@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 15:24:59 $
+ *  last change: $Author: ka $ $Date: 2001-04-02 14:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 // -----------
 // - Defines -
 // -----------
+
+#undef GALLERY_USE_CLIPBOARD
 
 #define GALLERY_DRAG_TIMEOUT 500
 #define DRAG_THRESHOLD 4
@@ -403,8 +405,13 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
         EnableItem( MN_PASTECLIPBOARD, TRUE );
     }
 
+#ifdef GALLERY_USE_CLIPBOARD
     if( IsItemEnabled( MN_PASTECLIPBOARD ) && !mpTheme->IsCurrentClipboardSupported() )
         EnableItem( MN_PASTECLIPBOARD, FALSE );
+#else
+    EnableItem( MN_COPYCLIPBOARD, FALSE );
+    EnableItem( MN_PASTECLIPBOARD, FALSE );
+#endif
 
     if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) )
         pAddMenu->EnableItem( MN_BACKGROUND, FALSE );
