@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:47:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ using namespace dbtools;
 namespace frm
 {
 //.........................................................................
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -150,14 +152,19 @@ StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 4 );
+    aSupported.realloc( nOldLen + 8 );
     ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
     *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
 
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
     *pStoreTo++ = FRM_SUN_COMPONENT_TIMEFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_TIMEFIELD;
+    *pStoreTo++ = BINDABLE_DATABASE_TIME_FIELD;
 
     return aSupported;
 }
@@ -172,7 +179,7 @@ Sequence<Type> OTimeModel::_getTypes()
 DBG_NAME( OTimeModel )
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_False, sal_True )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
             ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
 {
@@ -307,7 +314,7 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool _bPostReset )
         {
             try
             {
-                starutil::Time aTime;
+                util::Time aTime;
                 if ( !( aControlValue >>= aTime ) )
                 {
                     sal_Int32 nAsInt(0);
@@ -347,7 +354,7 @@ Any OTimeModel::translateControlValueToValidatableValue( ) const
         OSL_ENSURE( aValidatableValue >>= nTime, "OTimeModel::translateControlValueToValidatableValue: invalid time!" );
         if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
             // "invalid time" in VCL is different from "invalid time" in UNO
-            aValidatableValue <<= ::com::sun::star::util::Time( -1, -1, -1, -1 );
+            aValidatableValue <<= util::Time( -1, -1, -1, -1 );
         else
             aValidatableValue <<= DBTypeConversion::toTime( nTime );
     }
@@ -357,7 +364,7 @@ Any OTimeModel::translateControlValueToValidatableValue( ) const
 //------------------------------------------------------------------------------
 Any OTimeModel::translateDbColumnToControlValue()
 {
-    starutil::Time aTime = m_xColumn->getTime();
+    util::Time aTime = m_xColumn->getTime();
     if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
     else
@@ -380,6 +387,15 @@ Any OTimeModel::getDefaultForReset() const
     }
 
     return aValue;
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OTimeModel::approveValueBinding( const Reference< binding::XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "OTimeModel::approveValueBinding: invalid binding!" );
+
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< util::Time* >( NULL ) ) );
 }
 
 //.........................................................................
