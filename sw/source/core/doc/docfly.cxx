@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:48:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,9 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
                 pItem = 0;
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
 
-            if( HORI_NONE == aOldV.GetVertOrient() && (!pItem ||
+            // OD 2004-05-14 #i28922# - correction: compare <aOldV.GetVertOrient()
+            // with <VERT_NONE>
+            if( VERT_NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
                 SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldV.GetPos();
