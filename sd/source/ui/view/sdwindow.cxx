@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:47:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,20 @@ void Window::Command(const CommandEvent& rCEvt)
     if ( mpViewShell )
         mpViewShell->Command(rCEvt, this);
 }
+
+long Window::Notify( NotifyEvent& rNEvt )
+{
+    long nResult = FALSE;
+    if ( mpViewShell )
+    {
+        nResult = mpViewShell->Notify(rNEvt, this);
+    }
+    if( !nResult )
+        ::Window::Notify( rNEvt );
+
+    return nResult;
+}
+
 
 /*************************************************************************
 |*
