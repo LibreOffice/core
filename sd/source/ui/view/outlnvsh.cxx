@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
+ *  last change: $Author: dl $ $Date: 2001-06-07 11:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
+#endif
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -2239,7 +2242,6 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
     if( !pTO && pOPO )
     {
         pTO = new SdrRectObj( OBJ_OUTLINETEXT );
-        pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
         // als Praesentationsobjekt anmelden
@@ -2248,27 +2250,29 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         pPresObjList->Insert( pTO, LIST_APPEND );
 
         pPage->InsertObject( pTO );
+        pTO->SetOutlinerParaObject( pOPO );
 
         // Linien- und Fuellattribute der Standardvorlage hart
         // ueberschreiben
         SfxItemSet aTempAttr( pDoc->GetPool() );
         aTempAttr.Put( XLineStyleItem( XLINE_NONE ) );
         aTempAttr.Put( XFillStyleItem( XFILL_NONE ) );
-
-//-/        pTO->SetAttributes( aTempAttr, FALSE );
-//-/        SdrBroadcastItemChange aItemChange(*pTO);
         pTO->SetItemSetAndBroadcast(aTempAttr);
-//-/        pTO->BroadcastItemChange(aItemChange);
 
-        // als Listener anmelden
-        /*
+        // Liste der Gliederungsvorlagen fuer Anmeldung als Listener
+        String aName = pPage->GetLayoutName();
+        String aFullName;
+        SfxStyleSheet* pSheet = NULL;
+        SfxStyleSheetBasePool* pStyleSheetPool = pDoc->GetStyleSheetPool();
         for (USHORT i = 1; i < 10; i++)
         {
-            SfxStyleSheet* pS = (SfxStyleSheet*)pOutlineStyleList->
-                                                    GetObject( i );
-            if (pS)
-                pTO->StartListening( *pS );
-        }*/
+            aFullName  = aName;
+            aFullName += sal_Unicode(' ');
+            aFullName += String::CreateFromInt32( (sal_Int32)i );
+            pSheet = (SfxStyleSheet*) pStyleSheetPool->Find(aFullName, SD_LT_FAMILY);
+            pTO->StartListening( *pSheet );
+        }
+
         bNewObject = TRUE;
     }
     // Seitenobjekt, Gliederungstext im Outliner:
