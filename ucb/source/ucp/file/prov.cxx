@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2000-10-17 12:39:23 $
+ *  last change: $Author: abi $ $Date: 2000-10-17 13:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,7 @@ FileProvider::queryInterface(
                                           SAL_STATIC_CAST( XContentProvider*, this ),
                                           SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
                                           SAL_STATIC_CAST( lang::XServiceInfo*,     this ),
+                                          SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
                                           SAL_STATIC_CAST( beans::XPropertySet*, this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -790,8 +791,14 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromNormalizedPath( const rtl::OU
     throw( IllegalIdentifierException,
            uno::RuntimeException )
 {
+    rtl::OUString aRed;
+    sal_Bool success = m_pMyShell->uncheckMountPoint( NormalizedPath,aRed );
+    if( ! success )
+        throw IllegalIdentifierException();
+
+
     rtl::OUString aUrl;
-    sal_Bool err = m_pMyShell->getUrlFromUnq( NormalizedPath,aUrl );
+    sal_Bool err = m_pMyShell->getUrlFromUnq( aRed,aUrl );
     if( err )
         throw IllegalIdentifierException();
 
@@ -807,5 +814,10 @@ rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OU
     if( err )
         throw IllegalIdentifierException();
 
-    return aUnq;
+    rtl::OUString aRed;
+    sal_Bool success = m_pMyShell->checkMountPoint( aUnq,aRed );
+    if( ! success )
+        throw IllegalIdentifierException();
+
+    return aRed;
 }
