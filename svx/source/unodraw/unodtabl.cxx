@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 12:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ void SAL_CALL SvxUnoDashTable::insertByName( const OUString& aName, const uno::A
     XLineDashItem aLineDash;
     aLineDash.SetName( String( aName ) );
     aLineDash.PutValue( aElement );
+    aLineDash.SetWhich( XATTR_FILLGRADIENT ); // set which id for pooling
 
     mpInSet->Put( aLineDash, XATTR_LINEDASH );
 }
