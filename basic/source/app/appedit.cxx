@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void AppEdit::LoadIniFile()
 //    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     {
         Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
     }
