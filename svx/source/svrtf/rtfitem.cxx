@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-29 14:42:03 $
+ *  last change: $Author: cmc $ $Date: 2002-11-12 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,8 +1910,19 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 
         *ppSet = &pAkt->aAttrSet;
 
-        if( !bPard )
-            SetEncoding( GetCodeSet() );
+        if (!bPard)
+        {
+            //Once we have a default font, then any text without a font specifier is
+            //in the default font, and thus has the default font charset, otherwise
+            //we can fall back to the ansicpg set codeset
+            if (nDfltFont != -1)
+            {
+                const Font& rSVFont = GetFont(USHORT(nDfltFont));
+                SetEncoding(rSVFont.GetCharSet());
+            }
+            else
+                SetEncoding(GetCodeSet());
+        }
     }
 }
 
