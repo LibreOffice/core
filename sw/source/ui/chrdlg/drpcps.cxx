@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:45:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,8 @@ void SwDropCapsPict::_InitPrinter()
 
     if ( pSh )
         mpPrinter = pSh->GetPrinter();
-    else
+
+    if ( !mpPrinter )
     {
         mpPrinter = new Printer;
         mbDelPrinter = TRUE;
