@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-01 13:59:28 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 20:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ portuguese ] = "Tipos de letra das equações" ;
         Text [ finnish ] = "Kaavafontit" ;
         Text [ danish ] = "Fomelskrifttyper" ;
-        Text [ french ] = "Polices de formule" ;
+        Text [ french ] = "Polices des formules" ;
         Text [ swedish ] = "Formelteckensnitt" ;
         Text [ dutch ] = "Lettertypen fomules" ;
         Text [ spanish ] = "Fuentes de fórmula" ;
@@ -3087,7 +3087,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ russian ] = "Ïðåæíèé íàáîð";
         Text[ greek ] = "ÐáëéÜ ó~åéñÜ óõìâüëùí:";
         Text[ dutch ] = "Oud s~ymbolenset";
-        Text[ french ] = "Jeu de symboles précédent";
+        Text[ french ] = "Jeu précédent";
         Text[ spanish ] = "Conjunto ~anterior";
         Text[ finnish ] = "Va~nha merkkijoukko:";
         Text[ italian ] = "Set simboli preced.:";
@@ -3242,7 +3242,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "~Bereik";
         Text[ french ] = "~Plage";
         Text[ spanish ] = "~Área";
-        Text[ italian ] = "So~ttoinsieme";
+        Text[ italian ] = "~Area";
         Text[ danish ] = "~Subset";
         Text[ swedish ] = "~Område";
         Text[ polish ] = "~Obszar";
@@ -3526,7 +3526,7 @@ String RID_FONTREGULAR
     Text [ french ] = "Par défaut" ;
     Text [ swedish ] = ", Normal" ;
     Text [ dutch ] = ", Normaal" ;
-    Text [ spanish ] = ", Estándar" ;
+    Text [ spanish ] = ", Predeterminado" ;
     Text [ english_us ] = ", Standard" ;
     Text[ chinese_simplified ] = ", ÆÕÍ¨";
     Text[ russian ] = ", Îáû÷íûé";
@@ -4938,7 +4938,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "lig med" ;
                 Text [ italian ] = "Uguale a" ;
                 Text [ spanish ] = "es igual" ;
-                Text [ french ] = "est égal à" ;
+                Text [ french ] = "Est égal" ;
                 Text [ dutch ] = "is gelijk aan" ;
                 Text [ portuguese ] = "é igual" ;
                 Text[ chinese_simplified ] = "ÏàµÈ";
@@ -4966,7 +4966,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "forskellig fra" ;
                 Text [ italian ] = "Diverso" ;
                 Text [ spanish ] = "no es igual" ;
-                Text [ french ] = "est différent de" ;
+                Text [ french ] = "Est différent" ;
                 Text [ dutch ] = "is niet gelijk aan" ;
                 Text [ portuguese ] = "é desigual" ;
                 Text[ chinese_simplified ] = "²»µÈÓÚ";
@@ -4994,7 +4994,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "omtrent lig med" ;
                 Text [ italian ] = "Approssimativamente uguale" ;
                 Text [ spanish ] = "es aprox. igual" ;
-                Text [ french ] = "est approximativement égal à" ;
+                Text [ french ] = "Est approximativement égal à" ;
                 Text [ dutch ] = "is ongeveer gelijk aan" ;
                 Text [ portuguese ] = "é aprox. igual" ;
                 Text[ chinese_simplified ] = "½üËÆµÈÓÚ";
@@ -5020,7 +5020,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "teilt";
                 TEXT[ portuguese ] = "divide";
                 TEXT[ danish ] = "er divisor i";
-                TEXT[ french ] = "divise";
+                TEXT[ french ] = "Divise";
                 TEXT[ swedish ] = "delar";
                 TEXT[ dutch ] = "deelt";
                 TEXT[ spanish ] = "divide";
@@ -5048,7 +5048,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "teilt nicht";
                 TEXT[ portuguese ] = "não divide";
                 TEXT[ danish ] = "er ikke divisor i";
-                TEXT[ french ] = "ne divise pas";
+                TEXT[ french ] = "Ne divise pas";
                 TEXT[ swedish ] = "delar ej";
                 TEXT[ dutch ] = "deelt niet";
                 TEXT[ spanish ] = "no divide";
@@ -5082,7 +5082,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "mindre end" ;
                 Text [ italian ] = "Minore di" ;
                 Text [ spanish ] = "es menor que" ;
-                Text [ french ] = "est inférieur à" ;
+                Text [ french ] = "Est inférieur" ;
                 Text [ dutch ] = "is kleiner dan" ;
                 Text [ portuguese ] = "é menor que" ;
                 Text[ chinese_simplified ] = "Ð¡ÓÚ";
@@ -5110,7 +5110,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "større end" ;
                 Text [ italian ] = "Maggiore di" ;
                 Text [ spanish ] = "es mayor que" ;
-                Text [ french ] = "est supérieur à" ;
+                Text [ french ] = "Est supérieur à" ;
                 Text [ dutch ] = "is groter dan" ;
                 Text [ portuguese ] = "é maior que" ;
                 Text[ chinese_simplified ] = "´óÓÚ";
@@ -5139,7 +5139,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "tilnærmet eller lig med" ;
                 Text [ italian ] = "È simile o uguale" ;
                 Text [ spanish ] = "es parecido o igual" ;
-                Text [ french ] = "est similaire ou égal à" ;
+                Text [ french ] = "Est similaire ou égal" ;
                 Text [ dutch ] = "is ongeveer gelijk of gelijk aan" ;
                 Text [ portuguese ] = "é idêntico ou igual" ;
                 Text[ chinese_simplified ] = "ÏàËÆÓÚ»òµÈÓÚ";
@@ -5167,7 +5167,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "parallel med" ;
                 Text [ italian ] = "parallelo a" ;
                 Text [ spanish ] = "es paralelo a" ;
-                Text [ french ] = "est parallèle à" ;
+                Text [ french ] = "Est parallèle" ;
                 Text [ dutch ] = "is parallel aan" ;
                 Text [ portuguese ] = "é paralelo a" ;
                 Text[ chinese_simplified ] = "Æ½ÐÐÓÚ";
@@ -5195,7 +5195,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "ortogonal på" ;
                 Text [ italian ] = "ortogonale a" ;
                 Text [ spanish ] = "es ortogonal a" ;
-                Text [ french ] = "est perpendiculaire à" ;
+                Text [ french ] = "Est perpendiculaire à" ;
                 Text [ dutch ] = "is orthogonaal met" ;
                 Text [ portuguese ] = "é hortogonal a" ;
                 Text[ chinese_simplified ] = "Ö±½ÇÓÚ";
@@ -5228,7 +5228,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "mindre end eller lig med (skrå)" ;
                 Text [ italian ] = "Minore uguale (barra)" ;
                 Text [ spanish ] = "es menor que o igual a (oblicuo)" ;
-                Text [ french ] = "est inférieur ou égal à (trait oblique)" ;
+                Text [ french ] = "Est inférieur ou égal (oblique)" ;
                 Text [ dutch ] = "is kleiner dan of gelijk aan (schuin)" ;
                 Text [ portuguese ] = "é menor que ou igual a (oblíquo)" ;
                 Text[ chinese_simplified ] = "Ð¡ÓÚ»òµÈÓÚ";
@@ -5256,7 +5256,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "større end eller lig med (skrå)" ;
                 Text [ italian ] = "Maggiore uguale (obliquo)" ;
                 Text [ spanish ] = "es mayor que o igual a (oblicuo)" ;
-                Text [ french ] = "est supérieur ou égal à (trait oblique)" ;
+                Text [ french ] = "Est supérieur ou égal (oblique)" ;
                 Text [ dutch ] = "is groter dan of gelijk aan (schuin)" ;
                 Text [ portuguese ] = "é maior que ou igual a (oblíquo)" ;
                 Text[ chinese_simplified ] = "´óÓÚ»ò´óÓÚ";
@@ -5284,7 +5284,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "ækvivalent med" ;
                 Text [ italian ] = "È simile a" ;
                 Text [ spanish ] = "es parecido a" ;
-                Text [ french ] = "est similaire à" ;
+                Text [ french ] = "Est similaire à" ;
                 Text [ dutch ] = "is ongeveer gelijk met" ;
                 Text [ portuguese ] = "é idêntico a" ;
                 Text[ chinese_simplified ] = "ÏàËÆÓÚ";
@@ -5312,7 +5312,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "identisk med" ;
                 Text [ italian ] = "Congruente a" ;
                 Text [ spanish ] = "es congruente con" ;
-                Text [ french ] = "est congru à" ;
+                Text [ french ] = "Est congru à" ;
                 Text [ dutch ] = "is congruent met" ;
                 Text [ portuguese ] = "congruente com" ;
                 Text[ chinese_simplified ] = "È«µÈÓÚ";
@@ -5348,7 +5348,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "mindre end eller lig med" ;
                 Text [ italian ] = "Minore uguale" ;
                 Text [ spanish ] = "es menor que o igual a" ;
-                Text [ french ] = "est inférieur ou égal à" ;
+                Text [ french ] = "Est inférieur ou égal" ;
                 Text [ dutch ] = "is kleiner dan of gelijk aan" ;
                 Text [ portuguese ] = "é menor que ou igual a" ;
                 Text[ chinese_simplified ] = "Ð¡ÓÚ»òµÈÓÚ";
@@ -5376,7 +5376,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "større end eller lig med" ;
                 Text [ italian ] = "Maggiore uguale" ;
                 Text [ spanish ] = "es mayor que o igual a" ;
-                Text [ french ] = "est supérieur ou égal à" ;
+                Text [ french ] = "Est supérieur ou égal" ;
                 Text [ dutch ] = "is groter dan of gelijk aan" ;
                 Text [ portuguese ] = "é maior que ou igual a" ;
                 Text[ chinese_simplified ] = "´óÓÚ»òµÈÓÚ";
@@ -5404,7 +5404,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "proportional med" ;
                 Text [ italian ] = "Proporzionale a" ;
                 Text [ spanish ] = "es proporcional a" ;
-                Text [ french ] = "est proportionnel à" ;
+                Text [ french ] = "Est proportionnel à" ;
                 Text [ dutch ] = "is proportioneel met" ;
                 Text [ portuguese ] = "é proporcional a" ;
                 Text[ chinese_simplified ] = "³É±ÈÀýÓÚ";
@@ -5432,7 +5432,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "går mod" ;
                 Text [ italian ] = "Tendente a" ;
                 Text [ spanish ] = "tiende a" ;
-                Text [ french ] = "tend vers" ;
+                Text [ french ] = "Tend vers" ;
                 Text [ dutch ] = "streeft naar" ;
                 Text [ portuguese ] = "tende a" ;
                 Text[ chinese_simplified ] = "½Ó½ü";
@@ -5466,7 +5466,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "doppelter Pfeil nach links";
                 TEXT[ portuguese ] = "Seta dupla para a esquerda";
                 TEXT[ danish ] = "implikation mod venstre";
-                TEXT[ french ] = "double flèche vers la gauche";
+                TEXT[ french ] = "Double flèche vers la gauche";
                 TEXT[ swedish ] = "Dubbelpil till vänster";
                 TEXT[ dutch ] = "dubbele pijl naar links";
                 TEXT[ spanish ] = "Flecha doble hacia la izquierda";
@@ -5494,7 +5494,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "doppelter Pfeil nach links und rechts";
                 TEXT[ portuguese ] = "Seta dupla para a esquerda e direita";
                 TEXT[ danish ] = "biimplikation";
-                TEXT[ french ] = "double flèche vers la gauche et la droite";
+                TEXT[ french ] = "Double flèche vers la gauche et la droite";
                 TEXT[ swedish ] = "Dubbelpil till vänster och till höger";
                 TEXT[ dutch ] = "dubbele pijl naar links en rechts";
                 TEXT[ spanish ] = "Flecha doble hacia izquierda y derecha";
@@ -5522,7 +5522,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "doppelter Pfeil nach rechts";
                 TEXT[ portuguese ] = "seta dupla para a direita";
                 TEXT[ danish ] = "implikation mod højre";
-                TEXT[ french ] = "double flèche vers la droite";
+                TEXT[ french ] = "Double flèche vers la droite";
                 TEXT[ swedish ] = "Dubbelpil till höger";
                 TEXT[ dutch ] = "dubbele pijl naar rechts";
                 TEXT[ spanish ] = "Flecha doble hacia la derecha";
@@ -5602,7 +5602,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "tilhører" ;
                 Text [ italian ] = "Incluso in" ;
                 Text [ spanish ] = "está contenido en" ;
-                Text [ french ] = "est inclus dans" ;
+                Text [ french ] = "Est inclus dans" ;
                 Text [ dutch ] = "is in" ;
                 Text [ portuguese ] = "contido em" ;
                 Text[ chinese_simplified ] = "°üº¬ÔÚ";
@@ -5630,7 +5630,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "tihører ikke" ;
                 Text [ italian ] = "Non compreso in" ;
                 Text [ spanish ] = "no contenido en" ;
-                Text [ french ] = "n'est pas inclus dans" ;
+                Text [ french ] = "N'est pas inclus dans" ;
                 Text [ dutch ] = "is niet in" ;
                 Text [ portuguese ] = "não contido em" ;
                 Text[ chinese_simplified ] = "²»°üº¬ÔÚ";
@@ -5658,7 +5658,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "indeholder" ;
                 Text [ italian ] = "Contiene" ;
                 Text [ spanish ] = "contiene" ;
-                Text [ french ] = "contient" ;
+                Text [ french ] = "Contient" ;
                 Text [ dutch ] = "bevat" ;
                 Text [ portuguese ] = "contém" ;
                 Text[ chinese_simplified ] = "º¬ÓÐ";
@@ -5750,7 +5750,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "foreningsmængde" ;
                 Text [ italian ] = "Unione" ;
                 Text [ spanish ] = "Unión" ;
-                Text [ french ] = "Union" ;
+                Text [ french ] = "Réunion" ;
                 Text [ dutch ] = "Vereniging" ;
                 Text [ portuguese ] = "União" ;
                 Text[ chinese_simplified ] = "²¢¼¯";
@@ -5806,7 +5806,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "kvotientmængde " ;
                 Text [ italian ] = "Insieme quoziente " ;
                 Text [ spanish ] = "Conjunto cociente " ;
-                Text [ french ] = "Ensemble de quotient " ;
+                Text [ french ] = "Ensemble quotient " ;
                 Text [ dutch ] = "Quotiëntenverzameling  " ;
                 Text [ portuguese ] = "Conjunto de quociente " ;
                 Text[ chinese_simplified ] = "ÉÌÊý¼¯ ";
@@ -6204,6 +6204,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Conjunto de números reales";
                 TEXT[ finnish ] = "Reaalilukujoukko";
+                TEXT[ turkish ] = " ";
             };
             ToolBoxItem
             {
@@ -7489,7 +7490,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ french ] = "Accent aigu";
                 Text[ spanish ] = "Acento hacia arriba a la derecha";
                 Text[ finnish ] = "Aksenttimerkki oikealla";
-                Text[ italian ] = "Accento verso destra";
+                Text[ italian ] = "Accento acuto";
                 Text[ danish ] = "accent aigu";
                 Text[ swedish ] = "Accent åt höger";
                 Text[ polish ] = "Akcent w prawo do góry";
@@ -7516,7 +7517,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ french ] = "Accent grave";
                 Text[ spanish ] = "Acento hacia la izquierda abajo";
                 Text[ finnish ] = "Aksenttimerkki vasemmalla";
-                Text[ italian ] = "Accento verso sinistra";
+                Text[ italian ] = "Accento grave";
                 Text[ danish ] = "accent grave";
                 Text[ swedish ] = "Accent åt vänster";
                 Text[ polish ] = "Akcent w prawo na dó³";
@@ -9269,7 +9270,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "unendlich";
                 TEXT[ portuguese ] = "infinito";
                 TEXT[ danish ] = "uendelig";
-                TEXT[ french ] = "infini";
+                TEXT[ french ] = "Infini";
                 TEXT[ swedish ] = "Oändlig";
                 TEXT[ dutch ] = "oneindig";
                 TEXT[ spanish ] = "infinito";
@@ -9297,7 +9298,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "partial";
                 TEXT[ portuguese ] = "parcial";
                 TEXT[ danish ] = "partiel";
-                TEXT[ french ] = "partiel";
+                TEXT[ french ] = "Partiel";
                 TEXT[ swedish ] = "partial";
                 TEXT[ dutch ] = "partieel";
                 TEXT[ spanish ] = "parcial";
@@ -9353,7 +9354,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "Es existiert";
                 TEXT[ portuguese ] = "Existe";
                 TEXT[ danish ] = "der eksisterer";
-                TEXT[ french ] = "Il existe";
+                TEXT[ french ] = "Existe";
                 TEXT[ swedish ] = "Det finns";
                 TEXT[ dutch ] = "Er bestaat";
                 TEXT[ spanish ] = "Existe";
@@ -9413,7 +9414,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "h quer";
                 TEXT[ portuguese ] = "h tranversal";
                 TEXT[ danish ] = "h-streg";
-                TEXT[ french ] = "h horizontal";
+                TEXT[ french ] = "h + trait";
                 TEXT[ swedish ] = "Strukna h";
                 TEXT[ dutch ] = "h liggend";
                 TEXT[ spanish ] = "h barra";
@@ -9441,7 +9442,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "lambda quer";
                 TEXT[ portuguese ] = "lambda transversal";
                 TEXT[ danish ] = "lambda-streg";
-                TEXT[ french ] = "Lambda transversal";
+                TEXT[ french ] = "Lambda + trait";
                 TEXT[ swedish ] = "Strukna lambda";
                 TEXT[ dutch ] = "lambda liggend";
                 TEXT[ spanish ] = "lambda barra";
@@ -9457,6 +9458,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "lambda barra";
                 TEXT[ finnish ] = "Lambda-viiva";
+                TEXT[ turkish ] = " ";
             };
             ToolBoxItem
             {
@@ -9524,7 +9526,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "Weierstrass p";
                 TEXT[ portuguese ] = "Weierstrass p";
                 TEXT[ danish ] = "Weierstrass p";
-                TEXT[ french ] = "Weierstrass p";
+                TEXT[ french ] = "P de Weierstrass";
                 TEXT[ swedish ] = "Weierstrass p";
                 TEXT[ dutch ] = "Weierstrass p";
                 TEXT[ spanish ] = "p de Weierstrass";
@@ -9732,7 +9734,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "Punkte vertikal";
                 TEXT[ portuguese ] = "Pontos na vertical";
                 TEXT[ danish ] = "prikker lodret";
-                TEXT[ french ] = "Points verticalement";
+                TEXT[ french ] = "Points à la verticale";
                 TEXT[ swedish ] = "Punkter vertikalt";
                 TEXT[ dutch ] = "Punten verticaal";
                 TEXT[ spanish ] = "Puntos verticalmente";
@@ -11264,6 +11266,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
