@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
+#endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 
 #ifndef WW8STRUC_HXX
@@ -456,6 +459,10 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void RestoreMacroCmds();
 
     void InitFontTable();
+
+    bool MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt);
+    void DoComboBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
+    void DoCheckBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
 public:
     SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
     const SwPageDesc* pAktPageDesc;
@@ -676,6 +683,9 @@ public:
     // fuer WW8SaveData
     SwPaM* GetEndPaM()              { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
+
+    void DoComboBox(const rtl::OUString &rName, const rtl::OUString &rSelected,
+            com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
 
     static bool NoPageBreakSection(const SfxItemSet *pSet);
 private:
