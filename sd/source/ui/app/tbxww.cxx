@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:38:34 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ void SdPopupWindowTbx::AdaptToCTL (void)
                     case SID_ATTR_CHAR_VERTICAL:
                     case SID_TEXT_FITTOSIZE_VERTICAL:
                     case SID_DRAW_CAPTION_VERTICAL:
+                    case SID_DRAW_FONTWORK_VERTICAL:
                         aToolBox.RemoveItem (i);
                         break;
 
@@ -446,6 +447,8 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
         case SID_TEXT_FITTOSIZE_VERTICAL:
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
+        case SID_DRAW_FONTWORK:
+        case SID_DRAW_FONTWORK_VERTICAL:
 
         case SID_DRAW_RECT:
         case SID_DRAW_SQUARE:
