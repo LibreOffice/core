@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-27 09:12:06 $
+ *  last change: $Author: sb $ $Date: 2001-10-02 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,6 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
     : m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pMyShell( 0 )
 {
-
     if( ! m_pMyShell )
         m_pMyShell = new shell( m_xMultiServiceFactory, this );
 
@@ -236,7 +235,7 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
 
 
         // New access to configuration with locally cached components
-        rtl::OUString plugin = rtl::OUString::createFromAscii( "plugin" );
+        rtl::OUString plugin = rtl::OUString::createFromAscii( "local" );
         Any aAny;
         aAny <<= plugin;
         PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
