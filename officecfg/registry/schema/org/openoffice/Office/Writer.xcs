@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $: vg $ $Date: 2005-02-16 16:58:45 $
+ *  last change: $: vg $ $Date: 2005-03-07 17:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,8 @@
                     <desc>Contains a list of settings for address blocks. It is a sequence of address column positions separated with breaks (\n) and spaces. The column positions start at 0 and after 9 follows a, b, c and they are equivalent to the following parts of an address: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL</desc>
                     <label>Address block settings</label>
                 </info>
-                <value oor:separator=";">&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;3&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;5&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;5&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;</value>
+                <value oor:separator=";">&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;</value>
+            
             </prop>
             <prop oor:name="IsAddressBlock" oor:type="xs:boolean">
                 <info>
