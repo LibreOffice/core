@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:21:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,11 @@ void PDFWriter::DrawChord( const Rectangle& rRect, const Point& rStart, const Po
 }
 
 void PDFWriter::DrawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
+{
+    ((PDFWriterImpl*)pImplementation)->drawPolyLine( rPoly, rInfo );
+}
+
+void PDFWriter::DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo )
 {
     ((PDFWriterImpl*)pImplementation)->drawPolyLine( rPoly, rInfo );
 }
