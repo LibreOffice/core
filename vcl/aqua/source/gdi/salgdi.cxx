@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.28 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-14 22:06:45 $
+ *  $Revision: 1.29 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-15 01:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 {
     rSalGraphicsData->mhClipRgn = NULL;
-    rSalGraphicsData->mhGrowRgn = NULL;
+    rSalGraphicsData->mhGrowRgn = NewRgn();
 } // InitRegions
 
 // -----------------------------------------------------------------------
@@ -687,15 +687,14 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 
 void SalGraphics::EndSetClipRegion()
 {
-    if ( maGraphicsData.mhClipRgn != NULL )
+    if (    ( maGraphicsData.mhClipRgn != NULL )
+         && ( maGraphicsData.mhGrowRgn != NULL )
+       )
     {
-        if ( maGraphicsData.mhGrowRgn != NULL )
-        {
-            DiffRgn( maGraphicsData.mhClipRgn,
-                     maGraphicsData.mhGrowRgn,
-                     maGraphicsData.mhClipRgn
-                   );
-        } // if
+        DiffRgn( maGraphicsData.mhClipRgn,
+                 maGraphicsData.mhGrowRgn,
+                 maGraphicsData.mhClipRgn
+               );
     } // if
     else
     {
