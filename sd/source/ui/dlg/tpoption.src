@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:46:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "tpoption.hrc"
 #include "helpids.h"
 
@@ -1126,7 +1125,7 @@ TabPage TP_OPTIONS_MISC
         Text[ portuguese_brazilian ] = "Aumentar a~fastamento entre par�grafos no documento atual";
         Text[ japanese ] = "現在のドキュメントの段落間隔と表間隔を加算する(~S)";
         Text[ korean ] = "현재 문서에서 모든 단락 간격을 합산(~S)";
-        Text[ chinese_simplified ] = "当前文档之中所有段落间格相加(~S)";
+        Text[ chinese_simplified ] = "在段落和表格之间添加空格（当前文档中）";
         Text[ chinese_traditional ] = "目前的文件之中所有的段落間隔相加(~S)";
         Text[ turkish ] = "Paragraflar arasina bo�luk ekle";
         Text[ arabic ] = "Add ~distances between paragraphs";
