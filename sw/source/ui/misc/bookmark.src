@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:59:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT [ portuguese_brazilian ] = "Inserir Marcador" ;
     TEXT [ portuguese ] = "Inserir marcador de texto" ;
     TEXT [ finnish ] = "Lis�� kirjanmerkki" ;
-    TEXT [ danish ] = "Inds�t tekstmarkering" ;
+    TEXT [ danish ] = "Inds�t bogm�rke" ;
     TEXT [ french ] = "Insertion d'un rep�re de texte" ;
     TEXT [ swedish ] = "Infoga bokm�rke" ;
     TEXT [ dutch ] = "Tekstmarkering invoegen" ;
@@ -118,7 +118,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ portuguese_brazilian ] = "E~xcluir" ;
         TEXT [ portuguese ] = "E~liminar" ;
         TEXT [ finnish ] = "~Poista" ;
-        TEXT [ danish ] = "Slet" ;
+        TEXT [ danish ] = "~Slet" ;
         TEXT [ french ] = "Supprimer" ;
         TEXT [ swedish ] = "~Radera" ;
         TEXT [ dutch ] = "~Wissen" ;
@@ -141,6 +141,8 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ hebrew ] = "‮מחיקה‬";
         TEXT[ hindi ] = "~मिटाओ";
         TEXT[ slovak ] = "Z~mazať";
+        TEXT[ hungarian ] = "~Törlés";
+        TEXT[ slovenian ] = "~Izbriši";
     };
     FixedLine FL_BOOKMARK
     {
@@ -153,7 +155,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ portuguese_brazilian ] = "Marcadores" ;
         TEXT [ portuguese ] = "Marcadores de texto" ;
         TEXT [ finnish ] = "Kirjanmerkit" ;
-        TEXT [ danish ] = "Tekstmarkeringer" ;
+        TEXT [ danish ] = "Bogm�rker" ;
         TEXT [ french ] = "Rep�res de texte" ;
         TEXT [ swedish ] = "Bokm�rken" ;
         TEXT [ dutch ] = "Tekstmarkeringen" ;
@@ -174,6 +176,8 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ hebrew ] = "Textmarken";
         TEXT[ hindi ] = "पृष्ठसंकेत";
         TEXT[ slovak ] = "Záložky";
+        TEXT[ hungarian ] = "Könyvjelzők";
+        TEXT[ slovenian ] = "Zaznamki";
     };
     TEXT[ chinese_simplified ] = "插入书签";
     TEXT[ russian ] = "������� ��������";
@@ -190,6 +194,8 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT[ hebrew ] = "‮הוספת סימניה‬";
     TEXT[ hindi ] = "पृष्ठसंकेत जोड़ो";
     TEXT[ slovak ] = "Vložiť záložku";
+    TEXT[ hungarian ] = "Könyvjelző beszúrása";
+    TEXT[ slovenian ] = "Vstavi zaznamek";
 };
 String STR_REMOVE_WARNING
 {
@@ -220,7 +226,10 @@ String STR_REMOVE_WARNING
     Text[ hebrew ] = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt:";
     Text[ hindi ] = "निम्नलिखित अक्षरें अमान्य है और उनको हटाया: ";
     Text[ slovak ] = "Nasledujúce znaky sú neplatné a budú odstránené: ";
+    Text[ hungarian ] = "A következő karakterek érvénytelenek, és eltávolításra kerültek:";
+    Text[ slovenian ] = "Naslednji znaki so neveljavni in so bili odstranjeni:";
 };
+
 
 
 
