@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:53:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -477,14 +477,14 @@ void StatusIndicatorFactory::impl_createProgress()
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
             {
                 xLayoutManager->createElement(PROGRESSBAR_RES_STR);
                 xLayoutManager->showElement  (PROGRESSBAR_RES_STR);
 
-                css::uno::Reference< dcss::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESSBAR_RES_STR);
+                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESSBAR_RES_STR);
                 if (xProgressBar.is())
                     xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
             }
