@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:44:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,10 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ hindi ] = "%1 फाइल पहिले से ही अस्तित्व में है ।";
     Text[ slovak ] = "Súbor %1 už existuje.";
 };
+
+
+
+
 
 
 
