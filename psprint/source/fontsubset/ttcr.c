@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-15 16:15:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.3 2002-11-15 16:15:06 pl Exp $ */
+/* $Id: ttcr.c,v 1.4 2003-04-15 16:14:27 vg Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -71,7 +71,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #include "ttcr.h"
 
 /* These must be #defined so that they can be used in initializers */
