@@ -16,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\configuration\backend
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\connection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\data
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\deployment
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\deployment\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer\clipboard
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer\dnd
@@ -126,6 +127,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\data\*.hpp %_DEST%\inc%_EXT%\com\sun\star\data\*.hpp
 ..\%__SRC%\inc\com\sun\star\deployment\*.hpp %_DEST%\inc%_EXT%\com\sun\star\deployment\*.hpp
 ..\%__SRC%\inc\com\sun\star\deployment\*.hdl %_DEST%\inc%_EXT%\com\sun\star\deployment\*.hdl
+..\%__SRC%\inc\com\sun\star\deployment\ui\*.hpp %_DEST%\inc%_EXT%\com\sun\star\deployment\ui\*.hpp
+..\%__SRC%\inc\com\sun\star\deployment\ui\*.hdl %_DEST%\inc%_EXT%\com\sun\star\deployment\ui\*.hdl
 ..\%__SRC%\inc\com\sun\star\datatransfer\*.hpp %_DEST%\inc%_EXT%\com\sun\star\datatransfer\*.hpp
 ..\%__SRC%\inc\com\sun\star\datatransfer\*.hdl %_DEST%\inc%_EXT%\com\sun\star\datatransfer\*.hdl
 ..\%__SRC%\inc\com\sun\star\datatransfer\clipboard\*.hpp %_DEST%\inc%_EXT%\com\sun\star\datatransfer\clipboard\*.hpp
