@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleHyperlink.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:57:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,11 @@ interface XAccessibleHyperlink :
         hyperlink (group) starts.
 
         <p>The returned value relates to the <type>XAccessibleText</type>
-        interface of the <type>AccessibleHypertext</type> service that ownes
-        this hyperlink.</p>
+        interface that ownes this hyperlink.</p>
 
         @return
             The index relates to the text exposed by the
-            <type>XAccessibleHyperText</type> interface.
+            <type>XAccessibleHypertext</type> interface.
     */
     long getStartIndex ();
 
@@ -151,8 +150,7 @@ interface XAccessibleHyperlink :
         hyperlink (group) ends.
 
         <p>The returned value relates to the <type>XAccessibleText</type>
-        interface of the <type>AccessibleHypertext</type> service that ownes
-        this hyperlink.</p>
+        interface that ownes this hyperlink.</p>
 
         @return
             The index relates to the text exposed by the

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleExtendedComponent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:57:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,12 @@ module com { module sun { module star { module accessibility {
 
 interface XAccessibleComponent;
 
-/** The <type>AccessibleExtendedComponent</type> interface contains
-    additional methods to those of the <type>AccessibleComponent</type>
-    interface.  These methods provide more seldom used information.  The
+/** The <type>XAccessibleExtendedComponent</type> interface contains
+    additional methods to those of the <type>XAccessibleComponent</type>
+    interface.  These methods provide information that is used not as often.  The
     division into two interfaces allows classes to support the more
-    frequently used methods of the <type>AccessibleComponent</type>
-    interface and only support the <type>AccessibleExtendedComponent</type>
+    frequently used methods of the <type>XAccessibleComponent</type>
+    interface and only support the <type>XAccessibleExtendedComponent</type>
     interface if that makes sense for the class.
 
     <p>This interface provides extended access to retrieve information
