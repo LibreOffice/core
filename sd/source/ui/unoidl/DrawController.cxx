@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:10:19 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,13 @@ void SAL_CALL DrawController::dispose()
             mbDisposing = true;
 
             OPropertySetHelper::disposing();
+            OInterfaceContainerHelper* pListeners = getContainer(::getCppuType((Reference<view::XSelectionChangeListener>*)0));
+            if( pListeners )
+            {
+                lang::EventObject aEventObj;
+                pListeners->disposeAndClear(aEventObj);
+            }
+
             SfxBaseController::dispose();
         }
     }
@@ -277,42 +284,50 @@ Any SAL_CALL DrawController::getSelection()
 
     SdXImpressDocument* pModel = GetModel();
 
-    Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
-
     DBG_ASSERT (&mrView != NULL,
         "view is NULL in SdUnoDrawView::getSelection()");
 
-    const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-    sal_uInt32 nCount = rMarkList.GetMarkCount();
-    for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
-    {
-        SdrMark *pMark = rMarkList.GetMark(nNum);
-        if(pMark==NULL)
-            continue;
-
-        SdrObject *pObj = pMark->GetObj();
-        if(pObj==NULL || pObj->GetPage() == NULL)
-            continue;
-
-        Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
-
-        if(!xPage.is())
-            continue;
-
-        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
-
-        if(pDrawPage==NULL)
-            continue;
-
-        Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
-
-        if(xShape.is())
-            xShapes->add(xShape);
-    }
-
     Any aAny;
-    if( 0 != xShapes->getCount() )
-        aAny <<= xShapes;
+
+    if( mrView.IsTextEdit() )
+        mrView.getTextSelection( aAny );
+
+
+    if( !aAny.hasValue() )
+    {
+        const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
+        sal_uInt32 nCount = rMarkList.GetMarkCount();
+        if( nCount )
+        {
+            Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+            {
+                SdrMark *pMark = rMarkList.GetMark(nNum);
+                if(pMark==NULL)
+                    continue;
+
+                SdrObject *pObj = pMark->GetObj();
+                if(pObj==NULL || pObj->GetPage() == NULL)
+                    continue;
+
+                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+
+                if(!xPage.is())
+                    continue;
+
+                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+
+                if(pDrawPage==NULL)
+                    continue;
+
+                Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+
+                if(xShape.is())
+                    xShapes->add(xShape);
+            }
+            aAny <<= xShapes;
+        }
+    }
 
     return aAny;
 }
