@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 16:11:10 $
+ *  last change: $Author: avy $ $Date: 2001-03-22 07:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,7 +937,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         }
                     }
                     if(!bDone)
-                        throw (IllegalArgumentException());
+                        throw IllegalArgumentException();
                 }
                 else if( pDoc->GetRootFrm() )
                 {
