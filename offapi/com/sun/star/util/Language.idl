@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Language.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com { module sun { module star { module util {
 //=============================================================================
 /** This type is used for a language identifier number.
 */
-typedef short Language;
+published typedef short Language;
 
 //=============================================================================
 
