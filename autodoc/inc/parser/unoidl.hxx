@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:54 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 // USED SERVICES
     // BASE CLASSES
 #include <parser/parser.hxx>
+#include <parser/parserinfo.hxx>
     // COMPONENTS
     // PARAMETERS
 
@@ -87,7 +88,8 @@ namespace autodoc
 {
 
 
-class IdlParser : public ::CodeParser
+class IdlParser : public ::CodeParser,
+                  public ::ParserInfo
 {
   public:
                         IdlParser(
