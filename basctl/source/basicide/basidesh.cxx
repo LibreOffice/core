@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
+ *  last change: $Author: tbe $ $Date: 2001-10-10 16:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <sbxitem.hxx>
 #include <tbxctl.hxx>
 #include <iderdll2.hxx>
+#include <basidectrlr.hxx>
 
 #define BasicIDEShell
 #define SFX_TYPEMAP
@@ -112,6 +113,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -218,6 +220,9 @@ void BasicIDEShell::Init()
 
     IDE_DLL()->pShell = this;
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > aTmpRef;
+    GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, new BasicIDEController( this ) );
 
     UpdateWindows();
 }
