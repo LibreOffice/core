@@ -12,6 +12,8 @@ TARGETTYPE=CUI
 
 # --- Files --------------------------------------------------------
 
+SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
+
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/unxcrashres.obj
 APP1STDLIBS=$(TOOLSLIB) $(SALLIB)
