@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:08:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ TabDialog DLG_XML_FILTER_TABDIALOG
                 Text[ chinese_simplified ] = "转换";
                 Text[ chinese_traditional ] = "轉換";
                 Text[ slovak ] = "Transformácia";
+                Text[ portuguese_brazilian ] = "Transforma��o";
             };
         };
     };
@@ -130,7 +131,9 @@ TabDialog DLG_XML_FILTER_TABDIALOG
     Text[ chinese_simplified ] = "XML 筛选器：%s";
     Text[ chinese_traditional ] = "XML 篩選器: %s";
     Text[ slovak ] = "XML Filter: %s";
+    Text[ portuguese_brazilian ] = "Filtro XML: %s";
 };
+
 
 
 
