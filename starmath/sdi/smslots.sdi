@@ -5,8 +5,8 @@
 #*
 #*    Beschreibung      Starmath IDL-File
 #*
-#*    Letzte Aenderung  $Author: tl $ $Date: 2001-05-02 16:58:48 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: jp $ $Date: 2001-10-12 15:57:24 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/starmath/sdi/smslots.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/starmath/sdi/smslots.sdi,v 1.2 2001-05-02 16:58:48 tl Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/starmath/sdi/smslots.sdi,v 1.3 2001-10-12 15:57:24 jp Exp $
 
 *************************************************************************/
 
@@ -151,6 +151,25 @@ interface FormulaDocument : OfficeDocument
     SID_PASTEOBJECT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_UNDO //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_REDO //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_GETUNDOSTRINGS //idlpp ole : no , status : no
+    [
+        StateMethod = GetState ;
+    ]
+    SID_GETREDOSTRINGS //idlpp ole : no , status : no
+    [
         StateMethod = GetState ;
     ]
 }
@@ -318,6 +337,9 @@ shell SmViewShell : SfxViewShell
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/05/02 16:58:48  tl
+      Math configuration and Symbol/SymbolSet/SymbolSetManager
+
       Revision 1.1.1.1  2000/09/18 16:57:26  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-08 11:47:58 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 #ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
 #endif
@@ -164,6 +167,9 @@
 #endif
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
 #endif
 
 #ifndef STARMATH_HRC
@@ -1422,6 +1428,38 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
         }
         break;
+
+    case SID_UNDO:
+    case SID_REDO:
+        {
+            SfxUndoManager* pUndoMgr = GetUndoManager();
+            if( pUndoMgr )
+            {
+                USHORT nId = rReq.GetSlot(), nCnt = 1;
+                const SfxItemSet* pArgs = rReq.GetArgs();
+                const SfxPoolItem* pItem;
+                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
+                    nCnt = ((SfxUInt16Item*)pItem)->GetValue();
+
+                BOOL (SfxUndoManager:: *fnDo)( USHORT );
+
+                sal_uInt16 nCount;
+                if( SID_UNDO == rReq.GetSlot() )
+                {
+                    nCount = pUndoMgr->GetUndoActionCount();
+                    fnDo = &SfxUndoManager::Undo;
+                }
+                else
+                {
+                    nCount = pUndoMgr->GetRedoActionCount();
+                    fnDo = &SfxUndoManager::Redo;
+                }
+
+                for( ; nCnt && nCount; --nCnt, --nCount )
+                    (pUndoMgr->*fnDo)( 0 );
+            }
+        }
+        break;
     }
 }
 
@@ -1434,26 +1472,24 @@ void SmDocShell::GetState(SfxItemSet &rSet)
     {
         switch (nWh)
         {
-            case SID_TEXTMODE:
-            {
-                rSet.Put(SfxBoolItem(SID_TEXTMODE, GetFormat().IsTextmode()));
-                break;
-            }
+        case SID_TEXTMODE:
+            rSet.Put(SfxBoolItem(SID_TEXTMODE, GetFormat().IsTextmode()));
+            break;
 
-            case SID_DOCTEMPLATE :
-                rSet.DisableItem (SID_DOCTEMPLATE);
-                break;
+        case SID_DOCTEMPLATE :
+            rSet.DisableItem (SID_DOCTEMPLATE);
+            break;
 
-            case SID_AUTO_REDRAW :
+        case SID_AUTO_REDRAW :
             {
                 SmModule  *pp = SM_MOD1();
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put (SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
-                break;
             }
+            break;
 
-            case SID_TOOLBOX:
+        case SID_TOOLBOX:
             {
                 BOOL bState = FALSE;
                 SmViewShell *pView = SmGetActiveView();
@@ -1466,25 +1502,72 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                         bState = TRUE;
                 }
                 rSet.Put(SfxBoolItem(SID_TOOLBOX, bState));
-                break;
             }
+            break;
 
-            case SID_MODIFYSTATUS:
+        case SID_MODIFYSTATUS:
             {
-                char cMod = ' ';
+                sal_Unicode cMod = ' ';
                 if (IsModified())
                     cMod = '*';
                 rSet.Put(SfxStringItem(SID_MODIFYSTATUS, String(cMod)));
-                break;
             }
+            break;
 
-            case SID_TEXT:
-                rSet.Put(SfxStringItem(SID_TEXT, GetText()));
-                break;
+        case SID_TEXT:
+            rSet.Put(SfxStringItem(SID_TEXT, GetText()));
+            break;
 
-            case SID_GRAPHIC:
-                rSet.Put(SfxInt16Item(SID_GRAPHIC, nModifyCount));
-                break;
+        case SID_GRAPHIC:
+            rSet.Put(SfxInt16Item(SID_GRAPHIC, nModifyCount));
+            break;
+
+        case SID_UNDO:
+        case SID_REDO:
+            {
+                SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+                if( pFrm )
+                    pFrm->GetSlotState( nWh, NULL, &rSet );
+                else
+                    rSet.DisableItem( nWh );
+            }
+            break;
+
+        case SID_GETUNDOSTRINGS:
+        case SID_GETREDOSTRINGS:
+            {
+                SfxUndoManager* pUndoMgr = GetUndoManager();
+                if( pUndoMgr )
+                {
+                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+
+                    sal_uInt16 nCount;
+                    if( SID_GETUNDOSTRINGS == nWh )
+                    {
+                        nCount = pUndoMgr->GetUndoActionCount();
+                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
+                    }
+                    else
+                    {
+                        nCount = pUndoMgr->GetRedoActionCount();
+                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
+                    }
+                    if( nCount )
+                    {
+                        String sList;
+                        for( sal_uInt16 n = 0; n < nCount; ++n )
+                            ( sList += (pUndoMgr->*fnGetComment)( n ) )
+                                    += '\n';
+
+                        SfxStringListItem aItem( nWh );
+                        aItem.SetString( sList );
+                        rSet.Put( aItem );
+                    }
+                }
+                else
+                    rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-30 07:52:27 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,25 @@
 #ifndef _SFX_OBJFAC_HXX
 #include <sfx2/docfac.hxx>
 #endif
+#ifndef _SVX_LBOXCTRL_HXX_
+#include <svx/lboxctrl.hxx>
+#endif
 
 #ifndef _SMDLL_HXX
-#include "smdll.hxx"
+#include <smdll.hxx>
 #endif
 #ifndef DOCUMENT_HXX
-#include "document.hxx"
+#include <document.hxx>
 #endif
 #ifndef TOOLBOX_HXX
-#include "toolbox.hxx"
+#include <toolbox.hxx>
 #endif
 #ifndef VIEW_HXX
-#include "view.hxx"
+#include <view.hxx>
 #endif
+
 #ifndef _STARMATH_HRC
-#include "starmath.hrc"
+#include <starmath.hrc>
 #endif
 
 BOOL SmDLL::bInitialized = FALSE;
@@ -144,6 +148,8 @@ void SmDLL::Init()
 
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pp );
     SvxModifyControl::RegisterControl( SID_TEXTSTATUS, pp );
+    SvxUndoRedoControl::RegisterControl( SID_UNDO, pp );
+    SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
 
     SmToolBoxWrapper::RegisterChildWindow(TRUE);
     SmCmdBoxWrapper::RegisterChildWindow(TRUE);
