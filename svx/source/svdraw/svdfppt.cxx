@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:37:50 $
+ *  last change: $Author: sj $ $Date: 2002-05-06 15:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,23 @@ SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
     return rIn;
 }
 
+PptBackgroundHelper::PptBackgroundHelper() :
+    pBObj           ( NULL ),
+    bIsTemporary    ( sal_True )
+{
+}
+
+void PptBackgroundHelper::SetBackground( sal_Bool _bIsTemporary, SdrObject* pObj )
+{
+    pBObj = pObj;
+    bIsTemporary = _bIsTemporary;
+}
+
+PptBackgroundHelper::~PptBackgroundHelper()
+{
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
@@ -749,6 +766,7 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     nDrawingDgId        ( 0xffffffff ),
     nBackgroundOffset   ( 0 )
 {
+    pBackgroundHelper = NULL;
 }
 
 
@@ -2516,7 +2534,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         if ( nLen )
                             aSelection.nEndPos += (sal_uInt16)nLen;
                     }
-                    pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nInstanceInSheet );
+                    pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nInstanceInSheet, pTextObj );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
                     aSelection.nStartPos = aSelection.nEndPos;
                 }
@@ -3104,6 +3122,7 @@ void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
 }
 
 // be sure not to import masterpages with this method
+// be sure not to import masterpages with this method
 void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
 {
     UINT32 nMerk = rStCtrl.Tell();
@@ -3134,8 +3153,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                 pHFE->nAtom = 0;
             }
         }
-
         ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
+        rSlidePersist.pBackgroundHelper = new PptBackgroundHelper();
 
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
         {
@@ -3171,6 +3190,68 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                     DffRecordHeader aPPDrawHd;
                     if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, aHd.GetRecEndFilePos(), &aPPDrawHd ) )
                     {
+                        sal_uInt32 nPPDrawOfs = rStCtrl.Tell();
+
+                        // importing the background object before importing the page
+                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPPDrawHd.GetRecEndFilePos() ) )
+                        {
+                            DffRecordHeader aEscherObjListHd;
+                            rStCtrl >> aEscherObjListHd;
+                            switch ( aEscherObjListHd.nRecType )
+                            {
+                                case DFF_msofbtSpContainer :
+                                {
+                                    if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
+                                    {
+                                        if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                                        {
+                                            sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                                            PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+                                            PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
+                                            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
+                                            {
+                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                                                if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                                                    break;
+                                                else
+                                                    pE = (*pPageList)[ nNextMaster ];
+                                            }
+                                            if ( pE->nBackgroundOffset )
+                                            {
+                                                // do not follow master colorscheme ?
+                                                sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) == 0;
+                                                sal_uInt32 nPos = rStCtrl.Tell();
+                                                rStCtrl.Seek( pE->nBackgroundOffset );
+                                                rSlidePersist.pBackgroundHelper->SetBackground( bTemporary, ImportObj( rStCtrl, (void*)&aProcessData, NULL ) );
+                                                rStCtrl.Seek( nPos );
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DffRecordHeader aShapeHd;
+                                        rStCtrl >> aShapeHd;
+                                        if ( aShapeHd.nRecType == DFF_msofbtSp )
+                                        {
+                                            UINT32 nSpFlags;
+                                            rStCtrl >> nSpFlags >> nSpFlags;
+                                            if ( nSpFlags & SP_FBACKGROUND )
+                                            {
+                                                aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
+                                                rSlidePersist.pBackgroundHelper->SetBackground( sal_False, ImportObj( rStCtrl, (void*)&aProcessData, NULL ) );
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            if ( aEscherObjListHd.nRecType == DFF_msofbtSpContainer )
+                                break;
+                            aEscherObjListHd.SeekToEndOfRecord( rStCtrl );
+                        }
+
+                        // now importing page
+                        rStCtrl.Seek( nPPDrawOfs );
                         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPPDrawHd.GetRecEndFilePos() ) )
                         {
                             DffRecordHeader aEscherObjListHd;
@@ -3216,80 +3297,43 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     }
                                 }
                                 break;
-
-                                case DFF_msofbtSpContainer :
-                                {
-                                    SdrObject* pBackGroundObj = NULL;
-                                    if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
-                                    {
-                                        if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
-                                        {
-                                            sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                                            PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                                            PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
-                                            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
-                                            {
-                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
-                                                if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                                                    break;
-                                                else
-                                                    pE = (*pPageList)[ nNextMaster ];
-                                            }
-                                            if ( ! ( rSlidePersist.aSlideAtom.nFlags & 2 ) )  // do not follow master colorscheme ?
-                                            {
-                                                if ( pE->nBackgroundOffset )
-                                                {
-                                                    sal_uInt32 nPos = rStCtrl.Tell();
-                                                    rStCtrl.Seek( pE->nBackgroundOffset );
-                                                    pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
-                                                    rStCtrl.Seek( nPos );
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        DffRecordHeader aShapeHd;
-                                        rStCtrl >> aShapeHd;
-                                        if ( aShapeHd.nRecType == DFF_msofbtSp )
-                                        {
-                                            UINT32 nSpFlags;
-                                            rStCtrl >> nSpFlags >> nSpFlags;
-                                            if ( nSpFlags & SP_FBACKGROUND )
-                                            {
-                                                aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
-                                                if ( pBackGroundObj )
-                                                {
-                                                    if ( rSlidePersist.ePageKind == PPT_SLIDEPAGE )
-                                                    {
-                                                        List* pList = aProcessData.pBackgroundColoredObjects;
-                                                        if ( pList )
-                                                        {
-                                                            void* pPtr;
-                                                            const SfxPoolItem* pPoolItem = NULL;
-
-                                                            SfxItemState eState = pBackGroundObj->GetItemSet().GetItemState(XATTR_FILLCOLOR, FALSE, &pPoolItem);
-
-                                                            if ( pPoolItem )
-                                                            {
-                                                                for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
-                                                                {
-                                                                    ((SdrObject*)pPtr)->SetItem(*pPoolItem);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if ( pBackGroundObj )
-                                        pRet->SetBackgroundObj( pBackGroundObj );
-                                }
-                                break;
                             }
+                            if ( aEscherObjListHd.nRecType == DFF_msofbtSpgrContainer )
+                                break;
                             aEscherObjListHd.SeekToEndOfRecord( rStCtrl );
+                        }
+
+                        /* There are a lot of Shapes who are dependent to
+                           the current background color */
+                        if ( rSlidePersist.ePageKind == PPT_SLIDEPAGE )
+                        {
+                            List* pList = aProcessData.pBackgroundColoredObjects;
+                            if ( pList )
+                            {
+                                if ( rSlidePersist.pBackgroundHelper->pBObj )
+                                {
+                                    void* pPtr;
+                                    const SfxPoolItem* pPoolItem = NULL;
+
+                                    SfxItemState eState = rSlidePersist.pBackgroundHelper->
+                                        pBObj->GetItemSet().GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+                                    if ( pPoolItem )
+                                    {
+                                        for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
+                                        {
+                                            ((SdrObject*)pPtr)->SetItem( *pPoolItem );
+                                            ((SdrObject*)pPtr)->SetItem( XFillStyleItem( XFILL_SOLID ) );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if ( rSlidePersist.pBackgroundHelper->pBObj )
+                        {
+                            if ( rSlidePersist.pBackgroundHelper->bIsTemporary )
+                                delete rSlidePersist.pBackgroundHelper->pBObj;
+                            else
+                                pRet->SetBackgroundObj( rSlidePersist.pBackgroundHelper->pBObj );
                         }
                     }
                 }
@@ -3299,6 +3343,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
+
+        delete rSlidePersist.pBackgroundHelper;
     }
     rStCtrl.Seek( nMerk );
 }
@@ -5747,6 +5793,11 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
 
 void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet )
 {
+    ApplyTo( rSet, rManager, nInstanceInSheet, NULL );
+}
+
+void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet, const PPTTextObj* pTextObj )
+{
     UINT32  nVal;
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nInstanceInSheet ) )
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
@@ -5794,81 +5845,123 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
 
     if ( GetAttrib( PPT_CharAttr_Embossed, nVal, nInstanceInSheet ) )
         rSet.Put( SvxCharReliefItem( nVal != 0 ? RELIEF_EMBOSSED : RELIEF_NONE ) );
-    if ( nVal ) // if Embossed is set the font color depends to the fillstyle/color
+    if ( nVal ) /* if Embossed is set, the font color depends to the fillstyle/color of the object,
+                   if the object has no fillstyle, the font color depends to fillstyle of the background */
     {
         Color aDefColor( COL_BLACK );
-        if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )  // filled
+        MSO_FillType eFillType = mso_fillSolid;
+        if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )
+            eFillType = (MSO_FillType)rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+        else
+            eFillType = mso_fillBackground;
+        switch( eFillType )
         {
-            switch( (MSO_FillType)rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) )
+            case mso_fillShade :
+            case mso_fillShadeCenter :
+            case mso_fillShadeShape :
+            case mso_fillShadeScale :
+            case mso_fillShadeTitle :
+            case mso_fillSolid :
+                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillColor ) );
+            break;
+            case mso_fillPattern :
+                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillBackColor ) );
+            break;
+            case mso_fillTexture :
             {
-                case mso_fillShade :
-                case mso_fillShadeCenter :
-                case mso_fillShadeShape :
-                case mso_fillShadeScale :
-                case mso_fillShadeTitle :
-                case mso_fillSolid :
-                    aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillColor ) );
-                break;
-                case mso_fillPattern :
-                    aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillBackColor ) );
-                break;
-                case mso_fillTexture :
+                Graphic aGraf;
+                if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf ) )
                 {
-                    Graphic aGraf;
-                    if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf ) )
+                    Bitmap aBmp( aGraf.GetBitmap() );
+                    Size aSize( aBmp.GetSizePixel() );
+                    if ( aSize.Width() && aSize.Height() )
                     {
-                        Bitmap aBmp( aGraf.GetBitmap() );
-                        Size aSize( aBmp.GetSizePixel() );
-                        if ( aSize.Width() && aSize.Height() )
+                        if ( aSize.Width () > 64 )
+                            aSize.Width () = 64;
+                        if ( aSize.Height() > 64 )
+                            aSize.Height() = 64;
+
+                        ULONG nRt = 0, nGn = 0, nBl = 0;
+                        BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
+                        if( pAcc )
                         {
-                            if ( aSize.Width () > 64 )
-                                aSize.Width () = 64;
-                            if ( aSize.Height() > 64 )
-                                aSize.Height() = 64;
+                            const long nWidth = aSize.Width();
+                            const long nHeight = aSize.Height();
 
-                            ULONG nRt = 0, nGn = 0, nBl = 0;
-                            BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
-                            if( pAcc )
+                            if( pAcc->HasPalette() )
                             {
-                                const long nWidth = aSize.Width();
-                                const long nHeight = aSize.Height();
-
-                                if( pAcc->HasPalette() )
+                                for( long nY = 0L; nY < nHeight; nY++ )
                                 {
-                                    for( long nY = 0L; nY < nHeight; nY++ )
+                                    for( long nX = 0L; nX < nWidth; nX++ )
                                     {
-                                        for( long nX = 0L; nX < nWidth; nX++ )
-                                        {
-                                            const BitmapColor& rCol = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
-                                            nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
-                                        }
+                                        const BitmapColor& rCol = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
+                                        nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
                                     }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                for( long nY = 0L; nY < nHeight; nY++ )
                                 {
-                                    for( long nY = 0L; nY < nHeight; nY++ )
+                                    for( long nX = 0L; nX < nWidth; nX++ )
                                     {
-                                        for( long nX = 0L; nX < nWidth; nX++ )
-                                        {
-                                            const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
-                                            nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
-                                        }
+                                        const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
+                                        nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
                                     }
                                 }
-                                aBmp.ReleaseAccess( pAcc );
-                                sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
-                                nRt /= nC;
-                                nGn /= nC;
-                                nBl /= nC;
-                                aDefColor = Color(sal_uInt8( nRt ), sal_uInt8( nGn ),sal_uInt8( nBl ) );
+                            }
+                            aBmp.ReleaseAccess( pAcc );
+                            sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
+                            nRt /= nC;
+                            nGn /= nC;
+                            nBl /= nC;
+                            aDefColor = Color(sal_uInt8( nRt ), sal_uInt8( nGn ),sal_uInt8( nBl ) );
+                        }
+                    }
+                }
+            }
+            break;
+            case mso_fillBackground :
+            {
+                if ( pTextObj ) // the textobject is needed
+                {
+                    const SfxItemSet* pItemSet = pTextObj->GetBackground();
+                    if ( pItemSet )
+                    {
+                        const SfxPoolItem* pFillStyleItem = NULL;
+                        pItemSet->GetItemState( XATTR_FILLSTYLE, FALSE, &pFillStyleItem );
+                        if ( pFillStyleItem )
+                        {
+                            XFillStyle eFillStyle = ((XFillStyleItem*)pFillStyleItem)->GetValue();
+                            switch( eFillStyle )
+                            {
+                                case XFILL_SOLID :
+                                {
+                                    const SfxPoolItem* pFillColorItem = NULL;
+                                    pItemSet->GetItemState( XATTR_FILLCOLOR, FALSE, &pFillColorItem );
+                                    if ( pFillColorItem )
+                                        aDefColor = ((XColorItem*)pFillColorItem)->GetValue();
+                                }
+                                break;
+                                case XFILL_GRADIENT :
+                                {
+                                    const SfxPoolItem* pGradientItem = NULL;
+                                    pItemSet->GetItemState( XATTR_FILLGRADIENT, FALSE, &pGradientItem );
+                                    if ( pGradientItem )
+                                        aDefColor = ((XFillGradientItem*)pGradientItem)->GetValue().GetStartColor();
+                                }
+                                break;
+                                case XFILL_HATCH :
+                                case XFILL_BITMAP :
+                                    aDefColor = Color( COL_WHITE );
+                                break;
                             }
                         }
                     }
                 }
-                break;
-//              case mso_fillPicture :
-//              case mso_fillBackground :
             }
+            break;
+//          case mso_fillPicture :
         }
         rSet.Put( SvxColorItem( aDefColor, EE_CHAR_COLOR ) );
     }
@@ -6539,7 +6632,7 @@ void PPTFieldEntry::SetDateTime( UINT32 nVal )
 //  -----------------------------------------------------------------------
 
 PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData* pObjData ) :
-    mpImplTextObj   ( new ImplPPTTextObj )
+    mpImplTextObj   ( new ImplPPTTextObj( rPersistEntry ) )
 {
     mpImplTextObj->mnRefCount = 1;
     mpImplTextObj->mnShapeId = 0;
@@ -7125,6 +7218,14 @@ PPTParagraphObj* PPTTextObj::Next()
         return NULL;
     mpImplTextObj->mnCurrentObject++;
     return mpImplTextObj->mpParagraphList[ i ];
+}
+
+const SfxItemSet* PPTTextObj::GetBackground() const
+{
+    if ( mpImplTextObj->mrPersistEntry.pBackgroundHelper->pBObj )
+        return &mpImplTextObj->mrPersistEntry.pBackgroundHelper->pBObj->GetItemSet();
+    else
+        return NULL;
 }
 
 void PPTTextObj::ImplClear()
