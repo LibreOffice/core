@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:15:03 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4200,32 +4200,35 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
                     rView.GetViewFrame()->GetBindings().GetRecorder();
 
-            // #102812# convert quotes in IME text
-            // works on the last input character, this is escpecially in Korean text often done
-            // quotes that are inside of the string are not replaced!
-            const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
-            OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
-            SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-            if(pACorr &&
-                 ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                 ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
+            if ( sRecord.Len() )
             {
-               rSh.DelLeft();
-               rSh.AutoCorrect( *pACorr, aCh );
-            }
-            if ( sRecord.Len() && xRecorder.is() )
-            {
-                //Shell ermitteln
-                SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
-                // Request generieren und recorden
-                if (pSfxShell)
+                // #102812# convert quotes in IME text
+                // works on the last input character, this is escpecially in Korean text often done
+                // quotes that are inside of the string are not replaced!
+                const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
+                OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+                SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+                if(pACorr &&
+                    ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                    ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
                 {
-                    SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
-                    aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
-                    aReq.Done();
+                    rSh.DelLeft();
+                    rSh.AutoCorrect( *pACorr, aCh );
+                }
+
+                if ( xRecorder.is() )
+                {
+                    //Shell ermitteln
+                    SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
+                    // Request generieren und recorden
+                    if (pSfxShell)
+                    {
+                        SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
+                        aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
+                        aReq.Done();
+                    }
                 }
             }
-
         }
         break;
 
