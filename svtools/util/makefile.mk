@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.31 $
+#*  $Revision: 1.32 $
 #*
-#*  last change: $Author: kz $ $Date: 2002-01-10 09:45:53 $
+#*  last change: $Author: sab $ $Date: 2002-01-18 09:50:32 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -124,7 +124,8 @@ LIB7FILES=	\
         $(SLB)$/svcontnr.lib	\
         $(SLB)$/syslocale.lib   \
         $(SLB)$/svhtml2.lib     \
-        $(SLB)$/filepicker.lib
+        $(SLB)$/filepicker.lib	\
+        $(SLB)$/accessibility.lib
 
 
 .IF "$(GUI)" == "OS2"
@@ -274,7 +275,7 @@ APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
 APP2TARGET	=	g2g
 APP2BASE	=	0x10000000
 APP2DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
-APP2OBJS	=   $(OBJ)$/g2g.obj	
+APP2OBJS	=   $(OBJ)$/g2g.obj
 
 APP2STDLIBS	=	$(SVLIB)		\
                 $(TOOLSLIB)		\

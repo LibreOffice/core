@@ -331,6 +331,9 @@ hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 
+hedabu: ..\inc\AccessibleContextBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleContextBase.hxx
+hedabu: ..\inc\AccessibleDocumentBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleDocumentBase.hxx
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
