@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 11:21:22 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 10:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,9 +1587,13 @@ BOOL SwFrm::WannaRightPage() const
     {
         if ( pFlow->IsInTab() )
             pFlow = pFlow->FindTabFrm();
-        const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
-        pDesc = (SwPageDesc*)rPgDesc.GetPageDesc();
-        nPgNum = rPgDesc.GetNumOffset();
+        const SwFlowFrm *pTmp = SwFlowFrm::CastFlowFrm( pFlow );
+        if ( !pTmp->IsFollow() )
+        {
+            const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            pDesc = (SwPageDesc*)rPgDesc.GetPageDesc();
+            nPgNum = rPgDesc.GetNumOffset();
+        }
     }
     if ( !pDesc )
     {
