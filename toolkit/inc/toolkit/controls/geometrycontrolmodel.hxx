@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-28 10:51:22 $
+ *  last change: $Author: tbe $ $Date: 2001-03-01 14:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Int32       m_nHeight;
         ::rtl::OUString m_nName;
         sal_Int16       m_nTabIndex;
-        sal_Int16       m_nClassId;
         // </properties>
 
     public:
@@ -209,6 +208,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 10:51:22  tbe
+ *  added additional properties to geometry model
+ *
  *  Revision 1.2  2001/02/21 17:21:57  ab
  *  Support for XScriptEventsSupplier added
  *

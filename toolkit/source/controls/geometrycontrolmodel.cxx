@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-28 10:49:53 $
+ *  last change: $Author: tbe $ $Date: 2001-03-01 14:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #define GCM_PROPERTY_ID_HEIGHT      4
 #define GCM_PROPERTY_ID_NAME        5
 #define GCM_PROPERTY_ID_TABINDEX    6
-#define GCM_PROPERTY_ID_CLASSID     7
 
 #define GCM_PROPERTY_POS_X      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
 #define GCM_PROPERTY_POS_Y      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
@@ -92,7 +91,6 @@
 #define GCM_PROPERTY_HEIGHT     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
 #define GCM_PROPERTY_NAME       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
 #define GCM_PROPERTY_TABINDEX   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
-#define GCM_PROPERTY_CLASSID    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassId"))
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -120,7 +118,6 @@
         ,m_nHeight(0)
         ,m_nName(::rtl::OUString())
         ,m_nTabIndex(0)
-        ,m_nClassId(0)
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -140,7 +137,6 @@
         registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
         registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_nName, ::getCppuType(&m_nName));
         registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
-        registerProperty(GCM_PROPERTY_CLASSID,  GCM_PROPERTY_ID_CLASSID,    DEFAULT_ATTRIBS(), &m_nClassId, ::getCppuType(&m_nClassId));
     }
 
     //--------------------------------------------------------------------
@@ -240,6 +236,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 10:49:53  tbe
+ *  added additional properties to geometry model
+ *
  *  Revision 1.2  2001/02/21 17:31:20  ab
  *  Support for XScriptEventsSupplier added
  *
