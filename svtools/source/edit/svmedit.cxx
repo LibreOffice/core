@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-01 19:12:04 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 09:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,17 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
         mpTextWindow->GetTextView()->SetReadOnly( FALSE );
 
     if ( nWinStyle & WB_IGNORETAB )
+    {
         mpTextWindow->SetIgnoreTab( TRUE );
+    }
     else
+    {
         mpTextWindow->SetIgnoreTab( FALSE );
+        // #103667# MultiLineEdit has the flag, but focusable window also needs this flag
+        WinBits nStyle = mpTextWindow->GetStyle();
+        nStyle |= WINDOW_DLGCTRL_MOD1TAB;
+        mpTextWindow->SetStyle( nStyle );
+    }
 }
 
 ImpSvMEdit::~ImpSvMEdit()
