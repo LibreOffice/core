@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Condition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $  $Date: 2003-09-08 13:20:34 $
+ *  last change: $Author: kz $  $Date: 2003-12-11 12:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,8 @@ public:
 
     ~ConditionThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#ConditionThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        // LLA: do not throw in DTors!
+        // LLA: CPPUNIT_ASSERT_MESSAGE( "#ConditionThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     ::osl::Condition& m_MyCon;
