@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ TabPage TP_FLD_DB
         TEXT [ finnish ] = "Joukon numero" ;
         TEXT [ danish ] = "Datapostnummer" ;
         TEXT [ french ] = "~Numéro de l'enregistrement" ;
-        TEXT [ swedish ] = "Datapostnummer" ;
+        TEXT [ swedish ] = "~Datapostnummer" ;
         TEXT [ dutch ] = "~Record-nummer" ;
         TEXT [ spanish ] = "Número de registro" ;
         TEXT [ english_us ] = "Record number" ;
@@ -229,7 +229,7 @@ TabPage TP_FLD_DB
         Check = TRUE ;
         Text [ english_us ] = "From database" ;
         Text [ portuguese_brazilian ] = "Aus Datenbank" ;
-        Text [ swedish ] = "Från databas" ;
+        Text [ swedish ] = "F~rån databas" ;
         Text [ danish ] = "Fra database" ;
         Text [ italian ] = "Dal database" ;
         Text [ spanish ] = "De la base de datos" ;
@@ -254,7 +254,7 @@ TabPage TP_FLD_DB
         Text [ ENGLISH ] = "User defined" ;
         Text [ english_us ] = "User-defined" ;
         Text [ portuguese_brazilian ] = "Selbstdefiniert" ;
-        Text [ swedish ] = "Användardefinierat" ;
+        Text [ swedish ] = "An~vändardefinierat" ;
         Text [ danish ] = "Brugerdefineret" ;
         Text [ italian ] = "Personalizzato" ;
         Text [ spanish ] = "Definido por el usuario" ;
