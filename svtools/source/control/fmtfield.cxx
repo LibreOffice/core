@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 11:19:02 $
+ *  last change: $Author: fs $ $Date: 2002-09-27 13:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ BOOL FormattedField::SetFormat(const XubString& rFormatString, LanguageType eLan
         USHORT nCheckPos;
         short nType;
         XubString rFormat(rFormatString);
-        if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey))
+        if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
             return FALSE;
         DBG_ASSERT(nNewKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "FormattedField::SetFormatString : PutEntry returned an invalid key !");
     }
