@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:48:11 $
+ *  last change: $Author: ka $ $Date: 2002-11-21 12:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(application/vnd.sun.xml.chart), OUSTR(Chart 6.0) ) );//SOT_FORMATSTR_ID_STARCHART_60
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(application/vnd.sun.xml.math), OUSTR(Math 6.0) ) );//SOT_FORMATSTR_ID_STARMATH_60
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(application/vnd.sun.xml.dialog), OUSTR(Dialog 6.0) ) );//SOT_FORMATSTR_ID_DIALOG_60
+    m_TranslTable.push_back( mkPublicFormatEntry( OUSTR(image/bmp), OUSTR(Windows Bitmap) ) );//SOT_FORMATSTR_ID_BMP
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SO_DUMMYFORMAT_3) ) );//SOT_FORMATSTR_ID_DUMMY3
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SO_DUMMYFORMAT_4) ) );//SOT_FORMATSTR_ID_DUMMY4
 }

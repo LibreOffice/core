@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-13 12:45:10 $
+ *  last change: $Author: ka $ $Date: 2002-11-21 12:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,13 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
             {
                 GetData( aSubstFlavor );
                 bDone = maAny.hasValue();
+            }
+            else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_BMP, aSubstFlavor ) &&
+                     TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
+                     SotExchange::GetFormatDataFlavor( FORMAT_BITMAP, aSubstFlavor ) )
+            {
+                GetData( aSubstFlavor );
+                bDone = sal_True;
             }
             else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
@@ -569,7 +576,11 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 
         mpFormats->push_back( aFlavorEx );
 
-        if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
+        if( FORMAT_BITMAP == aFlavorEx.mnSotId )
+        {
+            AddFormat( SOT_FORMATSTR_ID_BMP );
+        }
+        else if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
         {
             AddFormat( SOT_FORMATSTR_ID_EMF );
             AddFormat( SOT_FORMATSTR_ID_WMF );
@@ -1213,8 +1224,15 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             rDataFlavorExVector.push_back( aFlavorEx );
 
             // add additional formats for special mime types
-            if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ||
-                SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId )
+            if( SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId )
+            {
+                if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavorEx ) )
+                {
+                    aFlavorEx.mnSotId = SOT_FORMAT_BITMAP;
+                    rDataFlavorExVector.push_back( aFlavorEx );
+                }
+            }
+            else if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId || SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId )
             {
                 if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                 {
@@ -1485,10 +1503,21 @@ sal_Bool TransferableDataHelper::GetBitmap( SotFormatStringId nFormat, Bitmap& r
 sal_Bool TransferableDataHelper::GetBitmap( const DataFlavor& rFlavor, Bitmap& rBmp )
 {
     SotStorageStreamRef xStm;
+    DataFlavor          aSubstFlavor;
     sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
     {
+        *xStm >> rBmp;
+        bRet = ( xStm->GetError() == ERRCODE_NONE );
+    }
+
+    if( !bRet &&
+        HasFormat( SOT_FORMATSTR_ID_BMP ) &&
+        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_BMP, aSubstFlavor ) &&
+        GetSotStorageStream( aSubstFlavor, xStm ) )
+    {
+        xStm->ResetError();
         *xStm >> rBmp;
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
