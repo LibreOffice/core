@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:40:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -91,7 +90,6 @@
 #include "unofield.hxx"
 #include "unoprov.hxx"
 #include "unotext.hxx"
-#include "adritem.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -538,7 +536,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
 
         // #92009# pass fixed attribute to constructor
-        pData = new SvxAuthorField( SvxAddressItem( aEmpty, aEmpty, aFirstName, aLastName ),
+        pData = new SvxAuthorField( aFirstName, aLastName, aEmpty,
                                     mpImpl->mbBoolean1 ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR );
 
         if( !mpImpl->mbBoolean2 )
