@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-14 11:24:06 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,21 +588,13 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
     // prepare access to styles
     uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
-    if(!xFamSup.is())
-        throw lang::IllegalArgumentException();
-
-    mxDocStyleFamilies = xFamSup->getStyleFamilies();
-    if(!mxDocStyleFamilies.is())
-        throw lang::IllegalArgumentException();
+    if(xFamSup.is())
+        mxDocStyleFamilies = xFamSup->getStyleFamilies();
 
     // prepare access to master pages
     uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
-    if(!xMasterPagesSupplier.is())
-        throw lang::IllegalArgumentException();
-
-    mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
-    if(!mxDocMasterPages.is())
-        throw lang::IllegalArgumentException();
+    if(xMasterPagesSupplier.is())
+        mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
 
     // prepare access to draw pages
     uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);
@@ -613,9 +605,12 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     if(!mxDocDrawPages.is())
         throw lang::IllegalArgumentException();
 
-    uno::Reference< form::XFormsSupplier > xFormsSupp;
-    mxDocDrawPages->getByIndex(0) >>= xFormsSupp;
-    mbIsFormsSupported = xFormsSupp.is();
+    if( mxDocDrawPages.is() && mxDocDrawPages->getCount() > 0 )
+    {
+        uno::Reference< form::XFormsSupplier > xFormsSupp;
+        mxDocDrawPages->getByIndex(0) >>= xFormsSupp;
+        mbIsFormsSupported = xFormsSupp.is();
+    }
 }
 
 // XInitialization
