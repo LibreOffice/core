@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,13 @@
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
+#ifndef _SV_SALOBJ_HXX
+#include <salobj.hxx>
+#endif
 
+class X11SalObject;
 
-// -----------------
-// - SalObjectData -
-// -----------------
-
-class SalObject;
-
-DECLARE_LIST( SalObjectList, SalObject* );
+DECLARE_LIST( SalObjectList, X11SalObject* );
 
 class SalClipRegion
 {
@@ -112,12 +110,9 @@ private:
 };
 
 
-class SalObjectData
+class X11SalObject : public SalObject
 {
-    friend class SalObject;
-    friend class SalDisplay;
-    friend class SalInstance;
-
+public:
     static SalObjectList aAllObjects;
 
     SystemChildData maSystemChildData;
@@ -130,6 +125,27 @@ class SalObjectData
     BOOL            mbVisible;
 
     static long Dispatch( XEvent* pEvent );
+
+    X11SalObject();
+    virtual ~X11SalObject();
+
+    // overload all pure virtual methods
+     virtual void                   ResetClipRegion();
+    virtual USHORT                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    EndSetClipRegion();
+
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    Show( BOOL bVisible );
+    virtual void                    Enable( BOOL nEnable );
+    virtual void                    GrabFocus();
+
+    virtual void                    SetBackground();
+    virtual void                    SetBackground( SalColor nSalColor );
+
+    virtual const SystemEnvData*    GetSystemData() const;
+
 };
 
 #endif // _SV_SALOBJ_H
