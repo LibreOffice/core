@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mempool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+ *  last change: $Author: mhu $ $Date: 2002-05-21 20:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 
 struct FixedMemBlock
 {
+    /** Representation.
+     */
     USHORT          nSize;
     USHORT          nFree;
     USHORT          nFirst;
@@ -89,7 +91,37 @@ struct FixedMemBlock
     void*           pDummyAlign2;
 #endif
     char            aData[1];
+
+    /** Allocation.
+     */
+    static void* operator new (size_t, USHORT nTypes, USHORT nTypeSize)
+    {
+        return ::operator new (sizeof(FixedMemBlock) + nTypes * nTypeSize);
+    }
+    static void  operator delete (void *p, size_t)
+    {
+        ::operator delete (p);
+    }
+
+    /** Construction.
+     */
+    FixedMemBlock (USHORT nTypes = 1, USHORT nTypeSize = 0);
+    ~FixedMemBlock() {}
 };
+
+FixedMemBlock::FixedMemBlock (USHORT nTypes, USHORT nTypeSize)
+    : nSize  (nTypes * nTypeSize),
+      nFree  (nTypes - 1),
+      nFirst (1),
+      pNext  (0)
+{
+    char * pData = aData;
+    for (USHORT i = 1; i < nTypes; i++)
+    {
+        *reinterpret_cast<USHORT*>(pData) = i;
+        pData += nTypeSize;
+    }
+}
 
 /*************************************************************************
 |*
@@ -206,27 +238,11 @@ void* FixedMemPool::Alloc()
     ImpDbgPoolTest( this );
 #endif
 
-    USHORT  i;
-    char*   pData;
-
     if ( !pFirst )
     {
-        pFirst = (FixedMemBlock*)new char[sizeof(FixedMemBlock)-1+(nInitSize*nTypeSize)];
-
+        pFirst = new(nInitSize, nTypeSize) FixedMemBlock(nInitSize, nTypeSize);
         if ( !pFirst )
             return NULL;
-
-        pFirst->pNext  = NULL;
-        pFirst->nSize  = nInitSize*nTypeSize;;
-        pFirst->nFree  = nInitSize-1;
-        pFirst->nFirst = 1;
-
-        pData = pFirst->aData;
-        for ( i = 1; i < nInitSize; i++ )
-        {
-            *((USHORT*)pData) = i;
-            pData += nTypeSize;
-        }
 
         return (void*)(pFirst->aData);
     }
@@ -237,8 +253,7 @@ void* FixedMemPool::Alloc()
 
     if ( pBlock )
     {
-        pData = pBlock->aData;
-        char* pFree = pData+(pBlock->nFirst*nTypeSize);
+        char* pFree = pBlock->aData+(pBlock->nFirst*nTypeSize);
         pBlock->nFirst = *((USHORT*)pFree); // UMR, wenn letzter freier Block, ist OK
         pBlock->nFree--;
         return (void*)pFree;
@@ -248,22 +263,11 @@ void* FixedMemPool::Alloc()
         if ( !nGrowSize )
             return NULL;
 
-        pBlock = (FixedMemBlock*)new char[sizeof(FixedMemBlock)-1+(nGrowSize*nTypeSize)];
-
+        pBlock = new(nGrowSize, nTypeSize) FixedMemBlock(nGrowSize, nTypeSize);
         if ( !pBlock )
             return NULL;
 
-        pData = pBlock->aData;
-        for ( i = 1; i < nGrowSize; i++ )
-        {
-            *((USHORT*)pData) = i;
-            pData += nTypeSize;
-        }
-
-        pBlock->pNext  = pFirst->pNext;
-        pBlock->nSize  = nGrowSize*nTypeSize;
-        pBlock->nFree  = nGrowSize-1;
-        pBlock->nFirst = 1;
+        pBlock->pNext = pFirst->pNext;
         pFirst->pNext = pBlock;
 
         return (void*)(pBlock->aData);
