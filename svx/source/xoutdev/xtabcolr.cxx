@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:36 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,8 @@ BOOL XColorTable::Load()
 
         aURL.Append( aName );
 
-        if( !aURL.getExtension().Len() )
-            aURL.setExtension( String( pszExtColor, 3 ) );
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
 
 //BFS01     // check if file exists, SfxMedium shows an errorbox else
 //BFS01     {
@@ -233,8 +233,8 @@ BOOL XColorTable::Save()
 
     aURL.Append( aName );
 
-    if( !aURL.getExtension().Len() )
-        aURL.setExtension( String( pszExtColor, 3 ) );
+    if( !aURL.getExtension().getLength() )
+        aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
