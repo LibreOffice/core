@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-19 10:02:53 $
+ *  last change: $Author: kr $ $Date: 2001-03-12 16:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-02-19 10:02:53 $
+ * @version     $Revision: 1.6 $ $ $Date: 2001-03-12 16:49:23 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -176,34 +176,22 @@ public class Job {
             }
         }
         catch(InvocationTargetException invocationTargetException) {
-            Throwable theException = invocationTargetException;
+            Throwable throwable = invocationTargetException.getTargetException();;
 
-            do {
-                if(DEBUG) {
-                    System.err.println("##### RemoteStub.request - exception occured:" + ((InvocationTargetException)theException).getTargetException());
-                    ((InvocationTargetException)theException).getTargetException().printStackTrace();
-                }
+            if(DEBUG) System.err.println("##### Job.execute - exception occured:" + throwable);
 
-                theException = ((InvocationTargetException)theException).getTargetException();
-            }
-            while(theException instanceof InvocationTargetException);
-
-            if(theException instanceof com.sun.star.uno.Exception
-            || theException instanceof com.sun.star.uno.RuntimeException) {
-                if(_iMessage.isSynchron())
-                    _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
-
-                if(DEBUG) System.err.println("#### RemoteStub.request - exception:" + theException);
-            }
-            else {// wrap it as uno exception
+            // Here we have to be aware of non UNO exceptions, cause they may kill
+            // a remote side (which does not know anything about theire types)
+            if(!(throwable instanceof com.sun.star.uno.Exception)
+            && !(throwable instanceof com.sun.star.uno.RuntimeException)) {
                 StringWriter stringWriter = new StringWriter();
-                theException.printStackTrace(new PrintWriter(stringWriter));
+                throwable.printStackTrace(new PrintWriter(stringWriter));
 
-                theException = new com.sun.star.uno.RuntimeException("java exception: " + stringWriter.toString(), null);
+                throwable = new com.sun.star.uno.RuntimeException("java exception: " + stringWriter.toString(), null);
             }
 
             if(_iMessage.mustReply())
-                _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
+                _iReceiver.sendReply(true, _iMessage.getThreadID(), throwable);
         }
 
         return result;
