@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
+ *  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <hash_map>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase4.hxx> // helper for component factory
+#include <cppuhelper/implbase5.hxx> // helper for component factory
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -77,6 +77,7 @@
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageExport.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptStorageRefresh.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
 namespace scripting_impl
@@ -100,11 +101,12 @@ ScriptOutput_hash;
 //=============================================================================
 
 class ScriptStorage : public
-    ::cppu::WeakImplHelper4<
+    ::cppu::WeakImplHelper5<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
         dcsssf::storage::XScriptInfoAccess,
-        dcsssf::storage::XScriptStorageExport >
+        dcsssf::storage::XScriptStorageExport,
+    dcsssf::storage::XScriptStorageRefresh >
 {
 public:
     //Constructors and Destructors
@@ -167,10 +169,22 @@ public:
 
     //=========================================================================
 
-    // XScriptStorageExport
+    /**
+     * Save the scripts stored in the ScriptStorage into the corresponding
+     * area (document or application)
+     */
     void SAL_CALL save()
         throw ( css::uno::RuntimeException );
     //=========================================================================
+
+    /**
+     * Refresh the ScriptStorage from the data stored in the corresponding area
+     * (document or application).
+     */
+    void SAL_CALL refresh()
+        throw ( css::uno::RuntimeException );
+    //=========================================================================
+
 
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -181,6 +195,7 @@ public:
     ScriptInfo_hash mh_implementations;
     ScriptOutput_hash mh_parcels;
     sal_Int32 m_scriptStorageID;
+    ::rtl::OUString m_stringUri;
 
     osl::Mutex m_mutex;
     bool m_bInitialised;
@@ -188,6 +203,8 @@ public:
     void updateMaps( const Datas_vec & vScriptDatas );
     void writeMetadataHeader(
         css::uno::Reference < css::xml::sax::XExtendedDocumentHandler > & xExDocHandler );
+    void create ()
+    throw (css::uno::RuntimeException, css::uno::Exception);
 
 }; // class ScriptingStorage
 

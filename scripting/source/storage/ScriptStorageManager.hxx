@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:39 $
+ *  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@ namespace scripting_impl
 typedef ::std::hash_map < sal_Int32, css::uno::Reference < css::uno::XInterface > >
     ScriptStorage_hash;
 
+typedef ::std::hash_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash>
+    StorageId_hash;
+
 class ScriptStorageManager : public
     ::cppu::WeakImplHelper3 < dcsssf::storage::XScriptStorageManager,
     css::lang::XServiceInfo, css::lang::XEventListener >
@@ -158,6 +161,10 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getScriptStorage(
         sal_Int32 scriptStorageID )
         throw ( css::uno::RuntimeException );
+
+
+    virtual void SAL_CALL refreshScriptStorage(const ::rtl::OUString & stringURI)
+    throw ( css::uno::RuntimeException );
     //======================================================================
 
 
@@ -175,6 +182,7 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex m_mutex;
     ScriptStorage_hash m_ScriptStorageHash;
+    StorageId_hash m_StorageIdHash;
     sal_Int32 m_count;
 
     void setupAppStorage( const css::uno::Reference< css::util::XMacroExpander > & xME,

@@ -11,6 +11,7 @@
         <status value="draft"/>
         <supported-service>drafts.com.sun.star.script.framework.storage.ScriptingStorage</supported-service>
         <type>com.sun.star.beans.XPropertySet</type>
+    <type>com.sun.star.beans.XPropertyContainer</type>
         <type>com.sun.star.uno.Exception</type>
         <type>com.sun.star.uno.XComponentContext</type>
         <type>com.sun.star.io.IOException</type>
@@ -20,6 +21,7 @@
         <type>drafts.com.sun.star.script.framework.storage.XScriptInfo</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptInfoAccess</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptStorageExport</type>
+    <type>drafts.com.sun.star.script.framework.storage.XScriptStorageRefresh</type>
         <type>com.sun.star.lang.XInitialization</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptStorageManager</type>
         <type>com.sun.star.xml.sax.XExtendedDocumentHandler</type>

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
+*  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptStorageRefresh.hpp>
 
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
@@ -202,6 +203,7 @@ SAL_THROW ( ( RuntimeException ) )
 
         // and place it in the hash_map. Increment the counter
         m_ScriptStorageHash[ m_count++ ] = xInterface;
+    m_StorageIdHash [storageStr] = m_count - 1;
 
 #ifdef _DEBUG
 
@@ -275,6 +277,40 @@ throw( RuntimeException )
     validateXRef( itr->second,
         "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
     return itr->second;
+}
+
+void SAL_CALL
+ScriptStorageManager::refreshScriptStorage(const OUString & stringURI)
+throw( RuntimeException )
+{
+    StorageId_hash::const_iterator it = m_StorageIdHash.find(stringURI);
+
+    if ( it == m_StorageIdHash.end() )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::refresh: attempt to look for non-existent storage" ),
+            Reference< XInterface >() );
+    }
+
+    try
+    {
+        Reference < storage::XScriptStorageRefresh > xSSR(
+            getScriptStorage(it->second), UNO_QUERY);
+
+       xSSR->refresh();
+    }
+    catch ( RuntimeException & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::refreshScriptStorage: " ).concat(
+                e.Message ), Reference< XInterface >() );
+    }
+    catch ( Exception & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::refreshScriptStorage: " ).concat(
+                e.Message ), Reference< XInterface >() );
+    }
 }
 
 //*************************************************************************

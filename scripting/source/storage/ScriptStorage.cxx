@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.12 $
-*  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
+*  $Revision: 1.13 $
+*  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -132,7 +132,6 @@ ScriptStorage::initialize( const Sequence <Any> & args )
 throw ( RuntimeException, Exception )
 {
     OSL_TRACE( "Entering ScriptStorage::initialize\n" );
-    ::rtl::OUString xStringUri;
 
     // Should not be renitialised
     if ( m_bInitialised )
@@ -168,7 +167,7 @@ throw ( RuntimeException, Exception )
                 Reference< XInterface >(), 0 );
         }
 
-        if ( sal_False == ( args[ 2 ] >>= xStringUri ) )
+        if ( sal_False == ( args[ 2 ] >>= m_stringUri ) )
         {
             throw lang::IllegalArgumentException(
                 OUSTR( "Invalid String Uri argument provided!" ),
@@ -178,11 +177,68 @@ throw ( RuntimeException, Exception )
 
 #ifdef _DEBUG
     fprintf( stderr, "uri: %s\n", ::rtl::OUStringToOString(
-        xStringUri, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        m_stringUri, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
     try
     {
+    create();
+
+    }
+    catch ( io::IOException ioe )
+    {
+        //From ScriptMetadata Importer
+        OSL_TRACE( "caught com::sun::star::io::IOException in ScriptStorage::initalize" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::initalize IOException: " ).concat( ioe.Message ),
+            Reference< XInterface > () );
+
+    }
+    catch ( ucb::CommandAbortedException cae )
+    {
+        OSL_TRACE( "caught com::sun::star::ucb::CommandAbortedException in ScriptStorage::initialize" );
+        throw RuntimeException(
+            OUSTR(
+                "ScriptStorage::initalize CommandAbortedException: " ).concat( cae.Message ),
+            Reference< XInterface > () );
+    }
+    catch ( RuntimeException re )
+    {
+        OSL_TRACE( "caught com::sun::star::uno::RuntimeException in ScriptStorage::initialize" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::initalize RuntimeException: " ).concat( re.Message ),
+            Reference< XInterface > () );
+    }
+    catch ( Exception ue )
+    {
+        OSL_TRACE( "caught com::sun::star::uno::Exception in ScriptStorage::initialize" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::initalize Exception: " ).concat( ue.Message ),
+            Reference< XInterface > () );
+    }
+#ifdef _DEBUG
+    catch ( ... )
+    {
+        OSL_TRACE( "caught unknown Exception in ScriptStorage::initialize" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::initalize unknown exception: " ),
+            Reference< XInterface > () );
+    }
+#endif
+
+    OSL_TRACE( "Parsed the XML\n" );
+
+    m_bInitialised = true;
+}
+
+void
+ScriptStorage::create()
+throw ( RuntimeException, Exception )
+{
+    try
+    {
+    OUString xStringUri(m_stringUri);
+
         ScriptMetadataImporter* SMI = new ScriptMetadataImporter( m_xContext );
         Reference< xml::sax::XExtendedDocumentHandler > xSMI( SMI );
 
@@ -264,7 +320,7 @@ throw ( RuntimeException, Exception )
                         xInput->closeInput();
                     }
                     OSL_TRACE(
-                        "caught com::sun::star::xml::sax::SAXException in ScriptStorage::initalize %s",
+                        "caught com::sun::star::xml::sax::SAXException in ScriptStorage::create %s",
                         ::rtl::OUStringToOString( saxe.Message,
                         RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
 
@@ -277,7 +333,7 @@ throw ( RuntimeException, Exception )
                         xInput->closeInput();
                     }
                     OSL_TRACE(
-                        "caught com::sun::star::io::IOException in ScriptStorage::initalize" );
+                        "caught com::sun::star::io::IOException in ScriptStorage::create" );
                     continue;
                 }
                 xInput->closeInput();
@@ -289,38 +345,38 @@ throw ( RuntimeException, Exception )
     catch ( io::IOException ioe )
     {
         //From ScriptMetadata Importer
-        OSL_TRACE( "caught com::sun::star::io::IOException in ScriptStorage::initalize" );
+        OSL_TRACE( "caught com::sun::star::io::IOException in ScriptStorage::create" );
         throw RuntimeException(
-            OUSTR( "ScriptStorage::initalize IOException: " ).concat( ioe.Message ),
+            OUSTR( "ScriptStorage::create IOException: " ).concat( ioe.Message ),
             Reference< XInterface > () );
 
     }
     catch ( ucb::CommandAbortedException cae )
     {
-        OSL_TRACE( "caught com::sun::star::ucb::CommandAbortedException in ScriptStorage::initialize" );
+        OSL_TRACE( "caught com::sun::star::ucb::CommandAbortedException in ScriptStorage::create" );
         throw RuntimeException(
             OUSTR(
-                "ScriptStorage::initalize CommandAbortedException: " ).concat( cae.Message ),
+                "ScriptStorage::create CommandAbortedException: " ).concat( cae.Message ),
             Reference< XInterface > () );
     }
     catch ( RuntimeException re )
     {
-        OSL_TRACE( "caught com::sun::star::uno::RuntimeException in ScriptStorage::initialize" );
+        OSL_TRACE( "caught com::sun::star::uno::RuntimeException in ScriptStorage::create" );
         throw RuntimeException(
-            OUSTR( "ScriptStorage::initalize RuntimeException: " ).concat( re.Message ),
+            OUSTR( "ScriptStorage::create RuntimeException: " ).concat( re.Message ),
             Reference< XInterface > () );
     }
     catch ( Exception ue )
     {
-        OSL_TRACE( "caught com::sun::star::uno::Exception in ScriptStorage::initialize" );
+        OSL_TRACE( "caught com::sun::star::uno::Exception in ScriptStorage::create" );
         throw RuntimeException(
-            OUSTR( "ScriptStorage::initalize Exception: " ).concat( ue.Message ),
+            OUSTR( "ScriptStorage::create Exception: " ).concat( ue.Message ),
             Reference< XInterface > () );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        OSL_TRACE( "caught unknown Exception in ScriptStorage::initialize" );
+        OSL_TRACE( "caught unknown Exception in ScriptStorage::create" );
         throw RuntimeException(
             OUSTR( "ScriptStorage::initalize unknown exception: " ),
             Reference< XInterface > () );
@@ -331,6 +387,7 @@ throw ( RuntimeException, Exception )
 
     m_bInitialised = true;
 }
+
 
 //*************************************************************************
 // private method for updating hashmaps
@@ -473,6 +530,35 @@ throw ( RuntimeException )
         throw RuntimeException(
             OUSTR( "ScriptStorage::save RuntimeException: " ).concat(
             re.Message ),
+            Reference< XInterface > () );
+    }
+}
+
+//*************************************************************************
+void
+ScriptStorage::refresh()
+throw (RuntimeException)
+{
+    // guard against concurrent refreshes
+    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
+
+    try
+    {
+        create();
+
+    }
+    catch ( RuntimeException re )
+    {
+        OSL_TRACE( "caught com::sun::star::uno::RuntimeException in ScriptStorage::refresh" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::refresh RuntimeException: " ).concat( re.Message ),
+            Reference< XInterface > () );
+    }
+    catch ( Exception ue )
+    {
+        OSL_TRACE( "caught com::sun::star::uno::Exception in ScriptStorage::refresh" );
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::refresh Exception: " ).concat( ue.Message ),
             Reference< XInterface > () );
     }
 }
