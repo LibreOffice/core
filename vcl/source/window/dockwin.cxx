@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
+ *  last change: $Author: pl $ $Date: 2002-03-22 13:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,15 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                     }
                     return TRUE;
                 }
+            }
+        }
+        else if( rNEvt.GetType() == EVENT_KEYINPUT )
+        {
+            const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+            if( rKey.GetCode() == KEY_F4 && ! rKey.GetModifier() )
+            {
+                SetFloatingMode( !IsFloatingMode() );
+                return TRUE;
             }
         }
     }
