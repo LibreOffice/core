@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-13 10:53:43 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 11:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,9 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
         if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
 #ifdef REMOTE_APPSERVER
-            aSoundName = aSoundURL.GetMainURL();
+            aSoundName = aSoundURL.GetMainURL( INetURLObject::NO_DECODE );
 #else
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL(), aSoundName );
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL( INetURLObject::NO_DECODE ), aSoundName );
 #endif
         }
         else if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundName, aTmp ) )
@@ -401,7 +401,7 @@ BOOL Sound::IsSoundFile( const XubString& rSoundPath )
         String          aSoundName;
 
         if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
-            aSoundName = aSoundURL.GetMainURL();
+            aSoundName = aSoundURL.GetMainURL( INetURLObject::NO_DECODE );
         else if( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundPath, aSoundName ) )
             aSoundName.Erase();
 

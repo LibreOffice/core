@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-11 13:26:43 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 11:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
 
         maURL = aTempFile.GetURL();
 
-        if( maURL.GetMainURL().Len() )
+        if( maURL.GetMainURL( INetURLObject::NO_DECODE ).Len() )
         {
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
             if( pOStm )
             {
@@ -335,7 +335,7 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
                 {
                     try
                     {
-                        ::ucb::Content aCnt( maURL.GetMainURL(),
+                        ::ucb::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
                                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                         aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -369,7 +369,7 @@ ImpSwap::~ImpSwap()
     {
         try
         {
-            ::ucb::Content aCnt( maURL.GetMainURL(),
+            ::ucb::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -398,7 +398,7 @@ BYTE* ImpSwap::GetData() const
 
     if( IsSwapped() )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL(), STREAM_READWRITE );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
         if( pIStm )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-11 13:26:43 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 11:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ void ImpGraphic::ImplClear()
         {
             try
             {
-                ::ucb::Content aCnt( mpSwapFile->aSwapURL.GetMainURL(),
+                ::ucb::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                 aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -868,7 +868,7 @@ void ImpGraphic::ImplSetDocFileName( const String& rName, ULONG nFilePos )
 
     DBG_ASSERT( !rName.Len() || ( aURL.GetProtocol() != INET_PROT_NOT_VALID ), "Graphic::SetDocFileName(...): invalid URL" );
 
-    maDocFileURLStr = aURL.GetMainURL();
+    maDocFileURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
     mnDocFilePos = nFilePos;
 }
 
@@ -995,9 +995,9 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                 ::utl::TempFile     aTempFile;
                 const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-                if( aTmpURL.GetMainURL().Len() )
+                if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).Len() )
                 {
-                    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
                     if( pOStm )
                     {
@@ -1037,7 +1037,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                             {
                                 try
                                 {
-                                    ::ucb::Content aCnt( aTmpURL.GetMainURL(),
+                                    ::ucb::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -1201,9 +1201,9 @@ BOOL ImpGraphic::ImplSwapOut()
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-            if( aTmpURL.GetMainURL().Len() )
+            if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).Len() )
             {
-                SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
                 if( pOStm )
                 {
@@ -1222,7 +1222,7 @@ BOOL ImpGraphic::ImplSwapOut()
 
                         try
                         {
-                            ::ucb::Content aCnt( aTmpURL.GetMainURL(),
+                            ::ucb::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -1297,7 +1297,7 @@ BOOL ImpGraphic::ImplSwapIn()
         String aSwapURL;
 
         if( mpSwapFile )
-            aSwapURL = mpSwapFile->aSwapURL.GetMainURL();
+            aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE );
         else
             aSwapURL = maDocFileURLStr;
 
