@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-20 16:22:42 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 11:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2741,7 +2741,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     }
                 }
 
-                if (FmFormInventor == pObject->GetObjInventor())
+                if ((pObject) && FmFormInventor == pObject->GetObjInventor())
                 {
                     //#79055# This was a FormControl. This means that the
                     //msdffimp ole import has already converted it to the
@@ -2997,11 +2997,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.7 2000-12-20 16:22:42 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.8 2001-01-18 11:47:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2000/12/20 16:22:42  khz
+      #79453# set Outliner Mode at new OutlinerParaObject (and khz says BYE !)
+
       Revision 1.6  2000/12/15 15:33:06  cmc
       #79055# OCX FormControls changes
 
