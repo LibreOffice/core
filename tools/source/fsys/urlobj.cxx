@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-06 13:29:03 $
+ *  last change: $Author: sb $ $Date: 2002-09-06 14:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2254,43 +2254,46 @@ bool INetURLObject::parseHost(sal_Unicode const * pBegin,
     if (pBegin < pEnd)
     {
         sal_Unicode const * p = pBegin;
-        if ((!parseHost(p, pEnd, bOctets, eMechanism, eCharset, aTheCanonic)
-             || p != pEnd)
-            && bNetBiosName)
-        {
-            aTheCanonic.Erase();
-            while (pBegin < pEnd)
+        if (!parseHost(p, pEnd, bOctets, eMechanism, eCharset, aTheCanonic)
+            || p != pEnd)
+            if (bNetBiosName)
             {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets, '%',
-                                             eMechanism, eCharset, eEscapeType);
-                if (!INetMIME::isVisible(nUTF32))
-                    return false;
-                if (!INetMIME::isAlphanumeric(nUTF32))
-                    switch (nUTF32)
-                    {
-                    case '"':
-                    case '*':
-                    case '+':
-                    case ',':
-                    case '/':
-                    case ':':
-                    case ';':
-                    case '<':
-                    case '=':
-                    case '>':
-                    case '?':
-                    case '[':
-                    case '\\':
-                    case ']':
-                    case '`':
-                    case '|':
-                        return false;;
-                    }
-                appendUCS4(aTheCanonic, nUTF32, eEscapeType, bOctets, PART_URIC,
-                           '%', eCharset, true);
+                aTheCanonic.Erase();
+                while (pBegin < pEnd)
+                {
+                    EscapeType eEscapeType;
+                    sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets, '%',
+                                                 eMechanism, eCharset,
+                                                 eEscapeType);
+                    if (!INetMIME::isVisible(nUTF32))
+                        return false;
+                    if (!INetMIME::isAlphanumeric(nUTF32))
+                        switch (nUTF32)
+                        {
+                        case '"':
+                        case '*':
+                        case '+':
+                        case ',':
+                        case '/':
+                        case ':':
+                        case ';':
+                        case '<':
+                        case '=':
+                        case '>':
+                        case '?':
+                        case '[':
+                        case '\\':
+                        case ']':
+                        case '`':
+                        case '|':
+                            return false;;
+                        }
+                    appendUCS4(aTheCanonic, nUTF32, eEscapeType, bOctets,
+                               PART_URIC, '%', eCharset, true);
+                }
             }
-        }
+            else
+                return false;
     }
     *pCanonic = aTheCanonic;
     return true;
