@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:25:54 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:43:32 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,60 +48,79 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-OUT_COMP_CLASS = $(OUT_CLASS)/OfficeDevFilterExample
+SAMPLE_NAME=OfficeDevAsciiFilterExample
+SAMPLE_CLASS_OUT = $(OUT_CLASS)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
 
-COMPONENT_NAME=SampleFilter
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
-COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
-COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
-
-REGISTERFLAG = $(OUT_MISC)/devguide_basicanddialogs_creatingdialogs_register_component.flag
+COMP_NAME=SampleFilter
+COMP_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP_NAME)
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_JAR_NAME = $(COMP_NAME).uno.jar
+COMP_JAR = $(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
+COMP_MANIFESTFILE = $(SAMPLE_GEN_OUT)/$(COMP_NAME).uno.Manifest
+COMP_UNOPKG_MANIFEST = $(SAMPLE_GEN_OUT)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_component.flag
 
 # often the java files are structured in a hierarchy similar to the package, 
 # for the example we know the package
 PACKAGE = OfficeDev/samples/Filter
 
-JAVAFILES  = \
+COMP_JAVAFILES  = \
 		   FilterOptions.java \
-		   AsciiReplaceFilter.java \
-		   Factory.java
+		   AsciiReplaceFilter.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
+COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/$(PACKAGE)/%.class,$(COMP_JAVAFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(COMP_CLASS_OUT))
 
 
 # Targets
 .PHONY: ALL
-ALL : OfficeDevFilterExample
+ALL : $(SAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS)/%.Manifest :
+$(SAMPLE_GEN_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).Factory> $@
+	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).AsciiReplaceFilter> $@
 
-$(CLASSFILES) : $(JAVAFILES)
+$(COMP_CLASSFILES) : $(COMP_JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(COMP_CLASS_OUT) $(COMP_JAVAFILES) 
 
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+# rule for component jar file
+$(COMP_JAR) : $(COMP_MANIFESTFILE) $(COMP_CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	$(SDK_JAR) cvfm $@ $< -C $(COMP_CLASS_OUT) .
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) TypeDetection.xcu
+# rule for component package manifest
+$(SAMPLE_GEN_OUT)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_CLASS))
-	$(SDK_JAR) cvfM $@ -C $(OUT_CLASS) $(<F) TypeDetection.xcu
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)TypeDetection.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+# rule for component package file
+$(COMP_PACKAGE) : $(COMP_JAR) TypeDetection.xcu $(COMP_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_ZIP) $@ TypeDetection.xcu
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -111,16 +130,15 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-OfficeDevFilterExample : $(REGISTERFLAG)
+$(SAMPLE_NAME) : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The SampleFilter Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo You can use this component in your office installation, see the example
-	@echo description.
+	@echo The "$(QM)$(COMP_NAME)$(QM)" Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo You can use the "$(QM)ASCII Replace$(QM)" filter in your office installation, see the
+	@echo example description.
 	@echo --------------------------------------------------------------------------------
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
