@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:14:27 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 13:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,6 +1281,20 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     const SwTwips nOldHeight = Prt().SSize().Height();
     const SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
 
+#ifdef VERTICAL_LAYOUT
+    // Vertical Formatting:
+    // The (rotated) repaint rectangle's x coordinate referes to the frame.
+    // If the frame grows (or shirks) the repaint rectangle cannot simply
+    // be rotated back after formatting, because we use the upper left point
+    // of the frame for rotation. This point changes when growing/shrinking.
+    if ( IsVertical() && nChg )
+    {
+        SwRect &rRepaint = *(pPara->GetRepaint());
+        rRepaint.Left( rRepaint.Left() - nChg );
+        rRepaint.Width( rRepaint.Width() - nChg );
+    }
+#endif
+
     AdjustFrm( nChg, bHasToFit );
 
     if( HasFollow() || IsInFtn() )
@@ -1302,6 +1316,10 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
 sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || IsSwapped(),
+            "SwTxtFrm::FormatLine( rLine, bPrev) with unswapped frame" );
+#endif
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     // Nach rLine.FormatLine() haelt nStart den neuen Wert,
     // waehrend in pOldStart der alte Offset gepflegt wird.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 13:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,6 +1241,11 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::FormatLine( nStart ) with unswapped frame" );
+#endif
+
     SwHookOut aHook( &GetInfo() );
     if( GetInfo().GetLen() < GetInfo().GetTxt().Len() )
         GetInfo().SetLen( GetInfo().GetTxt().Len() );
