@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:43:50 $
+ *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,6 +1414,10 @@ void SdXMLExport::ImpWritePageMasterInfos()
             sString = sNewName;
             AddAttribute(XML_NAMESPACE_STYLE, sXML_name, sString);
 
+            // write page-master
+            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, sXML_page_master, sal_True, sal_True);
+
+            // prepare style:properties inside page-master
             GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderTop());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, sXML_margin_top, sString);
@@ -1443,8 +1447,8 @@ void SdXMLExport::ImpWritePageMasterInfos()
             else
                 AddAttributeASCII(XML_NAMESPACE_FO, sXML_page_orientation, sXML_orientation_landscape);
 
-            // write page-master
-            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, sXML_page_master, sal_True, sal_True);
+            // write style:properties
+            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, sXML_properties, sal_True, sal_True);
         }
     }
 }

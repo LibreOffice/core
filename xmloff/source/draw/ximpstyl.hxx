@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// style:page-master context
+// special style:style context inside style:page-master context
 
-class SdXMLPageMasterContext: public SvXMLStyleContext
+class SdXMLPageMasterStyleContext: public SvXMLStyleContext
 {
     sal_Int32                   mnBorderBottom;
     sal_Int32                   mnBorderLeft;
@@ -94,7 +94,36 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
     sal_Int32                   mnWidth;
     sal_Int32                   mnHeight;
     com::sun::star::view::PaperOrientation meOrientation;
+
+    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
+    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+
+public:
+    TYPEINFO();
+
+    SdXMLPageMasterStyleContext(
+        SdXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const rtl::OUString& rLName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+    virtual ~SdXMLPageMasterStyleContext();
+
+    sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
+    sal_Int32 GetBorderLeft() const { return mnBorderLeft; }
+    sal_Int32 GetBorderRight() const { return mnBorderRight; }
+    sal_Int32 GetBorderTop() const { return mnBorderTop; }
+    sal_Int32 GetWidth() const { return mnWidth; }
+    sal_Int32 GetHeight() const { return mnHeight; }
+    com::sun::star::view::PaperOrientation GetOrientation() const { return meOrientation; }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// style:page-master context
+
+class SdXMLPageMasterContext: public SvXMLStyleContext
+{
     rtl::OUString               msName;
+    SdXMLPageMasterStyleContext*mpPageMasterStyle;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
@@ -109,14 +138,12 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterContext();
 
+    virtual SvXMLImportContext *CreateChildContext(
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
     const rtl::OUString& GetName() const { return msName; }
-    sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
-    sal_Int32 GetBorderLeft() const { return mnBorderLeft; }
-    sal_Int32 GetBorderRight() const { return mnBorderRight; }
-    sal_Int32 GetBorderTop() const { return mnBorderTop; }
-    sal_Int32 GetWidth() const { return mnWidth; }
-    sal_Int32 GetHeight() const { return mnHeight; }
-    com::sun::star::view::PaperOrientation GetOrientation() const { return meOrientation; }
+    const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
 
 //////////////////////////////////////////////////////////////////////////////

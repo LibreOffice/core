@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,13 +170,18 @@ static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,          sXML_name,              XML_TOK_PAGEMASTER_NAME                 },
-    { XML_NAMESPACE_FO,             sXML_margin_top,        XML_TOK_PAGEMASTER_MARGIN_TOP           },
-    { XML_NAMESPACE_FO,             sXML_margin_bottom,     XML_TOK_PAGEMASTER_MARGIN_BOTTOM        },
-    { XML_NAMESPACE_FO,             sXML_margin_left,       XML_TOK_PAGEMASTER_MARGIN_LEFT          },
-    { XML_NAMESPACE_FO,             sXML_margin_right,      XML_TOK_PAGEMASTER_MARGIN_RIGHT         },
-    { XML_NAMESPACE_FO,             sXML_page_width,        XML_TOK_PAGEMASTER_PAGE_WIDTH           },
-    { XML_NAMESPACE_FO,             sXML_page_height,       XML_TOK_PAGEMASTER_PAGE_HEIGHT          },
-    { XML_NAMESPACE_FO,             sXML_page_orientation,  XML_TOK_PAGEMASTER_PAGE_ORIENTATION     },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
+{
+    { XML_NAMESPACE_FO,             sXML_margin_top,        XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
+    { XML_NAMESPACE_FO,             sXML_margin_bottom,     XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
+    { XML_NAMESPACE_FO,             sXML_margin_left,       XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT         },
+    { XML_NAMESPACE_FO,             sXML_margin_right,      XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT        },
+    { XML_NAMESPACE_FO,             sXML_page_width,        XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH          },
+    { XML_NAMESPACE_FO,             sXML_page_height,       XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT         },
+    { XML_NAMESPACE_FO,             sXML_page_orientation,  XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
     XML_TOKEN_MAP_END
 };
 
@@ -311,6 +316,7 @@ SdXMLImport::SdXMLImport(
     mpMasterPageElemTokenMap(0L),
     mpMasterPageAttrTokenMap(0L),
     mpPageMasterAttrTokenMap(0L),
+    mpPageMasterStyleAttrTokenMap(0L),
     mpDrawPageAttrTokenMap(0L),
     mpDrawPageElemTokenMap(0L),
     mpPresentationPlaceholderAttrTokenMap(0L),
@@ -399,6 +405,8 @@ SdXMLImport::~SdXMLImport()
         delete mpMasterPageAttrTokenMap;
     if(mpPageMasterAttrTokenMap)
         delete mpPageMasterAttrTokenMap;
+    if(mpPageMasterStyleAttrTokenMap)
+        delete mpPageMasterStyleAttrTokenMap;
     if(mpDrawPageAttrTokenMap)
         delete mpDrawPageAttrTokenMap;
     if(mpDrawPageElemTokenMap)
@@ -468,6 +476,15 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
     if(!mpPageMasterAttrTokenMap)
         mpPageMasterAttrTokenMap = new SvXMLTokenMap(aPageMasterAttrTokenMap);
     return *mpPageMasterAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
+{
+    if(!mpPageMasterStyleAttrTokenMap)
+        mpPageMasterStyleAttrTokenMap = new SvXMLTokenMap(aPageMasterStyleAttrTokenMap);
+    return *mpPageMasterStyleAttrTokenMap;
 }
 
 //////////////////////////////////////////////////////////////////////////////

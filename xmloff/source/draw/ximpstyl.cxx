@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
+ *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,9 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLPageMasterContext, SvXMLStyleContext );
+TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
 
-SdXMLPageMasterContext::SdXMLPageMasterContext(
+SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLName,
@@ -135,7 +135,83 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     mnHeight( 0L ),
     meOrientation(GetSdImport().IsDraw() ? view::PaperOrientation_PORTRAIT : view::PaperOrientation_LANDSCAPE)
 {
-    // set family to somethiong special at SvXMLStyleContext
+    // set family to something special at SvXMLStyleContext
+    // for differences in search-methods
+    SetFamily(XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID);
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPageMasterStyleAttrTokenMap();
+
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderTop, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderBottom, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderLeft, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderRight, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT:
+            {
+                GetSdImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
+                break;
+            }
+            case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
+            {
+                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_orientation_portrait))))
+                    meOrientation = view::PaperOrientation_PORTRAIT;
+                else
+                    meOrientation = view::PaperOrientation_LANDSCAPE;
+                break;
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLPageMasterContext, SvXMLStyleContext );
+
+SdXMLPageMasterContext::SdXMLPageMasterContext(
+    SdXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLName,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList),
+    mpPageMasterStyle( 0L )
+{
+    // set family to something special at SvXMLStyleContext
     // for differences in search-methods
     SetFamily(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID);
 
@@ -155,44 +231,6 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
                 msName = sValue;
                 break;
             }
-            case XML_TOK_PAGEMASTER_MARGIN_TOP:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderTop, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_MARGIN_BOTTOM:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderBottom, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_MARGIN_LEFT:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderLeft, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_MARGIN_RIGHT:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderRight, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_PAGE_WIDTH:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_PAGE_HEIGHT:
-            {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-            case XML_TOK_PAGEMASTER_PAGE_ORIENTATION:
-            {
-                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_orientation_portrait))))
-                    meOrientation = view::PaperOrientation_PORTRAIT;
-                else
-                    meOrientation = view::PaperOrientation_LANDSCAPE;
-                break;
-            }
         }
     }
 }
@@ -201,6 +239,41 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
 
 SdXMLPageMasterContext::~SdXMLPageMasterContext()
 {
+    // release remembered contexts, they are no longer needed
+    if(mpPageMasterStyle)
+    {
+        mpPageMasterStyle->ReleaseRef();
+        mpPageMasterStyle = 0L;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = 0;
+
+    if(nPrefix == XML_NAMESPACE_STYLE && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_properties))))
+    {
+        pContext = new SdXMLPageMasterStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
+
+        // remember SdXMLPresentationPlaceholderContext for later evaluation
+        if(pContext)
+        {
+            pContext->AddRef();
+            DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
+            mpPageMasterStyle = (SdXMLPageMasterStyleContext*)pContext;
+        }
+    }
+
+    // call base class
+    if(!pContext)
+        pContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -542,44 +615,47 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
         {
             const SdXMLPageMasterContext* pPageMaster = (SdXMLPageMasterContext*)pStyle;
+            const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();
 
-            uno::Reference< drawing::XDrawPage > xMasterPage(
-                GetLocalShapesContext(), uno::UNO_QUERY);
-            if(xMasterPage.is())
+            if(pPageMasterContext)
             {
-                // set sizes for this masterpage
-                uno::Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
-                if(xPropSet.is())
+                uno::Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
+                if(xMasterPage.is())
                 {
-                    uno::Any aAny;
+                    // set sizes for this masterpage
+                    uno::Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
+                    if(xPropSet.is())
+                    {
+                        uno::Any aAny;
 
-                    aAny <<= pPageMaster->GetBorderBottom();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")), aAny);
+                        aAny <<= pPageMasterContext->GetBorderBottom();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")), aAny);
 
-                    aAny <<= pPageMaster->GetBorderLeft();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")), aAny);
+                        aAny <<= pPageMasterContext->GetBorderLeft();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")), aAny);
 
-                    aAny <<= pPageMaster->GetBorderRight();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")), aAny);
+                        aAny <<= pPageMasterContext->GetBorderRight();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")), aAny);
 
-                    aAny <<= pPageMaster->GetBorderTop();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")), aAny);
+                        aAny <<= pPageMasterContext->GetBorderTop();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")), aAny);
 
-                    aAny <<= pPageMaster->GetWidth();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), aAny);
+                        aAny <<= pPageMasterContext->GetWidth();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), aAny);
 
-                    aAny <<= pPageMaster->GetHeight();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), aAny);
+                        aAny <<= pPageMasterContext->GetHeight();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), aAny);
 
-                    aAny <<= pPageMaster->GetOrientation();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), aAny);
+                        aAny <<= pPageMasterContext->GetOrientation();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), aAny);
+                    }
                 }
             }
         }
