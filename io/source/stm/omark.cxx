@@ -2,9 +2,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-09 15:15:15 $
+ *  last change: $Author: jbu $ $Date: 2002-09-18 10:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,19 @@ void OMarkableOutputStream::flush(void)
             BufferSizeExceededException,
             RuntimeException)
 {
-    // Markable must ignore flush !
+    Reference< XOutputStream > output;
+    {
+        MutexGuard guard( m_mutex );
+        output = m_output;
+    }
+
+    // Markable cannot flush buffered data, because the data may get rewritten,
+    // however one can forward the flush to the chained stream to give it
+    // a chance to write data buffered in the chained stream.
+    if( output.is() )
+    {
+        output->flush();
+    }
 }
 
 void OMarkableOutputStream::closeOutput(void)

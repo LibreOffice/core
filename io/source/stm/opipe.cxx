@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opipe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-09 15:15:17 $
+ *  last change: $Author: jbu $ $Date: 2002-09-18 10:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,13 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
            RuntimeException )
 {
     MutexGuard guard( m_mutexAccess );
+    if( m_bInputStreamClosed )
+    {
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::skipBytes NotConnectedException" ) ),
+            *this );
+    }
+
     if( nBytesToSkip + m_nBytesToSkip > MAX_BUFFER_SIZE || 0 > nBytesToSkip + m_nBytesToSkip )
     {
         throw BufferSizeExceededException(
@@ -301,6 +308,12 @@ sal_Int32 OPipeImpl::available(void)
            RuntimeException )
  {
     MutexGuard guard( m_mutexAccess );
+    if( m_bInputStreamClosed )
+    {
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::available NotConnectedException" ) ),
+            *this );
+    }
     checkInvariant();
     return m_pFIFO->getSize();
 }
