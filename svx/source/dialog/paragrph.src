@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:02:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     Text [ English ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Rientri e interlinee" ;
-    Text [ portuguese_brazilian ] = "Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
     Text [ portuguese ] = "Avan�os e espa�amento" ;
     Text [ finnish ] = "Sisennys ja v�lit" ;
     Text [ danish ] = "Indrykning og mellemrum" ;
@@ -97,18 +97,21 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ greek ] = "A�� ��������";
         Text[ dutch ] = "Van ~links";
         Text[ french ] = "Avant le texte";
-        Text[ spanish ] = "~Antes del texto";
+        Text[ spanish ] = "~Delante del texto";
         Text[ finnish ] = "~Vasemmalta";
         Text[ italian ] = "Precede il testo";
         Text[ danish ] = "Fra venstre";
         Text[ swedish ] = "F�re text";
-        Text[ polish ] = "Od lewej";
+        Text[ polish ] = "Od ~lewej";
         Text[ portuguese_brazilian ] = "Da ~esquerda";
         Text[ japanese ] = "テキストの前";
         Text[ chinese_simplified ] = "在文字之前";
-        Text[ turkish ] = "S~oldan";
+        Text[ turkish ] = "Metinden �nce";
         Text[ arabic ] = "�� ������";
         Text[ thai ] = "จาก~ซ้าย";
+        Text[ czech ] = "Zleva";
+        Text[ hebrew ] = "‮לפני הטקסט‬";
+        Text[ hindi ] = "~बायाँ ओर से";
     };
     MetricField ED_LEFTINDENT
     {
@@ -145,13 +148,16 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ italian ] = "Segue il testo";
         Text[ danish ] = "F~ra h�jre";
         Text[ swedish ] = "Efter text";
-        Text[ polish ] = "Od prawej";
+        Text[ polish ] = "Od pra~wej";
         Text[ portuguese_brazilian ] = "Da dire~ita";
         Text[ japanese ] = "テキストのあと";
         Text[ chinese_simplified ] = "在文字之后";
-        Text[ turkish ] = "Sa~�dan";
+        Text[ turkish ] = "Sonraki metin";
         Text[ arabic ] = "�� ������";
         Text[ thai ] = "จากข~วา";
+        Text[ czech ] = "Zprava";
+        Text[ hebrew ] = "‮אחרי הטקסט‬";
+        Text[ hindi ] = "दाहि~ना ओर से";
     };
     MetricField ED_RIGHTINDENT
     {
@@ -188,7 +194,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text[ chinese_simplified ] = "第一行(~F)";
         Text[ russian ] = "������ ������";
-        Text[ polish ] = "Pierwszy wiersz";
+        Text[ polish ] = "Pie~rwszy wiersz";
         Text[ japanese ] = "最初の行(~F)";
         Text[ chinese_traditional ] = "第一行(~F)";
         Text[ arabic ] = "����� �����";
@@ -198,6 +204,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pri~m. l�nia";
         Text[ thai ] = "บรรทัดแ~รก";
+        Text[ czech ] = "První řádek";
+        Text[ hebrew ] = "‮שורה ראשונה‬";
+        Text[ hindi ] = "~पहिला रेखा";
     };
     MetricField ED_FLINEINDENT
     {
@@ -225,7 +234,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ ENGLISH ] = "~Automatic" ;
         Text [ portuguese ] = "~Automaticamente" ;
         Text [ english_us ] = "~Automatic" ;
-        Text [ portuguese_brazilian ] = "~Automatisch" ;
+        Text [ portuguese_brazilian ] = "Auto~m�tico" ;
         Text [ swedish ] = "~Automatiskt" ;
         Text [ danish ] = "Automatisk" ;
         Text [ italian ] = "Automatico" ;
@@ -234,7 +243,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ dutch ] = "~Automatisch" ;
         Text[ chinese_simplified ] = "自动(~A)";
         Text[ russian ] = "�������������";
-        Text[ polish ] = "Automatycznie";
+        Text[ polish ] = "~Automatycznie";
         Text[ japanese ] = "自動(~A)";
         Text[ chinese_traditional ] = "自動(~A)";
         Text[ arabic ] = "��������";
@@ -245,6 +254,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Auto~m�tic";
         Text[ finnish ] = "Automaattinen";
         Text[ thai ] = "~อัตโนมัติ";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‮אוטומטי‬";
+        Text[ hindi ] = "स्व~चालित";
     };
     FixedLine FL_INDENT
     {
@@ -254,7 +266,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ ENGLISH ] = "Indent" ;
         Text [ norwegian ] = "Innrykk" ;
         Text [ italian ] = "Rientro" ;
-        Text [ portuguese_brazilian ] = "Indentar" ;
+        Text [ portuguese_brazilian ] = "Recuo" ;
         Text [ portuguese ] = "Avan�o de par�grafo" ;
         Text [ finnish ] = "Sisenn�" ;
         Text [ danish ] = "Indrykning" ;
@@ -275,6 +287,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sagnat";
         Text[ thai ] = "ระยะเยื้อง";
+        Text[ czech ] = "Odsazení";
+        Text[ hebrew ] = "‮כניסה‬";
+        Text[ hindi ] = "इन्डेन्ट";
     };
     FixedText FT_TOPDIST
     {
@@ -288,21 +303,24 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ greek ] = "����";
         Text[ dutch ] = "~Boven";
         Text[ french ] = "Avant le paragraphe";
-        Text[ spanish ] = "Antes del p�rrafo";
+        Text[ spanish ] = "De~lante del p�rrafo";
         Text[ finnish ] = "~Yl�reuna";
-        Text[ italian ] = "Precede il testo";
+        Text[ italian ] = "Sopra il paragrafo";
         Text[ danish ] = "Foroven";
-        Text[ swedish ] = "F�re stycke";
-        Text[ polish ] = "Od g�ry";
-        Text[ portuguese_brazilian ] = "P~ara o topo";
-        Text[ japanese ] = "段落の前";
-        Text[ korean ] = "단락 앞";
-        Text[ chinese_simplified ] = "在文字之前";
-        Text[ chinese_traditional ] = "在段落之前";
-        Text[ turkish ] = "~�st";
+        Text[ swedish ] = "�ver stycke";
+        Text[ polish ] = "Od ~g�ry";
+        Text[ portuguese_brazilian ] = "Em ~Cima";
+        Text[ japanese ] = "段落の上";
+        Text[ korean ] = "단락 위";
+        Text[ chinese_simplified ] = "在段落之上";
+        Text[ chinese_traditional ] = "在段落之上";
+        Text[ turkish ] = "Paragrafdan �nce";
         Text[ arabic ] = "����";
         Text[ thai ] = "~บน";
         Text[ catalan ] = "~Part superior";
+        Text[ czech ] = "Nahoře";
+        Text[ hebrew ] = "‮לפני פיסקה‬";
+        Text[ hindi ] = "~ऊपर";
     };
     MetricField ED_TOPDIST
     {
@@ -331,22 +349,25 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ russian ] = "�����";
         Text[ greek ] = "����";
         Text[ dutch ] = "Be~neden";
-        Text[ french ] = "Apr�s le texte";
-        Text[ spanish ] = "D~etr�s del texto";
+        Text[ french ] = "Apr�s le paragraphe";
+        Text[ spanish ] = "Detr�s del p�rrafo";
         Text[ finnish ] = "Alareuna";
-        Text[ italian ] = "Segue il testo";
+        Text[ italian ] = "Sotto il paragrafo";
         Text[ danish ] = "Forneden";
-        Text[ swedish ] = "E~fter text";
-        Text[ polish ] = "Od do�u";
-        Text[ portuguese_brazilian ] = "Para a ~base";
-        Text[ japanese ] = "テキストのあと";
-        Text[ korean ] = "텍스트 뒤";
-        Text[ chinese_simplified ] = "在文字之后";
-        Text[ chinese_traditional ] = "在文字之後";
-        Text[ turkish ] = "~Alt";
+        Text[ swedish ] = "Under stycke";
+        Text[ polish ] = "Od ~do�u";
+        Text[ portuguese_brazilian ] = "Em ~Baixo";
+        Text[ japanese ] = "段落の下";
+        Text[ korean ] = "단락 아래";
+        Text[ chinese_simplified ] = "在段落之下";
+        Text[ chinese_traditional ] = "在段落之下";
+        Text[ turkish ] = "Sonraki metin";
         Text[ arabic ] = "����";
         Text[ thai ] = "~ล่าง";
         Text[ catalan ] = "~Part inferior";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "‮אחרי הטקסט‬";
+        Text[ hindi ] = "~नीचे";
     };
     MetricField ED_BOTTOMDIST
     {
@@ -371,7 +392,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ ENGLISH ] = "Distance" ;
         Text [ norwegian ] = "Avstand" ;
         Text [ italian ] = "Distanza" ;
-        Text [ portuguese_brazilian ] = "Dist�ncia" ;
+        Text [ portuguese_brazilian ] = "Afastamento" ;
         Text [ portuguese ] = "Espa�amento" ;
         Text [ finnish ] = "V�lit" ;
         Text [ danish ] = "Afstand" ;
@@ -388,10 +409,13 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ arabic ] = "�������";
         Text[ greek ] = "��������";
         Text[ korean ] = "간격";
-        Text[ turkish ] = "Aral�k";
+        Text[ turkish ] = "Bo�luk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espaiat";
         Text[ thai ] = "ระยะห่าง";
+        Text[ czech ] = "Vzdálenost";
+        Text[ hebrew ] = "‮ריווח‬";
+        Text[ hindi ] = "अंतर देना";
     };
     ListBox LB_LINEDIST
     {
@@ -438,12 +462,12 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Einzeilig" ; Default ; > ;
-            < "1,5zeilig" ; Default ; > ;
-            < "Zweizeilig" ; Default ; > ;
-            < "Proportional" ; Default ; > ;
-            < "Mindestens" ; Default ; > ;
-            < "A esquerda" ; Default ; > ;
+            < "Simples" ; Default ; > ;
+            < "Entrelinhas 1.5" ; Default ; > ;
+            < "Duplo" ; Default ; > ;
+            < "Proporcional" ; Default ; > ;
+            < "No m�nimo" ; Default ; > ;
+            < "Avan�o" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -537,12 +561,12 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     StringList [ polish ] =
     {
-            < "pojedyncze" ; Default ; > ;
-        < "1,5 wierszowe" ; Default ; > ;
-        < "podw�jne" ; Default ; > ;
-        < "proporcjonalne" ; Default ; > ;
-        < "minimalne" ; Default ; > ;
-        < "wielokrotne" ; Default ; > ;
+            < "Pojedyncza" ; Default ; > ;
+        < "1,5-wierszowa" ; Default ; > ;
+        < "Podw�jna" ; Default ; > ;
+        < "Proporcjonalna" ; Default ; > ;
+        < "Minimalna" ; Default ; > ;
+        < "Wiod�ca" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -625,13 +649,40 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         < "น้อยที่สุด" ; Default ; > ;
         < "นำหน้า" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Jednoduché" ; Default ; > ;
+        < "1,5 řádku" ; Default ; > ;
+        < "Dvojité" ; Default ; > ;
+        < "Proporcionální" ; Default ; > ;
+        < "Nejméně" ; Default ; > ;
+        < "Odstup prvního řádku" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮בודד‬" ; Default ; > ;
+        < "‮שורה וחצי‬" ; Default ; > ;
+        < "‮כפול‬" ; Default ; > ;
+        < "‮יחסי‬" ; Default ; > ;
+        < "‮לפחות‬" ; Default ; > ;
+        < "‮מוביל‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "अकेला" ; Default ; > ;
+        < "1.5 रेखाएँ" ; Default ; > ;
+        < "द्विगुणित" ; Default ; > ;
+        < "अनुरूपता" ; Default ; > ;
+        < "कम से कम" ; Default ; > ;
+        < "अग्र" ; Default ; > ;
+    };
     };
     String ST_LINEDIST_ABS
     {
         Text = "Fest" ;
         Text [ English ] = "Fix" ;
         Text [ english_us ] = "Fixed" ;
-        Text [ portuguese_brazilian ] = "Fest" ;
+        Text [ portuguese_brazilian ] = "Fixo" ;
         Text [ swedish ] = "Fast" ;
         Text [ danish ] = "Fast" ;
         Text [ italian ] = "Fissa" ;
@@ -641,7 +692,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ portuguese ] = "Fixo" ;
         Text[ chinese_simplified ] = "固定";
         Text[ russian ] = "�������������";
-        Text[ polish ] = "sta�e";
+        Text[ polish ] = "Sta�a";
         Text[ japanese ] = "固定";
         Text[ chinese_traditional ] = "固定";
         Text[ arabic ] = "����";
@@ -652,6 +703,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Fix";
         Text[ finnish ] = "Kiinte�";
         Text[ thai ] = "คงที่";
+        Text[ czech ] = "Fixní";
+        Text[ hebrew ] = "‮קבוע‬";
+        Text[ hindi ] = "स्थिर";
     };
     FixedText FT_LINEDIST
     {
@@ -662,7 +716,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ ENGLISH ] = "~of" ;
         Text [ english_us ] = "of" ;
         Left = TRUE ;
-        Text [ portuguese_brazilian ] = "~em" ;
+        Text [ portuguese_brazilian ] = "de" ;
         Text [ swedish ] = "~med" ;
         Text [ danish ] = "p�" ;
         Text [ italian ] = "~di" ;
@@ -683,6 +737,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "de";
         Text[ finnish ] = "/";
         Text[ thai ] = "ของ";
+        Text[ czech ] = " ";
+        Text[ hebrew ] = "‮של‬";
+        Text[ hindi ] = "का";
     };
     MetricField ED_LINEDISTPERCENT
     {
@@ -728,7 +785,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ ENGLISH ] = "Line spacing" ;
         Text [ norwegian ] = "Linjeavstand" ;
         Text [ italian ] = "Interlinea" ;
-        Text [ portuguese_brazilian ] = "Espa�amento de linha" ;
+        Text [ portuguese_brazilian ] = "Entrelinhas" ;
         Text [ portuguese ] = "Entrelinhas" ;
         Text [ finnish ] = "Riviv�li" ;
         Text [ danish ] = "Linjeafstand" ;
@@ -739,7 +796,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ english_us ] = "Line spacing" ;
         Text[ chinese_simplified ] = "行距";
         Text[ russian ] = "��� �����";
-        Text[ polish ] = "Odst�py mi�dzy wierszami";
+        Text[ polish ] = "Interlinia";
         Text[ japanese ] = "行間";
         Text[ chinese_traditional ] = "行距";
         Text[ arabic ] = "����� ������";
@@ -749,6 +806,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Interlineat";
         Text[ thai ] = "ระยะห่างบรรทัด";
+        Text[ czech ] = "Řádkování";
+        Text[ hebrew ] = "‮ריווח שורות‬";
+        Text[ hindi ] = "रेखा अंतर देना";
     };
     Window WN_EXAMPLE
     {
@@ -770,11 +830,11 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ dutch ] = "~Activeren" ;
         Text [ swedish ] = "~Ta h�nsyn till" ;
         Text [ danish ] = "Aktiver" ;
-        Text [ portuguese_brazilian ] = "Ber?cksichtigen" ;
+        Text [ portuguese_brazilian ] = "A~tivar" ;
         Text [ portuguese ] = "~Considerar" ;
         Text[ chinese_simplified ] = "顾及(~C)";
         Text[ russian ] = "������������";
-        Text[ polish ] = "Uwzgl�d~nij";
+        Text[ polish ] = "Ua~ktywnij";
         Text[ japanese ] = "合わせる(~C)";
         Text[ chinese_traditional ] = "顧及(~C)";
         Text[ arabic ] = "���";
@@ -785,6 +845,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "A~ctiva";
         Text[ finnish ] = "Aktivoi";
         Text[ thai ] = "ใ~ช้งานอยู่";
+        Text[ czech ] = "Aktivovat";
+        Text[ hebrew ] = "‮הפעלה‬";
+        Text[ hindi ] = "संचालि~त करो";
     };
     FixedLine FL_REGISTER
     {
@@ -800,7 +863,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ english_us ] = "Register-true" ;
         Text [ swedish ] = "Register" ;
         Text [ danish ] = "Hold register" ;
-        Text [ portuguese_brazilian ] = "Registerhaltigkeit" ;
+        Text [ portuguese_brazilian ] = "Registro de Conformidade" ;
         Text [ portuguese ] = "Registo" ;
         Text[ chinese_simplified ] = "正反页的行距相等";
         Text[ russian ] = "��������";
@@ -810,11 +873,14 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ arabic ] = "��������";
         Text[ greek ] = "����������� ��������";
         Text[ korean ] = "가늠 맞춤";
-        Text[ turkish ] = "E�it sat�r y�ksekli�i";
+        Text[ turkish ] = "Register-true";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conforme al registre";
         Text[ finnish ] = "Rivirekisteri";
         Text[ thai ] = "ลงทะเบียน-จริง";
+        Text[ czech ] = "Registr";
+        Text[ hebrew ] = "‮מיקום קבוע בדף‬";
+        Text[ hindi ] = "रजिस्टर-सही";
     };
 
     Text[ chinese_simplified ] = "缩进和间隔";
@@ -829,6 +895,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sagnats i espaiats";
     Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+    Text[ czech ] = "Odsazení a vzdálenosti";
+    Text[ hebrew ] = "‮כניסות וריווח‬";
+    Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
 };
  // RID_SVXPAGE_ALIGN_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
@@ -838,7 +907,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text = "Ausrichtung" ;
     Text [ English ] = "Alignment" ;
     Text [ english_us ] = "Alignment" ;
-    Text [ portuguese_brazilian ] = "Ausrichtung" ;
+    Text [ portuguese_brazilian ] = "Alinhamento" ;
     Text [ swedish ] = "Justering" ;
     Text [ danish ] = "Justering" ;
     Text [ italian ] = "Allineamento" ;
@@ -877,6 +946,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשרויות‬";
+        Text[ hindi ] = "ऑप्शन्स";
     };
     RadioButton BTN_LEFTALIGN
     {
@@ -889,7 +961,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese_brazilian ] = "Esq~uerda" ;
         Text [ portuguese ] = "Esq~uerda" ;
         Text [ finnish ] = "Vasemmalle" ;
-        Text [ danish ] = "Ven~stre" ;
+        Text [ danish ] = "Venstre" ;
         Text [ french ] = "� gauche" ;
         Text [ swedish ] = "~V�nster" ;
         Text [ dutch ] = "L~inks" ;
@@ -898,16 +970,19 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Group = TRUE ;
         Text[ chinese_simplified ] = "左(~L)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Do ~lewej";
+        Text[ polish ] = "Do lewej";
         Text[ japanese ] = "左揃え(~L)";
         Text[ chinese_traditional ] = "向左(~L)";
         Text[ arabic ] = "����";
         Text[ greek ] = "��������";
         Text[ korean ] = "왼쪽/위";
-        Text[ turkish ] = "So~l";
+        Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Esquerra";
         Text[ thai ] = "~ซ้าย";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "‮שמאל‬";
+        Text[ hindi ] = "~बायाँ";
     };
     RadioButton BTN_RIGHTALIGN
     {
@@ -917,7 +992,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ ENGLISH ] = "Righ~t" ;
         Text [ norwegian ] = "H�yr~e" ;
         Text [ italian ] = "Destro" ;
-        Text [ portuguese_brazilian ] = "Dire~ita" ;
+        Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "Oikealle" ;
         Text [ danish ] = "H�j~re" ;
@@ -928,16 +1003,19 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "Righ~t" ;
         Text[ chinese_simplified ] = "右(~T)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Do pra~wej";
+        Text[ polish ] = "Do prawej";
         Text[ japanese ] = "右揃え(~T)";
         Text[ chinese_traditional ] = "向右(~T)";
         Text[ arabic ] = "����";
         Text[ greek ] = "�����";
         Text[ korean ] = "오른쪽/아래";
-        Text[ turkish ] = "Sa~�";
+        Text[ turkish ] = "~Sa�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dret~a";
         Text[ thai ] = "ข~วา";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "‮לימין‬";
+        Text[ hindi ] = "दाहि~ना";
     };
     RadioButton BTN_CENTERALIGN
     {
@@ -958,7 +1036,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "~Center" ;
         Text[ chinese_simplified ] = "居中(~C)";
         Text[ russian ] = "�� ~������";
-        Text[ polish ] = "Do �rodka";
+        Text[ polish ] = "~Do �rodka";
         Text[ japanese ] = "中央揃え(~C)";
         Text[ chinese_traditional ] = "置中(~C)";
         Text[ arabic ] = "�����";
@@ -968,6 +1046,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Centre";
         Text[ thai ] = "~ตรงกลาง";
+        Text[ czech ] = "Na střed";
+        Text[ hebrew ] = "‮מרכז‬";
+        Text[ hindi ] = "~मध्य";
     };
     RadioButton BTN_JUSTIFYALIGN
     {
@@ -977,7 +1058,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ ENGLISH ] = "~Justified" ;
         Text [ norwegian ] = "~Stillt inn" ;
         Text [ italian ] = "~Giustificato" ;
-        Text [ portuguese_brazilian ] = "~Justificado" ;
+        Text [ portuguese_brazilian ] = "Justificado" ;
         Text [ portuguese ] = "~Justificado" ;
         Text [ finnish ] = "Tasattu" ;
         Text [ danish ] = "Lige margener" ;
@@ -988,7 +1069,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "Justified" ;
         Text[ chinese_simplified ] = "左右对齐";
         Text[ russian ] = "�� ~������";
-        Text[ polish ] = "Do lewej i praw~ej";
+        Text[ polish ] = "Do lewej i prawej";
         Text[ japanese ] = "両端揃え";
         Text[ chinese_traditional ] = "左右對齊";
         Text[ arabic ] = "���";
@@ -998,6 +1079,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Justificat";
         Text[ thai ] = "ชิดขอบ";
+        Text[ czech ] = "Do bloku";
+        Text[ hebrew ] = "‮מיושר‬";
+        Text[ hindi ] = "व्यवस्थित";
     };
     String ST_LEFTALIGN_ASIAN
     {
@@ -1018,8 +1102,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ finnish ] = "~Left/Top";
         Text[ danish ] = "~Left/Top";
         Text[ polish ] = "~Left/Top";
-        Text[ turkish ] = "~Left/Top";
+        Text[ turkish ] = "~Sol/Yukar�";
         Text[ arabic ] = "~Left/Top";
+        Text[ czech ] = "Vlevo/nahoře";
+        Text[ hebrew ] = "‮שמאל\\עליון‬";
+        Text[ catalan ] = "~Left/Top";
+        Text[ portuguese_brazilian ] = "~Left/Top";
+        Text[ thai ] = "~Left/Top";
+        Text[ hindi ] = "~Left/Top";
     };
     String ST_RIGHTALIGN_ASIAN
     {
@@ -1040,8 +1130,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ finnish ] = "Righ~t/Bottom";
         Text[ danish ] = "Righ~t/Bottom";
         Text[ polish ] = "Righ~t/Bottom";
-        Text[ turkish ] = "Righ~t/Bottom";
+        Text[ turkish ] = "~Sa�/Alt";
         Text[ arabic ] = "Righ~t/Bottom";
+        Text[ czech ] = "Vpravo/dole";
+        Text[ hebrew ] = "‮ימין\\תחתון‬";
+        Text[ catalan ] = "Righ~t/Bottom";
+        Text[ portuguese_brazilian ] = "Righ~t/Bottom";
+        Text[ thai ] = "Righ~t/Bottom";
+        Text[ hindi ] = "Righ~t/Bottom";
     };
     FixedText FT_LASTLINE
     {
@@ -1051,7 +1147,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ ENGLISH ] = "Last line" ;
         Hide = TRUE ;
         Text [ english_us ] = "~Last line" ;
-        Text [ portuguese_brazilian ] = "~Letzte Zeile" ;
+        Text [ portuguese_brazilian ] = "~�ltima linha" ;
         Text [ swedish ] = "~Sista raden" ;
         Text [ danish ] = "Sidste linje" ;
         Text [ italian ] = "Ultima riga" ;
@@ -1061,7 +1157,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese ] = "~�ltima linha" ;
         Text[ chinese_simplified ] = "最后一行(~L)";
         Text[ russian ] = "��������� ������";
-        Text[ polish ] = "Ostatni wiersz";
+        Text[ polish ] = "~Ostatni wiersz";
         Text[ japanese ] = "最後の行(~L)";
         Text[ chinese_traditional ] = "最後一行(~L)";
         Text[ arabic ] = "����� ������";
@@ -1072,6 +1168,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "�~ltima l�nia";
         Text[ finnish ] = "~Viimeinen rivi";
         Text[ thai ] = "บรรทัด~สุดท้าย";
+        Text[ czech ] = "Poslední řádek";
+        Text[ hebrew ] = "‮שורה אחרונה‬";
+        Text[ hindi ] = "~अंतिम रेखा";
     };
     ListBox LB_LASTLINE
     {
@@ -1098,18 +1197,18 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "Default" ; Default ; > ;
             < "Left" ; Default ; > ;
             < "Centered" ; Default ; > ;
-            < "Justified" ; Default ; > ;
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Blocksatz" ; Default ; > ;
+            < "Esquerda" ; Default ; > ;
+            < "Centralizado" ; Default ; > ;
+            < "Justificado" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
+            < "Standard" ; Default ; > ;
             < "Till v�nster" ; Default ; > ;
-            < "Centrerat" ; Default ; > ;
+            < "Centrerad" ; Default ; > ;
             < "Marginaljusterad" ; Default ; > ;
         };
         stringlist [ danish ] =
@@ -1120,18 +1219,21 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         stringlist [ italian ] =
         {
-            < "Sinistra" ; Default ; > ;
-            < "Centrato" ; Default ; > ;
+            < "Standard" ; Default ; > ;
+            < "A sinistra" ; Default ; > ;
+            < "Al centro" ; Default ; > ;
             < "Giustificato" ; Default ; > ;
         };
         stringlist [ spanish ] =
         {
-            < "Izquierda" ; Default ; > ;
+            < "Predeterminado" ; Default ; > ;
+            < "A la izquierda" ; Default ; > ;
             < "Centrado" ; Default ; > ;
-            < "Justificada" ; Default ; > ;
+            < "Justificado" ; Default ; > ;
         };
         stringlist [ french ] =
         {
+            < "Par d�faut" ; Default ; > ;
             < "� gauche" ; Default ; > ;
             < "Centr�" ; Default ; > ;
             < "Justifi�" ; Default ; > ;
@@ -1150,7 +1252,8 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ chinese_simplified ] =
         {
-                < "左" ; Default ; > ;
+                < "标准" ; Default ; > ;
+            < "左" ; Default ; > ;
             < "居中" ; Default ; > ;
             < "左右对齐" ; Default ; > ;
         };
@@ -1168,13 +1271,15 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ japanese ] =
         {
-                < "左揃え" ; Default ; > ;
+                < "標準" ; Default ; > ;
+            < "左揃え" ; Default ; > ;
             < "中央揃え" ; Default ; > ;
             < "両端揃え" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-                < "向左" ; Default ; > ;
+                < "標準" ; Default ; > ;
+            < "左" ; Default ; > ;
             < "置中" ; Default ; > ;
             < "左右對齊" ; Default ; > ;
         };
@@ -1192,8 +1297,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ korean ] =
         {
-                < "왼쪽/위" ; Default ; > ;
-            < "가운데" ; Default ; > ;
+                < "기본값" ; Default ; > ;
+            < "왼쪽 맞춤" ; Default ; > ;
+            < "가운데 맞춤" ; Default ; > ;
             < "양쪽 맞춤" ; Default ; > ;
         };
         StringList [ turkish ] =
@@ -1207,6 +1313,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
                 < "Links/Oben" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
+            < "; Blocksatz" ; Default ; > ;
         };
     StringList [ finnish ] =
     {
@@ -1226,6 +1333,24 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         < "ตรงกลาง" ; Default ; > ;
         < "ชิดขอบ" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Vlevo" ; Default ; > ;
+        < "Na střed" ; Default ; > ;
+        < "Do bloku" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮שמאל‬" ; Default ; > ;
+        < "‮ממורכז‬" ; Default ; > ;
+        < "‮מיושר‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "बायाँ" ; Default ; > ;
+        < "केन्द्रित" ; Default ; > ;
+        < "व्यवस्थित" ; Default ; > ;
+    };
     };
     CheckBox CB_EXPAND
     {
@@ -1235,7 +1360,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "Einzelnes ~Wort austreiben" ;
         Text [ ENGLISH ] = "Expand single ~word" ;
         Text [ english_us ] = "~Expand single word" ;
-        Text [ portuguese_brazilian ] = "Einzelnes ~Wort austreiben" ;
+        Text [ portuguese_brazilian ] = "~Expandir palavra simples" ;
         Text [ swedish ] = "~Expandera enstaka ord" ;
         Text [ danish ] = "Udvid enkelt ord" ;
         Text [ italian ] = "Giustificazione forzata" ;
@@ -1245,7 +1370,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ portuguese ] = "Expandir uma s� ~palavra" ;
         Text[ chinese_simplified ] = "拉长单个字(~E)";
         Text[ russian ] = "������~��� ��������� �����";
-        Text[ polish ] = "Rozci�gnij pojedyncze ~s�owo";
+        Text[ polish ] = "Ro~zci�gnij pojedynczy wyraz";
         Text[ japanese ] = "単語を引き伸ばす(~E)";
         Text[ chinese_traditional ] = "拉長單個字型(~E)";
         Text[ arabic ] = "����� ������ �������";
@@ -1256,6 +1381,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "~Expandeix una paraula";
         Text[ finnish ] = "~Laajenna yksitt�inen sana";
         Text[ thai ] = "คำ~ขยายเชิงเดี่ยว";
+        Text[ czech ] = "Rozšířit jedno slovo";
+        Text[ hebrew ] = "‮הרחבת מילה בודדת‬";
+        Text[ hindi ] = "अकेला शब्द को ~विस्तार करो";
     };
     CheckBox CB_SNAP
     {
@@ -1270,21 +1398,24 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ greek ] = "~Snap to text grid (if active)";
         Text[ dutch ] = "Aan tekstraster vangen (indien geactiveerd)";
         Text[ french ] = "Capturer � la grille du texte (si activ�e)";
-        Text[ spanish ] = "Usar cuadr�cula (si activada)";
+        Text[ spanish ] = "Usar cuadr�cula (si est� activada)";
         Text[ finnish ] = "Kohdistus tekstiruudukkoon (jos k�yt�ss�)";
         Text[ italian ] = "Cattura alla griglia di testo (se attivata)";
         Text[ danish ] = "M�ling ved tekstgitter (ved aktivering)";
         Text[ swedish ] = "F�st mot textraster (om det �r aktiverat)";
-        Text[ polish ] = "~Snap to text grid (if active)";
-        Text[ portuguese_brazilian ] = "~Snap to text grid (if active)";
+        Text[ polish ] = "Przy~ci�gaj do siatki tekstu (je�li aktywna)";
+        Text[ portuguese_brazilian ] = "Encaixar na grade do texto (se ativada)";
         Text[ japanese ] = "文字罫線に合わせる (オンのとき)";
         Text[ korean ] = "텍스트 그리드로 맞춤(활성시)";
         Text[ chinese_simplified ] = "和文字格子线对齐(如使用格子线)";
         Text[ chinese_traditional ] = "和文字格子線對齊(如有使用格子線)";
-        Text[ turkish ] = "~Snap to text grid (if active)";
+        Text[ turkish ] = "Snap to text grid (if active)";
         Text[ arabic ] = "~Snap to text grid (if active)";
-        Text[ catalan ] = "~Snap to text grid (if active)";
-        Text[ thai ] = "~Snap to text grid (if active)";
+        Text[ catalan ] = "Snap to text grid (if active)";
+        Text[ thai ] = "Snap to text grid (if active)";
+        Text[ czech ] = "Přichytávat na textovou mřížku (pokud je aktivní)";
+        Text[ hebrew ] = "‮קפיצה לרשת הטקסט (במידה שמופעלת)‬";
+        Text[ hindi ] = "Snap to text grid (if active)";
     };
     Window WN_EXAMPLE
     {
@@ -1311,15 +1442,18 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ danish ] = "Lodret tekstjustering";
         Text[ swedish ] = "Text-till-text";
         Text[ polish ] = "Wyr�wnanie tekstu w pionie";
-        Text[ portuguese_brazilian ] = "Vertical text alignment";
+        Text[ portuguese_brazilian ] = "Alinhamento vertical do texto";
         Text[ japanese ] = "文字位置";
         Text[ korean ] = "문자 간 사이";
         Text[ chinese_simplified ] = "字符高度";
         Text[ chinese_traditional ] = "字元高度";
-        Text[ turkish ] = "Vertical text alignment";
+        Text[ turkish ] = "Dikey metin hizalama";
         Text[ arabic ] = "Vertical text alignment";
         Text[ catalan ] = "Alineament vertical del text";
         Text[ thai ] = "จัดข้อความแนวตั้ง";
+        Text[ czech ] = "Svislé zarovnání textu";
+        Text[ hebrew ] = "‮ישור טקסט מול טקסט‬";
+        Text[ hindi ] = "लंबरूप टेक्स्ट् पंक्तिकरण";
     };
     FixedText FT_VERTALIGN
     {
@@ -1329,9 +1463,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "~Alignment" ;
         Text[ english_us ] = "~Alignment";
-        Text[ portuguese ] = "~Alignment";
+        Text[ portuguese ] = "~Alinhamento";
         Text[ russian ] = "������������";
-        Text[ greek ] = "~Alignment";
+        Text[ greek ] = "~��������";
         Text[ dutch ] = "~Uitlijning";
         Text[ french ] = "Alignement";
         Text[ spanish ] = "Alineaci�n";
@@ -1339,16 +1473,19 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ italian ] = "Allineamento";
         Text[ danish ] = "~Justering";
         Text[ swedish ] = "~Justering";
-        Text[ polish ] = "~Alignment";
-        Text[ portuguese_brazilian ] = "~Alignment";
+        Text[ polish ] = "~Wyr�wnanie";
+        Text[ portuguese_brazilian ] = "~Alinhamento";
         Text[ japanese ] = "文字の配置";
         Text[ korean ] = "맞춤";
         Text[ chinese_simplified ] = "对齐";
         Text[ chinese_traditional ] = "對齊";
         Text[ turkish ] = "~Alignment";
-        Text[ arabic ] = "~Alignment";
+        Text[ arabic ] = "��������";
         Text[ catalan ] = "~Alineaci�";
         Text[ thai ] = "~จัดตำแหน่ง";
+        Text[ czech ] = "Zarovnání";
+        Text[ hebrew ] = "‮יישור‬";
+        Text[ hindi ] = "~Alignment";
     };
     ListBox LB_VERTALIGN
     {
@@ -1470,11 +1607,11 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Automatisch" ; > ;
-            < "Grundlinie" ; > ;
-            < "Oben" ; > ;
-            < "Zentriert" ; > ;
-            < "Unten" ; > ;
+            < "Autom�tico" ; > ;
+            < "Linha de base" ; > ;
+            < "Em cima" ; > ;
+            < "No meio" ; > ;
+            < "Em baixo" ; > ;
         };
         StringList [ japanese ] =
         {
@@ -1512,9 +1649,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         {
             < "Otomatik" ; > ;
             < "Taban �izgisi" ; > ;
-            < "�stte" ; > ;
-            < "Ortala" ; > ;
-            < "A�a��" ; > ;
+            < "�st" ; > ;
+            < "Orta" ; > ;
+            < "Alt" ; > ;
         };
         StringList [ arabic ] =
         {
@@ -1548,6 +1685,30 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "ตรงกลาง" ; > ;
             < "ด้านล่าง" ; > ;
         };
+    StringList [ czech ] =
+    {
+         < "Automaticky" ; > ;
+        < "Účaří" ; > ;
+        < "Nahoře" ; > ;
+        < "Uprostřed" ; > ;
+        < "Dole" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮אוטומטי‬" ; > ;
+        < "‮קו בסיס‬" ; > ;
+        < "‮עליון‬" ; > ;
+        < "‮מרכז‬" ; > ;
+        < "‮תחתון‬" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "स्वाचालित" ; > ;
+        < "आधार रेखा" ; > ;
+        < "ऊपर" ; > ;
+        < "मध्यभाग" ; > ;
+        < "नीचे" ; > ;
+    };
     };
     FixedLine   FL_PROPERTIES
     {
@@ -1557,26 +1718,29 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
-        Text[ greek ] = "Properties";
-        Text[ dutch ] = "Properties";
+        Text[ portuguese ] = "Propriedades";
+        Text[ russian ] = "��������";
+        Text[ greek ] = "���������";
+        Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propri�t�s";
         Text[ spanish ] = "Propiedades";
-        Text[ finnish ] = "Properties";
+        Text[ finnish ] = "Ominaisuudet";
         Text[ italian ] = "Propriet�";
-        Text[ danish ] = "Properties";
+        Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "Properties";
+        Text[ polish ] = "W�a�ciwo�ci";
         Text[ japanese ] = "属性";
         Text[ korean ] = "등록 정보";
         Text[ chinese_simplified ] = "属性";
         Text[ chinese_traditional ] = "屬性";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "�zellikler";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "คุณสมบัติ";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "‮מאפיינים‬";
+        Text[ hindi ] = "टेक्स्ट् धारा";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -1587,25 +1751,28 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ ENGLISH ] = "Text ~direction" ;
         Text[ english_us ] = "Text ~direction";
         Text[ portuguese ] = "Text ~direction";
-        Text[ russian ] = "Text ~direction";
+        Text[ russian ] = "����������� ������";
         Text[ greek ] = "Text ~direction";
-        Text[ dutch ] = "Text ~direction";
+        Text[ dutch ] = "~Tekstverloop";
         Text[ french ] = "Orientation du texte";
         Text[ spanish ] = "~Direcci�n de escritura";
-        Text[ finnish ] = "Text ~direction";
+        Text[ finnish ] = "~Tekstin suunta";
         Text[ italian ] = "Direzione testo";
-        Text[ danish ] = "Text ~direction";
+        Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "Textriktning";
         Text[ polish ] = "Text ~direction";
         Text[ japanese ] = "文字方向";
         Text[ korean ] = "텍스트 방향";
         Text[ chinese_simplified ] = "文字方向";
         Text[ chinese_traditional ] = "文字方向";
-        Text[ turkish ] = "Text ~direction";
+        Text[ turkish ] = "Metin ~y�n�";
         Text[ arabic ] = "Text ~direction";
         Text[ portuguese_brazilian ] = "Text ~direction";
         Text[ catalan ] = "Text ~direction";
         Text[ thai ] = "Text ~direction";
+        Text[ czech ] = "Směr textu";
+        Text[ hebrew ] = "‮כיוון הטקסט‬";
+        Text[ hindi ] = "Text ~direction";
     };
     ListBox LB_TEXTDIRECTION
     {
@@ -1628,6 +1795,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text[ catalan ] = "Alineament";
     Text[ finnish ] = "Tasaus";
     Text[ thai ] = "จัดตำแหน่ง";
+    Text[ czech ] = "Zarovnání";
+    Text[ hebrew ] = "‮יישור‬";
+    Text[ hindi ] = "पंक्तिकरण";
 };
  // RID_SVXPAGE_EXT_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_EXT_PARAGRAPH
@@ -1638,7 +1808,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text [ English ] = "Paragraph Extensions" ;
     Text [ norwegian ] = "Utvidelse av avsnitt" ;
     Text [ italian ] = "Flusso di testo" ;
-    Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
     Text [ portuguese ] = "Fluxo de texto" ;
     Text [ finnish ] = "Tekstin rivitys" ;
     Text [ danish ] = "Tekstretning" ;
@@ -1661,7 +1831,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ swedish ] = "Auto~matisk" ;
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese ] = "Auto~maticamente" ;
-        Text [ portuguese_brazilian ] = "Auto~m." ;
+        Text [ portuguese_brazilian ] = "Auto~maticamente" ;
         Text[ chinese_simplified ] = "自动(~U)";
         Text[ russian ] = "�������������";
         Text[ polish ] = "A~utomatycznie";
@@ -1675,6 +1845,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "Au~tom�tic";
         Text[ finnish ] = "~Automaattisesti";
         Text[ thai ] = "อั~ตโนมัติ";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‮אוטומטית‬";
+        Text[ hindi ] = "स्व~चालित प्रकार से";
     };
     NumericField ED_HYPHENBEFORE
     {
@@ -1701,7 +1874,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Chars" ;
         Text [ norwegian ] = "Tegn" ;
         Text [ italian ] = "Caratteri a fine riga" ;
-        Text [ portuguese_brazilian ] = "Caracteres" ;
+        Text [ portuguese_brazilian ] = "Caracteres no fim da linha" ;
         Text [ portuguese ] = "caracteres no fim da linha" ;
         Text [ finnish ] = "Merkkej� rivin lopussa" ;
         Text [ danish ] = "tegn ved linjens slutning" ;
@@ -1713,16 +1886,19 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Left = TRUE ;
         Text[ chinese_simplified ] = "字符留位于行末";
         Text[ russian ] = "�������� � ����� ������";
-        Text[ polish ] = "znak�w na ko�cu wiersza";
+        Text[ polish ] = "znakach na ko�cu wiersza";
         Text[ japanese ] = "文字以上残す(行末)(~H)";
         Text[ chinese_traditional ] = "字元留位於行末(~H)";
         Text[ arabic ] = "���� �� ����� �����";
         Text[ greek ] = "���������� ��� ����� ��� �������";
         Text[ korean ] = "줄 마지막 문자(~A)";
-        Text[ turkish ] = "sat�rsonu karakteri";
+        Text[ turkish ] = "Sat�r sonundaki ~karakterler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "car�cter al final de la l�nia";
         Text[ thai ] = "ตัวอักขระที่จุดจบบรรทัด";
+        Text[ czech ] = "znaky na konci řádku";
+        Text[ hebrew ] = "‮תווים בסוף שורה‬";
+        Text[ hindi ] = "रेखा के अंत में अक्षरें";
     };
     NumericField ED_HYPHENAFTER
     {
@@ -1749,7 +1925,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Chars" ;
         Text [ norwegian ] = "Tegn" ;
         Text [ italian ] = "Caratteri ad inizio riga" ;
-        Text [ portuguese_brazilian ] = "Caracteres" ;
+        Text [ portuguese_brazilian ] = "Caracteres no in�cio da linha" ;
         Text [ portuguese ] = "Caracteres no in�cio da linha" ;
         Text [ finnish ] = "Merkkej� rivin alussa" ;
         Text [ danish ] = "tegn ved linjens begyndelse" ;
@@ -1761,16 +1937,19 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Left = TRUE ;
         Text[ chinese_simplified ] = "字符留位于行首";
         Text[ russian ] = "�������� � ������ ������";
-        Text[ polish ] = "znak�w na pocz�tku wiersza";
+        Text[ polish ] = "znakach na pocz�tku wiersza";
         Text[ japanese ] = "文字以上残す(行頭)(~R)";
         Text[ chinese_traditional ] = "字元留位於行首(~R)";
         Text[ arabic ] = "���� �� ����� �����";
         Text[ greek ] = "���������� ���� ���� ��� �������";
         Text[ korean ] = "줄 시작 문자";
-        Text[ turkish ] = "sat�rba�� karakteri";
+        Text[ turkish ] = "Sat�r ba��ndaki ka~rakterler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "car�cter al comen�ament de la l�nia";
         Text[ thai ] = "ตัวอักขระที่จุดเริ่มบรรทัด";
+        Text[ czech ] = "znaky na začátku řádku";
+        Text[ hebrew ] = "‮תווים בתחילת שורה‬";
+        Text[ hindi ] = "रेखा के प्रारंभ में अक्षरें";
     };
     FixedText FT_MAXHYPH
     {
@@ -1781,7 +1960,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Max. consecutive hyphens" ;
         Text [ norwegian ] = "Maksimalt antall av f�lgende Bindestreke~r" ;
         Text [ italian ] = "Sillabazioni successive:" ;
-        Text [ portuguese_brazilian ] = "Contagem m?xima do seguinte" ;
+        Text [ portuguese_brazilian ] = "N�mero ~m�ximo de h�fens sequenciais" ;
         Text [ portuguese ] = "~M�ximo de h�fens consecutivos" ;
         Text [ finnish ] = "Per~�kk�isten tavuviivojen enimm�ism��r�" ;
         Text [ danish ] = "Maksimalt antal orddelinger i r�kke" ;
@@ -1792,16 +1971,19 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ english_us ] = "~Maximum number of consecutive hyphens" ;
         Text[ chinese_simplified ] = "最多连续使用的连字符数目(~M)";
         Text[ russian ] = "������������ ���������� ���������������� ������������";
-        Text[ polish ] = "maksymalnie nast�puj�ce po sobie miejsca podzia�u";
+        Text[ polish ] = "Maksyma~lna liczba kolejnych podzia��w";
         Text[ japanese ] = "ハイフネーション行の最高連続数(~M)";
         Text[ chinese_traditional ] = "最多連續使用的連字號數目(~M)";
         Text[ arabic ] = "����� ������ ������ ����� ����������";
         Text[ greek ] = "�������� ������� ���������� ���~��� �����������";
         Text[ korean ] = "하이픈이 연속으로 삽입될 수 있는 최대 수(~M)";
-        Text[ turkish ] = "Azami ard���k ay�rma i�areti sa~y�s�";
+        Text[ turkish ] = "~Takip eden ba�lama �izgilerinin asgari say�s�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quantitat m�xima de ~guions consecutius";
         Text[ thai ] = "จำนวน~มากที่สุดของยัติภังค์แบบต่อกัน";
+        Text[ czech ] = "max. počet spojovníků za sebou";
+        Text[ hebrew ] = "‮מספר מירבי של מקפים ברציפות‬";
+        Text[ hindi ] = "निरन्तर हाइफनों की ~अधिकतम संख्या";
     };
     NumericField ED_MAXHYPH
     {
@@ -1823,7 +2005,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Hyphenation" ;
         Text [ norwegian ] = "Orddeling" ;
         Text [ italian ] = "Sillabazione" ;
-        Text [ portuguese_brazilian ] = "Hifena??o" ;
+        Text [ portuguese_brazilian ] = "Divis�o Sil�bica" ;
         Text [ portuguese ] = "Divis�o sil�bica" ;
         Text [ finnish ] = "Tavutus" ;
         Text [ danish ] = "Orddeling" ;
@@ -1840,10 +2022,13 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "��� �������";
         Text[ greek ] = "�����������";
         Text[ korean ] = "하이픈 넣기";
-        Text[ turkish ] = "Heceleme";
+        Text[ turkish ] = "Tireleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separaci� en s�l.labes";
         Text[ thai ] = "ใส่ยัติภังค์";
+        Text[ czech ] = "Dělení slov";
+        Text[ hebrew ] = "‮שבירת מלים‬";
+        Text[ hindi ] = "हाइफनेशन्";
     };
     FixedLine FL_OPTIONS
     {   // is moved one section deeper to not raise unnecessary translations
@@ -1853,7 +2038,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Extra" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Op��es" ;
         Text [ portuguese ] = "Op��es" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Flere" ;
@@ -1875,6 +2060,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשרויות‬";
+        Text[ hindi ] = "विकल्प";
     };
     FixedLine FL_BREAKS
     {
@@ -1899,8 +2087,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "나누기";
         Text[ chinese_simplified ] = "换行和分页";
         Text[ chinese_traditional ] = "換行和分頁";
-        Text[ turkish ] = "Breaks";
+        Text[ turkish ] = "Kesmeler";
         Text[ arabic ] = "Breaks";
+        Text[ czech ] = "Zalomení";
+        Text[ hebrew ] = "‮מעברים‬";
+        Text[ catalan ] = "Breaks";
+        Text[ portuguese_brazilian ] = "Breaks";
+        Text[ thai ] = "Breaks";
+        Text[ hindi ] = "Breaks";
     };
     TriStateBox BTN_PAGEBREAK
     {
@@ -1913,13 +2107,13 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Group = TRUE ;
         Text[ chinese_simplified ] = "允许";
         Text[ russian ] = "��~����";
-        Text[ polish ] = "Podzia~�";
+        Text[ polish ] = "~Podzia�";
         Text[ japanese ] = "使用する";
         Text[ chinese_traditional ] = "允許";
         Text[ arabic ] = "����";
         Text[ greek ] = "������";
         Text[ korean ] = "허용(~B)";
-        Text[ turkish ] = "~Kesme";
+        Text[ turkish ] = "Etkin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pausa";
         Text[ thai ] = "ตัวแ~บ่ง";
@@ -1931,7 +2125,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ italian ] = "Permetti";
         Text[ danish ] = "Skift";
         Text[ swedish ] = "T~ill�t";
-        Text[ portuguese_brazilian ] = "~Interrup??o";
+        Text[ portuguese_brazilian ] = "~Quebra";
+        Text[ czech ] = "Zalomení";
+        Text[ hebrew ] = "‮לאפשר‬";
+        Text[ hindi ] = "~खण्डन";
     };
     FixedText FT_BREAKTYPE
     {
@@ -1955,11 +2152,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "유형";
         Text[ chinese_simplified ] = "类型";
         Text[ chinese_traditional ] = "類型(~T)";
-        Text[ turkish ] = "T~ype";
+        Text[ turkish ] = "~T�r";
         Text[ arabic ] = "T~ype";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~ชนิด";
         Text[ portuguese_brazilian ] = "~Tipo";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     ListBox LB_BREAKTYPE
     {
@@ -2065,7 +2265,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     StringList [ turkish ] =
     {
          < "Sayfa" ; 0; > ;
-        < "S�TUN" ; 1; > ;
+        < "S�t�n" ; 1; > ;
     };
     StringList [ arabic ] =
     {
@@ -2075,7 +2275,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     StringList [ catalan ] =
     {
          < "Diapositiva" ; 0; > ;
-        < "COLUMN" ; 1; > ;
+        < "columna" ; 1; > ;
     };
     StringList [ thai ] =
     {
@@ -2086,6 +2286,21 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
          < "P??GINA" ; 0; > ;
         < "Coluna" ; 1; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "Strana" ; 0; > ;
+        < "Sloupec" ; 1; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮דף‬" ; 0; > ;
+        < "‮עמודה‬" ; 1; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "Page" ; 0; > ;
+        < "Column" ; 1; > ;
     };
     };
     FixedText FT_BREAKPOSITION
@@ -2111,11 +2326,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "O~rtala";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "������";
         Text[ thai ] = "~ตำแหน่ง";
         Text[ portuguese_brazilian ] = "Posi��o";
         Text[ catalan ] = "P~osici�";
+        Text[ czech ] = "Pozice";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "Position";
     };
     ListBox LB_BREAKPOSITION
     {
@@ -2183,6 +2401,81 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          < "之前" ; 0; > ;
         < "之后" ; 1; > ;
     };
+    StringList [ turkish ] =
+    {
+         < "�nce" ; 0; > ;
+        < "Sonra" ; 1; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Before" ; 0; > ;
+        < "������" ; 1; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Before" ; 0; > ;
+        < "en vervolgens" ; 1; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Before" ; 0; > ;
+        < "ja sitten" ; 1; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "Před" ; 0; > ;
+        < "Za" ; 1; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Before" ; 0; > ;
+        < "derefter" ; 1; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Before" ; 0; > ;
+        < "��� ���" ; 1; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮לפני‬" ; 0; > ;
+        < "‮אחרי‬" ; 1; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Before" ; 0; > ;
+        < "i despr�s" ; 1; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Before" ; 0; > ;
+        < "depois" ; 1; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Before" ; 0; > ;
+        < "�����" ; 1; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Before" ; 0; > ;
+        < "wed�ug" ; 1; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Before" ; 0; > ;
+        < "e ent�o" ; 1; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "Before" ; 0; > ;
+        < "และ  จากนั้น" ; 1; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "Before" ; 0; > ;
+        < "After" ; 1; > ;
+    };
     };
     TriStateBox BTN_PAGECOLL
     {
@@ -2193,7 +2486,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "With temp~late" ;
         Text [ norwegian ] = "Med m~al" ;
         Text [ italian ] = "Con modello di pagina" ;
-        Text [ portuguese_brazilian ] = "Com mode~lo" ;
+        Text [ portuguese_brazilian ] = "Com Esti~lo de P�gina" ;
         Text [ portuguese ] = "Com e~stilo de p�gina" ;
         Text [ finnish ] = "~Sivutyylin kanssa" ;
         Text [ danish ] = "Med sidetypografi" ;
@@ -2205,7 +2498,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Group = TRUE ;
         Text[ chinese_simplified ] = "使用页面样式(~Y)";
         Text[ russian ] = "�� ������ ��������";
-        Text[ polish ] = "Ze stylem strony";
+        Text[ polish ] = "~Ze stylem strony";
         Text[ japanese ] = "ページスタイル付き(~Y)";
         Text[ chinese_traditional ] = "使用頁面樣式(~Y)";
         Text[ arabic ] = "���� ����";
@@ -2215,6 +2508,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "A~mb estil de p�gina";
         Text[ thai ] = "ด้วยลัก~ษณะหน้า";
+        Text[ czech ] = "Se stylem stránky";
+        Text[ hebrew ] = "‮עם סגנון דף‬";
+        Text[ hindi ] = "पृष्ठ शै~ली सहित";
     };
     ListBox LB_PAGECOLL
     {
@@ -2238,11 +2534,11 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ spanish ] = "N�~mero de p�gina" ;
         Text [ french ] = "~Num�ro de page" ;
         Text [ dutch ] = "Pa~ginanummer" ;
-        Text [ portuguese_brazilian ] = "Se~itennummer" ;
+        Text [ portuguese_brazilian ] = "~N�mero da p�gina" ;
         Text [ portuguese ] = "~N�mero de p�gina" ;
         Text[ chinese_simplified ] = "页码(~N)";
         Text[ russian ] = "����� ��������";
-        Text[ polish ] = "Numer strony";
+        Text[ polish ] = "~Numer strony";
         Text[ japanese ] = "ページ番号(~N)";
         Text[ chinese_traditional ] = "頁碼(~N)";
         Text[ arabic ] = "��� ������";
@@ -2253,6 +2549,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "N�~mero de p�gina";
         Text[ finnish ] = "~Sivunumero";
         Text[ thai ] = "เ~ลขหน้า";
+        Text[ czech ] = "Číslo stránky";
+        Text[ hebrew ] = "‮מספר עמוד‬";
+        Text[ hindi ] = "पृष्ठ ~संख्या";
     };
     NumericField ED_PAGENUM
     {
@@ -2276,7 +2575,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Keep together" ;
         Text [ norwegian ] = "~Hold sammen" ;
         Text [ italian ] = "Non separare il paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Manter junto" ;
+        Text [ portuguese_brazilian ] = "Manter linhas ~juntas" ;
         Text [ portuguese ] = "Manter linhas ~juntas" ;
         Text [ finnish ] = "~Ei rivien erotusta" ;
         Text [ danish ] = "Del ikke afsnit" ;
@@ -2288,7 +2587,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Group = TRUE ;
         Text[ chinese_simplified ] = "段中不分页(~D)";
         Text[ russian ] = "�� ��������� ������";
-        Text[ polish ] = "Nie dziel akapitu";
+        Text[ polish ] = "N~ie dziel wierszy";
         Text[ japanese ] = "段落を分割しない(~D)";
         Text[ chinese_traditional ] = "段落不分隔(~D)";
         Text[ arabic ] = "��� ����� ������";
@@ -2298,6 +2597,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mant� les ~l�nies juntes";
         Text[ thai ] = "~ห้ามแยกบรรทัด";
+        Text[ czech ] = "Nedělit řádky";
+        Text[ hebrew ] = "‮ללא פיצול פסקה‬";
+        Text[ hindi ] = "रेखाओं को अलग ~मत करो";
     };
     TriStateBox CB_KEEPTOGETHER
     {
@@ -2307,7 +2609,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Kee~p paragraphs together" ;
         Text [ norwegian ] = "Holde~r avsnittene samlet" ;
         Text [ italian ] = "Ti~eni paragrafi uniti" ;
-        Text [ portuguese_brazilian ] = "Man~ter par?grafos juntos" ;
+        Text [ portuguese_brazilian ] = "Manter com o pa~r�grafo seguinte" ;
         Text [ portuguese ] = "Manter pa~r�grafos juntos" ;
         Text [ finnish ] = "Sido seuraavaan ~kappaleeseen" ;
         Text [ danish ] = "Hold sammen med ~n�ste afsnit" ;
@@ -2318,7 +2620,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ english_us ] = "~Keep with next paragraph" ;
         Text[ chinese_simplified ] = "与下段同页(~K)";
         Text[ russian ] = "�� �������� �� ����������";
-        Text[ polish ] = "��cznie z nast�pnym";
+        Text[ polish ] = "Za~chowuj razem z nast�pnym akapitem";
         Text[ japanese ] = "次の段落を離さない(~K)";
         Text[ chinese_traditional ] = "段落不分開(~K)";
         Text[ arabic ] = "����� �������";
@@ -2328,6 +2630,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mant� els par�gra~fs junts";
         Text[ thai ] = "~ตามติดด้วยย่อหน้าถัดไป";
+        Text[ czech ] = "Ponechat s následujícím odstavcem";
+        Text[ hebrew ] = "‮שמירה עם הפסקה העוקבת‬";
+        Text[ hindi ] = "~अगला परिच्छेद के साथ रखो";
     };
     TriStateBox BTN_ORPHANS
     {
@@ -2348,17 +2653,20 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ italian ] = "Controllo ~vedove";
         Text[ danish ] = "Fransk horeu~ngeordning";
         Text[ swedish ] = "�nkek~ontroll";
-        Text[ polish ] = "~Kontrola szewc�w";
-        Text[ portuguese_brazilian ] = "~?rf?os";
+        Text[ polish ] = "~Kontroluj sieroty";
+        Text[ portuguese_brazilian ] = "Controle de linhas ~�rf�s";
         Text[ japanese ] = "改ページ前の段落の孤立行(~O)";
         Text[ korean ] = "처음 한 줄 분리 방지(~O)";
         Text[ chinese_simplified ] = "段前分页(~O)";
         Text[ chinese_traditional ] = "段落前分頁(~O)";
-        Text[ turkish ] = "So~n sat�r� paragrafla birle�tir";
+        Text[ turkish ] = "~Yaln�z ilk sat�r";
         Text[ arabic ] = "������ ������� �������";
         Text[ catalan ] = "~Control orfe";
         Text[ finnish ] = "~Orporivien esto";
         Text[ thai ] = "ควบคุม~บรรทัดสุดท้ายของย่อหน้า";
+        Text[ czech ] = "Kontrola sirotků";
+        Text[ hebrew ] = "Schuster~jungenregelung";
+        Text[ hindi ] = "~ऑर्फन् नियंत्रण";
     };
     NumericField ED_ORPHANS
     {
@@ -2385,7 +2693,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Rows" ;
         Text [ norwegian ] = "Rows" ;
         Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "Fileiras" ;
+        Text [ portuguese_brazilian ] = "Linhas" ;
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = "Rivit" ;
         Text [ danish ] = "Linjer" ;
@@ -2403,10 +2711,13 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "����";
         Text[ greek ] = "�������";
         Text[ korean ] = "줄";
-        Text[ turkish ] = "Sat�r";
+        Text[ turkish ] = "Sat�rlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nies";
         Text[ thai ] = "บรรทัด";
+        Text[ czech ] = "řádky";
+        Text[ hebrew ] = "Zeilen";
+        Text[ hindi ] = "रेखाएँ";
     };
     TriStateBox BTN_WIDOWS
     {
@@ -2427,17 +2738,20 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ italian ] = "Controllo orfane";
         Text[ danish ] = "Ho~reungeordning";
         Text[ swedish ] = "Ho~rungekontroll";
-        Text[ polish ] = "Kontrola b�kart�w";
-        Text[ portuguese_brazilian ] = "~Vi?as";
+        Text[ polish ] = "Kontroluj ~wdowy";
+        Text[ portuguese_brazilian ] = "Controle de linhas ~vi�vas";
         Text[ japanese ] = "改ページ後の段落の孤立行(~W)";
         Text[ korean ] = "마지막 한 줄 분리 방지(~W)";
         Text[ chinese_simplified ] = "孤行控制(~W)";
         Text[ chinese_traditional ] = "段落遺留字串控制(~W)";
-        Text[ turkish ] = "~�lk sat�r� paragrafla birle�tir";
+        Text[ turkish ] = "~Yaln�z son sat�r";
         Text[ arabic ] = "������ ������� �������";
         Text[ catalan ] = "~Control vidu";
         Text[ finnish ] = "~Leskirivien ohjaus";
         Text[ thai ] = "ควบคุมบรรทัดแ~รกของย่อหน้า";
+        Text[ czech ] = "Kontrola vdov";
+        Text[ hebrew ] = "Hu~renkinderregelung";
+        Text[ hindi ] = "~विडो नियंत्रण";
     };
     NumericField ED_WIDOWS
     {
@@ -2464,7 +2778,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Rows" ;
         Text [ norwegian ] = "Rows" ;
         Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "Fileiras" ;
+        Text [ portuguese_brazilian ] = "Linhas" ;
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = "Rivit" ;
         Text [ danish ] = "Linjer" ;
@@ -2482,14 +2796,17 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ arabic ] = "����";
         Text[ greek ] = "�������";
         Text[ korean ] = "줄";
-        Text[ turkish ] = "Sat�r";
+        Text[ turkish ] = "Sat�rlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nies";
         Text[ thai ] = "บรรทัด";
+        Text[ czech ] = "řádky";
+        Text[ hebrew ] = "Zeilen";
+        Text[ hindi ] = "रेखाएँ";
     };
     Text[ chinese_simplified ] = "换行和分页";
     Text[ russian ] = "�� ��������";
-    Text[ polish ] = "Tekst";
+    Text[ polish ] = "Przep�yw tekstu";
     Text[ japanese ] = "体裁";
     Text[ chinese_traditional ] = "換行和分頁";
     Text[ arabic ] = "������ ����";
@@ -2499,6 +2816,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Flux del text";
     Text[ thai ] = "การไหลของข้อความ";
+    Text[ czech ] = "Tok textu";
+    Text[ hebrew ] = "‮זרימת טקסט‬";
+    Text[ hindi ] = "टेक्स्ट् धारा";
 };
 /*-- 29.11.00 11:36:24---------------------------------------------------
   Asian typography
@@ -2520,12 +2840,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text[ danish ] = "Asiatisk typografi";
     Text[ swedish ] = "Asiatisk typografi";
     Text[ polish ] = "Typografia azjatycka";
-    Text[ portuguese_brazilian ] = "Asian typography";
+    Text[ portuguese_brazilian ] = "Tipografia asi�tica";
     Text[ japanese ] = "日本語文の体裁";
     Text[ korean ] = "한글 입력 체계";
     Text[ chinese_simplified ] = "中日韩文字";
     Text[ chinese_traditional ] = "中日韓文字";
-    Text[ turkish ] = "Asian typography";
+    Text[ turkish ] = "Asya Matbaac�l�k";
     Text[ arabic ] = "����� ������� ��������";
     Text[ catalan ] = "Tipografia asi�tica";
     Text[ finnish ] = "Aasialaiset merkit";
@@ -2547,17 +2867,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Cambio ~riga";
         Text[ danish ] = "Linjeskift";
         Text[ swedish ] = "Radbrytning";
-        Text[ polish ] = "Podzia� wiersza";
-        Text[ portuguese_brazilian ] = "Options";
+        Text[ polish ] = "Zmiana wiersza";
+        Text[ portuguese_brazilian ] = "Mudan�a de linha";
         Text[ japanese ] = "改行時の処理";
         Text[ korean ] = "줄 바꿈";
         Text[ chinese_simplified ] = "换行";
         Text[ chinese_traditional ] = "換行";
-        Text[ turkish ] = "Options";
+        Text[ turkish ] = "�e�enekler";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Canvi de fila";
         Text[ finnish ] = "Viivan muutokset";
         Text[ thai ] = "เปลี่ยนบรรทัด";
+        Text[ czech ] = "Změna řádky";
+        Text[ hebrew ] = "Zeilenwechsel";
+        Text[ hindi ] = "रेखा परिवर्तन";
     };
     TriStateBox CB_AS_FORBIDDEN
     {
@@ -2575,17 +2898,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Considera elenco dei caratteri non ammessi all'inizio e fine della riga.";
         Text[ danish ] = "Tag hensyn til ~liste over forbudte tegn ved linjestart og -slutning";
         Text[ swedish ] = "Anv�nd ~lista med f�rbjudna tecken i b�rjan och slutet av rader";
-        Text[ polish ] = "Uwzgl�dnij list� znak�w niedozwolonych na pocz�tku i na ko�cu wiersza";
-        Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
+        Text[ polish ] = "Uwzgl�dnij list� znak�w niedozwolonych na pocz�tku i na ko�cu wierszy";
+        Text[ portuguese_brazilian ] = "Aplicar a lista dos caracteres proibidos no in�cio e no fim da linha.";
         Text[ japanese ] = "行頭および行末の禁則文字のリストで禁則処理を行う";
         Text[ korean ] = "줄 시작과 끝 부분에 금칙 문자의 목록을 적용";
         Text[ chinese_simplified ] = "顾及行首行末禁止使用字符的列单";
         Text[ chinese_traditional ] = "顧及行首行末禁止使用字元的清單";
-        Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ turkish ] = "Sat�rlar�n ba�lang�� ve biti�lerinde, yasaklanm�� karakterler�n listesini uygula";
         Text[ arabic ] = "����� ����� ������ �������� ��� ����� ������ ��������";
         Text[ catalan ] = "Aplica la llista de car�cters prohibits al principi i final de l�nia";
         Text[ finnish ] = "K�yt� rivien alussa ja lopussa kiellettyjen merkkien luetteloa";
         Text[ thai ] = "ใช้รายการตัวอักษรที่ห้ามที่จุดเริ่มต้นและจุดจบของบรรทัด";
+        Text[ czech ] = "Aplikovat seznam zakázaných znaků na začátek a konec řádky.";
+        Text[ hebrew ] = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen";
+        Text[ hindi ] = "सूचित की हुयी निषिद्ध अक्षरों को रेखाओं के प्रारंभ और अंत में लागू करो";
     };
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
@@ -2603,17 +2929,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Sono ammessi i separatori all'interno di parole scritte con caratteri latini.";
         Text[ danish ] = "~Tillad tekstombrydning i ord i latinsk tekst";
         Text[ swedish ] = "Till�t ~textbrytning inuti ord i latinsk text";
-        Text[ polish ] = "Dopu�� podzia� wyraz�w w tek�cie napisanym literami �aci�skimi";
-        Text[ portuguese_brazilian ] = "Allow break inside of words in latin text";
+        Text[ polish ] = "Zezwalaj na podzia� wyraz�w w tek�cie �aci�skim";
+        Text[ portuguese_brazilian ] = "Permitir ~divis�o sil�bica em textos com caracteres latinos";
         Text[ japanese ] = "英単語の途中で改行する(~B)";
         Text[ korean ] = "영단어 사이에서 나누기 허용(~B)";
         Text[ chinese_simplified ] = "允许西文之中的字词换行分开(~B)";
         Text[ chinese_traditional ] = "允許西文之中的字詞換行分開(~B)";
-        Text[ turkish ] = "Allow break inside of words in latin text";
+        Text[ turkish ] = "Latin Metin Belgeleri i�erisinde ay�rma i�lemine izin ver";
         Text[ arabic ] = "������ ����� ���� ���� ������� �� ������ ���������";
         Text[ catalan ] = "Permet el ~salt de paraules en textos amb car�cters llatins.";
         Text[ finnish ] = "Salli sanajaot ~latinalaisessa tekstiss�";
         Text[ thai ] = "ให้มี~ตัวตัดคำในข้อความภาษาลาติน";
+        Text[ czech ] = "Povolit zalomení v latinkovém textu";
+        Text[ hebrew ] = "~Textumbruch innerhalb von Wötern im lateinischen Text zulassen";
+        Text[ hindi ] = "लेटिन टेक्स्ट् में शब्दों के बीच में ~अंतर स्वीकृत";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
@@ -2631,17 +2960,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Interpunzioni di rientro";
         Text[ danish ] = "T~illad h�ngende tegns�tning";
         Text[ swedish ] = "Till�t h�ngande ~interpunktion";
-        Text[ polish ] = "Dopu�� sieroty i wdowy";
-        Text[ portuguese_brazilian ] = "Hanging punctuation";
+        Text[ polish ] = "Zezwalaj na sieroty i wdowy";
+        Text[ portuguese_brazilian ] = "Permitir pontua��o deslocada";
         Text[ japanese ] = "句読点のぶら下げを行う";
         Text[ korean ] = "문장 부호 끌어 맞춤";
         Text[ chinese_simplified ] = "允许行末附加标点符号";
         Text[ chinese_traditional ] = "行末附加標點符號";
-        Text[ turkish ] = "Hanging punctuation";
+        Text[ turkish ] = "Noktalama i�aretlerine izin ver";
         Text[ arabic ] = "������ ������� ������� �������";
         Text[ catalan ] = "Permet la puntuaci� lliure";
         Text[ finnish ] = "Salli riippuva v�limerkitys";
         Text[ thai ] = "ให้มีเครื่องหมายวรรคตอนลอย";
+        Text[ czech ] = "Povolit zavěšenou interpunkci";
+        Text[ hebrew ] = "Hängende ~Interpunktion zulassen";
+        Text[ hindi ] = "हांगिंग विराम-चिन्ह स्वीकृत";
     };
     FixedLine FL_AS_CHAR_DIST
     {
@@ -2660,16 +2992,19 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ danish ] = "Linjeafstand";
         Text[ swedish ] = "Teckenavst�nd";
         Text[ polish ] = "Odst�py mi�dzy znakami";
-        Text[ portuguese_brazilian ] = "Character distance";
+        Text[ portuguese_brazilian ] = "Afastamento entre caracteres";
         Text[ japanese ] = "文字間隔の調整";
         Text[ korean ] = "문자 간격";
         Text[ chinese_simplified ] = "字符间隔";
         Text[ chinese_traditional ] = "字元間隔";
-        Text[ turkish ] = "Character distance";
+        Text[ turkish ] = "Karakter aral�klar�";
         Text[ arabic ] = "����� ������";
         Text[ catalan ] = "Espai entre car�cters";
         Text[ finnish ] = "Merkkien v�lit";
         Text[ thai ] = "ระยะห่างตัวอักขระ";
+        Text[ czech ] = "Rozestup znaků";
+        Text[ hebrew ] = "Zeichenabstand";
+        Text[ hindi ] = "अक्षर के बीच में अंतर देना";
     };
     TriStateBox CB_AS_PUNCTUATION
     {
@@ -2687,17 +3022,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Interpunzioni all'inizio di riga per compressione";
         Text[ danish ] = "T~illad tegns�tning ved linjestart til komprimering";
         Text[ swedish ] = "Till�t komprimering av i~nterpunktion i b�rjan av rad";
-        Text[ polish ] = "Dopu�� kompresj� interpuncji na pocz�tku wiersza";
-        Text[ portuguese_brazilian ] = "Allow punctuation at line start";
+        Text[ polish ] = "Zezwalaj na znaki interpunkcyjne na pocz�tku wiersza";
+        Text[ portuguese_brazilian ] = "Permitir pontua��o no in�cio de linha";
         Text[ japanese ] = "行頭で禁則処理を行う";
         Text[ korean ] = "압축시 줄 시작 부분에 구두점 허용";
         Text[ chinese_simplified ] = "允许行首附加压缩标点符号";
         Text[ chinese_traditional ] = "允許行首附加壓縮標點符號";
-        Text[ turkish ] = "Allow punctuation at line start";
+        Text[ turkish ] = "Sat�r ba�lar�nda noktalama i�aretlerine izin ver";
         Text[ arabic ] = "������ ������� ������� ��� ����� ����� �����";
         Text[ catalan ] = "Permet la puntuaci� a l'inici de la l�nia";
         Text[ finnish ] = "Salli v�limerkit rivin alussa";
         Text[ thai ] = "ให้มีเครื่องหมายวรรคตอนที่จุดเริ่มบรรทัด";
+        Text[ czech ] = "Povolit interpunkci na začátku řádky";
+        Text[ hebrew ] = "I~nterpunktion am Zeilenbeginn zum Komprimieren zulassen";
+        Text[ hindi ] = "रेखा के प्रारंभ में विराम-चिन्ह स्वीकृत";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
@@ -2715,17 +3053,20 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Applica spazio tra testo asiatico, latino e complesso.";
         Text[ danish ] = "Anvend ~afstand mellem asiatisk, latinsk og kompleks tekst";
         Text[ swedish ] = "Anv�nd ~avst�nd mellan asiatisk, latinsk och komplex text";
-        Text[ polish ] = "Ustaw odst�p mi�dzy tekstem azjatyckim, �aci�skim i z�o�onym";
-        Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
+        Text[ polish ] = "Zastosuj odst�py mi�dzy tekstem azjatyckim, �aci�skim i z�o�onym";
+        Text[ portuguese_brazilian ] = "Aplicar afastamento entre textos Asi�tico, Latino e Complexo.";
         Text[ japanese ] = "アジア諸国語、西洋諸国語、および複合文字言語の間の間隔を調整する";
         Text[ korean ] = "한글, 영어 및 복합 문자 언어 사이에 간격을 적용";
         Text[ chinese_simplified ] = "在中日韩文字和西文及混合文字之间加入空格";
         Text[ chinese_traditional ] = "在中日韓文字和西文及混合文字之間加入空格";
-        Text[ turkish ] = "Apply distance between asian, latin and complex text";
+        Text[ turkish ] = "Asya, Latin ve Karma��k metinler i�erisinde aral�k b�rakmaya izin ver";
         Text[ arabic ] = "������� ����� ��� ������ �������� ���������� ��������.";
         Text[ catalan ] = "Aplica l'espai entre text asi�tic, llat� i complex.";
         Text[ finnish ] = "K�yt� v�lej� aasialaisten, latinalaisten monimutkaisten tekstien v�liss�";
         Text[ thai ] = "ใช้ระยะห่างระหว่างข้อความภาษาเอเชียและภาษาลาตินที่ซับซ้อน";
+        Text[ czech ] = "Použít rozestup znaků mezi latinkou, asijským a komplexním textem";
+        Text[ hebrew ] = "~Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden";
+        Text[ hindi ] = "ऐशियन, लेटिन और जटिल टेक्स्टों के बीच अंतर लागू करो";
     };
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
@@ -2744,20 +3085,42 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ danish ] = "Tilpas automatisk afstan~d mellem asiatisk tekst og tal";
         Text[ swedish ] = "Anpassa automatiskt avst�n~d mellan asiatisk text och siffror";
         Text[ polish ] = "Dopasuj automatycznie odst�p mi�dzy tekstem azjatyckim a liczbami";
-        Text[ portuguese_brazilian ] = "Automatically adjust distance between asian text and numbers";
+        Text[ portuguese_brazilian ] = "Ajustar automaticamente o espa�o entre o texto Asi�tico e n�meros";
         Text[ japanese ] = "日本語と数字の文字間隔を自動調整";
         Text[ korean ] = "한글과 숫자 사이의 간격을 자동으로 조정";
         Text[ chinese_simplified ] = "自动调整中日韩文字和数字之间的间隔";
         Text[ chinese_traditional ] = "自動調整中日韓文字和數字之間的間隔";
-        Text[ turkish ] = "Automatically adjust distance between asian text and numbers";
+        Text[ turkish ] = "Asya Metin ve Say�lar� aras�ndaki bo�luklar� otomatik olarak ayarla";
         Text[ arabic ] = "������ ������� ������� ��� ���� ������� ��������";
         Text[ catalan ] = "Ajusta autom�ticament l'espai entre el text asi�tic i els n�meros";
         Text[ finnish ] = "S��d� automaattisesti v�lit aasialaisen tekstin ja numeroiden v�liss�";
         Text[ thai ] = "ปรับระยะห่างอัตโนมัติระหว่างของความและตัวเลขภาษาเอเชีย";
+        Text[ czech ] = "Automaticky upravit mezery mezi asijským textem a číslicemi";
+        Text[ hebrew ] = "Abstan~d zwischen asiatischem Text und Zahlen automatisch anpassen";
+        Text[ hindi ] = "ऐशियन टेक्स्ट् और संख्यों के बीच में स्वचालित रूप से अंतर की व्यवस्था करो";
     };
+    Text[ czech ] = "Asijská typografie";
+    Text[ hebrew ] = "Asiatische Typographie";
+    Text[ hindi ] = "ऐशियन टइपोग्रफी";
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
