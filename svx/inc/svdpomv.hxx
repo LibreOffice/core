@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpomv.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ private:
 #endif
 public:
     SdrPolyMarkView(SdrModel* pModel1, OutputDevice* pOut);
-    SdrPolyMarkView(SdrModel* pModel1, ExtOutputDevice* pXOut);
+    SdrPolyMarkView(SdrModel* pModel1, XOutputDevice* pXOut);
     ~SdrPolyMarkView();
 };
 
