@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:25:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _FACTORY_HXX //autogen
-#include <so3/factory.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
