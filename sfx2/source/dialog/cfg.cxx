@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-02 17:03:00 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "viewfrm.hxx"
 #include "workwin.hxx"
 #include "filedlghelper.hxx"
+#include "request.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -1213,7 +1214,12 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
             SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
             Apply( pStbMgr, FALSE );
             pCfgMgr->StoreConfigItem( *pStbMgr );
-            if ( !bLoadedDocument )
+            if ( bLoadedDocument )
+            {
+                SfxRequest aReq( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, xDoc->GetPool() );
+                xDoc->ExecuteSlot( aReq );
+            }
+            else
                 pCfgMgr->StoreConfiguration();
 
             StatusBar* pBar = pStbMgr->GetStatusBar();

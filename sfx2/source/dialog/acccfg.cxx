@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:47:58 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include "objsh.hxx"
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
+#include "request.hxx"
 
 //static const char __FAR_DATA pUnknownStr[]    = "???";
 static USHORT __FAR_DATA aCodeArr[] =
@@ -645,7 +646,12 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
             SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
             Apply( pAccMgr, FALSE );
             pCfgMgr->StoreConfigItem( *pAccMgr );
-            if ( !bLoadedDocument )
+            if ( bLoadedDocument )
+            {
+                SfxRequest aReq( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, xDoc->GetPool() );
+                xDoc->ExecuteSlot( aReq );
+            }
+            else
                 pCfgMgr->StoreConfiguration();
             delete pAccMgr;
             if ( bCreated )
