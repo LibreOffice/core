@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 11:54:39 $
+ *  last change: $Author: mtg $ $Date: 2001-10-23 17:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,8 @@ class BaseFrameProperties_Impl
 
 public:
 
-    BaseFrameProperties_Impl(const SfxItemPropertyMap*  pMap) :
-        _pMap(pMap){}
+    BaseFrameProperties_Impl ( const SfxItemPropertyMap* pMap ) :
+        _pMap(pMap) {}
     ~BaseFrameProperties_Impl();
 
     void            SetProperty(USHORT nWID, BYTE nMemberId, uno::Any aVal);
@@ -294,9 +294,9 @@ public:
     void            GetProperty(const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any& rAny );
 
     const SfxItemPropertyMap*       GetMap() const {return _pMap;}
-    sal_Bool                        FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound);
+    sal_Bool                        FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet &rFromSet, sal_Bool& rSizeFound);
 
-    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
+    virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
 
 };
 /* -----------------------------12.06.01 15:46--------------------------------
@@ -342,11 +342,11 @@ void BaseFrameProperties_Impl::GetProperty( const OUString &rPropertyName, const
 /* -----------------29.06.98 09:55-------------------
  *
  * --------------------------------------------------*/
-sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound)
+sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, sal_Bool& rSizeFound)
 {
     sal_Bool bRet = sal_True;
     //Anker kommt auf jeden Fall in den Set
-    SwFmtAnchor aAnchor;
+    SwFmtAnchor aAnchor ( static_cast < const SwFmtAnchor & > ( rFromSet.Get ( RES_ANCHOR ) ) );
     {
         uno::Any* pAnchorPgNo;
         if(GetProperty(RES_ANCHOR, MID_ANCHOR_PAGENUM, pAnchorPgNo))
@@ -355,7 +355,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         if(GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, pAnchorType))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
-    rSet.Put(aAnchor);
+    rToSet.Put(aAnchor);
     {
         uno::Any* pCol = 0;
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
@@ -370,7 +370,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
 
         if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc)
         {
-            SvxBrushItem aBrush(RES_BACKGROUND);
+            SvxBrushItem aBrush ( static_cast < const SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
             if(pCol )
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
             if(pTrans)
@@ -381,7 +381,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
             if(pGrLoc)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
-            rSet.Put(aBrush);
+            rToSet.Put(aBrush);
         }
     }
     {
@@ -393,14 +393,14 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         GetProperty(RES_PROTECT, MID_PROTECT_SIZE, pName );
         if(pCont||pPos||pName)
         {
-            SvxProtectItem aProt(RES_PROTECT);
+            SvxProtectItem aProt ( static_cast < const SvxProtectItem & > ( rFromSet.Get ( RES_PROTECT ) ) );
             if(pCont)
                 bRet &= ((SfxPoolItem&)aProt).PutValue(*pCont, MID_PROTECT_CONTENT);
             if(pPos )
                 bRet &= ((SfxPoolItem&)aProt).PutValue(*pPos, MID_PROTECT_POSITION);
             if(pName)
                 bRet &= ((SfxPoolItem&)aProt).PutValue(*pName, MID_PROTECT_SIZE);
-            rSet.Put(aProt);
+            rToSet.Put(aProt);
         }
     }
     {
@@ -414,7 +414,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_PAGETOGGLE, pPageT);
         if(pHori||pHoriP||pHoriR||pPageT)
         {
-            SwFmtHoriOrient aOrient;
+            SwFmtHoriOrient aOrient ( static_cast < const SwFmtHoriOrient & > ( rFromSet.Get ( RES_HORI_ORIENT ) ) );
             if(pHori )
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pHori, MID_HORIORIENT_ORIENT);
             if(pHoriP)
@@ -423,7 +423,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pHoriR, MID_HORIORIENT_RELATION);
             if(pPageT)
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pPageT, MID_HORIORIENT_PAGETOGGLE);
-            rSet.Put(aOrient);
+            rToSet.Put(aOrient);
         }
     }
 
@@ -436,14 +436,14 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_RELATION, pVertR );
         if(pVert||pVertP||pVertR)
         {
-            SwFmtVertOrient aOrient;
+            SwFmtVertOrient aOrient ( static_cast < const SwFmtVertOrient & > ( rFromSet.Get ( RES_VERT_ORIENT ) ) );
             if(pVert )
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVert, MID_VERTORIENT_ORIENT);
             if(pVertP)
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVertP, MID_VERTORIENT_POSITION|CONVERT_TWIPS);
             if(pVertR)
                 bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVertR, MID_VERTORIENT_RELATION);
-            rSet.Put(aOrient);
+            rToSet.Put(aOrient);
         }
     }
     {
@@ -457,7 +457,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
         GetProperty(RES_URL, MID_URL_SERVERMAP, pHySMp );
         if(pURL||pTarget||pHyLNm||pHySMp)
         {
-            SwFmtURL aURL;
+            SwFmtURL aURL ( static_cast < const SwFmtURL & > ( rFromSet.Get ( RES_URL ) ) );
             if(pURL)
                 bRet &= ((SfxPoolItem&)aURL).PutValue(*pURL, MID_URL_URL);
             if(pTarget)
@@ -466,7 +466,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
                 bRet &= ((SfxPoolItem&)aURL).PutValue(*pHyLNm, MID_URL_HYPERLINKNAME  );
             if(pHySMp)
                 bRet &= ((SfxPoolItem&)aURL).PutValue(*pHySMp, MID_URL_SERVERMAP);
-            rSet.Put(aURL);
+            rToSet.Put(aURL);
         }
     }
     uno::Any* pL = 0;
@@ -475,12 +475,12 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR );
     if(pL||pR)
     {
-        SvxLRSpaceItem aLR(RES_LR_SPACE);
+        SvxLRSpaceItem aLR ( static_cast < const SvxLRSpaceItem & > ( rFromSet.Get ( RES_LR_SPACE ) ) );
         if(pL)
             bRet &= ((SfxPoolItem&)aLR).PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
         if(pR)
             bRet &= ((SfxPoolItem&)aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
-        rSet.Put(aLR);
+        rToSet.Put(aLR);
     }
     uno::Any* pT = 0;
     GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pT );
@@ -488,33 +488,33 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pB );
     if(pT||pB)
     {
-        SvxULSpaceItem aTB(RES_UL_SPACE);
+        SvxULSpaceItem aTB ( static_cast < const SvxULSpaceItem &> ( rFromSet.Get ( RES_UL_SPACE ) ) );
         if(pT)
             bRet &= ((SfxPoolItem&)aTB).PutValue(*pT, MID_UP_MARGIN|CONVERT_TWIPS);
         if(pB)
             bRet &= ((SfxPoolItem&)aTB).PutValue(*pB, MID_LO_MARGIN|CONVERT_TWIPS);
-        rSet.Put(aTB);
+        rToSet.Put(aTB);
     }
     uno::Any* pOp;
     if(GetProperty(RES_OPAQUE, 0, pOp))
     {
-        SvxOpaqueItem aOp(RES_OPAQUE);
+        SvxOpaqueItem aOp ( static_cast < const SvxOpaqueItem& > ( rFromSet.Get ( RES_OPAQUE ) ) );
         bRet &= ((SfxPoolItem&)aOp).PutValue(*pOp, 0);
-        rSet.Put(aOp);
+        rToSet.Put(aOp);
     }
     uno::Any* pPrt;
     if(GetProperty(RES_PRINT, 0, pPrt))
     {
-        SvxPrintItem aPrt(RES_PRINT);
+        SvxPrintItem aPrt ( static_cast < const SvxPrintItem & > ( rFromSet.Get ( RES_PRINT ) ) );
         bRet &= ((SfxPoolItem&)aPrt).PutValue(*pPrt, 0);
-        rSet.Put(aPrt);
+        rToSet.Put(aPrt);
     }
     uno::Any* pSh;
     if(GetProperty(RES_SHADOW, CONVERT_TWIPS, pSh))
     {
-        SvxShadowItem aSh(RES_SHADOW);
+        SvxShadowItem aSh ( static_cast < const SvxShadowItem& > ( rFromSet.Get ( RES_SHADOW ) ) );
         bRet &= ((SfxPoolItem&)aSh).PutValue(*pSh, CONVERT_TWIPS);
-        rSet.Put(aSh);
+        rToSet.Put(aSh);
     }
     uno::Any* pSur   = 0;
     GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE, pSur);
@@ -522,12 +522,12 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY, pSurAnch);
     if(pSur || pSurAnch)
     {
-        SwFmtSurround aSrnd;
+        SwFmtSurround aSrnd ( static_cast < const SwFmtSurround & > ( rFromSet.Get ( RES_SURROUND ) ) );
         if(pSur)
             bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE );
         if(pSurAnch)
             bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
-        rSet.Put(aSrnd);
+        rToSet.Put(aSrnd);
     }
     uno::Any* pLeft         = 0;
     GetProperty(RES_BOX, LEFT_BORDER  |CONVERT_TWIPS,    pLeft  );
@@ -550,7 +550,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
     {
-        SvxBoxItem aBox;
+        SvxBoxItem aBox ( static_cast < const SvxBoxItem & > ( rFromSet.Get ( RES_BOX ) ) );
         if( pLeft )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pLeft, CONVERT_TWIPS|LEFT_BORDER );
         if( pRight )
@@ -569,7 +569,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pTopDistance, CONVERT_TWIPS|TOP_BORDER_DISTANCE);
         if( pBottomDistance )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottomDistance, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE);
-        rSet.Put(aBox);
+        rToSet.Put(aBox);
     }
     {
         uno::Any* pRelH = 0;
@@ -592,7 +592,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
             pSyncWidth || pSyncHeight )
         {
             rSizeFound = sal_True;
-            SwFmtFrmSize aFrmSz;
+            SwFmtFrmSize aFrmSz ( static_cast < const SwFmtFrmSize& > ( rFromSet.Get ( RES_FRM_SIZE ) ) );
             if(pWidth)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
             if(pHeight)
@@ -613,7 +613,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
                 aFrmSz.SetWidth(MINFLY);
             if(!aFrmSz.GetHeight())
                 aFrmSz.SetHeight(MINFLY);
-            rSet.Put(aFrmSz);
+            rToSet.Put(aFrmSz);
         }
         else
         {
@@ -625,7 +625,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
             uno::Any aSizeVal;
             aSizeVal <<= aSize;
             ((SfxPoolItem&)aFrmSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
-            rSet.Put(aFrmSz);
+            rToSet.Put(aFrmSz);
         }
     }
     uno::Any* pUnknown = 0;
@@ -634,7 +634,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet, sal_Bool
     {
         SvXMLAttrContainerItem aAttr(RES_UNKNOWNATR_CONTAINER);
         aAttr.PutValue(*pUnknown, 0);
-        rSet.Put(aAttr);
+        rToSet.Put(aAttr);
     }
 
     return bRet;
@@ -650,22 +650,40 @@ public:
     SwFrameProperties_Impl();
     ~SwFrameProperties_Impl(){}
 
-    virtual sal_Bool        AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
+    virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
 /* -----------------22.06.98 09:17-------------------
  *
  * --------------------------------------------------*/
-SwFrameProperties_Impl::SwFrameProperties_Impl() :
-    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME))
+SwFrameProperties_Impl::SwFrameProperties_Impl():
+    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME) )
 {
 }
 /* -----------------22.06.98 11:27-------------------
  *
  * --------------------------------------------------*/
-sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
+sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
-    sal_Bool bRet = FillBaseProperties(rSet, rSizeFound);
+    uno::Any *pStyleName;
+    SwDocStyleSheet* pStyle = NULL;
+    sal_Bool bRet;
+    const SfxItemSet *pItemSet;
+
+    if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
+    {
+        OUString sStyle;
+        *pStyleName >>= sStyle;
+        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME);
+    }
+
+    if ( pStyle )
+        pItemSet = &pStyle->GetItemSet();
+    else
+        pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+
+       bRet = FillBaseProperties(rSet, *pItemSet, rSizeFound );
 
     uno::Any* pEdit;
     if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
@@ -677,7 +695,7 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SfxItemSet& rSet, SfxItemSet&, 
     uno::Any* pColumns;
     if(GetProperty(RES_COL, MID_COLUMNS, pColumns))
     {
-        SwFmtCol aCol;
+        SwFmtCol aCol ( static_cast < const SwFmtCol & > ( pItemSet->Get ( RES_COL ) ) );
         ((SfxPoolItem&)aCol).PutValue(*pColumns, MID_COLUMNS);
         rSet.Put(aCol);
     }
@@ -692,13 +710,13 @@ public:
     SwGraphicProperties_Impl();
     ~SwGraphicProperties_Impl(){}
 
-    virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
+    virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
 /* -----------------27.06.98 14:53-------------------
  *
  * --------------------------------------------------*/
-SwGraphicProperties_Impl::SwGraphicProperties_Impl() :
-    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC))
+SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
+    BaseFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC) )
 {
 }
 
@@ -706,13 +724,30 @@ SwGraphicProperties_Impl::SwGraphicProperties_Impl() :
  *
  * --------------------------------------------------*/
 sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
+            SwDoc* pDoc,
             SfxItemSet& rFrmSet,
             SfxItemSet& rGrSet,
             sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
-    sal_Bool bRet = FillBaseProperties(rFrmSet, rSizeFound);
+    sal_Bool bRet;
+    uno::Any *pStyleName;
+    SwDocStyleSheet* pStyle = NULL;
+    const SfxItemSet *pItemSet;
 
+    if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
+    {
+        OUString sStyle;
+        *pStyleName >>= sStyle;
+        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME);
+    }
+    if ( pStyle )
+        pItemSet = &pStyle->GetItemSet();
+    else
+        pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
+
+    bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
     uno::Any* pHEvenMirror = 0;
     uno::Any* pHOddMirror = 0;
     uno::Any* pVMirror = 0;
@@ -721,7 +756,7 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT, pVMirror);
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
-        SwMirrorGrf aMirror;
+        SwMirrorGrf aMirror ( static_cast < const SwMirrorGrf& > ( pItemSet->Get ( RES_FRM_SIZE ) ) );
         if(pHEvenMirror)
             bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
         if(pHOddMirror)
@@ -844,18 +879,6 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc 
     bIsDescriptor(sal_True),
     mpDoc ( pDoc )
 {
-    switch(eType)
-    {
-        case FLYCNTTYPE_FRM:
-            pProps = new SwFrameProperties_Impl();
-        break;
-        case FLYCNTTYPE_GRF:
-            pProps = new SwGraphicProperties_Impl();
-        break;
-        case FLYCNTTYPE_OLE:
-            pProps = 0;
-        break;
-    }
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     // get the property set for the default style data
@@ -869,6 +892,31 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc 
     Any aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "FrameStyles" ) ) );
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
+    // mxStyleFamily is initialised in the SwXFrame constructor
+    switch(eType)
+    {
+        case FLYCNTTYPE_FRM:
+        {
+            Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
+            aAny >>= mxStyleData;
+            pProps = new SwFrameProperties_Impl( );
+        }
+        break;
+        case FLYCNTTYPE_GRF:
+        {
+            Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
+            aAny >>= mxStyleData;
+            pProps = new SwGraphicProperties_Impl( );
+        }
+        break;
+        case FLYCNTTYPE_OLE:
+        {
+            Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
+            aAny >>= mxStyleData;
+            pProps = 0;
+        }
+        break;
+    }
 }
 
 /*-- 11.12.98 15:05:01---------------------------------------------------
@@ -1830,7 +1878,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         SfxItemSet aFrmSet(pDoc->GetAttrPool(), aFrmAttrRange );
         //jetzt muessen die passenden Items in den Set
         sal_Bool bSizeFound;
-        if(!pProps->AnyToItemSet(aFrmSet, aGrSet, bSizeFound))
+        if(!pProps->AnyToItemSet( pDoc, aFrmSet, aGrSet, bSizeFound))
             throw IllegalArgumentException();
         //der TextRange wird einzeln behandelt
         *aPam.GetPoint() = *aIntPam.GetPoint();
@@ -2064,9 +2112,6 @@ SwXTextFrame::SwXTextFrame( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME), pDoc ),
     SwXText(0, CURSOR_FRAME)
 {
-    // mxStyleFamily is initialised in the SwXFrame constructor
-    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
-    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 15:23:01---------------------------------------------------
 
@@ -2381,9 +2426,6 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
 {
-    // mxStyleFamily is initialised in the SwXFrame constructor
-    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
-    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 16:02:25---------------------------------------------------
 
@@ -2557,9 +2599,6 @@ uno::Reference<container::XNameReplace> SAL_CALL
 SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
 {
-    // mxStyleFamily is initialised in the SwXFrame constructor
-    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
-    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 16:16:53---------------------------------------------------
 
