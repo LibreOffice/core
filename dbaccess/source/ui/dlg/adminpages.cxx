@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:00:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,31 +342,35 @@ namespace dbaui
         {
             m_pAdminDialog->saveDatasource();
             OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), sal_True);
+            sal_Bool bShowMessage = sal_True;
             try
             {
-                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
-                bSuccess = xConnection.is();
-                ::comphelper::disposeComponent(xConnection);
+                ::std::pair< Reference<XConnection>,sal_Bool> xConnection = m_pAdminDialog->createConnection();
+                bShowMessage = xConnection.second;
+                bSuccess = xConnection.first.is();
+                ::comphelper::disposeComponent(xConnection.first);
             }
             catch(Exception&)
             {
             }
-
-            OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
-            String aMessage,sTitle;
-            sTitle = String (ModuleRes(STR_CONNECTION_TEST));
-            if ( bSuccess )
+            if ( bShowMessage )
             {
-                aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
+                OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
+                String aMessage,sTitle;
+                sTitle = String (ModuleRes(STR_CONNECTION_TEST));
+                if ( bSuccess )
+                {
+                    aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
+                }
+                else
+                {
+                    eImage = OSQLMessageBox::Error;
+                    aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
+                    m_pAdminDialog->clearPassword();
+                }
+                OSQLMessageBox aMsg(this,sTitle,aMessage);
+                aMsg.Execute();
             }
-            else
-            {
-                eImage = OSQLMessageBox::Error;
-                aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
-                m_pAdminDialog->clearPassword();
-            }
-            OSQLMessageBox aMsg(this,sTitle,aMessage);
-            aMsg.Execute();
         }
         return 0L;
     }
