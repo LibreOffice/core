@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-20 18:00:22 $
+ *  last change: $Author: sj $ $Date: 2001-01-15 09:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2744,7 +2744,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             {
                 BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                 Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-                Bitmap      aMask( aBitmap.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 8 ) );
+                Bitmap      aMask( aBitmap.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 ) );
                 if ( aBitmapEx.IsTransparent() )
                     aMask.CombineSimple( aBitmapEx.GetMask(), BMP_COMBINE_OR );
                 aGraf = BitmapEx( aBitmap, aMask );
