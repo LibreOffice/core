@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:24:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,6 +646,8 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
         TemplateRequest aTemplateRequest(configuration::makeName(aTemplate.Name, configuration::Name::NoValidate()),
                                          configuration::makeName(aTemplate.Component, configuration::Name::NoValidate()) );
         apNewInstance = m_aContext.getTemplateData( aTemplateRequest ).extractDataAndClear();
+        if (apNewInstance.get())
+            apNewInstance->setName( aName );
     }
 
     if (NULL == apNewInstance.get())
