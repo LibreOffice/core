@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:55:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ TabPage TP_LINENUMBERING
             < "Links" ; > ;
             < "Rechts" ; > ;
             < "Innen" ; > ;
-            < "Auﬂen" ; > ;
+            < "Au?en" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -310,7 +310,7 @@ TabPage TP_LINENUMBERING
     {
             < "Z lewej" ; > ;
         < "Z prawej" ; > ;
-        < "W úrodku" ; > ;
+        < "W ?rodku" ; > ;
         < "Na zewnπtrz" ; > ;
     };
     StringList [ japanese ] =
@@ -510,7 +510,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese ] = "Vista" ;
         Text[ chinese_simplified ] = "œ‘ æ";
         Text[ russian ] = "œÓÍ‡Á";
-        Text[ polish ] = "Wyúwietlenie";
+        Text[ polish ] = "Wy?wietlenie";
         Text[ japanese ] = "ï\\é¶";
         Text[ chinese_traditional ] = "≈„•‹";
         Text[ arabic ] = "«·⁄—÷";
@@ -750,7 +750,7 @@ TabPage TP_LINENUMBERING
         Text = "Z‰hlen" ;
         Text [ English ] = "Count" ;
         Text [ english_us ] = "Count" ;
-        Text [ portuguese_brazilian ] = "Z‰hlen" ;
+        Text [ portuguese_brazilian ] = "Z?hlen" ;
         Text [ swedish ] = "R‰kna" ;
         Text [ danish ] = "TÊl" ;
         Text [ italian ] = "Conta" ;
