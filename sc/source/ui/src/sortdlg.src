@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:35:37 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 22:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ danish ] = "Sorter efter" ;
         Text [ french ] = "~Trier selon" ;
         Text [ swedish ] = "~Sortera efter" ;
-        Text [ dutch ] = "Sorteren op" ;
+        Text [ dutch ] = "~Sorteren op" ;
         Text [ spanish ] = "Ordenar según" ;
         Text [ english_us ] = "Sort ~by" ;
         Text[ chinese_simplified ] = "ÅÅÐò°´ÕÕ";
@@ -246,7 +246,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "~Puis selon" ;
         Text [ swedish ] = "Sed~an efter" ;
-        Text [ dutch ] = "Daarna op" ;
+        Text [ dutch ] = "~Daarna op" ;
         Text [ spanish ] = "Después según" ;
         Text [ english_us ] = "Then b~y" ;
         Text[ chinese_simplified ] = "È»ºó°´ÕÕ";
@@ -344,7 +344,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "P~uis selon" ;
         Text [ swedish ] = "Seda~n efter" ;
-        Text [ dutch ] = "Daarna op" ;
+        Text [ dutch ] = "D~aarna op" ;
         Text [ spanish ] = "Después según" ;
         Text [ english_us ] = "T~hen by" ;
         Text[ chinese_simplified ] = "È»ºó°´ÕÕ";
@@ -647,7 +647,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ portuguese ] = "O~pções";
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÅðéëïãÝò";
-        Text[ dutch ] = "O~ptions";
+        Text[ dutch ] = "O~pties";
         Text[ french ] = "Op~tions";
         Text[ spanish ] = "Opciones";
         Text[ finnish ] = "O~ptions";
@@ -915,5 +915,6 @@ TabDialog RID_SCDLG_SORT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ordenar";
 };
+
 
 
