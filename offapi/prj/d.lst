@@ -73,8 +73,8 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
-..\%__SRC%\ucr\applicat.db %_DEST%\bin%_EXT%\applicat.rdb
-..\%__SRC%\ucrdoc\applicat_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
+..\%__SRC%\ucr\types.db %_DEST%\bin%_EXT%\types.rdb
+..\%__SRC%\ucrdoc\types_doc.db %_DEST%\bin%_EXT%\types_doc.rdb
 
 ..\com\sun\star\awt\*.idl %_DEST%\idl%_EXT%\com\sun\star\awt\*.idl
 ..\com\sun\star\chart\*.idl %_DEST%\idl%_EXT%\com\sun\star\chart\*.idl

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: tl $ $Date: 2002-10-02 14:41:10 $
+#   last change: $Author: jbu $ $Date: 2002-10-08 07:05:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,12 +157,12 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALLTAR : $(UCR)$/applicat.db $(OUT)$/ucrdoc$/applicat_doc.db
+ALLTAR : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
 
-$(UCR)$/applicat.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+$(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
     +$(GNUCOPY) -f $(UCR)$/offapi.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
-$(OUT)$/ucrdoc$/applicat_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
+$(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
