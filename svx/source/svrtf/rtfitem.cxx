@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:59:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,7 @@ ATTR_SETEMPHASIS:
             case RTF_HORZVERT:
                 if( PLAINID->nHorzVert )
                 {
-                    // RTF knows only 90°
+                    // RTF knows only 90deg
                     pSet->Put( SvxCharRotateItem( 900, 1 == nTokenValue,
                                                        PLAINID->nHorzVert ));
                 }
