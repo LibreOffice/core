@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:39:58 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-    virtual void        DragFinished();
+    virtual void        DragFinished( sal_Int8 nAction );
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );

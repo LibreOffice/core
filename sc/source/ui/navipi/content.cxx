@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:43:21 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ void ScContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     DoDrag();
 }
 
-void ScContentTree::DragFinished()
+void ScContentTree::DragFinished( sal_Int8 nAction )
 {
 }
 
