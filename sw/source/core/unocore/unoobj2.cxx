@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:11:09 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,7 @@ uno::Reference< XTextRange >  SwXTextRange::getStart(void) throw( uno::RuntimeEx
         getText();
     if(pBkm)
     {
-        SwPaM aPam(pBkm->GetPos());
+        SwPaM aPam(*pBkm->Start());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
@@ -1614,7 +1614,8 @@ uno::Reference< XTextRange >  SwXTextRange::getEnd(void) throw( uno::RuntimeExce
         getText();
     if(pBkm)
     {
-        SwPaM aPam(pBkm->GetOtherPos()? *pBkm->GetOtherPos() : pBkm->GetPos());
+//      SwPaM aPam(pBkm->GetOtherPos()? *pBkm->GetOtherPos() : pBkm->GetPos());
+        SwPaM aPam(*pBkm->End());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
