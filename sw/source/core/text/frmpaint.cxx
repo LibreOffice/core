@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:55:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
 SwRect SwTxtFrm::Paint()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
 #endif
 
@@ -683,7 +683,7 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
     DBG_LOOP_RESET;
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwTwips nDbgY = Frm().Top();
 #endif
 
