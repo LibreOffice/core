@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentIdentifier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 10:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,14 @@ interface XContentIdentifier: com::sun::star::uno::XInterface
     string getContentIdentifier();
 
     //-------------------------------------------------------------------------
-    /** returns the content provider scheme string. This string will
-        be calculated from the content identifier string and must be
-        lower-cased(!). It is the 'scheme' the content provider is
-        registered for. In example, a provider for FTP contents will
-        use ftp-URL's as content identifiers. The content provider
-        scheme for all contents provided by that provider will be "ftp".
+    /** returns the content provider scheme string.
+
+          <p>This string will   be calculated from the content identifier string
+        and must be lower-cased(!). It is the 'scheme' the content provider is
+        registered for. In example, a provider for FTP contents will use
+        ftp-URL's as content identifiers. The content provider scheme for all
+        contents provided by that provider will be "ftp".
+        </p>
 
         @returns
         the content provider scheme string.
