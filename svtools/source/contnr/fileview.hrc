@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 09:55:23 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 12:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,4 +61,13 @@
 
 #define MID_FILEVIEW_DELETE     1
 #define MID_FILEVIEW_RENAME     2
+
+// DLG_SFX_QUERYDELETE ********************************************************
+
+#define TXT_ENTRY                                               1
+#define TXT_ENTRYNAME                                           2
+#define TXT_QUERYMSG                                            3
+#define BTN_YES                                                 4
+#define BTN_NO                                                  5
+#define BTN_CANCEL                                              6
 
