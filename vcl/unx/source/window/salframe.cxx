@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:45:27 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mbFullScreen                = false;
     mbMoved                     = false;
     mbSized                     = false;
-    mbWasGraphicsPaint          = false;
 
     mnIconID                    = 0; // ICON_DEFAULT
 
@@ -798,7 +797,7 @@ SalGraphics *X11SalFrame::GetGraphics()
     else
     {
         pGraphics_ = new X11SalGraphics();
-        pGraphics_->Init( this );
+        pGraphics_->Init( this, GetWindow() );
     }
 
     return pGraphics_;
@@ -905,6 +904,8 @@ void X11SalFrame::SetIcon( USHORT nIcon )
                     if( pName )
                         XFree( pName );
                  }
+                if( pProps )
+                    XFree( pProps );
             }
             if( bGnomeIconSize )
                 iconSize = 20;
@@ -1949,20 +1950,27 @@ X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent
     XLIB_Window nFocusWindow = GetWindow();
     Atom        nEventAtom   = GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::SAL_EXTTEXTEVENT );
 
-    sal_uInt32 pEventData[5];
+    XEvent aEvent;
+    aEvent.xclient.type         = ClientMessage;
+    aEvent.xclient.serial       = 0;
+    aEvent.xclient.send_event   = True;
+    aEvent.xclient.display      = GetXDisplay();
+    aEvent.xclient.window       = nFocusWindow;
+    aEvent.xclient.message_type = nEventAtom;
+    aEvent.xclient.format       = 32;
 
 #if __SIZEOFLONG > 4
-    pEventData[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
-    pEventData[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
+    aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
+    aEvent.xclient.data.l[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
 #else
-    pEventData[0] = (sal_uInt32)((long)pExtTextEvent);
-    pEventData[1] = 0;
+    aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent);
+    aEvent.xclient.data.l[1] = NULL;
 #endif
-    pEventData[2] = (sal_uInt32)nExtTextEventType;
-    pEventData[3] = 0;
-    pEventData[4] = 0;
+    aEvent.xclient.data.l[2] = (sal_uInt32)nExtTextEventType;
+    aEvent.xclient.data.l[3] = NULL;
+    aEvent.xclient.data.l[4] = NULL;
 
-    GetDisplay()->SendEvent (nEventAtom, pEventData, nFocusWindow);
+    XPutBackEvent( GetXDisplay(), &aEvent );
 }
 
 void
@@ -1981,7 +1989,6 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
     switch (nExtTextEventType)
     {
         case SALEVENT_ENDEXTTEXTINPUT:
-
             break;
 
         case SALEVENT_EXTTEXTINPUT:
@@ -2007,9 +2014,7 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL X11SalFrame::PostEvent( void *pData )
 {
-    GetDisplay()->SendEvent( GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::SAL_USEREVENT ),
-                              pData,
-                              GetWindow() );
+    GetDisplay()->SendInternalEvent( this, pData );
     return TRUE;
 }
 
@@ -2887,40 +2892,6 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-extern "C"
-{
-    static Bool GraphicsExposePredicate( Display* pDisplay, XEvent* pEvent, XPointer pSFrame )
-    {
-        Bool bRet = False;
-        X11SalFrame* pFrame = (X11SalFrame*)pSFrame;
-        if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
-            pEvent->xnoexpose.drawable == pFrame->GetWindow() )
-        {
-            bRet = True;
-        }
-        return bRet;
-    }
-}
-
-void X11SalFrame::YieldGraphicsExpose()
-{
-    XEvent aEvent;
-    do
-    {
-        while( XCheckTypedWindowEvent( GetXDisplay(), GetWindow(), Expose, &aEvent ) )
-            HandleExposeEvent( &aEvent );
-
-        XIfEvent( GetXDisplay(), &aEvent, GraphicsExposePredicate, (XPointer)this );
-        if( aEvent.type == NoExpose )
-            return;
-
-        HandleExposeEvent( &aEvent );
-    } while( aEvent.xgraphicsexpose.count != 0 );
-}
-
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 {
     XRectangle  aRect;
@@ -2941,7 +2912,6 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
         aRect.width     = pEvent->xgraphicsexpose.width;
         aRect.height    = pEvent->xgraphicsexpose.height;
         nCount          = pEvent->xgraphicsexpose.count;
-        mbWasGraphicsPaint = true;
     }
 
     if( IsOverrideRedirect() && mbFullScreen &&
@@ -2953,7 +2923,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     // width and height are extents, so they are of by one for rectangle
     maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
 
-    if( nCount || (maResizeTimer.IsActive() && ! mbWasGraphicsPaint) )
+    if( nCount || maResizeTimer.IsActive() )
         // wait for last expose rectangle, do not wait for resize timer
         // if a completed graphics expose sequence is available
         return 1;
@@ -2970,7 +2940,6 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
         aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
      CallCallback( SALEVENT_PAINT, &aPEvt );
-    mbWasGraphicsPaint = false;
     maPaintRegion = Rectangle();
 
     return 1;
@@ -3140,7 +3109,6 @@ IMPL_LINK( X11SalFrame, HandleResizeTimer, void*, pDummy )
         aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
     CallCallback( SALEVENT_PAINT, &aPEvt );
-    mbWasGraphicsPaint = false;
     maPaintRegion = Rectangle();
 
     return 0;
@@ -3160,6 +3128,9 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
+    BOOL bOldIgnore = GetDisplay()->GetXLib()->GetIgnoreXErrors();
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+
     /*
      *  #89186# don't rely on the new parent from the event.
      *  the event may be "out of date", that is the window manager
@@ -3170,14 +3141,19 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     hWM_Parent = GetShellWindow();
     do
     {
-    Children = NULL;
+        Children = NULL;
         XQueryTree( pDisplay,
                     hWM_Parent,
                     &hRoot,
                     &hDummy,
                     &Children,
                     &nChildren );
-        /* #107048# this sometimes happens if a Show(TRUE) is
+        if( GetDisplay()->GetXLib()->WasXError() )
+        {
+            hWM_Parent = GetShellWindow();
+            break;
+        }
+         /* #107048# this sometimes happens if a Show(TRUE) is
          *  immediately followed by Show(FALSE) (which is braindead anyway)
          */
         if(  hDummy == hWM_Parent )
@@ -3211,6 +3187,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         // Reparenting before Destroy
         aPresentationReparentList.remove( GetStackingWindow() );
         mhStackingWindow = None;
+        GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldIgnore );
         return 0;
     }
 
@@ -3271,17 +3248,21 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                   hWM_Parent,
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
-    maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
-    maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
-    /*
-     *  note: this works because hWM_Parent is direct child of root,
-     *  not necessarily parent of GetShellWindow()
-     */
-    maGeometry.nX       = xp + nLeft;
-    maGeometry.nY       = yp + nTop;
-    bool bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
-    maGeometry.nWidth   = w;
-    maGeometry.nHeight = h;
+    bool bResized = false;
+    if( ! GetDisplay()->GetXLib()->WasXError() )
+    {
+        maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
+        maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
+        /*
+         *  note: this works because hWM_Parent is direct child of root,
+         *  not necessarily parent of GetShellWindow()
+         */
+        maGeometry.nX       = xp + nLeft;
+        maGeometry.nY       = yp + nTop;
+        bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
+        maGeometry.nWidth   = w;
+        maGeometry.nHeight = h;
+    }
 
     // limit width and height if we are too large: #47757
     // olwm and fvwm need this, it doesnt harm the rest
@@ -3304,6 +3285,8 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     }
     else if( bResized )
         CallCallback( SALEVENT_RESIZE, NULL );
+
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldIgnore );
 
     return 1;
 }
@@ -3357,17 +3340,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
 {
     const WMAdaptor& rWMAdaptor( *pDisplay_->getWMAdaptor() );
 
-    if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_USEREVENT ) )
-    {
-#if __SIZEOFLONG > 4
-        void* pData = (void*)
-            ( (pEvent->data.l[0] & 0xffffffff) | (pEvent->data.l[1] << 32) );
-#else
-        void* pData = (void*)(pEvent->data.l[0]);
-#endif
-        CallCallback( SALEVENT_USEREVENT, pData );
-        return 1;
-    }
 #if !defined(__synchronous_extinput__)
     if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_EXTTEXTEVENT ) )
     {
