@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:23:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "—“–Œ ¿";
         Text[ polish ] = "LINIA";
         Text[ japanese ] = "çs";
-        Text[ chinese_traditional ] = "ƒÊ";
+        Text[ chinese_traditional ] = "¶C";
         Text[ arabic ] = "ROW";
         Text[ greek ] = "√—¡ÃÃ«";
         Text[ korean ] = "«‡";
