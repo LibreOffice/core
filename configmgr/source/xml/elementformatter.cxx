@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-21 13:33:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-21 13:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,25 +173,25 @@ void ElementFormatter::prepareSimpleElement(ElementType::Enum _eType)
 
 void ElementFormatter::addName(OUString const & _aName)
 {
-    OUString _aContext;
-    OUString _aNodeName;
-    sal_Int32 _aIndex;
-
-    if ( m_aElementType == ElementType::layer )
+    if (_aName.getLength())
     {
-        if (_aName.getLength())
+        if ( m_aElementType == ElementType::layer )
         {
-            _aIndex = _aName.lastIndexOf ( '.');
-            _aNodeName = _aName.copy(++_aIndex);
-            addAttribute(ATTR_NAME, _aNodeName);
-            _aContext = _aName.copy( 0, --_aIndex);
-            addAttribute(ATTR_CONTEXT, _aContext);
+            sal_Int32 nIndex = _aName.lastIndexOf('.');
+
+            OUString aNodeName = _aName.copy(nIndex + 1);
+            addAttribute(ATTR_NAME, aNodeName);
+
+            if (nIndex > 0)
+            {
+                OUString aContext = _aName.copy(0, nIndex);
+                addAttribute(ATTR_CONTEXT, aContext);
+            }
         }
-    }
-    else
-    {
-        if (_aName.getLength())
+        else
+        {
             addAttribute(ATTR_NAME, _aName);
+        }
     }
 }
 // -----------------------------------------------------------------------------
