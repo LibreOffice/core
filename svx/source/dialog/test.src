@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:55:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,3 +1788,4 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posici?? y tama??";
 };
  // ********************************************************************** EOF
+
