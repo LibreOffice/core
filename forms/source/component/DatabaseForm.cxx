@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:08:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 11:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_pLoadTimer(NULL)
         ,m_nResetsPending(0)
         ,m_bForwardingConnection(sal_False)
+        ,m_pAggregatePropertyMultiplexer(NULL)
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -782,11 +783,12 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     // listen for the properties, important for Parameters
     if (m_xAggregateSet.is())
     {
-        OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet);
-        pMultiplexer->addProperty(PROPERTY_COMMAND);
-        pMultiplexer->addProperty(PROPERTY_FILTER_CRITERIA);
-        pMultiplexer->addProperty(PROPERTY_APPLYFILTER);
-        pMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
+        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+        m_pAggregatePropertyMultiplexer->acquire();
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_COMMAND);
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_FILTER_CRITERIA);
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_APPLYFILTER);
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
     if (m_xAggregate.is())
@@ -809,6 +811,13 @@ ODatabaseForm::~ODatabaseForm()
 
     if (m_xAggregate.is())
         m_xAggregate->setDelegator(InterfaceRef());
+
+    if (m_pAggregatePropertyMultiplexer)
+    {
+        m_pAggregatePropertyMultiplexer->dispose();
+        m_pAggregatePropertyMultiplexer->release();
+        m_pAggregatePropertyMultiplexer = NULL;
+    }
 }
 
 //==============================================================================
@@ -1875,6 +1884,9 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
 //------------------------------------------------------------------
 void ODatabaseForm::disposing()
 {
+    if (m_pAggregatePropertyMultiplexer)
+        m_pAggregatePropertyMultiplexer->dispose();
+
     if (m_bLoaded)
         unload();
 

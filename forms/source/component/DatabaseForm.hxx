@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:44:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ class ODatabaseForm :public OFormComponents
     // same object, interface as member because of performance reasons
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>          m_xAggregateAsRowSet;
 
+    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
     OGroupManager*              m_pGroupManager;
     OParameterInfoImpl*         m_pParameterInfo;
