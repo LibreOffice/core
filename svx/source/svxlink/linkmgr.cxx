@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:55:57 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ String lcl_DDE_RelToAbs( const String& rTopic, const String& rReferer )
     String sRet;
     INetURLObject aURL( rTopic );
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rReferer.Len() ? rReferer : INetURLObject::GetBaseURL(), sRet );
+        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rReferer.Len() ? rtl::OUString(rReferer) : INetURLObject::GetBaseURL(), sRet );
     if( !sRet.Len() )
         sRet = URIHelper::SmartRelToAbs( rTopic );
     return sRet;
