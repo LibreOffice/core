@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-14 13:29:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     Text[ polish ] = "Wybór tabeli";
     Text[ portuguese_brazilian ] = "Tabellenauswahl";
     Text[ japanese ] = "Ã°ÌÞÙ‚Ì‘I‘ð";
-    Text[ chinese_simplified ] = "£ºÑ¡Ôñ±í¸ñ";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ±í¸ñ";
     Text[ chinese_traditional ] = "¿ï¾Üªí®æ";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÌÏæá";
     Text[ dutch ] = "tabel selecteren";
-    Text[ chinese_simplified ] = "£ºÑ¡Ôñ±í¸ñ";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ±í¸ñ";
     Text[ greek ] = "ÅðéëïãÞ ðßíáêá";
     Text[ korean ] = " Ç¥¡¡¼±ÅÃ";
     Text[ turkish ] = "Tablo seçimi";
@@ -108,24 +108,24 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
             "Wählen Sie bitte die Tabelle, deren Daten die Grundlage für den Listeninhalt bilden sollen:";
         Text [ english ]= "On the right hand side, you see all tables of the form's data source.\n\n\n"
             "Please choose the table, whichs data should be the base for the list content:";
-        Text [ english_us ]= "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text [ english_us ]= "On the right side, you see all the tables from the data source of the form.\n\n\nChoose the table from which the data should be used as basis for the list content:";
         Text[ portuguese ] = "O lado direito mostra-lhe todas as tabelas da fonte de dados do formulário.\n\n\nSeleccione a tabela com os dados que vão servir de base ao conteúdo da lista.";
         Text[ russian ] = "Ñïðàâà ïîêàçàíû âñå òàáëèöû èç èñòî÷íèêà äàííûõ ôîðìóëÿðà.\n\n\nÂûáåðèòå òàáëèöó, äàííûå êîòîðîé äîëæíû ïîñëóæèòü îñíîâîé äëÿ ñîäåðæèìîãî ñïèñêà:";
-        Text[ greek ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ greek ] = "Óôçí äåîéÜ ðëåõñÜ ðñïâÜëëïíôáé üëïé ïé ðßíáêåò áðü ôïí ðñïïñéóìü ôùí äåäïìÝíùí ôçò öüñìáò.\n\n\nÅðéëÝîôå ôïí ðßíáêá ôïõ ïðïßïõ ôá äåäïìÝíá èá áðïôåëÝóïõí ôçí âÜóç ãéá ôï ðåñéå÷üìåíï ôçò ëßóôáò:";
         Text[ dutch ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
-        Text[ french ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ french ] = "Toutes les tables de la source de données du formulaire sont mentionnées à droite.\n\n\nSélectionnez les tables dont les données devront servir de base au contenu de la liste :";
         Text[ spanish ] = "En la parte derecha puede ver todas las tablas de la base de datos del formulario.\n\n\nSeleccione la tabla de la que deban tomarse los datos para el contenido de la lista:";
-        Text[ italian ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ italian ] = "Al lato destro vedrete le tabelle dalla sorgente dati del formulario.\n\nSelezionate le tabelle i cui dati dovranno costituire la base del contenuto dell'elenco:";
         Text[ danish ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
         Text[ swedish ] = "På den högra sidan ser du alla tabeller från datakällan till formuläret.\n\n\nVälj tabellen vars data ska ligga till grund för listinnehållet:";
         Text[ polish ] = "Po prawej stronie widoczne s¹ wszystkie tabele ze Ÿród³a danych formularza.\n\nNale¿y wybraæ tabelê, której dane bêd¹ s³u¿y³y jako podstawa zawartoœci listy.";
         Text[ portuguese_brazilian ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
         Text[ japanese ] = "¶‘¤‚ÉÌ«°Ñ‚ÌÃÞ°À¿°½‚©‚ç‚Ì‚·‚×‚Ä‚ÌÃ°ÌÞÙ‚ª•\\Ž¦‚³‚ê‚Ä‚¢‚Ü‚·B\n\n\n‚±‚Ì’†‚©‚çØ½Ä“à—e‚ÌÍÞ°½‚Æ‚È‚éÃ°ÌÞÙ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ korean ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
-        Text[ chinese_simplified ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ chinese_simplified ] = "ÔÚÓÒ±ßÄúÄÜ¹»¿´µ½±íµ¥Êý¾ÝÔ´µÄËùÓÐÊý¾Ý±í¸ñ¡£\n\n\nÇëÑ¡ÔñÒ»Ð©ÓÃÓÚ×é³ÉÁÐµ¥ÄÚÈÝµÄ»ù±¾Êý¾ÝµÄ±í¸ñ£º";
         Text[ chinese_traditional ] = "¦b¥kÃä±z¯à°÷¬Ý¨ìªí³æ¸ê®Æ·½ªº©Ò¦³¸ê®Æªí®æ¡C\n\n\n½Ð¿ï¾Ü¤@¨Ç¥Î©ó²Õ¦¨²M³æ¤º®eªº°ò¥»¸ê®Æªºªí®æ¡G";
         Text[ turkish ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
-        Text[ arabic ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ arabic ] = "Ýí ÇáÕÝÍÉ Çáíãäì¡ ÓæÝ ÊÑì ßÇÝÉ ÌÏÇæá ãÕÏÑ ÈíÇäÇÊ ÇáÇÓÊãÇÑÉ.\n\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÌÏæá ÇáÐí ÓæÝ ÊÔßá ÈíÇäÇÊå ÇáÞÇÚÏÉ áãÍÊæíÇÊ ÇáÞÇÆãÉ:";
     };
     ListBox LB_SELECTTABLE
     {
@@ -158,11 +158,11 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     Text[ polish ] = "Wybór pola";
     Text[ portuguese_brazilian ] = "Feldauswahl";
     Text[ japanese ] = "Ì¨°ÙÄÞ‚Ì‘I‘ð";
-    Text[ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
     Text[ chinese_traditional ] = "¿ï¾ÜÄæ¦ì";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÍÞá";
     Text[ dutch ] = "veld selecteren";
-    Text[ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
     Text[ greek ] = "ÅðéëïãÞ ðåäßïõ";
     Text[ korean ] = "ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = "Alan seçimi";
@@ -185,7 +185,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ portuguese ] = "Campos ~disponíveis";
         Text [ russian ] = "Èìåþùèåñÿ ïîëÿ";
         Text [ dutch ] = "~Voorhanden velden";
-        Text [ french ] = "~Champs existants";
+        Text [ french ] = "Champs ~existants";
         Text [ spanish ] = "~Campos existentes";
         Text [ italian ] = "~Campi disponibili";
         Text [ danish ] = "~Eksisterende felter";
@@ -193,12 +193,12 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ polish ] = "Istniej¹ce pola";
         Text [ portuguese_brazilian ] = "Should one option button be the default choice?";
         Text [ japanese ] = "Žg—p‚Å‚«‚éÌ¨°ÙÄÞ";
-        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î(~V)";
+        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î";
         Text [ chinese_traditional ] = "²{¦sªºÄæ¦ì";
         Text [ arabic ] = "~ÇáÍÞæá ÇáãæÌæÏÉ";
         Text [ dutch ] = "~Voorhanden velden";
-        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î(~V)";
-        Text [ greek ] = "Äéá~èÝóéìá ðåäßá";
+        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î";
+        Text [ greek ] = "ÕðÜñ÷ïíôá ðåäßá";
         Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
         Text [ turkish ] = "~Mevcut alanlar";
     };
@@ -221,7 +221,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ portuguese ] = "~Campo de visualização";
         Text [ russian ] = "Ïîëå ïîêàçà";
         Text [ dutch ] = "~Weergaveveld";
-        Text [ french ] = "~Champ d'affichage";
+        Text [ french ] = "Champ d'~affichage";
         Text [ spanish ] = "~Campo de visualización";
         Text [ italian ] = "~Campo di visualizzazione";
         Text [ danish ] = "Vi~sningsfelt";
@@ -229,12 +229,12 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ polish ] = "Pole-wyœwietlacz";
         Text [ portuguese_brazilian ] = "Yes, the default choice is:";
         Text [ japanese ] = "•\\Ž¦Ì¨°ÙÄÞ";
-        Text [ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
+        Text [ chinese_simplified ] = "ÏÔÊ¾×Ö¶Î";
         Text [ chinese_traditional ] = "Åã¥ÜÄæ¦ì";
         Text [ arabic ] = "~ÍÞá ÇáÚÑÖ";
         Text [ dutch ] = "~Weergaveveld";
-        Text [ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
-        Text [ greek ] = "Ðåäßï åìöÜíéóçò";
+        Text [ chinese_simplified ] = "ÏÔÊ¾×Ö¶Î";
+        Text [ greek ] = "Ðåäßï ðñïâïëÞò";
         Text [ korean ] = "³ªÅ¸³»´Â¡¡ÇÊµå";
         Text [ turkish ] = "~Görüntü alaný";
     };
@@ -256,7 +256,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     {
         Text = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
         Text [ english ] = "The contents of the field selected will be shown in the combo box field list.";
-        Text [ english_us ] = "The contents of the field selected will be shown in the combo box field list.";
+        Text [ english_us ] = "The contents of the field selected will be shown in the combo box list.";
         Text [ portuguese ] = "O conteúdo do campo seleccionado será mostrado na lista da caixa de combinação.";
         Text [ russian ] = "Ñîäåðæèìîå âûáðàííîãî ïîëÿ áóäåò ïîêàçàíî â ïîëå ñî ñïèñêîì.";
         Text [ dutch ] = "De inhoud van het geselecteerde veld wordt in de lijst onder het combinatieveld weergegeven..";
@@ -268,12 +268,12 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ polish ] = "Zawartoœæ wybranego pola wyœwietlona zostanie na liœcie pola kombi.";
         Text [ portuguese_brazilian ] = "No, no I don't want an option to be the default.";
         Text [ japanese ] = "‘I‘ð‚µ‚½Ì¨°ÙÄÞ‚Ì“à—e‚ÍAºÝÎÞÎÞ¯¸½‚ÌØ½Ä‚É•\\Ž¦‚³‚ê‚Ü‚·B";
-        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁÐµ¥ÄÚ¡£";
+        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁÐµ¥ÄÚ¡£";
         Text [ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ì¤º®e·|Åã¥Ü¦b²Õ¦XÄæ¦ìªº²M³æ¤§¤¤¡C";
         Text [ arabic ] = "ÓæÝ íÊã ÅÙåÇÑ ãÍÊæíÇÊ ÇáÍÞá ÇáãõÍÏÏ Ýí ÞÇÆãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ.";
         Text [ dutch ] = "De inhoud van het geselecteerde veld wordt in de lijst onder het combinatieveld weergegeven..";
-        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁÐµ¥ÄÚ¡£";
-        Text [ greek ] = "Ôï ðåñéå÷üìåíï ôïõ åðéëåãìÝíïõ ðåäßïõ åìöáíßæåôáé óôç ëßóôá ôïõ ðåäßïõ óõíäõáóìïý.";
+        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁÐµ¥ÄÚ¡£";
+        Text [ greek ] = "Ôï ðåñéå÷üìåíï ôïõ åðéëåãìÝíïõ ðåäßïõ åìöáíßæåôáé óôçí ëßóôá ôïõ ðåäßïõ óõíäõáóìïý.";
         Text [ korean ] = "¼±ÅÃµÈ ÇÊµåÀÇ ³»¿ëÀÌ ÄÞº¸¹Ú½ºÀÇ ¸ñ·Ï¿¡ Ç¥½ÃµË´Ï´Ù.";
         Text [ turkish ] = "Seçilen alanýn içeriði, kombinasyon alaný listesinde görüntülenecek.";
     };
@@ -285,18 +285,18 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ english_us ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ portuguese ] = "O conteúdo do campo seleccionado será mostrado na lista se os campos ligados coincidirem.";
         Text[ russian ] = "Ñîäåðæèìîå âûáðàííîãî ïîëÿ áóäåò ïîêàçàíî â ñïèñêå, åñëè ñâÿçàííûå ïîëÿ ñîâïàäàþò.";
-        Text[ greek ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ greek ] = "Ôï ðåñéå÷üìåíï ôïõ åðéëåãìÝíïõ ðåäßïõ åìöáíßæåôáé óôï ðåäßï ëßóôáò üôáí óõìðßðôïõí ôá óõíäåäåìÝíá ðåäßá.";
         Text[ dutch ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
-        Text[ french ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ french ] = "Le contenu du champ sélectionné sera affiché dans la zone de liste à condition que les champs liés concordent bien.";
         Text[ spanish ] = "El contenido del campo seleccionado se mostrará en el listado si coinciden los campos vinculados.";
-        Text[ italian ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ italian ] = "Il contenuto del campo selezionato verrà mostrato nella casella di riepilogo quando i campi collegati coincidono.";
         Text[ danish ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ swedish ] = "Innehållet i det utvalda fältet visas i listrutan om de länkade fälten stämmer överens.";
         Text[ polish ] = "Jeœli po³¹czone pola siê zgadzaj¹, zawartoœæ wybranego pola wyœwietlona zostanie w polu listy.";
         Text[ portuguese_brazilian ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ japanese ] = "ØÝ¸‚·‚éÌ¨°ÙÄÞ‚ª“¯ˆê‚¾‚ÆA‘I‘ð‚µ‚½Ì¨°ÙÄÞ‚Ì“à—e‚ªØ½ÄÎÞ¯¸½‚É•\\Ž¦‚³‚ê‚Ü‚·B";
         Text[ korean ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
-        Text[ chinese_simplified ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ chinese_simplified ] = "Èç¹ûÏàÁ¬½áµÄ×Ö¶ÎÒ»ÖÂ£¬ÁÐµ¥ÄÚ»áÏÔÊ¾³öÑ¡ÔñµÄ×Ö¶ÎÄÚÈÝ¡£";
         Text[ chinese_traditional ] = "¦pªG³sµ²ªºÄæ¦ì¬Û²Å¡A©Ò¿ï¾ÜªºÄæ¦ì¤º®e´N·|Åã¥Ü¦b²M³æ¤è¶ô¤§¤¤¡C";
         Text[ turkish ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ arabic ] = "ÓæÝ ÊÙåÑ ãÍÊæíÇÊ ÇáÍÞá ÇáãõÍÏÏ Ýí ãÑÈÚ ÇáÞÇÆãÉ Ýí ÍÇáÉ ÊØÇÈÞ ÇáÍÞæá ÇáãÑÊÈØÉ";
@@ -322,11 +322,11 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text [ polish ] = "Po³¹czenie pola";
     Text [ portuguese_brazilian ] = "Database Field";
     Text [ japanese ] = "Ì¨°ÙÄÞ‚ÌØÝ¸";
-    Text [ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text [ chinese_simplified ] = "Á¬½á×Ö¶Î";
     Text [ chinese_traditional ] = "Äæ¦ì±¶®|";
     Text [ arabic ] = "ÇÑÊÈÇØ ÇáÍÞá";
     Text [ dutch ] = "velden koppelen";
-    Text [ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text [ chinese_simplified ] = "Á¬½á×Ö¶Î";
     Text [ greek ] = "Óýíäåóç ðåäßïõ";
     Text [ korean ] = "ÇÊµå ¿¬°á";
     Text [ turkish ] = "Alan baðlantýsý";
@@ -343,7 +343,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Group = TRUE;
         Text = "Feld aus der ~Wertetabelle";
         Text [ english ] = "Field from the Value Table";
-        Text [ english_us ] = "Field from the Value Table";
+        Text [ english_us ] = "Field from the ~Value Table";
         Text [ portuguese ] = "Campo da ~tabela de valores";
         Text [ russian ] = "Ïîëå èç òàáëèöû çíà÷åíèé";
         Text [ dutch ] = "Veld uit de ~waardentabel";
@@ -360,7 +360,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ arabic ] = "ÍÞá ãä ÌÏæá ~ÇáÞíã";
         Text [ dutch ] = "Veld uit de ~waardentabel";
         Text [ chinese_simplified ] = "´ÓÊýÖµ±í¸ñÉú³É×Ö¶Î";
-        Text [ greek ] = "Ðåäßï áðü ôïí ~Ðßíáêá ôéìþí";
+        Text [ greek ] = "Ðåäßï áðü ôïí ðßíáêá ôéìþí";
         Text [ korean ] = "°ªÇ¥·Î ºÎÅÍÀÇ ÇÊµå";
         Text [ turkish ] = "Deðer tablosu alaný";
     };
@@ -381,24 +381,24 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Group = TRUE;
         Text = "Feld aus der ~Listentabelle";
         Text [ english ] = "Field from the List Table";
-        Text [ english_us ] = "Field from the List Table";
-        Text [ portuguese ] = "Campo da ~tabela de listagem";
+        Text [ english_us ] = "Field from the ~List Table";
+        Text [ portuguese ] = "Campo da tabela de listagem";
         Text [ russian ] = "Ïîëå èç òàáëèöû ñïèñêà";
-        Text [ dutch ] = "Veld uit de ~lijsttabel";
-        Text [ french ] = "Champ de la table de liste";
-        Text [ spanish ] = "Campo del list~ado";
-        Text [ italian ] = "Campo dalla tabella di ~elenco";
-        Text [ danish ] = "Felt fra ~listetabellen";
-        Text [ swedish ] = "Fält från ~listtabellen";
+        Text [ dutch ] = "Veld uit de &lijsttabel";
+        Text [ french ] = "Champ de la table de ~liste";
+        Text [ spanish ] = "Campo del list&ado";
+        Text [ italian ] = "Campo dalla tabella di &elenco";
+        Text [ danish ] = "Felt fra &listetabellen";
+        Text [ swedish ] = "Fält från listtabellen";
         Text [ polish ] = "Pole z tabeli listy";
         Text [ portuguese_brazilian ] = "Do you want to save the value in a database field?";
         Text [ japanese ] = "Ø½ÄÃ°ÌÞÙ‚©‚ç‚ÌÌ¨°ÙÄÞ";
         Text [ chinese_simplified ] = "´ÓÁÐµ¥±í¸ñÉú³É×Ö¶Î";
         Text [ chinese_traditional ] = "±q²M³æªí®æ²Õ¦¨Äæ¦ì";
-        Text [ arabic ] = "ÍÞá ãä ÌÏæá ~ÇáÞÇÆãÉ";
-        Text [ dutch ] = "Veld uit de ~lijsttabel";
+        Text [ arabic ] = "ÍÞá ãä ÌÏæá ÇáÞÇÆãÉ";
+        Text [ dutch ] = "Veld uit de &lijsttabel";
         Text [ chinese_simplified ] = "´ÓÁÐµ¥±í¸ñÉú³É×Ö¶Î";
-        Text [ greek ] = "Ðåäßï áðü ôïí ~Ðßíáêá ëßóôáò";
+        Text [ greek ] = "Ðåäßï áðü ôïí ðßíáêá ~ëßóôáò";
         Text [ korean ] = "¸ñ·Ï Ç¥·ÎºÎÅÍÀÇ ÇÊµå";
         Text [ turkish ] = "Liste tablosu alaný";
     };
@@ -418,9 +418,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 {
     Text = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
     Text [ english ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
-    Text [ english_us ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
+    Text [ english_us ] = "You can either save the value of the combo box in a database field or use it for display purposes.";
     Text [ portuguese ] = "Poderá guardar o valor da caixa de combinação num campo da base de dados ou utilizá-lo apenas para visualização.";
-    Text [ russian ] = "Çíà÷åíèå ïîëÿ ñî ñïèñêîì ìîæíî èëè ñîõðàíèòü â ïîëå áàçû äàííûõ èëè èñïîëüçîâàòü åãî äëÿ ïîêàçà.";
+    Text [ russian ] = "Çíà÷åíèå ïîëÿ ñî ñïèñêîì ìîæíî ñîõðàíèòü â ïîëå áàçû äàííûõ èëè èñïîëüçîâàòü åãî òîëüêî äëÿ ïîêàçà.";
     Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
     Text [ french ] = "Vous pouvez soit enregistrer la valeur de la zone combinée dans un champ de base de données, soit l'utiliser seulement pour l'affichage.";
     Text [ spanish ] = "Puede guardar el valor del campo combinado en un campo de base de datos o usarlo solo para mostrarlo.";
@@ -429,13 +429,13 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ swedish ] = "Du kan antingen spara kombinationsfältets värde i ett databasfält eller bara använda det för visning.";
     Text [ polish ] = "Wartoœæ pola kombi mo¿na zapisaæ w polu bazy danych lub u¿yæ jej tylko do wyœwietlenia.";
     Text [ portuguese_brazilian ] = "Yes, in the following database:";
-    Text [ japanese ] = "ºÝÎÞÎÞ¯¸½‚Ì’l‚ÍÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ‚É•Û‘¶A‚ ‚é‚¢‚Í•\\Ž¦‚·‚é‚½‚ß‚¾‚¯‚ÉŽg—p‚Å‚«‚Ü‚·B";
-    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖÐµÄÊýÖµ´æÈëÊý¾Ý¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
-    Text [ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®w¤º©ÎÅã¥Ü³o¨Ç¼Æ¾Ú¡C";
+    Text [ japanese ] = "ºÝÎÞÎÞ¯¸½‚Ì’l‚ÍAÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚Í•\\Ž¦—p‚¾‚¯‚ÉŽg—p‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖÐµÄÊýÖµ´æÈëÊý¾Ý¿â×Ö¶ÎÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text [ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®wÄæ¦ì©Î¥Î©óÅã¥Ü¡C";
     Text [ arabic ] = "íãßäß ÍÝÙ ÞíãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ Ýí ÍÞá ÞÇÚÏÉ ÈíÇäÇÊ¡ Ãæ ÇÓÊÎÏÇãåÇ ááÚÑÖ ÝÞØ.";
     Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
-    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖÐµÄÊýÖµ´æÈëÊý¾Ý¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
-    Text [ greek ] = "Ìðïñåßôå íá áðïèçêåýóåôå ôçí ôéìÞ ôïõ ðåäßïõ óõíäõáóìïý óå Ýíá ðåäßï âÜóçò äåäïìÝíùí Þ íá ôï ÷ñçóéìïðïéÞóåôå ìüíï ãéá åìöÜíéóç.";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖÐµÄÊýÖµ´æÈëÊý¾Ý¿â×Ö¶ÎÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text [ greek ] = "Ìðïñåßôå íá áðïèçêåýóåôå ôçí ôéìÞ ôïõ ðåäßïõ óõíäõáóìïý óå Ýíá ðåäßï ôçò âÜóçò äåäïìÝíùí Þ íá ôï ÷ñçóéìïðïéÞóåôå ìüíï ãéá ôçí åìöÜíéóÞ ôïõ.";
     Text [ korean ] = "ÄÞº¸¹Ú½ºÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text [ turkish ] = "Kombinasyon alanýnýn deðerini bir veritabaný alanýnda kaydedebilir ya da yalnýzca görüntüleme için kullanabilirsiniz.";
 };
@@ -443,6 +443,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/14 13:29:20  fs
+ *  & -> ~
+ *
  *  Revision 1.3  2001/03/09 20:50:09  kz
  *  Merge SRC624: 09.03.01 - 21:50:15 (NoBranch)
  *
