@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 15:51:29 $
+ *  last change: $Author: nn $ $Date: 2001-10-17 18:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1956,7 +1956,10 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
             for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, FALSE, &pItem );
-                if ( eState == SFX_ITEM_SET && nId != EE_CHAR_ESCAPEMENT && *pItem != pEditDefaults->Get(nId) )
+                if ( eState == SFX_ITEM_SET &&
+                        nId != EE_CHAR_ESCAPEMENT && nId != EE_CHAR_PAIRKERNING &&
+                        nId != EE_CHAR_KERNING && nId != EE_CHAR_XMLATTRIBS &&
+                            *pItem != pEditDefaults->Get(nId) )
                 {
                     if ( !pCommonAttrs )
                         pCommonAttrs = new SfxItemSet( pEngine->GetEmptyItemSet() );
@@ -1990,10 +1993,11 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
                     bAttrib = TRUE;
                 else if (eState == SFX_ITEM_SET)
                 {
-                    if ( nId == EE_CHAR_ESCAPEMENT )        // Hoch-/Tiefstellen immer ueber EE
+                    //  keep same items in EditEngine as in ScEditAttrTester
+                    if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
+                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                     {
-                        if ( (SvxEscapement)((const SvxEscapementItem*)pItem)->GetEnumValue()
-                                != SVX_ESCAPEMENT_OFF )
+                        if ( *pItem != pEditDefaults->Get(nId) )
                             bAttrib = TRUE;
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:11:50 $
+ *  last change: $Author: nn $ $Date: 2001-10-17 18:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,10 +238,15 @@ ScEditAttrTester::ScEditAttrTester( EditEngine* pEng ) :
                 bNeedsObject = TRUE;
             else if (eState == SFX_ITEM_SET)
             {
-                if ( nId == EE_CHAR_ESCAPEMENT )        // Hoch-/Tiefstellen immer ueber EE
+                if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
+                        nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                 {
-                    if ( (SvxEscapement)((const SvxEscapementItem*)pItem)->GetEnumValue()
-                            != SVX_ESCAPEMENT_OFF )
+                    //  Escapement and kerning are kept in EditEngine because there are no
+                    //  corresponding cell format items. User defined attributes are kept in
+                    //  EditEngine because "user attributes applied to all the text" is different
+                    //  from "user attributes applied to the cell".
+
+                    if ( *pItem != pEditPool->GetDefaultItem(nId) )
                         bNeedsObject = TRUE;
                 }
                 else
