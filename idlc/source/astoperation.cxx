@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astoperation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:23:25 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,34 +74,17 @@
 #include <idlc/errorhandler.hxx>
 #endif
 
+#include "registry/writer.hxx"
+
 using namespace ::rtl;
 
-void AstOperation::addExceptions(StringList* pExceptions)
+void AstOperation::setExceptions(DeclList const * pExceptions)
 {
-    if ( isOneway() )
-    {
-        idlc()->error()->error1(EIDL_ONEWAY_RAISE_CONFLICT, this);
-    }
-
-    StringList::iterator iter = pExceptions->begin();
-    StringList::iterator end = pExceptions->end();
-    AstDeclaration* pDecl = NULL;
-    while ( iter != end)
-    {
-        pDecl = lookupByName(*iter);
-        if ( !pDecl )
-        {
-            idlc()->error()->lookupError(*iter);
-            return;
+    if (pExceptions != 0) {
+        if (isOneway()) {
+            idlc()->error()->error1(EIDL_ONEWAY_RAISE_CONFLICT, this);
         }
-        if ( (pDecl->getNodeType() == NT_exception) )
-        {
-            m_exceptions.push_back(pDecl);
-        } else
-        {
-            idlc()->error()->error1(EIDL_ILLEGAL_RAISES, this);
-        }
-        ++iter;
+        m_exceptions = *pExceptions;
     }
 }
 
@@ -115,7 +98,13 @@ sal_Bool AstOperation::isVoid()
     return sal_False;
 }
 
-sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
+bool AstOperation::isVariadic() const {
+    DeclList::const_iterator i(getIteratorEnd());
+    return i != getIteratorBegin()
+        && static_cast< AstParameter const * >(*(--i))->isRest();
+}
+
+sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = nExceptions();
@@ -124,14 +113,22 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
     if ( isOneway() )
         methodMode = RT_MODE_ONEWAY;
 
-    rBlob.setMethodData(index, OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
-                        OStringToOUString(getReturnType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                        methodMode, nParam, nExcep, getDocumentation());
+    rtl::OUString returnTypeName;
+    if (m_pReturnType == 0) {
+        returnTypeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void"));
+    } else {
+        returnTypeName = rtl::OStringToOUString(
+            m_pReturnType->getRelativName(), RTL_TEXTENCODING_UTF8);
+    }
+    rBlob.setMethodData(
+        index, getDocumentation(), methodMode,
+        OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
+        returnTypeName, nParam, nExcep);
 
     if ( nParam )
     {
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
+        DeclList::const_iterator iter = getIteratorBegin();
+        DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         AstParameter* pParam = NULL;
         RTParamMode paramMode;
@@ -157,11 +154,18 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
                         paramMode = RT_PARAM_INVALID;
                         break;
                 }
+                if (pParam->isRest()) {
+                    paramMode = static_cast< RTParamMode >(
+                        paramMode | RT_PARAM_REST);
+                }
 
-                rBlob.setParamData(index, paramIndex++,
-                           OStringToOUString(pParam->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                           OStringToOUString(pDecl->getLocalName(), RTL_TEXTENCODING_UTF8),
-                           paramMode);
+                rBlob.setMethodParameterData(
+                    index, paramIndex++, paramMode,
+                    OStringToOUString(
+                        pDecl->getLocalName(), RTL_TEXTENCODING_UTF8),
+                    OStringToOUString(
+                        pParam->getType()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8));
             }
             ++iter;
         }
@@ -174,8 +178,10 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
         sal_uInt16 exceptIndex = 0;
         while ( iter != end )
         {
-            rBlob.setExcData(index, exceptIndex++,
-                             OStringToOUString((*iter)->getRelativName(), RTL_TEXTENCODING_UTF8) );
+            rBlob.setMethodExceptionTypeName(
+                index, exceptIndex++,
+                OStringToOUString(
+                    (*iter)->getRelativName(), RTL_TEXTENCODING_UTF8));
             ++iter;
         }
     }
