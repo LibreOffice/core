@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:50:01 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ public:
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
 
-    sal_Unicode             GetMnemonicChar() const;
+//  sal_Unicode             GetMnemonicChar() const;
 };
 
 enum SvxIconChoiceCtrlColumnAlign
@@ -340,6 +340,7 @@ public:
                                      ULONG nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      USHORT nFlags = 0 );
+    void                CreateAutoMnemonics( void );
     void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
 
     BOOL                DoKeyInput( const KeyEvent& rKEvt );
@@ -386,6 +387,8 @@ public:
     Point               GetLogicPos( const Point& rPosPixel ) const;
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
+
+    BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent );
 };
 
 #endif // _ICNVW_HXX

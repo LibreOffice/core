@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)
         nMaxTextLength = nTemp;
+
+    aIconCtrl.CreateAutoMnemonics();
 }
 
 SvtIconWindow_Impl::~SvtIconWindow_Impl()

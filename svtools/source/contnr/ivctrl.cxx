@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,14 @@ void SvxIconChoiceCtrlEntry::LockPos( BOOL bLock )
         nFlags &= ~ICNVIEW_FLAG_POS_LOCKED;
 }
 
-sal_Unicode SvxIconChoiceCtrlEntry::GetMnemonicChar() const
+/*sal_Unicode SvxIconChoiceCtrlEntry::GetMnemonicChar() const
 {
     sal_Unicode cChar = 0;
     xub_StrLen nPos = aText.Search( '~' );
     if ( nPos != STRING_NOTFOUND && nPos < ( aText.Len() ) - 1 )
         cChar = aText.GetChar( nPos + 1 );
     return cChar;
-}
+}*/
 
 // ----------------------------------------------------------------------------
 
@@ -400,6 +400,11 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( ULONG nPos ) const
     return _pImp->GetEntry( nPos );
 }
 
+void SvtIconChoiceCtrl::CreateAutoMnemonics( void )
+{
+    _pImp->CreateAutoMnemonics();
+}
+
 void SvtIconChoiceCtrl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
 {
     _pImp->RemoveEntry( pEntry );
@@ -553,3 +558,7 @@ void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
     _pImp->SetSelectionMode( eMode );
 }
 
+BOOL SvtIconChoiceCtrl::HandleShortCutKey( const KeyEvent& r )
+{
+    return _pImp->HandleShortCutKey( r );
+}

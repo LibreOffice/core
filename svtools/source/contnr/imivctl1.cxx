@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 
 #pragma hdrstop
@@ -383,6 +386,31 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, ULONG 
         }
         else
             InvalidateBoundingRect( pEntry->aRect );
+    }
+}
+
+void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( void )
+{
+    MnemonicGenerator   aMnemonicGenerator;
+    ULONG               nEntryCount = GetEntryCount();
+    ULONG               i;
+
+    // insert texts in generator
+    for( i = 0; i < nEntryCount; ++i )
+    {
+        DBG_ASSERT( GetEntry( i ), "-SvxIconChoiceCtrl_Impl::CreateAutoMnemonics(): more expected than provided!" );
+
+        aMnemonicGenerator.RegisterMnemonic( GetEntry( i )->GetText() );
+    }
+
+    // exchange texts with generated mnemonics
+    for( i = 0; i < nEntryCount; ++i )
+    {
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
+        String                  aTxt = pEntry->GetText();
+
+        if( aMnemonicGenerator.CreateMnemonic( aTxt ) )
+            pEntry->SetText( aTxt );
     }
 }
 
@@ -1195,7 +1223,7 @@ BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
     BOOL bMod2 = rKEvt.GetKeyCode().IsMod2();
     sal_Unicode cChar = rKEvt.GetCharCode();
     ULONG nPos = (ULONG)-1;
-    if ( bMod2 && cChar > 0 && IsMnemonicChar( cChar, nPos ) )
+    if ( bMod2 && cChar && IsMnemonicChar( cChar, nPos ) )
     {
         // shortcut is clicked
         SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
@@ -3641,10 +3669,10 @@ sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, ULONG& rPos 
 {
     sal_Bool bRet = sal_False;
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    for ( ULONG i = 0; i < GetEntryCount(); i++ )
+    ULONG nEntryCount = GetEntryCount();
+    for ( ULONG i = 0; i < nEntryCount; ++i )
     {
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
-        if ( rI18nHelper.MatchMnemonic( pEntry->GetText(), cChar ) )
+        if ( rI18nHelper.MatchMnemonic( GetEntry( i )->GetText(), cChar ) )
         {
             bRet = sal_True;
             rPos = i;
@@ -4640,5 +4668,36 @@ ULONG SvxIconChoiceCtrl_Impl::GetGridCount( const Size& rSize, BOOL bCheckScrBar
     return IcnGridMap_Impl::GetGridCount( aSize, (USHORT)nGridDX, (USHORT)nGridDY );
 }
 
+BOOL SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
+{
+    StopEditTimer();
 
+    BOOL        bRet = FALSE;
 
+    DBG_ASSERT( rKEvt.GetKeyCode().IsMod2(), "*SvxIconChoiceCtrl_Impl::HandleShortCutKey(): no <ALT> pressed!?" );
+
+    sal_Unicode cChar = rKEvt.GetCharCode();
+    ULONG       nPos = (ULONG)-1;
+
+    if( cChar && IsMnemonicChar( cChar, nPos ) )
+    {
+        // shortcut is clicked
+        SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
+        SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
+        if( pNewCursor != pOldCursor )
+        {
+            SetCursor_Impl( pOldCursor, pNewCursor, FALSE, FALSE, FALSE );
+
+            if( pNewCursor != NULL )
+            {
+                pHdlEntry = pNewCursor;
+                pCurHighlightFrame = pHdlEntry;
+                pView->ClickIcon();
+                pCurHighlightFrame = NULL;
+            }
+        }
+        bRet = TRUE;
+    }
+
+    return bRet;
+}

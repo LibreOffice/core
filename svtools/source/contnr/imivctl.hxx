@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ public:
     void            SetStyle( WinBits nWinStyle );
     WinBits         GetStyle() const { return nWinBits; }
     void            InsertEntry( SvxIconChoiceCtrlEntry*, ULONG nPos, const Point* pPos=0 );
+    void            CreateAutoMnemonics( void );
     void            RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            FontModified();
     void            SelectAll( BOOL bSelect = TRUE, BOOL bPaint = TRUE );
@@ -569,6 +570,8 @@ public:
     void            StopSelectTimer() { aCallSelectHdlTimer.Stop(); }
     void            Tracking( const TrackingEvent& rTEvt );
     Point           GetPopupMenuPosPixel() const;
+
+    BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent );
 };
 
 // ----------------------------------------------------------------------------------------------
