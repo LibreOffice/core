@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:45 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2053,7 +2053,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
             {
                 nWidth = (pOrient->Prt().*fnRect->fnGetWidth)();
                 nAdd = (pOrient->*fnRect->fnGetLeftMargin)();
-                if ( pOrient->IsTxtFrm() )
+                // OD 04.09.2003 #i18522# - consider offset of base, only if
+                // frame oriented at equals the anchor frame
+                if ( ( pOrient == GetAnchor() ) && pOrient->IsTxtFrm() )
                     nAdd += ((SwTxtFrm*)pOrient)->GetBaseOfstForFly( !bWrapThrough );
                 break;
             }
@@ -2124,9 +2126,11 @@ void SwFlyAtCntFrm::MakeFlyPos()
             default:
             {
                 nWidth = (pOrient->Frm().*fnRect->fnGetWidth)();
-                nAdd = pOrient->IsTxtFrm() ?
-                       ((SwTxtFrm*)pOrient)->GetBaseOfstForFly( !bWrapThrough ) :
-                       0;
+                // OD 04.09.2003 #i18522# - consider offset of base, only if
+                // frame oriented at equals the anchor frame
+                nAdd = ( ( pOrient == GetAnchor() ) && pOrient->IsTxtFrm() )
+                        ? ((SwTxtFrm*)pOrient)->GetBaseOfstForFly( !bWrapThrough )
+                        : 0;
                 break;
             }
         }
