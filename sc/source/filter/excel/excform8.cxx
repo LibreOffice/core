@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-08 10:47:18 $
+ *  last change: $Author: dr $ $Date: 2002-04-17 10:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
     UINT32                  nExtCnt = 0;
 
     SingleRefData           aSRD;
-    aSRD.InitFlags();
     ComplRefData            aCRD;
-    aCRD.InitFlags();
 
     if( eStatus != ConvOK )
     {
@@ -157,6 +155,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
     while( (aIn.GetRecPos() < nMaxPos) && !bError )
     {
         aIn >> nOp;
+
+        // #98524# always reset flags
+        aSRD.InitFlags();
+        aCRD.InitFlags();
 
         switch( nOp )   //                              Buch Seite:
         {           //                                      SDK4 SDK5
@@ -838,9 +840,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
     const XclImpXti*        pXti;
 
     SingleRefData           aSRD;
-    aSRD.InitFlags();
     ComplRefData            aCRD;
-    aCRD.InitFlags();
 
     bExternName = FALSE;
 
@@ -858,6 +858,10 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
     while( (aIn.GetRecPos() < nMaxPos) && !bError )
     {
         aIn >> nOp;
+
+        // #98524# always reset flags
+        aSRD.InitFlags();
+        aCRD.InitFlags();
 
         switch( nOp )   //                              Buch Seite:
         {           //                                      SDK4 SDK5
