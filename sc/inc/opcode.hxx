@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:33:16 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ enum OpCodeEnum
         ocCount2            = SC_OPCODE_COUNT_2,
         ocNBW               = SC_OPCODE_NBW,
         ocIKV               = SC_OPCODE_IKV,
+        ocMIRR              = SC_OPCODE_MIRR,
         ocVar               = SC_OPCODE_VAR,
         ocVarP              = SC_OPCODE_VAR_P,
         ocStDev             = SC_OPCODE_ST_DEV,

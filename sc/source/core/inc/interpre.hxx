@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:36:15 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,7 @@ void ScGetDiffDate();
 void ScGetDiffDate360();
 void ScNBW();
 void ScIKV();
+void ScMIRR();
 void ScPower();
 void ScAmpersand();
 void ScAdd();

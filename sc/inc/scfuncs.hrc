@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:33:16 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 #define HID_FUNC_IKV                (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_FINANZ*ID_FUNCTION_OFFSET)+18)
 #define HID_FUNC_LAUFZEIT           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_FINANZ*ID_FUNCTION_OFFSET)+19)
 #define HID_FUNC_ZGZ                (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_FINANZ*ID_FUNCTION_OFFSET)+20)
+#define HID_FUNC_QIKV               (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_FINANZ*ID_FUNCTION_OFFSET)+21)
 
 #define HID_FUNC_ISTBEZUG           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+1)
 #define HID_FUNC_ISTFEHL            (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_INFO*ID_FUNCTION_OFFSET)+2)
