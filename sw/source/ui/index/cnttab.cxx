@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-03-21 10:10:03 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     long    nCurrentRow;
     sal_Bool    bModified;
 
-    const String& GetCellText( long nRow, long nColumn ) const;
+
     void                        SetModified() {bModified = sal_True;}
 
 protected:
@@ -336,6 +336,8 @@ public:
     void    WriteEntries(SvStream& rOutStr);
 
     sal_Bool                        IsModified()const;
+
+    virtual String GetCellText( long nRow, USHORT nColumn ) const;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
@@ -4116,7 +4118,7 @@ sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
 /* -----------------------------19.01.00 15:32--------------------------------
 
  ---------------------------------------------------------------------------*/
-const String& SwEntryBrowseBox::GetCellText(long nRow, long nColumn) const
+String SwEntryBrowseBox::GetCellText(long nRow, USHORT nColumn) const
 {
     const String* pRet = &aEmptyStr;
     if(aEntryArr.Count() > nRow)
@@ -4142,9 +4144,9 @@ const String& SwEntryBrowseBox::GetCellText(long nRow, long nColumn) const
 void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    const String& rPaint = GetCellText( nCurrentRow, nColumnId );
+    String sPaint = GetCellText( nCurrentRow, nColumnId );
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
-    rDev.DrawText( rRect, rPaint, nStyle );
+    rDev.DrawText( rRect, sPaint, nStyle );
 }
 /* -----------------------------19.01.00 14:51--------------------------------
 
@@ -4205,7 +4207,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
 void    SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
-    const String& rTxt = GetCellText( nRow, nCol );
+    String rTxt = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)
     {
         rController = xController;
