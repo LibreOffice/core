@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 16:14:31 $
+ *  last change: $Author: sj $ $Date: 2001-03-29 12:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     sal_uInt32 nPicFlags = 0;
     ::com::sun::star::drawing::ColorMode eColorMode( ::com::sun::star::drawing::ColorMode_STANDARD );
     sal_Int16 nLuminance = 0;
-    sal_Int16 nContrast = 0;
+    sal_Int32 nContrast = 0;
     sal_Int16 nRed = 0;
     sal_Int16 nGreen = 0;
     sal_Int16 nBlue = 0;
@@ -710,7 +710,11 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustLuminance" ) ) ) )
         aAny >>= nLuminance;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustContrast" ) ) ) )
-        aAny >>= nContrast;
+    {
+        sal_Int16 nC;
+        aAny >>= nC;
+        nContrast = nC;
+    }
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
         aAny >>= nRed;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
@@ -722,34 +726,41 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Transparency" ) ) ) )
         aAny >>= nTransparency;
 
-    if ( ( eColorMode == ::com::sun::star::drawing::ColorMode_WATERMARK )
-            && ( nLuminance || nContrast ) )
+    if ( eColorMode == ::com::sun::star::drawing::ColorMode_WATERMARK )
     {
         eColorMode = ::com::sun::star::drawing::ColorMode_STANDARD;
-        nLuminance += 5000;
-        if ( nLuminance > 10000 )
-            nLuminance = 10000;
-        nContrast -= 7000;
-        if ( nContrast < 10000 )
-            nContrast = 10000;
+        nLuminance += 70;
+        if ( nLuminance > 100 )
+            nLuminance = 100;
+        nContrast -= 70;
+        if ( nContrast < -100 )
+            nContrast = -100;
     }
-    nContrast *= 327;
-    nLuminance *= 327;
-    switch ( eColorMode )
+    if ( eColorMode == ::com::sun::star::drawing::ColorMode_GREYS )
+        nPicFlags |= 0x40004;
+    else if ( eColorMode == ::com::sun::star::drawing::ColorMode_MONO )
+        nPicFlags |= 0x60006;
+
+    if ( nContrast )
     {
-        case ::com::sun::star::drawing::ColorMode_GREYS :
-            nPicFlags |= 0x40004;
-        break;
-        case ::com::sun::star::drawing::ColorMode_MONO :
-            nPicFlags |= 0x60006;
-        break;
-        case ::com::sun::star::drawing::ColorMode_WATERMARK :
+        nContrast += 100;
+        if ( nContrast == 100)
+            nContrast = 0x10000;
+        else if ( nContrast < 100 )
         {
-            nContrast = 0x4ccd;
-            nLuminance = 0x599a;
+            nContrast *= 0x10000;
+            nContrast /= 100;
         }
-        break;
+        else if ( nContrast < 200 )
+            nContrast = ( 100 * 0x10000 ) / ( 200 - nContrast );
+        else
+            nContrast = 0x7fffffff;
+        AddOpt( ESCHER_Prop_pictureContrast, nContrast );
     }
+    if ( nLuminance )
+        AddOpt( ESCHER_Prop_pictureBrightness, nLuminance * 327 );
+    if ( nPicFlags )
+        AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
 
     if ( bCreateCroppingAttributes && pGraphicProvider )
     {
@@ -790,12 +801,6 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
             }
         }
     }
-    if ( nContrast )
-        AddOpt( ESCHER_Prop_pictureContrast, nContrast );
-    if ( nLuminance )
-        AddOpt( ESCHER_Prop_pictureBrightness, nLuminance );
-    if ( nPicFlags )
-        AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
 }
 
 
