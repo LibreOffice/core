@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-20 15:44:14 $
+ *  last change: $Author: kso $ $Date: 2001-05-10 07:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,11 +1233,10 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const Content& rSourceContent,
-                                    InsertOperation eOperation,
-                                      const OUString & rTitle,
-                                      const sal_Int32 nNameClashAction,
-                                    Content& rNewContent )
+sal_Bool Content::transferContent( const Content& rSourceContent,
+                                   InsertOperation eOperation,
+                                     const OUString & rTitle,
+                                     const sal_Int32 nNameClashAction )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
@@ -1275,7 +1274,7 @@ sal_Bool Content::insertNewContent( const Content& rSourceContent,
     GlobalTransferCommandArgument aTransferArg(
                                         eTransOp,
                                         rSourceContent.getURL(), // SourceURL
-                                        getURL(),   // TargetURL,
+                                        getURL(),   // TargetFolderURL,
                                         rTitle,
                                         nNameClashAction );
     Command aCommand;
@@ -1285,19 +1284,6 @@ sal_Bool Content::insertNewContent( const Content& rSourceContent,
 
     xCmdProc->execute( aCommand, 0, m_xImpl->getEnvironment() );
     return sal_True;
-}
-
-//=========================================================================
-sal_Bool Content::insertNewContent( const Content& rSourceContent,
-                                    InsertOperation eOperation,
-                                    Content& rNewContent )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    return insertNewContent( rSourceContent,
-                             eOperation,
-                             OUString(),
-                             NameClash::ERROR,
-                             rNewContent );
 }
 
 //=========================================================================
