@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:44:31 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,50 +364,53 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
     #define FALLBACKFONT_UI_SANS_LATIN2 "Andale Sans UI;Tahoma;Arial Unicode MS;Arial;Luxi Sans;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
-    #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Andale Sans UI;gnu-unifont"
-   #define FALLBACKFONT_UI_SANS_JAPANESE1 "Andale Sans UI;HG Mincho Light J;"
-   #define FALLBACKFONT_UI_SANS_JAPANESE2 "Kochi Gochi;Gothic"
-   #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
-   #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
+    #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;BaekmukGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;gnu-unifont;Andale Sans UI"
+    #define FALLBACKFONT_UI_SANS_JAPANESE1 "Andale Sans UI;HG Mincho Light J;"
+    #define FALLBACKFONT_UI_SANS_JAPANESE2 "kochigothic;gothic"
+    #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
+    #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
     // we need localized names for japanese fonts
     static sal_Unicode const aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-   static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-   static sal_Unicode const aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-   static sal_Unicode const aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-   static sal_Unicode const aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+    static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+    static sal_Unicode const aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+    static sal_Unicode const aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+    static sal_Unicode const aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 
-   String aFallBackJapaneseLocalized( RTL_CONSTASCII_USTRINGPARAM( "MS UI Gothic;" ) );
-   aFallBackJapaneseLocalized += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE1 ) );
-   aFallBackJapaneseLocalized += String( aMSPGothic );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackJapaneseLocalized += String( aMSGothic );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackJapaneseLocalized += String( aTLPGothic );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackJapaneseLocalized += String( aLXGothic );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackJapaneseLocalized += String( aKochiGothic );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE2 ) );
-   static const OUString aFallBackJapanese( aFallBackJapaneseLocalized );
-   static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
-   static const OUString aFallbackLatin2 (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_LATIN2));
-   static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
-   static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
-   static const OUString aFallBackChineseSIM (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINSIM ) );
-   static const OUString aFallBackChineseTRD (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINTRD ) );
+    String aFallBackJapaneseLocalized( RTL_CONSTASCII_USTRINGPARAM( "MS UI Gothic;" ) );
+    aFallBackJapaneseLocalized += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE1 ) );
+    aFallBackJapaneseLocalized += String( aMSPGothic );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackJapaneseLocalized += String( aMSGothic );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackJapaneseLocalized += String( aTLPGothic );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackJapaneseLocalized += String( aLXGothic );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackJapaneseLocalized += String( aKochiGothic );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE2 ) );
+    static const OUString aFallBackJapanese( aFallBackJapaneseLocalized );
+    static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
+    static const OUString aFallbackLatin2 (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_LATIN2));
+    static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
+    static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
+    static const OUString aFallBackChineseSIM (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINSIM ) );
+    static const OUString aFallBackChineseTRD (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINTRD ) );
 
-   // we need localized names for korean fonts
-   static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
-   String aFallBackKoreanLocalized( aSunGulim );
-   aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-   aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
-   static const OUString aFallBackKorean( aFallBackKoreanLocalized );
+    // we need localized names for korean fonts
+    static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
+    static sal_Unicode const aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
+    String aFallBackKoreanLocalized( aSunGulim );
+    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackKoreanLocalized += String( aBaekmukGulim );
+    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
+    static const OUString aFallBackKorean( aFallBackKoreanLocalized );
 
-   // optimize font list for some locales, as long as Andale Sans UI does not support them
-   switch( nLanguage )
-   {
+    // optimize font list for some locales, as long as Andale Sans UI does not support them
+    switch( nLanguage )
+    {
        case LANGUAGE_ARABIC:
        case LANGUAGE_ARABIC_SAUDI_ARABIA:
        case LANGUAGE_ARABIC_IRAQ:
@@ -739,9 +742,9 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplKillLeading( String& rName, const char* const* ppStr )
+static bool ImplKillLeading( String& rName, const char* const* ppStr )
 {
-    while ( *ppStr )
+    for(; *ppStr; ++ppStr )
     {
         const char*         pStr = *ppStr;
         const xub_Unicode*  pNameStr = rName.GetBuffer();
@@ -752,23 +755,23 @@ static BOOL ImplKillLeading( String& rName, const char* const* ppStr )
         }
         if ( !*pStr )
         {
-            rName.Erase( 0, (xub_StrLen)(pNameStr-rName.GetBuffer()) );
-            return TRUE;
+            xub_StrLen nLen = pNameStr - rName.GetBuffer();
+            rName.Erase( 0, nLen );
+            return true;
         }
-
-        ppStr++;
     }
 
     // special case for Baekmuk
     // TODO: allow non-ASCII KillLeading list
     const xub_Unicode* pNameStr = rName.GetBuffer();
-    if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) && (pNameStr[2]==0x0020) )
+    if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) )
     {
-        rName.Erase( 0, 3 );
-        return TRUE;
+        xub_StrLen nLen = (pNameStr[2]==0x0020) ? 3 : 2;
+        rName.Erase( 0, nLen );
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -863,7 +866,8 @@ static BOOL ImplFindAndErase( String& rName, const char* pStr )
 
 // =======================================================================
 
-void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, unsigned long& rType )
+void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName,
+    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, unsigned long& rType )
 {
     rShortName = rOrgName;
 
