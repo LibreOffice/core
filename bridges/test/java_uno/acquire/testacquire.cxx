@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testacquire.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:21:00 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+#include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
@@ -68,292 +70,540 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/conditn.hxx"
+#include "osl/interlck.h"
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "test/java_uno/acquire/XBase.hpp"
-#include "test/java_uno/acquire/XDerived.hpp"
-#include "test/java_uno/acquire/XTest.hpp"
+#include "test/javauno/acquire/XBase.hpp"
+#include "test/javauno/acquire/XDerived.hpp"
+#include "test/javauno/acquire/XTest.hpp"
 #include "uno/environment.h"
 #include "uno/lbnames.h"
+
+#include <iostream>
+#include <cstdlib>
 
 namespace css = com::sun::star;
 
 namespace {
 
-class Service: public cppu::WeakImplHelper2<
-    css::lang::XServiceInfo, test::java_uno::acquire::XTest >
+class WaitCondition {
+public:
+    WaitCondition() {}
+
+    ~WaitCondition();
+
+    osl::Condition & get() { return m_condition; }
+
+private:
+    WaitCondition(WaitCondition &); // not implemented
+    void operator =(WaitCondition); // not implemented
+
+    osl::Condition m_condition;
+};
+
+}
+
+WaitCondition::~WaitCondition() {
+    std::cout << "waiting for condition\n";
+    if (m_condition.wait() != osl::Condition::result_ok) {
+        throw "osl::Condition::wait failed";
+    }
+}
+
+namespace {
+
+class Interface: public css::uno::XInterface {
+public:
+    explicit Interface(osl::Condition & condition):
+        m_condition(condition), m_refCount(0) {}
+
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ()
+    { osl_incrementInterlockedCount(&m_refCount); }
+
+    virtual void SAL_CALL release() throw ();
+
+protected:
+    virtual ~Interface() { m_condition.set(); }
+
+private:
+    Interface(Interface &); // not implemented
+    void operator =(Interface); // not implemented
+
+    osl::Condition & m_condition;
+    oslInterlockedCount m_refCount;
+};
+
+}
+
+css::uno::Any Interface::queryInterface(css::uno::Type const & type)
+    throw (css::uno::RuntimeException)
+{
+    return type.getTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                               "com.sun.star.uno.XInterface"))
+        ? css::uno::makeAny(css::uno::Reference< css::uno::XInterface >(this))
+        : css::uno::Any();
+}
+
+void Interface::release() throw () {
+    if (osl_decrementInterlockedCount(&m_refCount) == 0) {
+        delete this;
+    }
+}
+
+namespace {
+
+class Base: public Interface, public test::javauno::acquire::XBase {
+public:
+    explicit Base(osl::Condition & condition): Interface(condition) {}
+
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw () { Interface::acquire(); }
+
+    virtual void SAL_CALL release() throw () { Interface::release(); }
+
+protected:
+    virtual ~Base() {}
+};
+
+}
+
+css::uno::Any Base::queryInterface(css::uno::Type const & type)
+    throw (css::uno::RuntimeException)
+{
+    return type.getTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                               "test.javauno.acquire.XBase"))
+        ? css::uno::makeAny(
+            css::uno::Reference< test::javauno::acquire::XBase >(this))
+        : Interface::queryInterface(type);
+}
+
+namespace {
+
+class Derived: public Base, public test::javauno::acquire::XDerived {
+public:
+    explicit Derived(osl::Condition & condition): Base(condition) {}
+
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw () { Base::acquire(); }
+
+    virtual void SAL_CALL release() throw () { Base::release(); }
+
+private:
+    virtual ~Derived() {}
+};
+
+}
+
+css::uno::Any Derived::queryInterface(css::uno::Type const & type)
+    throw (css::uno::RuntimeException)
+{
+    return (type.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("test.javauno.acquire.XDerived")))
+        ? css::uno::makeAny(
+            css::uno::Reference< test::javauno::acquire::XDerived >(this))
+        : Interface::queryInterface(type);
+}
+
+namespace {
+
+class Service: public cppu::WeakImplHelper3<
+    css::lang::XServiceInfo, css::lang::XMain, test::javauno::acquire::XTest >
 {
 public:
-    virtual inline rtl::OUString SAL_CALL getImplementationName()
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii(getImplementationName_static()); }
+    { return getImplementationName_static(); }
 
-    virtual sal_Bool SAL_CALL supportsService(
-        rtl::OUString const & rServiceName) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+        throw (css::uno::RuntimeException);
 
-    virtual inline css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames()  throw (css::uno::RuntimeException)
     { return getSupportedServiceNames_static(); }
 
-    virtual inline void SAL_CALL setInterfaceToInterface(
-        css::uno::Reference< css::uno::XInterface > const & rObj)
-        throw (css::uno::RuntimeException)
-    { m_xInterface = rObj; }
+    virtual sal_Int32 SAL_CALL
+    run(css::uno::Sequence< rtl::OUString > const & arguments)
+        throw (css::uno::RuntimeException);
 
-    virtual inline void SAL_CALL setBaseToInterface(
-        css::uno::Reference< test::java_uno::acquire::XBase > const & rObj)
+    virtual void SAL_CALL setInterfaceToInterface(
+        css::uno::Reference< css::uno::XInterface > const & obj)
         throw (css::uno::RuntimeException)
-    { m_xInterface = rObj; }
+    { m_interface = obj; }
 
-    virtual inline void SAL_CALL setDerivedToInterface(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+    virtual void SAL_CALL setBaseToInterface(
+        css::uno::Reference< test::javauno::acquire::XBase > const & obj)
         throw (css::uno::RuntimeException)
-    { m_xInterface = rObj; }
+    { m_interface = obj; }
 
-    virtual inline void SAL_CALL setAnyToInterface(
-        css::uno::Any const & rObj)
+    virtual void SAL_CALL setDerivedToInterface(
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { rObj >>= m_xInterface; }
+    { m_interface = obj; }
 
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL getInterfaceFromInterface() throw (css::uno::RuntimeException)
-    { return m_xInterface; }
+    { return m_interface; }
 
-    virtual inline void SAL_CALL setBaseToBase(
-        css::uno::Reference< test::java_uno::acquire::XBase > const & rObj)
+    virtual void SAL_CALL clearInterface() throw (css::uno::RuntimeException)
+    { m_interface.clear(); }
+
+    virtual void SAL_CALL setBaseToBase(
+        css::uno::Reference< test::javauno::acquire::XBase > const & obj)
         throw (css::uno::RuntimeException)
-    { m_xBase = rObj; }
+    { m_base = obj; }
 
-    virtual inline void SAL_CALL setDerivedToBase(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+    virtual void SAL_CALL setDerivedToBase(
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { m_xBase = rObj.get(); }
+    { m_base = obj.get(); }
 
-    virtual inline void SAL_CALL setAnyToBase(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { rObj >>= m_xBase; }
-
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL getInterfaceFromBase() throw (css::uno::RuntimeException)
-    { return m_xBase; }
+    { return m_base; }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XBase >
+    virtual css::uno::Reference< test::javauno::acquire::XBase >
     SAL_CALL getBaseFromBase() throw (css::uno::RuntimeException)
-    { return m_xBase; }
+    { return m_base; }
 
-    virtual inline void SAL_CALL setDerivedToDerived(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+    virtual void SAL_CALL clearBase() throw (css::uno::RuntimeException)
+    { m_base.clear(); }
+
+    virtual void SAL_CALL setDerivedToDerived(
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { m_xDerived = rObj; }
+    { m_derived = obj; }
 
-    virtual inline void SAL_CALL setAnyToDerived(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { rObj >>= m_xDerived; }
-
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL getInterfaceFromDerived() throw (css::uno::RuntimeException)
-    { return m_xBase; }
+    { return m_derived; }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XBase >
+    virtual css::uno::Reference< test::javauno::acquire::XBase >
     SAL_CALL getBaseFromDerived() throw (css::uno::RuntimeException)
-    { return m_xBase; }
+    { return m_derived.get(); }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XDerived >
+    virtual css::uno::Reference< test::javauno::acquire::XDerived >
     SAL_CALL getDerivedFromDerived() throw (css::uno::RuntimeException)
-    { return m_xDerived; }
+    { return m_derived; }
 
-    virtual inline void SAL_CALL setAnyToAny(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { m_aAny = rObj; }
+    virtual void SAL_CALL clearDerived() throw (css::uno::RuntimeException)
+    { m_derived.clear(); }
 
-    virtual inline css::uno::Any
-    SAL_CALL getAnyFromAny() throw (css::uno::RuntimeException)
-    { return m_aAny; }
-
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL roundTripInterfaceToInterface(
-        css::uno::Reference< css::uno::XInterface > const & rObj)
+        css::uno::Reference< css::uno::XInterface > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj; }
+    { return obj; }
 
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL roundTripBaseToInterface(
-        css::uno::Reference< test::java_uno::acquire::XBase > const & rObj)
+        css::uno::Reference< test::javauno::acquire::XBase > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj; }
+    { return obj; }
 
-    virtual inline css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL roundTripDerivedToInterface(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj; }
+    { return obj; }
 
-    virtual inline css::uno::Reference< css::uno::XInterface >
-    SAL_CALL roundTripAnyToInterface(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { return css::uno::Reference< css::uno::XInterface >(
-        rObj, css::uno::UNO_QUERY_THROW); }
-
-    virtual inline css::uno::Reference< test::java_uno::acquire::XBase >
+    virtual css::uno::Reference< test::javauno::acquire::XBase >
     SAL_CALL roundTripBaseToBase(
-        css::uno::Reference< test::java_uno::acquire::XBase > const & rObj)
+        css::uno::Reference< test::javauno::acquire::XBase > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj; }
+    { return obj; }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XBase >
+    virtual css::uno::Reference< test::javauno::acquire::XBase >
     SAL_CALL roundTripDerivedToBase(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj.get(); }
+    { return obj.get(); }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XBase >
-    SAL_CALL roundTripAnyToBase(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { return css::uno::Reference< test::java_uno::acquire::XBase >(
-        rObj, css::uno::UNO_QUERY_THROW); }
-
-    virtual inline css::uno::Reference< test::java_uno::acquire::XDerived >
+    virtual css::uno::Reference< test::javauno::acquire::XDerived >
     SAL_CALL roundTripDerivedToDerived(
-        css::uno::Reference< test::java_uno::acquire::XDerived > const & rObj)
+        css::uno::Reference< test::javauno::acquire::XDerived > const & obj)
         throw (css::uno::RuntimeException)
-    { return rObj; }
+    { return obj; }
 
-    virtual inline css::uno::Reference< test::java_uno::acquire::XDerived >
-    SAL_CALL roundTripAnyToDerived(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { return css::uno::Reference< test::java_uno::acquire::XDerived >(
-        rObj, css::uno::UNO_QUERY_THROW); }
-
-    virtual inline css::uno::Any
-    SAL_CALL roundTripAnyToAny(
-        css::uno::Any const & rObj)
-        throw (css::uno::RuntimeException)
-    { return rObj; }
-
-    static inline sal_Char const * getImplementationName_static()
-    { return "com.sun.star.test.bridges.testacquire.impl"; }
+    static rtl::OUString getImplementationName_static();
 
     static css::uno::Sequence< rtl::OUString >
     getSupportedServiceNames_static();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-        css::uno::Reference< css::uno::XComponentContext > const &)
+        css::uno::Reference< css::uno::XComponentContext > const & context)
         throw (css::uno::Exception);
 
 private:
-    inline Service() {}
+    explicit Service(
+        css::uno::Reference< css::uno::XComponentContext > const & context):
+        m_context(context) {}
 
-    css::uno::Reference< css::uno::XInterface > m_xInterface;
-    css::uno::Reference< test::java_uno::acquire::XBase > m_xBase;
-    css::uno::Reference< test::java_uno::acquire::XDerived > m_xDerived;
-    css::uno::Any m_aAny;
+    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< css::uno::XInterface > m_interface;
+    css::uno::Reference< test::javauno::acquire::XBase > m_base;
+    css::uno::Reference< test::javauno::acquire::XDerived > m_derived;
 };
 
 }
 
-sal_Bool Service::supportsService(rtl::OUString const & rServiceName)
+sal_Bool Service::supportsService(rtl::OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > aNames(
+    css::uno::Sequence< rtl::OUString > names(
         getSupportedServiceNames_static());
-    for (sal_Int32 i = 0; i< aNames.getLength(); ++i)
-        if (aNames[i] == rServiceName)
+    for (sal_Int32 i = 0; i< names.getLength(); ++i) {
+        if (names[i] == serviceName) {
             return true;
-    return false;
-}
-
-css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static()
-{
-    css::uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString::createFromAscii(
-        "com.sun.star.test.bridges.testacquire");
-    return aNames;
-}
-
-css::uno::Reference< css::uno::XInterface > Service::createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const &)
-    throw (css::uno::Exception)
-{
-    return static_cast< cppu::OWeakObject * >(new Service);
-}
-
-extern "C" void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** pEnvTypeName, uno_Environment **)
-{
-    *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
-                                                void * pServiceManager, void *)
-{
-    void * pFactory = 0;
-    if (pServiceManager)
-        if (rtl_str_compare(pImplName, Service::getImplementationName_static())
-            == 0)
-        {
-            css::uno::Reference< css::lang::XSingleComponentFactory >
-                xFactory(cppu::createSingleComponentFactory(
-                             &Service::createInstance,
-                             rtl::OUString::createFromAscii(
-                                 Service::getImplementationName_static()),
-                             Service::getSupportedServiceNames_static()));
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pFactory = xFactory.get();
-            }
         }
-    return pFactory;
+    }
+    return false;
 }
 
 namespace {
 
-bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
-               css::uno::Sequence< rtl::OUString > const & rServiceNames)
+template< typename T > void assertNotNull(css::uno::Reference< T > const & ref)
 {
-    rtl::OUString aKeyName(rtl::OUString::createFromAscii("/"));
-    aKeyName += rtl::OUString::createFromAscii(pImplementationName);
-    aKeyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
-    css::uno::Reference< css::registry::XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< css::registry::XRegistryKey * >(pRegistryKey)->
-            createKey(aKeyName);
+    if (!ref.is()) {
+        std::cerr << "assertNotNull failed\n";
+        std::abort();
     }
-    catch (css::registry::InvalidRegistryException &) {}
-    if (!xKey.is())
-        return false;
-    bool bSuccess = true;
-    for (sal_Int32 i = 0; i < rServiceNames.getLength(); ++i)
-        try
-        {
-            xKey->createKey(rServiceNames[i]);
+}
+
+}
+
+sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
+    throw (css::uno::RuntimeException)
+{
+    // - arguments[0] must be the UNO URL to connect to:
+    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
+        m_context->getServiceManager()->createInstanceWithContext(
+            rtl::OUString::createFromAscii(
+                "com.sun.star.bridge.UnoUrlResolver"),
+            m_context),
+        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< XTest > test(
+        resolver->resolve(arguments[0]), css::uno::UNO_QUERY_THROW);
+
+    {
+        WaitCondition c;
+        test->setInterfaceToInterface(new Interface(c.get()));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+    {
+        WaitCondition c;
+        test->setInterfaceToInterface(
+            static_cast< Interface * >(new Base(c.get())));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+    {
+        WaitCondition c;
+        test->setInterfaceToInterface(
+            static_cast< Interface * >(new Derived(c.get())));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+
+    {
+        WaitCondition c;
+        test->setBaseToInterface(new Base(c.get()));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+    {
+        WaitCondition c;
+        test->setBaseToInterface(static_cast< Base * >(new Derived(c.get())));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+
+    {
+        WaitCondition c;
+        test->setDerivedToInterface(new Derived(c.get()));
+        assertNotNull(test->getInterfaceFromInterface());
+        test->clearInterface();
+    }
+
+    {
+        WaitCondition c;
+        test->setBaseToBase(new Base(c.get()));
+        assertNotNull(test->getInterfaceFromBase());
+        assertNotNull(test->getBaseFromBase());
+        test->clearBase();
+    }
+    {
+        WaitCondition c;
+        test->setBaseToBase(static_cast< Base * >(new Derived(c.get())));
+        assertNotNull(test->getInterfaceFromBase());
+        assertNotNull(test->getBaseFromBase());
+        test->clearBase();
+    }
+
+    {
+        WaitCondition c;
+        test->setDerivedToBase(new Derived(c.get()));
+        assertNotNull(test->getInterfaceFromBase());
+        assertNotNull(test->getBaseFromBase());
+        test->clearBase();
+    }
+
+    {
+        WaitCondition c;
+        test->setDerivedToDerived(new Derived(c.get()));
+        assertNotNull(test->getInterfaceFromDerived());
+        assertNotNull(test->getBaseFromDerived());
+        assertNotNull(test->getDerivedFromDerived());
+        test->clearDerived();
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(
+            test->roundTripInterfaceToInterface(new Interface(c.get())));
+    }
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripInterfaceToInterface(
+                          static_cast< Interface * >(new Base(c.get()))));
+    }
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripInterfaceToInterface(
+                          static_cast< Interface * >(new Derived(c.get()))));
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripBaseToInterface(new Base(c.get())));
+    }
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripBaseToInterface(
+                          static_cast< Base * >(new Derived(c.get()))));
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripDerivedToInterface(new Derived(c.get())));
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripBaseToBase(new Base(c.get())));
+    }
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripBaseToBase(
+                          static_cast< Base * >(new Derived(c.get()))));
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripDerivedToBase(new Derived(c.get())));
+    }
+
+    {
+        WaitCondition c;
+        assertNotNull(test->roundTripDerivedToDerived(new Derived(c.get())));
+    }
+
+    std::cout << "Client and server both cleanly terminate now: Success\n";
+    return 0;
+}
+
+rtl::OUString Service::getImplementationName_static() {
+    return rtl::OUString::createFromAscii(
+        "com.sun.star.test.bridges.testacquire.impl");
+}
+
+css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static() {
+    css::uno::Sequence< rtl::OUString > names(1);
+    names[0] = rtl::OUString::createFromAscii(
+        "com.sun.star.test.bridges.testacquire");
+    return names;
+}
+
+css::uno::Reference< css::uno::XInterface > Service::createInstance(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+    throw (css::uno::Exception)
+{
+    return static_cast< cppu::OWeakObject * >(new Service(context));
+}
+
+extern "C" void SAL_CALL component_getImplementationEnvironment(
+    char const ** envTypeName, uno_Environment **)
+{
+    if (envTypeName != 0) {
+        *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+}
+
+extern "C" void * SAL_CALL component_getFactory(char const * implName,
+                                                void * serviceManager, void *) {
+    void * p = 0;
+    if (serviceManager != 0) {
+        css::uno::Reference< css::lang::XSingleComponentFactory > f;
+        if (Service::getImplementationName_static().equalsAscii(implName)) {
+            f = cppu::createSingleComponentFactory(
+                &Service::createInstance,
+                Service::getImplementationName_static(),
+                Service::getSupportedServiceNames_static());
         }
-        catch (css::registry::InvalidRegistryException &)
-        {
-            bSuccess = false;
+        if (f.is()) {
+            f->acquire();
+            p = f.get();
+        }
+    }
+    return p;
+}
+
+namespace {
+
+bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
+               css::uno::Sequence< rtl::OUString > const & serviceNames) {
+    rtl::OUString keyName(rtl::OUString::createFromAscii("/"));
+    keyName += implementationName;
+    keyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
+    css::uno::Reference< css::registry::XRegistryKey > key;
+    try {
+        key = static_cast< css::registry::XRegistryKey * >(registryKey)->
+            createKey(keyName);
+    } catch (css::registry::InvalidRegistryException &) {}
+    if (!key.is()) {
+        return false;
+    }
+    bool success = true;
+    for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
+        try {
+            key->createKey(serviceNames[i]);
+        } catch (css::registry::InvalidRegistryException &) {
+            success = false;
             break;
         }
-    return bSuccess;
+    }
+    return success;
 }
 
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * pRegistryKey)
-{
-    return pRegistryKey
-        && writeInfo(pRegistryKey, Service::getImplementationName_static(),
+extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * registryKey) {
+    return registryKey
+        && writeInfo(registryKey, Service::getImplementationName_static(),
                      Service::getSupportedServiceNames_static());
 }
