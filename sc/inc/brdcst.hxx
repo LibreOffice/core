@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdcst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,10 @@ public:
                         ScHint( ULONG n, const ScAddress& a, ScBaseCell* p )
                             : SfxSimpleHint( n ), aAddress( a ), pCell( p ) {}
     ScBaseCell*         GetCell() const { return pCell; }
+    void                SetCell( ScBaseCell* p )    { pCell = p; }
     const ScAddress&    GetAddress() const { return aAddress; }
+          ScAddress&    GetAddress()       { return aAddress; }
+    void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }
 };
 
 class ScAreaChangedHint : public SfxHint
