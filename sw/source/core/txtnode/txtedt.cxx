@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:39:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,8 +1562,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 {
     if( nStart < nEnd )
     {
-
-        if ( !HasHiddenCharAttribute( true ) && !HasHiddenParaField() )
+        if ( !IsHidden() )
         {
             String& rWordStr = (String&)GetTxt();
             String aOldStr( rWordStr );
