@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 13:55:06 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
  **************************************************************************
 
  *************************************************************************/
-
-
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -223,20 +221,10 @@ AuthListener webdavAuthListener;
 
 void ContentProperties::setValues(DAVResource& resource)
 {
-
   // title
-  OUString aURL = resource.uri;
-  sal_Int32 nPos = aURL.lastIndexOf( '/' );
-  sal_Int32 nEnd = aURL.getLength();
-
-  if ( nPos == ( aURL.getLength() - 1 ) ) {
-    // Trailing slash found. Skip.
-    nPos = aURL.lastIndexOf( '/', nPos );
-    nEnd--;
-  }
-  if ( nPos != -1 ) {
-    aTitle = aURL.copy( nPos+1, nEnd-nPos-1  );
-  }
+  NeonUri aURI( resource.uri );
+  aTitle = aURI.GetPathBaseNameUnescaped();
+  aEscapedTitle = aURI.GetPathBaseName();
 
   // other required properties (default values)
   bIsDocument  =  sal_True;
@@ -604,7 +592,12 @@ Any SAL_CALL Content::execute( const Command& aCommand,
           OpenCommandArgument2 aOpenCommand;
           if ( aCommand.Argument >>= aOpenCommand )
         {
-              if ( isFolder( Environment ) )
+            sal_Bool bOpenFolder =
+                        ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
+                            ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
+                            ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
+
+              if ( bOpenFolder && isFolder( Environment ) )
             {
                 // Open collection.
 
@@ -615,7 +608,8 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                         Environment );
                 aRet <<= xSet;
               }
-              else
+
+            if ( aOpenCommand.Sink.is() )
             {
                 // Open document.
 
@@ -822,7 +816,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
 
             if (!transferArgs.NewTitle.getLength ())
             {
-                transferArgs.NewTitle = sourceURI.GetPathBaseName ();
+                transferArgs.NewTitle = sourceURI.GetPathBaseNameUnescaped();
             }
 
             if (transferArgs.NewTitle.compareToAscii ("/") == 0)
@@ -1459,7 +1453,10 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
                 if ( aNewValue != m_aProps.aTitle )
                   {
                     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+
                     m_aProps.aTitle = aNewValue;
+                    m_aProps.aEscapedTitle
+                        = NeonUri::escapeSegment( aNewValue );
 
                     // modified title -> modified URL -> exchange !
                     if ( !_transient )
@@ -1489,16 +1486,11 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
   {
     // Assemble new content identifier...
 
-    OUString aURL( m_xIdentifier->getContentIdentifier() );
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
-    if ( nPos == ( aURL.getLength() - 1 ) )
-    {
-        // Trailing slash found. Skip.
-        nPos = aURL.lastIndexOf( '/', nPos );
-    }
+      OUString aNewURL = getParentURL();
+      if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
+        aNewURL += OUString::createFromAscii( "/" );
 
-    OUString aNewURL = aURL.copy( 0, nPos + 1 );
-    aNewURL += m_aProps.aTitle;
+      aNewURL += m_aProps.aEscapedTitle;
 
     Reference< XContentIdentifier > xNewId
                         = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
@@ -1618,8 +1610,7 @@ void Content::insert(Reference<XInputStream> xInputStream,
       if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
         aURL += OUString::createFromAscii( "/" );
 
-      aURL += m_aProps.aTitle;
-
+      aURL += m_aProps.aEscapedTitle;
       m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
 
     if ( !initpath() )
@@ -1792,7 +1783,10 @@ sal_Bool Content::initpath()
         return sal_False;
     }
 
-       m_aProps.aTitle = aURL.copy( nPos + 1, nEnd - nPos - 1 );
+    NeonUri aURI( aURL );
+       m_aProps.aTitle = aURI.GetPathBaseNameUnescaped();
+       m_aProps.aEscapedTitle = aURI.GetPathBaseName();
+
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += OUString::createFromAscii( "/" );
 
-        aId += props.aTitle;
+        aId += props.aEscapedTitle;
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
