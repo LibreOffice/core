@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2000-11-30 16:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,15 @@
 #include "DAVSession.hxx"
 #endif
 
-#ifndef __VECTOR__
-#include <stl/vector>
-#endif
-#ifndef __LIST__
-#include <stl/list>
-#endif
+#include <vector>
+#include <list>
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #endif
@@ -113,8 +112,6 @@ namespace webdav_ucp
 //=========================================================================
 
 class DAVResource;
-class ContentCreationException : public ::com::sun::star::uno::Exception
-{};
 
 struct ContentProperties
 {
@@ -209,7 +206,7 @@ public:
        ::ucb::ContentProviderImplHelper* pProvider,
        const ::com::sun::star::uno::Reference<
        ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-    throw ( ContentCreationException );
+    throw ( ::com::sun::star::ucb::ContentCreationException );
   Content( const ::com::sun::star::uno::Reference<
        ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
        ::ucb::ContentProviderImplHelper* pProvider,
@@ -217,7 +214,7 @@ public:
        ::com::sun::star::ucb::XContentIdentifier >& Identifier,
        ::vos::ORef< DAVSession> pSession,
        sal_Bool isCollection)
-    throw ( ContentCreationException );
+    throw ( ::com::sun::star::ucb::ContentCreationException );
   virtual ~Content();
 
   // XInterface
