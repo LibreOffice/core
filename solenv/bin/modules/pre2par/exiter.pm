@@ -2,9 +2,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:47:18 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:59:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,8 +62,8 @@
 
 package pre2par::exiter;
 
-use par2script::files;
-use par2script::globals;
+use pre2par::files;
+use pre2par::globals;
 
 ############################################
 # Exiting the program with an error
@@ -77,23 +77,26 @@ sub exit_program
     my $infoline;
 
     $infoline = "\n***************************************************************\n";
-    push(@par2script::globals::logfileinfo, $infoline);
+    push(@pre2par::globals::logfileinfo, $infoline);
     print("$infoline");
 
     $infoline = "$message\n";
-    push(@par2script::globals::logfileinfo, $infoline);
+    push(@pre2par::globals::logfileinfo, $infoline);
     print("$infoline");
 
     $infoline = "in function: $function\n";
-    push(@par2script::globals::logfileinfo, $infoline);
+    push(@pre2par::globals::logfileinfo, $infoline);
     print("$infoline");
 
     $infoline = "***************************************************************\n";
-    push(@par2script::globals::logfileinfo, $infoline);
+    push(@pre2par::globals::logfileinfo, $infoline);
 
-    par2script::files::save_file($par2script::globals::logfilename ,\@par2script::globals::logfileinfo);
+    if ($pre2par::globals::logging)
+    {
+        pre2par::files::save_file($pre2par::globals::logfilename ,\@pre2par::globals::logfileinfo);
+        print("Saved logfile: $pre2par::globals::logfilename\n");
+    }
 
-    print("Saved logfile: $par2script::globals::logfilename\n");
     print("$infoline");
 
     exit(-1);
