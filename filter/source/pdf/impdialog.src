@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:42:26 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "Range";
         Text[ greek ] = "Range";
         Text[ dutch ] = "Range";
-        Text[ french ] = "Range";
+        Text[ french ] = "Zone";
         Text[ spanish ] = "�rea";
         Text[ finnish ] = "Range";
         Text[ italian ] = "Sezione";
@@ -109,7 +109,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "~All";
         Text[ greek ] = "~All";
         Text[ dutch ] = "~All";
-        Text[ french ] = "~All";
+        Text[ french ] = "Tout";
         Text[ spanish ] = "~Todo";
         Text[ finnish ] = "~All";
         Text[ italian ] = "~Tutte";
@@ -137,7 +137,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "Pa~ges";
         Text[ greek ] = "Pa~ges";
         Text[ dutch ] = "Pa~ges";
-        Text[ french ] = "Pa~ges";
+        Text[ french ] = "Pages";
         Text[ spanish ] = "P�gin~as";
         Text[ finnish ] = "Pa~ges";
         Text[ italian ] = "Pagine";
@@ -165,7 +165,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "~Selection";
         Text[ greek ] = "~Selection";
         Text[ dutch ] = "~Selection";
-        Text[ french ] = "~Selection";
+        Text[ french ] = "S�lection";
         Text[ spanish ] = "~Selecci�n";
         Text[ finnish ] = "~Selection";
         Text[ italian ] = "Scelta";
@@ -227,7 +227,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "S~creen optimized (smallest file size)";
         Text[ greek ] = "S~creen optimized (smallest file size)";
         Text[ dutch ] = "S~creen optimized (smallest file size)";
-        Text[ french ] = "S~creen optimized (smallest file size)";
+        Text[ french ] = "Optimis� pour l'�cran (taille minimum de fichier)";
         Text[ spanish ] = "~Optimado para la pantalla (tama�o m�nimo de archivo)";
         Text[ finnish ] = "S~creen optimized (smallest file size)";
         Text[ italian ] = "Ottimizzato per lo schermo (dimensioni minime file)";
@@ -255,7 +255,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "~Print optimized";
         Text[ greek ] = "~Print optimized";
         Text[ dutch ] = "~Print optimized";
-        Text[ french ] = "~Print optimized";
+        Text[ french ] = "Optimis� pour l'impression";
         Text[ spanish ] = "~Optimado para la impresi�n";
         Text[ finnish ] = "~Print optimized";
         Text[ italian ] = "Ottimizzato per la stampa";
@@ -283,7 +283,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "Pr~ess optimized";
         Text[ greek ] = "Pr~ess optimized";
         Text[ dutch ] = "Pr~ess optimized";
-        Text[ french ] = "Pr~ess optimized";
+        Text[ french ] = "Optimis� pour presse � imprimer";
         Text[ spanish ] = "~Optima para la impresi�n";
         Text[ finnish ] = "Pr~ess optimized";
         Text[ italian ] = "Ottimizza per la stampa";
@@ -292,7 +292,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ polish ] = "Pr~ess optimized";
         Text[ portuguese_brazilian ] = "Pr~ess optimized";
         Text[ japanese ] = "印刷準備用に最適化する";
-        Text[ korean ] = "인쇄용 최적화";
+        Text[ korean ] = "인쇄 단계용으로 최적화";
         Text[ chinese_simplified ] = "优化新闻印刷";
         Text[ chinese_traditional ] = "優化新聞印刷";
         Text[ turkish ] = "Pr~ess optimized";
@@ -313,7 +313,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ russian ] = "E~xport";
         Text[ greek ] = "E~xport";
         Text[ dutch ] = "E~xport";
-        Text[ french ] = "E~xport";
+        Text[ french ] = "Exporter";
         Text[ spanish ] = "E~xportar";
         Text[ finnish ] = "E~xport";
         Text[ italian ] = "Esporta";
@@ -349,7 +349,7 @@ ModalDialog DLG_PDFEXPORT
     Text[ russian ] = "PDF Options";
     Text[ greek ] = "PDF Options";
     Text[ dutch ] = "PDF Options";
-    Text[ french ] = "PDF Options";
+    Text[ french ] = "Options PDF";
     Text[ spanish ] = "Opciones PDF ";
     Text[ finnish ] = "PDF Options";
     Text[ italian ] = "Opzioni PDF";
