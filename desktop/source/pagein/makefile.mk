@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:48:34 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:44:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,39 +101,42 @@ ALL: \
 
 .INCLUDE :  target.mk
 
-ICUDLLPOST=$(DLLPOST).22
+ICUDLLPOST=$(DLLPOST).26
 UDKDLLPOST=$(DLLPOST).$(UDK_MAJOR)
+UNODLLPOST=.uno$(DLLPOST)
 UPDDLLPOST=$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @+echo Making: $@
-    @+echo $(DLLPRE)sc$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)sc$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
     @+echo Making: $@
-    @+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
     @+echo Making: $@
-    @+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
     @+echo Making: $@
-    @+echo $(DLLPRE)sw$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)sw$(UPDDLLPOST)  >  $@
+    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 # sorted in reverse load order (ld.so.1)
 $(MISC)$/$(TARGET)-common : makefile.mk
     @+echo Making: $@
     @-+echo $(DLLPRE)icui18n$(ICUDLLPOST)  >  $@
-    @-+echo $(DLLPRE)i18npool$(UPDDLLPOST) >> $@
+    @-+echo i18npool$(UNODLLPOST)       >> $@
 #
     @-+echo $(DLLPRE)xcr$(UPDDLLPOST)   >> $@
     @-+echo $(DLLPRE)xo$(UPDDLLPOST)    >> $@
     @-+echo $(DLLPRE)go$(UPDDLLPOST)    >> $@
     @-+echo $(DLLPRE)sb$(UPDDLLPOST)    >> $@
     @-+echo $(DLLPRE)sfx$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)svx$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)ofa$(UPDDLLPOST)   >> $@
     @-+echo $(DLLPRE)so$(UPDDLLPOST)    >> $@
 #
     @-+echo $(DLLPRE)fwe$(UPDDLLPOST)   >> $@
@@ -141,7 +144,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-+echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
     @-+echo $(DLLPRE)fwi$(UPDDLLPOST)   >> $@
     @-+echo $(DLLPRE)fwl$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)cfgmgr2$(DLLPOST)  >> $@
+    @-+echo configmgr2$(UNODLLPOST)     >> $@
 #
     @-+echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
     @-+echo $(DLLPRE)sot$(UPDDLLPOST)   >> $@
