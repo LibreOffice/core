@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:03:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,14 @@
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
 #include "sdxmlexp_impl.hxx"
+
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -227,6 +234,7 @@ using namespace ::xmloff::token;
 #define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
 #define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
+#define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 
 //////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
@@ -243,8 +251,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "LineColor",                      XML_NAMESPACE_SVG,  XML_STROKE_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "LineStartName",                  XML_NAMESPACE_DRAW, XML_MARKER_START,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINESTARTNAME ),
     GMAP( "LineStartWidth",                 XML_NAMESPACE_DRAW, XML_MARKER_START_WIDTH,     XML_TYPE_MEASURE, 0 ),
-    GMAP( "LineStartCenter",                    XML_NAMESPACE_DRAW, XML_MARKER_START_CENTER,    XML_TYPE_BOOL, 0 ),
-    GMAP( "LineEndName",                        XML_NAMESPACE_DRAW, XML_MARKER_END,             XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINEENDNAME ),
+    GMAP( "LineStartCenter",                XML_NAMESPACE_DRAW, XML_MARKER_START_CENTER,    XML_TYPE_BOOL, 0 ),
+    GMAP( "LineEndName",                    XML_NAMESPACE_DRAW, XML_MARKER_END,             XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_LINEENDNAME ),
     GMAP( "LineEndWidth",                   XML_NAMESPACE_DRAW, XML_MARKER_END_WIDTH,       XML_TYPE_MEASURE, 0 ),
     GMAP( "LineEndCenter",                  XML_NAMESPACE_DRAW, XML_MARKER_END_CENTER,      XML_TYPE_BOOL, 0 ),
     GMAP( "LineTransparence",               XML_NAMESPACE_SVG,  XML_STROKE_OPACITY,         XML_SD_TYPE_OPACITY, 0 ),
@@ -288,7 +296,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextWritingMode",                    XML_NAMESPACE_DRAW, XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
+    PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "FontIndependentLineSpacing",     XML_NAMESPACE_DRAW, XML_FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
@@ -303,15 +311,15 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
     // graphic attributes
     GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
-    GMAP( "AdjustLuminance",                    XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustContrast",                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE_PERCENT, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustGreen",                        XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
+    GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "GraphicCrop",                        XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, 0 ), // exists in SW, too, with same property name
+    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, 0 ), // exists in SW, too, with same property name
     GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
-    GMAP( "IsMirrored",                     XML_NAMESPACE_DRAW, XML_MIRROR,                 XML_TYPE_BOOL, 0 ),
+    GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR, 0 ),
 
     // animation text attributes
     TMAP( "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
@@ -423,8 +431,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, XML_CAPTION_FIT_LINE_LENGTH,    XML_TYPE_BOOL, 0 ),
 
     // misc object properties
-    GMAP( "MoveProtect",                    XML_NAMESPACE_DRAW, XML_MOVE_PROTECT,               XML_TYPE_BOOL, CTF_SD_MOVE_PROTECT ),
-    GMAP( "SizeProtect",                    XML_NAMESPACE_DRAW, XML_SIZE_PROTECT,               XML_TYPE_BOOL, CTF_SD_SIZE_PROTECT ),
+    GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
+    GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
     { 0L }
 };
 
@@ -448,11 +456,11 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 
     DPMAP( "FillStyle",                 XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
     DPMAP( "FillColor",                 XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
-    DPMAP( "FillGradientName",          XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STRING, 0 ),
+    DPMAP( "FillGradientName",          XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
     DPMAP( "FillGradientStepCount",     XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
-    DPMAP( "FillHatchName",             XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STRING, 0 ),
-    DPMAP( "FillBitmapName",            XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STRING, 0 ),
-    DPMAP( "FillTransparenceName",      XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STRING, 0 ),
+    DPMAP( "FillHatchName",             XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
+    DPMAP( "FillBitmapName",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,    XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
+    DPMAP( "FillTransparenceGradientName",  XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
     DPMAP( "FillBitmapSizeX",           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
     DPMAP( "FillBitmapLogicalSize",     XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
     DPMAP( "FillBitmapSizeY",           XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
@@ -844,6 +852,89 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Type_Enum[] =
 
 //////////////////////////////////////////////////////////////////////////////
 
+class XMLCaptionEscapeRelative : public XMLPropertyHandler
+{
+public:
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nValue;
+
+    if( !rUnitConverter.convertPercent( nValue, rStrImpValue ) )
+        return sal_False;
+
+    nValue *= 100;
+    rValue <<= nValue;
+    return sal_True;
+}
+
+sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nValue;
+    if( !(rValue >>= nValue ) )
+        return sal_False;
+
+    nValue /= 100;
+      OUStringBuffer aOut;
+     rUnitConverter.convertPercent( aOut, nValue );
+    rStrExpValue = aOut.makeStringAndClear();
+    return sal_True;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+class XMLMoveSizeProtectHdl : public XMLPropertyHandler
+{
+public:
+    XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+private:
+    const sal_Int32 mnType;
+};
+
+sal_Bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    const sal_Bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
+    rValue <<= bValue;
+    return sal_True;
+}
+
+sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bValue;
+    if( !(rValue >>= bValue ) )
+        return sal_False;
+
+    if( bValue )
+    {
+        if( rStrExpValue.getLength() )
+            rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+
+        rStrExpValue += GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE );
+    }
+
+    return sal_True;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport* pExport )
 : mxModel( xModel ), mpExport( pExport )
 {
@@ -883,6 +974,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_SHADOW :
             {
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
+                break;
+            }
+            case XML_TYPE_SD_MIRROR:
+            {
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_HORIZONTAL), GetXMLToken(XML_NONE) );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_STYLE :
@@ -1076,7 +1172,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLIsPercentagePropertyHandler();
                 break;
             case XML_SD_TYPE_CAPTION_ESC_REL:
-                pHdl = new XMLPercentOrMeasurePropertyHandler( sal_True );
+                pHdl = new XMLCaptionEscapeRelative();
                 break;
             case XML_SD_TYPE_CAPTION_ESC_ABS:
                 pHdl = new XMLPercentOrMeasurePropertyHandler( sal_False );
@@ -1095,6 +1191,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_TYPE_WRAP_OPTION:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_NO_WRAP ), GetXMLToken( XML_WRAP ) );
+                break;
+
+            case XML_SD_TYPE_MOVE_PROTECT:
+            case XML_SD_TYPE_SIZE_PROTECT:
+                pHdl = new XMLMoveSizeProtectHdl( nType );
                 break;
         }
 
