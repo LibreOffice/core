@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:29:37 $
+#   last change: $Author: kz $ $Date: 2003-11-18 17:18:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ IDLFILES=\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
+    XDocumentSubStorageSupplier.idl\
     XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
     XEventBroadcaster.idl\
