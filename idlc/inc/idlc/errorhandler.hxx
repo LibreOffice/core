@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,9 @@ enum WarningCode
 {
     WIDL_EXPID_CONFLICT,        // exception id conflict
     WIDL_REQID_CONFLICT,        // request id conflict
-    WIDL_INHERIT_IDCONFLICT,        // request id conflict inheritance tree
-    WIDL_TYPE_IDENT_CONFLICT    // type and identifier has equal names
+    WIDL_INHERIT_IDCONFLICT,    // request id conflict inheritance tree
+    WIDL_TYPE_IDENT_CONFLICT,   // type and identifier has equal names
+    WIDL_WRONG_NAMING_CONV      // type or identifier doesn't fulfill the UNO naming convention
 };
 
 class ErrorHandler
@@ -138,11 +139,12 @@ public:
     void    error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3);
 
     // Warning
+    void    warning0(WarningCode e, const sal_Char* warningmsg);
     void    warning1(WarningCode e, AstDeclaration* d);
     void    warning2(WarningCode e, AstDeclaration* d1, AstDeclaration* d2);
 
     // Report a syntax error in IDL input
-    void    syntaxError(ParseState state, sal_Int32 lineNumber, sal_Char* errmsg);
+    void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
 
     // Report a name being used with different spellings
     void    nameCaseError(sal_Char *n, sal_Char *t);
