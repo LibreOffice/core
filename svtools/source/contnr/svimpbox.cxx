@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-12-10 15:06:11 $
+ *  last change: $Author: gt $ $Date: 2002-12-11 13:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2535,6 +2535,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_ESCAPE:
         case KEY_TAB:
+        case KEY_DELETE:
         case KEY_BACKSPACE:
             // #105907# must not be handled because this quits dialogs and does other magic things...
             // if there are other single keys which should not be handled, they can be added here
