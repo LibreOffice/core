@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-14 11:20:24 $
+ *  last change: $Author: bm $ $Date: 2001-09-19 09:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1398,7 +1398,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             rtl::OUString::createFromAscii ("com.sun.star.chart.ChartAxisYSupplier")))
         {
             aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis")), bHasXAxis);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis")), bHasYAxis);
         }
         if (xServiceInfo->supportsService(
             rtl::OUString::createFromAscii ("com.sun.star.chart.ChartAxisZSupplier")))
@@ -1407,7 +1407,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis")), bHasZAxis);
         }
         if (xServiceInfo->supportsService(
-            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisSupplier")))
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisXSupplier")))
         {
             aDiagramProperties.Add (
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis")), bHasSecondaryXAxis);
