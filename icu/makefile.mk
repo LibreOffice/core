@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2002-08-27 09:03:10 $
+#   last change: $Author: er $ $Date: 2002-09-15 23:16:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,17 @@ TARGET=so_icu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=icu-2.0
+TARFILE_NAME=icu-2.2
 TARFILE_ROOTDIR=icu
 
-PATCH_FILE_NAME=icu-2.0.patch
-BINARY_PATCH_FILE_NAME=icu-2.0-binary_patch.tar.gz
+PATCH_FILE_NAME=icu-2.2.patch
+
+ADDITIONAL_FILES=source/data/brkitr/edit_word.txt \
+        source/data/brkitr/dict_word.txt \
+        source/data/brkitr/count_word.txt
+
+# Currently no binary patch, but this is how it worked with ICU 2.0
+#BINARY_PATCH_FILE_NAME=icu-2.0-binary_patch.tar.gz
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -93,25 +99,21 @@ CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64b
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
 
-.IF "$(CPU)"=="S" || "$(CPU)"=="P"
 OUT2LIB= \
-    $(BUILD_DIR)$/data$/libicudt20b.so
-.ELSE
-OUT2LIB= \
-    $(BUILD_DIR)$/data$/libicudt20l.so
-.ENDIF
-OUT2LIB+= \
+    $(BUILD_DIR)$/data$/out$/libicudata.so.22.0 \
+    $(BUILD_DIR)$/data$/out$/libicudata.so.22 \
+    $(BUILD_DIR)$/data$/out$/libicudata.so \
     $(BUILD_DIR)$/common$/libicuuc.a \
-    $(BUILD_DIR)$/common$/libicuuc.so.20.0 \
-    $(BUILD_DIR)$/common$/libicuuc.so.20 \
+    $(BUILD_DIR)$/common$/libicuuc.so.22.0 \
+    $(BUILD_DIR)$/common$/libicuuc.so.22 \
     $(BUILD_DIR)$/common$/libicuuc.so \
     $(BUILD_DIR)$/i18n$/libicui18n.a \
-    $(BUILD_DIR)$/i18n$/libicui18n.so.20.0 \
-    $(BUILD_DIR)$/i18n$/libicui18n.so.20 \
+    $(BUILD_DIR)$/i18n$/libicui18n.so.22.0 \
+    $(BUILD_DIR)$/i18n$/libicui18n.so.22 \
     $(BUILD_DIR)$/i18n$/libicui18n.so \
     $(BUILD_DIR)$/layout$/libicule.a \
-    $(BUILD_DIR)$/layout$/libicule.so.20.0 \
-    $(BUILD_DIR)$/layout$/libicule.so.20 \
+    $(BUILD_DIR)$/layout$/libicule.so.22.0 \
+    $(BUILD_DIR)$/layout$/libicule.so.22 \
     $(BUILD_DIR)$/layout$/libicule.so
 .ENDIF
 
@@ -123,7 +125,7 @@ CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
-BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all"
+BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 Release"
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudata.lib \
@@ -132,10 +134,10 @@ OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icule.lib
 
 OUT2BIN= \
-    $(BUILD_DIR)$/..$/bin$/icudt20.dll \
-    $(BUILD_DIR)$/..$/bin$/icuin20.dll \
-    $(BUILD_DIR)$/..$/bin$/icuuc20.dll \
-    $(BUILD_DIR)$/..$/bin$/icule20.dll
+    $(BUILD_DIR)$/..$/bin$/icudt22l.dll \
+    $(BUILD_DIR)$/..$/bin$/icuin22.dll \
+    $(BUILD_DIR)$/..$/bin$/icuuc22.dll \
+    $(BUILD_DIR)$/..$/bin$/icule22.dll
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -148,16 +150,18 @@ all: \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-#.IF "$(GUI)"=="WNT"
-
-TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
+TG_DELIVER : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
         $(DELIVER)
+
+.IF "$(BINARY_PATCH_FILE_NAME)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILE_NAME) | tar $(TAR_EXCLUDE_SWITCH) -xvf - 
     +$(TOUCH) $(PACKAGE_DIR)$/so_add_binary
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
+
+.ENDIF
 
 # Since you never know what will be in a patch (for example, it may already
 # patch at configure level) or in the case of a binary patch, we remove the
@@ -169,6 +173,4 @@ $(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME)
 .IF "$(BUILD_SOSL)"!=""
 ALLTAR : TG_DELIVER
 .ENDIF
-
-#.ENDIF
 
