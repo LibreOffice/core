@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formnavigation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:17:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,16 @@
 #endif
 #include <vector>
 #include <map>
+#include <memory>
 
 
 //.........................................................................
 namespace frm
 {
 //.........................................................................
+
+    class UrlTransformer;
+    class ControlFeatureInterception;
 
     //==================================================================
     //= OFormNavigationHelper
@@ -115,8 +119,8 @@ namespace frm
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
-                            m_xFirstDispatchInterceptor;
+        ::std::auto_ptr< ControlFeatureInterception >
+                            m_pFeatureInterception;
 
         // all supported features
         FeatureMap          m_aSupportedFeatures;
@@ -231,12 +235,7 @@ namespace frm
     class OFormNavigationMapper
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >
-                m_xTransformer;
-
-        bool    m_bTriedToCreateTransformer;
+        ::std::auto_ptr< UrlTransformer >   m_pUrlTransformer;
 
     public:
         OFormNavigationMapper(
