@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:44:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,19 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 if(pColumnItem)
                     aData.aDBColumn = ((SfxUsrAnyItem*)pColumnItem)->GetValue();
                 aFldMgr.InsertFld(aData);
+                SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                        pViewFrame->GetBindings().GetRecorder();
+                if ( xRecorder.is() )
+                {
+                    SfxRequest aReq( pViewFrame, FN_INSERT_DBFIELD );
+                    aReq.AppendItem( SfxUInt16Item(FN_PARAM_FIELD_TYPE, TYP_DBFLD));
+                    aReq.AppendItem( SfxStringItem( FN_INSERT_DBFIELD, sDBName ));
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, sCommandArg ));
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_2, sColumnName ));
+                    aReq.AppendItem( SfxInt32Item( FN_PARAM_3, nCommandTypeArg));
+                    aReq.Done();
+                }
             }
             break;
 
