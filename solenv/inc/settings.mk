@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: patrick.luby $ $Date: 2000-09-25 15:42:58 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-28 11:47:11 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -40,13 +40,17 @@ dmake_test_version:
 SOLARVERSION=$(SOLARVER)$/$(UPD)
 .ENDIF
 
+.IF "$(OS)"=="MACOSX"
 BUILDTYPE:=${WORK_STAMP:s/$(UPD)//}
-.IF "$(BUILDTYPE)=="UDK"
+.IF "$(BUILDTYPE)"=="UDK"
 .INCLUDE : udkminor.mk
 .ELSE
 # Default to "SRC" build type
 .INCLUDE : minor.mk
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+.INCLUDE : minor.mk
+.ENDIF			# "$(OS)"=="MACOSX"	
 
 .IF "$(BUILD_SOSL)"==""
 
@@ -896,6 +900,7 @@ SOLARRESXDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/$(SOLARLANG)
 .ENDIF
 SOLARBINDIR=$(SOLARVERSION)$/$(INPATH)$/bin$(EXT_UPDMINOR)
 SOLARUCRDIR=$(SOLARVERSION)$/$(INPATH)$/ucr$(EXT_UPDMINOR)
+SOLARPARDIR=$(SOLARVERSION)$/$(INPATH)$/par$(EXT_UPDMINOR)
 
 # Full-Debug Pfade
 .IF "$(debug)" != ""
@@ -1066,6 +1071,9 @@ ZIPUPDATE=-u -j
 ZIPFLAGS=$(ZIPUPDATE)
 #hack for dynamic language subdirs
 LANGDIR=LANGDIR
+
+#scplinker flags
+SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
 
 .IF "$(make_srs_deps)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
