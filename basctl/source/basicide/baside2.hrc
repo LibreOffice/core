@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+ *  last change: $Author: tbe $ $Date: 2002-11-19 10:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 // RID_POPUP_BRKDLG
 #define RID_BRKDLG              1
+
+// RID_POPUP_TABBAR
+#define RID_INSERT              1
 
 
 // BasicTreeListBox

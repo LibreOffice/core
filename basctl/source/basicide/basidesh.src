@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 17:31:55 $
+ *  last change: $Author: tbe $ $Date: 2002-11-19 10:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2779,6 +2779,7 @@ Menu RID_POPUP_TABBAR
     {
         MenuItem
         {
+            Identifier = RID_INSERT ;
             /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
             Text = "Einfügen" ;
             Text [ ENGLISH ] = "Insert" ;
