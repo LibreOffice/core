@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-09 12:09:18 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 10:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,13 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr )
+                pMgr                ( rPara.pResMgr ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
 
-
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/EPS" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     // Config-Parameter lesen
     String sPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
@@ -205,6 +205,7 @@ IMPL_LINK( DlgExportEPS, OK, void *, EMPTYARG )
     String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
     pConfigItem->WriteInt32( sTextMode, aLBTextMode.GetSelectEntryPos() );
 
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;

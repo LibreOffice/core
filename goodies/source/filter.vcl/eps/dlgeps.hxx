@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-28 15:40:36 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 10:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ class ResMgr;
 class DlgExportEPS : public ModalDialog
 {
 private:
+
+    FltCallDialogParameter& rFltCallPara;
+
     FixedLine           aGrpPreview;
     CheckBox            aCBPreviewTiff;
     CheckBox            aCBPreviewEPSI;
