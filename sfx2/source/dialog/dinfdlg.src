@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:35:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,11 +432,11 @@ TabPage TP_DOCINFODOC
         Text [ swedish ] = "Redigeringstid:" ;
         Text [ finnish ] = "Avattu:" ;
         Text [ english_us ] = "Edited:" ;
-        Text[ chinese_simplified ] = "±à¼­µÄÊ±¼ä£º";
+        Text[ chinese_simplified ] = "ÒÑ¾­±à¼­£º";
         Text[ russian ] = "Îòğåäàêòèğîâàí:";
         Text[ polish ] = "Opracowano:";
         Text[ japanese ] = "•ÒW“ú:";
-        Text[ chinese_traditional ] = "½s¿è¡G";
+        Text[ chinese_traditional ] = "¤w¸g½s¿è¡G";
         Text[ greek ] = "ÅğåîåñãÜóôçêå:";
         Text[ korean ] = "ÆíÁı:";
         Text[ arabic ] = "ãÍÑÑ:";
@@ -1055,6 +1055,7 @@ TabDialog SID_DOCINFO
         };
     };
 };
+
 
 
 
