@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:12:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
 #define CONFIGNAME_SEARCHPAGE   DEFINE_CONST_UNICODE("OfficeHelpSearch")
 #define IMAGE_URL               DEFINE_CONST_UNICODE("private:factory/")
+#define SHARED_FACTORY          DEFINE_CONST_UNICODE("shared")
 
 #define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
 #define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
@@ -957,8 +958,9 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
     DBG_ASSERT( rFactory.Len() > 0, "empty factory" );
+    String sSharedFactory( SHARED_FACTORY );
 
-    if ( rFactory != sFactory )
+    if ( rFactory != sFactory && rFactory != sSharedFactory )
     {
         sFactory = rFactory;
         ClearIndex();
