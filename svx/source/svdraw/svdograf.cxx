@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 11:52:33 $
+ *  last change: $Author: ka $ $Date: 2000-12-02 11:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,12 @@
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
 #endif
+
+// -----------
+// - Defines -
+// -----------
+
+#define GRAFSTREAMPOS_INVALID 0xffffffff
 
 #ifndef SVX_LIGHT
 
@@ -285,14 +291,10 @@ SdrGrafObj::SdrGrafObj():
 {
     pGraphic = new GraphicObject;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
-    nGrafStreamPos=0;
-    bSwappedOut = bNotLoaded = FALSE;
-    bNoShear=TRUE;
-
-#ifdef GRAFATTR
-//-/    pGrafAttr = NULL;
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
+    bNoShear = TRUE;
     bCopyToPoolOnAfterRead = FALSE;
-#endif // GRAFATTR
+//-/    pGrafAttr = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -304,14 +306,10 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
-    nGrafStreamPos = 0;
-    bSwappedOut = bNotLoaded = FALSE;
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
-
-#ifdef GRAFATTR
-//-/    pGrafAttr = NULL;
     bCopyToPoolOnAfterRead = FALSE;
-#endif // GRAFATTR
+//-/    pGrafAttr = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -322,14 +320,10 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
-    nGrafStreamPos = 0;
-    bSwappedOut = bNotLoaded = FALSE;
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
-
-#ifdef GRAFATTR
-//-/    pGrafAttr = NULL;
     bCopyToPoolOnAfterRead = FALSE;
-#endif // GRAFATTR
+//-/    pGrafAttr = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -338,10 +332,7 @@ SdrGrafObj::~SdrGrafObj()
 {
     delete pGraphic;
     ImpLinkAbmeldung();
-
-#ifdef GRAFATTR
 //-/    pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, NULL, FALSE );
-#endif // GRAFATTR
 }
 
 // -----------------------------------------------------------------------------
@@ -350,8 +341,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
-    nGrafStreamPos = 0;
-    bSwappedOut = bNotLoaded = FALSE;
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     SendRepaintBroadcast();
 }
@@ -369,8 +359,7 @@ const GraphicObject& SdrGrafObj::GetGraphicObject() const
 void SdrGrafObj::SetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
-    nGrafStreamPos = 0;
-    bSwappedOut = bNotLoaded = FALSE;
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     SendRepaintBroadcast();
 }
@@ -693,7 +682,7 @@ void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rTe
         long        nRectHgt=aTextRect.Bottom()-aTextRect.Top();
         long        nBmpWdt=aBmpSize.Width();
         long        nBmpHgt=aBmpSize.Height();
-        BOOL bText(rText.Len());
+        BOOL        bText = rText.Len() > 0;
 
         long nMinWdt = nBmpWdt;
         long nMinHgt = nBmpHgt;
@@ -879,15 +868,16 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     if(OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() && bEmptyPresObj)
         return TRUE;
 
-    FASTBOOL      bDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF));
-    FASTBOOL      bLoading=FALSE;
-    OutputDevice* pOutDev=rOut.GetOutDev();
-    OutDevType    eOutDevType=pOutDev!=NULL ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW;
-    FASTBOOL      bJustFillCache=pOutDev==NULL;
-    FASTBOOL      bPrn=!bJustFillCache && eOutDevType==OUTDEV_PRINTER;
-    GDIMetaFile*  pRecMetaFile=!bJustFillCache ? pOutDev->GetConnectMetaFile() : NULL;
-    FASTBOOL      bMtfRecording=pRecMetaFile!=NULL && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause();
-    const SdrView* pView=rInfoRec.pPV!=NULL ? &rInfoRec.pPV->GetView() : NULL;
+    FASTBOOL        bDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF));
+    FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE );
+    FASTBOOL        bLoading=FALSE;
+    OutputDevice*   pOutDev=rOut.GetOutDev();
+    OutDevType      eOutDevType=pOutDev!=NULL ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW;
+    FASTBOOL        bJustFillCache=pOutDev==NULL;
+    FASTBOOL        bPrn=!bJustFillCache && eOutDevType==OUTDEV_PRINTER;
+    GDIMetaFile*    pRecMetaFile=!bJustFillCache ? pOutDev->GetConnectMetaFile() : NULL;
+    FASTBOOL        bMtfRecording=pRecMetaFile!=NULL && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause();
+    const SdrView*  pView=rInfoRec.pPV!=NULL ? &rInfoRec.pPV->GetView() : NULL;
 
     if( !bDraft && bSwappedOut )
     {
@@ -908,16 +898,18 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     }
 #endif
 
-    GraphicType eType = pGraphic->GetType();
-
-    if( eType == GRAPHIC_NONE || eType == GRAPHIC_DEFAULT || bSwappedOut )
+    if( pGraphic->IsSwappedOut() ||
+        pGraphic->GetType() == GRAPHIC_NONE ||
+        pGraphic->GetType() == GRAPHIC_DEFAULT )
+    {
         bDraft=TRUE;
+    }
 
     long          nDrehWink = aGeo.nDrehWink;
     long          nShearWink = aGeo.nShearWink;
     USHORT        nMirrorCase = 0;
     FASTBOOL      bCache = pModel != NULL && pModel->IsBitmapCaching();
-    FASTBOOL      bBmp = eType == GRAPHIC_BITMAP;
+    FASTBOOL      bBmp = ( pGraphic->GetType() == GRAPHIC_BITMAP );
     FASTBOOL      bRotate = nDrehWink!=0 && nDrehWink!=18000;
     FASTBOOL      bShear = nShearWink!=0;
     FASTBOOL      bMirror = bMirrored;
@@ -936,14 +928,9 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
     if( !bEmptyPresObj && !bDraft )
     {
-        Point   aLogPos( aRect.TopLeft() );
-        Size    aLogSize( aRect.GetSize() );
-
-#ifdef GRAFATTR
+        Point       aLogPos( aRect.TopLeft() );
+        Size        aLogSize( aRect.GetSize() );
         GraphicAttr aAttr( aGrafInfo );
-#else // GRAFATTR
-        GraphicAttr aAttr;
-#endif // GRAFATTR
 
         aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
 
@@ -1137,10 +1124,8 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
     if( rGraf.pGraphicLink != NULL)
         SetGraphicLink( aFileName, aFilterName );
 
-#ifdef GRAFATTR
 //-/    if( ( pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, ( (SdrGrafObj&) rObj ).pGrafAttr ) ) != NULL )
         ImpSetAttrToGrafInfo();
-#endif // GRAFATTR
 }
 
 // -----------------------------------------------------------------------------
@@ -1275,10 +1260,10 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
     if( bChg )
     {
-        if( nGrafStreamPos !=0 )
+        if( GRAFSTREAMPOS_INVALID != nGrafStreamPos )
         {
             ForceSwapIn();
-            nGrafStreamPos = 0;
+            nGrafStreamPos = GRAFSTREAMPOS_INVALID;
         }
 
         if( pGraphicLink != NULL )
@@ -1424,7 +1409,6 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
     // ab V11
     rOut << (BOOL)( aFileName.Len() != 0 );
 
-#ifdef GRAFATTR
     SfxItemPool* pPool = GetItemPool();
 
     if(pPool)
@@ -1443,7 +1427,6 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
     }
     else
         rOut << UINT16( SFX_ITEMS_NULL );
-#endif // GRAFATTR
 
     ForceSwapOut();
 }
@@ -1525,15 +1508,14 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
     SdrRectObj::ReadData( rHead, rIn );
 
-    nGrafStreamPos = 0;
-    bSwappedOut = bNotLoaded = FALSE;
-
     SdrDownCompat   aCompat( rIn, STREAM_READ );
     FASTBOOL        bDelayedLoad = ( pModel != NULL ) && pModel->IsSwapGraphics();
 
 #ifdef DBG_UTIL
     aCompat.SetID("SdrGrafObj");
 #endif
+
+    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
 
     if( rHead.GetVersion() < 11 )
         ReadDataTilV10( rHead, rIn );
@@ -1562,8 +1544,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
                 rIn >> aGraphic;
                 pGraphic->SetGraphic( aGraphic );
             }
-            else
-                bNotLoaded = bSwappedOut = TRUE;
 
             // Ist die Grafik defekt, oder wurde nur eine leere Graphik eingelesen?
             // Daran soll mein Read jedoch nicht scheitern.
@@ -1590,8 +1570,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
         rIn.ReadByteString(aFilterName);
 
         rIn >> bGraphicLink;                    // auch dieses Flag ist neu in V11
-
-#ifdef GRAFATTR
 
         if( aCompat.GetBytesLeft() > 0 )
         {
@@ -1625,8 +1603,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
         else
             bCopyToPoolOnAfterRead = TRUE;
 
-#endif // GRAFATTR
-
         if( bGraphicLink && aFileName.Len() && aFilterName.Len() )
         {
 #ifndef SVX_LIGHT
@@ -1638,8 +1614,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
                 pGraphicLink->UpdateSynchron();
                 pModel->SetChanged( bIsChanged );
             }
-            else
-                bNotLoaded = bSwappedOut = TRUE;
 #else
             SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
 
@@ -1797,8 +1771,6 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
 }
 
 // -----------------------------------------------------------------------------
-
-#ifdef GRAFATTR
 
 void SdrGrafObj::AfterRead()
 {
@@ -2004,8 +1976,6 @@ void SdrGrafObj::ImpSetGrafInfoToAttr()
     SetItem( SdrGrafCropItem( aGrafInfo.GetLeftCrop(), aGrafInfo.GetTopCrop(), aGrafInfo.GetRightCrop(), aGrafInfo.GetBottomCrop() ) );
 }
 
-#endif // GRAFATTR
-
 // -----------------------------------------------------------------------------
 
 void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, BOOL bShrinkOnly )
@@ -2085,68 +2055,57 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             {
                 const ULONG nSwapMode = pModel->GetSwapGraphicsMode();
 
-                if( ( nGrafStreamPos || pGraphicLink ) && ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
+                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphicLink ) &&
+                    ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
                 {
                     pRet = NULL;
-                    bSwappedOut = bNotLoaded = TRUE;
                 }
                 else if( nSwapMode & SDR_SWAPGRAPHICSMODE_TEMP )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-                    nGrafStreamPos = 0;
-                    bSwappedOut = TRUE;
-                    bNotLoaded = FALSE;
+                    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
                 }
             }
         }
     }
     else if( pO->IsInSwapIn() )
     {
-        if( bSwappedOut )
+        // kann aus dem original Doc-Stream nachgeladen werden...
+        if( pModel != NULL )
         {
-            if( bNotLoaded )
+            if( GRAFSTREAMPOS_INVALID != nGrafStreamPos )
             {
-                // kann aus dem original Doc-Stream nachgeladen werden...
-                if( pModel != NULL )
+                FASTBOOL    bDeleteStream = FALSE;
+                SvStream*   pStream = pModel->GetDocumentStream( bDeleteStream );
+
+                if( pStream != NULL )
                 {
-                    if( nGrafStreamPos )
-                    {
-                        FASTBOOL    bDeleteStream = FALSE;
-                        SvStream*   pStream = pModel->GetDocumentStream( bDeleteStream );
+                    Graphic aGraphic;
 
-                        if( pStream != NULL )
-                        {
-                            Graphic aGraphic;
+                    pStream->Seek( nGrafStreamPos );
+                    *pStream >> aGraphic;
+                    pGraphic->SetGraphic( aGraphic );
+                    pStream->ResetError();
 
-                            pStream->Seek( nGrafStreamPos );
-                            *pStream >> aGraphic;
-                            pGraphic->SetGraphic( aGraphic );
-                            pStream->ResetError();
+                    if( bDeleteStream )
+                        delete pStream;
 
-                            if( bDeleteStream )
-                                delete pStream;
-
-                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-                            bNotLoaded = bSwappedOut = FALSE;
-                        }
-                    }
-#ifndef SVX_LIGHT
-                    else if( pGraphicLink )
-                    {
-                        BOOL bIsChanged = pModel->IsChanged();
-                        pGraphicLink->UpdateSynchron();
-                        pModel->SetChanged( bIsChanged );
-                        bNotLoaded = bSwappedOut = FALSE;
-                    }
-#endif
+                    pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                 }
             }
-            else
+#ifndef SVX_LIGHT
+            else if( pGraphicLink )
             {
-                pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-                bNotLoaded = bSwappedOut = FALSE;
+                BOOL bIsChanged = pModel->IsChanged();
+                pGraphicLink->UpdateSynchron();
+                pModel->SetChanged( bIsChanged );
             }
+#endif
+            else
+                pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
         }
+        else
+            pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
     return (long)(void*) pRet;
