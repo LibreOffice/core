@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-17 09:33:10 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 
 #define _SVX_CHARDLG_CXX
 
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 #include "dialogs.hrc"
 #include "svxitems.hrc"
 #include "chardlg.hrc"
@@ -1715,37 +1718,12 @@ BOOL SvxCharExtPage::FillItemSet( SfxItemSet& rSet )
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     FASTBOOL bChecked = FALSE;
 
-#if ( SUPD < 590 )
-    if ( aCapsBtn.IsChecked() )
-    {
-        eCaseMap = SVX_CASEMAP_VERSALIEN;
-        bChecked = TRUE;
-    }
-    else if ( aLowercaseBtn.IsChecked() )
-    {
-        eCaseMap = SVX_CASEMAP_GEMEINE;
-        bChecked = TRUE;
-    }
-    else if ( aSmallcapsBtn.IsChecked() )
-    {
-        eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
-        bChecked = TRUE;
-    }
-    else if ( aTitelBtn.IsChecked() )
-    {
-        eCaseMap = SVX_CASEMAP_TITEL;
-        bChecked = TRUE;
-    }
-    else if ( aNoneBtn.IsChecked() )
-        bChecked = TRUE;
-#else
     USHORT nCapsPos = aCapsLB.GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eCaseMap = (SvxCaseMap)nCapsPos;
         bChecked = TRUE;
     }
-#endif
 
     if ( pOld )
     {
@@ -1754,13 +1732,6 @@ BOOL SvxCharExtPage::FillItemSet( SfxItemSet& rSet )
         if ( (SvxCaseMap)rItem.GetValue() == eCaseMap )
             bChanged = FALSE;
     }
-
-#if ( SUPD < 590 )
-    if ( !bChanged && !aNoneBtn.GetSavedValue() &&
-         !aCapsBtn.GetSavedValue() && !aLowercaseBtn.GetSavedValue() &&
-         !aSmallcapsBtn.GetSavedValue() && !aTitelBtn.GetSavedValue() )
-        bChanged = TRUE;
-#endif
 
     if ( bChanged && bChecked )
     {
@@ -2263,15 +2234,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
     aExampleWin.Invalidate();
 
     // Alte Einstellungen merken
-#if ( SUPD < 590 )
-    aNoneBtn.SaveValue();
-    aCapsBtn.SaveValue();
-    aLowercaseBtn.SaveValue();
-    aSmallcapsBtn.SaveValue();
-    aTitelBtn.SaveValue();
-#else
     aCapsLB.SaveValue();
-#endif
     aHighBtn.SaveValue();
     aNormalBtn.SaveValue();
     aDeepBtn.SaveValue();
@@ -2309,16 +2272,7 @@ void SvxCharExtPage::DisableControls( USHORT nDisable )
 {
     if ( DISABLE_CASEMAP & nDisable )
     {
-#if ( SUPD < 590 )
-        aNoneBtn.Disable();
-        aCapsBtn.Disable();
-        aLowercaseBtn.Disable();
-        aSmallcapsBtn.Disable();
-        aTitelBtn.Disable();
-        aEffectBox.Disable();
-#else
         aCapsLB.Disable();
-#endif
     }
 
     if ( DISABLE_WORDLINE & nDisable )
@@ -2341,15 +2295,7 @@ SvxCharExtPage::SvxCharExtPage( Window* pParent, const SfxItemSet& rAttr ):
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_EXT ), rAttr ),
 
-#if ( SUPD < 590 )
-    aNoneBtn        ( this, ResId( BTN_NONE ) ),
-    aCapsBtn        ( this, ResId( BTN_CAPS ) ),
-    aLowercaseBtn   ( this, ResId( BTN_LOWERCASE ) ),
-    aSmallcapsBtn   ( this, ResId( BTN_SMALLCAPS ) ),
-    aTitelBtn       ( this, ResId( BTN_TITEL ) ),
-#else
     aCapsLB         ( this, ResId( LB_CAPS ) ),
-#endif
     aFlashBox       ( this, ResId( CB_FLASH ) ),
     aEffectBox      ( this, ResId( GB_EFFECT ) ),
     aHighBtn        ( this, ResId( BTN_HIGH ) ),
@@ -2402,11 +2348,6 @@ SvxCharExtPage::SvxCharExtPage( Window* pParent, const SfxItemSet& rAttr ):
             aEscRelPosEdit   .Hide();
             aEscRelSizeText  .Hide();
             aEscRelSizeEdit  .Hide();
-#if ( SUPD < 590 )
-            aCapsBtn         .Hide();
-            aLowercaseBtn    .Hide();
-            aTitelBtn        .Hide();
-#endif
             aUnderlineText   .Hide();
             aUnderlineBox    .Hide();
             aWordBox         .Hide();
@@ -2421,14 +2362,6 @@ SvxCharExtPage::SvxCharExtPage( Window* pParent, const SfxItemSet& rAttr ):
             }
             if ( !( nHtmlMode & HTMLMODE_BLINK ) )
                 aFlashBox.Hide();
-#if ( SUPD < 590 )
-            else
-                aFlashBox.SetPosPixel( aLowercaseBtn.GetPosPixel() );
-            if ( nHtmlMode & HTMLMODE_SMALL_CAPS )
-                aSmallcapsBtn.SetPosPixel( aCapsBtn.GetPosPixel() );
-            else
-                aSmallcapsBtn.Hide();
-#endif
             Point aPos = aPosExtBox.GetPosPixel();
             Point aXPos = aExampleBox.GetPosPixel();
             int nYDiff = aXPos.Y() - aPos.Y();
@@ -2637,15 +2570,7 @@ int SvxCharExtPage::DeactivatePage( SfxItemSet* pSet )
 void SvxCharExtPage::SetHandler_Impl()
 {
     Link aLink = LINK( this, SvxCharExtPage, CaseMapHdl_Impl );
-#if ( SUPD < 590 )
-    aNoneBtn.SetClickHdl( aLink );
-    aCapsBtn.SetClickHdl( aLink );
-    aLowercaseBtn.SetClickHdl( aLink );
-    aSmallcapsBtn.SetClickHdl( aLink );
-    aTitelBtn.SetClickHdl( aLink );
-#else
     aCapsLB.SetSelectHdl( aLink );
-#endif
 
     aLink = LINK( this, SvxCharExtPage, EscapementHdl_Impl );
     aHighBtn.SetClickHdl( aLink );
@@ -2687,31 +2612,13 @@ void SvxCharExtPage::SetHandler_Impl()
 
 // -----------------------------------------------------------------------
 
-#if ( SUPD < 590 )
-IMPL_LINK( SvxCharExtPage, CaseMapHdl_Impl, RadioButton *, pBox )
-#else
 IMPL_LINK( SvxCharExtPage, CaseMapHdl_Impl, ListBox *, EMPTYARG )
-#endif
 {
     SvxCaseMap eMap = SVX_CASEMAP_NOT_MAPPED;
 
-#if ( SUPD < 590 )
-    if ( !pBox->IsChecked() )
-        return 0;
-
-    if ( pBox == &aCapsBtn )
-        eMap = SVX_CASEMAP_VERSALIEN;
-    else if ( pBox == &aLowercaseBtn )
-        eMap = SVX_CASEMAP_GEMEINE;
-    else if ( pBox == &aSmallcapsBtn )
-        eMap = SVX_CASEMAP_KAPITAELCHEN;
-    else if ( pBox == &aTitelBtn )
-        eMap = SVX_CASEMAP_TITEL;
-#else
     USHORT nCapsPos = aCapsLB.GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
         eMap = (SvxCaseMap)nCapsPos;
-#endif
 
     SetCaseMap_Impl( eMap );
     return 0;
@@ -2721,26 +2628,6 @@ IMPL_LINK( SvxCharExtPage, CaseMapHdl_Impl, ListBox *, EMPTYARG )
 
 void SvxCharExtPage::SetCaseMap_Impl( USHORT eMap )
 {
-#if ( SUPD < 590 )
-    switch ( eMap  )
-    {
-        case SVX_CASEMAP_VERSALIEN:     aCapsBtn.Check( TRUE );         break;
-        case SVX_CASEMAP_GEMEINE:       aLowercaseBtn.Check( TRUE );    break;
-        case SVX_CASEMAP_TITEL:         aTitelBtn.Check( TRUE );        break;
-        case SVX_CASEMAP_KAPITAELCHEN:  aSmallcapsBtn.Check( TRUE );    break;
-        case SVX_CASEMAP_NOT_MAPPED:    aNoneBtn.Check( TRUE );         break;
-        case SVX_CASEMAP_END:
-            aCapsBtn.Check( FALSE );
-            aLowercaseBtn.Check( FALSE );
-            aTitelBtn.Check( FALSE );
-            aSmallcapsBtn.Check( FALSE );
-            aNoneBtn.Check( FALSE );
-            break;
-        default: DBG_ASSERT(FALSE, "Falscher CaseMap"); return;
-    }
-    if ( eMap == SVX_CASEMAP_END )
-        eMap = SVX_CASEMAP_NOT_MAPPED;
-#else
     if ( SVX_CASEMAP_END > (SvxCaseMap)eMap )
         aCapsLB.SelectEntryPos( eMap );
     else
@@ -2748,7 +2635,6 @@ void SvxCharExtPage::SetCaseMap_Impl( USHORT eMap )
         aCapsLB.SetNoSelection();
         eMap = SVX_CASEMAP_NOT_MAPPED;
     }
-#endif
 
     aExampleWin.GetFont().SetCaseMap( (SvxCaseMap)eMap );
     aExampleWin.Invalidate();
@@ -3061,13 +2947,13 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
     m_aWestLine             ( this, ResId( FL_WEST ) ),
     m_aWestFontNameFT       ( this, ResId( FT_WEST_NAME ) ),
-    m_aWestFontNameLB       ( this, ResId( LB_WEST_NAME ) ),
+    m_pWestFontNameLB(new FontNameBox( this, ResId( LB_WEST_NAME ) )),
     m_aWestFontStyleFT      ( this, ResId( FT_WEST_STYLE ) ),
-    m_aWestFontStyleLB      ( this, ResId( LB_WEST_STYLE ) ),
+    m_pWestFontStyleLB(new FontStyleBox( this, ResId( LB_WEST_STYLE ) )),
     m_aWestFontSizeFT       ( this, ResId( FT_WEST_SIZE ) ),
-    m_aWestFontSizeLB       ( this, ResId( LB_WEST_SIZE ) ),
+    m_pWestFontSizeLB( new FontSizeBox       ( this, ResId( LB_WEST_SIZE ) )),
     m_aWestFontLanguageFT   ( this, ResId( FT_WEST_LANG ) ),
-    m_aWestFontLanguageLB   ( this, ResId( LB_WEST_LANG )),
+    m_pWestFontLanguageLB(new SvxLanguageBox( this, ResId( LB_WEST_LANG ))),
 
     m_aEastLine             ( this, ResId( FL_EAST ) ),
     m_aEastFontNameFT       ( this, ResId( FT_EAST_NAME ) ),
@@ -3096,7 +2982,55 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
     FreeResource();
 
-    m_aWestFontLanguageLB.SetLanguageList( LANG_LIST_WESTERN, FALSE, FALSE );
+    SvtCJKOptions aCJKOptions;
+    if(!aCJKOptions.IsCJKFontEnabled())
+    {
+        m_aEastLine           .Hide();
+        m_aEastFontNameFT     .Hide();
+        m_aEastFontNameLB     .Hide();
+        m_aEastFontStyleFT    .Hide();
+        m_aEastFontStyleLB    .Hide();
+        m_aEastFontSizeFT     .Hide();
+        m_aEastFontSizeLB     .Hide();
+        m_aEastFontLanguageFT .Hide();
+        m_aEastFontLanguageLB .Hide();
+        FontNameBox* pTempName = new FontNameBox(this, m_pWestFontNameLB->GetStyle() & ~WB_DROPDOWN);
+        Point aPos(m_pWestFontNameLB->GetPosPixel());
+        Point aEastPos = m_aEastFontNameLB.GetPosPixel();
+        long nHeight = aEastPos.Y() - aPos.Y();
+        Size aSize = m_pWestFontNameLB->GetSizePixel();
+        aSize.Height() += nHeight;
+        pTempName->SetPosSizePixel(aPos,  aSize);
+        pTempName->Show();
+        delete m_pWestFontNameLB;
+        m_pWestFontNameLB = pTempName;
+
+        FontStyleBox* pTempStyle = new FontStyleBox( this, m_pWestFontStyleLB->GetStyle() & ~WB_DROPDOWN);
+        aSize = m_pWestFontStyleLB->GetSizePixel();
+        aSize.Height() += nHeight;
+        pTempStyle->SetPosSizePixel(m_pWestFontStyleLB->GetPosPixel(),  aSize);
+        pTempStyle->Show();
+        delete m_pWestFontStyleLB;
+        m_pWestFontStyleLB = pTempStyle;
+
+        FontSizeBox* pTempSize = new FontSizeBox( this, m_pWestFontSizeLB->GetStyle() & ~WB_DROPDOWN);
+        aSize = m_pWestFontSizeLB->GetSizePixel();
+        aSize.Height() += nHeight;
+        pTempSize->SetPosSizePixel(m_pWestFontSizeLB->GetPosPixel(),  aSize);
+        pTempSize->Show();
+        delete m_pWestFontSizeLB;
+        m_pWestFontSizeLB = pTempSize;
+
+        SvxLanguageBox* pTempLang = new SvxLanguageBox( this, m_pWestFontLanguageLB->GetStyle() & ~WB_DROPDOWN);
+        aSize = m_pWestFontLanguageLB->GetSizePixel();
+        aSize.Height() += nHeight;
+        pTempLang->SetPosSizePixel(m_pWestFontLanguageLB->GetPosPixel(),  aSize);
+        pTempLang->Show();
+        delete m_pWestFontLanguageLB;
+        m_pWestFontLanguageLB = pTempLang;
+    }
+
+    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN, FALSE, FALSE );
     m_aEastFontLanguageLB.SetLanguageList( LANG_LIST_CJK,     FALSE, FALSE );
 
     Initialize();
@@ -3109,6 +3043,10 @@ SvxCharNamePage::~SvxCharNamePage()
     if ( m_pImpl->m_bMustDelete )
         delete m_pImpl->m_pFontList;
     delete m_pImpl;
+    delete m_pWestFontLanguageLB;
+    delete m_pWestFontSizeLB;
+    delete m_pWestFontStyleLB;
+    delete m_pWestFontNameLB;
 }
 
 // -----------------------------------------------------------------------
@@ -3152,9 +3090,9 @@ void SvxCharNamePage::Initialize()
     m_aColorLB.SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
     Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
-    m_aWestFontNameLB.SetModifyHdl( aLink );
-    m_aWestFontStyleLB.SetModifyHdl( aLink );
-    m_aWestFontSizeLB.SetModifyHdl( aLink );
+    m_pWestFontNameLB->SetModifyHdl( aLink );
+    m_pWestFontStyleLB->SetModifyHdl( aLink );
+    m_pWestFontSizeLB->SetModifyHdl( aLink );
     m_aEastFontNameLB.SetModifyHdl( aLink );
     m_aEastFontStyleLB.SetModifyHdl( aLink );
     m_aEastFontSizeLB.SetModifyHdl( aLink );
@@ -3193,9 +3131,9 @@ void SvxCharNamePage::UpdatePreview_Impl()
     aSize.Width() = 0;
     // Font
     const FontList* pFontList = GetFontList();
-    FontInfo aFontInfo( pFontList->Get( m_aWestFontNameLB.GetText(), m_aWestFontStyleLB.GetText() ) );
+    FontInfo aFontInfo( pFontList->Get( m_pWestFontNameLB->GetText(), m_pWestFontStyleLB->GetText() ) );
     // Size
-    if ( m_aWestFontSizeLB.IsRelative() )
+    if ( m_pWestFontSizeLB->IsRelative() )
     {
         DBG_ASSERT( GetItemSet().GetParent(), "No parent set" );
         USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
@@ -3203,17 +3141,17 @@ void SvxCharNamePage::UpdatePreview_Impl()
 
         // alter Wert, skaliert
         long nHeight;
-        if ( m_aWestFontSizeLB.IsPtRelative() )
-            nHeight = rOldItem.GetHeight() + PointToTwips( m_aWestFontSizeLB.GetValue() / 10 );
+        if ( m_pWestFontSizeLB->IsPtRelative() )
+            nHeight = rOldItem.GetHeight() + PointToTwips( m_pWestFontSizeLB->GetValue() / 10 );
         else
-            nHeight = rOldItem.GetHeight() * m_aWestFontSizeLB.GetValue() / 100;
+            nHeight = rOldItem.GetHeight() * m_pWestFontSizeLB->GetValue() / 100;
 
         // Umrechnung in twips fuer das Beispiel-Window
         aSize.Height() =
             ItemToControl( nHeight, GetItemSet().GetPool()->GetMetric( nWhich ), SFX_FUNIT_TWIP );
     }
-    else if ( m_aWestFontSizeLB.GetText().Len() )
-        aSize.Height() = PointToTwips( m_aWestFontSizeLB.GetValue() / 10 );
+    else if ( m_pWestFontSizeLB->GetText().Len() )
+        aSize.Height() = PointToTwips( m_pWestFontSizeLB->GetValue() / 10 );
     else
         aSize.Height() = 200;   // default 10pt
     aFontInfo.SetSize( aSize );
@@ -3238,8 +3176,8 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pBox )
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    if ( &m_aWestFontNameLB == pBox )
-        m_aWestFontStyleLB.Fill( m_aWestFontNameLB.GetText(), pFontList );
+    if ( m_pWestFontNameLB == pBox )
+        m_pWestFontStyleLB->Fill( m_pWestFontNameLB->GetText(), pFontList );
     else if ( &m_aEastFontNameLB == pBox )
         m_aEastFontStyleLB.Fill( m_aEastFontNameLB.GetText(), pFontList );
     else
@@ -3254,11 +3192,11 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pBox )
         String aEntry = m_pImpl->m_aNoStyleText;
         const sal_Char sS[] = "%s";
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
-        m_pImpl->m_nExtraEntryPos = ( &m_aWestFontNameLB == pBox )
-            ? m_aWestFontStyleLB.InsertEntry( aEntry ) : m_aEastFontStyleLB.InsertEntry( aEntry );
+        m_pImpl->m_nExtraEntryPos = ( m_pWestFontNameLB == pBox )
+            ? m_pWestFontStyleLB->InsertEntry( aEntry ) : m_aEastFontStyleLB.InsertEntry( aEntry );
         aEntry = m_pImpl->m_aNoStyleText;
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetItalicStr() );
-        ( &m_aWestFontNameLB == pBox ) ? m_aWestFontStyleLB.InsertEntry( aEntry )
+        ( m_pWestFontNameLB == pBox ) ? m_pWestFontStyleLB->InsertEntry( aEntry )
                                        : m_aEastFontStyleLB.InsertEntry( aEntry );
     }
 }
@@ -3270,9 +3208,9 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    if ( &m_aWestFontNameLB == pBox )
-        m_aWestFontSizeLB.Fill( pFontList->Get( m_aWestFontNameLB.GetText(),
-                                                m_aWestFontStyleLB.GetText() ), pFontList );
+    if ( m_pWestFontNameLB == pBox )
+        m_pWestFontSizeLB->Fill( pFontList->Get( m_pWestFontNameLB->GetText(),
+                                                m_pWestFontStyleLB->GetText() ), pFontList );
     else if ( &m_aEastFontNameLB == pBox )
         m_aEastFontSizeLB.Fill( pFontList->Get( m_aEastFontNameLB.GetText(),
                                                 m_aEastFontStyleLB.GetText() ), pFontList );
@@ -3286,14 +3224,14 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
 
 void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 {
-    FontNameBox* pNameBox = bWest ? &m_aWestFontNameLB : &m_aEastFontNameLB;
+    FontNameBox* pNameBox = bWest ? m_pWestFontNameLB : &m_aEastFontNameLB;
     FixedText* pNameLabel = bWest ? &m_aWestFontNameFT : &m_aEastFontNameFT;
-    FontStyleBox* pStyleBox = bWest ? &m_aWestFontStyleLB : &m_aEastFontStyleLB;
+    FontStyleBox* pStyleBox = bWest ? m_pWestFontStyleLB : &m_aEastFontStyleLB;
     FixedText* pStyleLabel = bWest ? &m_aWestFontStyleFT : &m_aEastFontStyleFT;
-    FontSizeBox* pSizeBox = bWest ? &m_aWestFontSizeLB : &m_aEastFontSizeLB;
+    FontSizeBox* pSizeBox = bWest ? m_pWestFontSizeLB : &m_aEastFontSizeLB;
     FixedText* pSizeLabel = bWest ? &m_aWestFontSizeFT : &m_aEastFontSizeFT;
     FixedText* pLangFT = bWest ? &m_aWestFontLanguageFT : &m_aEastFontLanguageFT;
-    SvxLanguageBox* pLangBox = bWest ? &m_aWestFontLanguageLB : &m_aEastFontLanguageLB;
+    SvxLanguageBox* pLangBox = bWest ? m_pWestFontLanguageLB : &m_aEastFontLanguageLB;
 
     // die FontListBox fuellen
     const FontList* pFontList = GetFontList();
@@ -3459,10 +3397,10 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
 {
     BOOL bModified = FALSE;
 
-    FontNameBox* pNameBox = bWest ? &m_aWestFontNameLB : &m_aEastFontNameLB;
-    FontStyleBox* pStyleBox = bWest ? &m_aWestFontStyleLB : &m_aEastFontStyleLB;
-    FontSizeBox* pSizeBox = bWest ? &m_aWestFontSizeLB : &m_aEastFontSizeLB;
-    SvxLanguageBox* pLangBox = bWest ? &m_aWestFontLanguageLB : &m_aEastFontLanguageLB;
+    FontNameBox* pNameBox = bWest ? m_pWestFontNameLB : &m_aEastFontNameLB;
+    FontStyleBox* pStyleBox = bWest ? m_pWestFontStyleLB : &m_aEastFontStyleLB;
+    FontSizeBox* pSizeBox = bWest ? m_pWestFontSizeLB : &m_aEastFontSizeLB;
+    SvxLanguageBox* pLangBox = bWest ? m_pWestFontLanguageLB : &m_aEastFontLanguageLB;
 
     const SfxPoolItem* pItem = NULL;
     const SfxItemSet& rOldSet = GetItemSet();
@@ -3779,7 +3717,7 @@ IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pBox )
 {
     m_pImpl->m_aUpdateTimer.Start();
 
-    if ( &m_aWestFontNameLB == pBox || &m_aEastFontNameLB == pBox )
+    if ( m_pWestFontNameLB == pBox || &m_aEastFontNameLB == pBox )
     {
         FillStyleBox_Impl( (FontNameBox*)pBox );
         FillSizeBox_Impl( (FontNameBox*)pBox );
@@ -3944,7 +3882,7 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 void SvxCharNamePage::EnableRelativeMode()
 {
     DBG_ASSERT( GetItemSet().GetParent(), "RelativeMode, but no ParentSet!" );
-    m_aWestFontSizeLB.EnableRelativeMode( 0, 999 ); // min 0%, max 999%, step 5
+    m_pWestFontSizeLB->EnableRelativeMode( 0, 999 ); // min 0%, max 999%, step 5
 
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
     const SvxFontHeightItem& rWestItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
@@ -3954,7 +3892,7 @@ void SvxCharNamePage::EnableRelativeMode()
     // ausgehend von der akt. Hoehe:
     //      - negativ bis minimal 2 pt
     //      - positiv bis maximal 999 pt
-    m_aWestFontSizeLB.EnablePtRelativeMode( -(nCurHeight - 20), (9999 - nCurHeight), 10 );
+    m_pWestFontSizeLB->EnablePtRelativeMode( -(nCurHeight - 20), (9999 - nCurHeight), 10 );
 
     nWhich = GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT );
     const SvxFontHeightItem& rEastItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
@@ -4082,8 +4020,15 @@ void SvxCharEffectsPage::Initialize()
     aLink = LINK( this, SvxCharEffectsPage, ClickHdl_Impl );
     m_aOutlineBtn.SetClickHdl( aLink );
     m_aShadowBtn.SetClickHdl( aLink );
+    SvtCJKOptions aCJKOptions;
+    if(!aCJKOptions.IsAsianTypographyEnabled())
+    {
+        m_aEmphasisFT.Hide();
+        m_aEmphasisLB.Hide();
+        m_aPositionFT.Hide();
+        m_aPositionLB.Hide();
+    }
 }
-
 // -----------------------------------------------------------------------
 
 void SvxCharEffectsPage::UpdatePreview_Impl()

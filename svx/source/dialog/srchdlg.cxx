@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:41:34 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
@@ -313,7 +316,6 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
 
 // class SvxJSearchOptionsDialog -----------------------------------------
 
-
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
             Window *pParent,
             const SfxItemSet& rOptionsSet, USHORT nUniqueId, INT32 nInitialFlags ) :
@@ -500,6 +502,18 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     rBindings.LeaveRegistrations();
     NotifyApp( FID_SEARCH_ON );
     pImpl->aSelectionTimer.Start();
+
+
+    SvtCJKOptions aCJKOptions;
+    if(!aCJKOptions.IsJapaneseFindEnabled())
+    {
+        aJapOptionsCB.Hide();
+        aJapOptionsBtn.Hide();
+    }
+    if(!aCJKOptions.IsCJKFontEnabled())
+    {
+        aJapMatchFullHalfWidthCB.Hide();
+    }
 }
 
 // -----------------------------------------------------------------------
