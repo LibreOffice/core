@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:16:16 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3350,24 +3350,20 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
         }
     }
 
-    aM.SetAlternativeText( sFldTxt );
-
-    if( !aM.IsAlternativeText() )
-    {
-        pPaM->SetMark();
-        pPaM->GetMark()->nContent += aStr.Len();
-    }
-    rDoc.Insert( *pPaM, aM );
-    if( !aM.IsAlternativeText() )
-        pPaM->DeleteMark();
+    if (sFldTxt.Len())
+        {
+        aM.SetAlternativeText( sFldTxt );
+        rDoc.Insert( *pPaM, aM );
+        }
 }
 
 void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 {
-    const int nChunk = 64;  //number of characters to read at one time
     //Meaningless in a style
-    if (pAktColl)
+    if (pAktColl || !pPlcxMan)
         return;
+
+    const int nChunk = 64;  //number of characters to read at one time
 
     // Vorsicht: Bei Feldnamen mit Umlauten geht das MEMICMP nicht!
     const static sal_Char *aFldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
@@ -3388,7 +3384,8 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     bIgnoreText = true;
     long nOldPos = pStrm->Tell();
 
-    WW8_CP nStartCp = pSBase->WW8Fc2Cp( nOldPos );
+    WW8_CP nStartCp = pPlcxMan->Where() + pPlcxMan->GetCpOfs();
+
     String sFieldName;
     USHORT nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp,
         nChunk, eStructCharSet );
