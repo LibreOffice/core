@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:45:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
 }
 
 void SwXMLTextImportHelper::endAppletOrPlugin(
-        Reference < XPropertySet > &rPropSet,
+        const Reference < XPropertySet > &rPropSet,
         ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
