@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-16 06:56:05 $
+ *  last change: $Author: sb $ $Date: 2000-11-08 15:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
    ; private
    private-url = "PRIVATE:" path ["?" *uric]
    path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+
+
+   ; private
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://./" *DIGIT ["?" *uric]
 
 
    ; private
@@ -339,8 +343,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { "private", "private:", 0, false, false, false, false, false,
           false, false, true },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false },
+        { "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
+          false, false, false, true, true },
         { "https", "https://", 443, true, false, false, false, true, true,
           true, true },
         { "slot", "slot:", 0, false, false, false, false, false, false,
@@ -983,11 +987,25 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     pHostPortBegin = pAuthority;
                     pHostPortEnd = pPos;
                 }
-                else if (pPos != pAuthority)
-                {
-                    setInvalid();
-                    return false;
-                }
+                else
+                    switch (m_eScheme)
+                    {
+                        case INET_PROT_VND_SUN_STAR_HELP:
+                            if (pPos - pAuthority != 1 || *pAuthority != '.')
+                            {
+                                setInvalid();
+                                return false;
+                            }
+                            break;
+
+                        default:
+                            if (pPos != pAuthority)
+                            {
+                                setInvalid();
+                                return false;
+                            }
+                            break;
+                    }
                 break;
             }
         }
@@ -1833,6 +1851,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::EXTERNAL },
             { "vim:", "staroffice.vim:", INET_PROT_VIM,
               PrefixInfo::INTERNAL },
+            { "vnd.sun.star.help:", 0, INET_PROT_VND_SUN_STAR_HELP,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL } };
     PrefixInfo const * pFirst = aMap + 1;
@@ -2222,6 +2242,22 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             }
             break;
 
+        case INET_PROT_VND_SUN_STAR_HELP:
+            if (pPos == pEnd || *pPos++ != '/')
+            {
+                setInvalid();
+                return false;
+            }
+            while (pPos < pEnd && *pPos != nQueryDelimiter
+                   && *pPos != nFragmentDelimiter)
+                if (!INetMIME::isDigit(*pPos++))
+                {
+                    setInvalid();
+                    return false;
+                }
+            aTheSynPath = UniString(*pBegin, pPos - *pBegin);
+            break;
+
         case INET_PROT_JAVASCRIPT:
         case INET_PROT_DATA:
         case INET_PROT_CID:
@@ -2410,8 +2446,10 @@ bool INetURLObject::setPath(UniString const & rThePath, bool bOctets,
 {
     UniString aSynPath;
     sal_Unicode const * p = rThePath.GetBuffer();
-    if (!parsePath(&p, p + rThePath.Len(), bOctets, eMechanism, eCharset,
-                   false, '/', 0x80000000, 0x80000000, 0x80000000, &aSynPath))
+    sal_Unicode const * pEnd = p + rThePath.Len();
+    if (!parsePath(&p, pEnd, bOctets, eMechanism, eCharset, false, '/',
+                   0x80000000, 0x80000000, 0x80000000, &aSynPath)
+        || p != pEnd)
         return false;
     sal_Int32 nDelta = m_aPath.set(m_aAbsURIRef, aSynPath);
     m_aQuery += nDelta;
