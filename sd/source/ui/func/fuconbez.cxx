@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,7 @@ BOOL FuConstBezPoly::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SfxItemSet aAttr(pDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
-
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
-            pObj->SetItemSet(aAttr);
+            pObj->SetMergedItemSet(aAttr);
         }
     }
 
