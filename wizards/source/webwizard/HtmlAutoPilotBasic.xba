@@ -308,8 +308,19 @@ Dim LocMaxIndex as Integer
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
-	DirContent() = BubbleSortList(DirContent())
+	
 	LocMaxIndex = Ubound(DirContent())
+	
+	Dim SortList(LocMaxIndex,1)
+	For i = 0 to LocMaxIndex
+		SortList(i,0) = DirContent(i)
+		SortList(i,1) = RetrieveDocTitle(oDocInfo, DirContent(i))
+	Next i
+	SortList() = BubbleSortList(SortList(),True)
+	For i = 0 to LocMaxIndex
+		DirContent(i) = SortList(i,0)
+	Next i
+	
 	a = 0
 	For i = 0 To LocMaxIndex
 		FileName = DirContent(i)
