@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-04 14:22:39 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,10 @@
 #include <tools/shl.hxx>    //
 #include "dialmgr.hxx"      // not nice, we need our own resources some day
 #include "dialogs.hrc"      //
+
+#ifndef _SVDCAPT_HXX
+#include "svdocapt.hxx"
+#endif
 
 #ifndef _E3D_OBJ3D_HXX
 #include <obj3d.hxx>
@@ -1061,6 +1065,18 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
         switch( pMap->nWID )
         {
+        case OWN_ATTR_CAPTION_POINT:
+        {
+            awt::Point aPnt;
+            if( rVal >>= aPnt )
+            {
+                const Point aVclPoint( aPnt.X, aPnt.Y );
+                ((SdrCaptionObj*)pObj)->SetTailPos(aVclPoint);
+
+                return;
+            }
+            break;
+        }
         case OWN_ATTR_TRANSFORMATION:
         {
             drawing::HomogenMatrix3 aMatrix;
@@ -1566,6 +1582,13 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
+            case OWN_ATTR_CAPTION_POINT:
+            {
+                const Point& aVclPnt = ((SdrCaptionObj*)pObj)->GetTailPos();
+                awt::Point aPnt( aVclPnt.X(), aVclPnt.Y() );
+                aAny <<= aPnt;
+                break;
+            }
             case OWN_ATTR_INTERNAL_OLE:
             {
 #ifndef SVX_LIGHT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,6 @@
 
 ///////////////////////////////////////////////////////////////////////
 
-extern SfxItemPropertyMap* ImplGetSvxOle2PropertyMap();
-extern SfxItemPropertyMap* ImplGetSvxPluginPropertyMap();
-extern SfxItemPropertyMap* ImplGetSvxFramePropertyMap();
-extern SfxItemPropertyMap* ImplGetSvxAppletPropertyMap();
-
-///////////////////////////////////////////////////////////////////////
-
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::rtl;
@@ -104,7 +97,7 @@ using namespace ::com::sun::star::beans;
 ///////////////////////////////////////////////////////////////////////
 
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, ImplGetSvxOle2PropertyMap()  )
+: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2)  )
 {
 }
 
@@ -261,7 +254,7 @@ static void SvxImplFillCommandSequence( const SvCommandList& aCommands, Sequence
 ///////////////////////////////////////////////////////////////////////
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, ImplGetSvxAppletPropertyMap()  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET)  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
 }
@@ -409,7 +402,7 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
 ///////////////////////////////////////////////////////////////////////
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, ImplGetSvxPluginPropertyMap()  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN)  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
 }
@@ -533,7 +526,7 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
 ///////////////////////////////////////////////////////////////////////
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, ImplGetSvxFramePropertyMap()  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME)  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
 }

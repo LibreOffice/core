@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_FREEFILL:
                     pRet = new SvxShapePolyPolygonBezier( pObj , PolygonKind_FREEFILL );
                     break;
-                case OBJ_CAPTION:   // todo: caption?
+                case OBJ_CAPTION:
+                    pRet = new SvxShapeCaption( pObj );
+                    break;
                 case OBJ_TEXT:
                     pRet = new SvxShape( pObj );
                     break;

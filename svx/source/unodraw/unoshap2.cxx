@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:57:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "svdpage.hxx"
 #include "svdmodel.hxx"
 #include "svdouno.hxx"
+#include "shapeimpl.hxx"
 
 using namespace ::osl;
 using namespace ::vos;
@@ -603,12 +604,10 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 * class SvxShapeControl                                                *
 ***********************************************************************/
 
-extern SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap();
-
 uno::Sequence< uno::Type > SvxShapeControl::maTypeSequence;
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
-    SvxShape( pObj, ImplGetSvxControlShapePropertyMap() )
+    SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL) )
 {
 }
 
@@ -1805,4 +1804,15 @@ void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, drawing::P
         *pInnerSequence++ = awt::Point( rPolygon[b].X(), rPolygon[b].Y() );
         *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPolygon.GetFlags(b));
     }
+}
+
+///////////////////////////////////////////////////////////////////////
+
+SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
+: SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_CAPTION) )
+{
+}
+
+SvxShapeCaption::~SvxShapeCaption() throw()
+{
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,17 @@
 #include "unoshape.hxx"
 
 class SvGlobalName;
+
+/***********************************************************************
+*                                                                      *
+***********************************************************************/
+
+class SvxShapeCaption : public SvxShape
+{
+public:
+    SvxShapeCaption( SdrObject* pObj ) throw();
+    virtual ~SvxShapeCaption() throw();
+};
 
 /***********************************************************************
 *                                                                      *

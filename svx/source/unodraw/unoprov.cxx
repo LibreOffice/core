@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,29 @@ SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
     return aPageShapePropertyMap_Impl;
 }
 
+SfxItemPropertyMap* ImplGetSvxCaptionPropertyMap()
+{
+    static SfxItemPropertyMap aCaptionPropertyMap_Impl[] =
+    {
+        SPECIAL_CAPTION_PROPERTIES
+        EDGERADIUS_PROPERTIES
+        FILL_PROPERTIES
+        LINE_PROPERTIES
+        LINE_PROPERTIES_START_END
+        SHAPE_DESCRIPTOR_PROPERTIES
+        MISC_OBJ_PROPERTIES
+        LINKTARGET_PROPERTIES
+        SHADOW_PROPERTIES
+        TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
+        {0,0,0,0,0}
+    };
+
+    return aCaptionPropertyMap_Impl;
+}
+
+
 comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry aSvxDrawingDefaultsPropertyMap_Impl[] =
@@ -718,6 +741,13 @@ SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
             case SVXMAP_3DPOLYGONOBJECT: aMapArr[SVXMAP_3DPOLYGONOBJECT]=ImplGetSvx3DPolygonObjectPropertyMap(); break;
             case SVXMAP_ALL: aMapArr[SVXMAP_ALL]=ImplGetSvxAllPropertyMap(); break;
             case SVXMAP_GROUP: aMapArr[SVXMAP_GROUP]=ImplGetSvxGroupPropertyMap(); break;
+            case SVXMAP_CAPTION: aMapArr[SVXMAP_CAPTION]=ImplGetSvxCaptionPropertyMap(); break;
+            case SVXMAP_OLE2: aMapArr[SVXMAP_OLE2]=ImplGetSvxOle2PropertyMap(); break;
+            case SVXMAP_PLUGIN: aMapArr[SVXMAP_PLUGIN]=ImplGetSvxPluginPropertyMap(); break;
+            case SVXMAP_FRAME: aMapArr[SVXMAP_FRAME]=ImplGetSvxFramePropertyMap(); break;
+            case SVXMAP_APPLET: aMapArr[SVXMAP_APPLET]=ImplGetSvxAppletPropertyMap(); break;
+            case SVXMAP_CONTROL: aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
+
             default:
                 DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
