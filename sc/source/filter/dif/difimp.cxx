@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:23:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
 
     const BOOL  bPlain = aDifParser.IsPlain();
 
-    UINT16      nBaseTab = rInsPos.Tab();
+    SCTAB       nBaseTab = rInsPos.Tab();
 
     TOPIC       eTopic = T_UNKNOWN;
     BOOL        bSyntErrWarn = FALSE;
@@ -113,8 +113,8 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
     String&     rData = aDifParser.aData;
     BOOL        bData = FALSE;
 
-    UINT16      nNumCols = 0;
-    UINT16      nNumRows = 0;
+    SCCOL       nNumCols = 0;
+    SCROW       nNumRows = 0;
 
     rIn.Seek( 0 );
 
@@ -143,9 +143,9 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                 if( aDifParser.nVector != 0 )
                     bSyntErrWarn = TRUE;
                 if( aDifParser.nVal > MAXCOL + 1 )
-                    nNumCols = 0xFFFF;
+                    nNumCols = SCCOL_MAX;
                 else
-                    nNumCols = ( UINT16 ) aDifParser.nVal;
+                    nNumCols = static_cast<SCCOL>(aDifParser.nVal);
             }
                 break;
             case T_TUPLES:
@@ -153,9 +153,9 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                 if( aDifParser.nVector != 0 )
                     bSyntErrWarn = TRUE;
                 if( aDifParser.nVal > MAXROW + 1 )
-                    nNumRows = 0xFFFF;
+                    nNumRows = SCROW_MAX;
                 else
-                    nNumRows = ( UINT16 ) aDifParser.nVal;
+                    nNumRows = static_cast<SCROW>(aDifParser.nVal);
             }
                 break;
             case T_DATA:
@@ -187,10 +187,10 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
 
     if( eTopic == T_DATA )
     {   // Ab hier kommen die Daten
-        UINT16              nBaseCol = rInsPos.Col();
+        SCCOL               nBaseCol = rInsPos.Col();
 
-        UINT16              nColCnt = 0xFFFF;
-        UINT16              nRowCnt = rInsPos.Row();
+        SCCOL               nColCnt = SCCOL_MAX;
+        SCROW               nRowCnt = rInsPos.Row();
         UINT32              nHandleLogic = 0xFFFFFFFF;
         DifAttrCache        aAttrCache( bPlain );
 
@@ -205,17 +205,17 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
             switch( eAkt )
                 {
                 case D_BOT:
-                    if( nColCnt < 0xFFFF )
+                    if( nColCnt < SCCOL_MAX )
                         nRowCnt++;
                     nColCnt = nBaseCol;
                     break;
                 case D_EOD:
                     break;
                 case D_NUMERIC:                 // Numbercell
-                    if( nColCnt == 0xFFFF )
+                    if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
-                    if( nColCnt <= MAXCOL && nRowCnt <= MAXROW )
+                    if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
                         ScBaseCell*     pCell;
                         if( DifParser::IsV( rData.GetBuffer() ) )
@@ -252,10 +252,10 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                     nColCnt++;
                     break;
                 case D_STRING:                  // Textcell
-                    if( nColCnt == 0xFFFF )
+                    if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
-                    if( nColCnt <= MAXCOL && nRowCnt <= MAXROW )
+                    if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
                         if( rData.Len() > 0 )
                         {
@@ -787,9 +787,9 @@ DifColumn::~DifColumn( void )
 }
 
 
-void DifColumn::SetLogical( UINT16 nRow )
+void DifColumn::SetLogical( SCROW nRow )
 {
-    DBG_ASSERT( nRow <= MAXROW, "*DifColumn::SetLogical(): Row zu gross!" );
+    DBG_ASSERT( ValidRow(nRow), "*DifColumn::SetLogical(): Row zu gross!" );
 
     if( pAkt )
     {
@@ -809,9 +809,9 @@ void DifColumn::SetLogical( UINT16 nRow )
 }
 
 
-void DifColumn::SetNumFormat( UINT16 nRow, const UINT32 nNumFormat )
+void DifColumn::SetNumFormat( SCROW nRow, const UINT32 nNumFormat )
 {
-    DBG_ASSERT( nRow <= MAXROW, "*DifColumn::SetNumFormat(): Row zu gross!" );
+    DBG_ASSERT( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row zu gross!" );
 
     if( nNumFormat > 0 )
     {
@@ -835,7 +835,7 @@ void DifColumn::SetNumFormat( UINT16 nRow, const UINT32 nNumFormat )
 }
 
 
-void DifColumn::NewEntry( const UINT16 nPos, const UINT32 nNumFormat )
+void DifColumn::NewEntry( const SCROW nPos, const UINT32 nNumFormat )
 {
     pAkt = new ENTRY;
     pAkt->nStart = pAkt->nEnd = nPos;
@@ -844,7 +844,7 @@ void DifColumn::NewEntry( const UINT16 nPos, const UINT32 nNumFormat )
 }
 
 
-void DifColumn::Apply( ScDocument& rDoc, const UINT16 nCol, const UINT16 nTab, const ScPatternAttr& rPattAttr )
+void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& rPattAttr )
 {
     ENTRY*  pAkt = ( ENTRY* ) List::First();
 
@@ -857,7 +857,7 @@ void DifColumn::Apply( ScDocument& rDoc, const UINT16 nCol, const UINT16 nTab, c
 }
 
 
-void DifColumn::Apply( ScDocument& rDoc, const UINT16 nCol, const UINT16 nTab )
+void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
     ScPatternAttr   aAttr( rDoc.GetPool() );
     SfxItemSet&     rItemSet = aAttr.GetItemSet();
@@ -883,14 +883,14 @@ DifAttrCache::DifAttrCache( const BOOL bNewPlain )
 {
     bPlain = bNewPlain;
     ppCols = new DifColumn *[ MAXCOL + 1 ];
-    for( UINT16 nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
+    for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
         ppCols[ nCnt ] = NULL;
 }
 
 
 DifAttrCache::~DifAttrCache()
 {
-    for( UINT16 nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
+    for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
     {
         if( ppCols[ nCnt ] )
             delete ppCols[ nCnt ];
@@ -898,9 +898,9 @@ DifAttrCache::~DifAttrCache()
 }
 
 
-void DifAttrCache::SetNumFormat( const UINT16 nCol, const UINT16 nRow, const UINT32 nNumFormat )
+void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat )
 {
-    DBG_ASSERT( nCol <= MAXCOL, "-DifAttrCache::SetNumFormat(): Col zu gross!" );
+    DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col zu gross!" );
     DBG_ASSERT( !bPlain, "*DifAttrCache::SetNumFormat(): sollte nicht Plain sein!" );
 
     if( !ppCols[ nCol ] )
@@ -910,13 +910,13 @@ void DifAttrCache::SetNumFormat( const UINT16 nCol, const UINT16 nRow, const UIN
 }
 
 
-void DifAttrCache::Apply( ScDocument& rDoc, UINT16 nTab )
+void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     if( bPlain )
     {
         ScPatternAttr*  pPatt = NULL;
 
-        for( UINT16 nCol = 0 ; nCol <= MAXCOL ; nCol++ )
+        for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         {
             if( ppCols[ nCol ] )
             {
@@ -936,7 +936,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, UINT16 nTab )
     }
     else
     {
-        for( UINT16 nCol = 0 ; nCol <= MAXCOL ; nCol++ )
+        for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         {
             if( ppCols[ nCol ] )
                 ppCols[ nCol ]->Apply( rDoc, nCol, nTab );
