@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:28:14 $
+ *  last change: $Author: er $ $Date: 2001-02-27 10:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     nArrayEndPos = nArrayEndPosUnicode = 0;
     USHORT nField;
+    BOOL bPreselectUnicode = FALSE;
     if(pDatStream!=NULL)
     {
         USHORT j;
@@ -621,10 +622,28 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
         pDatStream->Seek( 0 );
         pDatStream->StartReadingUnicodeText();
+        ULONG nUniPos = pDatStream->Tell();
+        if ( nUniPos > 0 )
+            bPreselectUnicode = TRUE;   // read 0xfeff/0xfffe
+        else
+        {
+            UINT16 n;
+            *pDatStream >> n;
+            // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
+            // control characters.
+            if ( (n & 0xff00) < 0x2000 )
+                bPreselectUnicode = TRUE;
+            pDatStream->Seek( nUniPos );
+        }
         for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
         {
             pRowPosArrayUnicode[nArrayEndPosUnicode++] = pDatStream->Tell();
             if( !pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) )
+                break;
+            // #84386# Reading Unicode on ASCII/ANSI data won't find any line
+            // ends and therefor tries to read the whole file into strings.
+            // Check if first line is completely filled and don't try any further.
+            if ( j == 0 && aPreviewLineUnicode[j].Len() == STRING_MAXLEN )
                 break;
         }
         nStreamPosUnicode = pDatStream->Tell();
@@ -662,7 +681,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
-    aLbCharSet.SelectTextEncoding( gsl_getSystemTextEncoding() );
+    aLbCharSet.SelectTextEncoding( bPreselectUnicode ?
+        RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
     GetCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
@@ -1133,7 +1153,12 @@ void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
                 pRowPosArrayUnicode[nNew+j] = pDatStream->Tell();
                 nArrayEndPosUnicode = (USHORT) nNew+j;
             }
-            if( !pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) && !bVFlag )
+            // #84386# Reading Unicode on ASCII/ANSI data won't find any line
+            // ends and therefor tries to read the whole file into strings.
+            // Check if first line is completely filled and don't try any further.
+            if( (!pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) ||
+                 (j == 0 && aPreviewLineUnicode[j].Len() == STRING_MAXLEN)) &&
+                 !bVFlag )
             {
                 bVFlag = TRUE;
                 aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1 );
