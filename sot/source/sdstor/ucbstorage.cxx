@@ -79,6 +79,7 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
         case SOT_FORMATSTR_ID_STARMATH_60 :
             return SvGlobalName( SO3_SM_CLASSID_60 );
         default :
+            DBG_ERROR( "Unknown UCB storage format!" );
             return SvGlobalName();
     }
 }
