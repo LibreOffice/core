@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:04 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 07:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,30 +102,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Any SAL_CALL OKeys::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    if(rType == ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL)))
-        return Any();
-
-    return OCollection_TYPE::queryInterface(rType);
-}
-// -------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OKeys::getTypes(  ) throw(RuntimeException)
-{
-    Sequence< Type > aTypes(OCollection_TYPE::getTypes());
-    Type* pBegin    = aTypes.getArray();
-    Type* pEnd      = pBegin + aTypes.getLength();
-
-    ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());
-    for(;pBegin != pEnd; ++pBegin)
-    {
-        if(*pBegin != ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL)))
-            aOwnTypes.push_back(*pBegin);
-    }
-
-    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
-}
 // -------------------------------------------------------------------------
 Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
 {
