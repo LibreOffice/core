@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-14 14:49:08 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 08:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1756,17 +1756,25 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             const Point&  rPos = pCmdEvt->GetMousePosPixel();
             PopupMenu aMenu;
             if ( bIsIndexOn )
-                aMenu.InsertItem( TBI_INDEX, aIndexOffText );
+                aMenu.InsertItem( TBI_INDEX, aIndexOffText, aIndexOffImage );
             else
-                aMenu.InsertItem( TBI_INDEX, aIndexOnText );
+                aMenu.InsertItem( TBI_INDEX, aIndexOnText, aIndexOnImage );
+            aMenu.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
-            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
-            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ), Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
+            aMenu.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
+            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ), Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
+            aMenu.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
+            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ), Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
+            aMenu.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
-            aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
-            aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
+            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ), Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
+            aMenu.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
+            aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ), Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
+            aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+            aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ), Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
+            aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
+
             if ( bIsDebug )
             {
                 aMenu.InsertSeparator();
