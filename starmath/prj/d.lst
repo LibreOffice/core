@@ -9,7 +9,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\menubar
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\bin\sm?????.dll %_DEST%\bin%_EXT%\sm?????.dll
 ..\%__SRC%\bin\smd?????.dll %_DEST%\bin%_EXT%\smd?????.dll
-..\%__SRC%\bin\sm?????.res %_DEST%\bin%_EXT%\sm?????.res
+..\%__SRC%\bin\sm*.res %_DEST%\bin%_EXT%\sm*.res
 ..\%__SRC%\bin\sm?????.sym %_DEST%\bin%_EXT%\sm?????.sym
 mkdir: %_DEST%\inc%_EXT%\starmath
 
