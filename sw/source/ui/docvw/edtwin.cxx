@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 08:49:25 $
+ *  last change: $Author: jp $ $Date: 2002-01-23 16:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ void SwEditWin::JustifyAreaTimer()
 #ifdef TEST_FOR_BUG91313
     aTimer.SetTimeout( Max( 50L, nTimeout - nDiff) );
 #else
-    aTimer.SetTimeout( Max( 0L, nTimeout - nDiff*2L) );
+    aTimer.SetTimeout( Max( 50L, nTimeout - nDiff*2L) );
 #endif
 }
 
