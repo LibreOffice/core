@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#include <extensio.hrc>
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
 
 #ifndef _SV_LSTBOX_HXX //autogen wg. form::component::ListBox
 #include <vcl/lstbox.hxx>
@@ -97,10 +99,16 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef ADRBEAM_HXX
 #include "bibbeam.hxx"
+#endif
 #include "toolbar.hrc"
+#ifndef ADRRESID_HXX
 #include "bibresid.hxx"
+#endif
+#ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
+#endif
 
 using namespace rtl;
 using namespace ::com::sun::star;
@@ -114,185 +122,206 @@ using namespace ::com::sun::star::uno;
 #define ID_TOOLBAR                          1
 #define ID_GRIDWIN                          2
 
-rtl::OUString gGridModelCommand( OUString::createFromAscii(".uno:Bib/newGridModel"));
-
-BibGridwin::BibGridwin(Window* pParent, WinBits nStyle):
-    DockingWindow(pParent,nStyle)
+//.........................................................................
+namespace bib
 {
-    aCtrContainer = VCLUnoHelper::CreateControlContainer(this);
-}
+//.........................................................................
 
-BibGridwin::~BibGridwin()
-{
-}
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::awt;
 
-void BibGridwin::Resize()
-{
-    if(xGridWinRef.is())
+    //=====================================================================
+    //= BibGridwin
+    //=====================================================================
+    class BibGridwin
+                :public DockingWindow
     {
-        ::Size aSize = GetOutputSizePixel();
-        xGridWinRef->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::SIZE);
+    private:
+            Reference< XWindow >            m_xGridWin;
+            Reference< XControlModel >      m_xGridModel;
+            Reference< XControl >           m_xControl;
+            Reference< XControlContainer >  m_xControlContainer;
+
+    protected:
+
+            virtual void        Resize();
+
+    public:
+
+            BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
+            ~BibGridwin();
+
+            void createGridWin(const Reference< XControlModel > & xDbForm);
+            void changeGridModel(const Reference< XControlModel > & xGModel);
+            void disposeGridWin();
+
+            const Reference< XControlContainer >& getControlContainer() const { return m_xControlContainer; }
+    };
+
+    //---------------------------------------------------------------------
+    BibGridwin::BibGridwin( Window* _pParent, WinBits _nStyle )
+        :DockingWindow( _pParent, _nStyle )
+    {
+        m_xControlContainer = VCLUnoHelper::CreateControlContainer(this);
     }
-}
-void BibGridwin::createGridWin(const uno::Reference< XControlModel > & xGModel)
-{
-    xGridModel=xGModel;
 
-    if( aCtrContainer.is())
+    //---------------------------------------------------------------------
+    BibGridwin::~BibGridwin()
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+    }
 
-        if ( xGridModel.is() && xMgr.is())
+    //---------------------------------------------------------------------
+    void BibGridwin::Resize()
+    {
+        if(m_xGridWin.is())
         {
-            uno::Reference< XPropertySet >  xPropSet( xGridModel, UNO_QUERY );
+            ::Size aSize = GetOutputSizePixel();
+            m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::SIZE);
+        }
+    }
 
-            if ( xPropSet.is() && xGridModel.is() )
+    //---------------------------------------------------------------------
+    void BibGridwin::createGridWin(const uno::Reference< XControlModel > & xGModel)
+    {
+        m_xGridModel = xGModel;
+
+        if( m_xControlContainer.is())
+        {
+            uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+
+            if ( m_xGridModel.is() && xMgr.is())
             {
-                uno::Any aAny = xPropSet->getPropertyValue( C2U("DefaultControl") );
-                rtl::OUString aControlName;
-                aAny >>= aControlName;
+                uno::Reference< XPropertySet >  xPropSet( m_xGridModel, UNO_QUERY );
 
-                xControl=uno::Reference< XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
-                DBG_ASSERT(xControl.is(), "no GridControl created")
-                if ( xControl.is() )
-                    xControl->setModel( xGridModel);
+                if ( xPropSet.is() && m_xGridModel.is() )
+                {
+                    uno::Any aAny = xPropSet->getPropertyValue( C2U("DefaultControl") );
+                    rtl::OUString aControlName;
+                    aAny >>= aControlName;
+
+                    m_xControl = Reference< XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
+                    DBG_ASSERT( m_xControl.is(), "no GridControl created" )
+                    if ( m_xControl.is() )
+                        m_xControl->setModel( m_xGridModel );
+                }
+
+                if ( m_xControl.is() )
+                {
+                    // Peer als Child zu dem FrameWindow
+                    m_xControlContainer->addControl(C2U("GridControl"), m_xControl);
+                    m_xGridWin=uno::Reference< XWindow > (m_xControl, UNO_QUERY );
+                    m_xGridWin->setVisible( sal_True );
+                    m_xControl->setDesignMode( sal_True );
+                        // initially switch on the desing mode - switch it off _after_ loading the form
+                        // 17.10.2001 - 93107 - frank.schoenheit@sun.com
+
+                    ::Size aSize = GetOutputSizePixel();
+                    m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::POSSIZE);
+                }
             }
-
-            if ( xControl.is() )
-            {
-                // Peer als Child zu dem FrameWindow
-                aCtrContainer->addControl(C2U("Bla"), xControl);
-                xGridWinRef=uno::Reference< XWindow > (xControl, UNO_QUERY );
-                xGridWinRef->setVisible( sal_True );
-                xControl->setDesignMode(sal_False);
-                ::Size aSize = GetOutputSizePixel();
-                xGridWinRef->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::POSSIZE);
-//              Window* pWindow = ::GetWindow( xGridWinRef );
-//              pWindow->SetHelpId(HID_BIB_DB_GRIDCTRL);
-
-            }
         }
     }
-}
 
-void BibGridwin::disposeGridWin()
-{
-    if ( xControl.is() )
+    //---------------------------------------------------------------------
+    void BibGridwin::disposeGridWin()
     {
-        aCtrContainer->removeControl(xControl);
-        xControl->dispose();
-    }
-}
-
-void BibGridwin::changeGridModel(const uno::Reference< XControlModel > & xGModel)
-{
-    xGridModel=xGModel;
-
-    if ( xControl.is() )
-    {
-        xControl->setModel( xGridModel);
-    }
-}
-
-
-void BibGridwin::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException )
-{
-    if(rEvt.FeatureURL.Complete == gGridModelCommand)
-    {
-        if(IsEnabled() != rEvt.IsEnabled) Enable(rEvt.IsEnabled);
-
-        uno::Any aModel=rEvt.State;
-        if(aModel.getValueType()==::getCppuType((Reference< XControlModel>*)0))
+        if ( m_xControl.is() )
         {
-            uno::Reference< XControlModel >  xGModel=*(uno::Reference< XControlModel > *) aModel.getValue();
-            changeGridModel(xGModel);
+            m_xControlContainer->removeControl( m_xControl );
+            m_xControl->dispose();
         }
     }
-};
 
-
-
-
-BibBeamer::BibBeamer(Window* pParent,BibDataManager* pDM, WinBits nStyle):
-    SplitWindow(pParent,nStyle|WB_NOSPLITDRAW),
-    pDatMan(pDM),
-    pToolBar (NULL),
-    pGridWin (NULL)
-{
-    createToolBar();
-    createGridWin();
-    pDatMan->SetToolbar(pToolBar);
-    pGridWin->Show();
-    pDatMan->SetGridWin(pGridWin);
-}
-
-BibBeamer::~BibBeamer()
-{
-    if ( xToolBarRef.is() ) xToolBarRef->dispose();
-    if ( xGridRef.is() ) xGridRef->dispose();
-
-
-    if(pToolBar)
+    //---------------------------------------------------------------------
+    void BibGridwin::changeGridModel(const uno::Reference< XControlModel > & xGModel)
     {
-        if(pDatMan)
+        m_xGridModel = xGModel;
+
+        if ( m_xControl.is() )
+            m_xControl->setModel( m_xGridModel );
+    }
+
+    //---------------------------------------------------------------------
+    BibBeamer::BibBeamer( Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
+        :SplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
+        ,pDatMan( _pDM )
+        ,pToolBar( NULL )
+        ,pGridWin( NULL )
+    {
+        createToolBar();
+        createGridWin();
+        if ( pDatMan )
+            pDatMan->SetToolbar(pToolBar);
+        pGridWin->Show();
+
+        if ( pDatMan )
+            connectForm( pDatMan );
+    }
+
+    //---------------------------------------------------------------------
+    BibBeamer::~BibBeamer()
+    {
+        if ( isFormConnected() )
+            disconnectForm();
+
+        if ( m_xToolBarRef.is() )
+            m_xToolBarRef->dispose();
+
+        if ( pToolBar )
         {
-            pDatMan->SetToolbar(0);
-            pDatMan->SetGridWin(0);
+            if ( pDatMan )
+                pDatMan->SetToolbar(0);
+
+            DELETEZ( pToolBar );
         }
 
-        delete pToolBar;
-    }
-
-    if(pGridWin)
-    {
-        pGridWin->disposeGridWin();
-//      delete pGridWin;
-        xpGridWin = 0;
-    }
-
-}
-
-void BibBeamer::createToolBar()
-{
-    pToolBar= new BibToolBar(this);
-    ::Size aSize=pToolBar->GetSizePixel();
-    InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
-    if(xController.is()) pToolBar->SetXController(xController);
-}
-void BibBeamer::createGridWin()
-{
-    xpGridWin = pGridWin= new BibGridwin(this,0);
-
-    InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SWIB_RELATIVESIZE );
-
-
-    pGridWin->createGridWin(pDatMan->createGridModel());
-}
-
-void BibBeamer::SetXController(const uno::Reference< frame::XController > & xCtr)
-{
-    xController=xCtr;
-
-    if(xController.is())
-    {
-        uno::Reference< frame::XDispatch >  xDisp(xController, UNO_QUERY);
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() && xDisp.is())
+        if ( pGridWin )
         {
-            util::URL aURL;
-            aURL.Complete =gGridModelCommand;
-
-            xTrans->parseStrict( aURL );
-            xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pGridWin),aURL);
+            pGridWin->disposeGridWin();
+            DELETEZ( pGridWin );
         }
+
     }
 
-    if(pToolBar)
+    //---------------------------------------------------------------------
+    void BibBeamer::createToolBar()
     {
-        pToolBar->SetXController(xController);
+        pToolBar= new BibToolBar(this);
+        ::Size aSize=pToolBar->GetSizePixel();
+        InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
+        if ( m_xController.is() )
+            pToolBar->SetXController( m_xController );
     }
 
-}
+    //---------------------------------------------------------------------
+    void BibBeamer::createGridWin()
+    {
+        pGridWin = new BibGridwin(this,0);
 
+        InsertItem(ID_GRIDWIN, pGridWin, 40, 1, 0, SWIB_RELATIVESIZE );
 
+        pGridWin->createGridWin( pDatMan->updateGridModel() );
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XControlContainer > BibBeamer::getControlContainer()
+    {
+        Reference< XControlContainer > xReturn;
+        if ( pGridWin )
+            xReturn = pGridWin->getControlContainer();
+        return xReturn;
+    }
+
+    //---------------------------------------------------------------------
+    void BibBeamer::SetXController(const uno::Reference< frame::XController > & xCtr)
+    {
+        m_xController = xCtr;
+
+        if ( pToolBar )
+            pToolBar->SetXController( m_xController );
+
+    }
+
+//.........................................................................
+}   // namespace bib
+//.........................................................................

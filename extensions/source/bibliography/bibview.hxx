@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
+#endif
 
 #ifndef _SV_SECTION_HXX
 #include <svtools/section.hxx>
@@ -73,37 +76,56 @@
 #include <svtools/sectctr.hxx>
 #endif
 
+#ifndef EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
+#include "formcontrolcontainer.hxx"
+#endif
+
 class   BibGeneralPage;
 class   BibDataManager;
 
 namespace com{ namespace sun{ namespace star{ namespace awt{ class XFocusListener;}}}}
-// -----------------------------------------------------------------------
-class BibView: public Window//SvSectionControl
+
+//.........................................................................
+namespace bib
 {
-private:
+//.........................................................................
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               xViewSet;
-    BibDataManager*             pDatMan;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    xDatMan;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener>                xGeneralPage;
-    BibGeneralPage*             pGeneralPage;
-    rtl::OUString                       aDefaultName;
-    sal_Int32                       nDefNameCount;
+    // -----------------------------------------------------------------------
+    class BibView
+            :public Window
+            ,public FormControlContainer
+    {
+    private:
+        BibDataManager*                                                             m_pDatMan;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable>        m_xDatMan;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener>    m_xGeneralPage;
+        BibGeneralPage*                                                             m_pGeneralPage;
 
-protected:
+    private:
+        DECL_STATIC_LINK(BibView, CallMappingHdl, BibView*);
 
-//      void                InitPages();
-protected:
-        virtual void            Resize();
+    protected:
+        // Window overridables
+            virtual void            Resize();
 
-    DECL_STATIC_LINK(BibView, CallMappingHdl, BibView*);
+        // FormControlContainer
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    getControlContainer();
 
-public:
-        BibView(Window* pParent,BibDataManager* pDatMan,WinBits nStyle= WB_3DLOOK);
-        ~BibView();
+        // XLoadListener equivalents
+            virtual void _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
+            virtual void _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
 
-        void    UpdatePages();
-};
+    public:
+            BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
+            ~BibView();
+
+            void    UpdatePages();
+    };
+
+//.........................................................................
+}   // namespace bib
+//.........................................................................
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-extern rtl::OUString gGridModelCommand;
 
 SV_IMPL_PTRARR( BibStatusDispatchArr, BibStatusDispatchPtr );
 
@@ -207,7 +206,7 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
     pBibMod = OpenBibModul();
     pDatMan = (*pBibMod)->createDataManager();
-    xDatman = pDatMan;
+    m_xDatMan = pDatMan;
     bDisposing=sal_False;
     bHierarchical=sal_True;
     pImp = new BibFrameCtrl_Impl;
@@ -216,10 +215,11 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
 }
 
 BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent,
-                                                BibDataManager* pDataManager):
-    xWindow( xComponent ),
-    pDatMan(pDataManager),
-    pBibMod(NULL)
+                                                BibDataManager* pDataManager)
+    :xWindow( xComponent )
+    ,pDatMan( pDataManager )
+    ,m_xDatMan( pDataManager )
+    ,pBibMod(NULL)
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
     pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
@@ -289,9 +289,9 @@ void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeExc
     lang::EventObject aObject;
     aObject.Source = (XController*)this;
     pImp->aLC.disposeAndClear(aObject);
-    xDatman = 0;
+    m_xDatMan = 0;
     pDatMan = 0;
-     aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
+    aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
  }
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException)
@@ -621,7 +621,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     rtl::OUString aDBTableName;
     aValue >>= aDBTableName;
 
-    pDatMan->unloadDatabase();
+    m_xDatMan->unload();
 
     if(aArgs.getLength() > 1)
     {
@@ -633,29 +633,18 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     }
     else
         pDatMan->setActiveDataTable(aDBTableName);
-    uno::Reference< awt::XControlModel >  xNewModel=pDatMan->createGridModel();
+
+    pDatMan->updateGridModel();
 
     sal_uInt16 nCount = aStatusListeners.Count();
     FeatureStateEvent  aEvent;
 
-    sal_Bool bGridMod=sal_False;
     sal_Bool bMenuFilter=sal_False;
     sal_Bool bQueryText=sal_False;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         BibStatusDispatch *pObj = aStatusListeners[n];
-        if ( COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/newGridModel"))
-        {
-            aEvent.FeatureURL = pObj->aURL;
-            aEvent.IsEnabled  = sal_True;
-            aEvent.Requery    = sal_False;
-            aEvent.Source     = (XDispatch *) this;
-
-            aEvent.State.setValue(&xNewModel, ::getCppuType((uno::Reference<awt::XControlModel>*)0));
-            pObj->xListener->statusChanged( aEvent );
-            bGridMod=sal_True;
-        }
-        else if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/MenuFilter"))
+        if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/MenuFilter"))
         {
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
@@ -664,7 +653,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
             uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getQueryFields();
-            aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
+            aEvent.State  = makeAny( aStringSeq );
 
             pObj->xListener->statusChanged( aEvent );
             bMenuFilter=sal_True;
@@ -682,10 +671,11 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             bQueryText=sal_True;
         }
 
-        if(bGridMod && bMenuFilter && bQueryText) break;
+        if (bMenuFilter && bQueryText)
+            break;
 
     }
-    pDatMan->loadDatabase();
+    m_xDatMan->load();
 }
 
 void BibFrameController_Impl::activate()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-31 11:18:40 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

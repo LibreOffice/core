@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,14 +161,14 @@ class BibGeneralPage:
     FixedText       aCustom4FT;
     FixedText       aCustom5FT;
 
-     ScrollBar      aHoriScroll;
-     ScrollBar      aVertScroll;
+    ScrollBar       aHoriScroll;
+    ScrollBar       aVertScroll;
 
-     FixedText*     aFixedTexts[FIELD_COUNT];
-     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>      aControls[FIELD_COUNT];
+    FixedText*      aFixedTexts[FIELD_COUNT];
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>       aControls[FIELD_COUNT];
 
-     Size           aStdSize;
-     Point          aBasePos;
+    Size            aStdSize;
+    Point           aBasePos;
 
     String          aBibTypeArr[TYPE_COUNT];
     String          sErrorPrefix;
@@ -196,27 +196,32 @@ class BibGeneralPage:
                                     String aColumnUIName, sal_uInt16 nHelpId);
 
     void                    AdjustScrollbars();
-     DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK(ScrollHdl, ScrollBar*);
 
 protected:
-     virtual void       Resize();
+    virtual void        Resize();
+
 public:
         BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
         virtual ~BibGeneralPage();
 
         const String& GetErrorString() const {return sTableErrorString;}
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >         GetTypeListBoxModel() {return xLBModel;}
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+                                GetTypeListBoxModel() const { return xLBModel; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+                                GetControlContainer() const { return xCtrlContnr; }
+
         BibDataManager*         GetDataManager() {return pDatMan;}
 
         void                    CommitActiveControl();
 
-         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( com::sun::star::uno::RuntimeException );
 
-         void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
-         void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
+        void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
+        void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
 
-         void RemoveListeners();
+        void RemoveListeners();
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -109,10 +112,10 @@ friend class BibFrameCtrl_Impl;
     BibFrameCtrl_Impl*          pImp;
     BibStatusDispatchArr        aStatusListeners;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  xWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                     xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xFrame;
     sal_Bool                        bDisposing;
     sal_Bool                        bHierarchical;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    xDatman;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >               m_xDatMan;
     BibDataManager*             pDatMan;
     HdlBibModul                 pBibMod;
 

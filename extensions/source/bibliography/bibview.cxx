@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 12:58:00 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,33 @@
  *
  ************************************************************************/
 
+#ifndef BIB_HRC
 #include "bib.hrc"
+#endif
+#ifndef ADDRCONT_HXX
 #include "bibcont.hxx"
+#endif
+#ifndef ADRBEAM_HXX
 #include "bibbeam.hxx"
+#endif
+#ifndef BIBMOD_HXX
 #include "bibmod.hxx"
+#endif
+#ifndef _BIB_GENERAL_HXX
 #include "general.hxx"
+#endif
+#ifndef _BIB_VIEW_HXX
 #include "bibview.hxx"
+#endif
+#ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
+#endif
+#ifndef ADRRESID_HXX
 #include "bibresid.hxx"
+#endif
+#ifndef BIBMOD_HXX
 #include "bibmod.hxx"
+#endif
 #include "sections.hrc"
 
 
@@ -77,116 +95,152 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
-#define DEFAULT_SIZE 500
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using namespace ::com::sun::star::awt;
 
-rtl::OUString   gSectionSizes(C2U("TheSectionSizes"));
-rtl::OUString   gSectionNames(C2U("TheSectionNames"));
-rtl::OUString   gSectionExpander(C2U("TheSectionExpander"));
-rtl::OUString   gSectionPos(C2U("TheSectionPosition"));
-// -----------------------------------------------------------------------
-BibView::BibView(Window* pParent, BibDataManager* pDM, WinBits nStyle):
-        Window(pParent,nStyle),
-        pDatMan(pDM),
-        xDatMan(pDM),
-        pGeneralPage(NULL),
-        nDefNameCount(0)
-{
-        String aDefName(BibResId(RID_BIB_STR_SECTION));
-        aDefaultName=aDefName;
-        UpdatePages();
-}
+#define C2U( cChar ) ::rtl::OUString::createFromAscii( cChar )
 
-BibView::~BibView()
+//.........................................................................
+namespace bib
 {
-    pGeneralPage->CommitActiveControl();
-    uno::Reference< XForm >  xForm = pDatMan->getDatabaseForm();
-    uno::Reference< XPropertySet >  xPrSet(xForm, UNO_QUERY);
-    if(xPrSet.is())
+//.........................................................................
+
+    // -----------------------------------------------------------------------
+    BibView::BibView( Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
+        :Window( _pParent, _nStyle )
+        ,m_pDatMan( _pManager )
+        ,m_xDatMan( _pManager )
+        ,m_pGeneralPage( NULL )
     {
-        uno::Any aProp = xPrSet->getPropertyValue(C2U("IsModified"));
-        if(*(sal_Bool*)aProp.getValue())
+        if ( m_xDatMan.is() )
+            connectForm( m_xDatMan );
+    }
+
+    // -----------------------------------------------------------------------
+    BibView::~BibView()
+    {
+        m_pGeneralPage->CommitActiveControl();
+        Reference< XForm > xForm = m_pDatMan->getForm();
+        Reference< XPropertySet > xProps( xForm, UNO_QUERY );
+        Reference< sdbc::XResultSetUpdate > xResUpd( xProps, UNO_QUERY );
+        DBG_ASSERT( xResUpd.is(), "BibView::~BibView: invalid form!" );
+
+        if ( xResUpd.is() )
         {
-            uno::Any aNew = xPrSet->getPropertyValue(C2U("IsNew"));
-            uno::Reference< sdbc::XResultSetUpdate >  xResUpd(xForm, UNO_QUERY);
-            if(*(sal_Bool*)aNew.getValue())
-                xResUpd->insertRow();
-            else
-                xResUpd->updateRow();
+            Any aModified = xProps->getPropertyValue( C2U( "IsModified" ) );
+            sal_Bool bFlag;
+            if ( ( aModified >>= bFlag ) && bFlag )
+            {
+
+                Any aNew = xProps->getPropertyValue( C2U( "IsNew" ) );
+                aNew >>= bFlag;
+                if ( bFlag )
+                    xResUpd->insertRow();
+                else
+                    xResUpd->updateRow();
+            }
         }
+
+        if ( isFormConnected() )
+            disconnectForm();
+
+        m_pGeneralPage->RemoveListeners();
+        m_xGeneralPage = 0;
     }
-     //delete pGeneralPage;
-     pGeneralPage->RemoveListeners();
-     xGeneralPage = 0;
 
-}
-/* -----------------16.11.99 13:13-------------------
+    /* -----------------16.11.99 13:13-------------------
 
- --------------------------------------------------*/
-void BibView::UpdatePages()
-{
-    BOOL bResize = FALSE;
-    if(pGeneralPage)
+     --------------------------------------------------*/
+    void BibView::UpdatePages()
     {
-        bResize = TRUE;
-        pGeneralPage->Hide();
-//      delete pGeneralPage;
-        pGeneralPage->RemoveListeners();
-        xGeneralPage = 0;
-    }
-//  pGeneralPage = new BibGeneralPage(this, pDatMan);
-    xGeneralPage = pGeneralPage = new BibGeneralPage(this, pDatMan);
-    if(bResize)
+        // TODO:
+        // this is _strange_: Why not updating the existent general page?
+        // I consider the current behaviour a HACK.
+        // frank.schoenheit@sun.com
+        if ( m_pGeneralPage )
+        {
+            m_pGeneralPage->Hide();
+            m_pGeneralPage->RemoveListeners();
+            m_xGeneralPage = 0;
+        }
+
+        m_xGeneralPage = m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
         Resize();
-    String sErrorString(pGeneralPage->GetErrorString());
-    if(sErrorString.Len())
-    {
-        sErrorString += '\n';
-        sErrorString += String(BibResId(RID_MAP_QUESTION));
-        QueryBox aQuery( this, WB_YES_NO, sErrorString );
-        if(RET_YES == aQuery.Execute())
-        {
-            Application::PostUserEvent( STATIC_LINK(
-                    this, BibView, CallMappingHdl ) );
 
+        String sErrorString( m_pGeneralPage->GetErrorString() );
+        if ( sErrorString.Len() )
+        {
+            sErrorString += '\n';
+            sErrorString += String( BibResId( RID_MAP_QUESTION ) );
+            QueryBox aQuery( this, WB_YES_NO, sErrorString );
+            if ( RET_YES == aQuery.Execute() )
+            {
+                Application::PostUserEvent( STATIC_LINK( this, BibView, CallMappingHdl ) );
+            }
         }
     }
+    //---------------------------------------------------------------------
+    //--- 19.10.01 16:55:49 -----------------------------------------------
 
-}
-/* -----------------------------02.02.00 16:49--------------------------------
-
- ---------------------------------------------------------------------------*/
-IMPL_STATIC_LINK(BibView, CallMappingHdl, BibView*, EMPTYARG)
-{
-    pThis->pDatMan->CreateMappingDialog(pThis);
-    return 0;
-}
-/* -----------------------------13.04.00 16:12--------------------------------
-
- ---------------------------------------------------------------------------*/
-void BibView::Resize()
-{
-    if(pGeneralPage)
+    void BibView::_loaded( const EventObject& _rEvent )
     {
-        Size aSz(GetOutputSizePixel());
-        pGeneralPage->SetSizePixel(aSz);
+        UpdatePages();
+        FormControlContainer::_loaded( _rEvent );
     }
-    Window::Resize();
-}
 
+    void BibView::_reloaded( const EventObject& _rEvent )
+    {
+        UpdatePages();
+        FormControlContainer::_loaded( _rEvent );
+    }
 
+    /* -----------------------------02.02.00 16:49--------------------------------
 
+     ---------------------------------------------------------------------------*/
+    IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
+    {
+        pThis->m_pDatMan->CreateMappingDialog( pThis );
+        return 0;
+    }
+    /* -----------------------------13.04.00 16:12--------------------------------
 
+     ---------------------------------------------------------------------------*/
+    void BibView::Resize()
+    {
+        if ( m_pGeneralPage )
+        {
+            ::Size aSz( GetOutputSizePixel() );
+            m_pGeneralPage->SetSizePixel( aSz );
+        }
+        Window::Resize();
+    }
+
+    //---------------------------------------------------------------------
+    //--- 18.10.01 18:52:45 -----------------------------------------------
+
+    Reference< XControlContainer > BibView::getControlContainer()
+    {
+        Reference< XControlContainer > xReturn;
+        if ( m_pGeneralPage )
+            xReturn = m_pGeneralPage->GetControlContainer();
+        return xReturn;
+    }
+
+//.........................................................................
+}   // namespace bib
+//.........................................................................

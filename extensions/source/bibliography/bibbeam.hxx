@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,81 +84,54 @@
 #include <vcl/splitwin.hxx>
 #endif
 
-
 #ifndef _BIB_TOOLBAR_HXX
 #include "toolbar.hxx"
 #endif
-
-extern rtl::OUString gGridModelCommand;
+#ifndef EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
+#include "formcontrolcontainer.hxx"
+#endif
 
 class BibDataManager;
 
-class BibGridwin:   public DockingWindow,
-                    public cppu::WeakImplHelper1 < ::com::sun::star::frame::XStatusListener>
+//.........................................................................
+namespace bib
 {
-private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xGridWinRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >               xForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 xControl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >    aCtrContainer;
+//.........................................................................
 
-protected:
+    class BibGridwin;
+    class BibBeamer
+            :public SplitWindow
+            ,public FormControlContainer
+    {
+        private:
 
-        void                    Resize();
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xController;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xToolBarRef;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xGridRef;
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xGridWin;
 
-public:
+            BibDataManager*         pDatMan;
+            BibToolBar*             pToolBar;
+            BibGridwin*             pGridWin;
 
-        BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
-        ~BibGridwin();
+        protected:
 
-        void createGridWin(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xDbForm);
-        void changeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xGModel);
-        void disposeGridWin();
+            void                    createToolBar();
+            void                    createGridWin();
 
-        // ::com::sun::star::lang::XEventListener
-        // we do not hold References to dispatches, so there is nothing to do on disposal
-        virtual void    SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source)
-                                                throw( ::com::sun::star::uno::RuntimeException ){};
+            // FormControlContainer
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    getControlContainer();
+        public:
 
-        // ::com::sun::star::frame::XStatusListener
-        virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                                throw( ::com::sun::star::uno::RuntimeException );
+            BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
+            ~BibBeamer();
 
-};
+            void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
+    };
 
-
-class BibBeamer: public SplitWindow
-{
-    private:
-
-        BibDataManager*         pDatMan;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >               xForm;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xToolBarRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xGridRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xToolBarWinRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xGridWinRef;
-
-        BibToolBar*             pToolBar;
-        BibGridwin*             pGridWin;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> xpGridWin;
-
-    protected:
-
-        void                    createToolBar();
-        void                    createGridWin();
-
-    public:
-
-        BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
-        ~BibBeamer();
-
-        void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
-};
-
-
-
+//.........................................................................
+}   // namespace bib
+//.........................................................................
 
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: os $ $Date: 2001-07-09 12:08:45 $
+#   last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,9 @@ CXXFILES=			bibconfig.cxx\
                     datman.cxx	 \
 
 
-SLOFILES=			$(SLO)$/bibconfig.obj \
+SLOFILES=			$(SLO)$/formcontrolcontainer.obj \
+                    $(SLO)$/loadlisteneradapter.obj \
+                    $(SLO)$/bibconfig.obj \
                     $(SLO)$/bibcont.obj \
                     $(SLO)$/bibload.obj \
                     $(SLO)$/bibmod.obj \
@@ -196,22 +198,7 @@ DEF1EXPORTFILE=	exports.dxp
 
 ALL:\
     $(do_build) \
-    $(SRS)$/hidother.hid\
     ALLTAR
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)" =="WNT"
-.IF "$(BUILD_SOSL)" == ""
-    @+echo
-    @+echo 	NO HIDS!
-    @+echo
-    +copy ..\..\inc\extensio.hrc .
-#	+mhids hidother.src ..$/..$/$(INPATH)$/srs bib hidother
-    +del extensio.hrc
-.ENDIF
-.ELSE
-    @echo wnt only
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

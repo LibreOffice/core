@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
+#include <com/sun/star/form/XLoadListener.hpp>
+#endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
@@ -173,7 +176,6 @@
 #ifndef _BIBCONFIG_HXX
 #include <bibconfig.hxx>
 #endif
-
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #endif
@@ -185,6 +187,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -194,27 +199,22 @@ using namespace ::com::sun::star::sdbc;
 #define PROPERTY_FRAME                      1
 
 class BibliographyLoader : public cppu::WeakImplHelper4
-<
-    XServiceInfo,
-    container::XNameAccess,
-    XPropertySet,
-    frame::XFrameLoader
->
+                            < XServiceInfo, XNameAccess, XPropertySet, XFrameLoader >
 {
     HdlBibModul                                     m_pBibMod;
-    Reference< XPropertyChangeListener >            m_xDatMan;
+    Reference< XLoadable >                          m_xDatMan;
     BibDataManager*                                 m_pDatMan;
-    Reference< container::XNameAccess >             m_xColumns;
+    Reference< XNameAccess >                        m_xColumns;
     Reference< XResultSet >                         m_xCursor;
 
 private:
 
-    void                    loadView(const Reference< frame::XFrame > & aFrame, const rtl::OUString& aURL,
+    void                    loadView(const Reference< XFrame > & aFrame, const rtl::OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< frame::XLoadEventListener > & aListener);
+                                const Reference< XLoadEventListener > & aListener);
 
     BibDataManager*         GetDataManager()const;
-    Reference< container::XNameAccess >             GetDataColumns() const;
+    Reference< XNameAccess >            GetDataColumns() const;
     Reference< XResultSet >             GetDataCursor() const;
     Reference< sdb::XColumn >               GetIdentifierColumn() const;
 
@@ -235,7 +235,7 @@ public:
                             }
 
     //XNameAccess
-    virtual Any SAL_CALL getByName(const rtl::OUString& aName) throw ( container::NoSuchElementException, WrappedTargetException, RuntimeException );
+    virtual Any SAL_CALL getByName(const rtl::OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException );
     virtual Sequence< rtl::OUString > SAL_CALL getElementNames(void) throw ( RuntimeException );
     virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& aName) throw ( RuntimeException );
 
@@ -257,9 +257,9 @@ public:
     friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
 
     // XLoader
-    virtual void            SAL_CALL load(const Reference< frame::XFrame > & aFrame, const rtl::OUString& aURL,
+    virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const rtl::OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< frame::XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException);
+                                const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException);
     virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException);
 };
 
@@ -385,10 +385,11 @@ void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeExcep
     //!
     //!
 }
+
 // -----------------------------------------------------------------------
-void BibliographyLoader::load(const Reference< frame::XFrame > & rFrame, const rtl::OUString& rURL,
+void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< frame::XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException)
+        const Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException)
 {
     //!
 
@@ -410,9 +411,9 @@ void BibliographyLoader::load(const Reference< frame::XFrame > & rFrame, const r
 }
 
 // -----------------------------------------------------------------------
-void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, const rtl::OUString& rURL,
+void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< frame::XLoadEventListener > & rListener)
+        const Reference< XLoadEventListener > & rListener)
 {
     //!
     if(!m_pBibMod)
@@ -435,17 +436,17 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
         // Datei laden
         xTrans->parseStrict( aURL );
 
-        Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
+        Reference< XDispatchProvider >  xProv( rFrame, UNO_QUERY );
         if ( xProv.is() )
         {
-            Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 12 );
+            Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL, C2U("_menubar"), 12 );
             if ( aDisp.is() )
                 aDisp->dispatch( aURL, Sequence<PropertyValue>() );
         }
     }
 
 
-    BibDataManager* pDatMan=(*m_pBibMod)->createDataManager();
+    m_pDatMan = (*m_pBibMod)->createDataManager();
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
@@ -457,9 +458,9 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
             aBibDesc.sDataSource = aSources.getConstArray()[0];
     }
 
-    Reference< form::XForm >  xForm = pDatMan->createDatabaseForm(aBibDesc);
+    Reference< XForm > xForm = m_pDatMan->createDatabaseForm( aBibDesc );
 
-    if(xForm.is())
+    if ( xForm.is() )
     {
         Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
@@ -467,14 +468,14 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
         Window* pParent = VCLUnoHelper::GetWindow( aWindow );
 
-        BibBookContainer *pMyWindow = new BibBookContainer( pParent, pDatMan );
+        BibBookContainer *pMyWindow = new BibBookContainer( pParent, m_pDatMan );
         pMyWindow->Show();
 
-        BibView* pView = new BibView(pMyWindow,pDatMan,WB_SECTION_STYLE|WB_3DLOOK);
+        ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_SECTION_STYLE | WB_3DLOOK );
         pView->Show();
-        pDatMan->SetView(pView);
+        m_pDatMan->SetView( pView );
 
-        BibBeamer* pBeamer=new BibBeamer( pMyWindow,pDatMan);
+        ::bib::BibBeamer* pBeamer = new ::bib::BibBeamer( pMyWindow, m_pDatMan );
         pBeamer->Show();
         pMyWindow->createTopFrame(pBeamer);
 
@@ -482,14 +483,14 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
         Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
 
-        Reference< frame::XController >  xCtrRef(new BibFrameController_Impl( xWin,pDatMan));
+        Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
 
         xCtrRef->attachFrame(rFrame);
         rFrame->setComponent( xWin, xCtrRef);
         pBeamer->SetXController(xCtrRef);
         //!
 
-        pDatMan->loadDatabase();
+        m_xDatMan->load();
 
         if ( rListener.is() )
             rListener->loadFinished( this );
@@ -509,16 +510,16 @@ BibDataManager* BibliographyLoader::GetDataManager()const
     if(!m_pDatMan)
     {
         if(!m_pBibMod)
-            ((BibliographyLoader*)this)->m_pBibMod = OpenBibModul();
-        ((BibliographyLoader*)this)->m_pDatMan = (*m_pBibMod)->createDataManager();
-        ((BibliographyLoader*)this)->m_xDatMan = m_pDatMan;
+            const_cast< BibliographyLoader* >( this )->m_pBibMod = OpenBibModul();
+        const_cast< BibliographyLoader* >( this )->m_pDatMan = (*m_pBibMod)->createDataManager();
+        const_cast< BibliographyLoader* >( this )->m_xDatMan = m_pDatMan;
     }
     return m_pDatMan;
 }
 /* -----------------06.12.99 14:39-------------------
 
  --------------------------------------------------*/
-Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
+Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
 {
     if (!m_xColumns.is())
     {
@@ -558,6 +559,7 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
         }
         catch(Exception& rEx)
         {
+            rEx;    // make compiler happy
             DBG_ERROR("BibliographyLoader::GetDataCursor : could not execute the result set !");
             bSuccess = sal_False;
         }
@@ -585,7 +587,7 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
 Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
 {
     BibDataManager* pDatMan = GetDataManager();
-    Reference< container::XNameAccess >  xColumns = GetDataColumns();
+    Reference< XNameAccess >  xColumns = GetDataColumns();
     rtl::OUString sIdentifierColumnName = pDatMan->GetIdentifierMapping();
 
     Reference< sdb::XColumn >  xReturn;
@@ -612,7 +614,7 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
 /*-- 17.11.99 12:51:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-rtl::OUString lcl_AddProperty(Reference< container::XNameAccess >  xColumns,
+rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         const Mapping* pMapping, const String& rColumnName)
 {
     String sColumnName(rColumnName);
@@ -638,7 +640,7 @@ rtl::OUString lcl_AddProperty(Reference< container::XNameAccess >  xColumns,
 }
 //-----------------------------------------------------------------------------
 Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
-                        ( container::NoSuchElementException, WrappedTargetException, RuntimeException )
+                        ( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
     try
@@ -646,7 +648,7 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
         BibDataManager* pDatMan = ((BibliographyLoader*)this)->GetDataManager();
         Reference< XResultSet >  xCursor = GetDataCursor();
         Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xCursor, UNO_QUERY);
-        Reference< container::XNameAccess >  xColumns;
+        Reference< XNameAccess >  xColumns;
         if (!xSupplyCols.is())
             return aRet;
         xColumns = xSupplyCols->getColumns();
@@ -687,6 +689,7 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
     }
     catch(Exception& rEx)
     {
+        rEx;    // make compiler happy
         DBG_ERROR("Exception in BibliographyLoader::getByName")
     }
     return aRet;
@@ -724,6 +727,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
     }
     catch(Exception& rEx)
     {
+        rEx;    // make compiler happy
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
 
@@ -758,6 +762,7 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
     }
     catch(Exception& rEx)
     {
+        rEx;    // make compiler happy
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
     return bRet;
@@ -775,7 +780,7 @@ Type  BibliographyLoader::getElementType(void) throw ( RuntimeException )
 sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException )
 {
     Reference< XResultSet >  xCursor = GetDataCursor();
-    Reference< container::XNameAccess >  xColumns = GetDataColumns();
+    Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
 }
 

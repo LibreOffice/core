@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,35 +75,52 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 
 class Window;
 
 //-----------------------------------------------------------------------------
-class BibView;
+namespace bib
+{
+    class BibView;
+}
+
 class BibToolBar;
-class BibGridwin;
 struct BibDBDescriptor;
-class BibDataManager :  public cppu::WeakImplHelper1 < ::com::sun::star::beans::XPropertyChangeListener>
+
+typedef cppu::WeakComponentImplHelper2  <   ::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::form::XLoadable
+                                        >   BibDataManager_Base;
+class BibDataManager
+            :public ::comphelper::OMutexAndBroadcastHelper
+            ,public BibDataManager_Base
 {
 private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   xForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               xSourceProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        xParser;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   m_xForm;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            m_xGridModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xSourceProps;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;
         ::rtl::OUString                     aActiveDataTable;
         ::rtl::OUString                     aDataSourceURL;
         ::rtl::OUString                     aQuoteChar;
-//      sal_Bool                        bNew;
-//      sal_Bool                        bModified;
         ::com::sun::star::uno::Any                      aUID;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >              xBibCursor;
 
-        BibView*                    pBibView;
+        ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
+
+        ::bib::BibView*             pBibView;
         BibToolBar*                 pToolbar;
-        BibGridwin*                 pGridWin;
 
         rtl::OUString               sIdentifierMapping;
 protected:
@@ -113,6 +130,19 @@ protected:
         void                        RemoveMeAsUidListener();
 
         void                        UpdateAddressbookCursor(::rtl::OUString aSourceName);
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                                    updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                                    createGridModel( const ::rtl::OUString& rName );
+
+        // XLoadable
+        virtual void SAL_CALL load(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL unload(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL reload(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isLoaded(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addLoadListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeLoadListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 public:
 
         BibDataManager();
@@ -126,13 +156,8 @@ public:
 
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   getDatabaseForm();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            createGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            createGridModel();
-
-        void                        loadDatabase();
-        void                        unloadDatabase();
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            updateGridModel();
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString>           getDataSources();
 
@@ -149,11 +174,8 @@ public:
         ::rtl::OUString                     getQueryField();
         void                        startQueryWith(const ::rtl::OUString& rQuery);
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >&         getParser() { return xParser; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                    getForm()   { return xForm; }
-
-//      void                        saveGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xDbForm);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadGridModel(const ::rtl::OUString& rName);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >&         getParser() { return m_xParser; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                    getForm()   { return m_xForm; }
 
 
         ::rtl::OUString                     getControlName(sal_Int32 nFormatKey );
@@ -163,18 +185,14 @@ public:
         void                        saveCtrModel(const ::rtl::OUString& rName,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rCtrModel);
 
-//      sal_Bool                        isNew() { return bNew;}
-//      sal_Bool                        isModified() { return bModified;}
-
         sal_Bool                        moveRelative(long nMove);
 
         void                        CreateMappingDialog(Window* pParent);
         ::rtl::OUString                     CreateDBChangeDialog(Window* pParent);
 
-        void                        SetView(BibView* pView) {pBibView = pView;}
+        void                        SetView( ::bib::BibView* pView ) { pBibView = pView; }
 
         void                        SetToolbar(BibToolBar* pSet);
-        void                        SetGridWin(BibGridwin* pSet) {pGridWin = pSet;}
 
         const rtl::OUString&        GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 
 // Strings (500)
 #define RID_BIB_STRING              (RID_BIB_START + 200)
-#define RID_BIB_STR_SECTION         (RID_BIB_STRING +  1)
+    // FREE                         (RID_BIB_STRING +  1)
 #define RID_BIB_STR_FIELDSELECTION  (RID_BIB_STRING +  2)
 #define RID_BIB_STR_TABWIN_PREFIX   (RID_BIB_STRING +  3)
 #define RID_BIB_STR_FRAME_TITLE     (RID_BIB_STRING +  4)
