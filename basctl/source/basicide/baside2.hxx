@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:01:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 class ExtTextEngine;
 class ExtTextView;
 class SvxSearchItem;
-
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
-#endif
 
 #ifndef _SVTABBX_HXX //autogen
 #include <svtools/svtabbx.hxx>
