@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:26:43 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:51:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ BEGIN
 
     $prefilename = "";
     $parfilename = "";
-    $ulffilename = "";
+    $langfilename = "";
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
                  "Shortcut", "Custom", "Procedure", "Module", "Profile", "ProfileItem",
