@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: gh $ $Date: 2001-07-13 15:24:38 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 10:13:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..
 
 PRJNAME=basic
 TARGET=sb
+TARGETTYPE=GUI
 #basic.hid generieren
 GEN_HID=TRUE
 
