@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:58:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,13 +372,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 
     if (IsNoteEdit())
     {
-        //  Funktionen, die bei Notizen disabled sind:
-
-        rSet.DisableItem( SID_TEXT_STANDARD );
-        rSet.DisableItem( SID_DRAWTEXT_ATTR_DLG );
-
-        if(!bHasFontWork)
-            bDisableFontWork = TRUE;
+        // issue 21255 - Notes now support rich text formatting.
     }
 
     if ( bDisableFontWork )
@@ -852,15 +846,7 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 {
     if ( IsNoteEdit() )
     {
-            //  Notizen haben keine Text-Attribute !!!
-        SfxWhichIter aIter(rDestSet);
-        USHORT nWhich = aIter.FirstWhich();
-        while ( nWhich )
-        {
-            rDestSet.DisableItem( nWhich );
-            nWhich = aIter.NextWhich();
-        }
-        return;
+        // issue 21255 - Notes now support rich text formatting.
     }
 
     SvtLanguageOptions  aLangOpt;
