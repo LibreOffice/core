@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 12:58:47 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,15 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SFXSMPLHINT_HXX
+#include <smplhint.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #include <osl/mutex.hxx>
 
 using namespace utl;
@@ -90,35 +99,21 @@ static sal_Int32           nRefCount = 0;
 
 #define STEPS 0
 
-class SvtUndoOptions_Impl : public utl::ConfigItem
+class SvtUndoOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
     sal_Int32               nUndoCount;
+    Sequence< rtl::OUString > m_aPropertyNames;
 
 public:
                             SvtUndoOptions_Impl();
 
     virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
+    void                    Load();
 
     void                    SetUndoCount( sal_Int32 n ) { nUndoCount = n; SetModified();  }
     sal_Int32               GetUndoCount() const        { return nUndoCount; }
 };
-
-static Sequence< OUString > GetPropertyNames()
-{
-    static const char* aPropNames[] =
-    {
-        "Steps",
-    };
-
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i] );
-
-    return aNames;
-}
 
 // -----------------------------------------------------------------------
 
@@ -126,14 +121,55 @@ SvtUndoOptions_Impl::SvtUndoOptions_Impl()
     : ConfigItem( OUString::createFromAscii("Office.Common/Undo") )
     , nUndoCount( 20 )
 {
-    Sequence< OUString > aNames = GetPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    Load();
+}
+
+void SvtUndoOptions_Impl::Commit()
+{
+    OUString* pNames = m_aPropertyNames.getArray();
+    Sequence< Any > aValues( m_aPropertyNames.getLength() );
+    Any* pValues = aValues.getArray();
+    for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
     {
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+        switch ( nProp )
+        {
+            case STEPS :
+                pValues[nProp] <<= nUndoCount;
+                break;
+            default:
+                DBG_ERRORFILE( "invalid index to save a path" );
+        }
+    }
+
+    PutProperties( m_aPropertyNames, aValues );
+    //broadcast changes
+    Broadcast(SfxSimpleHint(SFX_HINT_UNDO_OPTIONS_CHANGED));
+}
+
+// -----------------------------------------------------------------------
+void SvtUndoOptions_Impl::Load()
+{
+    if(!m_aPropertyNames.getLength())
+    {
+        static const char* aPropNames[] =
+        {
+            "Steps",
+        };
+
+        const int nCount = sizeof( aPropNames ) / sizeof( const char* );
+        m_aPropertyNames.realloc(nCount);
+        OUString* pNames = m_aPropertyNames.getArray();
+        for ( int i = 0; i < nCount; i++ )
+            pNames[i] = OUString::createFromAscii( aPropNames[i] );
+        EnableNotification( m_aPropertyNames );
+    }
+
+    Sequence< Any > aValues = GetProperties( m_aPropertyNames );
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT( aValues.getLength() == m_aPropertyNames.getLength(), "GetProperties failed" );
+    if ( aValues.getLength() == m_aPropertyNames.getLength() )
+    {
+        for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
         {
             DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
@@ -158,35 +194,14 @@ SvtUndoOptions_Impl::SvtUndoOptions_Impl()
         }
     }
 }
-
-void SvtUndoOptions_Impl::Commit()
-{
-    Sequence< OUString > aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
-    Sequence< Any > aValues( aNames.getLength() );
-    Any* pValues = aValues.getArray();
-    for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
-    {
-        switch ( nProp )
-        {
-            case STEPS :
-                pValues[nProp] <<= nUndoCount;
-                break;
-            default:
-                DBG_ERRORFILE( "invalid index to save a path" );
-        }
-    }
-
-    PutProperties( aNames, aValues );
-}
-
 // -----------------------------------------------------------------------
-
 void SvtUndoOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
 {
-    DBG_ERRORFILE( "properties have been changed" );
+    Load();
+    //broadcast changes
+    Broadcast(SfxSimpleHint(SFX_HINT_UNDO_OPTIONS_CHANGED));
 }
-
+// -----------------------------------------------------------------------
 SvtUndoOptions::SvtUndoOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -195,6 +210,7 @@ SvtUndoOptions::SvtUndoOptions()
         pOptions = new SvtUndoOptions_Impl;
     ++nRefCount;
     pImp = pOptions;
+    StartListening(*pImp);
 }
 
 // -----------------------------------------------------------------------
@@ -203,6 +219,7 @@ SvtUndoOptions::~SvtUndoOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    EndListening(*pImp);
     if ( !--nRefCount )
     {
         if ( pOptions->IsModified() )
@@ -219,5 +236,11 @@ void SvtUndoOptions::SetUndoCount( sal_Int32 n )
 sal_Int32 SvtUndoOptions::GetUndoCount() const
 {
     return pImp->GetUndoCount();
+}
+
+void SvtUndoOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    Broadcast( rHint );
 }
 
