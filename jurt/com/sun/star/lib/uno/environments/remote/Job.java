@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:27 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2001-05-17 12:46:27 $
+ * @version     $Revision: 1.10 $ $ $Date: 2002-06-25 07:16:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -184,7 +184,8 @@ public class Job {
             if(exception instanceof InvocationTargetException)
                 throwable = ((InvocationTargetException)exception).getTargetException();;
 
-            if(DEBUG) System.err.println("##### Job.execute - exception occured:" + throwable);
+            if(DEBUG); System.err.println("##### Job.execute - exception occured:" + throwable);
+            throwable.printStackTrace();
             // Here we have to be aware of non UNO exceptions, cause they may kill
             // a remote side (which does not know anything about theire types)
             if(!(throwable instanceof com.sun.star.uno.Exception)

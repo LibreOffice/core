@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionInputStream_Adapter.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,16 +99,16 @@ class XConnectionInputStream_Adapter extends InputStream {
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        byte bytes[][] = new byte[1][];
+//      byte bytes[][] = new byte[1][];
 
         try {
-            len = _xConnection.read(bytes, len - off);
+            len = _xConnection.read(_bytes, len - off);
         }
         catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
 
-        System.arraycopy(bytes[0], 0, b, off, len);
+        System.arraycopy(_bytes[0], 0, b, off, len);
 
         return len == 0 ? -1 : len;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadId.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:44:32 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This is the global thread id.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2001-05-17 12:44:32 $
+ * @version     $Revision: 1.2 $ $ $Date: 2002-06-25 07:16:52 $
  * @author      Joerg Budischewski
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
@@ -91,12 +91,15 @@ public class ThreadId {
      * <p>
      */
     public ThreadId() {
-        try {
-            init(UnoRuntime.generateOid(new Object()).getBytes("UTF8"));
-        }
-        catch(UnsupportedEncodingException unsupportedEncodingException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".<init> - unexpected: " + unsupportedEncodingException.toString());
-        }
+        init(UnoRuntime.generateOid(new Object()));
+    }
+
+    /** Use this ctor only as long as the string
+        contains only ascii characters. Otherwise,
+        use the byte [] ctor.
+     */
+    public ThreadId(String threadId ) {
+        init( threadId );
     }
 
     /**
@@ -113,14 +116,37 @@ public class ThreadId {
      * <p>
      * @param  threadID     a byte array describing a thread id
      */
-    private void init(byte threadId[]) {
+    private void init(String threadId)
+    {
         try {
-            _threadId = threadId;
-              _string = new String(threadId, "8859_1");
+            _string = threadId;
+            _threadId = _string.getBytes( "UTF8" );
         }
-        catch(java.io.UnsupportedEncodingException bla) {
-            System.err.println(getClass().getName() + ".init - unexpected exception:" + bla);
+        catch(UnsupportedEncodingException unsupportedEncodingException) {
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".<init> - unexpected: " + unsupportedEncodingException.toString());
         }
+    }
+
+    /**
+     * Initializes a thread id with a byte array
+     * <p>
+     * @param  threadID     a byte array describing a thread id
+     */
+    private void init(byte threadId[])
+    {
+        _threadId = threadId;
+
+        // in case the deprecated String( byte [] , byte ) ctor
+        // once vanishes, replace it with this  code
+//         char [] a = new char[threadId.length];
+//         int nMax = threadId.length;
+//         for( int i = 0 ; i < nMax ; i ++ )
+//             a[i] = (char) threadId[i];
+//         _string = new String( a );
+
+        // fast but deprecated
+        _string = new String(threadId, (byte) 0 );
+
     }
 
     /**

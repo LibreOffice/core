@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2001-05-17 12:55:05 $
+ * @version     $Revision: 1.9 $ $ $Date: 2002-06-25 07:16:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -92,36 +92,40 @@ public class JavaThreadPool implements IThreadPool {
         _javaThreadPoolFactory = javaThreadPoolFactory;
     }
 
-    public void attach() {
-        ThreadId threadId = _javaThreadPoolFactory.getThreadId();
-
+    public Object attach( ThreadId threadId )
+    {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".attach - id:" + threadId);
-
-        // we don't have to synchronize here
-        // cause the thread can attach itself
-        // not concurrently
         JobQueue jobQueue = _javaThreadPoolFactory.getJobQueue(threadId);
         if(jobQueue == null)
             jobQueue = new JobQueue(_javaThreadPoolFactory, threadId, false);
 
         // acquiring the jobQueue registers it at the ThreadPoolFactory
         jobQueue.acquire();
+        return jobQueue;
+    }
+
+    public void attach() {
+        attach( _javaThreadPoolFactory.getThreadId() );
+    }
+
+    public void detach( Object handle, ThreadId id )
+    {
+        ((JobQueue)handle).release();
     }
 
     public void detach() {
-        ThreadId threadId = _javaThreadPoolFactory.getThreadId();
-
-        JobQueue jobQueue = _javaThreadPoolFactory.getJobQueue(threadId);
-        // releasing the jobQueue deregisters it from the ThreadPoolFactory
-        jobQueue.release();
+        ThreadId threadId =  _javaThreadPoolFactory.getThreadId();
+        detach(_javaThreadPoolFactory.getJobQueue(threadId), threadId );
     }
 
-    public Object enter() throws Throwable {
+
+    public Object enter( ) throws Throwable {
         ThreadId threadId = _javaThreadPoolFactory.getThreadId();
+        return enter( _javaThreadPoolFactory.getJobQueue( threadId ), threadId  );
+    }
 
-        JobQueue jobQueue = _javaThreadPoolFactory.getJobQueue(threadId);
-
-        return jobQueue.enter(this);
+    public Object enter( Object handle, ThreadId threadId ) throws Throwable {
+        return ((JobQueue)handle).enter(this);
     }
 
     public void putJob(Job job) {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-16 14:58:46 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2002-05-16 14:58:46 $
+ * @version     $Revision: 1.8 $ $ $Date: 2002-06-25 07:13:38 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -102,6 +102,7 @@ public class java_environment implements IEnvironment, Disposable {
      * When set to true, enables various debugging output.
      */
     static public final boolean DEBUG = false;
+    final static String _holderProxyClassName = HolderProxy.class.getName().replace('.', '/');
 
     /*
     ** This is the holder proxy, which one gets while trying to get a registered object
@@ -210,14 +211,19 @@ public class java_environment implements IEnvironment, Disposable {
     ** This is the holder class, whichs instances are put into the hashtable
     */
     class Holder {
+
         int    _refCount;
         String _oId;
         Object _object;
+        Class _class;
+        boolean _instanceOfProxy;
 
-        Holder(String oId, Object object) {
+        Holder(String oId, Object object , Type type) {
             _oId    = oId;
             _object = object;
             _refCount = 1;
+            _class = ((TypeDescription)type.getTypeDescription()).getZClass();
+            _instanceOfProxy = (object instanceof Proxy);
         }
 
         synchronized void incRefCount() {
@@ -235,30 +241,28 @@ public class java_environment implements IEnvironment, Disposable {
                 _objects.remove(_oId);
         }
 
-        Object xxgetObject(Type type) {
+        Object xxgetObject(Type type)
+        {
             Object result = _object;
-
-            if(_object instanceof Proxy) {
+            if( _instanceOfProxy ) {
                 if(DEBUG) System.err.println("##### " + getClass().getName() + " -  creating new Proxy Proxy");
-                Class holderProxyClass = DispatcherAdapterFactory.createDispatcherAdapter(((TypeDescription)type.getTypeDescription()).getZClass(),
-                                                                                          HolderProxy.class.getName().replace('.', '/'));
-
+                Class holderProxyClass =
+                    DispatcherAdapterFactory.createDispatcherAdapter(
+                        _class,
+                        _holderProxyClassName);
                 try {
                     HolderProxy holderProxy = (HolderProxy)holderProxyClass.newInstance();
                     holderProxy.setObject(holderProxy, _object);
                     holderProxy.setHolder(this);
                     holderProxy.setInterface(type);
-
                     result = holderProxy;
                 }
                 catch(Exception exception) {
                     System.err.println("##### " + getClass().getName() + ".xxgetObject - exception occurred:" + exception);
                     exception.printStackTrace();
-
                     result = null;
                 }
             }
-
             return result;
         }
 
@@ -321,7 +325,7 @@ public class java_environment implements IEnvironment, Disposable {
         if(oId[0] == null)
             oId[0] = UnoRuntime.generateOid(object);
 
-        String keyName = oId[0] + type;
+        String keyName = oId[0].concat( type.getTypeName());
 
         synchronized(_objects) {
             // get the holder
@@ -331,7 +335,7 @@ public class java_environment implements IEnvironment, Disposable {
                 System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + type);
 
             if(holder == null) {
-                holder = new Holder(keyName, object);
+                holder = new Holder(keyName, object , type );
 
                 _objects.put(keyName, holder);
             }
@@ -354,7 +358,7 @@ public class java_environment implements IEnvironment, Disposable {
     public void revokeInterface(String oId, Type type) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".revokeInterface:" + oId + " " + type);
         synchronized(_objects) {
-            Holder holder = (Holder)_objects.get(oId + type);
+            Holder holder = (Holder)_objects.get(oId.concat( type.getTypeName()));
             if(holder != null)
                 holder.decRefCount();
             else
@@ -372,7 +376,7 @@ public class java_environment implements IEnvironment, Disposable {
     public Object getRegisteredInterface(String oId, Type type)     {
         Object result = null;
 
-        Holder holder = (Holder)_objects.get(oId + type);
+        Holder holder = (Holder)_objects.get(oId.concat( type.getTypeName()));
 
         if(holder != null) {
             result = holder.xxgetObject(type);

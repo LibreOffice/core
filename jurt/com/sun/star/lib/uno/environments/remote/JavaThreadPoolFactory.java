@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPoolFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:42:21 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,7 @@ public class JavaThreadPoolFactory implements IThreadPoolFactory {
         if(thread instanceof JobQueue.JobDispatcher)
             threadId = ((JobQueue.JobDispatcher)thread).getThreadId();
         else {
-            try {
-                threadId = new ThreadId(UnoRuntime.generateOid(thread).getBytes("UTF8"));
-            }
-            catch(UnsupportedEncodingException unsupportedEncodingException) {
-                throw new com.sun.star.uno.RuntimeException("JavaThreadPool.getThreadId - unexpected: " + unsupportedEncodingException.toString());
-            }
+            threadId = new ThreadId(UnoRuntime.generateOid(thread));
         }
 
         if(DEBUG) System.err.println("##### ThreadPool.getThreadId:" + threadId);

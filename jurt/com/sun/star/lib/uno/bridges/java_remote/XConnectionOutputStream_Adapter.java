@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionOutputStream_Adapter.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,16 @@ class XConnectionOutputStream_Adapter extends OutputStream {
     }
 
     public void write(byte[] b, int off, int len) throws IOException {
-        byte bytes[] = new byte[len];
+        byte bytes[] = null;
 
-        System.arraycopy(b, off, bytes, 0, len);
+        if(off == 0 && len == b.length)
+            bytes = b;
+
+        else {
+            bytes = new byte[len];
+
+            System.arraycopy(b, off, bytes, 0, len);
+        }
 
         try {
             _xConnection.write(bytes);

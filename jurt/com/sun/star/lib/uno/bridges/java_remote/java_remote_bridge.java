@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-21 16:23:31 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.24 $ $ $Date: 2002-03-21 16:23:31 $
+ * @version     $Revision: 1.25 $ $ $Date: 2002-06-25 07:08:59 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -189,40 +189,45 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                     }
 
                     // Take care of special methods release and acquire
-                    if(iMessage.getOperation() != null && iMessage.getOperation().equals("release")) {
-                        _java_environment.revokeInterface(iMessage.getOid(), new Type(iMessage.getInterface()));
-                        remRefHolder(new Type(iMessage.getInterface()), iMessage.getOid());
+                    String operation = iMessage.getOperation();
+                    String oid = iMessage.getOid();
+                    if(operation != null && operation.equals("release")) {
+                        Type interfaceType = new Type(iMessage.getInterface());
+                        _java_environment.revokeInterface(oid, interfaceType );
+                        remRefHolder(interfaceType, oid);
 
                         if(iMessage.mustReply())
                             sendReply(false, iMessage.getThreadId(), null);
                     }
-                    else if(iMessage.getOperation() != null && iMessage.getOperation().equals("acquire")) {
-                        String oid_o[] = new String[]{iMessage.getOid()};
-                        _java_environment.registerInterface(null, oid_o, new Type(iMessage.getInterface()));
+                    else if(operation != null && operation.equals("acquire")) {
+                        Type interfaceType = new Type(iMessage.getInterface());
+                        String oid_o[] = new String[]{oid};
+                        _java_environment.registerInterface(null, oid_o, interfaceType );
 
-                        addRefHolder(new Type(iMessage.getInterface()), iMessage.getOid());
+                        addRefHolder(interfaceType, oid);
                     }
                     else {
                         Object object = null;
 
-                        if(iMessage.getOperation() != null) { // is it a request
-                            object = _java_environment.getRegisteredInterface(iMessage.getOid(), new Type(iMessage.getInterface()));
+                        if(operation != null) { // is it a request
+                            Type interfaceType = new Type(iMessage.getInterface());
+                            object = _java_environment.getRegisteredInterface(oid, interfaceType);
 
                             Object xexception = null;
 
                             if(object == null) { // this is an unknown oid, so we may have to ask the XInstanceProvider
                                 if(_xInstanceProvider == null) // we have neither an object nor an instance provider -> exception
-                                    xexception = new com.sun.star.uno.RuntimeException(getClass().getName() + ".dispatch - no instance provider set and unknown object:" + iMessage.getOid());
+                                    xexception = new com.sun.star.uno.RuntimeException(getClass().getName() + ".dispatch - no instance provider set and unknown object:" + oid);
 
                                 else {
                                     try {
-                                        object = _xInstanceProvider.getInstance(iMessage.getOid());
+                                        object = _xInstanceProvider.getInstance(oid);
 
-                                        if(object == null && !iMessage.getOperation().equals("queryInterface"))
+                                        if(object == null && !operation.equals("queryInterface"))
                                             xexception = new com.sun.star.uno.RuntimeException(
                                                 getClass().getName()
                                                 + ".dispatch: instance provider returned null and operation >"
-                                                + iMessage.getOperation()
+                                                + operation
                                                 + "< not supported on null");
                                     }
                                     catch(com.sun.star.container.NoSuchElementException noSuchElementException) {
@@ -288,7 +293,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
     protected XConnection       _xConnection;
     protected InputStream       _inputStream;       // wraps the connection to be an InputStream
-    protected OutputStream      _outputStream;      // wraps the connection to be an OutputStream
+    protected DataOutputStream      _outputStream;      // wraps the connection to be an OutputStream
 
     protected XInstanceProvider _xInstanceProvider;
 
@@ -483,7 +488,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         _xConnection        = (XConnection)args[1];
         _xInstanceProvider  = (XInstanceProvider)args[2];
         _inputStream        = new XConnectionInputStream_Adapter(_xConnection);
-        _outputStream       = new XConnectionOutputStream_Adapter(_xConnection);
+        _outputStream       = new DataOutputStream( new XConnectionOutputStream_Adapter(_xConnection) );
 
         if(args.length > 3)
             _name = (String)args[3];
@@ -837,7 +842,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         synchronized(_outputStream) {
             _iProtocol.writeReply(exception, threadId, result);
             try {
-                _iProtocol.flush(new DataOutputStream(_outputStream));
+                _iProtocol.flush(_outputStream);
                 _outputStream.flush();
             }
             catch(IOException iOException) {
@@ -868,17 +873,19 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         boolean goThroughThreadPool = false;
 
+        ThreadId threadId = ThreadPoolFactory.getThreadId();
+        Object handle = null;
         try {
             synchronized(_outputStream) {
-                _iProtocol.writeRequest((String)object, TypeDescription.getTypeDescription(type), operation, ThreadPoolFactory.getThreadId(), params, synchron, mustReply);
+                _iProtocol.writeRequest((String)object, TypeDescription.getTypeDescription(type), operation, threadId , params, synchron, mustReply);
 
                 goThroughThreadPool = synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher;
 
                 if(goThroughThreadPool) // prepare a queue for this thread in the threadpool
-                    _iThreadPool.attach();
+                    handle = _iThreadPool.attach( threadId );
 
                 try {
-                    _iProtocol.flush(new DataOutputStream(_outputStream));
+                    _iProtocol.flush(_outputStream);
                     _outputStream.flush();
                 }
                 catch(IOException iOException) {
@@ -890,12 +897,12 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             }
 
             if(goThroughThreadPool)
-                result = _iThreadPool.enter();
+                result = _iThreadPool.enter( handle, threadId);
 
         }
         finally {
             if(goThroughThreadPool)
-                _iThreadPool.detach();
+                _iThreadPool.detach( handle , threadId);
 
             if(operation.equals("release"))
                 release(); // kill this bridge, if this was the last proxy

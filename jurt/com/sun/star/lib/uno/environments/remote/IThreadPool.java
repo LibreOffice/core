@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IThreadPool.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various
  * threadpool implementations.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-17 12:55:05 $
+ * @version     $Revision: 1.4 $ $ $Date: 2002-06-25 07:16:52 $
  * @author      Joerg Budischewski
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolFactory
@@ -81,10 +81,31 @@ public interface IThreadPool {
     public void attach();
 
     /**
+     * As above, but hands in an already existing
+     * instance of the threadid of the current thread.
+     * Returns a handle which can be used in enter and
+     * detach calls.<p>
+     * The function exists for performance
+     * optimization reasons.
+     * @see #attach
+     */
+    public Object attach( ThreadId id );
+
+    /**
      * Detaches this thread from the thread pool.
      * @see                 #enter
      */
     public void detach();
+
+    /**
+     * As above, but hands in an already existing
+     * instance of the threadid of the current thread
+     * and a handle returned by attach.
+     * The function exists for performance
+     * optimization reasons.
+     * @see #attach,#detach
+     */
+    public void detach( Object handle, ThreadId id );
 
     /**
      * Lets this thread enter the thread pool.
@@ -94,6 +115,17 @@ public interface IThreadPool {
      * @see                 #putJob
      */
     public Object enter() throws Throwable;
+
+    /**
+     * as above but hands in an already existing
+     * instance of the threadid of the current thread
+     * and a handle returned by attach.
+     * This thread then executes all jobs put via
+     * <code>putJob</code> until a reply job arrives.
+     * <p>
+     * @see                 #putJob
+     */
+    public Object enter( Object handle, ThreadId id ) throws Throwable;
 
     /**
      * Queues a job into the jobQueue of the thread belonging

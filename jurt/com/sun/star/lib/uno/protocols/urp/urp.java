@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
+ *  last change: $Author: jbu $ $Date: 2002-06-25 07:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2001-05-17 12:46:28 $
+ * @version     $Revision: 1.11 $ $ $Date: 2002-06-25 07:18:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -126,6 +126,12 @@ public class urp extends Protocol {
     private boolean   _ignore_cache;
     private Marshal   _marshal;
     private Unmarshal _unmarshal;
+
+    private String _operationContainer[]  = new String[1];
+    private Object _paramsContainer[][]   = new Object[1][];
+    private boolean _synchronContainer[]  = new boolean[1];
+    private boolean _mustReplyContainer[] = new boolean[1];
+    private boolean _exceptionContainer[] = new boolean[1];
 
     static private final byte BIG_HEADER   = (byte)0x80;
     // big header flags
@@ -587,9 +593,10 @@ public class urp extends Protocol {
     public IMessage readMessage(InputStream inputStream) throws IOException {
         IMessage iMessage = null;
 
+        DataInput dataInput = new DataInputStream( inputStream );
           while(iMessage == null) { // try hard to get a message
             if(_unmarshal.bytesLeft() <= 0) { // the last block is empty, get a new one
-                byte bytes[] = readBlock(new DataInputStream(inputStream));
+                byte bytes[] = readBlock(dataInput);
                 _unmarshal.reset(bytes);
             }
 
@@ -597,15 +604,10 @@ public class urp extends Protocol {
                 throw new java.io.IOException("connection close message received");
 
             else {
-                String operation[]  = new String[1];
-                Object params[][]   = new Object[1][];
-                boolean synchron[]  = new boolean[1];
-                boolean mustReply[] = new boolean[1];
-                boolean exception[] = new boolean[1];
+                Object result = readMessage(_operationContainer, _paramsContainer, _synchronContainer,
+                                            _mustReplyContainer, _exceptionContainer);
 
-                Object result = readMessage(operation, params, synchron, mustReply, exception);
-
-                if(operation[0] == null) { // a reply ?
+                if(_operationContainer[0] == null) { // a reply ?
                     iMessage = new Message(null, // oid
                                            result, // object
                                            null, // interface
@@ -613,20 +615,25 @@ public class urp extends Protocol {
                                            _in_threadId,
                                            false,
                                            false,
-                                           exception[0],
-                                           params[0]);
+                                           _exceptionContainer[0],
+                                           _paramsContainer[0]);
                 }
                 else { // a request
                     iMessage = new Message(_in_oid,
                                            null,
                                            _in_interface,
-                                           operation[0],
+                                           _operationContainer[0],
                                            _in_threadId,
-                                           synchron[0],
-                                           mustReply[0],
+                                           _synchronContainer[0],
+                                           _mustReplyContainer[0],
                                            false,
-                                           params[0]);
+                                           _paramsContainer[0]);
                 }
+                _operationContainer[0] = null;
+                _paramsContainer[0] = null;
+                _synchronContainer[0] = false;
+                _exceptionContainer[0] = false;
+                _mustReplyContainer[0] = false;
             }
           }
 
