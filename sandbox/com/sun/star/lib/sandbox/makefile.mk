@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-12-22 09:56:46 $
+#   last change: $Author: kr $ $Date: 2001-02-06 12:28:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ JAVAFILES=						    \
     ExecutionContext.java			\
     FilePermission.java			    \
     Holder.java					    \
-    IInvokeHook.java		    	\
     ImageProducerProxy.java		    \
     JarEntry.java					\
     JarInputStream.java			    \
