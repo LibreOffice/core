@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 12:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,20 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
+namespace
+{
+    void dropTable(const Reference<XNameAccess>& _rxTable,const ::rtl::OUString& _sTableName)
+    {
+        if ( _rxTable->hasByName(_sTableName) )
+        {
+            Reference<XDrop> xNameCont(_rxTable,UNO_QUERY);
+            OSL_ENSURE(xNameCont.is(),"No drop interface for tables!");
+            if ( xNameCont.is() )
+                xNameCont->dropByName(_sTableName);
+        }
+    }
+}
+
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
 {
@@ -308,12 +322,18 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             aReturn.bEnabled = m_bNew || m_bEditable || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
-        case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = isConnected();
-            break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = m_bModified;
+            // run through
+        case ID_BROWSER_SAVEASDOC:
+            aReturn.bEnabled |= isConnected();
+            if ( aReturn.bEnabled )
+            {
+                ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+                aReturn.bEnabled = aIter != m_vRowList.end();
+            }
             break;
+
         case ID_BROWSER_CUT:
             aReturn.bEnabled = m_bEditable && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
@@ -409,10 +429,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 
     // check if a column exists
     // TODO
-//  ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
-//                      ::std::bind2nd(::std::not(::std::equal<OTableRow*>()),NULL));
-
-    ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
 
     Reference<XNameAccess> xTables;
     ::rtl::OUString sCatalog, sSchema;
@@ -475,13 +491,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         Reference<XPropertySet> xTable;
         if(bNew || !xTables->hasByName(m_sName)) // just to make sure the table already exists
         {
-            if(xTables->hasByName(m_sName))
-            {
-                Reference<XDrop> xNameCont(xTables,UNO_QUERY);
-                OSL_ENSURE(xNameCont.is(),"No drop interface for tables!");
-                if(xNameCont.is())
-                    xNameCont->dropByName(m_sName);
-            }
+            dropTable(xTables,m_sName);
 
             Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
             OSL_ENSURE(xFact.is(),"OTableController::doSaveDoc: No XDataDescriptorFactory available!");
@@ -716,20 +726,50 @@ sal_Bool OTableController::Construct(Window* pParent)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
-    if(isModified())
+    if ( isModified() )
     {
-        QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_SAVEMODIFIED));
-        switch (aQry.Execute())
+        ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+        if ( aIter != m_vRowList.end() )
         {
-            case RET_YES:
-                Execute(ID_BROWSER_SAVEDOC);
-                if(isModified())
-                    return sal_False; // when we save the table this must be false else some press cancel
-                break;
-            case RET_CANCEL:
-                return sal_False;
-            default:
-                break;
+            QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_SAVEMODIFIED));
+            switch (aQry.Execute())
+            {
+                case RET_YES:
+                    Execute(ID_BROWSER_SAVEDOC);
+                    if ( isModified() )
+                        return sal_False; // when we save the table this must be false else some press cancel
+                    break;
+                case RET_CANCEL:
+                    return sal_False;
+                default:
+                    break;
+            }
+        }
+        else if ( !m_bNew )
+        {
+            QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_ALL_ROWS_DELETED));
+            switch (aQry.Execute())
+            {
+                case RET_YES:
+                    {
+                        try
+                        {
+                            Reference<XTablesSupplier> xTablesSup(getConnection(),UNO_QUERY);
+                            Reference<XNameAccess> xTables = xTablesSup->getTables();
+                            dropTable(xTables,m_sName);
+                        }
+                        catch(const Exception&)
+                        {
+                            OSL_ENSURE(sal_False, "OTableController::suspend: nothing is expected to happen here!");
+                        }
+
+                    }
+                    break;
+                case RET_CANCEL:
+                    return sal_False;
+                default:
+                    break;
+            }
         }
     }
     return sal_True;
