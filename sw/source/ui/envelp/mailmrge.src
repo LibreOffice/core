@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Atalho" ;
         Text[ chinese_simplified ] = "Â·¾¶";
         Text[ russian ] = "Ïóòü";
-        Text[ polish ] = "?cie¿ka";
+        Text[ polish ] = "Œcie¿ka";
         Text[ japanese ] = "Êß½";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¸ô®|";
@@ -669,7 +669,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Formato da mensagem" ;
         Text[ chinese_simplified ] = "ÓÊ¼ş¸ñÊ½";
         Text[ russian ] = "Ôîğìàò Mail";
-        Text[ polish ] = "Format wiadomo?ci";
+        Text[ polish ] = "Format wiadomoœci";
         Text[ japanese ] = "Ò°Ù‘®";
         Text[ chinese_traditional ] = "¶l¥ó®æ¦¡";
         Text[ arabic ] = "ÊäÓíŞ ÇáÈÑíÏ";
@@ -791,8 +791,8 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Destino" ;
         Text[ chinese_simplified ] = "Êä³ö";
         Text[ russian ] = "Âûâîä";
-        Text[ polish ] = "Wyj?cie";
-        Text[ japanese ] = "±³ÄÌß¯Ä";
+        Text[ polish ] = "Wyjœcie";
+        Text[ japanese ] = "o—Í";
         Text[ chinese_traditional ] = "¿é¥X";
         Text[ arabic ] = "ÇáÅÎÑÇÌ";
         Text[ greek ] = "ÅîáãùãŞ";
@@ -830,3 +830,4 @@ ModalDialog DLG_MAILMERGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta en serie";
 };
+
