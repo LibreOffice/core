@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:03:46 $
+ *  last change: $Author: cl $ $Date: 2002-11-26 15:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@ Menu RID_DRAW_TEXTOBJ_INSIDE_POPUP
         MN_LINESPACING_ATTR
         SEPARATOR
         MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MenuItem
+        {
+            ITEM_OPEN_HYPERLINK
+        };
         SEPARATOR
         MN_BULLET
         ITEM_FORMAT_NUMBERING
