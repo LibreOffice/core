@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:52:06 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 11:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,8 +495,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             rReq.SetReturnValue( SfxBoolItem(0, bOk) );
             if ( bOk )
             {
-                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOCDONE,this));
-
                 // Daten am Medium updaten
                 SfxItemSet *pSet = GetMedium()->GetItemSet();
                 pSet->ClearItem( SID_POSTDATA );
@@ -517,6 +515,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SFX_REQUEST_ARG( rReq, pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, FALSE );
                 if ( pFilterOptItem )
                     pSet->Put( *pFilterOptItem );
+
+                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOCDONE,this));
+
                 if ( bWasReadonly )
                     Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
             }
