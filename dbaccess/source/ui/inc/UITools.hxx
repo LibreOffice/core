@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,28 @@ namespace dbaui
             <TRUE/> if so otherwise <FALSE/>
     */
     sal_Bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** check if the alias name of the table should be added at select statements
+        @param  _xConnection
+            Used to get the datasource as parent from the connection.
+        @return
+            <TRUE/> if so otherwise <FALSE/>
+    */
+    sal_Bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** check if a specific property is enabled in the info sequence
+        @param  _xConnection
+            Used to get the datasource as parent from the connection.
+        @param  _sProperty
+            The property to search in the info property of the data source.
+        @param  _bDefault
+            This value will be returned, if the property doesn't exist in the data source.
+        @return
+            <TRUE/> if so otherwise <FALSE/>
+    */
+    sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault = sal_False);
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
