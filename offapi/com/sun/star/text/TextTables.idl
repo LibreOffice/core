@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTables.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // DocMerge from xml: service com::sun::star::text::TextTables
 /** provides access to all tables in a document.
  */
-service TextTables
+published service TextTables
 {
     // DocMerge: empty anyway
     interface com::sun::star::container::XIndexAccess;
