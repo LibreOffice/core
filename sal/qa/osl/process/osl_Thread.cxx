@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Thread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:50:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 09:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1761,7 +1761,7 @@ namespace osl_Thread
                 pCountThread->create();
                 //pCountThread2->create();
                 pCountThread->setWait(3);
-                oId = pCountThread->getCurrentIdentifier();
+                oId = Thread::getCurrentIdentifier();
                 oslThreadIdentifier oIdChild = pCountThread->getIdentifier();
                 //t_print("CurrentId is %ld, Child1 id is %ld, Child2 id is %ld\n",oId, oIdChild,pCountThread2->m_id );
                 termAndJoinThread(pCountThread);
@@ -1782,7 +1782,7 @@ namespace osl_Thread
 
         CPPUNIT_TEST_SUITE(getCurrentIdentifier);
         CPPUNIT_TEST(getCurrentIdentifier_001);
-        CPPUNIT_TEST(getCurrentIdentifier_002);
+        //CPPUNIT_TEST(getCurrentIdentifier_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getCurrentIdentifier
 
