@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoregisterhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:34:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 10:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,15 @@ void SAL_CALL registerFunc(FktPtr _pFunc, const char* _sFuncName)
 
 // -----------------------------------------------------------------------------
 AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName, GetOpt & _aOptions /*, JobList * _pJobList*/)
-        :DynamicLibraryHelper(_sDLLName, _aOptions)
+        :DynamicLibraryHelper(_sDLLName, _aOptions),
+         m_bLoadLibraryOK(false)
 {
     // try to get the entry pointer
     FktRegAllPtr pFunc = (FktRegAllPtr) m_pModule->getSymbol( rtl::OUString::createFromAscii( "registerAllTestFunction" ) );
 
     if (pFunc)
     {
+        m_bLoadLibraryOK = true;
         // FktRegFuncPtr pRegisterFunc = &DynamicLibraryHelper::registerFunc;
         // pFunc(pRegisterFunc);
         // osl::Guard aGuard(m_Mutex);
@@ -142,6 +144,12 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
 
 void AutomaticRegisterHelper::CallAll(hTestResult _hResult) const
 {
+    // can't load the module, break the tests.
+    if (m_bLoadLibraryOK == false)
+    {
+        return;
+    }
+
     for (FunctionList::const_iterator it = m_aFunctionList.begin();
          it != m_aFunctionList.end();
          ++it)
