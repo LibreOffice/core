@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 09:43:45 $
+ *  last change: $Author: mba $ $Date: 2001-07-06 14:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,10 @@ ULONG SfxPS_Impl::Load( SvStream& rStream )
         return ERRCODE_IO_GENERAL;
     }
     SetSectionName( aName );
+
+    if ( nOsMinor == 5 )
+        rStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+
     return aSection.Load( rStream );
 }
 
