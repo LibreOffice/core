@@ -2,17 +2,22 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
 
+Public Const SBOVERWRITEUNDEFINED as Integer = 0
+Public Const SBOVERWRITECANCEL as Integer = 2
+Public Const SBOVERWRITEQUERY as Integer = 7
+Public Const SBOVERWRITEALWAYS as Integer = 6
+
 Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
 Public oLogDocument as Object
 Public oLogTable as Object
 Public bLogExists as Boolean
+Public sComment as String
 
 Public bInsertRow as Boolean
 Public sLogUrl as String
 Public sCurPassWord as String
 Public FileCount as Integer
-
 
 
 
@@ -76,7 +81,7 @@ End Sub
 
 
 Sub ConvertAllDocuments(sFilterName())
-Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
+Dim FileProperties(2) as new com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
 Dim OpenProperties(3) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
@@ -98,12 +103,14 @@ Dim CurFilterName as String
 Dim ApplIndex as Integer
 Dim Index as Integer
 Dim bIsDocument as Boolean
-Dim iOverWrite as Integer
+Dim iGeneralOverwrite as Integer
 Dim bDoSave as Boolean
 Dim sCurFileExists as String
 Dim MaxFileIndex as Integer
 Dim bContainsBasicMacro as Boolean
 Dim bIsPassWordProtected as Boolean
+Dim iOverwrite as Integer
+	iGeneralOverwrite = SBOVERWRITEUNDEFINED
 	bConversionIsRunnig = True
 	bLogExists = false
 	AbsTemplateFound = 0
@@ -113,7 +120,7 @@ Dim bIsPassWordProtected as Boolean
 		If bCancelTask Or RetValue = 0 Then
 			bConversionIsRunnig = False
 			Exit Sub
-		End if
+		End if		
 		bIsDocument = False
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
@@ -123,7 +130,7 @@ Dim bIsPassWordProtected as Boolean
 		If bCancelTask Or RetValue = 0 Then
 			bConversionIsRunnig = False
 			Exit Sub
-		End if
+		End if		
 		bIsDocument = True
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
@@ -135,15 +142,15 @@ Dim bIsPassWordProtected as Boolean
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
-		OpenProperties(1).Name = False
+		OpenProperties(1).Value = False
 		OpenProperties(2).Name = &quot;MacroExecutionMode&quot;
-		OpenProperties(2).Name = com.sun.star.document.MacroExecMode.NEVER_EXECUTE
+		OpenProperties(2).Value = com.sun.star.document.MacroExecMode.NEVER_EXECUTE	
 		OpenProperties(3).Name = &quot;UpdateDocMode&quot;
-		OpenProperties(3).Name = com.sun.star.document.UpdateDocMode.NO_UPDATE
-
+		OpenProperties(3).Value = com.sun.star.document.UpdateDocMode.NO_UPDATE
 		MaxFileIndex = Ubound(FilesList(),1)
 		FileCount = 0
 		For i = 0 To MaxFileIndex
+			sComment = &quot;&quot;
 			If bCancelTask Or RetValue = 0 Then
 				bConversionIsRunnig = False
 				Exit For
@@ -158,9 +165,9 @@ Dim bIsPassWordProtected as Boolean
 			If Not IsNull(oDocument) Then
 				bIsPassWordProtected = CheckPassWordProtection(oDocument)
 			End If
-			bContainsBasicMacro = CheckIfMacroExists(oDocument)
 
 			If Not IsNull(oDocument) Then
+				CheckIfMacroExists(oDocument, sComment)
 				Select Case sExtension
 					Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
 						SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
@@ -180,36 +187,57 @@ Dim bIsPassWordProtected as Boolean
 				If Not oUcb.Exists(TargetDir) Then
 					CreateFolder(TargetDir)
 				End If
-				If oUcb.Exists(TargetFile) Then
-					sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
-					sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)
-					iOverWrite = Msgbox (sCurFileExists, 32 + 3, sTitle)
-					Select Case iOverWrite
-						Case 1	&apos; OK
-							&apos; In the FileProperty-Bean this is already default
-							bDoSave = True
-						Case 2 	&apos; Abort
-							CancelTask(False)
-							bDoSave = False
-						Case 7 	&apos; No
-							bDoSave = False
-					End Select
+				&apos; Todo: According to AS there might come a new feature that storeasUrl could possibly rise a UI dialog. 
+				&apos; In this case my own UI becomes obsolete
+				If ((oUcb.Exists(TargetFile)) and (iGeneralOverwrite &lt;&gt; SBOVERWRITEALWAYS)) Then
+					If (iGeneralOverwrite = SBOVERWRITEUNDEFINED) Then
+						iGeneralOverWrite = Msgbox (sOverwriteallFiles, 32 + 3, sTitle)						
+					End If
+					If ((iGeneralOverWrite = SBOVERWRITEQUERY) OR (iGeneralOverwrite = SBOVERWRITECANCEL)) Then
+						sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+						sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)
+						iOverWrite = Msgbox (sCurFileExists, 32 + 3, sTitle)
+						Select Case iOverWrite
+							Case 1	&apos; OK
+								&apos; In the FileProperty-Bean this is already default
+								bDoSave = True
+							Case 2 	&apos; Abort
+								CancelTask(False)
+								bDoSave = False
+							Case 7 	&apos; No
+								bDoSave = False
+						End Select
+					End If
 				End If
 				If bDoSave Then
-					InsertDocNamesToLogDocument(sFullName, TargetFile, bContainsBasicMacro)
-					On Local Error Resume Next
+					On Local Error Goto NOSAVING
 					FileProperties(0).Name = &quot;FilterName&quot;
 					FileProperties(0).Value = CurFilterName
+					FileProperties(1).Name = &quot;Overwrite&quot;
+					FileProperties(1).Value = True
 					If bIsPassWordProtected Then
-						FileProperties(1).Name = &quot;PassWord&quot;
-						FileProperties(1).Value = sCurPassWord
+						FileProperties(2).Name = &quot;PassWord&quot;
+						FileProperties(2).Value = sCurPassWord
 					End If
+					&apos; Todo: Make sure that an errorbox pops up when saving fails
 					oDocument.StoreAsUrl(TargetFile,FileProperties())
-					FileCount = FileCount + 1
+					NOSAVING:
+					If Err &lt;&gt; 0 Then
+						sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+						sComment = ConcatComment(sComment, sCurCouldnotsaveDocument)
+						Resume LETSGO
+						LETSGO:
+					Else
+						FileCount = FileCount + 1
+					End If
 					oDocument.Dispose()
-					On Local Error Goto 0
 				End If
+			Else
+				sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sFullName), &quot;&lt;1&gt;&quot;)
+				sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
+				TargetFile = &quot;&quot;
 			End If
+			InsertDocNamesToLogDocument(sFullName, TargetFile, sComment)
 		Next i
 	End If
 	AddLogStatistics()
@@ -351,7 +379,8 @@ Dim bLogIsThere as Boolean
 End Sub
 
 
-Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, bContainsBasicMacro as Boolean)
+
+Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;bContainsBasicMacro as Boolean
 Dim oCell as Object
 Dim oLogCursor as Object
 Dim UrlList(1) as String
@@ -369,11 +398,13 @@ Dim oCommentCursor as Object
 		UrlList(1) = TargetUrl
 		For i = 0 To 1
 			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
-			If i = 1 And bContainsBasicMacro Then
-				oCommentCursor = oCell.createTextCursor()
-				oCell.insertControlCharacter(oCommentCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
-				oCell.insertString(oCommentCursor, sReeditMacro, false)
-			End If
+			If sComment &lt;&gt; &quot;&quot; Then
+				If ((TargetUrl &lt;&gt;&quot;&quot;) AND (i = 1)) Or ((TargetUrl = &quot;&quot;) AND (i = 0)) Then
+					oCommentCursor = oCell.createTextCursor()
+					oCell.insertControlCharacter(oCommentCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
+					oCell.insertString(oCommentCursor, sComment, false)
+				End If
+			End  If
 			LocUrl = UrlList(i)
 			oLogCursor = oCell.createTextCursor()
 			oLogCursor.CollapseToStart()
@@ -382,7 +413,7 @@ Dim oCommentCursor as Object
 			oLogCursor.HyperLinkTarget = LocUrl
 			LocFileName = FileNameOutOfPath(LocUrl)
 			oCell.InsertString(oLogCursor, LocFileName,False)
-		Next i
+		Next i 
 		oLogDocument.Store()
 	End If
 End Sub
@@ -392,7 +423,6 @@ Sub AddLogStatistics()
 Dim oCell as Object
 Dim oLogCursor as Object
 Dim MaxRowIndex as Integer
-Dim oTableCursor as Object
 	If bLogExists Then
 		MaxRowIndex = oLogTable.Rows.Count
 		sLogSummary = ReplaceString(sLogSummary, FileCount, &quot;&lt;COUNT&gt;&quot;)
@@ -400,9 +430,7 @@ Dim oTableCursor as Object
 		oCell = oLogTable.GetCellbyPosition(0, MaxRowIndex)
 		oLogCursor = oCell.createTextCursor()
 		oCell.InsertString(oLogCursor, sLogSummary,False)
-		oTableCursor = oLogTable.createCursorByCellName(oCell.CellName)
-		oTableCursor.goRight(1, True)
-		oTableCursor.mergeRange()
+		MergeRange(oLogTable, oCell, 1)		
 		oLogDocument.Store()
 		oLogDocument.Dispose()
 		bLogExists = False
@@ -412,12 +440,14 @@ End Sub
 
 &apos; This macro has to be reworked out again as it works with deprecated interfaces
 &apos; It can be completed as soon as Bug #93295 will be fixed because right now it
-&apos; is not possible to access BasicLibraries and DialogLibraries from outside the
+&apos; is not possible to access BasicLibraries and DialogLibraries from outside the 
 &apos; document
-Function CheckIfMacroExists(oDocument as Object) as Boolean
+Function CheckIfMacroExists(oDocument as Object, sComment as String) as Boolean
 Dim ModuleNames() as String
 Dim MaxIndex as Integer
 Dim oLibraryContainer as Object
+Dim bMacroExists as Boolean
+	bMacroExists = False
 &apos;	oLibraryContainer = oDocument.LibraryContainer
 &apos;	If oLibraryContainer.hasElements Then
 &apos;		ModuleNames = oDocument.LibraryContainer.ElementNames
@@ -425,16 +455,19 @@ Dim oLibraryContainer as Object
 &apos;		For i = 0 To MaxIndex
 &apos;			oLibrary = oLibraryContainer.getByName(ModuleNames(i))
 &apos;			If Not IsNull(oLibrary.getDialogContainer) Then
-&apos;				CheckIf MacroExists = True
+&apos;				bMacroExists = True
 &apos;				Exit Function
 &apos;			End If
 &apos;			If oLibrary.ModuleContainer.HasElements Then
-&apos;				CheckIfMacroExists() = True
+&apos;				bMacroExists = True
 &apos;				Exit Function
 &apos;			End If
 &apos;		Next i
 &apos;	End If
-	CheckIfMacroExists() = False
+	If bMacroExists = True Then
+		ConcatComment(sComment, sReeditMacro)
+	End If
+	CheckIfMacroExists() = bMacroExists
 End Function
 
 
@@ -461,4 +494,23 @@ End Function
 Sub OpenLogDocument()
 Dim NoArgs() as New com.sun.star.beans.PropertyValue
 	OpenDocument(sLogUrl, NoArgs())
-End Sub</script:module>
+End Sub
+
+
+Sub MergeRange(oTable as Object, oCell as Object, MergeCount as Integer)	
+Dim oTableCursor as Object
+	oTableCursor = oTable.createCursorByCellName(oCell.CellName)
+	oTableCursor.goRight(MergeCount, True)
+	oTableCursor.mergeRange()
+End Sub		
+
+
+Function ConcatComment(sComment as String, AdditionalComment as String)
+	If sComment = &quot;&quot; Then
+		sComment = AdditionalComment
+	Else
+		sComment = sComment &amp; chr(13) + AdditionalComment
+	End If				
+	ConcatComment = sComment
+End Function
+</script:module>

@@ -41,6 +41,12 @@ Public sSumMSTemplates(3) as String
 Public ModuleList(3) as String
 Public sLogSummary as String
 Public sReeditMacro as String
+Public sOverwriteallFiles as String
+Public scouldnotopenDocument as String
+Public sCurcouldnotopenDocument as String
+Public scouldnotsaveDocument as String
+Public sCurcouldnotsaveDocument as String
+
 
 Sub LoadLanguage()
 	If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
@@ -74,7 +80,7 @@ Sub LoadLanguage()
 		GetApplResourceArray(2017,2, sSOHelperDocuments())		
 		
 		sContainerName(0) = GetResText(1030)
-
+		&apos; Note: for the version 5.2 there was no Productname &quot;StarSuite&quot;
 		sContainerName(1) = &quot;StarOffice&quot;
 	
 		sSummaryHeader = GetResText(1031)
@@ -92,9 +98,12 @@ Sub LoadLanguage()
 		sConvertError2 = GetResText(1056)
 		sRTErrorDesc = GetResText(1057)
 		sRTErrorHeader = GetResText(1058)
+		sOverwriteallFiles = GetResText(1070)
+		sReeditMacro = GetResText(1071)
+		scouldnotsaveDocument = GetResText(1072)		
+		scouldnotopenDocument = GetResText(1073)
 		sPathDialogMessage = GetResText(1080)
 		sTitle = GetResText(1081)
-		sReeditMacro = &quot;Dokumentenmakro muss überarbeitet werden&quot;
 
 		sProgressPage_1 = GetResText(1090)
 		sProgressPage_2 = GetResText(1091)
@@ -124,7 +133,9 @@ Sub LoadLanguage()
 			.lblTemplateExport.Label = sExportLabel
 			.chkLogfile.Label = GetResText(2032)
 			.chkLogfile.Helptext = GetResText(2033)
-			.cmdShowLogFile.Label = &quot;Logdatei anzeigen&quot;
+			Dim Blabla as String
+			blabla = GetResText(1072)
+			.cmdShowLogFile.Label = GetResText(2035)
 		End With
 		ModuleList(0) = &quot;com.sun.star.text.TextDocument&quot;
 		ModuleList(1) = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;
