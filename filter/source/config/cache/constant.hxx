@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:58:54 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
  */
 #define  PROPNAME_TYPES     _FILTER_CONFIG_FROM_ASCII_("Types")
 
+/** @short  implicit properties. which are used at the container interface only.
+ */
+#define  PROPNAME_FINALIZED _FILTER_CONFIG_FROM_ASCII_("Finalized")
+#define  PROPNAME_MANDATORY _FILTER_CONFIG_FROM_ASCII_("Mandatory")
+
 /** @short  used to identify a set of items against the configuration API. */
 #define  CFGSET_TYPES               _FILTER_CONFIG_FROM_ASCII_("Types"          )
 #define  CFGSET_FILTERS             _FILTER_CONFIG_FROM_ASCII_("Filters"        )
@@ -202,11 +207,21 @@
 #define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
 #define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")
 #define  CFGPACKAGE_TD_OTHERS          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc"  )
+#define  CFGPACKAGE_TD_OLD             _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Office.TypeDetection")
 
 /** @short  some default values.
  */
 #define  DEFAULT_OFFICELOCALE       _FILTER_CONFIG_FROM_ASCII_("en-US")
 #define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("OpenOffice")
 #define  DEFAULT_FORMATVERSION      _FILTER_CONFIG_FROM_ASCII_("1.0")
+
+/** @short  used for the queries of the FilterFactory service.
+ */
+#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    _FILTER_CONFIG_FROM_ASCII_("matchByDocumentService")
+#define  QUERY_PARAM_IFLAGS                         _FILTER_CONFIG_FROM_ASCII_("iflags")
+#define  QUERY_PARAM_EFLAGS                         _FILTER_CONFIG_FROM_ASCII_("eflags")
+#define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
+
+#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE _FILTER_CONFIG_FROM_ASCII_("getDefaultFilterForType")
 
 #endif // _FILTER_CONFIG_static constANT_HXX_
