@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:42:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sDelim;
                 sValue += sDelim;
 
-                const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maDocumentService );
+                const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maExportService );
                 sValue += pAppInfo->maXMLImporter;
                 sValue += sDelim;
                 sValue += pAppInfo->maXMLExporter;
