@@ -4399,7 +4399,7 @@ SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
+    Cachable = Cachable
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -4411,10 +4411,10 @@ SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_MODIFY;
 ]
 
@@ -6780,10 +6780,10 @@ SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
@@ -6804,9 +6804,9 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
