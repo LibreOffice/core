@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:57:49 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 18:39:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -185,6 +185,24 @@ SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
+
+#
+# This part builds a tiny extra lib,
+# containing an alloc.c which uses system 
+# heap instead of our own mem management. 
+# This is e.g. useful for proper valgrinding
+# the office.
+#
+.IF "$(OS)"=="LINUX"
+
+TARGET2 = salalloc_malloc
+SHL2TARGET= $(TARGET2)
+SHL2IMPLIB= i$(TARGET2)
+SHL2VERSIONMAP=	salalloc.map
+
+SHL2LIBS+=$(SLB)$/SYSALLOC_cpprtl.lib
+
+.ENDIF # .IF "$(OS)"=="LINUX"
 
 # --- Coverage -----------------------------------------------------
 # LLA: 20040304 The follows lines are an additional which is only need if we run
