@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 07:41:03 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 12:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,9 @@ extern SfxType0 aSfxVoidItem_Impl;
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
@@ -376,6 +379,7 @@ sal_uInt16 AutoSlotMap[] =
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 //========================================================================
@@ -1333,36 +1337,31 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_ORDERCRIT:
         {
             Reference< ::com::sun::star::form::XFormController >    xFormCtrler = GetImpl()->getActiveController();
-            Reference< ::com::sun::star::awt::XControl >            xControl = xFormCtrler->getCurrentControl();
-
-            Reference< ::com::sun::star::sdb::XSQLQueryComposer >       xParser = GetImpl()->getParser();
-//          Reference< ::com::sun::star::data::XDatabaseDialogs >           xDlgs(xParser, UNO_QUERY);
 
             if (GetImpl()->SaveModified(xFormCtrler))
             {
-                Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xSet, UNO_QUERY);
-                sal_Bool bIsDeleted = xCursor.is() && xCursor->rowDeleted();
+                Reference< ::com::sun::star::awt::XControl >            xControl = xFormCtrler->getCurrentControl();
+                Reference< ::com::sun::star::sdb::XSQLQueryComposer >   xParser = GetImpl()->getParser();
+                Reference< XRowSet >                                    xSet(GetImpl()->getActiveForm(), UNO_QUERY);
 
-                Reference< ::com::sun::star::container::XNamed >  xField;
-                if (bIsDeleted)
-                {
-                    Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm()), UNO_QUERY);
-                    xField = Reference< ::com::sun::star::container::XNamed > (xSet, UNO_QUERY);
-                    // auslesen der Searchflags
-                    if (xSet.is())
-                    {
-                        if (!::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_SEARCHABLE)))
-                            xField = NULL;
-                    }
-                }
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSup(xSet,UNO_QUERY);
-                OSL_ENSURE(xSup.is(),"no columnssupplier!");
+                Reference< ::com::sun::star::beans::XPropertySet > xField(GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm()), UNO_QUERY);
+
+                PropertyValue aFirst;
+                aFirst.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QueryComposer"));
+                aFirst.Value <<= xParser;
+
+                PropertyValue aSecond;
+                aSecond.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
+                aSecond.Value <<= xSet;
+
+                PropertyValue aThird;
+                aThird.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultOrderColumn"));
+                aThird.Value <<= xField;
+
                 Sequence<Any> aInit(3);
-                aInit[0] <<= xParser;
-                aInit[1] <<= xParser;
-                aInit[2] <<= xSup->getColumns();
-
+                aInit[0] <<= aFirst;
+                aInit[1] <<= aSecond;
+                aInit[2] <<= aThird;
 
                 Reference< com::sun::star::ui::dialogs::XExecutableDialog> xDlg(
                     ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderDialog"),aInit),UNO_QUERY);
