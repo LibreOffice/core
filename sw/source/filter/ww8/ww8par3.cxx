@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:14:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,7 +1551,11 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             ? true : false;
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
         ASSERT( pTxtNode, "No Text-Node at PaM-Position" );
-        if( !IsInvalidOrToBeMergedTabCell() )
+
+        SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
+
+        if( IsInvalidOrToBeMergedTabCell() &&
+            ! pNumRule->IsOutlineRule() ) // #i27610#
             pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
 
         if( !rStyleInfo.pOutlineNumrule )
@@ -1702,7 +1706,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
              is unchanged
             */
             if (
-                 (GetOutlineNumRuleFromTxtNode(*pTxtNd)) &&
+                (GetOutlineNumRuleFromTxtNode(*pTxtNd)) &&
                  (pRule == mpChosenOutlineNumRule)
                )
             {
