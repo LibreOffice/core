@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:08:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
     SdrObject* pObj = pRecord->pObj;
     if( !pObj->IsEmptyPresObj() )
     {
-        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     else
     {
@@ -130,7 +130,7 @@ IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
         // so we need to check if this is one
         if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
         {
-            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+            pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
         }
     }
 
