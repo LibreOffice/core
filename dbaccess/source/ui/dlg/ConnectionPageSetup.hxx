@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:58:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,12 @@ namespace dbaui
     */
     class OConnectionTabPageSetup : public OConnectionHelper
     {
-
-        ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
         sal_Bool            m_bUserGrabFocus : 1;
     protected:
 
         FixedText           m_aFT_HelpText;
 
         // called when the test connection button was clicked
-        DECL_LINK(OnTestConnectionClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
 
     public:
@@ -120,6 +117,7 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateAdabasTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
         virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
@@ -152,21 +150,6 @@ namespace dbaui
         void toggleURLControlGroup(BOOL _bEnable);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPageSetup();
-
-    private:
-
-
-        /** enables the test connection button, if allowed
-        */
-
-
-        /** opens the FileOpen dialog and asks for a FileName
-            @param  _sFilterName
-                The filter name.
-            @param  _sExtension
-                The filter extension.
-        */
-// void askForFileName(const ::rtl::OUString& _sFilterName, const ::rtl::OUString& _sExtension);
     };
 
 //.........................................................................
