@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 12:49:49 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 12:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,13 +304,18 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     sal_Bool bElExists = xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
+    sal_Int32 nInd = 0;
+    for ( nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name.equalsAscii( "ReadOnly" ) )
             lArguments[nInd].Value >>= m_bReadOnly;
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
 
     SwitchOwnPersistence( xStorage, sEntName );
+
+    for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+        if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
+            lObjArgs[nInd].Value >>= m_bStoreVisRepl;
 
     if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
     {
@@ -325,7 +330,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
             // after the loading the object can appear as a link
             // will be detected later by olecomponent
-            m_pOleComponent->LoadEmbeddedObject( xInStream, embed::Aspects::MSASPECT_CONTENT );
+            m_pOleComponent->LoadEmbeddedObject( xInStream );
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
 
             m_nObjectState = embed::EmbedStates::EMBED_LOADED;
@@ -333,7 +338,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         else
         {
             // create a new object
-            m_pOleComponent->CreateNewEmbeddedObject( m_aClassID, embed::Aspects::MSASPECT_CONTENT, NULL );
+            m_pOleComponent->CreateNewEmbeddedObject( m_aClassID );
             m_pOleComponent->RunObject();
             m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
         }
@@ -345,16 +350,18 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
         if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
         {
-            // the document just already changed its stream to store to
+            // the document just already changed its stream to store to;
             // the links to OLE documents switch their persistence in the same way
             // as normal embedded objects
+
+            // This mode is called NO_INIT, that means that icon can not be changed also
         }
         else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRUNCATE_INIT )
         {
             // create a new object, that will be stored in specified stream
             CreateOleComponent_Impl();
 
-            m_pOleComponent->CreateNewEmbeddedObject( m_aClassID, embed::Aspects::MSASPECT_CONTENT, NULL );
+            m_pOleComponent->CreateNewEmbeddedObject( m_aClassID );
             m_pOleComponent->RunObject();
             m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
         }
@@ -376,9 +383,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
             // TODO: the m_bIsLink value must be set already
             if ( !m_bIsLink )
-                m_pOleComponent->CreateObjectFromFile( aURL, embed::Aspects::MSASPECT_CONTENT, NULL );
+                m_pOleComponent->CreateObjectFromFile( aURL );
             else
-                m_pOleComponent->CreateLinkFromFile( aURL, embed::Aspects::MSASPECT_CONTENT, NULL );
+                m_pOleComponent->CreateLinkFromFile( aURL );
 
             m_pOleComponent->RunObject();
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction

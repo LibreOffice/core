@@ -2,9 +2,9 @@
  *
  *  $RCSfile: advisesink.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:12 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,8 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER pmk)
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
 {
     // TODO: ???
-    /*
-     * A Container has nothing to do here as this notification is
-     * only useful when we have an ADVFCACHE_ONSAVE advise set up,
-     * which we don't.  So we ignore it.
-     */
+    // The object knows about document saving already since it contolls it as ClienSite
+    // other interested listeners must be registered for the object
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)

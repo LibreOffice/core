@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:13 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 12:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,6 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object must be in running state!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    return m_pOleComponent->GetMiscStatus();
+    return m_pOleComponent->GetMiscStatus( nAspect );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     ::rtl::OUString m_aTempURL;
     CComPtr< IStorage > m_pIStorage;
 
-    sal_Int32 m_nMSAspect;
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
 
@@ -148,7 +147,7 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     sal_Bool m_bOleInitialized;
 
-    sal_Bool InitializeObject_Impl( sal_uInt32 nIconHandle );
+    sal_Bool InitializeObject_Impl();
 
     CComPtr< IStorage > CreateIStorageOnXInputStream_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
@@ -169,20 +168,16 @@ public:
     void disconnectEmbeddedObject();
 
     // ==== Initialization ==================================================
-    void LoadEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-                             sal_Int64 nAspect );
+    void LoadEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
-    void CreateNewEmbeddedObject( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeqCLSID,
-                                  sal_Int64 nAspect,
-                                  sal_uInt32 nIconHandle );
+    void CreateNewEmbeddedObject( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeqCLSID );
 
     void CreateObjectFromData(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransfer,
-                        sal_Int64 nAspect );
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransfer );
 
-    void CreateObjectFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle );
+    void CreateObjectFromFile( const ::rtl::OUString& aFileName );
 
-    void CreateLinkFromFile( const ::rtl::OUString& aFileName, sal_Int64 nAspect, sal_uInt32 nIconHandle );
+    void CreateLinkFromFile( const ::rtl::OUString& aFileName );
 
     void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
 
@@ -202,9 +197,7 @@ public:
 
     ::com::sun::star::awt::Size GetExtent( sal_Int64 nAspect );
 
-    sal_Int64 GetViewAspect();
-
-    sal_Int64 GetMiscStatus();
+    sal_Int64 GetMiscStatus( sal_Int64 nAspect );
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCLSID();
 
