@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:28:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ czech ] = "Dokument již otevřen.";
     Message[ hebrew ] = "‮המסמך כבר פתוח.‬";
     Message[ hindi ] = "लेखपत्र पहिले से ही खुला है ।";
+    Message[ slovak ] = "Dokument je už otvorený.";
 };
 
 ErrorBox RID_CANTLOADDOC_DLG
@@ -131,6 +132,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message[ czech ] = "Dokument nelze otevřít.";
     Message[ hebrew ] = "‮לא ניתן לפתוח את המסמך.‬";
     Message[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
+    Message[ slovak ] = "Dokument nie je možné otvoriť";
 };
 
 ErrorBox MSG_ERR_READ_CFG
@@ -167,6 +169,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message[ czech ] = "Chyba při čtení z konfiguračního souboru.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת קריאת קובץ התצורה.‬";
     Message[ hindi ] = "Error reading configuration file.";
+    Message[ slovak ] = "Chyba pri čítaní­ z konfiguračné­ho súboru.";
 };
 
 ErrorBox MSG_ERR_WRITE_CFG
@@ -203,6 +206,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ czech ] = "Chyba při zápisu do konfiguračního souboru.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת כתיבה לקובץ התצורה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल को लिखने के समय गलती ।";
+    Message[ slovak ] = "Chyba pri zápise do konfiguračného súboru.";
 };
 
 ErrorBox MSG_ERR_OPEN_CFG
@@ -239,6 +243,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message[ czech ] = "Chyba při otevírání konfiguračního souboru.";
     Message[ hebrew ] = "‮שגיאה בעת פתיחת קובץ התצורה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल को खोलने के समय गलती ।";
+    Message[ slovak ] = "Chyba pri otváraní­ konfiguračného súboru.";
 };
 
 ErrorBox MSG_ERR_FILETYPE_CFG
@@ -275,6 +280,7 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     Message[ czech ] = "Soubor není konfiguračním souborem.";
     Message[ hebrew ] = "‮הקובץ אינו קובץ תצורה.‬";
     Message[ hindi ] = "फाइल रूप-रेखा फाइल नहीं है ।";
+    Message[ slovak ] = "Súbor nie je konfiguračným súborom.";
 };
 
 ErrorBox MSG_ERR_VERSION_CFG
@@ -302,7 +308,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ arabic ] = "����� ���� ���� �������.";
     Message[ dutch ] = "Foutieve versie van configuratiebestand.";
     Message[ chinese_simplified ] = "配置文件版本错误。";
-    Message[ greek ] = "����� ������ ��� ������ �����������.";
+    Message[ greek ] = "����� ������ ��� ������� �����������.";
     Message[ korean ] = "구성 파일의 버전이 틀립니다.";
     Message[ turkish ] = "Konfig�rasyon dosyas�n�n s�r�m� yanl��.";
     Message[ language_user1 ] = " ";
@@ -311,6 +317,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ czech ] = "Konfigurační soubor obsahuje špatnou verzi.";
     Message[ hebrew ] = "‮קובץ התצורה מכיל גרסה לא נכונה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल में गलत अनुवाद है ।";
+    Message[ slovak ] = "Konfiguračný súbor obsahuje špatnú verziu.";
 };
 
 ErrorBox MSG_ERR_WRITE_SBL
@@ -347,6 +354,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message[ czech ] = "Chyba při zaznamenávání BASIC knihovny do\n'@'.";
     Message[ hebrew ] = "‮שגואה בעת הקלטת ספרית הבייסיק ב \n'@'.‬";
     Message[ hindi ] = "'@'\n में BASIC को रेकोर्डिन्ग करने के समय गलती ।";
+    Message[ slovak ] = "Chyba pri zaznamenávaní BASIC knižnice do\n'@'.";
 };
 
 ErrorBox MSG_SIGNAL
@@ -360,7 +368,7 @@ ErrorBox MSG_SIGNAL
     Message [ danish ] = "Der opstod en uventet programfejl\nDu kan p� eget ansvar pr�ve p� at\ngemme alle �bne dokumenter!\n\nVil du pr�ve p� at gemme dine dokumenter, f�r programmet afsluttes?" ;
     Message [ italian ] = "Nell'applicazione si � verificato un errore inatteso!\nAdesso potete provare, a proprio rischio, di\nsalvare tutti i documenti aperti!\n\nVolete che si provi a salvare il lavoro prima di chiudere l'applicazione?" ;
     Message [ spanish ] = "�Se ha producido un error inesperado de la aplicaci�n!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n�Desea guardar su trabajo antes de cerrar la aplicaci�n?" ;
-    Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de m�me essayer de \nsauvegarder tous les documents ouverts !\n\nSauvegarder votre travail avant de fermer l'application ?" ;
+    Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de m�me essayer\nd'enregistrer les documents ouverts !\n\nEnregistrer votre travail avant fermeture de l'application ?" ;
     Message [ english_us ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
     Message [ portuguese ] = "Surgiu um erro de programa inesperado!\n\nPoder� agora, sob o seu pr�prio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplica��o seja fechada?" ;
     Message [ portuguese_brazilian ] = "Ocorreu um erro de programa inesperado!\n\nDeseja tentar saltar as mudan�as nos documentos abertos antes do programa ser terminado?" ;
@@ -372,7 +380,7 @@ ErrorBox MSG_SIGNAL
     Message[ arabic ] = "��� ��� ����� ��� �����!\n����� ���� ��� �������� �����ɡ ������ ��� \n�� ��������� ��������!\n\n�� ���� ������ ��� ���ߡ ��� ����� ������޿";
     Message[ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de toepassing wordt be�indigd?";
     Message[ chinese_simplified ] = "发生了一个意外的程序错误！\n您现在可以尝试保存所有被打开的文件！\n您要在关闭这个应用程序之前保存所有的文件吗？";
-    Message[ greek ] = "������������� �� ����������� ������ ���������!\n\n������ �� ����� ���������� (�� ���� ��� ������) �� ������������ ��� �� ������� ������� ��� ";
+    Message[ greek ] = "������������� �� ����������� ������ ���������!\n\n������ �� ����� ���������� (�� ���� ��� ������) �� ������������ ��� �� ������� ������� ���� ����������� �� ���������; ";
     Message[ korean ] = "예기치 않은 응용 프로그램 오류가 발생했습니다.\n사용자에게 위험 부담이 있지만 열려있는 모든 문서의 저장을 시도해 볼 수 있습니다!\n\n 응용 프로그램을 종료하기 전에 작업 내용을 저장하겠습니까?";
     Message[ turkish ] = "Beklenmeyen bir program hatas� olu�tu!\n�u an a��k olan t�m belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapat�lmadan �nce belgeleriniz kaydedilmeye �al���ls�n m�?";
     Message[ language_user1 ] = " ";
@@ -382,6 +390,7 @@ ErrorBox MSG_SIGNAL
     Message[ czech ] = "V programu nastala neočekávaná chyba.\n\n Přejete si zkusit uložit změny ve všech otevřených dokumentech před ukončením programu?";
     Message[ hebrew ] = "‮ארעה שגיאה בלתי צפויה בתוכנית.\n\nהאם לנסות לשמור את השינוים בכל המסמכים הפתוחים לפני סגירת התוכנית?‬";
     Message[ hindi ] = "प्रोग्राम् में आकस्मिक गलती घटित हुआ ।\n\nआप प्रोग्राम् को अंत करने से पहिले सब खुला हुआ लेखपत्रों में परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "V programe nastala neočakávaná chyba.\n\n Prajete si skúsiť uložiť zmeny vo všetkých otvorených dokumentoch pred ukončením programu?";
 };
 
 ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
@@ -414,6 +423,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ czech ] = "Při spouštění webového prohlížeče nastala chyba.\nProsím zkontrolujte nastavení %PRODUCTNAME a webového prohlížeče.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת איתחול הדפדפן. נא לבדוק הגדרות ב \"כלים\" > \"אפשרויות\" > %PRODUCTNAME > \"תוכניות חיצוניות\", וגם ההגדרות של הדפדפן עצמו.‬";
     Message[ hindi ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
+    Message[ slovak ] = "Pri spúšťaní webového prehliadača nastala chyba.\nProsím skontrolujte nastavenia %PRODUCTNAME a webového prehliadača.";
 };
 
 ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
@@ -446,6 +456,7 @@ ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
     Message[ czech ] = "Pro zadaný typ souboru nebyla nalezena žádná vhodná externí aplikace.\nProsím zkontrolujte nastavení %PRODUCTNAME.";
     Message[ hebrew ] = "‮לא ניתן לאתר יישום המתאים לסוג קובץ זה.\nנא לבדוק באפשרויות %PRODUCTNAME.‬";
     Message[ hindi ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ slovak ] = "Pre zadaný typ súboru nebola nájdená žiadna vhodná externá aplikácia.\nProsím skontrolujte nastavenie %PRODUCTNAME.";
 };
 
 Resource SID_UNKNOWN
@@ -552,6 +563,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message[ czech ] = "Formulář bude zaslán jako e-mail.\nTo znamená, že adresát se dozví vaši e-mail adresu.";
     Message[ hebrew ] = "‮פעולה זו תחשף את כתובת הדואר של המשתמש.‬\n‮הטופס ישלח בדואר אלקטרוני.‬";
     Message[ hindi ] = "इ-मेइल द्वारा फ़ॉर्म् को भेजना है ।\nइसका अर्थ है कि प्रातिग्राहक आपका इ-मेइल पता देख सकता है ।";
+    Message[ slovak ] = "Formulár bude odoslaný ako e-mail.\nTo znamená, že adresát sa dozvie vašu e-mail adresu.";
 };
 
 String STR_RECOVER_TITLE
@@ -585,6 +597,7 @@ String STR_RECOVER_TITLE
     Text[ czech ] = "Obnovení souboru";
     Text[ hebrew ] = "‮שיחזור קבצים‬";
     Text[ hindi ] = "फाइल पुनः प्राप्ति";
+    Text[ slovak ] = "Obnovenie súboru";
 };
 
 String STR_RECOVER_QUERY
@@ -618,6 +631,7 @@ String STR_RECOVER_QUERY
     Text[ czech ] = "Má být soubor \"$1\" obnoven?";
     Text[ hebrew ] = "‮האם לשחזר קובץ \"$1\"?‬";
     Text[ hindi ] = "\"$1\" फाइल को पूर्व अवस्था में पहुँचाना है?";
+    Text[ slovak ] = "Má byť súbor \"$1\" obnovený?";
 };
 
 String GID_INTERN
@@ -652,6 +666,7 @@ String GID_INTERN
     Text[ czech ] = "Interní";
     Text[ hebrew ] = "‮פנימי‬";
     Text[ hindi ] = "भीतरी";
+    Text[ slovak ] = "Interný";
 };
 
 String GID_APPLICATION
@@ -686,6 +701,7 @@ String GID_APPLICATION
     Text[ czech ] = "Aplikace";
     Text[ hebrew ] = "‮פעולה‬";
     Text[ hindi ] = "कार्यक्रम";
+    Text[ slovak ] = "Aplikácia";
 };
 
 String GID_VIEW
@@ -720,6 +736,7 @@ String GID_VIEW
     Text[ czech ] = "Pohled";
     Text[ hebrew ] = "‮תצוגה‬";
     Text[ hindi ] = "पूर्वदृश्य";
+    Text[ slovak ] = "~Zobraziť";
 };
 
 String GID_DOCUMENT
@@ -754,6 +771,7 @@ String GID_DOCUMENT
     Text[ czech ] = "Dokumenty";
     Text[ hebrew ] = "‮מסמכים‬";
     Text[ hindi ] = "लेखपत्रें";
+    Text[ slovak ] = "Dokumenty";
 };
 
 String GID_EDIT
@@ -788,6 +806,7 @@ String GID_EDIT
     Text[ czech ] = "Upravit";
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "संपादन";
+    Text[ slovak ] = "Upraviť";
 };
 
 String GID_MACRO
@@ -821,6 +840,7 @@ String GID_MACRO
     Text[ czech ] = "BASIC";
     Text[ hebrew ] = "‮בייסיק‬";
     Text[ hindi ] = "BASIC";
+    Text[ slovak ] = "BASIC";
 };
 
 String GID_OPTIONS
@@ -855,6 +875,7 @@ String GID_OPTIONS
     Text[ czech ] = "Volby";
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
+    Text[ slovak ] = "Nastavenia";
 };
 
 String GID_MATH
@@ -889,6 +910,7 @@ String GID_MATH
     Text[ czech ] = "Matematika";
     Text[ hebrew ] = "‮נוסחאות‬";
     Text[ hindi ] = "गणित";
+    Text[ slovak ] = "Matematika";
 };
 
 String GID_NAVIGATOR
@@ -922,6 +944,7 @@ String GID_NAVIGATOR
     Text[ czech ] = "Navigovat";
     Text[ hebrew ] = "‮ניווט‬";
     Text[ hindi ] = "नाविगेट";
+    Text[ slovak ] = "Previesť";
 };
 
 String GID_INSERT
@@ -955,6 +978,7 @@ String GID_INSERT
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
 
 String GID_FORMAT
@@ -988,6 +1012,7 @@ String GID_FORMAT
     Text[ czech ] = "Formát";
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचना";
+    Text[ slovak ] = "Formát";
 };
 
 String GID_TEMPLATE
@@ -1021,6 +1046,7 @@ String GID_TEMPLATE
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Šablóny";
 };
 
 String GID_TEXT
@@ -1054,6 +1080,7 @@ String GID_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 
 String GID_FRAME
@@ -1087,6 +1114,7 @@ String GID_FRAME
     Text[ czech ] = "Rámec";
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम्";
+    Text[ slovak ] = "Rámček";
 };
 
 String GID_GRAPHIC
@@ -1120,6 +1148,7 @@ String GID_GRAPHIC
     Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázok";
 };
 
 String GID_TABLE
@@ -1153,6 +1182,7 @@ String GID_TABLE
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 
 String GID_ENUMERATION
@@ -1186,6 +1216,7 @@ String GID_ENUMERATION
     Text[ czech ] = "Číslování";
     Text[ hebrew ] = "‮מיספור‬";
     Text[ hindi ] = "संख्या देना";
+    Text[ slovak ] = "Číslovanie";
 };
 
 String GID_DATA
@@ -1219,6 +1250,7 @@ String GID_DATA
     Text[ czech ] = "Data";
     Text[ hebrew ] = "‮נתונים‬";
     Text[ hindi ] = "ड़ॉटा";
+    Text[ slovak ] = "Dáta";
 };
 
 String GID_SPECIAL
@@ -1252,6 +1284,7 @@ String GID_SPECIAL
     Text[ czech ] = "Speciální funkce";
     Text[ hebrew ] = "‮תפקודים מיוחדים‬";
     Text[ hindi ] = "विशेष फंक्शन्स";
+    Text[ slovak ] = "Špeciálne funkcie";
 };
 
 String GID_IMAGE
@@ -1285,6 +1318,7 @@ String GID_IMAGE
     Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "‮צלם‬";
     Text[ hindi ] = "चित्र";
+    Text[ slovak ] = "Obrázok";
 };
 
 String GID_CHART
@@ -1318,6 +1352,7 @@ String GID_CHART
     Text[ czech ] = "Graf";
     Text[ hebrew ] = "‮תרשים‬";
     Text[ hindi ] = "चार्ट";
+    Text[ slovak ] = "Graf";
 };
 
 String GID_EXPLORER
@@ -1351,6 +1386,7 @@ String GID_EXPLORER
     Text[ czech ] = "Průzkumník";
     Text[ hebrew ] = "‮סייר‬";
     Text[ hindi ] = "एक्सप्लोरर";
+    Text[ slovak ] = "Prieskumník";
 };
 
 String GID_CONNECTOR
@@ -1384,6 +1420,7 @@ String GID_CONNECTOR
     Text[ czech ] = "Spojnice";
     Text[ hebrew ] = "‮מחבר‬";
     Text[ hindi ] = "कनेक्टर";
+    Text[ slovak ] = "Spojnica";
 };
 
 String GID_MODIFY
@@ -1417,6 +1454,7 @@ String GID_MODIFY
     Text[ czech ] = "Upravit";
     Text[ hebrew ] = "‮שינוי‬";
     Text[ hindi ] = "सुधारो";
+    Text[ slovak ] = "Upraviť";
 };
 
 String GID_DRAWING
@@ -1450,6 +1488,7 @@ String GID_DRAWING
     Text[ czech ] = "Kresba";
     Text[ hebrew ] = "‮סרטוט‬";
     Text[ hindi ] = "रेखाचित्र";
+    Text[ slovak ] = "Kresba";
 };
 
 String GID_CONTROLS
@@ -1483,6 +1522,7 @@ String GID_CONTROLS
     Text[ czech ] = "Ovládací prvky";
     Text[ hebrew ] = "‮פקדים‬";
     Text[ hindi ] = "नियंत्रण";
+    Text[ slovak ] = "Ovládacie prvky";
 };
 
 TabDialog SID_OPTIONS
@@ -1546,6 +1586,7 @@ TabDialog SID_OPTIONS
                 Text[ czech ] = "Obecné";
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
+                Text[ slovak ] = "Všeobecný";
             };
             PageItem
             {
@@ -1581,6 +1622,7 @@ TabDialog SID_OPTIONS
                 Text[ czech ] = "Uložit";
                 Text[ hebrew ] = "‮שמירה‬";
                 Text[ hindi ] = "संचित करो";
+                Text[ slovak ] = "Uložiť";
             };
             PageItem
             {
@@ -1616,6 +1658,7 @@ TabDialog SID_OPTIONS
                 Text[ czech ] = "Cesty";
                 Text[ hebrew ] = "‮מסלולים‬";
                 Text[ hindi ] = "मार्ग";
+                Text[ slovak ] = "Cesty";
             };
             PageItem
             {
@@ -1651,6 +1694,7 @@ TabDialog SID_OPTIONS
                 Text[ czech ] = "Kontrola pravopisu";
                 Text[ hebrew ] = "‮בדיקת איות‬";
                 Text[ hindi ] = "अक्षर की जाँच";
+                Text[ slovak ] = "Kontrola pravopisu";
             };
         };
     };
@@ -1671,6 +1715,7 @@ TabDialog SID_OPTIONS
     Text[ czech ] = "Volby";
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
+    Text[ slovak ] = "Nastavenia";
 };
 
 InfoBox MSG_CANT_QUIT
@@ -1705,6 +1750,7 @@ InfoBox MSG_CANT_QUIT
     Message[ czech ] = "Aplikace nemůže být právě teď ukončena.\nProsím počkejte, až doběhnou všechny tiskové úlohy a/nebo \nOLE akce, a zavřete všechna dialogová okna.";
     Message[ hebrew ] = "‮לא ניתן לסגור את היישום כעת.\nנא להמתין עד שכל משימות ההדפסה וה OLE יסתיימו ולסגור את כל תיבות הדו שיח.‬";
     Message[ hindi ] = "कार्यक्रम को क्षण मात्र में अंत नहीं कर सकते है ।\nकृपया सब छपाई कार्य और/अथवा\nOLE कार्य समाप्त होने तक ठहरिए और सब डयलॉगों को बन्द कीजिए ।";
+    Message[ slovak ] = "Aplikácia nemôže byť práve teraz ukončená.\nProsím počkajte, až dobehnú všetky tlačové úlohy a/alebo \nOLE akcie, a zavrite všetky dialógové okná.";
 };
 
 QueryBox MSG_IS_SERVER
@@ -1741,6 +1787,7 @@ QueryBox MSG_IS_SERVER
     Message[ czech ] = "Tato aplikace právě pracuje s objekty nebo s tiskem.\nPřejete si ji přesto ukončit?";
     Message[ hebrew ] = "‮יישום זה פעיל בתור שרת הדפסות או שרת עצמים.\nהאם לסגור אותו בכל זאת?‬";
     Message[ hindi ] = "इस कार्यक्रम वस्तु की जैसे है अथवा छपाई सर्वर क्रियाशील है ।\nआप किसी तरह अंत करना चाहते है?";
+    Message[ slovak ] = "Táto aplikácia práve pracuje s objektami alebo s tlačou.\nPrejete si ju i napriek tomu ukončiť?";
 };
 
 String STR_NODOUBLE
@@ -1774,6 +1821,7 @@ String STR_NODOUBLE
     Text[ czech ] = "%PRODUCTNAME nemůže být spuštěn víc než jednou.";
     Text[ hebrew ] = "‮לא ניתן להפעיל יותר ממופע אחד של %PRODUCTNAME בבת אחת.‬";
     Text[ hindi ] = "%PRODUCTNAME  को एक से अधिक बार प्रारंभ नहीं कर सकते है ।";
+    Text[ slovak ] = "%PRODUCTNAME nemôže byť spustený viac ako raz.";
 };
 
 String STR_NOPRINTER
@@ -1797,7 +1845,7 @@ String STR_NOPRINTER
     Text[ arabic ] = "�� ���� ����� ��� ���� %PRODUCTNAME ���� ���� ���� ������ ����� �������.\n���� ���� ����� ������ ����� �������.";
     Text[ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
     Text[ chinese_simplified ] = "因为没有安装打印机驱动程序，一些%PRODUCTNAME功能可能不会正常运转。\n请您安装一个打印机驱动程序。";
-    Text[ greek ] = "��������� ��� ��� ����������� ��� %PRODUCTNAME ��� �� ������������� ����� ����� �� ��������� �������� ��� ��������.\n�������� �� ����� � �������? ";
+    Text[ greek ] = "��������� ��� ��� ����������� ��� %PRODUCTNAME ��� �� ������������� ����� ����� �� ��������� �������� ��� ��������.\n����������� ������������ ���.";
     Text[ korean ] = "%PRODUCTNAME의 기능 중에는 프린터 드라이버가 있어야만 정확하게 작동하는 것도 있습니다.\n프린터 드라이버를 설치하십시오.";
     Text[ turkish ] = "Baz� %PRODUCTNAME i�levleri yaz�c� s�r�c�s� olmadan do�ru �al��amaz.\nBir yaz�c� s�r�c�s� kurun.";
     Text[ language_user1 ] = " ";
@@ -1807,6 +1855,7 @@ String STR_NOPRINTER
     Text[ czech ] = "Některé %PRODUCTNAME funkce nemusí bez tiskového ovladače fungovat správně.\nProsím nainstalujte ovladače tiskárny.";
     Text[ hebrew ] = "‮נא להתקין מנהל התקן למדפסת.\nאחדים מתפקודי %PRODUCTNAME לא יפעלו כראוי בלעדיו.‬";
     Text[ hindi ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver.";
+    Text[ slovak ] = "Niektoré %PRODUCTNAME funkcie nemusia bez tlačového ovládača fungovať správne.\nProsím nainštalujte ovládače tlačiarne.";
 };
 
 String STR_ISMODIFIED
@@ -1841,6 +1890,7 @@ String STR_ISMODIFIED
     TEXT[ czech ] = "Přejete si změny uložit do %1?";
     TEXT[ hebrew ] = "‮האם לשמור את השינוים שנעשו ל %1?‬";
     TEXT[ hindi ] = "आप %1 में परिवर्तनों को संचित करना चाहते है?";
+    TEXT[ slovak ] = "Prajete si zmeny uložiť do %1?";
 };
 
 String STR_AUTOSAVE
@@ -1875,6 +1925,7 @@ String STR_AUTOSAVE
     TEXT[ czech ] = "Ukládat automaticky";
     TEXT[ hebrew ] = "‮שמירה אוטומטית‬";
     TEXT[ hindi ] = "स्वचालित ढंग से संचित करो";
+    TEXT[ slovak ] = "Automatické uloženie";
 };
 
 String STR_RESWARNING
@@ -1909,6 +1960,7 @@ String STR_RESWARNING
     TEXT[ czech ] = "Docházejí systémové zdroje. Prosím ukončete nějaké aplikace předtím, než budete pokračovat.";
     TEXT[ hebrew ] = "‮משאבי מערכת מוגבלים. יש לסגור יישומים אחרים לפני ביצוע פעולות נוספות ביישום זה.‬";
     TEXT[ hindi ] = "सिस्टम साधन सीमित है । कृपया आगे जारी रखने से पहिले अन्य कार्यक्रमों को त्याग दीजिए अथवा कुछ विन्डों को बन्द कीजिए ।";
+    TEXT[ slovak ] = "Vyčerpávajú sa systémové zdroje. Prosím ukončite iné aplikácie predtým, než budete pokračovať.";
 };
 String STR_RESEXCEPTION
 {
@@ -1942,6 +1994,7 @@ String STR_RESEXCEPTION
     TEXT[ czech ] = "Některé soubory není možné nalézt. Prosím zkontrolujte nastavení aplikace.";
     TEXT[ hebrew ] = "‮קבצים אחדים לא נמצאים. נא לבדוק את התקנת היישום.‬";
     TEXT[ hindi ] = "कुछ फाइलें अनुपस्थित है । कृपया कार्यक्रम सेटप की जाँच कीजिए ।";
+    TEXT[ slovak ] = "Niektoré súbory nie je možné nájsť. Prosím skontrolujte nastavenie aplikácie.";
 };
 
 String STR_DOUBLEEXCEPTION
@@ -1975,6 +2028,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ czech ] = "Další chyba vznikla pří ukládání.\nJe možné, že ne všechna data byla kompletně uložena.";
     TEXT[ hebrew ] = "‮שגיאה נוספת ארעה בעת השמירה לצורך שחזור.\nיתכן שלא כל הנתונים נשמרו.‬";
     TEXT[ hindi ] = "संचित की पुनः प्राप्ति के समय ओर एक गलती घटित हुआ ।\nशायद, ड़ॉटा को संपूर्ण रूप से नहीं संचित किया है ।";
+    TEXT[ slovak ] = "Ďalšia chyba vznikla pri ukladaní.\nJe možné, že nie všetky dáta boli kompletne uložené.";
 };
 
 String STR_SYSRESEXCEPTION
@@ -2008,6 +2062,7 @@ String STR_SYSRESEXCEPTION
     Text[ czech ] = "Systémové zdroje byly vyčerpány. Prosím spusťte aplikaci znova.";
     Text[ hebrew ] = "‮משאבי מערכת אזלו. יש לאתחל את היישום מחדש.‬";
     Text[ hindi ] = "सिस्टम साधन निश्शेषित है । कृपया कार्यक्रम को पुनः प्रारंभ कीजिए ।";
+    Text[ slovak ] = "Systémové zdroje boli vyčerpané. Prosím spustite aplikáciu znova.";
 };
 
 ErrorBox MSG_ERR_SOINIT
@@ -2042,6 +2097,7 @@ ErrorBox MSG_ERR_SOINIT
     Message[ czech ] = "Chyba v inicializaci objektového systému.";
     Message[ hebrew ] = "‮שגיאה בעת איתחול מערכת העצמים.‬";
     Message[ hindi ] = "वस्तु-सिस्टम को इनिश्यलैज़ करने के समय गलती ।";
+    Message[ slovak ] = "Chyba v inicializácii objektového systému.";
 };
 
 String MSG_IOERR_FILE_NOT_FOUND
@@ -2076,6 +2132,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ czech ] = "Soubor $(FILE) neexistuje.";
     Text[ hebrew ] = "‮הקובץ $(FILE) אינו קיים.‬";
     Text[ hindi ] = "$(FILE) फाइल अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Súbor $(FILE) neexistuje.";
 };
 
 String MSG_IOERR_PATH_NOT_FOUND
@@ -2110,6 +2167,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text[ czech ] = "Cesta k souboru $(FILE) neexistuje.";
     Text[ hebrew ] = "‮מסלול הספריות לקובץ $(FILE) אינו קיים.‬";
     Text[ hindi ] = "$(FILE) फाइल केलिए मार्ग अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Cesta k súboru $(FILE) neexistuje.";
 };
 
 String MSG_IOERR_TOO_MANY_OPEN_FILES
@@ -2135,7 +2193,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ arabic ] = "���� ��� �����$(FILE) �\n��� ����� ����� ����� ���� ������.\n�� ������ ��� ������ʡ �� ���� ������.";
     Text[ dutch ] = "Bestand $(FILE) kan niet worden geopend \nomdat er te veel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeer het opnieuw.";
     Text[ chinese_simplified ] = "无法打开文件$(FILE) ，\n因为已经打开了太多的文件。\n请关闭一些文件，然后在重新尝试。";
-    Text[ greek ] = "��� ����� ������� �� �������� �� ������ $(FILE),\n������ ����� �������� ���� ����� ������ ����������.\n�������� ������� ������ ��� ���� �� ����? ";
+    Text[ greek ] = "��� ����� ������� �� �������� �� ������ $(FILE),\n������ ����� �������� ���� ����� ������ ����������.\n�������� ������� ������ ��� ���� �� ������ ��� ��������� ����.";
     Text[ korean ] = "현재 너무 많은 파일이 열려 있어\n파일$(FILE)을 열지 못했습니다.\n일부 파일을 닫고 다시 시도하십시오.";
     Text[ turkish ] = "$(FILE) dosyas�, �u an �ok fazla dosya a��k oldu�u\ni�in a��lam�yor.\nBirka� dosyay� kapat�p yeniden deneyin.";
     Text[ language_user1 ] = " ";
@@ -2144,6 +2202,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ czech ] = "Soubor $(FILE) nemohl být otevřen,\nprotože už je otevřeno příliš mnoho souborů.\nProsím zavřete nějaké soubory a zkuste to znovu.";
     Text[ hebrew ] = "‮לא ניתן לפתוח את הקובץ \n$(FILE)כי קבצים רבים מידי פתוחים.\nנא לסגור קבצים אחדים ולנסות שוב.‬";
     Text[ hindi ] = "$(FILE) फाइल को नहीं खोल सकते है ,\nक्यों कि बहुत संख्या में फाइल खुला हुआ है ।\nकृपया कुछ फाइलों को बन्द कीजिए और फ़िर से कोशिश कीजिए ।";
+    Text[ slovak ] = "Súbor $(FILE) nemohol byť otvorený,\npretože už je otvorených príliš veľa súborov.\nProsím zavrite nejaké súbory a skúste to znovu.";
 };
 
 String MSG_IOERR_ACCESS_DENIED
@@ -2178,6 +2237,7 @@ String MSG_IOERR_ACCESS_DENIED
     Text[ czech ] = "Soubor $(FILE) nelze otevřít kvůli chybějícím přístupovým právům.";
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $(FILE) עקב חוסר הרשאות גישה.‬";
     Text[ hindi ] = "The file $(FILE) could not be opened due to missing access rights.";
+    Text[ slovak ] = "Súbor $(FILE) nie je možné otvoriť kvôli chýbajúcim prístupovým právam.";
 };
 
 String MSG_IOERR_INVALID_ACCESS
@@ -2212,6 +2272,7 @@ String MSG_IOERR_INVALID_ACCESS
     Text[ czech ] = "Není možné přistupovat k souboru $(FILE).";
     Text[ hebrew ] = "‮לא ניתן לגשת לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) फाइल को प्रवेश नहीं कर सकते है ।";
+    Text[ slovak ] = "Nie je možné pristupovať k súboru $(FILE).";
 };
 
 String MSG_IOERR_INVALID_HANDLE
@@ -2246,6 +2307,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ czech ] = "Soubor $(FILE) nemůže být otevřen z důvodu neplatného file handle.";
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $(FILE) עקב פגית תוקפה של file handle.‬";
     Text[ hindi ] = "$(FILE) फाइल को अमान्य फाइल हान्डल् के कारण नहीं खोल सकते है ।";
+    Text[ slovak ] = "Súbor $(FILE) nemôže byť otvorený z dôvodu neplatného príkazu na prácu so súborom.";
 };
 
 String MSG_IOERR_CANNOT_MAKE
@@ -2280,6 +2342,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ czech ] = "Není možné vytvořit soubor $(FILE).";
     Text[ hebrew ] = "‮לא ניתן ליצור קובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) फाइल को उत्पन्न नहीं कर सकते है ।";
+    Text[ slovak ] = "Nie je možné vytvoriť súbor $(FILE).";
 };
 
 String MSG_IOERR_SHARING
@@ -2314,6 +2377,7 @@ String MSG_IOERR_SHARING
     Text[ czech ] = "Chyba sdílením přístupu k souboru $(FILE).";
     Text[ hebrew ] = "‮שגיאת גישה משותפת לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) केलिए हिस्सा प्रवेश द्वारा गलती ।";
+    Text[ slovak ] = "Chyba zdieľaným prístupu k súboru $(FILE).";
 };
 
 String MSG_IOERR_INVALID_PARAMETER
@@ -2368,6 +2432,7 @@ String MSG_IOERR_GENERAL
     Text[ czech ] = "Obecná chyba I/O při práci se souborem $(FILE).";
     Text[ hebrew ] = "‮שגיאת קלט פלט בלתי מפורטת בעת גישה לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) को प्रवेश करने के समय सामान्य I/O गलती ।";
+    Text[ slovak ] = "Všeobecná chyba I/O pri práci so súborom $(FILE).";
 };
 
 String RID_FULLSCREENTOOLBOX
@@ -2438,7 +2503,7 @@ String STR_EVENT_STARTAPP
     Text[ chinese_simplified ] = "启动程序";
     Text[ russian ] = "��������� ����������";
     Text[ polish ] = "Uruchom aplikacj�";
-    Text[ japanese ] = "プログラムの開始時";
+    Text[ japanese ] = "プログラム起動時";
     Text[ chinese_traditional ] = "啟動程式";
     Text[ arabic ] = "��� ��������";
     Text[ dutch ] = "Programma starten";
@@ -2452,6 +2517,7 @@ String STR_EVENT_STARTAPP
     Text[ czech ] = "Spustit aplikaci";
     Text[ hebrew ] = "‮התחלת יישום‬";
     Text[ hindi ] = "कार्यक्रम प्रारंभ करो";
+    Text[ slovak ] = "Spustiť aplikáciu";
 };
 
 String STR_EVENT_CLOSEAPP
@@ -2486,6 +2552,7 @@ String STR_EVENT_CLOSEAPP
     Text[ czech ] = "Ukončit aplikaci";
     Text[ hebrew ] = "‮יציאה מיישום‬";
     Text[ hindi ] = "कार्यक्रम बन्द करो";
+    Text[ slovak ] = "Ukončiť aplikáciu";
 };
 
 String STR_EVENT_CREATEDOC
@@ -2498,7 +2565,7 @@ String STR_EVENT_CREATEDOC
     Text [ portuguese ] = "Criar documento" ;
     Text [ finnish ] = "Luo asiakirja" ;
     Text [ danish ] = "Opret dokument" ;
-    Text [ french ] = "Cr�er le document" ;
+    Text [ french ] = "Cr�er un document" ;
     Text [ swedish ] = "Skapa dokument" ;
     Text [ dutch ] = "Document maken" ;
     Text [ spanish ] = "Crear documento" ;
@@ -2520,6 +2587,7 @@ String STR_EVENT_CREATEDOC
     Text[ czech ] = "Vytvořit dokument";
     Text[ hebrew ] = "‮יצירת מסמך‬";
     Text[ hindi ] = "लेखपत्र उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť dokument";
 };
 
 String STR_EVENT_CLOSEDOC
@@ -2531,20 +2599,20 @@ String STR_EVENT_CLOSEDOC
     Text [ swedish ] = "Dokumentet st�ngs" ;
     Text [ danish ] = "Programmet lukkes" ;
     Text [ italian ] = "Il documento viene chiuso" ;
-    Text [ spanish ] = "El documento se va a cerrar" ;
+    Text [ spanish ] = "El documento se va a cerrar." ;
     Text [ french ] = "Fermeture du document" ;
     Text [ dutch ] = "Document sluiten" ;
     Text [ portuguese ] = "Fechar documento" ;
-    Text[ chinese_simplified ] = "现在关闭文档";
+    Text[ chinese_simplified ] = "正在关闭文档";
     Text[ russian ] = "������� ��������";
     Text[ polish ] = "Zamknij dokument";
     Text[ japanese ] = "ドキュメントを閉じる時";
-    Text[ chinese_traditional ] = "現在關閉文件";
+    Text[ chinese_traditional ] = "正在關閉文件";
     Text[ arabic ] = "��� ��� ����� �������";
     Text[ dutch ] = "Document sluiten";
-    Text[ chinese_simplified ] = "现在关闭文档";
+    Text[ chinese_simplified ] = "正在关闭文档";
     Text[ greek ] = "�������� ��������";
-    Text[ korean ] = "문서 닫기";
+    Text[ korean ] = "문서를 닫는 중";
     Text[ turkish ] = "Belgeyi kapat";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tanca el document";
@@ -2553,6 +2621,7 @@ String STR_EVENT_CLOSEDOC
     Text[ czech ] = "Zavřít dokument";
     Text[ hebrew ] = "‮סגירת מסמך‬";
     Text[ hindi ] = "लेखपत्र बन्द करो";
+    Text[ slovak ] = "Zatvoriť dokument";
 };
 
 String STR_EVENT_PREPARECLOSEDOC
@@ -2587,6 +2656,7 @@ String STR_EVENT_PREPARECLOSEDOC
     Text[ czech ] = "Zavřít dokument";
     Text[ hebrew ] = "‮סגירת מסמך‬";
     Text[ hindi ] = "लेखपत्र बन्द करो";
+    Text[ slovak ] = "Zatvoriť dokument";
 };
 
 String STR_EVENT_OPENDOC
@@ -2621,6 +2691,7 @@ String STR_EVENT_OPENDOC
     Text[ czech ] = "Otevřít dokument";
     Text[ hebrew ] = "‮פתיחת מסך‬";
     Text[ hindi ] = "लेखपत्र खोलो";
+    Text[ slovak ] = "Otvoriť dokument";
 };
 
 String STR_EVENT_SAVEDOC
@@ -2631,7 +2702,7 @@ String STR_EVENT_SAVEDOC
     Text [ italian ] = "Salva documento" ;
     Text [ portuguese_brazilian ] = "Salvar documento" ;
     Text [ portuguese ] = "Guardar documento" ;
-    Text [ french ] = "Sauvegarder le document" ;
+    Text [ french ] = "Enregistrer le document" ;
     Text [ dutch ] = "Document opslaan" ;
     Text [ spanish ] = "Guardar documento" ;
     Text [ danish ] = "Gem dokument" ;
@@ -2655,6 +2726,7 @@ String STR_EVENT_SAVEDOC
     Text[ czech ] = "Uložit dokument";
     Text[ hebrew ] = "‮שמירת מסמך‬";
     Text[ hindi ] = "लेखपत्र संचित करो";
+    Text[ slovak ] = "Uložiť dokument";
 };
 
 String STR_EVENT_SAVEASDOC
@@ -2665,7 +2737,7 @@ String STR_EVENT_SAVEASDOC
     Text [ italian ] = "Salva documento con nome" ;
     Text [ portuguese_brazilian ] = "Salvar documento como" ;
     Text [ portuguese ] = "Guardar como" ;
-    Text [ french ] = "Sauvegarder le document sous" ;
+    Text [ french ] = "Enregistrer le document sous" ;
     Text [ dutch ] = "Document opslaan als" ;
     Text [ spanish ] = "Guardar documento como" ;
     Text [ danish ] = "Gem dokument som" ;
@@ -2689,6 +2761,7 @@ String STR_EVENT_SAVEASDOC
     Text[ czech ] = "Uložit dokument jako";
     Text[ hebrew ] = "‮שמירת מסמך בשם‬";
     Text[ hindi ] = "लेखपत्र संचित करो जैसे";
+    Text[ slovak ] = "Uložiť dokument ako";
 };
 
 String STR_EVENT_SAVEDOCDONE
@@ -2700,7 +2773,7 @@ String STR_EVENT_SAVEDOCDONE
     Text[ russian ] = "�������� ��������";
     Text[ greek ] = "�� ������� ������������";
     Text[ dutch ] = "Document is opgeslagen";
-    Text[ french ] = "Le document a bien �t� enregistr�";
+    Text[ french ] = "Le document a �t� enregistr�";
     Text[ spanish ] = "El documento se guard�";
     Text[ italian ] = "Il documento � stato salvato";
     Text[ danish ] = "Dokumentet er blevet gemt";
@@ -2720,6 +2793,7 @@ String STR_EVENT_SAVEDOCDONE
     Text[ czech ] = "Dokument byl uložen";
     Text[ hebrew ] = "‮המסמך נשמר‬";
     Text[ hindi ] = "लेखपत्र को संचित किया";
+    Text[ slovak ] = "Dokument bol uložený";
 };
 
 String STR_EVENT_SAVEASDOCDONE
@@ -2731,7 +2805,7 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ russian ] = "�������� �������� ���";
     Text[ greek ] = "�� ������� ������������ ��";
     Text[ dutch ] = "Document is opgeslagen als";
-    Text[ french ] = "Le document a �t� enregistr� en tant que";
+    Text[ french ] = "Le document a �t� enregistr� sous";
     Text[ spanish ] = "El documento se guard� como";
     Text[ italian ] = "Il documento � stato salvato con il nome";
     Text[ danish ] = "Dokumentet er blevet gemt som";
@@ -2751,6 +2825,7 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ czech ] = "Dokument byl uložen jako";
     Text[ hebrew ] = "‮המסמך נשמר בשם‬";
     Text[ hindi ] = "लेखपत्र को संचित किया जैसे";
+    Text[ slovak ] = "Dokument bol uložený ako";
 };
 
 String STR_EVENT_ACTIVATEDOC
@@ -2761,7 +2836,7 @@ String STR_EVENT_ACTIVATEDOC
     Text [ italian ] = "Attiva documento" ;
     Text [ portuguese_brazilian ] = "Ativar documento" ;
     Text [ portuguese ] = "Activar documento" ;
-    Text [ french ] = "Activer document" ;
+    Text [ french ] = "Activer le document" ;
     Text [ dutch ] = "Document activeren" ;
     Text [ spanish ] = "Activar documento" ;
     Text [ danish ] = "Aktiver dokument" ;
@@ -2785,6 +2860,7 @@ String STR_EVENT_ACTIVATEDOC
     Text[ czech ] = "Aktivovat dokument";
     Text[ hebrew ] = "‮מסמך פעיל‬";
     Text[ hindi ] = "लेखपत्र संचालित करो";
+    Text[ slovak ] = "Aktivovať dokument";
 };
 
 String STR_EVENT_DEACTIVATEDOC
@@ -2819,6 +2895,7 @@ String STR_EVENT_DEACTIVATEDOC
     Text[ czech ] = "Deaktivovat dokument";
     Text[ hebrew ] = "‮מסמך לא פעיל‬";
     Text[ hindi ] = "लेखपत्र निष्क्रिय करो";
+    Text[ slovak ] = "Dezaktivovať dokument";
 };
 
 String STR_EVENT_PRINTDOC
@@ -2852,6 +2929,7 @@ String STR_EVENT_PRINTDOC
     Text[ czech ] = "Tisk dokumentu";
     Text[ hebrew ] = "‮הדפסת מסמך‬";
     Text[ hindi ] = "लेखपत्र छपाई";
+    Text[ slovak ] = "Tlač dokumentu";
 };
 
 String STR_EVENT_MODIFYCHANGED
@@ -2859,6 +2937,14 @@ String STR_EVENT_MODIFYCHANGED
     Text = "'Ge�ndert'-Status wurde ge�ndert" ;
     Text [ ENGLISH ] = "'Modified' status has been changed" ;
     Text [ english_us ] = "'Modified' status was changed" ;
+    Text[ french ] = "Le statut 'Modifi�' a chang�";
+    Text[ spanish ] = "El estado 'Modificado el' ha cambiado.";
+    Text[ italian ] = "Lo stato 'Modificato' � stato cambiato";
+    Text[ swedish ] = "Status '�ndrad' har �ndrats";
+    Text[ japanese ] = "｢変更｣ステータスの変更時";
+    Text[ korean ] = "'수정 날짜'의 상태가 변경됨";
+    Text[ chinese_simplified ] = "状态'已更改'已经更改。";
+    Text[ chinese_traditional ] = "狀態 [已變更] 已經變更。";
 };
 
 String STR_ERR_NOTEMPLATE
@@ -2892,6 +2978,7 @@ String STR_ERR_NOTEMPLATE
     Text[ czech ] = "Vybraná šablona má neplatný formát";
     Text[ hebrew ] = "‮הצורה של התבנית שנבחרה אינה חוקית‬";
     Text[ hindi ] = "चुने हुए नमूने का रचना गलत है";
+    Text[ slovak ] = "Vybraná šablóna má neplatný formát";
 };
 
 String STR_ERR_NOFILE
@@ -2902,7 +2989,7 @@ String STR_ERR_NOFILE
     Text [ english_us ] = "Can't open file $." ;
     Text [ italian ] = "Non � possibile aprire il file  $." ;
     Text [ spanish ] = "El archivo $ no se puede abrir." ;
-    Text [ french ] = "Impossible d'ouvrir le fichier $ ." ;
+    Text [ french ] = "Impossible d'ouvrir le fichier $." ;
     Text [ swedish ] = "Filen $ kan inte �ppnas." ;
     Text [ danish ] = "Det er ikke muligt at �bne filen $." ;
     Text [ portuguese_brazilian ] = "N�o � poss�vel abrir o arquivo $." ;
@@ -2925,6 +3012,7 @@ String STR_ERR_NOFILE
     Text[ czech ] = "Nelze otevřít soubor $.";
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $.‬";
     Text[ hindi ] = "$ फाइल को नहीं खोल सकता है ।";
+    Text[ slovak ] = "Nie je možné otvoriť súbor $.";
 };
 
 
@@ -2959,6 +3047,7 @@ String STR_QUITAPP
     Text[ czech ] = "Ukončit";
     Text[ hebrew ] = "‮יציאה‬";
     Text[ hindi ] = "नि~र्गम";
+    Text[ slovak ] = "~Ukončiť";
 };
 
 String STR_EXITANDRETURN
@@ -2992,6 +3081,7 @@ String STR_EXITANDRETURN
     Text[ czech ] = "Konec a návrat do ";
     Text[ hebrew ] = "‮יציאה וחזרה אל ‬";
     Text[ hindi ] = "नि~र्गम और में वापस ";
+    Text[ slovak ] = "~Koniec a návrat do ";
 };
 
 String STR_EXTHELPSTATUS
@@ -3025,6 +3115,7 @@ String STR_EXTHELPSTATUS
     Text[ czech ] = "Vyberte příkaz nebo zadejte téma kliknutím.";
     Text[ hebrew ] = "‮ניתן לבחור פקודה או נושא.‬";
     Text[ hindi ] = "विषय को चुनने केलिए एक आज्ञा को चुनो अथवा क्लिक् करो ।";
+    Text[ slovak ] = "Vyberte príkaz alebo zadajte tému kliknutím.";
 };
 
 String STR_MAIL
@@ -3059,6 +3150,7 @@ String STR_MAIL
     Text[ czech ] = "Pošta";
     Text[ hebrew ] = "‮דואר‬";
     Text[ hindi ] = "मेइल";
+    Text[ slovak ] = "Pošta";
 };
 
 String STR_ADDRESS_NAME
@@ -3092,6 +3184,7 @@ String STR_ADDRESS_NAME
     Text[ czech ] = "Adresy";
     Text[ hebrew ] = "‮כתובות‬";
     Text[ hindi ] = "पतें";
+    Text[ slovak ] = "Adresy";
 };
 
 String RID_STR_HELP
@@ -3125,6 +3218,7 @@ String RID_STR_HELP
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "सहायता";
+    Text[ slovak ] = "Pomocník";
 };
 
 String RID_STR_NOAUTOSTARTHELPAGENT
@@ -3158,6 +3252,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ czech ] = "Nespouštět 'XX' automaticky";
     Text[ hebrew ] = "‮אין התחלה אוטומטי ב'XX'‬";
     Text[ hindi ] = "'XX' में कोई स्वचालित ढंग से प्रारंभ नहीं है ";
+    Text[ slovak ] = "Nespúšťať 'XX' automaticky";
 };
 
 String RID_STR_NOWELCOMESCREEN
@@ -3191,6 +3286,7 @@ String RID_STR_NOWELCOMESCREEN
     Text[ czech ] = "Nezobrazovat tipy";
     Text[ hebrew ] = "‮לא להציג טיפים‬";
     Text[ hindi ] = "सुझावों को मत दिखाओ";
+    Text[ slovak ] = "Nezobrazovať tipy";
 };
 
 String RID_HELPBAR
@@ -3224,6 +3320,7 @@ String RID_HELPBAR
     Text[ czech ] = "Panel nápovědy";
     Text[ hebrew ] = "‮סרגל עזרה‬";
     Text[ hindi ] = "सहायता पट्टी";
+    Text[ slovak ] = "Panel pomocníka";
 };
 
 ToolBox RID_HELPBAR
@@ -3312,6 +3409,7 @@ String RID_STR_HLPFILENOTEXIST
     Text[ czech ] = "Pro toto téma nebyl nainstalován příslušný soubor s nápovědou.";
     Text[ hebrew ] = "‮קובץ העזרה לנושא זה אינו מותקן‬";
     Text[ hindi ] = "इस विषय केलिए सहायता फाइल को प्रतिष्ठापित नहीं किया है ।";
+    Text[ slovak ] = "Pre túto tému nebol nainštalovaný príslušný súbor s pomocníkom.";
 };
 
 String RID_STR_HLPAPPNOTSTARTED
@@ -3345,6 +3443,7 @@ String RID_STR_HLPAPPNOTSTARTED
     Text[ czech ] = "Systém nápovědy nemůže být spuštěn.";
     Text[ hebrew ] = "‮לא ניתן לאתחל את מערכת העזרה‬";
     Text[ hindi ] = "सहायता सिस्टम् को प्रारंभ नहीं कर सकते है ।";
+    Text[ slovak ] = "Systém pomocníka nemôže byť spustený.";
 };
 
  //----------------------------------------------------------------------------
@@ -3366,7 +3465,7 @@ String RID_ENVTOOLBOX
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "ファンクションバー";
-    Text[ chinese_traditional ] = "工具列";
+    Text[ chinese_traditional ] = "功能列";
     Text[ arabic ] = "���� ������";
     Text[ dutch ] = "Werkbalk";
     Text[ chinese_simplified ] = "功能栏";
@@ -3380,6 +3479,7 @@ String RID_ENVTOOLBOX
     Text[ czech ] = "Panel funkcí";
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
+    Text[ slovak ] = "Panel funkcií­";
 };
 
 ToolBox RID_ENVTOOLBOX
@@ -3644,6 +3744,7 @@ String RID_SPECIALCONFIG_ERROR
     Text[ czech ] = "Nastala chyba ve zvláštní konfiguraci.\nProsím kontaktujte vašeho administrátora.";
     Text[ hebrew ] = "‮ארעה שגיאה בתצורה המיוחדת.\nנא להודיע למנהל המערכת.‬";
     Text[ hindi ] = "विशेष रूप-रेखा में एक गलती घटित हुआ ।\nकृपया आपका प्रशासक को संपर्क कीजिए ।";
+    Text[ slovak ] = "Nastala chyba vo zvláštnej konfigurácii.\nProsím kontaktujte vašeho administrátora.";
 };
 
 
@@ -3693,6 +3794,7 @@ String RID_PLUGIN
     Text[ czech ] = "Povolit zásuvné moduly";
     Text[ hebrew ] = "‮לאפשר הפעלת תוספים (plug-ins)‬";
     Text[ hindi ] = "प्लग-इन को सक्षम करो";
+    Text[ slovak ] = "Povoliť zásuvné moduly";
 };
 
 String STR_CORRUPT_INSTALLATION
@@ -3723,6 +3825,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ czech ] = "Důležité programové komponenty nemohou být inicializovány korektně.\nProsím spusťte program setup s volbou /Repair.";
     Text[ hebrew ] = "‮לא ניתן לתחל רכיבים חשובים כראוי.\nיש להפעיל את תוכנית ההתקנה עם /Repair.‬";
     Text[ hindi ] = "प्रधान प्रोग्राम कॉम्पोनेन्ट्स् को ठीक से इनिश्यलैज़ नहीं किया है ।\nकृपया सेटप प्रोग्राम को /मरम्मत विकल्प सहित प्रारंभ कीजिए ।";
+    Text[ slovak ] = "Dôležité programové komponenty nemôžu byť inicializované korektne.\nProsím spustite program setup s voľbou /Opraviť.";
 };
 
 String IDS_SBERR_STOREREF
@@ -3755,6 +3858,7 @@ String IDS_SBERR_STOREREF
     Text[ czech ] = "Reference nebude uložena: ";
     Text[ hebrew ] = "‮ההפניה לא ישמר: ‬";
     Text[ hindi ] = "रेफ़रेन्स को संचित नहीं कर सकते है: ";
+    Text[ slovak ] = "Referencia nebude uložená: ";
 };
 
 String STR_KEY_CONFIG_DIR
@@ -3789,6 +3893,7 @@ String STR_KEY_CONFIG_DIR
     Text[ czech ] = "Konfigurace";
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
+    Text[ slovak ] = "Konfigurácia";
 };
 String STR_KEY_WORK_PATH
 {
@@ -3822,6 +3927,7 @@ String STR_KEY_WORK_PATH
     Text[ czech ] = "Moje dokumenty";
     Text[ hebrew ] = "‮המסמכים שלי‬";
     Text[ hindi ] = "मेरा लेखपत्रें";
+    Text[ slovak ] = "Moje dokumenty";
 };
 String STR_KEY_GRAPHICS_PATH
 {
@@ -3855,6 +3961,7 @@ String STR_KEY_GRAPHICS_PATH
     Text[ czech ] = "Obrázky";
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázky";
 };
 String STR_KEY_BITMAP_PATH
 {
@@ -3887,6 +3994,7 @@ String STR_KEY_BITMAP_PATH
     Text[ czech ] = "Ikony";
     Text[ hebrew ] = "‮סמלים‬";
     Text[ hindi ] = "अइकॉन्स";
+    Text[ slovak ] = "Ikony";
 };
 String STR_KEY_BASIC_PATH
 {
@@ -3925,6 +4033,7 @@ String STR_KEY_PALETTE_PATH
     Text[ czech ] = "Palety";
     Text[ hebrew ] = "‮לוחות צבע‬";
     Text[ hindi ] = "पेलट्स";
+    Text[ slovak ] = "Palety";
 };
 String STR_KEY_BACKUP_PATH
 {
@@ -3958,6 +4067,7 @@ String STR_KEY_BACKUP_PATH
     Text[ czech ] = "Zálohy";
     Text[ hebrew ] = "‮גיבויים‬";
     Text[ hindi ] = "बैकप";
+    Text[ slovak ] = "Zálohy";
 };
 String STR_KEY_MODULES_PATH
 {
@@ -3978,7 +4088,7 @@ String STR_KEY_MODULES_PATH
     Text[ russian ] = "������";
     Text[ polish ] = "Modu�y";
     Text[ japanese ] = "モジュール";
-    Text[ chinese_traditional ] = "模塊";
+    Text[ chinese_traditional ] = "模組";
     Text[ arabic ] = "����� �����";
     Text[ dutch ] = "Modules";
     Text[ chinese_simplified ] = "模块";
@@ -3991,6 +4101,7 @@ String STR_KEY_MODULES_PATH
     Text[ czech ] = "Moduly";
     Text[ hebrew ] = "‮מודולים‬";
     Text[ hindi ] = "मोड्यूलें";
+    Text[ slovak ] = "Moduly";
 };
 String STR_KEY_TEMPLATE_PATH
 {
@@ -4024,6 +4135,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Šablóny";
 };
 String STR_KEY_GLOSSARY_PATH
 {
@@ -4053,6 +4165,7 @@ String STR_KEY_GLOSSARY_PATH
     Text[ czech ] = "Automatický text";
     Text[ hebrew ] = "‮טקסט אוטומטי‬";
     Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट्";
+    Text[ slovak ] = "Automatický text";
 };
 String STR_KEY_DICTIONARY_PATH
 {
@@ -4086,6 +4199,7 @@ String STR_KEY_DICTIONARY_PATH
     Text[ czech ] = "Slovníky";
     Text[ hebrew ] = "‮מילונים‬";
     Text[ hindi ] = "शब्दकोश";
+    Text[ slovak ] = "Slovníky";
 };
 String STR_KEY_HELP_DIR
 {
@@ -4118,6 +4232,7 @@ String STR_KEY_HELP_DIR
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "सहायता";
+    Text[ slovak ] = "Pomocník";
 };
 String STR_KEY_GALLERY_DIR
 {
@@ -4140,7 +4255,7 @@ String STR_KEY_GALLERY_DIR
     Text[ arabic ] = "��������";
     Text[ dutch ] = "Gallery";
     Text[ chinese_simplified ] = "画廊";
-    Text[ greek ] = "�������";
+    Text[ greek ] = "�������";
     Text[ korean ] = "갤러리";
     Text[ turkish ] = "Galeri";
     Text[ language_user1 ] = " ";
@@ -4150,6 +4265,7 @@ String STR_KEY_GALLERY_DIR
     Text[ czech ] = "Galerie";
     Text[ hebrew ] = "‮גלריה‬";
     Text[ hindi ] = "गेलरी";
+    Text[ slovak ] = "Galérie";
 };
 
 String STR_KEY_STORAGE_DIR
@@ -4183,6 +4299,7 @@ String STR_KEY_STORAGE_DIR
     Text[ czech ] = "Umístění zpráv";
     Text[ hebrew ] = "‮איחסון הודעות‬";
     Text[ hindi ] = "संदेश संग्रह";
+    Text[ slovak ] = "Umiestnenie správ";
 };
 String STR_KEY_TEMP_PATH
 {
@@ -4191,7 +4308,7 @@ String STR_KEY_TEMP_PATH
     Text[ english_us ] = "Temporary files";
     Text[ portuguese ] = "Ficheiros tempor�rios";
     Text[ russian ] = "��������� �����";
-    Text[ greek ] = "Temporary base directory";
+    Text[ greek ] = "��������� ������";
     Text[ dutch ] = "Tijdelijke bestanden";
     Text[ french ] = "Fichiers temporaires";
     Text[ spanish ] = "Archivos temporales";
@@ -4212,6 +4329,7 @@ String STR_KEY_TEMP_PATH
     Text[ czech ] = "Dočasné soubory";
     Text[ hebrew ] = "‮קבצים זמניים‬";
     Text[ hindi ] = "अस्थायी फाइलें";
+    Text[ slovak ] = "Dočasné súbory";
 };
 String STR_KEY_PLUGINS_PATH
 {
@@ -4243,6 +4361,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ czech ] = "Zásuvné moduly";
     Text[ hebrew ] = "‮תוספים (Plug-ins)‬";
     Text[ hindi ] = "प्लग-इन";
+    Text[ slovak ] = "Zásuvné moduly";
 };
 String STR_KEY_FAVORITES_DIR
 {
@@ -4273,6 +4392,7 @@ String STR_KEY_FAVORITES_DIR
     Text[ czech ] = "Záložky pro složku";
     Text[ hebrew ] = "‮סימניות לתיקיות‬";
     Text[ hindi ] = "कोष्ठ पृष्ठसंकेत ";
+    Text[ slovak ] = "Záložky pre zložku";
 };
 String STR_KEY_FILTER_PATH
 {
@@ -4303,6 +4423,7 @@ String STR_KEY_FILTER_PATH
     Text[ czech ] = "Filtry";
     Text[ hebrew ] = "‮מסננים‬";
     Text[ hindi ] = "फिल्टरें";
+    Text[ slovak ] = "Filtre";
 };
 String STR_KEY_ADDINS_PATH
 {
@@ -4332,6 +4453,7 @@ String STR_KEY_ADDINS_PATH
     Text[ czech ] = "Moduly";
     Text[ hebrew ] = "‮תוכניות נספחות‬";
     Text[ hindi ] = "Add-ins";
+    Text[ slovak ] = "Moduly";
 };
 String STR_KEY_USERCONFIG_PATH
 {
@@ -4362,6 +4484,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ czech ] = "Uživatelská konfigurace";
     Text[ hebrew ] = "‮תצורת משתמשים‬";
     Text[ hindi ] = "उपभोक्ता रूपरेखा";
+    Text[ slovak ] = "Užívateľská konfigurácia";
 };
 String STR_KEY_USERDICTIONARY_DIR
 {
@@ -4391,6 +4514,7 @@ String STR_KEY_USERDICTIONARY_DIR
     Text[ czech ] = "Uživatelské slovníky";
     Text[ hebrew ] = "‮מילונים מוגדרים על ידי המשתמש‬";
     Text[ hindi ] = "उपभोक्ता शब्दकोश";
+    Text[ slovak ] = "Užívateľské slovníky";
 };
 String STR_KEY_AUTOCORRECT_DIR
 {
@@ -4420,6 +4544,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ czech ] = "Automatické opravy";
     Text[ hebrew ] = "‮תיקון אוטומטי‬";
     Text[ hindi ] = "स्वयं ठीक करो";
+    Text[ slovak ] = "Automatické opravy";
 };
 #if defined STR_KEY_LINGUISTIC_DIR
 String STR_KEY_LINGUISTIC_DIR
@@ -4450,6 +4575,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ czech ] = "Pomůcky pro psaní";
     Text[ hebrew ] = "‮עזרי כתיבה‬";
     Text[ hindi ] = "लेखन सहायक";
+    Text[ slovak ] = "Pomôcky na písanie";
 };
 #endif // STR_KEY_LINGUISTIC_DIR
 
@@ -4481,6 +4607,7 @@ String STR_QUICKSTART_EXIT
     Text[ czech ] = "Ukončit rychlé spuštění";
     Text[ hebrew ] = "‮יציאה מהמדריך המזרז‬";
     Text[ hindi ] = "क्षिप्रप्रारंभ करनेवाला से निर्गम करो";
+    Text[ slovak ] = "Ukončiť Quickstarter";
 };
 String STR_QUICKSTART_TIP
 {
@@ -4510,6 +4637,7 @@ String STR_QUICKSTART_TIP
     Text[ czech ] = "Rychlé spuštění %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "‮המדריך המזרז ל %PRODUCTNAME %PRODUCTVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION क्षिप्रप्रारंभ करनेवाला";
+    Text[ slovak ] = "Rýchle spustenie %PRODUCTNAME %PRODUCTVERSION";
 };
 String STR_QUICKSTART_FILEOPEN
 {
@@ -4518,7 +4646,7 @@ String STR_QUICKSTART_FILEOPEN
     Text[ english_us ] = "Open Document";
     Text[ portuguese ] = "Abrir ficheiro...";
     Text[ russian ] = "������� ����...";
-    Text[ greek ] = "File open...";
+    Text[ greek ] = "������� �������...";
     Text[ dutch ] = "Bestand openen...";
     Text[ french ] = "Ouvrir un document";
     Text[ spanish ] = "Abrir documento";
@@ -4539,6 +4667,7 @@ String STR_QUICKSTART_FILEOPEN
     Text[ czech ] = "Otevřít soubor...";
     Text[ hebrew ] = "‮פתיחת קובץ...‬";
     Text[ hindi ] = "फाइल खोलो...";
+    Text[ slovak ] = "Otvoriť súbor...";
 };
 String STR_QUICKSTART_FROMTEMPLATE
 {
@@ -4547,7 +4676,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ english_us ] = "From Template";
     Text[ portuguese ] = "A partir de modelo...";
     Text[ russian ] = "�� �������...";
-    Text[ greek ] = "From template...";
+    Text[ greek ] = "��� �������...";
     Text[ dutch ] = "Uit sjabloon...";
     Text[ french ] = "� partir d'un mod�le";
     Text[ spanish ] = "De plantilla";
@@ -4568,6 +4697,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ czech ] = "Ze šablony...";
     Text[ hebrew ] = "‮מתבנית...‬";
     Text[ hindi ] = "नमूना से...";
+    Text[ slovak ] = "Zo šablóny...";
 };
 String STR_QUICKSTART_PRELAUNCH
 {
@@ -4576,7 +4706,7 @@ String STR_QUICKSTART_PRELAUNCH
     Text[ english_us ] = "Load %PRODUCTNAME During System Start-Up";
     Text[ portuguese ] = "Carregar %PRODUCTNAME ao iniciar o sistema";
     Text[ russian ] = "��������� %PRODUCTNAME �� ����� ������� �������";
-    Text[ greek ] = "Pre-launch %PRODUCTNAME during system start";
+    Text[ greek ] = "�� ���-���������� �� %PRODUCTNAME ���� ��� �������� ��� ����������";
     Text[ dutch ] = "%PRODUCTNAME bij systeemstart laden";
     Text[ french ] = "Charger %PRODUCTNAME au d�marrage du syst�me";
     Text[ spanish ] = "Cargar %PRODUCTNAME al iniciar el sistema";
@@ -4597,6 +4727,7 @@ String STR_QUICKSTART_PRELAUNCH
     Text[ czech ] = "Načíst %PRODUCTNAME během spuštění systému";
     Text[ hebrew ] = "‮טעינת %PRODUCTNAME בזמן איתחול המערכת‬";
     Text[ hindi ] = "सिस्टम प्रारंभ होने के समय %PRODUCTNAME को लोड़ करो";
+    Text[ slovak ] = "Načítať %PRODUCTNAME behom spúšťania systému";
 };
 String STR_QUICKSTART_LNKNAME
 {
@@ -4626,6 +4757,7 @@ String STR_QUICKSTART_LNKNAME
     Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 WarningBox RID_SECURITY_WARNING_HYPERLINK
@@ -4659,6 +4791,7 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     Message[ czech ] = "Tento hyperlink otevře \"%s\". Chcete pokračovat?";
     Message[ hebrew ] = "‮קישור זה פותח \"%s\". האם להמשיך?‬";
     Message[ hindi ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ slovak ] = "Tento odkaz otvorí \"%s\". Chcete pokračovať?";
 };
 
 String RID_SECURITY_WARNING_TITLE
@@ -4689,6 +4822,7 @@ String RID_SECURITY_WARNING_TITLE
     Text[ czech ] = "Bezpečnostní upozornění";
     Text[ hebrew ] = "‮אזהרת בטחון‬";
     Text[ hindi ] = "Security Warning";
+    Text[ slovak ] = "Bezpečnostné varovanie";
 };
 
 ErrorBox RID_INVALID_URL_MSG
@@ -4720,6 +4854,7 @@ ErrorBox RID_INVALID_URL_MSG
     Message[ czech ] = "URL je neplatné.";
     Message[ hebrew ] = "Der URL ist ungültig.";
     Message[ hindi ] = "The URL is not valid.";
+    Message[ slovak ] = "URL je neplatné.";
 };
 
 String RID_INVALID_URL_TITLE
@@ -4750,7 +4885,12 @@ String RID_INVALID_URL_TITLE
     Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "इशारा";
+    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
+
+
+
 
 
 
