@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:07:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,12 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Text[ spanish ] = "~Confirmar";
         Text[ italian ] = "~Conferma";
         Text[ swedish ] = "~Validera";
-        Text[ japanese ] = "検証";
-        Text[ korean ] = "검증";
+        Text[ japanese ] = "検証(~V)";
+        Text[ korean ] = "검증(~V)";
         Text[ chinese_simplified ] = "验证(~V)";
         Text[ chinese_traditional ] = "驗證(~V)";
         Text[ slovak ] = "Pot~vrdiť";
+        Text[ portuguese_brazilian ] = "~Validar";
     };
     Text[ french ] = "Sortie filtre XML";
     Text[ spanish ] = "Salida filtro XML";
@@ -106,7 +107,9 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
     Text[ chinese_simplified ] = "XML 筛选器输出";
     Text[ chinese_traditional ] = "XML 篩選器匯出";
     Text[ slovak ] = "XML Filter výstup";
+    Text[ portuguese_brazilian ] = "Sa�da do filtro XML";
 };
+
 
 
 
