@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:58:39 $
+#   last change: $Author: obo $ $Date: 2005-01-05 12:42:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,7 @@ UNOTYPES=\
     com.sun.star.sdb.CommandType\
     com.sun.star.sdb.XDatabaseEnvironment \
     com.sun.star.sdb.XColumn\
-    com.sun.star.sdb.XSQLQueryComposerFactory\
+    com.sun.star.sdb.XSingleSelectQueryComposer\
     com.sun.star.sdbc.DataType \
     com.sun.star.sdbc.ResultSetType \
     com.sun.star.sdbc.ResultSetConcurrency \
@@ -169,7 +169,6 @@ UNOTYPES=\
     com.sun.star.sdbcx.XTablesSupplier \
     com.sun.star.sdbcx.XColumnsSupplier \
     com.sun.star.sdbcx.XRowLocate \
-    com.sun.star.sdb.XSQLQueryComposer\
     com.sun.star.sdbc.XResultSet \
     com.sun.star.sdbc.ResultSetType \
     com.sun.star.sdbc.XRowSet\
