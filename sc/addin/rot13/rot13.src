@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:45:28 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ swedish ] = "Text";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "Text";
-        Text[ japanese ] = "•¶Žš";
+        Text[ japanese ] = "Ã·½Ä";
         Text[ chinese_simplified ] = "Text";
         Text[ chinese_traditional ] = "¥»¤å";
         Text[ arabic ] = "ÇáäÕ";
