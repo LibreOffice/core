@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 22:34:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Pos = MAP_APPFONT ( 6 , 2 ) ;
         Size = MAP_APPFONT ( 248 , 48 ) ;
         Text[ portuguese ] = "Fonte do livro de endereзos";
-        Text[ russian ] = "Исходная адресная книга";
+        Text[ russian ] = "Источник адресной книги";
         Text[ greek ] = "РспЭлехуз бфжЭнфбт дйехиэнуещн";
         Text[ dutch ] = "Bron voor adresboek";
         Text[ french ] = "Source du carnet d'adresses";
@@ -438,9 +438,9 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ portuguese ] = "Apelido";
     Text[ russian ] = "Фамилия";
     Text[ greek ] = "Ерюнхмп";
-    Text[ dutch ] = "Achternaam";
+    Text[ dutch ] = "Naam";
     Text[ french ] = "Nom";
-    Text[ spanish ] = "Nombre";
+    Text[ spanish ] = "Apellidos";
     Text[ italian ] = "Cognome";
     Text[ danish ] = "Last name";
     Text[ swedish ] = "Efternamn";
@@ -842,7 +842,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_simplified ] = "К№УГХЯ 2";
     Text[ chinese_traditional ] = "ЁПҐОЄМ 2";
     Text[ turkish ] = "User 2";
-    Text[ arabic ] = "гУКОПг  2";
+    Text[ arabic ] = "гУКОПг 2";
 };
     String STR_FIELD_USER3
     {
@@ -924,7 +924,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ russian ] = "Область";
     Text[ greek ] = "Нпмьт";
     Text[ dutch ] = "Provincie/Regio";
-    Text[ french ] = "Province";
+    Text[ french ] = "Йtat";
     Text[ spanish ] = "Provincia";
     Text[ italian ] = "Provincia";
     Text[ danish ] = "State";
@@ -947,7 +947,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ russian ] = "Телефон (раб.)";
     Text[ greek ] = "ФзлЭцщнп (ГсбцеЯп)";
     Text[ dutch ] = "Telefoon kantoor";
-    Text[ french ] = "Tйl. ligne directe";
+    Text[ french ] = "Tйl. bureau";
     Text[ spanish ] = "Telйfono trabajo";
     Text[ italian ] = "Telefono (uff.)";
     Text[ danish ] = "Telephon Office";
@@ -959,7 +959,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_simplified ] = "°м№«КТµДµз»°єЕВл";
     Text[ chinese_traditional ] = "їм¤Ѕ«З№qёЬё№ЅX";
     Text[ turkish ] = "Telephon Office";
-    Text[ arabic ] = "ЗбеЗКЭ (Ъгб)";
+    Text[ arabic ] = "ЗбеЗКЭ (гЯКИ)";
 };
     String STR_FIELD_PAGER
     {
@@ -972,7 +972,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ dutch ] = "Pager";
     Text[ french ] = "Pager";
     Text[ spanish ] = "Buscapersonas";
-    Text[ italian ] = "Pager";
+    Text[ italian ] = "Teledrin";
     Text[ danish ] = "Pager";
     Text[ swedish ] = "Personsцkare";
     Text[ polish ] = "Telefon (komуrkowy)";
@@ -1013,7 +1013,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english ] = "Telephon other";
         Text [ english_us ] = "Tel: Other";
         Text[ portuguese ] = "Telephon other";
-    Text[ russian ] = "Телефон (другие)";
+    Text[ russian ] = "Телефон (другой)";
     Text[ greek ] = "ФзлЭцщнп (ДйЬцпсб)";
     Text[ dutch ] = "Telefoon andere";
     Text[ french ] = "Tйl. autre";
