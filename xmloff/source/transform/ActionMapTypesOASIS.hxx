@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOASIS.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:26:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,11 @@ enum ActionMapTypesOOo
     OASIS_FORMULA_ACTIONS,
     OASIS_CHART_ACTIONS,
     OASIS_FORM_ACTIONS,
-    OOO_DDE_CONV_MODE_ACTIONS,
+    OASIS_DDE_CONV_MODE_ACTIONS,
+    OASIS_DATAPILOT_MEMBER_ACTIONS,
+    OASIS_DATAPILOT_LEVEL_ACTIONS,
+    OASIS_SOURCE_SERVICE_ACTIONS,
+    OASIS_DRAW_AREA_POLYGON_ACTIONS,
     OASIS_SCRIPT_ACTIONS,
     OASIS_DATETIME_ACTIONS,
     MAX_OASIS_ACTIONS
