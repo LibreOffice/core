@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ long SwEditShell::Move()
             GetDoc()->DoUndo( bUndo );
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // pruefe ob die Indizies auch in den richtigen Nodes angemeldet sind
 {
     SwPaM* pCmp = GetCrsr();        // sicher den Pointer auf Cursor
@@ -369,7 +369,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         pDestShell->GetCrsr()->SetMark();
         pDestShell->GetCrsr()->DeleteMark();
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // pruefe ob die Indizies auch in den richtigen Nodes angemeldet sind
 {
     SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // sicher den Pointer auf Cursor
