@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-22 08:40:36 $
+ *  last change: $Author: ssa $ $Date: 2002-11-29 08:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2926,6 +2926,11 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    // #105373# notify toolkit that highlight was removed
+    // otherwise the entry will not be read when the menu is opened again
+    if( nHighlightedItem != ITEMPOS_INVALID )
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+
     if( !bKeyInput && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
     {
         // #102461# remove highlight in parent
