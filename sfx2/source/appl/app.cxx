@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:04:44 $
+ *  last change: $Author: er $ $Date: 2001-07-09 08:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@
 #include <svtools/internaloptions.hxx>
 #include <svtools/workingsetoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
+#include <svtools/syslocale.hxx>
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
@@ -254,6 +255,7 @@ static SvtInetOptions *pInetOptions = NULL;
 static SvtFontOptions *pFontOptions = NULL;
 static SvtInternalOptions *pInternalOptions = NULL;
 static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
+static SvtSysLocale *pSysLocale = NULL;
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
@@ -351,10 +353,9 @@ SfxApplication::SfxApplication()
     aSettings.SetUILanguage( eUILanguage );
     aSettings.SetLanguage( eLanguage );
     Application::SetSettings( aSettings );
-//!!!!!!!
-//! TODO: Establish a SvtListener at pSysLocaleOptions to be notified if locale
-//!       changes, and propagate the new LanguageType to application settings.
-//!!!!!!!
+    // Create instance of SvtSysLocale _after_ setting the locale at the application,
+    // so that it can initialize itself correctly.
+    pSysLocale = new SvtSysLocale;
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
@@ -398,6 +399,7 @@ SfxApplication::~SfxApplication()
     delete pFontOptions;
     delete pInternalOptions;
     delete pSysLocaleOptions;
+    delete pSysLocale;
 
     if ( !bDowning )
         Deinitialize();
