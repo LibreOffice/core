@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,4 +283,13 @@ void SAL_CALL ORowSetDataColumns::disposing(void)
     ORowSetDataColumns_BASE::disposing();
     //  m_aColumns.clear();
 }
+// -----------------------------------------------------------------------------
+void ORowSetDataColumns::assign(const ORowSetDataColumns_COLLECTION& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
+{
+    m_aColumns = _rColumns;
+    for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
+}
+// -----------------------------------------------------------------------------
+
 

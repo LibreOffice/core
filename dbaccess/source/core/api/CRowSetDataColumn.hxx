@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace dbaccess
         {}
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
+        void assign(const ORowSetDataColumns_COLLECTION& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector);
     };
 }
 

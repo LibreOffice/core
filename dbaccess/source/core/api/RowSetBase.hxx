@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 10:19:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
 
     public:
+        virtual ~ORowSetBase();
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);

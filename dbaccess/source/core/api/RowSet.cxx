@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,10 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 setActiveConnection(xNewConnection, sal_False);
             }
 
+            // if we owned the connection, dispose it
+            if(m_bOwnConnection)
+                ::comphelper::disposeComponent(m_xActiveConnection);
+
             m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
@@ -641,10 +645,7 @@ void ORowSet::freeResources()
         // their owner can be the composer
         m_xColumns      = NULL;
         if(m_pColumns)
-        {
             m_pColumns->disposing();
-            DELETEZ(m_pColumns);
-        }
         // dispose the composer to avoid that everbody knows that the querycomposer is eol
         Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
         if (xComp.is())
@@ -2030,8 +2031,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         }
                     }
                     // now create the columns we need
-                    m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                                        aColumns,*this,m_aColumnsMutex,aNames);
+                    if(m_pColumns)
+                        m_pColumns->assign(aColumns,aNames);
+                    else
+                        m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                                                            aColumns,*this,m_aColumnsMutex,aNames);
                 }
             }
         }
@@ -2217,7 +2221,6 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                 }
             }
         }
-
         setActiveConnection(xNewConn);
         m_bOwnConnection = sal_True;
     }

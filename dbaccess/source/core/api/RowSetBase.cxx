@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,15 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rM
     registerProperty(PROPERTY_ROWCOUNT,             PROPERTY_ID_ROWCOUNT,               nRBT,                           &m_nRowCount,           ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_ISROWCOUNTFINAL,      PROPERTY_ID_ISROWCOUNTFINAL,        nRBT,                           &m_bRowCountFinal,      ::getBooleanCppuType());
 }
+// -----------------------------------------------------------------------------
+ORowSetBase::~ORowSetBase()
+{
+    if(m_pColumns)
+    {
+        delete m_pColumns;
+        m_pColumns = NULL;
+    }
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< Type > ORowSetBase::getTypes() throw (RuntimeException)
@@ -215,11 +224,7 @@ void SAL_CALL ORowSetBase::disposing(void)
     MutexGuard aGuard(m_rMutex);
 
     if(m_pColumns)
-    {
         m_pColumns->disposing();
-        delete m_pColumns;
-        m_pColumns = NULL;
-    }
 
     m_pCache    = NULL;
 }
