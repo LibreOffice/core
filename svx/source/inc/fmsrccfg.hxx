@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public:
 // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
 // ===================================================================================================
 
-class FmSearchConfigItem : public SfxConfigItem
+class FmSearchConfigItem
 {
     friend class FmSearchConfigAdmin;
 
@@ -135,8 +135,8 @@ private:
     FmSearchConfigItem();
 
 public:
-    virtual int         Load(SvStream&);
-    virtual BOOL        Store(SvStream&);
+//    virtual int         Load(SvStream&);
+//    virtual BOOL        Store(SvStream&);
     virtual void        UseDefault();
 
 protected:

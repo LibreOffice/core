@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,9 @@ BOOL FmSearchParams::operator ==(const FmSearchParams& rComp) const
 #define FM_SEARCH_CONFIG_VERSION_SO60       4       // ab der SRC629
 
 //------------------------------------------------------------------------
-FmSearchConfigItem::FmSearchConfigItem() : SfxConfigItem(SFX_ITEMTYPE_SVXSEARCHPARAMS)
+FmSearchConfigItem::FmSearchConfigItem()
 {
+    UseDefault();
 }
 
 //------------------------------------------------------------------------
@@ -169,6 +170,7 @@ INT32 FmSearchConfigItem::CalcCheckSum(const FmSearchParams& aParams, short nFor
     return nReturn;
 }
 
+/*
 //------------------------------------------------------------------------
 int FmSearchConfigItem::Load(SvStream& rStore)
 {
@@ -316,6 +318,7 @@ BOOL FmSearchConfigItem::Store(SvStream& rStore)
 
     return TRUE;
 }
+*/
 
 //------------------------------------------------------------------------
 void FmSearchConfigItem::UseDefault()
@@ -344,7 +347,7 @@ void FmSearchConfigItem::UseDefault()
         |   TransliterationModules_ignoreSeparator_ja_JP
         |   TransliterationModules_IGNORE_CASE;
 
-    SetDefault(TRUE);
+//    SetDefault(TRUE);
 }
 
 // ===================================================================================================
@@ -381,7 +384,7 @@ FmSearchConfigAdmin::~FmSearchConfigAdmin()
     {
         if (s_pItem)
         {
-            s_pItem->StoreConfig(TRUE);
+//            s_pItem->StoreConfig(TRUE);
             delete s_pItem;
             s_pItem = NULL;
         }
@@ -397,7 +400,8 @@ FmSearchConfigItem* FmSearchConfigAdmin::GetItem() const
         return s_pItem;
 
     s_pItem = new FmSearchConfigItem;
-    s_pItem->Initialize();
+//    s_pItem->Initialize();
+    s_pItem->UseDefault();
     return s_pItem;
 }
 
@@ -407,7 +411,7 @@ void FmSearchConfigAdmin::PutParams(const FmSearchParams& rParams)
     if (GetParams() != rParams)
     {
         GetItem()->m_aParams = rParams;
-        GetItem()->SetDefault(FALSE);   // damit wird das Ding implizit auch modified gesetzt
+//        GetItem()->SetDefault(FALSE);   // damit wird das Ding implizit auch modified gesetzt
     }
 }
 
