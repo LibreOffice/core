@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:45:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,15 @@ namespace connectivity
         typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
+        enum EDriverType
+        {
+            Mozilla,
+            LDAP,
+            Outlook,
+            OutlookExpress,
+            Unknown
+        };
+
         class MozabDriver : public ODriver_BASE
         {
         protected:
@@ -135,7 +144,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         & getMSFactory(void) const { return m_xMSFactory; }
 
-            static sal_Bool acceptsURL_Stat( const ::rtl::OUString& url );
+            static EDriverType acceptsURL_Stat( const ::rtl::OUString& url );
             // static methods to return the names of the uri
             static const sal_Char*    getSDBC_SCHEME_MOZILLA();
             static const sal_Char*    getSDBC_SCHEME_LDAP();
