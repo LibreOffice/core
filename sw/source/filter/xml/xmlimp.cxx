@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:43:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ void SwXMLImport::startDocument( void )
 
     if( !GetEmbeddedResolver().is() )
     {
-        SvPersist *pPersist = pDoc->GetPersist();
+        SfxObjectShell *pPersist = pDoc->GetPersist();
         if( pPersist )
         {
             pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
@@ -916,7 +916,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     SwDoc *pDoc = pText->GetDoc();
     Rectangle aRect;
     if( pDoc->GetDocShell() )
-        aRect = ((SfxInPlaceObject *)pDoc->GetDocShell())->GetVisArea();
+        aRect = pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
+        //TODO/LATER: why that cast?!
+        //aRect = ((SfxInPlaceObject *)pDoc->GetDocShell())->GetVisArea();
 
     sal_Int32 nCount = aViewProps.getLength();
     const PropertyValue *pValue = aViewProps.getConstArray();
@@ -925,7 +927,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False;
     sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False;
 
-    sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
+    //TODO/LATER: why that cast?!
+    sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
+    //sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
