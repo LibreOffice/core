@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:47:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,7 +866,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     // create xrender Picture for font foreground
     static Pixmap aPixmap;
-    static Picture aSrc = NULL;
+    static Picture aSrc = 0;
     if( !aSrc )
     {
         int iDummy;
@@ -1400,8 +1400,9 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
     {
         XTextItem16 *pTextItem = (XTextItem16*)alloca( nLength * sizeof(XTextItem16) );
         XChar2b     *pMBChar   = (XChar2b*)pStr;
+        int nItem = 0;
 
-        for( int nChar = 0, nItem = 0; nChar < nLength; ++nChar )
+        for( int nChar = 0; nChar < nLength; ++nChar )
         {
             rtl_TextEncoding  nEnc;
             XFontStruct* pFontStruct = rFont.GetFontStruct( pStr[nChar], &nEnc );
