@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 10:38:09 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 14:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,14 +484,14 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         aProgRange <<= nProgressRange;
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
 
-        sal_Bool bMetaRet(sal_False);
+        sal_Bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
         sal_Bool bStylesRet (sal_False);
         sal_Bool bDocRet(sal_False);
         sal_Bool bSettingsRet(sal_False);
         ScMySharedData* pSharedData = NULL;
 
         // meta export
-        if (!bStylesOnly)
+        if (!bStylesOnly && !bMetaRet)
         {
             uno::Sequence<uno::Any> aMetaArgs(3);
             uno::Any* pMetaArgs = aMetaArgs.getArray();
