@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:46:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,6 @@ void  SwTbxAnchor::Click()
 
     if (bHtmlModeNoAnchor || pWrtShell->IsInHeaderFooter())
         aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANKER_PAGE));
-
-    if (!pWrtShell->IsFrmSelected())
-        aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANKER_AT_CHAR));
 
     if (nActAnchorId)
         aPopMenu.CheckItem(nActAnchorId);
