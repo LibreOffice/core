@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-15 17:02:39 $
+ *  last change: $Author: abi $ $Date: 2001-11-15 17:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2251,19 +2251,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= readonly;
             it1->setValue( aAny );
         }
-    }
-
-    it1 = properties.find( MyProperty( IsReadOnly ) );
-    if( it1 != properties.end() )
-    {
-        if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-        {
-            sal_Bool readonly = true;
-            aAny <<= readonly;
-            it1->setValue( aAny );
-        }
-        else
-            it1->setValue( emptyAny );
     }
 
     it1 = properties.find( MyProperty( DateModified ) );
