@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:16:11 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "sfxtypes.hxx"
 #include "sfxuno.hxx"
