@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-03-08 11:14:19 $
+ *  last change: $Author: os $ $Date: 2002-03-20 15:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1948,6 +1948,40 @@ void SvxFrameSelector::LineClicked_Impl( SvxFrameLine& aLine,
     if ( !bShiftPressed )
         SelectLine( SVX_FRMSELLINE_NONE );
 }
+// -----------------------------------------------------------------------
+BOOL SvxFrameSelector::IsAnyLineSelected_Impl() const
+{
+    return ( pImpl->aLeftLine.bIsSelected ||
+        pImpl->aRightLine.bIsSelected ||
+        pImpl->aTopLine.bIsSelected ||
+        pImpl->aBottomLine.bIsSelected ||
+        pImpl->aHorLine.bIsSelected ||
+        pImpl->aVerLine.bIsSelected );
+}
+// -----------------------------------------------------------------------
+SvxFrameSelectorLine SvxFrameSelector::GetFirstSelLineForKey_Impl()const
+{
+    SvxFrameSelectorLine eRet = SVX_FRMSELLINE_NONE;
+    if( pImpl->aTopLine.bIsSelected )
+        eRet = SVX_FRMSELLINE_TOP;
+    else if( pImpl->aLeftLine.bIsSelected )
+        eRet = SVX_FRMSELLINE_LEFT;
+    else if( SVX_FRMSELTYPE_TABLE == pImpl->eSel)
+    {
+        if( pImpl->aVerLine.bIsSelected )
+            eRet = SVX_FRMSELLINE_VER;
+        else if( pImpl->aHorLine.bIsSelected )
+            eRet = SVX_FRMSELLINE_HOR;
+    }
+    if( SVX_FRMSELLINE_NONE == eRet )
+    {
+        if(pImpl->aRightLine.bIsSelected )
+            eRet = SVX_FRMSELLINE_RIGHT;
+        else if( pImpl->aBottomLine.bIsSelected )
+            eRet = SVX_FRMSELLINE_BOTTOM;
+    }
+    return eRet;
+}
 
 // -----------------------------------------------------------------------
 
@@ -1974,6 +2008,59 @@ void SvxFrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
 
     Window::DataChanged( rDCEvt );
 }
+/* -----------------------------20.03.2002 14:31------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxFrameSelectorLine lcl_GetNextStep(
+    const SvxFrameSelectorLine eCurLine, USHORT nKeyCode, BOOL bIsTable)
+{
+    //the first entry in the array contains the last reachable line
+    //if the current line is found at the beginning of the
+    static const SvxFrameSelectorLine aLeftArr[]  =
+        {SVX_FRMSELLINE_LEFT, SVX_FRMSELLINE_VER, SVX_FRMSELLINE_BOTTOM,
+        SVX_FRMSELLINE_HOR, SVX_FRMSELLINE_TOP, SVX_FRMSELLINE_RIGHT};
+    static const SvxFrameSelectorLine aRightArr[]  =
+        {SVX_FRMSELLINE_RIGHT, SVX_FRMSELLINE_TOP, SVX_FRMSELLINE_HOR,
+        SVX_FRMSELLINE_BOTTOM, SVX_FRMSELLINE_VER, SVX_FRMSELLINE_LEFT};
+    static const SvxFrameSelectorLine aUpArr[]  =
+        {SVX_FRMSELLINE_TOP, SVX_FRMSELLINE_VER, SVX_FRMSELLINE_RIGHT,
+        SVX_FRMSELLINE_HOR, SVX_FRMSELLINE_LEFT, SVX_FRMSELLINE_BOTTOM};
+    static const SvxFrameSelectorLine aDownArr[]  =
+        {SVX_FRMSELLINE_BOTTOM, SVX_FRMSELLINE_LEFT, SVX_FRMSELLINE_HOR,
+        SVX_FRMSELLINE_RIGHT, SVX_FRMSELLINE_VER, SVX_FRMSELLINE_TOP};
+    const SvxFrameSelectorLine* pMoveArray = 0;
+    BOOL bHLines = TRUE;
+    switch(nKeyCode)
+    {
+        case KEY_UP : pMoveArray = aUpArr;break;
+        case KEY_DOWN :pMoveArray = aDownArr;break;
+        case KEY_LEFT :pMoveArray = aLeftArr; bHLines = FALSE;   break;
+        case KEY_RIGHT :pMoveArray = aRightArr; bHLines = FALSE; break;
+    }
+    SvxFrameSelectorLine eRetLine = eCurLine;
+    if(pMoveArray)
+    {
+        for(USHORT i = 0; i < SVX_FRMSELLINE_VER; i++)
+        {
+            if(eCurLine == pMoveArray[i])
+            {
+                if(i)
+                {
+                    eRetLine = pMoveArray[--i];
+                    //make sure that no non-existing lines can be reached
+                    //and vertical travel selects horizontal lines and vice versa
+                    while((!bIsTable &&
+                        (SVX_FRMSELLINE_VER == eRetLine || SVX_FRMSELLINE_HOR == eRetLine))||
+                        (bHLines && (SVX_FRMSELLINE_VER  == eRetLine||  SVX_FRMSELLINE_LEFT == eRetLine || SVX_FRMSELLINE_RIGHT == eRetLine))||
+                        (!bHLines && (SVX_FRMSELLINE_TOP  == eRetLine||  SVX_FRMSELLINE_BOTTOM == eRetLine || SVX_FRMSELLINE_HOR == eRetLine)))
+                        eRetLine = pMoveArray[--i];
+                }
+                break;
+            }
+        }
+    }
+   return eRetLine;
+}
 /* -----------------------------01.02.2002 13:50------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1983,11 +2070,30 @@ void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     if ( !aKeyCode.GetModifier())
     {
-        switch(aKeyCode.GetCode())
+        SvxFrameSelectorLine eCurLine = GetFirstSelLineForKey_Impl();
+        USHORT nCode = aKeyCode.GetCode();
+        switch(nCode)
         {
             case KEY_SPACE:
                 //toggle current line type
+                LineClicked_Impl(GetLine(eCurLine), FALSE, FALSE);
+                SelectLine(eCurLine, TRUE);
+                ShowLines();
                 bHandled = sal_True;
+            break;
+            case KEY_UP :
+            case KEY_DOWN :
+            case KEY_LEFT :
+            case KEY_RIGHT :
+            {
+                BOOL bIsTable = SVX_FRMSELTYPE_TABLE == pImpl->eSel;
+                SvxFrameSelectorLine eFoundLine = lcl_GetNextStep(eCurLine, nCode, bIsTable);
+                if(eFoundLine != eCurLine)
+                {
+                    SelectLine( SVX_FRMSELLINE_NONE );
+                    SelectLine(eFoundLine, TRUE);
+                }
+            }
             break;
         }
     }
@@ -1999,6 +2105,8 @@ void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
  ---------------------------------------------------------------------------*/
 void SvxFrameSelector::GetFocus()
 {
+    if(!IsAnyLineSelected_Impl())
+        SelectLine( SVX_FRMSELLINE_TOP, true );
     Invalidate();
     if(pImpl->xAccess.is())
         pImpl->pAccess->NotifyFocusListeners(sal_True);
