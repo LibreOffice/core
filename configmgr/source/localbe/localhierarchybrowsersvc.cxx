@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ namespace configmgr
 
 AsciiServiceName const aLocalHierarchyBrowserServices[] =
 {
-    "com.sun.star.configuration.backend.local.HierarchyBrowser",
     "com.sun.star.configuration.backend.LocalHierarchyBrowser",
     0,
     "com.sun.star.configuration.backend.HierarchyBrowser",
@@ -100,7 +99,7 @@ AsciiServiceName const aLocalHierarchyBrowserServices[] =
 };
 const ServiceImplementationInfo aLocalHierarchyBrowserSI =
 {
-    "com.sun.star.comp.configuration.backend.local.LocalHierarchyBrowser",
+    "com.sun.star.comp.configuration.backend.LocalHierarchyBrowser",
     aLocalHierarchyBrowserServices,
     aLocalHierarchyBrowserServices + 3
 };
