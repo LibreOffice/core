@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-15 13:19:14 $
+ *  last change: $Author: abi $ $Date: 2001-11-15 16:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,17 +1996,19 @@ void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequen
     rtl::OUString PropertyName;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
     {
-        PropertyName = seq[i].Name;
+//          PropertyName = seq[i].Name;
 
-        if( PropertyName == Title )
+//          if( PropertyName == Title )
             n_Mask |= FileStatusMask_FileName;
-        else if( PropertyName == IsDocument || PropertyName == IsFolder )
+//          else if( PropertyName == IsDocument || PropertyName == IsFolder )
             n_Mask |= FileStatusMask_Type;
-        else if( PropertyName == DateModified )
+//          else if( PropertyName == DateCreated )
+//          n_Mask |= FileStatusMask_CreationTime;
+//          else if( PropertyName == DateModified )
             n_Mask |= FileStatusMask_ModifyTime;
-        else if( PropertyName == Size )
+//          else if( PropertyName == Size )
             n_Mask |= FileStatusMask_FileSize;
-        else if( PropertyName == IsReadOnly )
+//          else if( PropertyName == IsReadOnly )
             n_Mask |= FileStatusMask_Attributes;
 //      else if( PropertyName == FolderCount )
 //          ;
@@ -2092,6 +2094,7 @@ shell::commit( const shell::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
     uno::Any aAny;
+    uno::Any emptyAny;
     shell::PropertySet::iterator it1;
 
     if( it->second.properties == 0 )
@@ -2102,24 +2105,27 @@ shell::commit( const shell::ContentMap::iterator& it,
 
     PropertySet& properties = *( it->second.properties );
 
-    if( aFileStatus.isValid( FileStatusMask_FileName ) )
+    it1 = properties.find( MyProperty( Title ) );
+    if( it1 != properties.end() )
     {
-        aAny <<= aFileStatus.getFileName();
-
-        if( m_bFaked )
+        if( aFileStatus.isValid( FileStatusMask_FileName ) )
         {
-            for( sal_uInt32 i = 0; i < m_vecMountPoint.size(); ++i )
-                if( it->first == m_vecMountPoint[i].m_aDirectory )
-                    aAny <<= m_vecMountPoint[i].m_aTitle;
-        }
+            aAny <<= aFileStatus.getFileName();
 
-        it1 = properties.find( MyProperty( Title ) );
-        if( it1 != properties.end() )
-        {
+            if( m_bFaked )
+            {
+                for( sal_uInt32 i = 0; i < m_vecMountPoint.size(); ++i )
+                    if( it->first == m_vecMountPoint[i].m_aDirectory )
+                        aAny <<= m_vecMountPoint[i].m_aTitle;
+            }
             it1->setValue( aAny );
         }
+        else
+            it1->setValue( emptyAny );
     }
 
+
+    // This mask is always set
     if( aFileStatus.isValid( FileStatusMask_Type ) )
     {
         sal_Bool isDirectory,isFile;
@@ -2158,7 +2164,6 @@ shell::commit( const shell::ContentMap::iterator& it,
                 osl::FileStatus::Regular == aFileStatus.getFileType();
         }
 
-
         aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
         if( it1 != properties.end() )
@@ -2171,6 +2176,20 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( it1 != properties.end() )
         {
             it1->setValue( aAny );
+        }
+    }
+    else
+    {
+        it1 = properties.find( MyProperty( IsFolder ) );
+        if( it1 != properties.end() )
+        {
+            it1->setValue( emptyAny );
+        }
+
+        it1 = properties.find( MyProperty( IsDocument ) );
+        if( it1 != properties.end() )
+        {
+            it1->setValue( emptyAny );
         }
     }
 
@@ -2195,66 +2214,104 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
     }
 
-    if( aFileStatus.isValid( FileStatusMask_FileSize ) )
+
+    it1 = properties.find( MyProperty( Size ) );
+    if( it1 != properties.end() )
     {
-        aAny <<= sal_Int64( aFileStatus.getFileSize() );
-        it1 = properties.find( MyProperty( Size ) );
-        if( it1 != properties.end() )
+        if( aFileStatus.isValid( FileStatusMask_FileSize ) )
         {
+            aAny <<= sal_Int64( aFileStatus.getFileSize() );
             it1->setValue( aAny );
         }
+        else
+            it1->setValue( emptyAny );
     }
 
-    if( aFileStatus.isValid( FileStatusMask_Attributes ) )
+
+    it1 = properties.find( MyProperty( IsReadOnly ) );
+    if( it1 != properties.end() )
     {
-        sal_uInt64 Attr = aFileStatus.getAttributes();
-        sal_Bool readonly = ( Attr & Attribute_ReadOnly ) != 0;
-        aAny <<= readonly;
-        it1 = properties.find( MyProperty( IsReadOnly ) );
-        if( it1 != properties.end() )
+        if( aFileStatus.isValid( FileStatusMask_Attributes ) )
         {
+            sal_uInt64 Attr = aFileStatus.getAttributes();
+            sal_Bool readonly = ( Attr & Attribute_ReadOnly ) != 0;
+            aAny <<= readonly;
             it1->setValue( aAny );
         }
+        else
+            it1->setValue( emptyAny );
     }
 
-    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
+    it1 = properties.find( MyProperty( IsReadOnly ) );
+    if( it1 != properties.end() )
     {
-        sal_Bool readonly = true;
-        aAny <<= readonly;
-        it1 = properties.find( MyProperty( IsReadOnly ) );
-        if( it1 != properties.end() )
+        if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
         {
+            sal_Bool readonly = true;
+            aAny <<= readonly;
             it1->setValue( aAny );
         }
+        else
+            it1->setValue( emptyAny );
     }
 
-    if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
+    it1 = properties.find( MyProperty( DateModified ) );
+    if( it1 != properties.end() )
     {
-        TimeValue temp = aFileStatus.getModifyTime();
-
-        // Convert system time to local time (for EA)
-        TimeValue   myLocalTime;
-        osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
-
-        oslDateTime myDateTime;
-        osl_getDateTimeFromTimeValue( &myLocalTime, &myDateTime );
-        util::DateTime aDateTime;
-
-        aDateTime.HundredthSeconds = (unsigned short)(myDateTime.NanoSeconds / 10000000);
-        aDateTime.Seconds = myDateTime.Seconds;
-        aDateTime.Minutes = myDateTime.Minutes;
-        aDateTime.Hours = myDateTime.Hours;
-        aDateTime.Day = myDateTime.Day;
-        aDateTime.Month = myDateTime.Month;
-        aDateTime.Year = myDateTime.Year;
-        aAny <<= aDateTime;
-        it1 = properties.find( MyProperty( DateModified ) );
-        if( it1 != properties.end() )
+        if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
         {
+            TimeValue temp = aFileStatus.getModifyTime();
+
+            // Convert system time to local time (for EA)
+            TimeValue   myLocalTime;
+            osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
+
+            oslDateTime myDateTime;
+            osl_getDateTimeFromTimeValue( &myLocalTime, &myDateTime );
+            util::DateTime aDateTime;
+
+            aDateTime.HundredthSeconds = (unsigned short)(myDateTime.NanoSeconds / 10000000);
+            aDateTime.Seconds = myDateTime.Seconds;
+            aDateTime.Minutes = myDateTime.Minutes;
+            aDateTime.Hours = myDateTime.Hours;
+            aDateTime.Day = myDateTime.Day;
+            aDateTime.Month = myDateTime.Month;
+            aDateTime.Year = myDateTime.Year;
+            aAny <<= aDateTime;
             it1->setValue( aAny );
         }
+        else
+            it1->setValue( emptyAny );
     }
 
+    it1 = properties.find( MyProperty( DateCreated ) );
+    if( it1 != properties.end() )
+    {
+        if( aFileStatus.isValid( FileStatusMask_CreationTime ) )
+        {
+            TimeValue temp = aFileStatus.getCreationTime();
+
+            // Convert system time to local time (for EA)
+            TimeValue   myLocalTime;
+            osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
+
+            oslDateTime myDateTime;
+            osl_getDateTimeFromTimeValue( &myLocalTime,&myDateTime );
+            util::DateTime aDateTime;
+
+            aDateTime.HundredthSeconds = ( unsigned short )(myDateTime.NanoSeconds / 10000000);
+            aDateTime.Seconds = myDateTime.Seconds;
+            aDateTime.Minutes = myDateTime.Minutes;
+            aDateTime.Hours = myDateTime.Hours;
+            aDateTime.Day = myDateTime.Day;
+            aDateTime.Month = myDateTime.Month;
+            aDateTime.Year = myDateTime.Year;
+            aAny <<= aDateTime;
+            it1->setValue( aAny );
+        }
+        else
+            it1->setValue( emptyAny );
+    }
 }
 
 
