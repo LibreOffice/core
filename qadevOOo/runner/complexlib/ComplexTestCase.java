@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Date: 2003-12-11 11:31:22 $
+ *  last change: $Date: 2005-02-02 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,12 +158,42 @@ public abstract class ComplexTestCase implements ComplexTest {
                                                     (java.io.PrintWriter)log);
                  log.println("Starting " + testMethod.getName());
                  th.start();
+
                  try {
+                     // some tests are very dynamic in its exceution time so that
+                     // a threadTimeOut fials. In this cases the logging mechanisim
+                     // is a usefull way to detect that a office respective a test
+                     // is running and not death.
+                     // But way ThreadTimeOut?
+                     // There exeitsts a complex test which uses no office. Therefore
+                     // a logging mechanisim to detect a stalled test.
+
+                     int lastPing = -1;
+                     int newPing = 0;
+
                      int sleepingStep = 1000;
                      int factor = 0;
-                     while(th.isAlive() && factor*sleepingStep<mThreadTimeOut) {
+
+                     while(
+                                th.isAlive() &&
+                                (
+                                    lastPing != newPing ||
+                                    factor*sleepingStep<mThreadTimeOut
+                                )
+                           )
+                     {
                         Thread.sleep(sleepingStep);
                         factor++;
+                        // if a test starts the office itself it the watcher is a
+                        // new one.
+                        share.Watcher ow = (share.Watcher)
+                                                param.get("Watcher");
+                        if (ow != null) {
+                            lastPing = newPing;
+                            newPing = ow.getPing();
+                            //System.out.println("lastPing: '" + lastPing + "' newPing '" + newPing + "'");
+                            factor = 0;
+                        }
                      }
 
                  }
