@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuarea.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,27 +59,34 @@
  *
  ************************************************************************/
 
+#ifndef SD_FU_AREA_HXX
+#define SD_FU_AREA_HXX
 
-#ifndef _SD_FUAREA_HXX
-#define _SD_FUAREA_HXX
-
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuArea : public FuPoor
+namespace sd {
+
+class FuArea
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuArea(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-           SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuArea() {}
+    FuArea (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuArea (void) {}
 
     virtual void Activate() {}
     virtual void Deactivate() {}
 };
 
-#endif      // _SD_FUAREA_HXX
+} // end of namespace sd
+
+#endif
 

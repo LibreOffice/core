@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fubullet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,31 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUBULLET_HXX
-#define _SD_FUBULLET_HXX
+#ifndef SD_FU_BULLET_HXX
+#define SD_FU_BULLET_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuBullet : public FuPoor
+namespace sd {
+
+class FuBullet
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-            SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuBullet() {}
+    FuBullet (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuBullet (void) {}
 };
 
-#endif      // _SD_FUBULLET_HXX
+} // end of namespace sd
+
+#endif
 

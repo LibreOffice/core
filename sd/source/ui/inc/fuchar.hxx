@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,25 +59,34 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCHAR_HXX
-#define _SD_FUCHAR_HXX
+#ifndef SD_FU_CHAR_HXX
+#define SD_FU_CHAR_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuChar : public FuPoor
+namespace sd {
+
+class FuChar
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuChar(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-            SdDrawDocument* pDoc, SfxRequest& rReq);
-    ~FuChar() {}
+    FuChar (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuChar (void) {}
 
     virtual void Activate() {}         // Function aktivieren
     virtual void Deactivate() {}           // Function deaktivieren
 };
 
-#endif // _SD_FUCHAR_HXX
+} // end of namespace sd
+
+#endif
 
