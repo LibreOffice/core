@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-02-01 09:16:14 $
+ *  last change: $Author: mba $ $Date: 2001-02-09 15:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,19 +1192,20 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_setComponent( xComponentWindow, xController ), "Frame::setComponent()\nInvalid parameter detected.\n" )
 
+    // always release controller before releasing window, because controller may want to access its window
+    sal_Bool bNewController = ( m_xController       != xController      );
+    sal_Bool bNewWindow     = ( m_xComponentWindow  != xComponentWindow );
+    sal_Bool bHasController = m_xController.is();
+    sal_Bool bHasWindow     = m_xComponentWindow.is();
+
+    UNLOCK_MUTEX( aGuard, "Frame::setComponent()" )
+
     // Release current component, if any exist.
-    if  (
-            ( m_xController.is()        ==  sal_True    )   ||
-            ( m_xComponentWindow.is()   ==  sal_True    )
-        )
+    if  ( bHasController || bHasWindow )
     {
         // Send FrameAction-event to all listener.
         impl_sendFrameActionEvent( FrameAction_COMPONENT_DETACHING );
     }
-
-    // always release controller before releasing window, because controller may want to access its window
-    sal_Bool bNewController = ( m_xController       != xController      );
-    sal_Bool bNewWindow     = ( m_xComponentWindow  != xComponentWindow );
 
     if( bNewController == sal_True )
     {
@@ -1221,8 +1222,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
 
     // Send FrameActionEvent to all listener
     if  (
-            ( m_xController.is()        ==  sal_True    )   ||
-            ( m_xComponentWindow.is()   ==  sal_True    )
+            ( xController.is()        ==  sal_True    )   ||
+            ( xComponentWindow.is()   ==  sal_True    )
         )
     {
         if ( m_bConnected == sal_True )
@@ -1329,25 +1330,29 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
     {
         // Set flag against recursive or following calls.
         m_bAlreadyDisposed = sal_True ;
+
+        UNLOCK_MUTEX( aGuard, "Frame::dispose()" )
+
         // Send message to all DISPOSE-listener.
         impl_sendDisposeEvent();
+
         // Delete current component and controller.
         setComponent( Reference< awt::XWindow >(), Reference< XController >() );
-
-        // Tell all listeners to release this object.
-        Reference< XFrame > xThis( (OWeakObject*)this, UNO_QUERY );
 
         EventObject aEvent;
         aEvent.Source = xThis;
         m_aListenerContainer.disposeAndClear( aEvent );
+
+        LOCK_MUTEX( anotherGuard, m_aMutex, "Frame::dispose()" )
 
         // Force parent container to forget this frame.
         // ( It's contained in m_xParent and so no XEventListener for m_xParent! )
         if ( m_xParent.is() == sal_True )
         {
             m_xParent->getFrames()->remove( xThis );
-            m_xParent=Reference< XFramesSupplier >();
+            m_xParent = Reference< XFramesSupplier >();
         }
+
         // Release current indicator factory helper.
         m_xIndicatorFactoryHelper = Reference< XStatusIndicatorFactory >();
 
@@ -1468,6 +1473,8 @@ void SAL_CALL Frame::focusLost( const awt::FocusEvent& aEvent ) throw( RuntimeEx
 //*****************************************************************************************************************
 void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
 {
+    LOCK_MUTEX( aGuard, m_aMutex, "Frame::impl_setContainerWindow()" )
+
     // Remove this instance himself from "old" window-listener-container.
     if ( m_xContainerWindow.is() == sal_True )
     {
@@ -1479,14 +1486,6 @@ void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
     Reference< awt::XWindow > xOld = m_xContainerWindow;
     // Safe new window reference.
     m_xContainerWindow = xWindow;
-    // Dispose old window now.
-    if ( xOld.is() == sal_True )
-    {
-        // All VclComponents are XComponents; so call dispose before discarding
-        // a Reference< XVclComponent >, because this frame is the owner of the Component.
-        xOld->setVisible( sal_False );
-        xOld->dispose();
-    }
 
     // Register this instance himself as new listener.
     if ( m_xContainerWindow.is() == sal_True )
@@ -1501,6 +1500,17 @@ void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
     {
         xTopWindow->addTopWindowListener( this );
     }
+
+    UNLOCK_MUTEX( aGuard, "Frame::impl_setContainerWindow()" )
+
+    // Dispose old window now.
+    if ( xOld.is() == sal_True )
+    {
+        // All VclComponents are XComponents; so call dispose before discarding
+        // a Reference< XVclComponent >, because this frame is the owner of the Component.
+        xOld->setVisible( sal_False );
+        xOld->dispose();
+    }
 }
 
 //*****************************************************************************************************************
@@ -1508,6 +1518,8 @@ void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
 //*****************************************************************************************************************
 void Frame::impl_setComponentWindow( const Reference< awt::XWindow >& xWindow )
 {
+    LOCK_MUTEX( aGuard, m_aMutex, "Frame::impl_setComponentWindow()" )
+
     // Work only, if window will changing.
     if ( xWindow != m_xComponentWindow )
     {
@@ -1515,6 +1527,9 @@ void Frame::impl_setComponentWindow( const Reference< awt::XWindow >& xWindow )
         Reference< awt::XWindow > xOld = m_xComponentWindow;
         // Take the new one.
         m_xComponentWindow = xWindow;
+
+        UNLOCK_MUTEX( aGuard, "Frame::impl_setComponentWindow()" )
+
         // Set correct size before showing the window.
         impl_resizeComponentWindow();
 
@@ -1533,10 +1548,15 @@ void Frame::impl_setComponentWindow( const Reference< awt::XWindow >& xWindow )
 //*****************************************************************************************************************
 void Frame::impl_setController( const Reference< XController >& xController )
 {
+    LOCK_MUTEX( aGuard, m_aMutex, "Frame::impl_setController()" )
+
     // Safe old value for disposing AFTER set of new controller!
     Reference< XController > xOld = m_xController;
     // Take the new one.
     m_xController = xController;
+
+    UNLOCK_MUTEX( aGuard, "Frame::impl_setController()" )
+
     // Dispose old instance.
     if ( xOld.is() == sal_True )
     {
