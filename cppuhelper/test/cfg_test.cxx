@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg_test.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:40:44 $
+ *  last change: $Author: dbo $ $Date: 2001-10-16 11:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
@@ -315,6 +316,11 @@ int SAL_CALL main( int argc, char const * argv[] )
         OSL_VERIFY( (x = xMgr->createInstanceWithContext( OUSTR("com.sun.star.bootstrap.TestComponent0"), xContext )).is() );
         OSL_VERIFY( (x = xMgr->createInstanceWithContext( OUSTR("com.sun.star.bootstrap.TestComponent1"), xContext )).is() );
 
+        Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
+        if (xComp.is())
+        {
+            xComp->dispose();
+        }
         return 0;
     }
     catch (Exception & exc)
