@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 07:47:50 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,11 @@
  *
  ************************************************************************/
 
-
-
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
 #include "AccessibleControlShape.hxx"
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include "AccessibleShapeInfo.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
@@ -82,6 +83,9 @@
 #ifndef _SVDOUNO_HXX
 #include "svdouno.hxx"
 #endif
+#ifndef _SVX_UNOAPI_HXX_
+#include "unoapi.hxx"
+#endif
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
 
@@ -96,13 +100,10 @@ using ::com::sun::star::lang::XComponent;
 
 //=====  internal  ============================================================
 
-AccessibleControlShape::AccessibleControlShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
-    const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo,
-    long nIndex)
-    :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
+AccessibleControlShape::AccessibleControlShape (
+    const AccessibleShapeInfo& rShapeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    :      AccessibleShape (rShapeInfo, rShapeTreeInfo)
     ,   mbListeningForName( sal_False )
     ,   mbListeningForDesc( sal_False )
     ,   mbDisposeNativeContext( sal_False )
@@ -124,9 +125,7 @@ AccessibleControlShape::~AccessibleControlShape (void)
 //=============================================================================
 SdrObject* AccessibleControlShape::getSdrObject() const
 {
-    OSL_ENSURE( sal_False, "AccessibleControlShape::getSdrObject: not implemented yet!" );
-    // TODO
-    return NULL;
+    return GetSdrObjectFromXShape (mxShape);
 }
 
 //-----------------------------------------------------------------------------
@@ -333,18 +332,14 @@ void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChang
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    ::rtl::OUString sNewValue;
-    sal_Int16 nEventId = -1;
     // check if it is the name or the description
     if ( _rEvent.PropertyName.equals( lcl_getNamePropertyName() ) )
     {
-        nEventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
-        sNewValue = CreateAccessibleName();
+        SetAccessibleName (CreateAccessibleName());
     }
     else if ( _rEvent.PropertyName.equals( lcl_getDescPropertyName() ) )
     {
-        nEventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
-        sNewValue = CreateAccessibleDescription();
+        SetAccessibleDescription (CreateAccessibleDescription());
     }
 #ifdef _DEBUG
     else
@@ -352,27 +347,24 @@ void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChang
         OSL_ENSURE( sal_False, "AccessibleControlShape::propertyChange: where did this come from?" );
     }
 #endif
-    if ( -1 != nEventId )
-    {   // notify the AccessibilityListeners
-        CommitChange( nEventId, uno::makeAny( sNewValue ), uno::Any() );
-            // TODO: check this in reality: If the name is changed from non-empty to empty, this means
-            // that we remove ourself as listener _while_we_are_within_the_listener_call_. Don't know
-            // if the common implementation in cppuhelper can correctly handles this!
-    }
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSource) throw (uno::RuntimeException)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
+    OSL_TRACE ("AccessibleControlShape::disposing");
     if ( _rSource.Source == mxNativeContextComponent )
     {
-        // if our "pseudo-aggregated" inner context does not live anymore, we don't want to live, too
-        mbDisposeNativeContext = sal_False;
-        dispose();
-        // TODO: The dispose call here is not sufficient. The native context is disposed whenever the design mode
-        // is switched. In this case, we need to remove and re-insert our XAccessible into our parent, to
-        // reflect this change.
+        // If our "pseudo-aggregated" inner context does not live anymore,
+        // we don't want to live, too.  This is accomplished by asking our
+        // parent to replace this object with a new one.  Disposing this
+        // object and sending notifications about the replacement are the
+        // task of our parent.
+        mpParent->ReplaceChild (this,
+            ShapeTypeHandler::Instance().CreateAccessibleObject (
+                AccessibleShapeInfo (mxShape, getAccessibleParent(), mpParent, mnIndex),
+                mrShapeTreeInfo));
     }
     else
         AccessibleShape::disposing( _rSource );
