@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.31 $
- *  last change: $Author: hdu $ $Date: 2001-04-26 16:05:37 $
+ *  $Revision: 1.32 $
+ *  last change: $Author: hdu $ $Date: 2001-04-27 08:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
             {
                 if( (x & 7) == 0 )
                     nSrc = *(pSrc++);
-                *(pDest++) = (nSrc & 0x80) ? 0xFF : 0;
+                *(pDest++) = (0x7F - nSrc) >> 8;
             }
             for(; x < rRawBitmap.mnScanlineSize; ++x )
                 *(pDest++) = 0;
