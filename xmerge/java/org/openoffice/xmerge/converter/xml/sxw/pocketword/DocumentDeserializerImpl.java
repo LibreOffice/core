@@ -271,7 +271,14 @@ public final class DocumentDeserializerImpl
                 int len = nl.getLength();
 
                 for (int i = 0; i < len; i++) {
-                    paraNode.appendChild(nl.item(i));
+                    /*
+                     * Always take item 0 as the DOM tree event model will
+                     * cause the NodeList to shrink as each Node is reparented.
+                     *
+                     * By taking the first item from the list, we essentially
+                     * traverse the list in order.
+                     */
+                    paraNode.appendChild(nl.item(0));
                 }
             }
             else {
