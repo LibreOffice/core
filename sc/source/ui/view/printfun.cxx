@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:43:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include "printfun.hxx"
+
 #include <svx/svxids.hrc>
 #include <svx/adjitem.hxx>
 #include <svx/boxitem.hxx>
@@ -104,12 +106,6 @@
 #include <svx/xoutbmp.hxx>
 #endif
 
-
-//#if defined( WIN ) || defined( WNT )
-//#include <svwin.h>
-//#endif
-
-
 #include "editutil.hxx"
 #include "docsh.hxx"
 #include "output.hxx"
@@ -131,9 +127,6 @@
 #include "prevloc.hxx"
 #include "scmod.hxx"
 #include "drwlayer.hxx"
-
-#define _PRINTFUN_CXX
-#include "printfun.hxx"
 
 
 
@@ -917,25 +910,30 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     //------------------------------------------------------
     // TabPage "Tabelle"
 
-    const SfxUInt16Item* pScaleItem         = NULL;
-    const SfxUInt16Item* pScaleToPagesItem  = NULL;
-    SfxItemState         eState;
+    const SfxUInt16Item*     pScaleItem          = NULL;
+    const ScPageScaleToItem* pScaleToItem        = NULL;
+    const SfxUInt16Item*     pScaleToPagesItem   = NULL;
+    SfxItemState             eState;
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, FALSE,
                                       (const SfxPoolItem**)&pScaleItem );
     if ( SFX_ITEM_DEFAULT == eState )
         pScaleItem = (const SfxUInt16Item*)
-                     &pParamSet->GetPool()->
-                        GetDefaultItem( ATTR_PAGE_SCALE );
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE );
+
+    eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, FALSE,
+                                      (const SfxPoolItem**)&pScaleToItem );
+    if ( SFX_ITEM_DEFAULT == eState )
+        pScaleToItem = (const ScPageScaleToItem*)
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO );
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE,
                                       (const SfxPoolItem**)&pScaleToPagesItem );
     if ( SFX_ITEM_DEFAULT == eState )
         pScaleToPagesItem = (const SfxUInt16Item*)
-                            &pParamSet->GetPool()->
-                                GetDefaultItem( ATTR_PAGE_SCALETOPAGES );
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES );
 
-    DBG_ASSERT( pScaleItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
+    DBG_ASSERT( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
     aTableParam.bNotes          = GET_BOOL(pParamSet,ATTR_PAGE_NOTES);
     aTableParam.bGrid           = GET_BOOL(pParamSet,ATTR_PAGE_GRID);
@@ -951,23 +949,29 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if (!aTableParam.nFirstPageNo)
         aTableParam.nFirstPageNo = (USHORT) nPageStart;     // von vorheriger Tabelle
 
-    if ( pScaleItem && pScaleToPagesItem )
+    if ( pScaleItem && pScaleToItem && pScaleToPagesItem )
     {
         UINT16  nScaleAll     = pScaleItem->GetValue();
         UINT16  nScaleToPages = pScaleToPagesItem->GetValue();
 
         aTableParam.bScaleNone      = (nScaleAll     == 100);
         aTableParam.bScaleAll       = (nScaleAll      > 0  );
+        aTableParam.bScaleTo        = pScaleToItem->IsValid();
         aTableParam.bScalePageNum   = (nScaleToPages  > 0  );
         aTableParam.nScaleAll       = nScaleAll;
+        aTableParam.nScaleWidth     = pScaleToItem->GetWidth();
+        aTableParam.nScaleHeight    = pScaleToItem->GetHeight();
         aTableParam.nScalePageNum   = nScaleToPages;
     }
     else
     {
         aTableParam.bScaleNone      = TRUE;
         aTableParam.bScaleAll       = FALSE;
+        aTableParam.bScaleTo        = FALSE;
         aTableParam.bScalePageNum   = FALSE;
         aTableParam.nScaleAll       = 0;
+        aTableParam.nScaleWidth     = 0;
+        aTableParam.nScaleHeight    = 0;
         aTableParam.nScalePageNum   = 0;
     }
 
@@ -2525,7 +2529,7 @@ BOOL ScPrintFunc::UpdatePages()
     //  Zoom
 
     nZoom = 100;
-    if (aTableParam.bScalePageNum)
+    if (aTableParam.bScalePageNum || aTableParam.bScaleTo)
         nZoom = ZOOM_MIN;                       // stimmt fuer Umbrueche
     else if (aTableParam.bScaleAll)
     {
@@ -2941,6 +2945,21 @@ void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom bere
         {
             CalcPages();
             if ( nPagesX * nPagesY <= nPagesToFit || nZoom <= ZOOM_MIN )
+                bFound = TRUE;
+            else
+                --nZoom;
+        }
+    }
+    else if (aTableParam.bScaleTo)
+    {
+        nZoom = 100;
+        BOOL bFound = FALSE;
+        USHORT nW = aTableParam.nScaleWidth;
+        USHORT nH = aTableParam.nScaleHeight;
+        while (!bFound)
+        {
+            CalcPages();
+            if ( ((!nW || (nPagesX <= nW)) && (!nH || (nPagesY <= nH))) || (nZoom <= ZOOM_MIN) )
                 bFound = TRUE;
             else
                 --nZoom;
