@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:33:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,13 +438,14 @@ InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     const Reference< XHierarchicalNameAccess > & xTDMgr,
     const OUString & rName, const Sequence< OUString > & rBaseTypes,
     const Sequence< OUString > & rOptionalBaseTypes,
-    const Sequence< sal_Int8 > & rBytes )
+    const Sequence< sal_Int8 > & rBytes, bool published )
     : _xTDMgr( xTDMgr )
     , _aName( rName )
     , _aBaseTypes( rBaseTypes )
     , _aOptionalBaseTypes( rOptionalBaseTypes )
     , _aBytes( rBytes )
     , _membersInit( false )
+    , _published( published )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
