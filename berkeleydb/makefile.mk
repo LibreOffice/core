@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2002-02-08 15:18:17 $
+#   last change: $Author: hjs $ $Date: 2002-03-22 10:59:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,8 @@ OUT2BIN=java$/classes$/db.jar
 .ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(GUI)"=="WNT"
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=build_win32
 BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" /MAKE "db_java - RELEASE"
