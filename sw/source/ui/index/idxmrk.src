@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:35:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ Text [ en-US ] = "Phonetic reading";
         };                                                          \
         ImageButton BT_NEW                                          \
         {                                                           \
-            Pos = MAP_APPFONT ( IDX_NEWIMAGE_XPOS , 14 ) ;                        \
-            Size = MAP_APPFONT ( IDX_NEWIMAGE_WIDTH , 12 ) ;                        \
+            Pos = MAP_APPFONT ( IDX_NEWIMAGE_XPOS , 13 ) ;                        \
+            Size = MAP_APPFONT ( IDX_NEWIMAGE_WIDTH , 15 ) ;                        \
             QuickHelpText [ de ] = "Neues benutzerdefiniertes Verzeichnis";            \
             QuickHelpText [ en-US ] = "New User-defined Index";\
         };                                                          \
