@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:00 $
+ *  last change: $Author: cmc $ $Date: 2002-07-30 08:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1920,6 +1920,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 {
                     pColors[nRealBox] = ((const SvxBrushItem*)pI)->GetColor();
                 }
+                else
+                    pColors[nRealBox] = COL_AUTO;
                 ++nRealBox;
             }
 
