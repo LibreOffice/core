@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-01 12:16:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <list>
 
 class RscTypCont;
+class DirEntry;
 
 /****************** T Y P E S ********************************************/
 
@@ -92,9 +93,10 @@ class RscCmdLine
     void        Init();
 
 public:
+
     RscStrList          aInputList;     // Liste der Quelldateien
     RscStrList          aSymbolList;    // Liste der Symbole
-    ByteString          aPath;        // Liste der Pfade
+    ByteString          aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     short               nCommands;      // Steuerbits
     ByteString          aOutputLst;     // Name der List-Ausgabedatei
@@ -103,30 +105,38 @@ public:
     ByteString          aOutputRcCtor;  // Name der Ctor-Ausgabedatei
     ByteString          aOutputCxx;     // Name der Cxx-Ausgabedatei
     ByteString          aOutputHxx;     // Name der Hxx-Ausgabedatei
-
     ByteString          aTouchFile;     // create this file when done in rsc2
+    ByteString          aILDir;
 
     struct OutputFile
     {
-        LanguageType        nLangTypeId;        // language type
-        ByteString          aLangName;          // language name
-        CharSet             nSourceCharSet;     // source text encoding
-        ByteString          aOutputRc;          // target file
-        ByteString          aLangSearchPath;    // language specific search path
+        LanguageType                 nLangTypeId;       // language type
+        ByteString                   aLangName;         // language name
+        CharSet                      nSourceCharSet;    // source text encoding
+        ByteString                   aOutputRc;         // target file
+        ByteString                   aLangSearchPath;   // language specific search path
+        ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images
 
         OutputFile() :
                 nLangTypeId( LANGUAGE_DONTKNOW ),
                 nSourceCharSet( RTL_TEXTENCODING_ASCII_US )
         {}
     };
-    ::std::list<OutputFile>                     m_aOutputFiles;
 
-                        RscCmdLine( short argc, char ** argv, RscError * pEH );
-                        RscCmdLine();
+    std::list<OutputFile>                                   m_aOutputFiles;
+    std::list< std::pair< rtl::OString, rtl::OString > >    m_aReplacements;
 
-                        ~RscCmdLine();
+                    RscCmdLine( short argc, char ** argv, RscError * pEH );
+                    RscCmdLine();
+
+                    ~RscCmdLine();
+
+  ::rtl::OString     substitutePaths( const ::rtl::OString& rIn );
 };
 /****************** R s c ************************************************/
+
+class WriteRcContext;
+
 class RscCompiler
 {
 private:
@@ -137,9 +147,18 @@ private:
     ByteString      aTmpOutputSrc;  // Name der TempSrc-Ausgabedatei
 
     void            CreateResFile( const char * pRc );
-
     void            Append( const ByteString& rOutputSrs, const ByteString& rTmpFile );
     void            OpenInput( const ByteString& rInput );
+
+    bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
+                                       const WriteRcContext& rContext,
+                                    const ByteString& rBaseFileName,
+                                    ByteString& rImagePath,
+                                    FILE* pSysListFile );
+    void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
+                                          const WriteRcContext& rContext,
+                                         const DirEntry& rSrsInPath,
+                                         const DirEntry& rSrsOutPath );
 
 public:
     RscTypCont*     pTC;        // String und Id-Verwalter
@@ -155,8 +174,7 @@ public:
 
                     // Include Statements lesen
     ERRTYPE         IncludeParser( ULONG lFileKey );
-    ERRTYPE         ParseOneFile( ULONG lFileKey );
-    ERRTYPE         CheckSyntax();
+    ERRTYPE         ParseOneFile( ULONG lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
     ERRTYPE         Link();
     void            EndCompile();
 };
