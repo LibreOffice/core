@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:04:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,11 @@ public:
                                sal_Int32 nFileFormat ) const;
 
     virtual BOOL    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    virtual BOOL    Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    virtual BOOL    LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual BOOL    Load( SfxMedium& rMedium );
+    virtual BOOL    LoadFrom( SfxMedium& rMedium );
     virtual BOOL    ConvertFrom( SfxMedium &rMedium );
     virtual BOOL    Save();
-    virtual BOOL    SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual BOOL    SaveAs( SfxMedium& rMedium );
     virtual BOOL    ConvertTo( SfxMedium &rMedium );
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void    PrepareReload();
