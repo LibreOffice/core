@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-17 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bNeedDirty = FALSE;
         if (pUndoDoc && (bValChanged || pRangeData || bOnRefMove))
         {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld );
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld, cMatrixFlag );
             pFCell->nErgValue = MINDOUBLE;      // damit spaeter changed (Cut/Paste!)
             pUndoDoc->PutCell( nCol, nRow, nTab, pFCell );
         }
@@ -1110,7 +1110,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if (pUndoDoc)
         {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld );
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld, cMatrixFlag );
             pFCell->nErgValue = MINDOUBLE;      // damit spaeter changed (Cut/Paste!)
             pUndoDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pFCell );
         }
