@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:36:14 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include "progress.hxx"
 #include "redcom.hxx"
 #include "sc.hrc"
+#include "inputopt.hxx"
 
 //------------------------------------------------------------------
 
@@ -297,6 +298,13 @@ void ScDocShell::CalcOutputFactor()
     if (bIsInplace)
     {
         nPrtToScreenFactor = 1.0;           // passt sonst nicht zur inaktiven Darstellung
+        return;
+    }
+
+    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    if (bTextWysiwyg)
+    {
+        nPrtToScreenFactor = 1.0;
         return;
     }
 
