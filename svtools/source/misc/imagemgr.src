@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:03:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,8 @@ String STR_DESCRIPTION_SOURCEFILE
     Text[ hebrew ] = "‮קוד מקור‬";
     Text[ hindi ] = "मूल कोड़";
     Text[ slovak ] = "Zdrojový kód";
+    Text[ hungarian ] = "Forráskód";
+    Text[ slovenian ] = "Izvorna koda";
 };
 String STR_DESCRIPTION_BOOKMARKFILE
 {
@@ -244,6 +246,8 @@ String STR_DESCRIPTION_BOOKMARKFILE
     Text[ hebrew ] = "‮קובץ סימניה‬";
     Text[ hindi ] = "पृष्ठसंकेत फाइल";
     Text[ slovak ] = "Súbor záložiek";
+    Text[ hungarian ] = "Könyvjelzőfájl";
+    Text[ slovenian ] = "Datoteka z zaznamki";
 };
 String STR_DESCRIPTION_GRAPHIC_DOC
 {
@@ -276,6 +280,8 @@ String STR_DESCRIPTION_GRAPHIC_DOC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String STR_DESCRIPTION_CFGFILE
 {
@@ -308,6 +314,8 @@ String STR_DESCRIPTION_CFGFILE
     Text[ hebrew ] = "‮קובץ תצורה‬";
     Text[ hindi ] = "रूप-रेखा फाइल";
     Text[ slovak ] = "Konfiguračný súbor";
+    Text[ hungarian ] = "Konfigurációs fájl";
+    Text[ slovenian ] = "Konfiguracijska datoteka";
 };
 String STR_DESCRIPTION_APPLICATION
 {
@@ -319,7 +327,7 @@ String STR_DESCRIPTION_APPLICATION
     Text [ spanish ] = "Aplicaci�n" ;
     Text [ french ] = "Application" ;
     Text [ swedish ] = "Till�mpning" ;
-    Text [ danish ] = "Applikation" ;
+    Text [ danish ] = "Program" ;
     Text [ portuguese ] = "Aplica��o" ;
     Text [ portuguese_brazilian ] = "Aplica��o" ;
     Text [ chinese_simplified ] = "应用程序";
@@ -340,6 +348,8 @@ String STR_DESCRIPTION_APPLICATION
     Text[ hebrew ] = "‮יישום‬";
     Text[ hindi ] = "कार्यक्रम";
     Text[ slovak ] = "Aplikácia";
+    Text[ hungarian ] = "Alkalmazás";
+    Text[ slovenian ] = "Program";
 };
 String STR_DESCRIPTION_DATABASE_TABLE
 {
@@ -349,7 +359,7 @@ String STR_DESCRIPTION_DATABASE_TABLE
     Text [ english_us ] = "Database table" ;
     Text [ portuguese_brazilian ] = "Tabela do banco de dados" ;
     Text [ swedish ] = "Databastabell" ;
-    Text [ danish ] = "Database-tabel" ;
+    Text [ danish ] = "Databasetabel" ;
     Text [ italian ] = "Tabella database" ;
     Text [ spanish ] = "Tabla de base de datos" ;
     Text [ french ] = "Table de base de donn�es" ;
@@ -372,6 +382,8 @@ String STR_DESCRIPTION_DATABASE_TABLE
     Text[ hebrew ] = "‮טבלאת מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय सारणी";
     Text[ slovak ] = "Databázová tabuľka";
+    Text[ hungarian ] = "Adatbázistábla";
+    Text[ slovenian ] = "Tabela zbirke podatkov";
 };
 String STR_DESCRIPTION_SYSFILE
 {
@@ -404,6 +416,8 @@ String STR_DESCRIPTION_SYSFILE
     Text[ hebrew ] = "‮קובץ מערכת‬";
     Text[ hindi ] = "सिस्टम फाइल";
     Text[ slovak ] = "Systémový súbor";
+    Text[ hungarian ] = "Rendszerfájl";
+    Text[ slovenian ] = "Sistemska datoteka";
 };
 String STR_DESCRIPTION_WORD_DOC
 {
@@ -413,7 +427,7 @@ String STR_DESCRIPTION_WORD_DOC
     Text [ english_us ] = "MS Word document" ;
     Text [ portuguese_brazilian ] = "Documento MS Word" ;
     Text [ swedish ] = "MS Word-dokument" ;
-    Text [ danish ] = "MS-Word-dokument" ;
+    Text [ danish ] = "MS Word-dokument" ;
     Text [ italian ] = "Documento MS Word" ;
     Text [ spanish ] = "Documento de MS Word" ;
     Text [ french ] = "Document MS Word" ;
@@ -436,6 +450,8 @@ String STR_DESCRIPTION_WORD_DOC
     Text[ hebrew ] = "‮מסמך MS Word‬";
     Text[ hindi ] = "MS Word लेखपत्र ";
     Text[ slovak ] = "Dokument MS Word";
+    Text[ hungarian ] = "MS Word-dokumentum";
+    Text[ slovenian ] = "Dokument MS Word";
 };
 String STR_DESCRIPTION_HELP_DOC
 {
@@ -445,7 +461,7 @@ String STR_DESCRIPTION_HELP_DOC
     Text [ english_us ] = "Help file" ;
     Text [ portuguese_brazilian ] = "Arquivo de ajuda" ;
     Text [ swedish ] = "Hj�lpfil" ;
-    Text [ danish ] = "Hj�lp-fil" ;
+    Text [ danish ] = "Hj�lpefil" ;
     Text [ italian ] = "File della Guida" ;
     Text [ spanish ] = "Archivo de ayuda" ;
     Text [ french ] = "Fichier d'aide" ;
@@ -468,6 +484,8 @@ String STR_DESCRIPTION_HELP_DOC
     Text[ hebrew ] = "‮קובץ עזרה‬";
     Text[ hindi ] = "सहायता फाइल";
     Text[ slovak ] = "Súbor pomocníka";
+    Text[ hungarian ] = "Súgófájl";
+    Text[ slovenian ] = "Datoteka pomoči";
 };
 String STR_DESCRIPTION_HTMLFILE
 {
@@ -479,7 +497,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text [ spanish ] = "Documento HTML" ;
     Text [ french ] = "Document HTML" ;
     Text [ swedish ] = "HTML-dokument" ;
-    Text [ danish ] = "Internet-dokument" ;
+    Text [ danish ] = "HTML-dokument" ;
     Text [ portuguese ] = "Documento Internet" ;
     Text [ portuguese_brazilian ] = "Documento da internet" ;
     Text [ chinese_simplified ] = "HTML 文档";
@@ -500,6 +518,8 @@ String STR_DESCRIPTION_HTMLFILE
     Text[ hebrew ] = "‮מסמך אינטרנט‬";
     Text[ hindi ] = "इन्टरनेट् लेखपत्र ";
     Text[ slovak ] = "Súbor z Internetu";
+    Text[ hungarian ] = "HTML-dokumentum";
+    Text[ slovenian ] = "HTML dokument";
 };
 String STR_DESCRIPTION_ARCHIVFILE
 {
@@ -532,6 +552,8 @@ String STR_DESCRIPTION_ARCHIVFILE
     Text[ hebrew ] = "‮קובץ ארכיב‬";
     Text[ hindi ] = "आर्कैव फाइल";
     Text[ slovak ] = "Archívny súbor";
+    Text[ hungarian ] = "Archívumfájl";
+    Text[ slovenian ] = "Arhivska datoteka";
 };
 String STR_DESCRIPTION_LOGFILE
 {
@@ -541,7 +563,7 @@ String STR_DESCRIPTION_LOGFILE
     Text [ english_us ] = "Log file" ;
     Text [ portuguese_brazilian ] = "Arquivo de registro" ;
     Text [ swedish ] = "Protokollfil" ;
-    Text [ danish ] = "Protokolfil" ;
+    Text [ danish ] = "Logfil" ;
     Text [ italian ] = "File di protocollo" ;
     Text [ spanish ] = "Archivo de protocolo" ;
     Text [ french ] = "Fichier journal" ;
@@ -564,6 +586,8 @@ String STR_DESCRIPTION_LOGFILE
     Text[ hebrew ] = "‮קובץ מעקב‬";
     Text[ hindi ] = "लॉग फाइल";
     Text[ slovak ] = "Protokolový súbor";
+    Text[ hungarian ] = "Naplófájl";
+    Text[ slovenian ] = "Dnevnik";
 };
 String STR_DESCRIPTION_SMATH_DOC
 {
@@ -596,6 +620,8 @@ String STR_DESCRIPTION_SMATH_DOC
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME सूत्र";
     Text[ slovak ] = "Vzorec %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-képlet";
+    Text[ slovenian ] = "Formula programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SCHART_DOC
 {
@@ -628,6 +654,8 @@ String STR_DESCRIPTION_SCHART_DOC
     Text[ hebrew ] = "‮תרשים %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME चार्ट";
     Text[ slovak ] = "Graf %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-diagram";
+    Text[ slovenian ] = "Grafikon programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SDRAW_DOC
 {
@@ -660,6 +688,8 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text[ hebrew ] = "‮סרטוט %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME रेखाचित्र";
     Text[ slovak ] = "Kresba %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-rajz";
+    Text[ slovenian ] = "Risba programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SCALC_DOC
 {
@@ -669,7 +699,7 @@ String STR_DESCRIPTION_SCALC_DOC
     Text [ english_us ] = "%PRODUCTNAME spreadsheet" ;
     Text [ portuguese_brazilian ] = "Planilha %PRODUCTNAME" ;
     Text [ swedish ] = "%PRODUCTNAME-tabell" ;
-    Text [ danish ] = "%PRODUCTNAME-tabel" ;
+    Text [ danish ] = "%PRODUCTNAME-regneark" ;
     Text [ italian ] = "Tabella %PRODUCTNAME" ;
     Text [ spanish ] = "%PRODUCTNAME - Hoja de c�lculo" ;
     Text [ french ] = "Classeur %PRODUCTNAME" ;
@@ -692,6 +722,8 @@ String STR_DESCRIPTION_SCALC_DOC
     Text[ hebrew ] = "‮גליון עבודה  %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME स्प्रेडशीट्";
     Text[ slovak ] = "Tabuľka %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-munkafüzet";
+    Text[ slovenian ] = "Preglednica programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SIMPRESS_DOC
 {
@@ -724,6 +756,8 @@ String STR_DESCRIPTION_SIMPRESS_DOC
     Text[ hebrew ] = "‮מצגת %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME प्रस्तुति";
     Text[ slovak ] = "Prezentácia %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-bemutató";
+    Text[ slovenian ] = "Predstavitev programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SWRITER_DOC
 {
@@ -756,6 +790,8 @@ String STR_DESCRIPTION_SWRITER_DOC
     Text[ hebrew ] = "‮טקסט %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME टेक्स्ट्";
     Text[ slovak ] = "Text %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-szöveg";
+    Text[ slovenian ] = "Besedilo programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_GLOBALDOC
 {
@@ -788,6 +824,8 @@ String STR_DESCRIPTION_GLOBALDOC
     Text[ hebrew ] = "‮מסמך אב טקסט %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME टेक्स्ट् मास्टर लेखपत्र";
     Text[ slovak ] = "Hlavný dokument %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-szövegesfődokumentum";
+    Text[ slovenian ] = "Glavni dokument z besedilom programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_SIMAGE_DOC
 {
@@ -820,6 +858,8 @@ String STR_DESCRIPTION_SIMAGE_DOC
     Text[ hebrew ] = "‮צלם %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME चित्र";
     Text[ slovak ] = "Obrázok %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-kép";
+    Text[ slovenian ] = "Slika programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_TEXTFILE
 {
@@ -852,6 +892,8 @@ String STR_DESCRIPTION_TEXTFILE
     Text[ hebrew ] = "‮קובץ טקסט‬";
     Text[ hindi ] = "टेक्स्ट् फाइल";
     Text[ slovak ] = "Textový súbor";
+    Text[ hungarian ] = "Szövegfájl";
+    Text[ slovenian ] = "Datoteka z besedilom";
 };
 String STR_DESCRIPTION_LINK
 {
@@ -884,6 +926,8 @@ String STR_DESCRIPTION_LINK
     Text[ hebrew ] = "‮קישור‬";
     Text[ hindi ] = "लिंक";
     Text[ slovak ] = "Odkaz";
+    Text[ hungarian ] = "Hivatkozás";
+    Text[ slovenian ] = "Povezava";
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
 {
@@ -916,6 +960,8 @@ String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
     Text[ hebrew ] = "‮תבנית %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME नमूना";
     Text[ slovak ] = "Šablóna %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-sablon";
+    Text[ slovenian ] = "Predloga programa %PRODUCTNAME";
 };
 String STR_DESCRIPTION_EXCEL_DOC
 {
@@ -948,6 +994,8 @@ String STR_DESCRIPTION_EXCEL_DOC
     Text[ hebrew ] = "‮מסמך MS Excel‬";
     Text[ hindi ] = "MS Excel लेखपत्र";
     Text[ slovak ] = "Dokument MS Excel";
+    Text[ hungarian ] = "MS Excel-dokumentum";
+    Text[ slovenian ] = "Dokument MS Excel";
 };
 String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
 {
@@ -980,6 +1028,8 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text[ hebrew ] = "‮תבנית MS Excel‬";
     Text[ hindi ] = "MS Excel नमूना";
     Text[ slovak ] = "Šablóna MS Excel";
+    Text[ hungarian ] = "MS Excel-sablon";
+    Text[ slovenian ] = "Predloga MS Excel";
 };
 String STR_DESCRIPTION_BATCHFILE
 {
@@ -1012,6 +1062,8 @@ String STR_DESCRIPTION_BATCHFILE
     Text[ hebrew ] = "‮קובץ אצווה (Batch file)‬";
     Text[ hindi ] = "समुदाय फाइल";
     Text[ slovak ] = "Dávkový súbor";
+    Text[ hungarian ] = "Parancsfájl";
+    Text[ slovenian ] = "Paketna datoteka";
 };
 String STR_DESCRIPTION_FILE
 {
@@ -1044,6 +1096,8 @@ String STR_DESCRIPTION_FILE
     Text[ hebrew ] = "‮קובץ‬";
     Text[ hindi ] = "फाइल";
     Text[ slovak ] = "Súbor";
+    Text[ hungarian ] = "Fájl";
+    Text[ slovenian ] = "Datoteka";
 };
 String STR_DESCRIPTION_FOLDER
 {
@@ -1076,6 +1130,8 @@ String STR_DESCRIPTION_FOLDER
     Text[ hebrew ] = "‮תיקיה‬";
     Text[ hindi ] = "कोष्ठ";
     Text[ slovak ] = "Adresár";
+    Text[ hungarian ] = "Mappa";
+    Text[ slovenian ] = "Mapa";
 };
 String STR_DESCRIPTION_FACTORY_WRITER
 {
@@ -1106,6 +1162,8 @@ String STR_DESCRIPTION_FACTORY_WRITER
     Text[ hebrew ] = "‮מסמך טקסט‬";
     Text[ hindi ] = "टेक्स्ट् लेखपत्र";
     Text[ slovak ] = "Textový dokument";
+    Text[ hungarian ] = "Szöveges dokumentum";
+    Text[ slovenian ] = "Dokument z besedilom";
 };
 String STR_DESCRIPTION_FACTORY_CALC
 {
@@ -1132,10 +1190,12 @@ String STR_DESCRIPTION_FACTORY_CALC
     Text[ catalan ] = "Full de c�lcul";
     Text[ finnish ] = "Laskentataulukko";
     Text[ thai ] = "กระดาษคำนวณ";
-    Text[ czech ] = "Sešit";
+    Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮גליון עבודה‬";
     Text[ hindi ] = "स्प्रेडशीट्";
     Text[ slovak ] = "Zošit";
+    Text[ hungarian ] = "Munkafüzet";
+    Text[ slovenian ] = "Preglednica";
 };
 String STR_DESCRIPTION_FACTORY_IMPRESS
 {
@@ -1166,6 +1226,8 @@ String STR_DESCRIPTION_FACTORY_IMPRESS
     Text[ hebrew ] = "‮מצגת‬";
     Text[ hindi ] = "प्रस्तुति";
     Text[ slovak ] = "Prezentácia";
+    Text[ hungarian ] = "Bemutató";
+    Text[ slovenian ] = "Predstavitev";
 };
 String STR_DESCRIPTION_FACTORY_DRAW
 {
@@ -1196,6 +1258,8 @@ String STR_DESCRIPTION_FACTORY_DRAW
     Text[ hebrew ] = "‮סרטוט‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
+    Text[ hungarian ] = "Rajz";
+    Text[ slovenian ] = "Risba";
 };
 String STR_DESCRIPTION_FACTORY_WRITERWEB
 {
@@ -1226,6 +1290,8 @@ String STR_DESCRIPTION_FACTORY_WRITERWEB
     Text[ hebrew ] = "‮מסמך LMTH‬";
     Text[ hindi ] = "HTML लेखपत्र";
     Text[ slovak ] = "HTML dokument";
+    Text[ hungarian ] = "HTML-dokumentum";
+    Text[ slovenian ] = "HTML dokument";
 };
 String STR_DESCRIPTION_FACTORY_GLOBALDOC
 {
@@ -1256,6 +1322,8 @@ String STR_DESCRIPTION_FACTORY_GLOBALDOC
     Text[ hebrew ] = "‮מסמך אב‬";
     Text[ hindi ] = "मास्टर लेखपत्र";
     Text[ slovak ] = "Hlavný dokument";
+    Text[ hungarian ] = "Fődokumentum";
+    Text[ slovenian ] = "Glavni dokument";
 };
 String STR_DESCRIPTION_FACTORY_MATH
 {
@@ -1285,6 +1353,8 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ hebrew ] = "‮נוסחה‬";
     Text[ hindi ] = "सूत्र";
     Text[ slovak ] = "Vzorec";
+    Text[ hungarian ] = "Képlet";
+    Text[ slovenian ] = "Formula";
 };
 String STR_DESCRIPTION_CALC_TEMPLATE
 {
@@ -1293,12 +1363,12 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de folha de c�lculo";
     Text[ russian ] = "������ ����������� ������� %PRODUCTNAME 6.0";
     Text[ greek ] = "������� ������������� ������ %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%productname% 6.0 Werkbladsjabloon";
+    Text[ dutch ] = "%productname% %PRODUCTXMLFILEFORMATVERSION Werkbladsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Mod�le de classeur";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Plantilla de hoja de c�lculo";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -laskentataulukkomalli";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di foglio elettronico";
-    Text[ danish ] = "%PRODUCTNAME 6.0-regnearksskabelon";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-regnearksskabelon";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tabelldokumentsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
     Text[ portuguese_brazilian ] = "Modelo de planilha %PRODUCTNAME 6.0";
@@ -1314,6 +1384,8 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ hebrew ] = "‮תבנית גליון עבודה %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 स्प्रेडशीट् नमूना";
     Text[ slovak ] = "Šablóna tabuľky %PRODUCTNAME 6.0";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-munkafüzetsablon";
+    Text[ slovenian ] = "Predloga preglednice programa %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
 };
 String STR_DESCRIPTION_DRAW_TEMPLATE
 {
@@ -1322,12 +1394,12 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de desenho";
     Text[ russian ] = "������ ������� %PRODUCTNAME 6.0";
     Text[ greek ] = "������� ������� %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekeningsjabloon";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tekeningsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Mod�le de dessin";
     Text[ spanish ] = "Plantilla de dibujo %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ";
     Text[ finnish ] = "%PRODUCTNAME 6.0 - Piirrosmalli";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modelli di disegno";
-    Text[ danish ] = "%PRODUCTNAME 6.0-tegningsskabelon";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tegningsskabelon";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-teckningsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon rysunku";
     Text[ portuguese_brazilian ] = "Modelo de desenho %PRODUCTNAME 6.0";
@@ -1343,6 +1415,8 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ hebrew ] = "‮תבנית סרטוט %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 रेखाचित्र नमूना";
     Text[ slovak ] = "Šablóna kresby %PRODUCTNAME 6.0";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-rajzsablon";
+    Text[ slovenian ] = "Predloga risbe programa %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
@@ -1351,12 +1425,12 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de apresenta��o";
     Text[ russian ] = "������ ����������� %PRODUCTNAME 6.0";
     Text[ greek ] = "������� ������������ %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Presentatiesjabloon";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentatiesjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Mod�le de pr�sentation";
     Text[ spanish ] = "Plantilla de presentaci�n %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION   ";
     Text[ finnish ] = "%PRODUCTNAME 6.0 - Esitysmalli";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di presentazione";
-    Text[ danish ] = "%PRODUCTNAME 6.0-pr�sentationsskabelon";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-pr�sentationsskabelon";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-presentationsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
     Text[ portuguese_brazilian ] = "Modelo de apresenta��o %PRODUCTNAME 6.0";
@@ -1372,6 +1446,8 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ hebrew ] = "‮תבנית מצגת %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 प्रस्तुति नमूना";
     Text[ slovak ] = "Šablóna prezentácie %PRODUCTNAME 6.0";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-bemutatósablon";
+    Text[ slovenian ] = "Predloga predstavitve programa %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
 {
@@ -1380,12 +1456,12 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de texto";
     Text[ russian ] = "������ ������ %PRODUCTNAME 6.0";
     Text[ greek ] = "������� �������� �������� %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%productname% 6.0 Tekstdocumentsjabloon";
+    Text[ dutch ] = "%productname% %PRODUCTXMLFILEFORMATVERSION Tekstdocumentsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Mod�le de texte";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de documento de texto";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -tekstiasiakirjan malli";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modello di documento di testo";
-    Text[ danish ] = "%PRODUCTNAME 6.0-tekstdokumentskabelon";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tekstdokumentskabelon";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-textdokumentsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
     Text[ portuguese_brazilian ] = "Modelo de documento de texto %PRODUCTNAME 6.0";
@@ -1401,6 +1477,8 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ hebrew ] = "‮תבנית מסמך טקסט %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 टेक्स्ट् लेखपत्र नमूना";
     Text[ slovak ] = "Šablóna textového dokumentu %PRODUCTNAME 6.0";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-szövegesdokumentumsablon";
+    Text[ slovenian ] = "Predloga dokumenta z besedilom programa %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION";
 };
 String STR_DESCRIPTION_LOCALE_VOLUME
 {
@@ -1430,6 +1508,8 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ hebrew ] = "‮כונן מקומי‬";
     Text[ hindi ] = "Local drive";
     Text[ slovak ] = "Lokálna mechanika";
+    Text[ hungarian ] = "Helyi meghajtó";
+    Text[ slovenian ] = "Lokalni pogon";
 };
 String STR_DESCRIPTION_FLOPPY_VOLUME
 {
@@ -1459,6 +1539,8 @@ String STR_DESCRIPTION_FLOPPY_VOLUME
     Text[ hebrew ] = "‮כונן דיסק‬";
     Text[ hindi ] = "Disk drive";
     Text[ slovak ] = "Disk";
+    Text[ hungarian ] = "Lemezmeghajtó";
+    Text[ slovenian ] = "Diskovni pogon";
 };
 String STR_DESCRIPTION_CDROM_VOLUME
 {
@@ -1488,6 +1570,8 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ hebrew ] = "‮כונן תקליטור‬";
     Text[ hindi ] = "CD-ROM drive";
     Text[ slovak ] = "CD mechanika";
+    Text[ hungarian ] = "CD-ROM meghajtó";
+    Text[ slovenian ] = "CD-ROM pogon";
 };
 String STR_DESCRIPTION_REMOTE_VOLUME
 {
@@ -1517,6 +1601,8 @@ String STR_DESCRIPTION_REMOTE_VOLUME
     Text[ hebrew ] = "‮חיבור רשת‬";
     Text[ hindi ] = "Network connection";
     Text[ slovak ] = "Sieťové spojenie";
+    Text[ hungarian ] = "Hálózati kapcsolat";
+    Text[ slovenian ] = "Omrežna povezava";
 };
 String STR_DESCRIPTION_POWERPOINT
 {
@@ -1547,6 +1633,8 @@ String STR_DESCRIPTION_POWERPOINT
     Text[ hebrew ] = "‮מסמך MS PowerPoint‬";
     Text[ hindi ] = "MS PowerPoint Document";
     Text[ slovak ] = "Dokument MS PowerPoint";
+    Text[ hungarian ] = "MS PowerPoint-dokumentum";
+    Text[ slovenian ] = "MS PowerPoint dokument";
 };
 
 String STR_DESCRIPTION_POWERPOINT_TEMPLATE
@@ -1578,6 +1666,8 @@ String STR_DESCRIPTION_POWERPOINT_TEMPLATE
     Text[ hebrew ] = "‮תבנית MS PowerPoint‬";
     Text[ hindi ] = "MS PowerPoint Template";
     Text[ slovak ] = "Šablóna MS PowerPoint";
+    Text[ hungarian ] = "MS PowerPoint-sablon";
+    Text[ slovenian ] = "MS PowerPoint predloga";
 };
 
 String STR_DESCRIPTION_POWERPOINT_SHOW
@@ -1609,6 +1699,8 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ hebrew ] = "‮מצגת MS PowerPoint‬";
     Text[ hindi ] = "MS PowerPoint Show";
     Text[ slovak ] = "Prezentácia MS PowerPoint";
+    Text[ hungarian ] = "MS PowerPoint-bemutató";
+    Text[ slovenian ] = "Predstavitev programa MS PowerPoint";
 };
 
 String STR_DESCRIPTION_SXMATH_DOC
@@ -1626,9 +1718,9 @@ String STR_DESCRIPTION_SXMATH_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Formula";
     Text[ russian ] = "%PRODUCTNAME 6.0 Formula";
     Text[ greek ] = "%PRODUCTNAME 6.0 Formula";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Formula";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-formel";
     Text[ polish ] = "%PRODUCTNAME 6.0 Formula";
     Text[ portuguese_brazilian ] = "F�rmula %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Form�l�";
@@ -1639,6 +1731,8 @@ String STR_DESCRIPTION_SXMATH_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formel";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Vzorec";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-képlet";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION formula";
 };
 
 String STR_DESCRIPTION_SXCHART_DOC
@@ -1656,9 +1750,9 @@ String STR_DESCRIPTION_SXCHART_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Chart";
     Text[ russian ] = "%PRODUCTNAME 6.0 Chart";
     Text[ greek ] = "%PRODUCTNAME 6.0 Chart";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Chart";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-diagram";
     Text[ polish ] = "%PRODUCTNAME 6.0 Chart";
     Text[ portuguese_brazilian ] = "Gr�fico %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Haritas�";
@@ -1669,6 +1763,8 @@ String STR_DESCRIPTION_SXCHART_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Diagramm";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Graf";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-diagram";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION grafikon";
 };
 
 String STR_DESCRIPTION_SXDRAW_DOC
@@ -1686,9 +1782,9 @@ String STR_DESCRIPTION_SXDRAW_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ russian ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ greek ] = "%PRODUCTNAME 6.0 Drawing";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Drawing";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tegning";
     Text[ polish ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ portuguese_brazilian ] = "Desenho %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMARVERSION �izimi";
@@ -1699,6 +1795,8 @@ String STR_DESCRIPTION_SXDRAW_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnung";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Kresba";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-rajz";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION risba";
 };
 
 String STR_DESCRIPTION_SXCALC_DOC
@@ -1716,9 +1814,9 @@ String STR_DESCRIPTION_SXCALC_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ russian ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ greek ] = "%PRODUCTNAME 6.0 Spreadsheet";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Spreadsheet";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-regneark";
     Text[ polish ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ portuguese_brazilian ] = "Planilha %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Hesap �izelgesi";
@@ -1729,6 +1827,8 @@ String STR_DESCRIPTION_SXCALC_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zošit";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-munkafüzet";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION preglednica";
 };
 
 String STR_DESCRIPTION_SXIMPRESS_DOC
@@ -1746,9 +1846,9 @@ String STR_DESCRIPTION_SXIMPRESS_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ russian ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ greek ] = "%PRODUCTNAME 6.0 Presentation";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Presentation";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-pr�sentation";
     Text[ polish ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ portuguese_brazilian ] = "Apresenta��o %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Sunumu";
@@ -1759,6 +1859,8 @@ String STR_DESCRIPTION_SXIMPRESS_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Prezentácia";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-bemutató";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION predstavitev";
 };
 
 String STR_DESCRIPTION_SXWRITER_DOC
@@ -1776,9 +1878,9 @@ String STR_DESCRIPTION_SXWRITER_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ russian ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ greek ] = "%PRODUCTNAME 6.0 Text Document";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Text Document";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-tekstdokument";
     Text[ polish ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ portuguese_brazilian ] = "Documento de texto %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Metin Belgesi";
@@ -1789,6 +1891,8 @@ String STR_DESCRIPTION_SXWRITER_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textový dokument";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-szövegesdokumentum";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION dokument z besedilom";
 };
 
 String STR_DESCRIPTION_SXGLOBAL_DOC
@@ -1806,9 +1910,9 @@ String STR_DESCRIPTION_SXGLOBAL_DOC
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ russian ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ greek ] = "%PRODUCTNAME 6.0 Master Document";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document";
     Text[ finnish ] = "%PRODUCTNAME 6.0 Master Document";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-hoveddokument";
     Text[ polish ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Ana Belgesi";
@@ -1819,6 +1923,8 @@ String STR_DESCRIPTION_SXGLOBAL_DOC
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Hlavný dokument";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION-fődokumentum";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION glavni dokument";
 };
 
 String STR_DESCRIPTION_MATHML_DOC
@@ -1838,7 +1944,7 @@ String STR_DESCRIPTION_MATHML_DOC
     Text[ greek ] = "MathML Document";
     Text[ dutch ] = "MathML Document";
     Text[ finnish ] = "MathML Document";
-    Text[ danish ] = "MathML Document";
+    Text[ danish ] = "MathML dokument";
     Text[ polish ] = "MathML Document";
     Text[ portuguese_brazilian ] = "Documento MathML";
     Text[ turkish ] = "MathML Belgesi";
@@ -1849,7 +1955,10 @@ String STR_DESCRIPTION_MATHML_DOC
     Text[ hebrew ] = "MathML Dokument";
     Text[ hindi ] = "MathML Document";
     Text[ slovak ] = "MathML Dokument";
+    Text[ hungarian ] = "MathML-dokumentum";
+    Text[ slovenian ] = "MathML dokument";
 };
+
 
 
 
