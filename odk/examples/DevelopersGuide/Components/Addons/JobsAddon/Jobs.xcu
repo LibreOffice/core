@@ -6,19 +6,19 @@
                 <value>com.sun.star.comp.framework.java.services.AsyncJob</value>
             </prop>
             <node oor:name="Arguments">
-                <prop oor:name="arg_1" oor:type="xs:string" oor:op="replace">
+                <prop oor:name="arg_1" oor:type="xs:string">
                     <value>val_1</value>
                 </prop>
             </node>
         </node>
     </node>
     <node oor:name="Events">
-        <node oor:name="onFirstVisibleTask">
+        <node oor:name="onFirstVisibleTask" oor:op="modify">
             <node oor:name="JobList">
                 <node oor:name="AsyncJob" oor:op="replace"/>
             </node>
         </node>
-        <node oor:name="onMyOwnJobEvent">
+        <node oor:name="onMyOwnJobEvent" oor:op="replace">
             <node oor:name="JobList">
                 <node oor:name="AsyncJob" oor:op="replace"/>
             </node>
