@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:22:56 $
+ *  last change: $Author: mba $ $Date: 2002-01-24 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,7 @@ public:
     BOOL                    IsContainer_Impl() const;
     void                    NextObjectBar_Impl( USHORT nPos );
     USHORT                  HasNextObjectBar_Impl( USHORT nPos, String* pStr=0 );
+    void                    SetObjectBarCustomizeMode_Impl( BOOL );
 
     // Methoden f"ur ChildWindows
     void                    UpdateChildWindows_Impl();

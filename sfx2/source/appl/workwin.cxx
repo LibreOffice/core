@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-18 17:31:36 $
+ *  last change: $Author: mba $ $Date: 2002-01-24 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3003,5 +3003,20 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
     }
 
     return FALSE;
+}
+
+void SfxWorkWindow::SetObjectBarCustomizeMode_Impl( BOOL bSet )
+{
+    if ( bSet )
+        GetBindings().GetImageManager()->StartCustomize();
+    else
+        GetBindings().GetImageManager()->EndCustomize();
+
+    for ( USHORT n=0; n<SFX_OBJECTBAR_MAX; ++n )
+    {
+        SfxChild_Impl *&rpCli = (*pChilds)[TbxMatch(n)];
+        if ( aObjBars[n].pTbx )
+            aObjBars[n].pTbx->GetToolBox().SetCustomizeMode( bSet );
+    }
 }
 
