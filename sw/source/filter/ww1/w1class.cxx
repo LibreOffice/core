@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:01:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,38 +1051,10 @@ BOOL Ww1FkpPap::Fill(USHORT nIndex, BYTE*& p, USHORT& rnCountBytes)
     return TRUE;
 }
 
-BOOL Ww1FkpPap::Fill(
-    USHORT nIndex, BYTE*& p, USHORT& rnCountBytes, ULONG& rulStart, ULONG& rulEnd)
-{
-    rulStart = Where(nIndex);
-    rulEnd = Where(nIndex+1);
-    Fill(nIndex, p, rnCountBytes);
-    return TRUE;
-}
-
 //////////////////////////////////////////////////////////////// FkpChp
 BOOL Ww1FkpChp::Fill(USHORT nIndex, W1_CHP& aChp)
 {
     DBG_ASSERT( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
-    memset(&aChp, 0, sizeof(aChp)); // Default, da verkuerzt gespeichert
-    USHORT nOffset = GetData(nIndex)[0] * 2;
-    if (nOffset)
-    {
-        DBG_ASSERT(nOffset>(USHORT)(Count()*sizeof(SVBT32)), "calc error");
-        USHORT nCountBytes = aFkp[nOffset];
-        nOffset += sizeof(SVBT8);
-        DBG_ASSERT(nCountBytes <= 511-nOffset, "calc error");
-        DBG_ASSERT(nCountBytes <= sizeof(aChp), "calc error");
-        memcpy(&aChp, aFkp+nOffset, nCountBytes);
-    }
-    return TRUE;
-}
-
-BOOL Ww1FkpChp::Fill(USHORT nIndex, W1_CHP& aChp, ULONG& rulStart, ULONG& rulEnd)
-{
-    DBG_ASSERT( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
-    rulStart = Where(nIndex);
-    rulEnd = Where(nIndex+1);
     memset(&aChp, 0, sizeof(aChp)); // Default, da verkuerzt gespeichert
     USHORT nOffset = GetData(nIndex)[0] * 2;
     if (nOffset)
@@ -1233,24 +1205,6 @@ BOOL Ww1Pap::HasId(USHORT nId)
     return bRet;
 }
 
-BOOL Ww1Pap::NextHas(USHORT nId)
-{
-    BOOL bRet = FALSE;
-    USHORT nPushedPlcIndex = nPlcIndex;
-    USHORT nPushedFkpIndex = nFkpIndex;
-    (*this)++;
-    bRet = HasId0( nId );
-    if (nPlcIndex != nPushedPlcIndex)
-    {
-        delete pPap;
-        pPap = NULL;
-    }
-    nPlcIndex = nPushedPlcIndex;
-    nFkpIndex = nPushedFkpIndex;
-    Where( FALSE );
-    return bRet;
-}
-
 /////////////////////////////////////////////////////////////////// Chp
 Ww1Chp::Ww1Chp(Ww1Fib& rFib)
     : Ww1PlcChp(rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
@@ -1318,20 +1272,6 @@ Ww1Manager::Ww1Manager(SvStream& rStrm, ULONG nFieldFlgs)
         && !aBooks.GetError();
 }
 
-BOOL Ww1Manager::IsValidFib(const BYTE*p, USHORT size)
-{
-    return ((
-        ((W1_FIB*)p)->wIdentGet() == 42396
-         && ((W1_FIB*)p)->nFibGet() == 33 // ww1
-#if OSL_DEBUG_LEVEL > 1
-     || ((W1_FIB*)p)->wIdentGet() == 42459
-         && ((W1_FIB*)p)->nFibGet() == 45 // ww2b
-#endif
-     )
-//   && ((W1_FIB*)p)->nProductGet() == 8413
-     && ((W1_FIB*)p)->fComplexGet() == 0);
-}
-
 BOOL Ww1Manager::HasInTable()
 {
     return aPap.HasId(24); // Ww1SingleSprmPFInTable
@@ -1340,11 +1280,6 @@ BOOL Ww1Manager::HasInTable()
 BOOL Ww1Manager::HasTtp()
 {
     return aPap.HasId(25); // Ww1SingleSprmPTtp
-}
-
-BOOL Ww1Manager::NextHasTtp()
-{
-    return aPap.NextHas(25); // Ww1SingleSprmPTtp
 }
 
 BOOL Ww1Manager::HasPPc()
@@ -1356,5 +1291,3 @@ BOOL Ww1Manager::HasPDxaAbs()
 {
     return aPap.HasId(26); // Ww1SingleSprmPDxaAbs
 }
-
-
