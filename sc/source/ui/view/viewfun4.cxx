@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-22 18:26:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-29 14:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
     BOOL bFound = pSpellingEngine->SpellNextDocument();     // erste Zelle holen
 
     if (bFound)
-        eState = pEditView->StartSpeller( TRUE );
+        eState = pEditView->StartSpeller( (BOOL) TRUE );
     else
         eState = EE_SPELL_OK;                               // Bereich war leer
 
