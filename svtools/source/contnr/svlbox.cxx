@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:10:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #define _SVSTDARR_ULONGSSORT
@@ -1778,28 +1781,32 @@ BOOL SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
 // remove is called in link callback and in the destructor. So it can't
 // called to a deleted object.
 
-static SvULongsSort aSortLBoxes;
+namespace
+{
+    struct SortLBoxes : public rtl::Static<SvULongsSort, SortLBoxes> {};
+}
 
 void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
 {
     ULONG nVal = (ULONG)&rB;
-    aSortLBoxes.Insert( nVal );
+    SortLBoxes::get().Insert( nVal );
 }
 
 void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
 {
     ULONG nVal = (ULONG)&rB;
-    aSortLBoxes.Remove( nVal );
+    SortLBoxes::get().Remove( nVal );
 }
 
 IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
     ULONG nVal = (ULONG)pThis;
     USHORT nFnd;
-    if( aSortLBoxes.Seek_Entry( nVal, &nFnd ) )
+    SvULongsSort &rSortLBoxes = SortLBoxes::get();
+    if( rSortLBoxes.Seek_Entry( nVal, &nFnd ) )
     {
         pThis->DragFinished( *pAction );
-        aSortLBoxes.Remove( nFnd, 1 );
+        rSortLBoxes.Remove( nFnd, 1 );
     }
     return 0;
 }
