@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Events.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:16:09 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.ListModelBinder;
 import com.sun.star.wizards.ui.event.MethodInvocation;
@@ -213,11 +214,10 @@ public abstract class WWD_Events extends WWD_Startup {
             }
         }, resources.resLoadingSession );
 
-        System.out.println("finished load session");
+        //System.out.println("finished load session");
 
         try {
-            refreshStylePreview();
-            updateIconsetText();
+            refreshStylePreview();            updateIconsetText();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -425,7 +425,7 @@ public abstract class WWD_Events extends WWD_Startup {
                         bgDialog.createWindowPeer(xControl.getPeer());
                     }
                     bgDialog.setSelected(settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
-                        short i = bgDialog.executeDialog(WWD_Events.this);
+                        short i = bgDialog.executeDialog((UnoDialog)WWD_Events.this);
                         if (i == 1) //ok
                             setBackground(bgDialog.getSelected());
                 } catch (Exception ex) {
@@ -467,7 +467,7 @@ public abstract class WWD_Events extends WWD_Startup {
 
                     iconsDialog.setIconset(settings.cp_DefaultSession.cp_Design.cp_IconSet);
 
-                    short i = iconsDialog.executeDialog(WWD_Events.this);
+                    short i = iconsDialog.executeDialog((UnoDialog)WWD_Events.this);
                     if (i == 1) //ok
                         setIconset(iconsDialog.getIconset());
                 } catch (Exception ex) {
