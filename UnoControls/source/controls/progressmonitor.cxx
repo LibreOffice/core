@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressmonitor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-15 12:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,11 +1099,11 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, co
 {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.len ()  <   1       ) return sal_False ;    // ""
+    if ( rTopic.getLength ()    <   1       ) return sal_False ;    // ""
 
     // Check "rText"
     if ( &rText         ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rText.len ()   <   1       ) return sal_False ;    // ""
+    if ( rText.getLength () <   1       ) return sal_False ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 
@@ -1116,7 +1116,7 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sa
 {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.len ()  <   1       ) return sal_False ;    // ""
+    if ( rTopic.getLength ()    <   1       ) return sal_False ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 
