@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2001-03-01 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,15 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore) {
     The void* represented by oslSemaphore is used
     as a pointer to an osl_TSemImpl struct
 */
+
+
+#if defined(NETBSD)
+union semun {
+        int     val;            /* value for SETVAL */
+        struct  semid_ds *buf;  /* buffer for IPC_STAT & IPC_SET */
+        u_short *array;         /* array for GETALL & SETALL */
+};
+#endif
 
 typedef struct _osl_TSemImpl
 {
