@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 12:27:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xSourceObject(_xSourceObject)
     ,m_bCreatePrimaryColumn(sal_False)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
-    ,m_mNameMapping(_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,m_xFormatter(_xFormatter)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_xFactory(_rM)
@@ -224,7 +224,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xConnection(_xConnection)
     ,m_bCreatePrimaryColumn(sal_False)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
-    ,m_mNameMapping(_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,m_vSourceColumns(_rSourceColumns)
     ,m_xFormatter(_xFormatter)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
