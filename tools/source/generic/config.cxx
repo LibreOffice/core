@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 10:36:29 $
+ *  last change: $Author: pl $ $Date: 2001-05-22 15:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,10 @@ static String toUncPath( const String& rPath )
 #ifdef TF_FILEURL
     ::rtl::OUString aFileURL;
 
-    if( ::osl::FileBase::getFileURLFromSystemPath( rPath, aFileURL ) != ::osl::FileBase::E_None )
+    // check ir rFileName is already a URL; if not make it so
+    if( rPath.CompareToAscii( "file://", 7 ) == COMPARE_EQUAL )
+        aFileURL = rPath;
+    else if( ::osl::FileBase::getFileURLFromSystemPath( rPath, aFileURL ) != ::osl::FileBase::E_None )
         aFileURL = rPath;
 
     return aFileURL;
@@ -816,13 +819,10 @@ void Config::Modified()
 
 String Config::GetDefDirectory()
 {
-    String aDefConfig = ImplMakeConfigName( NULL, NULL );
-    // kill the last path element to obtain the path
-    // path separator is always / since we only use UNC notation nowadays
-    // (which also means that aDefConfig is an absolute path already)
-    int nPos = aDefConfig.SearchBackward( '/' );
-    if( nPos != STRING_NOTFOUND )
-        aDefConfig.Erase( nPos );
+    ::rtl::OUString aDefConfig;
+    oslSecurity aSec = osl_getCurrentSecurity();
+    osl_getConfigDir( aSec, &aDefConfig.pData );
+    osl_freeSecurityHandle( aSec );
 
     return aDefConfig;
 }
