@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinetab.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:11:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
+#endif
+#ifndef SC_COMPRESSEDARRAY_HXX
+#include "compressedarray.hxx"
 #endif
 
 
@@ -164,7 +167,8 @@ public:
     BOOL                    DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize );
 
     BOOL                    ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos,
-                                            BOOL bShow, BYTE* pHiddenFlags );
+                                BOOL bShow,
+                                const ScBitMaskCompressedArray< SCCOLROW, BYTE>& rHiddenFlags );
 
     void                    Load( SvStream& rStream );
     void                    Store( SvStream& rStream );
