@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-26 08:10:20 $
+ *  last change: $Author: ama $ $Date: 2002-08-26 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,16 +2097,17 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 // kein break;
             case REL_PG_RIGHT:
             {
-                nAdd = (*fnRect->fnXDiff)((pPage->Frm().*fnRect->fnGetLeft)(),
-                                         (pOrient->Frm().*fnRect->fnGetLeft)());
                 if ( bTmpToggle )    // linker Seitenrand
+                {
+                    nAdd = (*fnRect->fnXDiff)((pPage->Frm().*fnRect->fnGetLeft)(),
+                                         (pOrient->Frm().*fnRect->fnGetLeft)());
                     nWidth = (pPage->*fnRect->fnGetLeftMargin)();
+                }
                 else            // rechter Seitenrand
                 {
-                    nWidth = (pPage->Frm().*fnRect->fnGetWidth)();
-                    SwTwips nTmp = (pPage->*fnRect->fnGetRightMargin)();
-                    nWidth -= nTmp;
-                    nAdd += nTmp;
+                    nAdd = (*fnRect->fnXDiff)((pPage->*fnRect->fnGetPrtRight)(),
+                                         (pOrient->Frm().*fnRect->fnGetLeft)());
+                    nWidth = (pPage->*fnRect->fnGetRightMargin)();
                 }
                 bPageRel = TRUE;
                 break;
@@ -2123,9 +2124,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 }
                 else            // rechter Absatzrand
                 {
-                    nWidth = (pOrient->Frm().*fnRect->fnGetWidth)();
-                    nAdd = (pOrient->*fnRect->fnGetRightMargin)();
-                    nWidth -= nAdd;
+                    nWidth = (pOrient->*fnRect->fnGetRightMargin)();
+                    nAdd = (pOrient->Frm().*fnRect->fnGetWidth)()-nWidth;
                 }
                 break;
             }
