@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:47:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,9 @@ class SwDoc
                         sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
-    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, BOOL );
+    // --> OD 2005-01-13 #i40550#
+    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, BOOL, BOOL );
+    // <--
     SwFmt* CopyFmt( const SwFmt& rFmt, const SvPtrarr& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SvPtrarr& rSourceArr, SvPtrarr& rDestArr,
@@ -1286,8 +1288,11 @@ public:
     SwFrmFmt* FindSpzFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pSpzFrmFmtTbl, rName ); }
 
+    // --> OD 2005-01-13 #i40550#
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
-                           BOOL bBroadcast = FALSE);
+                           BOOL bBroadcast = FALSE,
+                           BOOL bAuto = TRUE );
+    // <--
     void       DelCharFmt(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
     void       DelCharFmt(SwCharFmt* pFmt, BOOL bBroadcast = FALSE);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
@@ -1297,9 +1302,12 @@ public:
     // TXT
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return pDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
+    // --> OD 2005-01-13 #i40550#
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
-                                  BOOL bBroadcast = FALSE);
+                                  BOOL bBroadcast = FALSE,
+                                  BOOL bAuto = TRUE );
+    // <--
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
                                                BOOL bBroadcast = FALSE);
@@ -2332,7 +2340,7 @@ public:
     // <- #i23726#
 
 
-    void RemoveLeadingChars(const SwPosition & rPos, sal_Unicode sChar);
+    void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 
     // --> #i31958# access methods for XForms model(s)
 
