@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:00:52 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,6 +709,20 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_MERGE_OFF:
                 if ( pDoc->GetChangeTrack() || !pTabViewShell->TestRemoveMerge() )
                     rSet.DisableItem( nWhich );
+                break;
+
+            case FID_MERGE_TOGGLE:
+                if ( pDoc->GetChangeTrack() )
+                    rSet.DisableItem( nWhich );
+                else
+                {
+                    bool bCanMerge = pTabViewShell->TestMergeCells();
+                    bool bCanSplit = pTabViewShell->TestRemoveMerge();
+                    if( !bCanMerge && !bCanSplit )
+                        rSet.DisableItem( nWhich );
+                    else
+                        rSet.Put( SfxBoolItem( nWhich, bCanSplit ) );
+                }
                 break;
 
             case FID_INS_ROWBRK:
