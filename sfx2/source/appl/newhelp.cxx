@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 18:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "newhelp.hxx"
 #include "sfxuno.hxx"
 #include "sfxresid.hxx"
+#include "helpinterceptor.hxx"
+#include "helper.hxx"
 
 #include "app.hrc"
 
@@ -96,15 +98,27 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HDL_
+#include <com/sun/star/beans/XPropertySetInfo.hdl>
+#endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
+#include <ucbhelper/content.hxx>
 
+using namespace ::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace com::sun::star::ucb;
 
 // defines ---------------------------------------------------------------
 
@@ -120,11 +134,13 @@ using namespace ::com::sun::star::util;
 #define TBI_CONTEXT         1005
 #define TBI_PRINT           1006
 
-#define HELPWIN_CONFIGNAME  String(DEFINE_CONST_UNICODE("OfficeHelp"))
+#define HELPWIN_CONFIGNAME      String(DEFINE_CONST_UNICODE("OfficeHelp"))
+#define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
+#define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
 
-// class ContentTabPage --------------------------------------------------
+// class ContentTabPage_Impl ---------------------------------------------
 
-ContentTabPage::ContentTabPage( Window* pParent ) :
+ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
 
     TabPage( pParent ),
 
@@ -138,7 +154,7 @@ ContentTabPage::ContentTabPage( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-void ContentTabPage::Resize()
+void ContentTabPage_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
     Point aPnt = aContentWin.GetPosPixel();
@@ -147,9 +163,9 @@ void ContentTabPage::Resize()
     aContentWin.SetSizePixel( aSize );
 }
 
-// class IndexTabPage ----------------------------------------------------
+// class IndexTabPage_Impl -----------------------------------------------
 
-IndexTabPage::IndexTabPage( Window* pParent ) :
+IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
     TabPage( pParent, SfxResId( TP_HELP_INDEX ) ),
 
@@ -165,10 +181,116 @@ IndexTabPage::IndexTabPage( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-void IndexTabPage::Resize()
+IndexTabPage_Impl::~IndexTabPage_Impl()
+{
+    ClearIndex();
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::InitializeIndex()
+{
+    ClearIndex();
+
+    try
+    {
+        ::rtl::OUString aURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
+        aURL += aFactory;
+        Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+        if ( xInfo->hasPropertyByName( PROPERTY_KEYWORDLIST ) )
+        {
+            ::com::sun::star::uno::Any aAny1 = aCnt.getPropertyValue( PROPERTY_KEYWORDLIST );
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aKeywordList;
+            ::com::sun::star::uno::Any aAny2 = aCnt.getPropertyValue( PROPERTY_KEYWORDREF );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aKeywordRefList;
+            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) )
+            {
+                const ::rtl::OUString* pKeywords  = aKeywordList.getConstArray();
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pRefs = aKeywordRefList.getConstArray();
+                sal_Int32 i, nCount = aKeywordList.getLength();
+                DBG_ASSERT( aKeywordRefList.getLength() == nCount, "keywordlist and reflist with different length" );
+                USHORT nPos;
+                String aIndex, aSubIndex;
+
+                for ( i = 0; i < nCount; ++i )
+                {
+                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRefList = pRefs[i];
+                    const ::rtl::OUString* pRef  = aRefList.getConstArray();
+                    sal_Int32 j, nRefCount = aRefList.getLength();
+
+                    String aKeywordPair( pKeywords[i] );
+                    xub_StrLen nTokenCount = aKeywordPair.GetTokenCount();
+                    if ( 1 == nTokenCount )
+                    {
+                        for ( j = 0; j < nRefCount; ++j )
+                        {
+                            nPos = aResultsLB.InsertEntry( aKeywordPair );
+                            String* pData = new String( pRef[j] );
+                            aResultsLB.SetEntryData( nPos, (void*)(ULONG)pData );
+                        }
+                    }
+                    else if ( 2 == nTokenCount )
+                    {
+                        xub_StrLen nIdx = 0;
+                        String aToken = aKeywordPair.GetToken( 0, ';', nIdx );
+                        if ( aIndex != aToken )
+                        {
+                            aIndex = aToken;
+                            aResultsLB.InsertEntry( aIndex );
+                        }
+                        String aSubIndex( DEFINE_CONST_UNICODE("  ") );
+                        aSubIndex += aKeywordPair.GetToken( 0, ';', nIdx );
+                        for ( j = 0; j < nRefCount; ++j )
+                        {
+                            nPos = aResultsLB.InsertEntry( aSubIndex );
+                            String* pData = new String( pRef[j] );
+                            aResultsLB.SetEntryData( nPos, (void*)(ULONG)pData );
+                        }
+                    }
+                    else
+                    {
+                        DBG_ERRORFILE( "unexpected token count of a keyword" );
+                    }
+                }
+            }
+        }
+    }
+    catch( ::com::sun::star::ucb::ContentCreationException& )
+    {
+        DBG_ERRORFILE( "content creation exception" );
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "command aborted exception" );
+    }
+    catch( ::com::sun::star::uno::RuntimeException& )
+    {
+        DBG_ERRORFILE( "runtime exception" );
+    }
+    catch( ... )
+    {
+        DBG_ERRORFILE( "Any other exception" );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::ClearIndex()
+{
+    USHORT nCount = aResultsLB.GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+        delete (String*)(ULONG)aResultsLB.GetEntryData(i);
+    aResultsLB.Clear();
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
-    if ( aSize.Width() > nMinWidth )
+    long nWidth = aExpressionFT.GetPosPixel().X() + aExpressionFT.GetSizePixel().Width();
+    if ( aSize.Width() > nMinWidth || nWidth > aSize.Width() )
     {
         Point aPnt = aExpressionFT.GetPosPixel();
         Size aNewSize = aExpressionFT.GetSizePixel();
@@ -188,9 +310,24 @@ void IndexTabPage::Resize()
     }
 }
 
-// class SearchTabPage ---------------------------------------------------
+// -----------------------------------------------------------------------
 
-SearchTabPage::SearchTabPage( Window* pParent ) :
+void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+{
+    aResultsLB.SetDoubleClickHdl( rLink );
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::SetFactory( const String& rFactory )
+{
+    aFactory = rFactory;
+    InitializeIndex();
+}
+
+// class SearchTabPage_Impl ----------------------------------------------
+
+SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 
     TabPage( pParent, SfxResId( TP_HELP_SEARCH ) ),
 
@@ -218,7 +355,7 @@ SearchTabPage::SearchTabPage( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-void SearchTabPage::Resize()
+void SearchTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
     if ( aSize.Width() > aMinSize.Width() )
@@ -267,9 +404,9 @@ void SearchTabPage::Resize()
     }
 }
 
-// class SfxHelpIndexWindow ----------------------------------------------
+// class SfxHelpIndexWindow_Impl -----------------------------------------
 
-SfxHelpIndexWindow::SfxHelpIndexWindow( Window* pParent ) :
+SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
 
     Window( pParent, SfxResId( WIN_HELP_INDEX ) ),
 
@@ -285,16 +422,17 @@ SfxHelpIndexWindow::SfxHelpIndexWindow( Window* pParent ) :
 {
     FreeResource();
 
-    aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow, ActivatePageHdl ) );
+    aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
     aTabCtrl.Show();
     aTabCtrl.SetCurPageId( 1 );
     ActivatePageHdl( &aTabCtrl );
     nMinWidth = aActiveLB.GetSizePixel().Width();
+    Initialize();
 }
 
 // -----------------------------------------------------------------------
 
-SfxHelpIndexWindow::~SfxHelpIndexWindow()
+SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
     delete pCPage;
     delete pIPage;
@@ -303,7 +441,66 @@ SfxHelpIndexWindow::~SfxHelpIndexWindow()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpIndexWindow::Resize()
+void SfxHelpIndexWindow_Impl::Initialize()
+{
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetFolderContentProperties( DEFINE_CONST_UNICODE("vnd.sun.star.help://"), sal_False );
+    const ::rtl::OUString* pFacs  = aFactories.getConstArray();
+    UINT32 i, nCount = aFactories.getLength();
+    for ( i = 0; i < nCount; ++i )
+    {
+        String aRow( pFacs[i] );
+        String aTitle, aSize, aDate, aURL;
+        xub_StrLen nIdx = 0;
+        aTitle = aRow.GetToken( 0, '\t', nIdx );
+        aSize = aRow.GetToken( 0, '\t', nIdx );
+        aDate = aRow.GetToken( 0, '\t', nIdx );
+        aURL = aRow.GetToken( 0, '\t', nIdx );
+        aActiveLB.InsertEntry( aTitle );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
+{
+    const USHORT nId = pTabCtrl->GetCurPageId();
+    TabPage* pPage = NULL;
+
+    switch ( nId )
+    {
+        case 1:
+        {
+            if ( !pCPage )
+                pCPage = new ContentTabPage_Impl( &aTabCtrl );
+            pPage = pCPage;
+            break;
+        }
+
+        case 2:
+        {
+            if ( !pIPage )
+                pIPage = new IndexTabPage_Impl( &aTabCtrl );
+            pPage = pIPage;
+            break;
+        }
+
+        case 3:
+        {
+            if ( !pSPage )
+                pSPage = new SearchTabPage_Impl( &aTabCtrl );
+            pPage = pSPage;
+            break;
+        }
+    }
+
+    pTabCtrl->SetTabPage( nId, pPage );
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
     Size aNewSize;
@@ -337,56 +534,26 @@ void SfxHelpIndexWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow, ActivatePageHdl, TabControl *, pTabCtrl )
+void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    const USHORT nId = pTabCtrl->GetCurPageId();
-    TabPage* pPage = NULL;
-
-    switch ( nId )
-    {
-        case 1:
-        {
-            if ( !pCPage )
-                pCPage = new ContentTabPage( &aTabCtrl );
-            pPage = pCPage;
-            break;
-        }
-
-        case 2:
-        {
-            if ( !pIPage )
-                pIPage = new IndexTabPage( &aTabCtrl );
-            pPage = pIPage;
-            break;
-        }
-
-        case 3:
-        {
-            if ( !pSPage )
-                pSPage = new SearchTabPage( &aTabCtrl );
-            pPage = pSPage;
-            break;
-        }
-    }
-
-    pTabCtrl->SetTabPage( nId, pPage );
-
-    return 0;
+    if ( !pIPage )
+        pIPage = new IndexTabPage_Impl( &aTabCtrl );
+    pIPage->SetDoubleClickHdl( rLink );
 }
 
-// class SfxHelpTextWindow -----------------------------------------------
+// class SfxHelpTextWindow_Impl ------------------------------------------
 
-SfxHelpTextWindow::SfxHelpTextWindow( Window* pParent ) :
+SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( Window* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN ),
 
     aToolBox( this, 0 ),
-    aTextWin( this, 0 )
+    pTextWin( new Window( this, 0 ) )
 
 {
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
-    xFrame->initialize( VCLUnoHelper::GetInterface ( &aTextWin ) );
+    xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
 
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
@@ -411,21 +578,14 @@ SfxHelpTextWindow::SfxHelpTextWindow( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-SfxHelpTextWindow::~SfxHelpTextWindow()
+SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
-//! xFrame->dispose();
+    xFrame->dispose();
 }
 
 // -----------------------------------------------------------------------
 
-void SfxHelpTextWindow::Paint( const Rectangle& rRect )
-{
-    aTextWin.DrawText( Point( 3, 3 ), DEFINE_CONST_UNICODE("Hilfe!") );
-}
-
-// -----------------------------------------------------------------------
-
-void SfxHelpTextWindow::Resize()
+void SfxHelpTextWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
     Size aSize = aToolBox.GetSizePixel();
@@ -435,12 +595,12 @@ void SfxHelpTextWindow::Resize()
     long nToolBoxHeight = aSize.Height();
     aSize = aWinSize;
     aSize.Height() -= nToolBoxHeight;
-    aTextWin.SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
+    pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
 }
 
-// class SfxHelpWindow ---------------------------------------------------
+// class SfxHelpWindow_Impl ----------------------------------------------
 
-void SfxHelpWindow::Resize()
+void SfxHelpWindow_Impl::Resize()
 {
     SplitWindow::Resize();
     InitSizes();
@@ -448,7 +608,7 @@ void SfxHelpWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::Split()
+void SfxHelpWindow_Impl::Split()
 {
     SplitWindow::Split();
 
@@ -459,7 +619,7 @@ void SfxHelpWindow::Split()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::MakeLayout()
+void SfxHelpWindow_Impl::MakeLayout()
 {
     if ( nHeight > 0 )
     {
@@ -500,7 +660,7 @@ void SfxHelpWindow::MakeLayout()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::InitSizes()
+void SfxHelpWindow_Impl::InitSizes()
 {
     if ( xWindow.is() )
     {
@@ -522,7 +682,7 @@ void SfxHelpWindow::InitSizes()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::LoadConfig()
+void SfxHelpWindow_Impl::LoadConfig()
 {
     sal_Int32 nWidth;
      SvtViewOptions aViewOpt( E_WINDOW, HELPWIN_CONFIGNAME );
@@ -550,7 +710,7 @@ void SfxHelpWindow::LoadConfig()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::SaveConfig()
+void SfxHelpWindow_Impl::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_WINDOW, HELPWIN_CONFIGNAME );
 
@@ -567,9 +727,9 @@ void SfxHelpWindow::SaveConfig()
     aViewOpt.SetUserData( aUserData );
 }
 
-//-------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpWindow, SelectHdl, ToolBox* , pToolBox )
+IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
     if ( pToolBox )
     {
@@ -585,9 +745,10 @@ IMPL_LINK( SfxHelpWindow, SelectHdl, ToolBox* , pToolBox )
 
             case TBI_START :
             {
-#ifdef DEBUG
                 URL aURL;
-                aURL.Complete = DEFINE_CONST_UNICODE("file:///e:/test.sdw");
+                aURL.Complete = DEFINE_CONST_UNICODE("vnd.sun.com.help://");
+                aURL.Complete += pIndexWin->GetFactory();
+                aURL.Complete += DEFINE_CONST_UNICODE("/start");
                 String aTarget( DEFINE_CONST_UNICODE("_self") );
                 Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
                 Reference < XDispatch > xDisp = xProv.is() ?
@@ -600,13 +761,19 @@ IMPL_LINK( SfxHelpWindow, SelectHdl, ToolBox* , pToolBox )
                     aArgs[0].Value <<= bReadOnly;
                     xDisp->dispatch( aURL, aArgs );
                 }
-#endif
                 break;
             }
 
             case TBI_BACKWARD :
             case TBI_FORWARD :
+            {
+                URL aURL;
+                aURL.Complete = DEFINE_CONST_UNICODE(".uno:Backward");
+                if ( TBI_FORWARD == nId )
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Forward");
+                pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
                 break;
+            }
 
             case TBI_CONTEXT :
                 break;
@@ -630,15 +797,34 @@ IMPL_LINK( SfxHelpWindow, SelectHdl, ToolBox* , pToolBox )
     return 1;
 }
 
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
+{
+    String* pData = (String*)(ULONG)pBox->GetEntryData( pBox->GetSelectEntryPos() );
+    if ( pData )
+    {
+        URL aURL;
+        aURL.Complete = DEFINE_CONST_UNICODE("vnd.sun.star.help://swriter/");
+        aURL.Complete += *pData;
+        Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
+        if ( xDisp.is() )
+            xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+    }
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
-SfxHelpWindow::SfxHelpWindow( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+SfxHelpWindow_Impl::SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
         Window* pParent, WinBits nBits ) :
 
     SplitWindow( pParent, nBits | WB_3DLOOK ),
 
     pIndexWin       ( NULL ),
     pTextWin        ( NULL ),
+    pHelpInterceptor( new HelpInterceptor_Impl() ),
     nExpandWidth    ( 0 ),
     nCollapseWidth  ( 0 ),
     nHeight         ( 0 ),
@@ -647,21 +833,23 @@ SfxHelpWindow::SfxHelpWindow( const ::com::sun::star::uno::Reference < ::com::su
     bIndex          ( sal_True )
 
 {
-    pIndexWin = new SfxHelpIndexWindow( this );
+    pIndexWin = new SfxHelpIndexWindow_Impl( this );
+    pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->Show();
-    pTextWin = new SfxHelpTextWindow( this );
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier > xSup( rFrame, UNO_QUERY );
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrames > xFrames = xSup->getFrames();
+    pTextWin = new SfxHelpTextWindow_Impl( this );
+    Reference < XFramesSupplier > xSup( rFrame, UNO_QUERY );
+    Reference < XFrames > xFrames = xSup->getFrames();
     xFrames->append( pTextWin->getFrame() );
-    pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow, SelectHdl ) );
+    pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow_Impl, SelectHdl ) );
     pTextWin->Show();
+    pHelpInterceptor->setInterception( pTextWin->getFrame() );
 
     LoadConfig();
 }
 
 // -----------------------------------------------------------------------
 
-SfxHelpWindow::~SfxHelpWindow()
+SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
     SaveConfig();
     delete pIndexWin;
@@ -670,7 +858,7 @@ SfxHelpWindow::~SfxHelpWindow()
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
+void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
 {
     xWindow = xWin;
     MakeLayout();

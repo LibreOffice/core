@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 18:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,39 +79,48 @@ namespace com { namespace sun { namespace star { namespace awt { class XWindow; 
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 
-// class ContentTabPage --------------------------------------------------
+// class ContentTabPage_Impl ---------------------------------------------
 
-class ContentTabPage : public TabPage
+class ContentTabPage_Impl : public TabPage
 {
 private:
     Window          aContentWin;
 
 public:
-    ContentTabPage( Window* pParent );
+    ContentTabPage_Impl( Window* pParent );
 
     virtual void    Resize();
 };
 
-// class IndexTabPage ----------------------------------------------------
+// class IndexTabPage_Impl -----------------------------------------------
 
-class IndexTabPage : public TabPage
+class IndexTabPage_Impl : public TabPage
 {
 private:
-    FixedText       aExpressionFT;
-    Edit            aExpressionED;
-    ListBox         aResultsLB;
+    FixedText           aExpressionFT;
+    Edit                aExpressionED;
+    ListBox             aResultsLB;
 
-    long            nMinWidth;
+    long                nMinWidth;
+    String              aFactory;
+
+    void                InitializeIndex();
+    void                ClearIndex();
 
 public:
-    IndexTabPage( Window* pParent );
+    IndexTabPage_Impl( Window* pParent );
+    ~IndexTabPage_Impl();
 
-    virtual void    Resize();
+    virtual void        Resize();
+
+    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetFactory( const String& rFactory );
+    String              GetFactory() const { return aFactory; }
 };
 
-// class SearchTabPage ---------------------------------------------------
+// class SearchTabPage_Impl ----------------------------------------------
 
-class SearchTabPage : public TabPage
+class SearchTabPage_Impl : public TabPage
 {
 private:
     FixedText   aSearchFT;
@@ -126,14 +135,14 @@ private:
     Size        aMinSize;
 
 public:
-    SearchTabPage( Window* pParent );
+    SearchTabPage_Impl( Window* pParent );
 
     virtual void    Resize();
 };
 
-// class SfxHelpIndexWindow ----------------------------------------------
+// class SfxHelpIndexWindow_Impl -----------------------------------------
 
-class SfxHelpIndexWindow : public Window
+class SfxHelpIndexWindow_Impl : public Window
 {
 private:
     FixedText           aActiveFT;
@@ -142,36 +151,41 @@ private:
 
     TabControl          aTabCtrl;
 
-    ContentTabPage*     pCPage;
-    IndexTabPage*       pIPage;
-    SearchTabPage*      pSPage;
+    ContentTabPage_Impl*    pCPage;
+    IndexTabPage_Impl*      pIPage;
+    SearchTabPage_Impl*     pSPage;
 
     long                nMinWidth;
 
+    void                Initialize();
+
+    DECL_LINK(          ActivatePageHdl, TabControl* );
+
 public:
-    SfxHelpIndexWindow( Window* pParent );
-    ~SfxHelpIndexWindow();
+    SfxHelpIndexWindow_Impl( Window* pParent );
+    ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize();
 
-    DECL_LINK(          ActivatePageHdl, TabControl* );
+    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetFactory( const String& rFactory ) { pIPage->SetFactory( rFactory ); }
+    String              GetFactory() const { return pIPage->GetFactory(); }
 };
 
-// class SfxHelpTextWindow -----------------------------------------------
+// class SfxHelpTextWindow_Impl ------------------------------------------
 
-class SfxHelpTextWindow : public Window
+class SfxHelpTextWindow_Impl : public Window
 {
 private:
     ToolBox                 aToolBox;
-    Window                  aTextWin;
+    Window*                 pTextWin;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             xFrame;
 
 public:
-    SfxHelpTextWindow( Window* pParent );
-    ~SfxHelpTextWindow();
+    SfxHelpTextWindow_Impl( Window* pParent );
+    ~SfxHelpTextWindow_Impl();
 
-    virtual void            Paint( const Rectangle& rRect );
     virtual void            Resize();
 
     void                    SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
@@ -180,16 +194,18 @@ public:
                             getFrame() const { return xFrame; }
 };
 
-// class SfxHelpWindow ---------------------------------------------------
+// class SfxHelpWindow_Impl ----------------------------------------------
 
-class SfxHelpWindow : public SplitWindow
+class HelpInterceptor_Impl;
+class SfxHelpWindow_Impl : public SplitWindow
 {
 private:
     ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
                         xWindow;
 
-    SfxHelpIndexWindow* pIndexWin;
-    SfxHelpTextWindow*  pTextWin;
+    SfxHelpIndexWindow_Impl*    pIndexWin;
+    SfxHelpTextWindow_Impl*     pTextWin;
+    HelpInterceptor_Impl*       pHelpInterceptor;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;
@@ -208,14 +224,16 @@ private:
     void                SaveConfig();
 
     DECL_LINK(          SelectHdl, ToolBox* );
+    DECL_LINK(          OpenHdl, ListBox* );
 
 public:
-    SfxHelpWindow( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
-            Window* pParent, WinBits nBits );
-    ~SfxHelpWindow();
+    SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+                        Window* pParent, WinBits nBits );
+    ~SfxHelpWindow_Impl();
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
+    void                SetFactory( const String& rFactory ) { pIndexWin->SetFactory( rFactory ); }
 };
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
