@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:59:17 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,9 @@ void SvxStyleBox_Impl::ReleaseFocus()
 
 void SvxStyleBox_Impl::Select()
 {
+    // Tell base class about selection so that AT get informed about it.
+    ListBox::Select();
+
     if ( !IsTravelSelect() )
     {
         SfxStringItem aItem( nSlotId, GetSelectEntry() );
@@ -2925,5 +2928,3 @@ BOOL lcl_FontChangedHint( const SfxHint &rHint )
     FillList();
     return FontNameBox::CreateAccessible();
 }
-
-
