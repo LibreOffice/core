@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:48:35 $
+ *  last change: $Author: er $ $Date: 2001-04-26 10:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,12 @@ public:
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const String& rComment );
     void            ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,BOOL bPrevNext=TRUE );
+                    /// Protect/unprotect ChangeTrack and return <TRUE/> if
+                    /// protection was successfully changed.
+                    /// If bJustQueryIfProtected==TRUE protection is not
+                    /// changed and <TRUE/> is returned if not protected or
+                    /// password was entered correctly.
+    BOOL            ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected = FALSE );
 
     void            SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages );
     BOOL            AdjustPrintZoom( const ScRange& rRange );
