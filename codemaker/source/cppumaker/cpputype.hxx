@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:12:11 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,10 @@ public:
         throw (CannotDumpException);
 
 private:
+    virtual void addSpecialDependencies();
+
+    bool isDefaultConstructor(sal_uInt16 ctorIndex) const;
+
     bool hasRestParameter(sal_uInt16 ctorIndex) const;
 
     void dumpCatchClauses(
