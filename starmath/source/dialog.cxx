@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-05 09:05:48 $
+ *  last change: $Author: tl $ $Date: 2002-04-24 10:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
+#ifndef _SV_WALL_HXX
+#include <vcl/wall.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -347,8 +353,10 @@ SfxTabPage* SmPrintOptionsTabPage::Create(Window* pWindow, const SfxItemSet& rSe
 /**************************************************************************/
 
 
-void SmShowFont::Paint(const Rectangle&)
+void SmShowFont::Paint(const Rectangle& rRect )
 {
+    Control::Paint( rRect );
+
     XubString   Text (GetFont().GetName());
     Size    TextSize(GetTextWidth(Text), GetTextHeight());
 
@@ -359,12 +367,16 @@ void SmShowFont::Paint(const Rectangle&)
 
 void SmShowFont::SetFont(const Font& rFont)
 {
+    Color aTxtColor( GetTextColor() );
     Font aFont (rFont);
 
     Invalidate();
     aFont.SetSize(Size(0, 24));
     aFont.SetAlign(ALIGN_TOP);
     Control::SetFont(aFont);
+
+    // keep old text color (new font may have different color)
+    SetTextColor( aTxtColor );
 }
 
 
@@ -456,9 +468,11 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
         Face.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
         Face.SetTransparent(TRUE);
 
-        Wallpaper aWhiteWall( (Color) Color(COL_WHITE) );
-        aShowFont.SetBackground( aWhiteWall );
+        InitColor_Impl();
+
+        // preview like controls should have a 2D look
         aShowFont.SetBorderStyle( WINDOW_BORDER_MONO );
+
         //Application::LeaveWait();
     }
 
@@ -466,6 +480,36 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
     aFontBox.SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
     aBoldCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
     aItalicCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
+}
+
+void SmFontDialog::InitColor_Impl()
+{
+#ifdef DEBUG
+    Color aBC( GetBackground().GetColor() );
+#endif
+    ColorData   nBgCol  = COL_WHITE,
+                nTxtCol = COL_BLACK;
+    if (GetBackground().GetColor().IsDark())
+    {
+        const StyleSettings &rS = GetSettings().GetStyleSettings();
+        nBgCol  = rS.GetFieldColor().GetColor();
+        nTxtCol = rS.GetFieldTextColor().GetColor();
+    }
+
+    Wallpaper aWall( Color( (ColorData) nBgCol ) );
+    Color aTxtColor( nTxtCol );
+    aShowFont.SetBackground( aWall );
+    aShowFont.SetTextColor( aTxtColor );
+}
+
+
+void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS  &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitColor_Impl();
+
+    ModalDialog::DataChanged( rDCEvt );
 }
 
 /**************************************************************************/
@@ -978,6 +1022,7 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     if (bFreeRes)
         FreeResource();
 
+    // preview like controls should have a 2D look
     aBitmap.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aMetricField1.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
@@ -1160,6 +1205,7 @@ void SmShowSymbolSet::Paint(const Rectangle&)
     int v        = (int) (aVScrollBar.GetThumbPos() * nColumns);
     int nSymbols = (int) aSymbolSet.GetCount();
 
+    Color aTxtColor( GetTextColor() );
     for (int i = v; i < nSymbols ; i++)
     {
         SmSym    aSymbol (aSymbolSet.GetSymbol(i));
@@ -1169,6 +1215,8 @@ void SmShowSymbolSet::Paint(const Rectangle&)
         // (hoffentlich auch genug für links und rechts!)
         aFont.SetSize(Size(0, nLen - (nLen / 3)));
         SetFont(aFont);
+        // keep text color
+        SetTextColor( aTxtColor );
 
         int   nIV   = i - v;
         Size  aSize(GetTextWidth(aSymbol.GetCharacter()), GetTextHeight());
@@ -1327,6 +1375,7 @@ void SmShowSymbolSet::SelectSymbol(USHORT nSymbol)
     Update();
 }
 
+
 IMPL_LINK( SmShowSymbolSet, ScrollHdl, ScrollBar*, pScrollBar)
 {
     Invalidate();
@@ -1335,8 +1384,10 @@ IMPL_LINK( SmShowSymbolSet, ScrollHdl, ScrollBar*, pScrollBar)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void SmShowSymbol::Paint(const Rectangle&)
+void SmShowSymbol::Paint(const Rectangle &rRect)
 {
+    Control::Paint( rRect );
+
     const XubString &rText = GetText();
     Size            aTextSize(GetTextWidth(rText), GetTextHeight());
 
@@ -1358,9 +1409,14 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
     if (pSymbol)
     {
+        Color aTxtColor( GetTextColor() );
+
         Font aFont (pSymbol->GetFace());
         aFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
         SetFont(aFont);
+
+        // keep old text color (font may have different color set)
+        SetTextColor(aTxtColor);
 
         SetText(XubString(pSymbol->GetCharacter()));
     }
@@ -1370,6 +1426,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
     // der Anzeige
     Invalidate();
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1500,11 +1557,10 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
     if (aSymbolSets.GetEntryCount() > 0)
         SelectSymbolSet(aSymbolSets.GetEntry(0));
 
-    // set background color to white
-    Wallpaper aWhiteWall( (Color) Color(COL_WHITE) );
-    aSymbolDisplay   .SetBackground( aWhiteWall );
-    aSymbolDisplay   .SetBorderStyle( WINDOW_BORDER_MONO );
-    aSymbolSetDisplay.SetBackground( aWhiteWall );
+    InitColor_Impl();
+
+    // preview like controls should have a 2D look
+    aSymbolDisplay.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aSymbolSets      .SetSelectHdl  (LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
     aSymbolSetDisplay.SetSelectHdl  (LINK(this, SmSymbolDialog, SymbolChangeHdl));
@@ -1519,6 +1575,39 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
 SmSymbolDialog::~SmSymbolDialog()
 {
     rSymSetMgr.Save();
+}
+
+
+void SmSymbolDialog::InitColor_Impl()
+{
+#ifdef DEBUG
+    Color aBC( GetBackground().GetColor() );
+#endif
+    ColorData   nBgCol  = COL_WHITE,
+                nTxtCol = COL_BLACK;
+    if (GetBackground().GetColor().IsDark())
+    {
+        const StyleSettings &rS = GetSettings().GetStyleSettings();
+        nBgCol  = rS.GetFieldColor().GetColor();
+        nTxtCol = rS.GetFieldTextColor().GetColor();
+    }
+
+    Wallpaper aWall( Color( (ColorData) nBgCol ) );
+    Color aTxtColor( nTxtCol );
+    aSymbolDisplay   .SetBackground( aWall );
+    aSymbolDisplay   .SetTextColor( aTxtColor );
+    aSymbolSetDisplay.SetBackground( aWall );
+    aSymbolSetDisplay.SetTextColor( aTxtColor );
+}
+
+
+void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS  &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitColor_Impl();
+
+    ModalDialog::DataChanged( rDCEvt );
 }
 
 
@@ -1570,10 +1659,11 @@ const SmSym * SmSymbolDialog::GetSymbol() const
 ////////////////////////////////////////////////////////////////////////////////
 
 
-void SmShowChar::Paint(const Rectangle&)
+void SmShowChar::Paint(const Rectangle &rRect)
 {
-    XubString Text (GetText ());
+    Control::Paint( rRect );
 
+    XubString Text (GetText ());
     if (Text.Len() > 0)
     {
         Size aTextSize(GetTextWidth(Text), GetTextHeight());
@@ -1593,12 +1683,17 @@ void SmShowChar::SetChar(xub_Unicode aChar)
 
 void SmShowChar::SetFont(const Font &rFont)
 {
+    Color aTxtColor( GetTextColor() );
+
     Font  aFont (rFont);
     Size  aSize (Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 
     aFont.SetSize(aSize);
     aFont.SetTransparent(TRUE);
     Control::SetFont(aFont);
+
+    // keep text color (new font may have different one)
+    SetTextColor( aTxtColor );
 
     Invalidate();
 }
@@ -2033,11 +2128,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     if (aFonts.GetEntryCount() > 0)
         SelectFont(aFonts.GetEntry(0));
 
-    // set background color to white
-    Wallpaper aWhiteWall( (Color) Color(COL_WHITE) );
-    aCharsetDisplay  .SetBackground( aWhiteWall );
-    aOldSymbolDisplay.SetBackground( aWhiteWall );
-    aOldSymbolDisplay.SetBackground( aWhiteWall );
+    InitColor_Impl();
 
     SetSymbolSetManager(rSymSetMgr);
 
@@ -2055,6 +2146,10 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     aChangeBtn     .SetClickHdl (LINK(this, SmSymDefineDialog, ChangeClickHdl));
     aDeleteBtn     .SetClickHdl (LINK(this, SmSymDefineDialog, DeleteClickHdl));
     aCharsetDisplay.SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
+
+    // preview like controls should have a 2D look
+    aOldSymbolDisplay.SetBorderStyle( WINDOW_BORDER_MONO );
+    aSymbolDisplay   .SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 
@@ -2063,6 +2158,41 @@ SmSymDefineDialog::~SmSymDefineDialog()
     delete pFontList;
     delete pSubsetMap;
     delete pOrigSymbol;
+}
+
+
+void SmSymDefineDialog::InitColor_Impl()
+{
+#ifdef DEBUG
+    Color aBC( GetBackground().GetColor() );
+#endif
+    ColorData   nBgCol  = COL_WHITE,
+                nTxtCol = COL_BLACK;
+    if (GetBackground().GetColor().IsDark())
+    {
+        const StyleSettings &rS = GetSettings().GetStyleSettings();
+        nBgCol  = rS.GetFieldColor().GetColor();
+        nTxtCol = rS.GetFieldTextColor().GetColor();
+    }
+
+    Wallpaper aWall( Color( (ColorData) nBgCol ) );
+    Color aTxtColor( nTxtCol );
+    aCharsetDisplay  .SetBackground( aWall );
+    aCharsetDisplay  .SetTextColor( aTxtColor );
+    aOldSymbolDisplay.SetBackground( aWall );
+    aOldSymbolDisplay.SetTextColor( aTxtColor );
+    aSymbolDisplay   .SetBackground( aWall );
+    aSymbolDisplay   .SetTextColor( aTxtColor );
+}
+
+
+void SmSymDefineDialog::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS  &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitColor_Impl();
+
+    ModalDialog::DataChanged( rDCEvt );
 }
 
 
