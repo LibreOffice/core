@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:57:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 // pass this to XclObjComment() for processing.
                 pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
 
-                pScNote->InsertObject(pCaption.get(), rDoc, rScPos.Tab());
+                pScNote->InsertObject(pCaption.get(), rDoc, rScPos.Tab(), sal_True);
                 (pCaption.get())->SetMergedItemSet(rSet);
             }
 
