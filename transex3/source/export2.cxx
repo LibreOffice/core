@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:39:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,11 @@
 #include "export.hxx"
 #include "utf8conv.hxx"
 #include <tools/datetime.hxx>
-#include <tools/l2txtenc.hxx>
 #include <bootstrp/appdef.hxx>
-
+#include <tools/isofallback.hxx>
+#include <stdio.h>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
 //
 // class ResData();
 //
@@ -75,28 +77,32 @@ ResData::~ResData()
     if ( pStringList ) {
         // delete existing res. of type StringList
         for ( ULONG i = 0; i < pStringList->Count(); i++ ) {
-            delete [] pStringList->GetObject( i );
+            ExportListEntry* test = pStringList->GetObject( i );
+            if( test != NULL ) delete test;
         }
         delete pStringList;
     }
     if ( pFilterList ) {
         // delete existing res. of type FilterList
         for ( ULONG i = 0; i < pFilterList->Count(); i++ ) {
-            delete [] pFilterList->GetObject( i );
+            ExportListEntry* test = pFilterList->GetObject( i );
+            delete test;
         }
         delete pFilterList;
     }
     if ( pItemList ) {
         // delete existing res. of type ItemList
         for ( ULONG i = 0; i < pItemList->Count(); i++ ) {
-            delete [] pItemList->GetObject( i );
+            ExportListEntry* test = pItemList->GetObject( i );
+            delete test;
         }
         delete pItemList;
     }
     if ( pUIEntries ) {
         // delete existing res. of type UIEntries
         for ( ULONG i = 0; i < pUIEntries->Count(); i++ ) {
-            delete [] pUIEntries->GetObject( i );
+            ExportListEntry* test = pUIEntries->GetObject( i );
+            delete test;
         }
         delete pUIEntries;
     }
@@ -111,55 +117,12 @@ ByteString Export::sLanguages;
 ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
-/*****************************************************************************/
-USHORT Export::LangId[ LANGUAGES ] =
-/*****************************************************************************/
-{
-    // translation table: Index <=> LangId
-    COMMENT,
-    ENGLISH_US,
-    PORTUGUESE,
-    GERMAN_DE,
-    RUSSIAN,
-    GREEK,
-    DUTCH,
-    FRENCH,
-    SPANISH,
-    FINNISH,
-    HUNGARIAN,
-    ITALIAN,
-    CZECH,
-    SLOVAK,
-    ENGLISH,
-    DANISH,
-    SWEDISH,
-    NORWEGIAN,
-    POLISH,
-    GERMAN,
-    PORTUGUESE_BRAZILIAN,
-    JAPANESE,
-    KOREAN,
-    CHINESE_SIMPLIFIED,
-    CHINESE_TRADITIONAL,
-    TURKISH,
-    ARABIC,
-    HEBREW,
-    CATALAN,
-    THAI,
-    HINDI,
-    ESTONIAN,
-    SLOVENIAN,
-    EXTERN
-};
-
 
 /*****************************************************************************/
 USHORT Export::GetLangIndex( USHORT nLangId )
 /*****************************************************************************/
 {
-    for ( USHORT i = 0; i < LANGUAGES; i++ )
-        if ( nLangId == LangId[ i ] )
-            return i;
+    // removeme
     return 0xFFFF;
 }
 
@@ -167,7 +130,9 @@ USHORT Export::GetLangIndex( USHORT nLangId )
 CharSet Export::GetCharSet( USHORT nLangId )
 /*****************************************************************************/
 {
-    return Langcode2TextEncoding( nLangId );
+    // removeme
+    //return Langcode2TextEncoding( nLangId );
+    return 0;
 }
 
 /*****************************************************************************/
@@ -175,118 +140,28 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
 /*****************************************************************************/
 {
     ByteString sLang( rIsoLang );
-
     sLang.ToUpperAscii();
-
-    if ( sLang == ByteString( COMMENT_ISO ).ToUpperAscii())
-        return COMMENT;
-    else if ( sLang == ByteString( ENGLISH_US_ISO ).ToUpperAscii())
-        return ENGLISH_US;
-    else if ( sLang == ByteString( PORTUGUESE_ISO ).ToUpperAscii())
-        return PORTUGUESE;
-    else if ( sLang == ByteString( RUSSIAN_ISO ).ToUpperAscii())
-        return RUSSIAN;
-    else if ( sLang == ByteString( GREEK_ISO ).ToUpperAscii())
-        return GREEK;
-    else if ( sLang == ByteString( DUTCH_ISO ).ToUpperAscii())
-        return DUTCH;
-    else if ( sLang == ByteString( FRENCH_ISO ).ToUpperAscii())
-        return FRENCH;
-    else if ( sLang == ByteString( SPANISH_ISO ).ToUpperAscii())
-        return SPANISH;
-    else if ( sLang == ByteString( FINNISH_ISO ).ToUpperAscii())
-        return FINNISH;
-    else if ( sLang == ByteString( HUNGARIAN_ISO ).ToUpperAscii())
-        return HUNGARIAN;
-    else if ( sLang == ByteString( ITALIAN_ISO ).ToUpperAscii())
-        return ITALIAN;
-    else if ( sLang == ByteString( CZECH_ISO ).ToUpperAscii())
-        return CZECH;
-    else if ( sLang == ByteString( SLOVAK_ISO ).ToUpperAscii())
-        return SLOVAK;
-    else if ( sLang == ByteString( SLOVENIAN_ISO ).ToUpperAscii())
-        return SLOVENIAN;
-    else if ( sLang == ByteString( ENGLISH_ISO ).ToUpperAscii())
-        return ENGLISH;
-    else if ( sLang == ByteString( DANISH_ISO ).ToUpperAscii())
-        return DANISH;
-    else if ( sLang == ByteString( SWEDISH_ISO ).ToUpperAscii())
-        return SWEDISH;
-    else if ( sLang == ByteString( NORWEGIAN_ISO ).ToUpperAscii())
-        return NORWEGIAN;
-    else if ( sLang == ByteString( POLISH_ISO ).ToUpperAscii())
-        return POLISH;
-    else if ( sLang == ByteString( GERMAN_ISO ).ToUpperAscii())
-        return GERMAN;
-    else if ( sLang == ByteString( PORTUGUESE_BRAZILIAN_ISO ).ToUpperAscii())
-        return PORTUGUESE_BRAZILIAN;
-    else if ( sLang == ByteString( JAPANESE_ISO ).ToUpperAscii())
-        return JAPANESE;
-    else if ( sLang == ByteString( KOREAN_ISO ).ToUpperAscii())
-        return KOREAN;
-    else if ( sLang == ByteString( CHINESE_SIMPLIFIED_ISO ).ToUpperAscii())
-        return CHINESE_SIMPLIFIED;
-    else if ( sLang == ByteString( CHINESE_TRADITIONAL_ISO ).ToUpperAscii())
-        return CHINESE_TRADITIONAL;
-    else if ( sLang == ByteString( TURKISH_ISO ).ToUpperAscii())
-        return TURKISH;
-    else if ( sLang == ByteString( ARABIC_ISO ).ToUpperAscii())
-        return ARABIC;
-    else if ( sLang == ByteString( HEBREW_ISO ).ToUpperAscii())
-        return HEBREW;
-    else if ( sLang == ByteString( CATALAN_ISO ).ToUpperAscii())
-        return CATALAN;
-    else if ( sLang == ByteString( THAI_ISO ).ToUpperAscii())
-        return THAI;
-    else if ( sLang == ByteString( HINDI_ISO ).ToUpperAscii())
-        return HINDI;
-    else if ( sLang == ByteString( ESTONIAN_ISO ).ToUpperAscii())
-        return ESTONIAN;
-    else if ( sLang == ByteString( sIsoCode99 ).ToUpperAscii())
-        return EXTERN;
-
     return 0xFFFF;
 }
+/*****************************************************************************/
+void Export::SetLanguages( std::vector<ByteString> val ){
+/*****************************************************************************/
+    aLanguages = val;
+    isInitialized = true;
+}
+/*****************************************************************************/
+std::vector<ByteString> Export::GetLanguages(){
+/*****************************************************************************/
+    return aLanguages;
+}
+
+std::vector<ByteString> Export::aLanguages = std::vector<ByteString>();
 
 /*****************************************************************************/
 ByteString Export::GetIsoLangByIndex( USHORT nIndex )
 /*****************************************************************************/
 {
-    switch ( nIndex ) {
-        case COMMENT_INDEX: return COMMENT_ISO;
-        case ENGLISH_US_INDEX: return ENGLISH_US_ISO;
-        case PORTUGUESE_INDEX: return PORTUGUESE_ISO;
-        case RUSSIAN_INDEX: return RUSSIAN_ISO;
-        case GREEK_INDEX: return GREEK_ISO;
-        case DUTCH_INDEX: return DUTCH_ISO;
-        case FRENCH_INDEX: return FRENCH_ISO;
-        case SPANISH_INDEX: return SPANISH_ISO;
-        case FINNISH_INDEX: return FINNISH_ISO;
-        case HUNGARIAN_INDEX: return HUNGARIAN_ISO;
-        case ITALIAN_INDEX: return ITALIAN_ISO;
-        case CZECH_INDEX: return CZECH_ISO;
-        case SLOVAK_INDEX: return SLOVAK_ISO;
-        case ENGLISH_INDEX: return ENGLISH_ISO;
-        case DANISH_INDEX: return DANISH_ISO;
-        case SWEDISH_INDEX: return SWEDISH_ISO;
-        case NORWEGIAN_INDEX: return NORWEGIAN_ISO;
-        case POLISH_INDEX: return POLISH_ISO;
-        case GERMAN_INDEX: return GERMAN_ISO;
-        case PORTUGUESE_BRAZILIAN_INDEX: return PORTUGUESE_BRAZILIAN_ISO;
-        case JAPANESE_INDEX: return JAPANESE_ISO;
-        case KOREAN_INDEX: return KOREAN_ISO;
-        case CHINESE_SIMPLIFIED_INDEX: return CHINESE_SIMPLIFIED_ISO;
-        case CHINESE_TRADITIONAL_INDEX: return CHINESE_TRADITIONAL_ISO;
-        case TURKISH_INDEX: return TURKISH_ISO;
-        case ARABIC_INDEX: return ARABIC_ISO;
-        case HEBREW_INDEX: return HEBREW_ISO;
-        case CATALAN_INDEX: return CATALAN_ISO;
-        case THAI_INDEX: return THAI_ISO;
-        case HINDI_INDEX: return HINDI_ISO;
-        case ESTONIAN_INDEX: return ESTONIAN_ISO;
-        case SLOVENIAN_INDEX: return SLOVENIAN_ISO;
-        case EXTERN_INDEX: return sIsoCode99;
-    }
+// remove me
     return "";
 }
 
@@ -378,121 +253,80 @@ void Export::UnquotHTML( ByteString &rString )
 }
 
 /*****************************************************************************/
-const ByteString Export::LangName[ LANGUAGES ] =
+bool Export::LanguageAllowed( const ByteString &nLanguage )
 /*****************************************************************************/
 {
-    "language_user1",
-    "english_us",
-    "portuguese",
-    "german_de",
-    "russian",
-    "greek",
-    "dutch",
-    "french",
-    "spanish",
-    "finnish",
-    "hungarian",
-    "italian",
-    "czech",
-    "slovak",
-    "english",
-    "danish",
-    "swedish",
-    "norwegian",
-    "polish",
-    "german",
-    "portuguese_brazilian",
-    "japanese",
-    "korean",
-    "chinese_simplified",
-    "chinese_traditional",
-    "turkish",
-    "arabic",
-    "hebrew",
-    "catalan",
-    "thai",
-    "hindi",
-    "estonian",
-    "slovenian",
-    "extern"
-};
-
-/*****************************************************************************/
-BOOL Export::LanguageAllowed( USHORT nLanguage )
-/*****************************************************************************/
-{
-    if ( !sLanguages.Len() && ( nLanguage != 99 ))
-        return TRUE;
-
-    for ( USHORT i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
-        if ( nLanguage ==
-            sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
-            return TRUE;
-
-    return FALSE;
+    return std::find( aLanguages.begin() , aLanguages.end() , nLanguage ) != aLanguages.end();
 }
 
+bool Export::isInitialized = false;
+
 /*****************************************************************************/
-USHORT Export::GetFallbackLanguage( USHORT nLanguage )
+void Export::InitLanguages( bool bMergeMode ){
+/*****************************************************************************/
+    ByteString sTmp;
+    ByteStringBoolHashMap aEnvLangs;
+    for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
+        sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
+        sTmp.EraseLeadingAndTrailingChars();
+        if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
+        else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
+            aLanguages.push_back( sTmp );
+    }
+    isInitialized = true;
+}
+
+
+/*****************************************************************************/
+ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
 /*****************************************************************************/
 {
-    for ( USHORT i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
-        if ( nLanguage ==
-            sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
-        {
-            if ( sLanguages.GetToken( i, ',' ).GetTokenCount( '=' ) > 1 )
-                return
-                    (USHORT)( sLanguages.GetToken( i, ',' ).GetToken( 1, '=' ).ToInt32());
-            else
-                return nLanguage;
-        }
-
-    return nLanguage;
+    ByteString sFallback=nLanguage;
+    GetIsoFallback( sFallback );
+    return sFallback;
 }
 
 /*****************************************************************************/
 void Export::FillInFallbacks( ResData *pResData )
 /*****************************************************************************/
 {
-    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
-            USHORT nFallbackIndex =
-                GetLangIndex( GetFallbackLanguage( LangId[ i ] ));
-            if (( nFallbackIndex < LANGUAGES)  && ( i != nFallbackIndex )) {
-                CharSet eSource =
-                    Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
-                CharSet eDest =
-                    Export::GetCharSet( Export::LangId[ i ] );
+    ByteString sCur;
+    for( long int n = 0; n < aLanguages.size(); n++ ){
+        sCur = aLanguages[ n ];
+        if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
+            ByteString nFallbackIndex = GetFallbackLanguage( sCur );
+            if( nFallbackIndex.Len() ){
+                if ( !pResData->sText[ sCur ].Len())
+                    pResData->sText[ sCur ] =
+                        pResData->sText[ nFallbackIndex ];
 
-                if ( !pResData->sText[ i ].Len())
-                    pResData->sText[ i ] = UTF8Converter::ConvertFromUTF8(
-                        UTF8Converter::ConvertToUTF8(
-                        pResData->sText[ nFallbackIndex ], eSource ), eDest );
-                if ( !pResData->sHelpText[ i ].Len())
-                    pResData->sHelpText[ i ] = UTF8Converter::ConvertFromUTF8(
-                        UTF8Converter::ConvertToUTF8(
-                        pResData->sHelpText[ nFallbackIndex ], eSource ), eDest );
-                if ( !pResData->sQuickHelpText[ i ].Len())
-                    pResData->sQuickHelpText[ i ] = UTF8Converter::ConvertFromUTF8(
-                        UTF8Converter::ConvertToUTF8(
-                        pResData->sQuickHelpText[ nFallbackIndex ], eSource ), eDest );
-                if ( !pResData->sTitle[ i ].Len())
-                    pResData->sTitle[ i ] = UTF8Converter::ConvertFromUTF8(
-                        UTF8Converter::ConvertToUTF8(
-                        pResData->sTitle[ nFallbackIndex ], eSource ), eDest );
+                if ( !pResData->sHelpText[ sCur ].Len())
+                    pResData->sHelpText[ sCur ] =
+                        pResData->sHelpText[ nFallbackIndex ];
+
+                if ( !pResData->sQuickHelpText[ sCur ].Len())
+                    pResData->sQuickHelpText[ sCur ] =
+                        pResData->sQuickHelpText[ nFallbackIndex ];
+
+                if ( !pResData->sTitle[ sCur ].Len())
+                    pResData->sTitle[ sCur ] =
+                        pResData->sTitle[ nFallbackIndex ];
 
                 if ( pResData->pStringList )
                     FillInListFallbacks(
-                        pResData->pStringList, i, nFallbackIndex );
+                        pResData->pStringList, sCur, nFallbackIndex );
+
                 if ( pResData->pFilterList )
                     FillInListFallbacks(
-                        pResData->pFilterList, i, nFallbackIndex );
+                        pResData->pFilterList, sCur, nFallbackIndex );
+
                 if ( pResData->pItemList )
                     FillInListFallbacks(
-                        pResData->pItemList, i, nFallbackIndex );
+                        pResData->pItemList, sCur, nFallbackIndex );
+
                 if ( pResData->pUIEntries )
                     FillInListFallbacks(
-                        pResData->pUIEntries, i, nFallbackIndex );
+                        pResData->pUIEntries, sCur, nFallbackIndex );
             }
         }
     }
@@ -500,20 +334,14 @@ void Export::FillInFallbacks( ResData *pResData )
 
 /*****************************************************************************/
 void Export::FillInListFallbacks(
-    ExportList *pList, USHORT nSource, USHORT nFallback )
+    ExportList *pList, const ByteString &nSource, const ByteString &nFallback )
 /*****************************************************************************/
 {
-    CharSet eSource =
-        Export::GetCharSet( Export::LangId[ nFallback ] );
-    CharSet eDest =
-        Export::GetCharSet( Export::LangId[ nSource ] );
 
     for ( ULONG i = 0; i < pList->Count(); i++ ) {
         ExportListEntry *pEntry = pList->GetObject( i );
         if ( !( *pEntry )[ nSource ].Len())
-             ( *pEntry )[ nSource ] = UTF8Converter::ConvertFromUTF8(
-                    UTF8Converter::ConvertToUTF8(
-                    ( *pEntry )[ nFallback ], eSource ), eDest );
+             ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
     }
 }
 
@@ -522,16 +350,12 @@ ByteString Export::GetTimeStamp()
 /*****************************************************************************/
 {
 //  return "xx.xx.xx";
+    char buf[20];
+    Time aTime;
 
-       Time aTime;
-    ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
-    sTimeStamp += " ";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
-    sTimeStamp += ":";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
-    sTimeStamp += ":";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
-    return sTimeStamp;
+    snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d\n", Date().GetDate(),
+        aTime.GetHour(), aTime.GetMin(), aTime.GetSec());
+    return ByteString(buf);
 }
 
 /*****************************************************************************/
@@ -593,6 +417,18 @@ DirEntry Export::GetTempFile()
 //  String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
     String sTempDir( String::CreateFromAscii( "/tmp" ));
 #endif
-    DirEntry aTemp( sTempDir );
-    return aTemp.TempName();
+
+    rtl::OUString* sTempFilename = new rtl::OUString();
+    int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
+    if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
+    ByteString sTmp( sTempFilename->getStr() , RTL_TEXTENCODING_UTF8 );
+#ifdef WNT
+    sTmp.SearchAndReplace("file:///","");
+    sTmp.SearchAndReplaceAll('/','\\');
+#else
+    sTmp.SearchAndReplace("file://","");
+#endif
+    DirEntry aDirEntry( sTmp );
+    delete sTempFilename;
+    return aDirEntry;
 }
