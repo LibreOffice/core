@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:33:27 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
             while(pMed)
             {
                 String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                sFileName += pMed->GetFilter()->GetFilterName();
+                sFileName += sfx2::cTokenSeperator;
+        sFileName += pMed->GetFilter()->GetFilterName();
                 sFileName += sfx2::cTokenSeperator;
                 pFileNames[nPos++] = sFileName;
                 pMed = pMedList->Next();
