@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:49:30 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,24 @@
 #endif
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
+#endif
+#ifndef _FMTINFMT_HXX
+#include <fmtinfmt.hxx>
+#endif
+#ifndef _TXTINET_HXX
+#include <txtinet.hxx>
+#endif
+#ifndef _FMTURL_HXX
+#include <fmturl.hxx>
+#endif
+#ifndef _IMAP_HXX
+#include <svtools/imap.hxx>
+#endif
+#ifndef _GOODIES_IMAPOBJ_HXX
+#include <svtools/imapobj.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _MDIEXP_HXX
@@ -2160,6 +2178,90 @@ void SwWW8Writer::StoreDoc1()
     WriteFkpPlcUsw();                   // FKP, PLC, .....
 }
 
+void SwWW8Writer::AddLinkTarget(const String& rURL)
+{
+    if( !rURL.Len() || rURL.GetChar(0) != INET_MARK_TOKEN )
+        return;
+
+    String aURL( BookmarkToWriter( rURL.Copy( 1 ) ) );
+    xub_StrLen nPos = aURL.SearchBackward( cMarkSeperator );
+
+    if( nPos < 2 )
+        return;
+
+    String sCmp( aURL.Copy( nPos+1 ) );
+    sCmp.EraseAllChars();
+    if( !sCmp.Len() )
+        return;
+
+    sCmp.ToLowerAscii();
+
+    if( sCmp.EqualsAscii( pMarkToOutline ) )
+    {
+        SwPosition aPos( *pCurPam->GetPoint() );
+        String aOutline( BookmarkToWriter(aURL.Copy( 0, nPos )) );
+        // If we can find the outline this bookmark refers to
+        // save the name of the bookmark and the
+        // node index number of where it points to
+        if( pDoc->GotoOutline( aPos, aOutline ) )
+        {
+            ULONG nIdx = aPos.nNode.GetIndex();
+            aPair aImplicitBookmark;
+            aImplicitBookmark.first = aOutline;
+            aImplicitBookmark.second = nIdx;
+            maImplicitBookmarks.push_back(aImplicitBookmark);
+        }
+    }
+}
+
+void SwWW8Writer::AddBookmark(String sBkmkName)
+{
+    pBkmks->Append(Fc2Cp(Strm().Tell()), BookmarkToWord(sBkmkName));
+}
+
+void SwWW8Writer::CollectOutlineBookmarks(const SwDoc &rDoc)
+{
+    const SwFmtINetFmt* pINetFmt;
+    const SwTxtINetFmt* pTxtAttr;
+    const SwTxtNode* pTxtNd;
+
+    USHORT n, nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    for( n = 0; n < nMaxItems; ++n )
+    {
+        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem(
+            RES_TXTATR_INETFMT, n ) ) &&
+            0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
+            0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
+            pTxtNd->GetNodes().IsDocNodes() )
+        {
+            AddLinkTarget( pINetFmt->GetValue() );
+        }
+    }
+
+    const SwFmtURL *pURL;
+    nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_URL );
+    for( n = 0; n < nMaxItems; ++n )
+    {
+        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem(
+            RES_URL, n ) ) )
+        {
+            AddLinkTarget( pURL->GetURL() );
+            const ImageMap *pIMap = pURL->GetMap();
+            if( pIMap )
+            {
+                for( USHORT i=0; i<pIMap->GetIMapObjectCount(); i++ )
+                {
+                    const IMapObject* pObj = pIMap->GetIMapObject( i );
+                    if( pObj )
+                    {
+                        AddLinkTarget( pObj->GetURL() );
+                    }
+                }
+            }
+        }
+    }
+}
+
 ULONG SwWW8Writer::StoreDoc()
 {
     nCharFmtStart = ANZ_DEFAULT_STYLES;
@@ -2344,6 +2446,8 @@ ULONG SwWW8Writer::StoreDoc()
         maFrames = GetAllFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
     else
         maFrames = GetNonDrawingFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
+
+    CollectOutlineBookmarks(*pDoc);
 
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
