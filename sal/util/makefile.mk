@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:47:20 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:48:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,21 +66,21 @@ $(PRJPCH)=
 
 PRJNAME=sal
 TARGET=sal
+
 NO_BSYMBOLIC=TRUE
 NO_DEFAULT_STL=TRUE
-USE_LDUMP2=TRUE
 
-.IF "$(GUI)"!="OS2"
+USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
-.ENDIF
 
 .IF "$(GUI)"=="UNX"
 TARGETTYPE=CUI
-.ENDIF
+.ENDIF # UNX
 
 UNIXVERSIONNAMES=UDK
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 .IF "$(depend)" == ""
@@ -92,22 +92,31 @@ UNIXVERSIONNAMES=UDK
 CHECKFORPIC=
 
 .IF "$(header)" == ""
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
 
-.IF "$(GUI)"!="WIN"
-LIB1FILES+=$(SLB)$/textenc.lib 
-.ENDIF
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1FILES=	\
+    $(SLB)$/oslall.lib	\
+    $(SLB)$/cpposl.lib	\
+    $(SLB)$/cpprtl.lib	\
+    $(SLB)$/textenc.lib 
+
+#.IF "$(GUI)"=="UNX"
+#LIB1FILES+=$(SLB)$/systoolsunx.lib
+#.ENDIF # UNX
+
 
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
-LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
+LIB3FILES=	\
+    $(LB)$/oslall.lib	\
+    $(LB)$/cpposl.lib	\
+    $(LB)$/cpprtl.lib	\
+    $(LB)$/textenc.lib
 
-#.IF "$(UPDATER)"!=""
-.IF "$(GUI)"!="WIN"
-LIB3FILES+=$(LB)$/textenc.lib
-.ENDIF
-#.ENDIF
+#.IF "$(GUI)"=="UNX"
+#LIB3FILES+=$(LB)$/systoolsunx.lib
+#.ENDIF # UNX
+
 
 SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
@@ -127,38 +136,25 @@ SHL1STDLIBS=	\
                 ole32.lib
 .ELSE
 SHL1STDLIBS= -luwinapi.lib -ladvapi32 -lwsock32 -lmpr -lole32
-.ENDIF
-.ENDIF
-
-.IF "$(GUI)"=="WIN"
-SHL1STDLIBS= winsock.lib
-.ENDIF
-
-
+.ENDIF # GCC
+.ENDIF # WNT
 
 .IF "$(GUI)"=="MAC"
 SHL1STDLIBS=-L$(shell $(UNIX2MACPATH) $(MW_HOME)$/Metrowerks\ CodeWarrior$/MacOS\ Support$/OpenTransport$/Open\ Tpt\ Client\ Developer$/PPC\ Libraries) \
   -weakimport -lOpenTransportLib -weakimport -lOpenTptInternetLib \
   -lOpenTransportExtnPPC.o -lOpenTptInetPPC.o
 SHL1STDLIBS+=-init InitLibrary -term ExitLibrary
-.ENDIF
+.ENDIF # MAC
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
-# libposix4.so (SunOS 5.6) -> librt.so (SunOS >= 5.7)
-SHL1STDLIBS= -lnsl -lsocket -lpthread -lposix4 
+# libposix4.so (SunOS 5.6) <-> librt.so (SunOS >= 5.7)
+SHL1STDLIBS= -Bdynamic -ldl -lpthread -lposix4 -lsocket -lnsl
 .IF "$(COM)" == "C50"
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
 .ENDIF # UNX
-
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS=n:\toolkit4\lib\so32dll.lib\
-            n:\toolkit4\lib\tcp32dll.lib\
-    os2286.lib
-
-.ENDIF
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
@@ -174,63 +170,25 @@ SHL1OBJS= \
 .ELSE
 SHL1OBJS= \
     $(SLO)$/dllentry.obj
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF # MAC
+.ENDIF # UNX
+.ENDIF # lincinc
 
 SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
-.IF "$(GUI)"=="OS2"
-DEF1EXPORT1=SignalHandlerFunction
-.ENDIF
-
-# --- tec ---
-
-#SALLIB= isal.lib
-
-#.IF "$(GUI)"!="WIN"
-#LIB2TARGET= 	$(SLB)$/tec.lib
-#LIB2ARCHIV= 	$(LB)$/libtec$(UPD)$(DLLPOSTFIX).a
-#LIB2FILES=		$(SLB)$/textenc.lib
-
-#.IF "$(UPDATER)"=="YES"
-#LIB2TARGET= 	$(LB)$/atec.lib
-#LIB2ARCHIV= 	$(LB)$/libtec$(UPD)$(DLLPOSTFIX).a
-#LIB2FILES=		$(LB)$/textenc.lib
-#.ENDIF
-
-#SHL2TARGET= 	tec$(UPD)$(DLLPOSTFIX)
-#SHL2IMPLIB= 	itec
-
-#SHL2STDLIBS=	$(SALLIB)
-
-#SHL2LIBS=		$(SLB)$/textenc.lib
-#.IF "$(linkinc)" != ""
-#SHL21FILE=		$(MISC)$/tec.slo
-#.ENDIF
-
-#SHL2DEPN=
-#SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
-
-#DEF2NAME=		$(SHL2TARGET)
-#DEF2EXPORTFILE= tec.dxp
-#.ENDIF
-
 
 # --- Targets ------------------------------------------------------
 
-.ENDIF
-
-.ENDIF			# $(depend)!=""
+.ENDIF # $(header) != ""
+.ENDIF # $(depend) != ""
 
 .INCLUDE :  target.mk
 
-
 .IF "$(SHL1TARGETN)" != ""
 $(SHL1TARGETN) : $(OUT)$/inc$/udkversion.h
-.ENDIF			# "$(SHL1TARGETN)" != ""
+.ENDIF # "$(SHL1TARGETN)" != ""
 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
