@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 15:25:26 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,60 +1704,6 @@ void SvxAngleTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
     {
         switch( eRP )
         {
-#ifndef VCL
-            case RP_LT:
-                aMtrPosX.SetUserValue( aRect.Left() );
-                aMtrPosY.SetUserValue( aRect.Top() );
-                break;
-            case RP_MT:
-                aMtrPosX.SetUserValue( aRect.Center().X() );
-                aMtrPosY.SetUserValue( aRect.Top() );
-                break;
-            case RP_RT:
-                aMtrPosX.SetUserValue( aRect.Right() );
-                aMtrPosY.SetUserValue( aRect.Top() );
-                break;
-            case RP_LM:
-                aMtrPosX.SetUserValue( aRect.Left() );
-                aMtrPosY.SetUserValue( aRect.Center().Y() );
-                break;
-            case RP_MM:
-                aMtrPosX.SetUserValue( aRect.Center().X() );
-                aMtrPosY.SetUserValue( aRect.Center().Y() );
-                break;
-            case RP_RM:
-                aMtrPosX.SetUserValue( aRect.Right() );
-                aMtrPosY.SetUserValue( aRect.Center().Y() );
-                break;
-            case RP_LB:
-                aMtrPosX.SetUserValue( aRect.Left() );
-                aMtrPosY.SetUserValue( aRect.Bottom() );
-                break;
-            case RP_MB:
-                aMtrPosX.SetUserValue( aRect.Center().X() );
-                aMtrPosY.SetUserValue( aRect.Bottom() );
-                break;
-            case RP_RB:
-                aMtrPosX.SetUserValue( aRect.Right() );
-                aMtrPosY.SetUserValue( aRect.Bottom() );
-                break;
-        }
-    }
-    else if( pWindow == &aCtlAngle )
-    {
-        switch( eRP )
-        {
-            case RP_LT: aMtrAngle.SetUserValue( 13500 ); break;
-            case RP_MT: aMtrAngle.SetUserValue(  9000 ); break;
-            case RP_RT: aMtrAngle.SetUserValue(  4500 ); break;
-            case RP_LM: aMtrAngle.SetUserValue( 18000 ); break;
-            case RP_RM: aMtrAngle.SetUserValue(     0 ); break;
-            case RP_LB: aMtrAngle.SetUserValue( 22500 ); break;
-            case RP_MB: aMtrAngle.SetUserValue( 27000 ); break;
-            case RP_RB: aMtrAngle.SetUserValue( 31500 ); break;
-        }
-    }
-#else
             case RP_LT:
                 aMtrPosX.SetUserValue( aRect.Left(), FUNIT_NONE );
                 aMtrPosY.SetUserValue( aRect.Top(), FUNIT_NONE );
@@ -1810,7 +1756,6 @@ void SvxAngleTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
             case RP_RB: aMtrAngle.SetUserValue( 31500, FUNIT_NONE ); break;
         }
     }
-#endif
 }
 
 //------------------------------------------------------------------------

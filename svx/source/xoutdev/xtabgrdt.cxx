@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabgrdt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:04:07 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,24 +274,16 @@ SvStream& XGradientTable::ImpRead( SvStream& rIn )
             rIn >> nGreen;
             rIn >> nBlue;
 
-#ifdef VCL
             aStart = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aStart = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
 
-#ifdef VCL
             aEnd = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aEnd = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
 
             rIn >> nAngle;
             rIn >> nBorder;
@@ -580,7 +572,6 @@ SvStream& XGradientList::ImpStore( SvStream& rOut )
         XGradient& rGradient = pEntry->GetGradient();
         rOut << (long)rGradient.GetGradientStyle();
 
-#ifdef VCL
         USHORT nCol = rGradient.GetStartColor().GetRed();
         nCol = nCol << 8;
         rOut << nCol;
@@ -600,15 +591,6 @@ SvStream& XGradientList::ImpStore( SvStream& rOut )
         nCol = rGradient.GetEndColor().GetBlue();
         nCol = nCol << 8;
         rOut << nCol;
-#else
-        rOut << rGradient.GetStartColor().GetRed();
-        rOut << rGradient.GetStartColor().GetGreen();
-        rOut << rGradient.GetStartColor().GetBlue();
-
-        rOut << rGradient.GetEndColor().GetRed();
-        rOut << rGradient.GetEndColor().GetGreen();
-        rOut << rGradient.GetEndColor().GetBlue();
-#endif
         rOut << rGradient.GetAngle();
         rOut << (ULONG)rGradient.GetBorder();
         rOut << (ULONG)rGradient.GetXOffset();
@@ -684,23 +666,15 @@ SvStream& XGradientList::ImpRead( SvStream& rIn )
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aStart = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aStart = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aEnd = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aEnd = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
 
             rIn >> nAngle;
             rIn >> nBorder;
@@ -730,23 +704,15 @@ SvStream& XGradientList::ImpRead( SvStream& rIn )
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aStart = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aStart = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aEnd = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aEnd = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
 
             rIn >> nAngle;
             rIn >> nBorder;
@@ -779,23 +745,15 @@ SvStream& XGradientList::ImpRead( SvStream& rIn )
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aStart = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aStart = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
             rIn >> nRed;
             rIn >> nGreen;
             rIn >> nBlue;
-#ifdef VCL
             aEnd = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aEnd = Color( (USHORT)nRed, (USHORT)nGreen, (USHORT)nBlue );
-#endif
 
             rIn >> nAngle;
             rIn >> nBorder;

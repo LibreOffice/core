@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,11 +307,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
             else
             {
                 aTsbEndless.SetState( STATE_CHECK );
-#ifndef VCL
-                aNumFldCount.SetEmptyValue();
-#else
                 aNumFldCount.SetEmptyFieldValue();
-#endif
             }
         }
         else
@@ -319,11 +315,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-#ifndef VCL
-        aNumFldCount.SetEmptyValue();
-#else
         aNumFldCount.SetEmptyFieldValue();
-#endif
         aTsbEndless.SetState( STATE_DONTKNOW );
     }
     aTsbEndless.SaveValue();
@@ -341,22 +333,14 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         if( nValue == 0 )
         {
             aTsbAuto.SetState( STATE_CHECK );
-#ifndef VCL
-            aMtrFldDelay.SetEmptyValue();
-#else
             aMtrFldDelay.SetEmptyFieldValue();
-#endif
         }
         else
             aTsbAuto.SetState( STATE_NOCHECK );
     }
     else
     {
-#ifndef VCL
-        aMtrFldDelay.SetEmptyValue();
-#else
         aMtrFldDelay.SetEmptyFieldValue();
-#endif
         aTsbAuto.SetState( STATE_DONTKNOW );
     }
     aTsbAuto.SaveValue();
@@ -405,11 +389,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     else
     {
         aMtrFldAmount.Disable();
-#ifndef VCL
-        aMtrFldAmount.SetEmptyValue();
-#else
         aMtrFldAmount.SetEmptyFieldValue();
-#endif
         aTsbPixel.SetState( STATE_DONTKNOW );
     }
     aTsbPixel.SaveValue();
@@ -682,11 +662,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickEndlessHdl_Impl, void *, EMPTYARG )
         if( eState != STATE_NOCHECK )
         {
             aNumFldCount.Disable();
-#ifndef VCL
-            aNumFldCount.SetEmptyValue();
-#else
             aNumFldCount.SetEmptyFieldValue();
-#endif
         }
         else
         {
@@ -709,11 +685,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickAutoHdl_Impl, void *, EMPTYARG )
     if( eState != STATE_NOCHECK )
     {
         aMtrFldDelay.Disable();
-#ifndef VCL
-        aMtrFldDelay.SetEmptyValue();
-#else
         aMtrFldDelay.SetEmptyFieldValue();
-#endif
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:44:38 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,7 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
     XPolygon    aNullPol;
     Color       aNullLineCol(RGB_Color(COL_BLACK));
 
-#ifndef VCL
-    Color       aNullFillCol(Color(0<<8,184<<8,255<<8));  // "Blau 7"
-#else
     Color       aNullFillCol(Color(0,184,255));  // "Blau 7"
-#endif
 
     Color       aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     XDash       aNullDash;

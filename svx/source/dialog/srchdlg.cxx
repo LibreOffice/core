@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-08-06 13:51:04 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,12 +668,8 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     bWriter = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_WRITER );
 
 #ifndef OS2
-#ifndef VCL
-    pImpl->bMultiLineEdit = bWriter;
-#else
     // bei VCL kein MultiLineEdit mehr fuer die Format-Texte
     pImpl->bMultiLineEdit = FALSE;
-#endif
 
     if ( !pImpl->bMultiLineEdit )
     {

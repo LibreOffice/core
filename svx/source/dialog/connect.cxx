@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 15:01:36 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,11 +232,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldHorz1, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldHorz1.SetEmptyValue();
-#else
         aMtrFldHorz1.SetEmptyFieldValue();
-#endif
 
     aMtrFldHorz1.SaveValue();
 
@@ -250,11 +246,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldHorz2, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldHorz2.SetEmptyValue();
-#else
         aMtrFldHorz2.SetEmptyFieldValue();
-#endif
 
     aMtrFldHorz2.SaveValue();
 
@@ -268,11 +260,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldVert1, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldVert1.SetEmptyValue();
-#else
         aMtrFldVert1.SetEmptyFieldValue();
-#endif
 
     aMtrFldVert1.SaveValue();
 
@@ -286,11 +274,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldVert2, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldVert2.SetEmptyValue();
-#else
         aMtrFldVert2.SetEmptyFieldValue();
-#endif
 
     aMtrFldVert2.SaveValue();
 
@@ -304,11 +288,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldLine1, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldLine1.SetEmptyValue();
-#else
         aMtrFldLine1.SetEmptyFieldValue();
-#endif
 
     aMtrFldLine1.SaveValue();
 
@@ -322,11 +302,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldLine2, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldLine2.SetEmptyValue();
-#else
         aMtrFldLine2.SetEmptyFieldValue();
-#endif
 
     aMtrFldLine2.SaveValue();
 
@@ -340,11 +316,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         SetMetricValue( aMtrFldLine3, nValue, eUnit );
     }
     else
-#ifndef VCL
-        aMtrFldLine3.SetEmptyValue();
-#else
         aMtrFldLine3.SetEmptyFieldValue();
-#endif
 
     aMtrFldLine3.SaveValue();
 
@@ -359,31 +331,19 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         {
             aFtLine3.Enable( FALSE );
             aMtrFldLine3.Enable( FALSE );
-#ifndef VCL
-            aMtrFldLine3.SetEmptyValue();
-#else
             aMtrFldLine3.SetEmptyFieldValue();
-#endif
         }
         if( nValue <= 1 )
         {
             aFtLine2.Enable( FALSE );
             aMtrFldLine2.Enable( FALSE );
-#ifndef VCL
-            aMtrFldLine2.SetEmptyValue();
-#else
             aMtrFldLine2.SetEmptyFieldValue();
-#endif
         }
         if( nValue == 0 )
         {
             aFtLine1.Enable( FALSE );
             aMtrFldLine1.Enable( FALSE );
-#ifndef VCL
-            aMtrFldLine1.SetEmptyValue();
-#else
             aMtrFldLine1.SetEmptyFieldValue();
-#endif
         }
     }
 
@@ -584,33 +544,21 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
         if( nCount > 2 )
             aMtrFldLine3.SetValue( aMtrFldLine3.GetValue() );
         else
-#ifndef VCL
-            aMtrFldLine3.SetEmptyValue();
-#else
             aMtrFldLine3.SetEmptyFieldValue();
-#endif
 
         aFtLine2.Enable( nCount > 1 );
         aMtrFldLine2.Enable( nCount > 1 );
         if( nCount > 1 )
             aMtrFldLine2.SetValue( aMtrFldLine2.GetValue() );
         else
-#ifndef VCL
-            aMtrFldLine2.SetEmptyValue();
-#else
             aMtrFldLine2.SetEmptyFieldValue();
-#endif
 
         aFtLine1.Enable( nCount > 0 );
         aMtrFldLine1.Enable( nCount > 0 );
         if( nCount > 0 )
             aMtrFldLine1.SetValue( aMtrFldLine1.GetValue() );
         else
-#ifndef VCL
-            aMtrFldLine1.SetEmptyValue();
-#else
             aMtrFldLine1.SetEmptyFieldValue();
-#endif
 
     }
 

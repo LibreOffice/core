@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:04:07 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,6 @@ SvStream& XHatchList::ImpStore( SvStream& rOut )
 
         XHatch& rHatch = pEntry->GetHatch();
         rOut << (long)rHatch.GetHatchStyle();
-#ifdef VCL
         USHORT nCol = rHatch.GetColor().GetRed();
         nCol = nCol << 8;
         rOut << nCol;
@@ -582,11 +581,6 @@ SvStream& XHatchList::ImpStore( SvStream& rOut )
         nCol = rHatch.GetColor().GetBlue();
         nCol = nCol << 8;
         rOut << nCol;
-#else
-        rOut << rHatch.GetColor().GetRed();
-        rOut << rHatch.GetColor().GetGreen();
-        rOut << rHatch.GetColor().GetBlue();
-#endif
         rOut << rHatch.GetDistance();
         rOut << rHatch.GetAngle();
     }
@@ -652,13 +646,9 @@ SvStream& XHatchList::ImpRead( SvStream& rIn )
             rIn >> nDistance;
             rIn >> nAngle;
 
-#ifdef VCL
             aColor = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aColor = Color( nRed, nGreen, nBlue );
-#endif
             XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
             pEntry = new XHatchEntry (aHatch, aName);
             Insert (pEntry, nIndex);
@@ -689,13 +679,9 @@ SvStream& XHatchList::ImpRead( SvStream& rIn )
                 // lesen neuer Daten ...
             }
 
-#ifdef VCL
             aColor = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aColor = Color( nRed, nGreen, nBlue );
-#endif
             XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
             pEntry = new XHatchEntry (aHatch, aName);
             Insert (pEntry, nIndex);

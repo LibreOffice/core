@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,19 +269,11 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, BOOL bNewModel )
             Bitmap  aBmp( rGraphic.GetBitmap() );
 
             DitherBitmap( aBmp );
-#ifndef VCL
-            aGraphic = Graphic( aBmp, rGraphic.GetTransparentBitmap() );
-#else
             aGraphic = Graphic( BitmapEx( aBmp, rGraphic.GetBitmapEx().GetMask() ) );
-#endif
         }
         else
         {
-#ifndef VCL
-            Bitmap aBmp( XOutBitmap::GetBitmapFromGraphic( rGraphic ) );
-#else
             Bitmap aBmp( rGraphic.GetBitmap() );
-#endif
             DitherBitmap( aBmp );
             aGraphic = aBmp;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:02:48 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,7 @@ using namespace ::com::sun::star;
 
 /************************************************************************/
 
-#ifdef VCL
 #define VCLTOSVCOL( rCol ) (USHORT)((((USHORT)(rCol))<<8)|(rCol))
-#endif
 
 /************************************************************************/
 
@@ -3072,25 +3070,14 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, USHORT nVer) :
         rIn >> nRed;
         rIn >> nGreen;
         rIn >> nBlue;
-#ifdef VCL
         Color aCol;
         aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
-#else
-        Color aCol( COL_USER );
-        aCol = Color( nRed, nGreen, nBlue );
-        aCol.SetColorName(COL_USER);
-#endif
         aGradient.SetStartColor( aCol );
 
         rIn >> nRed;
         rIn >> nGreen;
         rIn >> nBlue;
-#ifdef VCL
         aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
-#else
-        aCol = Color( nRed, nGreen, nBlue );
-        aCol.SetColorName(COL_USER);
-#endif
         aGradient.SetEndColor(aCol);
         rIn >> nLTemp; aGradient.SetAngle(nLTemp);
         rIn >> nUSTemp; aGradient.SetBorder(nUSTemp);
@@ -3649,14 +3636,8 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
         rIn >> nGreen;
         rIn >> nBlue;
 
-#ifdef VCL
         Color aCol;
         aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
-#else
-        Color aCol( COL_USER );
-        aCol = Color( nRed, nGreen, nBlue );
-        aCol.SetColorName(COL_USER);
-#endif
         aHatch.SetColor(aCol);
         rIn >> nLTemp; aHatch.SetDistance(nLTemp);
         rIn >> nLTemp; aHatch.SetAngle(nLTemp);
@@ -3742,16 +3723,10 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, USHORT nItemVersion ) const
     {
         rOut << (INT16)aHatch.GetHatchStyle();
 
-#ifdef VCL
         USHORT nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetGreen() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetBlue() ); rOut << nTmp;
-#else
-        rOut << aHatch.GetColor().GetRed();
-        rOut << aHatch.GetColor().GetGreen();
-        rOut << aHatch.GetColor().GetBlue();
-#endif
 
         rOut << (INT32) aHatch.GetDistance();
         rOut << (INT32) aHatch.GetAngle();

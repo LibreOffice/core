@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,9 @@
 #ifndef _SVDFMTF_HXX
 #define _SVDFMTF_HXX
 
-#ifdef VCL
 #ifndef _SV_METAACT_HXX //autogen
 #include <vcl/metaact.hxx>
 #endif
-#else // VCL
-#ifndef _SVMTFACT_HXX
-#include <svmtfact.hxx>
-#endif
-#endif // VCL
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:03:31 $
+ *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,6 @@ SvStream& XColorTable::ImpStore( SvStream& rOut )
         // UNICODE:: rOut << pEntry->GetName();
         rOut.WriteByteString(pEntry->GetName());
 
-#ifdef VCL
         USHORT nCol = pEntry->GetColor().GetRed();
         nCol = nCol << 8;
         rOut << nCol;
@@ -564,11 +563,6 @@ SvStream& XColorTable::ImpStore( SvStream& rOut )
         nCol = pEntry->GetColor().GetBlue();
         nCol = nCol << 8;
         rOut << nCol;
-#else
-        rOut << pEntry->GetColor().GetRed();
-        rOut << pEntry->GetColor().GetGreen();
-        rOut << pEntry->GetColor().GetBlue();
-#endif
         pEntry = (XColorEntry*)aTable.Next();
     }
     return( rOut );
@@ -690,13 +684,9 @@ SvStream& XColorTable::ImpRead( SvStream& rIn )
             rIn >> nGreen;
             rIn >> nBlue;
 
-#ifdef VCL
             aColor = Color( (BYTE) ( nRed   >> 8 ),
                             (BYTE) ( nGreen >> 8 ),
                             (BYTE) ( nBlue  >> 8 ) );
-#else
-            aColor = Color( nRed, nGreen, nBlue );
-#endif
             pEntry = new XColorEntry( aColor, aName);
             Insert (nIndex, pEntry);
         }
@@ -720,13 +710,9 @@ SvStream& XColorTable::ImpRead( SvStream& rIn )
                 rIn >> nRed;
                 rIn >> nGreen;
                 rIn >> nBlue;
-#ifdef VCL
                 aColor = Color( (BYTE) ( nRed   >> 8 ),
                                 (BYTE) ( nGreen >> 8 ),
                                 (BYTE) ( nBlue  >> 8 ) );
-#else
-                aColor = Color( nRed, nGreen, nBlue );
-#endif
             }
             /*
             else if( aIOC.GetVersion() >= 1 )
