@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-07 11:12:31 $
+ *  last change: $Author: cmc $ $Date: 2001-02-07 16:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2367,6 +2367,17 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
 
     eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_PARALLEL : SURROUND_NONE;
 
+    /*
+     #83307# These old style WinWord textboxes are a terrible problem for
+     headers and footers. They can be anchored in a footer and moved to just
+     about anyplace. Also they have flexible heights and can be higher than
+     the actual header/footer area, if we do not set wrap to NONE then boxes
+     narrower than a header/footer but taller will be forced into the
+     header/footer area and the look of the word original will be lost
+    */
+    if (rIo.bIsHeader || rIo.bIsFooter)
+        eSurround = SURROUND_NONE;
+
     nHeight = rWW.nSp45;
     if( nHeight & 0x8000 )
     {
@@ -2776,12 +2787,18 @@ void SwWW8ImplReader::StopApo()
             pSFlyPara->pFlyFmt->SetAttr(
                 SwFmtFrmSize( pSFlyPara->eHeightFix, nW, pSFlyPara->nHeight ) );
         }
-        else if( !pWFlyPara->nSp28 )  // *no* width set ->> automatic width
+        /*
+        #83307# Word set *no* width meaning its an automatic width. The
+        SwFlyPara reader will have already set a fallback width of the
+        printable regions width, so we should reuse it. Despite the related
+        problems with layout addressed with a hack in WW8FlyPara's constructor
+        */
+        else if( !pWFlyPara->nSp28 )
         {
             SfxItemSet aFlySet( pSFlyPara->pFlyFmt->GetAttrSet() );
             aFlySet.ClearItem( RES_FRM_SIZE );
-            CalculateFlySize( aFlySet, pSFlyPara->pMainTextPos->nNode, nPgWidth );
-
+            CalculateFlySize( aFlySet, pSFlyPara->pMainTextPos->nNode,
+                pSFlyPara->nWidth );
             pSFlyPara->pFlyFmt->SetAttr( aFlySet.Get( RES_FRM_SIZE ) );
         }
 
@@ -4890,12 +4907,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.10 2001-02-07 11:12:31 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.11 2001-02-07 16:15:13 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/07 11:12:31  cmc
+      #83308# Allow negative frame positions
+
       Revision 1.9  2001/02/06 17:28:21  cmc
       #83581# CJK Two Lines in One {Im|Ex}port for Word
 
