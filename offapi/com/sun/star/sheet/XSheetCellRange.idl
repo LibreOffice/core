@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCellRange.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-interface XSpreadsheet;
+ published interface XSpreadsheet;
 
 //=============================================================================
 
@@ -80,7 +80,7 @@ interface XSpreadsheet;
 
     @see com::sun::star::sheet::SheetCellRange
  */
-interface XSheetCellRange: com::sun::star::table::XCellRange
+published interface XSheetCellRange: com::sun::star::table::XCellRange
 {
     //-------------------------------------------------------------------------
 
