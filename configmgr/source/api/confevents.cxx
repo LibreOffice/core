@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,339 +70,128 @@
 #endif
 namespace configmgr
 {
-    // class is still abstract, ITreeListener methods are still unimplemented
-    TreeListenerImpl::TreeListenerImpl(ITreeNotifier* aSource)
-        : mySource(aSource)
-    {
-        if (mySource) mySource->setListener(this);
-    }
-    TreeListenerImpl::~TreeListenerImpl()
-    {
-        if (mySource) mySource->setListener(0);
-    }
-
-    void TreeListenerImpl::disposing(ITreeNotifier* pSource)
-    {
-        OSL_ASSERT(pSource && pSource == mySource);
-        if (pSource == mySource)
-            mySource = 0;
-    }
-
-    ITreeNotifier* TreeListenerImpl::rebind(ITreeNotifier* aSource)
-    {
-        ITreeNotifier* aOldSource = mySource;
-        if (aSource != aOldSource)
-        {
-            if (mySource) mySource->setListener(0);
-            mySource = aSource;
-            if (mySource) mySource->setListener(this);
-        }
-        return aOldSource;
-    }
-
     /////////////////////////////////////////////////////////////////////////
     using internal::ConfigChangesBroadcasterImpl;
-    using internal::ConfigMessageBroadcasterImpl;
 
     /////////////////////////////////////////////////////////////////////////
-    class ConfigChangeBroadcaster::Impl
+    class ConfigChangeBroadcastHelper // broadcasts changes for a given set of options
     {
-    public:
-        Impl() : m_changes(), m_messages() {}
-
         ConfigChangesBroadcasterImpl m_changes;
-        ConfigMessageBroadcasterImpl m_messages;
+    public:
+        ConfigChangeBroadcastHelper();
+        ~ConfigChangeBroadcastHelper();
+
+        void broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource);
+
+    public:
+        // IConfigBroadcaster implementation helper
+        void addListener(OUString const& aName, INodeListener* );
+        void removeListener(INodeListener*);
+
+        void removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
+
+        void dispose(IConfigBroadcaster* pSource);
     };
 
     /////////////////////////////////////////////////////////////////////////
-    ConfigChangeBroadcaster::ConfigChangeBroadcaster(ITreeNotifier* aSource)
-        : TreeListenerImpl(aSource)
-        , pImpl(new Impl())
+    ConfigChangeBroadcaster::ConfigChangeBroadcaster()
     {
     }
 
     ConfigChangeBroadcaster::~ConfigChangeBroadcaster()
     {
-        dispose();
     }
 
     /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcaster::dispose()
+    ConfigChangeBroadcastHelper::ConfigChangeBroadcastHelper()
+        : m_changes()
     {
-        unbind();
+    }
 
-        if (!pImpl) return;
-        pImpl->m_changes.disposing(this);
-        pImpl->m_messages.disposing(this);
-        delete pImpl, pImpl = 0;
+    ConfigChangeBroadcastHelper::~ConfigChangeBroadcastHelper()
+    {
     }
 
     /////////////////////////////////////////////////////////////////////////
-    // IConfigBroadcaster implementation
-    void ConfigChangeBroadcaster::addListener(OUString const& aName, INodeListener* pHandler)
-    { pImpl->m_changes.add(aName, pHandler); }
-
-    void ConfigChangeBroadcaster::removeListener(INodeListener* pHandler)
-    { pImpl->m_changes.remove(pHandler); }
-
-    void ConfigChangeBroadcaster::removeNode(OUString const& aPath, bool bRemovedFromModel)
-    { pImpl->m_changes.removed(aPath,bRemovedFromModel,this); }
-
-    void ConfigChangeBroadcaster::addHandler(IMessageHandler* pHandler)
-    { pImpl->m_messages.add(pHandler); }
-
-    void ConfigChangeBroadcaster::removeHandler(IMessageHandler* pHandler)
-    { pImpl->m_messages.remove(pHandler); }
-
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcaster::broadcast(TreeChangeList const& anUpdate, sal_Bool bError)
+    void ConfigChangeBroadcastHelper::dispose(IConfigBroadcaster* pSource)
     {
-        pImpl->m_changes.dispatch(anUpdate, bError, this);
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    // ITreeListener implementation
-    void ConfigChangeBroadcaster::changes(TreeChangeList const& rList_, sal_Bool bError_)
-    {
-        broadcast(rList_, bError_);;
-    }
-
-    void ConfigChangeBroadcaster::changes(sal_Int32 _nNotificationId,const OUString& _rNotifyReason)
-    {
-        pImpl->m_messages.dispatch(_rNotifyReason, _nNotificationId, this);
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    class ConfigChangeMultiplexer::Impl
-    {
-    public:
-
-        Impl(OUString const& sBasePath_) : sBasePath(sBasePath_), m_changes(), m_messages() {}
-
-        OUString const sBasePath;
-        ConfigChangesBroadcasterImpl m_changes;
-        ConfigMessageBroadcasterImpl m_messages;
-    };
-
-    /////////////////////////////////////////////////////////////////////////
-    ConfigChangeMultiplexer::ConfigChangeMultiplexer(IConfigBroadcaster* pSource)
-        : m_pSource(pSource)
-        , pImpl(0)
-    {
-        if (m_pSource) m_pSource->addHandler(this);
-    }
-
-    ConfigChangeMultiplexer::ConfigChangeMultiplexer(OUString const& aBasePath, IConfigBroadcaster* pSource)
-        : m_pSource(pSource)
-        , pImpl(0)
-    {
-        bind(aBasePath,pSource);
-    }
-
-    ConfigChangeMultiplexer::~ConfigChangeMultiplexer()
-    {
-        dispose();
-    }
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::bind(OUString const& sNewPath, IConfigBroadcaster* pSource)
-    {
-        if (pImpl)
-        {
-            OSL_ASSERT(sNewPath == pImpl->sBasePath);
-            rebind(pSource);
-        }
-        else
-        {
-            pImpl = new Impl(sNewPath);
-            if (pSource)
-                m_pSource = pSource;
-            m_pSource->addListener(pImpl->sBasePath, this);
-            m_pSource->addHandler(this);
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::rebind(IConfigBroadcaster* pSource)
-    {
-        if (pSource != m_pSource)
-        {
-            unbind();
-            m_pSource = pSource;
-            if (m_pSource)
-            {
-                if (pImpl) m_pSource->addListener(pImpl->sBasePath, this);
-                m_pSource->addHandler(this);
-            }
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::unbind()
-    {
-        if (m_pSource)
-        {
-            if (pImpl) m_pSource->removeListener(this);
-            m_pSource->removeHandler(this);
-        }
-        m_pSource = 0;
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    bool ConfigChangeMultiplexer::normalizePath(OUString& aName)
-    {
-        if (!pImpl) return false;
-
-        ConfigurationName aMyPath(pImpl->sBasePath);
-        ConfigurationName aPath(aName);
-        if (aPath.isRelative())
-        {
-            aName = aMyPath.composeWith(aPath).fullName();
-            return true;
-        }
-        else
-        {
-            bool ok = (aMyPath == aPath) || aPath.isNestedIn(aMyPath);
-
-            return ok;
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::broadcast(Change const& anUpdate, OUString const& aRelativePath, sal_Bool bError)
-    {
-        OSL_ENSURE(pImpl!=0, "Trying to broadcast on disconnected Notification Multiplexer");
-
-        OUString aContext( aRelativePath );
-        if (!normalizePath(aContext))
-            OSL_TRACE("Invalid path. Multiplexer may not walk subtrees correctly\n\r");
-
-        if (pImpl)
-        {
-            pImpl->m_changes.dispatch(anUpdate, aContext, bError, this);
-        }
-    }
-
-    void ConfigChangeMultiplexer::broadcast(Change const& anUpdate)
-    {
-        // do we need to append the local name ??
-        if (pImpl)
-            pImpl->m_changes.dispatch(anUpdate, pImpl->sBasePath, false, this);
-    }
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::dispose()
-    {
-        unbind();
-
-        if (!pImpl) return;
-        pImpl->m_changes.disposing(this);
-        pImpl->m_messages.disposing(this);
-        delete pImpl, pImpl = 0;
-    }
-
-    // IConfigListener implementation
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::disposing(IConfigBroadcaster* pSource)
-    {
-        OSL_ASSERT(pSource == m_pSource);
-        if (pSource == m_pSource)
-            unbind();
-    }
-
-    // INodeListener implementation
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource)
-    {
-        OSL_ASSERT(pImpl != 0);
-        OSL_VERIFY(pSource == m_pSource);
-        broadcast(aChange, aPath);
-    }
-    void ConfigChangeMultiplexer::nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource)
-    {
-        OSL_ASSERT(pImpl != 0);
-
-        if (pImpl)
-        {
-            OUString aContext( aPath );
-
-            // must be this base path or a child of it
-            OSL_ASSERT(!ConfigurationName(aPath).isRelative() || aPath.getLength() == 0);
-            OSL_ASSERT(aPath.getLength() == 0 ||
-                        pImpl->sBasePath == aPath ||
-                        ConfigurationName(pImpl->sBasePath).isNestedIn(aPath));
-            pImpl->m_changes.removed(aContext,true,this);
-        }
-    }
-
-    // IMessageHandler implementation
-    /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeMultiplexer::message(const OUString& rNotifyReason, sal_Int32 nNotificationId, IConfigBroadcaster* pSource)
-    {
-        OSL_VERIFY(pSource == m_pSource);
-        if (pImpl)
-            pImpl->m_messages.dispatch(rNotifyReason, nNotificationId, this);
+        m_changes.disposing(pSource);
     }
 
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation
+    void ConfigChangeBroadcaster::addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListener* pHandler)
+    {
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,true))
+        {
+            pHelper->addListener(aName, pHandler);
+        }
+        else
+            OSL_ASSERT(false);
+    }
 
-    void ConfigChangeMultiplexer::addListener(OUString const& aName, INodeListener* pHandler)
-    { pImpl->m_changes.add(aName, pHandler); }
+    void ConfigChangeBroadcaster::removeListener(const vos::ORef < OOptions >& _xOptions, INodeListener* pHandler)
+    {
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
+        {
+            pHelper->removeListener( pHandler);
+        }
+    }
 
-    void ConfigChangeMultiplexer::removeListener(INodeListener* pHandler)
-    { pImpl->m_changes.remove(pHandler); }
-
-    void ConfigChangeMultiplexer::removeNode(OUString const& aPath, bool bRemovedFromModel)
-    { pImpl->m_changes.removed(aPath,bRemovedFromModel,this); }
-
-    void ConfigChangeMultiplexer::addHandler(IMessageHandler* pHandler)
-    { pImpl->m_messages.add(pHandler); }
-
-    void ConfigChangeMultiplexer::removeHandler(IMessageHandler* pHandler)
-    { pImpl->m_messages.remove(pHandler); }
+    void ConfigChangeBroadcaster::removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel)
+    {
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
+        {
+            pHelper->removeNode(aPath, bRemovedFromModel, this);
+        }
+    }
 
     /////////////////////////////////////////////////////////////////////////
-    // ScreenedChangeMultiplexer
-    ScreenedChangeMultiplexer:: ScreenedChangeMultiplexer(IConfigBroadcaster* aSource)
-        : ConfigChangeMultiplexer()
-        , m_pScreeningChanges(0)
+    void ConfigChangeBroadcaster::fireChanges(TreeChangeList const& rList_, sal_Bool bError_)
     {
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(rList_.m_xOptions,false))
+        {
+            pHelper->broadcast(rList_, bError_, this);
+        }
     }
 
-    ScreenedChangeMultiplexer:: ScreenedChangeMultiplexer(TreeChangeList& aScreeningTree, IConfigBroadcaster* aSource)
-        : ConfigChangeMultiplexer(aScreeningTree.pathToRoot, aSource)
-        , m_pScreeningChanges(&aScreeningTree.root)
+    /////////////////////////////////////////////////////////////////////////
+    ConfigChangeBroadcastHelper* ConfigChangeBroadcaster::newBroadcastHelper()
     {
+        return new ConfigChangeBroadcastHelper();
+    }
+    /////////////////////////////////////////////////////////////////////////
+    void ConfigChangeBroadcaster::disposeBroadcastHelper(ConfigChangeBroadcastHelper* pHelper)
+    {
+        if (pHelper)
+        {
+            pHelper->dispose(this);
+            delete pHelper;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////
+    // IConfigBroadcaster implementation help
+    void ConfigChangeBroadcastHelper::addListener(OUString const& aName, INodeListener* pHandler)
+    {
+        m_changes.add(aName, pHandler);
     }
 
-    ScreenedChangeMultiplexer:: ScreenedChangeMultiplexer(ScreeningChange* aScreening, OUString const& aBasePath, IConfigBroadcaster* aSource)
-        : ConfigChangeMultiplexer(aBasePath, aSource)
-        , m_pScreeningChanges(aScreening)
+    void ConfigChangeBroadcastHelper::removeListener(INodeListener* pHandler)
     {
+        m_changes.remove(pHandler);
     }
 
-    void ScreenedChangeMultiplexer:: bind(TreeChangeList& aScreeningTree, IConfigBroadcaster* aSource)
+    void ConfigChangeBroadcastHelper::removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource)
     {
-        bind(&aScreeningTree.root, aScreeningTree.pathToRoot, aSource);
+        m_changes.removed(aPath, bRemovedFromModel,pSource);
     }
 
-    void ScreenedChangeMultiplexer:: bind(ScreeningChange* aScreening, OUString const& aBasePath, IConfigBroadcaster* aSource)
+    /////////////////////////////////////////////////////////////////////////
+    void ConfigChangeBroadcastHelper::broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
     {
-        unbind();
-        m_pScreeningChanges = aScreening;
-        ConfigChangeMultiplexer::bind(aBasePath, aSource);
+        m_changes.dispatch(anUpdate, bError, pSource);
     }
 
-    void ScreenedChangeMultiplexer:: nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource)
-    {
-        // To do: filter with local changes herehere
-        if (&aChange != m_pScreeningChanges)
-            ConfigChangeMultiplexer::nodeChanged(aChange,aPath,pSource);
-    }
-
-    void ScreenedChangeMultiplexer:: nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource)
-    {
-        // To do: filter here
-        ConfigChangeMultiplexer::nodeDeleted(aPath,pSource);
-    }
 
 } // namespace
 

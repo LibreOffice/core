@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,28 +63,12 @@
 #define CONFIGMGR_API_EVENTS_HXX_
 
 #include "cmtreemodel.hxx"
+
 namespace rtl { class OUString; }
 
 namespace configmgr
 {
     using ::rtl::OUString;
-
-    // class is still abstract, ITreeListener methods are still unimplemented
-    class TreeListenerImpl : private ITreeListener
-    {
-        ITreeNotifier* mySource;
-    public:
-        explicit TreeListenerImpl(ITreeNotifier* aSource = 0);
-        virtual ~TreeListenerImpl();
-
-        ITreeNotifier* rebind(ITreeNotifier* aSource);
-        ITreeNotifier* unbind() { return rebind(0); }
-    protected:
-        virtual void disposing(ITreeNotifier* pSource);
-    private:
-        TreeListenerImpl(TreeListenerImpl&);
-        void operator=(TreeListenerImpl&);
-    };
 
     struct IConfigBroadcaster;
     struct IConfigListener
@@ -96,10 +80,6 @@ namespace configmgr
         virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource) = 0;
         virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource) = 0;
     };
-    struct IMessageHandler: IConfigListener
-    {
-        virtual void message(const OUString& rNotifyReason, sal_Int32 nNotificationId, IConfigBroadcaster* pSource) = 0;
-    };
 
     struct IConfigBroadcaster
     {
@@ -107,102 +87,32 @@ namespace configmgr
         IConfigBroadcaster() {}
         ~IConfigBroadcaster() {}
     public:
-        virtual void addListener(OUString const& aName, INodeListener* pListener) = 0;
-        virtual void removeListener(INodeListener* pListener) = 0;
+        virtual void addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListener* pListener) = 0;
+        virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListener* pListener) = 0;
 
-        virtual void removeNode(OUString const& aPath, bool bRemovedFromModel = false) = 0;
-
-        virtual void addHandler(IMessageHandler* pHandler) = 0;
-        virtual void removeHandler(IMessageHandler* pHandler) = 0;
+        virtual void removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel = false) = 0;
     };
 
-    class ConfigChangeBroadcaster : public TreeListenerImpl, public IConfigBroadcaster
+    class ConfigChangeBroadcastHelper; // broadcasts changes for a given set of options
+    class ConfigChangeBroadcaster : public IConfigBroadcaster
     {
-        class Impl;
-        Impl* pImpl;
     public:
-        ConfigChangeBroadcaster(ITreeNotifier* aSource = 0);
+        ConfigChangeBroadcaster();
         virtual ~ConfigChangeBroadcaster();
 
-        void rebind(ITreeNotifier* aSource);
+        virtual void addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListener* pListener);
+        virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListener* pListener);
 
-        void broadcast(TreeChangeList const& anUpdate, sal_Bool bError = false);
-
-    public:
-        // IConfigBroadcaster implementation
-        void addListener(OUString const& aName, INodeListener* );
-        void removeListener(INodeListener*);
-
-        void removeNode(OUString const& aPath, bool bRemovedFromModel = false);
-
-        void addHandler(IMessageHandler* );
-        void removeHandler(IMessageHandler* );
-
-        void dispose();
-    protected:
-        // ITreeListener implementation
-        virtual void changes(TreeChangeList const& , sal_Bool _bError);
-        virtual void changes(sal_Int32 _nNotificationId,const ::rtl::OUString& _rNotifyReason);
-    };
-
-    class ConfigChangeMultiplexer : public IConfigBroadcaster, private INodeListener, private IMessageHandler
-    {
-        class Impl;
-        Impl* pImpl;
-        IConfigBroadcaster* m_pSource;
-    public:
-        ConfigChangeMultiplexer(IConfigBroadcaster* aSource = 0);
-        ConfigChangeMultiplexer(OUString const& aBasePath, IConfigBroadcaster* aSource);
-        virtual ~ConfigChangeMultiplexer();
-
-        void bind(OUString const& aBasePath, IConfigBroadcaster* aSource = 0);
-        void rebind(IConfigBroadcaster* aSource);
-        void unbind();
-
-        void broadcast(Change const& anUpdate, OUString const& aRelativePath, sal_Bool bError = false);
-        void broadcast(Change const& anUpdate);
-
-    public:
-        // IConfigBroadcaster implementation
-        void addListener(OUString const& aName, INodeListener* );
-        void removeListener(INodeListener*);
-
-        void removeNode(OUString const& aPath, bool bRemovedFromModel = false);
-
-        void addHandler(IMessageHandler* );
-        void removeHandler(IMessageHandler* );
-
-        void dispose();
-    protected:
-        bool normalizePath(OUString& aPath);
-
-        // IConfigListener implementation
-        virtual void disposing(IConfigBroadcaster* pSource);
-
-        // INodeListener implementation
-        virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
-        virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
-
-        // IMessageHandler implementation
-        virtual void message(const OUString& rNotifyReason, sal_Int32 nNotificationId, IConfigBroadcaster* pSource);
-    };
-
-    class ScreenedChangeMultiplexer : public ConfigChangeMultiplexer
-    {
-        typedef SubtreeChange ScreeningChange;
-        ScreeningChange* m_pScreeningChanges;
-    public:
-        ScreenedChangeMultiplexer(IConfigBroadcaster* aSource = 0);
-        ScreenedChangeMultiplexer(TreeChangeList& aScreeningTree, IConfigBroadcaster* aSource);
-        ScreenedChangeMultiplexer(ScreeningChange* aScreening, OUString const& aBasePath, IConfigBroadcaster* aSource);
-
-        void bind(TreeChangeList& aScreeningTree, IConfigBroadcaster* aSource = 0);
-        void bind(ScreeningChange* aScreening, OUString const& aBasePath, IConfigBroadcaster* aSource = 0);
+        virtual void removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel = false);
 
     protected:
-        virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
-        virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
+        virtual void fireChanges(TreeChangeList const& _aChanges, sal_Bool _bError);
+    protected:
+        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(const vos::ORef < OOptions >& _xOptions, bool bCreate) = 0;
+        ConfigChangeBroadcastHelper* newBroadcastHelper(); // needed to implement the preceding
+        void disposeBroadcastHelper(ConfigChangeBroadcastHelper* pHelper); // needed to discard the preceding
     };
+
 } // namespace
 
 #endif // CONFIGMGR_API_EVENTS_HXX_

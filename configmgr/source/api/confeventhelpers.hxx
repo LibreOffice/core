@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,20 +223,6 @@ namespace configmgr
         private:
             void dispatchInner(INodeListener* pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
             void dispatchOuter(INodeListener* pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
-        };
-
-    /////////////////////////////////////////////////////////////////////////
-        class ConfigMessageBroadcasterImpl
-        {
-        public:
-            void add(IMessageHandler* pListener);
-            void remove(IMessageHandler* pListener);
-
-            void dispatch(OUString const& _rNotifyReason, sal_Int32 _nNotificationId, IConfigBroadcaster* pSource);
-            void disposing(IConfigBroadcaster* pSource);
-        private:
-            typedef BroadcastImplHelper<IMessageHandler*> Listeners;
-            Listeners m_aListeners;
         };
 
     /////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ void ConfigChangesBroadcasterImpl::disposing(IConfigBroadcaster* pSource)
         };
 */
 /////////////////////////////////////////////////////////////////////////
-void ConfigMessageBroadcasterImpl::add(IMessageHandler* pListener)
+/*void ConfigMessageBroadcasterImpl::add(IMessageHandler* pListener)
 {
     osl::MutexGuard aGuard(m_aListeners.mutex);
 
@@ -475,7 +475,7 @@ void ConfigMessageBroadcasterImpl::disposing(IConfigBroadcaster* pSource)
 
     m_aListeners.disposing(pSource);
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////
     } // namespace
 } // namespace
