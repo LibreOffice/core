@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _tabsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:07:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,12 @@ interface BaseTextTable : Selection
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_TABLE_DELETE_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_GOTO_NEXT_CELL // status(final|play)
     [
         ExecMethod = Execute ;
@@ -258,8 +264,12 @@ interface BaseTextTable : Selection
         ExecMethod = Execute ;
         StateMethod = NoState ;
     ]
-
-
+    FN_TABLE_SELECT_CELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_TABLE_SET_ROW_HEIGHT // status(final|play)
     [
         ExecMethod = Execute ;
@@ -411,7 +421,23 @@ interface BaseTextTable : Selection
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
-
+    FN_TABLE_HEADLINE_REPEAT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_SELECT_CELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_DELETE_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 }
 
