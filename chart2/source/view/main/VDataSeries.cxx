@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-08 18:02:49 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 10:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,26 @@ double VDataSeries::getY( sal_Int32 index ) const
         ::rtl::math::setNan( & fNan );
         return fNan;
     }
+}
+
+uno::Sequence< double > VDataSeries::getAllX() const
+{
+    if(m_xData_XValues.is())
+    {
+        return m_XValues_Double;
+    }
+
+    // no x-values => categories indexes
+    uno::Sequence< double > aResult(m_YValues_Double.getLength());
+    for(sal_Int32 nN=m_YValues_Double.getLength();nN--;)
+        aResult[nN] = nN;
+
+    return aResult;
+}
+
+uno::Sequence< double > VDataSeries::getAllY() const
+{
+    return m_YValues_Double;
 }
 
 rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const

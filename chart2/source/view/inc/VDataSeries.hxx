@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-08 18:02:07 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 10:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ public:
     sal_Int32   getTotalPointCount() const;
     double      getX( sal_Int32 index ) const;
     double      getY( sal_Int32 index ) const;
+
+    ::com::sun::star::uno::Sequence< double > getAllX() const;
+    ::com::sun::star::uno::Sequence< double > getAllY() const;
 
     rtl::OUString       getCategoryString( sal_Int32 index ) const;
 
