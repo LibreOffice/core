@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleState.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 module com {  module sun {  module star {  module setup {
 
 /// @deprecated
-struct ModuleState
+published struct ModuleState
 {
     // DocMerge: empty anyway
     string                      strID;
