@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-28 09:12:08 $
+ *  last change: $Author: mt $ $Date: 2004-08-04 06:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,14 @@ private:
     RadioButton         maMediumRB;
     RadioButton         maLowRB;
 
-    RadioButton*        GetRadioButton( USHORT _nLevel );
-    USHORT              GetLevel( void ) const;
+    USHORT              mnCurLevel;
+
+protected:
+    DECL_LINK(          RadioButtonHdl, RadioButton* );
+
 public:
                         MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );
 
-    virtual void        ActivatePage();
     virtual void        ClosePage( void );
 };
 

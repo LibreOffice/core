@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-28 09:12:09 $
+ *  last change: $Author: mt $ $Date: 2004-08-04 06:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,40 +156,6 @@ MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroS
 {
 }
 
-
-RadioButton* MacroSecurityLevelTP::GetRadioButton( USHORT _nLevel )
-{
-    RadioButton*    pRet;
-    switch( _nLevel )
-    {
-        case 3:     pRet = &maVeryHighRB;       break;
-        case 2:     pRet = &maHighRB;           break;
-        case 1:     pRet = &maMediumRB;         break;
-        case 0:     pRet = &maLowRB;            break;
-        default:    pRet = NULL;
-    }
-
-    return pRet;
-}
-
-USHORT MacroSecurityLevelTP::GetLevel( void ) const
-{
-    USHORT  nRet;
-
-    if( maVeryHighRB.IsChecked() )
-        nRet = 3;
-    else if( maHighRB.IsChecked() )
-        nRet = 2;
-    else if( maMediumRB.IsChecked() )
-        nRet = 1;
-    else if( maLowRB.IsChecked() )
-        nRet = 0;
-    else
-        nRet = 0xFFFF;
-
-    return nRet;
-}
-
 MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
     ,maSecLevelFL       ( this, ResId( FL_SECLEVEL ) )
@@ -199,22 +165,45 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     ,maLowRB            ( this, ResId( RB_LOW ) )
 {
     FreeResource();
+
+    maLowRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    maMediumRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    maHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+    maVeryHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+
+    mnCurLevel = (USHORT) mpDlg->maSecOptions.GetMacroSecurityLevel();
+
+    switch( mnCurLevel )
+    {
+        case 3: maVeryHighRB.Check();   break;
+        case 2: maHighRB.Check();       break;
+        case 1: maMediumRB.Check();     break;
+        case 0: maLowRB.Check();        break;
+    }
 }
 
-void MacroSecurityLevelTP::ActivatePage()
+IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMTYARG )
 {
-    mpDlg->EnableReset();
+    USHORT nNewLevel = 0;
+    if( maVeryHighRB.IsChecked() )
+        nNewLevel = 3;
+    else if( maHighRB.IsChecked() )
+        nNewLevel = 2;
+    else if( maMediumRB.IsChecked() )
+        nNewLevel = 1;
 
-    RadioButton*    pRB = GetRadioButton( USHORT( mpDlg->maSecOptions.GetMacroSecurityLevel() ) );
-    if( pRB )
-        pRB->Check();
+    if ( nNewLevel != mnCurLevel )
+    {
+        mnCurLevel = nNewLevel;
+        mpDlg->EnableReset();
+    }
+
+    return 0;
 }
 
 void MacroSecurityLevelTP::ClosePage( void )
 {
-    USHORT  nLevel = GetLevel();
-    if( nLevel <= 3 )
-        mpDlg->maSecOptions.SetMacroSecurityLevel( nLevel );
+    mpDlg->maSecOptions.SetMacroSecurityLevel( mnCurLevel );
 }
 
 void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
