@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventlisteneradapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 16:13:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ namespace utl
         OEventListenerAdapterImpl*  m_pImpl;
 
     protected:
-        OEventListenerAdapter();
-        ~OEventListenerAdapter();
+                OEventListenerAdapter();
+        virtual ~OEventListenerAdapter();
 
         void startComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp );
         void stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp );
@@ -108,6 +108,12 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.120.1  2003/12/04 15:38:35  mt
+ *  #i23061# DTOR now virtual to avoid gcc WAll warnings
+ *
+ *  Revision 1.1  2001/04/19 16:13:06  fs
+ *  -initial checkin - base class for non-UNO dispose listeners
+ *
  *
  *  Revision 1.0 19.04.01 16:20:10  fs
  ************************************************************************/
