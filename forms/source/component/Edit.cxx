@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-23 11:05:37 $
+ *  last change: $Author: oj $ $Date: 2002-10-18 12:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void OEditModel::_loaded(const EventObject& rEvent)
                     aVal <<= (sal_Int16)nFieldLen;
                     m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
-                    m_nMaxLen = nFieldLen;  // damit das Ganze beim _unloaded wieder zurueckgesetzt wird
+                    m_nMaxLen = static_cast<sal_Int16>(nFieldLen);  // damit das Ganze beim _unloaded wieder zurueckgesetzt wird
                 }
             }
             else
@@ -617,7 +617,7 @@ sal_Bool OEditModel::_commit()
         {
             try
             {
-                if (m_bNumericField)
+                if ( m_bNumericField )
                     DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, sNewValue, m_nFormatKey, m_nFieldType, m_nKeyType);
                 else
                     m_xColumnUpdate->updateString(sNewValue);
@@ -649,6 +649,14 @@ void OEditModel::_onValueChanged()
                                               m_aNullDate,
                                               m_nFormatKey,
                                               m_nKeyType);
+
+    // #i2817# OJ
+    sal_uInt16 nMaxTextLen = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN));
+    if ( nMaxTextLen && m_aSaveValue.getLength() > nMaxTextLen )
+    {
+        sal_Int32 nDiff = m_aSaveValue.getLength() - nMaxTextLen;
+        m_aSaveValue = m_aSaveValue.replaceAt(nMaxTextLen,nDiff,::rtl::OUString());
+    }
 
     m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, makeAny(m_aSaveValue));
 }
