@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:10:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,13 +875,13 @@ AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertConten
 
 //add for ScInsertTableDlg begin
 AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg ( Window* pParent, ScViewData& rViewData,
-                                                                USHORT nTabCount, const ResId& rResId)
+                                                                SCTAB nTabCount, bool bFromFile, const ResId& rResId)
 {
     ScInsertTableDlg * pDlg=NULL;
     switch ( rResId.GetId() )
     {
         case RID_SCDLG_INSERT_TABLE :
-            pDlg = new ScInsertTableDlg( pParent, rViewData,nTabCount );
+            pDlg = new ScInsertTableDlg( pParent, rViewData,nTabCount, bFromFile );
             break;
         default:
             break;
