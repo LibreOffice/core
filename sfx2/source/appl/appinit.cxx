@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:03:04 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 11:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
 #endif
+#ifndef _SV_RESARY_HXX
+#include <vcl/resary.hxx>
+#endif
+
 #ifndef _SOERR_HXX //autogen
 #include <so3/soerr.hxx>
 #endif
@@ -137,6 +141,7 @@
 #include "appimp.hxx"
 #include "accmgr.hxx"
 #include "app.hrc"
+#include "sfxlocal.hrc"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "cfgmgr.hxx"
@@ -338,21 +343,23 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     Registrations_Impl();
 
-    RegisterEvent(SFX_EVENT_STARTAPP, String(SfxResId(STR_EVENT_STARTAPP)));
-    RegisterEvent(SFX_EVENT_CLOSEAPP, String(SfxResId(STR_EVENT_CLOSEAPP)));
-    RegisterEvent(SFX_EVENT_CREATEDOC,String(SfxResId(STR_EVENT_CREATEDOC)));
-    RegisterEvent(SFX_EVENT_OPENDOC,  String(SfxResId(STR_EVENT_OPENDOC)));
-    RegisterEvent(SFX_EVENT_SAVEASDOC,  String(SfxResId(STR_EVENT_SAVEASDOC)));
-    RegisterEvent(SFX_EVENT_SAVEASDOCDONE,  String(SfxResId(STR_EVENT_SAVEASDOCDONE)));
-    RegisterEvent(SFX_EVENT_SAVEDOC,  String(SfxResId(STR_EVENT_SAVEDOC)));
-    RegisterEvent(SFX_EVENT_SAVEDOCDONE,  String(SfxResId(STR_EVENT_SAVEDOCDONE)));
-    RegisterEvent(SFX_EVENT_PREPARECLOSEDOC,  String(SfxResId(STR_EVENT_PREPARECLOSEDOC)));
-    RegisterEvent(SFX_EVENT_CLOSEDOC,  String(SfxResId(STR_EVENT_CLOSEDOC)));
-    RegisterEvent(SFX_EVENT_ACTIVATEDOC,  String(SfxResId(STR_EVENT_ACTIVATEDOC)));
-    RegisterEvent(SFX_EVENT_DEACTIVATEDOC,  String(SfxResId(STR_EVENT_DEACTIVATEDOC)));
-    RegisterEvent(SFX_EVENT_PRINTDOC,   String(SfxResId(STR_EVENT_PRINTDOC)));
-    RegisterEvent(SFX_EVENT_ONERROR,    String(SfxResId(STR_EVENT_ONERROR)));
-    RegisterEvent(SFX_EVENT_NEWMESSAGE, String(SfxResId(STR_EVENT_NEWMESSAGE)));
+    ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
+
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_STARTAPP,        String(SfxResId(STR_EVENT_STARTAPP)),   aEventNames.GetString( 0 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEAPP,        String(SfxResId(STR_EVENT_CLOSEAPP)),   aEventNames.GetString( 1 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CREATEDOC,       String(SfxResId(STR_EVENT_CREATEDOC)),  aEventNames.GetString( 2 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_OPENDOC,         String(SfxResId(STR_EVENT_OPENDOC)),    aEventNames.GetString( 3 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOC,       String(SfxResId(STR_EVENT_SAVEASDOC)),  aEventNames.GetString( 4 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEASDOCDONE,   String(SfxResId(STR_EVENT_SAVEASDOCDONE)),  aEventNames.GetString( 5 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOC,         String(SfxResId(STR_EVENT_SAVEDOC)),        aEventNames.GetString( 6 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOCDONE,     String(SfxResId(STR_EVENT_SAVEDOCDONE)),    aEventNames.GetString( 7 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEDOC, String(SfxResId(STR_EVENT_PREPARECLOSEDOC)),aEventNames.GetString( 8 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEDOC,        String(SfxResId(STR_EVENT_CLOSEDOC)),       aEventNames.GetString( 9 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    aEventNames.GetString( 10 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  aEventNames.GetString( 11 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_ONERROR,         String(SfxResId(STR_EVENT_ONERROR)),        aEventNames.GetString( 13 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_NEWMESSAGE,      String(SfxResId(STR_EVENT_NEWMESSAGE)),     aEventNames.GetString( 14 ) );
 
     SfxFilterMatcher& rMatcher = GetFilterMatcher();
 /*
