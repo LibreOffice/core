@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-19 17:07:40 $
+ *  last change: $Author: dr $ $Date: 2002-11-29 11:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,6 +1157,10 @@ SvxDrawPage* ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 
 void ImplEscherExSdr::ImplExitPage()
 {
+    // close all groups before the solver container is written
+    while( mpEscherEx->GetGroupLevel() )
+        mpEscherEx->LeaveGroup();
+
     ImplFlushSolverContainer();
     mpSdrPage = NULL;   // reset page for next init
 }
