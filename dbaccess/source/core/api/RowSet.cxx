@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 12:50:03 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 15:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2032,19 +2032,26 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         {
             case CommandType::TABLE:
             {
-
                 OSL_ENSURE(_rxRetTables.is(),"ORowSet::getCommand: We got no tables from the connection!");
-                if (_rxRetTables.is() && _rxRetTables->hasByName(m_aCommand))
+                if ( _rxRetTables.is() && _rxRetTables->hasByName(m_aCommand) )
                 {
                     Reference< XPropertySet > xTable;
                     ::cppu::extractInterface(xTable,_rxRetTables->getByName(m_aCommand));
 
                     Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
-                    if(xSup.is())
+                    if ( xSup.is() )
                         m_xColumns = xSup->getColumns();
+
+                    aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
+                    aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand,::dbtools::eInDataManipulation);
                 }
-                aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
-                aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand,::dbtools::eInDataManipulation);
+                else
+                {
+                    ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no table with given name: \""));
+                    sError += m_aCommand;
+                    sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
+                    throwGenericSQLException(sError,*this);
+                }
             }
                 break;
             case CommandType::QUERY:
