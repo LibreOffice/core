@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 08:25:33 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 13:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,9 @@
 #define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
 #define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
 #define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
-#define TP_HELP_FAVOURITE                       (RID_SFX_APP_START+103)
+#define TP_HELP_BOOKMARKS                       (RID_SFX_APP_START+103)
+#define DLG_HELP_ADDBOOKMARK                    (RID_SFX_APP_START+104)
+#define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
 
 #define IMG_HELP_TOOLBOX_INDEX                  (RID_SFX_APP_START+110)
 #define IMG_HELP_TOOLBOX_START                  (RID_SFX_APP_START+111)
@@ -231,7 +233,7 @@
 #define IMG_HELP_TOOLBOX_NEXT                   (RID_SFX_APP_START+113)
 #define IMG_HELP_TOOLBOX_CONTEXT                (RID_SFX_APP_START+114)
 #define IMG_HELP_TOOLBOX_PRINT                  (RID_SFX_APP_START+115)
-#define IMG_HELP_TOOLBOX_FAVOURITE              (RID_SFX_APP_START+116)
+#define IMG_HELP_TOOLBOX_BOOKMARKS              (RID_SFX_APP_START+116)
 
 #define RID_IMAGE_USER1                         1
 #define RID_IMAGE_USER2                         2
@@ -269,7 +271,7 @@
 #define STR_QUICKSTART_FROMTEMPLATE             (RID_SFX_APP_START+137)
 #define STR_QUICKSTART_PRELAUNCH                (RID_SFX_APP_START+138)
 #define STR_QUICKSTART_LNKNAME                  (RID_SFX_APP_START+139)
-#define STR_HELP_BUTTON_FAVOURITE               (RID_SFX_APP_START+140)
+#define STR_HELP_BUTTON_ADDBOOKMARK             (RID_SFX_APP_START+140)
 
 #endif // #ifndef _SFX_APP_HRC
 
