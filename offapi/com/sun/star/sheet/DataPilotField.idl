@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotField.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:33:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,22 @@
 #include <com/sun/star/sheet/GeneralFunction.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_DataPilotFieldReference_idl__
+#include <com/sun/star/sheet/DataPilotFieldReference.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_DataPilotFieldLayoutInfo_idl__
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_DataPilotFieldAutoShowInfo_idl__
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_DataPilotFieldSortInfo_idl__
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -143,6 +159,40 @@ published service DataPilotField
         show all.
      */
     [property,optional] boolean UseSelectedPage;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which hierarchy of the dimension is used.
+
+    @see com::sun::star::sheet::DataPilotSourceHierarchies
+     */
+    [property,optional] string UsedHierarchy;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the field's items are sorted.
+     */
+    [property,optional] com::sun::star::sheet::DataPilotFieldSortInfo SortInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the field's items are laid out in the result table.
+     */
+    [property,optional] com::sun::star::sheet::DataPilotFieldLayoutInfo LayoutInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the automatic inclusion of only a number of items with
+        the highest or lowest result values.
+     */
+    [property,optional] com::sun::star::sheet::DataPilotFieldAutoShowInfo AutoShowInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the results are shown in relation to a selected
+        reference result.
+     */
+    [property,optional] com::sun::star::sheet::DataPilotFieldReference Reference;
 };
 
 //=============================================================================
