@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:41:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class Font;
 #define TEXTATTR_FONTWEIGHT 3
 
 #define TEXTATTR_USER_START 1000 //start id for user defined text attributes
+#define TEXTATTR_PROTECTED  4
 
 
 class TextAttrib
@@ -175,6 +176,18 @@ public:
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
+class TextAttribProtect : public TextAttrib
+{
+public:
+                            TextAttribProtect();
+                            TextAttribProtect( const TextAttribProtect& rAttr );
+                            ~TextAttribProtect();
+
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
+
+};
 
 
 class TextCharAttrib
