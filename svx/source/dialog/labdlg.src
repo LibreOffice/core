@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:08:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,17 +70,8 @@ TabPage RID_SVXPAGE_CAPTION
     Hide = TRUE ;
     //Size = MAP_APPFONT ( 189 , 97 ) ;
     Size = MAP_APPFONT ( 260 , 158 ) ;
-    Text = "Legende" ;
-    Text [ English ] = "Caption" ;
-    Text [ english_us ] = "Callouts" ;
-    Text [ italian ] = "Legenda" ;
-    Text [ spanish ] = "Leyenda" ;
-    Text [ french ] = "LÈgende" ;
-    Text [ dutch ] = "Tekstballon" ;
-    Text [ swedish ] = "Fˆrklaring" ;
-    Text [ danish ] = "Forklaringer" ;
-    Text [ portuguese ] = "Legenda" ;
-    Text [ portuguese_brazilian ] = "Textos Explicativos" ;
+    Text [ de ] = "Legende" ;
+    Text [ en-US ] = "Callouts" ;
     Control CT_CAPTTYPE
     {
         HelpId = HID_CAPTION_CTL_TYPE ;
@@ -93,36 +84,9 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 53  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        Text = "~Abstand" ;
-        Text [ English ] = "~Distance" ;
-        Text [ english_us ] = "~Spacing" ;
-        Text [ italian ] = "Spaziatura" ;
-        Text [ spanish ] = "Espa~cio" ;
-        Text [ french ] = "…cart" ;
-        Text [ dutch ] = "~Afstand" ;
-        Text [ swedish ] = "~AvstÂnd" ;
-        Text [ danish ] = "~Afstand" ;
-        Text [ portuguese_brazilian ] = "~Afastamento" ;
-        Text [ portuguese ] = "~EspaÁamento" ;
-        Text[ chinese_simplified ] = "Èó¥Èöî(~S)";
-        Text[ russian ] = "»ÌÚÂ‚‡Î";
-        Text[ polish ] = "~OdstÍp";
-        Text[ japanese ] = "ÈñìÈöî(~S)";
-        Text[ chinese_traditional ] = "ÈñìÈöî(~S)";
-        Text[ arabic ] = " »«⁄œ";
-        Text[ greek ] = "~¡¸ÛÙ·ÛÁ";
-        Text[ korean ] = "Í∞ÑÍ≤©(~S)";
-        Text[ turkish ] = "Uzakl˝k";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Espaiat";
-        Text[ finnish ] = "~V‰lit";
-        Text[ thai ] = "~‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
-        Text[ czech ] = "Vzd√°lenost";
-        Text[ hebrew ] = "‚ÄÆ◊®◊ô◊ï◊ï◊ó‚Ä¨";
-        Text[ hindi ] = "~‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§Ö‡§Ç‡§§‡§∞ ‡§¶‡•á‡§®‡§æ";
-        Text[ slovak ] = "~Rozostup";
-        Text[ hungarian ] = "~T√©rk√∂z";
-        Text[ slovenian ] = "~Razmik";
+        Text [ de ] = "~Abstand" ;
+        Text [ en-US ] = "~Spacing" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MF_ABSTAND
     {
@@ -142,36 +106,9 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 53  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "~Winkel" ;
-        Text [ English ] = "~Angle" ;
-        Text [ english_us ] = "~Angle" ;
-        Text [ italian ] = "Angolo" ;
-        Text [ spanish ] = "¡~ngulo" ;
-        Text [ french ] = "Angle" ;
-        Text [ dutch ] = "~Hoek" ;
-        Text [ swedish ] = "~Vinkel" ;
-        Text [ danish ] = "~Vinkel" ;
-        Text [ portuguese_brazilian ] = "~¬ngulo" ;
-        Text [ portuguese ] = "~¬ngulo" ;
-        Text[ chinese_simplified ] = "ËßíÂ∫¶(~A)";
-        Text[ russian ] = "”„ÓÎ";
-        Text[ polish ] = "~Kπt";
-        Text[ japanese ] = "ËßíÂ∫¶(~A)";
-        Text[ chinese_traditional ] = "ËßíÂ∫¶(~A)";
-        Text[ arabic ] = "«·“«ÊÌ…";
-        Text[ greek ] = "~√˘Ìﬂ·";
-        Text[ korean ] = "Í∞ÅÎèÑ(~A)";
-        Text[ turkish ] = "~AÁ˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Angle";
-        Text[ finnish ] = "~Kulma";
-        Text[ thai ] = "~‡∏°‡∏∏‡∏°";
-        Text[ czech ] = "√öhel";
-        Text[ hebrew ] = "~Winkel";
-        Text[ hindi ] = "~‡§ï‡•ã‡§£";
-        Text[ slovak ] = "~Uhol";
-        Text[ hungarian ] = "~Sz√∂g";
-        Text[ slovenian ] = "~Kot";
+        Text [ de ] = "~Winkel" ;
+        Text [ en-US ] = "~Angle" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_WINKEL
     {
@@ -181,7 +118,7 @@ TabPage RID_SVXPAGE_CAPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "Beliebig" ; 1 ; > ;
             < "30 Grad" ; 3000 ; > ;
@@ -189,15 +126,7 @@ TabPage RID_SVXPAGE_CAPTION
             < "60 Grad" ; 6000 ; > ;
             < "90 Grad" ; 9000 ; > ;
         };
-        StringList [ English ] =
-        {
-            < "Beliebig" ; 1 ; > ;
-            < "30 Grad" ; 3000 ; > ;
-            < "45 Grad" ; 4500 ; > ;
-            < "60 Grad" ; 6000 ; > ;
-            < "90 Grad" ; 9000 ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Free" ; 1 ; > ;
             < "30 Degrees" ; 3000 ; > ;
@@ -205,143 +134,7 @@ TabPage RID_SVXPAGE_CAPTION
             < "60 Degrees" ; 6000 ; > ;
             < "90 Degrees" ; 9000 ; > ;
         };
-        stringlist [ italian ] =
-        {
-            < "Qualsiasi" ; 1 ; > ;
-            < "30 gradi" ; 3000 ; > ;
-            < "45 gradi" ; 4500 ; > ;
-            < "60 gradi" ; 6000 ; > ;
-            < "90 gradi" ; 9000 ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Cualquiera" ; 1 ; > ;
-            < "30 grados" ; 3000 ; > ;
-            < "45 grados" ; 4500 ; > ;
-            < "60 grados" ; 6000 ; > ;
-            < "90 grados" ; 9000 ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Quelconque" ; 1 ; > ;
-            < "30 degrÈs" ; 3000 ; > ;
-            < "45 degrÈs" ; 4500 ; > ;
-            < "60 degrÈs" ; 6000 ; > ;
-            < "90 degrÈs" ; 9000 ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Willekeurig" ; 1 ; > ;
-            < "30 graden" ; 3000 ; > ;
-            < "45 graden" ; 4500 ; > ;
-            < "60 graden" ; 6000 ; > ;
-            < "90 graden" ; 9000 ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Livre" ; 1 ; > ;
-            < "30 Graus" ; 3000 ; > ;
-            < "45 Graus" ; 4500 ; > ;
-            < "60 Graus" ; 6000 ; > ;
-            < "90 Graus" ; 9000 ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Valfri" ; 1 ; > ;
-            < "30 grader" ; 3000 ; > ;
-            < "45 grader" ; 4500 ; > ;
-            < "60 grader" ; 6000 ; > ;
-            < "90 grader" ; 9000 ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Valgfri" ; 1 ; > ;
-            < "30 grader" ; 3000 ; > ;
-            < "45 grader" ; 4500 ; > ;
-            < "60 grader" ; 6000 ; > ;
-            < "90 grader" ; 9000 ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Qualquer um" ; 1 ; > ;
-            < "30 graus" ; 3000 ; > ;
-            < "45 graus" ; 4500 ; > ;
-            < "60 graus" ; 6000 ; > ;
-            < "90 graus" ; 9000 ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "‰ªªÊÑèËßíÂ∫¶" ; 1 ; > ;
-        < "30 Â∫¶" ; 3000 ; > ;
-        < "45 Â∫¶" ; 4500 ; > ;
-        < "60 Â∫¶" ; 6000 ; > ;
-        < "90 Â∫¶" ; 9000 ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "œÓ ÊÂÎ‡ÌË˛" ; 1 ; > ;
-        < "30 „‡‰ÛÒÓ‚" ; 3000 ; > ;
-        < "45 „‡‰ÛÒÓ‚" ; 4500 ; > ;
-        < "60 „‡‰ÛÒÓ‚" ; 6000 ; > ;
-        < "90 „‡‰ÛÒÓ‚" ; 9000 ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Dowolny" ; 1 ; > ;
-        < "30 st." ; 3000 ; > ;
-        < "45 st." ; 4500 ; > ;
-        < "60 st." ; 6000 ; > ;
-        < "90 st." ; 9000 ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Éï„É™„Éº" ; 1 ; > ;
-        < "30Â∫¶" ; 3000 ; > ;
-        < "45Â∫¶" ; 4500 ; > ;
-        < "60Â∫¶" ; 6000 ; > ;
-        < "90Â∫¶" ; 9000 ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "‰ªªÊÑèËßíÂ∫¶" ; 1 ; > ;
-        < "30 Â∫¶" ; 3000 ; > ;
-        < "45 Â∫¶" ; 4500 ; > ;
-        < "60 Â∫¶" ; 6000 ; > ;
-        < "90 Â∫¶" ; 9000 ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Õ—" ; 1 ; > ;
-        < "30 œ—Ã…" ; 3000 ; > ;
-        < "45 œ—Ã…" ; 4500 ; > ;
-        < "60 œ—Ã…" ; 6000 ; > ;
-        < "90 œ—Ã…" ; 9000 ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "≈ÎÂ˝ËÂÒ·" ; 1 ; > ;
-        < "30 ÏÔﬂÒÂÚ" ; 3000 ; > ;
-        < "45 ÏÔﬂÒÂÚ" ; 4500 ; > ;
-        < "60 ÃÔﬂÒÂÚ" ; 6000 ; > ;
-        < "90 ÏÔﬂÒÂÚ" ; 9000 ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏûÑÏùò" ; 1 ; > ;
-        < "30 ÎèÑ" ; 3000 ; > ;
-        < "45 ÎèÑ" ; 4500 ; > ;
-        < "60 ÎèÑ" ; 6000 ; > ;
-        < "90 ÎèÑ" ; 9000 ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Serbest" ; 1 ; > ;
-        < "30 Derece" ; 3000 ; > ;
-        < "45 Derece" ; 4500 ; > ;
-        < "60 Derece" ; 6000 ; > ;
-        < "90 Derece" ; 9000 ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; 1 ; > ;
         < " " ; 3000 ; > ;
@@ -349,113 +142,14 @@ TabPage RID_SVXPAGE_CAPTION
         < " " ; 6000 ; > ;
         < " " ; 9000 ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "Lliure" ; 1 ; > ;
-        < "30 graus" ; 3000 ; > ;
-        < "45 graus" ; 4500 ; > ;
-        < "60 graus" ; 6000 ; > ;
-        < "90 graus" ; 9000 ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Vapaa" ; 1 ; > ;
-        < "30 astetta" ; 3000 ; > ;
-        < "45 astetta" ; 4500 ; > ;
-        < "60 astetta" ; 6000 ; > ;
-        < "90 astetta" ; 9000 ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏≠‡∏¥‡∏™‡∏£‡∏∞" ; 1 ; > ;
-        < "30 ‡∏≠‡∏á‡∏®‡∏≤" ; 3000 ; > ;
-        < "45 ‡∏≠‡∏á‡∏®‡∏≤" ; 4500 ; > ;
-        < "60 ‡∏≠‡∏á‡∏®‡∏≤" ; 6000 ; > ;
-        < "90 ‡∏≠‡∏á‡∏®‡∏≤" ; 9000 ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Volnƒõ" ; 1 ; > ;
-        < "30 stup≈à≈Ø" ; 3000 ; > ;
-        < "45 stup≈à≈Ø" ; 4500 ; > ;
-        < "60 stup≈à≈Ø" ; 6000 ; > ;
-        < "90 stup≈à≈Ø" ; 9000 ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Beliebig" ; 1 ; > ;
-        < "30 Grad" ; 3000 ; > ;
-        < "45 Grad" ; 4500 ; > ;
-        < "60 Grad" ; 6000 ; > ;
-        < "90 Grad" ; 9000 ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§∏‡•ç‡§µ‡§§‡§Ç‡§§‡•ç‡§∞" ; 1 ; > ;
-        < "30 ‡§°‡§ø‡§ó‡•ç‡§∞‡§ø‡§Ø‡§æ‡§Å" ; 3000 ; > ;
-        < "45 ‡§°‡§ø‡§ó‡•ç‡§∞‡§ø‡§Ø‡§æ‡§Å" ; 4500 ; > ;
-        < "60 ‡§°‡§ø‡§ó‡•ç‡§∞‡§ø‡§Ø‡§æ‡§Å" ; 6000 ; > ;
-        < "90 ‡§°‡§ø‡§ó‡•ç‡§∞‡§ø‡§Ø‡§æ‡§Å" ; 9000 ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Voƒæne" ; 1 ; > ;
-        < "30 stup≈àov" ; 3000 ; > ;
-        < "45 stup≈àov" ; 4500 ; > ;
-        < "60 stup≈àov" ; 6000 ; > ;
-        < "90 stup≈àov" ; 9000 ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Szabad" ; 1 ; > ;
-        < "30 fok" ; 3000 ; > ;
-        < "45 fok" ; 4500 ; > ;
-        < "60 fok" ; 6000 ; > ;
-        < "90 fok" ; 9000 ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Poljubno" ; 1 ; > ;
-        < "30 stopinj" ; 3000 ; > ;
-        < "45 stopinj" ; 4500 ; > ;
-        < "60 stopinj" ; 6000 ; > ;
-        < "90 stopinj" ; 9000 ; > ;
-    };
     };
     FixedText FT_ANSATZ
     {
         Pos = MAP_APPFONT ( 6 , 69  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        Text = "A~nsatz" ;
-        Text [ English ] = "~Extension" ;
-        Text [ dutch ] = "~Aansluiting" ;
-        Text [ english_us ] = "~Extension" ;
-        Text [ italian ] = "Inizio linea" ;
-        Text [ spanish ] = "~ExtensiÛn" ;
-        Text [ french ] = "~Extension" ;
-        Text [ swedish ] = "F‰ste" ;
-        Text [ danish ] = "~TilhÊftning" ;
-        Text [ portuguese_brazilian ] = "~Extens„o" ;
-        Text [ portuguese ] = "E~xtens„o" ;
-        Text[ chinese_simplified ] = "Êâ©Â±ï(~E)";
-        Text[ russian ] = "–‡Ò¯ËÂÌËÂ";
-        Text[ polish ] = "~Rozszerzenie";
-        Text[ japanese ] = "Êã°Âºµ(~E)";
-        Text[ chinese_traditional ] = "Êì¥Â±ï(~E)";
-        Text[ arabic ] = "«„ œ«œ «·«”„";
-        Text[ greek ] = "≈~›ÍÙ·ÛÁ";
-        Text[ korean ] = "ÌôïÏû•Ïûê(~E)";
-        Text[ turkish ] = "Uzatma";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sortida";
-        Text[ finnish ] = "~Tunniste";
-        Text[ thai ] = "~‡∏™‡πà‡∏ß‡∏ô‡∏Ç‡∏¢‡∏≤‡∏¢";
-        Text[ czech ] = "Roz≈°√≠≈ôen√≠";
-        Text[ hebrew ] = "A~nsatz";
-        Text[ hindi ] = "~‡§µ‡§ø‡§∏‡•ç‡§§‡§æ‡§∞";
-        Text[ slovak ] = "Roz≈°√≠r~enie";
-        Text[ hungarian ] = "~Kiterjeszt√©s";
-        Text[ slovenian ] = "~Podalj≈°ek";
+        Text [ de ] = "A~nsatz" ;
+        Text [ en-US ] = "~Extension" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_ANSATZ
     {
@@ -465,7 +159,7 @@ TabPage RID_SVXPAGE_CAPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "Optimal" ; 4 ; > ;
             < "Von oben" ; 3 ; > ;
@@ -473,15 +167,7 @@ TabPage RID_SVXPAGE_CAPTION
             < "Horizontal" ; 1 ; > ;
             < "Vertikal" ; 2 ; > ;
         };
-        StringList [ English ] =
-        {
-            < "Optimal" ; 4 ; > ;
-            < "Von oben" ; 3 ; > ;
-            < "Von links" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertikal" ; 2 ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Optimal" ; 4 ; > ;
             < "From top" ; 3 ; > ;
@@ -489,143 +175,7 @@ TabPage RID_SVXPAGE_CAPTION
             < "Horizontal" ; 1 ; > ;
             < "Vertical" ; 2 ; > ;
         };
-        stringlist [ italian ] =
-        {
-            < "Ottimale" ; 4 ; > ;
-            < "Dall'alto" ; 3 ; > ;
-            < "Da sinistra" ; 3 ; > ;
-            < "Orizzontale" ; 1 ; > ;
-            < "Verticale" ; 2 ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "”ptimo" ; 4 ; > ;
-            < "Desde arriba" ; 3 ; > ;
-            < "De izquierda" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertical" ; 2 ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Optimal" ; 4 ; > ;
-            < "Du haut" ; 3 ; > ;
-            < "De gauche" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertical" ; 2 ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Optimaal" ; 4 ; > ;
-            < "Van boven" ; 3 ; > ;
-            < "Van links" ; 3 ; > ;
-            < "Horizontaal" ; 1 ; > ;
-            < "Verticaal" ; 2 ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Otimizado" ; 4 ; > ;
-            < "De cima" ; 3 ; > ;
-            < "Da esquerda" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertical" ; 2 ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Optimal" ; 4 ; > ;
-            < "UppifrÂn" ; 3 ; > ;
-            < "FrÂn v‰nster" ; 3 ; > ;
-            < "Horisontellt" ; 1 ; > ;
-            < "Vertikalt" ; 2 ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Optimal" ; 4 ; > ;
-            < "Fra toppen" ; 3 ; > ;
-            < "Fra venstre" ; 3 ; > ;
-            < "Vandret" ; 1 ; > ;
-            < "Lodret" ; 2 ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Optimizar" ; 4 ; > ;
-            < "De cima" ; 3 ; > ;
-            < "Da esquerda" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertical" ; 2 ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÊúÄ‰Ω≥" ; 4 ; > ;
-        < "‰ªé‰∏ä" ; 3 ; > ;
-        < "‰ªéÂ∑¶" ; 3 ; > ;
-        < "Ê∞¥Âπ≥ÊñπÂêë" ; 1 ; > ;
-        < "ÂûÇÁõ¥ÊñπÂêë" ; 2 ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ŒÔÚËÏ‡Î¸ÌÓ" ; 4 ; > ;
-        < "—‚ÂıÛ" ; 3 ; > ;
-        < "—ÎÂ‚‡" ; 3 ; > ;
-        < "√ÓËÁÓÌÚ‡Î¸ÌÓ" ; 1 ; > ;
-        < "¬ÂÚËÍ‡Î¸ÌÓ" ; 2 ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Optymalny" ; 4 ; > ;
-        < "Od gÛry" ; 3 ; > ;
-        < "Od lewej" ; 3 ; > ;
-        < "Poziomo" ; 1 ; > ;
-        < "Pionowo" ; 2 ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ÊúÄÈÅ©" ; 4 ; > ;
-        < "‰∏ä„Åã„Çâ" ; 3 ; > ;
-        < "Â∑¶„Åã„Çâ" ; 3 ; > ;
-        < "Â∑¶Âè≥" ; 1 ; > ;
-        < "‰∏ä‰∏ã" ; 2 ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÊúÄÂêàÈÅ©ÁöÑ" ; 4 ; > ;
-        < "Âæû‰∏ä" ; 3 ; > ;
-        < "ÂæûÂ∑¶" ; 3 ; > ;
-        < "Ê∞¥Âπ≥ÊñπÂêë" ; 1 ; > ;
-        < "ÂûÇÁõ¥ÊñπÂêë" ; 2 ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "«·√„À·" ; 4 ; > ;
-        < "„‰ √⁄·Ï" ; 3 ; > ;
-        < "„‰ «·Ì”«—" ; 3 ; > ;
-        < "√›ﬁÌ" ; 1 ; > ;
-        < "—√”Ì" ; 2 ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¬›ÎÙÈÛÙ·" ; 4 ; > ;
-        < "A¸ ‹Ì˘" ; 3 ; > ;
-        < "A¸ ·ÒÈÛÙÂÒ‹" ; 3 ; > ;
-        < "œÒÈÊ¸ÌÙÈ·" ; 1 ; > ;
-        < " ·Ù·Í¸Òıˆ·" ; 2 ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏµúÏ†Å" ; 4 ; > ;
-        < "ÏúÑ Î∂ÄÌÑ∞" ; 3 ; > ;
-        < "ÏôºÏ™Ω Î∂ÄÌÑ∞" ; 3 ; > ;
-        < "Í∞ÄÎ°ú" ; 1 ; > ;
-        < "ÏÑ∏Î°ú" ; 2 ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Optimum" ; 4 ; > ;
-        < "‹stten" ; 3 ; > ;
-        < "Soldan" ; 3 ; > ;
-        < "Yatay" ; 1 ; > ;
-        < "Dikey" ; 2 ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; 4 ; > ;
         < " " ; 3 ; > ;
@@ -633,113 +183,14 @@ TabPage RID_SVXPAGE_CAPTION
         < " " ; 1 ; > ;
         < " " ; 2 ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "“ptim" ; 4 ; > ;
-        < "Des de la part superior" ; 3 ; > ;
-        < "Des de l'esquerra" ; 3 ; > ;
-        < "Horitzontal" ; 1 ; > ;
-        < "Vertical" ; 2 ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Optimaalinen" ; 4 ; > ;
-        < "Ylh‰‰lt‰" ; 3 ; > ;
-        < "Vasemmalta" ; 3 ; > ;
-        < "Vaakataso" ; 1 ; > ;
-        < "Pystytaso" ; 2 ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡πÄ‡∏´‡∏°‡∏≤‡∏∞‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; 4 ; > ;
-        < "‡∏à‡∏≤‡∏Å‡∏î‡πâ‡∏≤‡∏ô‡∏ö‡∏ô" ; 3 ; > ;
-        < "‡∏à‡∏≤‡∏Å‡∏î‡πâ‡∏≤‡∏ô‡∏•‡πà‡∏≤‡∏á" ; 3 ; > ;
-        < "‡πÅ‡∏ô‡∏ß‡∏ô‡∏≠‡∏ô" ; 1 ; > ;
-        < "‡πÅ‡∏ô‡∏ß‡∏ï‡∏±‡πâ‡∏á" ; 2 ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Optim√°ln√≠" ; 4 ; > ;
-        < "Shora" ; 3 ; > ;
-        < "Zleva" ; 3 ; > ;
-        < "Vodorovnƒõ" ; 1 ; > ;
-        < "Svisle" ; 2 ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Optimal" ; 4 ; > ;
-        < "‚ÄÆ◊û◊ú◊û◊¢◊ú◊î‚Ä¨" ; 3 ; > ;
-        < "‚ÄÆ◊û◊©◊û◊ê◊ú‚Ä¨" ; 3 ; > ;
-        < "Horizontal" ; 1 ; > ;
-        < "Vertikal" ; 2 ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§Ø‡•ã‡§ó‡•ç‡§Ø" ; 4 ; > ;
-        < "‡§ä‡§™‡§∞ ‡§∏‡•á" ; 3 ; > ;
-        < "‡§¨‡§æ‡§Ø‡§æ‡§Å ‡§ì‡§∞ ‡§∏‡•á" ; 3 ; > ;
-        < "‡§∏‡§Æ‡§§‡§≤" ; 1 ; > ;
-        < "‡§≤‡§Æ‡•ç‡§¨" ; 2 ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Optim√°lne" ; 4 ; > ;
-        < "Zhora" ; 3 ; > ;
-        < "Zƒæava" ; 3 ; > ;
-        < "Vodorovne" ; 1 ; > ;
-        < "Zvisl√©" ; 2 ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Optim√°lis" ; 4 ; > ;
-        < "Fel√ºlr≈ël" ; 3 ; > ;
-        < "Balr√≥l" ; 3 ; > ;
-        < "V√≠zszintes" ; 1 ; > ;
-        < "F√ºgg≈ëleges" ; 2 ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Optimalno" ; 4 ; > ;
-        < "Od zgoraj" ; 3 ; > ;
-        < "Z leve" ; 3 ; > ;
-        < "Vodoravno" ; 1 ; > ;
-        < "Navpiƒçno" ; 2 ; > ;
-    };
     };
     FixedText FT_UM
     {
         Pos = MAP_APPFONT ( 106 , 69  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "~Um" ;
-        Text [ English ] = "~By" ;
-        Text [ dutch ] = "~Onder" ;
-        Text [ english_us ] = "~By" ;
-        Text [ italian ] = "Per" ;
-        Text [ spanish ] = "~De" ;
-        Text [ french ] = "De" ;
-        Text [ swedish ] = "~Om" ;
-        Text [ danish ] = "~Ved" ;
-        Text [ portuguese_brazilian ] = "~Por" ;
-        Text [ portuguese ] = "~De" ;
-        Text[ chinese_simplified ] = "Êï∞ÂÄº(~B)";
-        Text[ russian ] = "Õ‡";
-        Text[ polish ] = "~O";
-        Text[ japanese ] = "ÂÄçÁéá(~B)";
-        Text[ chinese_traditional ] = "Êï∏ÂÄº(~B)";
-        Text[ arabic ] = "»„ﬁœ«—";
-        Text[ greek ] = " ~·Ù‹";
-        Text[ korean ] = "Î∞∞Ïú®(~B)";
-        Text[ turkish ] = "Deer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Per";
-        Text[ finnish ] = "~Tekij‰";
-        Text[ thai ] = "‡πÇ~‡∏î‡∏¢";
-        Text[ czech ] = "O";
-        Text[ hebrew ] = "~Um";
-        Text[ hindi ] = "~‡§∏‡•á";
-        Text[ slovak ] = "~O";
-        Text[ hungarian ] = "√°~ltal";
-        Text[ slovenian ] = "~Za";
+        Text [ de ] = "~Um" ;
+        Text [ en-US ] = "~By" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MF_ANSATZ
     {
@@ -759,36 +210,9 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 69  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "~Position" ;
-        Text [ English ] = "~Position" ;
-        Text [ dutch ] = "~Positie" ;
-        Text [ english_us ] = "~Position" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ spanish ] = "PosiciÛn" ;
-        Text [ french ] = "Position" ;
-        Text [ swedish ] = "~Position" ;
-        Text [ danish ] = "~Placering" ;
-        Text [ portuguese_brazilian ] = "~PosiÁ„o" ;
-        Text [ portuguese ] = "~PosiÁ„o" ;
-        Text[ chinese_simplified ] = "‰ΩçÁΩÆ(~P)";
-        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
-        Text[ polish ] = "~Pozycja";
-        Text[ japanese ] = "‰ΩçÁΩÆ(~P)";
-        Text[ chinese_traditional ] = "‰ΩçÁΩÆ(~P)";
-        Text[ arabic ] = "«·„Ê÷⁄";
-        Text[ greek ] = "~»›ÛÁ";
-        Text[ korean ] = "ÏúÑÏπò(~P)";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~PosiciÛ";
-        Text[ finnish ] = "S~ijainti";
-        Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
-        Text[ czech ] = "Um√≠stƒõn√≠";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ô◊ß◊ï◊ù‚Ä¨";
-        Text[ hindi ] = "~‡§∏‡•ç‡§•‡§æ‡§®";
-        Text[ slovak ] = "~Umiestnenie";
-        Text[ hungarian ] = "~Poz√≠ci√≥";
-        Text[ slovenian ] = "~Polo≈æaj";
+        Text [ de ] = "~Position" ;
+        Text [ en-US ] = "~Position" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -804,36 +228,9 @@ TabPage RID_SVXPAGE_CAPTION
         Size = MAP_APPFONT ( 42 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~L‰nge : ~Lınge */
         /* ### ACHTUNG: Neuer Text in Resource? ~L‰nge : ~Lınge */
-        Text = "~L‰nge" ;
-        Text [ English ] = "~Length" ;
-        Text [ english_us ] = "~Length" ;
-        Text [ italian ] = "~Lungh." ;
-        Text [ spanish ] = "Longitud" ;
-        Text [ french ] = "~Longueur" ;
-        Text [ dutch ] = "~Lengte" ;
-        Text [ swedish ] = "~L‰ngd" ;
-        Text [ danish ] = "~LÊngde" ;
-        Text [ portuguese_brazilian ] = "~Comprimento" ;
-        Text [ portuguese ] = "~Comprimento" ;
-        Text[ chinese_simplified ] = "ÈïøÂ∫¶(~L)";
-        Text[ russian ] = "ƒÎËÌ‡";
-        Text[ polish ] = "~D≥ugoúÊ";
-        Text[ japanese ] = "Èï∑„Åï(~L)";
-        Text[ chinese_traditional ] = "Èï∑Â∫¶(~L)";
-        Text[ arabic ] = "«·ÿÊ·";
-        Text[ greek ] = "ÃﬁÍÔÚ";
-        Text[ korean ] = "Í∏∏Ïù¥(~L)";
-        Text[ turkish ] = "Uzunluk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Longitud";
-        Text[ finnish ] = "~Pituus";
-        Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°~‡∏¢‡∏≤‡∏ß";
-        Text[ czech ] = "D√©lka";
-        Text[ hebrew ] = "~L√§nge";
-        Text[ hindi ] = "~‡§≤‡§Æ‡•ç‡§¨‡§æ‡§à";
-        Text[ slovak ] = "~Dƒ∫≈æka";
-        Text[ hungarian ] = "~Hossz√∫s√°g";
-        Text[ slovenian ] = "Do~l≈æina";
+        Text [ de ] = "~L‰nge" ;
+        Text [ en-US ] = "~Length" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MF_LAENGE
     {
@@ -853,235 +250,46 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 84  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Optimal" ;
-        Text [ English ] = "~Optimal" ;
+        Text [ de ] = "~Optimal" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Optimal" ;
-        Text [ italian ] = "~Ottimale" ;
-        Text [ spanish ] = "”ptimo" ;
-        Text [ french ] = "~Optimal" ;
-        Text [ dutch ] = "~Optimaal" ;
-        Text [ swedish ] = "~Optimal" ;
-        Text [ danish ] = "~Optimal" ;
-        Text [ portuguese_brazilian ] = "~Otimizado" ;
-        Text [ portuguese ] = "~Optimizar" ;
-        Text[ chinese_simplified ] = "ÊúÄ‰Ω≥(~O)";
-        Text[ russian ] = "ŒÔÚËÏ‡Î¸ÌÓ";
-        Text[ polish ] = "~Optymalny";
-        Text[ japanese ] = "ÊúÄÈÅ©(~O)";
-        Text[ chinese_traditional ] = "ÊúÄÂêàÈÅ©ÁöÑ(~O)";
-        Text[ arabic ] = "«·√„À·";
-        Text[ greek ] = "¬›ÎÙÈÛÙ·";
-        Text[ korean ] = "ÏµúÏ†Å(~O)";
-        Text[ turkish ] = "~Optimum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "“~ptim";
-        Text[ finnish ] = "O~ptimaalinen";
-        Text[ thai ] = "‡πÄ~‡∏´‡∏°‡∏≤‡∏∞‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
-        Text[ czech ] = "Optim√°ln√≠";
-        Text[ hebrew ] = "~Optimal";
-        Text[ hindi ] = "~‡§Ø‡•ã‡§ó‡•ç‡§Ø";
-        Text[ slovak ] = "~Optim√°lny";
-        Text[ hungarian ] = "~Optim√°lis";
-        Text[ slovenian ] = "~Optimalno";
+        Text [ en-US ] = "~Optimal" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_1
     {
-        Text = "Gerade Linie" ;
-        Text [ English ] = "Straight line" ;
-        Text [ english_us ] = "Straight Line" ;
-        Text [ italian ] = "Linea diritta" ;
-        Text [ spanish ] = "LÌnea recta" ;
-        Text [ french ] = "Ligne droite" ;
-        Text [ dutch ] = "Rechte lijn" ;
-        Text [ swedish ] = "Rak linje" ;
-        Text [ danish ] = "Lige linje" ;
-        Text [ portuguese_brazilian ] = "Linha Reta" ;
-        Text [ portuguese ] = "Linha recta" ;
-        Text[ chinese_simplified ] = "Áõ¥Á∫ø";
-        Text[ russian ] = "œˇÏ‡ˇ ÎËÌËˇ";
-        Text[ polish ] = "Linia prosta";
-        Text[ japanese ] = "Áõ¥Á∑ö";
-        Text[ chinese_traditional ] = "Áõ¥Á∑ö";
-        Text[ arabic ] = "Œÿ „” ﬁÌ„";
-        Text[ greek ] = "≈ıËÂﬂ· „Ò·ÏÏﬁ";
-        Text[ korean ] = "ÏßÅÏÑ†";
-        Text[ turkish ] = "D¸z Áizgili";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌnia recta";
-        Text[ finnish ] = "Suora viiva";
-        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏ï‡∏£‡∏á";
-        Text[ czech ] = "P≈ô√≠mka";
-        Text[ hebrew ] = "Gerade Linie";
-        Text[ hindi ] = "‡§∏‡•Ä‡§ß‡§æ ‡§∞‡•á‡§ñ‡§æ";
-        Text[ slovak ] = "Priamka";
-        Text[ hungarian ] = "Egyenes vonal";
-        Text[ slovenian ] = "Ravna ƒçrta";
+        Text [ de ] = "Gerade Linie" ;
+        Text [ en-US ] = "Straight Line" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_2
     {
-        Text = "Abgewinkelte Linie" ;
-        Text [ English ] = "Abgewinkelte Linie" ;
-        Text [ english_us ] = "Angled Line" ;
-        Text [ italian ] = "Linea angolata" ;
-        Text [ spanish ] = "LÌnea acodada" ;
-        Text [ french ] = "Ligne en angle" ;
-        Text [ dutch ] = "Lijn met hoek" ;
-        Text [ swedish ] = "Vinklad linje" ;
-        Text [ danish ] = "Vinklet linje" ;
-        Text [ portuguese_brazilian ] = "Linha angular" ;
-        Text [ portuguese ] = "Linha angular" ;
-        Text[ chinese_simplified ] = "ËßíÂΩ¢Á∫ø";
-        Text[ russian ] = "ÀÓÏ‡Ì‡ˇ ÎËÌËˇ";
-        Text[ polish ] = "Zakrzywiona linia";
-        Text[ japanese ] = "Ëßí„Çí„ÇÇ„Å§Á∑ö";
-        Text[ chinese_traditional ] = "ËßíÂΩ¢Á∑ö";
-        Text[ arabic ] = "Œÿ –Ê “«ÊÌ…";
-        Text[ greek ] = "√Ò·ÏÏﬁ ÏÂ „˘Ìﬂ·";
-        Text[ korean ] = "Í∞ÅÏßÑ ÏÑ†";
-        Text[ turkish ] = "AÁ˝l˝ Áizgi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌnia angular";
-        Text[ finnish ] = "Kulmikas viiva";
-        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡πÄ‡∏õ‡πá‡∏ô‡πÄ‡∏´‡∏•‡∏µ‡πà‡∏¢‡∏°‡πÄ‡∏õ‡πá‡∏ô‡∏°‡∏∏‡∏°";
-        Text[ czech ] = "K≈ôivka";
-        Text[ hebrew ] = "Abgewinkelte Linie";
-        Text[ hindi ] = "‡§ï‡•ã‡§£‡§Ø‡•Å‡§ï‡•ç‡§§ ‡§∞‡•á‡§ñ‡§æ";
-        Text[ slovak ] = "Krivka";
-        Text[ hungarian ] = "T√∂r√∂ttvonal";
-        Text[ slovenian ] = "Lomljena ƒçrta";
+        Text [ de ] = "Abgewinkelte Linie" ;
+        Text [ en-US ] = "Angled Line" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_3
     {
-        Text = "Abgewinkelte Linie einfach geknickt" ;
-        Text [ English ] = "Abgewinkelte Linie einfach geknickt" ;
-        Text [ english_us ] = "Angled Connector Line" ;
-        Text [ italian ] = "Linea angolata una volta" ;
-        Text [ spanish ] = "LÌnea acodada con un sÛlo ·ngulo" ;
-        Text [ french ] = "Ligne en angle flÈchie" ;
-        Text [ dutch ] = "Lijn met enkele hoek" ;
-        Text [ swedish ] = "Vinklad linje med en knick" ;
-        Text [ danish ] = "Vinklet forbindelseslinje" ;
-        Text [ portuguese_brazilian ] = "Linha Conectora Angular" ;
-        Text [ portuguese ] = "Linha angular com um sÛ ‚ngulo" ;
-        Text[ chinese_simplified ] = "ÂçïËøûËßíÂΩ¢Á∫ø";
-        Text[ russian ] = "ÀÓÏ‡Ì‡ˇ ÎËÌËˇ Ò Ó‰ÌËÏ ËÁ„Ë·ÓÏ";
-        Text[ polish ] = "Zakrzywiona linia ≥πczπca";
-        Text[ japanese ] = "1„Å§„ÅÆËßí„Çí„ÇÇ„Å§Á∑ö";
-        Text[ chinese_traditional ] = "ÂñÆÈÄ£ËßíÂΩ¢Á∑ö";
-        Text[ arabic ] = "Œÿ —«»ÿ –Ê “«ÊÌ… Ê«Õœ…";
-        Text[ greek ] = "√Ò·ÏÏﬁ Û˝Ì‰ÂÛÁÚ ı¸ „˘Ìﬂ·";
-        Text[ korean ] = "Íµ¨Î∂ÄÎü¨ÏßÑ Îã®Ïùº Ïó∞Í≤∞ÏÑ†";
-        Text[ turkish ] = "Tek aÁ˝l˝ Áizgi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌnia angular amb nomÈs un angle";
-        Text[ finnish ] = "Kulmikas yhdysviiva";
-        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠‡πÄ‡∏õ‡πá‡∏ô‡πÄ‡∏´‡∏•‡∏µ‡πà‡∏¢‡∏°‡πÄ‡∏õ‡πá‡∏ô‡∏°‡∏∏‡∏°";
-        Text[ czech ] = "Zak≈ôiven√° spojnice";
-        Text[ hebrew ] = "Abgewinkelte Linie einfach geknickt";
-        Text[ hindi ] = "‡§ï‡•ã‡§£‡§Ø‡•Å‡§ï‡•ç‡§§ ‡§ú‡•ã‡§°‡§º‡§®‡•á‡§µ‡§æ‡§≤‡§æ ‡§∞‡•á‡§ñ‡§æ";
-        Text[ slovak ] = "Ohnut√° spojnica";
-        Text[ hungarian ] = "√ñsszek√∂t≈ë t√∂r√∂ttvonal";
-        Text[ slovenian ] = "Lomljena povezovalna ƒçrta";
+        Text [ de ] = "Abgewinkelte Linie einfach geknickt" ;
+        Text [ en-US ] = "Angled Connector Line" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_4
     {
-        Text = "Abgewinkelte Linie doppelt geknickt" ;
-        Text [ English ] = "Abgewinkelte Linie doppelt geknickt" ;
-        Text [ english_us ] = "Double-angled line" ;
-        Text [ italian ] = "Linea angolata due volte" ;
-        Text [ spanish ] = "LÌnea acodada con dos ·ngulos" ;
-        Text [ french ] = "Ligne en angle doublement flÈchie" ;
-        Text [ dutch ] = "Lijn met dubbele hoek" ;
-        Text [ swedish ] = "Vinklad linje med tvÂ knickar" ;
-        Text [ danish ] = "Vinklet linje med to knÊk" ;
-        Text [ portuguese_brazilian ] = "Linha angular com ‚ngulo duplo" ;
-        Text [ portuguese ] = "Linha angular com ‚ngulo duplo" ;
-        Text[ chinese_simplified ] = "ÂèåËøûËßíÂΩ¢Á∫ø";
-        Text[ russian ] = "ÀÓÏ‡Ì‡ˇ ÎËÌËˇ Ò ‰‚ÓÈÌ˚Ï ËÁ„Ë·ÓÏ";
-        Text[ polish ] = "Linia podwÛjnie za≥amana";
-        Text[ japanese ] = "2„Å§„ÅÆËßí„Çí„ÇÇ„Å§Á∑ö";
-        Text[ chinese_traditional ] = "ÈõôÈÄ£ËßíÂΩ¢Á∑ö";
-        Text[ arabic ] = "Œÿ „“œÊÃ «·“Ê«Ì«";
-        Text[ greek ] = "√Ò·ÏÏﬁ ÏÂ 2 „˘ÌﬂÂÚ";
-        Text[ korean ] = "Ïù¥Ï§ë Í∞ÅÏßÑ ÏÑ†";
-        Text[ turkish ] = "«ift aÁ˝l˝ Áizgi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌnia angular amb dos angles";
-        Text[ finnish ] = "Kaksikulmainen viiva";
-        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡πÄ‡∏õ‡πá‡∏ô‡πÄ‡∏´‡∏•‡∏µ‡πà‡∏¢‡∏°‡πÄ‡∏õ‡πá‡∏ô‡∏°‡∏∏‡∏°‡∏Ñ‡∏π‡πà";
-        Text[ czech ] = "Dvakr√°t lomen√° k≈ôivka";
-        Text[ hebrew ] = "Abgewinkelte Linie doppelt geknickt";
-        Text[ hindi ] = "‡§¶‡•ç‡§µ‡§ø‡§ó‡•Å‡§£‡§ø‡§§-‡§ï‡•ã‡§£‡§Ø‡•Å‡§ï‡•ç‡§§ ‡§∞‡•á‡§ñ‡§æ";
-        Text[ slovak ] = "Dvakr√°t lomen√° krivka";
-        Text[ hungarian ] = "K√©tszeresen t√∂r√∂tt vonal";
-        Text[ slovenian ] = "Dvojno lomljena ƒçrta";
+        Text [ de ] = "Abgewinkelte Linie doppelt geknickt" ;
+        Text [ en-US ] = "Double-angled line" ;
+        Text [ x-comment ] = " ";
     };
     String STR_HORZ_LIST
     {
-        Text = "Oben;Mitte;Unten" ;
-        Text [ English ] = "Top;Middle;Bottom" ;
-        Text [ english_us ] = "Top;Middle;Bottom" ;
-        Text [ italian ] = "in alto;al centro;in basso" ;
-        Text [ spanish ] = "Arriba;centro;abajo" ;
-        Text [ french ] = "Haut;Milieu;Bas" ;
-        Text [ dutch ] = "Boven;Midden;Beneden" ;
-        Text [ swedish ] = "Uppe;Mitten;Nere" ;
-        Text [ danish ] = "Top;Midte;Bund" ;
-        Text [ portuguese_brazilian ] = "Superior; Meio; Inferior" ;
-        Text [ portuguese ] = "Superior; centro; inferior" ;
-        Text[ chinese_simplified ] = "‰∏ä;‰∏≠;‰∏ã";
-        Text[ russian ] = "¬‚ÂıÛ;œÓ ÒÂ‰ËÌÂ;¬ÌËÁÛ";
-        Text[ polish ] = "Na gÛrze;Poúrodku;Na dole";
-        Text[ japanese ] = "‰∏ä;‰∏≠;‰∏ã";
-        Text[ chinese_traditional ] = "‰∏ä;‰∏≠;‰∏ã";
-        Text[ arabic ] = "√⁄·Ï∫Ê”ÿ∫√”›·";
-        Text[ greek ] = "–‹Ì˘; ›ÌÙÒÔ; ‹Ù˘";
-        Text[ korean ] = "ÏúÑ;Í∞ÄÏö¥Îç∞;ÏïÑÎûò";
-        Text[ turkish ] = "‹st;Orta;Alt";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Part superior;Mig;Part inferior";
-        Text[ finnish ] = "Yl‰reuna;Keskikohta;Alareuna";
-        Text[ thai ] = "‡∏ö‡∏ô;‡∏Å‡∏•‡∏≤‡∏á;‡∏•‡πà‡∏≤‡∏á";
-        Text[ czech ] = "Naho≈ôe;Uprost≈ôed;Dole";
-        Text[ hebrew ] = "Oben;Mitte;Unten";
-        Text[ hindi ] = "‡§ä‡§™‡§∞;‡§Æ‡§ß‡•ç‡§Ø;‡§®‡•Ä‡§ö‡•á";
-        Text[ slovak ] = "Nahor;Uprostred;Naspodok";
-        Text[ hungarian ] = "Teteje;K√∂zepe;Alja";
-        Text[ slovenian ] = "Zgoraj;Sredina;Spodaj";
+        Text [ de ] = "Oben;Mitte;Unten" ;
+        Text [ en-US ] = "Top;Middle;Bottom" ;
+        Text [ x-comment ] = " ";
     };
     String STR_VERT_LIST
     {
-        Text = "Links;Mitte;Rechts" ;
-        Text [ English ] = "Left;Middle;Right" ;
-        Text [ english_us ] = "Left;Middle;Right" ;
-        Text [ italian ] = "A sinistra;al centro;a destra" ;
-        Text [ spanish ] = "Izquierda;centrado;derecha" ;
-        Text [ french ] = "Gauche;Milieu;Droite" ;
-        Text [ dutch ] = "Links;Midden;Rechts" ;
-        Text [ swedish ] = "V‰nster;Mitten;Hˆger" ;
-        Text [ danish ] = "Venstre;Centreret;H¯jre" ;
-        Text [ portuguese_brazilian ] = "Esquerda; Meio; Direita" ;
-        Text [ portuguese ] = "Esquerda; centro; direita" ;
-        Text[ chinese_simplified ] = "Â∑¶;‰∏≠;Âè≥";
-        Text[ russian ] = "—ÎÂ‚‡;œÓ ÒÂ‰ËÌÂ;—Ô‡‚‡";
-        Text[ polish ] = "Z lewej;Poúrodku;Z prawej";
-        Text[ japanese ] = "Â∑¶;‰∏≠Â§Æ;Âè≥";
-        Text[ chinese_traditional ] = "Â∑¶;‰∏≠;Âè≥";
-        Text[ arabic ] = "Ì”«—∫Ê”ÿ∫Ì„Ì‰";
-        Text[ greek ] = "¡ÒÈÛÙÂÒ‹; ›ÌÙÒÔ;ƒÂÓÈ‹";
-        Text[ korean ] = "ÏôºÏ™Ω;Í∞ÄÏö¥Îç∞;Ïò§Î•∏Ï™Ω";
-        Text[ turkish ] = "Sol;Orta;Sa";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Esquerra;Mig;Dreta";
-        Text[ finnish ] = "Vasen;Keskikohta;Oikea";
-        Text[ thai ] = "‡∏ã‡πâ‡∏≤‡∏¢;‡∏Å‡∏•‡∏≤‡∏á;‡∏Ç‡∏ß‡∏≤";
-        Text[ czech ] = "Vlevo;Uprost≈ôed;Vpravo";
-        Text[ hebrew ] = "Links;Mitte;Rechts";
-        Text[ hindi ] = "‡§¨‡§æ‡§Ø‡§æ‡§Å;‡§Æ‡§ß‡•ç‡§Ø;‡§¶‡§æ‡§π‡§ø‡§®‡§æ";
-        Text[ slovak ] = "Vƒæavo;Uprostred;Vpravo";
-        Text[ hungarian ] = "Balra;K√∂z√©pre;Jobbra";
-        Text[ slovenian ] = "Levo;Sredina;Desno";
+        Text [ de ] = "Links;Mitte;Rechts" ;
+        Text [ en-US ] = "Left;Middle;Right" ;
+        Text [ x-comment ] = " ";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -1115,25 +323,7 @@ TabPage RID_SVXPAGE_CAPTION
     {
         File = "legtyp4_hc.bmp" ;
     };
-    Text[ chinese_simplified ] = "Âõæ‰æã";
-    Text[ russian ] = "¬˚ÌÓÒÍ‡";
-    Text[ polish ] = "Objaúnienia";
-    Text[ japanese ] = "Âá°‰æã";
-    Text[ chinese_traditional ] = "Âúñ‰æã";
-    Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
-    Text[ greek ] = "≈È„Ò·ˆﬁ";
-    Text[ korean ] = "ÏÑ§Î™ÖÏÑ†";
-    Text[ turkish ] = "Belirtme Áizgisi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llegendes";
-    Text[ finnish ] = "Kuvatekstit";
-    Text[ thai ] = "‡∏Ñ‡∏≥‡∏ö‡∏£‡∏£‡∏¢‡∏≤‡∏¢‡∏†‡∏≤‡∏û";
-    Text[ czech ] = "Bubliny";
-    Text[ hebrew ] = "‚ÄÆ◊ì◊ô◊ë◊ï◊®◊ô◊ù‚Ä¨";
-    Text[ hindi ] = "‡§ï‡§æ‡§≤‡•å‡§ü‡•ç‡§∏‡•ç";
-    Text[ slovak ] = "Bubliny";
-    Text[ hungarian ] = "√Åbrafelirat";
-    Text[ slovenian ] = "Oblaƒçki";
+    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 TabDialog RID_SVXDLG_CAPTION
@@ -1141,17 +331,8 @@ TabDialog RID_SVXDLG_CAPTION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 237 , 161 ) ;
-    Text = "Legende" ;
-    Text [ English ] = "Caption" ;
-    Text [ english_us ] = "Callouts" ;
-    Text [ italian ] = "Legenda" ;
-    Text [ spanish ] = "Leyenda" ;
-    Text [ french ] = "LÈgende" ;
-    Text [ dutch ] = "Tekstballonnen" ;
-    Text [ swedish ] = "Fˆrklaring" ;
-    Text [ danish ] = "Forklaringer" ;
-    Text [ portuguese_brazilian ] = "Textos Explicativos" ;
-    Text [ portuguese ] = "Legenda" ;
+    Text [ de ] = "Legende" ;
+    Text [ en-US ] = "Callouts" ;
     Moveable = TRUE ;
     TabControl TAB_CONTROL
     {
@@ -1164,94 +345,21 @@ TabDialog RID_SVXDLG_CAPTION
             {
                 Identifier = RID_SVXPAGE_POSITION_SIZE ;
                 PageResID = RID_SVXPAGE_POSITION_SIZE ;
-                Text = "Position und Grˆﬂe" ;
-                Text [ ENGLISH ] = "Position and Size" ;
-                Text [ norwegian ] = "Posisjon og st¯rrelse" ;
-                Text [ italian ] = "Posizione e dimensione" ;
-                Text [ portuguese_brazilian ] = "PosiÁ„o e Tamanho" ;
-                Text [ portuguese ] = "PosiÁ„o e tamanho" ;
-                Text [ finnish ] = "Sijainti ja koko" ;
-                Text [ danish ] = "Placering og st¯rrelse" ;
-                Text [ french ] = "Position et taille" ;
-                Text [ swedish ] = "Position och storlek" ;
-                Text [ dutch ] = "Positie en grootte" ;
-                Text [ spanish ] = "PosiciÛn y tamaÒo" ;
-                Text [ english_us ] = "Position and Size" ;
-                Text[ chinese_simplified ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";
-                Text[ russian ] = "œÓÁËˆËˇ Ë ‡ÁÏÂ";
-                Text[ polish ] = "Pozycja i rozmiar";
-                Text[ japanese ] = "‰ΩçÁΩÆ„Å®„Çµ„Ç§„Ç∫";
-                Text[ chinese_traditional ] = "‰ΩçÁΩÆÂíåÂ§ßÂ∞è";
-                Text[ arabic ] = "«·„Ê÷⁄ Ê«·ÕÃ„";
-                Text[ greek ] = "»›ÛÁ Í·È Ï›„ÂËÔÚ";
-                Text[ korean ] = "ÏúÑÏπò Î∞è ÌÅ¨Í∏∞";
-                Text[ turkish ] = "Konum ve boyut";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Position and Size";
-                Text[ thai ] = "‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡πÅ‡∏•‡∏∞‡∏Ç‡∏ô‡∏≤‡∏î";
-                Text[ czech ] = "Um√≠stƒõn√≠ a velikost";
-                Text[ hebrew ] = "Position und Gr√∂√üe";
-                Text[ hindi ] = "Position and Size";
-                Text[ slovak ] = "Umiestnenie a veƒækos≈•";
-                Text[ hungarian ] = "Poz√≠ci√≥ √©s m√©ret";
-                Text[ slovenian ] = "Polo≈æaj in velikost";
+                Text [ de ] = "Position und Grˆﬂe" ;
+                Text [ en-US ] = "Position and Size" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CAPTION ;
-                Text = "Legende" ;
-                Text [ English ] = "Caption" ;
+                Text [ de ] = "Legende" ;
                 PageResID = RID_SVXPAGE_CAPTION ;
-                Text [ dutch ] = "Tekstballon" ;
-                Text [ english_us ] = "Callout" ;
-                Text [ italian ] = "Legenda" ;
-                Text [ spanish ] = "Leyenda" ;
-                Text [ french ] = "LÈgende" ;
-                Text [ swedish ] = "Fˆrklaring" ;
-                Text [ danish ] = "Forklaring" ;
-                Text [ portuguese_brazilian ] = "Texto Explicativo" ;
-                Text [ portuguese ] = "Legenda" ;
-                Text[ chinese_simplified ] = "Âõæ‰æã";
-                Text[ russian ] = "¬˚ÌÓÒÍ‡";
-                Text[ polish ] = "Objaúnienie";
-                Text[ japanese ] = "Âá°‰æã";
-                Text[ chinese_traditional ] = "Âúñ‰æã";
-                Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
-                Text[ greek ] = "≈È„Ò·ˆﬁ";
-                Text[ korean ] = "ÏÑ§Î™ÖÏÑ†";
-                Text[ turkish ] = "Belirtme Áizgisi";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Llegenda";
-                Text[ finnish ] = "Kuvateksti";
-                Text[ thai ] = "‡∏Ñ‡∏≥‡∏ö‡∏£‡∏£‡∏¢‡∏≤‡∏¢‡∏†‡∏≤‡∏û";
-                Text[ czech ] = "Bublina";
-                Text[ hebrew ] = "Legende";
-                Text[ hindi ] = "‡§ï‡§æ‡§≤‡•å‡§ü‡•ç";
-                Text[ slovak ] = "Bublina";
-                Text[ hungarian ] = "√Åbrafelirat";
-                Text[ slovenian ] = "Oblaƒçek";
+                Text [ en-US ] = "Callout" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text[ chinese_simplified ] = "Âõæ‰æã";
-    Text[ russian ] = "¬˚ÌÓÒÍË";
-    Text[ polish ] = "Objaúnienia";
-    Text[ japanese ] = "Âá°‰æã";
-    Text[ chinese_traditional ] = "Âúñ‰æã";
-    Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
-    Text[ greek ] = "≈È„Ò·ˆﬁ";
-    Text[ korean ] = "ÏÑ§Î™ÖÏÑ†";
-    Text[ turkish ] = "Belirtme Áizgisi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llegendes";
-    Text[ finnish ] = "Kuvatekstit";
-    Text[ thai ] = "‡∏Ñ‡∏≥‡∏ö‡∏£‡∏£‡∏¢‡∏≤‡∏¢‡∏†‡∏≤‡∏û";
-    Text[ czech ] = "Bubliny";
-    Text[ hebrew ] = "‚ÄÆ◊ì◊ô◊ë◊ï◊®◊ô◊ù‚Ä¨";
-    Text[ hindi ] = "‡§ï‡§æ‡§≤‡•å‡§ü‡•ç‡§∏‡•ç";
-    Text[ slovak ] = "Bubliny";
-    Text[ hungarian ] = "√Åbrafelirat";
-    Text[ slovenian ] = "Oblaƒçki";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
