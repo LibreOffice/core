@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-28 10:05:57 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:03:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ SLOFILES =\
         $(SLO)$/RelationDesignView.obj		\
         $(SLO)$/RelationController.obj
 
-SRCFILES =  relation.src
+SRS1NAME=$(TARGET)
+SRC1FILES =  relation.src
 
 # --- Targets -------------------------------------------------------
 
