@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:38:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,14 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbcx.adabas.ODriver");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbcx.adabas.ODriver"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -232,9 +232,6 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
     {
         odbc::OTools::ThrowException(pCon,nSQLRETURN,pCon->getConnection(),SQL_HANDLE_DBC,*this);
-    }
-    else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
-    {
     }
 
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
