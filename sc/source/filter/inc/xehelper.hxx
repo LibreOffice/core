@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:18:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,19 @@ public:
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
+    /** Creates a new unformatted string from the passed character.
+        @descr  Creates a Unicode string or a byte string, depending on the
+                current BIFF version contained in the passed XclExpRoot object.
+        @param cChar  The source character. The NUL character is explicitly allowed.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string.
+        @return  The new string object (shared pointer). */
+    static XclExpStringRef CreateString(
+                            const XclExpRoot& rRoot,
+                            sal_Unicode cChar,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
     /** Appends an unformatted string to an Excel string object.
         @descr  Selects the correct Append() function depending on the current
                 BIFF version contained in the passed XclExpRoot object.
@@ -340,8 +353,6 @@ public:
 };
 
 // Cached Value Lists =========================================================
-
-class XclExpStream;
 
 /** The base class for cached values.
     @descr  Cached values are used to store a list or a 2D array of double,
