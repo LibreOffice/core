@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-15 08:38:55 $
+ *  last change: $Author: ssa $ $Date: 2002-02-22 09:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,6 +1339,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnCurItemId       = 0;
     mnDownItemId      = 0;
     mnCurPos          = TOOLBOX_ITEM_NOTFOUND;
+    mnFocusPos        = TOOLBOX_ITEM_NOTFOUND;  // current position during keyboard access
     mnLines           = 1;
     mnCurLine         = 1;
     mnCurLines        = 1;
@@ -1364,10 +1365,13 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbDragging        = FALSE;
     mbHideStatusText  = FALSE;
     mbMenuStrings     = FALSE;
+    mbDummy1_Shift    = FALSE;
+    mbDummy2_KeyEvt   = FALSE;
     meButtonType      = BUTTON_SYMBOL;
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
+
     maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
@@ -4226,6 +4230,8 @@ void ToolBox::GetAccessObject( AccessObjectRef& rAcc ) const
 
 void ToolBox::GetFocus()
 {
+    ImplChangeHighlight( mpItemList->First() );
+
     DockingWindow::GetFocus();
 }
 
@@ -4233,6 +4239,8 @@ void ToolBox::GetFocus()
 
 void ToolBox::LoseFocus()
 {
+    ImplChangeHighlight( NULL );
+
     DockingWindow::LoseFocus();
 }
 
@@ -4240,6 +4248,176 @@ void ToolBox::LoseFocus()
 
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
-    DockingWindow::KeyInput( rKEvt );
+    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    switch ( nCode )
+    {
+        case KEY_UP:
+        {
+            ImplChangeHighlightUpDn( TRUE );
+        }
+        break;
+        case KEY_DOWN:
+        {
+            ImplChangeHighlightUpDn( FALSE );
+        }
+        break;
+        case KEY_END:
+            {
+            ImplChangeHighlight( mpItemList->Last() );
+            }
+            break;
+        case KEY_HOME:
+            {
+            ImplChangeHighlight( mpItemList->First() );
+            }
+            break;
+        case KEY_ESCAPE:
+        {
+        }
+        break;
+        case KEY_LEFT:
+        {
+            ImplChangeHighlightUpDn( TRUE );
+        }
+        break;
+        case KEY_RIGHT:
+        {
+            ImplChangeHighlightUpDn( FALSE );
+        }
+        break;
+        case KEY_RETURN:
+        {
+            if( mnHighItemId )
+            {
+                mnDownItemId = mnCurItemId = mnHighItemId;
+                ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+                mbDummy2_KeyEvt = TRUE;
+                Activate();
+                Click();
+                Select();
+                mbDummy2_KeyEvt = FALSE;
+            }
+        }
+        break;
+        case KEY_SPACE:
+        {
+            if( mnHighItemId )
+            {
+
+
+                // close last popup toolbox (see also:
+                // ImplHandleMouseFloatMode(...) in winproc.cxx )
+
+                if( ImplGetSVData()->maWinData.mpFirstFloat )
+                {
+                    FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+                    if( pLastLevelFloat )
+                        pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                }
+
+                mnDownItemId = mnCurItemId = mnHighItemId;
+                ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+
+                mbDummy1_Shift = TRUE;
+                mbDummy2_KeyEvt = TRUE;
+                Activate();
+                Click();
+                if (pItem->mnBits & TIB_REPEAT)
+                   Select();
+                mbDummy2_KeyEvt = FALSE;
+                mbDummy1_Shift = FALSE;
+            }
+        }
+        break;
+        default:
+        {
+            DockingWindow::KeyInput( rKEvt );
+            /*
+            xub_Unicode nCharCode = rKEvent.GetCharCode();
+            USHORT nPos;
+            USHORT nDuplicates = 0;
+            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos, nDuplicates, nHighlightedItem ) : NULL;
+            if ( pData )
+            {
+                if ( pData->pSubMenu || nDuplicates > 1 )
+                {
+                    ChangeHighlightItem( nPos, FALSE );
+                    HighlightChanged( 0 );
+                }
+                else
+                {
+                    nHighlightedItem = nPos;
+                    EndExecute();
+                }
+            }
+            else
+            {
+                // Bei ungueltigen Tasten Beepen, aber nicht bei HELP und F-Tasten
+                if ( !rKEvent.GetKeyCode().IsControlMod() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
+                    Sound::Beep();
+                FloatingWindow::KeyInput( rKEvent );
+            }
+            */
+        }
+    }
+
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::ImplChangeHighlight( ImplToolItem* pItem )
+{
+    if( mnFocusPos != TOOLBOX_ITEM_NOTFOUND )
+        ImplDrawItem( mnFocusPos, FALSE );
+
+    if ( mnHighItemId )
+        ImplDrawItem( GetItemPos( mnHighItemId ), FALSE );
+
+    if( pItem )
+    {
+        mnFocusPos = (USHORT) mpItemList->GetPos( pItem );
+        if( mnFocusPos != TOOLBOX_ITEM_NOTFOUND)
+        {
+            mnHighItemId = pItem->mnId;
+            ImplDrawItem( mnFocusPos, 2 );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::ImplChangeHighlightUpDn( BOOL bUp )
+{
+    ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+    if( !pItem && mnFocusPos != TOOLBOX_ITEM_NOTFOUND )
+        pItem = mpItemList->Seek( mnFocusPos );
+
+    if( pItem )
+    {
+        ULONG pos = mpItemList->GetPos( pItem );
+        ULONG nCount = mpItemList->Count();
+        ULONG i=0;
+        do
+        {
+            if( bUp )
+            {
+                if( !pos-- )
+                    pos = nCount-1;
+            }
+            else
+            {
+                if( ++pos >= nCount )
+                    pos = 0;
+            }
+
+            pItem = mpItemList->GetObject( pos );
+            if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
+                pItem->mbEnabled && !pItem->mbEmptyBtn && pItem->mbVisible )
+                break;
+        } while( ++i < nCount);
+
+        if( i != nCount )
+            ImplChangeHighlight( pItem );
+    }
 }
 
