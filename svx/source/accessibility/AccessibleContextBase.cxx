@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 17:35:56 $
+ *  last change: $Author: af $ $Date: 2002-03-06 15:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
 
 
@@ -202,6 +205,18 @@ sal_Int16 SAL_CALL
        AccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if (!msDescription.getLength())
+    {
+        OUString sDescription (createAccessibleDescription());
+
+        uno::Any aOldValue, aNewValue;
+        aOldValue <<= msDescription;
+        aNewValue <<= sDescription;
+
+        msDescription = sDescription;
+
+        CommitChange (OUString::createFromAscii ("AccessibleDescription"), aNewValue, aOldValue);
+    }
     return msDescription;
 }
 
@@ -212,6 +227,18 @@ OUString SAL_CALL
        AccessibleContextBase::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if ( !msName.getLength())
+    {
+        OUString sName (createAccessibleName());
+
+        uno::Any aOldValue, aNewValue;
+        aOldValue <<= msName;
+        aNewValue <<= sName;
+
+        msName = sName;
+
+        CommitChange (OUString::createFromAscii ("AccessibleName"), aNewValue, aOldValue);
+    }
     return msName;
 }
 
@@ -254,6 +281,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         ::com::sun::star::uno::RuntimeException)
 {
+    // Delegate request to parent.
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -279,20 +307,8 @@ void SAL_CALL
     {
         //  Make sure that the given listener is not already a member of the
         //  listener list.
-        sal_Bool bFound(sal_False);
-           PropertyChangeListenerListType::iterator aItr = mxPropertyChangeListeners.begin();
-        while (!bFound && (aItr != mxPropertyChangeListeners.end()))
-            if (*aItr == xListener)
-                bFound = sal_True;
-            else
-                aItr++;
-
-        if (!bFound)
-        {
-            //  Append the new listener to the end of the listener list.
-            ::vos::OGuard aGuard (maMutex);
-            mxPropertyChangeListeners.push_back (xListener);
-        }
+        ::vos::OGuard aGuard (maMutex);
+           mxPropertyChangeListeners.insert (xListener);
     }
 }
 
@@ -306,6 +322,10 @@ void SAL_CALL
 {
     if (xListener.is())
     {
+        ::vos::OGuard aGuard (maMutex);
+           mxPropertyChangeListeners.erase (xListener);
+
+        /*
         //  Find the listener to remove by iterating over the whole list.
         sal_Bool bFound(sal_False);
            PropertyChangeListenerListType::iterator aItr = mxPropertyChangeListeners.begin();
@@ -321,6 +341,59 @@ void SAL_CALL
             else
                 aItr++;
         }
+        */
+    }
+}
+
+
+
+
+void AccessibleContextBase::fireEvent (const AccessibleEventObject& aEvent)
+{
+    EventListenerListType::iterator I;
+
+    for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
+        if ((*I).is())
+        {
+            OSL_TRACE ("Fireing event.");
+            (*I)->notifyEvent (aEvent);
+        }
+        else
+            OSL_TRACE ("listener invalid.");
+}
+
+
+
+
+//=====  XAccessibleEventListener  ============================================
+
+void SAL_CALL
+    AccessibleContextBase::addEventListener (
+        const uno::Reference<XAccessibleEventListener >& xListener)
+    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ::vos::OGuard aGuard (maMutex);
+           mxEventListeners.insert (
+            mxEventListeners.begin(),
+            xListener);
+        OSL_ASSERT (mxEventListeners.begin()!=mxEventListeners.end());
+    }
+}
+
+
+
+
+void SAL_CALL
+    AccessibleContextBase::removeEventListener (
+        const uno::Reference<XAccessibleEventListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ::vos::OGuard aGuard (maMutex);
+        mxEventListeners.erase (xListener);
     }
 }
 
@@ -336,6 +409,9 @@ void SAL_CALL
     return OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleContextBase"));
 }
 
+
+
+
 sal_Bool SAL_CALL
      AccessibleContextBase::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
@@ -350,6 +426,9 @@ sal_Bool SAL_CALL
     return sal_False;
 }
 
+
+
+
 uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -357,6 +436,9 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
     return uno::Sequence<OUString> (&sServiceName, 1);
 }
+
+
+
 
 //=====  XTypeProvider  =======================================================
 
@@ -370,6 +452,8 @@ uno::Sequence< ::com::sun::star::uno::Type>
         ::getCppuType((const uno::Reference<
             XAccessibleContext>*)0),
         ::getCppuType((const uno::Reference<
+            XAccessibleEventBroadcaster>*)0),
+        ::getCppuType((const uno::Reference<
             lang::XServiceInfo>*)0),
         ::getCppuType((const uno::Reference<
             lang::XTypeProvider>*)0),
@@ -377,9 +461,12 @@ uno::Sequence< ::com::sun::star::uno::Type>
             lang::XServiceName>*)0)
         };
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 5);
+        aTypeSequence (aTypeList, 6);
     return aTypeSequence;
 }
+
+
+
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
@@ -395,6 +482,9 @@ uno::Sequence<sal_Int8> SAL_CALL
     return aId;
 }
 
+
+
+
 //=====  XServiceName  ========================================================
 
 ::rtl::OUString
@@ -403,6 +493,9 @@ uno::Sequence<sal_Int8> SAL_CALL
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
 }
+
+
+
 
 //=====  internal  ============================================================
 
@@ -478,5 +571,8 @@ void AccessibleContextBase::CommitChange(const rtl::OUString& rPropertyName,
         (*I)->propertyChange (aEvent);
     }
 }
+
+
+
 
 } // end of namespace accessibility
