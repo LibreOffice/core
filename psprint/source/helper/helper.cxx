@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-23 13:28:52 $
+ *  last change: $Author: pl $ $Date: 2002-12-10 17:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/profile.hxx>
+#include <tools/config.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
 #include <cpputools/jenv.hxx>
@@ -165,15 +165,18 @@ const ::rtl::OUString& psp::getFontPath()
         aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
 
         // append jre/jdk fonts if possible
-        ::rtl::OUString aJavaRc( RTL_CONSTASCII_USTRINGPARAM( "file://" ) );
-        aJavaRc += getOfficePath( psp::UserPath );
+        rtl::OUString aJavaRc( getOfficePath( psp::UserPath ) );
         aJavaRc += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/config/" SAL_CONFIGFILE( "java" ) ) );
-        ::osl::Profile aProfile( aJavaRc );
-        ::rtl::OString aJREpath =
-              aProfile.readString(
-                                  ::rtl::OString( "Java" ),
-                                  ::rtl::OString( "Home" ),
-                                  ::rtl::OString() );
+        Config aConfig( aJavaRc );
+        aConfig.SetGroup( "Java" );
+        rtl::OString aJREpath = aConfig.ReadKey( "Home" );
+        if( aJREpath.compareTo( "file:", 5 ) == 0 )
+        {
+            rtl::OUString aURL( rtl::OStringToOUString( aJREpath, osl_getThreadTextEncoding() ) );
+            rtl::OUString aSys;
+            if( osl_getSystemPathFromFileURL( aURL.pData, &aSys.pData ) == osl_File_E_None )
+                aJREpath = rtl::OUStringToOString( aSys, osl_getThreadTextEncoding() );
+        }
         if( aJREpath.getLength() > 0 )
         {
             ::rtl::OString aTestPath( aJREpath );
