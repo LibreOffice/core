@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:25:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1589,6 +1589,46 @@ void SwWW8Writer::WriteLong( SvStream& rStrm, ULONG nPos, INT32 nVal )
     rStrm.Seek( nOldPos );
 }
 
+void SwWW8Writer::InsUInt16(ww::bytes &rO, sal_uInt16 n)
+{
+    SVBT16 nL;
+    ShortToSVBT16( n, nL );
+    rO.push_back(nL[0]);
+    rO.push_back(nL[1]);
+}
+
+void SwWW8Writer::InsUInt32(ww::bytes &rO, sal_uInt32 n)
+{
+    SVBT32 nL;
+    LongToSVBT32( n, nL );
+    rO.push_back(nL[0]);
+    rO.push_back(nL[1]);
+    rO.push_back(nL[2]);
+    rO.push_back(nL[3]);
+}
+
+void SwWW8Writer::InsAsString16(ww::bytes &rO, const String& rStr)
+{
+    const sal_Unicode* pStr = rStr.GetBuffer();
+    for( xub_StrLen n = 0, nLen = rStr.Len(); n < nLen; ++n, ++pStr )
+        SwWW8Writer::InsUInt16( rO, *pStr );
+}
+
+void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
+        rtl_TextEncoding eCodeSet)
+{
+    ByteString sTmp(rStr, eCodeSet);
+    const sal_Char *pStart = sTmp.GetBuffer();
+    const sal_Char *pEnd = pStart + sTmp.Len();
+    rO.reserve(rO.size() + sTmp.Len());
+#if 0
+    //Solaris compiler doesn't like this, I believe its good.
+    rO.insert(rO.end(), pStart, pStart + sTmp.Len());
+#else
+    std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
+#endif
+}
+
 #ifdef __WW8_NEEDS_COPY
 
 void SwWW8Writer::InsUInt16( WW8Bytes& rO, UINT16 n )
@@ -1634,21 +1674,27 @@ void SwWW8Writer::InsAsString8( WW8Bytes& rO, const String& rStr,
 void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
     bool bAddZero)
 {
-    WW8Bytes aBytes;
-    SwWW8Writer::InsAsString16( aBytes, rStr );
-    if( bAddZero )
-        SwWW8Writer::InsUInt16( aBytes, 0 );
-    rStrm.Write( aBytes.GetData(), aBytes.Count() );
+    ww::bytes aBytes;
+    SwWW8Writer::InsAsString16(aBytes, rStr);
+    if (bAddZero)
+        SwWW8Writer::InsUInt16(aBytes, 0);
+    //vectors are guaranteed to have contiguous memory, so we can do
+    //this while migrating away from WW8Bytes. Meyers Effective STL, item 16
+    if (!aBytes.empty())
+        rStrm.Write(&aBytes[0], aBytes.size());
 }
 
 void SwWW8Writer::WriteString8(SvStream& rStrm, const String& rStr,
     bool bAddZero, rtl_TextEncoding eCodeSet)
 {
-    WW8Bytes aBytes;
-    SwWW8Writer::InsAsString8( aBytes, rStr, eCodeSet );
-    if( bAddZero )
-        aBytes.Insert( (BYTE)0, aBytes.Count() );
-    rStrm.Write( aBytes.GetData(), aBytes.Count() );
+    ww::bytes aBytes;
+    SwWW8Writer::InsAsString8(aBytes, rStr, eCodeSet);
+    if (bAddZero)
+        aBytes.push_back(0);
+    //vectors are guaranteed to have contiguous memory, so we can do
+    ////this while migrating away from WW8Bytes. Meyers Effective STL, item 16
+    if (!aBytes.empty())
+        rStrm.Write(&aBytes[0], aBytes.size());
 }
 
 void SwWW8Writer::WriteStringAsPara( const String& rTxt, USHORT nStyleId )
