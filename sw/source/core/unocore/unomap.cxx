@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: os $ $Date: 2002-11-05 08:34:02 $
+ *  last change: $Author: tl $ $Date: 2002-11-07 13:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1722,7 +1722,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
                     COMMON_HYPERLINK_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},    \
-                    { SW_PROP_NMID(UNO_NAME_NUMBERING_RULES), FN_UNO_NUM_RULES,     CPPU_E2T(CPPUTYPE_REFIDXREPL),  PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
