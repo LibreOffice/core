@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:14:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,7 +1971,12 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
 }
 
 
-SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, const Rectangle& rBoundRect ) const
+// --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
+SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
+                                           const Graphic& rGraf,
+                                           const Rectangle& rBoundRect,
+                                           const int _nCalledByGroup ) const
+// <--
 {
     SdrObject* pRet = NULL;
 
