@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:46:53 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,50 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ slovak ] = "Sprievodca zdrojom d√°t adries";
     Text[ hungarian ] = "C√≠mt√°rt√ºnd√©r";
     Text[ slovenian ] = "Avtopilot vira podatkov adresarja";
+
+#if defined( ABP_USE_ROADMAP )
+    String STR_SELECT_ABTYPE
+    {
+        Text = "Adreﬂbuchtyp";
+        Text [ english ] = "Address book type";
+        Text [ english_us ] = "Address book type";
+    };
+
+    String STR_INVOKE_ADMIN_DIALOG
+    {
+        Text = "Verbindungs-Einstellungen";
+        Text [ english ] = "Connection Settings";
+        Text [ english_us ] = "Connection Settings";
+    };
+
+    String STR_TABLE_SELECTION
+    {
+        Text = "Tabellenauswahl";
+        Text [ english ] = "Table selection";
+        Text [ english_us ] = "Table selection";
+    };
+
+    String STR_MANUAL_FIELD_MAPPING
+    {
+        Text = "Feldzuordnung";
+        Text [ english ] = "Field Assignment";
+        Text [ english_us ] = "Field Assignment";
+    };
+
+    String STR_FINAL_CONFIRM
+    {
+        Text = "Datenquellen Titel";
+        Text [ english ] = "Data Source Title";
+        Text [ english_us ] = "Data Source Title";
+    };
+
+    String STR_ROADMAP_TITLE
+    {
+        Text = "Adreﬂbuch Datenquelle";
+        Text [ english ] = "Address Book Data Source";
+        Text [ english_us ] = "Address Book Data Source";
+    };
+#endif
 };
 
 //........................................................................
@@ -111,9 +155,11 @@ TabPage RID_PAGE_SELECTABTYPE
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
+#if !defined( ABP_USE_ROADMAP )
     Text = "Willkommen zum AutoPiloten zur Einrichtung von Adressdatenquellen.";
     Text [ english ] = "Welcome to the Address Data Source AutoPilot";
     Text [ english_us ] = "Welcome to the Address Data Source AutoPilot";
+#endif
 
     FixedText FT_TYPE_HINTS
     {
@@ -437,9 +483,11 @@ TabPage RID_PAGE_ADMININVOKATION
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
+#if !defined( ABP_USE_ROADMAP )
     Text = "Zus‰tzliche Einstellungen";
     Text [ english ] = "Additional Settings";
     Text [ english_us ] = "Additional Settings";
+#endif
 
     FixedText FT_ADMINEXPLANATION
     {
@@ -591,9 +639,11 @@ TabPage RID_PAGE_TABLESELECTION
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
+#if !defined( ABP_USE_ROADMAP )
     Text = "Tabelle ausw‰hlen";
     Text [ english ] = "Select Table";
     Text [ english_us ] = "Select Table";
+#endif
 
     FixedText FL_TOOMUCHTABLES
     {
@@ -678,9 +728,11 @@ TabPage RID_PAGE_FIELDMAPPING
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
+#if !defined( ABP_USE_ROADMAP )
     Text = "Feldzuordnung";
     Text [ english ] = "Field Assignment";
     Text [ english_us ] = "Field Assignment";
+#endif
 
     FixedText FT_FIELDASSIGMENTEXPL
     {
@@ -803,9 +855,11 @@ TabPage RID_PAGE_FINAL
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
+#if !defined( ABP_USE_ROADMAP )
     Text = "Datenquellen Titel";
     Text [ english ] = "Data Source Title";
     Text [ english_us ] = "Data Source Name";
+#endif
 
     FixedText FT_FINISH_EXPL
     {
@@ -1274,71 +1328,4 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
