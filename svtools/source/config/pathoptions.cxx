@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-08 18:22:21 $
+ *  last change: $Author: as $ $Date: 2000-11-09 09:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #pragma hdrstop
 
 #include "pathoptions.hxx"
-#include "iniman.hxx"
 
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
@@ -104,6 +103,8 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 
 // define ----------------------------------------------------------------
+
+#define SEARCHPATH_DELIMITER            ';'
 
 #define ASCII_STR(s)                    OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
@@ -1449,12 +1450,12 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_TRASH:        aPath = GetTrashPath();         break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
             }
-            sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SFX_SEARCHPATH_DELIMITER );
+            sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
             for ( i = 0; i < nCount; ++i )
             {
                 INetURLObject aObj;
                 aObj.SetSmartProtocol( INET_PROT_FILE );
-                aObj.SetSmartURL( aPath.GetToken( i, SFX_SEARCHPATH_DELIMITER, nIdx ) );
+                aObj.SetSmartURL( aPath.GetToken( i, SEARCHPATH_DELIMITER, nIdx ) );
                 aObj.insertName( aIniFile );
                 bRet = IniFileExists_Impl( aObj.GetMainURL() );
 
