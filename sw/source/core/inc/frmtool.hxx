@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:22:43 $
+ *  last change: $Author: fme $ $Date: 2002-08-26 07:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,9 @@ public:
     inline USHORT CalcTop() const;
     inline USHORT CalcBottom() const;
            long CalcLeft( const SwFrm *pCaller ) const;
+#ifdef BIDI
+           long CalcRight( const SwFrm *pCaller );
+#endif
     inline long CalcRight() const;
 
     inline BOOL IsLine() const;

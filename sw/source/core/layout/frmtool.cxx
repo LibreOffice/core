@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-12 08:08:09 $
+ *  last change: $Author: fme $ $Date: 2002-08-26 07:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,6 +1717,44 @@ void SwBorderAttrs::_CalcBottom()
     bBottom = FALSE;
 }
 
+void SwBorderAttrs::_CalcRight()
+{
+    nRight = CalcRightLine() + rLR.GetRight();
+    bRight = FALSE;
+}
+
+
+#ifdef BIDI
+
+long SwBorderAttrs::CalcRight( const SwFrm* pCaller )
+{
+    if ( pCaller->IsRightToLeft() )
+        nRight = CalcRightLine() + rLR.GetRight() +
+                 ( rLR.GetTxtFirstLineOfst() < 0 ?
+                   rLR.GetTxtFirstLineOfst() :
+                   0 );
+    else
+        nRight = CalcRightLine() + rLR.GetRight();
+
+    return nRight;
+}
+
+long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
+{
+    long nLeft;
+    if ( pCaller->IsRightToLeft() )
+        nLeft = rLR.GetTxtLeft() + CalcLeftLine();
+    else
+        nLeft = rLR.GetLeft() + CalcLeftLine();
+#ifdef NUM_RELSPACE
+    if ( pCaller->IsTxtFrm() )
+        nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
+#endif
+    return nLeft;
+}
+
+#else
+
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
     long nLeft = rLR.GetLeft() + CalcLeftLine();
@@ -1727,11 +1765,8 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     return nLeft;
 }
 
-void SwBorderAttrs::_CalcRight()
-{
-    nRight = CalcRightLine() + rLR.GetRight();
-    bRight = FALSE;
-}
+#endif
+
 
 /*************************************************************************
 |*

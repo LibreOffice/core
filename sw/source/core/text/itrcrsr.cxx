@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
+ *  last change: $Author: fme $ $Date: 2002-08-26 07:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,28 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
 
     const SvxLRSpaceItem &rSpace =
         pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+
+#ifdef BIDI
+    //
+    // Carefully adjust the text formatting ranges.
+    //
+    const nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
+    if ( pFrm->IsRightToLeft() )
+        nLeft = pFrm->Frm().Left() + pFrm->Prt().Left() + nLMWithNum -
+                ( rSpace.GetTxtFirstLineOfst() < 0 ?
+                  rSpace.GetTxtFirstLineOfst() :
+                  0 );
+    else
+        nLeft = Max( long( rSpace.GetTxtLeft() + nLMWithNum), pFrm->Prt().Left() ) +
+                pFrm->Frm().Left();
+#else
+    nLeft = Max( long( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum(sal_True) ),
+                 pFrm->Prt().Left() ) +
+            pFrm->Frm().Left();
+#endif
+
     nRight = pFrm->Frm().Left() + pFrm->Prt().Left() + pFrm->Prt().Width();
-    nLeft = Max( long( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum(sal_True)),
-                 pFrm->Prt().Left() ) + pFrm->Frm().Left();
+
     if( nLeft >= nRight )
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
     if( nLeft >= nRight ) // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
@@ -272,8 +291,18 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
         }
         else
             nFirstLineOfs = nFLOfst;
+
+#ifdef BIDI
+        if ( pFrm->IsRightToLeft() )
+            nFirst = nLeft + nFirstLineOfs;
+        else
+            nFirst = Max( rSpace.GetTxtLeft() + nLMWithNum + nFirstLineOfs,
+                          pFrm->Prt().Left() ) + pFrm->Frm().Left();
+#else
         nFirst = Max( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum( sal_True )
             + nFirstLineOfs, pFrm->Prt().Left() ) + pFrm->Frm().Left();
+#endif
+
         if( nFirst >= nRight )
             nFirst = nRight - 1;
     }

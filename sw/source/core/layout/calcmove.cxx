@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-19 11:10:10 $
+ *  last change: $Author: fme $ $Date: 2002-08-26 07:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,12 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //An der FixSize gibt der umgebende Frame die Groesse vor, die
             //Raender werden einfach abgezogen.
             const long nLeft = rAttrs.CalcLeft( this );
+#ifdef BIDI
+            const long nRight = ((SwBorderAttrs&)rAttrs).CalcRight( this );
+            (this->*fnRect->fnSetXMargins)( nLeft, nRight );
+#else
             (this->*fnRect->fnSetXMargins)( nLeft, rAttrs.CalcRight() );
+#endif
 
             ViewShell *pSh = GetShell();
             SwTwips nWidthArea;
