@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:36:55 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,11 @@ TabPage TP_REDLINE_OPT
     HelpID = HID_REDLINE_OPT ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     RadioButton RB_INSERT
     {
-        Pos = MAP_APPFONT ( 12 , 18 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Einfügen" ;
         Text [ ENGLISH ] = "Insert" ;
         Check = TRUE ;
@@ -108,8 +108,8 @@ TabPage TP_REDLINE_OPT
     };
     RadioButton RB_DELETED
     {
-        Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 90 , 14 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "Delete" ;
         Text [ portuguese ] = "E~liminar" ;
@@ -134,8 +134,8 @@ TabPage TP_REDLINE_OPT
     };
     RadioButton RB_CHANGED
     {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 178 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Attributänderung" ;
         Text [ ENGLISH ] = "Change attribute" ;
         Text [ portuguese ] = "~Modificar atributo" ;
@@ -160,7 +160,7 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_TE_ATTRIB
     {
-        Pos = MAP_APPFONT ( 74 , 18 ) ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
@@ -186,8 +186,8 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_TE_ATTRIB
     {
-        Pos = MAP_APPFONT ( 115 , 17 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 27 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -466,8 +466,8 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_TL_ATTRIB
     {
-        Pos = MAP_APPFONT ( 115 , 17 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 27 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -726,8 +726,8 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_TC_ATTRIB
     {
-        Pos = MAP_APPFONT ( 115 , 17 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 27 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -1007,7 +1007,7 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_TE_COL
     {
-        Pos = MAP_APPFONT ( 74 , 34 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
@@ -1033,23 +1033,23 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_TE_COL
     {
-        Pos = MAP_APPFONT ( 115 , 33 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 42 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ListBox LB_TL_COL
     {
-        Pos = MAP_APPFONT ( 115 , 33 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 42 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
     };
     ListBox LB_TC_COL
     {
-        Pos = MAP_APPFONT ( 115 , 33 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 42 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -1057,8 +1057,8 @@ TabPage TP_REDLINE_OPT
     Window WIN_TE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 198 , 22 ) ;
-        Size = MAP_APPFONT ( 50 , 18 ) ;
+        Pos = MAP_APPFONT ( 178 , 27 ) ;
+        Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Beispiel" ;
         Text [ English ] = "Example" ;
         Text [ portuguese ] = "Exemplo" ;
@@ -1084,7 +1084,7 @@ TabPage TP_REDLINE_OPT
     GroupBox GB_TE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 70 ) ;
+        Size = MAP_APPFONT ( 248 , 57 ) ;
         Text = "Textdarstellung" ;
         Text [ English ] = "Text representation" ;
         Text [ portuguese ] = "Visualizar texto" ;
@@ -1109,9 +1109,9 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_MARKPOS
     {
-        Pos = MAP_APPFONT ( 65 , 93 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text = "Markierung" ;
+        Text = "Ma~rkierung" ;
         Text [ English ] = "Mark" ;
         Text [ portuguese ] = "Marca" ;
         Text [ english_us ] = "Mark" ;
@@ -1135,8 +1135,8 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_MARKPOS
     {
-        Pos = MAP_APPFONT ( 115 , 92 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 74 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -1310,9 +1310,9 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_LC_COL
     {
-        Pos = MAP_APPFONT ( 65 , 109 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text = "Farbe" ;
+        Pos = MAP_APPFONT ( 12 , 91 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "Far~be" ;
         Text [ English ] = "Color" ;
         Text [ english_us ] = "Color" ;
         Text [ portuguese_brazilian ] = "Farbe" ;
@@ -1336,20 +1336,20 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_LC_COL
     {
-        Pos = MAP_APPFONT ( 115 , 108 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 89 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     Window WIN_MARK
     {
-        Pos = MAP_APPFONT ( 198 , 92 ) ;
-        Size = MAP_APPFONT ( 52 , 31 ) ;
+        Pos = MAP_APPFONT ( 178 , 74 ) ;
+        Size = MAP_APPFONT ( 70 , 28 ) ;
     };
     GroupBox GB_LC
     {
-        Pos = MAP_APPFONT ( 6 , 79 ) ;
-        Size = MAP_APPFONT ( 248 , 50 ) ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Size = MAP_APPFONT ( 248 , 41 ) ;
         Text = "Geänderte Zeilen" ;
         Text [ English ] = "Changed lines" ;
         Text [ portuguese ] = "Linhas modificadas" ;

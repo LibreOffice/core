@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,7 @@
 #define GRP_2              72
 #define GRP_3              73
 #define GRP_4              74
-#define GRP_5              75
-#define GB_FAX             76
+#define FT_FAX             76
 #define CB_BACKGROUND      79
 
 #define RB_NO              80

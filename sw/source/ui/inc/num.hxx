@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,15 +151,15 @@ class SwNumPositionTabPage : public SfxTabPage
     MultiListBox    aLevelLB;
 
     GroupBox            aPositionGB;
-    FixedText           aAlignFT;
-    ListBox             aAlignLB;
     FixedText           aDistBorderFT;
-    CheckBox            aRelativeCB;
     MetricField         aDistBorderMF;
+    CheckBox            aRelativeCB;
     FixedText           aIndentFT;
     MetricField         aIndentMF;
     FixedText           aDistNumFT;
     MetricField         aDistNumMF;
+    FixedText           aAlignFT;
+    ListBox             aAlignLB;
     PushButton          aStandardPB;
 
     GroupBox            aPreviewGB;

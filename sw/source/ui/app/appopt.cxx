@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 14:33:37 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,6 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case RID_SW_TP_HTML_OPTGRID_PAGE:
         case RID_SVXPAGE_GRID:
             pRet = SvxGridTabPage::Create(pParent, rSet);
-            ((SvxGridTabPage*)pRet)->HideSnapGrid();
         break;
 
         break;
@@ -588,6 +587,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/30 14:33:37  jp
+    GetBinding: View must not exist
+
     Revision 1.3  2000/10/06 13:31:28  jp
     should changes: don't use IniManager
 

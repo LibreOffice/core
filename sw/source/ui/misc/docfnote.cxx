@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,39 +192,38 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
-    aPosPageBox     (this, SW_RES( RB_POS_PAGE   )),
-    aPosChapterBox  (this, SW_RES( RB_POS_CHAPTER)),
-    aPosGrp         (this, SW_RES( GB_POS        )),
+    aNumTypeFT      (this, ResId( FT_NUMTYPE    )),
+    aNumViewBox     (this, ResId( LB_NUMVIEW    )),
+    aOffsetLbl      (this, ResId( FT_OFFSET )),
+    aOffsetFld      (this, ResId( FLD_OFFSET   )),
+    aNumCountFT     (this, ResId( FT_NUMCOUNT   )),
+    aNumCountBox    (this, ResId( LB_NUMCOUNT   )),
+    aPrefixFT       (this, ResId( FT_PREFIX     )),
+    aPrefixED       (this, ResId( ED_PREFIX    )),
+    aSuffixFT       (this, ResId( FT_SUFFIX    )),
+    aSuffixED       (this, ResId( ED_SUFFIX    )),
+    aPosFT          (this, ResId( FT_POS    )),
+    aPosPageBox     (this, ResId( RB_POS_PAGE    )),
+    aPosChapterBox  (this, ResId( RB_POS_CHAPTER)),
+    aNumGrp         (this, ResId( GB_NUM        )),
 
-    aNumViewBox     (this, SW_RES( LB_NUMVIEW   )),
-    aOffsetLbl      (this, SW_RES( FT_OFFSET    )),
-    aOffsetFld      (this, SW_RES( FLD_OFFSET   )),
-    aNumCountBox    (this, SW_RES( LB_NUMCOUNT  )),
-    aPrefixFT       (this, SW_RES( FT_PREFIX    )),
-    aPrefixED       (this, SW_RES( ED_PREFIX    )),
-    aSuffixFT       (this, SW_RES( FT_SUFFIX    )),
-    aSuffixED       (this, SW_RES( ED_SUFFIX    )),
+    aParaTemplLbl   (this, ResId( FT_PARA_TEMPL)),
+    aParaTemplBox   (this, ResId( LB_PARA_TEMPL)),
+    aPageTemplLbl   (this, ResId( FT_PAGE_TEMPL)),
+    aPageTemplBox   (this, ResId( LB_PAGE_TEMPL)),
+    aTemplGrp       (this, ResId( GB_TEMPL      )),
 
+    aFtnCharTextTemplLbl(   this, ResId( FT_TEXT_CHARFMT)),
+    aFtnCharTextTemplBox(   this, ResId( LB_TEXT_CHARFMT)),
+    aFtnCharAnchorTemplLbl( this, ResId( FT_ANCHR_CHARFMT)),
+    aFtnCharAnchorTemplBox( this, ResId( LB_ANCHR_CHARFMT)),
+    aCharTemplGrp(          this, ResId(GB_CHAR_TEMPL)),
 
-    aNumGrp         (this, SW_RES( GB_NUM       )),
-
-    aParaTemplLbl   (this, SW_RES( FT_PARA_TEMPL)),
-    aParaTemplBox   (this, SW_RES( LB_PARA_TEMPL)),
-    aPageTemplLbl   (this, SW_RES( FT_PAGE_TEMPL)),
-    aPageTemplBox   (this, SW_RES( LB_PAGE_TEMPL)),
-    aTemplGrp       (this, SW_RES( GB_TEMPL     )),
-
-    aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
-    aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
-    aFtnCharAnchorTemplLbl( this, SW_RES( FT_ANCHR_CHARFMT)),
-    aFtnCharAnchorTemplBox( this, SW_RES( LB_ANCHR_CHARFMT)),
-    aCharTemplGrp(          this, SW_RES(GB_CHAR_TEMPL)),
-
-    aContLbl        (this, SW_RES( FT_CONT      )),
-    aContEdit       (this, SW_RES( ED_CONT      )),
-    aContFromLbl    (this, SW_RES( FT_CONT_FROM )),
-    aContFromEdit   (this, SW_RES( ED_CONT_FROM )),
-    aContGrp        (this, SW_RES( GB_CONT      )),
+    aContLbl        (this, ResId( FT_CONT       )),
+    aContEdit       (this, ResId( ED_CONT       )),
+    aContFromLbl    (this, ResId( FT_CONT_FROM )),
+    aContFromEdit   (this, ResId( ED_CONT_FROM )),
+    aContGrp        (this, ResId( GB_CONT       )),
 
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
     pSh( 0 ),
@@ -256,42 +255,9 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aFtnCharAnchorTemplBox.Hide();
         aCharTemplGrp   .Hide();
         aTemplGrp       .Hide();
-        if(!bEndNote)
-        {
-            // die unteren Controls sollen nach oben verschoben werden
-            long nYDiff = aPosGrp.GetPosPixel().Y() - aTemplGrp.GetPosPixel().Y();
-            Point aTmpPos(aPosGrp.GetPosPixel());
-            aTmpPos.Y() -= nYDiff;
-            aPosGrp.SetPosPixel(aTmpPos);
-            aTmpPos = aPosPageBox.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aPosPageBox.SetPosPixel(aTmpPos);
-            aTmpPos = aPosChapterBox.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aPosChapterBox.SetPosPixel(aTmpPos);
-            aTmpPos = aNumCountBox.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aNumCountBox.SetPosPixel(aTmpPos);
-            aTmpPos = aContLbl.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aContLbl.SetPosPixel(aTmpPos);
-            aTmpPos = aContEdit.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aContEdit.SetPosPixel(aTmpPos);
-            aTmpPos = aContFromLbl.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aContFromLbl.SetPosPixel(aTmpPos);
-            aTmpPos = aContFromEdit.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aContFromEdit.SetPosPixel(aTmpPos);
-            aTmpPos = aContGrp.GetPosPixel();
-            aTmpPos.Y() -= nYDiff;
-            aContGrp.SetPosPixel(aTmpPos);
-        }
     }
     if ( bEndNote )
     {
-        aPosGrp.Hide();
         aPosPageBox.Hide();
         aPosChapterBox.Hide();
         aNumCountBox.Hide();
@@ -588,6 +554,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.72  2000/09/18 16:05:56  willem.vandorp
     OpenOffice header added.
 

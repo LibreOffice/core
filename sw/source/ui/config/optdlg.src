@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 10:06:07 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@ TabPage TP_CONTENT_OPT
 {
     HelpID = HID_CONTENT_OPT ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_DISP
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 120 , 69 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 120 , 77 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Display" ;
         Text [ norwegian ] = "Display" ;
@@ -112,7 +112,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_GRF
     {
-        Pos = MAP_APPFONT ( 12 , 11 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Grafiken und Objekte" ;
         Text [ ENGLISH ] = "Gra~phics and Objects" ;
@@ -142,7 +142,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_TBL
     {
-        Pos = MAP_APPFONT ( 12 , 23 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Tabellen          " ;
         Text [ ENGLISH ] = "~Tables" ;
@@ -170,7 +170,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_DRWFAST
     {
-        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Zeichnungen und ~Kontrollfelder" ;
         Text [ ENGLISH ] = "Dra~wings and controls" ;
@@ -198,7 +198,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FIELD
     {
-        Pos = MAP_APPFONT ( 12 , 47 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? F~eldname : F~eldname anzeigen */
         Text = "F~eldnamen" ;
@@ -225,7 +225,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_POSTIT
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "N~otizen" ;
         Text [ ENGLISH ] = "N~otes" ;
@@ -251,8 +251,8 @@ TabPage TP_CONTENT_OPT
     };
     GroupBox GB_BACK
     {
-        Pos = MAP_APPFONT ( 6 , 74 ) ;
-        Size = MAP_APPFONT ( 120 , 57 ) ;
+        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Size = MAP_APPFONT ( 120 , 63 ) ;
         Text = "Hinterlegung" ;
         Text [ ENGLISH ] = "Background" ;
         Text [ norwegian ] = "Background" ;
@@ -280,7 +280,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_IDX_ENTRY
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Verzeichniseintr~‰ge" ;
         Text [ ENGLISH ] = "Index entries" ;
@@ -308,7 +308,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_INDEX
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Verzeichn~isse" ;
         Text [ ENGLISH ] = "Indexes" ;
@@ -334,7 +334,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FOOTBACK
     {
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Fu~ﬂnoten" ;
         Text [ ENGLISH ] = "Footnotes" ;
@@ -360,9 +360,8 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FLDBACK
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Felder : ~Felder hinterlegen */
         Text = "~Felder" ;
         Text [ ENGLISH ] = "Fields" ;
         Text [ english_us ] = "Fie~lds" ;
@@ -388,8 +387,8 @@ TabPage TP_CONTENT_OPT
      //_----------------------------
     GroupBox GB_NOPRINT
     {
-        Pos = MAP_APPFONT ( 134 , 2 ) ;
-        Size = MAP_APPFONT ( 120 , 129 ) ;
+        Pos = MAP_APPFONT ( 134 , 3 ) ;
+        Size = MAP_APPFONT ( 120 , 143 ) ;
         Text = "Nicht druckbare Zeichen" ;
         Text [ ENGLISH ] = "Unprintable Characters" ;
         Text [ norwegian ] = "Unprintable Characters" ;
@@ -417,7 +416,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_PARA
     {
-        Pos = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( 140 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Absatzende" ;
         Text [ ENGLISH ] = "Paragraph ends" ;
@@ -447,7 +446,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_SHYPH
     {
-        Pos = MAP_APPFONT ( 140 , 25 ) ;
+        Pos = MAP_APPFONT ( 140 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Weiche Trenner" ;
         Text [ ENGLISH ] = "Soft hyphens" ;
@@ -475,7 +474,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_SPACE
     {
-        Pos = MAP_APPFONT ( 140 , 38 ) ;
+        Pos = MAP_APPFONT ( 140 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Lee~rzeichen" ;
         Text [ ENGLISH ] = "Spaces" ;
@@ -503,7 +502,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_HSPACE
     {
-        Pos = MAP_APPFONT ( 140 , 51 ) ;
+        Pos = MAP_APPFONT ( 140 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Ge~sch. Leerzeichen" ;
         Text [ ENGLISH ] = "Nonbreaking spaces" ;
@@ -531,7 +530,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_TAB
     {
-        Pos = MAP_APPFONT ( 140 , 64 ) ;
+        Pos = MAP_APPFONT ( 140 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Ta~bulatoren" ;
         Text [ ENGLISH ] = "~Tabs" ;
@@ -559,7 +558,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_BREAK
     {
-        Pos = MAP_APPFONT ( 140 , 77 ) ;
+        Pos = MAP_APPFONT ( 140 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Umbr~¸che" ;
         Text [ ENGLISH ] = "Breaks" ;
@@ -587,7 +586,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_HIDDEN
     {
-        Pos = MAP_APPFONT ( 140 , 90 ) ;
+        Pos = MAP_APPFONT ( 140 , 92 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Verste~ckter Text" ;
         Text [ ENGLISH ] = "~Hidden text" ;
@@ -615,7 +614,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_HIDDEN_PARA
     {
-        Pos = MAP_APPFONT ( 140 , 103 ) ;
+        Pos = MAP_APPFONT ( 140 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Versteckte Abs‰tze" ;
         Text [ ENGLISH ] = "H~idden paragraphs" ;
@@ -650,11 +649,11 @@ TabPage TP_LAYOUT_OPT
     HelpID = HID_LAYOUT_OPT ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_LINE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 93 ) ;
+        Size = MAP_APPFONT ( 120 , 89 ) ;
         Text = "Linien" ;
         Text [ ENGLISH ] = "Lines" ;
         Group = TRUE ;
@@ -680,7 +679,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_TXTBEG
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Te~xtbegrenzungen" ;
         Text [ ENGLISH ] = "Text boundaries" ;
@@ -709,7 +708,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_TABBEG
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Tabelle~nbegrenzungen" ;
         Text [ ENGLISH ] = "~Table boundaries" ;
@@ -737,7 +736,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_SECT_BOUNDS
     {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Bereichsbegrenzungen" ;
         Text [ ENGLISH ] = "~Section boundaries" ;
@@ -763,7 +762,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_CROSS
     {
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "H~ilfslinien" ;
         Text [ ENGLISH ] = "~Crosshair" ;
@@ -791,7 +790,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_HANDLE
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Einfache Griffe" ;
         Text [ ENGLISH ] = "Simple Handles" ;
@@ -817,7 +816,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_BIGHANDLE
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Groﬂe Griffe" ;
         Text [ ENGLISH ] = "Big Handles" ;
@@ -844,7 +843,7 @@ TabPage TP_LAYOUT_OPT
     GroupBox GB_WINDOW
     {
         Pos = MAP_APPFONT ( 134 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 93 ) ;
+        Size = MAP_APPFONT ( 120 , 89 ) ;
         Text = "Fenster";
         Text [ italian ] = "Finestra";
         Text [ portuguese_brazilian ] = "Janela";
@@ -871,7 +870,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_HSCROLL
     {
-        Pos = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( 140 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Horizontale Bildla~ufleiste" ;
         Text [ ENGLISH ] = "~Horizontal scrollbar" ;
@@ -897,7 +896,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_VSCROLL
     {
-        Pos = MAP_APPFONT ( 140 , 25 ) ;
+        Pos = MAP_APPFONT ( 140 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Vertikale Bildlaufleiste" ;
         Text [ ENGLISH ] = "~Vertical scrollbar" ;
@@ -923,7 +922,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_HRULER
     {
-        Pos = MAP_APPFONT ( 140 , 38 ) ;
+        Pos = MAP_APPFONT ( 140 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Horizontales ~Lineal" ;
         Text [ ENGLISH ] = "~Horic. ruler" ;
@@ -951,7 +950,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_VRULER
     {
-        Pos = MAP_APPFONT ( 140 , 51 ) ;
+        Pos = MAP_APPFONT ( 140 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Verti~kales Lineal" ;
         Text [ ENGLISH ] = "~Vert. ruler" ;
@@ -979,7 +978,7 @@ TabPage TP_LAYOUT_OPT
     };
     CheckBox CB_SMOOTH_SCROLL
     {
-        Pos = MAP_APPFONT ( 140 , 64 ) ;
+        Pos = MAP_APPFONT ( 140 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Weiches Scrollen" ;
         Text [ ENGLISH ] = "S~mooth scroll" ;
@@ -1005,7 +1004,7 @@ TabPage TP_LAYOUT_OPT
     };
     GroupBox GB_METRIC
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 120 , 26 ) ;
         Text = "Maﬂeinheit";
         Text [ ENGLISH ] = "Metric Units" ;
@@ -1033,7 +1032,7 @@ TabPage TP_LAYOUT_OPT
     };
     ListBox LB_METRIC
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 70 , 50 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -1319,7 +1318,7 @@ TabPage TP_LAYOUT_OPT
     };
     GroupBox GB_TAB
     {
-        Pos = MAP_APPFONT ( 134 , 101 ) ;
+        Pos = MAP_APPFONT ( 134 , 95 ) ;
         Size = MAP_APPFONT ( 120 , 26 ) ;
         Text = "Tabulatorenabstand";
         Text [ ENGLISH ] = "Default Tab distance" ;
@@ -1349,7 +1348,7 @@ TabPage TP_LAYOUT_OPT
     MetricField MF_TAB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 140 , 110 ) ;
+        Pos = MAP_APPFONT ( 140 , 106 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1371,12 +1370,12 @@ TabPage TP_LAYOUT_OPT
 TabPage TP_OPTPRINT_PAGE
 {
     HelpID = HID_OPTPRINT_PAGE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GRP_1
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 78 , 92 ) ;
+        Size = MAP_APPFONT ( 78 , 89 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
@@ -1571,7 +1570,7 @@ TabPage TP_OPTPRINT_PAGE
     GroupBox GRP_2
     {
         Pos = MAP_APPFONT ( 90 , 3 ) ;
-        Size = MAP_APPFONT ( 78 , /*92*/66 ) ;
+        Size = MAP_APPFONT ( 78 , 89 ) ;
         Text = "Seiten" ;
         Text [ ENGLISH ] = "Pages" ;
         Text [ norwegian ] = "Pages" ;
@@ -1826,7 +1825,7 @@ TabPage TP_OPTPRINT_PAGE
     GroupBox GRP_3
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , /*92*/66 ) ;
+        Size = MAP_APPFONT ( 80 , 89 ) ;
         Text = "Notizen" ;
         Text [ ENGLISH ] = "Notes" ;
         Text [ norwegian ] = "Notes" ;
@@ -1852,36 +1851,35 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
     };
-
-    GroupBox GRP_5
+    GroupBox GRP_4
     {
-        Pos = MAP_APPFONT ( 90 , 70 ) ;
-        Size = MAP_APPFONT ( 164 , 25 ) ;
-        Text = "Ausgabe" ;
-        Text [ ENGLISH ] = "Destination" ;
-        Text [ english_us ] = "Output" ;
-        Text [ italian ] = "Destinazione" ;
-        Text [ spanish ] = "Destino" ;
-        Text [ french ] = "Sortie" ;
-        Text [ dutch ] = "Uitgave" ;
-        Text [ swedish ] = "Utdata" ;
-        Text [ danish ] = "Output" ;
-        Text [ portuguese_brazilian ] = "Ausgabe" ;
-        Text [ portuguese ] = "Destino" ;
-        Text[ chinese_simplified ] = " ‰≥ˆ";
-        Text[ russian ] = "¬˚‚Ó‰";
-        Text[ polish ] = "Wyjúcie";
-        Text[ japanese ] = "±≥ƒÃﬂØƒ";
-        Text[ chinese_traditional ] = "øÈ•X";
-        Text[ arabic ] = "«·≈Œ—«Ã";
-        Text[ greek ] = "≈Ó·„˘„ﬁ";
-        Text[ korean ] = "√‚∑¬";
-        Text[ turkish ] = "«˝kt˝";
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 248 , 52 ) ;
+        Text = "Sonstiges" ;
+        Text [ English ] = "Other" ;
+        Text [ dutch ] = "Overige" ;
+        Text [ english_us ] = "Other" ;
+        Text [ italian ] = "Altro" ;
+        Text [ spanish ] = "Otros" ;
+        Text [ french ] = "Autres" ;
+        Text [ swedish ] = "Annat" ;
+        Text [ danish ] = "Andet" ;
+        Text [ portuguese ] = "Outros" ;
+        Text [ portuguese_brazilian ] = "Sonstiges" ;
+        Text[ chinese_simplified ] = "∆‰À˚";
+        Text[ russian ] = "œÓ˜ÂÂ";
+        Text[ polish ] = "Inne";
+        Text[ japanese ] = "ÇªÇÃëº";
+        Text[ chinese_traditional ] = "®‰•L";
+        Text[ arabic ] = "€Ì— –·ﬂ";
+        Text[ greek ] = "¢ÎÎ·";
+        Text[ korean ] = "±‚≈∏";
+        Group = TRUE ;
     };
     CheckBox CB_SINGLEJOBS
     {
-        Pos = MAP_APPFONT ( 96 , 81 ) ;
-        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Einzelne Druck~jobs erzeugen" ;
         Text [ ENGLISH ] = "Si~ngle print jobs" ;
         TabStop = TRUE ;
@@ -1904,83 +1902,22 @@ TabPage TP_OPTPRINT_PAGE
         Text[ korean ] = "∞¢∞¢¿«  ¿Œº‚ ¿€æ˜∏∏µÈ±‚(~S)";
         Text[ turkish ] = "Bi~reysel yazd˝rma i˛leri olu˛tur";
     };
-
     CheckBox CB_PAPERFROMSETUP
     {
-        Pos = MAP_APPFONT ( 138 , 112 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
-        Text = "aus ~Druckereinstellung" ;
-        Text [ ENGLISH ] = "from printer ~setup" ;
-        Text [ norwegian ] = "from printer ~setup" ;
-        Text [ italian ] = "Come da  imposta~zione stampante" ;
-        Text [ portuguese_brazilian ] = "da impressora ~setup" ;
-        Text [ portuguese ] = "Da configuraÁ„o da ~impressora" ;
-        Text [ finnish ] = "kirjoittimen ~asetuksista" ;
-        Text [ danish ] = "fra udskriftsindstillingerne" ;
-        Text [ french ] = "d'aprËs ~les paramËtres de l'imprimante" ;
-        Text [ swedish ] = "frÂn ~skrivarinst‰llning" ;
-        Text [ dutch ] = "~uit printerinstelling" ;
-        Text [ spanish ] = "De la c~onfiguraciÛn de la impresora" ;
-        Text [ english_us ] = "From printer ~settings" ;
-        Group = TRUE ;
-        Text[ chinese_simplified ] = "≤…”√¥Ú”°ª˙µƒ…Ë∂®(~S)";
-        Text[ russian ] = "ËÁ Ì‡ÒÚÓÈÍË ÔËÌÚÂ‡";
-        Text[ polish ] = "Z ustaw~ienia drukarki";
-        Text[ japanese ] = "Ãﬂÿ›¿ÇÃê›íËÇ©ÇÁ(~S)";
-        Text[ chinese_traditional ] = "±ƒ•Œ¶L™Ìæ˜™∫≥]©w(~S)";
-        Text[ arabic ] = "„‰ ≈⁄œ«œ«  «·ÿ«»⁄…";
-        Text[ greek ] = "·¸ ÙÈÚ ÒıËÏﬂÛÂÈÚ ÙÔı ÂÍÙı˘Ùﬁ";
-        Text[ korean ] = "«¡∏∞≈Õ º≥¡§¿∏∑Œ ∫Œ≈Õ(~S)";
-        Text[ turkish ] = "Yaz˝c˝ ayarlar˝n˝ kullan";
-        Text[ language_user1 ] = " ";
+        Text = "Papierschacht aus ~Druckereinstellung" ;
+        Text [ ENGLISH ] = "Paper tray from printer ~setup" ;
+        Text [ norwegian ] = "Paper tray from printer ~setup" ;
     };
-    GroupBox GRP_4
+    FixedText FT_FAX
     {
-        Pos = MAP_APPFONT ( 132 , 101 ) ;
-        Size = MAP_APPFONT ( 122 , 29 ) ;
-        Text = "Papierschacht" ;
-        Text [ English ] = "Paper tray" ;
-        Text [ norwegian ] = "Paper tray" ;
-        Text [ italian ] = "Cassetto" ;
-        Text [ portuguese_brazilian ] = "Bandeja para o papel" ;
-        Text [ portuguese ] = "Tabuleiro de alimentaÁ„o" ;
-        Text [ finnish ] = "Paperilokero" ;
-        Text [ danish ] = "Papirbakke" ;
-        Text [ french ] = "Bac d'alimentation" ;
-        Text [ swedish ] = "Pappersmagasin" ;
-        Text [ dutch ] = "Papierinvoer" ;
-        Text [ spanish ] = "Origen del papel" ;
-        Text [ english_us ] = "Paper tray" ;
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "÷Ω’≈¿¥‘¥";
-        Text[ russian ] = "œÓ‰‡˜‡ ·ÛÏ‡„Ë";
-        Text[ polish ] = "Zasobnik papieru";
-        Text[ japanese ] = "ããéÜï˚ñ@";
-        Text[ chinese_traditional ] = "Ø»±i®”∑Ω";
-        Text[ arabic ] = "œ—Ã «·Ê—ﬁ";
-        Text[ greek ] = "ƒﬂÛÍÔÚ ˜·ÒÙÈÔ˝";
-        Text[ korean ] = "øÎ¡ˆ ∞¯±ﬁ";
-        Text[ turkish ] = "Ka˝t kayna˝";
-        Text[ language_user1 ] = " ";
-    };
-    ListBox LB_FAX
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 108 , 70 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        Sort = TRUE ;
-        Group = TRUE ;
-    };
-    GroupBox GB_FAX
-    {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
-        Size = MAP_APPFONT ( 120 , 29 ) ;
-        Text = "Fax" ;
+        Text = "Fa~x" ;
         Text[English] = "Fax" ;
-        Group = TRUE ;
         Text[ english_us ] = "Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "‘‡ÍÒ";
@@ -1999,7 +1936,16 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "∂«Øu";
         Text[ arabic ] = "«·›«ﬂ”";
         Text[ turkish ] = "Faks";
-        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 132 ) ;
+        Size = MAP_APPFONT ( 184 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+        Group = TRUE ;
     };
 };
 /**************************************************************************/
@@ -2010,12 +1956,12 @@ TabPage TP_OPTPRINT_PAGE
 TabPage TP_STD_FONT
 {
     HelpID = HID_STD_FONT ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_STDCHR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 159 , 113 ) ;
+        Size = MAP_APPFONT ( 195 , 113 ) ;
         Text = "Grundschriften" ;
         Text [ English ] = "Standard fonts" ;
         Text [ norwegian ] = "Standard fonts" ;
@@ -2186,7 +2132,7 @@ TabPage TP_STD_FONT
     ComboBox LB_STANDARD
     {
         Pos = MAP_APPFONT ( 63 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -2194,7 +2140,7 @@ TabPage TP_STD_FONT
     ComboBox LB_TITLE
     {
         Pos = MAP_APPFONT ( 63 , 31 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -2202,7 +2148,7 @@ TabPage TP_STD_FONT
     ComboBox LB_LIST
     {
         Pos = MAP_APPFONT ( 63 , 48 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -2210,7 +2156,7 @@ TabPage TP_STD_FONT
     ComboBox LB_LABEL
     {
         Pos = MAP_APPFONT ( 63 , 65 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -2218,7 +2164,7 @@ TabPage TP_STD_FONT
     ComboBox LB_IDX
     {
         Pos = MAP_APPFONT ( 63 , 83 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -2251,7 +2197,7 @@ TabPage TP_STD_FONT
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 171 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "S~tandard" ;
         Text [ English ] = "S~tandard" ;
@@ -2284,12 +2230,12 @@ TabPage TP_STD_FONT
 TabPage TP_OPTTABLE_PAGE
 {
     HelpID = HID_OPTTABLE_PAGE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_MOVE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 39 ) ;
+        Size = MAP_APPFONT ( 120 , 41 ) ;
         Text = "Verschieben" ;
         Text [ English ] = "Move" ;
         Text [ english_us ] = "Shift" ;
@@ -2314,8 +2260,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_ROWMOVE
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Zeile" ;
         Text [ English ] = "~Row" ;
         Text [ english_us ] = "~Row" ;
@@ -2341,7 +2287,7 @@ TabPage TP_OPTTABLE_PAGE
     MetricField MF_ROWMOVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 11 ) ;
+        Pos = MAP_APPFONT ( 83 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2356,8 +2302,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_COLMOVE
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Spalte" ;
         Text [ English ] = "~Column" ;
         Text [ english_us ] = "~Column" ;
@@ -2383,7 +2329,7 @@ TabPage TP_OPTTABLE_PAGE
     MetricField MF_COLMOVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 26 ) ;
+        Pos = MAP_APPFONT ( 83 , 29 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2399,7 +2345,7 @@ TabPage TP_OPTTABLE_PAGE
     GroupBox GB_INSERT
     {
         Pos = MAP_APPFONT ( 132 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 39 ) ;
+        Size = MAP_APPFONT ( 122 , 41 ) ;
         Text = "Einf¸gen" ;
         Text [ English ] = "Insert" ;
         Text [ english_us ] = "Insert" ;
@@ -2424,8 +2370,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_ROWINSERT
     {
-        Pos = MAP_APPFONT ( 138 , 12 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 16 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Z~eile" ;
         Text [ English ] = "Ro~w" ;
         Text [ english_us ] = "Ro~w" ;
@@ -2451,7 +2397,7 @@ TabPage TP_OPTTABLE_PAGE
     MetricField MF_ROWINSERT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 192 , 11 ) ;
+        Pos = MAP_APPFONT ( 211 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2466,7 +2412,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_COLINSERT
     {
-        Pos = MAP_APPFONT ( 138 , 27 ) ;
+        Pos = MAP_APPFONT ( 138 , 31 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "S~palte" ;
         Text [ English ] = "C~olumn" ;
@@ -2493,7 +2439,7 @@ TabPage TP_OPTTABLE_PAGE
     MetricField MF_COLINSERT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 192 , 26 ) ;
+        Pos = MAP_APPFONT ( 211 , 29 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2508,8 +2454,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     GroupBox GB_HANDLING
     {
-        Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 246 , 74 ) ;
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 248 , 66 ) ;
         Text = "Verhalten" ;
         Text [ English ] = "Behaviour" ;
         Text [ english_us ] = "Behavior" ;
@@ -2534,7 +2480,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIX
     {
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Pos = MAP_APPFONT ( 12 , 57 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text = "~Fix" ;
         Text [ English ] = "~Fix" ;
@@ -2560,8 +2506,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_FIX
     {
-        Pos = MAP_APPFONT ( 93 , 56 ) ;
-        Size = MAP_APPFONT ( 155 , 19 ) ;
+        Pos = MAP_APPFONT ( 93 , 55 ) ;
+        Size = MAP_APPFONT ( 155 , 16 ) ;
         Text = "Ver‰nderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus" ;
         Text [ English ] = "Changes of a row and column respectively will affect the direct neighbor only" ;
         WordBreak = TRUE ;
@@ -2587,7 +2533,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIXPROP
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text = "F~ix, proportional" ;
         Text [ English ] = "F~ix, proportional" ;
@@ -2613,8 +2559,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_FIXPROP
     {
-        Pos = MAP_APPFONT ( 93 , 77 ) ;
-        Size = MAP_APPFONT ( 155 , 19 ) ;
+        Pos = MAP_APPFONT ( 93 , 74 ) ;
+        Size = MAP_APPFONT ( 155 , 16 ) ;
         Text = "Ver‰nderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus" ;
         Text [ English ] = "Changes of a row and column respectively will affect the whole table" ;
         WordBreak = TRUE ;
@@ -2640,7 +2586,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_VAR
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text = "~Variabel" ;
         Text [ English ] = "~Variable" ;
@@ -2666,7 +2612,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_VAR
     {
-        Pos = MAP_APPFONT ( 93 , 98 ) ;
+        Pos = MAP_APPFONT ( 93 , 93 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
         Text = "Ver‰nderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengrˆﬂe aus" ;
         Text [ English ] = "Changes of a row and column respectively will affect the table size" ;
@@ -2693,7 +2639,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_DESC
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Diese Einstellungen sind bei der Tastaturbedienung wirksam." ;
         Text [ English ] = "These settings affect the keyboard handling." ;
@@ -2728,12 +2674,12 @@ TabPage TP_OPTSRCVIEW
 {
     HelpID = HID_OPTSRCVIEW ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 80 ) ;
+        Size = MAP_APPFONT ( 248 , 74 ) ;
         Text = "Farbzuordnung Syntax - Highlighting" ;
         Text [ English ] = "Color assignment syntax highlighting" ;
         Text [ english_us ] = "Colors for syntax highlighting" ;
@@ -2759,7 +2705,7 @@ TabPage TP_OPTSRCVIEW
     FixedText FT_SGML
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~SGML" ;
         Text [ English ] = "~SGML" ;
         Text [ english_us ] = "~SGML" ;
@@ -2785,14 +2731,14 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_SGML
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 16 ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 188 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_COMMENT
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~Kommentar" ;
         Text [ English ] = "~Comment" ;
         Text [ portuguese ] = "~Coment·rio" ;
@@ -2818,14 +2764,14 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_COMMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 31 ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 188 , 30 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_KEYWD
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Sch~l¸sselwort" ;
         Text [ English ] = "~Keyword" ;
         Text [ english_us ] = "~Key word" ;
@@ -2852,13 +2798,13 @@ TabPage TP_OPTSRCVIEW
     {
         Border = TRUE ;
         Pos = MAP_APPFONT (188 , 46 ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_UNKNOWN
     {
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~Unbekannt" ;
         Text [ English ] = "~Unknown" ;
         Text [ english_us ] = "~Unknown" ;
@@ -2884,8 +2830,8 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_UNKNOWN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 61 ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 188 , 62 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
 };
@@ -2898,12 +2844,12 @@ TabPage TP_OPTSHDWCRSR
 {
     HelpID = HID_OPTSHDWCRSR ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_SHDWCRSFLAG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 100 ) ;
+        Size = MAP_APPFONT ( 248 , 92 ) ;
         Text = "Direkt-Cursor" ;
         Text [ ENGLISH ] = "Direct cursor" ;
         Text [ english_us ] = "Direct Cursor" ;
@@ -2928,7 +2874,7 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_SHDWCRSONOFF
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Direkt-Cursor" ;
         Text [ ENGLISH ] = "~Direct cursor" ;
@@ -2956,8 +2902,8 @@ TabPage TP_OPTSHDWCRSR
     };
     FixedText FT_SHDWCRSFILLMODE
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Einf¸gen" ;
         Text [ English ] = "Insert" ;
         Left = TRUE ;
@@ -2983,7 +2929,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
-        Pos = MAP_APPFONT ( 80 , 31 ) ;
+        Pos = MAP_APPFONT ( 80 , 27 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Absatzausrichtung" ;
         Text [ ENGLISH ] = "~Adjustment" ;
@@ -3011,7 +2957,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
-        Pos = MAP_APPFONT ( 80 , 44 ) ;
+        Pos = MAP_APPFONT ( 80 , 40 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "linker Absatz~rand" ;
         Text [ ENGLISH ] = "Left ~margin" ;
@@ -3037,7 +2983,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
-        Pos = MAP_APPFONT ( 80 , 57 ) ;
+        Pos = MAP_APPFONT ( 80 , 53 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Tabulator" ;
         Text [ ENGLISH ] = "~Tab" ;
@@ -3063,7 +3009,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
-        Pos = MAP_APPFONT ( 80 , 70 ) ;
+        Pos = MAP_APPFONT ( 80 , 66 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Tabulator und ~Leerzeichen" ;
         Text [ ENGLISH ] = "Tabs and ~space" ;
@@ -3089,7 +3035,7 @@ TabPage TP_OPTSHDWCRSR
     };
     FixedText FT_SHDWCRSCOLOR
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "~Color" ;
@@ -3116,14 +3062,14 @@ TabPage TP_OPTSHDWCRSR
     ListBox LB_SHDWCRSCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 86 ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 80 , 80 ) ;
+        Size = MAP_APPFONT ( 80 , 80 ) ;
         DropDown = TRUE ;
     };
     GroupBox GB_CRSR_OPT
     {
-        Pos = MAP_APPFONT ( 6 , 106 ) ;
-        Size = MAP_APPFONT ( 248 , 25 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 248 , 24 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ NORWEGIAN ] = "Options" ;
@@ -3150,7 +3096,7 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_ALLOW_IN_PROT
     {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 220 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;

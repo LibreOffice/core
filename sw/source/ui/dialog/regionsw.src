@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:38:48 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,25 +582,6 @@ ModalDialog MD_EDIT_REGION
         Size = MAP_APPFONT ( 99 , 127 ) ;
         TabStop = TRUE ;
     };
-    /*  FixedText FT_CONDITION
-    {
-        Pos = MAP_APPFONT( 97, 48 );
-        Size = MAP_APPFONT( 40, 10 );
-        Text = "Bedingung";
-        Text[ English ] = "Condition";
-        Text[norwegian] = "Vilkår";
-        Text[italian] = "Condizione";
-        Text[portuguese_brazilian] = "condição";
-        Text[portuguese] = "Condição";
-        Text[finnish] = "Ehto";
-        Text[danish] = "Betingelse";
-        Text[french] = "Condition";
-        Text[swedish] = "Villkor";
-        Text[dutch] = "Voorwaarde";
-        Text[spanish] = "Condición";
-        Text[english_us] = "Condition";
-        Disable = TRUE;
-    };*/
     GroupBox GB_EDIT_OPTIONS
     {
         OutputSize = TRUE ;
@@ -940,12 +921,12 @@ TabPage TP_INSERT_SECTION
     HelpID = HID_INSERT_SECTION_PAGE;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     ComboBox ED_RNAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 66 , 104 ) ;
+        Size = MAP_APPFONT ( 66 , 115 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         SORT = TRUE ;
@@ -978,8 +959,8 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_PROTECT
     {
-        Pos = MAP_APPFONT ( 96 , 17 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 96 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Geschützt" ;
         Text [ English ] = "Pro~tected" ;
@@ -1007,7 +988,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_HIDE
     {
-        Pos = MAP_APPFONT ( 96 , 31 ) ;
+        Pos = MAP_APPFONT ( 96 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         CB_HIDE_TEXT
     };
@@ -1021,8 +1002,8 @@ TabPage TP_INSERT_SECTION
     Edit ED_CONDITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 43 ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 57 ) ;
+        Size = MAP_APPFONT ( 148 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
     };
@@ -1042,14 +1023,14 @@ TabPage TP_INSERT_SECTION
     };
     FixedText FT_DDE
     {
-        Pos = MAP_APPFONT ( 111 , 85 ) ;
+        Pos = MAP_APPFONT ( 102 , 87 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Hide = TRUE ;
         FT_DDE_TEXT
     };
     FixedText FT_FILE
     {
-        Pos = MAP_APPFONT ( 111 , 85 ) ;
+        Pos = MAP_APPFONT ( 102 , 87 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Disable = TRUE ;
         FT_FILE_TEXT
@@ -1057,14 +1038,14 @@ TabPage TP_INSERT_SECTION
     Edit ED_FILE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 97 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Pos = MAP_APPFONT ( 102 , 100 ) ;
+        Size = MAP_APPFONT ( 95 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_FILE
     {
-        Pos = MAP_APPFONT ( 204 , 97 ) ;
+        Pos = MAP_APPFONT ( 200 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -1072,14 +1053,14 @@ TabPage TP_INSERT_SECTION
     };
     FixedText FT_SUBREG
     {
-        Pos = MAP_APPFONT ( 111 , 113 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 102 , 116 ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
         Disable = TRUE ;
         FT_SUBREG_TEXT
     };
     ComboBox LB_SUBREG
     {
-        Pos = MAP_APPFONT ( 142 , 112 ) ;
+        Pos = MAP_APPFONT ( 142 , 116 ) ;
         Size = MAP_APPFONT ( 53 , 50 ) ;
         DropDown = TRUE ;
         Disable = TRUE ;
@@ -1091,7 +1072,7 @@ TabPage TP_INSERT_SECTION
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 90 , 3 ) ;
-        Size = MAP_APPFONT ( 167 , 129 ) ;
+        Size = MAP_APPFONT ( 163 , 129 ) ;
         GB_OPTIONS_TEXT
     };
 };
@@ -1216,13 +1197,13 @@ TabPage TP_SECTION_FTNENDNOTES
     HelpID = HID_SECTION_FTNENDNOTES_PAGE;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_FTN
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 59 ) ;
+        Size = MAP_APPFONT ( 248 , 55 ) ;
         Text = "Fußnoten" ;
         Text [ English ] = "Footnotes" ;
         Text[ english_us ] = "Footnotes";
@@ -1325,7 +1306,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     NumericField FLD_FTN_OFFSET
     {
-        Pos = MAP_APPFONT ( 136 , 29 ) ;
+        Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -1337,7 +1318,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_NUM_FMT
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         Text = "eigenes ~Format" ;
@@ -1363,7 +1344,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_FTN_PREFIX
     {
-        Pos = MAP_APPFONT ( 85 , 44 ) ;
+        Pos = MAP_APPFONT ( 85 , 45 ) ;
         Size = MAP_APPFONT ( 25 , 10 ) ;
         Text = "~Davor" ;
         Text [ ENGLISH ] = "Before" ;
@@ -1392,7 +1373,7 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_FTN_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 44 ) ;
+        Pos = MAP_APPFONT ( 113 , 43 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1401,7 +1382,7 @@ TabPage TP_SECTION_FTNENDNOTES
     ListBox LB_FTN_NUMVIEW
     {
         Border = TRUE ;
-         Pos = MAP_APPFONT ( 136 , 44 ) ;
+         Pos = MAP_APPFONT ( 136 , 43 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -1420,7 +1401,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_FTN_SUFFIX
     {
-        Pos = MAP_APPFONT ( 201 , 44 ) ;
+        Pos = MAP_APPFONT ( 201 , 45 ) ;
         Size = MAP_APPFONT ( 25 , 10 ) ;
         Text = "Dah~inter" ;
         Text [ ENGLISH ] = "Behind" ;
@@ -1449,7 +1430,7 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_FTN_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 44 ) ;
+        Pos = MAP_APPFONT ( 229 , 43 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1460,7 +1441,7 @@ TabPage TP_SECTION_FTNENDNOTES
     GroupBox GB_END
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
         Size = MAP_APPFONT ( 248 , 59 ) ;
         Text = "Endnoten" ;
         Text [ English ] = "Endnotes" ;
@@ -1485,7 +1466,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_AT_TXTEND
     {
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
         Text = "~am Bereichsende sammeln" ;
@@ -1511,7 +1492,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_NUM
     {
-        Pos = MAP_APPFONT ( 12 , 91 ) ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         Text = "Nummer neu ~starten" ;
@@ -1537,7 +1518,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_END_OFFSET
     {
-        Pos = MAP_APPFONT ( 85 , 91 ) ;
+        Pos = MAP_APPFONT ( 85 , 88 ) ;
         Size = MAP_APPFONT ( 36 , 8 ) ;
         Text = "Be~ginn bei" ;
         Text [ ENGLISH ] = "~Start at" ;
@@ -1563,7 +1544,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     NumericField FLD_END_OFFSET
     {
-        Pos = MAP_APPFONT ( 136 , 91 ) ;
+        Pos = MAP_APPFONT ( 136 , 86 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -1575,7 +1556,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_NUM_FMT
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         Text = "~eigenes Format" ;
@@ -1602,7 +1583,7 @@ TabPage TP_SECTION_FTNENDNOTES
 
     FixedText FT_END_PREFIX
     {
-        Pos = MAP_APPFONT ( 85 , 106 ) ;
+        Pos = MAP_APPFONT ( 85 , 104 ) ;
         Size = MAP_APPFONT ( 25 , 10 ) ;
         Text = "Da~vor" ;
         Text [ ENGLISH ] = "Before" ;
@@ -1631,7 +1612,7 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_END_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 106 ) ;
+        Pos = MAP_APPFONT ( 113 , 102 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1640,7 +1621,7 @@ TabPage TP_SECTION_FTNENDNOTES
     ListBox LB_END_NUMVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 136 , 106 ) ;
+        Pos = MAP_APPFONT ( 136 , 102 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -1659,7 +1640,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_END_SUFFIX
     {
-        Pos = MAP_APPFONT ( 201 , 106 ) ;
+        Pos = MAP_APPFONT ( 201 , 104 ) ;
         Size = MAP_APPFONT ( 25 , 10 ) ;
         Text = "Dahinte~r" ;
         Text [ ENGLISH ] = "Behind" ;
@@ -1688,7 +1669,7 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_END_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 106 ) ;
+        Pos = MAP_APPFONT ( 229 , 102 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

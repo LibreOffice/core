@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:55:31 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,12 @@ TabPage TP_NUM_POSITION
 {
     HelpID = HID_NUM_POSITION ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     GroupBox GB_LEVEL
     {
-        Pos = MAP_APPFONT ( 6 , 1 ) ;
-        Size = MAP_APPFONT ( 38 , 130 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 38 , 179 ) ;
         Text = "Ebene" ;
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
@@ -110,7 +110,7 @@ TabPage TP_NUM_POSITION
     MultiListBox LB_LEVEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 26 , 114 ) ;
+        Size = MAP_APPFONT ( 26 , 163 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
         Border = TRUE ;
@@ -118,8 +118,8 @@ TabPage TP_NUM_POSITION
     };
     GroupBox GB_POSITION
     {
-        Pos = MAP_APPFONT ( 47 , 1 ) ;
-        Size = MAP_APPFONT ( 207 , 77 ) ;
+        Pos = MAP_APPFONT ( 47 , 3 ) ;
+        Size = MAP_APPFONT ( 207 , 92 ) ;
         Text = "Position und Abstand" ;
         Text [ ENGLISH ] = "Position and distance" ;
         Group = TRUE ;
@@ -145,10 +145,9 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 50 , 16 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ein~rückung";
-//        Text = "Abstand Text <-> Rand" ;
         Text [ ENGLISH ] = "Distance text <-> border" ;
         Text [ english_us ] = "Indent" ;
         Text [ swedish ] = "Indrag" ;
@@ -172,7 +171,7 @@ TabPage TP_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 201 , 14 ) ;
+        Pos = MAP_APPFONT ( 201 , 16 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "Relati~v" ;
         Text [ ENGLISH ] = "Relati~ve" ;
@@ -198,7 +197,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 158 , 12 ) ;
+        Pos = MAP_APPFONT ( 158 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -216,10 +215,9 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 50 , 29 ) ;
+        Pos = MAP_APPFONT ( 50 , 32 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Abstand zum Te~xt" ;
-//        Text = "Einr~ückung" ;
         Text [ ENGLISH ] = "Indent" ;
         Text [ english_us ] = "Space to Te~xt" ;
         Text [ swedish ] = "Avstånd till text" ;
@@ -243,7 +241,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_INDENT
     {
-        Pos = MAP_APPFONT ( 158 , 27 ) ;
+        Pos = MAP_APPFONT ( 158 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -261,10 +259,9 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_NUMDIST
     {
-        Pos = MAP_APPFONT ( 50 , 44 ) ;
+        Pos = MAP_APPFONT ( 50 , 48 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "Mindestabstand Nummer <-> Text" ;
-//        Text = "Abstand Te~xt <-> Numerierung" ;
+        Text = "~Mindestabstand Nummer <-> Text" ;
         Text [ ENGLISH ] = "Distance text <-> numbering" ;
         Text [ english_us ] = "Minimum space numbering <-> text" ;
         Text [ swedish ] = "Minsta avstånd nummer <-> text" ;
@@ -288,7 +285,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_NUMDIST
     {
-        Pos = MAP_APPFONT ( 158 , 42 ) ;
+        Pos = MAP_APPFONT ( 158 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -306,11 +303,10 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Pos = MAP_APPFONT ( 50 , 64 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ausri~chtung der Nummerierung" ;
         Text [ ENGLISH ] = "Alignment of the numbering" ;
-         //???
         Text [ english_us ] = "Numbering ~alignment" ;
         Text [ swedish ] = "~Placering av numrering" ;
         Text [ danish ] = "Justering af nummerering" ;
@@ -333,7 +329,7 @@ TabPage TP_NUM_POSITION
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 158 , 57 ) ;
+        Pos = MAP_APPFONT ( 158 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -466,8 +462,8 @@ TabPage TP_NUM_POSITION
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 201 , 63 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 201 , 78 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ ENGLISH ] = "~Standard" ;
         Text [ english_us ] = "~Default" ;
@@ -492,8 +488,8 @@ TabPage TP_NUM_POSITION
     };
     GroupBox GB_PREVIEW
     {
-        Pos = MAP_APPFONT ( 47 , 81 ) ;
-        Size = MAP_APPFONT ( 207 , 50 ) ;
+        Pos = MAP_APPFONT ( 47 , 98 ) ;
+        Size = MAP_APPFONT ( 207 , 84 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ english_us ] = "Preview" ;
@@ -518,8 +514,8 @@ TabPage TP_NUM_POSITION
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 50 , 92 ) ;
-        Size = MAP_APPFONT ( 201 , 34 ) ;
+        Pos = MAP_APPFONT ( 50 , 109 ) ;
+        Size = MAP_APPFONT ( 201 , 70 ) ;
     };
 };
 

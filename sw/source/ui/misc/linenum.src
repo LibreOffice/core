@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:27:18 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ TabPage TP_LINENUMBERING
     HelpID = HID_LINENUMBERING ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Zeilennummerierung" ;
     Text [ ENGLISH ] = "Line Numbering" ;
     CheckBox CB_NUMBERING_ON
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "~Nummerierung einschalten" ;
         Text [ ENGLISH ] = "~Turn line numbering on" ;
         TabStop = TRUE ;
@@ -110,8 +110,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "~Zeichenvorlage" ;
         Text [ English ] = "~Char style" ;
         Text [ english_us ] = "~Character Style" ;
@@ -136,16 +136,16 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 65 , 30 ) ;
-        Size = MAP_APPFONT ( 75 , 60 ) ;
+        Pos = MAP_APPFONT ( 100 , 30 ) ;
+        Size = MAP_APPFONT ( 148 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     FixedText FT_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "~Format" ;
         Text [ English ] = "~Format" ;
         Text [ english_us ] = "F~ormat" ;
@@ -170,15 +170,15 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_FORMAT
     {
-        Pos = MAP_APPFONT ( 65 , 48 ) ;
-        Size = MAP_APPFONT ( 75 , 60 ) ;
+        Pos = MAP_APPFONT ( 100 , 44 ) ;
+        Size = MAP_APPFONT ( 148 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_POS
     {
-        Pos = MAP_APPFONT ( 12 , 68 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Text [ english_us ] = "Position" ;
@@ -203,8 +203,8 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_POS
     {
-        Pos = MAP_APPFONT ( 65 , 66 ) ;
-        Size = MAP_APPFONT ( 75 , 60 ) ;
+        Pos = MAP_APPFONT ( 100 , 60 ) ;
+        Size = MAP_APPFONT ( 148 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -357,8 +357,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_OFFSET
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "~Abstand" ;
         Text [ English ] = "~Offset" ;
         Text [ english_us ] = "Spacing" ;
@@ -383,7 +383,7 @@ TabPage TP_LINENUMBERING
     };
     MetricField MF_OFFSET
     {
-        Pos = MAP_APPFONT ( 65 , 84 ) ;
+        Pos = MAP_APPFONT ( 100 , 76 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -400,8 +400,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_NUM_INVERVAL
     {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "~Intervall" ;
         Text [ English ] = "~Interval" ;
         Text [ english_us ] = "Interval" ;
@@ -426,7 +426,7 @@ TabPage TP_LINENUMBERING
     };
     NumericField NF_NUM_INVERVAL
     {
-        Pos = MAP_APPFONT ( 65 , 102 ) ;
+        Pos = MAP_APPFONT ( 100 , 92 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -441,8 +441,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_NUM_ROWS
     {
-        Pos = MAP_APPFONT ( 100 , 104 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 136 , 94 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "Zeilen" ;
         Text [ English ] = "Rows" ;
         Text [ english_us ] = "lines" ;
@@ -467,8 +467,8 @@ TabPage TP_LINENUMBERING
     };
     GroupBox GB_DISPLAY
     {
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 140 , 103 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 248 , 90 ) ;
         Text = "Anzeige" ;
         Text [ English ] = "Display" ;
         Text [ english_us ] = "View" ;
@@ -493,8 +493,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_DIVISOR
     {
-        Pos = MAP_APPFONT ( 158 , 32 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "~Text" ;
         Text [ English ] = "~Text" ;
         Text [ portuguese ] = "~Texto" ;
@@ -519,15 +519,15 @@ TabPage TP_LINENUMBERING
     };
     Edit ED_DIVISOR
     {
-        Pos = MAP_APPFONT ( 186 , 31 ) ;
-        Size = MAP_APPFONT ( 62 , 12 ) ;
+        Pos = MAP_APPFONT ( 45 , 121 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
         Left = TRUE ;
         Border = TRUE ;
     };
     FixedText FT_DIV_INTERVAL
     {
-        Pos = MAP_APPFONT ( 158 , 46 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "A~lle" ;
         Text [ English ] = "A~ll" ;
          //        Disable = TRUE ;
@@ -553,7 +553,7 @@ TabPage TP_LINENUMBERING
     };
     NumericField NF_DIV_INTERVAL
     {
-        Pos = MAP_APPFONT ( 186 , 44 ) ;
+        Pos = MAP_APPFONT ( 45 , 137 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -569,8 +569,8 @@ TabPage TP_LINENUMBERING
     };
     FixedText FT_DIV_ROWS
     {
-        Pos = MAP_APPFONT ( 221 , 46 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 139 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ English ] = "Rows" ;
         Text [ english_us ] = "Lines" ;
@@ -595,8 +595,8 @@ TabPage TP_LINENUMBERING
     };
     GroupBox GB_DIVISOR
     {
-        Pos = MAP_APPFONT ( 152 , 19 ) ;
-        Size = MAP_APPFONT ( 102 , 44 ) ;
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Size = MAP_APPFONT ( 121 , 53 ) ;
         Text = "Teiler" ;
         Text [ English ] = "Divisor" ;
         Text [ english_us ] = "Separator" ;
@@ -621,8 +621,8 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
-        Pos = MAP_APPFONT ( 158 , 80 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 139 , 121 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "L~eerzeilen" ;
         Text [ ENGLISH ] = "~Empty lines" ;
         TabStop = TRUE ;
@@ -648,8 +648,8 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_COUNT_FRAMELINES
     {
-        Pos = MAP_APPFONT ( 158 , 93 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 139 , 135 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "Zeilen in Te~xtrahmen" ;
         Text [ ENGLISH ] = "Text frame l~ines" ;
         TabStop = TRUE ;
@@ -675,8 +675,8 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_RESTART_PAGE
     {
-        Pos = MAP_APPFONT ( 158 , 106 );
-        Size = MAP_APPFONT ( 90 , 10 );
+        Pos = MAP_APPFONT ( 139 , 149 );
+        Size = MAP_APPFONT ( 110 , 10 );
         Text = "~Neustart am Seitenanfang";
         Text [ ENGLISH ] = "~Restart each new page";
         TabStop = TRUE;
@@ -701,8 +701,8 @@ TabPage TP_LINENUMBERING
     };
     GroupBox GB_COUNT
     {
-        Pos = MAP_APPFONT ( 152 , 67 ) ;
-        Size = MAP_APPFONT ( 102 , 55 ) ;
+        Pos = MAP_APPFONT ( 133 , 110 ) ;
+        Size = MAP_APPFONT ( 121 , 53 ) ;
         Text = "Zählen" ;
         Text [ English ] = "Count" ;
         Text [ english_us ] = "Count" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impfnote.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,19 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    RadioButton aPosPageBox;
-    RadioButton aPosChapterBox;
-    GroupBox aPosGrp;
-
+    FixedText       aNumTypeFT;
     ListBox         aNumViewBox;
     FixedText       aOffsetLbl;
     NumericField    aOffsetFld;
+    FixedText       aNumCountFT;
     ListBox         aNumCountBox;
     FixedText       aPrefixFT;
     Edit            aPrefixED;
     FixedText       aSuffixFT;
     Edit            aSuffixED;
+    FixedText       aPosFT;
+    RadioButton     aPosPageBox;
+    RadioButton     aPosChapterBox;
     GroupBox        aNumGrp;
 
     FixedText       aParaTemplLbl;

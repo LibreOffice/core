@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: csaba $ $Date: 2000-12-07 18:35:30 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,6 +633,7 @@ void    SwOutlineSettingsTabPage::Update()
         else
             aCharFmtLB.SetNoSelection();
 
+        aAllLevelFT.Enable(TRUE);
         aAllLevelNF.Enable(TRUE);
         aAllLevelNF.SetMax(MAXLEVEL);
         if(bSameComplete)
@@ -664,6 +665,7 @@ void    SwOutlineSettingsTabPage::Update()
 
         if(nTmpLevel)
         {
+            aAllLevelFT.Enable(TRUE);
             aAllLevelNF.Enable(TRUE);
             aAllLevelNF.SetMax(nTmpLevel + 1);
             aAllLevelNF.SetValue(rFmt.GetUpperLevel());
@@ -672,6 +674,7 @@ void    SwOutlineSettingsTabPage::Update()
         {
             aAllLevelNF.SetText(aEmptyStr);
             aAllLevelNF.Enable(FALSE);
+            aAllLevelFT.Enable(FALSE);
         }
 
         aStartEdit.SetValue( rFmt.GetStartValue() );
@@ -1223,6 +1226,9 @@ NumberingPreview::~NumberingPreview()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/07 18:35:30  csaba
+    79541 Branding/Configuration Change
+
     Revision 1.3  2000/11/09 10:10:34  obo
     Without string include
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:29:32 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,30 +74,10 @@ TabPage TP_OPTLOAD_PAGE
     HelpID = HID_OPTLOAD_PAGE ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE ;
-/*  FixedText FT_UPDATE_LINKS
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text = "Verknüpfungen beim Laden aktualisieren" ;
-        Text [ English ] = "Update links while loading" ;
-        Text[ italian ] = "Aggiorna collegamenti durante il caricamento";
-        Text[ portuguese_brazilian ] = "Refresh links";
-        Text[ portuguese ] = "Actualizar ligações ao carregar";
-        Text[ danish ] = "Refresh links";
-        Text[ french ] = "Actualiser les liens lors du chargement";
-        Text[ swedish ] = "Uppdatera länkar vid laddning";
-        Text[ dutch ] = "Verbindingen bij het laden actualiseren";
-        Text[ spanish ] = "Actualizar vínculos al cargar";
-        Text[ english_us ] = "Update links";
-        Text[ chinese_simplified ] = "ÔÚ×°ÔØÊ±¸üÐÂÁ´½Ó";
-        Text[ russian ] = "Îáíîâèòü ñâÿçè";
-        Text[ polish ] = "Aktualizuj ³¹cza";
-        Text[ japanese ] = "Verknüpfungen aktualisieren";
-    };*/
     GroupBox GB_LINK
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 37 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 38 ) ;
         Text = "Verknüpfungen aktualisieren" ;
         Text [ English ] = "Update links" ;
         Text[ english_us ] = "Update links";
@@ -122,7 +102,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     RadioButton RB_ALWAYS
     {
-        Pos = MAP_APPFONT ( 12 , 13 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Immer" ;
         Text [ ENGLISH ] = "~Always" ;
@@ -149,7 +129,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     RadioButton RB_REQUEST
     {
-        Pos = MAP_APPFONT ( 90 , 13 ) ;
+        Pos = MAP_APPFONT ( 90 , 14 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "Auf Nach~frage" ;
         Text [ ENGLISH ] = "On request" ;
@@ -176,7 +156,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     RadioButton RB_NEVER
     {
-        Pos = MAP_APPFONT ( 168 , 13 ) ;
+        Pos = MAP_APPFONT ( 168 , 14 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Nie" ;
         Text [ ENGLISH ] = "Never" ;
@@ -203,7 +183,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     CheckBox CB_LINK_DOCONLY
     {
-        Pos = MAP_APPFONT ( 12 , 25) ;
+        Pos = MAP_APPFONT ( 12 , 28) ;
         Size = MAP_APPFONT ( 220 , 10 ) ;
         Text = "Nur für das aktuelle ~Dokument" ;
         Text [ English ] = "Actual document only" ;
@@ -229,8 +209,8 @@ TabPage TP_OPTLOAD_PAGE
 };
     GroupBox GB_FIELD
     {
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
-        Size = MAP_APPFONT ( 248 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 248 , 51 ) ;
         Text = "Felder und Diagramme" ;
         Text [ English ] = "Update" ;
         Text[ english_us ] = "Fields and charts";
@@ -307,7 +287,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     CheckBox CB_FLD_DOCONLY
     {
-        Pos = MAP_APPFONT ( 12 , 83) ;
+        Pos = MAP_APPFONT ( 12 , 82) ;
         Size = MAP_APPFONT ( 213 , 10 ) ;
         Text = "Nur für das aktuelle D~okument" ;
         Text [ English ] = "Current document only" ;
@@ -334,7 +314,7 @@ TabPage TP_OPTLOAD_PAGE
     GroupBox GB_COMPAT
     {
         Pos = MAP_APPFONT ( 6 , 98 ) ;
-        Size = MAP_APPFONT ( 248 , 33 ) ;
+        Size = MAP_APPFONT ( 248 , 37 ) ;
         Text = "Kompatibilität" ;
         Text [ English ] = "Compatibility" ;
         Text[ english_us ] = "Compatibility";
@@ -385,7 +365,7 @@ TabPage TP_OPTLOAD_PAGE
 };
     CheckBox CB_MERGE_PARA_DIST_PAGESTART
     {
-        Pos = MAP_APPFONT ( 12 , 121) ;
+        Pos = MAP_APPFONT ( 12 , 122) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
         Text [ English ] = "Add distances at the beginning of pages" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 10:15:53 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,33 +559,6 @@ IMPL_LINK(SwLayoutOptPage, MetricHdl, ListBox*, EMPTYARG)
  TabPage Drucker Zusatzeinstellungen
 -------------------------------------------------------*/
 
-// makro fuers init ------------------------------------------------------
-
-#define _INIT \
-    aGrfCB           (this, SW_RES(CB_PGRF)), \
-    aTabCB           (this, SW_RES(CB_PTAB)), \
-    aDrawCB          (this, SW_RES(CB_PDRAW)), \
-    aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)), \
-    aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),\
-    aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),\
-    aGroup1          (this, SW_RES(GRP_1)),  \
-    aLeftPageCB      (this, SW_RES(CB_LEFTP)),\
-    aRightPageCB     (this, SW_RES(CB_RIGHTP)),\
-    aReverseCB       (this, SW_RES(CB_REVERSE)),\
-    aProspectCB      (this, SW_RES(CB_PROSPECT)),\
-    aGroup2          (this, SW_RES(GRP_2)),     \
-    aNoRB            (this, SW_RES(RB_NO)),     \
-    aOnlyRB          (this, SW_RES(RB_ONLY)),   \
-    aEndRB           (this, SW_RES(RB_END)),    \
-    aEndPageRB       (this, SW_RES(RB_PAGEEND)),\
-    aGroup3          (this, SW_RES(GRP_3)),     \
-    aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),\
-    aGroup5          (this, SW_RES(GRP_5)),     \
-    aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),\
-    aGroup4          (this, SW_RES(GRP_4)),  \
-    aFaxLB           (this, SW_RES(LB_FAX)), \
-    aFaxGB           (this, SW_RES(GB_FAX)), \
-    bAttrModified( FALSE )
 
 // -----------------------------------------------------------------------
 
@@ -594,7 +567,29 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
                                       const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, SW_RES( TP_OPTPRINT_PAGE ), rCoreSet),
     bPreview  ( FALSE ),
-    _INIT
+    aGrfCB           (this, SW_RES(CB_PGRF)),
+    aTabCB           (this, SW_RES(CB_PTAB)),
+    aDrawCB          (this, SW_RES(CB_PDRAW)),
+    aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)),
+    aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
+    aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
+    aGroup1          (this, SW_RES(GRP_1)),
+    aLeftPageCB      (this, SW_RES(CB_LEFTP)),
+    aRightPageCB     (this, SW_RES(CB_RIGHTP)),
+    aReverseCB       (this, SW_RES(CB_REVERSE)),
+    aProspectCB      (this, SW_RES(CB_PROSPECT)),
+    aGroup2          (this, SW_RES(GRP_2)),
+    aNoRB            (this, SW_RES(RB_NO)),
+    aOnlyRB          (this, SW_RES(RB_ONLY)),
+    aEndRB           (this, SW_RES(RB_END)),
+    aEndPageRB       (this, SW_RES(RB_PAGEEND)),
+    aGroup3          (this, SW_RES(GRP_3)),
+    aGroup4          (this, SW_RES(GRP_4)),
+    aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
+    aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
+    aFaxFT           (this, SW_RES(FT_FAX)),
+    aFaxLB           (this, SW_RES(LB_FAX)),
+    bAttrModified( FALSE )
 {
     Init();
     FreeResource();
@@ -634,7 +629,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
 
 }
 
-#undef _INIT
 //------------------------------------------------------------------------
 
 void SwAddPrinterTabPage::SetPreview(BOOL bPrev)

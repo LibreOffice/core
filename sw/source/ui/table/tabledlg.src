@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:52:21 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,12 +254,12 @@ TabPage TP_FORMAT_TABLE
 {
     HelpID = HID_FORMAT_TABLE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 22 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Name" ;
         Text [ English ] = "~Name" ;
         Text [ italian ] = "~Nome" ;
@@ -285,14 +285,14 @@ TabPage TP_FORMAT_TABLE
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 14 ) ;
-        Size = MAP_APPFONT ( 79 , 12 ) ;
+        Pos = MAP_APPFONT ( 75 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 22 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Br~eite" ;
         Text [ ENGLISH ] = "W~idth" ;
         Text [ norwegian ] = "B~redde" ;
@@ -320,7 +320,7 @@ TabPage TP_FORMAT_TABLE
     MetricField ED_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 32 ) ;
+        Pos = MAP_APPFONT ( 75 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -337,8 +337,8 @@ TabPage TP_FORMAT_TABLE
     };
     CheckBox CB_REL_WIDTH
     {
-        Pos = MAP_APPFONT ( 101 , 34 ) ;
-        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Pos = MAP_APPFONT ( 118 , 32 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "Relati~v" ;
         Text [ ENGLISH ] = "Relati~ve" ;
         TabStop = TRUE ;
@@ -365,7 +365,7 @@ TabPage TP_FORMAT_TABLE
     GroupBox GB_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 184 , 73 ) ;
+        Size = MAP_APPFONT ( 184 , 42 ) ;
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -392,8 +392,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FULL
     {
-        Pos = MAP_APPFONT ( 199 , 15 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Automatic" ;
@@ -420,8 +420,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_LEFT
     {
-        Pos = MAP_APPFONT ( 199 , 29 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ norwegian ] = "~Left" ;
@@ -449,8 +449,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FROM_LEFT
     {
-        Pos = MAP_APPFONT ( 199 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Von l~inks" ;
         Text [ ENGLISH ] = "~From left" ;
         TabStop = TRUE ;
@@ -475,8 +475,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_RIGHT
     {
-        Pos = MAP_APPFONT ( 199 , 57 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ norwegian ] = "~Right" ;
@@ -504,8 +504,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_CENTER
     {
-        Pos = MAP_APPFONT ( 199 , 71 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Zen~triert" ;
         Text [ ENGLISH ] = "~Centered" ;
         Text [ norwegian ] = "~Centered" ;
@@ -533,8 +533,8 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FREE
     {
-        Pos = MAP_APPFONT ( 199 , 85 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Manuell" ;
         Text [ ENGLISH ] = "~Manual" ;
         TabStop = TRUE ;
@@ -561,7 +561,7 @@ TabPage TP_FORMAT_TABLE
     GroupBox GB_POS
     {
         Pos = MAP_APPFONT ( 193 , 3 ) ;
-        Size = MAP_APPFONT ( 61 , 129 ) ;
+        Size = MAP_APPFONT ( 61 , 119 ) ;
         Text = "Ausrichtung" ;
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -588,8 +588,8 @@ TabPage TP_FORMAT_TABLE
     };
     GroupBox GB_DIST
     {
-        Pos = MAP_APPFONT ( 6 , 82 ) ;
-        Size = MAP_APPFONT ( 184 , 50 ) ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 184 , 74 ) ;
         Text = "Abst‰nde" ;
         Text [ ENGLISH ] = "Distance" ;
         Text [ norwegian ] = "Avstand" ;
@@ -614,10 +614,101 @@ TabPage TP_FORMAT_TABLE
         Text[ turkish ] = "Aral˝k";
         Text[ language_user1 ] = " ";
     };
+    FixedText FT_LEFT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text = "Nach lin~ks" ;
+        Text [ ENGLISH ] = "To lef~t" ;
+        Text [ norwegian ] = "Til venstr~e" ;
+        Text [ italian ] = "a sinis~tra" ;
+        Text [ portuguese_brazilian ] = "Para a esqueda" ;
+        Text [ portuguese ] = "¿ esqueda" ;
+        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ danish ] = "Til venstre" ;
+        Text [ french ] = "¿ ga~uche" ;
+        Text [ swedish ] = "Till v‰ns~ter" ;
+        Text [ dutch ] = "~Naar links" ;
+        Text [ spanish ] = "Hacia la i~zda." ;
+        Text [ english_us ] = "Lef~t" ;
+        Text[ chinese_simplified ] = "œÚ◊Û(~T)";
+        Text[ russian ] = "¬ÎÂ‚Ó";
+        Text[ polish ] = "Na lewo";
+        Text[ japanese ] = "ç∂(~T)";
+        Text[ chinese_traditional ] = "¶V•™(~T)";
+        Text[ arabic ] = "≈·Ï «·Ì”«—";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
+        Text[ korean ] = "øﬁ¬ (~T)";
+        Text[ turkish ] = "S~ola";
+    };
+    MetricField ED_LEFT_DIST
+    {
+        Pos = MAP_APPFONT ( 147 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -9999 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_RIGHT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text = "Nach recht~s" ;
+        Text [ ENGLISH ] = "To ri~ght" ;
+        Text [ norwegian ] = "Til h¯y~re" ;
+        Text [ italian ] = "a de~stra" ;
+        Text [ portuguese_brazilian ] = "Para a direita" ;
+        Text [ portuguese ] = "¿ direita" ;
+        Text [ finnish ] = "~Oikealle" ;
+        Text [ danish ] = "Til h¯jre" ;
+        Text [ french ] = "¿ dr~oite" ;
+        Text [ swedish ] = "Till hˆ~ger" ;
+        Text [ dutch ] = "Naar recht~s" ;
+        Text [ spanish ] = "Hacia la d~cha." ;
+        Text [ english_us ] = "Ri~ght" ;
+        Text[ chinese_simplified ] = "œÚ”“(~G)";
+        Text[ russian ] = "¬Ô‡‚Ó";
+        Text[ polish ] = "Na prawo";
+        Text[ japanese ] = "âE(~G)";
+        Text[ chinese_traditional ] = "¶V•k(~G)";
+        Text[ arabic ] = "≈·Ï «·Ì„Ì‰";
+        Text[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
+        Text[ korean ] = "ø¿∏•¬ (~G)";
+        Text[ turkish ] = "Sa~a";
+        Text[ language_user1 ] = " ";
+    };
+
+    MetricField ED_RIGHT_DIST
+    {
+        Pos = MAP_APPFONT ( 147 , 75 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -9999 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
     FixedText FT_TOP_DIST
     {
-        Pos = MAP_APPFONT ( 102 , 94 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
         Text = "Nach ~oben" ;
         Text [ ENGLISH ] = "To t~op" ;
         Text [ norwegian ] = "Til t~oppen" ;
@@ -644,7 +735,7 @@ TabPage TP_FORMAT_TABLE
     };
     MetricField ED_TOP_DIST
     {
-        Pos = MAP_APPFONT ( 145 , 93 ) ;
+        Pos = MAP_APPFONT ( 147 , 91 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -661,8 +752,8 @@ TabPage TP_FORMAT_TABLE
     };
     FixedText FT_BOTTOM_DIST
     {
-        Pos = MAP_APPFONT ( 102 , 112 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
         Text = "Nach ~unten" ;
         Text [ ENGLISH ] = "To ~bottom" ;
         Text [ norwegian ] = "Til ~bunn" ;
@@ -690,7 +781,7 @@ TabPage TP_FORMAT_TABLE
     MetricField ED_BOTTOM_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 145 , 111 ) ;
+        Pos = MAP_APPFONT ( 147 , 107 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -698,96 +789,6 @@ TabPage TP_FORMAT_TABLE
         Spin = TRUE ;
         Minimum = 0 ;
         Maximum = 1000 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        First = 0 ;
-        Last = 9999 ;
-        SpinSize = 5 ;
-    };
-    FixedText FT_LEFT_DIST
-    {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Nach lin~ks" ;
-        Text [ ENGLISH ] = "To lef~t" ;
-        Text [ norwegian ] = "Til venstr~e" ;
-        Text [ italian ] = "a sinis~tra" ;
-        Text [ portuguese_brazilian ] = "Para a esqueda" ;
-        Text [ portuguese ] = "¿ esqueda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
-        Text [ danish ] = "Til venstre" ;
-        Text [ french ] = "¿ ga~uche" ;
-        Text [ swedish ] = "Till v‰ns~ter" ;
-        Text [ dutch ] = "~Naar links" ;
-        Text [ spanish ] = "Hacia la i~zda." ;
-        Text [ english_us ] = "Lef~t" ;
-        Text[ chinese_simplified ] = "œÚ◊Û(~T)";
-        Text[ russian ] = "¬ÎÂ‚Ó";
-        Text[ polish ] = "Na lewo";
-        Text[ japanese ] = "ç∂(~T)";
-        Text[ chinese_traditional ] = "¶V•™(~T)";
-        Text[ arabic ] = "≈·Ï «·Ì”«—";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
-        Text[ korean ] = "øﬁ¬ (~T)";
-        Text[ turkish ] = "S~ola";
-    };
-    MetricField ED_LEFT_DIST
-    {
-        Pos = MAP_APPFONT ( 58 , 93 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = -9999 ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        First = 0 ;
-        Last = 9999 ;
-        SpinSize = 5 ;
-    };
-    FixedText FT_RIGHT_DIST
-    {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Nach recht~s" ;
-        Text [ ENGLISH ] = "To ri~ght" ;
-        Text [ norwegian ] = "Til h¯y~re" ;
-        Text [ italian ] = "a de~stra" ;
-        Text [ portuguese_brazilian ] = "Para a direita" ;
-        Text [ portuguese ] = "¿ direita" ;
-        Text [ finnish ] = "~Oikealle" ;
-        Text [ danish ] = "Til h¯jre" ;
-        Text [ french ] = "¿ dr~oite" ;
-        Text [ swedish ] = "Till hˆ~ger" ;
-        Text [ dutch ] = "Naar recht~s" ;
-        Text [ spanish ] = "Hacia la d~cha." ;
-        Text [ english_us ] = "Ri~ght" ;
-        Text[ chinese_simplified ] = "œÚ”“(~G)";
-        Text[ russian ] = "¬Ô‡‚Ó";
-        Text[ polish ] = "Na prawo";
-        Text[ japanese ] = "âE(~G)";
-        Text[ chinese_traditional ] = "¶V•k(~G)";
-        Text[ arabic ] = "≈·Ï «·Ì„Ì‰";
-        Text[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
-        Text[ korean ] = "ø¿∏•¬ (~G)";
-        Text[ turkish ] = "Sa~a";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField ED_RIGHT_DIST
-    {
-        Pos = MAP_APPFONT ( 58 , 111 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = -9999 ;
-        Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
         First = 0 ;
@@ -804,20 +805,13 @@ TabPage TP_TABLE_COLUMN
 {
     HelpID = HID_TABLE_COLUMN ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    FixedText FT_NAME
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "~Name" ;
-    };
     CheckBox CB_MOD_TBL
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 180 , 12 ) ;
-        Text = "Tabellenbreite anpassen" ;
-        Text [ ENGLISH ] = "" ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Text = "~Tabellenbreite anpassen" ;
         TabStop = TRUE ;
         Text [ italian ] = "Adatta larghezza tabella" ;
         Text [ spanish ] = "Ajustar al ancho de la tabla" ;
@@ -841,9 +835,9 @@ TabPage TP_TABLE_COLUMN
     };
     CheckBox CB_PROP
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 180 , 12 ) ;
-        Text = "Spalten gleichm‰ﬂig ‰ndern" ;
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Text = "~Spalten gleichm‰ﬂig ‰ndern" ;
         Text [ ENGLISH ] = "Adjust columns equally" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Adjust columns proportionally" ;
@@ -866,37 +860,10 @@ TabPage TP_TABLE_COLUMN
         Text[ turkish ] = "S¸tunlar˝ orant˝l˝ dei˛tir";
         Text[ language_user1 ] = " ";
     };
-    CheckBox CB_INV
-    {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
-        Size = MAP_APPFONT ( 180 , 12 ) ;
-        Text = "Spalten umgekehrt proportional ‰ndern" ;
-        Text [ ENGLISH ] = "" ;
-        TabStop = TRUE ;
-        Text [ dutch ] = "Kolommen omgekeerd proportioneel wijzigen" ;
-        Text [ italian ] = "Modifica colonne in modo inversamente proporzionale" ;
-        Text [ spanish ] = "Modificar columnas proporcionalmente inversas" ;
-        Text [ french ] = "Modifier les colonnes de maniËre inversement proportionnelle" ;
-        Text [ english_us ] = "Reverse columns proportionally" ;
-        Text [ swedish ] = "ƒndra kolumnerna omv‰nt proportionellt" ;
-        Text [ danish ] = "Modificer kolonner omvendt proportional" ;
-        Text [ portuguese ] = "Alterar colunas em proporÁ„o inversa" ;
-        Text [ portuguese_brazilian ] = "Spalten umgekehrt proportional ‰ndern" ;
-        Text[ chinese_simplified ] = "∑¥œ‡∏¸∏ƒ¡–øÌ";
-        Text[ russian ] = "»ÁÏÂÌËÚ¸ ÍÓÎÓÌÍË Ó·‡ÚÌÓ ÔÓÔÓˆËÓÌ‡Î¸ÌÓ";
-        Text[ polish ] = "ZmieÒ kolumny odwrotnie proporcjonalnie";
-        Text[ japanese ] = "óÒÇîΩî‰ó·Ç…ïœçX";
-        Text[ chinese_traditional ] = "§œ¨€≈‹ßÛƒÊºe";
-        Text[ arabic ] = "⁄ﬂ” «· €ÌÌ— «· ‰«”»Ì ··√⁄„œ…";
-        Text[ greek ] = "¡ÎÎ·„ﬁ ÛÙÁÎ˛Ì ·ÌÙÈÛÙÒ¸ˆ˘Ú ·Ì‹ÎÔ„·";
-        Text[ korean ] = "ø≠ø° π›∫Ò∑ ∑Œ";
-        Text[ turkish ] = "S¸tunlar˝ ters orant˝l˝ dei˛tir";
-        Text[ language_user1 ] = " ";
-    };
     FixedText FT_SPACE
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 85 , 8 ) ;
         Text = "Noch verf¸gbarer Platz" ;
         Text [ English ] = "Available space" ;
         Text [ english_us ] = "Remaining space" ;
@@ -923,7 +890,7 @@ TabPage TP_TABLE_COLUMN
     {
         ReadOnly = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 95 , 51 ) ;
+        Pos = MAP_APPFONT ( 95 , 34 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -938,7 +905,7 @@ TabPage TP_TABLE_COLUMN
     ImageButton COL_BTN_DOWN
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
@@ -946,14 +913,15 @@ TabPage TP_TABLE_COLUMN
     ImageButton COL_BTN_UP
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 234 , 95 ) ;
+        Pos = MAP_APPFONT ( 234 , 65 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
     };
     FixedText COL_FT_1
     {
-        Pos = MAP_APPFONT ( 30 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 30 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~1" ;
         Left = TRUE ;
@@ -964,7 +932,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 13 , 111 ) ;
+        Pos = MAP_APPFONT ( 13 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -980,7 +948,8 @@ TabPage TP_TABLE_COLUMN
     };
     FixedText COL_FT_2
     {
-        Pos = MAP_APPFONT ( 68 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 68 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~2" ;
         Left = TRUE ;
@@ -990,7 +959,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 52 , 111 ) ;
+        Pos = MAP_APPFONT ( 52 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1006,7 +975,8 @@ TabPage TP_TABLE_COLUMN
     };
     FixedText COL_FT_3
     {
-        Pos = MAP_APPFONT ( 107 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 107 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~3" ;
         Left = TRUE ;
@@ -1016,7 +986,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 91 , 111 ) ;
+        Pos = MAP_APPFONT ( 91 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1032,7 +1002,8 @@ TabPage TP_TABLE_COLUMN
     };
     FixedText COL_FT_4
     {
-        Pos = MAP_APPFONT ( 146 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 146 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~4" ;
         Left = TRUE ;
@@ -1042,7 +1013,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 111 ) ;
+        Pos = MAP_APPFONT ( 130 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1058,7 +1029,8 @@ TabPage TP_TABLE_COLUMN
     };
     FixedText COL_FT_5
     {
-        Pos = MAP_APPFONT ( 185 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~5" ;
         Left = TRUE ;
@@ -1068,7 +1040,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 169 , 111 ) ;
+        Pos = MAP_APPFONT ( 169 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1084,7 +1056,8 @@ TabPage TP_TABLE_COLUMN
     };
     FixedText COL_FT_6
     {
-        Pos = MAP_APPFONT ( 224 , 95 ) ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 204 , 65 ) ;
         Size = MAP_APPFONT ( 9 , 8 ) ;
         Text = "~6" ;
         Left = TRUE ;
@@ -1094,7 +1067,7 @@ TabPage TP_TABLE_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 111 ) ;
+        Pos = MAP_APPFONT ( 208 , 81 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1110,7 +1083,7 @@ TabPage TP_TABLE_COLUMN
     };
     GroupBox COL_GB_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 80 ) ;
+        Pos = MAP_APPFONT ( 6 , 50 ) ;
         Size = MAP_APPFONT ( 240 , 49 ) ;
         Text = "Spaltenbreite" ;
         Text [ ENGLISH ] = "Column width" ;
@@ -1145,20 +1118,20 @@ TabPage TP_TABLE_COLUMN
 TabPage TP_TABLE_TEXTFLOW
 {
     HelpId = HID_TABLE_TEXTFLOW ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     TEXT_TEXTFLOW
     Hide = TRUE;
     GroupBox GB_FLOW
     {
-        Pos = MAP_APPFONT ( 3 , 6 ) ;
-        Size = MAP_APPFONT ( 251 , 64 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 251 , 96 ) ;
         TEXT_TEXTFLOW
     };
     CheckBox CB_PAGEBREAK
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Umbruch" ;
         Text [ ENGLISH ] = "~Break" ;
         Text [ norwegian ] = "~Skift" ;
@@ -1187,9 +1160,8 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_BREAKPAGE
     {
-         //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 105 , 16 ) ;
-        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Pos = MAP_APPFONT ( 105 , 14 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "~Seite" ;
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
@@ -1219,8 +1191,8 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_BREAKCOLUMN
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 141 , 16 ) ;
-        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Pos = MAP_APPFONT ( 176 , 14 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
          // ### ACHTUNG: Neuer Text in Resource? S~palte : ~Spalte
         Text = "S~palte" ;
         Text [ ENGLISH ] = "~Column" ;
@@ -1249,8 +1221,8 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_PAGEBREAKBEFORE
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 176 , 16 ) ;
-        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Pos = MAP_APPFONT ( 105 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "~davor" ;
         Text [ ENGLISH ] = "be~fore" ;
         Text [ norwegian ] = "f~¯r" ;
@@ -1280,8 +1252,8 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_PAGEBREAKAFTER
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 211 , 16 ) ;
-        Size = MAP_APPFONT ( 37 , 10 ) ;
+        Pos = MAP_APPFONT ( 176 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "da~nach" ;
         Text [ ENGLISH ] = "aft~er" ;
         Text [ norwegian ] = "ett~er" ;
@@ -1309,7 +1281,7 @@ TabPage TP_TABLE_TEXTFLOW
     CheckBox CB_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "mit Seitenvor~lage" ;
         Text [ ENGLISH ] = "With temp~late" ;
@@ -1339,15 +1311,14 @@ TabPage TP_TABLE_TEXTFLOW
     };
     ListBox LB_PAGECOLL
     {
-         //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 105 , 28 ) ;
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_PAGENUM
     {
-        Pos = MAP_APPFONT ( 171 , 30 ) ;
+        Pos = MAP_APPFONT ( 171 , 44 ) ;
         Size = MAP_APPFONT ( 47 , 10 ) ;
         Text = "Se~itennummer" ;
         Text [ ENGLISH ] = "Page number" ;
@@ -1374,7 +1345,7 @@ TabPage TP_TABLE_TEXTFLOW
     NumericField NF_PAGENUM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 223 , 28 ) ;
+        Pos = MAP_APPFONT ( 223 , 42 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1388,8 +1359,8 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_SPLIT
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Tabelle nicht ~trennen" ;
         Text [ ENGLISH ] = "dont split" ;
         TabStop = TRUE ;
@@ -1415,8 +1386,8 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_KEEP
     {
-        Pos = MAP_APPFONT ( 105 , 43 ) ;
-        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Mit folgendem Absatz ~zusammenhalten" ;
         Text [ ENGLISH ] = "~keep with next" ;
         TabStop = TRUE ;
@@ -1442,8 +1413,8 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_HEADLINE
     {
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "‹berschrift ~wiederholen" ;
         Text [ ENGLISH ] = "R~epeat Headline" ;
         Text [ norwegian ] = "G~jenta Overskrift" ;
@@ -1471,7 +1442,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     GroupBox GB_VERT_ORIENT
     {
-        Pos = MAP_APPFONT ( 3 , 76 ) ;
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 251 , 52 ) ;
         Text = "Vertikale Ausrichtung" ;
         Text [ ENGLISH ] = "Vertical Alignment" ;
@@ -1497,9 +1468,9 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_TOP
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Oben" ;
+        Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
         Text [ english_us ] = "Top" ;
         Text [ swedish ] = "Uppe" ;
@@ -1523,9 +1494,9 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_CENTER
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Mitte" ;
+        Text = "~Mitte" ;
         Text [ ENGLISH ] = "Middle" ;
         Text [ english_us ] = "~Centered" ;
         Text [ swedish ] = "Mitten" ;
@@ -1549,9 +1520,9 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_BOTTOM
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Unten" ;
+        Text = "Unt~en" ;
         Text [ ENGLISH ] = "Bottom" ;
         Text [ english_us ] = "Bottom" ;
         Text [ swedish ] = "Nere" ;

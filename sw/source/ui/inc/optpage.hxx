@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,12 +216,11 @@ class SwAddPrinterTabPage : public SfxTabPage
     RadioButton     aEndRB;
     RadioButton     aEndPageRB;
     GroupBox        aGroup3;
-    CheckBox        aSingleJobsCB;
     GroupBox        aGroup4;
-    ListBox         aFaxLB;
-    GroupBox        aFaxGB;
+    CheckBox        aSingleJobsCB;
     CheckBox        aPaperFromSetupCB;
-    GroupBox        aGroup5;
+    FixedText       aFaxFT;
+    ListBox         aFaxLB;
 
     BOOL        bAttrModified;
     BOOL        bPreview;

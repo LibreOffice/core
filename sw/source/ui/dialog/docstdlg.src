@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:37:33 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@ TabPage TP_DOC_STAT
 {
     HelpID = HID_DOC_STAT ;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Seiten:" ;
         Text [ ENGLISH ] = "Number of pages:" ;
         Text [ norwegian ] = "Number of pages:" ;
@@ -99,8 +99,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Tabellen:" ;
         Text [ ENGLISH ] = "Number of tables:" ;
         Text [ norwegian ] = "Number of tables:" ;
@@ -128,8 +128,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_GRF
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Grafiken:" ;
         Text [ ENGLISH ] = "Number of graphics:" ;
         Text [ norwegian ] = "Number of graphics:" ;
@@ -157,8 +157,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_OLE
     {
-        Pos = MAP_APPFONT ( 6 , 54 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl OLE-Objekte:" ;
         Text [ ENGLISH ] = "Number of OLE objects:" ;
         Text [ norwegian ] = "Number of OLE objects:" ;
@@ -186,9 +186,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_PARA
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Anzahl Absätze: : Anzahl Absõtze: */
+        Pos = MAP_APPFONT ( 6 , 54 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Absätze:" ;
         Text [ ENGLISH ] = "Number of paragraphs:" ;
         Text [ norwegian ] = "Number of paragraphs:" ;
@@ -216,9 +215,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_WORD
     {
-        Pos = MAP_APPFONT ( 6 , 86 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Anzahl Wörter: : Anzahl W÷rter: */
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Wörter:" ;
         Text [ ENGLISH ] = "Number of words:" ;
         Text [ norwegian ] = "Number of words:" ;
@@ -246,8 +244,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_WORD_DELIM
     {
-        Pos = MAP_APPFONT ( 144 , 86 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 144 , 68 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
         Text = "~Trenner" ;
         Text [ ENGLISH ] = "Delimiter" ;
         Left = TRUE ;
@@ -274,14 +272,14 @@ TabPage TP_DOC_STAT
     Edit ED_WORD_DELIM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 204 , 85 ) ;
+        Pos = MAP_APPFONT ( 204 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_CHAR
     {
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Zeichen:" ;
         Text [ ENGLISH ] = "Number of chars:" ;
         Text [ norwegian ] = "Number of chars:" ;
@@ -309,8 +307,8 @@ TabPage TP_DOC_STAT
     };
     FixedText FT_LINE
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Anzahl Zeilen:" ;
         Text [ ENGLISH ] = "Number of lines:" ;
         Text [ portuguese ] = "Número de linhas:" ;
@@ -336,55 +334,55 @@ TabPage TP_DOC_STAT
     FixedText FT_PAGE_COUNT
     {
         Pos = MAP_APPFONT ( 114 , 6 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_TABLE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 22 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 18 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_GRF_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 38 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 30 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_OLE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 54 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 42 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_PARA_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 70 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 54 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_WORD_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 86 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 68 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_CHAR_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 102 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 82 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
     };
     FixedText FT_LINE_COUNT
     {
-        Pos = MAP_APPFONT ( 114 , 118 ) ;
-        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Pos = MAP_APPFONT ( 114 , 96 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
         Left = TRUE ;
         Text = "..." ;
     };
     PushButton PB_PDATE
     {
-        Pos = MAP_APPFONT ( 204 , 116 ) ;
+        Pos = MAP_APPFONT ( 204 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Aktualisieren" ;
         Text [ ENGLISH ] = "~Update" ;

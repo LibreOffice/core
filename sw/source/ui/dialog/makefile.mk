@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+#   last change: $Author: os $ $Date: 2001-02-09 07:57:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ SRCFILES =  \
         ascfldlg.src \
         dialog.src \
         docstdlg.src \
-        macassgn.src \
         ltmpdlg.src \
         regionsw.src
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 15:49:34 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,6 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     SfxTabPage(pParent, SW_RES( TP_TABLE_COLUMN ), rSet ),
     aModifyTableCB(this,    SW_RES(CB_MOD_TBL)),
     aProportionalCB(this,   SW_RES(CB_PROP)),
-    aInverseCB(this,        SW_RES(CB_INV)),
     aSpaceFT(this,          SW_RES(FT_SPACE)),
     aSpaceED(this,          SW_RES(ED_SPACE)),
     aFT1(this,              SW_RES(COL_FT_1)),
@@ -948,7 +947,6 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     pTextArr[4] = &aFT5;
     pTextArr[5] = &aFT6;
 
-    aInverseCB.Hide();
     const SfxPoolItem* pItem;
     Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, FALSE,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
@@ -1042,7 +1040,6 @@ void  SwTableColumnPage::Init(BOOL bWeb)
     aLk = LINK( this, SwTableColumnPage, ModeHdl );
     aModifyTableCB .SetClickHdl( aLk );
     aProportionalCB.SetClickHdl( aLk );
-    aInverseCB     .SetClickHdl( aLk );
 };
 
 /*------------------------------------------------------------------------
@@ -1122,18 +1119,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
         if(bCheck)
             aModifyTableCB.Check();
         aModifyTableCB.Enable(!bCheck && bModifyTbl);
-        aInverseCB.Enable(!bCheck);
     }
-    else if(pBox == &aInverseCB)
-    {
-        if(bCheck)
-            aModifyTableCB.Check(FALSE);
-        aModifyTableCB.Enable(!bCheck && bModifyTbl);
-        aProportionalCB.Enable(!bCheck);
-    }
-    else
-        aInverseCB.Enable(!bCheck);
-
     return 0;
 };
 
@@ -1186,9 +1172,8 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 
     BOOL bModifyTbl = aModifyTableCB.IsChecked();
     BOOL bProp =    aProportionalCB.IsChecked();
-    BOOL bInverse = aInverseCB     .IsChecked();
 
-    if(!bModifyTbl && !bProp &&!bInverse)
+    if(!bModifyTbl && !bProp )
     {
 //      Tabellenbreite bleibt, Differenz wird mit der/den
 //      naechsten Zellen ausgeglichen
@@ -1222,7 +1207,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
             }
         }
     }
-    else if(bModifyTbl && !bProp &&!bInverse)
+    else if(bModifyTbl && !bProp)
     {
 //      Differenz wird ueber die Tabellenbreite ausgeglichen,
 //      andere Spalten bleiben unveraendert
@@ -1335,10 +1320,8 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& rSet )
         bModifyTbl = FALSE;
     if(bPercentMode)
     {
-        aInverseCB      .Enable(FALSE);
         aModifyTableCB  .Check(FALSE);
         aProportionalCB .Check(FALSE);
-        aInverseCB      .Check(FALSE);
     }
     else if( !bModifyTbl )
     {
@@ -1894,6 +1877,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                     aPgBrkCB.Check();
                     aPageCollCB.Enable(FALSE);
                     aPageCollLB.Enable(FALSE);
+                    aPageNoFT.Enable(FALSE);
                     aPageNoNF.Enable(FALSE);
                 }
                 switch ( eBreak )
@@ -2007,7 +1991,10 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
                                             aPageCollLB.GetEntryCount();
                 aPageCollLB.Enable(bEnable);
                 if(!bHtmlMode)
+                {
+                    aPageNoFT.Enable(bEnable);
                     aPageNoNF.Enable(bEnable);
+                }
             }
     }
     else
@@ -2015,6 +2002,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
             aPageCollCB.Check( FALSE );
             aPageCollCB.Enable(FALSE);
             aPageCollLB.Enable(FALSE);
+            aPageNoFT.Enable(FALSE);
             aPageNoNF.Enable(FALSE);
             aPgBrkRB.       Enable(FALSE);
             aColBrkRB.      Enable(FALSE);
@@ -2041,7 +2029,10 @@ IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
     }
     aPageCollLB.Enable(bEnable);
     if(!bHtmlMode)
+    {
+        aPageNoFT.Enable(bEnable);
         aPageNoNF.Enable(bEnable);
+    }
     return 0;
 }
 
@@ -2060,13 +2051,17 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
 
             aPageCollLB.Enable(bEnable);
             if(!bHtmlMode)
+            {
+                aPageNoFT.Enable(bEnable);
                 aPageNoNF.Enable(bEnable);
+            }
         }
         else if ( pBtn == &aPgBrkAfterRB )
         {
             aPageCollCB .Check( FALSE );
             aPageCollCB .Enable(FALSE);
             aPageCollLB .Enable(FALSE);
+            aPageNoFT   .Enable(FALSE);
             aPageNoNF   .Enable(FALSE);
         }
     }
@@ -2082,6 +2077,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
         aPageCollCB .Check(FALSE);
         aPageCollCB .Enable(FALSE);
         aPageCollLB .Enable(FALSE);
+        aPageNoFT   .Enable(FALSE);
         aPageNoNF   .Enable(FALSE);
     }
     else if ( aPgBrkBeforeRB.IsChecked() )
@@ -2106,226 +2102,5 @@ void SwTextFlowPage::DisablePageBreak()
     aPageNoNF      .Disable();
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/09 15:22:28  hr
-    #65293#: std::min()/max()
-
-    Revision 1.2  2000/11/07 12:48:38  hjs
-    use min/max from stl
-
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.169  2000/09/18 16:06:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.168  2000/08/24 15:21:38  os
-    tables with negative LRSpace
-
-    Revision 1.167  2000/07/27 21:16:28  jp
-    opt: get template names direct from the doc and don't load it from the resource
-
-    Revision 1.166  2000/06/16 09:51:28  os
-    #73123# disable manual table alignment in HTML
-
-    Revision 1.165  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.164  2000/05/23 19:31:24  jp
-    Bugfixes for Unicode
-
-    Revision 1.163  2000/04/19 11:22:11  os
-    UNICODE
-
-    Revision 1.162  1999/08/23 07:48:32  OS
-    #61218# correct handling of left_and_width oriented tables
-
-
-      Rev 1.161   23 Aug 1999 09:48:32   OS
-   #61218# correct handling of left_and_width oriented tables
-
-      Rev 1.160   28 May 1999 10:28:32   OS
-   #54824# HoriOrientation_LEFT_AND_WIDTH fuer von links ausgerichtete Tabellen
-
-      Rev 1.159   08 Feb 1999 14:56:32   OS
-   #61545# Break-Attribut nur noch bei fehlendem oder leeren PageDesc mitschicken
-
-      Rev 1.158   08 Feb 1999 10:23:22   JP
-   Task #61467#/#61014#: neu FindPageDescByName
-
-      Rev 1.157   04 Jan 1999 14:15:00   OS
-   #60366# Umbruch-Buttons in HTML-Docs ebenfalls disablen
-
-      Rev 1.156   27 Nov 1998 14:56:48   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.155   27 Nov 1998 14:02:44   MH
-   add: header
-
-      Rev 1.154   08 Sep 1998 17:04:00   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.153   29 May 1998 19:08:00   JP
-   SS vom SwTableReq geaendert
-
-      Rev 1.152   28 Apr 1998 09:10:12   OS
-   Background: ShowSelector mit HTML-Beruecksichtigung #49862#
-
-      Rev 1.151   21 Apr 1998 08:44:36   OS
-   TableNameEdit verschoben
-
-      Rev 1.150   17 Apr 1998 16:30:50   OS
-   Printing extensions fuer HTML
-
-      Rev 1.149   16 Apr 1998 15:57:28   OS
-   Printing extensions fuer HTML
-
-      Rev 1.148   02 Mar 1998 09:15:52   OS
-   Minimalbreite spaltenabhaengig, Fokushilfe fuer Edit#47641##47658#
-
-      Rev 1.147   29 Nov 1997 14:28:10   MA
-   includes
-
-      Rev 1.146   24 Nov 1997 15:52:22   MA
-   includes
-
-      Rev 1.145   19 Nov 1997 16:54:54   OS
-   Hintergrund: zuerst ShowTblCtrl rufen #45654#
-
-      Rev 1.144   03 Nov 1997 13:56:50   MA
-   precomp entfernt
-
-      Rev 1.143   30 Oct 1997 11:19:20   AMA
-   Chg: Kein AutoFlag mehr an Break bzw. PageDesc-Attributen
-
-      Rev 1.142   30 Sep 1997 16:51:36   TJ
-   include
-
-      Rev 1.141   25 Aug 1997 14:26:28   OS
-   Leerzeichen im Tabellennamen vor dem Verlassen der Page ueberpruefen #42643#
-
-      Rev 1.140   15 Aug 1997 12:18:20   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.139   11 Aug 1997 10:12:42   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.138   03 Jul 1997 12:53:40   OS
-   SwSwMode jetzt mit BYTE #41255#
-
-      Rev 1.137   18 Jun 1997 17:27:42   OS
-   Breite im TableRep nie auf IVALID_TWIP setzen #40808#
-
-      Rev 1.136   11 Jun 1997 10:54:40   OS
-   Behandlung relativer Tabellen berichtigt; restore nach automatisch funktioniert jetzt #40590#
-
-      Rev 1.135   03 Jun 1997 16:39:58   MA
-   chg: neue Tabellenfeatures hiden
-
-      Rev 1.134   30 May 1997 08:44:50   OS
-   kein Umbruch ausserbalb des Bodies #40306#
-
-      Rev 1.133   14 Apr 1997 19:15:58   MA
-   eigendes Headerfile fuer die Pages
-
-      Rev 1.132   11 Apr 1997 15:55:26   MA
-   chg: kein Keep und split fuer Web
-
-      Rev 1.131   11 Apr 1997 13:36:26   MA
-   split richtig
-
-      Rev 1.130   11 Apr 1997 13:07:08   MA
-   new: Layout-Split
-
-      Rev 1.129   10 Apr 1997 18:26:48   MA
-   Keep besser (?), Keep fuer Tables
-
-      Rev 1.128   13 Mar 1997 11:37:52   OS
-   enable/disble fuer manuell/zentriert berichtigt
-
-      Rev 1.127   10 Mar 1997 16:20:48   OS
-   Right an den TabCols darf niemals groesser als RightMax sein
-
-      Rev 1.126   20 Feb 1997 17:49:36   OS
-   Abstand oben/unten nicht im HTML
-
-      Rev 1.125   13 Feb 1997 13:49:44   OS
-   Tabellen im HTML auch manuell
-
-      Rev 1.124   12 Feb 1997 14:28:38   OS
-   wird der Umbruch abgeschaltet, muss auch der Offeset auf NULL gesetzt werden
-
-      Rev 1.123   10 Feb 1997 16:36:02   OS
-   autom. Ausrichtung: rechter Rand darf nicht eingestellt werden
-
-      Rev 1.122   05 Feb 1997 10:04:22   OS
-   keine Leerzeichen und Punkte im Tabellennamen; FillItemSet aus DeactivatePage aufrufen
-
-      Rev 1.121   03 Feb 1997 12:12:44   OS
-   Im HtmlMode kein Name und keine manuelle Ausrichtung
-
-      Rev 1.120   30 Jan 1997 15:33:00   OS
-   ...PARA_PAGENUM ueberfluessig
-
-      Rev 1.119   22 Jan 1997 11:38:16   MA
-   Umstellung Put
-
-      Rev 1.118   08 Jan 1997 11:57:30   OS
-   Umbruch-CheckBox nicht setzen fuer SVX_BREAK_NONE
-
-      Rev 1.117   20 Dec 1996 12:13:48   OS
-   vertikale Ausrichtung jetzt mit FN_TABLE_SET_VERT_ALIGN
-
-      Rev 1.116   19 Dec 1996 12:00:42   OS
-   V-Alignment auswerten
-
-      Rev 1.115   18 Dec 1996 14:58:40   OS
-   Vorbereitung BoxAlign
-
-      Rev 1.114   16 Dec 1996 16:23:22   OS
-   versteckte Trenner an der alten Position wieder einsortieren
-
-      Rev 1.113   13 Dec 1996 15:48:38   HJS
-   header name
-
-      Rev 1.112   13 Dec 1996 08:34:14   OS
-   vorlaeufig vollstaendig
-
-      Rev 1.111   12 Dec 1996 16:58:12   OS
-   Textfluss fuer Tabelle
-
-      Rev 1.110   10 Dec 1996 18:23:32   OS
-   FillTabCols: rechten Rand aus der Summe der Spalten und dem linken Rand ermitteln #34303#
-
-      Rev 1.109   04 Dec 1996 16:04:44   OS
-   rechter Rand darf auch wieder fuer die manuelle Einstellung benutzt werden
-
-      Rev 1.108   02 Dec 1996 10:35:24   OS
-   erst SetRefValue, dann ShowPercent
-
-      Rev 1.107   30 Nov 1996 11:24:18   OS
-   Rel. Breite: Raender werden mitgesetzt
-
-      Rev 1.106   11 Nov 1996 11:20:32   MA
-   ResMgr
-
-      Rev 1.105   05 Nov 1996 07:01:28   OS
-   bModified auf TRUE setzen
-
-      Rev 1.104   04 Nov 1996 12:00:10   OS
-   kein Handler fuer HeadlineRepeat
-
-      Rev 1.103   16 Oct 1996 16:25:22   OS
-   letzte Probleme mit autom. Breite behoben
-
-      Rev 1.102   14 Oct 1996 14:01:40   OS
-   keine Breitenaenderung in der Spalten-Page fuer automatische Ausrichtung
-
-      Rev 1.101   14 Oct 1996 13:52:48   OS
-   bei automatischer Ausrichtung muss TableSpace statt TableWidth benutzt werden
-
-------------------------------------------------------------------------*/
 
 

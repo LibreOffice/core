@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 10:41:41 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,14 +114,17 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aRelHeightCB;
     CheckBox        aFixedRatioCB;
     CheckBox        aAutoHeightCB;
+    PushButton      aRealSizeBT;
     GroupBox        aSizeGB;
     BOOL            bWidthLastChanged;
 
     // Anker
-    RadioButton     aAnchorTypeRB;
-    RadioButton     aAnchorAsCharRB;
-    ListBox         aAnchorTypeLB;
     GroupBox        aTypeGB;
+    RadioButton     aAnchorAtPageRB;
+    RadioButton     aAnchorAtParaRB;
+    RadioButton     aAnchorAtCharRB;
+    RadioButton     aAnchorAsCharRB;
+    RadioButton     aAnchorAtFrameRB;
 
     // Position
     FixedText       aHorizontalFT;
@@ -140,8 +143,6 @@ class SwFrmPage: public SfxTabPage
     GroupBox        aPositionGB;
     BOOL            bAtHorzPosModified;
     BOOL            bAtVertPosModified;
-
-    PushButton      aRealSizeBT;
 
     // Example
     SwFrmPagePreview    aExampleWN;
@@ -168,7 +169,7 @@ class SwFrmPage: public SfxTabPage
 
 
     DECL_LINK( RangeModifyHdl, Edit * );
-    DECL_LINK( TypHdl, ListBox *pLB = 0 );
+    DECL_LINK( AnchorTypeHdl, RadioButton * );
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
     void            InitPos(USHORT nId, USHORT nH, USHORT nHRel,
@@ -212,22 +213,19 @@ public:
 
 class SwGrfExtPage: public SfxTabPage
 {
+    // Spiegeln
+    GroupBox        aMirrorFrm;
+    CheckBox        aMirrorVertBox;
+    CheckBox        aMirrorHorzBox;
+    RadioButton     aAllPagesRB;
+    RadioButton     aLeftPagesRB;
+    RadioButton     aRightPagesRB;
     BmpWindow       aBmpWin;
 
     GroupBox        aConnectGB;
     FixedText       aConnectFT;
     Edit            aConnectED;
     PushButton      aBrowseBT;
-
-    // Spiegeln
-    GroupBox        aMirrorFrm;
-    CheckBox        aMirrorHorzBox;
-    CheckBox        aMirrorVertBox;
-//  ListBox         aMirrorPagesLB;
-    RadioButton     aAllPagesRB;
-    RadioButton     aLeftPagesRB;
-    RadioButton     aRightPagesRB;
-//  FixedText       aMirrorPagesFT;
 
     String          aFilterName;
     String          aGrfName, aNewGrfName;

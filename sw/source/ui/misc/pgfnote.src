@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:57:47 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,47 +61,16 @@
 #include "globals.hrc"
 #include "pgfnote.hrc"
 #include "helpid.h"
- // #define TP_FOOTNOTE_PAGE 256
 TabPage TP_FOOTNOTE_PAGE
 {
     HelpID = HID_FOOTNOTE_PAGE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    RadioButton RB_MAXHEIGHT
-    {
-        Pos = MAP_APPFONT ( 14 , 31 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ma~x. Hˆhe der Fuﬂnote : Ma~x. H˜he der Fuònote */
-        Text = "Ma~x. Hˆhe der Fuﬂnote" ;
-        Text [ ENGLISH ] = "Max. ~Height of Footnote" ;
-        Text [ norwegian ] = "Maks. ~H¯yde pÂ Fotnote" ;
-        Text [ italian ] = "Altezza massima nota a piË pagina" ;
-        Text [ portuguese_brazilian ] = "Max. ~Height of Footnote" ;
-        Text [ portuguese ] = "~Altura m·xima da nota de rodapÈ" ;
-        Text [ finnish ] = "Max. ~Height of Footnote" ;
-        Text [ danish ] = "Maks. h¯jde fodnote" ;
-        Text [ french ] = "Hauteur max. du ~pied de page" ;
-        Text [ swedish ] = "Fotnotens ma~x hˆjd" ;
-        Text [ dutch ] = "~Maximum hoogte" ;
-        Text [ spanish ] = "Altura m·x. de ~nota al pie" ;
-        Text [ english_us ] = "Maximum footnote ~height" ;
-        Text[ chinese_simplified ] = "◊¢Ω≈µƒ◊Ó∏ﬂ∂»(~H)";
-        Text[ russian ] = "Ã‡ÍÒ. ‚˚ÒÓÚ‡ ÒÌÓÒÍË";
-        Text[ polish ] = "~Maks. wysokoúÊ przypisÛw doln.";
-        Text[ japanese ] = "ãríçÇÃç≈çÇÇÃçÇÇ≥(~H)";
-        Text[ chinese_traditional ] = "µ˘∏}™∫≥Ã∞™(~H)";
-        Text[ arabic ] = "«·«— ›«⁄ «·√ﬁ’Ï ··Õ«‘Ì… «·”›·Ì…";
-        Text[ greek ] = "Ã›„ÈÛÙÔ ˝¯ÔÚ ıÔÛÁÏÂﬂ˘ÛÁÚ";
-        Text[ korean ] = "∞¢¡÷ √÷¥Î ≥Ù¿Ã(~H)";
-        Text[ turkish ] = "Azami dipnot y¸kseklii";
-        Text[ language_user1 ] = " ";
-    };
     RadioButton RB_MAXHEIGHT_PAGE
     {
-        Pos = MAP_APPFONT ( 14 , 16 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hˆhe maximal wie ~Seite : H˜he maximal wie ~Seite */
         Text = "Hˆhe maximal wie ~Seite" ;
         Text [ ENGLISH ] = "Page height at maximum" ;
         Text [ norwegian ] = "Maksimum Sideh¯yde" ;
@@ -128,10 +97,38 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "En fazla sayfa y¸ksekliinde";
         Text[ language_user1 ] = " ";
     };
+    RadioButton RB_MAXHEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Text = "Ma~x. Hˆhe der Fuﬂnote" ;
+        Text [ ENGLISH ] = "Max. ~Height of Footnote" ;
+        Text [ norwegian ] = "Maks. ~H¯yde pÂ Fotnote" ;
+        Text [ italian ] = "Altezza massima nota a piË pagina" ;
+        Text [ portuguese_brazilian ] = "Max. ~Height of Footnote" ;
+        Text [ portuguese ] = "~Altura m·xima da nota de rodapÈ" ;
+        Text [ finnish ] = "Max. ~Height of Footnote" ;
+        Text [ danish ] = "Maks. h¯jde fodnote" ;
+        Text [ french ] = "Hauteur max. du ~pied de page" ;
+        Text [ swedish ] = "Fotnotens ma~x hˆjd" ;
+        Text [ dutch ] = "~Maximum hoogte" ;
+        Text [ spanish ] = "Altura m·x. de ~nota al pie" ;
+        Text [ english_us ] = "Maximum footnote ~height" ;
+        Text[ chinese_simplified ] = "◊¢Ω≈µƒ◊Ó∏ﬂ∂»(~H)";
+        Text[ russian ] = "Ã‡ÍÒ. ‚˚ÒÓÚ‡ ÒÌÓÒÍË";
+        Text[ polish ] = "~Maks. wysokoúÊ przypisÛw doln.";
+        Text[ japanese ] = "ãríçÇÃç≈çÇÇÃçÇÇ≥(~H)";
+        Text[ chinese_traditional ] = "µ˘∏}™∫≥Ã∞™(~H)";
+        Text[ arabic ] = "«·«— ›«⁄ «·√ﬁ’Ï ··Õ«‘Ì… «·”›·Ì…";
+        Text[ greek ] = "Ã›„ÈÛÙÔ ˝¯ÔÚ ıÔÛÁÏÂﬂ˘ÛÁÚ";
+        Text[ korean ] = "∞¢¡÷ √÷¥Î ≥Ù¿Ã(~H)";
+        Text[ turkish ] = "Azami dipnot y¸kseklii";
+        Text[ language_user1 ] = " ";
+    };
     MetricField ED_MAXHEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 30 ) ;
+        Pos = MAP_APPFONT ( 118 , 27 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -149,9 +146,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 25 , 51 ) ;
-        Size = MAP_APPFONT ( 85 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Abstand zum Textkˆrper : ~Abstand zum Textk˜rper */
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 95 , 8 ) ;
         Text = "~Abstand zum Textkˆrper" ;
         Text [ ENGLISH ] = "~Distance from Bodytext" ;
         Text [ norwegian ] = "~Avstand fra Hovedtekst" ;
@@ -180,7 +176,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 50 ) ;
+        Pos = MAP_APPFONT ( 118 , 41 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -196,9 +192,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     GroupBox GB_FOOTNOTE_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 157 , 67 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnotenbereich : Fuònotenbereich */
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 53 ) ;
         Text = "Fuﬂnotenbereich" ;
         Text [ ENGLISH ] = "Footnote range" ;
         Text [ norwegian ] = "+++Footnote range" ;
@@ -223,10 +218,44 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "Dipnot bˆl¸m¸";
         Text[ language_user1 ] = " ";
     };
+    Window WN_BSP
+    {
+        Pos = MAP_APPFONT ( 175 , 20 ) ;
+        Size = MAP_APPFONT ( 72 , 33 ) ;
+        Text = "Window" ;
+    };
+    GroupBox GB_BSP
+    {
+        Pos = MAP_APPFONT ( 169 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 53 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Example" ;
+        Text [ norwegian ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Exemplo" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Malli" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "AperÁu" ;
+        Text [ swedish ] = "Fˆrhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "PrevisualizaciÛn" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+        Text[ language_user1 ] = " ";
+    };
     FixedText FT_LINEPOS
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Left = TRUE ;
@@ -252,7 +281,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINEPOS
     {
-        Pos = MAP_APPFONT ( 40 , 85 ) ;
+        Pos = MAP_APPFONT ( 40 , 70 ) ;
         Size = MAP_APPFONT ( 57 , 40 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -399,9 +428,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINETYPE
     {
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? St‰r~ke : A~rt */
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "St‰r~ke" ;
         Text [ ENGLISH ] = "~Thickness" ;
         Group = TRUE ;
@@ -428,7 +456,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINETYPE
     {
-        Pos = MAP_APPFONT ( 40 , 105 ) ;
+        Pos = MAP_APPFONT ( 40 , 86 ) ;
         Size = MAP_APPFONT ( 57 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -437,9 +465,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEWIDTH
     {
-        Pos = MAP_APPFONT ( 99 , 87 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? L‰n~ge : Br~eite */
+        Pos = MAP_APPFONT ( 100 , 72 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "L‰n~ge" ;
         Text [ ENGLISH ] = "~Length" ;
         Left = TRUE ;
@@ -466,7 +493,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEWIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 84 ) ;
+        Pos = MAP_APPFONT ( 208 , 70 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -481,7 +508,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 99 , 107 ) ;
+        Pos = MAP_APPFONT ( 100 , 88 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Abstan~d zum Fuﬂnoteninhalt" ;
         Text [ ENGLISH ] = "Distan~ce" ;
@@ -511,7 +538,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEDIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 104 ) ;
+        Pos = MAP_APPFONT ( 208 , 86 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -527,8 +554,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     GroupBox GB_LINE
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
-        Size = MAP_APPFONT ( 247 , 57 ) ;
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 247 , 42 ) ;
         Text = "Trennlinie" ;
         Text [ ENGLISH ] = "Line" ;
         Text [ norwegian ] = "Linje" ;
@@ -551,40 +578,6 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍﬁ „Ò·ÏÏﬁ";
         Text[ korean ] = "±∏∫–º±";
         Text[ turkish ] = "Ay˝rma Áizgisi";
-        Text[ language_user1 ] = " ";
-    };
-    Window WN_BSP
-    {
-        Pos = MAP_APPFONT ( 175 , 12 ) ;
-        Size = MAP_APPFONT ( 72 , 52 ) ;
-        Text = "Window" ;
-    };
-    GroupBox GB_BSP
-    {
-        Pos = MAP_APPFONT ( 169 , 2 ) ;
-        Size = MAP_APPFONT ( 84 , 67 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Malli" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "AperÁu" ;
-        Text [ swedish ] = "Fˆrhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "PrevisualizaciÛn" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "‘§¿¿";
-        Text[ russian ] = "œÓÒÏÓÚ";
-        Text[ polish ] = "Podglπd";
-        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        Text[ chinese_traditional ] = "πwƒ˝";
-        Text[ arabic ] = "„⁄«Ì‰…";
-        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        Text[ korean ] = "πÃ∏Æ∫∏±‚";
-        Text[ turkish ] = "÷nizleme";
         Text[ language_user1 ] = " ";
     };
 };

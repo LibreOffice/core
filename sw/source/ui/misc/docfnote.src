@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:46:22 $
+ *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,11 +158,11 @@ TabPage TP_FOOTNOTEOPTION
     Hide = TRUE;
     HelpID = HID_FOOTNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_NUM
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 83 ) ;
         Text = "Automatische Nummerierung" ;
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
@@ -188,11 +188,18 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
     };
+    FixedText FT_NUMTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "Nu~mmerierung" ;
+        Text [ ENGLISH ] = "Numbering" ;
+    };
     ListBox LB_NUMVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 62 , 50 ) ;
+        Pos = MAP_APPFONT ( 65 , 14 ) ;
+        Size = MAP_APPFONT ( 59 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -210,8 +217,8 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_OFFSET
     {
-        Pos = MAP_APPFONT ( 82 , 14 ) ;
-        Size = MAP_APPFONT ( 36 , 8 ) ;
+        Pos = MAP_APPFONT ( 130 , 16 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Be~ginn bei" ;
         Text [ ENGLISH ] = "~Start at" ;
         Left = TRUE ;
@@ -237,7 +244,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     NumericField FLD_OFFSET
     {
-        Pos = MAP_APPFONT ( 133 , 12 ) ;
+        Pos = MAP_APPFONT ( 189 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -247,11 +254,18 @@ TabPage TP_FOOTNOTEOPTION
         TabStop = TRUE ;
         Border = TRUE ;
     };
+    FixedText FT_NUMCOUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "~Z‰hlung" ;
+        Text [ ENGLISH ] = "Counting" ;
+    };
     ListBox LB_NUMCOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 62 , 50 ) ;
+        Pos = MAP_APPFONT ( 65 , 28 ) ;
+        Size = MAP_APPFONT ( 59 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -397,8 +411,8 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 82 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Davor" ;
         Text [ ENGLISH ] = "Before" ;
         Text [ norwegian ] = "F¯r" ;
@@ -427,16 +441,16 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 133 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 65 , 42 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 166 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 44 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
         Text = "Dahin~ter" ;
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
@@ -465,15 +479,99 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 221 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 189 , 42 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
     };
+    FixedText FT_POS
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 36 , 8 ) ;
+        Text = "Position" ;
+        Text [ English ] = "Position" ;
+        Text [ english_us ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ swedish ] = "Position" ;
+        Text [ danish ] = "Placering" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ spanish ] = "PosiciÛn" ;
+        Text [ french ] = "Position" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ portuguese ] = "PosiÁ„o" ;
+        Text[ chinese_simplified ] = "Œª÷√";
+        Text[ russian ] = "œÓÁËˆËˇ";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "à íu";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "¿ßƒ°";
+        Text[ turkish ] = "Konum";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_POS_PAGE
+    {
+        Pos = MAP_APPFONT ( 65 , 59 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text = "Seiten~ende" ;
+        Text [ ENGLISH ] = "End of ~page" ;
+        Text [ norwegian ] = "End of ~page" ;
+        Text [ italian ] = "Fine ~pagina" ;
+        Text [ portuguese_brazilian ] = "Final de ~p·gina" ;
+        Text [ portuguese ] = "Fim de ~p·gina" ;
+        Text [ finnish ] = "~Sivun loppu" ;
+        Text [ danish ] = "Sidens slutning" ;
+        Text [ french ] = "Fin de ~page" ;
+        Text [ swedish ] = "S~idslut" ;
+        Text [ dutch ] = "Pag~ina-einde" ;
+        Text [ spanish ] = "Fin de ~p·gina" ;
+        Text [ english_us ] = "~End of page" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "“≥Œ≤(~O)";
+        Text[ russian ] = " ÓÌÂˆ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Koniec strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁññ(~O)";
+        Text[ chinese_traditional ] = "≠∂ß¿(~O)";
+        Text[ arabic ] = "‰Â«Ì… «·’›Õ…";
+        Text[ greek ] = "‘›ÎÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ∏∂¡ˆ∏∑(~E)";
+        Text[ turkish ] = "Sayfa so~nu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_POS_CHAPTER
+    {
+        Pos = MAP_APPFONT ( 65 , 73 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text = "Do~kumentende" ;
+        Text [ ENGLISH ] = "End of ~doc." ;
+        Text [ norwegian ] = "Slutt pÂ ~dok." ;
+        Text [ italian ] = "Fine ~documento" ;
+        Text [ portuguese_brazilian ] = "Final de~doc." ;
+        Text [ portuguese ] = "Fim do ~documento" ;
+        Text [ finnish ] = "~Asiakirjan loppu" ;
+        Text [ danish ] = "Dokumentets slutn." ;
+        Text [ french ] = "Fin de ~document" ;
+        Text [ swedish ] = "Do~kumentslut" ;
+        Text [ dutch ] = "~Documenteinde" ;
+        Text [ spanish ] = "F~in del documento" ;
+        Text [ english_us ] = "En~d of document" ;
+        Text[ chinese_simplified ] = "ŒƒµµŒ≤∂À(~D)";
+        Text[ russian ] = " ÓÌÂˆ ‰ÓÍÛÏÂÌÚ‡";
+        Text[ polish ] = "Koniec dokumentu";
+        Text[ japanese ] = "ï∂èëññ(~D)";
+        Text[ chinese_traditional ] = "§Â•Ûß¿∫›(~D)";
+        Text[ arabic ] = "‰Â«Ì… «·„” ‰œ";
+        Text[ greek ] = "‘›ÎÔÚ ÍÂÈÏ›ÌÔı";
+        Text[ korean ] = "πÆº≠ ∏∂¡ˆ∏∑(~D)";
+        Text[ turkish ] = "~Belge sonunda";
+        Text[ language_user1 ] = " ";
+    };
     GroupBox GB_TEMPL
     {
-        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 115 , 42 ) ;
         Text = "Vorlagen" ;
         Text [ ENGLISH ] = "Styles" ;
@@ -501,7 +599,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_PARA_TEMPL
     {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
         Text = "~Absatz" ;
         Text [ ENGLISH ] = "~Paragraph" ;
@@ -531,8 +629,8 @@ TabPage TP_FOOTNOTEOPTION
     ListBox LB_PARA_TEMPL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 56 ) ;
-        Size = MAP_APPFONT ( 67 , 54 ) ;
+        Pos = MAP_APPFONT ( 51 , 100 ) ;
+        Size = MAP_APPFONT ( 67 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -540,7 +638,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_PAGE_TEMPL
     {
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
         Text = "~Seite" ;
         Text [ ENGLISH ] = "~Page" ;
@@ -570,14 +668,14 @@ TabPage TP_FOOTNOTEOPTION
     ListBox LB_PAGE_TEMPL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 71 ) ;
-        Size = MAP_APPFONT ( 67 , 54 ) ;
+        Pos = MAP_APPFONT ( 51 , 116) ;
+        Size = MAP_APPFONT ( 67 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     GroupBox GB_CHAR_TEMPL
     {
-        Pos = MAP_APPFONT ( 125 , 46 ) ;
+        Pos = MAP_APPFONT ( 125 , 89 ) ;
         Size = MAP_APPFONT ( 129 , 42 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ ENGLISH ] = "Character styles" ;
@@ -604,7 +702,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_ANCHR_CHARFMT
     {
-        Pos = MAP_APPFONT ( 129 , 58 ) ;
+        Pos = MAP_APPFONT ( 129 , 102 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Text = "Te~xtbereich" ;
         Text [ ENGLISH ] = "Text" ;
@@ -632,7 +730,7 @@ TabPage TP_FOOTNOTEOPTION
     ListBox LB_ANCHR_CHARFMT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 186 , 56 ) ;
+        Pos = MAP_APPFONT ( 186 , 100 ) ;
         Size = MAP_APPFONT ( 65 , 54 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -640,7 +738,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_TEXT_CHARFMT
     {
-        Pos = MAP_APPFONT ( 129 , 73 ) ;
+        Pos = MAP_APPFONT ( 129 , 118 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Text = "~Fuﬂnotenbereich" ;
         Text [ ENGLISH ] = "~Footnote text" ;
@@ -668,102 +766,16 @@ TabPage TP_FOOTNOTEOPTION
     ListBox LB_TEXT_CHARFMT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 186 , 71 ) ;
+        Pos = MAP_APPFONT ( 186 , 116 ) ;
         Size = MAP_APPFONT ( 65 , 54 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
-    GroupBox GB_POS
-    {
-        Pos = MAP_APPFONT ( 6 , 91 ) ;
-        Size = MAP_APPFONT ( 71 , 42 ) ;
-        Text = "Position" ;
-        Text [ English ] = "Position" ;
-        Group = TRUE ;
-        Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Position" ;
-        Text [ swedish ] = "Position" ;
-        Text [ danish ] = "Placering" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ spanish ] = "PosiciÛn" ;
-        Text [ french ] = "Position" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ portuguese ] = "PosiÁ„o" ;
-        Text[ chinese_simplified ] = "Œª÷√";
-        Text[ russian ] = "œÓÁËˆËˇ";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "à íu";
-        Text[ chinese_traditional ] = "¶Ï∏m";
-        Text[ arabic ] = "«·„Ê÷⁄";
-        Text[ greek ] = "»›ÛÁ";
-        Text[ korean ] = "¿ßƒ°";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_POS_PAGE
-    {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Seiten~ende" ;
-        Text [ ENGLISH ] = "End of ~page" ;
-        Text [ norwegian ] = "End of ~page" ;
-        Text [ italian ] = "Fine ~pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~p·gina" ;
-        Text [ portuguese ] = "Fim de ~p·gina" ;
-        Text [ finnish ] = "~Sivun loppu" ;
-        Text [ danish ] = "Sidens slutning" ;
-        Text [ french ] = "Fin de ~page" ;
-        Text [ swedish ] = "S~idslut" ;
-        Text [ dutch ] = "Pag~ina-einde" ;
-        Text [ spanish ] = "Fin de ~p·gina" ;
-        Text [ english_us ] = "~End of page" ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        Text[ chinese_simplified ] = "“≥Œ≤(~O)";
-        Text[ russian ] = " ÓÌÂˆ ÒÚ‡ÌËˆ˚";
-        Text[ polish ] = "Koniec strony";
-        Text[ japanese ] = "Õﬂ∞ºﬁññ(~O)";
-        Text[ chinese_traditional ] = "≠∂ß¿(~O)";
-        Text[ arabic ] = "‰Â«Ì… «·’›Õ…";
-        Text[ greek ] = "‘›ÎÔÚ ÛÂÎﬂ‰·Ú";
-        Text[ korean ] = "∆‰¿Ã¡ˆ ∏∂¡ˆ∏∑(~E)";
-        Text[ turkish ] = "Sayfa so~nu";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_POS_CHAPTER
-    {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Do~kumentende" ;
-        Text [ ENGLISH ] = "End of ~doc." ;
-        Text [ norwegian ] = "Slutt pÂ ~dok." ;
-        Text [ italian ] = "Fine ~documento" ;
-        Text [ portuguese_brazilian ] = "Final de~doc." ;
-        Text [ portuguese ] = "Fim do ~documento" ;
-        Text [ finnish ] = "~Asiakirjan loppu" ;
-        Text [ danish ] = "Dokumentets slutn." ;
-        Text [ french ] = "Fin de ~document" ;
-        Text [ swedish ] = "Do~kumentslut" ;
-        Text [ dutch ] = "~Documenteinde" ;
-        Text [ spanish ] = "F~in del documento" ;
-        Text [ english_us ] = "En~d of document" ;
-        Text[ chinese_simplified ] = "ŒƒµµŒ≤∂À(~D)";
-        Text[ russian ] = " ÓÌÂˆ ‰ÓÍÛÏÂÌÚ‡";
-        Text[ polish ] = "Koniec dokumentu";
-        Text[ japanese ] = "ï∂èëññ(~D)";
-        Text[ chinese_traditional ] = "§Â•Ûß¿∫›(~D)";
-        Text[ arabic ] = "‰Â«Ì… «·„” ‰œ";
-        Text[ greek ] = "‘›ÎÔÚ ÍÂÈÏ›ÌÔı";
-        Text[ korean ] = "πÆº≠ ∏∂¡ˆ∏∑(~D)";
-        Text[ turkish ] = "~Belge sonunda";
-        Text[ language_user1 ] = " ";
-    };
     GroupBox GB_CONT
     {
-        Pos = MAP_APPFONT ( 80 , 91 ) ;
-        Size = MAP_APPFONT ( 174 , 42 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hinweistext mehrseitige Fuﬂnoten : Hinweistext mehrseitige Fuònoten */
+        Pos = MAP_APPFONT ( 6 , 134 ) ;
+        Size = MAP_APPFONT ( 248 , 42 ) ;
         Text = "Hinweistext mehrseitige Fuﬂnoten" ;
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
@@ -790,7 +802,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_CONT
     {
-        Pos = MAP_APPFONT ( 86 , 103 ) ;
+        Pos = MAP_APPFONT ( 12 , 148 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
         Text = "Am Fuﬂn~otenende" ;
         Text [ ENGLISH ] = "~Continued" ;
@@ -820,15 +832,15 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_CONT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 147 , 101 ) ;
-        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Pos = MAP_APPFONT ( 78, 145 ) ;
+        Size = MAP_APPFONT ( 170 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 30 ;
     };
     FixedText FT_CONT_FROM
     {
-        Pos = MAP_APPFONT ( 86 , 118 ) ;
+        Pos = MAP_APPFONT ( 12 , 163 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
         Text = "A~uf Folgeseite" ;
         Text [ ENGLISH ] = "~Started" ;
@@ -858,8 +870,8 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_CONT_FROM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 147 , 116 ) ;
-        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 161 ) ;
+        Size = MAP_APPFONT ( 170 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 30 ;
@@ -871,7 +883,7 @@ TabPage TP_ENDNOTEOPTION
     Hide = TRUE;
     HelpID = HID_ENDNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_NUM
     {
         Pos = MAP_APPFONT ( 6 , 2 ) ;
@@ -901,11 +913,18 @@ TabPage TP_ENDNOTEOPTION
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
     };
+    FixedText FT_NUMTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "Nu~mmerierung" ;
+        Text [ ENGLISH ] = "Numbering" ;
+    };
     ListBox LB_NUMVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 62 , 50 ) ;
+        Pos = MAP_APPFONT ( 65 , 14 ) ;
+        Size = MAP_APPFONT ( 59 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -923,8 +942,8 @@ TabPage TP_ENDNOTEOPTION
     };
     FixedText FT_OFFSET
     {
-        Pos = MAP_APPFONT ( 82 , 14 ) ;
-        Size = MAP_APPFONT ( 36 , 8 ) ;
+        Pos = MAP_APPFONT ( 130 , 16 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Be~ginn bei" ;
         Text [ ENGLISH ] = "~Start at" ;
         Left = TRUE ;
@@ -950,7 +969,7 @@ TabPage TP_ENDNOTEOPTION
     };
     NumericField FLD_OFFSET
     {
-        Pos = MAP_APPFONT ( 133 , 12 ) ;
+        Pos = MAP_APPFONT ( 189 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -960,158 +979,24 @@ TabPage TP_ENDNOTEOPTION
         TabStop = TRUE ;
         Border = TRUE ;
     };
+    FixedText FT_NUMCOUNT
+    {
+        Pos = MAP_APPFONT ( 82 , 14 ) ;
+        Size = MAP_APPFONT ( 36 , 8 ) ;
+        Hide = TRUE;
+    };
     ListBox LB_NUMCOUNT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        StringList =
-        {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Per pagina" ; > ;
-            < "Per capitolo" ; > ;
-            < "Per documento" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Por p·gina" ; > ;
-            < "Por capÌtulo" ; > ;
-            < "Por documento" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Por p·gina" ; > ;
-            < "Por capÌtulo" ; > ;
-            < "Por documento" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Per side" ; > ;
-            < "Per kapitel" ; > ;
-            < "Per dokument" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Par page" ; > ;
-            < "Par chapitre" ; > ;
-            < "Par document" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Per sida" ; > ;
-            < "Per kapitel" ; > ;
-            < "Per dokument" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Per pagina" ; > ;
-            < "Per hoofdstuk" ; > ;
-            < "Per document" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Por p·gina" ; > ;
-            < "Por capÌtulo" ; > ;
-            < "Por documento" ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Per page" ; > ;
-            < "Per chapter" ; > ;
-            < "Per document" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "√ø“≥" ; > ;
-        < "√ø’¬" ; > ;
-        < "√ø∏ˆŒƒµµ" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Õ‡ Ó‰ÌÛ ÒÚ‡ÌËˆÛ" ; > ;
-        < "Õ‡ Ó‰ÌÛ „Î‡‚Û" ; > ;
-        < "Õ‡ Ó‰ËÌ ‰ÓÍÛÏÂÌÚ" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Na stronÍ" ; > ;
-        < "Na rozdzia≥" ; > ;
-        < "Na dokument" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Õﬂ∞ºﬁÇ≤Ç∆" ; > ;
-        < "èÕÇ≤Ç∆" ; > ;
-        < "ï∂èëÇ≤Ç∆" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "®C≠∂" ; > ;
-        < "®C≥π" ; > ;
-        < "®C≠”§Â•Û" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "›Ì «·’›Õ…" ; > ;
-        < "›Ì «·›’·" ; > ;
-        < "›Ì «·„” ‰œ" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¡Ì‹ ÛÂÎﬂ‰·" ; > ;
-        < "¡Ì‹ ÍÂˆ‹Î·ÈÔ" ; > ;
-        < "¡Ì‹ ›„„Ò·ˆÔ" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "∆‰¿Ã¡ˆ ¥Á" ; > ;
-        < "¿Â ∏∂¥Ÿ" ; > ;
-        < "πÆº≠ ¥Á" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Beher sayfa" ; > ;
-        < "Beher bˆl¸m" ; > ;
-        < "Beher belge" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
+        Hide = TRUE;
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 82 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+
         Text = "~Davor" ;
         Text [ ENGLISH ] = "Before" ;
         Text [ norwegian ] = "F¯r" ;
@@ -1139,17 +1024,17 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_PREFIX
     {
+        Pos = MAP_APPFONT ( 65 , 26 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 133 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 166 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 28 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
         Text = "Dahin~ter" ;
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
@@ -1177,12 +1062,76 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_SUFFIX
     {
+        Pos = MAP_APPFONT ( 189 , 26 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 221 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
+    };
+    FixedText FT_POS
+    {
+        Pos = MAP_APPFONT ( 82 , 14 ) ;
+        Size = MAP_APPFONT ( 36 , 8 ) ;
+        Hide = TRUE;
+    };
+    RadioButton RB_POS_PAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Seiten~ende" ;
+        Text [ ENGLISH ] = "End of ~page" ;
+        Text [ norwegian ] = "End of ~page" ;
+        Text [ italian ] = "Fine ~pagina" ;
+        Text [ portuguese_brazilian ] = "Final de ~p·gina" ;
+        Text [ portuguese ] = "Fim de ~p·gina" ;
+        Text [ finnish ] = "~Sivun loppu" ;
+        Text [ danish ] = "Sidens slutning" ;
+        Text [ french ] = "Fin de ~page" ;
+        Text [ swedish ] = "~Sidslut" ;
+        Text [ dutch ] = "Pag~ina-einde" ;
+        Text [ spanish ] = "Fin de ~p·gina" ;
+        Text [ english_us ] = "End ~of page" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "“≥Œ≤(~O)";
+        Text[ russian ] = " ÓÌÂˆ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Koniec strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁññ(~O)";
+        Text[ chinese_traditional ] = "≠∂ß¿(~O)";
+        Text[ arabic ] = "‰Â«Ì… «·’›Õ…";
+        Text[ greek ] = "‘›ÎÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ∏∂¡ˆ∏∑(~O)";
+        Text[ turkish ] = "Sayfa so~nu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_POS_CHAPTER
+    {
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Dokumentende" ;
+        Text [ ENGLISH ] = "End of ~doc." ;
+        Text [ norwegian ] = "Slutt pÂ ~dok." ;
+        Text [ italian ] = "Fine ~documento" ;
+        Text [ portuguese_brazilian ] = "Final de~doc." ;
+        Text [ portuguese ] = "Fim do ~documento" ;
+        Text [ finnish ] = "~Asiakirjan loppu" ;
+        Text [ danish ] = "Dokumentets slutn." ;
+        Text [ french ] = "Fin de ~document" ;
+        Text [ swedish ] = "~Dokumentslut" ;
+        Text [ dutch ] = "~Documenteinde" ;
+        Text [ spanish ] = "Fin del ~documento" ;
+        Text [ english_us ] = "End of ~document" ;
+        Text[ chinese_simplified ] = "ŒƒµµŒ≤∂À(~D)";
+        Text[ russian ] = " ÓÌÂˆ ‰ÓÍÛÏÂÌÚ‡";
+        Text[ polish ] = "Koniec dokumentu";
+        Text[ japanese ] = "ï∂èëññ(~D)";
+        Text[ chinese_traditional ] = "§Â•Ûß¿∫›(~D)";
+        Text[ arabic ] = "‰Â«Ì… «·„” ‰œ";
+        Text[ greek ] = "‘›ÎÔÚ ÍÂÈÏ›ÌÔı";
+        Text[ korean ] = "πÆº≠ ≥°(~D)";
+        Text[ turkish ] = "~Belge sonunda";
+        Text[ language_user1 ] = " ";
     };
     GroupBox GB_TEMPL
     {
@@ -1383,91 +1332,6 @@ TabPage TP_ENDNOTEOPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
-    };
-    GroupBox GB_POS
-    {
-        Pos = MAP_APPFONT ( 6 , 91 ) ;
-        Size = MAP_APPFONT ( 71 , 42 ) ;
-        Text = "Position" ;
-        Text [ English ] = "Position" ;
-        Group = TRUE ;
-        Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Position" ;
-        Text [ swedish ] = "Position" ;
-        Text [ danish ] = "Placering" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ spanish ] = "PosiciÛn" ;
-        Text [ french ] = "Position" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ portuguese ] = "PosiÁ„o" ;
-        Text[ chinese_simplified ] = "Œª÷√";
-        Text[ russian ] = "œÓÁËˆËˇ";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "à íu";
-        Text[ chinese_traditional ] = "¶Ï∏m";
-        Text[ arabic ] = "«·„Ê÷⁄";
-        Text[ greek ] = "»›ÛÁ";
-        Text[ korean ] = "¿ßƒ°";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_POS_PAGE
-    {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Seiten~ende" ;
-        Text [ ENGLISH ] = "End of ~page" ;
-        Text [ norwegian ] = "End of ~page" ;
-        Text [ italian ] = "Fine ~pagina" ;
-        Text [ portuguese_brazilian ] = "Final de ~p·gina" ;
-        Text [ portuguese ] = "Fim de ~p·gina" ;
-        Text [ finnish ] = "~Sivun loppu" ;
-        Text [ danish ] = "Sidens slutning" ;
-        Text [ french ] = "Fin de ~page" ;
-        Text [ swedish ] = "~Sidslut" ;
-        Text [ dutch ] = "Pag~ina-einde" ;
-        Text [ spanish ] = "Fin de ~p·gina" ;
-        Text [ english_us ] = "End ~of page" ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        Text[ chinese_simplified ] = "“≥Œ≤(~O)";
-        Text[ russian ] = " ÓÌÂˆ ÒÚ‡ÌËˆ˚";
-        Text[ polish ] = "Koniec strony";
-        Text[ japanese ] = "Õﬂ∞ºﬁññ(~O)";
-        Text[ chinese_traditional ] = "≠∂ß¿(~O)";
-        Text[ arabic ] = "‰Â«Ì… «·’›Õ…";
-        Text[ greek ] = "‘›ÎÔÚ ÛÂÎﬂ‰·Ú";
-        Text[ korean ] = "∆‰¿Ã¡ˆ ∏∂¡ˆ∏∑(~O)";
-        Text[ turkish ] = "Sayfa so~nu";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_POS_CHAPTER
-    {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "~Dokumentende" ;
-        Text [ ENGLISH ] = "End of ~doc." ;
-        Text [ norwegian ] = "Slutt pÂ ~dok." ;
-        Text [ italian ] = "Fine ~documento" ;
-        Text [ portuguese_brazilian ] = "Final de~doc." ;
-        Text [ portuguese ] = "Fim do ~documento" ;
-        Text [ finnish ] = "~Asiakirjan loppu" ;
-        Text [ danish ] = "Dokumentets slutn." ;
-        Text [ french ] = "Fin de ~document" ;
-        Text [ swedish ] = "~Dokumentslut" ;
-        Text [ dutch ] = "~Documenteinde" ;
-        Text [ spanish ] = "Fin del ~documento" ;
-        Text [ english_us ] = "End of ~document" ;
-        Text[ chinese_simplified ] = "ŒƒµµŒ≤∂À(~D)";
-        Text[ russian ] = " ÓÌÂˆ ‰ÓÍÛÏÂÌÚ‡";
-        Text[ polish ] = "Koniec dokumentu";
-        Text[ japanese ] = "ï∂èëññ(~D)";
-        Text[ chinese_traditional ] = "§Â•Ûß¿∫›(~D)";
-        Text[ arabic ] = "‰Â«Ì… «·„” ‰œ";
-        Text[ greek ] = "‘›ÎÔÚ ÍÂÈÏ›ÌÔı";
-        Text[ korean ] = "πÆº≠ ≥°(~D)";
-        Text[ turkish ] = "~Belge sonunda";
-        Text[ language_user1 ] = " ";
     };
     GroupBox GB_CONT
     {
