@@ -1,5 +1,7 @@
 #!/bin/sh
 
+URI_ENCODE="`dirname $0`/uri-encode"
+
 # tries to locate the executable specified
 # as first parameter in the user's path.
 which() {
@@ -118,7 +120,7 @@ case `basename $MAILER | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo file://$2 | uri-encode`
+                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo file://$2 | ${URI_ENCODE}`
                     shift
                     ;;
                 *)
@@ -154,27 +156,27 @@ case `basename $MAILER | sed 's/-.*$//'` in
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
-                    TO=${TO:-}${TO:+,}$2
+                    TO="${TO:-}${TO:+,}$2"
                     shift
                     ;;
                 --cc)
-                    CC=${CC:-}${CC:+,}$2
+                    CC="${CC:-}${CC:+,}$2"
                     shift
                     ;;
                 --bcc)
-                    BCC=${BCC:-}${BCC:+,}$2
+                    BCC="${BCC:-}${BCC:+,}$2"
                     shift
                     ;;
                 --subject)
-                    SUBJECT=$2
+                    SUBJECT="$2"
                     shift
                     ;;
                 --body)
-                    BODY=$2
+                    BODY="$2"
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach $2"
+                    ATTACH="$2"
                     shift
                     ;;
                 *)
@@ -185,7 +187,7 @@ case `basename $MAILER | sed 's/-.*$//'` in
 
         ${MAILER} --composer ${CC:+--cc} ${CC:+"${CC}"} ${BCC:+--bcc} ${BCC:+"${BCC}"} \
             ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"} ${BODY:+--body} ${BODY:+"${BODY}"} \
-            ${ATTACH} ${TO:+"${TO}"}
+            ${ATTACH:+--attach} ${ATTACH:+"${ATTACH}"} ${TO:+"${TO}"}
         ;;
 
     evolution)
@@ -201,23 +203,23 @@ case `basename $MAILER | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO=${MAILTO:-}${MAILTO:+&}cc=$2
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc=`echo $2| ${URI_ENCODE}`"
                     shift
                     ;;
                 --bcc)
-                    MAILTO=${MAILTO:-}${MAILTO:+&}bcc=$2
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc=`echo $2| ${URI_ENCODE}`"
                     shift
                     ;;
                 --subject)
-                    MAILTO=${MAILTO:-}${MAILTO:+&}subject=$2
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject=`echo $2 | ${URI_ENCODE}`"
                     shift
                     ;;
                 --body)
-                    MAILTO=${MAILTO:-}${MAILTO:+&}body=$2
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body=`echo $2 | ${URI_ENCODE}`"
                     shift
                     ;;
                 --attach)
-                    MAILTO=${MAILTO:-}${MAILTO:+&}attach=$2
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach=`echo $2 | ${URI_ENCODE}`"
                     shift
                     ;;
                 *)
@@ -239,7 +241,7 @@ case `basename $MAILER | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                     ATTACH="${ATTACH:-}${ATTACH:+ } $2"
+                    ATTACH="$2"
                     shift
                     ;;
                 *)
@@ -248,8 +250,30 @@ case `basename $MAILER | sed 's/-.*$//'` in
             shift;
         done
 
-         ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:-}
+        ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
         ;;
+
+    sylpheed)
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --to)
+                    TO=${TO:-}${TO:+,}$2
+                    shift
+                    ;;
+                --attach)
+                    ATTACH="${ATTACH:-}${ATTACH:+ } $2"
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+         ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
+        ;;
+
     *)
         if [ "$MAILER" != "" ]; then
             echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
