@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:04:34 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ TabPage TP_COLUMN
         Text[ portuguese_brazilian ] = "Distribuição uniforme do conteúdo em todas as colunas";
         Text[ japanese ] = "å†…å®¹ã‚’å„æ®µã«å‡ç­‰é…åˆ†ã™ã‚‹(~T)";
         Text[ korean ] = "ë‚´ìš©ì„ ê° ë‹¨ì— ê· ë“±í•˜ê²Œ ë°°ì¹˜(~T)";
-        Text[ chinese_simplified ] = "å¯¹ç§°è°ƒæ•´æ å®½(~T)";
+        Text[ chinese_simplified ] = "å¯¹ç§°è°ƒæ•´æ å®½";
         Text[ chinese_traditional ] = "å°ç¨±èª¿æ•´æ¬„å¯¬(~T)";
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
         Text[ turkish ] = "İçeriği s~ütunlara dengeli olarak dağıtın";
