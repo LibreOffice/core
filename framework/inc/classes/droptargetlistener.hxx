@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-06 13:27:58 $
+ *  last change: $Author: as $ $Date: 2002-07-05 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
+#endif
+
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
@@ -97,37 +101,53 @@
 namespace framework
 {
 
-class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
+class DropTargetListener : private ThreadHelpBase
+                         , public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
 {
+    //___________________________________________
+    // member
     private:
 
-        css::uno::WeakReference< css::frame::XFrame >   m_xTargetFrame; // weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
-        DataFlavorExVector*                             m_pFormats;
+        /// uno service manager to create neccessary services
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
+        css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
+        /// drag/drop info
+        DataFlavorExVector* m_pFormats;
 
-        // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
-        // XDropTargetListener
-        virtual void SAL_CALL   drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL   dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL   dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL   dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL   dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw(::com::sun::star::uno::RuntimeException);
-
-    private:
-
-        void                    impl_BeginDrag( const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& rSupportedDataFlavors );
-        void                    impl_EndDrag();
-        sal_Bool                impl_IsDropFormatSupported( SotFormatStringId nFormat );
-        void                    impl_OpenFile( const String& rFilePath );
-
+    //___________________________________________
+    // c++ interface
     public:
 
-        DropTargetListener( css::uno::Reference< css::frame::XFrame > xFrame );
-        ~DropTargetListener();
-};
+         DropTargetListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
+                             const css::uno::Reference< css::frame::XFrame >& xFrame                );
+        ~DropTargetListener(                                                                        );
 
-}
+    //___________________________________________
+    // uno interface
+    public:
+
+        // XEventListener
+        virtual void SAL_CALL disposing        ( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException);
+
+        // XDropTargetListener
+        virtual void SAL_CALL drop             ( const css::datatransfer::dnd::DropTargetDropEvent&      dtde  ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL dragEnter        ( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL dragExit         ( const css::datatransfer::dnd::DropTargetEvent&          dte   ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL dragOver         ( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) throw(css::uno::RuntimeException);
+
+    //___________________________________________
+    // internal helper
+    private:
+
+        void     implts_BeginDrag            ( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
+        void     implts_EndDrag              (                                                                                  );
+        sal_Bool implts_IsDropFormatSupported( SotFormatStringId nFormat                                                        );
+        void     implts_OpenFile             ( const String& rFilePath                                                          );
+
+}; // class DropTargetListener
+
+} // namespace framework
 
 #endif // __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
-
