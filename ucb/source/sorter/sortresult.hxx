@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:39:27 $
+ *  last change: $Author: dv $ $Date: 2001-02-08 12:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,19 +214,23 @@ class SortedResultSet:
 
 private:
 
-    long                FindPos( SortListData *pEntry, long nStart, long nEnd );
+    long                FindPos( SortListData *pEntry, long nStart, long nEnd )
+                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
     long                Compare( SortListData *pOne,
-                                 SortListData *pTwo );
+                                 SortListData *pTwo )
+                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
     void                BuildSortInfo( REFERENCE< XRESULTSET > aResult,
                                        const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
                                        const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
     long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
                                      REFERENCE < XRESULTSET > xResultTwo,
                                      long nIndexOne, long nIndexTwo,
-                                     SortInfo* pSortInfo );
+                                     SortInfo* pSortInfo )
+                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
     long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
                                      REFERENCE < XRESULTSET > xResultTwo,
-                                     long nIndexOne, long nIndexTwo );
+                                     long nIndexOne, long nIndexTwo )
+                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
     void                PropertyChanged( const PROPERTYCHANGEEVENT& rEvt );
 
 public:
