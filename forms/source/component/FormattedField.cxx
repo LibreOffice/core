@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:52:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ void OFormattedModel::implConstruct()
 
 //------------------------------------------------------------------
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_True, sal_True )
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, sal_True, sal_True )
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
