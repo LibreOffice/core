@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:02:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,13 +134,13 @@ const SwFrm *lcl_FindAnchor( const SdrObject *pObj, FASTBOOL bAll )
     if ( pVirt )
     {
         if ( bAll || !pVirt->GetFlyFrm()->IsFlyInCntFrm() )
-            return pVirt->GetFlyFrm()->GetAnchor();
+            return pVirt->GetFlyFrm()->GetAnchorFrm();
     }
     else
     {
         const SwDrawContact *pCont = (const SwDrawContact*)GetUserCall(pObj);
         if ( pCont )
-            return pCont->GetAnchor();
+            return pCont->GetAnchorFrm( pObj );
     }
     return 0;
 }
@@ -426,10 +426,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
         if ( pPg->IsObjOrdNumsDirty() )
             pPg->RecalcObjOrdNums();
 
-#ifdef ACCESSIBLE_LAYOUT
         rImp.DisposeAccessibleFrm( pFly );
         rImp.AddAccessibleFrm( pFly );
-#endif
 
         if ( bBtm )
             ++nNewPos;
@@ -442,17 +440,20 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
             const SwFrm *pAnch;
             const BOOL bFly = pO->ISA(SwVirtFlyDrawObj);
             if ( bFly )
-                pAnch = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->GetAnchor();
+            {
+                pAnch = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->GetAnchorFrm();
+            }
             else
-                pAnch = ((SwDrawContact*)GetUserCall(pO))->GetAnchor();
+            {
+                pAnch = ((SwDrawContact*)GetUserCall(pO))->GetAnchorFrm( pO );
+            }
             const SwFlyFrm *pF = pAnch ? pAnch->FindFlyFrm() : NULL;
-            if ( pF && (pF == pFly || pFly->IsUpperOf( pAnch->FindFlyFrm())))
+            if ( pF && (pF == pFly || pFly->IsUpperOf( *pF ) ) )
             {
                 //Kind gefunden, verschieben.
                 pPg->SetObjectOrdNum( i, nNewPos );
                 pPg->RecalcObjOrdNums();
                 --i;    //keinen auslassen
-#ifdef ACCESSIBLE_LAYOUT
                 if ( bFly )
                 {
                     const SwFlyFrm *pFF =
@@ -460,17 +461,14 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                     rImp.DisposeAccessibleFrm( pFF );
                     rImp.AddAccessibleFrm( pFF );
                 }
-#endif
             }
         }
     }
-#ifdef ACCESSIBLE_LAYOUT
     else
     {
         rImp.DisposeAccessibleObj( pObj );
         rImp.AddAccessibleObj( pObj );
     }
-#endif
 }
 
 /*************************************************************************
@@ -511,7 +509,7 @@ BOOL SwDrawView::TakeDragLimit( SdrDragMode eMode,
 *************************************************************************/
 
 
-const SwFrm *SwDrawView::CalcAnchor()
+const SwFrm* SwDrawView::CalcAnchor()
 {
     const SdrMarkList &rMrkList = GetMarkList();
     if ( rMrkList.GetMarkCount() != 1 )
@@ -521,12 +519,12 @@ const SwFrm *SwDrawView::CalcAnchor()
 
     //Fuer Absatzgebundene Objekte suchen, andernfalls einfach nur
     //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
-    const SwFrm *pAnch;
+    const SwFrm* pAnch;
     Rectangle aMyRect;
     const BOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
     if ( bFly )
     {
-        pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor();
+        pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm();
         aMyRect = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().SVRect();
     }
     else
@@ -534,27 +532,15 @@ const SwFrm *SwDrawView::CalcAnchor()
         SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
         // OD 17.06.2003 #108784# - determine correct anchor position for
         // 'virtual' drawing objects.
-        if ( pObj->ISA(SwDrawVirtObj) )
-        {
-            pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
-        }
-        else
-        {
-            pAnch = pC->GetAnchor();
-        }
+        // OD 2004-03-25 #i26791#
+        pAnch = pC->GetAnchorFrm( pObj );
         if( !pAnch )
         {
             pC->ConnectToLayout();
             // OD 17.06.2003 #108784# - determine correct anchor position for
             // 'virtual' drawing objects.
-            if ( pObj->ISA(SwDrawVirtObj) )
-            {
-                pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
-            }
-            else
-            {
-                pAnch = pC->GetAnchor();
-            }
+            // OD 2004-03-25 #i26791#
+            pAnch = pC->GetAnchorFrm( pObj );
         }
         aMyRect = pObj->GetSnapRect();
     }
@@ -590,8 +576,9 @@ const SwFrm *SwDrawView::CalcAnchor()
             const SwRect aRect( aPt.X(), aPt.Y(), 1, 1 );
 
             SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
-            if( pContact->GetAnchor() && pContact->GetAnchor()->IsPageFrm() )
-                pAnch = pContact->GetPage();
+            if ( pContact->GetAnchorFrm( pObj ) &&
+                 pContact->GetAnchorFrm( pObj )->IsPageFrm() )
+                pAnch = pContact->GetPageFrm();
             else
                 pAnch = pContact->FindPage( aRect );
         }
@@ -742,7 +729,7 @@ void SwDrawView::CheckPossibilities()
             const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pFly  )
             {
-                pFrm = pFly->GetAnchor();
+                pFrm = pFly->GetAnchorFrm();
                 if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
                 {
                     SwOLENode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode();
@@ -761,8 +748,8 @@ void SwDrawView::CheckPossibilities()
         else
         {
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-            if( pC )
-                pFrm = pC->GetAnchor();
+            if ( pC )
+                pFrm = pC->GetAnchorFrm( pObj );
         }
         if ( pFrm )
             bProtect = pFrm->IsProtected(); //Rahmen, Bereiche usw.
