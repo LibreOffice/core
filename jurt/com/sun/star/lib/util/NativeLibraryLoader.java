@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:56:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,8 +183,8 @@ public final class NativeLibraryLoader {
             return url.getProtocol().equalsIgnoreCase("file")
                 && url.getAuthority() == null && url.getQuery() == null
                 && url.getRef() == null
-                ? new File(URLDecoder.decode(replace(url.getPath(), '+',
-                                                     "%2B")))
+                ? new File(URLDecoder.decode(
+                               StringHelper.replace(url.getPath(), '+', "%2B")))
                 : null;
         } else {
             // If java.net.URI is avaliable, do
@@ -222,21 +222,5 @@ public final class NativeLibraryLoader {
                 }
             }
         }
-    }
-
-    private static String replace(String str, char from, String to) {
-        StringBuffer b = new StringBuffer();
-        for (int i = 0;;) {
-            int j = str.indexOf(from, i);
-            if (j == -1) {
-                b.append(str.substring(i));
-                break;
-            } else {
-                b.append(str.substring(i, j));
-                b.append(to);
-                i = j + 1;
-            }
-        }
-        return b.toString();
     }
 }
