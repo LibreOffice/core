@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 12:37:45 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 12:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ Window FLT_NAVIGATOR
     ImageList IL_NAVIGATR
     {
         ImageBitmap = Bitmap { File = "nv_imagelist.bmp" ; };
-        MaskColor = IMAGE_MASK_STDCOLOR ;
+        MaskColor = IMAGE_MASK_STDCOLOR_HC ;
         NAVIGATR_IDLIST
     };
     ImageList ILH_NAVIGATR
