@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:22:32 $
+ *  last change: $Author: os $ $Date: 2002-06-17 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,13 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 
@@ -247,14 +254,31 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     aRightBtn(this,     SW_RES( RB_RIGHT )),
     aCenterBtn(this,    SW_RES( RB_CENTER )),
     aPosFL(this,       SW_RES( FL_POS )),
+    aPropertiesFL(this,     ResId( FL_PROPERTIES    )),
+    aTextDirectionFT(this,  ResId( FT_TEXTDIRECTION )),
+    aTextDirectionLB(this,  ResId( LB_TEXTDIRECTION )),
     pTblData(0),
     nSaveWidth(0),
     nMinTableWidth(MINLAY),
     bModified(FALSE),
-    bFull(0)
+    bFull(0),
+    bHtmlMode(sal_False)
 {
     FreeResource();
     SetExchangeSupport();
+
+    const SfxPoolItem* pItem;
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+        bHtmlMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+
+    SvtLanguageOptions aLangOptions;
+    sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
+    if( !bHtmlMode && bCTL )
+    {
+        aPropertiesFL.Show();
+        aTextDirectionFT.Show();
+        aTextDirectionLB.Show();
+    }
 
     Init();
 }
@@ -602,6 +626,17 @@ BOOL  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
         rCoreSet.Put(SfxStringItem( FN_PARAM_TABLE_NAME, aNameED.GetText()));
         bModified = TRUE;
     }
+
+    USHORT nPos;
+    if( aTextDirectionLB.IsVisible() &&
+        ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
+                                            aTextDirectionLB.GetSavedValue() )
+    {
+        sal_uInt32 nDirection = (sal_uInt32)aTextDirectionLB.GetEntryData( nPos );
+        rCoreSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+        bModified = TRUE;
+    }
+
     return bModified;
 }
 
@@ -612,9 +647,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     const SfxItemSet& rSet = GetItemSet();
     const SfxPoolItem*  pItem;
 
-    BOOL bHtmlMode = FALSE;
-    if(SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, FALSE,&pItem )
-        && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+    if(bHtmlMode)
     {
         aNameED .Disable();
         aTopFT  .Hide();
@@ -622,7 +655,6 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         aBottomFT.Hide();
         aBottomMF.Hide();
         aFreeBtn.Enable(FALSE);
-        bHtmlMode = TRUE;
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric( aWidthMF, aMetric );
@@ -746,6 +778,15 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
                         ((const SvxULSpaceItem*)pItem)->GetLower()), FUNIT_TWIP);
         aTopMF.SaveValue();
         aBottomMF.SaveValue();
+    }
+
+    //text direction
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
+    {
+        sal_uInt32 nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
+        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
+        aTextDirectionLB.SelectEntryPos( nPos );
+        aTextDirectionLB.SaveValue();
     }
 
     aWidthMF.SetMax( 2*aWidthMF.Normalize( pTblData->GetSpace() ), FUNIT_TWIP );
