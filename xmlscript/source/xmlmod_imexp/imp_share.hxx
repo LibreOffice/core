@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-09 15:42:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <xmlscript/xmlmod_imexp.hxx>
 
 #include <cppuhelper/implbase1.hxx>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -191,6 +194,7 @@ protected:
 
     OUString _aLocalName;
     Reference< xml::sax2::XExtendedAttributes > _xAttributes;
+    ::rtl::OUStringBuffer _StrBuffer;
 
 public:
     ModuleElement(

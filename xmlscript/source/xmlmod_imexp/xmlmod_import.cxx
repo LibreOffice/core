@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:13:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,13 @@ void ModuleElement::ignorableWhitespace(
 void ModuleElement::characters( OUString const & rChars )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    _pImport->mrModuleDesc.aCode += rChars;
+    _StrBuffer.append( rChars );
 }
 //__________________________________________________________________________________________________
 void ModuleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
+    _pImport->mrModuleDesc.aCode = _StrBuffer.makeStringAndClear();
 }
 //__________________________________________________________________________________________________
 Reference< xml::XImportContext > ModuleElement::createChildContext(
