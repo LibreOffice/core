@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTopWindow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:24:39 $
+ *  last change:$Date: 2003-09-08 10:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.awt;
 
+import java.io.PrintWriter;
+
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.XMenuBar;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
@@ -68,8 +72,6 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import java.io.PrintWriter;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.awt.XTopWindow</code>
@@ -217,7 +219,7 @@ public class _XTopWindow extends MultiMethodTest {
 
         oObj.setMenuBar(menu) ;
 
-        tRes.tested("setMenuBar()", true) ;
+        tRes.tested("setMenuBar()", result) ;
     }
 
     /**
