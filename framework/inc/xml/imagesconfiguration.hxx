@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:18:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,14 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
+#include <vector>
 
 namespace framework
 {
@@ -149,6 +157,16 @@ class ImagesConfiguration
         static sal_Bool StoreImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const ImageListsDescriptor& aItems );
+
+        static sal_Bool LoadImages(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
+            ImageListsDescriptor& rItems );
+
+        static sal_Bool StoreImages(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
+            const ImageListsDescriptor& rItems );
 };
 
 } // namespace framework
