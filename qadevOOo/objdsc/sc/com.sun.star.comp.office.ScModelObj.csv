@@ -21,6 +21,8 @@
 "ScModelObj";"com::sun::star::lang::XMultiServiceFactory";"createInstance()"
 "ScModelObj";"com::sun::star::lang::XMultiServiceFactory";"createInstanceWithArguments()"
 "ScModelObj";"com::sun::star::lang::XMultiServiceFactory";"getAvailableServiceNames()"
+"ScModelObj";"com::sun::star::view::XPrintJobBroadcaster#optional";"addPrintJobListener()"
+"ScModelObj";"com::sun::star::view::XPrintJobBroadcaster#optional";"removePrintJobListener()"
 "ScModelObj";"com::sun::star::document::XViewDataSupplier#optional";"getViewData()"
 "ScModelObj";"com::sun::star::document::XViewDataSupplier#optional";"setViewData()"
 "ScModelObj";"com::sun::star::frame::XStorable";"hasLocation()"
