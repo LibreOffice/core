@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:28:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _B3D_B3DCOMMN_HXX
 #include "b3dcommn.hxx"
@@ -333,7 +334,11 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
                     aBuffers[0].SetEdgeVisible(FALSE);
             }
             break;
+
         }
+        case Base3DComplexPolygon:
+        case Base3DComplexPolygonCut:
+            break;  // -Wall not handled.
     }
 }
 
@@ -381,6 +386,8 @@ void Base3DCommon::ImplEndPrimitive()
             }
             break;
         }
+        default:
+            break;  // -Wall multiple values not handled.
     }
 }
 
