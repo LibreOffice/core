@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:50:29 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _TRANSFER_HXX //autogen
 #include <svtools/transfer.hxx>
+#endif
+#ifndef _URLBMK_HXX
+#include <svtools/urlbmk.hxx>
 #endif
 #ifndef _INSDLG_HXX //autogen
 #include <so3/insdlg.hxx>
@@ -261,6 +264,7 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
     pDlg->Insert( SOT_FORMATSTR_ID_SVXB, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_SVXB, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( FORMAT_GDIMETAFILE, ( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( FORMAT_BITMAP, ( SotExchange::GetFormatDataFlavor( FORMAT_BITMAP, aFlavor ), aFlavor.HumanPresentableName ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( FORMAT_STRING, ( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( SOT_FORMATSTR_ID_HTML, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aFlavor ), aFlavor.HumanPresentableName ) );
     pDlg->Insert( FORMAT_RTF, ( SotExchange::GetFormatDataFlavor( FORMAT_RTF, aFlavor ), aFlavor.HumanPresentableName ) );
@@ -272,9 +276,25 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
     {
         sal_Int8 nAction = DND_ACTION_COPY;
 
-        pView->InsertData( aDataHelper,
-                           pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
-                           nAction, FALSE, nFormatId );
+        if( !pView->InsertData( aDataHelper,
+                                pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
+                                nAction, FALSE, nFormatId ) &&
+            ( pViewShell && pViewShell->ISA( SdDrawViewShell ) ) )
+        {
+            SdDrawViewShell*    pDrViewSh = (SdDrawViewShell*) pViewShell;
+            String              aEmptyStr;
+            INetBookmark        aINetBookmark( aEmptyStr, aEmptyStr );
+
+            if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                  aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                  aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                  aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+            {
+                pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+            }
+        }
     }
 
     delete pDlg;

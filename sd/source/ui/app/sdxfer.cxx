@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:48:10 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,12 +416,8 @@ void SdTransferable::AddSupportedFormats()
     }
     else if( pBookmark )
     {
-        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_SOLK );
-        AddFormat( FORMAT_STRING );
-        AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
         AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+        AddFormat( FORMAT_STRING );
     }
     else
     {
@@ -480,9 +476,9 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
         {
             bOK = SetBitmap( pSdViewIntern->GetAllMarkedBitmap( TRUE ), rFlavor );
         }
-        else if( nFormat == FORMAT_STRING )
+        else if( ( nFormat == FORMAT_STRING ) && pBookmark )
         {
-            bOK = SetString( String(), rFlavor );
+            bOK = SetString( pBookmark->GetURL(), rFlavor );
         }
         else if( ( nFormat == SOT_FORMATSTR_ID_SVXB ) && pGraphic )
         {
