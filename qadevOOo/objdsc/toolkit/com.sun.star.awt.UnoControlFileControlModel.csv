@@ -36,6 +36,7 @@
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"HelpText"
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"HelpURL"
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Printable"
+"UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"ReadOnly#optional"
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Tabstop"
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Text"
 "UnoControlFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"TextColor"
