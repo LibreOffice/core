@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 10:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,12 @@ interface XContentIdentifier;
 
 //=============================================================================
 /** specifies methods for obtaining information on a content in different
-    levels. In example, if there is a cursor which points to
-    <type>XContent</type>'s, this interface could be used to give the user
-    access to the content under the cursor. If the client only needs the
-    identifier string of the content, there is no need to first create the
-    content object, then to obtain the string from it and after that to
-    release the content.
+    levels.
+    <p>In example, if there is a cursor which points to <type>XContent</type>s,
+    this interface could be used to give the user access to the content under
+    the cursor. If the client only needs the identifier string of the content,
+    there is no need to first create the content object, then to obtain the
+    string from it and after that to release the content.</p>
 
     @version    1.0
     @author     Kai Sommerfeld
