@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:12:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "fuconrec.hxx"
 
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
@@ -136,23 +138,33 @@
 #include <svx/svdomeas.hxx>
 #endif
 
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 // #109583#
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
 #endif
 
-#include "viewshel.hxx"
 #include "sdresid.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "stlpool.hxx"
 #include "drawdoc.hxx"
-#include "fuconrec.hxx"
 #include "res_bmp.hrc"
 #include "glob.hrc"
 
-TYPEINIT1( FuConstRectangle, FuConstruct );
+namespace sd {
+
+TYPEINIT1( FuConstructRectangle, FuConstruct );
 
 /*************************************************************************
 |*
@@ -160,14 +172,15 @@ TYPEINIT1( FuConstRectangle, FuConstruct );
 |*
 \************************************************************************/
 
-FuConstRectangle::FuConstRectangle(SdViewShell*     pViewSh,
-                                   SdWindow*        pWin,
-                                   SdView*          pView,
-                                   SdDrawDocument*  pDoc,
-                                   SfxRequest&      rReq) :
-      FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+FuConstructRectangle::FuConstructRectangle (
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
+    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
-    pViewShell->SwitchObjectBar(RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -261,7 +274,7 @@ FuConstRectangle::FuConstRectangle(SdViewShell*     pViewSh,
 |*
 \************************************************************************/
 
-FuConstRectangle::~FuConstRectangle()
+FuConstructRectangle::~FuConstructRectangle()
 {
 }
 
@@ -271,7 +284,7 @@ FuConstRectangle::~FuConstRectangle()
 |*
 \************************************************************************/
 
-BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
@@ -317,7 +330,7 @@ BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -328,7 +341,7 @@ BOOL FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
@@ -384,7 +397,7 @@ BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
@@ -396,7 +409,7 @@ BOOL FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void FuConstRectangle::Activate()
+void FuConstructRectangle::Activate()
 {
     SdrObjKind aObjKind;
 
@@ -503,7 +516,7 @@ void FuConstRectangle::Activate()
 |*
 \************************************************************************/
 
-void FuConstRectangle::Deactivate()
+void FuConstructRectangle::Deactivate()
 {
     if( nSlotId == SID_TOOL_CONNECTOR               ||
         nSlotId == SID_CONNECTOR_ARROW_START        ||
@@ -553,7 +566,7 @@ void FuConstRectangle::Deactivate()
 |*
 \************************************************************************/
 
-void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
+void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 {
     if (nSlotId == SID_DRAW_RECT_ROUND        ||
         nSlotId == SID_DRAW_RECT_ROUND_NOFILL ||
@@ -683,7 +696,7 @@ XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 
 }
 
-void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
+void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 {
     if ( (pObj->GetObjIdentifier() == OBJ_EDGE &&
           nSlotId != SID_TOOL_CONNECTOR        &&
@@ -865,7 +878,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 }
 
 // #97016#
-SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_LINE:
     // case SID_DRAW_XLINE:
@@ -1080,4 +1093,4 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
     return pObj;
 }
 
-
+} // end of namespace sd
