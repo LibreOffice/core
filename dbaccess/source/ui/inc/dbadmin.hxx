@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 06:59:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 07:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,9 @@ public:
     /// translate the current dialog SfxItems into driver relevant PropertyValues
     sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
 
+    /// clear the password in the current data source's item set
+    void        clearPassword();
+
     /// apply the current changes, return sal_True if successfull
     void        applyChangesAsync();
     /// return <TRUE/> if in the current state, the changes can be saved (i.e. they produce no conflict)
@@ -653,6 +656,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/27 06:59:28  oj
+ *  new method createConnection and export of ORB
+ *
  *  Revision 1.12  2001/03/13 10:21:25  fs
  *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
  *

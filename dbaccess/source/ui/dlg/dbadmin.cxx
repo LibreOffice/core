@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:34:00 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 07:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,6 +825,13 @@ void ODbAdminDialog::selectDataSource(const ::rtl::OUString& _rName)
 {
     if (m_aDatasources.exists(_rName))
         implSelectDatasource(_rName);
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::clearPassword()
+{
+    if (pExampleSet)
+        pExampleSet->ClearItem(DSID_PASSWORD);
 }
 
 //-------------------------------------------------------------------------
@@ -2433,6 +2440,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2001/03/29 07:34:00  oj
+ *  dispose connection in dtor and type casts
+ *
  *  Revision 1.40  2001/03/27 08:05:56  oj
  *  impl new page for adabas
  *
