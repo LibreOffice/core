@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:40:18 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,6 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where,
               sal_uInt32  nConversionInfo;
               sal_Size    nConvertedChars;
 
-              sal_Size nSize =
             rtl_convertTextToUnicode( aConverter, aContext,
                     pMBString, nMBLength,
                      pInsertTextString, nBufferSize,
@@ -380,12 +379,13 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength )
               if (nfeedback & XIMTertiary) // same as 2ery
                 nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
 
-#if 0 // visibility feedback not supported now
+            /*
+            // visibility feedback not supported now
               if (   (nfeedback & XIMVisibleToForward)
                   || (nfeedback & XIMVisibleToBackward)
                   || (nfeedback & XIMVisibleCenter) )
             { }
-#endif
+            */
         }
         // copy in list
         psalattr[npos] = nval;
