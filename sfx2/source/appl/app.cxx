@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-26 12:18:03 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 17:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,16 +966,16 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }
 
-        // Activate mit sal_True auch wenn die zu aktivierenden Bindings gerade
-        // keinen Dispatcher haben
-        if ( pViewFrame && bTaskActivate )
-            pViewFrame->GetObjectShell()->PostActivateEvent_Impl();
-
         if( pViewFrame )
             pViewFrame->DoActivate(
                 bTaskActivate ||
                 pViewFrame->GetBindings().GetDispatcher_Impl() !=
                 pViewFrame->GetDispatcher(), pOldContainerFrame );
+
+        // Activate mit sal_True auch wenn die zu aktivierenden Bindings gerade
+        // keinen Dispatcher haben
+        if ( pViewFrame && bTaskActivate )
+            pViewFrame->GetObjectShell()->PostActivateEvent_Impl();
 
         if( pOldContainerFrame && pOldContainerFrame->GetProgress() )
             pOldContainerFrame->GetProgress()->Suspend();
