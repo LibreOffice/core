@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:01:41 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text [ italian ] = "Inserisci nota a piè pagina" ;
     Text [ portuguese_brazilian ] = "Inserir nota de rodapé" ;
     Text [ portuguese ] = "Inserir nota de rodapé" ;
-    Text [ finnish ] = "Lisää alaviitteen" ;
+    Text [ finnish ] = "Lisää alaviite" ;
     Text [ danish ] = "Indsæt fodnote" ;
     Text [ french ] = "Insérer une note de bas de page" ;
     Text [ swedish ] = "Infoga fotnot" ;
@@ -256,6 +256,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ turkish ] = "~Dipnot";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N~ota al pie";
+        Text[ finnish ] = "~Alaviite";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -283,6 +284,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ turkish ] = "~Sonnot";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nota al ~final";
+        Text[ finnish ] = "~Loppuhuomautus";
     };
     GroupBox GB_TYPE
     {
@@ -310,6 +312,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+        Text[ finnish ] = "Tyyppi";
     };
     Text[ chinese_simplified ] = "²åÈë×¢½Å";
     Text[ russian ] = "Âñòàâèòü ñíîñêó";
