@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-06 15:08:07 $
+ *  last change: $Author: mba $ $Date: 2001-07-09 10:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,6 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
 {
     try
     {
-        Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
         Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
         if ( !xCreator.is() )
             return sal_False;
