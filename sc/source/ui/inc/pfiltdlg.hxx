@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiltdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 09:22:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,13 @@
 #include <vcl/combobox.hxx>
 #endif
 
+#ifndef SC_SCGLOB_HXX
 #include "global.hxx" // -> ScQueryParam
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 //------------------------------------------------------------------
 
@@ -102,7 +108,7 @@ class ScPivotFilterDlg : public ModalDialog
 {
 public:
                     ScPivotFilterDlg( Window* pParent,
-                                      const SfxItemSet& rArgSet, USHORT nSourceTab );
+                                      const SfxItemSet& rArgSet, SCTAB nSourceTab );
                     ~ScPivotFilterDlg();
 
     const ScQueryItem&  GetOutputItem();
@@ -152,14 +158,14 @@ private:
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    USHORT              nSrcTab;
+    SCTAB               nSrcTab;
 
     USHORT              nFieldCount;
     ComboBox*           aValueEdArr[3];
     ListBox*            aFieldLbArr[3];
     ListBox*            aCondLbArr[3];
 
-    TypedStrCollection* pEntryLists[MAXCOL+1];
+    TypedStrCollection* pEntryLists[MAXCOLCOUNT];
 
 #ifdef _PFILTDLG_CXX
 private:
@@ -167,7 +173,7 @@ private:
     void    FillFieldLists  ();
     void    UpdateValueList ( USHORT nList );
     void    ClearValueList  ( USHORT nList );
-    USHORT  GetFieldSelPos  ( USHORT nField );
+    USHORT  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
     DECL_LINK( LbSelectHdl, ListBox* );
