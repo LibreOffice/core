@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseIndex.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,10 @@ service BaseIndex
 
     // DocMerge from xml: property com::sun::star::text::BaseIndex::BackTransparent
     /** specifies the color of the background.
-        [property] long BackColor;
-        /** If <TRUE/>, the background color value in "BackColor" is not visible.
+     */
+    [property] long BackColor;
+
+    /** If <TRUE/>, the background color value in "BackColor" is not visible.
      */
     [property] boolean BackTransparent;
 
