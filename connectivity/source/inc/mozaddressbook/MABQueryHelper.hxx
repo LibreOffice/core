@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQueryHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 09:14:54 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace connectivity
             fieldMap    m_Fields;
 
         public:
+            OMozabQueryHelperResultEntry();
             ~OMozabQueryHelperResultEntry();
 
             void insert( rtl::OUString &key, rtl::OUString &value );

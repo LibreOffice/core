@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
