@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:47:59 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_nLockCount( 0 )
         ,   m_bActive( sal_False )
         ,   m_bInplaceMenuSet( sal_False )
+        ,   m_bMenuVisible( sal_True )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::drafts::com::sun::star::ui::XUIElementFactory >(
@@ -706,7 +707,10 @@ throw (RuntimeException)
                             if ( pMenuBar )
                             {
                                 pSysWindow->SetMenuBar( pMenuBar );
-                                pMenuBar->SetDisplayable( sal_True );
+                                if ( m_bMenuVisible )
+                                    pMenuBar->SetDisplayable( sal_True );
+                                else
+                                    pMenuBar->SetDisplayable( sal_False );
                                 implts_updateMenuBarClose();
                             }
                         }
@@ -822,7 +826,8 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL LayoutManager::showElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    ReadGuard aReadLock( m_aLock );
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
 
     OUString    aElementType;
     OUString    aElementName;
@@ -839,6 +844,7 @@ throw (RuntimeException)
                 while ( pWindow && !pWindow->IsSystemWindow() )
                     pWindow = pWindow->GetParent();
 
+                m_bMenuVisible = sal_True;
                 if ( pWindow )
                 {
                     MenuBar* pSetMenuBar = 0;
@@ -904,6 +910,7 @@ throw (RuntimeException)
                 while ( pWindow && !pWindow->IsSystemWindow() )
                     pWindow = pWindow->GetParent();
 
+                m_bMenuVisible = sal_False;
                 if ( pWindow )
                 {
                     MenuBar* pMenuBar = ((SystemWindow *)pWindow)->GetMenuBar();
@@ -989,6 +996,8 @@ throw (RuntimeException)
                     if ( pMenuBar && pMenuBar->IsDisplayable() )
                         return sal_True;
                 }
+                else
+                    return m_bMenuVisible;
             }
         }
         else
