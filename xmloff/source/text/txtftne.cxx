@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-29 07:58:46 $
+ *  last change: $Author: dvo $ $Date: 2001-03-01 15:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,13 +293,9 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     const Reference<XPropertySet> & rFootnoteConfig,
     sal_Bool bIsEndnote)
 {
-    // prefix
+    // default/paragraph style
     lcl_exportString( GetExport(), rFootnoteConfig,
-                      sPrefix, sXML_num_prefix, sal_True);
-
-    // suffix
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sSuffix, sXML_num_suffix, sal_True);
+                      sParaStyleName, sXML_default_style_name, sal_True);
 
     // citation style
     lcl_exportString( GetExport(), rFootnoteConfig,
@@ -309,13 +305,18 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     lcl_exportString( GetExport(), rFootnoteConfig, sAnchorCharStyleName,
                       sXML_citation_body_style_name, sal_True);
 
-    // default/paragraph style
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sParaStyleName, sXML_default_style_name, sal_True);
-
     // page style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sPageStyleName, sXML_master_page_name, sal_True);
+
+    // prefix
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sPrefix, sXML_num_prefix, sal_True);
+
+    // suffix
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sSuffix, sXML_num_suffix, sal_True);
+
 
 
     Any aAny;
