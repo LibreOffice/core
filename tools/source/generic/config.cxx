@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-08 13:11:22 $
+ *  last change: $Author: mh $ $Date: 2000-11-13 18:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@
 #include <osl/file.hxx>
 #endif
 #ifndef _NEW_HXX
-#include <tools/new.hxx>
+#include <new.hxx>
 #endif
 #ifndef _STREAM_HXX
-#include <tools/stream.hxx>
+#include <stream.hxx>
 #endif
 #ifndef _DEBUG_HXX
-#include <tools/debug.hxx>
+#include <debug.hxx>
 #endif
 
 #ifndef _CONFIG_HXX
