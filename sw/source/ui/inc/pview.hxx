@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:46:39 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,15 +187,30 @@ public:
     void AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
                                  const SvxZoomType _eZoomType );
 
-    const Rectangle&           GetPaintedPreviewDocRect() const
-                                    { return maPaintedPreviewDocRect;}
-    void                       Scroll(long nXMove, long nYMove);
+    const Rectangle& GetPaintedPreviewDocRect() const
+    {
+        return maPaintedPreviewDocRect;
+    }
 
-#ifdef ACCESSIBLE_LAYOUT
+    void Scroll(long nXMove, long nYMove);
+
+    /** method to enable/disable book preview
+
+        OD 2004-03-05 #i18143#
+
+        @author OD
+
+        @param _bBookPreview
+        input parameter - boolean indicating, if book preview mode has to
+        switch on <TRUE> or of <FALSE>
+
+        @return boolean indicating, if book preview mode has changed.
+    */
+    bool SetBookPreviewMode( const bool _bBookPreview );
+
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible();
-#endif
 };
 
 
