@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-24 02:59:25 $
+*  last change: $Author: rt $ $Date: 2005-04-04 10:15:06 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -69,7 +69,7 @@ End
 
 File gid_File_Extra_Autotextshare_Lang
     Dir = gid_Dir_Autotext_Language;
-    TXT_FILE_BODY;
+    USER_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(autotextshare);
 End
