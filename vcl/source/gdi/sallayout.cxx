@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-19 11:02:06 $
+ *  last change: $Author: hdu $ $Date: 2002-04-22 17:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,26 +367,25 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
         int n = pG->mnCharIndex;
         if( n < mnFirstCharIndex || n >= mnEndCharIndex )
             continue;
-        if( nBasePointX >= 0 )  // break when initalized
-            break;
-        // initialize x base offset with first match glyph position
+        // initialize x base offset with first matching glyph position
         nBasePointX = pG->maLinearPos.X();
+        pTouched[ n - mnFirstCharIndex ] = 1;
+        break;
     }
 
     // adjust to requested positions
     long nDelta = 0;
+    const long* pCurrentDX = pDXArray;
     for(; i < mnGlyphCount; ++i, ++pG )
     {
         int n = pG->mnCharIndex;
         if( n < mnEndCharIndex )
         {
             n -= mnFirstCharIndex;
-            if( (n >= 0) && !pTouched[ n ] )
+            if( (n >= 0) && !pTouched[n] )
             {
-                // mark first character in cluster as touched
-                pTouched[ n ] = 1;
-
-                long nNewDelta = (n <= 0) ? 0 : pDXArray[ n-1 ];
+                pTouched[n] = 1;
+                long nNewDelta = *(pCurrentDX++);
                 nNewDelta += nBasePointX - pG->maLinearPos.X();
                 nDelta = nNewDelta;
             }
@@ -399,8 +398,6 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     if( nDelta )
         for(; i < mnGlyphCount; ++i, ++pG )
             pG->maLinearPos += Point( nDelta, 0 );
-
-    // adjust character widths
 }
 
 // -----------------------------------------------------------------------
