@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-14 09:14:33 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
         if(FAILED(::VariantChangeType(static_cast<VARIANT*>(this),
                           const_cast<VARIANT*>(static_cast<const VARIANT*>(pSrc)),
                           0, vartype)))
-                          throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
+                          throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could not convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
     }
 }
 // -----------------------------------------------------------------------------

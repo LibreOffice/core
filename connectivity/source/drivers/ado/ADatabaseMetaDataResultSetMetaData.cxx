@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal
         nSize = (*m_mColumnsIter).second.getColumnDisplaySize();
     else if(m_pRecordSet)
     {
-        ADO_GETFIELD(m_vMapping[column]);
+        WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
         if(aField.IsValid())
             nSize = aField.GetActualSize();
     }
@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnType( sal_Int32 
         nType = (*m_mColumnsIter).second.getColumnType();
     else if(m_pRecordSet)
     {
-        ADO_GETFIELD(m_vMapping[column]);
+        WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
         nType = ADOS::MapADOType2Jdbc(aField.GetADOType());
     }
     return nType;
@@ -137,7 +137,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnCount(  ) throw(
         return (*m_mColumnsIter).second.getColumnName();
     if(!m_pRecordSet)
         return ::rtl::OUString();
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
         return aField.GetName();
 
@@ -158,7 +158,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 colu
         return (*m_mColumnsIter).second.isCurrency();
     if(!m_pRecordSet)
         return 0;
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
         return (aField.GetAttributes() & adFldFixed) == adFldFixed;
@@ -174,7 +174,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column
         return (*m_mColumnsIter).second.isSigned();
     if(!m_pRecordSet)
         return 0;
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
         return (aField.GetAttributes() & adFldNegativeScale) == adFldNegativeScale;
@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getPrecision( sal_Int32 c
         return (*m_mColumnsIter).second.getPrecision();
     if(!m_pRecordSet)
         return 0;
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
         return aField.GetPrecision();
     return 0;
@@ -202,7 +202,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getScale( sal_Int32 colum
     if(!m_pRecordSet)
         return 0;
 
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
         return aField.GetNumericScale();
     return 0;
@@ -217,7 +217,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 col
     if(!m_pRecordSet)
         return 0;
 
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
         return (aField.GetAttributes() & adFldIsNullable) == adFldIsNullable;
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 colu
     if(!m_pRecordSet)
         return 0;
 
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
         //  return (aField.GetStatus() & adFieldReadOnly) == adFieldReadOnly;
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_
     if(!m_pRecordSet)
         return 0;
 
-    ADO_GETFIELD(m_vMapping[column]);
+    WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
         return (aField.GetAttributes() & adFldUpdatable) == adFldUpdatable;

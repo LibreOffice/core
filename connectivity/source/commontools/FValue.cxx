@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,35 +649,41 @@ Any ORowSetValue::makeAny() const
     Any rValue;
     if(isBound() && !isNull())
     {
-        OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
         switch(getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= (::rtl::OUString)m_aValue.m_pString;
                 break;
             case DataType::FLOAT:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(float*)m_aValue.m_pValue;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(double*)m_aValue.m_pValue;
                 break;
             case DataType::DATE:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(Date*)m_aValue.m_pValue;
                 break;
             case DataType::TIME:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(Time*)m_aValue.m_pValue;
                 break;
             case DataType::TIMESTAMP:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(DateTime*)m_aValue.m_pValue;
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
             case DataType::LONGVARCHAR:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(Sequence<sal_Int8>*)m_aValue.m_pValue;
                 break;
             case DataType::OBJECT:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 09:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,15 +264,15 @@ VARTYPE OLEVariant::getType() const { return vt; }
 
 OLEVariant::operator ::com::sun::star::util::Date() const
 {
-    return ::dbtools::DBTypeConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? ::com::sun::star::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::operator ::com::sun::star::util::Time() const
 {
-    return ::dbtools::DBTypeConversion::toTime(date);
+    return isNull() ? ::com::sun::star::util::Time() : ::dbtools::DBTypeConversion::toTime(date);
 }
 OLEVariant::operator ::com::sun::star::util::DateTime()const
 {
-    return ::dbtools::DBTypeConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? ::com::sun::star::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
 }
 
 VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)
@@ -308,6 +308,8 @@ OLEVariant::operator rtl::OUString() const
     if (V_VT(this) == VT_BSTR)
         return V_BSTR(this);
 
+    if(isNull())
+        return ::rtl::OUString();
 
     OLEVariant varDest;
 
@@ -324,7 +326,7 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
         OLEString sStr(V_BSTR(this));
         aRet = ::com::sun::star::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>((const wchar_t*)sStr),sizeof(sal_Unicode)*sStr.length());
     }
-    else
+    else if(!isNull())
     {
         SAFEARRAY* pArray = getUI1SAFEARRAYPtr();
 
@@ -353,13 +355,15 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
 // -----------------------------------------------------------------------------
 ::rtl::OUString OLEVariant::getString() const
 {
-    return (rtl::OUString)*this;
+    return isNull() ? ::rtl::OUString() : (rtl::OUString)*this;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OLEVariant::getBool() const
 {
     if (V_VT(this) == VT_BOOL)
         return V_BOOL(this) == VARIANT_TRUE ? sal_True : sal_False;
+    if(isNull())
+        return sal_False;
 
     OLEVariant varDest;
 
@@ -375,6 +379,8 @@ IUnknown* OLEVariant::getIUnknown() const
         V_UNKNOWN(this)->AddRef();
         return V_UNKNOWN(this);
     }
+    if(isNull())
+        return NULL;
 
     OLEVariant varDest;
 
@@ -392,6 +398,9 @@ IDispatch* OLEVariant::getIDispatch() const
         return V_DISPATCH(this);
     }
 
+    if(isNull())
+        return NULL;
+
     OLEVariant varDest;
 
     varDest.ChangeType(VT_DISPATCH, this);
@@ -405,6 +414,8 @@ sal_uInt8 OLEVariant::getByte() const
     if (V_VT(this) == VT_UI1)
         return V_UI1(this);
 
+    if(isNull())
+        return sal_Int8(0);
     OLEVariant varDest;
 
     varDest.ChangeType(VT_UI1, this);
@@ -417,6 +428,8 @@ sal_Int16 OLEVariant::getInt16() const
     if (V_VT(this) == VT_I2)
         return V_I2(this);
 
+    if(isNull())
+        return sal_Int16(0);
     OLEVariant varDest;
 
     varDest.ChangeType(VT_I2, this);
@@ -428,6 +441,9 @@ sal_Int8 OLEVariant::getInt8() const
 {
     if (V_VT(this) == VT_I1)
         return V_I1(this);
+
+    if(isNull())
+        return sal_Int8(0);
 
     OLEVariant varDest;
 
@@ -441,6 +457,9 @@ sal_Int32 OLEVariant::getInt32() const
     if (V_VT(this) == VT_I4)
         return V_I4(this);
 
+    if(isNull())
+        return sal_Int32(0);
+
     OLEVariant varDest;
 
     varDest.ChangeType(VT_I4, this);
@@ -452,6 +471,9 @@ sal_uInt32 OLEVariant::getUInt32() const
 {
     if (V_VT(this) == VT_UI4)
         return V_UI4(this);
+
+    if(isNull())
+        return sal_uInt32(0);
 
     OLEVariant varDest;
 
@@ -465,6 +487,8 @@ float OLEVariant::getFloat() const
     if (V_VT(this) == VT_R4)
         return V_R4(this);
 
+    if(isNull())
+        return float(0);
     OLEVariant varDest;
 
     varDest.ChangeType(VT_R4, this);
@@ -477,6 +501,8 @@ double OLEVariant::getDouble() const
     if (V_VT(this) == VT_R8)
         return V_R8(this);
 
+    if(isNull())
+        return double(0);
     OLEVariant varDest;
 
     varDest.ChangeType(VT_R8, this);
@@ -489,6 +515,8 @@ double OLEVariant::getDate() const
     if (V_VT(this) == VT_DATE)
         return V_DATE(this);
 
+    if(isNull())
+        return double(0);
     OLEVariant varDest;
 
     varDest.ChangeType(VT_DATE, this);
@@ -501,6 +529,11 @@ CY OLEVariant::getCurrency() const
     if (V_VT(this) == VT_CY)
         return V_CY(this);
 
+    if(isNull())
+    {
+        CY aVar;
+        return aVar;
+    }
     OLEVariant varDest;
 
     varDest.ChangeType(VT_CY, this);
@@ -513,6 +546,8 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     if (V_VT(this) == (VT_ARRAY|VT_UI1))
         return V_ARRAY(this);
 
+    if(isNull())
+        return (0);
     OLEVariant varDest;
 
     varDest.ChangeType((VT_ARRAY|VT_UI1), this);
