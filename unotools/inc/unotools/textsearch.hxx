@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 08:12:55 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 09:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ namespace com {
     }
 }
 
+// ............................................................................
+namespace utl
+{
+// ............................................................................
 
 // SS - Klasse fuers Suchen
 class SearchParam
@@ -199,6 +203,9 @@ public:
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
 };
 
+// ............................................................................
+}   // namespace utl
+// ............................................................................
 
 #endif
 

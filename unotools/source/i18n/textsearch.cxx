@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:43:57 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 09:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,23 @@
 #include <unotools/charclass.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_TEXTSEARCH_HXX
 #include <unotools/textsearch.hxx>
+#endif
 
 #pragma hdrstop
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+// ............................................................................
+namespace utl
+{
+// ............................................................................
 
 SearchParam::SearchParam( const String &rText,
                                 SearchType eType,
@@ -283,4 +292,7 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
+// ............................................................................
+}   // namespace utl
+// ............................................................................
 
