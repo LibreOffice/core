@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 14:00:33 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 14:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,27 +210,34 @@ bool LegendItemConverter::ApplySpecialItem(
                     break;
             }
 
-            sal_Bool bWasShown = sal_True;
-            if( ! (GetPropertySet()->getPropertyValue( C2U("Show")) >>= bWasShown) ||
-                ( bWasShown != bShow ))
+            try
             {
-                GetPropertySet()->setPropertyValue( C2U("Show"), uno::Any( &bShow, ::getBooleanCppuType() ));
-                bChanged = true;
-            }
-
-            if( bShow )
-            {
-
-                if( ! ( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= eOldPos ) ||
-                    ( eOldPos != eNewPos ))
+                sal_Bool bWasShown = sal_True;
+                if( ! (GetPropertySet()->getPropertyValue( C2U("Show")) >>= bWasShown) ||
+                    ( bWasShown != bShow ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
-                    chart2::LegendExpansion eExp = bIsWide
-                        ? chart2::LegendExpansion_WIDE
-                        : chart2::LegendExpansion_HIGH;
-                    GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
+                    GetPropertySet()->setPropertyValue( C2U("Show"), uno::Any( &bShow, ::getBooleanCppuType() ));
                     bChanged = true;
                 }
+
+                if( bShow )
+                {
+                    if( ! ( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= eOldPos ) ||
+                        ( eOldPos != eNewPos ))
+                    {
+                        GetPropertySet()->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
+                        chart2::LegendExpansion eExp = bIsWide
+                            ? chart2::LegendExpansion_WIDE
+                            : chart2::LegendExpansion_HIGH;
+                        GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
+                        GetPropertySet()->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
+                        bChanged = true;
+                    }
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
             }
         }
         break;
