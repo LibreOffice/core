@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:38:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2306,10 +2306,10 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             if( pSilentItem )
                 bSilent = pSilentItem->GetValue();
 
+              BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
             if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
             {
                 // broken package was handled already
-                BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
                 if ( xHandler.is() )
                 {
                     ::com::sun::star::uno::Any aInteraction;
@@ -2343,9 +2343,12 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 delete pMedium;
             }
 
-            throw task::ErrorCodeIOException( ::rtl::OUString(),
-                                                uno::Reference< uno::XInterface >(),
-                                                nError ? nError : ERRCODE_IO_CANTREAD );
+            if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
+            {
+                throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                    uno::Reference< uno::XInterface >(),
+                                                    nError ? nError : ERRCODE_IO_CANTREAD );
+            }
         }
     }
 }
