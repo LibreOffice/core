@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:27:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,5 +597,10 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
     }
 }
 
+// #i33136#
+bool FuPoor::doConstructOrthogonal() const
+{
+    return false;
+}
 
-
+// eof
