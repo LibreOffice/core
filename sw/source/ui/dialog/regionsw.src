@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:24:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,16 @@
 #define CB_CONDITION_TEXT  \
     Text [ de ] = "Mi~t Bedingung" ; \
     Text [ en-US ] = "~With Condition" ;
+
+// --> FME 2004-06-22 #114856# edit in readonly sections
+#define FL_PROPERTIES_TEXT \
+    Text = "Eigenschaften" ; \
+    Text [ en-US ] = "Properties" ;
+
+#define CB_EDIT_IN_READONLY_TEXT \
+    Text = "E~ditierbar in schreibgeschütztem Dokument" ; \
+    Text [ en-US ] = "E~ditable in read-only document" ;
+// <--
 
 #define FL_FILE_TEXT \
     Text [ de ] = "Verknüpfung" ; \
@@ -288,6 +298,25 @@ ModalDialog MD_EDIT_REGION
         TabStop = TRUE ;
         Disable = TRUE ;
     };
+
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    FixedLine FL_PROPERTIES
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 159 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        FL_PROPERTIES_TEXT
+    };
+    TriStateBox CB_EDIT_IN_READONLY
+    {
+        Pos = MAP_APPFONT ( 98 , 170 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        TriStateDisable = FALSE ;
+        CB_EDIT_IN_READONLY_TEXT
+    };
+    // <--
+
     OKButton PB_OK
     {
         Pos = MAP_APPFONT ( 263 , 6 ) ;
@@ -587,6 +616,23 @@ TabPage TP_INSERT_SECTION
         Disable = TRUE ;
         TabStop = TRUE ;
     };
+
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    FixedLine FL_PROPERTIES
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 159 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
+        FL_PROPERTIES_TEXT
+    };
+    CheckBox CB_EDIT_IN_READONLY
+    {
+        Pos = MAP_APPFONT ( 96 , 170 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        CB_EDIT_IN_READONLY_TEXT
+    };
+    // <--
+
 };
 
 TabDialog DLG_SECTION_PROPERTIES
