@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreMinusSign_ja_JP.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:03:13 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@ ignoreMinusSign_ja_JP_translator (const sal_Unicode c)
     switch (c) {
         case 0x2212: // MINUS SIGN
         case 0x002d: // HYPHEN-MINUS
+        case 0x2010: // HYPHEN
+        case 0x2011: // NON-BREAKING HYPHEN
+        case 0x2012: // FIGURE DASH
+        case 0x2013: // EN DASH
+        case 0x2014: // EM DASH
+        case 0x2015: // HORIZONTAL BAR
         case 0xff0d: // FULLWIDTH HYPHEN-MINUS
         case 0xff70: // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
         return 0x30fc; // KATAKANA-HIRAGANA PROLONGED SOUND MARK
