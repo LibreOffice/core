@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-31 11:19:09 $
+ *  last change: $Author: ab $ $Date: 2001-06-12 16:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2122,6 +2122,36 @@ sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
 // End #80200 HACK
 
 
+bool isRootDir( String aDirURLStr )
+{
+    INetURLObject aDirURLObj( aDirURLStr );
+    BOOL bRoot = FALSE;
+
+    // Check if it's a root directory
+    sal_Int32 nCount = aDirURLObj.getSegmentCount();
+
+    // No segment means Unix root directory "file:///"
+    if( nCount == 0 )
+    {
+        bRoot = TRUE;
+    }
+    // Exactly one segment needs further checking, because it
+    // can be Unix "file:///foo/" -> no root
+    // or Windows  "file:///c:/"  -> root
+    else if( nCount == 1 )
+    {
+        OUString aSeg1 = aDirURLObj.getName( 0, TRUE,
+            INetURLObject::DECODE_WITH_CHARSET );
+        if( aSeg1.getStr()[1] == (sal_Unicode)':' )
+        {
+            bRoot = TRUE;
+        }
+    }
+    // More than one segments can never be root
+    // so bRoot remains FALSE
+
+    return bRoot;
+}
 
 RTLFUNC(Dir)
 {
@@ -2193,31 +2223,7 @@ RTLFUNC(Dir)
                         // #78651 Add "." and ".." directories for VB compatibility
                         if( bIncludeFolders )
                         {
-                            INetURLObject aDirURLObj( aDirURLStr );
-                            BOOL bRoot = FALSE;
-
-                            // Check if it's a root directory
-                            sal_Int32 nCount = aDirURLObj.getSegmentCount();
-
-                            // No segment means Unix root directory "file:///"
-                            if( nCount == 0 )
-                            {
-                                bRoot = TRUE;
-                            }
-                            // Exactly one segment needs further checking, because it
-                            // can be Unix "file:///foo/" -> no root
-                            // or Windows  "file:///c:/"  -> root
-                            else if( nCount == 1 )
-                            {
-                                OUString aSeg1 = aDirURLObj.getName( 0, TRUE,
-                                    INetURLObject::DECODE_WITH_CHARSET );
-                                if( aSeg1.getStr()[1] == (sal_Unicode)':' )
-                                {
-                                    bRoot = TRUE;
-                                }
-                            }
-                            // More than one segments can never be root
-                            // so bRoot remains FALSE
+                            BOOL bRoot = isRootDir( aDirURLStr );
 
                             // If it's no root directory we flag the need for
                             // the "." and ".." directories by the value -2
@@ -2252,7 +2258,6 @@ RTLFUNC(Dir)
                                 aPath = OUString::createFromAscii( ".." );
                             }
                             pRTLData->nCurDirPos++;
-                            break;
                         }
                         else if( pRTLData->nCurDirPos >= pRTLData->aDirSeq.getLength() )
                         {
@@ -2275,15 +2280,15 @@ RTLFUNC(Dir)
                             INetURLObject aURL( aFile );
                             aPath = aURL.getName( INetURLObject::LAST_SEGMENT, TRUE,
                                 INetURLObject::DECODE_WITH_CHARSET );
-
-                            // #80200 HACK to provide minimum wildcard functionality (*.xxx)
-                            sal_Bool bMatch = implCheckWildcard( aPath, pRTLData );
-                            if( !bMatch )
-                                continue;
-                            // End #80200 HACK
-
-                            break;
                         }
+
+                        // #80200 HACK to provide minimum wildcard functionality (*.xxx)
+                        sal_Bool bMatch = implCheckWildcard( aPath, pRTLData );
+                        if( !bMatch )
+                            continue;
+                        // End #80200 HACK
+
+                        break;
                     }
                 }
                 rPar.Get(0)->PutString( aPath );
@@ -2380,7 +2385,7 @@ RTLFUNC(Dir)
                 String aFileParam = rPar.Get(1)->GetString();
 
                 // #80200 HACK to provide minimum wildcard functionality
-                String aDirUNCStr = implSetupWildcard( aFileParam, pRTLData, sal_False );
+                String aDirURL = implSetupWildcard( aFileParam, pRTLData, sal_False );
 
                 USHORT nFlags = 0;
                 if ( nParCount > 2 )
@@ -2389,8 +2394,8 @@ RTLFUNC(Dir)
                     pRTLData->nDirFlags = 0;
 
                 // Read directory
-                //sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
-                pRTLData->pDir = new Directory( aDirUNCStr );
+                sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
+                pRTLData->pDir = new Directory( aDirURL );
                 FileBase::RC nRet = pRTLData->pDir->open();
                 if( nRet != FileBase::E_None )
                 {
@@ -2399,7 +2404,23 @@ RTLFUNC(Dir)
                     rPar.Get(0)->PutString( String() );
                     return;
                 }
-                //pRTLData->nCurDirPos = 0;
+
+                // #86950 Add "." and ".." directories for VB compatibility
+                pRTLData->nCurDirPos = 0;
+                if( bIncludeFolders )
+                {
+                    BOOL bRoot = isRootDir( aDirURL );
+
+                    // If it's no root directory we flag the need for
+                    // the "." and ".." directories by the value -2
+                    // for the actual position. Later for -2 will be
+                    // returned "." and for -1 ".."
+                    if( !bRoot )
+                    {
+                        pRTLData->nCurDirPos = -2;
+                    }
+                }
+
             }
 
             if( pRTLData->pDir )
@@ -2407,30 +2428,45 @@ RTLFUNC(Dir)
                 sal_Bool bOnlyFolders = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
                 for( ;; )
                 {
-                    DirectoryItem aItem;
-                    FileBase::RC nRet = pRTLData->pDir->getNextItem( aItem );
-                    if( nRet != FileBase::E_None )
+                    if( pRTLData->nCurDirPos < 0 )
                     {
-                        delete pRTLData->pDir;
-                        pRTLData->pDir = NULL;
-                        aPath.Erase();
-                        break;
+                        if( pRTLData->nCurDirPos == -2 )
+                        {
+                            aPath = OUString::createFromAscii( "." );
+                        }
+                        else if( pRTLData->nCurDirPos == -1 )
+                        {
+                            aPath = OUString::createFromAscii( ".." );
+                        }
+                        pRTLData->nCurDirPos++;
                     }
-
-                    // Handle flags
-                    FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
-                    nRet = aItem.getFileStatus( aFileStatus );
-
-                    // Only directories?
-                    if( bOnlyFolders )
+                    else
                     {
-                        FileStatus::Type aType = aFileStatus.getFileType();
-                        sal_Bool bFolder = (aType == FileStatus::Directory);
-                        if( !bFolder )
-                            continue;
-                    }
+                        DirectoryItem aItem;
+                        FileBase::RC nRet = pRTLData->pDir->getNextItem( aItem );
+                        if( nRet != FileBase::E_None )
+                        {
+                            delete pRTLData->pDir;
+                            pRTLData->pDir = NULL;
+                            aPath.Erase();
+                            break;
+                        }
 
-                    aPath = aFileStatus.getFileName();
+                        // Handle flags
+                        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+                        nRet = aItem.getFileStatus( aFileStatus );
+
+                        // Only directories?
+                        if( bOnlyFolders )
+                        {
+                            FileStatus::Type aType = aFileStatus.getFileType();
+                            sal_Bool bFolder = (aType == FileStatus::Directory);
+                            if( !bFolder )
+                                continue;
+                        }
+
+                        aPath = aFileStatus.getFileName();
+                    }
 
                     // #80200 HACK to provide minimum wildcard functionality (*.xxx)
                     sal_Bool bMatch = implCheckWildcard( aPath, pRTLData );
