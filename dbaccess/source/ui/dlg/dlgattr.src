@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:12:24 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,14 +128,14 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "~Ongedaan" ;
         Text [ spanish ] = "~Regresar" ;
         Text [ english_us ] = "Bac~k" ;
-        Text[ chinese_simplified ] = "·µ»Ø(~K)";
+        Text[ chinese_simplified ] = "è¿”å›(~K)";
         Text[ russian ] = "Íàçàä";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "–ß‚é(~K)";
-        Text[ chinese_traditional ] = "ªğ¦^(~K)";
+        Text[ japanese ] = "æˆ»ã‚‹(~K)";
+        Text[ chinese_traditional ] = "è¿”å›(~K)";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "Ğßóù";
-        Text[ korean ] = "ÀÌÀü(~K)";
+        Text[ korean ] = "ì´ì „(~K)";
         Text[ turkish ] = "Geri";
         Text[ catalan ] = "~Regresar";
     };
@@ -155,14 +155,14 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "Lettertype" ;
         Text [ spanish ] = "Fuente" ;
         Text [ english_us ] = "Font" ;
-        Text[ chinese_simplified ] = "×ÖÌå";
+        Text[ chinese_simplified ] = "å­—ä½“";
         Text[ russian ] = "Øğèôò";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "Ì«İÄ";
-        Text[ chinese_traditional ] = "¦r«¬";
+        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+        Text[ chinese_traditional ] = "å­—å‹";
         Text[ arabic ] = "ÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ";
-        Text[ korean ] = "±Û²Ã";
+        Text[ korean ] = "ê¸€ê¼´";
         Text[ turkish ] = "Yazıtipi";
         Text[ catalan ] = "Fuente";
     };
@@ -181,14 +181,14 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "Formaat" ;
         Text [ spanish ] = "Formato" ;
         Text [ english_us ] = "Format" ;
-        Text[ chinese_simplified ] = "¸ñÊ½";
+        Text[ chinese_simplified ] = "æ ¼å¼";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®";
-        Text[ chinese_traditional ] = "®æ¦¡";
+        Text[ japanese ] = "æ›¸å¼";
+        Text[ chinese_traditional ] = "æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ greek ] = "ÌïñöŞ";
-        Text[ korean ] = "¼­½Ä";
+        Text[ korean ] = "ì„œì‹";
         Text[ turkish ] = "Renk formatı";
         Text[ catalan ] = "Formato";
     };
@@ -207,14 +207,14 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "Uitlijning" ;
         Text [ spanish ] = "Alineación" ;
         Text [ english_us ] = "Alignment" ;
-        Text[ chinese_simplified ] = "¶ÔÆë";
+        Text[ chinese_simplified ] = "å¯¹é½";
         Text[ russian ] = "Âûğàâíèâàíèå";
         Text[ polish ] = "Wyrównanie";
-        Text[ japanese ] = "”z’u";
-        Text[ chinese_traditional ] = "¹ï»ô";
+        Text[ japanese ] = "é…ç½®";
+        Text[ chinese_traditional ] = "å°é½Š";
         Text[ arabic ] = "ãÍÇĞÇÉ";
         Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "¹è¿­";
+        Text[ korean ] = "ë°°ì—´";
         Text[ turkish ] = "Hizalama";
         Text[ catalan ] = "Alineación";
     };
@@ -231,29 +231,30 @@ TabDialog DLG_ATTR
         Text [ danish ] = "Tabelformatering" ;
         Text [ portuguese_brazilian ] = "Tabellenformatierung" ;
         Text [ portuguese ] = "Formatar tabela" ;
-        Text[ chinese_simplified ] = "±í¸ñ¸ñÊ½";
+        Text[ chinese_simplified ] = "è¡¨æ ¼æ ¼å¼";
         Text[ russian ] = "Ôîğìàò òàáëèöû";
         Text[ polish ] = "Formatowanie tabeli";
-        Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘®İ’è";
-        Text[ chinese_traditional ] = "ªí®æ®æ¦¡";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æ›¸å¼è¨­å®š";
+        Text[ chinese_traditional ] = "è¡¨æ ¼æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá";
         Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí ¼­½Ä";
+        Text[ korean ] = "í…Œì´ë¸” ì„œì‹";
         Text[ turkish ] = "Tablo formatı";
         Text[ catalan ] = "Formateado de tabla";
         Text[ finnish ] = "Tabellenformatierung";
     };
-    Text[ chinese_simplified ] = "×Ö¶Î¸ñÊ½";
+    Text[ chinese_simplified ] = "å­—æ®µæ ¼å¼";
     Text[ russian ] = "Ôîğìàò ïîëÿ";
     Text[ polish ] = "Formatowanie pola";
-    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì‘®İ’è";
-    Text[ chinese_traditional ] = "Äæ¦ì®æ¦¡";
+    Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®æ›¸å¼è¨­å®š";
+    Text[ chinese_traditional ] = "æ¬„ä½æ ¼å¼";
     Text[ arabic ] = "ÊäÓíŞ ÇáÍŞá";
     Text[ greek ] = "Ìïñöïğïßçóç ğåäßïõ";
-    Text[ korean ] = "ÇÊµå ¼­½Ä";
+    Text[ korean ] = "í•„ë“œ ì„œì‹";
     Text[ turkish ] = "Alan formatı";
     Text[ catalan ] = "Formato de campo";
 };
+
 
 
 
