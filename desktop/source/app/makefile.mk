@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dic $ $Date: 2002-03-14 15:39:43 $
+#   last change: $Author: ghiggins $ $Date: 2002-06-10 22:14:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,8 @@ OBJFILES = \
         $(OBJ)$/opluginframefactory.obj	\
         $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj		\
-        $(OBJ)$/dispatchwatcher.obj
+        $(OBJ)$/dispatchwatcher.obj		\
+        $(OBJ)$/ssoinit.obj
 
 .IF "$(OS)" == "SOLARIS"
 
@@ -110,7 +111,8 @@ SLOFILES = \
         $(SLO)$/opluginframefactory.obj	\
         $(SLO)$/appsys.obj				\
         $(SLO)$/desktopresid.obj		\
-        $(SLO)$/dispatchwatcher.obj
+        $(SLO)$/dispatchwatcher.obj		\
+        $(SLO)$/ssoinit.obj
 
 .ENDIF
 

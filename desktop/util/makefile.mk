@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dic $ $Date: 2002-03-14 15:40:48 $
+#   last change: $Author: ghiggins $ $Date: 2002-06-10 22:15:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ APP1STDLIBS=			\
     $(UNOTOOLSLIB)		\
     $(UCBHELPERLIB)		\
     $(COMPHELPERLIB)	\
-    $(SALHELPERLIB)
+    $(SALHELPERLIB)		\
+    $(SVTOOLLIB)
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
@@ -134,7 +135,8 @@ APP1OBJS= \
             $(OBJ)$/opluginframefactory.obj	\
             $(OBJ)$/appsys.obj				\
             $(OBJ)$/desktopresid.obj	\
-            $(OBJ)$/dispatchwatcher.obj
+            $(OBJ)$/dispatchwatcher.obj		\
+            $(OBJ)$/ssoinit.obj
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
@@ -227,7 +229,8 @@ SLOFILES =	\
     $(SLO)$/opluginframefactory.obj	\
     $(SLO)$/appsys.obj		\
     $(SLO)$/desktopresid.obj	\
-    $(SLO)$/dispatchwatcher.obj
+    $(SLO)$/dispatchwatcher.obj	\
+    $(SLO)$/ssoinit.obj
 
 SHL1OBJS=	$(SLOFILES)
 SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)
@@ -244,7 +247,8 @@ SHL1STDLIBS=    \
     $(UNOTOOLSLIB)		\
     $(UCBHELPERLIB)		\
     $(COMPHELPERLIB)	\
-    $(SALHELPERLIB)
+    $(SALHELPERLIB)		\
+    $(SVTOOLLIB)
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:24:34 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-10 22:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "pluginacceptthread.hxx"
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
+#ifndef BUILD_SOSL
+#include "ssoinit.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -1267,6 +1270,11 @@ void Desktop::Main()
 
     // ----  Startup screen ----
     OpenStartupScreen();
+
+#ifndef BUILD_SOSL
+    //  Initialise Single Signon
+    InitSSO();
+#endif
 
     //  Read the common configuration items for optimization purpose
     //  do not do it if terminate flag was specified, to avoid exception
