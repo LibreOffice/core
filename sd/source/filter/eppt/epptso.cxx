@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-31 16:47:27 $
+ *  last change: $Author: cl $ $Date: 2001-06-05 16:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2670,7 +2670,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
             nDepth = 0;
         ImplGetNumberingLevel( rBuProv, nDepth, bGetPropStateValue );
     }
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabstops" ) ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabStops" ) ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
     ::com::sun::star::style::ParagraphAdjust eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
