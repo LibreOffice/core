@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2002-05-27 09:06:34 $
+ *  last change: $Author: pb $ $Date: 2002-05-30 13:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,6 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
-
 
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
@@ -898,6 +896,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TOOLBOX:
                 pNewWindow = new ToolBox( pParent, nWinBits );
+                *ppNewComp = new VCLXToolBox;
             break;
             case WINDOW_TRISTATEBOX:
                 pNewWindow = new TriStateBox( pParent, nWinBits );

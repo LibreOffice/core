@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-27 16:44:59 $
+ *  last change: $Author: pb $ $Date: 2002-05-30 13:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessibletextcomponent.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETOOLBOX_HXX_
+#include <toolkit/awt/vclxaccessibletoolbox.hxx>
 #endif
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
@@ -4371,3 +4374,20 @@ VCLXMenuWindow::~VCLXMenuWindow()
 {
     return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu( this, m_pMenu, m_nIndexInParent, m_xParent );
 }
+
+//  ----------------------------------------------------
+//  class VCLXToolBox
+//  ----------------------------------------------------
+VCLXToolBox::VCLXToolBox()
+{
+}
+
+VCLXToolBox::~VCLXToolBox()
+{
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleToolBox( this );
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-27 16:53:05 $
+ *  last change: $Author: pb $ $Date: 2002-05-30 13:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@
         case WINDOW_FLOATINGWINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
 
+        case WINDOW_TOOLBOX:        return new VCLXToolBox;
+
         // case WINDOW_FIXEDLINE:
         // case WINDOW_FIXEDBITMAP:
         // case WINDOW_DATEBOX:
@@ -143,7 +145,6 @@
         // case WINDOW_NUMERICBOX:
         // case WINDOW_TRISTATEBOX:
         // case WINDOW_TIMEBOX:
-        // case WINDOW_TOOLBOX:
         // case WINDOW_SPLITWINDOW:
         // case WINDOW_SCROLLBARBOX:
         // case WINDOW_PATTERNBOX:
