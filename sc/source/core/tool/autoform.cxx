@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:56:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,13 @@ const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
 const USHORT AUTOFORMAT_ID_680DR14      = 10011;
 const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
+// --- from 680/dr25 on: #21549# store strings as UTF-8
+const USHORT AUTOFORMAT_ID_680DR25      = 10021;
+const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
+
 // aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR14;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR14;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR25;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR25;
 
 
 #ifdef READ_OLDVERS
@@ -380,7 +384,11 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     }
 
     if( 0 == rVersions.nNumFmtVersion )
-        aNumFormat.Load( rStream );
+    {
+        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        aNumFormat.Load( rStream, eCharSet );
+    }
 
     //  adjust charset in font
     CharSet eSysSet = gsl_getSystemTextEncoding();
@@ -400,7 +408,7 @@ BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVer
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation;
 
-    aNumFormat.Load(rStream);
+    aNumFormat.Load(rStream, rStream.GetStreamCharSet());
 
     READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
     READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
@@ -470,7 +478,8 @@ BOOL ScAutoFormatDataField::Save( SvStream& rStream )
     aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aRotateMode.Store   ( rStream, aRotateMode.GetVersion( SOFFICE_FILEFORMAT_40 ) );
 
-    aNumFormat.Save( rStream );
+    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );
 
     return (rStream.GetError() == 0);
 }
@@ -795,11 +804,9 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
-        CharSet eSysSet = gsl_getSystemTextEncoding();
-        CharSet eSrcSet = rStream.GetStreamCharSet();
-
-        BOOL b;
-        rStream.ReadByteString( aName, eSrcSet );
+        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream >> nStrResId;
@@ -813,6 +820,7 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
                 nStrResId = USHRT_MAX;
         }
 
+        BOOL b;
         rStream >> b; bIncludeFont = b;
         rStream >> b; bIncludeJustify = b;
         rStream >> b; bIncludeFrame = b;
@@ -862,7 +870,8 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
     USHORT nVal = AUTOFORMAT_DATA_ID;
     BOOL b;
     rStream << nVal;
-    rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
+    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
 
 #if 0
     //  This was an internal flag to allow creating AutoFormats with localized names
