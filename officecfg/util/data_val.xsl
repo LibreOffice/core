@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:49:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 				xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
 				xmlns:xs="http://www.w3.org/2001/XMLSchema"
 				xmlns:oor="http://openoffice.org/2001/registry"
+				xmlns:install="http://openoffice.org/2004/installation"
 				xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"			
 				extension-element-prefixes="filehelper">
 
@@ -147,6 +148,8 @@
 			<xsl:message terminate="yes">ERROR: Node '<xsl:value-of select="$path"/>' does not exist in schema!</xsl:message>
 		</xsl:if>
 
+        <xsl:call-template name="checkModule"/>
+
 		<xsl:choose>
 			<!-- look for matching templates in other components -->
 			<xsl:when test="$context/@oor:node-type and $context/@oor:component">
@@ -203,9 +206,12 @@
 		<xsl:if test="not ($context)">
 			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not exist in schema !</xsl:message>
 		</xsl:if>
+
 		<xsl:if test="@oor:op">
 			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>' !</xsl:message>
 		</xsl:if>
+
+        <xsl:call-template name="checkModule"/>
 		
 	</xsl:template>
 
@@ -243,8 +249,22 @@
 			    <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>'!</xsl:message>
 		    </xsl:otherwise>		
         </xsl:choose>
+
+        <xsl:call-template name="checkModule"/>
 	</xsl:template>
 
+
+<!-- ************************************* -->
+<!-- * checkModule					   *** -->
+<!-- ************************************* -->
+	<xsl:template name="checkModule">		
+		<xsl:if test="@install:module">
+            <xsl:if test="ancestor::*[@install:module]">
+                <xsl:message terminate="yes">ERROR: Nested modules are not supported.  Found module '<xsl:value-of select="@install:module"/>' within module '<xsl:value-of select="ancestor::*/@install:module"/>'!
+                </xsl:message>
+            </xsl:if> 
+		</xsl:if> 
+	</xsl:template>
 
 <!-- ************************************* -->
 <!-- * collectPath					   *** -->
