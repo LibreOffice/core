@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 11:27:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,8 @@ sal_Bool ImageManager::implts_storeUserImages(
 
                     // Commit user bitmaps storage
                     xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );
-                    xTransaction->commit();
+                    if ( xTransaction.is() )
+                        xTransaction->commit();
                 }
 
                 xOutputStream = xStream->getOutputStream();
@@ -451,7 +452,8 @@ sal_Bool ImageManager::implts_storeUserImages(
 
                 // Commit user image storage
                 xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
-                xTransaction->commit();
+                if ( xTransaction.is() )
+                    xTransaction->commit();
             }
 
             return sal_True;
@@ -1108,7 +1110,8 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
              m_xUserConfigStorage.is())
         {
             uno::Reference< XTransactedObject > xUserConfigStorageCommit( m_xUserConfigStorage, UNO_QUERY );
-            xUserConfigStorageCommit->commit();
+            if ( xUserConfigStorageCommit.is() )
+                xUserConfigStorageCommit->commit();
         }
 
         m_bModified = sal_False;
@@ -1140,7 +1143,8 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
             }
 
             uno::Reference< XTransactedObject > xTransaction( Storage, UNO_QUERY );
-            xTransaction->commit();
+            if ( xTransaction.is() )
+                xTransaction->commit();
         }
     }
 }
