@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 14:31:18 $
+ *  last change: $Author: dr $ $Date: 2001-08-03 13:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,120 +255,61 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         DBG_ERROR("ScDocument::InsertTableOp: Keine Tabelle markiert");
         return;
     }
+
+    ScRefTripel aTrip;
     String aForString = '=';
     if (ScCompiler::pSymbolTableNative)
         aForString += ScCompiler::pSymbolTableNative[SC_OPCODE_TABLE_OP];
     aForString += '(';
     if (rParam.nMode == 0)                          // nur Spalte
     {
-        for (i = nCol1+1; i <= nCol2; i++)
-        {
-            k = i - nCol1 - 1;
-            if (rParam.aRefFormulaCell.GetCol()+k <= rParam.aRefFormulaEnd.GetCol())
-            {
-                ScRefTripel aTrip;
-                aTrip.Put( rParam.aRefFormulaCell.GetCol()+k, rParam.aRefFormulaCell.GetRow(),
-                    rParam.aRefFormulaCell.GetTab(), TRUE, FALSE, FALSE );
-                String aFString = aForString;
-                aFString += aTrip.GetRefString(this, nTab1);
-                aFString += ';';
-                aFString += rParam.aRefColCell.GetRefString(this, nTab1);
-                aFString += ';';
-                for (j = nRow1; j <= nRow2; j++)
-                {
-                    aTrip.Put( nCol1, j, nTab1, FALSE, TRUE, TRUE );
-                    String aFormula = aFString;
-                    aFormula += aTrip.GetRefString(this, nTab1);
-                    aFormula += ')';
-                    ScFormulaCell* pCell = new ScFormulaCell(this, ScAddress( i, j, nTab1 ),
-                                                 aFormula, 0l);
-                    for (k = 0; k <= MAXTAB; k++)
-                    {
-                        if (pTab[k] && rMark.GetTableSelect(k))
-                        {
-                            if (k == nTab1)
-                                pTab[k]->PutCell(i, j, pCell);
-                            else
-                                pTab[k]->PutCell(i, j, pCell->Clone(this, ScAddress( i, j, k)));
-                        }
-                    }
-                }
-            }
-        }
+        aTrip.Put( rParam.aRefFormulaCell.GetCol(), rParam.aRefFormulaCell.GetRow(),
+            rParam.aRefFormulaCell.GetTab(), TRUE, FALSE, FALSE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        aForString += ';';
+        aForString += rParam.aRefColCell.GetRefString(this, nTab1);
+        aForString += ';';
+        aTrip.Put( nCol1, nRow1, nTab1, FALSE, TRUE, TRUE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        nCol1++;
+        nCol2 = Min( nCol2, (USHORT)(rParam.aRefFormulaEnd.GetCol()-rParam.aRefFormulaCell.GetCol()+nCol1+1) );
     }
     else if (rParam.nMode == 1)                 // nur zeilenweise
     {
-        for (j = nRow1+1; j <= nRow2; j++)
-        {
-            k = j - nRow1 - 1;
-            if (rParam.aRefFormulaCell.GetRow()+k <= rParam.aRefFormulaEnd.GetRow())
-            {
-                ScRefTripel aTrip;
-                aTrip.Put( rParam.aRefFormulaCell.GetCol(), rParam.aRefFormulaCell.GetRow()+k,
-                    rParam.aRefFormulaCell.GetTab(), FALSE, TRUE, FALSE );
-                String aFString = aForString;
-                aFString += aTrip.GetRefString(this, nTab1);
-                aFString += ';';
-                aFString += rParam.aRefRowCell.GetRefString(this, nTab1);
-                aFString += ';';
-                for (i = nCol1; i <= nCol2; i++)
-                {
-                    aTrip.Put( i, nRow1, nTab1, TRUE, FALSE, TRUE );
-                    String aFormula = aFString;
-                    aFormula += aTrip.GetRefString(this, nTab1);
-                    aFormula += ')';
-                    ScFormulaCell* pCell = new ScFormulaCell(this, ScAddress( i, j, nTab1 ),
-                                                 aFormula, 0l);
-                    for (k = 0; k <= MAXTAB; k++)
-                    {
-                        if (pTab[k] && rMark.GetTableSelect(k))
-                        {
-                            if (k == nTab1)
-                                pTab[k]->PutCell(i, j, pCell);
-                            else
-                                pTab[k]->PutCell(i, j, pCell->Clone(this, ScAddress(i, j, k)));
-                        }
-                    }
-                }
-            }
-        }
+        aTrip.Put( rParam.aRefFormulaCell.GetCol(), rParam.aRefFormulaCell.GetRow(),
+            rParam.aRefFormulaCell.GetTab(), FALSE, TRUE, FALSE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        aForString += ';';
+        aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
+        aForString += ';';
+        aTrip.Put( nCol1, nRow1, nTab1, TRUE, FALSE, TRUE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        nRow1++;
+        nRow2 = Min( nRow2, (USHORT)(rParam.aRefFormulaEnd.GetRow()-rParam.aRefFormulaCell.GetRow()+nRow1+1) );
     }
     else                    // beides
     {
-        for (i = nCol1+1; i <= nCol2; i++)
-        {
-            ScRefTripel aTrip;
-            String aFString = aForString;
-            aFString += rParam.aRefFormulaCell.GetRefString(this, nTab1);
-            aFString += ';';
-            aFString += rParam.aRefColCell.GetRefString(this, nTab1);
-            aFString += ';';
-            for (j = nRow1+1; j <= nRow2; j++)
-            {
-                aTrip.Put( nCol1, j, nTab1, FALSE, TRUE, TRUE );
-                String aFormula = aFString;
-                aFormula += aTrip.GetRefString(this, nTab1);
-                aFormula += ';';
-                aFormula += rParam.aRefRowCell.GetRefString(this, nTab1);
-                aFormula += ';';
-                aTrip.Put( i, nRow1, nTab1, TRUE, FALSE, TRUE );
-                aFormula += aTrip.GetRefString(this, nTab1);
-                aFormula += ')';
-                ScFormulaCell* pCell = new ScFormulaCell(this, ScAddress( i, j, nTab1 ),
-                                             aFormula );
-                for (k = 0; k <= MAXTAB; k++)
-                {
-                    if (pTab[k] && rMark.GetTableSelect(k))
-                    {
-                        if (k == nTab1)
-                            pTab[k]->PutCell(i, j, pCell);
-                        else
-                            pTab[k]->PutCell(i, j, pCell->Clone(this, ScAddress( i, j, k)));
-                    }
-                }
-            }
-        }
+        aForString += rParam.aRefFormulaCell.GetRefString(this, nTab1);
+        aForString += ';';
+        aForString += rParam.aRefColCell.GetRefString(this, nTab1);
+        aForString += ';';
+        aTrip.Put( nCol1, nRow1 + 1, nTab1, FALSE, TRUE, TRUE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        aForString += ';';
+        aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
+        aForString += ';';
+        aTrip.Put( nCol1 + 1, nRow1, nTab1, TRUE, FALSE, TRUE );
+        aForString += aTrip.GetRefString(this, nTab1);
+        nCol1++; nRow1++;
     }
+    aForString += ')';
+
+    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString, 0l );
+    for( i = nCol1; i <= nCol2; i++ )
+        for( j = nRow1; j <= nRow2; j++ )
+            for (k = 0; k <= MAXTAB; k++)
+                if( pTab[k] && rMark.GetTableSelect(k) )
+                    pTab[k]->PutCell( i, j, aRefCell.Clone( this, ScAddress( i, j, k ) ) );
 }
 
 USHORT ScDocument::GetErrorData( USHORT nCol, USHORT nRow, USHORT nTab ) const
