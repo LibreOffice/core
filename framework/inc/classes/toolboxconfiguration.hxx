@@ -59,14 +59,14 @@ struct ToolBoxLayoutItemDescriptor
     Point                       aFloatingPos;   // Position in floating mode
     USHORT                      nFloatingLines; // Number of lines in floating mode
     USHORT                      nLines;         // Number of lines in docking mode
-    ToolBoxAlign                eAlign;         // Aligned position in docking mode
+    WindowAlign                 eAlign;         // Aligned position in docking mode
     BOOL                        bVisible;       // Visible or not
     BOOL                        bFloating;      // Floating mode on/off
     ButtonType                  eType;          // text, symbol or text+symbol
 
     ToolBoxLayoutItemDescriptor() : nFloatingLines( 0 )
                                     ,nLines( 1 )
-                                    ,eAlign( BOXALIGN_LEFT )
+                                    ,eAlign( WINDOWALIGN_LEFT )
                                     ,bVisible( sal_False )
                                     ,bFloating( sal_False )
                                     ,eType( BUTTON_SYMBOL ) {}
