@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 09:03:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,6 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
 FieldUnit   GetDfltMetric(BOOL bWeb);
 void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
-
-// Umwandlung:  Sub(LibName.ModulName) -> LibName.ModulName.Sub
-String ConvertMacroFormat(const String& rInput );
 
 // besorge einen Filenamen/Filternamen. Wird ppMed uebergeben, wird das
 // erzeugte Medium returnt. Auch das FilePassword kann returnt werden.
