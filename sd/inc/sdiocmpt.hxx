@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdiocmpt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,15 @@
 #include <svx/svdio.hxx>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 class SvStream;
 
 #define SDIOCOMPAT_VERSIONDONTKNOW (UINT16)0xffff
 
-class SdIOCompat : public SdrDownCompat
+class SD_DLLPUBLIC SdIOCompat : public SdrDownCompat
 {
 private:
     UINT16 nVersion;
