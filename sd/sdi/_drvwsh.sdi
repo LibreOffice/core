@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:08:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2401,6 +2401,16 @@ interface DrawView : Object
         StateMethod = GetMenuState ;
     ]
     SID_DRAW_FONTWORK_VERTICAL
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_AVMEDIA_PLAYER // ole : yes, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_AVMEDIA // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
