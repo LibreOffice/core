@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:48:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ turkish ] = "Artan s˝ralama";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Orden ascendente";
+            Text[ finnish ] = "Nouseva lajittelu";
         };
         MenuItem
         {
@@ -139,6 +140,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ turkish ] = "Azalan s˝ralama";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Orden descendente";
+            Text[ finnish ] = "Laskeva lajittelu";
         };
     };
 };
@@ -166,6 +168,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ arabic ] = " ⁄–—  √”Ì” «·« ’«· »‹ (#servicename#) SDBC Driver Manager .";
     Text[ catalan ] = "No se pudo establecer una conexiÛn al administrador de controladores SDBC (#servicename#).";
+    Text[ finnish ] = "Yhteyden muodostaminen SDBC-ajurien hallintaan ei onnistu (servicename).";
 };
 
 String STR_NOREGISTEREDDRIVER
@@ -191,6 +194,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
     Text[ arabic ] = "·« ÌÊÃœ »—‰«„Ã  ‘€Ì· „”Ã· ··‹ URL #connurl#!";
     Text[ catalan ] = "No existe un controlador registrado para la URL #connurl#";
+    Text[ finnish ] = "Ajuria ei ole rekisterˆity URL-osoitteelle connurl.";
 };
 
 String STR_COULDNOTCONNECT
@@ -216,6 +220,7 @@ String STR_COULDNOTCONNECT
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
     Text[ arabic ] = " ⁄–—  √”Ì” « ’«· ··‹ URL #connurl#..";
     Text[ catalan ] = "No se pudo realizar ninguna conexiÛn para la URL #connurl#.";
+    Text[ finnish ] = "Yhteyden muodostaminen URL-osoitteeseen connurl ei onnistunut.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
@@ -240,6 +245,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ arabic ] = "«·—Ã«¡ ›Õ’ «·≈⁄œ«œ«  «·Õ«·Ì…° „À· «”„ «·„” Œœ„ Êﬂ·„… «·”— ⁄·Ï ”»Ì· «·„À«·.";
     Text[ catalan ] = "Compruebe la configuraciÛn actual, p.ej. el nombre de usuario y la contraseÒa.";
+    Text[ finnish ] = "Tarkista, ett‰ nykyiset asetukset (esimerkiksi salasana- ja k‰ytt‰j‰tunnusasetukset) ovat oikeat.";
 };
 String STR_NOTABLEINFO
 {
@@ -264,6 +270,7 @@ String STR_NOTABLEINFO
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = " „  √”Ì” «·« ’«· »‰Ã«Õ° ≈·« √‰Â  ⁄–— «·Õ’Ê· ⁄·Ï „⁄·Ê„«  »Œ’Ê’ Ãœ«Ê· ﬁ«⁄œ… «·»Ì«‰« .";
     Text[ catalan ] = "Se ha realizado una conexiÛn satisfactoriamente, pero no se ha conseguido ninguna informaciÛn sobre tablas en la base de datos.";
+    Text[ finnish ] = "Yhteys on muodostettu, mutta tietokannan taulukkotiedot eiv‰t ole k‰ytett‰viss‰.";
 };
 String STR_ALL_TABLES
 {
@@ -288,6 +295,7 @@ String STR_ALL_TABLES
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "ﬂ· «·Ãœ«Ê·";
     Text[ catalan ] = "Todas las tablas";
+    Text[ finnish ] = "Alle Tabellen";
 };
 String STR_ALL_VIEWS
 {
@@ -312,6 +320,7 @@ String STR_ALL_VIEWS
     Text[ turkish ] = "All views";
     Text[ arabic ] = "ﬂ«›… ÿ—ﬁ ⁄—÷ «·Ãœ«Ê·";
     Text[ catalan ] = "Todas las visualizaciones de tablas";
+    Text[ finnish ] = "Alle Tabellensichten";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
@@ -336,11 +345,15 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "ﬂ«›… «·Ãœ«Ê· Êÿ—ﬁ ⁄—÷Â«";
     Text[ catalan ] = "Todas las tablas y visualizaciones de tablas";
+    Text[ finnish ] = "Alle Tabellen und Tabellensichten";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/04 19:48:56  rt
+ *  Merge SRC630: 04.05.01 - 21:48:13 (NoBranch)
+ *
  *  Revision 1.8  2001/03/19 11:32:51  kz
  *  Merge SRC625: 19.03.01 - 12:32:26 (NoBranch)
  *
