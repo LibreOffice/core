@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:58:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,14 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
 #ifndef _GETPOOLIDFROMNAMEENUM_HXX
 #include <SwGetPoolIdFromName.hxx>
 #endif
+
+#ifndef INCLUDED_LIMITS_H
 #include <limits.h>     //fuer LONG_MAX
+#define INCLUDED_LIMITS_H
+#endif
 
 #ifdef PM20
 #include <stdlib.h>
@@ -78,17 +79,19 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
+
 #ifndef _HORIORNT_HXX
 #include <horiornt.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 // wenn das hier geaendert wird, dann auch im globals.hrc aendern!!!
 //#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
-namespace com{namespace sun{namespace star{
+namespace com { namespace sun { namespace star {
     namespace linguistic2{
         class XDictionaryList;
         class XSpellChecker1;
@@ -231,8 +234,6 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #define DDE_AVAILABLE
 
 
-com::sun::star::lang::Locale    CreateLocale( LanguageType eLanguage );
-
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
 ::com::sun::star::uno::Reference<
@@ -245,7 +246,7 @@ com::sun::star::lang::Locale    CreateLocale( LanguageType eLanguage );
     ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
 // reutns the twip size of this graphic
-Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
+SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 
 // Seperator fuer Sprunge im Dokument auf verschiedene Inhalttype
@@ -297,10 +298,9 @@ enum SetAttrMode
 #define CHAR_SOFTHYPHEN     ((sal_Unicode)0x00AD)
 
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
-CharClass& GetAppCharClass();
-LocaleDataWrapper& GetAppLocaleData();
-
-ULONG GetAppLanguage();
+SW_DLLPUBLIC CharClass& GetAppCharClass();
+SW_DLLPUBLIC LocaleDataWrapper& GetAppLocaleData();
+SW_DLLPUBLIC ULONG GetAppLanguage();
 
 
 #if 0
@@ -314,10 +314,10 @@ ULONG GetAppLanguage();
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 #endif
 
-CollatorWrapper& GetAppCollator();
-CollatorWrapper& GetAppCaseCollator();
+SW_DLLPUBLIC CollatorWrapper& GetAppCollator();
+SW_DLLPUBLIC CollatorWrapper& GetAppCaseCollator();
 
-const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
+SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
 // --> OD 2004-06-30 #i28701# - moved from <frame.hxx>
 //fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
