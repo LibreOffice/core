@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 13:57:06 $
+#   last change: $Author: obo $ $Date: 2004-09-09 16:20:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ SLOFILES=\
     $(SLO)$/evntpost.obj		\
     $(SLO)$/canvastools.obj		\
     $(SLO)$/xconnection.obj		\
-    $(SLO)$/threadex.obj
+    $(SLO)$/threadex.obj		\
+    $(SLO)$/smartid.obj
 
 # --- Targets ------------------------------------------------------
 
