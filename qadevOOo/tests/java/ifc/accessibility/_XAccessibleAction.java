@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleAction.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-04-28 12:22:39 $
+ *  last change:$Date: 2003-05-22 13:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
      */
 
     public void _doAccessibleAction() {
-        requiredMethod("getAccessibleKeyBinding()");
+        requiredMethod("getAccessibleActionKeyBinding()");
         boolean res = true;
 
         log.println("Calling method with wrong argument");
@@ -170,13 +170,13 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
      * for the calls with valid parameters aren't null.
      */
 
-    public void _getAccessibleKeyBinding() {
+    public void _getAccessibleActionKeyBinding() {
         requiredMethod("getAccessibleActionDescription()");
         boolean res = true;
 
         log.println("Calling method with wrong argument");
         try {
-            oObj.getAccessibleKeyBinding(count);
+            oObj.getAccessibleActionKeyBinding(count);
             log.println("Exception expected -- FAILED");
             res &= false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
@@ -186,7 +186,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
 
         for (int i=0;i<count;i++) {
             try {
-                Object key = oObj.getAccessibleKeyBinding(i);
+                Object key = oObj.getAccessibleActionKeyBinding(i);
                 if (key != null ) {
                     log.println("Found key: "+key.toString());
                 }
@@ -197,7 +197,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
             }
         }
 
-        tRes.tested("getAccessibleKeyBinding()",res);
+        tRes.tested("getAccessibleActionKeyBinding()",res);
     }
 
     /**
