@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.9 2001-04-20 13:21:05 mib Exp $
+	$Id: form.mod,v 1.10 2001-07-24 11:23:13 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -300,7 +300,6 @@
 
 <!ENTITY % types "(submit|reset|push|url)">
 <!ENTITY % button-type "form:button-type %types; 'push'">
-<!ENTITY % control-id "form:id CDATA #REQUIRED">
 <!ENTITY % current-selected "form:current-selected %boolean; 'false'">
 <!ENTITY % current-value "form:current-value CDATA #IMPLIED">
 <!ENTITY % value "form:value CDATA #IMPLIED">

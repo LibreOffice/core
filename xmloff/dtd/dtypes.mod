@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.14 2001-05-21 10:18:49 mib Exp $
+	$Id: dtypes.mod,v 1.15 2001-07-24 11:23:13 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -167,3 +167,5 @@
 <!ENTITY % shapes "(%shape;)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">
+
+<!ENTITY % control-id "form:id CDATA #REQUIRED">
