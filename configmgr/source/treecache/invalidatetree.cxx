@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+ *  last change: $Author: vg $ $Date: 2001-04-18 12:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-void TreeManager::invalidateTreeAsync(const rtl::OUString &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions)
+void TreeManager::invalidateTreeAsync(const rtl::OUString &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) throw (uno::Exception)
 {
     if (m_bDisposeMode == false)
     {
