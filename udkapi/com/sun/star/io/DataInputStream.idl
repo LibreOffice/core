@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataInputStream.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,13 @@ module com {  module sun {  module star { module io {
 
 // DocMerge from xml: service com::sun::star::io::DataInputStream
 /** reads structured data from a chained <type>XInputStream</type>.
-
     <p>
     An implementation of this service in general does not need
     to buffer data itself.
 
     @see com::sun::star::io::ObjectInputStream
  */
-service DataInputStream
+published service DataInputStream
 {
     /** allows to read structured data.
      */
