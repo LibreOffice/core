@@ -1,0 +1,42 @@
+    <node oor:name="StarWriter 3.0 (StarWriter/GlobalDocument)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>3450</value></prop>
+        <prop oor:name="Type"><value>writer_StarWriter_30</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CSW3</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">StarWriter 3.0 </value>
+            <value xml:lang="hu">StarWriter 3.0</value>
+            <value xml:lang="ja">StarWriter 3.0 </value>
+            <value xml:lang="es">StarWriter 3.0</value>
+            <value xml:lang="tr">StarWriter 3.0</value>
+            <value xml:lang="ru">StarWriter 3.0</value>
+            <value xml:lang="th">StarWriter 3.0 </value>
+            <value xml:lang="x-comment">StarWriter 3.0 (%productname% Globaldokument)</value>
+            <value xml:lang="ca">StarWriter 3.0 </value>
+            <value xml:lang="el">StarWriter 3.0</value>
+            <value xml:lang="zh-CN">StarWriter 3.0 </value>
+            <value xml:lang="pt">StarWriter 3.0 (%productname% Documento-mestre)</value>
+            <value xml:lang="cs">StarWriter 3.0 </value>
+            <value xml:lang="fr">StarWriter 3.0 </value>
+            <value xml:lang="ar">StarWriter 3.0</value>
+            <value xml:lang="zh-TW">StarWriter 3.0</value>
+            <value xml:lang="sl">StarWriter 3.0 </value>
+            <value xml:lang="fi">StarWriter 3.0</value>
+            <value xml:lang="hi-IN">StarWriter 3.0 </value>
+            <value xml:lang="en-US">StarWriter 3.0 </value>
+            <value xml:lang="sk">StarWriter 3.0 </value>
+            <value xml:lang="he">StarWriter 3.0 </value>
+            <value xml:lang="sv">StarWriter 3.0 </value>
+            <value xml:lang="da">StarWriter 3.0 </value>
+            <value xml:lang="de">StarWriter 3.0 </value>
+            <value xml:lang="ko">StarWriter 3.0 </value>
+            <value xml:lang="nl">StarWriter 3.0</value>
+            <value xml:lang="pt-BR">StarWriter 3.0</value>
+            <value xml:lang="it">StarWriter 3.0 </value>
+            <value xml:lang="x-translate">StarWriter 3.0 </value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN</value></prop>
+    </node>
