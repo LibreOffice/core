@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:10:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ english_us ] = "Gallery";
     Text[ portuguese ] = "Gallery";
     Text[ russian ] = "Γΰλεπεÿ";
-    Text[ greek ] = "Γκαλερί";
+    Text[ greek ] = "Συλλογή";
     Text[ dutch ] = "Gallery";
     Text[ french ] = "Gallery";
     Text[ spanish ] = "Gallery";
@@ -543,16 +543,16 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ danish ] = "Filtype" ;
         Text [ portuguese_brazilian ] = "~Tipo de arquivo" ;
         Text [ portuguese ] = "Tipo de ficheiro" ;
-        Text[ chinese_simplified ] = "ζ–‡δ»¶η±»ε‹";
+        Text[ chinese_simplified ] = "ζ–‡δ»¶η±»ε‹(~F)";
         Text[ russian ] = "Òθο τΰιλΰ";
         Text[ polish ] = "~Typ pliku";
-        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ®η¨®ι΅";
-        Text[ chinese_traditional ] = "ζª”ζ΅ι΅ε‹";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ®η¨®ι΅(~F)";
+        Text[ chinese_traditional ] = "ζª”ζ΅ι΅ε‹(~F)";
         Text[ arabic ] = "δζΪ Ηαγαέ";
         Text[ dutch ] = "~Bestandstype";
-        Text[ chinese_simplified ] = "ζ–‡δ»¶η±»ε‹";
-        Text[ greek ] = "Τύπος αρχείου";
-        Text[ korean ] = "νμΌ ν•μ‹";
+        Text[ chinese_simplified ] = "ζ–‡δ»¶η±»ε‹(~F)";
+        Text[ greek ] = "~Τύπος αρχείου";
+        Text[ korean ] = "νμΌ ν•μ‹(~F)";
         Text[ turkish ] = "~Dosya tόrό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de fitxer";
@@ -1232,7 +1232,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ arabic ] = "ΚΪΡνέ ΗαγζΗΦνΪ";
     Text[ dutch ] = "Onderwerp-ID";
     Text[ chinese_simplified ] = "δΈ»ιΆ  ID";
-    Text[ greek ] = "Ταυτότητα (ID) θέματος";
+    Text[ greek ] = "Αναγνωριστικό (ID) θέματος";
     Text[ korean ] = "μ£Όμ  ID";
     Text[ turkish ] = "Tema ID'si";
     Text[ language_user1 ] = " ";
@@ -1275,7 +1275,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ arabic ] = "ΗαΚΪΡνέ";
         Text[ dutch ] = "ID";
         Text[ chinese_simplified ] = "ID";
-        Text[ greek ] = "Ταυτότητα (ID)";
+        Text[ greek ] = "Αναγνωριστικό";
         Text[ korean ] = "ID";
         Text[ turkish ] = "ID";
         Text[ language_user1 ] = " ";
@@ -1590,7 +1590,7 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text [ swedish ] = "Filformat Audio Interchange" ;
     Text [ danish ] = "Audio Interchange File Format" ;
     Text [ portuguese ] = "Audio Interchange File Format" ;
-    Text [ portuguese_brazilian ] = "Audio Interchange File Format" ;
+    Text [ portuguese_brazilian ] = "AIFF - Audio Interchange File Format" ;
     Text[ chinese_simplified ] = "ι³ιΆ‘δΊ¤ζΆζ–‡δ»¶ζ ΌεΌ(AIFF)";
     Text[ russian ] = "Τξπμΰς τΰιλΰ ηβσκξβξγξ ξαμενΰ";
     Text[ polish ] = "Format Audio Interchange File";
@@ -2029,7 +2029,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text[ arabic ] = "γζΦζΪ ΗαΜΗανΡν";
     Text[ dutch ] = "Gallery-onderwerp";
     Text[ chinese_simplified ] = "η”»ε»δΈ»ιΆ";
-    Text[ greek ] = "Θέμα Gallery";
+    Text[ greek ] = "Θέμα Συλλογής";
     Text[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ ";
     Text[ turkish ] = "Tema Galerisi";
     Text[ language_user1 ] = " ";
@@ -2086,7 +2086,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text [ spanish ] = "Tema nuevo..." ;
     Text [ french ] = "Nouveau thθme..." ;
     Text [ portuguese ] = "Novo tema..." ;
-    Text [ portuguese_brazilian ] = "Novo Tema..." ;
+    Text [ portuguese_brazilian ] = "Novo tema" ;
     Text[ chinese_simplified ] = "ζ–°ε»ΊδΈ»ιΆ...";
     Text[ russian ] = "Ρξηδΰςό ςεμσ...";
     Text[ polish ] = "Nowy temat...";
@@ -2195,7 +2195,7 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ arabic ] = "ΚΪννδ ΗαΚΪΡνέ";
     Text[ dutch ] = "ID bezet";
     Text[ chinese_simplified ] = "ε†ι… ID";
-    Text[ greek ] = "Απονομή ταυτότητας (ID)";
+    Text[ greek ] = "Ανάθεση αναγνωριστικού (ID)";
     Text[ korean ] = "ID ν• λ‹Ή";
     Text[ turkish ] = "Atama ID'si";
     Text[ language_user1 ] = " ";
@@ -2228,7 +2228,7 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ arabic ] = "...εΠΗ ΗαΚΪΡνέ γζΜζΟ γΣΘήΗπ";
     Text[ dutch ] = "ID bestaat reeds...";
     Text[ chinese_simplified ] = "θΏ™δΈª ID ε·²η»ε­ε¨...";
-    Text[ greek ] = "Αυτή η ταυτότητα ( ID) υπάρχει ήδη...";
+    Text[ greek ] = "Αυτό το αναγνωριστικό ( ID) υπάρχει ήδη...";
     Text[ korean ] = "μ΄ IDλ” μ΄λ―Έ μ΅΄μ¬ν•©λ‹λ‹¤...";
     Text[ turkish ] = "Bu ID φnceden mevcut...";
     Text[ language_user1 ] = " ";
@@ -2309,7 +2309,7 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ english_us ] = "Icon View";
     Text[ portuguese ] = "Ver νcones";
     Text[ russian ] = "Βθδ ηνΰχκξβ";
-    Text[ greek ] = "Symbol view";
+    Text[ greek ] = "Προβολή εικονιδίου";
     Text[ dutch ] = "Pictogramweergave";
     Text[ french ] = "Affichage des icτnes";
     Text[ spanish ] = "Ver sνmbolos";
@@ -2318,7 +2318,7 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ danish ] = "Ikonvisning";
     Text[ swedish ] = "Symbolvy";
     Text[ polish ] = "Widok ikon";
-    Text[ portuguese_brazilian ] = "Visγo de Νcones";
+    Text[ portuguese_brazilian ] = "Visγo de νcones";
     Text[ japanese ] = "γ‚Άγ‚¤γ‚³γƒ³θ΅¨η¤Ί";
     Text[ korean ] = "μ•„μ΄μ½ λ³΄κΈ°";
     Text[ chinese_simplified ] = "ε›Ύζ ‡θ§†ε›Ύ";
@@ -2339,7 +2339,7 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text[ english_us ] = "Detailed View";
     Text[ portuguese ] = "Ver detalhes";
     Text[ russian ] = "Βθδ δεςΰλει";
-    Text[ greek ] = "Detail view";
+    Text[ greek ] = "Λεπτομερής προβολή";
     Text[ dutch ] = "Detailweergave";
     Text[ french ] = "Liste dιtaillιe";
     Text[ spanish ] = "Ver detalles";
@@ -2619,8 +2619,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ arabic ] = "ΚΪννδ ΗαΚΪΡνέ";
             Text[ dutch ] = "~ID bezet";
             Text[ chinese_simplified ] = "ε†ι… ~ID";
-            Text[ greek ] = "Απονομή ταυτότητας (~ID)";
-            Text[ korean ] = "~ID ν• λ‹Ή";
+            Text[ greek ] = "Ανάθεση αναγνωριστικού (~ID)";
+            Text[ korean ] = "ID ν• λ‹Ή(~I)";
             Text[ turkish ] = "~Numara Ata";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Assigna ~identificador";
@@ -2702,7 +2702,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ arabic ] = "ΕΦΗέΙ";
             Text[ dutch ] = "~Toevoegen";
             Text[ chinese_simplified ] = "ε ε…¥(~I)";
-            Text[ greek ] = "Εισαγωγή";
+            Text[ greek ] = "Εισαγ~ωγή";
             Text[ korean ] = "μ‚½μ…(~I)";
             Text[ turkish ] = "~Araya ekle";
             Text[ language_user1 ] = " ";
@@ -3000,7 +3000,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ polish ] = "W~staw";
             Text[ japanese ] = "θ²Όγ‚δ»γ‘(~I)";
             Text[ chinese_traditional ] = "ζ’ε…¥(~I)"  ;
-            Text[ greek ] = "~Εισαγωγή" ;
+            Text[ greek ] = "Εισαγ~ωγή" ;
             Text[ korean ] = "μ‚½μ…(~I)"   ;
             Text[ arabic ] = "ΕΟΡΗΜ"    ;
             Text[ turkish ] = "~Araya ekle" ;
@@ -3013,6 +3013,7 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
 
