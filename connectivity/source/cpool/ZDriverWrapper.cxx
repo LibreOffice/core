@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZDriverWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 10:56:17 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 10:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,15 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
+    Any SAL_CALL ODriverWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
+    {
+        Any aReturn = ODriverWrapper_BASE::queryInterface(_rType);
+        if (!aReturn.hasValue() && m_xDriverAggregate.is())
+            aReturn = m_xDriverAggregate->queryAggregation(_rType);
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
     Reference< XConnection > SAL_CALL ODriverWrapper::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Reference< XConnection > xConnection;
@@ -166,6 +175,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/25 10:56:17  fs
+ *  initial checkin - driver rerouting it's connect through the connection pool
+ *
  *
  *  Revision 1.0 25.05.01 11:10:52  fs
  ************************************************************************/
