@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:01:53 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,36 +673,60 @@ const char * dbg_out(SwNodes & rNodes)
 
 static String lcl_dbg_out(const SwUndos & rUndos)
 {
-    String aResult;
-    int nIndent = 1;
+    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
+    int nLevel = 0;
 
-    aResult += String("[ ", RTL_TEXTENCODING_ASCII_US);
-
-    for (int i = 0; i < rUndos.Count(); i++)
+    for (USHORT n = 0; n < rUndos.Count(); n++)
     {
-        SwUndo * pUndo = rUndos[i];
+        SwUndo * pUndo = rUndos[n];
 
-        if (UNDO_END == pUndo->GetId())
-            nIndent--;
+        if (pUndo->GetId() == UNDO_END)
+            nLevel--;
 
-        for (int j = 0; j < nIndent; j++)
-            aResult += String("  ", RTL_TEXTENCODING_ASCII_US);
+        for (int n1 = 0; n1 < nLevel; n1++)
+            aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
 
-        aResult += String("[ ", RTL_TEXTENCODING_ASCII_US);
-        aResult += String::CreateFromInt32(i);
-        aResult += String(": ", RTL_TEXTENCODING_ASCII_US);
-        aResult += String::CreateFromInt32(pUndo->GetId());
-        aResult += String(" ", RTL_TEXTENCODING_ASCII_US);
-        aResult += pUndo->GetComment();
-        aResult += String("] \n", RTL_TEXTENCODING_ASCII_US);
+        aStr += String("[ ", RTL_TEXTENCODING_ASCII_US);
+        aStr += String::CreateFromInt32(n);
+        aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+        aStr += String::CreateFromInt32(pUndo->GetId());
 
-        if (UNDO_START == pUndo->GetId())
-            nIndent++;
+        switch(pUndo->GetId())
+        {
+        case UNDO_START:
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr +=
+                String::CreateFromInt32(((SwUndoStart *) pUndo)->GetUserId());
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr += String::CreateFromInt32(((SwUndoStart *) pUndo)
+                                            ->GetEndOffset());
+
+            break;
+
+        case UNDO_END:
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr +=
+                String::CreateFromInt32(((SwUndoEnd *) pUndo)->GetUserId());
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr += String::CreateFromInt32(((SwUndoEnd *) pUndo)
+                                            ->GetSttOffset());
+
+            break;
+
+        default:
+            break;
+        }
+
+        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+        aStr += pUndo->GetComment();
+        aStr += String(" ]\n", RTL_TEXTENCODING_ASCII_US);
+
+        if (pUndo->GetId() == UNDO_START)
+            nLevel++;
     }
+    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
-
-    return aResult;
+    return aStr;
 }
 
 const char * dbg_out(const SwUndos & rUndos)
