@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-22 17:11:25 $
+ *  last change: $Author: hdu $ $Date: 2002-12-05 16:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,6 +791,13 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
 
     *pNewFont = hNewFont;
     return hOldFont;
+}
+
+// -----------------------------------------------------------------------
+
+void SalGraphics::RemovingFont( ImplFontData* )
+{
+    // dummy implementation on W32
 }
 
 // -----------------------------------------------------------------------
