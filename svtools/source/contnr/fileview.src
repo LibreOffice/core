@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-20 10:43:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ portuguese ] = "TÌtulo";
     Text[ russian ] = "«‡„ÓÎÓ‚ÓÍ";
     Text[ greek ] = "‘ﬂÙÎÔÚ";
-    Text[ dutch ] = "Title";
+    Text[ dutch ] = "Titel";
     Text[ french ] = "Titre";
     Text[ spanish ] = "TÌtulo";
     Text[ italian ] = "Titolo";
@@ -136,9 +136,9 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ polish ] = "Data modyfikacji";
     Text[ portuguese_brazilian ] = "Modified Date";
     Text[ japanese ] = "ïœçXì˙éû";
-    Text[ korean ] = "∫Ø∞Ê¿œ¿⁄";
-    Text[ chinese_simplified ] = "–ﬁ∏ƒ ±º‰";
-    Text[ chinese_traditional ] = "≠◊ßÔ§È¥¡";
+    Text[ korean ] = "∫Ø∞Ê≥Ø¬•";
+    Text[ chinese_simplified ] = "–ﬁ∏ƒµƒ ±º‰";
+    Text[ chinese_traditional ] = "≠◊ßÔ™∫§È¥¡";
     Text[ turkish ] = "Modified Date";
     Text[ arabic ] = " «—ÌŒ «· ⁄œÌ·";
     Text[ finnish ] = "Muokkausp‰iv‰m‰‰r‰";
@@ -150,6 +150,25 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text = "Typ";
     Text[English] = "Type";
     Text[ english_us ] = "Type";
+    Text[ portuguese ] = "Type";
+    Text[ russian ] = "Type";
+    Text[ greek ] = "Type";
+    Text[ dutch ] = "Type";
+    Text[ french ] = "Type";
+    Text[ spanish ] = "Tipo";
+    Text[ finnish ] = "Type";
+    Text[ italian ] = "Type";
+    Text[ danish ] = "Type";
+    Text[ swedish ] = "Typ";
+    Text[ polish ] = "Type";
+    Text[ portuguese_brazilian ] = "Type";
+    Text[ japanese ] = "Type";
+    Text[ korean ] = "Type";
+    Text[ chinese_simplified ] = "Type";
+    Text[ chinese_traditional ] = "Type";
+    Text[ turkish ] = "Type";
+    Text[ arabic ] = "Type";
+    Text[ catalan ] = "Type";
 };
 
 String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
@@ -159,7 +178,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ portuguese ] = "Foi impossÌvel criar a pasta %1.";
     Text[ russian ] = "—ÓÁ‰‡Ú¸ Ô‡ÔÍÛ %1 ÌÂ‚ÓÁÏÓÊÌÓ.";
     Text[ greek ] = "Could not create the folder %1.";
-    Text[ dutch ] = "Could not create the folder %1.";
+    Text[ dutch ] = "Map %1 kon niet worden aangelegd.";
     Text[ french ] = "Impossible de crÈer le dossier %1 !";
     Text[ spanish ] = "No se pudo crear la carpeta %1.";
     Text[ finnish ] = "Der Ordner %1 konnte nicht angelegt werden.";
@@ -169,7 +188,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ polish ] = "Utworzenie folderu %1 nie powiod≥o siÍ.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
     Text[ japanese ] = "Ã´Ÿ¿ﬁ %1 ÇÕäiî[Ç≥ÇÍÇ‹ÇπÇÒÇ≈ÇµÇΩÅB";
-    Text[ korean ] = "Could not create the folder %1.";
+    Text[ korean ] = "∆˙¥ı %1¿ª(∏¶) ∏∏µÈ ºˆ æ¯Ω¿¥œ¥Ÿ";
     Text[ chinese_simplified ] = "Œﬁ∑®¥¥Ω®Œƒº˛º– %1 °£";
     Text[ chinese_traditional ] = "µL™k∑sºW∏ÍÆ∆ß® %1 °C";
     Text[ turkish ] = "Could not create the folder %1.";
@@ -210,7 +229,7 @@ String STR_SVT_KB
     Text [ portuguese ] = "KB" ;
     Text [ english_us ] = "KB" ;
     Text [ portuguese_brazilian ] = "KB" ;
-    Text [ swedish ] = "kb" ;
+    Text [ swedish ] = "kB" ;
     Text [ danish ] = "kB" ;
     Text [ italian ] = "KB" ;
     Text [ spanish ] = "KB" ;
@@ -302,6 +321,26 @@ Menu RID_FILEVIEW_CONTEXTMENU
             HelpId = HID_FILEVIEW_MENU_DELETE ;
             Text = "~Lˆschen" ;
             Text[ English ] = "Delete" ;
+            Text[ english_us ] = "Delete";
+            Text[ portuguese ] = "Delete";
+            Text[ russian ] = "Delete";
+            Text[ greek ] = "Delete";
+            Text[ dutch ] = "~Wissen";
+            Text[ french ] = "Delete";
+            Text[ spanish ] = "~Eliminar";
+            Text[ finnish ] = "Delete";
+            Text[ italian ] = "Delete";
+            Text[ danish ] = "Delete";
+            Text[ swedish ] = "~Radera";
+            Text[ polish ] = "Delete";
+            Text[ portuguese_brazilian ] = "Delete";
+            Text[ japanese ] = "Delete";
+            Text[ korean ] = "Delete";
+            Text[ chinese_simplified ] = "Delete";
+            Text[ chinese_traditional ] = "Delete";
+            Text[ turkish ] = "Delete";
+            Text[ arabic ] = "Delete";
+            Text[ catalan ] = "Delete";
         };
         MenuItem
         {
@@ -309,6 +348,26 @@ Menu RID_FILEVIEW_CONTEXTMENU
             HelpId = HID_FILEVIEW_MENU_RENAME ;
             Text = "~Umbenennen" ;
             Text[ English ] = "Rename" ;
+            Text[ english_us ] = "Rename";
+            Text[ portuguese ] = "Rename";
+            Text[ russian ] = "Rename";
+            Text[ greek ] = "Rename";
+            Text[ dutch ] = "~Naam wijzigen";
+            Text[ french ] = "Rename";
+            Text[ spanish ] = "~Cambiar nombre";
+            Text[ finnish ] = "Rename";
+            Text[ italian ] = "Rename";
+            Text[ danish ] = "Rename";
+            Text[ swedish ] = "~Byt namn";
+            Text[ polish ] = "Rename";
+            Text[ portuguese_brazilian ] = "Rename";
+            Text[ japanese ] = "Rename";
+            Text[ korean ] = "Rename";
+            Text[ chinese_simplified ] = "Rename";
+            Text[ chinese_traditional ] = "Rename";
+            Text[ turkish ] = "Rename";
+            Text[ arabic ] = "Rename";
+            Text[ catalan ] = "Rename";
         };
     };
 };
@@ -508,4 +567,5 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
