@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-15 16:02:10 $
+ *  last change: $Author: tra $ $Date: 2001-11-15 16:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,13 +321,7 @@ void SAL_CALL CFilePicker::notifyAllListener( CAsyncFilePickerEventNotifier::Fil
 {
     OSL_ASSERT( pfncFPListener );
 
-    if ( !rBHelper.bDisposed )
-    {
-        ::osl::MutexGuard aGuard( rBHelper.rMutex );
-
-        if ( !rBHelper.bDisposed )
-            m_aAsyncEventNotifier.notifyEvent( pfncFPListener, aEvent );
-    }
+    m_aAsyncEventNotifier.notifyEvent( pfncFPListener, aEvent );
 }
 
 //------------------------------------------------------------------------------------
