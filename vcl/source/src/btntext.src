@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-30 17:32:51 $
+ *  last change: $Author: rt $ $Date: 2002-08-02 20:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String SV_BUTTONTEXT_OK
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aceptar";
     TEXT[ finnish ] = "OK";
+    TEXT[ thai ] = "à¸•à¸à¸¥à¸‡";
 };
 
 String SV_BUTTONTEXT_CANCEL
@@ -109,7 +110,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ english_us ] = "Cancel";
     TEXT[ russian ] = "Îòìåíà";
     TEXT[ polish ] = "Anuluj";
-    TEXT[ japanese ] = "ï½·ï½¬ï¾ï½¾ï¾™";
+    TEXT[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«";
     TEXT[ chinese_simplified ] = "å–æ¶ˆ";
     TEXT[ chinese_traditional ] = "å–æ¶ˆ";
     TEXT[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
@@ -121,6 +122,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Cancelar";
     TEXT[ finnish ] = "Peruuta";
+    TEXT[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸";
 };
 
 String SV_BUTTONTEXT_YES
@@ -149,7 +151,8 @@ String SV_BUTTONTEXT_YES
     TEXT[ turkish ] = "~Evet";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Sí";
-    TEXT[ finnish ] = "~Kyll?";
+    TEXT[ finnish ] = "~Kyllä";
+    TEXT[ thai ] = "à¹ƒ~à¸Šà¹ˆ";
 };
 
 String SV_BUTTONTEXT_NO
@@ -179,6 +182,7 @@ String SV_BUTTONTEXT_NO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~No";
     TEXT[ finnish ] = "~Ei";
+    TEXT[ thai ] = "à¹„~à¸¡à¹ˆà¹ƒà¸Šà¹ˆ";
 };
 
 String SV_BUTTONTEXT_RETRY
@@ -207,25 +211,26 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Reintentar";
-    TEXT[ finnish ] = "~Yrit? uudelleen";
+    TEXT[ finnish ] = "~Yritä uudelleen";
+    TEXT[ thai ] = "~à¸¥à¸­à¸‡à¹ƒà¸«à¸¡à¹ˆ";
 };
 
 String SV_BUTTONTEXT_HELP
 {
     Text = "~Hilfe";
     Text [ English ] = "~Help";
-    TEXT[ italian ] = "?";
+    TEXT[ italian ] = "~?";
     TEXT[ portuguese_brazilian ] = "Aj~uda";
     TEXT[ portuguese ] = "Aj~uda";
     TEXT[ danish ] = "~Hjælp";
-    TEXT[ french ] = "Ai~de";
+    TEXT[ french ] = "Aide";
     TEXT[ swedish ] = "~Hjälp";
     TEXT[ dutch ] = "~Help";
     TEXT[ spanish ] = "Ay~uda";
     TEXT[ english_us ] = "~Help";
     TEXT[ russian ] = "Ñï~ğàâêà";
     TEXT[ polish ] = "~Pomoc";
-    TEXT[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿ(~H)";
+    TEXT[ japanese ] = "ãƒ˜ãƒ«ãƒ—(~H)";
     TEXT[ chinese_simplified ] = "å¸®åŠ©(~H)";
     TEXT[ chinese_traditional ] = "èªªæ˜(~H)";
     TEXT[ arabic ] = "ãÓÇÚÏÉ";
@@ -237,6 +242,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ay~uda";
     TEXT[ finnish ] = "~Ohje";
+    TEXT[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
 };
 
 String SV_BUTTONTEXT_MORE
@@ -254,18 +260,19 @@ String SV_BUTTONTEXT_MORE
     TEXT[ english_us ] = "~More";
     TEXT[ russian ] = "Áîëüøå";
     TEXT[ polish ] = "~Dodatki";
-    TEXT[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾(~M)";
+    TEXT[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~M)";
     TEXT[ chinese_simplified ] = "å…¶ä»–(~M)";
     TEXT[ chinese_traditional ] = "å…¶ä»–(~M)";
     TEXT[ arabic ] = "ÅÖÇİÇÊ";
     TEXT[ dutch ] = "~Overige";
     TEXT[ chinese_simplified ] = "å…¶ä»–(~M)";
     TEXT[ greek ] = "Ğñüóèåôá";
-    TEXT[ korean ] = "ì¶”ê°€(~M)";
+    TEXT[ korean ] = "ì˜µì…˜(~M)";
     TEXT[ turkish ] = "A~yrıntılar";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Opciones";
-    TEXT[ finnish ] = "~Lis??";
+    TEXT[ finnish ] = "~Lisää";
+    TEXT[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
 };
 
 String SV_BUTTONTEXT_IGNORE
