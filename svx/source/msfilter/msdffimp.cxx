@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:18:59 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
-
+#ifndef _EEITEM_HXX //autogen
+#include <eeitem.hxx>
+#endif
 #ifndef _EDITDATA_HXX
 #include <editdata.hxx>
 #endif
@@ -111,6 +113,9 @@
 #define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
 #define ITEMID_AUTOKERN     EE_CHAR_PAIRKERNING
 #define ITEMID_WORDLINEMODE EE_CHAR_WLM
+#define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
+#define ITEMID_KERNING      EE_CHAR_KERNING
+
 //      paraitem.hxx       editdata.hxx
 #define ITEMID_ADJUST      EE_PARA_JUST
 #define ITEMID_FIELD       EE_FEATURE_FIELD
@@ -154,6 +159,12 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <charscaleitem.hxx>
+#endif
+#ifndef _SVX_KERNITEM_HXX
+#include <kernitem.hxx>
+#endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
@@ -191,10 +202,6 @@
 //#ifndef _SFX_INTERNO_HXX
 //#include <sfx2/interno.hxx>
 //#endif
-
-#ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
-#endif
 
 #ifndef _SDGCPITM_HXX
 #ifndef ITEMID_GRF_CROP
@@ -336,7 +343,9 @@
 #ifndef _GALLERY_HXX_
 #include "gallery.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#endif
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -397,8 +406,14 @@ using namespace vos;
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#endif
 #ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #endif
 #ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "../customshapes/EnhancedCustomShape2d.hxx"
@@ -2086,7 +2101,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( SdrTextLowerDistItem( nTextBottom ) );
 
     rSet.Put( SdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
-    rSet.Put( SdrTextAutoGrowSizeItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+    rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 
 //  rSet.Put( SdrTextAutoGrowWidthItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_False : sal_True ) );
 //  rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
@@ -2143,31 +2158,22 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aPropVec.push_back( aProp );
     }
 */
-    ////////////////////////
-    // "CoordinateOrigin" //
-    ////////////////////////
-    com::sun::star::awt::Point aCoordinateOrigin( 0, 0 );
-    if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) )
+    ///////////////
+    // "ViewBox" //
+    ///////////////
+    if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) || IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
     {
-        const rtl::OUString sCoordinateOrigin( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateOrigin" ) );
-        aCoordinateOrigin.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
-        aCoordinateOrigin.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
-        aProp.Name = sCoordinateOrigin;
-        aProp.Value <<= aCoordinateOrigin;
+        com::sun::star::awt::Rectangle aViewBox;
+        const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+        aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
+        aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
+        aViewBox.Width = ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aViewBox.X;
+        aViewBox.Height = ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aViewBox.Y;
+        aProp.Name = sViewBox;
+        aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
-    }
-    //////////////////////
-    // "CoordinateSize" //
-    //////////////////////
-    if ( IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
-    {
-        const rtl::OUString sCoordinateSize( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateSize" ) );
-        com::sun::star::awt::Size aCoordinateSize(
-            ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aCoordinateOrigin.X,
-            ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aCoordinateOrigin.Y );
-        aProp.Name = sCoordinateSize;
-        aProp.Value <<= aCoordinateSize;
-        aPropVec.push_back( aProp );
+
+
     }
     /////////////////////
     // TextRotateAngle //
@@ -2197,127 +2203,6 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPropVec.push_back( aProp );
         }
     }
-    ////////////////////////////////////////
-    // "Callout" PropertySequence element //
-    ////////////////////////////////////////
-    sal_Bool bCalloutOn = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 64 ) != 0;
-    if ( !bCalloutOn )
-        bCalloutOn = ( ( ( eShapeType >= mso_sptCallout1 ) && ( eShapeType <= mso_sptAccentBorderCallout3 ) )
-                        || ( eShapeType == mso_sptCallout90 )
-                        || ( eShapeType == mso_sptAccentCallout90 )
-                        || ( eShapeType == mso_sptBorderCallout90 )
-                        || ( eShapeType == mso_sptAccentBorderCallout90 ) );
-    if ( bCalloutOn )
-    {
-        PropVec aCalloutPropVec;
-
-        // "On"
-        const rtl::OUString sCalloutOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
-        aProp.Name = sCalloutOn;
-        aProp.Value <<= bCalloutOn;
-        aCalloutPropVec.push_back( aProp );
-        // "AccentBar"
-        const rtl::OUString sCalloutAccentBar( RTL_CONSTASCII_USTRINGPARAM ( "AccentBar" ) );
-        sal_Bool bCalloutAccentBar = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 32 ) != 0;
-        aProp.Name = sCalloutAccentBar;
-        aProp.Value <<= bCalloutAccentBar;
-        aCalloutPropVec.push_back( aProp );
-        // "Angle" in Grad
-        if ( IsProperty( DFF_Prop_spcoa ) )
-        {
-            const rtl::OUString sCalloutAngle( RTL_CONSTASCII_USTRINGPARAM ( "Angle" ) );
-            double fCalloutAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_spcoa )) / 65536.0;
-            aProp.Name = sCalloutAngle;
-            aProp.Value <<= fCalloutAngle;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // "Gap"
-        if ( IsProperty( DFF_Prop_dxyCalloutGap ) )
-        {
-            const rtl::OUString sCalloutDistance( RTL_CONSTASCII_USTRINGPARAM ( "Gap" ) );
-            double fGap = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutGap )) / 360.0;
-            aProp.Name = sCalloutDistance;
-            aProp.Value <<= fGap;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // "Drop"
-        if ( IsProperty( DFF_Prop_spcod ) )
-        {
-            const rtl::OUString sCalloutDrop( RTL_CONSTASCII_USTRINGPARAM ( "Drop" ) );
-            sal_Int16 nCalloutDrop = (sal_Int16)GetPropertyValue( DFF_Prop_spcod );
-            aProp.Name = sCalloutDrop;
-            aProp.Value <<= nCalloutDrop;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // "DropAuto"
-        const rtl::OUString sCalloutDropAuto( RTL_CONSTASCII_USTRINGPARAM ( "DropAuto" ) );
-        sal_Bool bCalloutAutoDrop = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 2 ) != 0;
-        aProp.Name = sCalloutDropAuto;
-        aProp.Value <<= bCalloutAutoDrop;
-        aCalloutPropVec.push_back( aProp );
-        // "Distance"
-        if ( IsProperty( DFF_Prop_dxyCalloutDropSpecified ) )
-        {
-            const rtl::OUString sCalloutGap( RTL_CONSTASCII_USTRINGPARAM ( "Distance" ) );
-            double fDistance = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutDropSpecified )) / 360.0;
-            aProp.Name = sCalloutGap;
-            aProp.Value <<= fDistance;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // "Length"
-        if ( IsProperty( DFF_Prop_dxyCalloutLengthSpecified ) )
-        {
-            const rtl::OUString sCalloutLength( RTL_CONSTASCII_USTRINGPARAM ( "Length" ) );
-            double fLength = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutLengthSpecified )) / 360.0;
-            aProp.Name = sCalloutLength;
-            aProp.Value <<= fLength;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // "LengthSpecified"
-        const rtl::OUString sCalloutLenghtSpecified( RTL_CONSTASCII_USTRINGPARAM ( "LengthSpecified" ) );
-        sal_Bool bCalloutLengthSpecified = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 1 ) != 0;
-        aProp.Name = sCalloutLenghtSpecified;
-        aProp.Value <<= bCalloutLengthSpecified;
-        aCalloutPropVec.push_back( aProp );
-        // "FlipX"
-        const rtl::OUString sCalloutFlipX( RTL_CONSTASCII_USTRINGPARAM ( "FlipX" ) );
-        sal_Bool bCalloutFlipX = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 8 ) != 0;
-        aProp.Name = sCalloutFlipX;
-        aProp.Value <<= bCalloutFlipX;
-        aCalloutPropVec.push_back( aProp );
-        // "FlipY"
-        const rtl::OUString sCalloutFlipY( RTL_CONSTASCII_USTRINGPARAM ( "FlipY" ) );
-        sal_Bool bCalloutFlipY = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 4 ) != 0;
-        aProp.Name = sCalloutFlipY;
-        aProp.Value <<= bCalloutFlipY;
-        aCalloutPropVec.push_back( aProp );
-        // "TextBorder"
-        const rtl::OUString sCalloutTextBorder( RTL_CONSTASCII_USTRINGPARAM ( "TextBorder" ) );
-        sal_Bool bCalloutTextBorder = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 16 ) != 0;
-        aProp.Name = sCalloutTextBorder;
-        aProp.Value <<= bCalloutTextBorder;
-        aCalloutPropVec.push_back( aProp );
-        // "Type"
-        if ( IsProperty( DFF_Prop_spcot ) )
-        {
-            const rtl::OUString sCalloutType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
-            sal_Int16 nType = (sal_Int16)GetPropertyValue( DFF_Prop_spcot );
-            aProp.Name = sCalloutType;
-            aProp.Value <<= nType;
-            aCalloutPropVec.push_back( aProp );
-        }
-        // pushing the whole Callout element
-        const rtl::OUString sCallout( RTL_CONSTASCII_USTRINGPARAM ( "Callout" ) );
-        PropSeq aCalloutPropSeq( aCalloutPropVec.size() );
-        aIter = aCalloutPropVec.begin();
-        aEnd =aCalloutPropVec.end();
-        beans::PropertyValue* pCalloutValues = aCalloutPropSeq.getArray();
-        while ( aIter != aEnd )
-            *pCalloutValues++ = *aIter++;
-        aProp.Name = sCallout;
-        aProp.Value <<= aCalloutPropSeq;
-        aPropVec.push_back( aProp );
-    }
     //////////////////////////////////////////
     // "Extrusion" PropertySequence element //
     //////////////////////////////////////////
@@ -2326,26 +2211,12 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     {
         PropVec aExtrusionPropVec;
 
-        // "On"
-        const rtl::OUString sExtrusionOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
+        // "Extrusion"
+        const rtl::OUString sExtrusionOn( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
         aProp.Name = sExtrusionOn;
         aProp.Value <<= bExtrusionOn;
         aExtrusionPropVec.push_back( aProp );
-        // "AutoRotationCenter"
-        const rtl::OUString sExtrusionAutoRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "AutoRotationCenter" ) );
-        sal_Bool bExtrusionAutoRotationCenter = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 8 ) != 0;
-        aProp.Name = sExtrusionAutoRotationCenter;
-        aProp.Value <<= bExtrusionAutoRotationCenter;
-        aExtrusionPropVec.push_back( aProp );
-        // "BackwardDepth"  in 1/100mm
-        if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) )
-        {
-            const rtl::OUString sExtrusionBackwardDepth( RTL_CONSTASCII_USTRINGPARAM ( "BackwardDepth" ) );
-            double fBackwardDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward )) / 360.0;
-            aProp.Name = sExtrusionBackwardDepth;
-            aProp.Value <<= fBackwardDepth;
-            aExtrusionPropVec.push_back( aProp );
-        }
+
         // "Brightness"
         if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
         {
@@ -2356,39 +2227,39 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= fBrightness;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "Diffusity"
+        // "Depth" in 1/100mm
+        if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) || IsProperty( DFF_Prop_c3DExtrudeForward ) )
+        {
+            const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+            double fBackDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 )) / 360.0;
+            double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward ), 0 ) / 360.0;
+            double fDepth = fBackDepth + fForeDepth;
+            double fFraction = fForeDepth / fDepth;
+            EnhancedCustomShapeParameterPair aDepthParaPair;
+            aDepthParaPair.First.Value <<= fDepth;
+            aDepthParaPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aDepthParaPair.Second.Value <<= fFraction;
+            aDepthParaPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aProp.Name = sDepth;
+            aProp.Value <<= aDepthParaPair;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Diffusion"
         if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
         {
-            const rtl::OUString sExtrusionDiffusity( RTL_CONSTASCII_USTRINGPARAM ( "Diffusity" ) );
-            double fDiffusity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt );
-            fDiffusity /= 655.36;
-            aProp.Name = sExtrusionDiffusity;
-            aProp.Value <<= fDiffusity;
+            const rtl::OUString sExtrusionDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
+            double fDiffusion = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt );
+            fDiffusion /= 655.36;
+            aProp.Name = sExtrusionDiffusion;
+            aProp.Value <<= fDiffusion;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "Edge"
-        if ( IsProperty( DFF_Prop_c3DEdgeThickness ) )
-        {
-            const rtl::OUString sExtrusionEdge( RTL_CONSTASCII_USTRINGPARAM ( "Edge" ) );
-            aProp.Name = sExtrusionEdge;
-            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DEdgeThickness );
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "Facet"
+        // "NumberOfLineSegments"
         if ( IsProperty( DFF_Prop_c3DTolerance ) )
         {
-            const rtl::OUString sExtrusionFacet( RTL_CONSTASCII_USTRINGPARAM ( "Facet" ) );
-            aProp.Name = sExtrusionFacet;
+            const rtl::OUString sExtrusionNumberOfLineSegments( RTL_CONSTASCII_USTRINGPARAM ( "NumberOfLineSegments" ) );
+            aProp.Name = sExtrusionNumberOfLineSegments;
             aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance );
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "ForewardDepth" in 1/100mm
-        if ( IsProperty( DFF_Prop_c3DExtrudeForward ) )
-        {
-            const rtl::OUString sExtrusionForewardDepth( RTL_CONSTASCII_USTRINGPARAM ( "ForewardDepth" ) );
-            double fForewardDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward )) / 360.0;
-            aProp.Name = sExtrusionForewardDepth;
-            aProp.Value <<= fForewardDepth;
             aExtrusionPropVec.push_back( aProp );
         }
         // "LightFace"
@@ -2397,60 +2268,60 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Name = sExtrusionLightFace;
         aProp.Value <<= bExtrusionLightFace;
         aExtrusionPropVec.push_back( aProp );
-        // "LightHarsh1"
-        const rtl::OUString sExtrusionLightHarsh1( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh1" ) );
-        sal_Bool bExtrusionLightHarsh1 = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 2 ) != 0;
-        aProp.Name = sExtrusionLightHarsh1;
-        aProp.Value <<= bExtrusionLightHarsh1;
+        // "FirstLightHarsh"
+        const rtl::OUString sExtrusionFirstLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightHarsh" ) );
+        sal_Bool bExtrusionFirstLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 2 ) != 0;
+        aProp.Name = sExtrusionFirstLightHarsh;
+        aProp.Value <<= bExtrusionFirstLightHarsh;
         aExtrusionPropVec.push_back( aProp );
-        // "LightHarsh2"
-        const rtl::OUString sExtrusionLightHarsh2( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh2" ) );
-        sal_Bool bExtrusionLightHarsh2 = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 1 ) != 0;
-        aProp.Name = sExtrusionLightHarsh2;
-        aProp.Value <<= bExtrusionLightHarsh2;
+        // "SecondLightHarsh"
+        const rtl::OUString sExtrusionSecondLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightHarsh" ) );
+        sal_Bool bExtrusionSecondLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 1 ) != 0;
+        aProp.Name = sExtrusionSecondLightHarsh;
+        aProp.Value <<= bExtrusionSecondLightHarsh;
         aExtrusionPropVec.push_back( aProp );
-        // "LightLevel1"
+        // "FirstLightLevel"
         if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
         {
-            const rtl::OUString sExtrusionLightLevel1( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel1" ) );
-            double fLightLevel1 = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity );
-            fLightLevel1 /= 655.36;
-            aProp.Name = sExtrusionLightLevel1;
-            aProp.Value <<= fLightLevel1;
+            const rtl::OUString sExtrusionFirstLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightLevel" ) );
+            double fFirstLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity );
+            fFirstLightLevel /= 655.36;
+            aProp.Name = sExtrusionFirstLightLevel;
+            aProp.Value <<= fFirstLightLevel;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "LightLevel2"
+        // "SecondLightLevel"
         if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
         {
-            const rtl::OUString sExtrusionLightLevel2( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel2" ) );
-            double fLightLevel2 = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity );
-            fLightLevel2 /= 655.36;
-            aProp.Name = sExtrusionLightLevel2;
-            aProp.Value <<= fLightLevel2;
+            const rtl::OUString sExtrusionSecondLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightLevel" ) );
+            double fSecondLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity );
+            fSecondLightLevel /= 655.36;
+            aProp.Name = sExtrusionSecondLightLevel;
+            aProp.Value <<= fSecondLightLevel;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "LightDirection1"
+        // "FirtstLightDirection"
         if ( IsProperty( DFF_Prop_c3DKeyX ) || IsProperty( DFF_Prop_c3DKeyY ) || IsProperty( DFF_Prop_c3DKeyZ ) )
         {
             double fLightX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyX, 50000 ));
             double fLightY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
             double fLightZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 ));
-            ::com::sun::star::drawing::Direction3D aExtrusionLightDirection1( fLightX, fLightY, fLightZ );
-            const rtl::OUString sExtrusionLightDirection1( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection1" ) );
-            aProp.Name = sExtrusionLightDirection1;
-            aProp.Value <<= aExtrusionLightDirection1;
+            ::com::sun::star::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
+            const rtl::OUString sExtrusionFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
+            aProp.Name = sExtrusionFirstLightDirection;
+            aProp.Value <<= aExtrusionFirstLightDirection;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "LightDirection2"
+        // "SecondLightDirection"
         if ( IsProperty( DFF_Prop_c3DFillX ) || IsProperty( DFF_Prop_c3DFillY ) || IsProperty( DFF_Prop_c3DFillZ ) )
         {
             double fLight2X = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillX, -50000 ));
             double fLight2Y = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillY, 0 ));
             double fLight2Z = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillZ, 10000 ));
-            ::com::sun::star::drawing::Direction3D aExtrusionLightDirection2( fLight2X, fLight2Y, fLight2Z );
-            const rtl::OUString sExtrusionLightDirection2( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection2" ) );
-            aProp.Name = sExtrusionLightDirection2;
-            aProp.Value <<= aExtrusionLightDirection2;
+            ::com::sun::star::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
+            const rtl::OUString sExtrusionSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+            aProp.Name = sExtrusionSecondLightDirection;
+            aProp.Value <<= aExtrusionSecondLightDirection;
             aExtrusionPropVec.push_back( aProp );
         }
 
@@ -2491,69 +2362,55 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Name = sExtrusionMetal;
         aProp.Value <<= bExtrusionMetal;
         aExtrusionPropVec.push_back( aProp );
-        // "Plane"
-        // !!!! EnhancedExtrusionPlane has to be used
-        if ( IsProperty( DFF_Prop_c3DExtrudePlane ) )
-        {
-            const rtl::OUString sExtrusionPlane( RTL_CONSTASCII_USTRINGPARAM ( "Plane" ) );
-            sal_Int16 nExtrusionPlane = (sal_Int16)GetPropertyValue( DFF_Prop_c3DExtrudePlane );
-            aProp.Name = sExtrusionPlane;
-            aProp.Value <<= nExtrusionPlane;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "RenderMode"
+//      if ( IsProperty( DFF_Prop_c3DExtrudePlane ) )
+//      {
+//      UPS
+//      }
+        // "ShadeMode"
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
-            const rtl::OUString sExtrusionRenderMode( RTL_CONSTASCII_USTRINGPARAM ( "RenderMode" ) );
-            sal_Int16 nExtrusionRenderMode = (sal_Int16)GetPropertyValue( DFF_Prop_c3DRenderMode );
-            aProp.Name = sExtrusionRenderMode;
-            aProp.Value <<= nExtrusionRenderMode;
+            const rtl::OUString sExtrusionShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
+            sal_uInt32 nExtrusionRenderMode = GetPropertyValue( DFF_Prop_c3DRenderMode );
+            com::sun::star::drawing::ShadeMode eExtrusionShadeMode( com::sun::star::drawing::ShadeMode_FLAT );
+            if ( nExtrusionRenderMode == mso_Wireframe )
+                eExtrusionShadeMode = com::sun::star::drawing::ShadeMode_DRAFT;
+
+            aProp.Name = sExtrusionShadeMode;
+            aProp.Value <<= eExtrusionShadeMode;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "AngleX" in Grad
-        if ( IsProperty( DFF_Prop_c3DXRotationAngle ) )
+        // "RotateAngle" in Grad
+        if ( IsProperty( DFF_Prop_c3DXRotationAngle ) || IsProperty( DFF_Prop_c3DYRotationAngle ) )
         {
-            const rtl::OUString sExtrusionAngleX( RTL_CONSTASCII_USTRINGPARAM ( "AngleX" ) );
-            double fAngleX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXRotationAngle )) / 65536.0;
-            aProp.Name = sExtrusionAngleX;
-            aProp.Value <<= fAngleX;
+            const rtl::OUString sExtrusionAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
+            double fAngleX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 )) / 65536.0;
+            double fAngleY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 )) / 65536.0;
+            EnhancedCustomShapeParameterPair aRotateAnglePair;
+            aRotateAnglePair.First.Value <<= fAngleX;
+            aRotateAnglePair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aRotateAnglePair.Second.Value <<= fAngleY;
+            aRotateAnglePair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aProp.Name = sExtrusionAngle;
+            aProp.Value <<= aRotateAnglePair;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "AngleY" in Grad
-        if ( IsProperty( DFF_Prop_c3DYRotationAngle ) )
+
+        // "AutoRotationCenter"
+        if ( ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 8 ) == 0 )
         {
-            const rtl::OUString sExtrusionAngleY( RTL_CONSTASCII_USTRINGPARAM ( "AngleY" ) );
-            double fAngleY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYRotationAngle )) / 65536.0;
-            aProp.Name = sExtrusionAngleY;
-            aProp.Value <<= fAngleY;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "RotationCenterX"
-        if ( IsProperty( DFF_Prop_c3DRotationCenterX ) )
-        {
-            double fRotationCenterX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 )) / 360.0;
-            const rtl::OUString sExtrusionRotationCenterX( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterX" ) );
-            aProp.Name = sExtrusionRotationCenterX;
-            aProp.Value <<= fRotationCenterX;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "RotationCenterY"
-        if ( IsProperty( DFF_Prop_c3DRotationCenterY ) )
-        {
-            double fRotationCenterY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0;
-            const rtl::OUString sExtrusionRotationCenterY( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterY" ) );
-            aProp.Name = sExtrusionRotationCenterY;
-            aProp.Value <<= fRotationCenterY;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "RotationCenterZ"
-        if ( IsProperty( DFF_Prop_c3DRotationCenterZ ) )
-        {
-            double fRotationCenterZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0;
-            const rtl::OUString sExtrusionRotationCenterZ( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterZ" ) );
-            aProp.Name = sExtrusionRotationCenterZ;
-            aProp.Value <<= fRotationCenterZ;
-            aExtrusionPropVec.push_back( aProp );
+            // "RotationCenter"
+            if ( IsProperty( DFF_Prop_c3DRotationCenterX ) || IsProperty( DFF_Prop_c3DRotationCenterY ) || IsProperty( DFF_Prop_c3DRotationCenterZ ) )
+            {
+                ::com::sun::star::drawing::Direction3D aRotationCenter(
+                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 )) / 360.0,
+                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0,
+                    (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0 );
+
+                const rtl::OUString sExtrusionRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenter" ) );
+                aProp.Name = sExtrusionRotationCenter;
+                aProp.Value <<= aRotationCenter;
+                aExtrusionPropVec.push_back( aProp );
+            }
         }
         // "Shininess"
         if ( IsProperty( DFF_Prop_c3DShininess ) )
@@ -2566,21 +2423,19 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aExtrusionPropVec.push_back( aProp );
         }
         // "Skew"
-        if ( IsProperty( DFF_Prop_c3DSkewAmount ) )
+        if ( IsProperty( DFF_Prop_c3DSkewAmount ) || IsProperty( DFF_Prop_c3DSkewAngle ) )
         {
             const rtl::OUString sExtrusionSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-            double fSkew = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount );
-            aProp.Name = sExtrusionSkew;
-            aProp.Value <<= fSkew;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "SkewAngle" in Grad
-        if ( IsProperty( DFF_Prop_c3DSkewAngle ) )
-        {
-            const rtl::OUString sExtrusionSkewAngle( RTL_CONSTASCII_USTRINGPARAM ( "SkewAngle" ) );
+            double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount );
             double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle )) / 65536.0;
-            aProp.Name = sExtrusionSkewAngle;
-            aProp.Value <<= fSkewAngle;
+
+            EnhancedCustomShapeParameterPair aSkewPair;
+            aSkewPair.First.Value <<= fSkewAmount;
+            aSkewPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aSkewPair.Second.Value <<= fSkewAngle;
+            aSkewPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aProp.Name = sExtrusionSkew;
+            aProp.Value <<= aSkewPair;
             aExtrusionPropVec.push_back( aProp );
         }
         // "Specularity"
@@ -2593,12 +2448,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= fSpecularity;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "Parallel"
-        const rtl::OUString sExtrusionParallel( RTL_CONSTASCII_USTRINGPARAM ( "Parallel" ) );
-        sal_Bool bExtrusionParallel = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 4 ) != 0;
-        aProp.Name = sExtrusionParallel;
-        aProp.Value <<= bExtrusionParallel;
+        // "ProjectionMode"
+        const rtl::OUString sExtrusionProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+        ProjectionMode eProjectionMode = GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 4 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
+        aProp.Name = sExtrusionProjectionMode;
+        aProp.Value <<= eProjectionMode;
         aExtrusionPropVec.push_back( aProp );
+
         // "ViewPoint" in 1/100mm
         if ( IsProperty( DFF_Prop_c3DXViewpoint ) || IsProperty( DFF_Prop_c3DYViewpoint ) || IsProperty( DFF_Prop_c3DZViewpoint ) )
         {
@@ -2611,24 +2467,21 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= aExtrusionViewPoint;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "OriginX"
-        if ( IsProperty( DFF_Prop_c3DOriginX ) )
+        // "Origin"
+        if ( IsProperty( DFF_Prop_c3DOriginX ) || IsProperty( DFF_Prop_c3DOriginY ) )
         {
-            const rtl::OUString sExtrusionOriginX( RTL_CONSTASCII_USTRINGPARAM ( "OriginX" ) );
+            const rtl::OUString sExtrusionOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
             double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 0 ));
-            fOriginX /= 655.36;
-            aProp.Name = sExtrusionOriginX;
-            aProp.Value <<= fOriginX;
-            aExtrusionPropVec.push_back( aProp );
-        }
-        // "OriginY"
-        if ( IsProperty( DFF_Prop_c3DOriginY ) )
-        {
-            const rtl::OUString sExtrusionOriginY( RTL_CONSTASCII_USTRINGPARAM ( "OriginY" ) );
             double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, 0 ));
-            fOriginY /= 655.36;
-            aProp.Name = sExtrusionOriginY;
-            aProp.Value <<= fOriginY;
+            fOriginX /= 65536;
+            fOriginY /= 65536;
+            EnhancedCustomShapeParameterPair aOriginPair;
+            aOriginPair.First.Value <<= fOriginX;
+            aOriginPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aOriginPair.Second.Value <<= fOriginY;
+            aOriginPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aProp.Name = sExtrusionOrigin;
+            aProp.Value <<= aOriginPair;
             aExtrusionPropVec.push_back( aProp );
         }
         // "ExtrusionColor"
@@ -3192,23 +3045,25 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     {
         PropVec aTextPathPropVec;
 
-        // On
-        const rtl::OUString sTextPathOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
+        // TextPath
+        const rtl::OUString sTextPathOn( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
         aProp.Name = sTextPathOn;
         aProp.Value <<= bTextPathOn;
         aTextPathPropVec.push_back( aProp );
-        // FitPath
-        const rtl::OUString sTextPathFitPath( RTL_CONSTASCII_USTRINGPARAM ( "FitPath" ) );
+
+        // TextPathMode
+        const rtl::OUString sTextPathMode( RTL_CONSTASCII_USTRINGPARAM ( "TextPathMode" ) );
         sal_Bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x100 ) != 0;
-        aProp.Name = sTextPathFitPath;
-        aProp.Value <<= bTextPathFitPath;
-        aTextPathPropVec.push_back( aProp );
-        // FitShape
-        const rtl::OUString sTextPathFitShape( RTL_CONSTASCII_USTRINGPARAM ( "FitShape" ) );
         sal_Bool bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x400 ) != 0;
-        aProp.Name = sTextPathFitShape;
-        aProp.Value <<= bTextPathFitShape;
+        EnhancedCustomShapeTextPathMode eTextPathMode( EnhancedCustomShapeTextPathMode_NORMAL );
+        if ( bTextPathFitShape )
+            eTextPathMode = EnhancedCustomShapeTextPathMode_SHAPE;
+        else if ( bTextPathFitPath )
+            eTextPathMode = EnhancedCustomShapeTextPathMode_PATH;
+        aProp.Name = sTextPathMode;
+        aProp.Value <<= eTextPathMode;
         aTextPathPropVec.push_back( aProp );
+
         // ScaleX
         const rtl::OUString sTextPathScaleX( RTL_CONSTASCII_USTRINGPARAM ( "ScaleX" ) );
         sal_Bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x40 ) != 0;
@@ -4966,12 +4821,19 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     eFTS = SDRTEXTFIT_ALLLINES;
                                 aSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
                             }
-                            if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 )
-                            {   // SJ TODO: Vertical Writing is not correct, instead this should be
-                                // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
-                                // supported by svx core, api and xml file format
-                                ((SdrObjCustomShape*)pRet)->SetVerticalWriting( sal_True );
+                            if ( IsProperty( DFF_Prop_gtextSpacing ) )
+                            {
+                                sal_Int32 nTextWidth = GetPropertyValue( DFF_Prop_gtextSpacing, 100 < 16 ) / 655;
+                                if ( nTextWidth != 100 )
+                                    aSet.Put( SvxCharScaleWidthItem( (sal_uInt16)nTextWidth, EE_CHAR_FONTWIDTH ) );
                             }
+                            if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x1000 ) // SJ: Font Kerning On ?
+                                aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
+
+                            // SJ TODO: Vertical Writing is not correct, instead this should be
+                            // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
+                            // supported by svx core, api and xml file format
+                            ((SdrObjCustomShape*)pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
                         }
                         pRet->SetMergedItemSet( aSet );
                         pRet->SetSnapRect( aBoundRect );
