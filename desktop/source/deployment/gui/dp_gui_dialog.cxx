@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:20:56 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "toolkit/helper/vclunohelper.hxx"
 #include "vcl/wintypes.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/threadex.hxx"
 #include "svtools/svtools.hrc"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
@@ -85,6 +86,8 @@
 #include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include "boost/function.hpp"
+#include "boost/bind.hpp"
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -528,6 +531,7 @@ DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel ) const
 }
 
 namespace {
+
 struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
     const OUString operator () () {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
@@ -538,20 +542,52 @@ struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
         return ret;
     }
 };
-}
-//______________________________________________________________________________
-void DialogImpl::clickAdd( USHORT )
-{
-    OSL_ASSERT( m_treelb->getSelectedPackages().getLength() == 0 );
-    OUString context( m_treelb->getContext(
-                          m_treelb->getCurrentSingleSelectedEntry() ) );
-    OSL_ASSERT( context.getLength() > 0 );
-    if (context.getLength() == 0)
-        return;
-    Reference<deployment::XPackageManager> xPackageManager(
-        m_xPkgMgrFac->getPackageManager( context ) );
-    OSL_ASSERT( xPackageManager.is() );
 
+template <typename FuncT, typename ResultT>
+class SolarThreadEx : public vcl::SolarThreadExecutor
+{
+public:
+    explicit SolarThreadEx( FuncT func ) : m_func(func), m_result() {}
+
+    ::boost::function0<ResultT> m_func;
+    ResultT m_result;
+
+    virtual long doIt() {
+        try {
+            m_result = m_func();
+        }
+        catch (Exception &) {
+            OSL_ENSURE(
+                false, rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        return 0;
+    }
+};
+
+template <typename FuncT, typename ResultT>
+inline ResultT executeInSolarThread( FuncT func )
+{
+    // no stack mem:
+    std::auto_ptr< SolarThreadEx<FuncT, ResultT> > threadEx(
+        new SolarThreadEx<FuncT, ResultT>(func) );
+    threadEx->execute();
+    return threadEx->m_result;
+}
+
+template <typename FuncT>
+inline typename FuncT::result_type executeInSolarThread( FuncT func )
+{
+    return executeInSolarThread<FuncT, typename FuncT::result_type>(func);
+}
+
+} // anon namespace
+
+//______________________________________________________________________________
+Sequence<OUString> DialogImpl::solarthread_raiseAddPicker(
+    Reference<deployment::XPackageManager> const & xPackageManager )
+{
     const Any mode( static_cast<sal_Int16>(
                         ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) );
     const Reference<ui::dialogs::XFilePicker> xFilePicker(
@@ -607,10 +643,33 @@ void DialogImpl::clickAdd( USHORT )
     xFilterManager->setCurrentFilter( StrAllFiles::get() );
 
     if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
-        return; // cancelled
+        return Sequence<OUString>(); // cancelled
 
     Sequence<OUString> files( xFilePicker->getFiles() );
     OSL_ASSERT( files.getLength() > 0 );
+    return files;
+}
+
+//______________________________________________________________________________
+void DialogImpl::clickAdd( USHORT )
+{
+    OSL_ASSERT( m_treelb->getSelectedPackages().getLength() == 0 );
+    OUString context( m_treelb->getContext(
+                          m_treelb->getCurrentSingleSelectedEntry() ) );
+    OSL_ASSERT( context.getLength() > 0 );
+    if (context.getLength() == 0)
+        return;
+
+    Reference<deployment::XPackageManager> xPackageManager(
+        m_xPkgMgrFac->getPackageManager( context ) );
+    OSL_ASSERT( xPackageManager.is() );
+
+    const Sequence<OUString> files(
+        executeInSolarThread(
+            boost::bind( &DialogImpl::solarthread_raiseAddPicker, this,
+                         xPackageManager ) ) );
+    if (files.getLength() == 0)
+        return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( this, m_strAddingPackages ) );
@@ -720,17 +779,12 @@ void DialogImpl::clickEnableDisable( USHORT id )
     }
 }
 
-//______________________________________________________________________________
-void DialogImpl::clickExport( USHORT )
+bool DialogImpl::solarthread_raiseExportPickers(
+    Sequence< Reference<deployment::XPackage> > const & selection,
+    OUString * pDestFolder, OUString * pNewTitle, sal_Int32 * pNameClashAction )
 {
-    Sequence< Reference<deployment::XPackage> > selection(
-        m_treelb->getSelectedPackages() );
-    OSL_ASSERT( selection.getLength() > 0 );
-    if (selection.getLength() == 0)
-        return;
+    *pNameClashAction = NameClash::ASK;
 
-    OUString destFolder, newTitle;
-    sal_Int32 nameClashAction = NameClash::ASK;
     if (selection.getLength() > 1)
     {
         // raise folder picker:
@@ -741,8 +795,8 @@ void DialogImpl::clickExport( USHORT )
                 m_xComponentContext ), UNO_QUERY_THROW );
         xFolderPicker->setTitle( m_strExportPackages );
         if (xFolderPicker->execute() !=ui::dialogs::ExecutableDialogResults::OK)
-            return; // cancelled
-        destFolder = xFolderPicker->getDirectory();
+            return false; // cancelled
+        *pDestFolder = xFolderPicker->getDirectory();
     }
     else // single item selected
     {
@@ -791,7 +845,7 @@ void DialogImpl::clickExport( USHORT )
         xFilePicker->setDefaultName(
             sourceContent.getPropertyValue( OUSTR("Title") ).get<OUString>() );
         if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
-            return; // cancelled
+            return false; // cancelled
 
         Sequence<OUString> files( xFilePicker->getFiles() );
         OSL_ASSERT( files.getLength() == 1 );
@@ -802,13 +856,44 @@ void DialogImpl::clickExport( USHORT )
         ::ucb::Content destFolderContent(
             Reference<XContent>( xChild->getParent(), UNO_QUERY_THROW ),
             currentCmdEnv.get() );
-        destFolder = destFolderContent.getURL();
-        newTitle = ::rtl::Uri::decode( url.copy( url.lastIndexOf( '/' ) + 1 ),
-                                       rtl_UriDecodeWithCharset,
-                                       RTL_TEXTENCODING_UTF8 );
-        nameClashAction = NameClash::OVERWRITE; /* overwrite, because FilePicker
-                                                   has already asked */
+        *pDestFolder = destFolderContent.getURL();
+        *pNewTitle = ::rtl::Uri::decode( url.copy( url.lastIndexOf( '/' ) + 1 ),
+                                         rtl_UriDecodeWithCharset,
+                                         RTL_TEXTENCODING_UTF8 );
+        // overwrite, because FilePicker has already asked:
+        *pNameClashAction = NameClash::OVERWRITE;
     }
+    return true;
+}
+
+namespace {
+struct ExportPickersOutParams {
+    OUString m_destFolder;
+    OUString m_newTitle;
+    sal_Int32 m_nameClashAction;
+    ExportPickersOutParams() : m_nameClashAction(NameClash::ASK) {}
+};
+}
+
+//______________________________________________________________________________
+void DialogImpl::clickExport( USHORT )
+{
+    Sequence< Reference<deployment::XPackage> > selection(
+        m_treelb->getSelectedPackages() );
+    OSL_ASSERT( selection.getLength() > 0 );
+    if (selection.getLength() == 0)
+        return;
+
+    // no stack mem:
+    std::auto_ptr<ExportPickersOutParams> pExportPickersOutParams(
+        new ExportPickersOutParams );
+    if (! executeInSolarThread(
+            boost::bind( &DialogImpl::solarthread_raiseExportPickers, this,
+                         selection,
+                         &pExportPickersOutParams->m_destFolder,
+                         &pExportPickersOutParams->m_newTitle,
+                         &pExportPickersOutParams->m_nameClashAction ) ))
+        return;
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( this, m_strExportingPackages ) );
@@ -818,8 +903,10 @@ void DialogImpl::clickExport( USHORT )
     {
         Reference<deployment::XPackage> const & xPackage = selection[ pos ];
         currentCmdEnv->progressSection( xPackage->getDisplayName() );
-        OSL_ASSERT( destFolder.getLength() > 0 );
-        xPackage->exportTo( destFolder, newTitle, nameClashAction,
+        OSL_ASSERT( pExportPickersOutParams->m_destFolder.getLength() > 0 );
+        xPackage->exportTo( pExportPickersOutParams->m_destFolder,
+                            pExportPickersOutParams->m_newTitle,
+                            pExportPickersOutParams->m_nameClashAction,
                             currentCmdEnv.get() );
     }
 }
@@ -876,7 +963,10 @@ void SAL_CALL ThreadedPushButton_callback( void * p )
 void DialogImpl::ThreadedPushButton::Click()
 {
     if (m_thread != 0) {
+        const ULONG nLockCount = Application::ReleaseSolarMutex();
         osl_joinWithThread( m_thread );
+        if (nLockCount > 0)
+            Application::AcquireSolarMutex( nLockCount );
         osl_destroyThread( m_thread );
     }
     m_thread = osl_createSuspendedThread( ThreadedPushButton_callback, this );
@@ -888,7 +978,10 @@ void DialogImpl::ThreadedPushButton::Click()
 DialogImpl::ThreadedPushButton::~ThreadedPushButton()
 {
     if (m_thread != 0) {
+        const ULONG nLockCount = Application::ReleaseSolarMutex();
         osl_joinWithThread( m_thread );
+        if (nLockCount > 0)
+            Application::AcquireSolarMutex( nLockCount );
         osl_destroyThread( m_thread );
     }
 }
