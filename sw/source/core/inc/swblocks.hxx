@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:52:21 $
+ *  last change: $Author: mtg $ $Date: 2001-02-08 15:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,12 @@
 #include <svtools/svarray.hxx>
 #endif
 
+
 class SfxMedium;
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
-
+class SvXMLTextBlocks;
 // Name eines Textblocks:
 
 class SwBlockName
@@ -85,13 +86,15 @@ class SwBlockName
     USHORT nHashS, nHashL;              // Hash-Codes zum Checken
     long   nPos;                        // Dateiposition (SW2-Format)
 public:
-    String aShort;                      // Kurztext
-    String aLong;                       // Langtext
+    String aShort;                      // Short name
+    String aLong;                       // Long name
+    String aPackageName;                // Package name
     BOOL bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
-    BOOL bIsOnlyTxt : 1;                // Text ohne Formatierung
+    BOOL bIsOnlyTxt : 1;                // unformatted text
     BOOL bInPutMuchBlocks : 1;          // put serveral block entries
 
     SwBlockName( const String& rShort, const String& rLong, long n );
+    SwBlockName( const String& rShort, const String& rLong, const String& rPackageName );
 
     // fuer das Einsortieren in das Array
     int operator==( const SwBlockName& r ) { return aShort == r.aShort; }
@@ -122,14 +125,16 @@ protected:
     virtual ~SwImpBlocks();
 
     static short GetFileType( const String& );
+    virtual short GetFileType() const = 0;
 #define SWBLK_NO_FILE   0               // nicht da
 #define SWBLK_NONE      1               // keine TB-Datei
 #define SWBLK_SW2       2               // SW2-Datei
 #define SWBLK_SW3       3               // SW3-Datei
+#define SWBLK_XML       4               // XML Block List
 
     void   ClearDoc();                  // Doc-Inhalt loeschen
     SwPaM* MakePaM();                   // PaM ueber Doc aufspannen
-    void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
+    virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     BOOL   IsFileChanged() const;
     void   Touch();
 
@@ -140,12 +145,13 @@ public:
     USHORT GetLongIndex( const String& ) const; //Index fuer Langnamen ermitteln
     const String& GetShortName( USHORT ) const; // Kurzname fuer Index zurueck
     const String& GetLongName( USHORT ) const;  // Langname fuer Index zurueck
+    const String& GetPackageName( USHORT ) const;   // Langname fuer Index zurueck
 
     const String& GetFileName() const {return aFile;}   // phys. Dateinamen liefern
     void SetName( const String& rName )                 // logic name
         { aName = rName; bInfoChanged = TRUE; }
-
-    virtual BOOL IsOld() const = 0;
+    const String & GetName( void )
+        { return aName; }
 
     virtual ULONG Delete( USHORT ) = 0;
     virtual ULONG Rename( USHORT, const String&, const String& ) = 0;
@@ -200,7 +206,6 @@ class Sw2TextBlocks : public SwImpBlocks
 public:
     Sw2TextBlocks( const String& );
     virtual ~Sw2TextBlocks();
-    virtual BOOL   IsOld() const;
     virtual ULONG Delete( USHORT );
     virtual ULONG Rename( USHORT, const String&, const String& );
     virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
@@ -210,6 +215,7 @@ public:
     virtual ULONG GetText( USHORT, String& );
     virtual ULONG PutText( const String&, const String&, const String& );
     virtual ULONG MakeBlockList();
+    virtual short GetFileType( ) const;
     ULONG LoadDoc();
 
     virtual ULONG OpenFile( BOOL bReadOnly = TRUE );
@@ -231,16 +237,17 @@ public:
     Sw3TextBlocks( const String& );
     Sw3TextBlocks( SvStorage& );
     virtual ~Sw3TextBlocks();
-    virtual BOOL   IsOld() const;
     virtual ULONG Delete( USHORT );
     virtual ULONG Rename( USHORT, const String&, const String& );
     virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
     virtual ULONG GetDoc( USHORT );
     virtual ULONG BeginPutDoc( const String&, const String& );
     virtual ULONG PutDoc();
+    virtual void SetDoc( SwDoc * pNewDoc);
     virtual ULONG GetText( USHORT, String& );
     virtual ULONG PutText( const String&, const String&, const String& );
     virtual ULONG MakeBlockList();
+    virtual short GetFileType( ) const;
 
     virtual ULONG OpenFile( BOOL bReadOnly = TRUE );
     virtual void  CloseFile();
