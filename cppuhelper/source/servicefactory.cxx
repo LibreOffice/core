@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 08:52:02 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 10:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ static Reference< XSingleServiceFactory > loadLibComponentFactory(
         // ========================= LATEST VERSION =========================
 #ifdef MACOSX
         OUString aGetEnvName(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) + rLibName );
+            rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) );
 #else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
 #endif
@@ -176,7 +176,7 @@ static Reference< XSingleServiceFactory > loadLibComponentFactory(
 
 #ifdef MACOSX
             OUString aGetFactoryName(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) ) + rLibName );
+                rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) ) );
 #else
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
 #endif

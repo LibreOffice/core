@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 08:50:54 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 10:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,7 @@ static uno_Environment * initDefaultEnvironment( const OUString & rEnvTypeName, 
         {
 #ifdef MACOSX
             OUString aSymbolName(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("_uno" UNO_INIT_ENVIRONMENT) ) + rEnvTypeName );
+                rEnvTypeName + OUString( RTL_CONSTASCII_USTRINGPARAM("_uno" UNO_INIT_ENVIRONMENT) ) );
 #else
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT) );
 #endif

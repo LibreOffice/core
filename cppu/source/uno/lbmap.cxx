@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 08:50:54 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 10:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ static Mapping loadExternalMapping(
         {
 #ifdef MACOSX
             OUString aSymbolName(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) ) + aName );
+                aName + OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) ) );
 #else
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) );
 #endif
