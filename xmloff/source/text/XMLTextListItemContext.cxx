@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListItemContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-18 08:04:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,6 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
-    sal_Bool bOrdered = sal_False;
     sal_Bool bHeading = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -167,12 +166,10 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
             GetImport().GetProgressBarHelper()->Increment();
 
         break;
-    case XML_TOK_TEXT_ORDERED_LIST:
-        bOrdered = sal_True;
-    case XML_TOK_TEXT_UNORDERED_LIST:
+    case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
                                             nPrefix, rLocalName,
-                                            xAttrList, bOrdered );
+                                            xAttrList );
         break;
     }
 
