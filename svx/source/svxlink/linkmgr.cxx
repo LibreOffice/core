@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:08:16 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,9 +252,6 @@ void SvxLinkManager::SetTransferPriority( so3::SvBaseLink& rLink, USHORT nPrio )
 //                                  CastAndAddRef( rLink.GetObj() );
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLink.GetObjType()) ?
                 (SvFileObject*)rLink.GetObj() : 0;
-
-    if( pFileObj )
-        pFileObj->SetTransferPriority( nPrio );
 }
 
 
