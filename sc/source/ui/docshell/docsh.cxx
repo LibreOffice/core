@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:58:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,9 +286,9 @@ void ScDocShell::DoEnterHandler()
 
 //------------------------------------------------------------------
 
-USHORT ScDocShell::GetSaveTab()
+SCTAB ScDocShell::GetSaveTab()
 {
-    USHORT nTab = 0;
+    SCTAB nTab = 0;
     ScTabViewShell* pSh = GetBestViewShell();
     if (pSh)
     {
@@ -434,7 +434,7 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 
     if (eShellMode == SFX_CREATE_MODE_EMBEDDED)
     {
-        USHORT nVisTab = aDocument.GetVisibleTab();
+        SCTAB nVisTab = aDocument.GetVisibleTab();
         BOOL bHasVis = aDocument.HasTable(nVisTab);
         if ( SfxInPlaceObject::GetVisArea().IsEmpty() || !bHasVis )
         {
@@ -443,9 +443,11 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
                 nVisTab = 0;
                 aDocument.SetVisibleTab(nVisTab);
             }
-            USHORT nStartCol,nStartRow;
+            SCCOL nStartCol;
+            SCROW nStartRow;
             aDocument.GetDataStart( nVisTab, nStartCol, nStartRow );
-            USHORT nEndCol,nEndRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
             aDocument.GetPrintArea( nVisTab, nEndCol, nEndRow );
             if (nStartCol>nEndCol)
                 nStartCol = nEndCol;
@@ -561,8 +563,8 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                 pChartListener->UpdateDirtyCharts();
 
             // #95582#; set the table names of linked tables to the new path
-            USHORT nTabCount = aDocument.GetTableCount();
-            for (USHORT i = 0; i < nTabCount; ++i)
+            SCTAB nTabCount = aDocument.GetTableCount();
+            for (SCTAB i = 0; i < nTabCount; ++i)
             {
                 if (aDocument.IsLinked( i ))
                 {
@@ -848,8 +850,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     // ob nach dem Import optimale Spaltenbreiten gesetzt werden sollen
     BOOL bSetColWidths = FALSE;
     BOOL bSetSimpleTextColWidths = FALSE;
-    BOOL bSimpleColWidth[MAXCOL+1];
-    memset( bSimpleColWidth, 1, (MAXCOL+1) * sizeof(BOOL) );
+    BOOL bSimpleColWidth[MAXCOLCOUNT];
+    memset( bSimpleColWidth, 1, (MAXCOLCOUNT) * sizeof(BOOL) );
     ScRange aColWidthRange;
     // ob nach dem Import optimale Zeilenhoehen gesetzt werden sollen
     BOOL bSetRowHeights = FALSE;
@@ -1086,7 +1088,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
             // Memo-Felder fuehren zu einem bSimpleColWidth[nCol]==FALSE
-            for ( USHORT nCol=0; nCol <= MAXCOL && !bSetRowHeights; nCol++ )
+            for ( SCCOL nCol=0; nCol <= MAXCOL && !bSetRowHeights; nCol++ )
             {
                 if ( !bSimpleColWidth[nCol] )
                     bSetRowHeights = TRUE;
@@ -1248,10 +1250,11 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
         //  all sheets (for Excel import)
-        USHORT nTabCount = aDocument.GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = aDocument.GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
-            USHORT nEndCol, nEndRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
             aDocument.GetCellArea( nTab, nEndCol, nEndRow );
             aColWidthRange.aEnd.SetCol( nEndCol );
             aColWidthRange.aEnd.SetRow( nEndRow );
@@ -1261,7 +1264,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // Reihenfolge erst Breite dann Hoehe ist wichtig (vergl. hund.rtf)
             if ( bSetColWidths )
             {
-                for ( USHORT nCol=0; nCol <= nEndCol; nCol++ )
+                for ( SCCOL nCol=0; nCol <= nEndCol; nCol++ )
                 {
                     USHORT nWidth = aDocument.GetOptimalColWidth(
                         nCol, nTab, &aVirtDev, nPPTX, nPPTY, aZoom, aZoom, FALSE, &aMark,
@@ -1408,7 +1411,7 @@ xub_StrLen lcl_ScDocShell_GetColWidthInChars( USHORT nWidth )
 
 
 void lcl_ScDocShell_GetFixedWidthString( String& rStr, const ScDocument& rDoc,
-        USHORT nTab, USHORT nCol, BOOL bValue, SvxCellHorJustify eHorJust )
+        SCTAB nTab, SCCOL nCol, BOOL bValue, SvxCellHorJustify eHorJust )
 {
     xub_StrLen nLen = lcl_ScDocShell_GetColWidthInChars(
             rDoc.GetColWidth( nCol, nTab ) );
@@ -1448,7 +1451,7 @@ void lcl_ScDocShell_GetFixedWidthString( String& rStr, const ScDocument& rDoc,
 
 
 void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
-        const ScDocument& rDoc, USHORT nTab, USHORT nCol )
+        const ScDocument& rDoc, SCTAB nTab, SCCOL nCol )
 {
     String aString;
     lcl_ScDocShell_GetFixedWidthString( aString, rDoc, nTab, nCol, FALSE,
@@ -1492,10 +1495,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             bContextOrNotAsciiEncoding = FALSE;
     }
 
-    USHORT nStartCol = 0;
-    USHORT nStartRow = 0;
-    USHORT nTab = GetSaveTab();
-    USHORT nEndCol, nEndRow;
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCTAB nTab = GetSaveTab();
+    SCCOL nEndCol;
+    SCROW nEndRow;
     aDocument.GetCellArea( nTab, nEndCol, nEndRow );
 
     ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ), nEndRow );
@@ -1509,11 +1513,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     BOOL bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
     BOOL bTabProtect = aDocument.IsTabProtected( nTab );
 
-    USHORT nCol;
-    USHORT nRow;
-    USHORT nNextCol = nStartCol;
-    USHORT nNextRow = nStartRow;
-    USHORT nEmptyCol, nEmptyRow;
+    SCCOL nCol;
+    SCROW nRow;
+    SCCOL nNextCol = nStartCol;
+    SCROW nNextRow = nStartRow;
+    SCCOL nEmptyCol;
+    SCROW nEmptyRow;
     SvNumberFormatter& rFormatter = *aDocument.GetFormatTable();
 
     ScHorizontalCellIterator aIter( &aDocument, nTab, nStartCol, nStartRow,
@@ -2020,7 +2025,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         {
             WaitObject aWait( GetDialogParent() );
 
-            USHORT nEndCol, nEndRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
             aDocument.GetCellArea( 0, nEndCol, nEndRow );
             ScRange aRange( 0,0,0, nEndCol,nEndRow,0 );
 
@@ -2392,7 +2398,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
     rDocStat.nPageCount = 0;
 
     if ( pPrinter )
-        for ( USHORT i=0; i<rDocStat.nTableCount; i++ )
+        for ( SCTAB i=0; i<rDocStat.nTableCount; i++ )
             rDocStat.nPageCount +=
                 (USHORT) ScPrintFunc( this, pPrinter, i ).GetTotalPages();
 }
