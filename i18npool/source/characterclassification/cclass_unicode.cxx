@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:59:03 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,21 +95,21 @@ cclass_Unicode::~cclass_Unicode() {
 
 OUString SAL_CALL
 cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset;
+    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToUpper, rLocale);
     return trans->transliterate(Text, nPos, nCount, offset);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset;
+    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToLower, rLocale);
     return trans->transliterate(Text, nPos, nCount, offset);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
-    Sequence< sal_Int32 > offset;
+    Sequence< sal_Int32 > offset( nCount );
     trans->setMappingType(MappingTypeToTitle, rLocale);
     return trans->transliterate(Text, nPos, nCount, offset);
 }
@@ -224,6 +224,9 @@ Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( 
     Source Code Control System - Updates
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/03/26 16:59:03  er
+    #97583# it's dual licensed, LGPL and SISSL
+
     Revision 1.1  2002/03/26 06:31:13  bustamam
     #97583# Add Character Classification
 
