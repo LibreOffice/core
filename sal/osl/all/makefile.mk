@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2001-03-27 12:25:40 $
+#   last change: $Author: obr $ $Date: 2001-04-06 14:56:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ MULTITHREAD_OBJ=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   $(SLO)$/isocket.obj		\
-            $(SLO)$/omutex.obj      \
             $(SLO)$/logmodule.obj      \
             $(SLO)$/utility.obj
 
