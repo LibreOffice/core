@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-21 20:48:33 $
+ *  last change: $Author: svesik $ $Date: 2000-12-21 21:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,7 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
     else
         return 0;
 }
+#endif
 
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -709,8 +710,6 @@ final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 }
 
 // --------------------------------------------------------------------------
-
-#endif
 
 final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
