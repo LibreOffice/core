@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:32:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,7 +1577,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "….PAR" ;
         Text [ finnish ] = "ISEVEN" ;
         Text [ danish ] = "ER.LIGE" ;
-        Text [ french ] = "ESTPAIR" ;
+        Text [ french ] = "EST.PAIR" ;
         Text [ swedish ] = "ƒRJƒMN" ;
         Text [ dutch ] = "ISEVEN" ;
         Text [ spanish ] = "ESPAR" ;
@@ -1606,7 +1606,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "….ÕMPAR" ;
         Text [ finnish ] = "ISODD" ;
         Text [ danish ] = "ER.ULIGE" ;
-        Text [ french ] = "ESTIMPAIR" ;
+        Text [ french ] = "EST.IMPAIR" ;
         Text [ swedish ] = "ƒRUDDA" ;
         Text [ dutch ] = "ISONEVEN" ;
         Text [ spanish ] = "ESIMPAR" ;
@@ -2479,7 +2479,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "GCD" ;
         Text [ danish ] = "STÿRSTE.F∆LLES.DIVISOR" ;
         Text [ french ] = "PGCD" ;
-        Text [ swedish ] = "SGN" ;
+        Text [ swedish ] = "SGD" ;
         Text [ dutch ] = "GGD" ;
         Text [ spanish ] = "M.C.D" ;
         Text [ english_us ] = "GCD" ;
@@ -2508,7 +2508,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "LCM" ;
         Text [ danish ] = "MINDSTE.F∆LLES.MULTIPLUM" ;
         Text [ french ] = "PPCM" ;
-        Text [ swedish ] = "MGT" ;
+        Text [ swedish ] = "MGM" ;
         Text [ dutch ] = "KGV" ;
         Text [ spanish ] = "M.C.M" ;
         Text [ english_us ] = "LCM" ;
@@ -3690,7 +3690,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "PV" ;
         Text [ danish ] = "NV" ;
         Text [ french ] = "VA" ;
-        Text [ swedish ] = "NV" ;
+        Text [ swedish ] = "NUVƒRDE" ;
         Text [ dutch ] = "HW" ;
         Text [ spanish ] = "VA" ;
         Text [ english_us ] = "PV" ;
@@ -4151,7 +4151,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NPER" ;
         Text [ danish ] = "NPER" ;
         Text [ french ] = "NPM" ;
-        Text [ swedish ] = "BPER" ;
+        Text [ swedish ] = "BETALNING" ;
         Text [ dutch ] = "NPER" ;
         Text [ spanish ] = "NPER" ;
         Text [ english_us ] = "NPER" ;
@@ -4324,14 +4324,14 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "EFECTIVA" ;
         Text [ finnish ] = "EFFECTIVE" ;
         Text [ danish ] = "EFFEKTIV" ;
-        Text [ french ] = "EFFECTIF" ;
+        Text [ french ] = "TAUX.EFFECTIF" ;
         Text [ swedish ] = "EFFEKTIV" ;
         Text [ dutch ] = "EFFECT.RENTE" ;
         Text [ spanish ] = "INT.EFECTIVO" ;
         Text [ english_us ] = "EFFECTIVE" ;
         Text[ chinese_simplified ] = "EFFECTIVE";
         Text[ russian ] = "›‘‘≈ “œ–Œ÷";
-        Text[ polish ] = "EFEKTYWNY";
+        Text[ polish ] = "EFFECT";
         Text[ japanese ] = "EFFECTIVE";
         Text[ chinese_traditional ] = "EFFECTIVE";
         Text[ arabic ] = "EFFECTIVE";
@@ -4353,14 +4353,14 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "NOMINAL" ;
         Text [ finnish ] = "NOMINAL" ;
         Text [ danish ] = "NOMINEL" ;
-        Text [ french ] = "NOMINAL" ;
+        Text [ french ] = "TAUX.NOMINAL" ;
         Text [ swedish ] = "NOMINAL" ;
         Text [ dutch ] = "NOMINALE.RENTE" ;
         Text [ spanish ] = "TASA.NOMINAL" ;
         Text [ english_us ] = "NOMINAL" ;
         Text[ chinese_simplified ] = "NOMINAL";
         Text[ russian ] = "ÕŒÃ»Õ¿À";
-        Text[ polish ] = "NOMINALNY";
+        Text[ polish ] = "NOMINAL";
         Text[ japanese ] = "NOMINAL";
         Text[ chinese_traditional ] = "NOMINAL";
         Text[ arabic ] = "NOMINAL";
@@ -5254,7 +5254,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "ID NTICO" ;
         Text [ finnish ] = "EXACT" ;
         Text [ danish ] = "EKSAKT" ;
-        Text [ french ] = "IDENTIQUE" ;
+        Text [ french ] = "EXACT" ;
         Text [ swedish ] = "EXAKT" ;
         Text [ dutch ] = "GELIJK" ;
         Text [ spanish ] = "IGUAL" ;
@@ -7265,7 +7265,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "WEEKNUM" ;
         Text[ chinese_simplified ] = "WEEKNUM";
         Text[ russian ] = " ¿À≈Õƒ.Õ≈ƒ≈Àﬂ";
-        Text[ polish ] = "TYDZIE—KALENDARZOWY";
+        Text[ polish ] = "WEEKNUM";
         Text[ japanese ] = "WEEKNUM";
         Text[ chinese_traditional ] = "WEEKNUM";
         Text[ arabic ] = "WEEKNUM";
@@ -7796,4 +7796,5 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
 
