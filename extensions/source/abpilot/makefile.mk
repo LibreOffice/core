@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-01 11:09:35 $
+#   last change: $Author: mh $ $Date: 2001-08-08 09:22:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,12 +105,8 @@ RESLIB1SRSFILES= $(SRS)/abp.srs
 
 #IMGLST_SRS=$(SRS)$/abp.srs
 
-
-
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
-
-
 
 SHL1STDLIBS= \
         $(VCLLIB)			\
@@ -121,18 +117,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(COMPHELPERLIB)	\
         $(TKLIB)			\
-        $(UNOTOOLSLIB)		\
-
-#		$(VOSLIB) 	 \
-        $(SO2LIB)	\
-        $(VCLLIB)    \
-        $(SVLLIB)	\
-        $(OSLLIB)	 \
-        $(SOTLIB)	\
-        $(UCBHELPERLIB)	\
-        $(SFXLIB)	\
-        $(DBTOOLSLIB)
-
+        $(UNOTOOLSLIB)		
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
@@ -142,9 +127,6 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
