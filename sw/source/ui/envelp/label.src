@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:52:43 $
+ *  last change: $Author: os $ $Date: 2001-07-02 09:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,6 @@ TabPage TP_LAB_LAB
         Size = MAP_APPFONT ( 124 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Sort = TRUE ;
     };
     FixedText INF_FORMAT
     {
@@ -749,29 +748,8 @@ String STR_DOC_TITLE
 };
 String STR_CUSTOM
 {
-    Text                        = "(Benutzer)" ;
-    Text [ English ]            = "(Custom)" ;
-    Text [ norwegian ]          = "(Custom)" ;
-    Text [ italian ]            = "[Utente]" ;
-    Text [ portuguese_brazilian ] = "[Pessoal]" ;
-    Text [ portuguese ]         = "[Utilizador]" ;
-    Text [ finnish ]            = "[Käyttäjän määrittämä]" ;
-    Text [ danish ]             = "[Bruger]" ;
-    Text [ french ]             = "(Utilisateur)" ;
-    Text [ swedish ]            = "[Användare]" ;
-    Text [ dutch ]              = "[Gebruiker] " ;
-    Text [ spanish ]            = "(Usuario)" ;
-    Text [ english_us ]         = "[User-defined]" ;
-    Text[ chinese_simplified ]  = "[Ê¹ÓÃÕß]";
-    Text[ russian ]             = "(Ïîëüçîâàòåëü)";
-    Text[ polish ]              = "(U¿ytkownik)";
-    Text[ japanese ]            = "(Õ°»Þ°)";
-    Text[ greek ]               = "[×ñÞóôçò]";
-    Text[ korean ]              = "[»ç¿ëÀÚ]";
-    Text[ chinese_traditional ] = "[¨Ï¥ÎªÌ]";
-    Text[ arabic ]              = "[ãÓÊÎÏã]";
-    Text[ turkish ]             = "[Kullanýcý tanýmlý]";
-    Text[ catalan ]             = "[Usuario]";
+    Text                        = "[Benutzer]" ;
+    Text [ English ]            = "[Custom]" ;
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS

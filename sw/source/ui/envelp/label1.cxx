@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:15:58 $
+ *  last change: $Author: os $ $Date: 2001-07-02 09:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aMakeBox       (this, SW_RES(BOX_MAKE   )),
     aTypeText      (this, SW_RES(TXT_TYPE   )),
     aTypeBox       (this, SW_RES(BOX_TYPE   )),
+    aHiddenSortTypeBox(this, WB_SORT|WB_HIDE),
     aFormatInfo    (this, SW_RES(INF_FORMAT )),
     aFormatFL      (this, SW_RES(FL_FORMAT ))
 {
@@ -705,6 +706,7 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     WaitObject aWait( GetParent() );
 
     aTypeBox.Clear();
+    aHiddenSortTypeBox.Clear();
     GetParent()->TypeIds().Remove( 0, GetParent()->TypeIds().Count() );
 
     const String aMake = aMakeBox.GetSelectEntry();
@@ -715,20 +717,35 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     const sal_uInt16 nCount   = GetParent()->Recs().Count();
           sal_uInt16 nLstType = 0;
 
+    const String sCustom(SW_RES(STR_CUSTOM));
+    //insert the entries into the sorted list box
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        if ( GetParent()->Recs()[i]->aType == String( SW_RES(STR_CUSTOM) ) ||
-             GetParent()->Recs()[i]->bCont == bCont )
+        const String aType ( GetParent()->Recs()[i]->aType );
+        BOOL bInsert = FALSE;
+        if ( GetParent()->Recs()[i]->aType == sCustom )
         {
-            const String aType ( GetParent()->Recs()[i]->aType );
-            if ( aTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
+            bInsert = TRUE;
+            aTypeBox.InsertEntry(aType );
+        }
+        else if ( GetParent()->Recs()[i]->bCont == bCont )
+        {
+            if ( aHiddenSortTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
-                if ( !nLstType && aType == String(aItem.aLstType) )
-                    nLstType = GetParent()->TypeIds().Count();
-                aTypeBox.InsertEntry( aType );
-                GetParent()->TypeIds().Insert(i, GetParent()->TypeIds().Count());
+                bInsert = TRUE;
+                aHiddenSortTypeBox.InsertEntry( aType );
             }
         }
+        if(bInsert)
+        {
+            GetParent()->TypeIds().Insert(i, GetParent()->TypeIds().Count());
+            if ( !nLstType && aType == String(aItem.aLstType) )
+                nLstType = GetParent()->TypeIds().Count();
+        }
+    }
+    for(sal_uInt16 nEntry = 0; nEntry < aHiddenSortTypeBox.GetEntryCount(); nEntry++)
+    {
+        aTypeBox.InsertEntry(aHiddenSortTypeBox.GetEntry(nEntry));
     }
     if (nLstType)
         aTypeBox.SelectEntry(aItem.aLstType);
