@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:39:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,9 +431,16 @@ Sequence< Type> OBoundControl::_getTypes()
 //------------------------------------------------------------------
 Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
+    Any aReturn;
+
+    // XTypeProvider first - don't ask the OBoundControl_BASE, it would deliver incomplete types
+    if ( _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) ) )
+        aReturn = OControl::queryAggregation( _rType );
+
     // ask our own interfaces
-    // (do this first - we want to "overwrite" XPropertiesChangeListener)
-    Any aReturn( OBoundControl_BASE::queryInterface(_rType) );
+    // (do this first (except XTypeProvider ) - we want to "overwrite" XPropertiesChangeListener)
+    if ( !aReturn.hasValue() )
+        aReturn = OBoundControl_BASE::queryInterface( _rType );
 
     // ask the base class
     if ( !aReturn.hasValue() )
@@ -1869,6 +1876,23 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
+Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+{
+    Any aDefault;
+    switch ( _nHandle )
+    {
+        case PROPERTY_ID_CONTROLSOURCE:
+            aDefault <<= ::rtl::OUString();
+            break;
+
+        case PROPERTY_ID_CONTROLLABEL:
+            aDefault <<= Reference< XPropertySet >();
+            break;
+    }
+    return aDefault;
+}
+
+//------------------------------------------------------------------------------
 void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
     switch (nHandle)
@@ -2378,12 +2402,27 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
+    // on a new record?
+    sal_Bool bIsNewRecord = sal_False;
+    Reference<XPropertySet> xSet( m_xCursor, UNO_QUERY );
+    if ( xSet.is() )
+        xSet->getPropertyValue( PROPERTY_ISNEW ) >>= bIsNewRecord;
+
+    // cursor on an invalid row?
+    sal_Bool bInvalidCursorPosition =  m_xCursor.is()
+                                    && (  m_xCursor->isAfterLast()
+                                       || m_xCursor->isBeforeFirst()
+                                       )
+                                    && !bIsNewRecord;
+    // don't count the insert row as "invalid"
+    // @since  #i24495#
+    // @date   2004-05-14
+    // @author fs@openoffice.org
+
     sal_Bool bSimpleReset =
                         (   !m_xColumn.is()                     // no connection to a database column
                         ||  (   m_xCursor.is()                  // OR   we have an improperly positioned cursor
-                            &&  (   m_xCursor->isAfterLast()
-                                ||  m_xCursor->isBeforeFirst()
-                                )
+                            &&  bInvalidCursorPosition
                             )
                         ||  hasExternalValueBinding()           // OR we have an external value binding
                         );
@@ -2428,11 +2467,6 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
         if ( bIsNull )
         {
-            sal_Bool bIsNewRecord = sal_False;
-            Reference<XPropertySet> xSet( m_xCursor, UNO_QUERY );
-            if ( xSet.is() )
-                xSet->getPropertyValue( PROPERTY_ISNEW ) >>= bIsNewRecord;
-
             if ( bIsNewRecord )
             {
                 // reset the control to it's default
