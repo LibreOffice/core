@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:12 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1282,7 +1282,7 @@ void FmXGridPeer::disposing(const EventObject& e) throw( RuntimeException )
         {
             if ( m_pDispatchers[i] == e.Source )
             {
-                m_pDispatchers[i]->removeStatusListener( static_cast< XStatusListener* >( this ), *pSupportedURLs );
+                m_pDispatchers[i]->removeStatusListener( static_cast< ::com::sun::star::frame::XStatusListener* >( this ), *pSupportedURLs );
                 m_pDispatchers[i] = NULL;
                 m_pStateCache[i] = 0;
                 bKnownSender = true;
