@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:55:44 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,23 +73,46 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
-#include "swmodule.hxx"
-
-#include "redline.hxx"      // SwRedline
-#include "txtatr.hxx"       // SwTxt ...
-#include "docary.hxx"       // SwRedlineTbl
-#include "itratr.hxx"       // SwAttrIter
-#include "ndtxt.hxx"        // SwTxtNode
-#include "swfntcch.hxx"     // SwFontAccess
-#include "doc.hxx"          // SwDoc
-#include "txatbase.hxx"     // SwTxtAttr
-#include "rootfrm.hxx"
-#include "frmsh.hxx"
-#include "breakit.hxx"
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>      // SwRedline
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>       // SwTxt ...
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>       // SwRedlineTbl
+#endif
+#ifndef _ITRATR_HXX
+#include <itratr.hxx>       // SwAttrIter
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>        // SwTxtNode
+#endif
+#ifndef _SWFNTCCH_HXX
+#include <swfntcch.hxx>     // SwFontAccess
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>          // SwDoc
+#endif
+#ifndef _TXATBASE_HXX
+#include <txatbase.hxx>     // SwTxtAttr
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
 //////////////////////////
 
@@ -107,11 +130,14 @@
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _REDLNITR_HXX
+#include <redlnitr.hxx>
+#endif
+#ifndef _EXTINPUT_HXX
+#include <extinput.hxx>
+#endif
 
-#include "redlnitr.hxx"
-#include "extinput.hxx"
-
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 /*************************************************************************
  *                      SwAttrIter::CtorInit()

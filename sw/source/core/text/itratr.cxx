@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-27 11:50:18 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -161,7 +161,7 @@
 #include <fmtsrnd.hxx>
 #endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 /*************************************************************************
  *                      SwAttrIter::Chg()

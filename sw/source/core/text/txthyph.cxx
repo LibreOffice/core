@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:12:13 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
-#include <com/sun/star/text/WordType.hpp>
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #ifndef _VIEWOPT_HXX
@@ -119,7 +119,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 /*************************************************************************
  *                      SwTxtFormatInfo::HyphWord()

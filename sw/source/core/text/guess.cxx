@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:08:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,12 @@
 #include <viewsh.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_BREAKTYPE_HPP_
-#include <com/sun/star/text/BreakType.hpp>
+#ifndef _COM_SUN_STAR_I18N_BREAKTYPE_HPP_
+#include <com/sun/star/i18n/BreakType.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::linguistic2;
 
 inline sal_Bool IsDelim( const xub_Unicode cCh )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-14 08:21:35 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 #pragma hdrstop
 
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
@@ -150,7 +150,7 @@
 #endif
 #endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 #define MAX_TXTPORLEN 300
 
