@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-15 10:07:36 $
+ *  last change: $Author: er $ $Date: 2002-09-24 18:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3472,8 +3472,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
         if (aName.Len())
         {
             String aContent;
-            ScRangeUtil().MakeAreaString( ScArea( nTab,nX1,nY1,nX2,nY2 ),
-                                            aContent, pDoc, FALSE );
+            ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
             ScRangeName* pList = pDoc->GetRangeName();
 

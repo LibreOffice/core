@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 15:56:03 $
+ *  last change: $Author: er $ $Date: 2002-09-24 18:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,80 +109,6 @@ BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
                         endPos.GetCol(),    endPos.GetRow() );
 
     return nSuccess;
-}
-
-//------------------------------------------------------------------------
-
-void ScRangeUtil::MakeAreaString( const ScArea& rArea,
-                                  String&       rAreaStr,
-                                  ScDocument*   pDoc,
-                                  BOOL bRel ) const
-{
-    /*
-     * => z.B. "$Tabelle1.$A1:$D17"
-     */
-
-    DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
-    if ( !pDoc )
-        return;
-
-    rAreaStr  = ScRefTripel( rArea.nColStart,
-                             rArea.nRowStart,
-                             rArea.nTab,
-                             bRel, bRel, bRel ).GetRefString( pDoc,
-                                                                 MAXTAB+1 );
-    if (   (rArea.nColStart != rArea.nColEnd)
-        || (rArea.nRowStart != rArea.nRowEnd) )
-    {
-        rAreaStr += ':';
-        rAreaStr += ScRefTripel( rArea.nColEnd,
-                                 rArea.nRowEnd,
-                                 rArea.nTab,
-                                 bRel, bRel, bRel ).GetRefString( pDoc,
-                                                                     rArea.nTab );
-    }
-}
-
-//------------------------------------------------------------------------
-
-void ScRangeUtil::MakeTabAreaString( const ScTripel&    rAreaStart,
-                                     const ScTripel&    rAreaEnd,
-                                     String&            rAreaStr,
-                                     ScDocument*        pDoc ) const
-{
-    DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
-    if ( !pDoc )
-        return;
-
-    /*
-     * => z.B. "$Tabelle1.$A1:$Tabelle1.$D17"
-     */
-
-    USHORT nStartTab = rAreaStart.GetTab();
-    USHORT nEndTab   = rAreaEnd.GetTab();
-
-    if ( nStartTab == nEndTab )
-    {
-        ScArea aArea( nStartTab,
-                      rAreaStart.GetCol(), rAreaStart.GetRow(),
-                      rAreaEnd.GetCol(), rAreaEnd.GetRow() );
-
-        MakeAreaString( aArea, rAreaStr, pDoc );
-    }
-    else
-    {
-        rAreaStr  = ScRefTripel( rAreaStart.GetCol(),
-                                 rAreaStart.GetRow(),
-                                 nStartTab,
-                                 FALSE, FALSE, FALSE ).GetRefString( pDoc,
-                                                                     MAXTAB+1 );
-        rAreaStr += ':';
-        rAreaStr += ScRefTripel( rAreaEnd.GetCol(),
-                                 rAreaEnd.GetRow(),
-                                 nEndTab,
-                                 FALSE, FALSE, FALSE ).GetRefString( pDoc,
-                                                                     MAXTAB+1 );
-    }
 }
 
 //------------------------------------------------------------------------

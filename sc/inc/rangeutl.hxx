@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 15:50:22 $
+ *  last change: $Author: er $ $Date: 2002-09-24 18:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,16 +92,6 @@ public:
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   USHORT            nTab ) const;
-
-    void    MakeAreaString      ( const ScArea&     rArea,
-                                  String&           rAreaStr,
-                                  ScDocument*       pDoc,
-                                  BOOL bRel = FALSE ) const;
-
-    void    MakeTabAreaString   ( const ScTripel&   rAreaStart,
-                                  const ScTripel&   rAreaEnd,
-                                  String&           rAreaStr,
-                                  ScDocument*       pDoc ) const;
 
     void    CutPosString        ( const String&     theAreaStr,
                                   String&           thePosStr ) const;

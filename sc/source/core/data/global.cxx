@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-14 12:21:57 $
+ *  last change: $Author: er $ $Date: 2002-09-24 18:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,30 +248,19 @@ String ScRefTripel::GetRefString(ScDocument* pDoc, USHORT nActTab) const
         return ScGlobal::GetRscString( STR_NOREF_STR );
 
     String aString;
-    if (nActTab != nTab)
+    USHORT nFlags = SCA_VALID;
+    if ( nActTab != nTab )
     {
-        if (!bRelTab)
-            aString += '$';
-        String aTabName;
-        pDoc->GetName(nTab, aTabName);
-        aString += aTabName;
-        aString += '.';
+        nFlags |= SCA_TAB_3D;
+        if ( !bRelTab )
+            nFlags |= SCA_TAB_ABSOLUTE;
     }
-
-    if (!bRelCol)
-        aString += '$';
-    if ( nCol < 26 )
-        aString += (sal_Unicode) ( 'A' + nCol );
-    else
-    {
-        aString += (sal_Unicode) ( 'A' + ( nCol / 26 ) - 1 );
-        aString += (sal_Unicode) ( 'A' + ( nCol % 26 ) );
-    }
-
+    if ( !bRelCol )
+        nFlags |= SCA_COL_ABSOLUTE;
     if ( !bRelRow )
-        aString += '$';
-    aString += String::CreateFromInt32( nRow+1 );
+        nFlags |= SCA_ROW_ABSOLUTE;
 
+    ScAddress( nCol, nRow, nTab ).Format( aString, nFlags, pDoc );
 
     return aString;
 }
