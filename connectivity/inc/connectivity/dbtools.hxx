@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:58:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ namespace awt {
 namespace lang {
     struct Locale;
     class XMultiServiceFactory;
+    class WrappedTargetException;
 }
 namespace container {
     class XNameAccess;
@@ -151,39 +152,45 @@ namespace dbtools
 
 //=========================================================================
 
-    /** calculates the connection the given RowSet works - or should work - with.
-        <p>If the set has an active connection (ActiveConnection property), this one is returned.
-        Else the parent hierarchy is searched for an object with an XConnection interface. If found, this
-        one is returned.</p>
-        <p>If we still haven't a connection, a new one is calculated from the current RowSet settings (such as
-        DataSource, URL, User, Password) and returned.</p>
-        <p>In any of these cases the calculated connection is <b>forwarded</b> to the RowSet, that means before
-        returning from the function the connection is set as ActiveConnection property on the RowSet !<p>
-        <p>This function  is deprecated, please use connectRowset.</p>
-    @deprecated
-    @see connectRowset
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
-            throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
     /** creates a connection which can be used for the rowset given
-        <p>If the rowset already has an ActiveConnection (means a value vor this property), this connection is returned.</p>
-        <p>The connection is calculated from the settings in the row set (data source name, URL, user, pwd).</p>
+
+        The function tries to obtain a connection for the row set with the following
+        steps (in this order):
+        <nl>
+            <li>If the rowset already has an ActiveConnection (means a non-<NULL/> value vor this property),
+                this one is used.</li>
+            <li>If in the parent hierarchy of the row set, there is an object supporting
+                the XConnection interface, this one is returned.</li>
+            <li>If the DataSourceName property of the row set is not empty, a connection for this
+                data source is retrieved.</li>
+            <li>If the URL property of the row set is not empty, an connection for this URL is
+                retrieved from the driver manager.
+        </nl>
+
         @param _rxRowSet
             the row set
+
         @param _rxFactory
             a service factory, which can be used to create data sources, interaction handler etc (the usual stuff)
+
         @param _bSetAsActiveConnection
             If <TRUE/>, the calculated connection is set as ActiveConnection property on the rowset.
-            In this case, the method behaves exactly like calcConnection.
+
+            If the connection was newly created by the method, and this parameter is <TRUE/>, then
+            the ownership of the conneciton is delivered to a temporary object, which observes the
+            row set: As soon as a connection-relevant property of the row set changes, or as soon
+            as if somebody else sets another ActiveConnection at the row set, the original
+            connection (the one which this function calculated) is disposed and discarded. At this
+            very moment, also the temporary observer object dies. This way, it is ensured that
+            there's no resource leak from an un-owned connection object.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         sal_Bool _bSetAsActiveConnection
-    )   SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+                    , ::com::sun::star::lang::WrappedTargetException
+                    , ::com::sun::star::uno::RuntimeException ) );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
@@ -386,7 +393,7 @@ namespace dbtools
         the current settings (Command/CommandType/Filter/Order) of the given rowset.
 
         As such an instance can be obtained from a <type scope="com::sun::star::sdb">Connection</type>
-        only the function searches for the connection the RowSet is using via calcConnection.
+        only the function searches for the connection the RowSet is using via connectRowset.
         This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
     */
