@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 18:47:57 $
+ *  last change: $Author: os $ $Date: 2001-06-05 07:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,7 +1136,13 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 if ( !rSh.BalanceRowHeight(TRUE) )
                     rSet.DisableItem(FN_TABLE_BALANCE_ROWS);
             break;
-
+            case FN_OPTIMIZE_TABLE:
+                if ( !rSh.IsTableMode() &&
+                        !rSh.IsAdjustCellWidthAllowed() &&
+                        !rSh.IsAdjustCellWidthAllowed(TRUE) &&
+                        !rSh.BalanceRowHeight(TRUE) )
+                    rSet.DisableItem(FN_OPTIMIZE_TABLE);
+            break;
             case SID_INSERT_DIAGRAM:
                 {
                     SvtModuleOptions aMOpt;
@@ -1409,179 +1415,4 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     }
 
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/02/21 17:38:36  jp
-    use GetCurLang form the EditShell
-
-    Revision 1.3  2000/11/14 18:32:27  jp
-    use moduleoptions
-
-    Revision 1.2  2000/10/06 13:36:37  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.246  2000/09/18 16:06:05  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.245  2000/09/08 08:12:52  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.244  2000/09/07 15:59:30  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.243  2000/08/25 09:02:38  os
-    negative margins enabled
-
-    Revision 1.242  2000/07/03 20:02:16  jp
-    Bug #70403#: dont delete protected cells
-
-    Revision 1.241  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.240  2000/05/18 08:37:25  os
-    lcl_IsNumeric
-
-    Revision 1.239  2000/05/16 14:32:51  jp
-    Changes for Unicode
-
-    Revision 1.238  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.237  2000/04/20 12:51:52  os
-    GetName() returns String&
-
-    Revision 1.236  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.235  2000/02/11 14:57:39  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.234  2000/02/03 15:10:42  os
-    #72601# record deleting of rows or column prior to execution
-
-    Revision 1.233  1999/08/23 07:49:02  OS
-    #61218# correct handling of left_and_width oriented tables
-
-
-      Rev 1.232   23 Aug 1999 09:49:02   OS
-   #61218# correct handling of left_and_width oriented tables
-
-      Rev 1.231   21 Jul 1999 13:29:58   JP
-   WhichId-Ranges of SfxItemSets: EndId is inclusive
-
-      Rev 1.230   09 Jun 1999 19:33:58   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.229   11 May 1999 21:51:40   JP
-   Task #66127#: ueberfluessigen Code entfernt
-
-      Rev 1.228   05 May 1999 11:23:18   OS
-   #63790# Tabellen-Update nur bei Bedarf rufen
-
-      Rev 1.227   28 Apr 1999 22:41:34   JP
-   Bug #65545#: lcl_TableParamToItemSet - umgebene spaltige Bereiche beachten
-
-      Rev 1.226   18 Mar 1999 14:40:48   OS
-   #61169# #61489# Masseinheiten fuer Text u. HTML am Module setzen, nicht an der App
-
-      Rev 1.225   22 Feb 1999 11:50:32   JP
-   fuer Bug #61545#: Code optimiert
-
-      Rev 1.224   17 Feb 1999 21:14:20   JP
-   Task #61764#: neu: Tabellen zusammenfassen
-
-      Rev 1.223   27 Nov 1998 14:52:54   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.222   05 Oct 1998 15:36:02   OM
-   Vernuenftiges Standardformat verwenden
-
-      Rev 1.221   15 Sep 1998 11:20:36   JP
-   Bug #56201#: GoNextCell - per Flag das anhaengen von Lines steuern
-
-      Rev 1.220   08 Sep 1998 17:03:00   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.219   30 Jul 1998 10:58:18   OS
-   Tabellenbreit ergibt sich fuer HORI-NONE aus verfuegbarer Breite - Raender #54030#
-
-      Rev 1.218   20 Jul 1998 10:44:52   MA
-   #53013# Nach Anweisung abgeklemmt
-
-      Rev 1.217   26 Jun 1998 17:36:06   OS
-   SwBGDestItem mit Which #51751#
-
-      Rev 1.216   18 Jun 1998 18:18:46   OS
-   SwBackgroundDestinationItem
-
-      Rev 1.215   02 Jun 1998 10:53:16   JP
-   aUITableAttrRange sollte ein const Array sein
-
-      Rev 1.214   29 May 1998 19:08:26   JP
-   SS vom SwTableReq geaendert
-
-      Rev 1.213   12 May 1998 23:44:08   JP
-   neu: InserTable/TextToTable mit optionalen AutoFormat
-
-      Rev 1.212   28 Apr 1998 09:16:18   OS
-   GetTableWidth() verschoben
-
-      Rev 1.211   18 Mar 1998 19:44:20   MA
-   State fuer Split
-
-      Rev 1.210   17 Mar 1998 16:20:42   OS
-   Tabelle auftrennen
-
-      Rev 1.209   17 Mar 1998 14:12:06   OS
-   Border-Slot auch ohne Argumente ueberleben #48169#
-
-      Rev 1.208   16 Mar 1998 23:21:04   JP
-   SplitTable: zusaetzlich einen Modus angeben - Headline kopieren/Attr. Kopieren/Border korrigieren
-
-      Rev 1.207   02 Mar 1998 14:19:34   OS
-   Zahlenformat statt Default auf Text einstellen#46574#
-
-      Rev 1.206   25 Feb 1998 12:53:52   MA
-   new: SplitTable
-
-      Rev 1.205   29 Nov 1997 15:53:00   MA
-   includes
-
-      Rev 1.204   24 Nov 1997 09:47:06   MA
-   includes
-
-      Rev 1.203   11 Nov 1997 10:49:08   OS
-   Parameter fuer Split und ColumnWidth richtig pruefen
-
-      Rev 1.202   03 Nov 1997 13:55:48   MA
-   precomp entfernt
-
-      Rev 1.201   01 Sep 1997 13:23:08   OS
-   DLL-Umstellung
-
-      Rev 1.200   15 Aug 1997 11:48:50   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.199   12 Aug 1997 14:43:10   MH
-   chg: header
-
-      Rev 1.198   11 Aug 1997 15:42:10   JP
-   Bugfix #42478#: ueber die DocShell die geloeschten Formate besorgen
-
-      Rev 1.198   11 Aug 1997 15:41:44   JP
-   Bugfix #42478#: ueber die DocShell die geloeschten Formate besorgen
-
-      Rev 1.197   11 Aug 1997 08:48:54   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.196   08 Aug 1997 17:28:52   OM
-   Headerfile-Umstellung
-
-
-------------------------------------------------------------------------*/
-
 
