@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:16:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include "xestream.hxx"
 #endif
 
+using ::rtl::OUString;
+
 // Escher client anchor =======================================================
 
 namespace {
@@ -97,15 +99,17 @@ double lclGetTwipsScale( MapUnit eMapUnit )
 /** Calculates a drawing layer X position (in twips) from an Escher object column position. */
 long lclGetXFromCol( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
 {
-    return static_cast< long >( fScale * (rDoc.GetColOffset( static_cast<SCCOL>(nXclCol), nScTab ) +
-        ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( static_cast<SCCOL>(nXclCol), nScTab )) + 0.5 );
+    SCCOL nScCol = static_cast< SCCOL >( nXclCol );
+    return static_cast< long >( fScale * (rDoc.GetColOffset( nScCol, nScTab ) +
+        ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( nScCol, nScTab )) + 0.5 );
 }
 
 /** Calculates a drawing layer Y position (in twips) from an Escher object row position. */
 long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
 {
-    return static_cast< long >( fScale * (rDoc.GetRowOffset( static_cast<SCROW>(nXclRow), nScTab ) +
-        ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( static_cast<SCROW>(nXclRow), nScTab )) + 0.5 );
+    SCROW nScRow = static_cast< SCROW >( nXclRow );
+    return static_cast< long >( fScale * (rDoc.GetRowOffset( nScRow, nScTab ) +
+        ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( nScRow, nScTab )) + 0.5 );
 }
 
 /** Calculates an Escher object column position from a drawing layer X position (in twips). */
@@ -240,6 +244,137 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor )
         << rAnchor.mnTRow << rAnchor.mnTY
         << rAnchor.mnRCol << rAnchor.mnRX
         << rAnchor.mnBRow << rAnchor.mnBY;
+}
+
+// ============================================================================
+
+OUString XclTbxControlHelper::GetServiceName( sal_uInt16 nCtrlType )
+{
+    OUString aName;
+#define LCL_CREATE_NAME( name ) CREATE_OUSTRING( "com.sun.star.form.component." name )
+    switch( nCtrlType )
+    {
+        case EXC_OBJ_CMO_BUTTON:        aName = LCL_CREATE_NAME( "CommandButton" ); break;
+        case EXC_OBJ_CMO_CHECKBOX:      aName = LCL_CREATE_NAME( "CheckBox" );      break;
+        case EXC_OBJ_CMO_OPTIONBUTTON:  aName = LCL_CREATE_NAME( "RadioButton" );   break;
+        case EXC_OBJ_CMO_LABEL:         aName = LCL_CREATE_NAME( "FixedText" );     break;
+        case EXC_OBJ_CMO_LISTBOX:       aName = LCL_CREATE_NAME( "ListBox" );       break;
+        case EXC_OBJ_CMO_GROUPBOX:      aName = LCL_CREATE_NAME( "GroupBox" );      break;
+        case EXC_OBJ_CMO_COMBOBOX:      aName = LCL_CREATE_NAME( "ListBox" );       break;  // it's a dropdown listbox
+        case EXC_OBJ_CMO_SPIN:          aName = LCL_CREATE_NAME( "SpinButton" );    break;
+        case EXC_OBJ_CMO_SCROLLBAR:     aName = LCL_CREATE_NAME( "ScrollBar" );     break;
+        default:    DBG_ERRORFILE( "XclTbxControlHelper::GetServiceName - unknown control type" );
+    }
+#undef LCL_CREATE_NAME
+    return aName;
+}
+
+OUString XclTbxControlHelper::GetControlName( sal_uInt16 nCtrlType )
+{
+    OUString aName;
+    switch( nCtrlType )
+    {
+        case EXC_OBJ_CMO_BUTTON:        aName = CREATE_OUSTRING( "CommandButton" ); break;
+        case EXC_OBJ_CMO_CHECKBOX:      aName = CREATE_OUSTRING( "CheckBox" );      break;
+        case EXC_OBJ_CMO_OPTIONBUTTON:  aName = CREATE_OUSTRING( "OptionButton" );  break;
+        case EXC_OBJ_CMO_LABEL:         aName = CREATE_OUSTRING( "Label" );         break;
+        case EXC_OBJ_CMO_LISTBOX:       aName = CREATE_OUSTRING( "ListBox" );       break;
+        case EXC_OBJ_CMO_GROUPBOX:      aName = CREATE_OUSTRING( "GroupBox" );      break;
+        case EXC_OBJ_CMO_COMBOBOX:      aName = CREATE_OUSTRING( "ComboBox" );      break;
+        case EXC_OBJ_CMO_SPIN:          aName = CREATE_OUSTRING( "SpinButton" );    break;
+        case EXC_OBJ_CMO_SCROLLBAR:     aName = CREATE_OUSTRING( "ScrollBar" );     break;
+        default:    DBG_ERRORFILE( "XclTbxControlHelper::GetControlName - unknown control type" );
+    }
+    return aName;
+}
+
+OUString XclTbxControlHelper::GetListenerType( sal_uInt16 nCtrlType )
+{
+    OUString aType;
+    switch( nCtrlType )
+    {
+        case EXC_OBJ_CMO_BUTTON:
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
+            aType = CREATE_OUSTRING( "XActionListener" );
+        break;
+        case EXC_OBJ_CMO_LABEL:
+        case EXC_OBJ_CMO_GROUPBOX:
+            aType = CREATE_OUSTRING( "XMouseListener" );
+        break;
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+            aType = CREATE_OUSTRING( "XChangeListener" );
+        break;
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
+            aType = CREATE_OUSTRING( "XAdjustmentListener" );
+        break;
+        default:
+            DBG_ERRORFILE( "XclTbxControlHelper::GetListenerType - unknown control type" );
+    }
+    return aType;
+}
+
+OUString XclTbxControlHelper::GetEventMethod( sal_uInt16 nCtrlType )
+{
+    OUString aMethod;
+    switch( nCtrlType )
+    {
+        case EXC_OBJ_CMO_BUTTON:
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
+            aMethod = CREATE_OUSTRING( "actionPerformed" );
+        break;
+        case EXC_OBJ_CMO_LABEL:
+        case EXC_OBJ_CMO_GROUPBOX:
+            aMethod = CREATE_OUSTRING( "mouseReleased" );
+        break;
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+            aMethod = CREATE_OUSTRING( "changed" );
+        break;
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
+            aMethod = CREATE_OUSTRING( "adjustmentValueChanged" );
+        break;
+        default:
+            DBG_ERRORFILE( "XclTbxControlHelper::GetEventMethod - unknown control type" );
+    }
+    return aMethod;
+}
+
+OUString XclTbxControlHelper::GetScriptType()
+{
+    return CREATE_OUSTRING( "Script" );
+}
+
+#define EXC_TBX_MACRONAME_PRE "vnd.sun.star.script:Standard."
+#define EXC_TBX_MACRONAME_SUF "?language=Basic&location=document"
+
+OUString XclTbxControlHelper::GetScMacroName( const String& rXclMacroName )
+{
+    // TODO #i38718#: find missing module name
+//    DBG_ASSERT( rXclMacroName.Search( '.' ) != STRING_NOTFOUND, "XclTbxControlHelper::GetScMacroName - missing module name" );
+    return CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE ) + rXclMacroName + CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
+}
+
+String XclTbxControlHelper::GetXclMacroName( const OUString& rScMacroName )
+{
+    static const OUString saMacroNamePre = CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE );
+    static const OUString saMacroNameSuf = CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
+    const sal_uInt32 snMacroNamePreLen = sizeof( EXC_TBX_MACRONAME_PRE ) - 1;
+    const sal_uInt32 snMacroNameSufLen = sizeof( EXC_TBX_MACRONAME_SUF ) - 1;
+
+    sal_uInt32 snScMacroNameLen = rScMacroName.getLength();
+    sal_uInt32 snXclMacroNameLen = snScMacroNameLen - snMacroNamePreLen - snMacroNameSufLen;
+
+    String aXclMacroName;
+    if( (snXclMacroNameLen > 0) && rScMacroName.match( saMacroNamePre, 0 ) &&
+            rScMacroName.match( saMacroNameSuf, snScMacroNameLen - snMacroNameSufLen ) )
+        aXclMacroName = rScMacroName.copy( snMacroNamePreLen, snXclMacroNameLen );
+
+    return aXclMacroName;
 }
 
 // ============================================================================
