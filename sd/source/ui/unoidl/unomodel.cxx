@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 12:54:18 $
+ *  last change: $Author: cl $ $Date: 2001-06-25 16:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(document::XLinkTargetSupplier);
     else QUERYINT(style::XStyleFamiliesSupplier);
     else QUERYINT(lang::XUnoTunnel);
-    else QUERYINT(ucb::XAnyCompareFactory);
+    else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
     else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
             aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
     else if( mbImpressDoc && rType == ITYPE(presentation::XCustomPresentationSupplier) )
@@ -377,7 +377,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
         *pTypes++ = ITYPE(lang::XUnoTunnel);
-        *pTypes++ = ITYPE(ucb::XAnyCompareFactory);
+        *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
         if( mbImpressDoc )
         {
             *pTypes++ = ITYPE(presentation::XPresentationSupplier);
@@ -1107,7 +1107,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
 }
 
 // XAnyCompareFactory
-uno::Reference< ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& PropertyName )
+uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& PropertyName )
     throw(uno::RuntimeException)
 {
     return SvxCreateNumRuleCompare();
