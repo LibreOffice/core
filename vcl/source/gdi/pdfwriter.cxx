@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:29:38 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 08:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 
 using namespace vcl;
 
-PDFWriter::PDFWriter( const rtl::OUString& rFilename, PDFVersion eVersion )
+PDFWriter::PDFWriter( const rtl::OUString& rFilename, PDFVersion eVersion, Compression eCompression )
         :
-        pImplementation( new PDFWriterImpl( rFilename, eVersion ) )
+        pImplementation( new PDFWriterImpl( rFilename, eVersion, eCompression ) )
 {
 }
 

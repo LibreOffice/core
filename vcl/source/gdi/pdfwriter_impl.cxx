@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 12:03:02 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 08:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
  *  class PDFWriterImpl
  */
 
-PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion eVersion )
+PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion eVersion, PDFWriter::Compression eCompression )
         :
         m_pReferenceDevice( NULL ),
         m_aMapMode( MAP_POINT, Point(), Fraction( 1L, 10L ), Fraction( 1L, 10L ) ),
@@ -466,6 +466,7 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_eVersion( eVersion ),
+        m_eCompression( eCompression ),
         m_aFileName( rFilename ),
         m_pCodec( NULL )
 {

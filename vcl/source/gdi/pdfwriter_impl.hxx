@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 16:26:35 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 08:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ private:
     sal_Int32                       m_nCatalogObject;
 
     PDFWriter::PDFVersion           m_eVersion;
+    PDFWriter::Compression          m_eCompression;
     rtl::OUString                   m_aFileName;
     oslFileHandle                   m_aFile;
     bool                            m_bOpen;
@@ -402,7 +403,7 @@ private:
     void endCompression();
     void endPage();
 public:
-    PDFWriterImpl( const rtl::OUString& rTargetFile, PDFWriter::PDFVersion eVersion = PDFWriter::PDF_1_4 );
+    PDFWriterImpl( const rtl::OUString& rTargetFile, PDFWriter::PDFVersion eVersion = PDFWriter::PDF_1_4, PDFWriter::Compression eCompression = PDFWriter::Screen );
     ~PDFWriterImpl();
 
     /*  for OutputDevice so the reference device can have a list
