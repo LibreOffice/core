@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:54:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 17:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,83 @@ void OInterfaceContainer::disposing()
 
 // XPersistObject
 //------------------------------------------------------------------------------
+class IntIterator
+{
+private:
+    sal_Int32 m_nPos;
+
+public:
+    IntIterator( sal_Int32 _nPos ) : m_nPos( _nPos ) { }
+
+    bool operator == ( const IntIterator& rhs ) { return m_nPos == rhs.m_nPos ? true : false; }
+    bool operator != ( const IntIterator& rhs ) { return !( *this == rhs ); }
+
+    sal_Int32 operator*() { return m_nPos; }
+
+    IntIterator& operator++()       { ++m_nPos; return *this; }
+    IntIterator  operator++(int)    { IntIterator hold(*this); ++*this; return hold; }
+
+    IntIterator& operator--()       { --m_nPos; return *this; }
+    IntIterator  operator--(int)    { IntIterator hold(*this); --*this; return hold; }
+};
+
+//------------------------------------------------------------------------------
+class ExtractEvents : public ::std::unary_function< sal_Int32, Sequence< ScriptEventDescriptor > >
+{
+private:
+    Reference< XEventAttacherManager > m_xManager;
+
+public:
+    ExtractEvents( const Reference< XEventAttacherManager >& _rxManager ) : m_xManager( _rxManager ) { }
+
+    //..........................................................................
+    Sequence< ScriptEventDescriptor > operator()( sal_Int32 _nPos )
+    {
+        return m_xManager->getScriptEvents( _nPos );
+    }
+};
+//------------------------------------------------------------------------------
+namespace
+{
+    //..........................................................................
+    void lcl_saveEvents( ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
+        const Reference< XEventAttacherManager >& _rxManager, const sal_Int32 _nItemCount )
+    {
+        // reserve the space needed
+        _rSave.reserve( _nItemCount );
+
+        // copy the events
+        ::std::transform(
+            IntIterator( 0 ),
+            IntIterator( _nItemCount ),
+            ::std::back_inserter( _rSave ),
+            ExtractEvents( _rxManager )
+        );
+    }
+
+    //..........................................................................
+    void lcl_restoreEvents( const ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
+        const Reference< XEventAttacherManager >& _rxManager )
+    {
+        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aLoop = _rSave.begin();
+        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aEnd = _rSave.end();
+        for ( sal_Int32 i=0; aLoop != aEnd; ++aLoop, ++i )
+        {
+            _rxManager->revokeScriptEvents( i );
+            _rxManager->registerScriptEvents( i, *aLoop );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     // We're writing a document in SO 5.2 format (or even from earlier versions)
     // -> convert the events from the new runtime format to the format of the 5.2 files
+    // but before, remember the current script events set for our children
+    ::std::vector< Sequence< ScriptEventDescriptor > > aSave;
+    lcl_saveEvents( aSave, m_xEventAttacher, m_aItems.size() );
+
     transformEvents( efVersionSO5x );
 
     try
@@ -207,13 +280,13 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
     }
     catch( const Exception& )
     {
-        // transform the events back
-        transformEvents( efVersionSO6x );
+        // restore the events
+        lcl_restoreEvents( aSave, m_xEventAttacher );
         throw;
     }
 
-    // transform the events back
-    transformEvents( efVersionSO6x );
+    // restore the events
+    lcl_restoreEvents( aSave, m_xEventAttacher );
 }
 
 //------------------------------------------------------------------------------
