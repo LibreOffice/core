@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-30 06:59:29 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 06:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ TRANSLITERATION_NUMTOTEXT_CJK ( Lower_zh_CN )
 TRANSLITERATION_NUMTOTEXT_CJK ( Upper_zh_CN )
 TRANSLITERATION_NUMTOTEXT_CJK ( Lower_zh_TW )
 TRANSLITERATION_NUMTOTEXT_CJK ( Upper_zh_TW )
+TRANSLITERATION_NUMTOTEXT_CJK ( Fullwidth_zh )
+TRANSLITERATION_NUMTOTEXT_CJK ( Fullwidth_ja )
+TRANSLITERATION_NUMTOTEXT_CJK ( Fullwidth_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( Date_zh )
 TRANSLITERATION_NUMTOTEXT_CJK ( InformalLower_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( InformalUpper_ko )

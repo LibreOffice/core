@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-30 06:54:40 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 06:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,36 +226,39 @@ sal_Bool SAL_CALL NumToText_CJK::numberMaker(const sal_Unicode *str, sal_Int32 b
     }
 }
 
-#define TRANSLITERATION_NUMTOTEXT( name, _number, _short, flag ) \
+#define TRANSLITERATION_NUMTOTEXT( name, _number, _mult, _short, flag ) \
 NumToText##name::NumToText##name() \
 { \
     number = NumberChar_##_number; \
     numberChar = NumberChar[NumberChar_##_number]; \
-    multiplierChar = MultiplierChar_##_short[Multiplier_##_number]; \
+    multiplierChar = MultiplierChar_##_short[Multiplier_##_mult]; \
     exponentCount = ExponentCount_##_short; \
     multiplierExponent = MultiplierExponent_##_short; \
     numberFlag = flag; \
     transliterationName = "NumToText"#name; \
     implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
 }
-TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, Lower_zh, CJK, 0 )
-TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, Upper_zh, CJK, 0 )
-TRANSLITERATION_NUMTOTEXT( Lower_zh_TW, Lower_zh, CJK, 0 )
-TRANSLITERATION_NUMTOTEXT( Upper_zh_TW, Upper_zh_TW, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, Lower_zh, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, Upper_zh, Upper_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Lower_zh_TW, Lower_zh, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Upper_zh_TW, Upper_zh_TW, Upper_zh_TW, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_zh, FullWidth, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_ja, FullWidth, Modern_ja, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_ko, FullWidth, Hangul_ko, CJK, 0 )
 #define Multiplier_Lower_ko Multiplier_Upper_zh_TW
 #define Multiplier_Upper_ko Multiplier_Upper_zh_TW
-TRANSLITERATION_NUMTOTEXT( FormalLower_ko, Lower_ko, CJK, NUMBER_OMIT_ZERO )
-TRANSLITERATION_NUMTOTEXT( FormalUpper_ko, Upper_ko, CJK, NUMBER_OMIT_ZERO )
-TRANSLITERATION_NUMTOTEXT( FormalHangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalLower_ko, Lower_ko, Lower_ko, CJK, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalUpper_ko, Upper_ko, Upper_ko, CJK, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalHangul_ko, Hangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ZERO )
 #define NUMBER_OMIT_ALL ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE|NUMBER_OMIT_ONLY_ZERO )
-TRANSLITERATION_NUMTOTEXT( InformalLower_ko, Lower_ko, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( InformalUpper_ko, Upper_ko, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( InformalHangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiLongTraditional_ja_JP, Traditional_ja, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiLongModern_ja_JP, Modern_ja, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( Date_zh, Lower_zh, CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiShortTraditional_ja_JP, Traditional_ja, short_CJK, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, Modern_ja, short_CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalLower_ko, Lower_ko, Lower_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalUpper_ko, Upper_ko, Upper_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalHangul_ko, Hangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiLongTraditional_ja_JP, Traditional_ja, Traditional_ja, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiLongModern_ja_JP, Modern_ja, Modern_ja, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( Date_zh, Lower_zh, Lower_zh, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiShortTraditional_ja_JP, Traditional_ja, Traditional_ja, short_CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, Modern_ja, Modern_ja,short_CJK, NUMBER_OMIT_ALL )
 #undef TRANSLITERATION_NUMTOTEXT
 
 #define TRANSLITERATION_NUMTOTEXT( name ) \

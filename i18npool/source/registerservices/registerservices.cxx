@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-30 06:57:59 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 06:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,9 @@ IMPL_CREATEINSTANCE( NumToTextLower_zh_CN )
 IMPL_CREATEINSTANCE( NumToTextUpper_zh_CN )
 IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
+IMPL_CREATEINSTANCE( NumToTextFullwidth_zh )
+IMPL_CREATEINSTANCE( NumToTextFullwidth_ja )
+IMPL_CREATEINSTANCE( NumToTextFullwidth_ko )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortModern_ja_JP )
@@ -598,6 +601,9 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_zh),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ja),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortModern_ja_JP),
