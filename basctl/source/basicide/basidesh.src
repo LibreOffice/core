@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:18:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ String RID_STR_FILTER_ALLFILES
     TEXT[ czech ] = "<Vše>";
     TEXT[ hebrew ] = "<Alle>";
     TEXT[ hindi ] = "<सब>";
+    TEXT[ slovak ] = "<Všetko>";
 };
 String RID_STR_NOMODULE
 {
@@ -120,7 +121,7 @@ String RID_STR_NOMODULE
     Text[ russian ] = "< ��� ������ >";
     Text[ polish ] = "< Bez modu�u >";
     Text[ japanese ] = "<モジュールなし>";
-    Text[ chinese_traditional ] = "< 無模塊 >";
+    Text[ chinese_traditional ] = "< 無模組 >";
     Text[ arabic ] = "< ���� ���� ����� >";
     Text[ dutch ] = "< Geen module >";
     Text[ chinese_simplified ] = "< 无模块 >";
@@ -133,6 +134,7 @@ String RID_STR_NOMODULE
     Text[ czech ] = "<Žádný modul>";
     Text[ hebrew ] = "< Kein Modul >";
     Text[ hindi ] = "< कोई मोड्यूल नहीं >";
+    Text[ slovak ] = "< Nie Modul >";
 };
 String RID_STR_WRONGPASSWORD
 {
@@ -166,6 +168,7 @@ String RID_STR_WRONGPASSWORD
     Text[ czech ] = "Neplatné heslo.";
     Text[ hebrew ] = "Fehlerhaftes Kennwort.";
     Text[ hindi ] = "गलत कूटशब्द ।";
+    Text[ slovak ] = "Neplatné heslo.";
 };
 String RID_STR_OPEN
 {
@@ -198,6 +201,7 @@ String RID_STR_OPEN
     Text[ czech ] = "Načíst";
     Text[ hebrew ] = "‮טעינה‬";
     Text[ hindi ] = "लोड़ करो ";
+    Text[ slovak ] = "Načítať";
 };
 String RID_STR_SAVE
 {
@@ -230,6 +234,7 @@ String RID_STR_SAVE
     Text[ czech ] = "Uložit";
     Text[ hebrew ] = "‮שצירה‬";
     Text[ hindi ] = "संचित करो";
+    Text[ slovak ] = "Uložiť";
 };
 String RID_STR_SOURCETOBIG
 {
@@ -249,7 +254,7 @@ String RID_STR_SOURCETOBIG
     Text[ russian ] = "�������� ����� ������� �������. ��� ���������� �� ���������, �� �������������.\n������� ��������� ����������� ��� ���������� ����� ���� � ������ ������.";
     Text[ polish ] = "Tekst �r�d�owy jest zbyt du�y. Nie mo�na go zapisa� ani skompilowa�.\nUsu� cz�� komentarzy lub przenie� niekt�re metody do innego modu�u.";
     Text[ japanese ] = "ソーステキストが長すぎて、保存もコンパイルを行うこともできません。\nコメントをいくつか削除するか、メソッドのいくつかを別のモジュールに転送します。";
-    Text[ chinese_traditional ] = "原始檔太大﹐無法儲存編譯。\n請刪除一些註解或者將幾個方法轉移到一個其他的模塊之中。";
+    Text[ chinese_traditional ] = "原始檔太大﹐無法儲存編譯。\n請刪除一些註解或者將幾個方法轉移到一個其他的模組之中。";
     Text[ arabic ] = "�� ������ ���� ����� ����� ���� ���� �� ������.\n�� ���� ��� ��������ʡ �� ���� ��� �������� ��� ���� ����� ����.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele opmerkingen of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "源文本太大，无法存盘和编译。\n请删除一些注解或者将几个方法转移到一个其他的模块之中。";
@@ -262,6 +267,7 @@ String RID_STR_SOURCETOBIG
     Text[ czech ] = "Zdrojový text je příliš velký a nemůže být zkompilován ani uložen.\nSmažte některé z komentářů nebo převeďte některé metody do jiného modulu.";
     Text[ hebrew ] = "Der Quelltext ist zu groß und kann weder gespeichert noch compiliert werden.\nLöschen Sie einige Kommentare oder übertragen Sie einige Methoden in ein anderes Modul.";
     Text[ hindi ] = "मूल टेक्स्ट् बहुत बड़ा है और इसलिए न उसे कम्पैल कर सकते है न संचित ।\n इसलिए कुछ टीका को मिटाओ अथवा कुछ मेथड को दूसरे मोड्यूल में स्थानान्तर करो ।";
+    Text[ slovak ] = "Zdrojový text je príliš veľký a nemôže byť skompilovaný ani uložený.\nZmažte niektoré z komentárov alebo preneste niektoré metódy do iného modulu.";
 };
 String RID_STR_ERROROPENSTORAGE
 {
@@ -294,6 +300,7 @@ String RID_STR_ERROROPENSTORAGE
     Text[ czech ] = "Chyba při otevírání souboru";
     Text[ hebrew ] = "Fehler beim Öffnen der Datei";
     Text[ hindi ] = "फाइल को खोलने के समय गलती ";
+    Text[ slovak ] = "Chyba pri otváraní­ súboru";
 };
 String RID_STR_ERROROPENLIB
 {
@@ -325,6 +332,7 @@ String RID_STR_ERROROPENLIB
     Text[ czech ] = "Chyba při načítání knihovny";
     Text[ hebrew ] = "Fehler beim Laden der Bibliothek";
     Text[ hindi ] = "लैब्ररी लोड़ करने के समय गलती ";
+    Text[ slovak ] = "Chyba pri načítaní­ knižnice";
 };
 String RID_STR_NOLIBINSTORAGE
 {
@@ -357,6 +365,7 @@ String RID_STR_NOLIBINSTORAGE
     Text[ czech ] = "Soubor neobsahuje žádné knihovny BASIC";
     Text[ hebrew ] = "Die Datei enthält keine BASIC-Bibliotheken";
     Text[ hindi ] = "फाइल में BASIC लैब्ररियाँ नहीं है ";
+    Text[ slovak ] = "Súbor neobsahuje žiadne knižnice BASICu";
 };
 String RID_STR_BADSBXNAME
 {
@@ -390,6 +399,7 @@ String RID_STR_BADSBXNAME
     Text[ czech ] = "Neplatný název";
     Text[ hebrew ] = "Ungültiger Bezeichner";
     Text[ hindi ] = "अमान्य नाम";
+    Text[ slovak ] = "Neplatné meno";
 };
 String RID_STR_LIBNAMETOLONG
 {
@@ -419,6 +429,7 @@ String RID_STR_LIBNAMETOLONG
     Text[ czech ] = "Název knihovny může obsahovat maximálně 30 znaků.";
     Text[ hebrew ] = "Der Name einer Bibliothek darf maximal 30 Zeichen lang sein.";
     Text[ hindi ] = "लैब्ररी का नाम में 30 से अधिक अक्षरें नहीं हो सकता है ।";
+    Text[ slovak ] = "Názov knižnice môže obsahovať do 30 znakov.";
 };
 String RID_STR_ERRORCHOOSEMACRO
 {
@@ -448,6 +459,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ czech ] = "Makra z jiných dokumentů jsou nedostupná.";
     Text[ hebrew ] = "Auf Makros anderer Dokumente kann nicht zugegriffen werden.";
     Text[ hindi ] = "Macros from other documents are not accessible.";
+    Text[ slovak ] = "Makrá z iného dokumentu nie sú prístupné.";
 };
 String RID_STR_LIBISREADONLY
 {
@@ -477,6 +489,7 @@ String RID_STR_LIBISREADONLY
     Text[ czech ] = "Tato knihovna je pouze pro čtení.";
     Text[ hebrew ] = "Diese Bibliothek ist schreibgeschützt.";
     Text[ hindi ] = "This library is read-only.";
+    Text[ slovak ] = "Táto knižnica je len na čítanie.";
 };
 String RID_STR_REPLACELIB
 {
@@ -506,6 +519,7 @@ String RID_STR_REPLACELIB
     Text[ czech ] = "Nelze nahradit 'XX'.";
     Text[ hebrew ] = "'XX' kann nicht ersetzt werden.";
     Text[ hindi ] = "'XX' cannot be replaced.";
+    Text[ slovak ] = "Nedá sa nahradiť 'XX'.";
 };
 String RID_STR_IMPORTNOTPOSSIBLE
 {
@@ -535,6 +549,7 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ czech ] = "Nelze přidat 'XX'.";
     Text[ hebrew ] = "Hinzufügen von 'XX' nicht möglich.";
     Text[ hindi ] = "'XX' cannot be added.";
+    Text[ slovak ] = "Nedá sa pridať 'XX'.";
 };
 String RID_STR_NOIMPORT
 {
@@ -564,6 +579,7 @@ String RID_STR_NOIMPORT
     Text[ czech ] = "'XX' nebylo přidáno.";
     Text[ hebrew ] = "'XX' wurde nicht hinzugefügt.";
     Text[ hindi ] = "'XX' was not added.";
+    Text[ slovak ] = "'XX' nebolo pridané";
 };
 String RID_STR_ENTERPASSWORD
 {
@@ -593,6 +609,7 @@ String RID_STR_ENTERPASSWORD
     Text[ czech ] = "Zadejte heslo pro 'XX'";
     Text[ hebrew ] = "Kennwort eingeben für 'XX'";
     Text[ hindi ] = "Enter password for 'XX'";
+    Text[ slovak ] = "Zadajte heslo pre 'XX'";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -625,6 +642,7 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text[ czech ] = "Název již existuje";
     Text[ hebrew ] = "Name bereits vergeben";
     Text[ hindi ] = "नाम पहिले से ही अस्तित्व में है ";
+    Text[ slovak ] = "Názov už existuje";
 };
 String RID_STR_SBXNAMEALLREADYUSED2
 {
@@ -657,6 +675,7 @@ String RID_STR_SBXNAMEALLREADYUSED2
     Text[ czech ] = "Objekt s takovým názvem již existuje";
     Text[ hebrew ] = "Objekt mit dem Namen existiert schon";
     Text[ hindi ] = "समान नाम का वस्तु पहिले से ही अस्तित्व में है ";
+    Text[ slovak ] = "Objekt s rovnakým názvom už existuje";
 };
 String RID_STR_FILEEXISTS
 {
@@ -689,6 +708,7 @@ String RID_STR_FILEEXISTS
     Text[ czech ] = "Soubor 'XX' již existuje";
     Text[ hebrew ] = "Die Datei 'XX' existiert schon";
     Text[ hindi ] = "'XX' फाइल पहिले से ही अस्तित्व में है";
+    Text[ slovak ] = "Súbor 'XX' už existuje";
 };
 String RID_STR_COMPILEERROR
 {
@@ -722,6 +742,7 @@ String RID_STR_COMPILEERROR
     Text[ czech ] = "Chyba v kompilaci: ";
     Text[ hebrew ] = "Übersetzungs-Fehler:";
     Text[ hindi ] = "कम्पैल गलती :";
+    Text[ slovak ] = "Chyba kompilácie:";
 };
 String RID_STR_RUNTIMEERROR
 {
@@ -754,6 +775,7 @@ String RID_STR_RUNTIMEERROR
     Text[ czech ] = "Chyba při běhu: #";
     Text[ hebrew ] = "Laufzeit-Fehler: #";
     Text[ hindi ] = "रनटइम गलती: #";
+    Text[ slovak ] = "Chyba pri behu: #";
 };
 String RID_STR_SEARCHNOTFOUND
 {
@@ -786,6 +808,7 @@ String RID_STR_SEARCHNOTFOUND
     Text[ czech ] = "Hledané klíčové slovo nenalezeno";
     Text[ hebrew ] = "Suchbegriff nicht gefunden";
     Text[ hindi ] = "खोज की नहीं मिला ";
+    Text[ slovak ] = "Hľadané kľúčové slovo nenájdené";
 };
 String RID_STR_SEARCHFROMSTART
 {
@@ -805,7 +828,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ russian ] = "����� �� ���������� ������ ��������. �� ������ ���������� ����� � ������� ������?";
     Text[ polish ] = "Przeszukano do ostatniego modu�u. Czy kontynuowa� wyszukiwanie od pierwszego modu�u?";
     Text[ japanese ] = "最後のモジュールまで検索しました。最初のモジュールに戻って検索を続けますか。";
-    Text[ chinese_traditional ] = "已經搜尋至最後一個模塊。您要從第一個模塊開始搜尋﹖";
+    Text[ chinese_traditional ] = "已經搜尋至最後一個模組。您要從第一個模組開始搜尋﹖";
     Text[ arabic ] = "�� ����� ��� ������ ������� �������. �� ���� ������ ����� ��� ������ ������� ������";
     Text[ dutch ] = "Er is tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?";
     Text[ chinese_simplified ] = "已经搜寻至最后一个模块。要从第一个模块开始搜寻？";
@@ -818,6 +841,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ czech ] = "Hledání dokončeno až k poslednímu modulu. Pokračovat od prvního modulu?";
     Text[ hebrew ] = "Es wurde bis zum letzten Modul gesucht. Möchten Sie die Suche beim ersten Modul fortsetzen?";
     Text[ hindi ] = "अंतिम मोड्यूल तक खोज समाप्त हुआ । पहिला मोड्यूल से खोज को जारी रखना है?";
+    Text[ slovak ] = "Hľadanie do posledného modulu ukončené. Pokračovať od prvého modulu?";
 };
 String RID_STR_SEARCHREPLACES
 {
@@ -850,6 +874,7 @@ String RID_STR_SEARCHREPLACES
     Text[ czech ] = "Hledané klíčové slovo bylo XX-krát nahrazeno";
     Text[ hebrew ] = "Suchbegriff XXmal ersetzt";
     Text[ hindi ] = "खोज की को XX बार प्रतिस्थापित किया";
+    Text[ slovak ] = "Hľadané kľúčové slovo bolo nahradené XX-krát.";
 };
 String RID_STR_COULDNTREAD
 {
@@ -881,6 +906,7 @@ String RID_STR_COULDNTREAD
     Text[ czech ] = "Soubor nelze přečíst";
     Text[ hebrew ] = "Die Datei konnte nicht gelesen werden";
     Text[ hindi ] = "फाइल को नहीं पढ़ सकते है ";
+    Text[ slovak ] = "Súbor sa nedá čítať";
 };
 String RID_STR_COULDNTWRITE
 {
@@ -912,6 +938,7 @@ String RID_STR_COULDNTWRITE
     Text[ czech ] = "Soubor nelze uložit";
     Text[ hebrew ] = "Die Datei konnte nicht gespeichert werden";
     Text[ hindi ] = "फाइल को संचित नहीं कर सकते है";
+    Text[ slovak ] = "Súbor sa nedá uložiť";
 };
 String RID_STR_CANNOTCHANGENAMESTDLIB
 {
@@ -944,6 +971,7 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text[ czech ] = "Název výchozí knihovny nelze změnit.";
     Text[ hebrew ] = "Der Name der Standard-Bibliothek kann nicht geändert werden";
     Text[ hindi ] = "अनुपस्थिति लैब्ररी का नाम नहीं बदल सकते है ।";
+    Text[ slovak ] = "Názov východzej knižnice nieje možné zmeniť.";
 };
 String RID_STR_CANNOTCHANGENAMEREFLIB
 {
@@ -976,6 +1004,7 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text[ czech ] = "Název odkazované knihovny nelze změnit.";
     Text[ hebrew ] = "Der Name einer referenzierten Bibliothek kann nicht geändert werden";
     Text[ hindi ] = "रेफरेन्स किया हुआ लैब्ररी का नाम नहीं बदल सकते है ।";
+    Text[ slovak ] = "Názov referenčnej knižnice nieje možné zmeniť.";
 };
 String RID_STR_CANNOTUNLOADSTDLIB
 {
@@ -1007,6 +1036,7 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text[ czech ] = "Výchozí knihovnu nelze deaktivovat";
     Text[ hebrew ] = "Die Standard-Bibliothek kann nicht deaktiviert werden";
     Text[ hindi ] = "अनुपस्थिति लैब्ररी को निष्क्रिय नहीं कर सकते है  ";
+    Text[ slovak ] = "Východziu knižnicu nieje možné deaktivovať";
 };
 String RID_STR_GENERATESOURCE
 {
@@ -1038,6 +1068,7 @@ String RID_STR_GENERATESOURCE
     Text[ czech ] = "Generuji zdroj";
     Text[ hebrew ] = "Erzeuge Quelltext";
     Text[ hindi ] = "उत्पन्न करने का मूल ";
+    Text[ slovak ] = "Generujem zdroj";
 };
 String RID_STR_FILENAME
 {
@@ -1069,6 +1100,7 @@ String RID_STR_FILENAME
     Text[ czech ] = "Název souboru:";
     Text[ hebrew ] = "‮שם קובץ:‬";
     Text[ hindi ] = "फाइल नाम:";
+    Text[ slovak ] = "Názov súboru:";
 };
 String RID_STR_APPENDLIBS
 {
@@ -1101,6 +1133,7 @@ String RID_STR_APPENDLIBS
     Text[ czech ] = "Připojit knihovny";
     Text[ hebrew ] = "Bibliotheken hinzufügen";
     Text[ hindi ] = "लैब्ररियों को जोड़ो";
+    Text[ slovak ] = "Pripojiť knižnice";
 };
 String RID_STR_QUERYDELMACRO
 {
@@ -1133,6 +1166,7 @@ String RID_STR_QUERYDELMACRO
     Text[ czech ] = "Přejete si smazat XX?";
     Text[ hebrew ] = "Möchten Sie das Makro XX löschen ?";
     Text[ hindi ] = "आप मॉक्रो XX को मिटाना चाहते है ?";
+    Text[ slovak ] = "Chcete zmazať makro na XX ?";
 };
 String RID_STR_QUERYDELDIALOG
 {
@@ -1165,6 +1199,7 @@ String RID_STR_QUERYDELDIALOG
     Text[ czech ] = "Přejete si smazat dialog XX?";
     Text[ hebrew ] = "Möchten Sie den Dialog XX löschen ?";
     Text[ hindi ] = "आप डयलॉग XX को मिटाना चाहते है  ?";
+    Text[ slovak ] = "Chcete zmazať XX dialóg?";
 };
 String RID_STR_QUERYDELLIB
 {
@@ -1197,6 +1232,7 @@ String RID_STR_QUERYDELLIB
     Text[ czech ] = "Přejete si smazat knihovnu XX?";
     Text[ hebrew ] = "Möchten Sie die Bibliothek XX löschen ?";
     Text[ hindi ] = "आप लैब्ररी XX को मिटाना चाहते है  ?";
+    Text[ slovak ] = "Chcete zmazať knižnicu XX ?";
 };
 String RID_STR_QUERYDELLIBREF
 {
@@ -1229,6 +1265,7 @@ String RID_STR_QUERYDELLIBREF
     Text[ czech ] = "Přejete si smazat odkaz na knihovnu XX?";
     Text[ hebrew ] = "Möchten Sie die Referenz auf die Bibliothek XX löschen ?";
     Text[ hindi ] = "आप लैब्ररी XX का रेफरेन्स को मिटाना चाहते है ?";
+    Text[ slovak ] = "Chcete zmazať odkaz na knižnicu XX ?";
 };
 String RID_STR_QUERYDELMODULE
 {
@@ -1248,7 +1285,7 @@ String RID_STR_QUERYDELMODULE
     Text[ russian ] = "������� ������ XX ?";
     Text[ polish ] = "Czy chcesz usun�� modu� XX?";
     Text[ japanese ] = "モジュール XX を削除しますか。";
-    Text[ chinese_traditional ] = "您要刪除這個模塊 XX ﹖";
+    Text[ chinese_traditional ] = "您要刪除這個模組 XX ﹖";
     Text[ arabic ] = "� XX �� ���� ��� ������ �������";
     Text[ dutch ] = "Wilt u de module XX wissen?";
     Text[ chinese_simplified ] = "您要删除模块 XX ？";
@@ -1261,6 +1298,7 @@ String RID_STR_QUERYDELMODULE
     Text[ czech ] = "Přejete si smazat modul XX?";
     Text[ hebrew ] = "Möchten Sie das Modul XX löschen ?";
     Text[ hindi ] = "आप मोड्यूल XX को मिटाना चाहते है ?";
+    Text[ slovak ] = "Chcete zmazať modul XX ?";
 };
 String RID_STR_OBJNOTFOUND
 {
@@ -1292,6 +1330,7 @@ String RID_STR_OBJNOTFOUND
     Text[ czech ] = "Objekt nebo metoda nenalezeny";
     Text[ hebrew ] = "Objekt oder Methode nicht gefunden";
     Text[ hindi ] = "वस्तु अथवा मेथड नहीं मिला";
+    Text[ slovak ] = "Objekt alebo metóda nenájdený";
 };
 String RID_STR_BASIC
 {
@@ -1323,6 +1362,7 @@ String RID_STR_BASIC
     Text[ czech ] = "BASIC";
     Text[ hebrew ] = "BASIC";
     Text[ hindi ] = "BASIC";
+    Text[ slovak ] = "BASIC";
 };
 String RID_STR_LINE
 {
@@ -1356,6 +1396,7 @@ String RID_STR_LINE
     Text[ czech ] = "Řádek";
     Text[ hebrew ] = "Zl";
     Text[ hindi ] = "रेखा";
+    Text[ slovak ] = "Riad.";
 };
 String RID_STR_COLUMN
 {
@@ -1388,6 +1429,7 @@ String RID_STR_COLUMN
     Text[ czech ] = "Sloupec";
     Text[ hebrew ] = "Sp";
     Text[ hindi ] = "स्तंभ";
+    Text[ slovak ] = "Stĺp.";
 };
 String RID_STR_DOC
 {
@@ -1419,6 +1461,7 @@ String RID_STR_DOC
     Text[ czech ] = "Dokument";
     Text[ hebrew ] = "Dokument";
     Text[ hindi ] = "लेखपत्र";
+    Text[ slovak ] = "Dokument";
 };
 String RID_BASICIDE_OBJECTBAR
 {
@@ -1451,6 +1494,7 @@ String RID_BASICIDE_OBJECTBAR
     Text[ czech ] = "Panel maker";
     Text[ hebrew ] = "Makro-Leiste";
     Text[ hindi ] = "मॉक्रो पट्टी";
+    Text[ slovak ] = "Panel makier";
 };
 String RID_STR_CANNOTCLOSE
 {
@@ -1484,6 +1528,7 @@ String RID_STR_CANNOTCLOSE
     Text[ czech ] = "Okno nelze zavřít, dokud běží kód BASIC.";
     Text[ hebrew ] = "Das Fenster kann nicht geschlossen werden,\nwährend das BASIC-Programm läuft.";
     Text[ hindi ] = "जब BASIC कार्य करने के समय विन्डो को बन्द नहीं कर सकते है ।";
+    Text[ slovak ] = "Okno nemôže byť zavreté pokým beží BASIC.";
 };
 String RID_STR_REPLACESTDLIB
 {
@@ -1515,6 +1560,7 @@ String RID_STR_REPLACESTDLIB
     Text[ czech ] = "Výchozí knihovnu nelze nahradit.";
     Text[ hebrew ] = "Die Standard-Bibliothek kann nicht ersetzt werden.";
     Text[ hindi ] = "अनुपस्थिति लैब्ररी को प्रतिस्थापित नहीं कर सकते है ।";
+    Text[ slovak ] = "Východziu knižnicu nieje možné nahradiť.";
 };
 String RID_STR_REFNOTPOSSIBLE
 {
@@ -1548,6 +1594,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ czech ] = "Odkaz na 'XX' není k dispozici.";
     Text[ hebrew ] = "Referenz auf 'XX' nicht möglich.";
     Text[ hindi ] = "'XX' केलिए रेफरेन्स संभव नहीं है ।";
+    Text[ slovak ] = "Odkaz na 'XX' nie je možný.";
 };
 String RID_STR_WATCHNAME
 {
@@ -1580,6 +1627,7 @@ String RID_STR_WATCHNAME
     Text[ czech ] = "Kukátko";
     Text[ hebrew ] = "Beobachter";
     Text[ hindi ] = "निरीक्षण";
+    Text[ slovak ] = "Sledovanie";
 };
 String RID_STR_STACKNAME
 {
@@ -1596,14 +1644,14 @@ String RID_STR_STACKNAME
     Text [ dutch ] = "Opgeroepen stack" ;
     Text [ spanish ] = "Pila" ;
     Text [ english_us ] = "Call Stack" ;
-    Text[ chinese_simplified ] = "呼叫堆叠";
+    Text[ chinese_simplified ] = "调用栈";
     Text[ russian ] = "���� �������";
     Text[ polish ] = "Stos wywo�a�";
     Text[ japanese ] = "スタックの呼び出し";
     Text[ chinese_traditional ] = "呼叫堆疊";
     Text[ arabic ] = "������� ��������";
     Text[ dutch ] = "Opgeroepen stack";
-    Text[ chinese_simplified ] = "呼叫堆叠";
+    Text[ chinese_simplified ] = "调用栈";
     Text[ greek ] = "������ �������";
     Text[ korean ] = "스택 호출";
     Text[ turkish ] = "�a�r� Y���n�";
@@ -1612,6 +1660,7 @@ String RID_STR_STACKNAME
     Text[ czech ] = "Zásobník volání";
     Text[ hebrew ] = "Kommandostapel";
     Text[ hindi ] = "कॉल स्टॉक ";
+    Text[ slovak ] = "Volanie Stack";
 };
 String RID_STR_INITIDE
 {
@@ -1644,6 +1693,7 @@ String RID_STR_INITIDE
     Text[ czech ] = "BASIC - inicializace";
     Text[ hebrew ] = "Initialisierung BASIC";
     Text[ hindi ] = "BASIC इनिशियलैज़ेशन्";
+    Text[ slovak ] = "BASIC inicializácia";
 };
 String RID_STR_STDMODULENAME
 {
@@ -1664,7 +1714,7 @@ String RID_STR_STDMODULENAME
     Text[ russian ] = "������";
     Text[ polish ] = "Modu�";
     Text[ japanese ] = "モジュール";
-    Text[ chinese_traditional ] = "模塊";
+    Text[ chinese_traditional ] = "模組";
     Text[ arabic ] = "���� �����";
     Text[ dutch ] = "Module";
     Text[ chinese_simplified ] = "模块";
@@ -1676,6 +1726,7 @@ String RID_STR_STDMODULENAME
     Text[ czech ] = "Modul";
     Text[ hebrew ] = "Modul";
     Text[ hindi ] = "मोड्यूल";
+    Text[ slovak ] = "Modul";
 };
 String RID_STR_STDDIALOGNAME
 {
@@ -1708,6 +1759,7 @@ String RID_STR_STDDIALOGNAME
     Text[ czech ] = "Dialog";
     Text[ hebrew ] = "Dialog";
     Text[ hindi ] = "डयलॉग";
+    Text[ slovak ] = "Dialóg";
 };
 String RID_STR_STDLIBNAME
 {
@@ -1740,6 +1792,7 @@ String RID_STR_STDLIBNAME
     Text[ czech ] = "Knihovna";
     Text[ hebrew ] = "Bibliothek";
     Text[ hindi ] = "लैब्ररी";
+    Text[ slovak ] = "Knižnica";
 };
 String RID_STR_NEWLIB
 {
@@ -1771,6 +1824,7 @@ String RID_STR_NEWLIB
     Text[ czech ] = "Nová knihovna";
     Text[ hebrew ] = "Neue Bibliothek";
     Text[ hindi ] = "नया लैब्ररी";
+    Text[ slovak ] = "Nová knižnica";
 };
 String RID_STR_NEWMOD
 {
@@ -1789,7 +1843,7 @@ String RID_STR_NEWMOD
     Text[ russian ] = "����� ������";
     Text[ polish ] = "Nowy modu�";
     Text[ japanese ] = "新しいモジュール";
-    Text[ chinese_traditional ] = "新的模塊";
+    Text[ chinese_traditional ] = "新的模組";
     Text[ arabic ] = "���� ����� �����";
     Text[ dutch ] = "Nieuwe module";
     Text[ chinese_simplified ] = "新的模块";
@@ -1802,6 +1856,7 @@ String RID_STR_NEWMOD
     Text[ czech ] = "Nový modul";
     Text[ hebrew ] = "Neues Modul";
     Text[ hindi ] = "नया मोड्यूल";
+    Text[ slovak ] = "Nový modul";
 };
 String RID_STR_NEWDLG
 {
@@ -1833,6 +1888,7 @@ String RID_STR_NEWDLG
     Text[ czech ] = "Nový dialog";
     Text[ hebrew ] = "Neuer Dialog";
     Text[ hindi ] = "नया डयलॉग";
+    Text[ slovak ] = "Nový dialóg";
 };
 String RID_STR_ALL
 {
@@ -1865,6 +1921,7 @@ String RID_STR_ALL
     Text[ czech ] = "Vše";
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "सब";
+    Text[ slovak ] = "Všetko";
 };
 String RID_STR_PAGE
 {
@@ -1897,6 +1954,7 @@ String RID_STR_PAGE
     Text[ czech ] = "Stránka";
     Text[ hebrew ] = "‮דף‬";
     Text[ hindi ] = "पृष्ठ";
+    Text[ slovak ] = "Stránka";
 };
 String RID_STR_MACRONAMEREQ
 {
@@ -1929,6 +1987,7 @@ String RID_STR_MACRONAMEREQ
     Text[ czech ] = "Musí být zadán název.";
     Text[ hebrew ] = "Es muss ein Name angegeben werden.";
     Text[ hindi ] = "नाम को भरती करना आवश्यक है ।";
+    Text[ slovak ] = "Musí byť zadaný názov..";
 };
 String RID_STR_WILLSTOPPRG
 {
@@ -1961,6 +2020,7 @@ String RID_STR_WILLSTOPPRG
     Text[ czech ] = "Po této úpravě budete muset restartovat program.\nPokračovat?";
     Text[ hebrew ] = "Sie müssen nach dieser Änderung Ihr Programm neu starten.\nForfahren?";
     Text[ hindi ] = "इस संपादन के पश्चात प्रोग्राम को पुनःप्रारंभ करना आवश्यक है ।\nजारी रखना है ?";
+    Text[ slovak ] = "Po editácii bude nutné reštartovať program.\nPokračovať?";
 };
 String RID_STR_SEARCHALLMODULES
 {
@@ -1979,7 +2039,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ russian ] = "�������� ����� �� ���� �������� �������?";
     Text[ polish ] = "Czy chcesz zamieni� tekst we wszystkich aktywnych modu�ach?";
     Text[ japanese ] = "テキストをすべてのアクティブなモジュールで置き換えますか。";
-    Text[ chinese_traditional ] = "您要代替在所有啟動模塊中的文字﹖";
+    Text[ chinese_traditional ] = "您要代替在所有啟動模組中的文字﹖";
     Text[ arabic ] = "�� ���� ������� ���� �� �� ������� ������� �����ɿ";
     Text[ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?";
     Text[ chinese_simplified ] = "要替换使用中的模块的全部文字？";
@@ -1992,6 +2052,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ czech ] = "Přejete si nahradit text ve všech aktivních modulech?";
     Text[ hebrew ] = "Soll der Text in allen aktiven Modulen ersetzt werden?";
     Text[ hindi ] = "आप सब क्रियाशील मोड्यूलों में टेक्स्ट् को प्रतिस्थापित करना चाहते है ?";
+    Text[ slovak ] = "Chcete zmeniť texty vo všetkých aktívnych moduloch?";
 };
 Edit RID_EDT_WATCHEDIT
 {
@@ -2037,6 +2098,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ czech ] = "Odstranit kukátko";
     QuickHelpText[ hebrew ] = "Beobachter entfernen";
     QuickHelpText[ hindi ] = "निरीक्षण हटाओ";
+    QuickHelpText[ slovak ] = "Odstrániť sledovanie";
 };
 Image RID_IMG_REMOVEWATCH_HC
 {
@@ -2080,6 +2142,7 @@ String RID_STR_REMOVEWATCH
     Text[ czech ] = "Kukátko:";
     Text[ hebrew ] = "Beobachter:";
     Text[ hindi ] = "निरीक्षण:";
+    Text[ slovak ] = "Sledovanie:";
 };
 String RID_STR_STACK
 {
@@ -2111,6 +2174,7 @@ String RID_STR_STACK
     Text[ czech ] = "Volání: ";
     Text[ hebrew ] = "Aufrufe:";
     Text[ hindi ] = "कॉल्स: ";
+    Text[ slovak ] = "Volania: ";
 };
 /*
 String RID_STR_INSERTMODE
@@ -2216,7 +2280,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_BASICSTEPOUT ;
         SID_BASICSTOP ;
         SID_BASICIDE_TOGGLEBRKPNT ;
-        SID_BASICIDE_MANAGEBRKPNTS ;
+        SID_BASICIDE_MANAGEBRKPNTS ;        
         SID_BASICIDE_ADDWATCH ;
         SID_BASICIDE_MODULEDLG ;
         SID_BASICIDE_OBJCAT ;
@@ -2316,6 +2380,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Knihovna";
             Text[ hebrew ] = "Bibliothek";
             Text[ hindi ] = "लैब्ररी";
+            Text[ slovak ] = "Knižnica";
         };
         ToolBoxItem
         {
@@ -2354,6 +2419,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Kompilovat";
             Text[ hebrew ] = "Übersetzen";
             Text[ hindi ] = "कम्पैल";
+            Text[ slovak ] = "Kompilovať";
         };
         ToolBoxItem
         {
@@ -2388,6 +2454,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Spustit";
             Text[ hebrew ] = "Ausführen";
             Text[ hindi ] = "चलाना";
+            Text[ slovak ] = "Spustiť";
         };
         ToolBoxItem
         {
@@ -2399,7 +2466,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ portuguese_brazilian ] = "Parar" ;
             Text [ portuguese ] = "Parar" ;
             Text [ finnish ] = "Seis" ;
-            Text [ danish ] = "Stop" ;
+            Text [ danish ] = "Deaktiver" ;
             Text [ french ] = "Arr�ter" ;
             Text [ swedish ] = "Stoppa" ;
             Text [ dutch ] = "Stop" ;
@@ -2421,6 +2488,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Zastavit";
             Text[ hebrew ] = "Anhalten";
             Text[ hindi ] = "रोको";
+            Text[ slovak ] = "Zastaviť";
         };
         ToolBoxItem
         {
@@ -2457,6 +2525,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Krok procedury";
             Text[ hebrew ] = "Prozedurschritt";
             Text[ hindi ] = "कार्यप्रणाली स्टेप";
+            Text[ slovak ] = "Krok procedúry";
         };
         ToolBoxItem
         {
@@ -2489,6 +2558,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Jeden krok";
             Text[ hebrew ] = "Einzelschritt";
             Text[ hindi ] = "अकेला स्टेप";
+            Text[ slovak ] = "Jeden krok";
         };
         ToolBoxItem
         {
@@ -2522,6 +2592,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Krok zpět";
             Text[ hebrew ] = "Rücksprung";
             Text[ hindi ] = "स्टेप पीछे";
+            Text[ slovak ] = "Krok späť";
         };
         ToolBoxItem
         {
@@ -2555,6 +2626,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Bod přerušení";
             Text[ hebrew ] = "Haltepunkt";
             Text[ hindi ] = "ब्रेकपोइन्ट";
+            Text[ slovak ] = "Bod prerušenia";
         };
         ToolBoxItem
         {
@@ -2570,7 +2642,22 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "중단점 관리";
             Text[ chinese_simplified ] = "管理中断点";
             Text[ chinese_traditional ] = "管理中斷點";
-        };
+            Text[ portuguese ] = "Manage Breakpoints";
+            Text[ russian ] = "Manage Breakpoints";
+            Text[ greek ] = "Manage Breakpoints";
+            Text[ dutch ] = "Manage Breakpoints";
+            Text[ finnish ] = "Manage Breakpoints";
+            Text[ czech ] = "Manage Breakpoints";
+            Text[ danish ] = "Manage Breakpoints";
+            Text[ polish ] = "Manage Breakpoints";
+            Text[ portuguese_brazilian ] = "Manage Breakpoints";
+            Text[ turkish ] = "Manage Breakpoints";
+            Text[ arabic ] = "Manage Breakpoints";
+            Text[ hebrew ] = "Manage Breakpoints";
+            Text[ catalan ] = "Manage Breakpoints";
+            Text[ thai ] = "Manage Breakpoints";
+            Text[ slovak ] = "Body prerušenia";
+        };                  
         ToolBoxItem
         {
             Identifier = SID_BASICIDE_ADDWATCH ;
@@ -2602,6 +2689,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Přidat kukátko";
             Text[ hebrew ] = "Beobachter anzeigen";
             Text[ hindi ] = "निरीक्षण जोड़ो";
+            Text[ slovak ] = "Pridať sledovanie";
         };
         ToolBoxItem
         {
@@ -2639,6 +2727,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Katalog objektů";
             Text[ hebrew ] = "Objektkatalog";
             Text[ hindi ] = "वस्तु सूचीपत्र";
+            Text[ slovak ] = "Katalóg objektov";
         };
         ToolBoxItem
         {
@@ -2672,6 +2761,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Makra";
             Text[ hebrew ] = "‮מאקרו‬";
             Text[ hindi ] = "मॉक्रोस";
+            Text[ slovak ] = "Makrá";
         };
         ToolBoxItem
         {
@@ -2693,7 +2783,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ russian ] = "������";
             Text[ polish ] = "Modu�y";
             Text[ japanese ] = "モジュール";
-            Text[ chinese_traditional ] = "模塊";
+            Text[ chinese_traditional ] = "模組";
             Text[ arabic ] = "���� �����";
             Text[ dutch ] = "Module";
             Text[ chinese_simplified ] = "模块";
@@ -2705,6 +2795,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Moduly";
             Text[ hebrew ] = "Module";
             Text[ hindi ] = "मोड्यूल";
+            Text[ slovak ] = "Moduly";
         };
         ToolBoxItem
         {
@@ -2730,7 +2821,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ russian ] = "����� ������";
             Text[ polish ] = "Znajd� nawiasy";
             Text[ japanese ] = "かっこの検索";
-            Text[ chinese_traditional ] = "搜尋括號";
+            Text[ chinese_traditional ] = "尋找括號";
             Text[ arabic ] = "����� �� �����";
             Text[ dutch ] = "Haakjes zoeken";
             Text[ chinese_simplified ] = "搜寻括号";
@@ -2742,6 +2833,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Najít závorky";
             Text[ hebrew ] = "Klammer suchen";
             Text[ hindi ] = "कोष्ठक को अन्वेषण करो";
+            Text[ slovak ] = "Nájsť zátvorky";
         };
         ToolBoxItem
         {
@@ -2775,6 +2867,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Ovládací prvky";
             Text[ hebrew ] = "‮כפתורי שליטה‬";
             Text[ hindi ] = "नियंत्रण";
+            Text[ slovak ] = "Ovládacie prvky";
         };
         ToolBoxItem
         {
@@ -2812,6 +2905,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Vložit zdrojový text";
             Text[ hebrew ] = "Quelltext einfügen";
             Text[ hindi ] = "मूल टेक्स्ट् जोड़ो";
+            Text[ slovak ] = "Vložiť zdrojový text";
         };
         ToolBoxItem
         {
@@ -2819,7 +2913,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text = "Quelltext speichern unter..." ;
             Text [ ENGLISH ] = "Save source as..." ;
             Text [ norwegian ] = "Save source as..." ;
-            Text [ italian ] = "Salva origine con nome..." ;
+            Text [ italian ] = "Salva sorgente con nome..." ;
             Text [ portuguese_brazilian ] = "Salvar C�digo Fonte como..." ;
             Text [ portuguese ] = "Guardar texto fonte como..." ;
             Text [ finnish ] = "Tallenna l�hde nimell�..." ;
@@ -2844,6 +2938,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Uložit zdroj jako...";
             Text[ hebrew ] = "Quelltext speichern unter...";
             Text[ hindi ] = "मूल को संचित करो जैसे...";
+            Text[ slovak ] = "Uložiť zdroj ako...";
         };
     };
     Text[ chinese_simplified ] = "BASIC";
@@ -2862,6 +2957,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
     Text[ czech ] = "BASIC";
     Text[ hebrew ] = "BASIC";
     Text[ hindi ] = "BASIC";
+    Text[ slovak ] = "BASIC";
 };
 
 Menu RID_POPUP_BRKPROPS
@@ -2915,6 +3011,7 @@ Menu RID_POPUP_BRKPROPS
             Text[ czech ] = "Aktivní";
             Text[ hebrew ] = "Aktiv";
             Text[ hindi ] = "क्रियाशील";
+            Text[ slovak ] = "Aktívny";
         };
         MenuItem
         {
@@ -2954,6 +3051,7 @@ Menu RID_POPUP_BRKPROPS
             Text[ czech ] = "Vlastnosti...";
             Text[ hebrew ] = "‮מאפינים‬";
             Text[ hindi ] = "विशेषतायें...";
+            Text[ slovak ] = "Vlastnosti...";
         };
     };
     Text[ chinese_simplified ] = "属性";
@@ -2972,6 +3070,7 @@ Menu RID_POPUP_BRKPROPS
     Text[ czech ] = "Vlastnosti";
     Text[ hebrew ] = "Eigenschaften";
     Text[ hindi ] = "विशेषतायें";
+    Text[ slovak ] = "Vlastnosti";
 };
 Menu RID_POPUP_BRKDLG
 {
@@ -3024,6 +3123,7 @@ Menu RID_POPUP_BRKDLG
             Text[ czech ] = "Body přerušení...";
             Text[ hebrew ] = "Haltepunkte...";
             Text[ hindi ] = "खण्डन बिन्दु...";
+            Text[ slovak ] = "Body prerušenia...";
         };
     };
     Text[ chinese_simplified ] = "管理中断点";
@@ -3042,6 +3142,7 @@ Menu RID_POPUP_BRKDLG
     Text[ czech ] = "Body přerušení";
     Text[ hebrew ] = "Haltepunkte";
     Text[ hindi ] = "खण्डन बिन्दु";
+    Text[ slovak ] = "Body prerušenia";
 };
 Menu RID_POPUP_TABBAR
 {
@@ -3101,6 +3202,7 @@ Menu RID_POPUP_TABBAR
                         Text[ czech ] = "Modul BASIC";
                         Text[ hebrew ] = "BASIC-Modul";
                         Text[ hindi ] = "BASIC Module";
+                        Text[ slovak ] = "BASIC Module";
                     };
                     MenuItem
                     {
@@ -3134,6 +3236,7 @@ Menu RID_POPUP_TABBAR
                         Text[ czech ] = "BASIC dialog";
                         Text[ hebrew ] = "BASIC-Dialog";
                         Text[ hindi ] = "BASIC Dialog";
+                        Text[ slovak ] = "BASIC Dialóg";
                     };
                 };
             };
@@ -3154,6 +3257,7 @@ Menu RID_POPUP_TABBAR
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "Einfügen";
             Text[ hindi ] = "छिपकाओ";
+            Text[ slovak ] = "Vložiť";
         };
         MenuItem
         {
@@ -3190,6 +3294,7 @@ Menu RID_POPUP_TABBAR
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "हटाना";
+            Text[ slovak ] = "Zmazať";
         };
         MenuItem
         {
@@ -3224,6 +3329,7 @@ Menu RID_POPUP_TABBAR
             Text[ czech ] = "Přejmenovat";
             Text[ hebrew ] = "Umbenennen";
             Text[ hindi ] = "पुनः नाम दो";
+            Text[ slovak ] = "Premenovať";
         };
         MenuItem
         {
@@ -3258,6 +3364,7 @@ Menu RID_POPUP_TABBAR
             Text[ czech ] = "Skrýt";
             Text[ hebrew ] = "Ausblenden";
             Text[ hindi ] = "छिपाओ";
+            Text[ slovak ] = "Skryť";
         };
         MenuItem
         {
@@ -3284,7 +3391,7 @@ Menu RID_POPUP_TABBAR
             Text[ russian ] = "������...";
             Text[ polish ] = "Modu�y...";
             Text[ japanese ] = "モジュール...";
-            Text[ chinese_traditional ] = "模塊...";
+            Text[ chinese_traditional ] = "模組...";
             Text[ arabic ] = "...����� �����";
             Text[ dutch ] = "Modules...";
             Text[ chinese_simplified ] = "模块...";
@@ -3296,6 +3403,7 @@ Menu RID_POPUP_TABBAR
             Text[ czech ] = "Moduly...";
             Text[ hebrew ] = "Module...";
             Text[ hindi ] = "मोड्यूल...";
+            Text[ slovak ] = "Moduly...";
         };
     };
 };
@@ -3334,6 +3442,7 @@ Menu RID_POPUP_DLGED
             Text[ czech ] = "Vlastnosti...";
             Text[ hebrew ] = "‮מאפינים‬";
             Text[ hindi ] = "Properties...";
+            Text[ slovak ] = "Vlastnosti...";
         };
     };
 };
@@ -3433,6 +3542,7 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ czech ] = "Chcete nahradit makro XX?";
     Text[ hebrew ] = "Möchten Sie das Makro XX überschreiben ?";
     Text[ hindi ] = "Do you want to overwrite the XX macro?";
+    Text[ slovak ] = "Chcete prepísať makro XX?";
 };
 
 #define MN_EDIT 20
@@ -3588,6 +3698,7 @@ Menu RID_BASICMENU
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
         MenuItem
         {
@@ -3666,6 +3777,7 @@ Menu RID_BASICMENU
                                     Text[ czech ] = "Hlavní panel nástrojů";
                                     Text[ hebrew ] = "Werk~zeugleiste";
                                     Text[ hindi ] = "~मुख्य औज़ार पट्टी";
+                                    Text[ slovak ] = "Hlavný panel nás~trojov";
                                 };
                                 MenuItem
                                 {
@@ -3706,6 +3818,7 @@ Menu RID_BASICMENU
                                     Text[ czech ] = "Přizpůsobit...";
                                     Text[ hebrew ] = "~Bearbeiten...";
                                     Text[ hindi ] = "~व्यवस्था करो...";
+                                    Text[ slovak ] = "P~rispôsobiť...";
                                 };
                             };
                         };
@@ -3725,6 +3838,7 @@ Menu RID_BASICMENU
                         Text[ czech ] = "Panely nástrojů";
                         Text[ hebrew ] = "‮סרגלי כלים‬";
                         Text[ hindi ] = "~औज़ार पट्टी";
+                        Text[ slovak ] = "Panely nás~trojov";
                     };
                     MenuItem
                     {
@@ -3758,6 +3872,7 @@ Menu RID_BASICMENU
             Text[ czech ] = "Zobrazit";
             Text[ hebrew ] = "‮תצוגה‬";
             Text[ hindi ] = "~à¤¦à¥ƒà¤¶à¥à¤¯";
+            Text[ slovak ] = "~Zobraziť";
         };
         MenuItem
         {
@@ -3807,14 +3922,15 @@ Menu RID_BASICMENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
-        };
+            Text[ slovak ] = "Nás~troje";
+        };          
         GLOBLMN_WINMN
         {
             ITEM_WINDOW_MDIWINDOWLIST
             SubMenu = Menu
             {
                 ItemList =
-                {
+                {           
                     MenuItem
                     {
                         ITEM_WINDOW_CLOSEWIN
@@ -3822,10 +3938,10 @@ Menu RID_BASICMENU
                     MenuItem
                     {
                         Separator = TRUE ;
-                    };
+                    };                                      
                 };
             };
-        };
+        };                      
         ITEM_HELP_MENU
     };
 };
@@ -3990,6 +4106,7 @@ Menu RID_BASICPLUGINMENU
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
         MenuItem
         {
@@ -4068,6 +4185,7 @@ Menu RID_BASICPLUGINMENU
                                     Text[ czech ] = "Hlavní panel nástrojů";
                                     Text[ hebrew ] = "Werk~zeugleiste";
                                     Text[ hindi ] = "~मुख्य औज़ार पट्टी";
+                                    Text[ slovak ] = "Hlavný panel nás~trojov";
                                 };
                                 MenuItem
                                 {
@@ -4108,6 +4226,7 @@ Menu RID_BASICPLUGINMENU
                                     Text[ czech ] = "Přizpůsobit...";
                                     Text[ hebrew ] = "~Bearbeiten...";
                                     Text[ hindi ] = "~व्यवस्था करो...";
+                                    Text[ slovak ] = "P~rispôsobiť...";
                                 };
                             };
                         };
@@ -4127,6 +4246,7 @@ Menu RID_BASICPLUGINMENU
                         Text[ czech ] = "Panely nástrojů";
                         Text[ hebrew ] = "‮סרגלי כלים‬";
                         Text[ hindi ] = "~औज़ार पट्टी";
+                        Text[ slovak ] = "Panely nás~trojov";
                     };
                     MenuItem
                     {
@@ -4160,6 +4280,7 @@ Menu RID_BASICPLUGINMENU
             Text[ czech ] = "Zobrazit";
             Text[ hebrew ] = "‮תצוגה‬";
             Text[ hindi ] = "~à¤¦à¥ƒà¤¶à¥à¤¯";
+            Text[ slovak ] = "~Zobraziť";
         };
         MenuItem
         {
@@ -4209,6 +4330,7 @@ Menu RID_BASICPLUGINMENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
+            Text[ slovak ] = "Nás~troje";
         };
         GLOBLMN_WINMN
         {
@@ -4216,7 +4338,7 @@ Menu RID_BASICPLUGINMENU
             SubMenu = Menu
             {
                 ItemList =
-                {
+                {           
                     MenuItem
                     {
                         ITEM_WINDOW_CLOSEWIN
@@ -4224,13 +4346,15 @@ Menu RID_BASICPLUGINMENU
                     MenuItem
                     {
                         Separator = TRUE ;
-                    };
+                    };                                      
                 };
             };
-        };
+        };              
         ITEM_HELP_MENU
     };
 };
+
+
 
 
 
