@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 14:42:03 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 20:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,6 +1452,18 @@ long EditEngine::GetFirstLineStartX( sal_uInt16 nParagraph )
     return nX;
 }
 
+Point EditEngine::GetDocPos( const Point& rPaperPos ) const
+{
+    Point aDocPos( rPaperPos );
+    if ( IsVertical() )
+    {
+        aDocPos.X() = rPaperPos.Y();
+        aDocPos.Y() = GetPaperSize().Width() - rPaperPos.X();
+    }
+    return aDocPos;
+}
+
+
 Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1480,21 +1492,25 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
     return aPoint;
 }
 
-sal_Bool EditEngine::IsTextPos( const Point& rDocPos, sal_uInt16 nBorder )
+sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
     sal_Bool bTextPos = sal_False;
-    if ( ( rDocPos.Y() > 0  ) && ( rDocPos.Y() < (long)GetTextHeight() ) )
+
+    Point aDocPos = GetDocPos( rPaperPos );
+
+    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)GetTextHeight() ) )
     {
-        EditPaM aPaM = pImpEditEngine->GetPaM( rDocPos, sal_False );
+        EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
         if ( aPaM.GetNode() )
         {
             ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
             EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
-            if ( ( rDocPos.X() >= pLine->GetStartPosX() - nBorder ) &&
-                 ( rDocPos.X() <= pLine->GetStartPosX() +
+            if ( ( aDocPos.X() >= pLine->GetStartPosX() - nBorder ) &&
+                 ( aDocPos.X() <= pLine->GetStartPosX() +
                          pImpEditEngine->CalcLineWidth( pParaPortion, pLine ) + nBorder ) )
             {
                  bTextPos = sal_True;
@@ -1971,7 +1987,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {
-            aInfos.nParaHeight = pParaPortion->GetHeight();
+            aInfos.nParaHeight = (USHORT)pParaPortion->GetHeight();
             aInfos.nLines = pParaPortion->GetLines().Count();
             aInfos.nFirstLineStartX = pLine->GetStartPosX();
             aInfos.nFirstLineOffset = pParaPortion->GetFirstLineOffset();
@@ -2326,7 +2342,7 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
         // Einzug und Erstzeileneinzug
         if ( pOldLRSpace )
         {
-            short nLSpace = pOldLRSpace->GetTxtLeft();
+            short nLSpace = (short)pOldLRSpace->GetTxtLeft();
             pNumberFormat->SetLSpace( nLSpace );
             pNumberFormat->SetAbsLSpace( nLSpace );
             pNumberFormat->SetFirstLineOffset( pOldLRSpace->GetTxtFirstLineOfst() );
