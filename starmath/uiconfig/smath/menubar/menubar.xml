@@ -110,10 +110,7 @@
     <menu:menu menu:id=".uno:HelpMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex" menu:helpid="5401" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelperDialog" menu:helpid="5962" menu:label="" />
-            <menu:menuitem menu:id=".uno:HelpTip" menu:helpid="5404" menu:label="" />
-            <menu:menuitem menu:id=".uno:ActiveHelp" menu:helpid="5403" menu:label="" />
+            <menu:menuitem menu:id=".uno:ExtendedHelp" menu:helpid="5402" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport" menu:helpid="6683" menu:label="" />
             <menu:menuitem menu:id=".uno:OnlineRegistrationDlg" menu:helpid="6537" menu:label="" />
