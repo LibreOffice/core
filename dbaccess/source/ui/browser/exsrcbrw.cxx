@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
     {
         // search the argument describing the column to create
         ::rtl::OUString sControlType;
-        sal_Int16 nControlPos = -1;
+        sal_Int32 nControlPos = -1;
         Sequence< ::com::sun::star::beans::PropertyValue> aControlProps;
         for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
         {
@@ -284,7 +284,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             {
                 xNewCol->setPropertyValue(pControlProps->Name, pControlProps->Value);
             }
-            catch(...)
+            catch(Exception&)
             {
                 OSL_ASSERT("SbaExternalSourceBrowser::dispatch : could not set a column property (maybe you forgot a READONLY attribute for a dispatch-argument ?) !");
             }
@@ -474,7 +474,8 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     if (xMasterProps.is())
     {
         try { bWasInsertRow = ::comphelper::getBOOL(xMasterProps->getPropertyValue(PROPERTY_ISNEW)); }
-        catch(...) { } ;
+        catch(Exception&)
+        { }
     }
 
     stopListening();
