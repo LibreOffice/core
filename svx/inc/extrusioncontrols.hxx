@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:55:22 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <vcl/field.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 class SfxBindings;
 class ToolbarMenu;
 class SfxStatusForwarder;
@@ -98,6 +102,7 @@ class ExtrusionDirectionWindow : public SfxPopupWindow
 private:
     ToolbarMenu*        mpMenu;
     ValueSet*           mpDirectionSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     SfxStatusForwarder* mpDirectionForewarder;
     SfxStatusForwarder* mpProjectionForewarder;
@@ -129,7 +134,8 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    ExtrusionDirectionWindow( USHORT nId, SfxBindings& rBindings );
+    ExtrusionDirectionWindow( USHORT nId,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     ~ExtrusionDirectionWindow();
 
     void            StartSelection();
@@ -146,7 +152,7 @@ class ExtrusionDirectionControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionDirectionControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    ExtrusionDirectionControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ExtrusionDirectionControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -178,6 +184,7 @@ private:
 
     SfxStatusForwarder* mpDepthForewarder;
     SfxStatusForwarder* mpMetricForewarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     bool        mbPopupMode;
     FieldUnit   meUnit;
@@ -201,7 +208,8 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    ExtrusionDepthWindow( USHORT nId, SfxBindings& rBindings );
+    ExtrusionDepthWindow( USHORT nId,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     ~ExtrusionDepthWindow();
 
     void            StartSelection();
@@ -218,7 +226,7 @@ class ExtrusionDepthControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionDepthControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    ExtrusionDepthControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ExtrusionDepthControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -252,6 +260,7 @@ private:
 
     SfxStatusForwarder* mpLightingDirectionForewarder;
     SfxStatusForwarder* mpLightingIntensityForewarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     bool    mbPopupMode;
     int     mnLevel;
@@ -275,7 +284,8 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    ExtrusionLightingWindow( USHORT nId, SfxBindings& rBindings );
+    ExtrusionLightingWindow( USHORT nId,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     ~ExtrusionLightingWindow();
 
     void            StartSelection();
@@ -292,7 +302,7 @@ class ExtrusionLightingControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionLightingControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    ExtrusionLightingControl( USHORT nSlotid, USHORT nId, ToolBox& rTbx );
     ~ExtrusionLightingControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -318,6 +328,7 @@ private:
     Image maImgSurface4h;
 
     SfxStatusForwarder* mpSurfaceForewarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
     bool        mbPopupMode;
 
@@ -336,7 +347,8 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    ExtrusionSurfaceWindow( USHORT nId, SfxBindings& rBindings );
+    ExtrusionSurfaceWindow( USHORT nId,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     ~ExtrusionSurfaceWindow();
 
     void            StartSelection();
@@ -353,7 +365,7 @@ class ExtrusionSurfaceControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionSurfaceControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    ExtrusionSurfaceControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ExtrusionSurfaceControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -371,7 +383,7 @@ private:
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionColorControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    ExtrusionColorControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ExtrusionColorControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
