@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 09:04:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,9 @@
 
 #ifndef __JVM_HXX
 #define __JVM_HXX
-#ifdef UNIX
-#define CLASSPATH_DELIMETER ":"
 
-#else
-#define CLASSPATH_DELIMETER ";"
 
-#endif
-
-#include <cstdarg>
 #include <vector>
-
-
 #include <rtl/ustring>
 
 #include "jni.h"
@@ -87,59 +78,14 @@ extern "C" {
 
 namespace stoc_javavm {
 
-/** The path has the form: foo/bar
-    That is, separator is a slash.
-    @exception com::sun::star::uno::Exception
- */
-
-
-
     class JVM {
         ::std::vector<rtl::OUString> _props;
-        ::rtl::OUString _runtimeLib;
-        ::rtl::OUString _classpath;
-        sal_Bool _enabled;
-        ::rtl::OUString _java_home;
-        rtl::OUString _version;
-
-        rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
 
     public:
         JVM() throw();
 
         void pushProp(const ::rtl::OUString & uString);
-        void setEnabled(sal_Bool sbFlag);
-        void addClassPath(const ::rtl::OUString & str);
-        void setRuntimeLib(const ::rtl::OUString & libName);
-        const ::rtl::OUString & getRuntimeLib() const;
-//      sal_Bool isEnabled() const;
         const ::std::vector< ::rtl::OUString> & getProperties() const;
-        rtl::OUString getClassPath() const;
-        /** @return
-            The system path to the Java installation directory.
-         */
-        const ::rtl::OUString & getJavaHome() const;
-        /** @param sHomeUrl
-            File URL to Java installation directory.
-        */
-        void setJavaHome(const ::rtl::OUString & sHomeUrl);
-
-        void setVersion(const rtl::OUString & sVersion);
-
-        const ::rtl::OUString & getVersion() const;
-
-        /** The method creates based on the specified directory paths
-            to all contained jar files and puts them in the _systemClasspath
-            member which can be retrieved with getSystemClasspath.
-            @param sDir
-            A relative path from the application directory to a directory
-            that contains classes and jar files. The separator must be a '/'.
-            For example “program/classes”
-            @exception com::sun::star::uno::Exception
-         */
-        void setApplicationClassesDir(const rtl::OUString & sDir);
-
-
     };
 }
 
