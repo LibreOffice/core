@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:35:35 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 #endif
 
+#include <rtl/ustrbuf.hxx>
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -96,12 +98,12 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-        static void check_if_complete(uno::Reference< lang::XMultiServiceFactory > const & _xServiceFactory)
+        static void check_if_complete(uno::Reference< uno::XComponentContext > const & _xContext)
         {
             MergedComponentData aData;
 
             uno::Reference< backenduno::XLayerHandler >
-                test(new LayerMergeHandler(_xServiceFactory, aData));
+                test(new LayerMergeHandler(_xContext, aData));
         }
 
 // -----------------------------------------------------------------------------
@@ -111,23 +113,23 @@ struct LayerMergeHandler::Converter
     typedef uno::Reference< com::sun::star::script::XTypeConverter > TypeConverter;
 
     explicit
-    Converter(ServiceFactory const & _xServiceFactory);
+    Converter(Context const & xContext);
 
     uno::Any convertValue(uno::Type const & _aTargetType, uno::Any const & _aValue);
 
-    static TypeConverter createTCV(ServiceFactory const & _xServiceFactory);
+    static TypeConverter createTCV(Context const & xContext);
 
     ValueConverter m_aConverter;
     bool m_bConvertData;
 };
 // -----------------------------------------------------------------------------
-LayerMergeHandler::LayerMergeHandler(ServiceFactory const & _xServiceFactory, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider )
+LayerMergeHandler::LayerMergeHandler(Context const & xContext, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider )
 : m_rData(_rData)
-, m_aContext(static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider )
+, m_aContext(xContext,static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider )
 , m_aFactory()
 , m_aLocale()
 , m_pProperty(NULL)
-, m_pConverter( new Converter(_xServiceFactory) )
+, m_pConverter( new Converter(xContext) )
 , m_nSkipping(0)
 , m_bSublayer(false)
 {
@@ -144,6 +146,9 @@ LayerMergeHandler::~LayerMergeHandler(  )
 void LayerMergeHandler::prepareLayer()
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer or schema not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().error("Previous layer or schema not terminated properly", "prepareLayer()", "configmgr::LayerMergeHandler");
+
     m_aLocale = localehelper:: getDefaultLanguage();
     m_bSublayer = false;
 
@@ -154,6 +159,8 @@ void LayerMergeHandler::prepareLayer()
 bool LayerMergeHandler::prepareSublayer(OUString const & aLocale)
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().error("Previous layer not terminated properly", "prepareSublayer()", "configmgr::LayerMergeHandler");
 
     m_aLocale = aLocale;
     m_bSublayer = (aLocale.getLength() != 0);
@@ -165,6 +172,8 @@ bool LayerMergeHandler::prepareSublayer(OUString const & aLocale)
 MergedComponentData & LayerMergeHandler::result()
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().error("Layer not terminated properly", "result()", "configmgr::LayerMergeHandler");
 
     return m_rData;
 }
@@ -173,6 +182,8 @@ MergedComponentData & LayerMergeHandler::result()
 MergedComponentData const & LayerMergeHandler::result() const
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().error("Layer not terminated properly", "result()", "configmgr::LayerMergeHandler");
 
     return m_rData;
 }
@@ -292,8 +303,12 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
                     OSL_VERIFY( pValue->setValueType(_aType) );
 
                 else
+                {
                     OSL_TRACE("Layer merging: Illegal property type: VOID overriding ANY");
+                    m_aContext.getLogger().warning("Illegal property type: VOID overriding ANY - ignoring",
+                                                    "checkPropertyType()", "configmgr::LayerMergeHandler");
                     // m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID overriding ANY");
+                }
             }
             else if (_aType == uno::Type() && m_pConverter)
                 m_pConverter->m_bConvertData = true;
@@ -362,7 +377,11 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
                 setValueAndCheck(*pLocValue,_aValue);
             }
             else
+            {
                 OSL_ENSURE(false,"Layer merging: Localized subnode is not a value");
+                m_aContext.getLogger().error("Localized subnode is not a value - ignoring data",
+                                             "setLocalizedValue()", "configmgr::LayerMergeHandler");
+            }
         }
         else {
             node::Attributes attributes = pLocalizedCont->getAttributes() ;
@@ -386,12 +405,18 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
 
     else if (ValueNode * pValue = pProperty->asValueNode())
     {
-        OSL_ENSURE(false, "Layer merging: Got locale-dependent value for non localized node");
+        OSL_ENSURE(false, "Layer merging: Got locale-dependent value for non-localized node");
+        m_aContext.getLogger().error("Got locale-dependent value for non-localized node",
+                                     "setLocalizedValue()", "configmgr::LayerMergeHandler");
         setValueAndCheck(*pValue,_aValue);
     }
 
     else
+    {
         OSL_ENSURE(false, "Layer merging: Unknown node type for localized node");
+        m_aContext.getLogger().error("Unknown node type for localized node",
+                                     "setLocalizedValue()", "configmgr::LayerMergeHandler");
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -411,7 +436,11 @@ void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue)
     }
 
     else
+    {
         OSL_ENSURE(false, "Layer merging: Unknown node type for property");
+        m_aContext.getLogger().error("Unknown node type for property",
+                                     "applyPropertyValue()", "configmgr::LayerMergeHandler");
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -435,7 +464,11 @@ void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue, OUString co
     }
 
     else
+    {
         OSL_ENSURE(false, "Layer merging: Unknown node type for localized property");
+        m_aContext.getLogger().error("Unknown node type for localized property",
+                                     "applyPropertyValue()", "configmgr::LayerMergeHandler");
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -460,6 +493,9 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
     {
         OSL_ENSURE(!(aNodeAttributes & NodeAttribute::FINALIZED),
                     "Layer merging: Warning: Node is both read-only and finalized");
+        if (aNodeAttributes & NodeAttribute::FINALIZED)
+            m_aContext.getLogger().warning("Node is both read-only and finalized - treating as readonly",
+                                           "applyAttributes()", "configmgr::LayerMergeHandler");
 
         pNode->modifyAccess(node::accessReadonly);
     }
@@ -496,6 +532,9 @@ bool LayerMergeHandler::startOverride(INode * pNode, sal_Bool bClear) /* ensure 
     if (pNode->isDefault()) pNode->modifyState( node::isMerged );
 
     OSL_ENSURE(!bClear,"'clear' operation is not yet supported");
+    if (bClear)
+        m_aContext.getLogger().warning("'clear' operation is not yet supported",
+                                       "startOverride()", "configmgr::LayerMergeHandler");
 
     return true;
 }
@@ -524,7 +563,10 @@ void SAL_CALL LayerMergeHandler::startLayer( )
     OSL_ENSURE(pSchema,"No base data to merge layer into");
 
     if (!pSchema)
+    {
+        m_aContext.getLogger().error("No schema data for merging layer", "startLayer", "configmgr::LayerMergeHandler");
         throw uno::RuntimeException(OUString::createFromAscii("Layer merging: No data to merge with"),*this);
+    }
 
     m_aContext.startActiveComponent(pSchema->getName());
 
@@ -583,6 +625,8 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
     else
     {
         OSL_ENSURE(false,"No base data to merge layer into");
+        m_aContext.getLogger().warning("No component data in schema for merging layer",
+                                       "overrideNode() [for layer root]", "configmgr::LayerMergeHandler");
         this->skipNode();
     }
 }
@@ -614,7 +658,14 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
     }
     else // ignore non-matched data
     {
-        OSL_ENSURE(false,"Layer merging: The node to be overridden does not exist.");
+        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        {
+            rtl::OUStringBuffer aMessage;
+            aMessage.appendAscii("Node ").append(m_aContext.getNodePath(aName))
+                    .appendAscii(" to be overridden does not exist - skipping");
+
+            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
+        }
         // m_aContext.raiseNoSuchElementException("Layer merging: The node to be overridden does not exist.",aName);
         this->skipNode();
     }
@@ -723,8 +774,15 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
     }
     else
     {
+        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        {
+            rtl::OUStringBuffer aMessage;
+            aMessage.appendAscii("Node ").append(m_aContext.getNodePath(aName))
+                    .appendAscii(" to be removed does not exist - ignoring");
+
+            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "dropNode()", "configmgr::LayerMergeHandler");
+        }
         // m_aContext.raiseNoSuchElementException("Layer merging: The node to be removed does not exist.",aName);
-        OSL_TRACE("Layer merging: The node to be removed does not exist.");
     }
     m_aContext.getCurrentParent().removeChild(aName);
 }
@@ -754,7 +812,14 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
     }
     else // ignore non-matched data
     {
-        OSL_TRACE("Layer merging: The property to be overridden does not exist.");
+        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        {
+            rtl::OUStringBuffer aMessage;
+            aMessage.appendAscii("Property ").append(m_aContext.getNodePath(aName))
+                    .appendAscii(" to be overridden does not exist - skipping");
+
+            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
+        }
         //   m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
         this->skipNode();
     }
@@ -843,23 +908,26 @@ void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aVal
 // -----------------------------------------------------------------------------
 
 LayerMergeHandler::Converter::TypeConverter
-    LayerMergeHandler::Converter::createTCV(ServiceFactory const & _xServiceFactory)
+    LayerMergeHandler::Converter::createTCV(Context const & xContext)
 {
-    OSL_ENSURE(_xServiceFactory.is(),"Cannot create TypeConverter for LayerMergeHandler without a ServiceManager");
+    OSL_ENSURE(xContext.is(),"Cannot create TypeConverter for LayerMergeHandler without a Context");
+
+    uno::Reference< lang::XMultiComponentFactory > xFactory = xContext->getServiceManager();
+    OSL_ENSURE(xFactory.is(),"Cannot create TypeConverter for LayerMergeHandler without a ServiceManager");
 
     TypeConverter xTCV;
-    if (_xServiceFactory.is())
+    if (xFactory.is())
     {
         static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
 
-        xTCV = TypeConverter::query(_xServiceFactory->createInstance(k_sTCVService));
+        xTCV = TypeConverter::query(xFactory->createInstanceWithContext(k_sTCVService,xContext));
     }
     return xTCV;
 }
 // -----------------------------------------------------------------------------
 
-LayerMergeHandler::Converter::Converter(ServiceFactory const & _xServiceFactory)
-: m_aConverter( createTCV(_xServiceFactory) )
+LayerMergeHandler::Converter::Converter(Context const & xContext)
+: m_aConverter( createTCV(xContext) )
 , m_bConvertData(false)
 {
 }
@@ -897,6 +965,7 @@ uno::Any LayerMergeHandler::Converter::convertValue(uno::Type const & _aTargetTy
 
 
     OSL_ENSURE(false, "Cannot convert typed value (not a string)");
+
     return uno::Any();
 }
 // -----------------------------------------------------------------------------
