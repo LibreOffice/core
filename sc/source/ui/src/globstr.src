@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:26:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2122,22 +2122,23 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Change case" ;
         Text[ english_us ] = "Case/Characters";
         Text[ portuguese ] = "Change case";
-        Text[ russian ] = "Change case";
+        Text[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
         Text[ greek ] = "Change case";
         Text[ dutch ] = "Change case";
         Text[ french ] = "Change case";
         Text[ spanish ] = "Change case";
         Text[ italian ] = "Change case";
         Text[ danish ] = "Change case";
-        Text[ swedish ] = "Change case";
-        Text[ polish ] = "Change case";
+        Text[ swedish ] = "Stor/liten bokstav";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Change case";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê";
+        Text[ japanese ] = "•¶ší‚Ì•ÏŠ·";
         Text[ korean ] = "Change case";
-        Text[ chinese_simplified ] = "Change case";
+        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
         Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
         Text[ turkish ] = "Change case";
-        Text[ arabic ] = "Change case";
+        Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
+        Text[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
     };
     String STR_DB_NONAME
     {
