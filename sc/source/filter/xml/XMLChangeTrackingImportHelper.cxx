@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: er $ $Date: 2001-10-02 15:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,30 +481,32 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
     pCurrentAction = NULL;
 }
 
-void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, sal_uInt16& nUserPos, DateTime& aDateTime)
+void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime)
 {
     Date aDate(aInfo.aDateTime.Day, aInfo.aDateTime.Month, aInfo.aDateTime.Year);
     Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.HundredthSeconds);
-    DateTime aTempDateTime (aDate, aTime);
-    aDateTime = aTempDateTime;
+    aDateTime.SetDate( aDate.GetDate() );
+    aDateTime.SetTime( aTime.GetTime() );
 
-    String aTempUser(aInfo.sUser);
-    StrData* pStrData = new StrData( aTempUser );
-    pTrack->GetUserCollection().Search(pStrData, nUserPos);
-    if (pStrData)
-        delete pStrData;
+    StrData aStrData( aInfo.sUser );
+    USHORT nPos;
+    if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
+    {
+        const StrData* pUser = static_cast<const StrData*>( pTrack->GetUserCollection().At( nPos ) );
+        if ( pUser )
+            rUser = pUser->GetString();
+        else
+            rUser = aInfo.sUser;    // shouldn't happen
+    }
+    else
+        rUser = aInfo.sUser;    // shouldn't happen
 }
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
-    DateTime aDateTime;
-    sal_uInt16 nPos;
-    ConvertInfo(pAction->aInfo, nPos, aDateTime);
-
-    StrData* pUser = (StrData*) aUsers.At( nPos );
+    DateTime aDateTime( Date(0), Time(0) );
     String aUser;
-    if ( pUser )
-        aUser = pUser->GetString();
+    ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
 
@@ -515,14 +517,9 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
-    DateTime aDateTime;
-    sal_uInt16 nPos;
-    ConvertInfo(pAction->aInfo, nPos, aDateTime);
-
-    StrData* pUser = (StrData*) aUsers.At( nPos );
+    DateTime aDateTime( Date(0), Time(0) );
     String aUser;
-    if ( pUser )
-        aUser = pUser->GetString();
+    ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
 
@@ -536,14 +533,9 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     DBG_ASSERT(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
     {
-        DateTime aDateTime;
-        sal_uInt16 nPos;
-        ConvertInfo(pAction->aInfo, nPos, aDateTime);
-
-        StrData* pUser = (StrData*) aUsers.At( nPos );
+        DateTime aDateTime( Date(0), Time(0) );
         String aUser;
-        if ( pUser )
-            aUser = pUser->GetString();
+        ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
         String sComment (pAction->aInfo.sComment);
 
@@ -556,14 +548,9 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
-    DateTime aDateTime;
-    sal_uInt16 nPos;
-    ConvertInfo(pAction->aInfo, nPos, aDateTime);
-
-    StrData* pUser = (StrData*) aUsers.At( nPos );
+    DateTime aDateTime( Date(0), Time(0) );
     String aUser;
-    if ( pUser )
-        aUser = pUser->GetString();
+    ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
 
@@ -578,14 +565,9 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
     if (pAction->pCellInfo)
          pCell = pAction->pCellInfo->CreateCell(pDoc);
 
-    DateTime aDateTime;
-    sal_uInt16 nPos(0);
-    ConvertInfo(pAction->aInfo, nPos, aDateTime);
-
-    StrData* pUser = (StrData*) aUsers.At( nPos );
+    DateTime aDateTime( Date(0), Time(0) );
     String aUser;
-    if ( pUser )
-        aUser = pUser->GetString();
+    ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
 
