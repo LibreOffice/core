@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:39 $
+#   last change: $Author: rt $ $Date: 2004-03-30 14:52:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 # ----------------------------CFGMGR settings------------------------------------#
 # target
-CFGMGR_TARGET=cfgmgr
+CFGMGR_TARGET=configmgr
 
 # the major 
 CFGMGR_MAJOR=2
