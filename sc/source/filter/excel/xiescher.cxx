@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:26:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 10:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
         {
             Rectangle aRect = maAnchorRect;
             aNote.SetRectangle(aRect);
-            SdrObject* pObj = mpSdrObj.get();
+            SdrObject* pObj = mxSdrObj.get();
 
             // get the actual container from this group object.
             if (pObj->IsGroupObject())
