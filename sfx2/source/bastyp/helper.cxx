@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-09 17:41:27 $
+ *  last change: $Author: pb $ $Date: 2000-11-14 11:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     {
         Content aCnt( aURL.GetMainURL(), aCmdEnv );
         Content aNewFolder( aNewFolderURL, aCmdEnv );
-        OUString aType( RTL_CONSTASCII_USTRINGPARAM( "FSysFolder" ) );
+        OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
         bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
