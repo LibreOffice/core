@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:52:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
          propertie != rProperties.end();
          propertie++ )
     {
+        if( propertie->mnIndex == -1 )
+            continue;
+
         switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
         {
         case CTF_CHARHEIGHT:            pCharHeightState = propertie; break;
