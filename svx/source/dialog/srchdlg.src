@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:58:15 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_SVXSTR_SEARCH_STYLES
     Text [ english_us ] = "Including Styles" ;
     Text[ chinese_simplified ] = "°üÀ¨ÑùÊ½";
     Text[ russian ] = "Âêëş÷àÿ ñòèëè";
-    Text[ polish ] = "W³¹cznie ze stylami";
+    Text[ polish ] = "£¹cznie ze stylami";
     Text[ japanese ] = "½À²Ù‚ğŠÜ‚Ş";
     Text[ chinese_traditional ] = "¥]¬A¼Ë¦¡";
     Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÃäãÇØ";
@@ -172,7 +172,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
     Text[ russian ] = "Íàéòè è çàìåíèòü";
-    Text[ polish ] = "Znajd? i zamieñ";
+    Text[ polish ] = "ZnajdŸ i zamieñ";
     Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
     Text[ chinese_traditional ] = "·j´M©M´À¥N";
     Text[ arabic ] = "ÈÍË æÇÓÊÈÏÇá";
@@ -536,9 +536,9 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Zwyk³a/po³owa szeroko?ci";
+        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê";
+        Text[ japanese ] = "‘SŠp‚Æ”¼Šp‚ğ‹æ•Ê";
         Text[ korean ] = "¹İÆø/ÀüÆø Çü½Ä";
         Text[ chinese_simplified ] = "°ë½ÇºÍÈ«½Ç×Ö·û";
         Text[ chinese_traditional ] = "¥b§Î©M¥ş§Î¦r¤¸";
@@ -661,7 +661,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text[ chinese_simplified ] = "ÊıÖµ(~V)";
         Text[ russian ] = "çíà÷åíèÿõ";
-        Text[ polish ] = "warto?c~iach";
+        Text[ polish ] = "wartoœc~iach";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáŞíã";
@@ -867,20 +867,20 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text = "Extras" ;
         Text [ ENGLISH ] = "Extras" ;
         Hide = TRUE ;
-        Text [ english_us ] = "Extras" ;
+        Text [ english_us ] = "Options" ;
         Text [ portuguese_brazilian ] = "Extras" ;
         Text [ swedish ] = "Tillägg" ;
         Text [ danish ] = "Supplerende" ;
         Text [ italian ] = "Extra" ;
-        Text [ spanish ] = "Considerar todas las hojas" ;
+        Text [ spanish ] = "Opciones" ;
         Text [ french ] = "Classeur à plusieurs feuilles" ;
         Text [ dutch ] = "Extra" ;
-        Text [ portuguese ] = "Extras" ;
-        Text[ chinese_simplified ] = "¹¤¾ß";
-        Text[ russian ] = "Ñåğâèñ";
+        Text [ portuguese ] = "Outros" ;
+        Text[ chinese_simplified ] = "ÆäËü";
+        Text[ russian ] = "Äîïîëíèòåëüíî";
         Text[ polish ] = "Narzêdzia";
-        Text[ japanese ] = "Ú×İ’è";
-        Text[ chinese_traditional ] = "¤u¨ã";
+        Text[ japanese ] = "‚»‚Ì‘¼";
+        Text[ chinese_traditional ] = "¨ä¥¦";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "Ğñüóèåôá";
         Text[ korean ] = "µµ±¸";
@@ -909,7 +909,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ËÑÑ°È«²¿(~A)";
         Text[ russian ] = "Íàéòè âñå";
-        Text[ polish ] = "~Znajd? wszystkie";
+        Text[ polish ] = "~ZnajdŸ wszystkie";
         Text[ japanese ] = "‚·‚×‚ÄŒŸõ(~A)";
         Text[ chinese_traditional ] = "·j´M¥ş³¡(~A)";
         Text[ arabic ] = "ÇáÈÍË Úä Çáßá";
