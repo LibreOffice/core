@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:12:15 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,6 +1118,8 @@ ImplMiscData::ImplMiscData()
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = 1930;
     mnEnableATT                 = ~0;
+    static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
+    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1127,6 +1129,7 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
     mnRefCount                  = 1;
     mnTwoDigitYearStart         = rData.mnTwoDigitYearStart;
     mnEnableATT                 = rData.mnEnableATT;
+    mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
 
 // -----------------------------------------------------------------------
@@ -1198,7 +1201,8 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
         return TRUE;
 
     if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) &&
-         (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) )
+         (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
+         (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
         return TRUE;
     else
         return FALSE;
@@ -1347,6 +1351,19 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
+
+void MiscSettings::SetEnableLocalizedDecimalSep( BOOL bEnable )
+{
+    CopyData();
+    mpData->mbEnableLocalizedDecimalSep = bEnable;
+}
+
+BOOL MiscSettings::GetEnableLocalizedDecimalSep() const
+{
+    return mpData->mbEnableLocalizedDecimalSep;
+}
+
+
 
 // =======================================================================
 
