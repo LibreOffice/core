@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-03-19 14:29:57 $
+ *  last change:$Date: 2004-07-23 10:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,21 @@ public class utils {
         if (fullDocPath.startsWith("file:")) {
             return fullDocPath;
         }
+        String prefix = null;
+
+        //  Windows: \\\\margritte\\qaapi\\workspace\\qadev\\testdocs/emptyChart.sds
+        if (fullDocPath.startsWith("\\\\"))
+        prefix = "file:";
+
         fullDocPath = fullDocPath.replace('\\','/');
-        String prefix = "";
-        if (fullDocPath.startsWith("/")) prefix="file://";
-                                    else prefix="file:///";
+        if (prefix == null){
+            if (fullDocPath.startsWith("//"))
+                prefix="file:/";
+            else if (fullDocPath.startsWith("/"))
+                prefix="file://";
+            else
+                prefix="file:///";
+        }
         if (!fullDocPath.endsWith("/")) {
             File aFile = new File(fullDocPath);
             if (aFile.isDirectory()) {
