@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:48:24 $
+ *  last change: $Author: nf $ $Date: 2003-07-17 16:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ BOOL LngParser::Merge(
                         !(( i == COMMENT ) && ( sNewText == "-" )))
                     {
                         ByteString sLine;
-                        if ( Export::LangId[ i ] < 10 )
+                        if ( !bULF && Export::LangId[ i ] < 10 )
                             sLine += "0";
                         if ( bULF )
                             if ( i == ENGLISH_US_INDEX )
