@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:28:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,10 +1045,14 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeShort( aFont.Pitch );
     }
 
-    if ( m_aDefaultControl == FRM_SUN_CONTROL_GRIDCONTROL )
-        // for compatibility, write a sevice name which older versions understand (up to 5.1)
-        _rxOutStream << STARDIV_ONE_FORM_CONTROL_GRID;
-    else
+    // no need to write a compatible service name anymore: Since the binfilter workspace, this
+    // code here is not used anymore for writing old binary file formats. Thus, there's no need
+    // to be compatible to anything except ourself.
+    // 2004-07-26 - #i31138# - fs@openoffice.org
+//    if ( m_aDefaultControl == FRM_SUN_CONTROL_GRIDCONTROL )
+//        // for compatibility, write a sevice name which older versions understand (up to 5.1)
+//        _rxOutStream << STARDIV_ONE_FORM_CONTROL_GRID;
+//    else
         _rxOutStream << m_aDefaultControl;
 
     _rxOutStream->writeShort(m_nBorder);
