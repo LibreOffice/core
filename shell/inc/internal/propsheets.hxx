@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsheets.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:53:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef PROPSHEETS_HXX_INCLUDED
 #define PROPSHEETS_HXX_INCLUDED
 
-#ifndef METAINFO_HXX_INCLUDED
-#include "internal/metainfo.hxx"
+#ifndef METAINFOREADER_HXX_INCLUDED
+#include "internal/metainforeader.hxx"
 #endif
 
 #include <shlobj.h>
@@ -119,7 +119,7 @@ private:
 private:
     long m_RefCnt;
     char m_szFileName[MAX_PATH];
-    std::auto_ptr<COpenOfficeMetaInformation> m_pMetaInfo;
+    std::auto_ptr<CMetaInfoReader> m_pMetaInfo;
 };
 
 #endif

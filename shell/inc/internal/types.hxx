@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:54:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,15 @@
 
 typedef std::vector<std::wstring> StringList_t;
 
+//+-------------------------------------------------------------------------
+//
+//  Declare:    XmlTagAttributes_t, xml tag attribute struct
+//              XmlTag_t, xml tag including content and attributes.
+//              XmlTags_t, tags defined with tag name and xml tag.
+//
+//  Contents:   Definitions of xml tag used in parser.
+//
+//--------------------------------------------------------------------------
 typedef std::wstring Name_t;
 typedef std::wstring Value_t;
 typedef std::wstring Characters_t;
@@ -78,6 +87,40 @@ typedef std::map<Name_t, Value_t>                   XmlTagAttributes_t;
 typedef std::pair<Characters_t, XmlTagAttributes_t> XmlTag_t;
 typedef std::map<Name_t, XmlTag_t>                  XmlTags_t;
 
-#define EMPTY_XML_TAG std::make_pair(std::wstring(), XmlTagAttributes_t())
+const XmlTag_t EMPTY_XML_TAG = std::make_pair(std::wstring(), XmlTagAttributes_t());
+
+//+-------------------------------------------------------------------------
+//
+//  Declare:    Language_t, language of the Locale pair
+//              Country_t, country of the Local pair
+//              LocaleSet_t, Local pair
+//
+//  Contents:   Definitions of Chunk properties.
+//
+//--------------------------------------------------------------------------
+typedef ::std::wstring Language_t;
+typedef ::std::wstring Country_t;
+typedef ::std::pair<Language_t, Country_t >   LocaleSet_t;
+
+typedef ::std::wstring Content_t;
+typedef ::std::pair<LocaleSet_t, Content_t > Chunk_t;
+typedef ::std::vector< Chunk_t > ChunkBuffer_t;
+
+const LocaleSet_t EMPTY_LOCALE = ::std::make_pair(::std::wstring(), ::std::wstring());
+const Chunk_t EMPTY_CHUNK = ::std::make_pair( EMPTY_LOCALE, ::std::wstring());
+
+//+-------------------------------------------------------------------------
+//
+//  Declare:    StyleName_t, style name of a style-locale pair.
+//              StyleLocaleMap, the map of Styple-Locale pair.
+//
+//  Contents:   Definitions of Style Names.
+//
+//--------------------------------------------------------------------------
+typedef ::std::wstring StyleName_t;
+typedef ::std::pair <StyleName_t, LocaleSet_t> StyleLocalePair_t;
+typedef ::std::map<StyleName_t, LocaleSet_t>  StyleLocaleMap_t;
+
+const StyleLocalePair_t EMPTY_STYLELOCALE_PAIR = ::std::make_pair(::std::wstring(), EMPTY_LOCALE );
 
 #endif

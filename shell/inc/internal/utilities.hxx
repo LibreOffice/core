@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utilities.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:54:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,16 @@
 #ifndef UTILITIES_HXX_INCLUDED
 #define UTILITIES_HXX_INCLUDED
 
+#include <malloc.h>
+#include <windows.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+
+#ifndef TYPES_HXX_INCLUDED
+#include "internal/types.hxx"
+#endif
+
 #include <string>
 
 //---------------------------------
@@ -87,5 +97,20 @@ std::wstring GetResString(int ResId);
     on Windows XP or not
 */
 bool is_windows_xp();
+
+//---------------------------------
+/** helper function to judge if the string is only has spaces.
+    @returns
+        <TRUE>if the provided string contains only but at least one space
+        character else <FALSE/>.
+*/
+bool HasOnlySpaces(const std::wstring& String);
+
+/** convert LocaleSet pair into Windows LCID identifier.
+    @returns
+        Windows Locale Identifier corresponding to input LocaleSet.
+*/
+
+LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 
 #endif
