@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:36:34 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 08:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,14 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 
 #include <tools/ref.hxx>
@@ -721,6 +727,40 @@ Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rU
     }
     else
         return Sequence < OUString > ();
+}
+
+// -----------------------------------------------------------------------
+
+String SfxContentHelper::GetActiveHelpString( const String& rURL )
+{
+    String aRet;
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        Content aCnt( rURL, new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+        // open the "active help" stream
+        Reference< ::com::sun::star::io::XInputStream > xStream = aCnt.openStream();
+        // and convert it to a String
+        Sequence< sal_Int8 > lData;
+        sal_Int32 nRead = xStream->readBytes( lData, 1024 );
+        while ( nRead > 0 )
+        {
+            OStringBuffer sBuffer( nRead );
+            for( sal_Int32 i = 0; i < nRead; ++i )
+                sBuffer.append( (sal_Char)lData[i] );
+            OUString sString = OStringToOUString( sBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+            aRet += String( sString );
+
+            nRead = xStream->readBytes( lData, 1024 );
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
