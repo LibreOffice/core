@@ -4,9 +4,7 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
+
 #include <tools/stream.hxx>
 
 namespace com
@@ -18,6 +16,11 @@ namespace com
             namespace task
             {
                 class XInteractionHandler;
+            }
+            namespace io
+            {
+                class XStream;
+                class XInputStream;
             }
         }
     }
@@ -41,6 +44,7 @@ namespace utl
                                 NS_UNO::Reference < NS_TASK::XInteractionHandler >,
                                 UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream );
+        static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream );
     };
 };
 
