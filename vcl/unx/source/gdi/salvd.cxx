@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ void SalGraphicsData::Init( SalVirtualDevice *pDevice,
         xColormap_ = new SalColormap();
 
     hDrawable_   = pDevice->maVirDevData.GetDrawable();
+    m_pVDev      = pDevice;
+    m_pFrame     = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = TRUE;

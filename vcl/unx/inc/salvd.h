@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $    //
+// $Revision: 1.2 $  $Author: pl $  $Date: 2002-06-18 11:26:23 $    //
 //                                                                            //
 // $Workfile:   salvd.h  $                                                    //
 //  $Modtime:   09 Aug 1997 00:15:48  $                                       //
@@ -112,6 +112,8 @@ public:
     inline  BOOL            IsDisplay() const;
     inline  Pixmap          GetDrawable() const { return hDrawable_; }
     inline  USHORT          GetDepth() const { return nDepth_; }
+    int                     GetWidth() const { return nDX_; }
+    int                     GetHeight() const { return nDY_; }
 };
 
 #ifdef _SV_SALDISP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:29 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,8 @@ void SalGraphicsData::Init( SalFrame *pFrame )
     hDrawable_      = pFrame->_GetDrawable();
 
     bWindow_        = TRUE;
+    m_pFrame        = pFrame;
+    m_pVDev         = NULL;
 
     nPenPixel_      = GetPixel( nPenColor_ );
     nTextPixel_     = GetPixel( nTextColor_ );

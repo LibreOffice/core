@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ SalGraphicsData::SalGraphicsData()
     m_pPrinterGfx       = NULL;
     m_pPhoneNr          = NULL;
 #endif
+    m_pFrame            = NULL;
+    m_pVDev             = NULL;
     hDrawable_          = None;
 
     pClipRegion_            = NULL;

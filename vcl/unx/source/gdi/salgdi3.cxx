@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-30 15:31:44 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
@@ -1086,24 +1092,44 @@ bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rLayout 
     Display* pDisplay = GetXDisplay();
 
     XRectangle aXRect;
+    unsigned long nWidth = 1, nHeight = 1;
+    if( m_pFrame )
+        nWidth = m_pFrame->maGeometry.nWidth, nHeight = m_pFrame->maGeometry.nHeight;
+    else if( m_pVDev )
+        nWidth = m_pVDev->maVirDevData.GetWidth(), nHeight = m_pVDev->maVirDevData.GetHeight();
+
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
     {
+        // get bounding box
         XClipBox( pClipRegion_, &aXRect );
+        // clip with window
         if( aXRect.x < 0 ) aXRect.x = 0;
         if( aXRect.y < 0 ) aXRect.y = 0;
+        if( aXRect.width+aXRect.x > nWidth ) aXRect.width = nWidth-aXRect.x;
+        if( aXRect.height+aXRect.y > nHeight ) aXRect.height = nHeight-aXRect.y;
     }
     else
     {
-        XLIB_Window aDummyWin;
-        unsigned uDummy;
-        int nDummy;
-        unsigned nWidth, nHeight;
-        XGetGeometry( pDisplay, hDrawable_, &aDummyWin,
-            &nDummy, &nDummy, &nWidth, &nHeight, &uDummy, &uDummy );
         aXRect.x = 0;
         aXRect.y = 0;
         aXRect.width = nWidth;
         aXRect.height = nHeight;
+    }
+    if( m_pFrame )
+    {
+        // clip with screen
+        int nScreenX = m_pFrame->maGeometry.nX+aXRect.x;
+        int nScreenY = m_pFrame->maGeometry.nY+aXRect.y;
+        int nScreenW = GetDisplay()->GetScreenSize().Width();
+        int nScreenH = GetDisplay()->GetScreenSize().Height();
+        if( nScreenX < 0 )
+            aXRect.x -= nScreenX, aXRect.width += nScreenX;
+        if( nScreenX+aXRect.width > nScreenW )
+            aXRect.width = nScreenW-nScreenX;
+        if( nScreenY < 0 )
+            aXRect.y -= nScreenY, aXRect.height += nScreenY;
+        if( nScreenY+aXRect.height > nScreenH )
+            aXRect.height = nScreenH-nScreenY;
     }
 
     if( nXmin < aXRect.x )  nXmin = aXRect.x;
@@ -1115,6 +1141,7 @@ bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rLayout 
         return false;
     if( nYmin > nYmax )
         return false;
+
     XImage* const pImg = XGetImage( pDisplay, hDrawable_,
         nXmin, nYmin, (nXmax-nXmin+1), (nYmax-nYmin+1), ~0, ZPixmap );
     if( pImg == NULL )

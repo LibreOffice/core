@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-22 16:45:59 $
+ *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ class SalGraphicsData
     friend  class           SalInfoPrinter;
 
     STDAPI( SalGraphicsData );
+    SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
+    SalVirtualDevice*       m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
 #ifndef _USE_PRINT_EXTENSION_
     ::psp::JobData*         m_pJobData;
