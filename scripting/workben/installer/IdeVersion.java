@@ -48,10 +48,11 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         Properties ideProps = new Properties();
         if(netbeansProps!=null )
         {
+                System.out.println("**** Found netbeans install");
         for( int n = 0; n < netbeansProps.size(); n++ ) {
-            for( int v = 0; v < versions.length; v++ ) {
+            for( int v = 0; v < InstUtil.versions.length; v++ ) {
                 System.out.println("n: " +n+" v: " +v);
-                String key = versions[v];
+                String key = InstUtil.versions[v];
                 System.out.println("It got here1");
                 String path = null;
                 if ( (path = netbeansProps.getProperty(key) ) != null ) {
@@ -61,12 +62,13 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             }
         }
         }
+                System.out.println("*** About to look for jedit install");
         if(jeditProps!=null)
         {
             for( int j = 0; j < jeditProps.size(); j++ ) {
-                for( int v = 0; v < versions.length; v++ ) {
+                for( int v = 0; v < InstUtil.versions.length; v++ ) {
                 System.out.println("j: " +j+" v: " +v);
-                    String key = versions[v];
+                    String key = InstUtil.versions[v];
                     String path = null;
                     if ((path = jeditProps.getProperty(key)) != null) {
                         //System.out.println( "j="+j+" v="+v + " jEdit " + " key=" + key + " path=" + path );
@@ -85,15 +87,13 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             System.err.println("Exception thrown in initComponents");
         }
 
-    tableModel = new MyTableModelIDE (props, versions);
+    tableModel = new MyTableModelIDE (props, InstUtil.versions);
 
-    /*
     if (tableModel.getRowCount() == 0)
     {
             JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
             //wizard.exitForm(null);
     }
-    */
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel) {
@@ -252,10 +252,6 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     private InstallWizard wizard;
     private MyTableModelIDE  tableModel;
     private NavPanel nav;
-    //private static final String [] versions = {"StarOffice 6.0", "OpenOffice.org 1.0","OpenOffice.org 1.0.1","OpenOffice.org 642","OpenOffice.org 643","StarOffice 6.1"};
-    //private static final String [] versions = {"OpenOffice.org 643"};
-
-    private static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3", "jEdit 4.1pre5" };
     // End of variables declaration//GEN-END:variables
 
   }
@@ -314,38 +310,38 @@ class MyTableModelIDE extends AbstractTableModel {
         return aRow.get(col);
     }
 
-    public Class getColumnClass(int c) {
+        public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
-    }
+        }
 
-    public boolean isCellEditable(int row, int col) {
+        public boolean isCellEditable(int row, int col) {
         if (col == 0) {
             return true;
         } else {
             return false;
         }
-    }
+        }
 
-    public void setValueAt(Object value, int row, int col) {
+        public void setValueAt(Object value, int row, int col) {
         ArrayList aRow = (ArrayList)data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
-    }
+        }
 
-    String [] getSelected() {
+        String [] getSelected() {
         return null;
-    }
+        }
 
-    public boolean isAnySelected() {
+        public boolean isAnySelected() {
         Iterator iter = data.iterator();
         while (iter.hasNext()) {
             ArrayList row = (ArrayList)iter.next();
             if (((Boolean)row.get(0)).booleanValue() == true) {
-                return true;
+            return true;
             }
         }
         return false;
-    }
+        }
 
 }
 

@@ -50,28 +50,58 @@ public class InstUtil {
     
     
     public static boolean hasNetbeansInstallation() {
-    File theFile = null;
-    StringBuffer str = new StringBuffer();
-        str.append(System.getProperty("user.home"));
-        str.append(File.separator);
-    StringBuffer thePath = new StringBuffer(str.toString());    
-    thePath.append(".netbeans");
-    theFile = new File(thePath.toString());
-    
-    return theFile.isDirectory();
+        boolean result = false;
+        try
+        {
+            result = checkForSupportedVersion( getNetbeansLocation(), versions );
+                System.out.println("No supported version for netbeans found.");
+        }
+        catch ( IOException ioe )
+        {
+            System.err.println("Exception caught trying to determine netbeans installation: " + ioe );
+            ioe.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
+
+    private static boolean checkForSupportedVersion( Properties installs, String[] supportedVersions )
+    {
+        if ( installs != null )
+        {
+            for ( int index = 0; index < supportedVersions.length; index++ )
+            {
+                String key = supportedVersions[ index ];
+                String path = null;
+                if ( ( path = installs.getProperty(key) ) != null )
+                {
+                    // at least one supported version for netbeans present, so return;
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }       
  
 
     public static boolean hasJeditInstallation() {
-    File theFile = null;
-    StringBuffer str = new StringBuffer();
-        str.append(System.getProperty("user.home"));
-        str.append(File.separator);
-    StringBuffer thePath = new StringBuffer(str.toString());    
-    thePath.append(".jedit");
-    theFile = new File(thePath.toString());
-    
-    return theFile.isDirectory();
+        boolean result = false;
+        try
+        {
+            result = checkForSupportedVersion( getJeditLocation(), versions );
+            if ( !result )
+            {
+                System.out.println("No supported version for JEdit found.");
+            }
+        }
+        catch ( IOException ioe )
+        {
+            System.err.println("Exception caught trying to determine jedit installation: " + ioe );
+            ioe.printStackTrace();
+            result = false;
+        }
+        return result;
     }   
        
     
@@ -102,6 +132,8 @@ public class InstUtil {
     if ( thePath.toString().indexOf( ".netbeans" ) == -1 )
         return null;
     else if ( new File( thePath.append( File.separator+"3.4"+File.separator ).toString() ).isDirectory() ) {
+                System.out.println( "Funny file is " + thePath );
+
         System.out.println( "Found NetBeans 3.4 on user home Directory " + thePath );
         File netbeansLogFile = new File( thePath.toString() + File.separator + "system" + File.separator + "ide.log" );
         if( netbeansLogFile.exists() ) {
@@ -111,9 +143,15 @@ public class InstUtil {
             System.out.println( "f.getPath() " + f.getPath()+File.separator );
         }
         else {
-            System.out.println( "Prompt user for NetBeans installation path" );
+            System.out.println( "Prompt user for NetBeans installation path, but returning null" );
+                        return null;
         }
     }
+        else
+        {
+        System.out.println( "No NetBeans, returning null" );
+        return null;    
+        }
     
     
     return results; 
@@ -123,10 +161,10 @@ public class InstUtil {
 
     public static Properties getJeditLocation() throws IOException {
     
-    if( !hasJeditInstallation() ) {
+    /*if( !hasJeditInstallation() ) {
         System.out.println( "No Jedit found (line195 InstUtil");
         return null;    
-    }
+    }*/
     
     File theFile = null;
     Properties results = new Properties();
@@ -398,6 +436,7 @@ public class InstUtil {
         }
     }
     
+    public static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3", "jEdit 4.1pre5" };
     private static File tmpDir = null;
 }
 
