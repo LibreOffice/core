@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PasswordHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 17:34:47 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 class SvPasswordHelper
 {
 public:
-    static void     GetHashPassword(com::sun::star::uno::Sequence <sal_uInt8>& rPassHash, const String& sPass);
+    static void     GetHashPassword(com::sun::star::uno::Sequence <sal_Int8>& rPassHash, const String& sPass);
 };
 
 #endif
