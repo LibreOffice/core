@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:04:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ using namespace ::com::sun::star::task;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
+namespace css = ::com::sun::star;
 
 
 #define DEFAULT_WIDTH  15000
@@ -718,6 +719,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                         {
                                         }
                                     }
+                                    Reference<XModifiable> xModifiable(xModel,UNO_QUERY_THROW);
+                                    xModifiable->setModified(sal_False);
                                 }
                             }
                         }
@@ -752,9 +755,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         {
             xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
             xPersist->storeOwn();
-//          Reference<XTransactedObject> xTransact(xStorage,UNO_QUERY);
-//          if ( xTransact.is() )
-//              xTransact->commit();
         }
         else
             throw CommandAbortedException();
@@ -791,6 +791,12 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         //////////////////////////////////////////////////////////////////
         // delete
         //////////////////////////////////////////////////////////////////
+        closeObject();
+        Reference< XStorage> xStorage = getStorage();
+        if ( xStorage.is() )
+            xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
+
+        dispose();
     }
     else
         aRet = OContentHelper::execute(aCommand,CommandId,Environment);
@@ -1219,6 +1225,7 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) thro
     {
         sal_Int32 nHandle = PROPERTY_ID_NAME;
         osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+
         Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
         aGuard.clear();
         Any aNew = makeAny(newName);
@@ -1239,7 +1246,8 @@ Reference< XStorage> ODocumentDefinition::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bForm ? s_sForms : s_sReports) : Reference< XStorage>();
+    Reference<css::embed::XTransactionListener> xEvt(m_pImpl->m_pDataSource->m_xModel,UNO_QUERY);
+    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bForm ? s_sForms : s_sReports,xEvt) : Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::isModified()
