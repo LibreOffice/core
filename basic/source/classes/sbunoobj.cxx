@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:58:25 $
+ *  last change: $Author: jbu $ $Date: 2001-01-30 17:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,11 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         */
 
         case TypeClass_BOOLEAN:         pVar->PutBool( *(sal_Bool*)aValue.getValue() ); break;
-        case TypeClass_CHAR:            { sal_Unicode val; aValue >>= val; pVar->PutChar( val ); } break;
+        case TypeClass_CHAR:
+        {
+            pVar->PutChar( *(sal_Unicode*)aValue.getValue() );
+            break;
+        }
         case TypeClass_STRING:          { OUString val; aValue >>= val; pVar->PutString( String( val ) ); } break;
         case TypeClass_FLOAT:           { float val; aValue >>= val; pVar->PutSingle( val ); } break;
         case TypeClass_DOUBLE:          { double val; aValue >>= val; pVar->PutDouble( val ); } break;
@@ -660,8 +664,18 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
         }
         break;
 
-        case TypeClass_BOOLEAN:         aRetVal <<= (sal_Bool)( pVar->GetBool() ); break;
-        case TypeClass_CHAR:            aRetVal <<= (sal_Unicode)( pVar->GetChar() ); break;
+        case TypeClass_BOOLEAN:
+        {
+            sal_Bool b = pVar->GetBool();
+            aRetVal.setValue( &b, getBooleanCppuType() );
+            break;
+        }
+        case TypeClass_CHAR:
+        {
+            sal_Unicode c = pVar->GetChar();
+            aRetVal.setValue( &c , getCharCppuType() );
+            break;
+        }
         case TypeClass_STRING:          aRetVal <<= OUString( pVar->GetString() ); break;
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
