@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:20:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ TabPage TP_DOCINFODOC
         Text [ danish ] = "Oprettet den:" ;
         Text [ portuguese_brazilian ] = "Erstellt am:" ;
         Text [ portuguese ] = "Criado em:" ;
-        Text[ chinese_simplified ] = "ÖÆ×÷ÈÕÆÚ£º";
+        Text[ chinese_simplified ] = "½¨Á¢ÈÕÆÚ£º";
         Text[ russian ] = "Ñîçäàíî:";
         Text[ polish ] = "Utworzony:";
         Text[ japanese ] = "ì¬“ú:";
@@ -1055,6 +1055,7 @@ TabDialog SID_DOCINFO
         };
     };
 };
+
 
 
 
