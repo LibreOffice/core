@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:03:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #define _SVICNVW_HXX
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
+#endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
 #endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
@@ -184,7 +187,7 @@ public:
 
 ******************************************/
 
-class BasicTreeListBox : public SvTreeListBox
+class BasicTreeListBox : public SvTreeListBox, public SfxListener
 {
 private:
     USHORT          nMode;
@@ -200,6 +203,8 @@ protected:
 
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, SfxObjectShell* pShell, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxObjectShell* pShell, const String& rLibName );
+
+    virtual void            SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType );
 
 public:
                     BasicTreeListBox( Window* pParent, const ResId& rRes );
