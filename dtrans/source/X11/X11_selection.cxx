@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:42:24 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,10 +949,14 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     }
 
     // do a reschedule
-    time_t nBegin = time( NULL );
+    struct timeval tv_last, tv_current;
+    gettimeofday( &tv_last, NULL );
+    tv_current = tv_last;
+
     XEvent aEvent;
     do
     {
+        bool bAdjustTime = false;
         {
             ClearableMutexGuard aGuard(m_aMutex);
             bool bHandle = false;
@@ -961,13 +965,20 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                                   PropertyNotify,
                                   &aEvent
                                   ) )
+            {
                 bHandle = true;
+                if( aEvent.xproperty.window == m_aWindow
+                    && aEvent.xproperty.atom == selection )
+                    bAdjustTime = true;
+            }
             else
             if( XCheckTypedEvent( m_pDisplay,
                                   SelectionClear,
                                   &aEvent
                                   ) )
+            {
                 bHandle = true;
+            }
             else
             if( XCheckTypedEvent( m_pDisplay,
                                   SelectionRequest,
@@ -979,12 +990,19 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                                   SelectionNotify,
                                   &aEvent
                                   ) )
+            {
                 bHandle = true;
+                if( aEvent.xselection.selection == selection
+                    && ( aEvent.xselection.requestor == m_aWindow ||
+                         aEvent.xselection.requestor == m_aCurrentDropWindow )
+                    )
+                    bAdjustTime = true;
+            }
             else
             {
                 TimeValue aTVal;
                 aTVal.Seconds = 0;
-                aTVal.Nanosec = 200000000;
+                aTVal.Nanosec = 100000000;
                 osl_waitThread( &aTVal );
             }
             if( bHandle )
@@ -993,10 +1011,13 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                 handleXEvent( aEvent );
             }
         }
-    } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
+        gettimeofday( &tv_current, NULL );
+        if( bAdjustTime )
+            tv_last = tv_current;
+    } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < 3 );
 
 #if OSL_DEBUG_LEVEL > 1
-    if( time(NULL)-nBegin >= 2 )
+    if( (tv_current.tv_sec - tv_last.tv_sec) > 2 )
         fprintf( stderr, "timed out\n" );
 #endif
     if( it->second->m_aDataArrived.check() &&
@@ -2016,7 +2037,7 @@ void SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 
 void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    ResettableMutexGuard aGuard(m_aMutex);
 
     // handle drop related events
     Window aSource = rMessage.data.l[0];
@@ -2049,7 +2070,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         OSL_ENSURE( 0, "someone forgot to call dropComplete ?" );
         // some listener forgot to call dropComplete in the last operation
         // let us end it now and accept the new enter event
+        aGuard.clear();
         dropComplete( sal_False, m_aCurrentDropWindow, m_nDropTime );
+        aGuard.reset();
     }
 
     if( it != m_aDropTargets.end() &&
@@ -2726,7 +2749,9 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     m_bDropSent                     = true;
                     m_nDropTimeout                  = time( NULL );
                     // HACK :-)
+                    aGuard.clear();
                     static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
+                    aGuard.reset();
                     bCancel = false;
                 }
             }
@@ -3083,7 +3108,7 @@ void SelectionManager::startDrag(
     }
 
     {
-        MutexGuard aGuard(m_aMutex);
+        ClearableMutexGuard aGuard(m_aMutex);
 
         // first get the current pointer position and the window that
         // the pointer is located in. since said window should be one
@@ -3113,6 +3138,7 @@ void SelectionManager::startDrag(
         // the pointer or if no mouse button is pressed
         if( it == m_aDropTargets.end() || (mask & (Button1Mask|Button2Mask|Button3Mask)) == 0 )
         {
+            aGuard.clear();
             if( listener.is() )
                 listener->dragDropEnd( aDragFailedEvent );
             return;
@@ -3168,6 +3194,7 @@ void SelectionManager::startDrag(
             if( nKeyboardGrabSuccess == GrabSuccess )
                 XUngrabKeyboard( m_pDisplay, CurrentTime );
             XFlush( m_pDisplay );
+            aGuard.clear();
             if( listener.is() )
                 listener->dragDropEnd( aDragFailedEvent );
             return;
@@ -3372,8 +3399,8 @@ void SelectionManager::transferablesFlavorsChanged()
     m_aDragFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
     int i;
 
-    ::std::list< Atom > aConversions;
-    ::std::list< Atom >::const_iterator type_it;
+    std::list< Atom > aConversions;
+    std::list< Atom >::const_iterator type_it;
 
     getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
@@ -3442,18 +3469,19 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
     {
         case SelectionClear:
         {
-            MutexGuard aGuard(m_aMutex);
+            ClearableMutexGuard aGuard(m_aMutex);
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "SelectionClear for selection %s\n",
                      OUStringToOString( getString( rEvent.xselectionclear.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
                      );
 #endif
             SelectionAdaptor* pAdaptor = getAdaptor( rEvent.xselectionclear.selection );
-            if ( pAdaptor )
-                pAdaptor->clearTransferable();
-            ::std::hash_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
+            std::hash_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
             if( it != m_aSelections.end() )
                 it->second->m_bOwner = false;
+            aGuard.clear();
+            if ( pAdaptor )
+                pAdaptor->clearTransferable();
         }
         break;
 
