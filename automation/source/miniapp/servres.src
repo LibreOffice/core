@@ -1,0 +1,267 @@
+/*************************************************************************
+ *
+ *  $RCSfile: servres.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-11-18 11:18:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2002
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2002 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "servres.hrc"
+#include "servuid.hxx"
+ModalDialog GROSSER_TEST_DLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = UID_GROSSER_TEST_DLG ;
+    Pos = MAP_APPFONT ( 14 , 7 ) ;
+    Size = MAP_APPFONT ( 273 , 110 ) ;
+    Text = "Groﬂer Testdialog" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    CheckBox 1
+    {
+        HelpID = UID_CheckBox ;
+        Pos = MAP_APPFONT ( 9 , 17 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Text = "CheckBox" ;
+        TabStop = TRUE ;
+    };
+    TriStateBox 1
+    {
+        HelpID = UID_TriStateBox ;
+        Pos = MAP_APPFONT ( 9 , 29 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        Text = "TriStateBox" ;
+        TabStop = TRUE ;
+    };
+    OKButton 1
+    {
+        HelpID = 1 ;
+        Pos = MAP_APPFONT ( 132 , 92 ) ;
+        Size = MAP_APPFONT ( 64 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    TimeField 1
+    {
+        Border = TRUE ;
+        HelpID = UID_TimeField ;
+        Pos = MAP_APPFONT ( 9 , 92 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+    };
+    MultiLineEdit 1
+    {
+        Border = TRUE ;
+        HelpID = UID_MultiLineEdit ;
+        Pos = MAP_APPFONT ( 172 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 48 ) ;
+        Text = "MultiLineEdit" ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+    GroupBox 1
+    {
+        Pos = MAP_APPFONT ( 9 , 42 ) ;
+        Size = MAP_APPFONT ( 58 , 44 ) ;
+        Text = "GroupBox" ;
+        Group = TRUE ;
+    };
+    RadioButton 2
+    {
+        HelpID = UID_RadioButton2 ;
+        Pos = MAP_APPFONT ( 16 , 68 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Text = "Radio2" ;
+        TabStop = TRUE ;
+    };
+    RadioButton 1
+    {
+        HelpID = UID_RadioButton1 ;
+        Pos = MAP_APPFONT ( 16 , 54 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Text = "Radio1" ;
+        TabStop = TRUE ;
+    };
+    MultiListBox 1
+    {
+        Border = TRUE ;
+        HelpID = UID_MultiListBox ;
+        Pos = MAP_APPFONT ( 76 , 6 ) ;
+        Size = MAP_APPFONT ( 86 , 48 ) ;
+        TabStop = TRUE ;
+        StringList =
+        {
+            < "MultiListBox" ; Default ; > ;
+            < "Zeile 2" ; Default ; > ;
+            < "Zeile 3" ; Default ; > ;
+            < "Zeile 4" ; Default ; > ;
+            < "Zeile 5" ; Default ; > ;
+            < "Zeile 6" ; Default ; > ;
+            < "Zeile 7" ; Default ; > ;
+            < "Zeile 8" ; Default ; > ;
+            < "Zeile 9" ; Default ; > ;
+            < "Zeile 10" ; Default ; > ;
+        };
+    };
+    ComboBox 1
+    {
+        HelpID = UID_ComboBox ;
+        Pos = MAP_APPFONT ( 76 , 58 ) ;
+        Size = MAP_APPFONT ( 86 , 55 ) ;
+        Text = "ComboBox" ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            "ComboBox" ;
+            "Erster" ;
+            "Zweiter" ;
+            "Dritter" ;
+        };
+    };
+    DateBox 1
+    {
+        HelpID = UID_DateBox ;
+        Pos = MAP_APPFONT ( 76 , 72 ) ;
+        Size = MAP_APPFONT ( 86 , 54 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            "1.1.91" ;
+            "2.2.92" ;
+            "3.3.93" ;
+        };
+    };
+    FixedText 1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 19 , 6 ) ;
+        Size = MAP_APPFONT ( 39 , 9 ) ;
+        Text = "FixedText" ;
+        Center = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 202 , 92 ) ;
+        Size = MAP_APPFONT ( 64 , 12 ) ;
+        TabStop = TRUE ;
+    };
+};
+Menu MENU_CLIENT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = IDM_FILE ;
+            HelpID = IDM_FILE_HELP ;
+            Text = "~File" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = IDM_FILE_OPEN_TEST ;
+                        HelpID = IDM_FILE_OPEN_TEST_HELP ;
+                        Text = "~Open Test Window" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = 4 ;
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = IDM_FILE_EXIT ;
+                        HelpID = IDM_FILE_EXIT_HELP ;
+                        Text = "~Beenden" ;
+                        AccelKey = KeyCode
+                        {
+                            Code = KEY_F4 ;
+                            Modifier2 = TRUE ;
+                        };
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = IDM_TEST ;
+            Text = "~Test" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = IDM_TEST_GROSS ;
+                        Text = "~Groﬂer Testdialog" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = IDM_SYS_DLG ;
+                        Text = "~Sysdialoge" ;
+                    };
+                };
+            };
+        };
+    };
+};
+
