@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 12:18:11 $
+ *  last change: $Author: dr $ $Date: 2002-08-13 10:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,33 +84,39 @@
 #ifndef _SVTOOLS_SCRIPTEDTEXT_HXX
 #include <svtools/scriptedtext.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
+#endif
 
+#ifndef _SWMODULE_HXX
+#include "swmodule.hxx"
+#endif
 #ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
+#include "uiparam.hxx"
 #endif
 #ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
+#include "swtypes.hxx"
 #endif
 #ifndef _VIEW_HXX
-#include <view.hxx>
+#include "view.hxx"
 #endif
 #ifndef _WRTSH_HXX
-#include <wrtsh.hxx>
+#include "wrtsh.hxx"
 #endif
 #ifndef _TBLAFMT_HXX
-#include <tblafmt.hxx>
+#include "tblafmt.hxx"
 #endif
 #ifndef _TAUTOFMT_HXX
-#include <tautofmt.hxx>
+#include "tautofmt.hxx"
 #endif
 #ifndef _SHELLRES_HXX
-#include <shellres.hxx>
+#include "shellres.hxx"
 #endif
 #ifndef _BREAKIT_HXX
-#include <breakit.hxx>
+#include "breakit.hxx"
 #endif
 #ifndef _TAUTOFMT_HRC
-#include <tautofmt.hrc>
+#include "tautofmt.hrc"
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -956,6 +962,32 @@ void AutoFmtPreview::GetLines( BYTE nIndex, AutoFmtLine eLine,
 
 //------------------------------------------------------------------------
 
+void lcl_DrawHorizontalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
+{
+    DBG_ASSERT( rStart.Y() <= rEnd.Y(), "lcl_DrawHorizontalLine - wrong point order" );
+    Point aLineStart( rStart );
+    Point aLineEnd( rEnd.X(), rStart.Y() );
+    while( aLineStart.Y() <= rEnd.Y() )
+    {
+        rDev.DrawLine( aLineStart, aLineEnd );
+        ++aLineStart.Y();
+        ++aLineEnd.Y();
+    }
+}
+
+void lcl_DrawVerticalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
+{
+    DBG_ASSERT( rStart.X() <= rEnd.X(), "lcl_DrawVerticalLine - wrong point order" );
+    Point aLineStart( rStart );
+    Point aLineEnd( rStart.X(), rEnd.Y() );
+    while( aLineStart.X() <= rEnd.X() )
+    {
+        rDev.DrawLine( aLineStart, aLineEnd );
+        ++aLineStart.X();
+        ++aLineEnd.X();
+    }
+}
+
 void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                                     Point                   from,
                                     Point                   to,
@@ -986,10 +1018,9 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
 
     if ( dLine.nLeft > 0 )
     {
-        Color   oldColor     = aVD.GetLineColor();
-        aVD.SetLineColor( Color(COL_TRANSPARENT) );
-        Color oldFillColor = aVD.GetFillColor();
-        aVD.SetFillColor( rLineD.GetColor() );
+        Color oldColor = aVD.GetLineColor();
+        aVD.SetLineColor( rLineD.GetColor() );
+
         USHORT  nHeight  = dLine.nLeft + dLine.nMiddle + dLine.nRight;
         Point   from2    = from;
         Point   to2      = to;
@@ -1008,7 +1039,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
             from.X() += dxArr[0];
             to.X()   += dxArr[2];
 
-            aVD.DrawRect( Rectangle( from, to ) );
+            lcl_DrawHorizontalLine( aVD, from, to );
 
             // noch eine zweite Linie zu malen?
             if ( dLine.nRight != 0 )
@@ -1022,7 +1053,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                 from2.X() += dxArr[1];
                 to2.X()   += dxArr[3];
 
-                aVD.DrawRect( Rectangle( from2, to2 ) );
+                lcl_DrawHorizontalLine( aVD, from2, to2 );
             }
         }
         else
@@ -1034,7 +1065,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
             from.Y() += dxArr[0];
             to.Y()   += dxArr[2];
 
-            aVD.DrawRect( Rectangle( from, to ) );
+            lcl_DrawVerticalLine( aVD, from, to );
 
             // noch eine zweite Linie zu malen?
             if ( dLine.nRight != 0 )
@@ -1046,10 +1077,9 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                 from2.Y() += dxArr[1];
                 to2.Y()   += dxArr[3];
 
-                aVD.DrawRect( Rectangle( from2, to2 ) );
+                lcl_DrawVerticalLine( aVD, from2, to2 );
             }
         }
-        aVD.SetFillColor( oldFillColor );
         aVD.SetLineColor( oldColor );
     }
 }
@@ -1416,6 +1446,8 @@ void AutoFmtPreview::PaintCells()
 
 void __EXPORT AutoFmtPreview::Init()
 {
+    SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
+
     SvxBoxItem aEmptyBoxItem;
 
     aEmptyBoxItem.SetLine    ( NULL, BOX_LINE_TOP );
@@ -1435,7 +1467,6 @@ void __EXPORT AutoFmtPreview::Init()
 
     CalcCellArray( FALSE );
     CalcLineMap();
-
 }
 
 //------------------------------------------------------------------------
@@ -1541,6 +1572,11 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 
 void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 {
+    sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            SW_MOD()->GetAccessibilityOptions().GetIsForBorders() )
+        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+
     Bitmap  thePreview;
     Point   aCenterPos;
     Size    theWndSize = GetSizePixel();
@@ -1552,7 +1588,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     aFont.SetTransparent( TRUE );
 
     aVD.SetFont          ( aFont );
-    aVD.SetLineColor     ( Color(COL_TRANSPARENT));
+    aVD.SetLineColor     ();
     const Color& rWinColor = GetSettings().GetStyleSettings().GetWindowColor();
     aVD.SetBackground    ( Wallpaper(rWinColor) );
     aVD.SetFillColor     ( rWinColor );
@@ -1571,7 +1607,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     //--------------------------------------
     aVD.SetOutputSizePixel( theWndSize );
     oldColor = aVD.GetLineColor();
-    aVD.SetLineColor( Color( COL_BLACK ) );
+    aVD.SetLineColor();
     aVD.DrawRect( Rectangle( Point(0,0), theWndSize ) );
     SetLineColor( oldColor );
     aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
@@ -1583,6 +1619,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     //----------------------------
     DrawBitmap( Point(0,0), aVD.GetBitmap( Point(0,0), theWndSize ) );
 
+    aVD.SetDrawMode( nOldDrawMode );
 }
 
 //------------------------------------------------------------------------
