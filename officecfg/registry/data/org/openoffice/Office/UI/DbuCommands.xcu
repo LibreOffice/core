@@ -69,6 +69,216 @@
                     <value xml:lang="en-US">Distinct Values</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DB/PasteSpecial" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Inhalte einfügen...</value>
+                    <value xml:lang="en-US">Paste Special...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Delete" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Löschen</value>
+                    <value xml:lang="en-US">Delete</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Rename" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Umbennen</value>
+                    <value xml:lang="en-US">Rename</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Edit" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Bearbeiten...</value>
+                    <value xml:lang="en-US">Edit...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Open" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Datenbankobjekt öffnen...</value>
+                    <value xml:lang="en-US">Open Database Object...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ConvertToView" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Als Ansicht erstellen</value>
+                    <value xml:lang="en-US">Create as View</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewFormAutoPilot" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Formular-Assistent...</value>
+                    <value xml:lang="en-US">Form Wizard...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewFormAutoPilotWithPreSelection" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Formular-Assistent...</value>
+                    <value xml:lang="en-US">Form Wizard...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewReportAutoPilot" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Berichts-Assistent...</value>
+                    <value xml:lang="en-US">Report Wizard...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewReportAutoPilotWithPreSelection" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Berichts-Assistent...</value>
+                    <value xml:lang="en-US">Report Wizard...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/SelectAll" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Alles auswählen</value>
+                    <value xml:lang="en-US">Select All</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DSProperties" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Eigenschaften</value>
+                    <value xml:lang="en-US">Properties</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DSConnectionType" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Verbingungsart</value>
+                    <value xml:lang="en-US">Connection Type</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DSAdvancedSettings" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Erweiterte Einstellungen</value>
+                    <value xml:lang="en-US">Advanced Settings</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ViewTables" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabellen</value>
+                    <value xml:lang="en-US">Tables</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ViewQueries" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Abfragen</value>
+                    <value xml:lang="en-US">Queries</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ViewForms" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Formulare</value>
+                    <value xml:lang="en-US">Forms</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ViewReports" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Berichte</value>
+                    <value xml:lang="en-US">Reports</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/SortAscending" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Aufsteigend</value>
+                    <value xml:lang="en-US">Ascending</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/SortDescending" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Absteigend</value>
+                    <value xml:lang="en-US">Descending</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DisablePreview" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Keine</value>
+                    <value xml:lang="en-US">None</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ShowDocInfoPreview" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Dokumentinformationen</value>
+                    <value xml:lang="en-US">Document Information</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/ShowDocPreview" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Dokument</value>
+                    <value xml:lang="en-US">Document</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewForm" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Formular...</value>
+                    <value xml:lang="en-US">Form...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewQuery" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Abfrage (Entwurfsansicht)...</value>
+                    <value xml:lang="en-US">Query (Design View)...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewQuerySql" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Abfrage (SQL-Ansicht)...</value>
+                    <value xml:lang="en-US">Query (SQL View)...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewTable" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabellenentwurf...</value>
+                    <value xml:lang="en-US">Table Design...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewView" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Ansichtsentwurf...</value>
+                    <value xml:lang="en-US">View Design...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewViewSQL" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Ansicht (einfach)...</value>
+                    <value xml:lang="en-US">View (Simple)...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/NewFolder" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Neuer Ornder</value>
+                    <value xml:lang="en-US">New Folder</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/RelationDesign" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Beziehungen...</value>
+                    <value xml:lang="en-US">Relationships...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/UserAdmin" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Benutzerverwaltung...</value>
+                    <value xml:lang="en-US">User Administration...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/TableFilter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabellenfilter...</value>
+                    <value xml:lang="en-US">Table Filter...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/RefreshTables" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabellen aktualisieren</value>
+                    <value xml:lang="en-US">Refresh Tables</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DirectSQL" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">SQL...</value>
+                    <value xml:lang="en-US">SQL...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:FormSlots/saveRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Aktuellen Datensatz speichern</value>
@@ -119,6 +329,42 @@
             </node>
         </node>
         <node oor:name="Popups">
+            <node oor:name=".uno:DB/DatabasePropertiesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Datenbank</value>
+                    <value xml:lang="en-US">Database</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/DatabaseObjectsMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Datenbankobjekte</value>
+                    <value xml:lang="en-US">Database Objects</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Sort" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Sortieren</value>
+                    <value xml:lang="en-US">Sort</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/Preview" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Vorschau</value>
+                    <value xml:lang="en-US">Preview</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/SendReportAsMail" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Bericht als E-Mail...</value>
+                    <value xml:lang="en-US">Report As E-Mail...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DB/SendReportToWriter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Bericht an Text Dokument</value>
+                    <value xml:lang="en-US">Report to Text Document</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
