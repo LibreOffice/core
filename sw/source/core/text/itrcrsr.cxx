@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,26 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
                         Point aOldPos = pOrig->Pos();
+
+#ifdef VERTICAL_LAYOUT
+                        // Ok, for ruby portions in grid mode we have to
+                        // temporarily set the inner line height to the
+                        // outer line height because that value is needed
+                        // for the adjustment inside the recursion
+                        USHORT nOldRubyHeight = pCurr->Height();
+                        const sal_Bool bChgHeight =
+                                ((SwMultiPortion*)pPor)->IsRuby() &&
+                                GetTxtFrm()->GetGridValue( GRID_DIST );
+
+                        if ( bChgHeight )
+                            pCurr->Height( pOldCurr->Height() );
+#endif
                         _GetCharRect( pOrig, nOfst, pCMS );
+
+#ifdef VERTICAL_LAYOUT
+                        if ( bChgHeight )
+                            pCurr->Height( nOldRubyHeight );
+#endif
 
                         // if we are still in the first row of
                         // our 2 line multiportion, we use the FirstMulti flag

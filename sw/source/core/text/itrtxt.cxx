@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,25 +503,33 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     // always centered in grid mode
     if ( nGridDist )
     {
+        const USHORT nRubyHeight = GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+
         if ( GetInfo().IsMulti() )
         {
             // we are inside the GetCharRect recursion for multi portions
-            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+            USHORT nAdjustment = ( nPorHeight > nGridDist ) ?
+                                 pCurr->Height() - nRubyHeight :
+                                 nGridDist;
+
+            nOfst = ( nAdjustment - nPorHeight ) / 2 + nPorAscent;
         }
         else
         {
-            // We have to take care for ruby portions. For ruby portions only
-            // the base line is centered
+            // We have to take care for ruby portions.
+            // The ruby portion is NOT centered
             if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsRuby() )
-                nPorHeight += ((SwMultiPortion*)pPor)->GetRoot().Height();
-
-            const USHORT nRubyHeight = GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
-            // Portions which are bigger than on grid distance are centered inside
-            // the whole line.
-            const USHORT nLineNetto = ( nPorHeight > nGridDist ) ?
-                                        rLine.Height() - nRubyHeight :
-                                        nGridDist;
-            nOfst += nRubyHeight + ( nLineNetto - nPorHeight ) / 2 + nPorAscent;
+                nOfst += pPor->GetAscent() + nRubyHeight -
+                        ((SwMultiPortion*)pPor)->GetRoot().Height();
+            else
+            {
+                // Portions which are bigger than on grid distance are centered inside
+                // the whole line.
+                const USHORT nLineNetto = ( nPorHeight > nGridDist ) ?
+                                            rLine.Height() - nRubyHeight :
+                                            nGridDist;
+                nOfst += nRubyHeight + ( nLineNetto - nPorHeight ) / 2 + nPorAscent;
+            }
         }
     }
     else

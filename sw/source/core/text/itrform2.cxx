@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#endif
 
 #ifdef DEBUG
 #ifndef _NDTXT_HXX
@@ -169,7 +164,8 @@
 
 using namespace ::com::sun::star::i18n;
 #ifdef VERTICAL_LAYOUT
-using namespace ::com::sun::star::i18n::ScriptType;
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
 #endif
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
@@ -674,12 +670,10 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                    // 3. Multi Portion and 4. Drop Caps
                      ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() )&&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
-#ifdef VERTICAL_LAYOUT
-                       rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() ) ||
-                   // 5. Grid Mode
-                     ( nGridWidth )
-#else
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
+#ifdef VERTICAL_LAYOUT
+                   // 5. Grid Mode
+                     || ( nGridWidth && SW_CJK != pFnt->GetActual() )
 #endif
                    )
                 )
@@ -739,19 +733,19 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if ( nGridWidth && pPor != pGridKernPortion && ! pMulti )
         {
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
-            const SwTwips nRestWidth = rInf.Width() - rInf.X();
+            const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
-            const BYTE nCurrScript = pScriptInfo->ScriptType( rInf.GetIdx() );
+            const BYTE nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
             const BYTE nNextScript = nTmp >= rInf.GetTxt().Len() ?
-                                     (BYTE)i18n::ScriptType::ASIAN :
-                                     pScriptInfo->ScriptType( nTmp );
+                                     SW_CJK :
+                                     WhichFont( nTmp, 0, pScriptInfo );
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
             // be careful when handling an underflow event: the gridkernportion
             // could have been deleted
-            if ( nRestWidth > 0 && i18n::ScriptType::ASIAN != nCurrScript &&
-                ! rInf.IsUnderFlow() && ( bFull || ASIAN == nNextScript ) )
+            if ( nRestWidth > 0 && SW_CJK != nCurrScript &&
+                ! rInf.IsUnderFlow() && ( bFull || SW_CJK == nNextScript ) )
             {
                 ASSERT( pGridKernPortion, "No GridKernPortion available" )
 
@@ -784,7 +778,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 pGridKernPortion = 0;
             }
-            else if ( pPor->IsMultiPortion() || pPor->InFixMargGrp() || pPor->IsFlyCntPortion() ||
+            else if ( pPor->IsMultiPortion() || pPor->InFixMargGrp() ||
+                      pPor->IsFlyCntPortion() || pPor->InNumberGrp() ||
                       nCurrScript != nNextScript )
                 // next portion should snap to grid
                 pGridKernPortion = 0;
