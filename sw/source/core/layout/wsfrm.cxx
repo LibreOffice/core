@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:22:37 $
+ *  last change: $Author: ama $ $Date: 2001-07-23 10:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
+#endif
+#ifndef _FMTSRND_HXX //autogen
+#include <fmtsrnd.hxx>
 #endif
 
 #include "ftnfrm.hxx"
@@ -2071,7 +2074,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                 NotifyFlys();
 
             if( IsCellFrm() )
-                InvaPercentLowers();
+                InvaPercentLowers( nReal );
 
             const SvxGraphicPosition ePos = GetFmt()->GetBackground().GetGraphicPos();
             if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
@@ -2202,7 +2205,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
             NotifyFlys();
 
         if( IsCellFrm() )
-            InvaPercentLowers();
+            InvaPercentLowers( nReal );
 
         if( IsFtnFrm() && !((SwFtnFrm*)this)->GetAttr()->GetFtn().IsEndNote() &&
             ( GetFmt()->GetDoc()->GetFtnInfo().ePos != FTNPOS_CHAPTER ||
@@ -2507,7 +2510,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 |*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
-static void InvaPercentFlys( SwFrm *pFrm )
+static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
     ASSERT( pFrm->GetDrawObjs(), "Can't find any Objects" );
     for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
@@ -2518,15 +2521,35 @@ static void InvaPercentFlys( SwFrm *pFrm )
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
-                pFly->InvalidateSize();
+            {
+                BOOL bNotify = TRUE;
+                // If we've a fly with more than 90% relative height...
+                if( rSz.GetHeightPercent() > 90 && pFly->GetAnchor() &&
+                    rSz.GetHeightPercent() != 0xFF && nDiff )
+                {
+                    const SwFrm *pRel = pFly->IsFlyLayFrm() ? pFly->GetAnchor():
+                                        pFly->GetAnchor()->GetUpper();
+                    // ... and we have already more than 90% height and we
+                    // not allow the text to go through...
+                    // then a notifycation could cause an endless loop, e.g.
+                    // 100% height and no text wrap inside a cell of a table.
+                    if( pFly->Frm().Height()*10 >
+                        ( nDiff + pRel->Prt().Height() )*9 &&
+                        pFly->GetFmt()->GetSurround().GetSurround() !=
+                        SURROUND_THROUGHT )
+                       bNotify = FALSE;
+                }
+                if( bNotify )
+                    pFly->InvalidateSize();
+            }
         }
     }
 }
 
-void SwLayoutFrm::InvaPercentLowers()
+void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
 {
     if ( GetDrawObjs() )
-        ::InvaPercentFlys( this );
+        ::InvaPercentFlys( this, nDiff );
 
     SwFrm *pFrm = ContainsCntnt();
     if ( pFrm )
@@ -2547,7 +2570,7 @@ void SwLayoutFrm::InvaPercentLowers()
                     pFrm->InvalidatePrt();
             }
             else if ( pFrm->GetDrawObjs() )
-                ::InvaPercentFlys( pFrm );
+                ::InvaPercentFlys( pFrm, nDiff );
             pFrm = pFrm->FindNextCnt();
         } while ( pFrm && IsAnLower( pFrm ) ) ;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-12 09:40:08 $
+ *  last change: $Author: ama $ $Date: 2001-07-23 10:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ SwLayNotify::~SwLayNotify()
             bNotify = TRUE;
             //TEUER!! aber wie macht man es geschickter?
             if( bInvaPercent )
-                pLay->InvaPercentLowers();
+                pLay->InvaPercentLowers( pLay->Prt().Height() - aPrt.Height() );
         }
         if ( pLay->IsTabFrm() )
             //Damit _nur_ der Shatten bei Groessenaenderungen gemalt wird.

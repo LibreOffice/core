@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2001-07-23 10:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ public:
     //Invalidiert diejenigen innenliegenden Frames, deren Breite und/oder
     //Hoehe Prozentual berechnet werden. Auch Rahmen, die an this oder an
     //innenliegenden verankert sind werden ggf. invalidiert.
-    void InvaPercentLowers();
+    void InvaPercentLowers( SwTwips nDiff = 0 );
 
     //Gerufen von Format fuer Rahmen und Bereichen mit Spalten.
     void FormatWidthCols( const SwBorderAttrs &, const SwTwips nBorder,
