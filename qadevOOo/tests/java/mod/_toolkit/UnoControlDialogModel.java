@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialogModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:06:00 $
+ *  last change:$Date: 2003-11-18 16:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 package mod._toolkit;
 
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameContainer;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -68,7 +72,9 @@ import lib.TestParameters;
 import util.utils;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import lib.StatusException;
 
 
 /**
@@ -108,17 +114,96 @@ public class UnoControlDialogModel extends TestCase {
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
-
+        XInterface dialogModel = null;
+        String _buttonName = "MyButton";
+        String _labelName = "MyLabel";
+        String _labelPrefix = "MyLabelPrefix";
+        XMultiServiceFactory xMultiServiceFactory = null;
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
-                                     .createInstance("com.sun.star.awt.UnoControlDialogModel");
-        } catch (Exception e) {
+            dialogModel = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
+                      .createInstance("com.sun.star.awt.UnoControlDialogModel");
+        // create the dialog model and set the properties
+        XPropertySet xPSetDialog = (XPropertySet)
+            UnoRuntime.queryInterface( XPropertySet.class, dialogModel);
+        xPSetDialog.setPropertyValue("PositionX", new Integer(100));
+        xPSetDialog.setPropertyValue("PositionY", new Integer(100));
+        xPSetDialog.setPropertyValue("Width", new Integer(150));
+        xPSetDialog.setPropertyValue("Height", new Integer(100));
+        xPSetDialog.setPropertyValue("Title", new String("Runtime Dialog Demo"));
+
+        // get the service manager from the dialog model
+        xMultiServiceFactory = (XMultiServiceFactory)
+            UnoRuntime.queryInterface( XMultiServiceFactory.class, dialogModel);
+
+        // create the button model and set the properties
+        Object buttonModel = xMultiServiceFactory.createInstance(
+                                    "com.sun.star.awt.UnoControlButtonModel" );
+        XPropertySet xPSetButton = (XPropertySet)
+            UnoRuntime.queryInterface( XPropertySet.class, buttonModel);
+        xPSetButton.setPropertyValue("PositionX", new Integer(50));
+        xPSetButton.setPropertyValue("PositionY", new Integer(30));
+        xPSetButton.setPropertyValue("Width", new Integer(50));
+        xPSetButton.setPropertyValue("Height", new Integer(14));
+        xPSetButton.setPropertyValue("Name", _buttonName);
+        xPSetButton.setPropertyValue("TabIndex", new Short((short)0));
+        xPSetButton.setPropertyValue("Label", new String("Click Me"));
+
+        // create the label model and set the properties
+        Object labelModel = xMultiServiceFactory.createInstance(
+                                  "com.sun.star.awt.UnoControlFixedTextModel" );
+        XPropertySet xPSetLabel = ( XPropertySet )
+            UnoRuntime.queryInterface( XPropertySet.class, labelModel );
+        xPSetLabel.setPropertyValue("PositionX", new Integer(40));
+        xPSetLabel.setPropertyValue("PositionY", new Integer(60));
+        xPSetLabel.setPropertyValue("Width", new Integer(100));
+        xPSetLabel.setPropertyValue("Height", new Integer(14));
+        xPSetLabel.setPropertyValue("Name", _labelName);
+        xPSetLabel.setPropertyValue("TabIndex", new Short((short)1));
+        xPSetLabel.setPropertyValue("Label", _labelPrefix);
+
+        // insert the control models into the dialog model
+        XNameContainer xNameCont = (XNameContainer)
+            UnoRuntime.queryInterface( XNameContainer.class, dialogModel);
+        xNameCont.insertByName(_buttonName, buttonModel);
+        xNameCont.insertByName(_labelName, labelModel);
+
+        // create the dialog control and set the model
+        XControl dialog = (XControl)
+                UnoRuntime.queryInterface(XControl.class,
+                ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                "com.sun.star.awt.UnoControlDialog"));
+        XControl xControl = (XControl)
+                UnoRuntime.queryInterface( XControl.class, dialog );
+        XControlModel xControlModel = (XControlModel)
+                UnoRuntime.queryInterface( XControlModel.class, dialogModel);
+        xControl.setModel(xControlModel);
+
+
+         } catch (Exception e) {
+             throw new StatusException("Could no create test object", e);
         }
+
+        oObj = dialogModel;
 
         log.println("creating a new environment for object");
 
+        XMultiServiceFactory oMSF = (XMultiServiceFactory)
+            UnoRuntime.queryInterface(XMultiServiceFactory.class, oObj);
+
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
+        try {
+            // XNameReplace
+            tEnv.addObjRelation("INSTANCE1", xMultiServiceFactory.createInstance(
+                                 "com.sun.star.awt.UnoControlFixedTextModel" ));
+            //XContainer
+            tEnv.addObjRelation("INSTANCE", xMultiServiceFactory.createInstance(
+                                 "com.sun.star.awt.UnoControlFixedTextModel" ));
+        } catch (com.sun.star.uno.Exception e) {
+            log.println("Could not add object relations 'INSTANCEn'");
+            e.printStackTrace(log);
+        }
         tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.Dialog");
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
