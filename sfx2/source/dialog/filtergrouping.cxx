@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-29 13:42:35 $
+ *  last change: $Author: pb $ $Date: 2002-10-01 12:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,21 +816,27 @@ namespace sfx2
     //--------------------------------------------------------------------
     struct AppendFilter : public ::std::unary_function< FilterDescriptor, void >
     {
-    protected:
-        Reference< XFilterManager >         m_xFilterManager;
-    public:
-        AppendFilter( const Reference< XFilterManager >& _rxFilterManager )
-            :m_xFilterManager       ( _rxFilterManager )
-        {
-            DBG_ASSERT( m_xFilterManager.is(), "AppendFilter::AppendFilter: invalid filter manager!" );
-        }
+        protected:
+            Reference< XFilterManager >         m_xFilterManager;
+            FileDialogHelper_Impl*              m_pFileDlgImpl;
 
-        // operate on a single filter
-        void operator() ( const FilterDescriptor& _rFilterEntry )
-        {
-            String sDisplayText = addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True );
-            m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
-        }
+        public:
+            AppendFilter( const Reference< XFilterManager >& _rxFilterManager, FileDialogHelper_Impl* _pImpl ) :
+
+                m_xFilterManager( _rxFilterManager ),
+                m_pFileDlgImpl  ( _pImpl )
+
+            {
+                DBG_ASSERT( m_xFilterManager.is(), "AppendFilter::AppendFilter: invalid filter manager!" );
+                DBG_ASSERT( m_pFileDlgImpl, "AppendFilter::AppendFilter: invalid filedlg impl!" );
+            }
+
+            // operate on a single filter
+            void operator() ( const FilterDescriptor& _rFilterEntry )
+            {
+                String sDisplayText = addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True, *m_pFileDlgImpl );
+                m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
+            }
     };
 
 // =======================================================================
@@ -907,12 +913,16 @@ namespace sfx2
     protected:
         Reference< XFilterManager >         m_xFilterManager;
         Reference< XFilterGroupManager >    m_xFilterGroupManager;
+        FileDialogHelper_Impl*              m_pFileDlgImpl;
 
     public:
-        AppendFilterGroup( const Reference< XFilterManager >& _rxFilterManager )
+        AppendFilterGroup( const Reference< XFilterManager >& _rxFilterManager, FileDialogHelper_Impl* _pImpl )
             :m_xFilterManager       ( _rxFilterManager )
             ,m_xFilterGroupManager  ( _rxFilterManager, UNO_QUERY )
+            ,m_pFileDlgImpl         ( _pImpl )
         {
+            DBG_ASSERT( m_xFilterManager.is(), "AppendFilterGroup::AppendFilterGroup: invalid filter manager!" );
+            DBG_ASSERT( m_pFileDlgImpl, "AppendFilterGroup::AppendFilterGroup: invalid filedlg impl!" );
         }
 
         // operate on a single filter group
@@ -935,7 +945,7 @@ namespace sfx2
                         StringPair* pEnd = pFilters + aFilters.getLength();
                         int i = 0;
                         for ( ; pFilters != pEnd; ++pFilters )
-                            pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True );
+                            pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True, *m_pFileDlgImpl );
                         m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                     }
                 }
@@ -944,7 +954,7 @@ namespace sfx2
                     ::std::for_each(
                         _rGroup.begin(),
                         _rGroup.end(),
-                        AppendFilter( m_xFilterManager )
+                        AppendFilter( m_xFilterManager, m_pFileDlgImpl )
                     );
                 }
             }
@@ -956,7 +966,9 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void appendFiltersForSave( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    void appendFiltersForSave( SfxFilterMatcherIter& _rFilterMatcher,
+                               const Reference< XFilterManager >& _rxFilterManager,
+                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForSave: invalid manager!" );
         if ( !_rxFilterManager.is() )
@@ -967,7 +979,7 @@ namespace sfx2
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
             ::rtl::OUString sExtension = pFilter->GetWildcard().GetWildCard();
-            sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False );
+            sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
             try
             {
                 _rxFilterManager->appendFilter( sUIName, sExtension );
@@ -996,7 +1008,9 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void appendExportFilters( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    void appendExportFilters( SfxFilterMatcherIter& _rFilterMatcher,
+                              const Reference< XFilterManager >& _rxFilterManager,
+                              ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendExportFilters: invalid manager!" );
         if ( !_rxFilterManager.is() )
@@ -1051,7 +1065,9 @@ namespace sfx2
                 Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aImportantFilterGroup.size(); i++ )
                 {
-                    aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName, aImportantFilterGroup[i].aWildcard, sal_False );
+                    aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName,
+                                                        aImportantFilterGroup[i].aWildcard,
+                                                        sal_False, _rFileDlgImpl );
                     aFilters[i].Second  = aImportantFilterGroup[i].aWildcard;
                 }
 
@@ -1069,7 +1085,9 @@ namespace sfx2
                 Sequence< StringPair > aFilters( aFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aFilterGroup.size(); i++ )
                 {
-                    aFilters[i].First   = addExtension( aFilterGroup[i].aUIName, aFilterGroup[i].aWildcard, sal_False );
+                    aFilters[i].First   = addExtension( aFilterGroup[i].aUIName,
+                                                        aFilterGroup[i].aWildcard,
+                                                        sal_False, _rFileDlgImpl );
                     aFilters[i].Second  = aFilterGroup[i].aWildcard;
                 }
 
@@ -1089,7 +1107,9 @@ namespace sfx2
             {
                 try
                 {
-                    rtl::OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName, aImportantFilterGroup[n].aWildcard, sal_False );
+                    rtl::OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName,
+                                                          aImportantFilterGroup[n].aWildcard,
+                                                          sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aImportantFilterGroup[n].aWildcard  );
                     if ( !_rFirstNonEmpty.getLength() )
                         _rFirstNonEmpty = sUIName;
@@ -1109,7 +1129,9 @@ namespace sfx2
             {
                 try
                 {
-                    rtl::OUString aUIName = addExtension( aFilterGroup[n].aUIName, aFilterGroup[n].aWildcard, sal_False );
+                    rtl::OUString aUIName = addExtension( aFilterGroup[n].aUIName,
+                                                          aFilterGroup[n].aWildcard,
+                                                          sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aFilterGroup[n].aWildcard );
                     if ( !_rFirstNonEmpty.getLength() )
                         _rFirstNonEmpty = sUIName;
@@ -1128,7 +1150,9 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    void appendFiltersForOpen( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    void appendFiltersForOpen( SfxFilterMatcherIter& _rFilterMatcher,
+                               const Reference< XFilterManager >& _rxFilterManager,
+                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForOpen: invalid manager!" );
         if ( !_rxFilterManager.is() )
@@ -1166,12 +1190,14 @@ namespace sfx2
         ::std::for_each(
             aAllFilters.begin(),
             aAllFilters.end(),
-            AppendFilterGroup( _rxFilterManager )
+            AppendFilterGroup( _rxFilterManager, &_rFileDlgImpl )
         );
 #endif
     }
 
-    ::rtl::OUString addExtension( const ::rtl::OUString& _rDisplayText, const ::rtl::OUString& _rExtension, sal_Bool _bForOpen )
+    ::rtl::OUString addExtension( const ::rtl::OUString& _rDisplayText,
+                                  const ::rtl::OUString& _rExtension,
+                                  sal_Bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         static ::rtl::OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
         static ::rtl::OUString sOpenBracket( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
@@ -1188,6 +1214,7 @@ namespace sfx2
             sRet += sExt;
             sRet += sCloseBracket;
         }
+        _rFileDlgImpl.addFilterPair( _rDisplayText, sRet );
         return sRet;
     }
 
@@ -1198,6 +1225,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/08/29 13:42:35  cd
+ *  #102385# Use correct way to create filter groups for export
+ *
  *  Revision 1.13  2002/08/26 07:57:16  cd
  *  #101559# Display export filters in new order
  *

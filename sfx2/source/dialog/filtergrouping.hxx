@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:58:28 $
+ *  last change: $Author: pb $ $Date: 2002-10-01 12:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
 
+#ifndef _SFX_FILEDLGIMPL_HXX
+#include "filedlgimpl.hxx"
+#endif
+
 class SfxFilterMatcherIter;
 
 //........................................................................
@@ -80,13 +84,15 @@ namespace sfx2
     void appendFiltersForSave(
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty
+        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        FileDialogHelper_Impl& _rFileDlgImpl
     );
 
     void appendExportFilters(
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty
+        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        FileDialogHelper_Impl& _rFileDlgImpl
         );
 
     //--------------------------------------------------------------------
@@ -96,7 +102,8 @@ namespace sfx2
     void appendFiltersForOpen(
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty
+        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        FileDialogHelper_Impl& _rFileDlgImpl
     );
 
     //--------------------------------------------------------------------
@@ -106,7 +113,8 @@ namespace sfx2
     ::rtl::OUString addExtension(
         const ::rtl::OUString& _rDisplayText,
         const ::rtl::OUString& _rExtension,
-        sal_Bool _bForOpen
+        sal_Bool _bForOpen,
+        FileDialogHelper_Impl& _rFileDlgImpl
     );
 
 //........................................................................
@@ -118,6 +126,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/08/26 07:58:28  cd
+ *  #101559# Display export filters in new order
+ *
  *  Revision 1.2  2002/08/20 09:22:52  pb
  *  fix: #92788# show extensions of filter
  *
