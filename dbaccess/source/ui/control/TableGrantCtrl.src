@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:50:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ String STR_TABLE_PRIV_INSERT
     Text[ english_us ] = "Insert data";
     Text[ portuguese ] = "Inserir dados";
     Text[ russian ] = "Δξαΰβλενθε";
-    Text[ greek ] = "Προσθήκη";
+    Text[ greek ] = "Εισαγωγή δεδομένων";
     Text[ dutch ] = "Gegevens invoegen";
     Text[ french ] = "Insιrer des donnιes";
     Text[ spanish ] = "Insertar datos";
@@ -132,7 +132,7 @@ String STR_TABLE_PRIV_DELETE
     Text[ english_us ] = "Delete data";
     Text[ portuguese ] = "Eliminar";
     Text[ russian ] = "Σδΰλενθε";
-    Text[ greek ] = "Διαγραφή";
+    Text[ greek ] = "Διαγραφή δεδομένων";
     Text[ dutch ] = "Gegevens wissen";
     Text[ french ] = "Supprimer les donnιes";
     Text[ spanish ] = "Borrar datos";
@@ -163,7 +163,7 @@ String STR_TABLE_PRIV_UPDATE
     Text[ english_us ] = "Modify data";
     Text[ portuguese ] = "Modificar dados";
     Text[ russian ] = "Πεδΰκςθπξβΰνθε";
-    Text[ greek ] = "Αλλαγή";
+    Text[ greek ] = "Τροποποίηση δεδομένων";
     Text[ dutch ] = "Gegevens wijzigen";
     Text[ french ] = "Modifier les donnιes";
     Text[ spanish ] = "Modificar datos";
@@ -224,7 +224,7 @@ String STR_TABLE_PRIV_SELECT
     Text[ english_us ] = "Read data";
     Text[ portuguese ] = "Ler dados";
     Text[ russian ] = "Χςενθε";
-    Text[ greek ] = "Ανάγνωση";
+    Text[ greek ] = "Ανάγνωση δεδομένων";
     Text[ dutch ] = "Gegevens lezen";
     Text[ french ] = "Lire les donnιes";
     Text[ spanish ] = "Leer datos";
@@ -255,7 +255,7 @@ String STR_TABLE_PRIV_REFERENCE
     Text[english_us] = "Modify references";
     Text[ portuguese ] = "Modificar referκncias";
     Text[ russian ] = "Θημενθςό ρρϋλκθ";
-    Text[ greek ] = "Αλλαγές παραπομπών";
+    Text[ greek ] = "Τροποποίηση παραπομπών";
     Text[ dutch ] = "Referenties wijzigen";
     Text[ french ] = "Modifier les rιfιrences";
     Text[ spanish ] = "Modificar referencias";
@@ -286,7 +286,7 @@ String STR_TABLE_PRIV_DROP
     Text[ english_us ] = "Drop structure";
     Text[ portuguese ] = "Eliminar estrutura";
     Text[ russian ] = "Σδΰλθςό ρςπσκςσπσ";
-    Text[ greek ] = "Droping";
+    Text[ greek ] = "Απόρριψη δομής";
     Text[ dutch ] = "Structuur wissen";
     Text[ french ] = "Supprimer la structure";
     Text[ spanish ] = "Borrar la estructura";
@@ -309,6 +309,7 @@ String STR_TABLE_PRIV_DROP
     Text[ hindi ] = "ΰ¤¬ΰ¤¨ΰ¤Ύΰ¤µΰ¤ ΰ¤—ΰ¤Ώΰ¤°ΰ¤Ύΰ¤“";
     Text[ slovak ] = "StrΓ΅nkovanie";
 };
+
 
 
 
