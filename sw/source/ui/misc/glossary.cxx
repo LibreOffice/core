@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-28 14:25:16 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 15:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
@@ -129,6 +126,12 @@
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
 #include <com/sun/star/text/XAutoTextGroup.hpp>
@@ -223,8 +226,11 @@
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::ucb;
 using namespace ::comphelper;
@@ -328,17 +334,17 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
                             SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell) :
 
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
+    aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
+    aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
     aNameLbl      (this, SW_RES(FT_NAME)),
     aNameED       (this, SW_RES(ED_NAME)),
     aShortNameLbl (this, SW_RES(FT_SHORTNAME)),
     aShortNameEdit(this, SW_RES(ED_SHORTNAME)),
     aCategoryBox  (this, SW_RES(LB_BIB)),
-    aRelativeFL   (this, SW_RES(FL_RELATIVE)),
     aFileRelCB    (this, SW_RES(CB_FILE_REL)),
     aNetRelCB     (this, SW_RES(CB_NET_REL)),
-    aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
-    aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
+    aRelativeFL   (this, SW_RES(FL_RELATIVE)),
     aInsertBtn    (this, SW_RES(PB_INSERT)),
     aEditBtn      (this, SW_RES(PB_EDIT)),
     aBibBtn       (this, SW_RES(PB_BIB)),
@@ -724,9 +730,19 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         case FN_GL_IMPORT:
         {
             // call the FileOpenDialog do find WinWord - Files with templates
-            SfxFileDialog* pDlg = new SfxFileDialog( this, WB_OPEN | WB_3DLOOK );
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference < XFilePicker > xFP;
+            if( xMgr.is() )
+            {
+                Sequence <Any> aProps(1);
+                aProps.getArray()[0] <<= C2U("FileOpen");
+                xFP = Reference< XFilePicker >(
+                        xMgr->createInstanceWithArguments(
+                            C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                        UNO_QUERY );
+            }
             SvtPathOptions aPathOpt;
-            pDlg->SetPath( aPathOpt.GetWorkPath() );
+            xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
             String sWW8( C2S(FILTER_WW8) );
 
             sal_uInt16 i = 0;
@@ -735,6 +751,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                     SwDocShell::Factory().GetFilterContainer();
             if( pFltCnt )
             {
+                Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+
                 const SfxFilter* pFilter;
                 sal_uInt16 nCount = pFltCnt->GetFilterCount();
                 for( i = 0; i < nCount; ++i )
@@ -742,23 +760,21 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                         /*->IsAllowedAsTemplate()
                         && pFilter*/->GetUserData() == sWW8 )
                     {
-                        pDlg->AddFilter( pFilter->GetUIName(),
-                                ((WildCard&)pFilter->GetWildcard())(),
-                                pFilter->GetTypeName() );
-                        pDlg->SetCurFilter( pFilter->GetUIName() );
-                }
+                        xFltMgr->appendFilter( pFilter->GetUIName(),
+                                    ((WildCard&)pFilter->GetWildcard()).GetWildCard() );
+                        xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
+                    }
             }
 
-            if( i && RET_OK == pDlg->Execute() )
+            if( i && RET_OK == xFP->execute() )
             {
-                if( pGlossaryHdl->ImportGlossaries( pDlg->GetPath() ))
+                if( pGlossaryHdl->ImportGlossaries( xFP->getPath().getConstArray()[0] ))
                     Init();
                 else
                 {
                     InfoBox(this, SW_RES( MSG_NO_GLOSSARIES )).Execute();
                 }
             }
-            delete pDlg;
         }
            break;
 
@@ -947,7 +963,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 //EndDialog darf nicht im MenuHdl aufgerufen werden
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
     {
-        SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc ( GetCurrGrpName () );
+        SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
         BOOL bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
         delete pGroup;
         if ( bRet )
