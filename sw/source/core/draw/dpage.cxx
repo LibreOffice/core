@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:58:52 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
         SdrPageView* pPV;
         SdrObject* pObj;
         if( pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_PICKMACRO ) &&
-             pObj->IsWriterFlyFrame() )
+             pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
