@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:56:47 $
+ *  last change: $Author: os $ $Date: 2002-06-14 12:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
 #ifndef _RESARY_HXX //autogen
 #include <vcl/resary.hxx>
 #endif
@@ -88,11 +91,14 @@
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVX_HTMLMODE_HXX
+#include <htmlmode.hxx>
 #endif
 
 #define _SVX_PAGE_CXX
@@ -287,21 +293,43 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    SvtCJKOptions aCJKOptions;
-    if(aCJKOptions.IsAsianTypographyEnabled())
+
+    SvtLanguageOptions aLangOptions;
+    sal_Bool bCJK = aLangOptions.IsAsianTypographyEnabled();
+    sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
+    sal_Bool bWeb = sal_False;
+    const SfxPoolItem* pItem;
+
+    SfxObjectShell* pShell;
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+        ( 0 != (pShell = SfxObjectShell::Current()) &&
+                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+
+    if( !bWeb && (bCJK || bCTL) &&
+        SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
         aTextFlowLbl.Show();
         aTextFlowBox.Show();
+        aTextFlowBox.SetSelectHdl(LINK(this, SvxPageDescPage, FrameDirectionModify_Impl ));
 
-        //remove non-implemented entries
-        sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
-        USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-        aTextFlowBox.RemoveEntry( nPos );
-#ifndef BIDI
-        nVal = FRMDIR_HORI_RIGHT_TOP;
-        nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-        aTextFlowBox.RemoveEntry( nPos );
-#endif
+        aBspWin.EnableFrameDirection(sal_True);
+
+        if(!bCJK)
+        {
+            sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
+            USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
+            aTextFlowBox.RemoveEntry( nPos );
+            nVal = FRMDIR_VERT_TOP_RIGHT;
+            nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
+            aTextFlowBox.RemoveEntry( nPos );
+        }
+        if(!bCTL)
+        {
+            sal_uInt32 nVal = FRMDIR_HORI_RIGHT_TOP;
+            USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
+            aTextFlowBox.RemoveEntry( nPos );
+        }
 
     }
     Init_Impl();
@@ -670,6 +698,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
         aTextFlowBox.SelectEntryPos( nPos );
         aTextFlowBox.SaveValue();
+        aBspWin.SetFrameDirection(nVal);
     }
 }
 
@@ -1227,6 +1256,8 @@ void SvxPageDescPage::UpdateExample_Impl()
     // Layout
     aBspWin.SetUsage( PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() ) );
     aBspWin.Invalidate();
+
+
 }
 
 // -----------------------------------------------------------------------
@@ -1686,5 +1717,15 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     }
     aRegisterFT.Enable( bEnable );
     aRegisterLB.Enable( bEnable );
+    return 0;
+}
+/* -----------------------------14.06.2002 09:03------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  pListBox)
+{
+    aBspWin.SetFrameDirection(
+        (sal_uInt32)aTextFlowBox.GetEntryData( pListBox->GetSelectEntryPos()));
+    aBspWin.Invalidate();
     return 0;
 }
