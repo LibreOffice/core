@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,14 +445,9 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             if (aCellPos.Row > MAXROW)
                 aCellPos.Row = MAXROW;
             ScDocument* pDoc = GetScImport().GetDocument();
-            Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aCellPos.Column), static_cast<USHORT>(aCellPos.Row),
-                static_cast<USHORT>(aCellPos.Column), static_cast<USHORT>(aCellPos.Row), aCellPos.Sheet);
-            awt::Point aPoint;
-            aPoint.X = aRec.Left();
-            aPoint.Y = aRec.Top();
             XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
             pTableShapeImport->SetOnTable(sal_False);
-            pTableShapeImport->SetPoint(aPoint);
+            pTableShapeImport->SetCell(aCellPos);
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                 rXMLImport, nPrefix, rLName, xAttrList, xShapes);
             if (pContext)

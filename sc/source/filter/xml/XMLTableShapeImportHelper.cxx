@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void XMLTableShapeImportHelper::finishShape(
         sal_Int32 X(-1);
         sal_Int32 Y(-1);
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        table::CellAddress aAddress;
+        table::CellAddress aEndCell;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -139,30 +139,15 @@ void XMLTableShapeImportHelper::finishShape(
             if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_cell_address) == 0)
             {
                 sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetAddressFromString(aAddress, rValue, rImport.GetDocument(), nOffset))
-                    pRect = new Rectangle(rImport.GetDocument()->GetMMRect( static_cast<USHORT>(aAddress.Column), static_cast<USHORT>(aAddress.Row),
-                        static_cast<USHORT>(aAddress.Column), static_cast<USHORT>(aAddress.Row), aAddress.Sheet ));
+                ScXMLConverter::GetAddressFromString(aEndCell, rValue, rImport.GetDocument(), nOffset);
             }
             else if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_x) == 0)
                 rImport.GetMM100UnitConverter().convertMeasure(X, rValue);
             else if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_y) == 0)
                 rImport.GetMM100UnitConverter().convertMeasure(Y, rValue);
         }
-        if (X >= 0 && Y >= 0 && pRect)
-        {
-            X += pRect->Left();
-            //Y += pRect->Top();
-            awt::Point aPoint = rShape->getPosition();
-            awt::Size aSize = rShape->getSize();
-            aPoint.X += aRefPoint.X;
-            aPoint.Y += aRefPoint.Y;
-            aSize.Width = X - aPoint.X;
-            //aSize.Height = Y - aPoint.Y;
-            rShape->setPosition(aPoint);
-            rShape->setSize(aSize);
-            delete pRect;
-            rImport.GetTables().AddShape(rShape, aAddress, Y);
-        }
+        if (X >= 0 && Y >= 0)
+            rImport.GetTables().AddShape(rShape, aStartCell, aEndCell, X, Y);
         SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
         if (pShapeImp)
         {

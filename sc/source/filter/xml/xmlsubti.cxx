@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:12 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,8 @@ sal_Bool ScMyTables::HasDrawPage()
 }
 
 void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
-    com::sun::star::table::CellAddress& rAddress, sal_Int32 nY)
+    table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
+    sal_Int32 nX, sal_Int32 nY)
 {
-    aResizeShapes.AddShape(rShape, rAddress, nY);
+    aResizeShapes.AddShape(rShape, rStartAddress, rEndAddress, nX, nY);
 }

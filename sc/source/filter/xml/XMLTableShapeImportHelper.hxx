@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,8 @@
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
 #include <xmloff/shapeimport.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
-#include <com/sun/star/awt/Point.hpp>
+#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
+#include <com/sun/star/table/CellAddress.hpp>
 #endif
 
 class ScXMLImport;
@@ -76,7 +75,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
     ScXMLImport& rImport;
 
-    ::com::sun::star::awt::Point aRefPoint;
+    ::com::sun::star::table::CellAddress aStartCell;
     sal_Bool bOnTable;
 public:
 
@@ -88,7 +87,7 @@ public:
             com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
 
 
-    void SetPoint (const ::com::sun::star::awt::Point& aPoint) { aRefPoint = aPoint; }
+    void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
 };
 

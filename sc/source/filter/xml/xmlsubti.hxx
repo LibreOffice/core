@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-13 17:17:33 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,9 @@ public:
                                         GetCurrentXShapes();
     sal_Bool                            HasDrawPage();
     void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                                                com::sun::star::table::CellAddress& rAddress, sal_Int32 nY);
+                                                com::sun::star::table::CellAddress& rStartAddress,
+                                                com::sun::star::table::CellAddress& rEndAddress,
+                                                sal_Int32 nX, sal_Int32 nY);
 };
 
 #endif

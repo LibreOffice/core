@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,15 @@ ScMyShapeResizer::~ScMyShapeResizer()
 }
 
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
-    com::sun::star::table::CellAddress& rAddress, sal_Int32 nY)
+    table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
+    sal_Int32 nX, sal_Int32 nY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
-    aShape.aCell = rAddress;
+    aShape.aEndCell = rEndAddress;
+    aShape.aStartCell = rStartAddress;
     aShape.nY = nY;
+    aShape.nX = nX;
     aShapes.push_back(aShape);
 }
 
@@ -118,10 +121,10 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                 Rectangle* pRect = NULL;
                 while (aItr != aShapes.end())
                 {
-                    if (nOldRow != aItr->aCell.Row || !xTableRow.is())
+                    if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
                     {
-                        nOldRow = aItr->aCell.Row;
-                        uno::Any aRow = xTableRows->getByIndex(aItr->aCell.Row);
+                        nOldRow = aItr->aEndCell.Row;
+                        uno::Any aRow = xTableRows->getByIndex(aItr->aEndCell.Row);
                         aRow >>= xTableRow;
                     }
                     if (xTableRow.is())
@@ -133,15 +136,25 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                             sal_Int32 nHeight;
                             if (aAny >>= nHeight)
                             {
+                                Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                    static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                awt::Point aRefPoint;
+                                aRefPoint.X = aRec.Left();
+                                aRefPoint.Y = aRec.Top();
                                 pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
-                                    static_cast<USHORT>(aItr->aCell.Column), static_cast<USHORT>(aItr->aCell.Row),
-                                    static_cast<USHORT>(aItr->aCell.Column), static_cast<USHORT>(aItr->aCell.Row), aItr->aCell.Sheet ));
+                                    static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
+                                    static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
                                 sal_Int32 Y (nHeight - aItr->nY);
+                                aItr->nX += pRect->Left();
                                 Y = pRect->Bottom() - Y;
                                 awt::Point aPoint = aItr->xShape->getPosition();
                                 awt::Size aSize = aItr->xShape->getSize();
+                                aPoint.X += aRefPoint.X;
+                                aPoint.Y += aRefPoint.Y;
+                                aSize.Width = aItr->nX - aPoint.X;
                                 aSize.Height = Y - aPoint.Y;
                                 aItr->xShape->setSize(aSize);
+                                aItr->xShape->setPosition(aPoint);
                                 delete pRect;
                             }
                         }
