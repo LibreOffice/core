@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:07:07 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1787,22 +1787,22 @@ String STR_INVERT
     Text[ english ] = "Invert";
     Text[ english_us ] = "Invert";
     Text[ portuguese ] = "Invert";
-    Text[ russian ] = "Invert";
-    Text[ greek ] = "Invert";
-    Text[ dutch ] = "Invert";
-    Text[ french ] = "Invert";
-    Text[ spanish ] = "Invert";
-    Text[ italian ] = "Invert";
+    Text[ russian ] = "Èíâåğòèğîâàòü";
+    Text[ greek ] = "ÁíáóôñïöŞ";
+    Text[ dutch ] = "Diapositief";
+    Text[ french ] = "Invertir";
+    Text[ spanish ] = "Invertir";
+    Text[ italian ] = "Inverti";
     Text[ danish ] = "Invert";
     Text[ swedish ] = "Invertera";
-    Text[ polish ] = "Invert";
+    Text[ polish ] = "Odwróæ";
     Text[ portuguese_brazilian ] = "Invert";
-    Text[ japanese ] = "Invert";
+    Text[ japanese ] = "‹t“]";
     Text[ korean ] = "Invert";
-    Text[ chinese_simplified ] = "Invert";
-    Text[ chinese_traditional ] = "Invert";
+    Text[ chinese_simplified ] = "»¥²¹É«×ª»»";
+    Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«";
     Text[ turkish ] = "Invert";
-    Text[ arabic ] = "Invert";
+    Text[ arabic ] = "ÚßÓ";
 };
 String STR_INVERT_NOT
 {
