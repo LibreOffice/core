@@ -1,6 +1,9 @@
 eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
 
+use strict;
+use Cwd;
+
 # #/usr/bin/perl
 
 # @lines
@@ -26,6 +29,10 @@ my $sCurrentFilename;
 my $nNoAdditionalAnyMore = 0;
 my $bShowDemo = 1;
 my $sSrcExt = ".cxx";
+
+my $cwd = getcwd();
+
+sub generateMakefileEntry(*$$);
 
 # ------------------------------------------------------------------------------
 sub createFilename
@@ -94,7 +101,9 @@ sub closeMethods
     print CPPFILE "\n";
 
     print CPPFILE "    // insert your test code here.\n";
-    if ($#sMethodNames > 0)
+
+    my $sMethod;
+    if ($#sMethodNames >= 0)
     {
         # all found methods
         foreach $sMethod (@sMethodNames)
@@ -118,7 +127,7 @@ sub closeMethods
         print CPPFILE "    // this is only demonstration code\n";
         print CPPFILE "    void EmptyMethod()\n";
         print CPPFILE "    {\n";
-        print CPPFILE "       // CPPUNIT_ASSERT_MESSAGE(\"a message\", 1 == 1);\n";
+        print CPPFILE "           // CPPUNIT_ASSERT_MESSAGE(\"a message\", 1 == 1);\n";
         print CPPFILE "       CPPUNIT_ASSERT_STUB();\n";
         print CPPFILE "    }\n";
         print CPPFILE "\n";
@@ -134,7 +143,7 @@ sub closeMethods
     push(@sClassNameStack, $sCurrentClass);
 
     my $nCount = 0;
-    if ($#sMethodNames > 0)
+    if ($#sMethodNames >= 0)
     {
         foreach $sMethod (@sMethodNames)
         {
@@ -179,6 +188,7 @@ sub closePackage
     # create the autoregister code
     print CPPFILE "// -----------------------------------------------------------------------------\n";
     my $nCount = 0;
+    my $sClassName;
     foreach $sClassName (@sClassNameStack)
     {
         print CPPFILE "CPPUNIT_TEST_SUITE_NAMED_REGISTRATION($sCurrentPackage" . "::" . "$sClassName, \"$sCurrentPackage\");\n";
@@ -237,6 +247,7 @@ sub walkThroughJobFile
     open(FILE, $filename) || die "can't open $filename\n";
 
     print "start jobfile interpreter.\n";
+    my $line;
     while($line = <FILE>)
     {
         chomp($line);
@@ -280,7 +291,7 @@ sub walkThroughJobFile
                 # test if it also works without methods
                 # elsif ($sMethodName =~ /^$/)
                 # {
-                #     print "error: in $line, no method name exist.\n";
+                #         print "error: in $line, no method name exist.\n";
                 # }
                 else
                 {
@@ -323,6 +334,7 @@ sub walkThroughJobFile
 
     print "done.\n\nThe following files have been created in the current directory:\n";
 
+    my $sFilename;
     foreach $sFilename (@sFilenameStack)
     {
         print "  ${sFilename}${sSrcExt}\n";
@@ -395,6 +407,7 @@ sub createNewMakefile($$$)
 
     # search a point, where to insert the new makefile part.
     my $nTargetMK = -1;
+    my $i;
     for ($i = $#lines; $i > 0; $i--)
     {
         if ($lines[$i] =~ /\.INCLUDE.*target.mk\s$/)
@@ -414,19 +427,20 @@ sub createNewMakefile($$$)
         # print "@lines[$nTargetMK - 1]";
         # print "@lines[$nTargetMK]";
 
-        open(MAKEFILE, ">$sNewMakefileName") || return;
+        local *OUT_MAKEFILE;
+        open(OUT_MAKEFILE, ">$sNewMakefileName") || return;
         for ($i = 0;$i < ($nTargetMK - 2); $i++)
         {
-            print MAKEFILE $lines[$i];
+            print OUT_MAKEFILE $lines[$i];
         }
 
-        generateMakefileEntry(MAKEFILE, $sTargetName, $nNumber);
+        generateMakefileEntry(OUT_MAKEFILE, $sTargetName, $nNumber);
 
         for ($i = ($nTargetMK - 2);$i <= $#lines; $i++)
         {
-            print MAKEFILE $lines[$i];
+            print OUT_MAKEFILE $lines[$i];
         }
-        close(MAKEFILE);
+        close(OUT_MAKEFILE);
     }
 }
 # ------------------------------------------------------------------------------
@@ -443,10 +457,11 @@ sub generateMakefileEntry(*$$)
     print _MAKEFILE "# BEGIN ----------------------------------------------------------------\n";
     print _MAKEFILE "# auto generated Target:$sTargetName by codegen.pl \n";
     print _MAKEFILE "SHL${nNumber}OBJS= ";
+    my $sFilename;
     foreach $sFilename (@sFilenameStack)
     {
         print _MAKEFILE " \\\n";
-        print _MAKEFILE "   \$(SLO)\$/$sFilename.obj";
+        print _MAKEFILE "       \$(SLO)\$/$sFilename.obj";
     }
     print _MAKEFILE "\n\n";
 
@@ -517,7 +532,7 @@ sub main
 
     if (! -e $jobfile)
     {
-        print "error: given jobfile $jobfile doesn't exist.\n";
+        print "error: given jobfile '$jobfile' doesn't exist.\n";
         exit(1);
     }
     walkThroughJobFile($jobfile);
@@ -565,7 +580,7 @@ sub main
         local *EXPORTMAP;
         print "info: create export.map file\n";
         open(EXPORTMAP, ">export.map") || die "can't create export.map";
-        print EXPORTMAP "UDK_3.1 {\n";
+        print EXPORTMAP "UDK_3.0 {\n";
         print EXPORTMAP "    global:\n";
         print EXPORTMAP "        registerAllTestFunction;\n";
         print EXPORTMAP "\n";
