@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:56:40 $
+ *  last change: $Author: sb $ $Date: 2001-03-07 16:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
                                                eEncodeMechanism, eCharset,
                                                bRelativeNonURIs, eStyle));
     if (bCheckFileExists && !bWasAbsolute
-        && aAbsURIRef.GetProtocol() == INET_PROT_FILE)
+        && (aAbsURIRef.GetProtocol() == INET_PROT_FILE
+            || aAbsURIRef.GetProtocol() == INET_PROT_VND_SUN_STAR_WFS))
     {
         INetURLObject aNonFileURIRef;
         aNonFileURIRef.SetSmartURL(rTheRelURIRef, eEncodeMechanism, eCharset,
