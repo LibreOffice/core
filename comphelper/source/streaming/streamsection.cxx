@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamsection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:33:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,25 @@ OStreamSection::~OStreamSection()
             }
         }
     }
-    catch(...)
+    catch(const staruno::Exception&)
     {
     }
 }
+// -----------------------------------------------------------------------------
+sal_Int32 OStreamSection::available()
+{
+    sal_Int32 nBytes = 0;
+    try
+    {   // don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
+        if (m_xInStream.is() &&  m_xMarkStream.is())
+            nBytes = m_xMarkStream->offsetToMark(m_nBlockStart) - sizeof(m_nBlockLen);
+    }
+    catch(const staruno::Exception&)
+    {
+    }
+    return nBytes;
+}
+// -----------------------------------------------------------------------------
 
 }   // namespace comphelper
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamsection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@ public:
         If constructed for reading, any remaining bytes 'til the end of the section will be skipped.
     */
     ~OStreamSection();
+    /**
+        return the number of bytes which are still available
+    */
+    sal_Int32 available();
 };
 
 }   // namespace comphelper
