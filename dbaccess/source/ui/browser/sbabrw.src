@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:40:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,115 +833,23 @@ Menu MENU_BROWSER_QUERYCONTEXT
 
         MenuItem
         {
-            Identifier = ID_TREE_QUERY_CREATE_DESIGN ;
-            HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ;
-            Text = "neuer ~Abfrageentwurf" ;
-            Text [ english ] = "new ~querydesign" ;
-            Text [ english_us ] = "New ~Query Design" ;
-            Text[ portuguese ] = "~Novo esboço de consulta";
-            Text[ russian ] = "Íîâûé ïğîåêò çàïğîñà";
-            Text[ greek ] = "Íİïò ó÷åäé~áóìüò åñùôŞìáôïò";
-            Text[ dutch ] = "nieuw ~query-ontwerp";
-            Text[ french ] = "Nouvelle ébauche de ~requête";
-            Text[ spanish ] = "nue~vo diseño de consulta";
-            Text[ italian ] = "Nuova ~struttura di ricerca";
-            Text[ danish ] = "new ~querydesign";
-            Text[ swedish ] = "Nytt sökningsutk~ast";
-            Text[ polish ] = "Nowy projekt ~kwerendy";
-            Text[ portuguese_brazilian ] = "new ~querydesign";
-            Text[ japanese ] = "V‚µ‚¢¸´Ø°ÃŞ»Ş²İ(~Q)";
-            Text[ korean ] = "new ~querydesign";
-            Text[ chinese_simplified ] = "ĞÂ½¨²éÑ¯Éè¼Æ";
-            Text[ chinese_traditional ] = "·s«Ø¬d¸ß³]­p(~Q)";
-            Text[ turkish ] = "new ~querydesign";
-            Text[ arabic ] = "ÊÕãíã ÌÏíÏ ááÇÓÊİÓÇÑ";
-            Text[ finnish ] = "neuer ~Abfrageentwurf";
-            Text[ catalan ] = "New ~Query Design";
+            MID_QUERY_NEW_DESIGN
         };
         MenuItem
         {
-            Identifier = ID_TREE_QUERY_CREATE_TEXT ;
-            HelpId = HID_BROWSER_QUERY_CREATE_TEXT ;
-            Text = "neuen ~SQL Befehl eingeben" ;
-            Text [ english ] = "new ~SQL command" ;
-            Text [ english_us ] = "New ~SQL Command" ;
-            Text[ portuguese ] = "Novo comando ~SQL";
-            Text[ russian ] = "Ââåñòè íîâóş êîìàíäó ~SQL";
-            Text[ greek ] = "ÅéóáãùãŞ íİáò åíôïëŞò ôïõ ~SQL";
-            Text[ dutch ] = "nieuwe ~SQL opdracht";
-            Text[ french ] = "Saisir une nouvelle instruction ~SQL";
-            Text[ spanish ] = "introducir nuevo comando ~SQL";
-            Text[ italian ] = "Nuovo comando S~QL";
-            Text[ danish ] = "new ~SQL command";
-            Text[ swedish ] = "Mata in nytt ~SQL-kommando";
-            Text[ polish ] = "Wpisz nowe polecenie ~SQL";
-            Text[ portuguese_brazilian ] = "new ~SQL command";
-            Text[ japanese ] = "V‚µ‚¢ ~SQL ºÏİÄŞ‚Ì“ü—Í";
-            Text[ korean ] = "new ~SQL command";
-            Text[ chinese_simplified ] = "ÊäÈëĞÂ ~SQL Ö¸Áî";
-            Text[ chinese_traditional ] = "·s ~SQL «ü¥O";
-            Text[ turkish ] = "new ~SQL command";
-            Text[ arabic ] = "ÅÏÎÇá ÃãÑ SQL ÌÏíÏ";
-            Text[ finnish ] = "neuen ~SQL Befehl eingeben";
-            Text[ catalan ] = "New ~SQL Command";
+            MID_QUERY_NEW_SQL
         };
         MenuItem
         {
-            Identifier = ID_TREE_QUERY_EDIT ;
-            HelpId = HID_BROWSER_QUERY_EDIT ;
-            Text = "Abfrage b~earbeiten" ;
-            Text [ english ] = "~edit query" ;
-            Text [ english_us ] = "~Edit Query" ;
-            Text[ portuguese ] = "E~ditar consulta";
-            Text[ russian ] = "~Ïğàâêà çàïğîñà";
-            Text[ greek ] = "~Åğåîåñãáóßá åñùôŞìáôïò";
-            Text[ dutch ] = "~query bewerken";
-            Text[ french ] = "~Éditer la requête";
-            Text[ spanish ] = "Editar cons~ulta";
-            Text[ italian ] = "Modi~fica ricerca";
-            Text[ danish ] = "~edit query";
-            Text[ swedish ] = "R~edigera sökning";
-            Text[ polish ] = "~Edytuj kwerendê";
-            Text[ portuguese_brazilian ] = "~edit query";
-            Text[ japanese ] = "¸´Ø°‚Ì•ÒW(~E)";
-            Text[ korean ] = "~edit query";
-            Text[ chinese_simplified ] = "±à¼­²éÑ¯(~E)";
-            Text[ chinese_traditional ] = "½s¿è¬d¸ß(~E)";
-            Text[ turkish ] = "~edit query";
-            Text[ arabic ] = "ÊÍÑíÑ ÇáÇÓÊİÓÇÑ";
-            Text[ finnish ] = "Abfrage b~earbeiten";
-            Text[ catalan ] = "~Edit Query";
-        };
+            MID_QUERY_EDIT_DESIGN
+         };
         MenuItem
         {
             Separator = TRUE;
         };
         MenuItem
         {
-            Identifier = ID_TREE_QUERY_DELETE ;
-            HelpId = HID_BROWSER_QUERY_DELETE ;
-            Text = "Abfrage ~löschen" ;
-            Text [ english ] = "de~lete query" ;
-            Text [ english_us ] = "De~lete Query" ;
-            Text[ portuguese ] = "Eli~minar consulta";
-            Text[ russian ] = "~Óäàëèòü çàïğîñ";
-            Text[ greek ] = "ÄéáãñáöŞ åñùôŞìáôïò";
-            Text[ dutch ] = "query ~wissen";
-            Text[ french ] = "~Supprimer la requête";
-            Text[ spanish ] = "Eliminar cons~ulta";
-            Text[ italian ] = "~Elimina ricerca";
-            Text[ danish ] = "de~lete query";
-            Text[ swedish ] = "Radera ~sökning";
-            Text[ polish ] = "~Usuñ kwerendê";
-            Text[ portuguese_brazilian ] = "de~lete query";
-            Text[ japanese ] = "¸´Ø°‚Ìíœ(~L)";
-            Text[ korean ] = "de~lete query";
-            Text[ chinese_simplified ] = "É¾³ı²éÑ¯(~L)";
-            Text[ chinese_traditional ] = "§R°£¬d¸ß(~L)";
-            Text[ turkish ] = "de~lete query";
-            Text[ arabic ] = "ÍĞİ ÇáÇÓÊİÓÇÑ";
-            Text[ finnish ] = "Abfrage ~löschen";
-            Text[ catalan ] = "De~lete Query";
+            MID_QUERY_DROP
         };
         MenuItem
         {
@@ -979,118 +887,14 @@ Menu MENU_BROWSER_TABLECONTEXT
     {
         MITEMS_DEFAULT
 
-        MenuItem
-        {
-            Identifier = ID_TREE_TABLE_CREATE_DESIGN ;
-            HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ;
-            Text = "neuer ~Tabellenentwurf" ;
-            Text [ english ] = "new ~tabledesign" ;
-            Text [ english_us ] = "New ~Table Design" ;
-            Text[ portuguese ] = "Novo e~sboço de tabela";
-            Text[ russian ] = "~Íîâûé ïğîåêò òàáëèöû";
-            Text[ greek ] = "Íİïò ó÷åäéáóìüò ğßíáêá";
-            Text[ dutch ] = "nieuw ~tabel-ontwerp";
-            Text[ french ] = "Nouvelle ébauche de ~table";
-            Text[ spanish ] = "nuevo diseño de ta~bla";
-            Text[ italian ] = "Nuova struttura ~tabella";
-            Text[ danish ] = "new ~tabledesign";
-            Text[ swedish ] = "Nytt ~tabellutkast";
-            Text[ polish ] = "~Nowy projekt tabeli";
-            Text[ portuguese_brazilian ] = "new ~tabledesign";
-            Text[ japanese ] = "V‚µ‚¢Ã°ÌŞÙÃŞ»Ş²İ(~T)";
-            Text[ korean ] = "new ~tabledesign";
-            Text[ chinese_simplified ] = "ĞÂ½¨±í¸ñÉè¼Æ(~T)";
-            Text[ chinese_traditional ] = "·s«Øªí®æ³]­p(~T)";
-            Text[ turkish ] = "new ~tabledesign";
-            Text[ arabic ] = "ÊÕãíã ÌÏíÏ ááÌÏæá";
-            Text[ finnish ] = "neuer ~Tabellenentwurf";
-            Text[ catalan ] = "New ~Table Design";
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_TABLE_EDIT ;
-            HelpId = HID_BROWSER_TABLE_EDIT ;
-            Text = "Tabelle ~bearbeiten" ;
-            Text [ english ] = "edit ta~ble" ;
-            Text [ english_us ] = "Edit Ta~ble" ;
-            Text[ portuguese ] = "Editar ta~bela";
-            Text[ russian ] = "~Ïğàâêà òàáëèöû";
-            Text[ greek ] = "Åğåîåñãáóßá ğßíáêá";
-            Text[ dutch ] = "tabel ~bewerken";
-            Text[ french ] = "~Éditer la table";
-            Text[ spanish ] = "Edit~ar tabla";
-            Text[ italian ] = "~Modifica tabella";
-            Text[ danish ] = "edit ta~ble";
-            Text[ swedish ] = "Redigera ta~bell";
-            Text[ polish ] = "~Edytuj tabelê";
-            Text[ portuguese_brazilian ] = "edit ta~ble";
-            Text[ japanese ] = "Ã°ÌŞÙ‚Ì•ÒW(~B)";
-            Text[ korean ] = "edit ta~ble";
-            Text[ chinese_simplified ] = "±à¼­±í¸ñ(~B)";
-            Text[ chinese_traditional ] = "½s¿èªí®æ(~B)";
-            Text[ turkish ] = "edit ta~ble";
-            Text[ arabic ] = "ÊÍÑíÑ ÌÏæá";
-            Text[ finnish ] = "Tabelle ~bearbeiten";
-            Text[ catalan ] = "Edit Ta~ble";
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_VIEW_CREATE_DESIGN ;
-            HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ;
-            Text = "neuer ~Ansichtsentwurf" ;
-            Text [ english ] = "new ~viewdesign" ;
-            Text [ english_us ] = "New ~View Design" ;
-            Text[ portuguese ] = "No~vo esboço de vista";
-            Text[ russian ] = "Íîâûé ïğîåêò âèäà";
-            Text[ greek ] = "New ~View Design";
-            Text[ dutch ] = "nieuw ~beeld-layout";
-            Text[ french ] = "Nouvelle ébauche de ~vue";
-            Text[ spanish ] = "nuevo ~diseño de visualización";
-            Text[ finnish ] = "neuer ~Ansichtsentwurf";
-            Text[ italian ] = "New ~View Design";
-            Text[ danish ] = "New ~View Design";
-            Text[ swedish ] = "Nytt vyutk~ast";
-            Text[ polish ] = "Nowy ~projekt widoku";
-            Text[ portuguese_brazilian ] = "New ~View Design";
-            Text[ japanese ] = "V‚µ‚¢ËŞ­°ÃŞ»Ş²İ";
-            Text[ korean ] = "New ~View Design";
-            Text[ chinese_simplified ] = "ĞÂ½¨ÊÓÍ¼Éè¼Æ";
-            Text[ chinese_traditional ] = "·s«ØÀËµø³]­p";
-            Text[ turkish ] = "New ~View Design";
-            Text[ arabic ] = "New ~View Design";
-            Text[ catalan ] = "New ~View Design";
-        };
+        MenuItem { MID_NEW_TABLE_DESIGN };
+        MenuItem { MID_EDIT_TABLE       };
+        MenuItem { MID_NEW_VIEW_DESIGN  };
         MenuItem
         {
             Separator = TRUE;
         };
-        MenuItem
-        {
-            Identifier = ID_TREE_TABLE_DELETE ;
-            HelpId = HID_BROWSER_TABLE_DELETE ;
-            Text = "Tabelle ~löschen" ;
-            Text [ english ] = "de~lete table" ;
-            Text [ english_us ] = "De~lete Table" ;
-            Text[ portuguese ] = "Eliminar ~tabela";
-            Text[ russian ] = "Ó~äàëèòü òàáëèöó";
-            Text[ greek ] = "ÄéáãñáöŞ ğßíáêá";
-            Text[ dutch ] = "tabel ~wissen";
-            Text[ french ] = "~Supprimer la table";
-            Text[ spanish ] = "Eli~minar tabla";
-            Text[ italian ] = "~Elimina tabella";
-            Text[ danish ] = "de~lete table";
-            Text[ swedish ] = "Radera tabe~ll";
-            Text[ polish ] = "~Usuñ tabelê";
-            Text[ portuguese_brazilian ] = "de~lete table";
-            Text[ japanese ] = "Ã°ÌŞÙ‚Ìíœ(~L)";
-            Text[ korean ] = "de~lete table";
-            Text[ chinese_simplified ] = "É¾³ı±í¸ñ(~L)";
-            Text[ chinese_traditional ] = "§R°£ªí®æ(~L)";
-            Text[ turkish ] = "de~lete table";
-            Text[ arabic ] = "ÍĞİ ÌÏæá";
-            Text[ finnish ] = "Tabelle ~löschen";
-            Text[ catalan ] = "De~lete Table";
-        };
+        MenuItem { MID_DROP_TABLE       };
         MenuItem
         {
             Identifier = ID_TREE_TABLE_COPY ;
