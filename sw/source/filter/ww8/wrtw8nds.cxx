@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:38 $
+ *  last change: $Author: cmc $ $Date: 2002-07-18 13:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,13 +1530,16 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             SwWW8Writer::InsUInt16( aAt, (USHORT)nHeight );
         }
 
-        // sprmTFCantSplit - unsere Tabellen duerfen nie in der Zeile
-        // gesplittet werden.
+        /*
+        #i4569#
+        Writer always behaves as if it has 0x3403 set as true sprmTFCantSplit
+        - our tables may be never split in the line
+        */
         if( rWW8Wrt.bWrtWW8 )
             SwWW8Writer::InsUInt16( aAt, 0x3403 );
         else
             aAt.Insert( 185, aAt.Count() );
-        aAt.Insert( (BYTE)0, aAt.Count() );
+        aAt.Insert( (BYTE)1, aAt.Count() );
 
         // Inhalt der Boxen ausgeben
         for( nBox = 0, nRealBox = 0; nBox < nColCnt; ++nBox )
@@ -1547,7 +1550,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( pBoxArr[ nBox ]->GetRowSpan() == pRowSpans[ nBox ] )
             {
                 // new Box
-                const SwStartNode* pSttNd = pBoxArr[ nBox ]->GetBox()->GetSttNd();
+                const SwStartNode* pSttNd = pBoxArr[nBox]->GetBox()->GetSttNd();
                 WW8SaveData aSaveData( rWW8Wrt, pSttNd->GetIndex()+1,
                                         pSttNd->EndOfSectionIndex() );
                 rWW8Wrt.bOutTable = TRUE;
