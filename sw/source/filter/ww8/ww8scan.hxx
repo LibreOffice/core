@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,8 +660,9 @@ public:
     long GetLen() const;
     BOOL GetIsEnd() const { return nIsEnd ? TRUE : FALSE; }
     long GetHandle() const;
-    BOOL SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion, const String& rName,
-        eBookStatus eStat );
+    void SetStatus( USHORT nIndex, eBookStatus eStat );
+    BOOL MapName(String& rName);
+    String GetBookmark(long nStart,long nEnd, USHORT &nIndex);
     eBookStatus GetStatus() const;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-18 10:47:31 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,11 +279,6 @@
 #ifndef _WW8PAR2_HXX
 #include <ww8par2.hxx>          // class WW8RStyle, class WwAnchorPara
 #endif
-
-
-#define NEW_MINHDSIZ            // Definieren zum Ausnutzen der minimalen
-                                // Header- und Footerhoehe
-
 
 static ColorData __FAR_DATA eSwWW8ColA[] = {
         COL_AUTO, COL_BLACK, COL_LIGHTBLUE,
@@ -565,10 +560,42 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
     short nWWRi = ReadULSprm( pSep, pIds[4], nRig[nLIdx] );
     short nWWGu = ReadULSprm( pSep, pIds[5], 0 );
 
-    nWWLe += nWWGu;
+    /*
+    0x322A is set if the gutter is on the right, the gutter is otherwise
+    placed on the left unless the global dop options are to put it on top,
+    that case is handled in GetPageULData, unfortunately when we are "2 pages
+    in 1" then the gutter is alternated between the top of odd pages and bottom
+    of even pages, which we can't do, so ignore it in that case
+    */
+    if (!pWDop->doptypography.f2on1)
+    {
+        if ((!bVer67) && ReadULSprm( pSep, 0x322A, 0 ))
+            nWWRi += nWWGu;
+        else if (!pWDop->iGutterPos)
+            nWWLe += nWWGu;
+    }
 
-                                            // Left / Right
-    rFmt.SetAttr( SvxLRSpaceItem( nWWLe, nWWRi ) );
+    // Left / Right
+    if ((aSz.GetWidth() - nWWLe - nWWRi) < MINLAY)
+    {
+        /*
+        There are some label templates which are "broken", they specify
+        margins which make no sense e.g. Left 16.10cm, Right 16.10cm. So the
+        space left between the margins is less than 0 In word the left margin
+        is honoured and if the right margin would be past the left margin is
+        left at the left margin position.
+
+        Now this will work fine for importing, layout and exporting, *but* the
+        page layout dialog has a hardcoded minimum page width of 0.5cm so it
+        will report a different value than what is actually being used. i.e.
+        it will add up the values to give a wider page than is actually being
+        used.
+        */
+        nWWRi = aSz.GetWidth()-nWWLe-MINLAY;
+    }
+
+    SvxLRSpaceItem aTemp( nWWLe, nWWRi );
+    rFmt.SetAttr( aTemp );
 
     nPgLeft = nWWLe;
     nPgRight = nWWRi;
@@ -580,22 +607,17 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
     }
 }
 
-
-
-
 struct WW8ULSpaceData
 {
     BOOL  bHasHeader, bHasFooter;
     short nSwHLo, nHdUL,
           nSwFUp, nFtUL,
           nSwUp,  nSwLo;
-    WW8ULSpaceData(): bHasHeader( FALSE ), bHasFooter( FALSE ){}
+    WW8ULSpaceData() : bHasHeader( FALSE ), bHasFooter( FALSE ) {}
 };
 
-void SwWW8ImplReader::GetPageULData( const  WW8PLCFx_SEPX* pSep,
-                                     USHORT nLIdx,
-                                     BOOL   bFirst,
-                                     WW8ULSpaceData& rData )
+void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
+    BOOL bFirst, WW8ULSpaceData& rData )
 {
     if( nIniFlags & WW8FL_NO_LRUL )         // abgeschaltet
         return;
@@ -626,6 +648,19 @@ void SwWW8ImplReader::GetPageULData( const  WW8PLCFx_SEPX* pSep,
     short nWWHTop = ReadULSprm( pSep, pIds[2], MM_125 );
     short nWWFBot = ReadULSprm( pSep, pIds[3], MM_125 );
 
+    /*
+    If there is gutter in 97+ and the dop says put it on top then get the
+    gutter distance and set it to the top margin. When we are "two pages
+    in one" the gutter is put at the top of odd pages, and bottom of
+    even pages, something we cannot do. So we will put it on top of all
+    pages, that way the pages are at least the right size.
+    */
+    if ( pWDop->doptypography.f2on1 ||
+        (!bVer67 && pWDop->iGutterPos && !ReadULSprm( pSep, 0x322A, 0 )))
+    {
+        nWWUp += ReadULSprm( pSep, 0xB025, 0 );
+    }
+
     if( bFirst )
         rData.bHasHeader = (nCorrIhdt &   WW8_HEADER_FIRST                )!=0;
     else
@@ -635,20 +670,8 @@ void SwWW8ImplReader::GetPageULData( const  WW8PLCFx_SEPX* pSep,
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
         rData.nSwHLo = nWWUp - nWWHTop;
-#ifdef NEW_MINHDSIZ
         if( rData.nSwHLo < MINLAY )
             rData.nSwHLo = MINLAY;
-#else //  NEW_MINHDSIZ
-        if( nIniHdSiz )
-            rData.nSwHLo -= (short)nIniHdSiz;
-        else if( nHdTextHeight )
-            rData.nSwHLo -= (short)nHdTextHeight;
-        else
-            rData.nSwHLo -= 240;
-
-        if( rData.nSwHLo < 0 )
-            rData.nSwHLo = 0;
-#endif // NEW_MINHDSIZ
     }
     else // kein Header -> Up einfach uebernehmen
         rData.nSwUp = nWWUp;
@@ -663,10 +686,6 @@ void SwWW8ImplReader::GetPageULData( const  WW8PLCFx_SEPX* pSep,
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
         rData.nSwFUp = nWWLo - nWWFBot;
 
-#if 0
-        if( rData.nSwFUp < MINLAY )
-            rData.nSwFUp = MINLAY;
-#else //  0
         if( nIniFtSiz )
             rData.nSwFUp -= (short)nIniFtSiz;
         else if( nFtTextHeight )
@@ -676,7 +695,6 @@ void SwWW8ImplReader::GetPageULData( const  WW8PLCFx_SEPX* pSep,
 
         if( rData.nSwFUp < 0 )
             rData.nSwFUp = 0;
-#endif // !0
     }
     else // kein Footer -> Lo einfach uebernehmen
         rData.nSwLo = nWWLo;
@@ -692,35 +710,21 @@ void SwWW8ImplReader::SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData
 
     if( rData.bHasHeader )              // ... und Header-Lower setzen
     {
-        SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt();
-        if( pHdFmt )
-        {
-#ifdef NEW_MINHDSIZ
-//              Kopfzeilenhoehe minimal sezten
+        //Kopfzeilenhoehe minimal sezten
+        if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
             pHdFmt->SetAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, rData.nSwHLo ) );
-#else //  NEW_MINHDSIZ
-            SvxULSpaceItem aHdUL( pHdFmt->GetULSpace() );
-            aHdUL.SetLower(  rData.nSwHLo );
-            pHdFmt->SetAttr( aHdUL );
-#endif // NEW_MINHDSIZ
-        }
     }
 
     if( rData.bHasFooter )              // ... und Footer-Upper setzen
     {
-        SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt();
-        if( pFtFmt )
+        if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
         {
-#if 0
-//              Fusszeilenhoehe minimal sezten
-            pFtFmt->SetAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, rData.nSwFUp ) );
-#else // 0
             SvxULSpaceItem aFtUL( pFtFmt->GetULSpace() );
             aFtUL.SetUpper(  rData.nSwFUp );
             pFtFmt->SetAttr( aFtUL );
-#endif // !0
         }
     }
+
     SvxULSpaceItem aUL( rData.nSwUp, rData.nSwLo ); // Page-UL setzen
     rFmt.SetAttr( aUL );
 }
@@ -1196,8 +1200,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
     // sprmSNfcPgn
     BYTE nLastNfcPgn = nNfcPgn;
     nNfcPgn = ReadBSprm( pSep, (bVer67 ? 147 : 0x300E), 0 );
-    if( nNfcPgn > 4 ) nNfcPgn = 0;
-
+    if (nNfcPgn > 4)
+        nNfcPgn = 0;
 
     /*
         Pruefen, ob wir uns den neuen Abschnitt schenken koennen, da kein
@@ -2724,7 +2728,6 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         WW8DupProperties aDup(rDoc,pCtrlStck);
 
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-        pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
         // Setze Pam in den FlyFrame
         const SwFmtCntnt& rCntnt = pSFlyPara->pFlyFmt->GetCntnt();
@@ -2792,7 +2795,6 @@ void SwWW8ImplReader::StopApo()
         // die aus Flys rausragen
         WW8DupProperties aDup(rDoc,pCtrlStck);
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-        pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
         /*
         ##582##
@@ -3356,12 +3358,6 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
         bTxtCol = FALSE;
-#if 0
-        //No longer need this with auto color
-        if( bCharShdTxtCol || bShdTxtCol )
-            // dann muss die wieder eingeschaltet werden!!
-            NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
-#endif
     }
     else
     {
@@ -3371,7 +3367,7 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
             b = 0;
 
         NewAttr( SvxColorItem( Color( eSwWW8ColA[b] ) ) );
-        bTxtCol = TRUE;                         // SHD darf nicht Farbe einschalten
+        bTxtCol = TRUE;             // SHD darf nicht Farbe einschalten
         if( pAktColl && pStyles )
             pStyles->bTxtColChanged = TRUE;
     }
@@ -3584,9 +3580,6 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     }
 }
 
-
-
-
 void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
 {
     switch( nId )
@@ -3663,8 +3656,6 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
     }
 }
 
-
-
 /*
     Einschalten des Zeichen-Styles:
 */
@@ -3714,7 +3705,8 @@ void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
         if( bCharShdTxtCol )
         {
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );  // Zeichenfarbe auch
+            // Zeichenfarbe auch
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
             bCharShdTxtCol = FALSE;
         }
     }
@@ -3725,16 +3717,6 @@ void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
-
-#if 0
-        //Now we have auto color, no longer need this
-        // weisse Schrift und nicht ueberattributiert
-        if( aSh.bWhiteText && !bTxtCol && !bShdTxtCol )
-        {
-            NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
-            bCharShdTxtCol = TRUE;
-        }
-#endif
     }
 }
 
@@ -3758,16 +3740,6 @@ void SwWW8ImplReader::Read_CharHighlight(USHORT, const BYTE* pData, short nLen)
 
         Color aCol( eSwWW8ColA[b] );
         NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
-
-#if 0
-        //No longer need this with auto color
-        // weisse Schrift und nicht ueberattributiert
-        if( COL_BLACK == aCol.GetColor() && !bTxtCol && !bShdTxtCol )
-        {
-            NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
-            bCharShdTxtCol = TRUE;
-        }
-#endif
     }
 }
 
@@ -4093,7 +4065,8 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     }
 }
 
-void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen ) // Sprm 21, 22
+// Sprm 21, 22
+void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 {
     if( nIniFlags & WW8FL_NO_LRUL )
         return;
@@ -4116,7 +4089,9 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen ) // Sp
     if( bStyNormal && ( nIniFlags & WW8FL_NO_STD_STY_DYA ) )
         return;
 
-    if( nLen < 0 ){                 // Ende des Attributes
+    if( nLen < 0 )
+    {
+        // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
@@ -4126,40 +4101,22 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen ) // Sp
 
     SvxULSpaceItem aUL( *(const SvxULSpaceItem*)GetFmtAttr( RES_UL_SPACE ));
 
-    switch( nId ){                // keine Versuche
+    switch( nId )
+    {
         //sprmPDyaBefore
         case     21:
-        case 0xA413: aUL.SetUpper( nPara ); break;
+        case 0xA413:
+            aUL.SetUpper( nPara );
+            break;
         //sprmPDyaAfter
         case     22:
-        case 0xA414: aUL.SetLower( nPara ); break;
-        default: return;
+        case 0xA414:
+            aUL.SetLower( nPara );
+            break;
+        default:
+            return;
     };
-#if 0
-    // nIniFlags stehen in c:\winnt40\soffice.ini[user]
-    // siehe wwpar.hxx
-    // und SwWW8ImplReader::LoadDoc( SwPaM& rPaM )
-    //
-    if( nIniFlags & WW8FL_NO_IMPLPASP ){
-        switch( nId ){                // keine Versuche
-            case 21:
-            case 0xA413: aUL.SetUpper( nPara ); break;
-            case 22:
-            case 0xA414: aUL.SetLower( nPara ); break;
-            default: return;
-        };
-    }else{
-    // auf alte Werte addieren wg. implizitem Absatzabstand
-    // ( siehe Read_LineSpace() )
-        switch( nId ){
-            case 21:
-            case 0xA413: aUL.SetUpper( aUL.GetUpper() + nPara ); break;
-            case 22:
-            case 0xA414: aUL.SetLower( aUL.GetLower() + nPara ); break;
-            default: return;
-        };
-    }
-#endif
+
     NewAttr( aUL );
 }
 
@@ -4168,7 +4125,8 @@ void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
     static SvxAdjust aAdjArr[] = { SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER,
                                    SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
 
-    if( nLen < 0 ){
+    if( nLen < 0 )
+    {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_ADJUST );
         return;
     }
@@ -4182,12 +4140,18 @@ void SwWW8ImplReader::Read_BoolItem( USHORT nId, const BYTE* pData, short nLen )
 {
     switch( nId )
     {
-    case 0x2433:    nId = RES_PARATR_FORBIDDEN_RULES;       break;
-    case 0x2435:    nId = RES_PARATR_HANGINGPUNCTUATION;    break;
-    case 0x2437:    nId = RES_PARATR_SCRIPTSPACE;           break;
-    default:
-        ASSERT( !this, "wrong Id" );
-        return ;
+        case 0x2433:
+            nId = RES_PARATR_FORBIDDEN_RULES;
+            break;
+        case 0x2435:
+            nId = RES_PARATR_HANGINGPUNCTUATION;
+            break;
+        case 0x2437:
+            nId = RES_PARATR_SCRIPTSPACE;
+            break;
+        default:
+            ASSERT( !this, "wrong Id" );
+            return ;
     }
 
     if( nLen < 0 )
@@ -4212,7 +4176,9 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, const BYTE* pData, short nLen )
         //there is use it, if there is not fall back to the currently set one.
         //Only the cjk language setting seems to matter to word, the western
         //one is ignored
-        const BYTE *pLang = pPlcxMan ? pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : 0;
+        const BYTE *pLang =
+            pPlcxMan ? pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : 0;
+
         if (pLang)
             nLang = SVBT16ToShort( pLang );
         else
@@ -4297,7 +4263,6 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
         }
     }
 }
-
 
 SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
 {
@@ -4413,34 +4378,31 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
             {
                 Color aForeColor = Color( nFore );
                 Color aBackColor = Color( nBack );
-                ULONG   nRed        = aForeColor.GetRed()    *      nWW8BrushStyle;
-                ULONG   nGreen  = aForeColor.GetGreen()  *      nWW8BrushStyle;
-                ULONG   nBlue       = aForeColor.GetBlue()   *      nWW8BrushStyle;
-                nRed   += (ULONG)(aBackColor.GetRed()  *(1000-nWW8BrushStyle));
+                ULONG nRed = aForeColor.GetRed() * nWW8BrushStyle;
+                ULONG nGreen = aForeColor.GetGreen() * nWW8BrushStyle;
+                ULONG nBlue = aForeColor.GetBlue() * nWW8BrushStyle;
+                nRed += (ULONG)(aBackColor.GetRed()  *(1000-nWW8BrushStyle));
                 nGreen += (ULONG)(aBackColor.GetGreen()*(1000-nWW8BrushStyle));
-                nBlue  += (ULONG)(aBackColor.GetBlue() *(1000-nWW8BrushStyle));
+                nBlue += (ULONG)(aBackColor.GetBlue() *(1000-nWW8BrushStyle));
 
-                aColor.SetColor( RGB_COLORDATA( nRed/1000, nGreen/1000, nBlue/1000 ) );
+                aColor.SetColor( RGB_COLORDATA( nRed/1000, nGreen/1000,
+                    nBlue/1000 ) );
             }
             break;
     }
-#if 0
-    //Now we have Auto color, no longer need this
-    // schwarzer Hintergrund -> weisse Schrift
-    bWhiteText =    (nFore == COL_BLACK) && ( 800 <= nWW8BrushStyle )
-                 || (nBack == COL_BLACK) && ( 200 >= nWW8BrushStyle );
-#endif
 }
 
 
 void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen <= 0 )
-    {       // Ende des Attributes
+    {
+        // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BACKGROUND );
         if( bShdTxtCol )
         {
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );  // Zeichenfarbe auch
+            // Zeichenfarbe auch
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
             bShdTxtCol = FALSE;
         }
     }
@@ -4451,15 +4413,6 @@ void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor ) );
-#if 0
-        //Now we have Auto Color, no longer need this
-        // weisse Schrift und nicht ueberattributiert
-        if( aSh.bWhiteText && !bTxtCol )
-        {
-            NewAttr( SvxColorItem( Color( COL_WHITE ) ) );  // -> weisse Schrift
-            bShdTxtCol = TRUE;
-        }
-#endif
     }
 }
 
@@ -4571,7 +4524,6 @@ void SwWW8ImplReader::Read_WidowControl( USHORT, const BYTE* pData, short nLen )
     }
 }
 
-
 void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen <= 0 )
@@ -4606,7 +4558,6 @@ void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
         NewAttr( SvxParaVertAlignItem( nVal ) );
     }
 }
-
 
 void SwWW8ImplReader::Read_KeepLines( USHORT, const BYTE* pData, short nLen )
 {
@@ -4688,9 +4639,9 @@ typedef long (SwWW8ImplReader:: *FNReadRecordExt)( WW8PLCFManResult*, BOOL );
 static FNReadRecordExt aWwSprmTab2[] = {
 /* 0 (256) */   &SwWW8ImplReader::Read_Ftn,     // FootNote
 /* 1 (257) */   &SwWW8ImplReader::Read_Ftn,     // EndNote
-/* 2 (258) */   &SwWW8ImplReader::Read_Field,   // Feld
-/* 3 (259) */   &SwWW8ImplReader::Read_Book,    // Bookmark
-/* 4 (260) */   &SwWW8ImplReader::Read_And      // Annotation
+/* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Feld
+/* 3 (259) */   &SwWW8ImplReader::Read_Book,   // Bookmark
+/* 4 (260) */   &SwWW8ImplReader::Read_And     // Annotation
 };
 
 long SwWW8ImplReader::ImportExtSprm( WW8PLCFManResult* pRes, BOOL bStart )
@@ -5166,7 +5117,7 @@ SprmReadInfo aSprmReadTab[] = {
     0xD227, (FNReadRecord)0, //"sprmSPropRMark" // sep.fPropRMark, sep.ibstPropRMark, sep.dttmPropRMark ;complex (see below);variable length always recorded as 7 bytes;
 //0x3228, ? ? ?  , "sprmSFBiDi", // ;;;
 //0x3229, ? ? ?  , "sprmSFFacingCol", // ;;;
-//0x322A, ? ? ?  , "sprmSFRTLGutter", // ;;;
+    0x322A, (FNReadRecord)0, // "sprmSFRTLGutter", //set to 1 if gutter is on the right.
     0x702B, (FNReadRecord)0, //"sprmSBrcTop" // sep.brcTop;BRC;long;
     0x702C, (FNReadRecord)0, //"sprmSBrcLeft" // sep.brcLeft;BRC;long;
     0x702D, (FNReadRecord)0, //"sprmSBrcBottom" // sep.brcBottom;BRC;long;

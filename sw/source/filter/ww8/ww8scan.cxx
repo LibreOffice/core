@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,7 +1102,7 @@ private:
 public:
     UShortStk() : SvShorts( 10, 10 ) {}
     ~UShortStk() {}
-    void Push( USHORT s ) { Insert( (USHORT)s, SvShorts::Count() ); }
+    void Push( USHORT s ) { Insert( s, SvShorts::Count() ); }
     inline USHORT Top();
     inline USHORT Pop();
     USHORT Count() { return SvShorts::Count(); }
@@ -3115,44 +3115,10 @@ long WW8PLCFx_Book::GetLen() const
     return nNum;
 }
 
-// IgnoreBook ist dafuer da, bei Feldern mit implizitem WW-Bookmark
-// die Bookmarks zwischen Anfang und Ende des Feldes zu ignorieren,
-// die den angegebenen Namen tragen.
-BOOL WW8PLCFx_Book::SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion,
-    const String& rName, eBookStatus eStat )
+void WW8PLCFx_Book::SetStatus(USHORT nIndex, eBookStatus eStat )
 {
-    ASSERT( nStartRegion < LONG_MAX && nEndRegion < LONG_MAX,
-            "IgnoreBook mit falschen Parametern" );
-
-    if( !pBook[0] || !pBook[1] )
-        return FALSE;
-
-    BOOL bFound = FALSE;
-    USHORT i = 0;
-    WW8_CP nStartAkt, nEndAkt;
-    do
-    {
-        void* p;
-        USHORT nEndIdx;
-
-        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
-            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
-        else
-        {
-            ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
-            nEndIdx = (USHORT)i;
-        }
-        nEndAkt = pBook[1]->GetPos( nEndIdx );
-        if ( (nStartAkt >= nStartRegion) && (nEndAkt <= nEndRegion)
-            && (rName.Equals( *aBookNames[ i ] )) )
-        {
-            pStatus[nEndIdx] = (eBookStatus)( pStatus[nEndIdx] | eStat );
-            bFound = TRUE;
-        }
-        i++;
-    }
-    while( nStartAkt <= nEndRegion && i < pBook[0]->GetIMax() );
-    return bFound;
+    ASSERT(nIndex < nIMax, "set status of non existing bookmark!");
+    pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
 }
 
 eBookStatus WW8PLCFx_Book::GetStatus() const
@@ -3180,6 +3146,72 @@ long WW8PLCFx_Book::GetHandle() const
     }
 }
 
+String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, USHORT &nIndex)
+{
+    BOOL bFound = FALSE;
+    USHORT i = 0;
+    if( pBook[0] && pBook[1] )
+    {
+        WW8_CP nStartAkt, nEndAkt;
+        do
+        {
+            void* p;
+            USHORT nEndIdx;
+
+            if( pBook[0]->GetData( i, nStartAkt, p ) && p )
+                nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+            else
+            {
+                ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
+                nEndIdx = i;
+            }
+
+            nEndAkt = pBook[1]->GetPos( nEndIdx );
+
+            if ((nStartAkt >= nStart) && (nEndAkt <= nEnd))
+            {
+                nIndex = i;
+                bFound=TRUE;
+                break;
+            }
+            ++i;
+        }
+        while (i < pBook[0]->GetIMax());
+    }
+    return bFound ? *aBookNames[i] : aEmptyStr;
+}
+
+BOOL WW8PLCFx_Book::MapName(String& rName)
+{
+    if( !pBook[0] || !pBook[1] )
+        return FALSE;
+
+    BOOL bFound = FALSE;
+    USHORT i = 0;
+    WW8_CP nStartAkt, nEndAkt;
+    do
+    {
+        void* p;
+        USHORT nEndIdx;
+
+        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
+            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+        else
+        {
+            ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
+            nEndIdx = i;
+        }
+        nEndAkt = pBook[1]->GetPos( nEndIdx );
+        if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(*aBookNames[i]))
+        {
+            rName = *aBookNames[i];
+            bFound = TRUE;
+        }
+        ++i;
+    }
+    while (!bFound && i < pBook[0]->GetIMax());
+    return bFound;
+}
 //-----------------------------------------
 //          WW8PLCFMan
 //-----------------------------------------

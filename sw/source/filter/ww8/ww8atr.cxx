@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,9 @@
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>       // fuer SwField ...
+#endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
 #endif
 #ifndef _FORMAT_HXX
 #include <format.hxx>
@@ -571,7 +574,9 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
 
                     if( bWrtWW8 )
                     {
-                        // write sprmPIlvl and sprmPIlfo
+                        // write sprmPOutLvl sprmPIlvl and sprmPIlfo
+                        SwWW8Writer::InsUInt16( *pO, 0x2640 );
+                        pO->Insert( nLvl, pO->Count() );
                         SwWW8Writer::InsUInt16( *pO, 0x260a );
                         pO->Insert( nLvl, pO->Count() );
                         SwWW8Writer::InsUInt16( *pO, 0x460b );
@@ -1784,7 +1789,31 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     {
 //  case RES_CHAPTERFLD:
 //      break;
-
+    case RES_GETEXPFLD:
+        if (nSubType == GSE_STRING)
+        {
+            const SwGetExpField *pGet=(const SwGetExpField*)(pFld);
+            sStr.ASSIGN_CONST_ASC( " REF \"" );
+            sStr += pGet->GetFormula();
+            sStr.APPEND_CONST_ASC( "\" " );
+            rWW8Wrt.OutField( pFld, 3, sStr,WRITEFIELD_START |
+                WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+            String sVar = pFld->Expand();
+            if (sVar.Len())
+            {
+                if (rWW8Wrt.IsUnicode())
+                    SwWW8Writer::WriteString16( rWrt.Strm(), sVar, FALSE );
+                else
+                {
+                SwWW8Writer::WriteString8( rWrt.Strm(), sVar, FALSE,
+                    RTL_TEXTENCODING_MS_1252 );
+                }
+            }
+            rWW8Wrt.OutField( pFld, 3, sStr, WRITEFIELD_CLOSE );
+        }
+        else
+            bWriteExpand = TRUE;
+        break;
     case RES_SETEXPFLD:
         if( GSE_SEQ == nSubType )
         {
@@ -1795,10 +1824,60 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             ::WW8_GetNumberPara( sStr, *pFld );
             rWW8Wrt.OutField( pFld, 12, sStr );
         }
+        else if (nSubType & GSE_STRING)
+        {
+            BYTE nFieldNo;
+            const SwSetExpField *pSet=(const SwSetExpField*)(pFld);
+            const String &rVar = pSet->GetPar2();
+            if (pSet->GetInputFlag())
+            {
+                sStr.ASSIGN_CONST_ASC( " ASK \"" );
+                sStr += pSet->GetPar1();
+                sStr.APPEND_CONST_ASC( "\" " );
+                sStr += pSet->GetPromptText();
+                sStr.APPEND_CONST_ASC( " \\d " );
+                sStr += rVar;
+                nFieldNo = 38;
+            }
+            else
+            {
+                sStr.ASSIGN_CONST_ASC( " SET \"" );
+                sStr += pSet->GetPar1();
+                sStr.APPEND_CONST_ASC( "\" " );
+                sStr += rVar;
+                nFieldNo = 6;
+            }
+
+            ULONG nFrom = rWW8Wrt.Fc2Cp(rWrt.Strm().Tell());
+
+            rWW8Wrt.OutField( pFld, nFieldNo, sStr,WRITEFIELD_START |
+                WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+
+            /*
+            Is there a bookmark at the start position of this field, if so
+            move it to the 0x14 of the result of the field.  This is what word
+            does. MoveFieldBookmarks moves any bookmarks at this position to
+            the beginning of the field result, and marks the bookmark as a
+            fieldbookmark which is to be ended before the field end mark
+            instead of after it like a normal bookmark.
+            */
+            rWW8Wrt.MoveFieldBookmarks(nFrom,rWW8Wrt.Fc2Cp(rWrt.Strm().Tell()));
+
+            if (rVar.Len())
+            {
+                if (rWW8Wrt.IsUnicode())
+                    SwWW8Writer::WriteString16( rWrt.Strm(), rVar, FALSE );
+                else
+                {
+                SwWW8Writer::WriteString8( rWrt.Strm(), rVar, FALSE,
+                    RTL_TEXTENCODING_MS_1252 );
+                }
+            }
+            rWW8Wrt.OutField( pFld, nFieldNo, sStr, WRITEFIELD_CLOSE );
+        }
         else
             bWriteExpand = TRUE;
         break;
-
     case RES_PAGENUMBERFLD:
         sStr.ASSIGN_CONST_ASC( " SEITE " );
         ::WW8_GetNumberPara( sStr, *pFld );
@@ -2028,13 +2107,13 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                         sStr.InsertAscii( "SEITEN", 1 );
                         nFldTyp = 37;
                         break;
-
                     case REF_UPDOWN:
                         sStr.APPEND_CONST_ASC( " \\p" );
                         nFldTyp = 3;
                         break;
-
                     case REF_CHAPTER:
+                        sStr.APPEND_CONST_ASC( " \\n" );
+                        break;
                     case REF_ONLYNUMBER:
                     case REF_ONLYCAPTION:
                     case REF_ONLYSEQNO:
@@ -2042,10 +2121,8 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     // default:
                     // case REF_CONTENT:
                 }
-
                 sStr.APPEND_CONST_ASC( " \\h " );       // insert hyperlink
                 rWW8Wrt.OutField( pFld, nFldTyp, sStr );
-
             }
             else
                 bWriteExpand = TRUE;

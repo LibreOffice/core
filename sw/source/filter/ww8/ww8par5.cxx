@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*, BOOL bStartAttr)
     if( !bStartAttr )
     {
         ASSERT( bStartAttr, "Read_Book::Nanu ?" );
-        pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK );
+        pRefStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK );
         return 0;
     }
     // muesste auch ueber pRes.nCo2OrIdx gehen
@@ -418,16 +418,16 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*, BOOL bStartAttr)
         return 0;
     }
 
+    eBookStatus eB = pB->GetStatus();
+    if (eB & BOOK_IGNORE)
+        return 0;                               // Bookmark zu ignorieren
+
     if (pB->GetIsEnd())
     {
-        pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE,
+        pRefStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE,
             pB->GetHandle() );
         return 0;
     }
-
-    eBookStatus eB = pB->GetStatus();
-    if ( (eB & BOOK_IGNORE) != 0 )
-        return 0;                               // Bookmark zu ignorieren
 
     //"_Toc*" and "_Hlt*" are unnecessary
     const String* pName = pB->GetName();
@@ -503,8 +503,8 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*, BOOL bStartAttr)
         if( aVal.Len() > (MAX_FIELDLEN - 4))
             aVal.Erase( MAX_FIELDLEN - 4 );
     }
-    pEndStck->NewAttr( *pPaM->GetPoint(), SwFltBookmark( *pName, aVal,
-                        pB->GetHandle(), ( eB & BOOK_ONLY_REF ) != 0 ) );
+    pRefStck->NewAttr( *pPaM->GetPoint(), SwFltBookmark( *pName, aVal,
+        pB->GetHandle(), 0 ) );
     return 0;
 }
 
@@ -972,7 +972,7 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
                                 SwSetExpFieldType( &rDoc, aName, GSE_STRING ) );
         SwSetExpField aFld( (SwSetExpFieldType*)pFT, rTagText );                            // SUB_INVISIBLE
         USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : SUB_INVISIBLE;
-        aFld.SetSubType(nSubType);
+        aFld.SetSubType(nSubType|GSE_STRING);
 
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     }
@@ -1070,10 +1070,129 @@ String SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
     return sRes;
 }
 
-// "FRAGE"
+/*
+Bookmarks can be set with fields SET and ASK, and they can be referenced with
+REF. When set, they behave like variables in writer, otherwise they behave
+like normal bookmarks. We can check whether we should use a show variable
+instead of a normal bookmark ref by converting to "show variable" at the end
+of the document those refs which look for the content of a bookmark but whose
+bookmarks were set with SET or ASK. (See SwWW8FltRefStack)
+
+The other piece of the puzzle is that refs that point to the "location" of the
+bookmark will in word actually point to the last location where the bookmark
+was set with SET or ASK, not the actual bookmark. This is only noticable when
+a document sets the bookmark more than once. This is because word places the
+true bookmark at the location of the last set, but the refs will display the
+position of the first set before the ref.
+
+So what we will do is
+
+1) keep a list of all bookmarks that were set, any bookmark names mentioned
+here that are refed by content will be converted to show variables.
+
+2) create pseudo bookmarks for every position that a bookmark is set with SET
+or ASK but has no existing bookmark. We can then keep a map from the original
+bookmark name to the new one. As we parse the document new pseudo names will
+replace the older ones, so the map always contains the bookmark of the
+location that msword itself would use.
+
+3) word's bookmarks are case insensitive, writers are not. So we need to
+map case different versions together, regardless of whether they are
+variables or not.
+
+4) when a reference is (first) SET or ASK, the bookmark associated with it
+is placed around the 0x14 0x15 result part of the field. We will fiddle
+the placement to be the writer equivalent of directly before and after
+the field, which gives the same effect and meaning, to do so we must
+get any bookmarks in the field range, and begin them immediately before
+the set/ask field, and end them directly afterwards. MapBookmarkVariables
+returns an identifier of the bookmark attribute to close after inserting
+the appropiate set/ask field.
+*/
+long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
+    String &rOrigName, const String &rData)
+{
+    ASSERT(pPlcxMan,"No pPlcxMan");
+    long nNo;
+    /*
+    If there was no bookmark associated with this set field, then we create a
+    pseudo one and insert it in the document.
+    */
+    USHORT nIndex;
+    pPlcxMan->GetBook()->MapName(rOrigName);
+    String sName = pPlcxMan->GetBook()->GetBookmark(
+        pF->nSCode, pF->nSCode + pF->nLen, nIndex);
+    if (sName.Len())
+    {
+        pPlcxMan->GetBook()->SetStatus(nIndex,BOOK_IGNORE);
+        nNo = nIndex;
+    }
+    else
+    {
+        sName = String::CreateFromAscii("WWSetBkmk");
+        nNo = pRefStck->aFieldVarNames.size()+1;
+        sName += String::CreateFromInt32(nNo);
+        nNo += pPlcxMan->GetBook()->GetIMax();
+    }
+    pRefStck->NewAttr(*pPaM->GetPoint(),SwFltBookmark(sName,rData,nNo,0));
+    pRefStck->aFieldVarNames[rOrigName] = sName;
+    return nNo;
+}
+
+/*
+Word can set a bookmark with set or with ask, such a bookmark is equivalent to
+our variables, but until the end of a document we cannot be sure if a bookmark
+is a variable or not, at the end we will have a list of reference names which
+were set or asked, all bookmarks using the content of those bookmarks are
+converted to show variables, those that reference the position of the field
+can be left as references, because a bookmark is also inserted at the position
+of a set or ask field, either by word, or in some special cases by the import
+filter itself.
+*/
+SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
+    SwFltStackEntry *pEntry)
+{
+    SwFltStackEntry *pRet=0;
+    if (RES_GETREFFLD == pFld->Which())
+    {
+        //Get the name of the ref field, and see if actually a variable
+        const String &rName = pFld->GetPar1();
+        ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator
+            aResult = aFieldVarNames.find(rName);
+
+        if (aResult != aFieldVarNames.end())
+        {
+            SwGetExpField aFld( (SwGetExpFieldType*)
+                pDoc->GetSysFldType(RES_GETEXPFLD), rName, GSE_STRING, 0);
+            delete pEntry->pAttr;
+            SwFmtFld aTmp(aFld);
+            pEntry->pAttr = aTmp.Clone();
+            pRet = pEntry;
+        }
+    }
+    return pRet;
+}
+
+const String &SwWW8ImplReader::GetMappedBookmark(String &rOrigName)
+{
+    ASSERT(pPlcxMan,"no pPlcxMan");
+    pPlcxMan->GetBook()->MapName(rOrigName);
+
+    //See if there has been a variable set with this name, if so get
+    //the pseudo bookmark name that was set with it.
+    ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator aResult =
+            pRefStck->aFieldVarNames.find(rOrigName);
+
+    const String &rBkmName = (aResult == pRefStck->aFieldVarNames.end())
+        ? rOrigName : (*aResult).second;
+
+    return rBkmName;
+}
+
+// "ASK"
 eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 {
-    String aVar;
+    String sOrigName;
     String aQ;
     String aDef;
     long nRet;
@@ -1083,39 +1202,36 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !aVar.Len() )
-                aVar = aReadParam.GetResult();
+            if( !sOrigName.Len() )
+                sOrigName = aReadParam.GetResult();
             else if( !aQ.Len() )
                 aQ = aReadParam.GetResult();
             break;
         case 'd':
         case 'D':
-            {
-                xub_StrLen n = aReadParam.GoToTokenParam();
-                if( STRING_NOTFOUND != n )
-                    aDef = aReadParam.GetResult();
-            }
+            if (STRING_NOTFOUND != aReadParam.GoToTokenParam())
+                aDef = aReadParam.GetResult();
             break;
         }
     }
-    if( !aVar.Len() )
+
+    if( !sOrigName.Len() )
         return FLD_TAGIGN;  // macht ohne Textmarke keinen Sinn
     if( !aDef.Len() )
         aDef = GetFieldResult( pF );
 
+    long nNo = MapBookmarkVariables(pF,sOrigName,aDef);
 
-
-    SwFieldType* pFT = rDoc.InsertFldType( SwSetExpFieldType( &rDoc, aVar, GSE_STRING ) );
-    SwSetExpField aFld( (SwSetExpFieldType*)pFT, aVar );
-    aFld.SetSubType(SUB_INVISIBLE);
+    SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
+        SwSetExpFieldType(&rDoc, sOrigName, GSE_STRING));
+    SwSetExpField aFld( pFT, aDef );
+    aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
     aFld.SetInputFlag( TRUE );
     aFld.SetPromptText( aQ );
-    aFld.SetPar2( aDef );
-    pPlcxMan->GetBook()->SetStatus( pF->nSCode, pF->nSCode + pF->nLen,
-                aVar, BOOK_ONLY_REF );
+
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-
+    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE, nNo);
     return FLD_OK;
 }
 
@@ -1194,8 +1310,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
         }
     }
-    if(    !aSequenceName.Len()
-        && !aBook.Len() )
+    if (!aSequenceName.Len() && !aBook.Len())
         return FLD_TAGIGN;
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
@@ -1593,7 +1708,6 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     return FLD_OK;
 }
 
-
 // "EINBETTEN"
 eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, String& rStr )
 {
@@ -1622,11 +1736,11 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, String& rStr )
 }
 
 
-// "BESTIMMEN"
+// "SET"
 eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 {
-    String aName;
-    String aVal;
+    String sOrigName;
+    String sVal;
     long nRet;
     _ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -1634,28 +1748,32 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !aName.Len() )
-                aName = aReadParam.GetResult();
-            else if( !aVal.Len() )
-                aVal = aReadParam.GetResult();
+            if( !sOrigName.Len() )
+                sOrigName = aReadParam.GetResult();
+            else if( !sVal.Len() )
+                sVal = aReadParam.GetResult();
             break;
         }
     }
-    SwFieldType* pFT = rDoc.InsertFldType(
-                            SwSetExpFieldType( &rDoc, aName, GSE_STRING ) );
-    SwSetExpField aFld( (SwSetExpFieldType*)pFT, aVal );
-    aFld.SetSubType(SUB_INVISIBLE);
-    pPlcxMan->GetBook()->SetStatus( pF->nSCode, pF->nSCode + pF->nLen,
-         aName, BOOK_IGNORE );
+
+    long nNo = MapBookmarkVariables(pF,sOrigName,sVal);
+
+    SwFieldType* pFT = rDoc.InsertFldType( SwSetExpFieldType( &rDoc, sOrigName,
+        GSE_STRING ) );
+    SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal );
+    aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
+
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+
+    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, TRUE, nNo);
+
     return FLD_OK;
 }
 
 // "REF"
 eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 {                                                       // Reference - Field
-    String aBkmName;
-    REFERENCEMARK eMark = REF_CONTENT;
+    String sOrigBkmName;
     BOOL bChapterNr = FALSE;
     BOOL bAboveBelow = FALSE;
 
@@ -1666,8 +1784,8 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !aBkmName.Len() ) // get name of bookmark
-                aBkmName = aReadParam.GetResult();
+            if( !sOrigBkmName.Len() ) // get name of bookmark
+                sOrigBkmName = aReadParam.GetResult();
             break;
         case 'n':
         case 'r':
@@ -1689,23 +1807,46 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
         SwGetExpField aFld( (SwGetExpFieldType*)
-            rDoc.GetSysFldType( RES_GETEXPFLD ),aBkmName, GSE_STRING, VVF_SYS );
+            rDoc.GetSysFldType( RES_GETEXPFLD ),sOrigBkmName, GSE_STRING,
+            VVF_SYS );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pEndStck->SetBookRef( aBkmName, FALSE );
+        pRefStck->SetBookRef( sOrigBkmName, FALSE );
     }
     else
     {
-        if (bChapterNr || bAboveBelow)
-            eMark = REF_CHAPTER;
-        SwGetRefField aFld( (SwGetRefFieldType*)
-            rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName,REF_BOOKMARK,0,eMark);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        const String &rBkmName = GetMappedBookmark(sOrigBkmName);
+
+        if (!bAboveBelow || bChapterNr)
+        {
+            if (bChapterNr)
+            {
+                SwGetRefField aFld(
+                    (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
+                    rBkmName,REF_BOOKMARK,0,REF_CHAPTER);
+                rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+            }
+            else
+            {
+                /*
+                If we are just inserting the contents of the bookmark, then it
+                is possible that the bookmark is actually a variable, so we
+                must store it until the end of the document to see if it was,
+                in which case we'll turn it into a show variable
+                */
+                SwGetRefField aFld(
+                    (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
+                    sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
+                pRefStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
+                pRefStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
+            }
+        }
+
         if( bAboveBelow )
         {
-            SwGetRefField aFld2( (SwGetRefFieldType*)
-                rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_BOOKMARK, 0,
+            SwGetRefField aFld( (SwGetRefFieldType*)
+                rDoc.GetSysFldType( RES_GETREFFLD ), rBkmName, REF_BOOKMARK, 0,
                 REF_UPDOWN );
-            rDoc.Insert( *pPaM, SwFmtFld( aFld2 ) );
+            rDoc.Insert(*pPaM, SwFmtFld(aFld));
         }
     }
     return FLD_OK;
@@ -1747,7 +1888,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
         SwGetExpField aFld( (SwGetExpFieldType*)
             rDoc.GetSysFldType( RES_GETEXPFLD ), aBkmName, GSE_STRING, VVF_SYS);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pEndStck->SetBookRef( aBkmName, FALSE );
+        pRefStck->SetBookRef( aBkmName, FALSE );
     }
     else
     {   // set Sequence No of corresponding Foot-/Endnote to Zero
@@ -1755,13 +1896,13 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
         SwGetRefField aFld( (SwGetRefFieldType*)
             rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_FOOTNOTE, 0,
             REF_ONLYNUMBER );
-        pRefFldStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld ));
+        pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld ));
         if( bAboveBelow )
         {
             SwGetRefField aFld2( (SwGetRefFieldType*)
                 rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName, REF_FOOTNOTE, 0,
                 REF_UPDOWN );
-            pRefFldStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld2 ));
+            pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld2 ));
         }
     }
     return FLD_OK;
@@ -1770,7 +1911,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
 // "SEITENREF"
 eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 {
-    String aName;
+    String sOrigName;
     long nRet;
     _ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -1778,27 +1919,27 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !aName.Len() )
-                aName = aReadParam.GetResult();
+            if( !sOrigName.Len() )
+                sOrigName = aReadParam.GetResult();
             break;
         }
     }
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
         SwGetRefField aFld( (SwGetRefFieldType*)
-                        rDoc.GetSysFldType( RES_GETREFFLD ), aName, 0, 0,
+                        rDoc.GetSysFldType( RES_GETREFFLD ), sOrigName, 0, 0,
                         REF_PAGE );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pEndStck->SetBookRef( aName, TRUE );
+        pRefStck->SetBookRef( sOrigName, TRUE );
     }
     else
     {
-        SwGetRefField aFld( (SwGetRefFieldType*)
-                    rDoc.GetSysFldType( RES_GETREFFLD ),
-                    aName,
-                    REF_BOOKMARK,
-                    0,
-                    REF_PAGE );
+        const String &rName = GetMappedBookmark(sOrigName);
+
+        SwGetRefField aFld(
+            (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), rName,
+            REF_BOOKMARK, 0, REF_PAGE );
+
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     }
     return FLD_OK;
@@ -1942,14 +2083,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
         aPara += aBook;
     }
     String aStr(CREATE_CONST_ASC( "WW" ));
-#if 0
-    SwSection* pSection = new SwSection( FILE_LINK_SECTION,
-                                    rDoc.GetUniqueSectionName( &aStr ) );
-    pSection->SetLinkFileName( aPara );
-    pSection->SetProtect( TRUE );
-    NewAttr( SwFltSection( pSection ) );
-    pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_SECTION );
-#else
+
     /*
     ##509##
     What we will do is insert a section to be linked to a file, but just in
@@ -1974,7 +2108,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
 
     aSave.Restore( this );
-#endif
+
     return FLD_OK;
 }
 
@@ -2772,12 +2906,12 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     }
 
     // Setze Anfang in Stack
-    pEndStck->NewAttr( *pPos, aFltTOX );
+    pRefStck->NewAttr( *pPos, aFltTOX );
     if( 1 < nIndexCols )
         bDontCreateSep = TRUE;
 
     // Setze Ende in Stack
-    pEndStck->SetAttr( *pPos, RES_FLTR_TOX );
+    pRefStck->SetAttr( *pPos, RES_FLTR_TOX );
 
     return FLD_OK;
 }
@@ -2788,30 +2922,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
     String sURL, sTarget, sMark;
     BOOL bDataImport=FALSE;
 
-    // JP 02.12.98: es gibt Hyperlink-Felder, die am Ende eine '\x01' stehen
-    //              haben. Die wollen wir aber nicht beachten
-    /*
-    if( pStr[ pF->nLCode - 1 ] < ' ' )
-        pStr[ pF->nLCode - 1 ] = 0;
-    */
-
-
-
-/*
-    //caolan
-    if( rStr.GetChar( pF->nLCode - 1 ) < ' ' )
-    {
-#if DEBUG
-        if( 0x01 == rStr.GetChar( pF->nLCode-1 ) )
-            bDataImport=ImportURL( sURL, sMark, pF->nSCode + pF->nLCode-1 );
-#endif
-        rStr.SetChar( pF->nLCode - 1, 0 );
-    }
-*/
-
     rStr.EraseTrailingChars( 1 );
-
-
 
     if (!bDataImport)
     {
@@ -2896,16 +3007,16 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
                 pFmtOfJustInsertedGraphicOrOLE->SetAttr( aURL );
                 pFmtOfJustInsertedGraphicOrOLE = 0;
             }
-            eRet = FLD_OK;
         }
         else
         {
             SwFmtINetFmt aURL( sURL, sTarget );
-            pRefFldStck->NewAttr( *pPaM->GetPoint(), aURL );
+            pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
 
             // das Ende als "relative" Pos auf den Stack setzen
             pPaM->SetMark();
             pPaM->GetMark()->nContent += sDef.Len();
+
             /*#83156#
             We need to know the length of this content field here, but we
             do not truly know the length of the final result as we may
@@ -2923,7 +3034,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
             for(xub_StrLen i=sDef.Len();i>0;i--)
                 if (sDef.GetChar(i-1) < 0x20)
                     pPaM->GetMark()->nContent--;
-            pRefFldStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
+
+            pCtrlStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
             pPaM->DeleteMark();
 
             eRet = FLD_TEXT;

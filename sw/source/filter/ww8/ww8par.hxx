@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -116,8 +119,6 @@ class SwAttrSet;
 class SwNumRule;
 class SwFrmFmt;
 
-class SwFltControlStack;
-class SwFltEndStack;
 class SwWW8StyInf;
 class WW8Fib;
 class WW8PLCFMan;
@@ -316,7 +317,6 @@ public:
         nToggleAttrFlags( 0 )
     {}
 
-    BOOL IsFtnEdnBkmField(SwFmtFld& rFmtFld, USHORT& nBkmNo);
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
     void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE,
         long nHand=LONG_MAX);
@@ -328,6 +328,36 @@ public:
             nToggleAttrFlags &= ~(1 << nId);
     }
     USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
+};
+
+class SwWW8FltRefStack : public SwFltEndStack
+{
+public:
+    SwWW8FltRefStack(SwDoc* pDo, ULONG nFieldFl)
+        : SwFltEndStack( pDo, nFieldFl )
+    {}
+    BOOL IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo);
+
+    struct ltstr
+    {
+        bool operator()(const String &r1, const String &r2) const
+        {
+            return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
+        }
+    };
+
+    //Keep track of variable names created with fields, and the bookmark
+    //mapped to their position, hopefully the same, but very possibly
+    //an additional pseudo bookmark
+    ::std::map<String, String, ltstr> aFieldVarNames;
+protected:
+    SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
+    virtual void SetAttrInDoc(const SwPosition& rTmpPos,
+        SwFltStackEntry* pEntry);
+private:
+    //No copying
+    SwWW8FltRefStack(const SwWW8FltRefStack&);
+    SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
 };
 
 //-----------------------------------------
@@ -361,8 +391,6 @@ class WW8ReaderSave
 {
     SwPosition aTmpPos;
     SwWW8FltControlStack* pOldStck;
-    SwWW8FltControlStack* pOldFldStck;
-    SwFltEndStack* pOldEndStck;
     WW8PLCFxSaveAll aPLCFxSave;
     WW8PLCFMan* pOldPlcxMan;
 
@@ -382,6 +410,7 @@ class WW8ReaderSave
     BOOL bTableInApo    : 1;
     BOOL bAnl           : 1;
     BOOL bInHyperlink : 1;
+    BOOL bPgSecBreak : 1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
@@ -542,10 +571,14 @@ friend class WW8FormulaControl;
     SwPaM* pPaM;
 
     SwWW8FltControlStack* pCtrlStck;    // Stack fuer die Attribute
-    SwFltEndStack*        pEndStck;     // End-Stack fuer die Attribute
-    SwWW8FltControlStack* pRefFldStck;  // for Reference Fields
 
-//  BYTE* pCharBuf;             // Puffer fuer nackten Text
+    /*
+    This stack is for fields whose true conversion cannot be determined until
+    the end of the document, it is the same stack for headers/footers/main
+    text/textboxes/tables etc...
+    */
+    SwWW8FltRefStack *pRefStck;
+
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
@@ -768,8 +801,7 @@ friend class WW8FormulaControl;
 
     void DeleteStk(SwFltControlStack* prStck);
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
-    void DeleteEndStk()     { DeleteStk( pEndStck   ); pEndStck    = 0; }
-    void DeleteRefFldStk()  { DeleteStk( pRefFldStck); pRefFldStck = 0; }
+    void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
 
     BOOL ReadChar( long nPosCp, long nCpOfs );
     BOOL ReadPlainChars( long& rPos, long nEnd, long nCpOfs );
@@ -1097,14 +1129,15 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_LFOPosition(      USHORT nId, const sal_uInt8* pData, short nLen);
     BOOL SetTxtFmtCollAndListLevel(const SwPaM& rRg, SwWW8StyInf& rStyleInfo);
 
-                                        // FastSave-Attribute
-
     void Read_StyleCode(USHORT, const BYTE* pData, short nLen);
     void Read_Majority(USHORT, const BYTE* , short );
     void Read_DoubleLine_Rotate( USHORT, const BYTE* pDATA, short nLen);
 
-                                        // Felder
+    long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
+        const String &rData);
+    const String &GetMappedBookmark(String &rOrigName);
 
+    // Felder
     eF_ResT Read_F_Nul(WW8FieldDesc*, String& );
     eF_ResT Read_F_Input(WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_InputVar(WW8FieldDesc*, String& rStr);

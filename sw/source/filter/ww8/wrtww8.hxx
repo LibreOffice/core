@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <tools/gen.hxx>
 #endif
 #ifndef _SVSTDARR_HXX
+#define _SVSTDARR_BOOLS
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGS
@@ -461,8 +462,13 @@ public:
         SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
     void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
         xub_StrLen nLen );
+    //Hides Writer::GetBookmarks, hopefully temporarily until that is
+    //made consistent.
+    USHORT GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
+        xub_StrLen nEnd, SvPtrarr& rArr);
     void AppendBookmark( const String& rName, USHORT nOffset = 0 );
     String GetBookmarkName( USHORT nTyp, const String* pNm, USHORT nSeqNo );
+    void MoveFieldBookmarks(ULONG nFrom, ULONG nTo);
     BOOL HasRefToObject( USHORT nTyp, const String* pNm, USHORT nSeqNo );
 
     void WriteAsStringTable( const SvStrings&, INT32& rfcSttbf,

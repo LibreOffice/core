@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,31 +390,12 @@ void SwWW8ImplReader::Read_Majority( USHORT, const BYTE* , short )
 //-----------------------------------------
 //            Stack
 //-----------------------------------------
-BOOL SwWW8FltControlStack::IsFtnEdnBkmField(SwFmtFld& rFmtFld, USHORT& nBkmNo)
+void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
+    const SfxPoolItem& rAttr)
 {
-    const SwField* pFld = rFmtFld.GetFld();
-    USHORT nSubType;
-    return(    pFld
-            && (RES_GETREFFLD == pFld->Which())
-            && (   (REF_FOOTNOTE == (nSubType = pFld->GetSubType()))
-                || (REF_ENDNOTE  == nSubType))
-            && ((SwGetRefField*)pFld)->GetSetRefName().Len()
-                // find Sequence No of corresponding Foot-/Endnote
-            && (USHRT_MAX != (nBkmNo = pDoc->FindBookmark(
-                                ((SwGetRefField*)pFld)->GetSetRefName() ))));
-}
-
-void SwWW8FltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr)
-{
-    USHORT nBkmNo;
-    if(    (RES_TXTATR_FIELD == rAttr.Which())
-        && IsFtnEdnBkmField((SwFmtFld&)rAttr, nBkmNo) )
-    {
-        SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone());
-        Insert(pTmp, Count());
-    }
-    else
-        SwFltControlStack::NewAttr(rPos, rAttr);
+    ASSERT(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
+        "fields into the control stack");
+    SwFltControlStack::NewAttr(rPos, rAttr);
 }
 
 void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId, BOOL bTstEnde, long nHand)
@@ -435,7 +416,8 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId, BOOL 
         SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
 }
 
-void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry)
+void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
+    SwFltStackEntry* pEntry)
 {
     switch( pEntry->pAttr->Which() )
     {
@@ -457,115 +439,109 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEnt
                     {
                         if( bChange1stLine )
                         {
-                            if(    0 != (pNum = ((SwTxtNode*)pNode)->GetNum() )
-                                && (MAXLEVEL > pNum->GetLevel())
-                                && 0 != (pRule = ((SwTxtNode*)pNode)->GetNumRule() ) )
+                            if ( (pNum = ((SwTxtNode*)pNode)->GetNum()) &&
+                                (MAXLEVEL > pNum->GetLevel()) &&
+                                (pRule = ((SwTxtNode*)pNode)->GetNumRule()) )
                             {
-                                const SwNumFmt rNumFmt = pRule->Get( pNum->GetLevel() );
-                                aLR.SetTxtFirstLineOfst( rNumFmt.GetFirstLineOffset() );
+                                const SwNumFmt rNumFmt =
+                                    pRule->Get(pNum->GetLevel());
+                                aLR.SetTxtFirstLineOfst(
+                                    rNumFmt.GetFirstLineOffset());
                             }
                             else
                                 aLR.SetTxtFirstLineOfst( 0 );
                         }
                         ((SwCntntNode*)pNode)->SetAttr( aLR );
 
-                        // wenn wir dies nicht tun, ueberschreibt die NumRule uns alle
-                        // harten L-Randeinstellungen
+                        // wenn wir dies nicht tun, ueberschreibt die NumRule
+                        // uns alle harten L-Randeinstellungen
                         pNode->SetNumLSpace( FALSE );
                     }
                 }
             }
         }
-        break;
+            break;
         case RES_TXTATR_FIELD:
-        {
-            SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
-            const SwField* pFld = rFmtFld.GetFld();
-            USHORT nBkmNo;
-            if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
-            {
-                SwBookmark& rBkMrk = pDoc->GetBookmark( nBkmNo );
-
-                const SwPosition& rBkMrkPos = rBkMrk.GetPos();
-
-                SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
-                if( pTxt && rBkMrkPos.nContent.GetIndex() )
-                {
-                    SwTxtAttr* pFtn = pTxt->GetTxtAttr( rBkMrkPos.nContent.GetIndex()-1,
-                                                        RES_TXTATR_FTN );
-                    if( pFtn )
-                    {
-                        USHORT nRefNo = ((SwTxtFtn*)pFtn)->GetSeqRefNo();
-
-                        ((SwGetRefField*)pFld)->SetSeqNo( nRefNo );
-
-                        if( pFtn->GetFtn().IsEndNote() )
-                            ((SwGetRefField*)pFld)->SetSubType( REF_ENDNOTE );
-                    }
-                }
-                /*
-                const SwStartNode* pSearchNode =
-                  rBkMrkPos.nNode.GetNode().FindFootnoteStartNode();
-
-                if( pSearchNode )
-                {
-                    const SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
-
-                    const USHORT nFtnCnt = rFtnIdxs.Count();
-
-                    for(USHORT n = 0; n < nFtnCnt; ++n )
-                    {
-                        SwTxtFtn* pFtn = rFtnIdxs[ n ];
-                        const SwNodeIndex* pSttIdx =
-                            ((SwTxtFtn*)pFtn)->GetStartNode();
-                        if( pSttIdx &&
-                            (pSearchNode ==
-                                pSttIdx->GetNode().GetStartNode()) )
-                        {
-                            USHORT nRefNo = pFtn->SetSeqRefNo();
-
-                            ((SwGetRefField*)pFld)->SetSeqNo( nRefNo );
-
-                        }
-                    }
-                }
-                */
-            }
-            SwNodeIndex aIdx( pEntry->nMkNode, +1 );
-            SwPaM aPaM( aIdx, pEntry->nMkCntnt );
-            pDoc->Insert(aPaM, *pEntry->pAttr);
-        }
-        break;
-/*
-        case RES_TXTATR_INETFMT:
-        {
-            if( rReader.pSBase )
-            {
-                if( rReader.pSBase->pFldPLCF )
-                {
-                    WW8PLCFx_FLD& rPLCF = *rReader.pSBase->pFldPLCF;
-                    if( rPLCF.SeekPos( pEntry->nCPStart ) )
-                    {
-                        const ULONG nIdxPoint = rPLCF.GetIdx();
-                        if( rPLCF.SeekPos( pEntry->nCPEnd ) )
-                        {
-                            const ULONG nIdxMark = rPLCF.GetIdx();
-                            if( nIdxPoint == nIdxMark )
-                            {
-                                ;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        break;
-*/
-        default: SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
+            ASSERT(0,"What is a field doing in the control stack,"
+                "probably should have been in the endstack");
+            break;
+        default:
+            SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
+            break;
     }
 }
 
+BOOL SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
+{
+    const SwField* pFld = rFmtFld.GetFld();
+    USHORT nSubType;
+    return (pFld && (RES_GETREFFLD == pFld->Which())
+            && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) ||
+                (REF_ENDNOTE  == nSubType))
+            && ((SwGetRefField*)pFld)->GetSetRefName().Len()
+                // find Sequence No of corresponding Foot-/Endnote
+            && (USHRT_MAX != (rBkmNo = pDoc->FindBookmark(
+                ((SwGetRefField*)pFld)->GetSetRefName() ))));
+}
 
+void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
+        SwFltStackEntry* pEntry)
+{
+    switch( pEntry->pAttr->Which() )
+    {
+        /*
+        Look up these in our lists of bookmarks that were changed to
+        variables, and replace the ref field with a var field, otherwise
+        do normal (?) strange stuff
+        */
+        case RES_TXTATR_FIELD:
+        {
+            const SwFmtFld& rFmtFld   = *(const SwFmtFld*)pEntry->pAttr;
+            const SwField* pFld = rFmtFld.GetFld();
+
+            if (!RefToVar(pFld,pEntry))
+            {
+                USHORT nBkmNo;
+                if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
+                {
+                    SwBookmark& rBkMrk = pDoc->GetBookmark( nBkmNo );
+
+                    const SwPosition& rBkMrkPos = rBkMrk.GetPos();
+
+                    SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
+                    if( pTxt && rBkMrkPos.nContent.GetIndex() )
+                    {
+                        SwTxtAttr* pFtn = pTxt->GetTxtAttr(
+                            rBkMrkPos.nContent.GetIndex()-1, RES_TXTATR_FTN );
+                        if( pFtn )
+                        {
+                            USHORT nRefNo = ((SwTxtFtn*)pFtn)->GetSeqRefNo();
+
+                            ((SwGetRefField*)pFld)->SetSeqNo( nRefNo );
+
+                            if( pFtn->GetFtn().IsEndNote() )
+                                ((SwGetRefField*)pFld)->SetSubType(REF_ENDNOTE);
+                        }
+                    }
+                }
+            }
+
+            SwNodeIndex aIdx( pEntry->nMkNode, +1 );
+            SwPaM aPaM( aIdx, pEntry->nMkCntnt );
+            pDoc->Insert(aPaM, *pEntry->pAttr);
+            MoveAttrs(*aPaM.GetPoint());
+        }
+        break;
+        case RES_FLTR_TOX:
+        case RES_FLTR_BOOKMARK:
+            SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
+            break;
+        default:
+            ASSERT(0,"EndStck used with non field, not what we want");
+            SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
+            break;
+    }
+}
 
 //-----------------------------------------
 //            Tabs
@@ -826,6 +802,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bTableInApo     = pRdr->bTableInApo;
     bAnl            = pRdr->bAnl;
     bInHyperlink    = pRdr->bInHyperlink;
+    bPgSecBreak     = pRdr->bPgSecBreak;
     nAktColl        = pRdr->nAktColl;
     nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
@@ -837,15 +814,8 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
 
-    pOldEndStck = pRdr->pEndStck;
-    pRdr->pEndStck = new SwFltEndStack(&pRdr->rDoc, pRdr->nFieldFlags );
-
     pOldStck = pRdr->pCtrlStck;
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
-        *pRdr);
-
-    pOldFldStck = pRdr->pRefFldStck;
-    pRdr->pRefFldStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
 
     // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
@@ -879,6 +849,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
     pRdr->bInHyperlink  = bInHyperlink;
+    pRdr->bPgSecBreak   = bPgSecBreak;
     pRdr->nAktColl      = nAktColl;
     pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
 
@@ -886,12 +857,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     // entstehen koennen, die aus dem Fly rausragen
     pRdr->DeleteCtrlStk();
     pRdr->pCtrlStck = pOldStck;
-
-    pRdr->DeleteRefFldStk();
-    pRdr->pRefFldStck = pOldFldStck;
-
-    pRdr->DeleteEndStk();
-    pRdr->pEndStck = pOldEndStck;
 
     *pRdr->pPaM->GetPoint() = aTmpPos;
 
@@ -2009,6 +1974,7 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
     pAktItemSet =  0;
     nCharFmt    = -1;
     bSpec = FALSE;
+    bPgSecBreak = FALSE;
     nHdTextHeight = nFtTextHeight = 0;
 
     pPlcxMan = new WW8PLCFMan( pSBase, nType, nStartCp );
@@ -2126,8 +2092,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
     pCtrlStck   = 0;
-    pEndStck    = 0;
-    pRefFldStck = 0;
+    pRefStck = 0;
     pFonts          = 0;
     pSBase          = 0;
     pPlcxMan        = 0;
@@ -2221,14 +2186,10 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
     /*
-        Endestack: haelt z.B. Bookmarks und Variablen solange vor,
-        bis er den Befehl zum inserten bekommt.
+        RefFldStck: Keeps track of bookmarks which may be inserted as
+        variables intstead.
     */
-    pEndStck    = new SwFltEndStack(        &rDoc, nFieldFlags );
-    /*
-        fieldstack holds Reference Fields until the very end of file import
-    */
-    pRefFldStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
+    pRefStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
 
     nPageDescOffset = rDoc.GetPageDescCnt();
 
@@ -2718,8 +2679,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
     DELETEZ(pFontSrcCharSets);
-    DeleteEndStk();
-    DeleteRefFldStk();
+    DeleteRefStk();
 
     // set NoBallanced flag on last inserted section
     if( pNewSection )

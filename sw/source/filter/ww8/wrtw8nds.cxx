@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,6 +1114,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
 
+        //Append bookmarks in this range, exclusive of final position
+        //of this range
         rWW8Wrt.AppendBookmarks( *pNd, nAktPos, nNextAttr - nAktPos );
         BOOL bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         BOOL bAttrWithRange = aAttrIter.OutAttrWithRange( nAktPos );
@@ -1132,6 +1134,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     bRedlineAtEnd = TRUE;
                 else
                 {
+                    //insert final bookmarks if any before CR
+                    rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
                     if( pTOXSect )
                         rWW8Wrt.EndTOX( *pTOXSect );
                     rWW8Wrt.WriteCR();              // CR danach
@@ -1157,6 +1161,9 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             if( bTxtAtr || bAttrWithRange || bRedlineAtEnd )
             {
+                //insert final bookmarks if any before CR
+                rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
+
                 if( pTOXSect )
                     rWW8Wrt.EndTOX( *pTOXSect );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,9 @@ public:
 class WW8_WrtBookmarks
 {
 private:
-    SvULongs aSttCps, aEndCps;              // Array of Start- and End CPs
-    SvStringsDtor aSwBkmkNms;               // Array of Sw - Bookmarknames
+    SvULongs aSttCps, aEndCps;      // Array of Start- and End CPs
+    SvBools aFieldBookmarks;       // If the bookmark is in a field result
+    SvStringsDtor aSwBkmkNms;       // Array of Sw - Bookmarknames
 
     USHORT GetPos( const String& rNm );
 
@@ -280,6 +281,7 @@ public:
 
     void Append( WW8_CP nStartCp, const String& rNm );
     void Write( SwWW8Writer& rWrt );
+    void MoveFieldBookmarks(ULONG nFrom,ULONG nTo);
 
 //  String GetWWBkmkName( const String& rName ) const;
 };
@@ -1242,6 +1244,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
 
         aSttCps.Insert( nStartCp, nPos );
         aEndCps.Insert( nStartCp, nPos );
+        aFieldBookmarks.Insert( BOOL(FALSE), nPos );
         String* p = new String( rNm );
         aSwBkmkNms.Insert( p, nPos );
 // JP 24.06.99: not used at time
@@ -1252,6 +1255,13 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
     {
         // old -> its the end position
         ASSERT( aEndCps[ nPos ] == aSttCps[ nPos ], "end position is valid" );
+
+        //If this bookmark was around a field in writer, then we want to move
+        //it to the field result in word. The end is therefore one cp
+        //backwards from the 0x15 end mark that was inserted.
+        if (aFieldBookmarks[nPos])
+            --nStartCp;
+
         aEndCps.Replace( nStartCp, nPos );
     }
 }
@@ -1331,6 +1341,55 @@ USHORT WW8_WrtBookmarks::GetPos( const String& rNm )
     return nRet;
 }
 
+void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
+{
+    for (USHORT nI=0;nI<aSttCps.Count();++nI)
+    {
+        if (aSttCps[nI] == nFrom)
+        {
+            aSttCps[nI] = nTo;
+            if (aEndCps[nI] == nFrom)
+            {
+                aFieldBookmarks[nI] = TRUE;
+                aEndCps[nI] = nTo;
+            }
+        }
+    }
+}
+
+/*
+Writer::GetBookmarks is inconsistent, when its changed this might go away, and
+the usage of GetBookmarks refined. GetBookmarks is inconsistent in use between
+asking for a range in the txtnode that has bookmarks vs the full node. The
+first is exclusive of the end point, the second is inclusive. This makes is
+consistently exclusive.
+*/
+USHORT SwWW8Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
+    xub_StrLen nEnd, SvPtrarr& rArr)
+{
+    if (Writer::GetBookmarks( rNd, nStt, nEnd, rArr))
+    {
+        if (!nStt && nEnd == rNd.Len())
+        {
+            for( USHORT n = 0; n < rArr.Count(); ++n )
+            {
+                void* p = rArr[n];
+                const SwBookmark& rBkmk = *(SwBookmark*)p;
+                xub_StrLen nCntnt = rBkmk.GetPos().nContent.GetIndex();
+                xub_StrLen nCntnt2;
+                if (rBkmk.GetOtherPos())
+                    nCntnt2 = rBkmk.GetOtherPos()->nContent.GetIndex();
+                else
+                    nCntnt2 = nCntnt;
+
+                if ((nCntnt >= nEnd) && (nCntnt2 >= nEnd))
+                    rArr.Remove(n--);
+            }
+        }
+    }
+    return rArr.Count();
+}
+
 void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
                                     xub_StrLen nAktPos, xub_StrLen nLen )
 {
@@ -1368,6 +1427,11 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
             }
         }
     }
+}
+
+void SwWW8Writer::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
+{
+    pBkmks->MoveFieldBookmarks(nFrom, nTo);
 }
 
 void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
