@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include "fltprgrs.hxx"
 #include "excsst.hxx"
 #include "flttools.hxx"
-#include "spstring.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
 
@@ -375,52 +374,6 @@ RootData::~RootData()
 
 
 
-ImportTyp::ImportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eQ ): aIn( aStream )
-{
-    eQuellChar = eQ;
-    pD = pDoc;
-
-    pExtOpt = NULL;
-}
-
-
-ImportTyp::~ImportTyp()
-{
-    ScExtDocOptions*    p = pD->GetExtDocOptions();
-    if( p )
-    {
-        if( pExtOpt )
-        {
-            *p = *pExtOpt;
-            delete pExtOpt;
-        }
-    }
-    else
-        pD->SetExtDocOptions( pExtOpt );
-}
-
-
-FltError ImportTyp::Read()
-{
-    return eERR_INTERN;
-}
-
-
-ScExtDocOptions &ImportTyp::GetExtOpt( void )
-{
-    if( !pExtOpt )
-    {
-        pExtOpt = new ScExtDocOptions;
-        ScExtDocOptions*    pOrg = pD->GetExtDocOptions();
-        if( pOrg )
-            *pExtOpt = *pOrg;
-    }
-    return *pExtOpt;
-}
-
-
-
-
 OutlineBuffer::OutlineBuffer( USHORT nNewSize )
 {
     DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
@@ -643,24 +596,21 @@ void OutlineBuffer::Reset( ScOutlineArray *pOArray )
 INT32   FilterProgressBar::nInstances = 0;
 
 
-FilterProgressBar::FilterProgressBar( SvStream& rStr ) : pStr( &rStr )
+FilterProgressBar::FilterProgressBar( SvStream& rStream ) :
+    pStr( &rStream )
 {
-    nInstances++;
+    ULONG nOldPos = rStream.Tell();
+    rStream.Seek( STREAM_SEEK_TO_END );
+    ULONG nStrmLen = rStream.Tell();
+    rStream.Seek( nOldPos );
+    Init( nOldPos, nStrmLen );
+}
 
-    const UINT32    nCurPos = rStr.Tell();
 
-    UINT32          nEndPos = rStr.Seek( STREAM_SEEK_TO_END );
-    nCnt = 0;
-
-    if( nInstances == 1 )
-        pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_LOAD_DOC ), nEndPos - nCurPos );
-    else
-        pPrgrs = NULL;
-
-    if( pPrgrs )
-        pPrgrs->SetState( nCurPos );
-
-    rStr.Seek( nCurPos );
+FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) :
+    pXIStr( &rStream )
+{
+    Init( rStream.GetStreamPos(), rStream.GetStreamLen() );
 }
 
 
@@ -673,12 +623,30 @@ FilterProgressBar::~FilterProgressBar()
 }
 
 
+void FilterProgressBar::Init( ULONG nStreamPos, ULONG nStreamLen )
+{
+    nInstances++;
+
+    nCnt = 0;
+
+    if( nInstances == 1 )
+        pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_LOAD_DOC ), nStreamLen );
+    else
+        pPrgrs = NULL;
+
+    if( pPrgrs )
+        pPrgrs->SetState( nStreamPos );
+}
+
+
 void FilterProgressBar::Progress( void )
 {
     if( pPrgrs )
     {
         if( pStr )
             pPrgrs->SetState( pStr->Tell() );
+        else if( pXIStr )
+            pPrgrs->SetState( pXIStr->GetStreamPos() );
         else
         {
             nCnt++;
@@ -688,28 +656,12 @@ void FilterProgressBar::Progress( void )
 }
 
 
-UINT32 FilterProgressBar::GetStreamLen( void ) const
-{
-    if( pStr )
-    {
-        const UINT32    nCurPos = pStr->Tell();
-
-        UINT32          nEndPos = pStr->Seek( STREAM_SEEK_TO_END );
-
-        pStr->Seek( nCurPos );
-
-        return nEndPos;
-    }
-    else
-        return 0;
-}
-
-
 void FilterProgressBar::StartPostLoadProgress( const UINT32 nObj )
 {
     if( pPrgrs )
     {
         pStr = NULL;
+        pXIStr = NULL;
         nCnt = 0;
 
         delete pPrgrs;
@@ -757,13 +709,13 @@ struct ShStrTabFormData
     UINT16*             pForms;
     UINT16              nFormCnt;
 
-                        ShStrTabFormData( SvStream& rIn, INT32& rBytesLeft, UINT16 nFormCnt );
+                        ShStrTabFormData( XclImpStream& rIn, UINT16 nFormCnt );
                             // wenn Ctor fehlschlaegt, ist pForms NULL!
                         ~ShStrTabFormData();
 };
 
 
-ShStrTabFormData::ShStrTabFormData( SvStream& r, INT32& rBytesLeft, UINT16 n )
+ShStrTabFormData::ShStrTabFormData( XclImpStream& r, UINT16 n )
 {
     pEdTxtObj = NULL;
     if( n )
@@ -771,7 +723,6 @@ ShStrTabFormData::ShStrTabFormData( SvStream& r, INT32& rBytesLeft, UINT16 n )
         pForms = new UINT16[ n * 2 ];
         nFormCnt = n;
 
-        rBytesLeft -= n * 4;
         UINT16*     p = pForms;
 
         while( n )
@@ -800,10 +751,10 @@ ShStrTabFormData::~ShStrTabFormData()
 
 
 
-ShStrTabFormEntry::ShStrTabFormEntry( const String& r, SvStream& rIn, INT32& rBytesLeft, const UINT16 nFormCnt ) :
+ShStrTabFormEntry::ShStrTabFormEntry( const String& r, XclImpStream& rIn, const UINT16 nFormCnt ) :
     ShStrTabEntry( r )
 {
-    pData = new ShStrTabFormData( rIn, rBytesLeft, nFormCnt );
+    pData = new ShStrTabFormData( rIn, nFormCnt );
     if( !pData->pForms )
     {
         delete pData;
@@ -936,488 +887,6 @@ CharSet GetSystemCharSet( void )
 }
 
 
-
-ShStrTabEntry* CreateUnicodeEntry( SvStream& rIn, INT32& nLeft, CharSet eSrc, const UINT16 nPreLen,
-                                    UINT32List* pCutPosList )
-{
-    UINT16              nCch;
-    UINT8               nGrbit;
-    ShStrTabEntry*      pRet;
-
-    if( nPreLen )
-        nCch = nPreLen;
-    else
-    {
-        rIn >> nCch;
-        nLeft -= 2;
-    }
-    rIn >> nGrbit;
-    nLeft--;
-
-    const BOOL  b8Bit = ( nGrbit & 0x01 ) == 0x00;
-    const BOOL  bRich = ( nGrbit & 0x08 ) != 0x00;
-    const BOOL  bFarEast = ( nGrbit & 0x04 ) != 0x00;
-
-    UINT16      nCrun;
-    UINT32      nExtInf;
-
-    if( bRich )
-    {
-        rIn >> nCrun;
-        nLeft -= sizeof( nCrun );
-    }
-    else
-        nCrun = 0;
-
-    if( bFarEast )
-    {
-        rIn >> nExtInf;
-        nLeft -= sizeof( nExtInf );
-    }
-    else
-        nExtInf = 0;
-
-    if( pCutPosList )
-    {
-        if( bRich )
-            pRet = new ShStrTabFormEntry(
-                            ReadString( rIn, nLeft, nCch, b8Bit, *pCutPosList, eSrc ), rIn, nLeft, nCrun );
-        else
-            pRet = new ShStrTabEntry( ReadString( rIn, nLeft, nCch, b8Bit, *pCutPosList, eSrc ) );
-    }
-    else
-    {
-        if( bRich )
-            pRet = new ShStrTabFormEntry( ReadString( rIn, nLeft, nCch, b8Bit, eSrc ), rIn, nLeft, nCrun );
-        else
-            pRet = new ShStrTabEntry( ReadString( rIn, nLeft, nCch, b8Bit, eSrc ) );
-    }
-
-    if( nExtInf )
-    {
-        rIn.SeekRel( nExtInf );
-        nLeft -= nExtInf;
-    }
-
-    return pRet;
-}
-
-
-
-
-String ReadUnicodeString( SvStream& rIn, INT32& nLeft, CharSet eSrc, const UINT16 nPreLen )
-{
-    UINT16      nCch;
-    UINT8       nGrbit;
-
-    if( nPreLen )
-        nCch = nPreLen;
-    else
-    {
-        rIn >> nCch;
-        nLeft -= 2;
-    }
-
-    rIn >> nGrbit;
-    nLeft--;
-
-    const BOOL  b8Bit = ( nGrbit & 0x01 ) == 0x00;
-    const BOOL  bRich = ( nGrbit & 0x08 ) != 0x00;
-    const BOOL  bFarEast = ( nGrbit & 0x04 ) != 0x00;
-
-    UINT16      nCrun;
-    UINT32      nExtInf;
-
-    if( bRich )
-    {
-        rIn >> nCrun;
-        nLeft -= sizeof( nCrun );
-    }
-    else
-        nCrun = 0;
-
-    if( bFarEast )
-    {
-        rIn >> nExtInf;
-        nLeft -= sizeof( nExtInf );
-    }
-    else
-        nExtInf = 0;
-
-    String      aRet = ReadString( rIn, nLeft, nCch, b8Bit, eSrc );
-
-    UINT32      nSeek = nCrun * 4 + nExtInf;
-    if( nSeek )
-    {
-        rIn.SeekRel( nSeek );
-        nLeft -= nSeek;
-    }
-
-    return aRet;
-}
-
-
-
-
-void SkipUnicodeString( SvStream& rIn, INT32& nLeft, const UINT16 nPreLen )
-{
-    UINT16      nCch;
-    UINT8       nGrbit;
-
-    if( nPreLen )
-        nCch = nPreLen;
-    else
-    {
-        rIn >> nCch;
-        nLeft -= 2;
-    }
-
-    rIn >> nGrbit;
-    nLeft--;
-
-    const BOOL  b8Bit = ( nGrbit & 0x01 ) == 0x00;
-    const BOOL  bRich = ( nGrbit & 0x08 ) != 0x00;
-    const BOOL  bFarEast = ( nGrbit & 0x04 ) != 0x00;
-
-    UINT16      nCrun;
-    UINT32      nExtInf;
-
-    if( bRich )
-    {
-        rIn >> nCrun;
-        nLeft -= sizeof( nCrun );
-    }
-    else
-        nCrun = 0;
-
-    if( bFarEast )
-    {
-        rIn >> nExtInf;
-        nLeft -= sizeof( nExtInf );
-    }
-    else
-        nExtInf = 0;
-
-    SkipString( rIn, nLeft, nCch, b8Bit );
-
-
-    UINT32      nSeek = nCrun * 4 + nExtInf;
-    if( nSeek )
-    {
-        rIn.SeekRel( nSeek );
-        nLeft -= nSeek;
-    }
-}
-
-
-
-
-INT16 lcl_ReadExternSheetChar( SvStream& aIn, INT32& nBytesLeft, UINT16& nCharsLeft, BOOL b16Bit )
-{
-    INT16       nRetVal;
-    sal_Char    cChar;
-
-    if( b16Bit )
-    {
-        aIn >> nRetVal;
-        nBytesLeft -= 2;
-    }
-    else
-    {
-        aIn >> cChar;
-        nRetVal = (INT16) cChar;
-        nBytesLeft--;
-    }
-    nCharsLeft--;
-    return nRetVal;
-}
-
-
-
-
-// reads 8 bit and 16 bit strings
-void EncodeExternSheet( SvStream& aIn, String& aFile, String& aTabName,
-                        INT32& nBytesLeft, BOOL& rbSWbk, UINT16 nLen, BOOL b16Bit )
-{
-    enum        State{ S_INIT, S_PATH, S_FILENAME, S_TABNAME };
-    INT16       cEnc;
-    State       eS = S_INIT;
-
-    rbSWbk = FALSE;
-    while( nLen )
-    {
-        cEnc = lcl_ReadExternSheetChar( aIn, nBytesLeft, nLen, b16Bit );
-        switch( eS )
-        {
-            case S_INIT:
-                switch( cEnc )
-                {
-                    case 0x00:                          // empty
-                    case 0x01:                  break;  // encode
-                    case 0x02:                          // self
-                    case 0x03:  rbSWbk = TRUE;  break;  // encode & self
-                    default:    aFile += ( sal_Unicode ) cEnc;
-                }
-                eS = S_PATH;
-                break;
-            case S_PATH:
-                switch( cEnc )
-                {
-                    case 0x01:
-                        if( nLen > 1 )
-                        {
-                            cEnc = lcl_ReadExternSheetChar( aIn, nBytesLeft, nLen, b16Bit );
-                            if( cEnc == '@' )
-                                aFile.AppendAscii( "//" );
-                            else
-                            {
-                                aFile += ( sal_Unicode ) cEnc;
-                                aFile.AppendAscii( ":\\" );
-                            }
-                        }
-                        else
-                            aFile.AppendAscii( "<NULL-DRIVE!>" );
-                        break;
-                    case 0x02:
-                    case 0x03:  aFile.AppendAscii( "\\" );      break;
-                    case 0x04:  aFile.AppendAscii( "..\\") ;    break;
-                    case 0x05:
-                        if( nLen )
-                        {
-                            INT16 nVolLen = lcl_ReadExternSheetChar( aIn, nBytesLeft, nLen, b16Bit );
-                            if( nVolLen )
-                            {
-                                while( nVolLen )
-                                {
-                                    cEnc = lcl_ReadExternSheetChar( aIn, nBytesLeft, nLen, b16Bit );
-                                    aFile += ( sal_Unicode ) cEnc;
-                                    nVolLen--;
-                                }
-                            }
-                            else
-                                aFile.AppendAscii( "<EMPTY MAC-LONG-VOLUME>" );
-
-                            aFile.AppendAscii( ":" );
-                        }
-                        else
-                            aFile.AppendAscii( "<ERROR IN MAC-LONG-VOLUME>" );
-                        break;
-                    case 0x06:  aFile.AppendAscii( "<Startup Dir>:" );      break;
-                    case 0x07:  aFile.AppendAscii( "<Alt Startup Dir>:" );  break;
-                    case 0x08:  aFile.AppendAscii( "<Library>" );           break;
-                    case '[':   eS = S_FILENAME;                            break;  // Start von FileName
-                    default:    aFile += ( sal_Unicode ) cEnc;
-                }
-                break;
-            case S_FILENAME:
-                switch( cEnc )
-                {
-                    case ']':   eS = S_TABNAME;     break;  // Ende FileName
-                    default:    aFile += ( sal_Unicode ) cEnc;
-                }
-                break;
-            case S_TABNAME:     aTabName += ( sal_Unicode ) cEnc;   break;
-        }
-    }
-}
-
-
-
-
-void EncodeExternSheetUnicode( SvStream& aIn, String& aFile, String& aTabName, INT32& nBytesLeft,
-                              BOOL& rbSWbk, UINT16 nPreLen )
-{
-    UINT16              nCch;
-    UINT8               nGrbit;
-    String              aRet;
-
-    if( nPreLen )
-        nCch = nPreLen;
-    else
-    {
-        aIn >> nCch;
-        nBytesLeft -= 2;
-    }
-
-    aIn >> nGrbit;
-    nBytesLeft--;
-
-    UINT16 b16Bit = (nGrbit & 0x01);
-
-    if( nGrbit & 0x04 )
-    {
-        // extended String Far-East-Version
-        UINT32      nExtRstLen;
-        UINT8       nEnc;
-
-        aIn >> nExtRstLen >> nEnc;
-        nBytesLeft -= sizeof( nExtRstLen ) + sizeof( nEnc );
-        EncodeExternSheet( aIn, aFile, aTabName, nBytesLeft, rbSWbk, nCch, b16Bit );
-        aIn.SeekRel( nExtRstLen );
-        nBytesLeft -= nExtRstLen;
-    }
-    else if( nGrbit & 0x08 )
-    {
-        // extended String Rich-String-Version
-        UINT32      nTmp;
-        UINT16      nCrun;
-
-        aIn >> nCrun;
-        nBytesLeft -= sizeof( nCrun );
-        EncodeExternSheet( aIn, aFile, aTabName, nBytesLeft, rbSWbk, nCch, b16Bit );
-        nTmp = nCrun * 4;
-        aIn.SeekRel( nTmp );
-        nBytesLeft -= nTmp;
-    }
-    else
-        EncodeExternSheet( aIn, aFile, aTabName, nBytesLeft, rbSWbk, nCch, b16Bit );
-}
-
-
-//___________________________________________________________________
-// class XclImpHelper
-
-// static
-UINT16 XclImpHelper::ReadExternsheetChar( XclImpStream& rStrm, UINT16& nCharsLeft, BOOL b16Bit )
-{
-    UINT16      nRetVal;
-    sal_Char    cChar;
-
-    if( b16Bit )
-        rStrm >> nRetVal;
-    else
-    {
-        rStrm >> cChar;
-        nRetVal = (UINT16) cChar;
-    }
-    nCharsLeft--;
-    return nRetVal;
-}
-
-// static
-void XclImpHelper::DecodeExternsheetImpl( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars, BOOL b16Bit )
-{
-    enum State { S_INIT, S_PATH, S_FILENAME, S_TABNAME };
-
-    UINT16  cEnc;
-    State   eState = S_INIT;
-    UINT16  nCharsLeft = nChars;
-
-    rbSameWb = FALSE;
-
-    while( nCharsLeft )
-    {
-        cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
-        switch( eState )
-        {
-            case S_INIT:
-            {
-                switch( cEnc )
-                {
-                    case 0x0000:                                // empty
-                    case 0x0001:                        break;  // encode
-                    case 0x0002:                                // self
-                    case 0x0003:    rbSameWb = TRUE;    break;  // encode & self
-                    default:        rFile += (sal_Unicode) cEnc;
-                }
-                eState = S_PATH;
-            }
-            break;
-            case S_PATH:
-            {
-                switch( cEnc )
-                {
-                    case 0x0001:
-                    {
-                        if( nCharsLeft > 1 )
-                        {
-                            cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
-                            if( cEnc == '@' )
-                                rFile.AppendAscii( "//" );
-                            else
-                            {
-                                rFile += (sal_Unicode) cEnc;
-                                rFile.AppendAscii( ":\\" );
-                            }
-                        }
-                        else
-                            rFile.AppendAscii( "<NULL-DRIVE!>" );
-                    }
-                    break;
-                    case 0x0002:
-                    case 0x0003:    rFile.AppendAscii( "\\" );      break;
-                    case 0x0004:    rFile.AppendAscii( "..\\") ;    break;
-                    case 0x0005:
-                    {
-                        if( nCharsLeft )
-                        {
-                            UINT16 nVolLen = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
-                            if( nVolLen )
-                            {
-                                while( nVolLen-- )
-                                {
-                                    cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
-                                    rFile += (sal_Unicode) cEnc;
-                                }
-                            }
-                            else
-                                rFile.AppendAscii( "<EMPTY MAC-LONG-VOLUME>" );
-
-                            rFile.AppendAscii( ":" );
-                        }
-                        else
-                            rFile.AppendAscii( "<ERROR IN MAC-LONG-VOLUME>" );
-                    }
-                    break;
-                    case 0x0006:    rFile.AppendAscii( "<Startup Dir>:" );      break;
-                    case 0x0007:    rFile.AppendAscii( "<Alt Startup Dir>:" );  break;
-                    case 0x0008:    rFile.AppendAscii( "<Library>" );           break;
-                    case '[':       eState = S_FILENAME;                        break;  // start of file name
-                    default:        rFile += (sal_Unicode) cEnc;
-                }
-            }
-            break;
-            case S_FILENAME:
-            {
-                switch( cEnc )
-                {
-                    case ']':   eState = S_TABNAME;             break;  // end of file name
-                    default:    rFile += (sal_Unicode) cEnc;
-                }
-            }
-            break;
-            case S_TABNAME:     rTable += (sal_Unicode) cEnc;   break;
-        }
-    }
-}
-
-// static
-void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars, UINT8 nFlags )
-{
-    rStrm.PushPosition();
-    BOOL b16Bit;
-    rStrm.SeekUniStringData( b16Bit, nFlags );
-    DecodeExternsheetImpl( rStrm, rFile, rTable, rbSameWb, nChars, b16Bit );
-    rStrm.PopPosition();
-    rStrm.IgnoreUniString( nChars, nFlags );
-}
-
-// static
-void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars )
-{
-    UINT8 nFlags;
-    rStrm >> nFlags;
-    DecodeExternsheet( rStrm, rFile, rTable, rbSameWb, nChars, nFlags );
-}
-
-// static
-void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb )
-{
-    UINT16 nChars;
-    rStrm >> nChars;
-    DecodeExternsheet( rStrm, rFile, rTable, rbSameWb, nChars );
-}
-
 //___________________________________________________________________
 
 
@@ -1506,33 +975,32 @@ void ExcScenarioCell::SetValue( const String& r )
 #define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
 
 
-ExcScenario::ExcScenario( SvStream& rIn, const RootData& rR ) : nTab( *rR.pAktTab )
+ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pAktTab )
 {
     const CharSet   eSrc = *rR.pCharset;
 
     UINT16          nCref;
     UINT8           nName, nComment;
-    INT32           nD = 0x7FFFFFFF;
 
     rIn >> nCref;
-    rIn.SeekRel( 2 );
+    rIn.Ignore( 2 );
     rIn >> nName >> nComment;
-    rIn.SeekRel( 1 );       // statt nUser!
+    rIn.Ignore( 1 );        // statt nUser!
 
     if( nName )
-        pName = new String( ::ReadUnicodeString( rIn, nD, eSrc, nName ) );
+        pName = new String( rIn.ReadUniString( eSrc, nName ) );
     else
     {
         pName = new String( RTL_CONSTASCII_STRINGPARAM( "Scenery" ) );
-        rIn.SeekRel( 1 );
+        rIn.Ignore( 1 );
     }
 
-    pUserName = new String( ::ReadUnicodeString( rIn, nD, eSrc ) );
+    pUserName = new String( rIn.ReadUniString( eSrc ) );
 
     if( nComment )
-        pComment = new String( ::ReadUnicodeString( rIn, nD, eSrc, 0 ) );
+        pComment = new String( rIn.ReadUniString( eSrc ) );
     else
-        pComment = new String( EMPTY_STRING );
+        pComment = new String;
 
     UINT16          n = nCref;
     UINT16          nC, nR;
@@ -1549,7 +1017,7 @@ ExcScenario::ExcScenario( SvStream& rIn, const RootData& rR ) : nTab( *rR.pAktTa
     ExcScenarioCell*    p = EXCSCFIRST();
     while( p )
     {
-        p->SetValue( ::ReadUnicodeString( rIn, nD, eSrc ) );
+        p->SetValue( rIn.ReadUniString( eSrc ) );
 
         p = EXCSCNEXT();
     }
@@ -1650,20 +1118,84 @@ String ScGetHexStr( UINT16 nValue )
     return aStrName;
 }
 
-//_________________________________________________________
-
-const sal_Char* GetExcBuiltInName( sal_Unicode n )
+const sal_Char* GetBuiltInName( sal_Unicode nIndex )
 {
-    const sal_Char* p[] = {
+    const sal_Char* pNames[] = {
         "BuiltIn_Consolidate_Area","BuiltIn_Auto_Open","BuiltIn_Auto_Close",
         "BuiltIn_Extract","BuiltIn_Database","BuiltIn_Criteria","BuiltIn_Print_Area",
         "BuiltIn_Print_Titles","BuiltIn_Recorder","BuiltIn_Data_Form",
         "BuiltIn_Auto_Activate","BuiltIn_Auto_Deactivate","BuiltIn_SheetTitle",
         "BuiltIn_AutoFilter","BuiltIn_UNKNOWN" };
 
-    if( n < 0x00 || n > EXC_BUILTIN_UNKNOWN )
-        n = EXC_BUILTIN_UNKNOWN;
+    if( nIndex < 0x00 || nIndex > EXC_BUILTIN_UNKNOWN )
+        nIndex = EXC_BUILTIN_UNKNOWN;
 
-    return p[ n ];
+    return pNames[ nIndex ];
 }
+
+//___________________________________________________________________
+// string operations
+
+ByteString ReadCString( SvStream& rStrm )
+{
+    ByteString  aRet;
+    sal_Char    c;
+
+    rStrm >> c;
+    while( c )
+    {
+        aRet += c;
+        rStrm >> c;
+    }
+
+    return aRet;
+}
+
+String ReadCString( SvStream& rStrm, CharSet eSrc )
+{
+    return String( ReadCString( rStrm ), eSrc );
+}
+
+ByteString ReadCString( SvStream& rStrm, INT32& rBytesLeft )
+{
+    ByteString  aRet;
+    sal_Char    c;
+
+    rStrm >> c;
+    rBytesLeft--;
+    while( c )
+    {
+        aRet += c;
+        rStrm >> c;
+        rBytesLeft--;
+    }
+
+    return aRet;
+}
+
+String ReadCString( SvStream& rStrm, INT32& rBytesLeft, CharSet eSrc )
+{
+    return String( ReadCString( rStrm, rBytesLeft ), eSrc );
+}
+
+void AppendCString( SvStream& rStrm, ByteString& rString )
+{
+    sal_Char    c;
+
+    rStrm >> c;
+    while( c )
+    {
+        rString += c;
+        rStrm >> c;
+    }
+}
+
+void AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
+{
+    ByteString  aByteString;
+    AppendCString( rStrm, aByteString );
+    rString += String( aByteString, eSrc );
+}
+
+
 

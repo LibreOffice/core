@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,14 @@
 #include "tool.h"
 #include "math.h"
 #include "decl.h"
-#include "spstring.hxx"
 #include "lotform.hxx"
 #include "lotrange.hxx"
 
 #include "root.hxx"
+
+#ifndef _SC_XCLIMPHELPER_HXX
+#include "XclImpHelper.hxx"
+#endif
 
 extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
 extern sal_Char*    pErgebnis;      // -> memory.cxx, Ergebnispuffer
@@ -272,7 +275,7 @@ void OP_NamedRange( SvStream& r, UINT16 n )
 
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
-    ExcelNameToScName( aTmp );
+    XclImpHelper::ConvertName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }
@@ -310,7 +313,7 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     DosToSystem( pAnsi );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
-    ExcelNameToScName( aTmp );
+    XclImpHelper::ConvertName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }

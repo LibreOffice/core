@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,30 +93,26 @@ void ImportExcel::Formula25()
     BOOL    bShrFmla;
 
     aIn >> nRow >> nCol;
-    nBytesLeft -= 4;
 
     if( pExcRoot->eHauptDateiTyp == Biff2 )
     {//                     BIFF2
         BYTE nDummy;
 
-        aIn.SeekRel( 3 );
-        nBytesLeft -= 3;
+        aIn.Ignore( 3 );
 
         aIn >> fCurVal;
-        aIn.SeekRel( 1 );
+        aIn.Ignore( 1 );
         aIn >> nDummy;
         nFormLen = nDummy;
-        nBytesLeft -= 10;
         bShrFmla = FALSE;
         nAttr0 = 0x01;  // Always calculate
     }
     else
     {//                     BIFF5
         aIn >> nXF >> fCurVal >> nFlag0;
-        aIn.SeekRel( 5 );
+        aIn.Ignore( 5 );
 
         aIn >> nFormLen;
-        nBytesLeft -= 18;
 
         bShrFmla = nFlag0 & 0x08;   // shared or not shared
     }
@@ -140,9 +136,8 @@ void ImportExcel::Formula4()
     BYTE    nFlag0;
 
     aIn >> nRow >> nCol >> nXF >> fCurVal >> nFlag0;
-    aIn.SeekRel( 1 );
+    aIn.Ignore( 1 );
     aIn >> nFormLen;
-    nBytesLeft -= 18;
 
     nLastXF = nXF;
 
@@ -159,20 +154,17 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
-        INT32               nAnzBytes = nFormLen;
         BOOL                bConvert;
 
-        pFormConv->Reset( nFormLen, ScAddress( nCol, nRow, nTab ) );
+        pFormConv->Reset( ScAddress( nCol, nRow, nTab ) );
 
         if( bShrFmla )
-            bConvert = !pFormConv->GetShrFmla( pErgebnis, nAnzBytes );
+            bConvert = !pFormConv->GetShrFmla( pErgebnis, nFormLen );
         else
             bConvert = TRUE;
 
         if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, nAnzBytes );
-
-        nBytesLeft += nAnzBytes - nFormLen;
+            eErr = pFormConv->Convert( pErgebnis, nFormLen );
 
         ScFormulaCell*      pZelle = NULL;
 
@@ -222,8 +214,8 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
 ExcelToSc::~ExcelToSc() {}
 
 
-ExcelToSc::ExcelToSc( RootData* pRD, SvStream& aStr, const UINT16& rOrgTab ) :
-    ConverterBase( aStr, 512 ),
+ExcelToSc::ExcelToSc( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab ) :
+    ExcelConverterBase( aStr, 512 ),
     ExcRoot( pRD )
 {
 }
@@ -237,7 +229,8 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 }
 
 
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, const FORMULA_TYPE eFT )
+// stream seeks to first byte after <nFormulaLen>
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE            nOp, nLen, nByte;
     UINT16          nUINT16, nIndexToFunc;
@@ -259,12 +252,13 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
 
     bExternName = FALSE;
 
-    nBytesLeft = rRestbytes;
-
     if( eStatus != ConvOK )
+    {
+        aIn.Ignore( nFormulaLen );
         return eStatus;
+    }
 
-    if( rRestbytes == 0 )
+    if( nFormulaLen == 0 )
     {
         aPool.Store( _STRINGCONST( "-/-" ) );
         aPool >> aStack;
@@ -272,9 +266,11 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
         return ConvOK;
     }
 
-    while( nBytesLeft > 0 && !bError )
+    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+
+    while( (aIn.GetRecPos() < nMaxPos) && !bError )
     {
-        Read( nOp );
+        aIn >> nOp;
 
         switch( nOp )   //                              Buch Seite:
         {           //                                      SDK4 SDK5
@@ -285,7 +281,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 if( pExcRoot->eHauptDateiTyp != Biff2 )
                     nUINT16++;
 
-                Ignore( nUINT16 );
+                aIn.Ignore( nUINT16 );
 
                 bArrayFormula = TRUE;
                 break;
@@ -295,7 +291,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 if( pExcRoot->eHauptDateiTyp != Biff2 )
                     nUINT16++;
 
-                Ignore( nUINT16 );
+                aIn.Ignore( nUINT16 );
 
                 aPool << ocBad;
                 aPool >> aStack;
@@ -438,14 +434,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 aPool >> aStack;
                 break;
             case 0x17: // String Constant                       [314 266]
-                Read( nLen );
-                DBG_ASSERT( (long)nLen + (long)3 < (long)nBufferSize,
-                    "-ExcelToSc::Convert(): Uni-Puffer zu klein!" );
-                aIn.Read( pBuffer, nLen );
-                nBytesLeft -= nLen;
-                pBuffer[ nLen ] = 0;
-
-                aString = String( pBuffer, eCharSet );
+                aIn >> nLen;
+                aString.Erase();
+                aIn.AppendRawByteString( aString, eCharSet, nLen );
 
                 aStack << aPool.Store( aString );
                 break;
@@ -454,24 +445,23 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 UINT16  nData, nFakt;
                 BYTE    nOpt;
 
-                Read( nOpt );
+                aIn >> nOpt;
 
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
                 {
-                    Read( nByte );
-                    nData = nByte;
+                    nData = aIn.ReaduInt8();
                     nFakt = 1;
                 }
                 else
                 {
-                    Read( nData );
+                    aIn >> nData;
                     nFakt = 2;
                 }
 
                 if( nOpt & 0x04 )
                 {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
                     nData++;
-                    Ignore( nData * nFakt );
+                    aIn.Ignore( nData * nFakt );
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
@@ -480,9 +470,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x1A: // External Reference                    [330    ]
                 switch( pExcRoot->eHauptDateiTyp )
                 {
-                    case Biff2: Ignore( 7 ); break;
+                    case Biff2: aIn.Ignore( 7 ); break;
                     case Biff3:
-                    case Biff4: Ignore( 10 ); break;
+                    case Biff4: aIn.Ignore( 10 ); break;
                     case Biff5:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
                     default:
@@ -492,9 +482,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x1B: // End External Reference                [330    ]
                 switch( pExcRoot->eHauptDateiTyp )
                 {
-                    case Biff2: Ignore( 3 ); break;
+                    case Biff2: aIn.Ignore( 3 ); break;
                     case Biff3:
-                    case Biff4: Ignore( 4 ); break;
+                    case Biff4: aIn.Ignore( 4 ); break;
                     case Biff5:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
                     default:
@@ -503,7 +493,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 break;
             case 0x1C: // Error Value                           [314 266]
             {
-                Read( nByte );
+                aIn >> nByte;
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -524,7 +514,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             }
                 break;
             case 0x1D: // Boolean                               [315 266]
-                Read( nByte );
+                aIn >> nByte;
                 if( nByte == 0 )
                     aPool << ocFalse << ocOpen << ocClose;
                 else
@@ -532,17 +522,17 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 aPool >> aStack;
                 break;
             case 0x1E: // Integer                               [315 266]
-                Read( nUINT16 );
+                aIn >> nUINT16;
                 aStack << aPool.Store( ( double ) nUINT16 );
                 break;
             case 0x1F: // Number                                [315 266]
-                Read( fDouble );
+                aIn >> fDouble;
                 aStack << aPool.Store( fDouble );
                 break;
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                Ignore( 7 );
+                aIn.Ignore( 7 );
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -551,12 +541,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
                 if( pExcRoot->eHauptDateiTyp == Biff2 ||
                     pExcRoot->eHauptDateiTyp == Biff3 )
-                {
-                    Read( nByte );
-                    nIndexToFunc = nByte;
-                }
+                    nIndexToFunc = aIn.ReaduInt8();
                 else
-                    Read( nIndexToFunc );
+                    aIn >> nIndexToFunc;
 
                 DoDefArgs( nIndexToFunc );
                 break;
@@ -565,17 +552,14 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x22: // Function, Variable Number of Arg.     [333 283]
             {
                 BYTE nAnz;
-                Read( nAnz );
+                aIn >> nAnz;
                 nAnz &= 0x7F;
 
                 if( pExcRoot->eHauptDateiTyp == Biff2 ||
                     pExcRoot->eHauptDateiTyp == Biff3 )
-                {
-                    Read( nByte );
-                    nIndexToFunc = nByte;
-                }
+                    nIndexToFunc = aIn.ReaduInt8();
                 else
-                    Read( nIndexToFunc );
+                    aIn >> nIndexToFunc;
 
                 DoMulArgs( IndexToToken( nIndexToFunc ), nAnz );
             }
@@ -583,13 +567,13 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
-                Read( nUINT16 );
+                aIn >> nUINT16;
                 switch( pExcRoot->eHauptDateiTyp )
                 {
-                    case Biff2: Ignore( 5 ); break;
+                    case Biff2: aIn.Ignore( 5 ); break;
                     case Biff3:
-                    case Biff4: Ignore( 8 ); break;
-                    case Biff5: Ignore( 12 ); break;
+                    case Biff4: aIn.Ignore( 8 ); break;
+                    case Biff5: aIn.Ignore( 12 ); break;
                     default:
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
@@ -602,8 +586,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x4A:
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
-                Read( nUINT16 );
-                Read( nByte );
+                aIn >> nUINT16 >> nByte;
                 aSRD.nCol = nByte;
                 aSRD.nRow = nUINT16 & 0x3FFF;
                 aSRD.nRelTab = 0;
@@ -637,7 +620,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 SingleRefData&  rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 6;
 
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
                 rSRef1.SetTabRel( TRUE );
@@ -671,15 +653,15 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
-                Ignore( 6 );        // mehr steht da nicht!
+                aIn.Ignore( 6 );        // mehr steht da nicht!
                 break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    Ignore( 4 );    // mehr steht da nicht!
+                    aIn.Ignore( 4 );    // mehr steht da nicht!
                 else
-                    Ignore( 6 );    // mehr steht da nicht!
+                    aIn.Ignore( 6 );    // mehr steht da nicht!
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -687,9 +669,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    Ignore( 4 );    // mehr steht da nicht!
+                    aIn.Ignore( 4 );    // mehr steht da nicht!
                 else
-                    Ignore( 6 );    // mehr steht da nicht!
+                    aIn.Ignore( 6 );    // mehr steht da nicht!
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -697,17 +679,16 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    Ignore( 1 );    // mehr steht da nicht!
+                    aIn.Ignore( 1 );    // mehr steht da nicht!
                 else
-                    Ignore( 2 );    // mehr steht da nicht!
+                    aIn.Ignore( 2 );    // mehr steht da nicht!
                 break;
             case 0x4C:
             case 0x6C:
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                Read( nUINT16 );    // Attribute, Row
-                Read( nByte );      // Col
+                aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
 
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( TRUE );
@@ -732,7 +713,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 6;
 
                 ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
                 ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
@@ -749,9 +729,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    Ignore( 1 );    // mehr steht da nicht!
+                    aIn.Ignore( 1 );    // mehr steht da nicht!
                 else
-                    Ignore( 2 );    // mehr steht da nicht!
+                    aIn.Ignore( 2 );    // mehr steht da nicht!
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -759,9 +739,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    Ignore( 1 );    // mehr steht da nicht!
+                    aIn.Ignore( 1 );    // mehr steht da nicht!
                 else
-                    Ignore( 2 );    // mehr steht da nicht!
+                    aIn.Ignore( 2 );    // mehr steht da nicht!
                 aPool << ocBad;
                 aPool >> aStack;
                 break;
@@ -769,18 +749,18 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
                 aString.AssignAscii( "COMM_EQU_FUNC" );
-                Read( nByte );
+                aIn >> nByte;
                 aString += String::CreateFromInt32( nByte );
-                Read( nByte );
+                aIn >> nByte;
                 aStack << aPool.Store( aString );
                 DoMulArgs( ocPush, nByte + 1 );
                 break;
             case 0x59:
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
-                Read( nINT16 );
-                Ignore( 8 );
-                Read( nUINT16 );
+                aIn >> nINT16;
+                aIn.Ignore( 8 );
+                aIn >> nUINT16;
                 if( nINT16 >= 0 )
                 {
                     const ExtName*  pExtName;
@@ -807,7 +787,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 }
                 else
                     aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
-                Ignore( 12 );
+                aIn.Ignore( 12 );
                 break;
             case 0x5A:
             case 0x7A:
@@ -821,9 +801,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 BYTE            nCol;
 
                 aIn >> nExtSheet;
-                Ignore( 8 );
+                aIn.Ignore( 8 );
                 aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
-                nBytesLeft -= 9;
 
                 if( nExtSheet >= 0 )
                 {   // von extern
@@ -891,10 +870,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
                 BYTE        nColFirst, nColLast;
 
                 aIn >> nExtSheet;
-                Ignore( 8 );
+                aIn.Ignore( 8 );
                 aIn >> nTabFirst >> nTabLast >> nRowFirst >> nRowLast
                     >> nColFirst >> nColLast;
-                nBytesLeft -= 12;
 
                 if( nExtSheet >= 0 )
                     // von extern
@@ -966,7 +944,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
         pErgebnis = aPool[ aStack.Get() ];
         eRet = ConvErrNi;
     }
-    else if( nBytesLeft != 0 )
+    else if( aIn.GetRecPos() != nMaxPos )
     {
         aPool << ocBad;
         aPool >> aStack;
@@ -975,32 +953,27 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, c
     }
     else if( bExternName )
     {
-        rRestbytes = nBytesLeft;
-
         pErgebnis = aPool[ aStack.Get() ];
         eRet = ConvErrExternal;
     }
     else if( bArrayFormula )
     {
-        rRestbytes = nBytesLeft;
-
         pErgebnis = NULL;
         eRet = ConvOK;
     }
     else
     {
-        rRestbytes = nBytesLeft;
-
         pErgebnis = aPool[ aStack.Get() ];
-
         eRet = ConvOK;
     }
 
+    aIn.Seek( nMaxPos );
     return eRet;
 }
 
 
-ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, const FORMULA_TYPE eFT )
+// stream seeks to first byte after <nFormulaLen>
+ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE            nOp, nLen;
     UINT16          nIgnore;
@@ -1020,17 +993,20 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
 
     bExternName = FALSE;
 
-    nBytesLeft = rRestbytes;
-
     if( eStatus != ConvOK )
+    {
+        aIn.Ignore( nFormulaLen );
         return eStatus;
+    }
 
-    if( rRestbytes == 0 )
+    if( nFormulaLen == 0 )
         return ConvOK;
 
-    while( nBytesLeft > 0 && !bError )
+    ULONG nMaxPos = aIn.GetRecPos() + nFormulaLen;
+
+    while( (aIn.GetRecPos() < nMaxPos) && !bError )
     {
-        Read( nOp );
+        aIn >> nOp;
         nIgnore = 0;
 
         switch( nOp )   //                              Buch Seite:
@@ -1074,7 +1050,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
             case 0x16: // Missing Argument                      [314 266]
                 break;
             case 0x17: // String Constant                       [314 266]
-                Read( nLen );
+                aIn >> nLen;
                 nIgnore = nLen;
                 break;
             case 0x19: // Special Attribute                     [327 279]
@@ -1082,25 +1058,23 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
                 UINT16 nData, nFakt;
                 BYTE nOpt;
 
-                Read( nOpt );
+                aIn >> nOpt;
 
                 if( pExcRoot->eHauptDateiTyp == Biff2 )
                 {
-                    UINT8   n;
-                    Read( n );
-                    nData = n;
+                    nData = aIn.ReaduInt8();
                     nFakt = 1;
                 }
                 else
                 {
-                    Read( nData );
+                    aIn >> nData;
                     nFakt = 2;
                 }
 
                 if( nOpt & 0x04 )
                 {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
                     nData++;
-                    Ignore( nData * nFakt );
+                    aIn.Ignore( nData * nFakt );
                 }
             }
                 break;
@@ -1170,8 +1144,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
             case 0x44:
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
-                Read( nUINT16 );
-                Read( nByte );
+                aIn >> nUINT16 >> nByte;
                 aSRD.nCol = nByte;
                 aSRD.nRow = nUINT16 & 0x3FFF;
                 aSRD.nRelTab = 0;
@@ -1192,7 +1165,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
                 SingleRefData   &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 6;
 
                 rSRef1.nRelTab = rSRef2.nRelTab = 0;
                 rSRef1.SetTabRel( TRUE );
@@ -1250,8 +1222,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                Read( nUINT16 );    // Attribute, Row
-                Read( nByte );      // Col
+                aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
 
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( TRUE );
@@ -1276,7 +1247,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 6;
 
                 ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
                 ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
@@ -1319,9 +1289,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
                 BYTE            nCol;
 
                 aIn >> nExtSheet;
-                Ignore( 8 );
+                aIn.Ignore( 8 );
                 aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
-                nBytesLeft -= 9;
 
                 if( nExtSheet >= 0 )
                     // von extern
@@ -1374,10 +1343,9 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
                 BYTE        nColFirst, nColLast;
 
                 aIn >> nExtSheet;
-                Ignore( 8 );
+                aIn.Ignore( 8 );
                 aIn >> nTabFirst >> nTabLast >> nRowFirst >> nRowLast
                     >> nColFirst >> nColLast;
-                nBytesLeft -= 12;
 
                 if( nExtSheet >= 0 )
                     // von extern
@@ -1433,28 +1401,23 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, INT32& rRestbytes, con
             default: bError = TRUE;
         }
 
-        Ignore( nIgnore );
+        aIn.Ignore( nIgnore );
     }
 
     ConvErr eRet;
 
     if( bError )
         eRet = ConvErrNi;
-    else if( nBytesLeft != 0 )
+    else if( aIn.GetRecPos() != nMaxPos )
         eRet = ConvErrCount;
     else if( bExternName )
         eRet = ConvErrExternal;
     else if( bArrayFormula )
-    {
-        rRestbytes = nBytesLeft;
         eRet = ConvOK;
-    }
     else
-    {
-        rRestbytes = nBytesLeft;
         eRet = ConvOK;
-    }
 
+    aIn.Seek( nMaxPos );
     return eRet;
 }
 
@@ -2467,28 +2430,26 @@ const ScTokenArray* ExcelToSc::GetBoolErr( BoolError eType )
 }
 
 
-BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, INT32& rRestbytes )
+// if a shared formula was found, stream seeks to first byte after <nFormulaLen>,
+// else stream pointer stays unchanged
+BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen )
 {
     BYTE            nOp;
     BOOL            bRet = TRUE;
-    UINT32          nOldPos;
 
-    if( rRestbytes == 0 )
+    if( nFormulaLen == 0 )
         bRet = FALSE;
     else
     {
-        nBytesLeft = rRestbytes;
+        aIn.PushPosition();
 
-        nOldPos = aIn.Tell();
-
-        Read( nOp );
+        aIn >> nOp;
 
         if( nOp == 0x01 )   // Shared Formula       [    277]
         {
             UINT16 nCol, nRow;
 
-            Read( nRow );
-            Read( nCol );
+            aIn >> nRow >> nCol;
 
             aStack << aPool.Store( pExcRoot->pShrfmlaBuff->Find(
                 ScAddress( nCol, nRow, *pExcRoot->pAktTab ) ) );
@@ -2497,18 +2458,18 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, INT32& rRestbytes )
         }
         else
             bRet = FALSE;
+
+        aIn.PopPosition();
     }
 
     if( bRet )
     {
-        rRestbytes = nBytesLeft;
+        aIn.Ignore( nFormulaLen );
         rpErgebnis = aPool[ aStack.Get() ];
     }
     else
-    {
-        aIn.Seek( nOldPos );
         rpErgebnis = NULL;
-    }
+
     return bRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-01 14:33:40 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 // ----- forwards --------------------------------------------------------
 class XF_Buffer;
-class SvStream;
+class XclImpStream;
 class ScExtDocOptions;
 struct ScExtTabOptions;
 
@@ -134,7 +134,7 @@ public:
     inline void         SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
                                     // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
 
-    void                ReadSplit( SvStream& rIn );
+    void                ReadSplit( XclImpStream& rIn );
     void                SetFrozen( const BOOL bFrozen );
     void                SetSelection( const ScRange& rSel );
     void                SetDimension( const ScRange& rDim );

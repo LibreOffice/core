@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-19 11:31:30 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,7 @@ void ImportExcel::Obj()
         >> nMacroLen;
     BOOL bBiff5 = BOOL( pExcRoot->eHauptDateiTyp == Biff5 );
     short nReserved = bBiff5 ? 6 : 2;
-    aIn.SeekRel( nReserved );
-    nBytesLeft -= 28 + nReserved;
+    aIn.Ignore( nReserved );
 
     Point aUL(  CalcX( nTab, nCol1, nColOff1, HMM_PER_TWIPS, pD ),
                 CalcY( nTab, nRow1, nRowOff1, HMM_PER_TWIPS, pD ) );
@@ -203,12 +202,11 @@ void ImportExcel::Obj()
         pObj->NbcSetLogicRect(Rectangle( aUL, aLR ) );
         pObj->SetLayer( SC_LAYER_FRONT );
         pD->GetDrawLayer()->GetPage( nTab )->InsertObject( pObj );
-        if( bBiff5 && nBytesLeft )
+        if( bBiff5 && aIn.GetRecLeft() )
         {
             BYTE nNameLen;
             aIn >> nNameLen;
-            aIn.SeekRel( nNameLen + nMacroLen );
-            nBytesLeft -= nNameLen + nMacroLen;
+            aIn.Ignore( nNameLen + nMacroLen );
         }
     }
 }
@@ -251,8 +249,7 @@ SdrObject* ImportExcel::LineObj( SfxItemSet& rSet, const Point& rUL, const Point
     UINT16      nEndStyles;
     BYTE        nQuadrant;
     aIn >> nLc >> nStyle >> nWeight >> nAuto >> nEndStyles >> nQuadrant;
-    aIn.SeekRel( 1 );
-    nBytesLeft -= 8;
+    aIn.Ignore( 1 );
 
     Point       aPointArr[2] = { rUL, rLR };
     SdrPathObj* pObj = new SdrPathObj( OBJ_LINE, XPolyPolygon( XPolygon( Polygon( 2, aPointArr ) ) ) );
@@ -267,7 +264,6 @@ SdrObject* ImportExcel::RectObj( SfxItemSet& rSet, const Point& rUL, const Point
     UINT16      nFRS;
     aIn >> nBg >> nFg >> nPat >> fAuto1 >> nLc >> nLStyle
         >> nLWeight >> fAuto2 >> nFRS;
-    nBytesLeft -= 10;
 
     SdrRectObj* pObj = new SdrRectObj( Rectangle( rUL, rLR ) );
     SetLineStyle( rSet, nLc, nLStyle, nLWeight );
@@ -282,8 +278,7 @@ SdrObject* ImportExcel::BeginChartObj( SfxItemSet&, const Point& rUL, const Poin
     UINT16      nFRS;
     aIn >> nBg >> nFg >> nPat >> fAuto1 >> nLc >> nLStyle
         >> nLWeight >> fAuto2 >> nFRS;
-    aIn.SeekRel( 18 );
-    nBytesLeft -= 10 + 18;
+    aIn.Ignore( 18 );
 
     ExcelChartData* pData = new ExcelChartData( pD, rUL, rLR, nTab );
     SetLineStyle( *pData->pAttrs, nLc, nLStyle, nLWeight );
@@ -354,7 +349,7 @@ void ImportExcel::ChartSelection( void )
 
             if( nLink == 0xFFFF )
             {
-                aIn.SeekRel( 8 );
+                aIn.Ignore( 8 );
                 switch( nOp )
                 {
                     case 0x3A:
@@ -448,7 +443,7 @@ void ImportExcel::ChartSeriesText()
     UINT16  nId;
     aIn >> nId;
     if( pChart )
-        ReadExcString( LenByte, pChart->aLastLabel );
+        aIn.AppendByteString( pChart->aLastLabel, eQuellChar, FALSE );
 }
 
 
@@ -861,14 +856,14 @@ OBJECTTYPE ExcEscherOle::GetObjType( void ) const
 }
 
 
-void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
+void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
 {
     UINT32 nStorageId;
     UINT16 nFmlaLen;
     rIn >> nFmlaLen;
 
     String aUserName;
-    ULONG nPos0 = rIn.Tell();       // fmla start
+    ULONG nPos0 = rIn.GetRecPos();      // fmla start
     BOOL bOk = TRUE;
     if ( bLinked )
     {
@@ -880,7 +875,7 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
         DBG_ASSERT( bOk, "ExcEscherOle::ReadPictFmla: linked length mismatch" );
         if ( bOk )
         {
-            rIn.SeekRel( n16 );
+            rIn.Ignore( n16 );
             UINT8 n8;
             rIn >> n8;
             bOk = (n8 == 0x01);
@@ -903,7 +898,7 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
         DBG_ASSERT( n16 + 4 <= nFmlaLen, "ExcEscherOle::ReadPictFmla: embedded length mismatch" );
         if ( n16 + 4 <= nFmlaLen )
         {
-            rIn.SeekRel( n16 + 4 );
+            rIn.Ignore( n16 + 4 );
             UINT8 n8;
             rIn >> n8;
             DBG_ASSERT( n8 == 0x03, "ExcEscherOle::ReadPictFmla: no name start" );
@@ -912,8 +907,8 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
                 rIn >> n16;     // string length
                 if ( n16 )
                 {   // the 4th way Xcl stores a unicode string: not even a Grbit byte present if length 0
-                    INT32 nLeft = INT32(nFmlaLen) - (rIn.Tell() - nPos0);
-                    aUserName = ReadUnicodeString( rIn, nLeft, *pExcRoot->pCharset, n16 );
+                    INT32 nLeft = INT32(nFmlaLen) - (rIn.GetRecPos() - nPos0);
+                    rIn.AppendUniString( aUserName, *pExcRoot->pCharset, n16 );
                     // 0:= ID follows, 1:= pad byte + ID
                     DBG_ASSERT( nLeft == 0 || nLeft == 1, "ExcEscherOle::ReadPictFmla: unknown left over" );
                 }

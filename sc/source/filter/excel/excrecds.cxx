@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 15:27:57 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1823,7 +1823,7 @@ ExcName::ExcName( RootData* pRD, ScRangeData* pRange ) : eBiff( pRD->eDateiTyp )
 
     pRange->GetName( aName );
 
-    bDummy = aName.CompareToAscii( GetExcBuiltInName( 0x06 ) ) == COMPARE_EQUAL;    // no PrintRanges
+    bDummy = aName.CompareToAscii( GetBuiltInName( 0x06 ) ) == COMPARE_EQUAL;   // no PrintRanges
 
     if( !bDummy )
     {

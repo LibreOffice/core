@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-21 08:34:28 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ struct DUMP_ERR
 
 
 enum _KEYWORD           { KW_Unknown, Skipdump, Contload, Parsep, Maxbodylines, Include, Exclude,
-                            Hex, Body, Comment, Output, Title, NameOnly, ClearFile, SkipOffset };
+                            Hex, Body, Comment, Output, Title, NameOnly, ClearFile, SkipOffset, ReadContRecs };
 
 
 
@@ -178,13 +178,14 @@ protected:
     ByteString*                 pOutName;
 
     SvFileStream*               pDumpStream;
-    SvStream*                   pIn;
+    XclImpStream*               pIn;
     SvStorage*                  pPivotCache;
 
     UINT32                      nMaxBodyLines;
     BOOL                        bEndLoading;
     BOOL                        bSkip;
     BOOL                        bSkipOffset;
+    BOOL                        bReadContRecs;
     BOOL                        bClearFile;
 
     UINT32                      nFieldCnt;
@@ -215,12 +216,13 @@ protected:
     void                        Print( const sal_Char* pStr );
     void                        DumpSubStream( SvStorage* pStorage, const sal_Char* pStreamName );
     void                        DumpPivotCache( const UINT16 nStrId );
-    UINT16                      DumpXF( SvStream& rIn, const sal_Char* pPre );
-    void                        DumpValidPassword( SvStream& rIn, const sal_Char* pPre );
-    void                        RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream = FALSE );
-    void                        EscherDump( const UINT16 nL );
-    void                        ObjDump( const UINT16 nL );
-    void                        ContDump( const UINT16 nL );
+    UINT16                      DumpXF( XclImpStream& rIn, const sal_Char* pPre );
+    void                        DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre );
+    void                        RecDump( BOOL bSubStream = FALSE );
+    void                        EscherDump( const ULONG nL );
+    void                        ObjDump( const ULONG nL );
+    void                        ContDump( const ULONG nL );
+    void                        ContDumpStream( SvStream& rStrm, const ULONG nL );
     void                        FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT );
     void                        ControlsDump( SvStream& rIn );
     static const sal_Char*      GetBlanks( const UINT16 nNumOfBlanks );
@@ -275,7 +277,7 @@ protected:
 public:
                                 Biff8RecDumper( RootData& rRootData );
                                 ~Biff8RecDumper();
-    BOOL                        Dump( SvStream& rIn );
+    BOOL                        Dump( XclImpStream& rIn );
                                 // = TRUE -> nicht weiter laden
 
     inline static BOOL          IsPrintable( const UINT8 nC );

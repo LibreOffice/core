@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,21 +72,21 @@
 
 
 _ScRangeList::~_ScRangeList()
-    {
+{
     ScRange*    p = ( ScRange* ) First();
 
     while( p )
-        {
+    {
         delete p;
         p = ( ScRange* ) Next();
-        }
     }
+}
 
 
 
 
 _ScRangeListTabs::_ScRangeListTabs( void )
-    {
+{
     ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
 
     for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
@@ -95,28 +95,28 @@ _ScRangeListTabs::_ScRangeListTabs( void )
     bHasRanges = FALSE;
     pAct = NULL;
     nAct = 0;
-    }
+}
 
 
 _ScRangeListTabs::~_ScRangeListTabs()
-    {
+{
     if( bHasRanges )
-        {
+    {
         for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
-            {
+        {
             if( ppTabLists[ n ] )
                 delete ppTabLists[ n ];
-            }
         }
+    }
 
     delete[] ppTabLists;
-    }
+}
 
 
 void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
-    {
+{
     if( b )
-        {
+    {
         if( a.nTab > MAXTAB )
             a.nTab = MAXTAB;
 
@@ -125,11 +125,11 @@ void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
 
         if( a.nRow > MAXROW )
             a.nRow = MAXROW;
-        }
+    }
     else
-        {
+    {
         DBG_ASSERT( a.nTab <= MAXTAB, "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
-        }
+    }
 
     bHasRanges = TRUE;
 
@@ -139,13 +139,13 @@ void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
         p = ppTabLists[ a.nTab ] = new _ScRangeList;
 
     p->Append( a );
-    }
+}
 
 
 void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
-    {
+{
     if( b )
-        {
+    {
         INT16&  rTab = a.Ref1.nTab;
         if( rTab > MAXTAB )
             rTab = MAXTAB;
@@ -175,14 +175,14 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
             rRow2 = MAXROW;
         else if( rRow2 < 0 )
             rRow2 = 0;
-        }
+    }
     else
-        {
+    {
         DBG_ASSERT( a.Ref1.nTab <= MAXTAB,
             "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
         DBG_ASSERT( a.Ref1.nTab == a.Ref2.nTab,
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
-        }
+    }
 
     bHasRanges = TRUE;
 
@@ -192,87 +192,119 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
         p = ppTabLists[ a.Ref1.nTab ] = new _ScRangeList;
 
     p->Append( a );
-    }
+}
 
 
 const ScRange* _ScRangeListTabs::First( const UINT16 n )
-    {
+{
     DBG_ASSERT( n <= MAXTAB, "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
     if( ppTabLists[ n ] )
-        {
+    {
         pAct = ppTabLists[ n ];
         nAct = n;
         return pAct->First();
-        }
+    }
     else
-        {
+    {
         pAct = NULL;
         nAct = 0;
         return NULL;
-        }
     }
+}
 
 
 const ScRange* _ScRangeListTabs::Next( void )
-    {
+{
     if( pAct )
         return pAct->Next();
     else
         return NULL;
-    }
+}
 
 
 
 
-ConverterBase::ConverterBase( SvStream &rStr, UINT16 nNewBuffer ) :
-    aIn( rStr ),
-    aEingPos( ( UINT16 ) 0, ( UINT16 ) 0, ( UINT16 ) 0 )
-    {
-    DBG_ASSERT( nNewBuffer > 0, "-ExcelToSc::ExcelToSc(): nNewBuffer == 0!" );
-
+ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
+    aPool(),
+    aStack(),
+    aEingPos( 0, 0, 0 ),
+    nBufferSize( nNewBuffer ),
+    eStatus( ConvOK )
+{
+    DBG_ASSERT( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer = new sal_Char[ nNewBuffer ];
-
-    nBufferSize = nNewBuffer;
-    nBytesLeft = 0;
-    eStatus = ConvOK;
-    }
-
+}
 
 ConverterBase::~ConverterBase()
-    {
+{
     delete[] pBuffer;
-    }
+}
 
-
-void ConverterBase::Reset( INT32 nLen, ScAddress aNewEingPos )
-    {
-    nBytesLeft = nLen;
+void ConverterBase::Reset()
+{
     eStatus = ConvOK;
-    aEingPos = aNewEingPos;
     aPool.Reset();
     aStack.Reset();
-    }
+}
 
 
-void ConverterBase::Reset( INT32 nLen )
-    {
-    nBytesLeft = nLen;
-    eStatus = ConvOK;
+
+
+ExcelConverterBase::ExcelConverterBase( XclImpStream &rStr, UINT16 nNewBuffer ) :
+    ConverterBase( nNewBuffer ),
+    aIn( rStr )
+{
+}
+
+ExcelConverterBase::~ExcelConverterBase()
+{
+}
+
+void ExcelConverterBase::Reset( ScAddress aNewEingPos )
+{
+    ConverterBase::Reset();
+    aEingPos = aNewEingPos;
+}
+
+void ExcelConverterBase::Reset()
+{
+    ConverterBase::Reset();
     aEingPos.Set( 0, 0, 0 );
-    aPool.Reset();
-    aStack.Reset();
-    }
+}
 
 
-void ConverterBase::Reset( ScAddress aNewEingPos )
-    {
-    nBytesLeft = 0;
-    eStatus = ConvOK;
+
+
+LotusConverterBase::LotusConverterBase( SvStream &rStr, UINT16 nNewBuffer ) :
+    ConverterBase( nNewBuffer ),
+    aIn( rStr ),
+    nBytesLeft( 0 )
+{
+}
+
+LotusConverterBase::~LotusConverterBase()
+{
+}
+
+void LotusConverterBase::Reset( INT32 nLen, ScAddress aNewEingPos )
+{
+    ConverterBase::Reset();
+    nBytesLeft = nLen;
     aEingPos = aNewEingPos;
-    aPool.Reset();
-    aStack.Reset();
-    }
+}
 
+void LotusConverterBase::Reset( INT32 nLen )
+{
+    ConverterBase::Reset();
+    nBytesLeft = nLen;
+    aEingPos.Set( 0, 0, 0 );
+}
 
+void LotusConverterBase::Reset( ScAddress aNewEingPos )
+{
+    ConverterBase::Reset();
+    nBytesLeft = 0;
+    aEingPos = aNewEingPos;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,12 @@
 //------------------------------------------------------------------------
 
 #include "decl.h"
-#include "spstring.hxx"
 #include "lotform.hxx"
 #include "compiler.hxx"
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "root.hxx"
+#include "flttools.hxx"
 #include "tool.h"
 
 extern WKTYP                eTyp;
@@ -383,7 +383,7 @@ void LotusToSc::NegToken( TokenId &rParam )
 
 void LotusToSc::Reset( ScAddress aEingPos )
     {
-    ConverterBase::Reset( aEingPos );
+    LotusConverterBase::Reset( aEingPos );
 
     TokenId nEins = aPool.Store( 1.0 );
 
@@ -398,7 +398,7 @@ void LotusToSc::Reset( ScAddress aEingPos )
 
 
 LotusToSc::LotusToSc( SvStream &rStream, CharSet e ) :
-    ConverterBase( rStream, 128 )
+    LotusConverterBase( rStream, 128 )
     {
     eSrcChar = e;
     bWK3 = FALSE;

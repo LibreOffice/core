@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 
 // ----- forwards --------------------------------------------------------
 
-class SvStream;
+class XclImpStream;
 class ScTokenArray;
 class ScFormulaCell;
 struct SingleRefData;
@@ -245,117 +245,108 @@ inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
 class ConverterBase
 {
 protected:
-    SvStream&           aIn;
     ConvErr             eStatus;
     TokenPool           aPool;          // User Token + Predefined Token
     TokenStack          aStack;
-    INT32               nBytesLeft;
     sal_Char*           pBuffer;        // Universal-Puffer
     UINT16              nBufferSize;    // ...und seine Groesse
     ScAddress           aEingPos;
-    // -------------------------------------------------------------------
+
+                        ConverterBase( UINT16 nNewBuffer );
+    virtual             ~ConverterBase();
+
+    void                Reset();
+
+public:
+    inline UINT16       GetEingabeCol( void ) const { return aEingPos.Col(); }
+    inline UINT16       GetEingabeRow( void ) const { return aEingPos.Row(); }
+    inline UINT16       GetEingabeTab( void ) const { return aEingPos.Tab(); }
+    inline ScAddress    GetEingPos( void ) const    { return aEingPos; }
+};
+
+
+
+class ExcelConverterBase : public ConverterBase
+{
+protected:
+    XclImpStream&       aIn;
+
+                        ExcelConverterBase( XclImpStream& rStr, UINT16 nNewBuffer );
+    virtual             ~ExcelConverterBase();
+
+public:
+    void                Reset();
+    void                Reset( ScAddress aEingPos );
+
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, UINT32 nFormulaLen,
+                                    const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+    virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen,
+                                    const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+};
+
+
+
+class LotusConverterBase : public ConverterBase
+{
+protected:
+    SvStream&           aIn;
+    INT32               nBytesLeft;
+
     inline void         Ignore( const long nSeekRel );
-
     inline void         Read( sal_Char& nByte );
-
     inline void         Read( BYTE& nByte );
-
     inline void         Read( UINT16& nUINT16 );
-
     inline void         Read( INT16& nINT16 );
-
     inline void         Read( double& fDouble );
 
-                        ConverterBase( SvStream& rStr, UINT16 nNewBuffer );
-    virtual             ~ConverterBase();
+                        LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
+    virtual             ~LotusConverterBase();
 
 public:
     void                Reset( INT32 nLen );
-
     void                Reset( INT32 nLen, ScAddress aEingPos );
-
     void                Reset( ScAddress aEingPos );
-
-    inline UINT16       GetEingabeCol( void ) const;
-
-    inline UINT16       GetEingabeRow( void ) const;
-
-    inline UINT16       GetEingabeTab( void ) const;
-
-    inline ScAddress    GetEingPos( void ) const;
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 
 
-inline void ConverterBase::Ignore( const long nSeekRel )
+inline void LotusConverterBase::Ignore( const long nSeekRel )
 {
     aIn.SeekRel( nSeekRel );
     nBytesLeft -= nSeekRel;
 }
 
-
-inline void ConverterBase::Read( sal_Char& nByte )
+inline void LotusConverterBase::Read( sal_Char& nByte )
 {
     aIn >> nByte;
     nBytesLeft--;
 }
 
-
-inline void ConverterBase::Read( BYTE& nByte )
+inline void LotusConverterBase::Read( BYTE& nByte )
 {
     aIn >> nByte;
     nBytesLeft--;
 }
 
-
-inline void ConverterBase::Read( UINT16& nUINT16 )
+inline void LotusConverterBase::Read( UINT16& nUINT16 )
 {
     aIn >> nUINT16;
     nBytesLeft -= 2;
 }
 
-
-inline void ConverterBase::Read( INT16& nINT16 )
+inline void LotusConverterBase::Read( INT16& nINT16 )
 {
     aIn >> nINT16;
     nBytesLeft -= 2;
 }
 
-
-inline void ConverterBase::Read( double& fDouble )
+inline void LotusConverterBase::Read( double& fDouble )
 {
     aIn >> fDouble;
     nBytesLeft -= 8;
 }
-
-
-inline UINT16 ConverterBase::GetEingabeCol( void ) const
-{
-    return aEingPos.Col();
-}
-
-
-inline UINT16 ConverterBase::GetEingabeRow( void ) const
-{
-    return aEingPos.Row();
-}
-
-
-inline UINT16 ConverterBase::GetEingabeTab( void ) const
-{
-    return aEingPos.Tab();
-}
-
-
-inline ScAddress ConverterBase::GetEingPos( void ) const
-{
-    return aEingPos;
-}
-
-
-
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ enum FUNC_TYPE
 
 
 
-class LotusToSc : public ConverterBase
+class LotusToSc : public LotusConverterBase
 {
 private:
     CharSet             eSrcChar;

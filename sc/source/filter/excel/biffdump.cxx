@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:33:34 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef _SC_XCLIMPHELPER_HXX
+#include "XclImpHelper.hxx"
 #endif
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
@@ -293,9 +296,8 @@ static void __AddDec( ByteString& r, UINT32 nVal, UINT16 nNumOfDig, sal_Char c =
     ByteString  t;
     ByteString  aVal;
     __AddDec( aVal, nVal );
-    INT32 n = nNumOfDig - (INT32) aVal.Len();
-    if( n > 0 )
-        t.Fill( n, c );
+    if( nNumOfDig > (UINT16) aVal.Len() )
+        t.Fill( nNumOfDig - (UINT16) aVal.Len(), c );
     r += t;
     r += aVal;
 }
@@ -337,39 +339,6 @@ static void __AddCellHead( ByteString& r, const UINT16 nC, const UINT16 nR, cons
     __AddDec( r, nXF );
     r += ')';
 }
-
-
-static UINT8 Read1( SvStream& r )
-{
-    UINT8   n;
-    r >> n;
-    return n;
-}
-
-
-static UINT16 Read2( SvStream& r )
-{
-    UINT16  n;
-    r >> n;
-    return n;
-}
-
-
-static UINT32 Read4( SvStream& r )
-{
-    UINT32  n;
-    r >> n;
-    return n;
-}
-
-
-static double Read8( SvStream& r )
-{
-    double  f;
-    r >> f;
-    return f;
-}
-
 
 
 
@@ -533,7 +502,7 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, const BOOL bName, con
 }
 */
 
-static void AddString( ByteString& t, SvStream& r, INT32& rLeft, const UINT16 nLen )
+static void AddString( ByteString& t, XclImpStream& r, const UINT16 nLen )
 {
     if( nLen )
     {
@@ -541,7 +510,7 @@ static void AddString( ByteString& t, SvStream& r, INT32& rLeft, const UINT16 nL
         UINT8   c;
         while( n )
         {
-            c = Read1( r );
+            r >> c;
             if( c < ' ' )
             {
                 t += '<';
@@ -552,50 +521,47 @@ static void AddString( ByteString& t, SvStream& r, INT32& rLeft, const UINT16 nL
                 t += ( sal_Char ) c;
             n--;
         }
-        rLeft -= nLen;
     }
 }
 
 
-static BOOL AddUNICODEString( ByteString& t, SvStream& r, INT32& rLeft, const BOOL b = TRUE, UINT16 n = 0 )
-{ // ByteString& rInOut, SvStream& rInStream, INT32& rLeft, const BOOL bWordLen, UINT16 nPrefetchLen )
-    UINT32      nStart = r.Tell();
+static BOOL AddUNICODEString( ByteString& t, XclImpStream& r, const BOOL b = TRUE, UINT16 n = 0 )
+{ // ByteString& rInOut, SvStream& rInStream, const BOOL bWordLen, UINT16 nPrefetchLen )
     BOOL        bRet = TRUE;
+
     if( !n )
     {
         if( b )
             r >> n;
         else
-            n = Read1( r );
+            n = r.ReaduInt8();
     }
-    UINT8           nGrbit = 0;
-    UINT32          nExtLen = 0;
-    UINT16          nCrun = 0;
-    const sal_Char* p;
+    UINT8   nGrbit;
+    UINT32  nExtLen;
+    UINT16  nCrun;
+    BOOL    b16Bit, bFarEast, bRichString;
     r >> nGrbit;
-    const BOOL      b8Bit = ( nGrbit & 0x01 ) == 0x00;
-    const BOOL      bFarEast = ( nGrbit & 0x04 ) != 0x00;
-    const BOOL      bRichString = ( nGrbit & 0x08 ) != 0x00;
+    ULONG nSeek = r.SeekUniStringData( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
+
+    const sal_Char* p;
     t += "[l=";
     __AddDec( t, n );
     t += ", f=";
     __AddHex( t, nGrbit );
     t += " (";
-    if( b8Bit )
-        p = "8-Bit, ";
-    else
+    if( b16Bit )
         p = "16-Bit, ";
+    else
+        p = "8-Bit, ";
     t += p;
 
     p = NULL;
     if( bRichString )
     {
-        r >> nCrun;
         p = "Rich-ByteString";
     }
     if( bFarEast )
     {
-        r >> nExtLen;
         if( p )
             p = "Far East Rich-ByteString";
         else
@@ -609,35 +575,33 @@ static BOOL AddUNICODEString( ByteString& t, SvStream& r, INT32& rLeft, const BO
     UINT8           nC;
     const UINT32    nLimit = 256;
     const BOOL      bCut = n > nLimit;
-    UINT32          nRest = 0;
-    UINT32          nSeek = 0;
-    if( n )
+    ULONG           nRest = 0;
+
+    if( bCut )
     {
-        if( bCut )
+        nRest = (n - nLimit) * (b16Bit ? 2 : 1);
+        n = nLimit;
+    }
+
+    while( n )
+    {
+        if( b16Bit )
+            nC = (UINT8) r.ReaduInt16();
+        else
+            r >> nC;
+        if( nC < ' ' )
         {
-            nRest = n - nLimit;
-            n = nLimit;
+            t += '<';
+            __AddHex( t, nC );
+            t += '>';
         }
-        while( n )
-        {
-            if( b8Bit )
-                r >> nC;
-            else
-                nC = ( UINT8 ) Read2( r );
-            if( nC < ' ' )
-            {
-                t += '<';
-                __AddHex( t, nC );
-                t += '>';
-            }
-            else
-                t += ( sal_Char ) nC;
-            n--;
-        }
+        else
+            t += ( sal_Char ) nC;
+        n--;
     }
 
     if( nRest )
-        r.SeekRel( nRest );
+        r.Ignore( nRest );
 
     t += '\'';
     if( bCut )
@@ -659,22 +623,13 @@ static BOOL AddUNICODEString( ByteString& t, SvStream& r, INT32& rLeft, const BO
         t += " Byte extended info";
     }
 
-    if( nExtLen + nCrun < 2048  )
-    {
-        if( bRichString )
-            nSeek = nCrun + nExtLen;
-        else if( bFarEast )
-            nSeek = nExtLen;
-    }
-    else
+    if( nSeek > 2048  )
     {
         t += " (Gruetze!)";
         bRet = FALSE;
     }
 
-    r.SeekRel( nSeek );
-
-    rLeft -= r.Tell() - nStart;
+    r.SkipUniStringExt( nSeek );
 
     return bRet;
 }
@@ -689,23 +644,27 @@ DUMP_ERR::~DUMP_ERR()
 
 
 
+#define Read1(rIn)              (rIn).ReaduInt8()
+#define Read2(rIn)              (rIn).ReaduInt16()
+#define Read4(rIn)              (rIn).ReaduInt32()
+#define Read8(rIn)              (rIn).ReadDouble()
 #define LINESTART()             {t.Erase();t+=pPre;}
-#define IGNORE(n)               rIn.SeekRel(n)
+#define IGNORE(n)               rIn.Ignore(n)
 #define ADDBIN(n)               __AddBin( t, Read##n( rIn ) )
 #define ADDHEX(n)               __AddHex( t, Read##n( rIn ) )
 #define ADDDEC(n)               __AddDec( t, Read##n( rIn ) )
-#define ADDDOUBLE()             {double f; rIn >> f; __AddDouble( t, f );}
+#define ADDDOUBLE()             __AddDouble( t, rIn.ReadDouble() )
 #define ADD16P16()              __Add16p16( t, Read4( rIn ) )
 #define ADDTEXT(T)              t += T
 #define ADDCOLROW(c,r)          __AddRef( t, c, r )
 #define PRINT()                 Print( t )
-#define PreDump(LEN)            {UINT32 nOldPos=rIn.Tell();ContDump(LEN);rIn.Seek(nOldPos);}
+#define PreDump(LEN)            {rIn.PushPosition();ContDump(LEN);rIn.PopPosition();}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
 #define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
 #define ADDFLAG(mask,text)      {if( __nFlags & mask ) t += text;}
 
 
-UINT16 Biff8RecDumper::DumpXF( SvStream& rIn, const sal_Char* pPre )
+UINT16 Biff8RecDumper::DumpXF( XclImpStream& rIn, const sal_Char* pPre )
 {
     ByteString      t;
     const sal_Char* p;
@@ -861,7 +820,7 @@ UINT16 Biff8RecDumper::DumpXF( SvStream& rIn, const sal_Char* pPre )
 }
 
 // 16 bit pseudo password
-void Biff8RecDumper::DumpValidPassword( SvStream& rIn, const sal_Char* pPre )
+void Biff8RecDumper::DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre )
 {
     ByteString  t;
     UINT16 nPasswd;
@@ -934,7 +893,7 @@ void Biff8RecDumper::DumpValidPassword( SvStream& rIn, const sal_Char* pPre )
 }
 
 
-void __AddGUID( ByteString& rStr, SvStream& rIn )
+void __AddGUID( ByteString& rStr, XclImpStream& rIn )
 {
     UINT16 nIndex;
     for( nIndex = 0; nIndex < 4; nIndex++ )
@@ -954,14 +913,28 @@ void __AddGUID( ByteString& rStr, SvStream& rIn )
 }
 
 
-void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream )
+void Biff8RecDumper::RecDump( BOOL bSubStream )
 {
     const sal_Char*     p;
     BOOL                bDec = FALSE;
     ByteString          aTmp;
-    const ByteString*   pName = GetName( nR );
-    INT32               nLeft = nL;
     UINT16              __nFlags;
+    const UINT16        nR = pIn->GetRecNum();
+    const ByteString*   pName = GetName( nR );
+
+    // set CONTINUE handling mode
+    switch( nR )
+    {
+        case 0x003C:        // CONT
+        case 0x005D:        // OBJ
+        case 0x00EC:        // MSODRAWING
+        case 0x01B6:        // TXO
+            pIn->InitializeRecord( FALSE );
+        break;
+        default:
+            pIn->InitializeRecord( bReadContRecs );
+    }
+    const ULONG         nL = pIn->GetRecLen();
 
     switch( nR )
     {
@@ -1014,12 +987,12 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
         else
             aT += " [";
 
-        __AddHex( aT, nL );
+        __AddHex( aT, (UINT16)nL );
         aT += "]";
         if( !bSkipOffset )
         {
             aT += " :";
-            __AddHex( aT, UINT32(pIn->Tell() - 2 * sizeof(UINT16)) );
+            __AddHex( aT, UINT32(pIn->GetStreamPos() - 2 * sizeof(UINT16)) );
             aT += ':';
         }
 
@@ -1032,7 +1005,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
         ContDump( nL );
     else if( nMaxBodyLines && nL )
     {
-        SvStream&   rIn = *pIn;
+        XclImpStream& rIn = *pIn;
 
         LINESTART();
 
@@ -1094,7 +1067,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             case 0x18:
             case 0x0218:        // NAME
             {
-                UINT32  nStop = rIn.Tell() + nL;
                 UINT8   nNameText, n8;
                 UINT16  nNameDef, n16;
 
@@ -1114,19 +1086,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 __AddDec( t, (UINT16)((__nFlags & 0x0FC0) >> 6) );
                 PRINT();
 
-                INT32       nBytesLeft = nStop - rIn.Tell();
                 ByteString  sTemp;
                 LINESTART();
                 ADDTEXT( "NAMETEXT[" );
                 __AddDec( t, nNameText );
                 ADDTEXT( "] = " );
                 if( nNameText )
-                    sTemp = GETSTR( ::ReadUnicodeString( rIn, nBytesLeft, *pExcRoot->pCharset, nNameText ) );
+                    sTemp = GETSTR( rIn.ReadUniString( *pExcRoot->pCharset, nNameText ) );
                 else
-                {
                     rIn >> n8;
-                    nBytesLeft--;
-                }
                 if( (__nFlags & 0x0020) && (nNameText == 1) )
                 {
                     UINT8 nAutoname = (UINT8)(sTemp.GetChar( 0 ));
@@ -1164,9 +1132,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 __AddDec( t, nNameDef );
                 t += "] (formula?)";
                 PRINT();
-                if ( nNameDef && nBytesLeft > 0 )
-                    FormulaDump( ((nBytesLeft < nNameDef) ? UINT16(nBytesLeft) : nNameDef), FT_RangeName );
-                rIn.Seek( nStop );
+                if ( nNameDef && rIn.GetRecLeft() > 0 )
+                    FormulaDump( ((rIn.GetRecLeft() < nNameDef) ? UINT16(rIn.GetRecLeft()) : nNameDef), FT_RangeName );
             }
             break;
             case 0x001D:        // SELECTION - list of selections
@@ -1206,8 +1173,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PRINT();
                 LINESTART();
                 ADDTEXT( "workbook: " );
-                INT32   nDummy;
-                AddUNICODEString( t, rIn, nDummy, TRUE );
+                AddUNICODEString( t, rIn, TRUE );
                 PRINT();
             }
             break;
@@ -1251,7 +1217,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PRINT();
                 LINESTART();
                 ADDTEXT( "reserved: " );
-                ADDHEX( 2 );
+                ADDHEX( 1 );
                 PRINT();
             }
             break;
@@ -1260,7 +1226,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
 //              LINESTART();
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
+                __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
                 PRINT();
             }
             break;
@@ -1348,7 +1314,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ByteString  sTemp[ 2 ];
                 UINT16      nLen[ 2 ] = { 0, 0 };
                 UINT8       nF;
-                INT32       nDummy;
                 LINESTART();
                 ADDTEXT( "count: " );
                 ADDDEC( 2 );
@@ -1415,7 +1380,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     switch( nType )
                     {
                         case 0x02:
-                            __AddDouble( sTemp[ nF ], ImportExcel::RkToDouble( Read4( rIn ) ) );
+                            __AddDouble( sTemp[ nF ], XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
                             IGNORE( 4 );
                             break;
                         case 0x04:
@@ -1440,7 +1405,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 {
                     t = sTemp[ nF ];
                     if( nLen[ nF ] )
-                        AddUNICODEString( t, rIn, nDummy, TRUE, nLen[ nF ] );
+                        AddUNICODEString( t, rIn, TRUE, nLen[ nF ] );
                     PRINT();
                 }
             }
@@ -1461,10 +1426,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             {
                 UINT16  nCref;
                 UINT8   nLocked, nHidden, nName, nComment, nNameUser;
-                UINT16  nRest = nL;
                 rIn >> nCref >> nLocked >> nHidden >> nName >> nComment >> nNameUser;
-                nRest -= sizeof( nCref ) + sizeof( nLocked ) + sizeof( nHidden ) + sizeof( nName )
-                        + sizeof( nComment ) + sizeof( nNameUser );
                 LINESTART();
                 ADDTEXT( "Changing Cells = " );
                 __AddDec( t, nCref );
@@ -1481,7 +1443,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ADDTEXT( "    Name User = " );
                 __AddDec( t, nNameUser );
                 PRINT();
-                ContDump( nRest );
+                ContDump( rIn.GetRecLeft() );
             }
             break;
             case 0xB0:      // SXVIEW
@@ -1546,17 +1508,16 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 LINESTART();
                 UINT16  nTableLen = Read2( rIn );
                 UINT16  nDataLen = Read2( rIn );
-                INT32   nDummy;
                 ADDTEXT( "PivotTable name: " );
                 if( nTableLen )
-                    AddUNICODEString( t, rIn, nDummy, TRUE, nTableLen );
+                    AddUNICODEString( t, rIn, TRUE, nTableLen );
                 else
                     ADDTEXT( "-/-" );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "data field name: " );
                 if( nDataLen )
-                    AddUNICODEString( t, rIn, nDummy, TRUE, nDataLen );
+                    AddUNICODEString( t, rIn, TRUE, nDataLen );
                 else
                     ADDTEXT( "-/-" );
                 PRINT();
@@ -1611,17 +1572,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 LINESTART();
                 ADDTEXT( "Name: " );
                 UINT16      nLen = Read2( rIn );
-                INT32       nDummy;
                 if( nLen == 0xFFFF )
                     ADDTEXT( "<name in cache>" );
                 else
-                    AddUNICODEString( t, rIn, nDummy, TRUE, nLen );
+                    AddUNICODEString( t, rIn, TRUE, nLen );
                 PRINT();
             }
             break;
             case 0xB2:                                                          // SXVI
             {
-                INT32   nCntDwn = nL;
                 UINT16  nType, nCache;
                 rIn >> nType >> __nFlags >> nCache;
                 LINESTART();
@@ -1668,7 +1627,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 if( nCch == 0xFFFF )
                     ADDTEXT( "<name in cache>" );
                 else if( nCch )
-                    AddUNICODEString( t, rIn, nCntDwn, TRUE, nCch );
+                    AddUNICODEString( t, rIn, TRUE, nCch );
                 else
                     ADDTEXT( "<empty string>" );
                 PRINT();
@@ -1678,7 +1637,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             {
                 const UINT16    nBrkNum = 5;
                 UINT16          nBrk = nBrkNum;
-                UINT16          nSize = nL / 2;
+                UINT16          nSize = (UINT16)(nL / 2);
                 LINESTART();
                 for( UINT16 i = 0; i < nSize; i++ )
                 {
@@ -1707,7 +1666,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     "MAX", "MIN", "PRODUCT", "COUNTA", "STDEV",
                     "STDEVP", "VAR", "VARP", "Grand total",
                     "Blank line" };                         // undocumented
-                while( nLeft > 0 )
+                while( rIn.GetRecLeft() > 0 )
                 {
                     rIn >> nIdent >> nType >> nMaxInd >> __nFlags;
                     LINESTART();
@@ -1741,7 +1700,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     ADDTEXT( "index to data field: " );
                     __AddDec( t, (UINT16) ( (__nFlags & 0x01FE) >> 1 ) );
                     PRINT();
-                    nLeft -= 8;
                     LINESTART();
                     ADDTEXT( pInd );
                     ADDTEXT( "array of " );
@@ -1751,42 +1709,36 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     LINESTART();
                     ADDTEXT( pInd );
                     ADDTEXT( "  " );
-                    nLeft -= 2 * nSXLISize[nSXLIIndex];
-                    if( nLeft >= 0 )
+                    const UINT16    nBrkNum = 5;
+                    UINT16          nBrk = nBrkNum;
+                    for( UINT16 i = 0; i < nSXLISize[nSXLIIndex]; i++ )
                     {
-                        const UINT16    nBrkNum = 5;
-                        UINT16          nBrk = nBrkNum;
-                        for( UINT16 i = 0; i < nSXLISize[nSXLIIndex]; i++ )
+                        __AddDec( t, Read2( rIn ), 7 );
+                        if( i < nIdent )
+                            ADDTEXT( "^" );
+                        else if( i < nMaxInd )
+                            ADDTEXT( " " );
+                        else
+                            ADDTEXT( "*" );
+                        nBrk--;
+                        if( !nBrk )
                         {
-                            __AddDec( t, Read2( rIn ), 7 );
-                            if( i < nIdent )
-                                ADDTEXT( "^" );
-                            else if( i < nMaxInd )
-                                ADDTEXT( " " );
-                            else
-                                ADDTEXT( "*" );
-                            nBrk--;
-                            if( !nBrk )
-                            {
-                                PRINT();
-                                LINESTART();
-                                ADDTEXT( pInd );
-                                ADDTEXT( "  " );
-                                nBrk = nBrkNum;
-                            }
-                        }
-                        if( nBrk < nBrkNum )
                             PRINT();
+                            LINESTART();
+                            ADDTEXT( pInd );
+                            ADDTEXT( "  " );
+                            nBrk = nBrkNum;
+                        }
                     }
-                    else
-                        Print( "<unexpected end of record>" );
+                    if( nBrk < nBrkNum )
+                        PRINT();
                 }
                 nSXLIIndex = 1 - nSXLIIndex;
             }
             break;
             case 0xB6:      // SXPI - pivot table page item(s)
             {
-                UINT16  nArrayCnt = nL / 6;
+                UINT16  nArrayCnt = (UINT16)(nL / 6);
                 LINESTART();
                 __AddDec( t, nArrayCnt );
                 ADDTEXT( " page items:" );
@@ -1813,7 +1765,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             {
                 UINT16  nC, nR, nXF;
                 UINT32 nRK;
-                UINT16  n = ( nL - 4 ) / 6;
+                UINT16  n = (UINT16)((nL - 4) / 6);
 
                 rIn >> nR >> nC;
                 while( n )
@@ -1822,7 +1774,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     LINESTART();
                     __AddCellHead( t, nC, nR, nXF );
                     ADDTEXT( "   val = " );
-                    __AddDouble( t, ImportExcel::RkToDouble( nRK ) );
+                    __AddDouble( t, XclImpHelper::GetDoubleFromRK( nRK ) );
                     PRINT();
                     nC++;
                     n--;
@@ -1836,7 +1788,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PRINT();
                 LINESTART();
                 ADDTEXT( "next XFs: " );
-                UINT16  n = ( nL - 6 ) / 2;
+                UINT16  n = (UINT16)((nL - 6) / 2);
                 while( n )
                 {
                     __AddDec( t, Read2( rIn ) );
@@ -1849,7 +1801,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             break;
             case 0x00C5:        // SXDI
             {
-                INT32   nCntDwn = nL;
                 LINESTART();
                 ADDTEXT( "Field: " );
                 ADDDEC( 2 );
@@ -1880,11 +1831,10 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 LINESTART();
                 ADDTEXT( "name: " );
                 UINT16  nCch = Read2( rIn );
-                nCntDwn -= 14;
                 if( nCch == 0xFFFF )
                     ADDTEXT( "<name in cache>" );
                 else if( nCch )
-                    AddUNICODEString( t, rIn, nCntDwn, TRUE, nCch );
+                    AddUNICODEString( t, rIn, TRUE, nCch );
                 else
                     ADDTEXT( "<empty string>" );
                 PRINT();
@@ -1906,9 +1856,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ADDTEXT( "   type: " );         ADDHEX( 2 );
                 ADDTEXT( "   changed by:" );
                 PRINT();
-                nLeft -= 18;
                 LINESTART();
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
             }
             break;
@@ -1920,7 +1869,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 __AddDec( t, nFieldCnt, 3 );
                 nFieldCnt++;
                 ADDTEXT( " (pivot field): " );
-                if( nLeft < 14 )
+                if( rIn.GetRecLeft() < 14 )
                 {
                     ADDTEXT( "<break in pivot field start>" );
                     PRINT();
@@ -1964,8 +1913,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     PRINT();
                     LINESTART();
                     ADDTEXT( pPre );
-                    nLeft -= 14;
-                    if( nLeft < 3 )
+                    if( rIn.GetRecLeft() < 3 )
                     {
                         ADDTEXT( "<break in pivot field name>" );
                         PRINT();
@@ -1973,7 +1921,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     else
                     {
                         ADDTEXT( "name: " );
-                        AddUNICODEString( t, rIn, nLeft );
+                        AddUNICODEString( t, rIn );
                         PRINT();
                     }
                 }
@@ -1985,7 +1933,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 __AddDec( t, nTabIndexCnt, 3 );
                 nTabIndexCnt++;
                 ADDTEXT( " (index list):" );
-                for( UINT16 iIndex = 0; iIndex < nLeft; iIndex++ )
+                for( UINT16 iIndex = 0; iIndex < rIn.GetRecLen(); iIndex++ )
                 {
                     ADDTEXT( " " );
                     ADDHEX( 1 );
@@ -2013,7 +1961,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     ADDTEXT( " (string): " );
                     nItemCnt++;
                 }
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
             }
                 break;
@@ -2090,7 +2038,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     ADDTEXT( " row - row  / col-col | " );
                 PRINT();
                 LINESTART();
-                if( nCount * 8 + 2 == nL )
+                if( (ULONG)(nCount * 8 + 2) == nL )
                 {
                     for( nInd = 0; nInd < nCount; nInd++ )
                     {
@@ -2125,19 +2073,16 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             break;
             case 0xFC:
             {
-                INT32   nCntDwn = nL;
                 UINT16  nCnt = 0;
-
+                BOOL    bOK = TRUE;
                 ContDump( 8 );
-                nCntDwn -= 8;
 
-                while( nCntDwn > 0 )
+                while( bOK && (rIn.GetRecLeft() > 0) )
                 {
                     LINESTART();
                     __AddDec( t, nCnt );
                     ADDTEXT( ": " );
-                    if( !AddUNICODEString( t, rIn, nCntDwn ) )
-                        nCntDwn = 0;
+                    bOK = AddUNICODEString( t, rIn );
                     PRINT();
                     nCnt++;
                 }
@@ -2235,15 +2180,14 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 LINESTART();
                 ADDTEXT( "unknown: " );         ADDHEX( 2 );
                 ADDTEXT( "   user: " );
-                nLeft -= 32;
-                if( nLeft > 3 )
-                    AddUNICODEString( t, rIn, nLeft );
+                if( rIn.GetRecLeft() > 3 )
+                    AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
-                __AddDec( t, (UINT16)(nLeft - 10) );
+                __AddDec( t, (UINT16)(rIn.GetRecLeft() - 10) );
                 ADDTEXT( " bytes of unknown data..." );
                 PRINT();
-                ContDump( nLeft - 10 );
+                ContDump( rIn.GetRecLeft() - 10 );
                 LINESTART();
                 ADDTEXT( "date/time: " );       ADDDEC( 2 );
                 ADDTEXT( "-" );                 ADDDEC( 1 );
@@ -2341,7 +2285,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     nOldLen >>= 1;
                 ADDTEXT( "   unknown: " );      ADDHEX( 4 );
                 PRINT();
-                nLeft -= 28;
                 UINT16 nCount = 0;
                 switch( nFormatData )
                 {
@@ -2358,7 +2301,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                         ADDHEX( 2 );
                     }
                     PRINT();
-                    nLeft -= (nCount << 1);
                 }
                 if( nOldType )
                 {
@@ -2367,17 +2309,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     switch( nOldType )
                     {
                         case 0x0001:
-                            __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
-                            nLeft -= 4;
+                            __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
                             PRINT();
                         break;
                         case 0x0002:
                             ADDDOUBLE();
-                            nLeft -= 8;
                             PRINT();
                         break;
                         case 0x0003:
-                            AddUNICODEString( t, rIn, nLeft );
+                            AddUNICODEString( t, rIn );
                             PRINT();
                         break;
                         case 0x0004:
@@ -2385,7 +2325,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                                 ADDTEXT( "true" );
                             else
                                 ADDTEXT( "false" );
-                            nLeft -= 2;
                             PRINT();
                         break;
                         case 0x0005:
@@ -2393,11 +2332,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                             PRINT();
                             UINT16 nLen;
                             rIn >> nLen;
-                            nLeft -= 2;
                             FormulaDump( nLen, FT_CellFormula );
-                            nLeft -= nLen;
                             IGNORE( 1 );
-                            nLeft--;
                         }
                         break;
                     }
@@ -2409,17 +2345,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     switch( nNewType )
                     {
                         case 0x0001:
-                            __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
+                            __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
                             PRINT();
-                            nLeft -= 4;
                         break;
                         case 0x0002:
                             ADDDOUBLE();
                             PRINT();
-                            nLeft -= 8;
                         break;
                         case 0x0003:
-                            AddUNICODEString( t, rIn, nLeft );
+                            AddUNICODEString( t, rIn );
                             PRINT();
                         break;
                         case 0x0004:
@@ -2428,39 +2362,34 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                             else
                                 ADDTEXT( "false" );
                             PRINT();
-                            nLeft -= 2;
                         break;
                         case 0x0005:
                         {
                             PRINT();
                             UINT16 nLen;
                             rIn >> nLen;
-                            nLeft -= 2;
                             FormulaDump( nLen, FT_CellFormula );
-                            nLeft -= nLen;
                             IGNORE( 1 );
-                            nLeft--;
                         }
                         break;
                     }
                 }
-                if( nLeft > 0 )
+                if( rIn.GetRecLeft() > 0 )
                 {
                     LINESTART();
                     ADDTEXT( "*UNKNOWN* data:" );
                     PRINT();
-                    PreDump( nLeft );
+                    PreDump( rIn.GetRecLeft() );
                 }
             }
             break;
             case 0x013D:        // TABID
             {
                 ADDTEXT( "tab ids:" );
-                while( nLeft )
+                while( rIn.GetRecLeft() )
                 {
                     ADDTEXT( " " );
                     ADDDEC( 2 );
-                    nLeft -= 2;
                 }
                 PRINT();
             }
@@ -2498,14 +2427,13 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 LINESTART();
                 ADDTEXT( "unknown: " );         ADDHEX( 4 );
                 ADDTEXT( "   table name: " );
-                nLeft -= 18;
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
-                __AddDec( t, nLeft );
+                __AddDec( t, rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
-                ContDump( nLeft );
+                ContDump( rIn.GetRecLeft() );
             }
             break;
             case 0x0193:
@@ -2527,9 +2455,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PRINT();
                 LINESTART();
                 ADDTEXT( "user: " );
-                nLeft -= 24;
-                if( nLeft > 3 )
-                    AddUNICODEString( t, rIn, nLeft );
+                if( rIn.GetRecLeft() > 3 )
+                    AddUNICODEString( t, rIn );
                 PRINT();
             }
             break;
@@ -2546,15 +2473,14 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PRINT();
                 LINESTART();
                 ADDTEXT( "user: " );
-                nLeft -= 12;
-                if( nLeft > 3 )
-                    AddUNICODEString( t, rIn, nLeft );
+                if( rIn.GetRecLeft() > 3 )
+                    AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
-                __AddDec( t, nLeft );
+                __AddDec( t, rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
-                ContDump( nLeft );
+                ContDump( rIn.GetRecLeft() );
             }
             break;
             case 0x0196:
@@ -2573,12 +2499,11 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ContDump( 16 );
                 LINESTART();
                 ADDTEXT( "count of changes: " );    ADDDEC( 2 );
-                nLeft -= 40;
                 ADDTEXT( "   " );
-                __AddDec( t, nLeft );
+                __AddDec( t, rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
-                ContDump( nLeft );
+                ContDump( rIn.GetRecLeft() );
             }
             break;
             case 0x01A9:        // USERBVIEW
@@ -2615,12 +2540,11 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ADDTEXT( "   merge int: " );    ADDDEC( 2 );
                 ADDTEXT( "   reserved: " );     ADDHEX( 2 );
                 PRINT();
-                INT32 nLeft = nL - 50;
-                if( nLeft > 3 )
+                if( rIn.GetRecLeft() > 3 )
                 {
                     LINESTART();
                     ADDTEXT( "name: " );
-                    AddUNICODEString( t, rIn, nLeft );
+                    AddUNICODEString( t, rIn );
                     PRINT();
                 }
             }
@@ -2706,34 +2630,31 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 UINT16  nTabs;
                 rIn >> nTabs;
                 __AddDec( t, nTabs );
-                const UINT32    n = rIn.Tell();
+                rIn.PushPosition();
                 PRINT();
                 LINESTART();
-                if( nL <= 2 + 2 * nTabs )
+                if( nL <= (ULONG)(2 + 2 * nTabs) )
                 {
                     ADDTEXT( "----- shortened record -----" );
                     PRINT();
 
-                    rIn.Seek( n );
+                    rIn.PopPosition();
                     ContDump( nL - 2 );
                 }
                 else
                 {
-                    INT32   nDummy;
+                    rIn.RejectPosition();
                     ADDTEXT( "file name: " );
-                    AddUNICODEString( t, rIn, nDummy );
+                    AddUNICODEString( t, rIn );
                     PRINT();
                     while( nTabs )
                     {
                         LINESTART();
                         ADDTEXT( "  " );
-                        AddUNICODEString( t, rIn, nDummy );
+                        AddUNICODEString( t, rIn );
                         PRINT();
                         nTabs--;
                     }
-
-//                  rIn.Seek( n );
-//                  ContDump( nL - 2 );
                 }
 
             }
@@ -2802,17 +2723,15 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     nC++;
                 }
                 if( nCntDwn > 0 )
-                    ContDump( ( UINT16 ) nCntDwn );
+                    ContDump( nCntDwn );
             }
             break;
             case 0x01B1:        // CF - conditional format
             {
-                INT32           nCntDwn = nL;
-                UINT8           nCcf, nCp;
-                UINT16          nCce1, nCce2;
-                const UINT32    nStartPos = rIn.Tell();
+                UINT8   nCcf, nCp;
+                UINT16  nCce1, nCce2;
+                ULONG   nStartPos = rIn.GetRecPos();
                 rIn >> nCcf >> nCp >> nCce1 >> nCce2;
-                nCntDwn -= 6;
                 LINESTART();
                 ADDTEXT( "type (" );
                 __AddHex( t, nCcf );
@@ -2852,7 +2771,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 __AddDec( t, nCce2 );
                 PRINT();
 
-                INT32       nPreForm = nCntDwn - nCce1 - nCce2;
+                ULONG nPreForm = rIn.GetRecLeft() - nCce1 - nCce2;
                 if( nPreForm > 0 )
                 {
                     LINESTART();
@@ -2860,8 +2779,8 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     __AddDec( t, nPreForm );
                     PRINT();
 
-                    UINT32  nPosPreForm = rIn.Tell();
-                    ContDump( ( UINT16 ) nPreForm );
+                    ULONG nPosPreForm = rIn.GetRecPos();
+                    ContDump( nPreForm );
 
                     rIn.Seek( nPosPreForm );    // start
                     UINT32  nFlags = Read4( rIn );
@@ -2924,24 +2843,21 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     }
 
                     rIn.Seek( nPosPreForm + nPreForm );
-                    nCntDwn -= nPreForm;
                 }
 
-                if( nCntDwn >= nCce1 )
+                if( rIn.GetRecLeft() >= nCce1 )
                 {
                     LINESTART();
                     ADDTEXT( "form1:" );
                     PRINT();
                     FormulaDump( nCce1, FT_RangeName );
-                    nCntDwn -= nCce1;
                 }
-                if( nCntDwn >= nCce2 )
+                if( rIn.GetRecLeft() >= nCce2 )
                 {
                     LINESTART();
                     ADDTEXT( "form2:" );
                     PRINT();
                     FormulaDump( nCce2, FT_RangeName );
-//                  nCntDwn -= nCce2;
                 }
             }
             break;
@@ -2981,7 +2897,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 PreDump( nL );
                 UINT32  __nFlags;
                 rIn >> __nFlags;
-                nLeft -= 4;
                 LINESTART();
                 STARTFLAG();
                 ADDTEXT( " (" );
@@ -3022,22 +2937,22 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
 
                 LINESTART();
                 ADDTEXT( "Prompt Title:   " );
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "Error Title:    " );
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "Prompt Message: " );
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "Error Message:  " );
-                AddUNICODEString( t, rIn, nLeft );
+                AddUNICODEString( t, rIn );
                 PRINT();
-                if( nLeft > 8 )
-                    ContDump( ( UINT16 ) ( nLeft - 8 ) );
+                if( rIn.GetRecLeft() > 8 )
+                    ContDump( rIn.GetRecLeft() - 8 );
 
                 // Row-Row / Col-Col
                 UINT16  nR1, nR2, nC1, nC2;
@@ -3241,7 +3156,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             {
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddDouble( t, ImportExcel::RkToDouble( Read4( rIn ) ) );
+                __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
                 PRINT();
             }
             break;
@@ -3301,7 +3216,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             break;
             case 0x0804:        // WEBQRYTABLES - web query: selected tables
             {
-                INT32 nDummy;
                 LINESTART();
                 ADDTEXT( "repeated recnum: " );     ADDHEX( 2 );
                 ADDTEXT( "   unknown: " );          ADDHEX( 2 );
@@ -3310,7 +3224,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 {
                     LINESTART();
                     ADDTEXT( "text: " );
-                    AddUNICODEString( t, rIn, nDummy );
+                    AddUNICODEString( t, rIn );
                     PRINT();
                 }
             }
@@ -4264,13 +4178,6 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
 
     }
 
-    if( nLeft < 0 )
-    {
-        LINESTART();
-        ADDTEXT( "  ----- RECORD OVER READ -----" );
-        PRINT();
-    }
-
     if( bDec )
         pLevelPre -= nLevelInc;
 }
@@ -4303,43 +4210,43 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
         return;
     }
 
+    pStream->Seek( STREAM_SEEK_TO_END );
+    if( pStream->Tell() == ~((ULONG)0) )
+    {
+        sOutput = "-- no stream available --";
+        Print( sOutput );
+        DBG_ERROR( "Biff8RecDumper::DumpSubStream - no stream available" );
+        delete pStream;
+        return;
+    }
+
     sOutput = "-- substream dump --";
     Print( sOutput );
     sOutput = "Stream name: ";
     sOutput += pStreamName;
     Print( sOutput );
 
-    SvStream* pOldStream = pIn;
-    pIn = pStream;
-    SvStream& rIn = *pIn;
+    XclImpStream* pOldStream = pIn;
+    pIn = new XclImpStream( *pStream );
+    XclImpStream& rIn = *pIn;
 
     // -- dump from here --
-    rIn.Seek( STREAM_SEEK_TO_END );
-    UINT32  nTotalLen   = rIn.Tell();
-    UINT16  nStrLen     = (nTotalLen > 0x0000FFFF) ? 0xFFFF : (UINT16) nTotalLen;
-    rIn.Seek( 0 );
+    UINT16  nId;
+    BOOL bLoop = TRUE;
 
-    INT32   n = (INT32) nTotalLen;
-    UINT16  nId, nLen;
-
-    while( n > 3 )      // 7 = min len (End-Marke)
+    while( bLoop && rIn.StartNextRecord() )
     {
-        rIn >> nId >> nLen;
-        n -= 4;
-        INT32 nNextRecStart = rIn.Tell() + nLen;
-
+        nId = rIn.GetRecNum();
         if( HasModeDump( nId ) )
-            RecDump( nId, nLen, TRUE );
+            RecDump( TRUE );
 
-        if( nId == 0x000A )
-            n = 0;
-        else
-            n -= nLen;
-        rIn.Seek( nNextRecStart );
+        bLoop = (nId != 0x000A);
     }
 
     sOutput = "-- end of stream --\n";
     Print( sOutput );
+    delete pIn;
+    delete pStream;
     pIn = pOldStream;
 }
 
@@ -4388,7 +4295,7 @@ static const sal_Char* GetBlipType( UINT8 n )
     }
 }
 
-void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
+void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
 {
 #if 0
 // if an entire hex block is needed
@@ -4397,7 +4304,7 @@ void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
     pIn->Seek( nPos );
 #endif
 
-    INT32           n = nMaxLen;
+    ULONG           n = nMaxLen;
     UINT16          nPre, nR;
     UINT32          nL;
     const sal_Char* p;
@@ -4465,7 +4372,7 @@ void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
 
         if ( nR == 0xF007 && 36 <= n && 36 <= nL )
         {   // BSE, FBSE
-            ULONG nP = pIn->Tell();
+            ULONG nP = pIn->GetRecPos();
             UINT8 n8;
             UINT16 n16;
             UINT32 n32;
@@ -4518,12 +4425,12 @@ void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
             __AddHex( aT, n8 );
             Print( aT );
 
-            n -= pIn->Tell() - nP;
+            n -= pIn->GetRecPos() - nP;
             nL = 0;     // loop to MsofbtBLIP
         }
         else if ( nR == 0xF010 && 0x12 <= n && 0x12 <= nL )
         {   // ClientAnchor
-            ULONG nP = pIn->Tell();
+            ULONG nP = pIn->GetRecPos();
             UINT16 n16;
 
             aT = "    Flag: ";
@@ -4559,7 +4466,7 @@ void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
             __AddHex( aT, n16 );
             Print( aT );
 
-            ULONG nC = pIn->Tell() - nP;
+            ULONG nC = pIn->GetRecPos() - nP;
             n -= nC;
             nL -= nC;
         }
@@ -4632,20 +4539,20 @@ void Biff8RecDumper::EscherDump( const UINT16 nMaxLen )
 }
 
 
-void Biff8RecDumper::ObjDump( const UINT16 nMaxLen )
+void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
 {
 #if 0
 // if an entire hex block is needed
-    ULONG nPos = pIn->Tell();
+    pIn->PushPosition();
     ContDump( nMaxLen );
-    pIn->Seek( nPos );
+    pIn->PopPosition();
 #endif
 
-    INT32           n = nMaxLen;
+    ULONG           n = nMaxLen;
     UINT16          nR, nL;
     const sal_Char* p;
     ByteString      t;
-    SvStream&       rIn = *pIn;
+    XclImpStream&   rIn = *pIn;
     UINT16          nDumpSize;
 
     t += pLevelPre;
@@ -4697,12 +4604,12 @@ void Biff8RecDumper::ObjDump( const UINT16 nMaxLen )
 
             if( nDumpSize )
             {
-                ULONG nPos1 = (bDetails ? rIn.Tell() : 0);
+                ULONG nPos1 = (bDetails ? rIn.GetRecPos() : 0);
                 ContDump( nDumpSize );
                 n -= nDumpSize;
                 if ( bDetails )
                 {
-                    ULONG nPos2 = rIn.Tell();
+                    ULONG nPos2 = rIn.GetRecPos();
                     rIn.Seek( nPos1 );
                     t.Erase();
                     switch ( nR )
@@ -4737,7 +4644,9 @@ void Biff8RecDumper::ObjDump( const UINT16 nMaxLen )
                                 const UINT16 nStringOffset = 14;    // MAY be right
                                 rIn.Seek( nPos1 + nStringOffset );
                                 INT32 nBytesLeft = nL - nStringOffset;
-                                AddUNICODEString( t, rIn, nBytesLeft );
+                                ULONG nPos3 = rIn.GetRecPos();
+                                AddUNICODEString( t, rIn );
+                                nBytesLeft -= (rIn.GetRecPos() - nPos3);
                                 ADDTEXT( '\n' );
                                 if ( nBytesLeft < 4 )
                                     ADDTEXT( "    >> ByteString OVERRUN <<\n" );
@@ -4834,7 +4743,7 @@ void Biff8RecDumper::ObjDump( const UINT16 nMaxLen )
 #undef  PreDump
 #undef  ADDCELLHEAD
 
-void Biff8RecDumper::ContDump( const UINT16 nL )
+void Biff8RecDumper::ContDump( const ULONG nL )
 {
     UINT32          nC = nMaxBodyLines;
     UINT32          n = nL;
@@ -4855,6 +4764,86 @@ void Biff8RecDumper::ContDump( const UINT16 nL )
         n -= nInL;
 
         pIn->Read( pB, nInL );
+
+        // als Hex-Codes
+        nTmp = nInL;
+        p = pB;
+        nCharCnt = 0;
+        while( nTmp )
+        {
+            if( nCharCnt == nLineLen / 2 )
+                aT += ' ';
+
+            nCharCnt++;
+
+            aT += ' ';
+            __AddPureHex( aT, *p );
+            p++;
+
+            nTmp--;
+        }
+
+        if( bPart )
+            aT += GetBlanks( ( UINT16 ) ( ( nLineLen - nInL ) * 3 ) );
+
+        // als chars
+
+        aT += "    ";
+        if( nInL < 9 )
+            aT += ' ';
+
+        nTmp = nInL;
+        p = pB;
+        nCharCnt = 0;
+        while( nTmp )
+        {
+            if( nCharCnt == nLineLen / 2 )
+                aT += ' ';
+
+            nCharCnt++;
+
+            if( IsPrintable( *p ) )
+                aT += *p;
+            else
+                aT += '.';
+
+            p++;
+
+            nTmp--;
+        }
+
+        Print( aT );
+        aT.Erase();
+        aT += pLevelPre;
+
+        nC--;
+    }
+
+    delete[] pB;
+}
+
+
+void Biff8RecDumper::ContDumpStream( SvStream& rStrm, const ULONG nL )
+{
+    UINT32          nC = nMaxBodyLines;
+    UINT32          n = nL;
+    UINT32          nInL, nTmp;
+    UINT8*          pB = new UINT8[ nL ];
+    UINT8*          p;
+    const UINT16    nLineLen = 16;
+    UINT16          nCharCnt;
+    BOOL            bPart;
+    ByteString      aT;
+
+    aT += pLevelPre;
+
+    while( n && nC )
+    {
+        bPart = n < nLineLen;
+        nInL = bPart? n : nLineLen;
+        n -= nInL;
+
+        rStrm.Read( pB, nInL );
 
         // als Hex-Codes
         nTmp = nInL;
@@ -4953,9 +4942,9 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
 #define ADD(string)     {t+=pInfix;t+=string;}
 
-#define IGNORE(n)       {pIn->SeekRel(n);nBytesLeft-=n;}
+#define IGNORE(n)       {pIn->Ignore(n);}
 
-    const UINT32            nAfterPos = pIn->Tell() + nL;
+    const ULONG             nAfterPos = pIn->GetRecPos() + nL;
     const sal_Char*         pPre = "    ";
     const sal_Char*         pInfix = "  ";
 
@@ -4967,14 +4956,11 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
 
-    INT32                   nBytesLeft = ( INT32 ) nL;
-
     t += pPre;
 
-    while( nBytesLeft > 0 && !bError )
+    while( (pIn->GetRecLeft() > 0) && !bError )
     {
         *pIn >> nOp;
-        nBytesLeft -= sizeof( nOp );
 
         switch( nOp )   //                              Buch Seite:
         {           //                                      SDK4 SDK5
@@ -5051,19 +5037,15 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 UINT8   nLen;
 
                 *pIn >> nLen;
-                nBytesLeft -= sizeof( nLen );
 
                 ADD("STRING[");
                 __AddDec( t, nLen );
                 t += "] = \"";
 
                 if( nLen )
-                    t += GETSTR( ::ReadUnicodeString( *pIn, nBytesLeft, *pExcRoot->pCharset, nLen ) );
+                    t += GETSTR( pIn->ReadUniString( *pExcRoot->pCharset, nLen ) );
                 else
-                {
-                    pIn->SeekRel( 1 );
-                    nBytesLeft--;
-                }
+                    pIn->Ignore( 1 );
                 t += "\"";
             }
                 break;
@@ -5071,10 +5053,9 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 {
 #define D(name,size,ext,type)   {ByteString s( "eptg " );__AddDec(s,(UINT16)nEptg);s+=": ";     \
                                 s+=name;s+=" [";__AddDec(s,(UINT16)size);s+="] ";s+=type;       \
-                                if(ext)s+=" + ext";CLOSE(s);ContDump(size);nBytesLeft-=size;}
+                                if(ext)s+=" + ext";CLOSE(s);ContDump(size);}
                 UINT8   nEptg;
                 *pIn >> nEptg;
-                nBytesLeft--;
 
                 switch( nEptg )
                 {                           //  name        size    ext     type
@@ -5162,15 +5143,13 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 BYTE nOpt;
 
                 *pIn >> nOpt >> nData;
-                nBytesLeft -= sizeof( nOpt ) + sizeof( nData );
                 nFakt = 2;
 
                 if( nOpt & 0x04 )
                 {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
                     CLOSE("AttrChoose");
                     nData++;
-                    pIn->SeekRel( nData * nFakt );
-                    nBytesLeft -= nData * nFakt;
+                    pIn->Ignore( nData * nFakt );
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                 {
@@ -5192,7 +5171,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                     p = "FALSE";
                 else
                     p = "TRUE";
-                nBytesLeft--;
                 ADD("BOOL = ");
                 t += p;
             }
@@ -5200,13 +5178,11 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x1E: // Integer                               [315 266]
                 ADD("INT = ");
                 __AddDec( t, Read2( *pIn ) );
-                nBytesLeft -= 2;
                 break;
             case 0x1F: // Number                                [315 266]
             {
                 double  f;
                 *pIn >> f;
-                nBytesLeft -= sizeof( f );
                 ADD( "NUMBER = " );
                 __AddDouble( t, f );
             }
@@ -5223,7 +5199,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16  nInd;
                 *pIn >> nInd;
-                nBytesLeft -= sizeof( nInd );
 
                 ByteString  aStr( GetTokenClassString( nOp ) );
                 aStr += "FIX FUNCTION [";
@@ -5242,7 +5217,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 UINT16  nInd;
 
                 *pIn >> nAnz >> nInd;
-                nBytesLeft -= sizeof( nAnz ) + sizeof( nInd );
 
                 ByteString  aStr( GetTokenClassString( nOp ) );
                 aStr += "VAR FUNCTION [";
@@ -5263,7 +5237,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16  nInd;
                 *pIn >> nInd;
-                nBytesLeft -= sizeof( nInd );
                 IGNORE(2);
                 ADD( GetTokenClassString( nOp ) );
                 ADD("NAME = ");
@@ -5279,7 +5252,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16          nCol, nRow;
                 *pIn >> nRow >> nCol;
-                nBytesLeft -= 4;
                 ADD( GetTokenClassString( nOp ) );
                 switch ( nOp )
             {
@@ -5307,7 +5279,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 UINT16          nRowFirst, nRowLast;
                 UINT16          nColFirst, nColLast;
                 *pIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 8;
                 ADD( GetTokenClassString( nOp ) );
                 switch ( nOp )
             {
@@ -5366,7 +5337,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16      nRow, nCol;
                 *pIn >> nRow >> nCol;
-                nBytesLeft -= 4;
                 ADD( GetTokenClassString( nOp ) );
                 ADD("CELL REF IN NAME = ");
                 __AddHex( t, nCol );
@@ -5384,7 +5354,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 UINT16                  nRowFirst, nRowLast;
                 UINT16                  nColFirst, nColLast;
                 *pIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                nBytesLeft -= 8;
                 ADD( GetTokenClassString( nOp ) );
                 ADD("AREA REF IN NAME = ");
                 __AddHex( t, nColFirst );
@@ -5423,10 +5392,8 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 ByteString  aStr( GetTokenClassString( nOp ) );
                 aStr += "COMM_EQU_FUNC";
                 *pIn >> nNum;
-                nBytesLeft -= sizeof( nNum );
                 aStr.Append( ByteString::CreateFromInt32( nNum ) );
                 *pIn >> nAnz;
-                nBytesLeft -= sizeof( nAnz );
                 aStr += ")] #";
                 __AddDec( aStr, ( UINT32 ) ( nAnz & 0x7F ) );
                 aStr += "(";
@@ -5441,10 +5408,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16  nUINT16;
                 INT16   nINT16;
-                *pIn >> nINT16;
-                nBytesLeft -= sizeof( nINT16 );
-                *pIn >> nUINT16;
-                nBytesLeft -= sizeof( nUINT16 );
+                *pIn >> nINT16 >> nUINT16;
                 IGNORE(2);
                 ADD( GetTokenClassString( nOp ) );
                 if( nINT16 >= 0 )
@@ -5468,7 +5432,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16          nIxti, nRow, nCol;
                 *pIn >> nIxti >> nRow >> nCol;
-                nBytesLeft -= 6;
                 ADD( GetTokenClassString( nOp ) );
                 switch ( nOp )
             {
@@ -5497,7 +5460,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             {
                 UINT16          nIxti, nRow1, nCol1, nRow2, nCol2;
                 *pIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-                nBytesLeft -= 10;
                 ADD( GetTokenClassString( nOp ) );
                 switch ( nOp )
             {
@@ -5543,24 +5505,19 @@ void Biff8RecDumper::ControlsDump( SvStream& rIn )
     if( !pDumpStream )
         return;
 
-    SvStream&   rOut = *pDumpStream;
-    SvStream*   pOldIn = pIn;
-    pIn = &rIn;
     rIn.Seek( STREAM_SEEK_TO_END );
-    UINT32      nLen = rIn.Tell();
+    ULONG nLen = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
-    if( nLen < 0xFFFFFFFF )
+    if( nLen < ~((ULONG)0) )
     {
         while( nLen )
         {
             UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
-            ContDump( nPart );
+            ContDumpStream( rIn, nPart );
             nLen -= nPart;
         }
     }
-
-    pIn = pOldIn;
 }
 
 
@@ -5607,6 +5564,8 @@ _KEYWORD Biff8RecDumper::GetKeyType( const ByteString& r )
         e = Skipdump;
     else if( t == "SKIPOFFSET" )
         e = SkipOffset;
+    else if( t == "READCONTRECS" )
+        e = ReadContRecs;
     else if( t == "CONTLOAD" )
         e = Contload;
     else if( t == "PARSEP" )
@@ -6078,6 +6037,7 @@ BOOL Biff8RecDumper::ExecCommand( const UINT32 nL, const ByteString& r, const By
     {
         case Skipdump:      bSkip = TRUE;           break;
         case SkipOffset:    bSkipOffset = TRUE;     break;
+        case ReadContRecs:  bReadContRecs = TRUE;   break;
         case Contload:      bEndLoading = TRUE;     break;
         case Parsep:
             if( nValLen == 0 )
@@ -6726,7 +6686,7 @@ Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
     pLevelPre = pLevelPreStringNT;
 
     nMaxBodyLines = 1024;
-    bEndLoading = bSkip = bSkipOffset = FALSE;
+    bEndLoading = bSkip = bSkipOffset = bReadContRecs = FALSE;
 
     pDumpModes = NULL;
     ppRecNames = NULL;
@@ -6800,7 +6760,7 @@ Biff8RecDumper::~Biff8RecDumper()
 }
 
 
-BOOL Biff8RecDumper::Dump( SvStream& r )
+BOOL Biff8RecDumper::Dump( XclImpStream& r )
 {
     const DUMP_ERR*     pErr = FirstErr();
 
@@ -6815,7 +6775,7 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
                 if( pErr->nLine )
                 {
                     ByteString  t;
-                    t += pErr->nLine;
+                    t += ByteString::CreateFromInt32( pErr->nLine );
                     rOut << " at line " << t.GetBuffer();
                 }
 
@@ -6843,31 +6803,17 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
             *pDumpStream << "\n### end Ctls stream ###\n";
         }
 
-        const UINT32        nStartPos = r.Tell();
         pIn = &r;
+        r.StoreUserPosition();
 
-        UINT16              nRecNum, nRecLen;
-        UINT32              nNextRecord;
+        FilterProgressBar*  pPrgrsBar = new FilterProgressBar( r );
 
-        FilterProgressBar*  pPrgrsBar = new FilterProgressBar( *pIn );
-
-        const UINT32        nLimitPos = pPrgrsBar->GetStreamLen();      // mit 'Sicherheitsbereich'
-
-        nNextRecord = r.Tell();
-
-        while( nNextRecord < nLimitPos )
+        while( r.StartNextRecord() )
         {
-            r >> nRecNum >> nRecLen;
-
             pPrgrsBar->Progress();
 
-            if( HasModeDump( nRecNum ) )
-                RecDump( nRecNum, nRecLen );
-
-            nNextRecord += 4;
-            nNextRecord += nRecLen;
-
-            r.Seek( nNextRecord );
+            if( HasModeDump( r.GetRecNum() ) )
+                RecDump();
         }
 
         *pDumpStream << '\n';
@@ -6875,7 +6821,7 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
         pIn = NULL;
         delete pPrgrsBar;
 
-        r.Seek( nStartPos );
+        r.SeekUserPosition();
 
         pPivotCache = NULL;
 
@@ -6887,6 +6833,10 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
     return !bEndLoading;
 }
 
+#undef Read1
+#undef Read2
+#undef Read4
+#undef Read8
 
 #endif
 

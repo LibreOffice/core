@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
+#   last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 CXXFILES = \
         XclImpStream.cxx \
+        XclImpHelper.cxx \
         read.cxx \
         readchrt.cxx \
         impop.cxx \
@@ -93,7 +94,6 @@ CXXFILES = \
         vfbuff.cxx \
         xfbuff.cxx \
         tokstack.cxx \
-        spstring.cxx \
         namebuff.cxx \
         colrowst.cxx \
         expop2.cxx \
@@ -110,6 +110,7 @@ CXXFILES = \
 
 SLOFILES =	\
         $(SLO)$/XclImpStream.obj \
+        $(SLO)$/XclImpHelper.obj \
         $(SLO)$/read.obj \
         $(SLO)$/readchrt.obj \
         $(SLO)$/impop.obj \
@@ -121,7 +122,6 @@ SLOFILES =	\
         $(SLO)$/vfbuff.obj \
         $(SLO)$/xfbuff.obj \
         $(SLO)$/tokstack.obj \
-        $(SLO)$/spstring.obj \
         $(SLO)$/namebuff.obj \
         $(SLO)$/colrowst.obj \
         $(SLO)$/expop2.obj \

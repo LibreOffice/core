@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-01 14:33:03 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,19 @@
 
 #pragma hdrstop
 
+#include "colrowst.hxx"
 
 #include <string.h>
 
 #include "document.hxx"
 #include "scextopt.hxx"
 
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
+
 #include "root.hxx"
 #include "xfbuff.hxx"
-#include "colrowst.hxx"
-
 
 
 
@@ -368,7 +371,7 @@ void ColRowSettings::_SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeig
 }
 
 
-void ColRowSettings::ReadSplit( SvStream& rIn )
+void ColRowSettings::ReadSplit( XclImpStream& rIn )
 {
     if( !pExtTabOpt )
     {
@@ -378,14 +381,10 @@ void ColRowSettings::ReadSplit( SvStream& rIn )
 
     rIn >> pExtTabOpt->nSplitX >> pExtTabOpt->nSplitY >> pExtTabOpt->nTopSplitRow >> pExtTabOpt->nLeftSplitCol;
 
-    if( pExcRoot->eHauptDateiTyp == Biff5 )
+    if( (pExcRoot->eHauptDateiTyp == Biff5) || (pExcRoot->eHauptDateiTyp == Biff8) )
         rIn >> pExtTabOpt->nActPane;
     else
-    {
-        UINT8 nTmp;
-        rIn >> nTmp;
-        pExtTabOpt->nActPane = nTmp;
-    }
+        pExtTabOpt->nActPane = rIn.ReaduInt8();
 
     pExtTabOpt->nTabNum = *pExcRoot->pAktTab;
 }

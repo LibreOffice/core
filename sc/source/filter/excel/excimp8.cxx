@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,15 @@
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
 #endif
+#ifndef _SC_XCLIMPHELPER_HXX
+#include "XclImpHelper.hxx"
+#endif
 
 #include "excimp8.hxx"
 #include "xfbuff.hxx"
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
-#include "spstring.hxx"
 #include "fltprgrs.hxx"
 #include "flttools.hxx"
 #include "scextopt.hxx"
@@ -706,19 +708,20 @@ String      ImportExcel8::aSstErrTxt( _STRINGCONST( "*** ERROR IN SST ***" ) );
 
 
 
-void TxoCont::ReadTxo( SvStream& r )
+void TxoCont::ReadTxo( XclImpStream& rStrm )
 {
     if( !nStepCount )
     {
-        r.SeekRel( 10 );
-        r >> nTextLen >> nFormCnt;
+        rStrm.Ignore( 10 );
+        rStrm >> nTextLen >> nFormCnt;
+        nFormCnt /= 8;
 
         nStepCount = 1;
     }
 }
 
 
-void TxoCont::ReadCont( SvStream& r, RootData& rRD, ScEditEngineDefaulter& rEdEngine )
+void TxoCont::ReadCont( XclImpStream& rStrm, RootData& rRootData, ScEditEngineDefaulter& rEdEngine )
 {
     if( nStepCount == 1 )
     {// Record mit Text
@@ -726,8 +729,8 @@ void TxoCont::ReadCont( SvStream& r, RootData& rRD, ScEditEngineDefaulter& rEdEn
         {
             if( !pText )
             {
-                INT32   nDummy = 0xFFFF;
-                pText = new String( ::ReadUnicodeString( r, nDummy, *rRD.pCharset, nTextLen ) );
+                pText = new String;
+                rStrm.AppendUniString( *pText, *rRootData.pCharset, nTextLen );
             }
         }
 
@@ -739,32 +742,27 @@ void TxoCont::ReadCont( SvStream& r, RootData& rRD, ScEditEngineDefaulter& rEdEn
 
         if( pText )
         {
-            SvMemoryStream          aHelpStr;
-
             if( nFormCnt )
                 nFormCnt--;
 
-            UINT32                  n = nFormCnt;
-            UINT16                  nChar, nFont;
+            SvMemoryStream aMemStrm;
+            UINT16 nChar, nFont;
 
-            while( n )
+            aMemStrm << (UINT16) 0x0001 << (UINT16)(4 * nFormCnt);
+            for( UINT16 nIndex = 0; nIndex < nFormCnt; nIndex++ )
             {
-                r >> nChar >> nFont;
-                r.SeekRel( 4 );
-
-                aHelpStr << nChar << nFont;
-
-                n--;
+                rStrm >> nChar >> nFont;
+                rStrm.Ignore( 4 );
+                aMemStrm << nChar << nFont;
             }
 
-            aHelpStr.Seek( 0 );
-
-            INT32                   nDummy1 = 0xFFFF;
-            ShStrTabFormEntry       aHelpObj( *pText, aHelpStr, nDummy1, nFormCnt );
+            XclImpStream aImpStrm( aMemStrm, TRUE );
+            aImpStrm.StartNextRecord();
+            ShStrTabFormEntry aHelpObj( *pText, aImpStrm, nFormCnt );
 
             DBG_ASSERT( !pFormText, "TxoCont::ReadCont(): Ich bin doch nicht alleine!!" );
 
-            pFormText = aHelpObj.CreateEditTextObject( rEdEngine, *rRD.pFontBuffer );
+            pFormText = aHelpObj.CreateEditTextObject( rEdEngine, *rRootData.pFontBuffer );
         }
 
         nStepCount = 3;
@@ -897,14 +895,14 @@ ExcCondForm::~ExcCondForm()
 }
 
 
-void ExcCondForm::Read( SvStream& rIn )
+void ExcCondForm::Read( XclImpStream& rIn )
 {
     rIn >> nNumOfConds;
-    rIn.SeekRel( 2 );
+    rIn.Ignore( 2 );
     rIn >> nRow;
-    rIn.SeekRel( 2 );
+    rIn.Ignore( 2 );
     rIn >> nCol;
-    rIn.SeekRel( 2 );
+    rIn.Ignore( 2 );
 
     UINT16  nRngCnt, nR1, nR2, nC1, nC2;
     rIn >> nRngCnt;
@@ -919,13 +917,13 @@ void ExcCondForm::Read( SvStream& rIn )
 }
 
 
-void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv )
+void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 {
     if( nNumOfConds )
     {
         nNumOfConds--;
 
-        const UINT32        nRecPos = rIn.Tell();
+//      const UINT32        nRecPos = rIn.Tell();
         UINT8               nFormType, nFormOperator;
         UINT16              nLenForm1, nLenForm2;
         ULONG               nDummy;
@@ -961,18 +959,17 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
 
         if( bValid )
         {
-            UINT16              nFormatsLen = nLenForm1 + nLenForm2 + 6;
-            if( nFormatsLen > nRecLen )
+            ULONG               nFormatsLen = nLenForm1 + nLenForm2 + 6;
+            if( nFormatsLen > rIn.GetRecLen() )
                 return;
 
-            nFormatsLen = nRecLen - nFormatsLen;    // >0!
+            nFormatsLen = rIn.GetRecLen() - nFormatsLen;    // >0!
 
             ScDocument*         pDoc = pExcRoot->pDoc;
             String              aStyle( pExcRoot->GetCondFormStyleName( nCondCnt ) );
 
             const ScTokenArray* pFrmla1 = NULL;
             const ScTokenArray* pFrmla2 = NULL;
-            INT32               nAnzBytes;
 
             ScAddress           aPos( nCol, nRow, nTab );
 
@@ -983,9 +980,9 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
             }
 
             // create style
-            UINT32              nPosF = rIn.Tell();
-            UINT32              nPosL = nPosF;
-            UINT32              nPosP = nPosF;
+            ULONG nPosF = rIn.GetRecPos();      // font
+            ULONG nPosL = nPosF;                // line
+            ULONG nPosP = nPosF;                // pattern (fill)
 
             switch( nFormatsLen )
             {
@@ -1005,22 +1002,22 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
 
             ColorBuffer&        rColBuff = *pExcRoot->pColor;
 
-            if( nPosF )
+            if( nPosF )     // font
             {
                 UINT8           nAttr1, nAttr2, nAttr3, nUnder;
                 UINT16          nBold;
                 UINT32          nCol;
                 rIn.Seek( nPosF );
                 rIn >> nAttr1;          // italic / strike out
-                rIn.SeekRel( 3 );
+                rIn.Ignore( 3 );
                 rIn >> nBold;           // boldness
-                rIn.SeekRel( 2 );
+                rIn.Ignore( 2 );
                 rIn >> nUnder;          // num of underlines
-                rIn.SeekRel( 3 );
+                rIn.Ignore( 3 );
                 rIn >> nCol;            // color
-                rIn.SeekRel( 4 );
+                rIn.Ignore( 4 );
                 rIn >> nAttr2;          // strike out DC + italic/bold DC
-                rIn.SeekRel( 7 );
+                rIn.Ignore( 7 );
                 rIn >> nAttr3;          // underline DC
 
                 BOOL            bItalic = nAttr1 & 0x02;
@@ -1063,7 +1060,7 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
                     rStyleItemSet.Put( *rColBuff.GetColor( nCol ) );
             }
 
-            if( nPosL )
+            if( nPosL )     // line
             {
                 UINT8           nLineH, nLineV;
                 UINT16          nColH, nColV;
@@ -1084,7 +1081,7 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
                         nLineL, nColL, nLineR, nColR, nLineT, nColT, nLineB, nColB );
             }
 
-            if( nPosP )
+            if( nPosP )     // pattern (fill)
             {
                 UINT8           nP;
                 UINT16          nCol;
@@ -1109,12 +1106,10 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
             FORMULA_TYPE        eFT = FT_RangeName;
             if( nLenForm1 )
             {
-                rIn.Seek( nRecPos + nRecLen - nLenForm1 - nLenForm2 );
+                rIn.Seek( rIn.GetRecLen() - nLenForm1 - nLenForm2 );
 
-                rConv.Reset( nLenForm1, aPos );
-                nAnzBytes = nLenForm1;
-
-                rConv.Convert( pFrmla1, nAnzBytes, eFT );
+                rConv.Reset( aPos );
+                rConv.Convert( pFrmla1, nLenForm1, eFT );
             }
 
             ScTokenArray*       pHelp;
@@ -1128,12 +1123,10 @@ void ExcCondForm::ReadCf( SvStream& rIn, const UINT16 nRecLen, ExcelToSc& rConv 
                     pFrmla1 = ( const ScTokenArray* ) pHelp;
                 }
 
-                rIn.Seek( nRecPos + nRecLen - nLenForm2 );
+                rIn.Seek( rIn.GetRecLen() - nLenForm2 );
 
-                rConv.Reset( nLenForm2, aPos );
-                nAnzBytes = nLenForm2;
-
-                rConv.Convert( pFrmla2, nAnzBytes, eFT );
+                rConv.Reset( aPos );
+                rConv.Convert( pFrmla2, nLenForm2, eFT );
             }
 
             ScCondFormatEntry   aCFE( eMode, pFrmla1, pFrmla2, pDoc, aPos, aStyle );
@@ -1221,7 +1214,7 @@ void XclImpTabIdBuffer::Append( UINT16 nTabId )
         UINT16List::Append( nTabId );
 }
 
-void XclImpTabIdBuffer::Fill( SvStream& rStrm, UINT16 nCount )
+void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
 {
     Clear();
     UINT16 nTabId;
@@ -1258,7 +1251,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pExcRoot->pSupbookBuffer = new XclImpSupbookBuffer;
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
-    pFormConv = new ExcelToSc8( pExcRoot, rStream, nTab );
+    pFormConv = new ExcelToSc8( pExcRoot, aIn, nTab );
 
     pActTxo = NULL;
 
@@ -1301,8 +1294,7 @@ void ImportExcel8::RecString( void )
 {
     if( pLastFormCell )
     {
-        INT32   nDummy = nBytesLeft;
-        pLastFormCell->SetString( ::ReadUnicodeString( aIn, nDummy, eQuellChar ) );
+        pLastFormCell->SetString( aIn.ReadUniString( eQuellChar ) );
 
         pLastFormCell = NULL;
     }
@@ -1311,7 +1303,7 @@ void ImportExcel8::RecString( void )
 
 void ImportExcel8::Protect( void )
 {
-    if( Read2() )
+    if( aIn.ReaduInt16() )
         pD->SetTabProtection( nTab, TRUE, EMPTY_STRING );
 }
 
@@ -1326,7 +1318,7 @@ void ImportExcel8::Verticalpagebreaks( void )
     while( n )
     {
         aIn >> nCol;
-        aIn.SeekRel( 4 );       // beide Rows ueberlesen
+        aIn.Ignore( 4 );        // beide Rows ueberlesen
 
         aColRowBuff.SetVertPagebreak( nCol );
 
@@ -1345,7 +1337,7 @@ void ImportExcel8::Horizontalpagebreaks( void )
     while( n )
     {
         aIn >> nRow;
-        aIn.SeekRel( 4 );       // beide Cols ueberlesen
+        aIn.Ignore( 4 );        // beide Cols ueberlesen
 
         aColRowBuff.SetHorizPagebreak( nRow );
 
@@ -1359,7 +1351,7 @@ void ImportExcel8::Note( void )
     UINT16  nCol, nRow, nId;
 
     aIn >> nRow >> nCol;
-    aIn.SeekRel( 2 );
+    aIn.Ignore( 2 );
     aIn >> nId;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
@@ -1386,10 +1378,8 @@ void ImportExcel8::Note( void )
 
 void ImportExcel8::Format( void )
 {
-    Ignore( 2 );
-    String  aFormat( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
-
-    pValueFormBuffer->NewValueFormat( aFormat );
+    aIn.Ignore( 2 );
+    pValueFormBuffer->NewValueFormat( aIn.ReadUniString( eQuellChar ) );
 }
 
 
@@ -1398,9 +1388,8 @@ void ImportExcel8::Externsheet( void )
     UINT16  nXtiCnt;
 
     aIn >> nXtiCnt;
-    nBytesLeft -= 2;
 
-    pExcRoot->pXtiBuffer->Read( aIn, nBytesLeft, nXtiCnt );
+    pExcRoot->pXtiBuffer->Read( aIn, nXtiCnt );
 }
 
 
@@ -1411,16 +1400,15 @@ void ImportExcel8::Externname( void )
     UINT8           nLen;
 
     aIn >> nOpt >> nRes >> nLen;
-    nBytesLeft -= sizeof( nRes ) + sizeof( nOpt ) + sizeof( nLen );
 
-    String      aName;
-
-    if( nLen )
-        aName = ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar, nLen );
+    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
+    {
         // external name
-        pExcRoot->pExtNameBuff->AddName( ExcelNameToScName( aName ) );
+        XclImpHelper::ConvertName( aName );
+        pExcRoot->pExtNameBuff->AddName( aName );
+    }
     else if( nOpt & 0x0010 )
         // ole link
         pExcRoot->pExtNameBuff->AddOLE( aName, nRes );      // nRes is storage ID
@@ -1439,13 +1427,13 @@ void ImportExcel8::Font( void )
     UINT16  nWeight;
 
     aIn >> nHeight >> nAttr0;
-    aIn.SeekRel( 1 );
+    aIn.Ignore( 1 );
     aIn >> nIndexCol >> nWeight >> nScript >> nUnderline >> nFamily >> nCharSet;
-    aIn.SeekRel( 1 );   // Reserved
+    aIn.Ignore( 1 );    // Reserved
 
     aIn >> nLen;
 
-    String  aName( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar, nLen ) );
+    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
 
     // Font in Pool batschen
     pExcRoot->pFontBuffer->NewFont(
@@ -1454,7 +1442,7 @@ void ImportExcel8::Font( void )
 }
 
 
-void ImportExcel8::Cont( const UINT16 nLenRecord )
+void ImportExcel8::Cont( void )
 {
     if( pActTxo )
     {
@@ -1487,18 +1475,20 @@ void ImportExcel8::Cont( const UINT16 nLenRecord )
         }
     }
     else if( bCond4EscherCont )
-        Msodrawing( nLenRecord );
+        Msodrawing();
     else if( bLeadingObjRec )
     {
-        UINT32      nOldPos = aIn.Tell();
+        aIn.PushPosition();
         UINT32      nId;
         aIn >> nId;
 
         if( ( nId & 0xF000000F ) == 0xF000000F )
         {
-            aIn.Seek( nOldPos );
-            Msodrawing( nLenRecord );
+            aIn.PopPosition();
+            Msodrawing();
         }
+        else
+            aIn.RejectPosition();
 
         bLeadingObjRec = FALSE;
     }
@@ -1516,9 +1506,8 @@ void ImportExcel8::Dconref( void )
     BOOL    bSelf;
 
     aIn >> nR1 >> nR2 >> nC1 >> nC2;
-    nBytesLeft -= 6;
 
-    EncodeExternSheetUnicode( aIn, aFileName, aTabName, nBytesLeft, bSelf );
+    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf );
 
     if( !aTabName.Len() )
     {
@@ -1537,7 +1526,7 @@ void ImportExcel8::Xct( void )
         UINT16  nTabNum = 0;
 
         aIn >> nCrnCount;
-        if( nBytesLeft > 3 )
+        if( aIn.GetRecLeft() > 3 )
             aIn >> nTabNum;
 
         pExcRoot->pCurrSupbook->SetCurrScTab( nTabNum );
@@ -1560,53 +1549,53 @@ void ImportExcel8::Crn( void )
             UINT8       nValType;
 
             aIn >> nLastCol >> nFirstCol >> nRow;
-            nBytesLeft -= 4;
 
             ScAddress   aAddr( (UINT16) 0, nRow, nTab );
 
-            for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (nBytesLeft > 1); iCol++ )
+            for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
             {
                 aAddr.SetCol( iCol );
                 aIn >> nValType;
-                nBytesLeft--;
                 switch( nValType )
                 {
                     case EXC_CRN_DOUBLE:
-                        if( nBytesLeft >= 8 )
-                        {
-                            double fVal;
-                            aIn >> fVal;
-                            nBytesLeft -= 8;
+                    {
+                        double fVal;
+                        aIn >> fVal;
+                        if( aIn.IsValid() )
                             pD->SetValue( iCol, nRow, nTab, fVal );
-                        }
-                        break;
+                    }
+                    break;
                     case EXC_CRN_STRING:
-                        if( nBytesLeft >= 3 )
+                    {
+                        String sText( aIn.ReadUniString( eQuellChar ) );
+                        if( aIn.IsValid() )
                         {
-                            String sText( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
                             ScStringCell* pStrCell = new ScStringCell( sText );
                             pD->PutCell( aAddr, pStrCell );
                         }
-                        break;
+                    }
+                    break;
                     case EXC_CRN_BOOL:
                     case EXC_CRN_ERROR:
-                        if( nBytesLeft >= 8 )
+                    {
+                        BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
+                        UINT16  nErrBool;
+                        double  fVal;
+
+                        aIn >> nErrBool;
+                        aIn.Ignore( 6 );
+
+                        if( aIn.IsValid() )
                         {
-                            BOOL    bIsErr = (nValType == 0x10);
-                            UINT16  nErrBool;
-                            double  fVal;
-
-                            aIn >> nErrBool;
-                            aIn.SeekRel( 6 );
-                            nBytesLeft -= 8;
-
-                            const ScTokenArray* pTok    = ErrorToFormula( bIsErr, nErrBool, fVal );
+                            const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
                             ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
 
                             pCell->SetDouble( fVal );
                             pD->PutCell( aAddr, pCell );
                         }
-                        break;
+                    }
+                    break;
                 }
             }
         }
@@ -1614,36 +1603,29 @@ void ImportExcel8::Crn( void )
 }
 
 
-void ImportExcel8::Obj( const UINT32 nLimitPos )
+void ImportExcel8::Obj()
 {
     UINT16          nOpcode, nLenRec;
-    UINT32          nNextRec = aIn.Tell();
     BOOL            bLoop = TRUE;
     ExcEscherObj*   pObj = NULL;
 
-    while( bLoop )
+    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
+
+    while( bLoop && (aIn.GetRecLeft() >= 4) )
     {
         aIn >> nOpcode >> nLenRec;
+        aIn.PushPosition();
 
-        nNextRec += 4;
-        nNextRec += nLenRec;
-
-        if( aIn.IsEof() || nNextRec > nLimitPos )
-            bLoop = FALSE;
-        else
+        switch( nOpcode )
         {
-            switch( nOpcode )
-            {
-                case 0x00:
-                    bLoop = FALSE;
-                    break;
-                case 0x15:  pObj = ObjFtCmo();  break;
-                case 0x08:  ObjFtPioGrbit( pObj );  break;
-                case 0x09:  ObjFtPictFmla( pObj, nLenRec ); break;
-            }
+            case 0x00:  bLoop = FALSE;                  break;
+            case 0x15:  pObj = ObjFtCmo();              break;
+            case 0x08:  ObjFtPioGrbit( pObj );          break;
+            case 0x09:  ObjFtPictFmla( pObj, nLenRec ); break;
         }
 
-        aIn.Seek( nNextRec );
+        aIn.PopPosition();
+        aIn.Ignore( nLenRec );
     }
 
     bLeadingObjRec = TRUE;
@@ -1727,13 +1709,12 @@ void ImportExcel8::Boundsheet( void )
     UINT8           nLen;
     UINT16          nGrbit;
 
-    aIn.SeekRel( 4 );
+    aIn.Ignore( 4 );
     aIn >> nGrbit >> nLen;
-    nBytesLeft -= 7;
 
-    String          aName( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar, nLen ) );
+    String aName( aIn.ReadUniString( eQuellChar, nLen ) );
 
-    ExcelNameToScName( aName );
+    XclImpHelper::ConvertName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
     if( nBdshtTab > 0 )
@@ -1753,7 +1734,8 @@ void ImportExcel8::Boundsheet( void )
 
 
 void ImportExcel8::FilterMode( void )
-{   }
+{
+}
 
 
 void ImportExcel8::AutoFilterInfo( void )
@@ -1768,7 +1750,7 @@ void ImportExcel8::AutoFilter( void )
 {
     AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
     if( pData )
-        pData->ReadAutoFilter( aIn, nBytesLeft );
+        pData->ReadAutoFilter( aIn );
 }
 
 
@@ -1776,41 +1758,22 @@ void ImportExcel8::Scenman( void )
 {
     UINT16              nLastDispl;
 
-    aIn.SeekRel( 4 );
+    aIn.Ignore( 4 );
     aIn >> nLastDispl;
 
     aScenList.SetLast( nLastDispl );
 }
 
 
-UINT32 ImportExcel8::Scenario( const UINT16 n )
+void ImportExcel8::Scenario( void )
 {
-    SvStream*           pStr;
-
-    UINT32              nSumLen;
-    UINT32              nNextRecord;
-    SvMemoryStream*     pMemStr = CreateContinueStream( n, nSumLen, nNextRecord, FALSE );
-
-    if( pMemStr )
-    {
-        pStr = pMemStr;
-        pStr->Seek( STREAM_SEEK_TO_BEGIN );
-    }
-    else
-        pStr = &aIn;
-
-    aScenList.Append( new ExcScenario( *pStr, *pExcRoot ) );
-
-    if( pMemStr )
-        delete pMemStr;
-
-    return nNextRecord;
+    aScenList.Append( new ExcScenario( aIn, *pExcRoot ) );
 }
 
 
 void ImportExcel8::SXView( void )
 {
-    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8) nTab, nBytesLeft );
+    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8) nTab );
     aPivotTabList.Append( pCurrPivTab );
 }
 
@@ -1819,7 +1782,7 @@ void ImportExcel8::SXVd( void )
 {
     if( !pCurrPivTab )
         return;
-    pCurrPivTab->AddViewField( aIn, nBytesLeft );
+    pCurrPivTab->AddViewField( aIn );
 }
 
 
@@ -1838,12 +1801,13 @@ void ImportExcel8::SXIvd( void )
 {
     if( !pCurrPivTab )
         return;
-    pCurrPivTab->ReadRCFieldIDs( aIn, nBytesLeft );
+    pCurrPivTab->ReadRCFieldIDs( aIn );
 }
 
 
 void ImportExcel8::SXLi( void )
-{   }   // unnecessary to read this record
+{
+}   // unnecessary to read this record
 
 
 void ImportExcel8::SXPi( void )
@@ -1851,7 +1815,7 @@ void ImportExcel8::SXPi( void )
     if( !pCurrPivTab )
         return;
 
-    UINT16  nArrayCnt = nBytesLeft / 6;     // SXPI contains 6-byte-arrays
+    UINT16  nArrayCnt = aIn.GetRecLen() / 6;        // SXPI contains 6-byte-arrays
     UINT16  nSXVD;
     UINT16  nSXVI;
     UINT16  nObjID;
@@ -1868,7 +1832,7 @@ void ImportExcel8::SXDi( void )
 {
     if( !pCurrPivTab )
         return;
-    pCurrPivTab->AddDataItem( aIn, nBytesLeft );
+    pCurrPivTab->AddDataItem( aIn );
 }
 
 
@@ -1896,8 +1860,6 @@ void ImportExcel8::Xf( void )
     XF_Data*    pXFD = new XF_Data;
 
     aIn >> nW4 >> nW6 >> nW8 >> nW10 >> nW12 >> nW14 >> nW16 >> nL18 >> nW22;
-
-    nBytesLeft -= 20;
 
     const BOOL  bCellXF = ( nW8 & 0x0004 ) == 0;
 
@@ -1981,7 +1943,7 @@ void ImportExcel8::Cellmerging( void )
 
     aIn >> n;
 
-    DBG_ASSERT( nBytesLeft >= 2 + n * 8, "*ImportExcel8::Cellmerging(): in die Hose!" );
+    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(2 + n * 8), "*ImportExcel8::Cellmerging(): in die Hose!" );
 
     while( n )
     {
@@ -2014,15 +1976,13 @@ struct BackgroundGraphic
 };
 
 
-static sal_Bool lcl_ImportBackgroundGraphic( SvStream& rIn, sal_uInt32 nSize, Graphic& rGraphic )
+static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphic )
 {
     sal_Bool    bRetValue = FALSE;
-    sal_uInt16  nOldNumberFormat( rIn.GetNumberFormatInt() );
+    sal_uInt32  nSize = (sal_uInt32) rIn.GetRecLen();
 
     if( nSize > sizeof( BackgroundGraphic ) )
     {
-        rIn.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
         BackgroundGraphic   aBackground;
         rIn >> aBackground.nMagicNumber
             >> aBackground.nUnknown1
@@ -2065,7 +2025,7 @@ static sal_Bool lcl_ImportBackgroundGraphic( SvStream& rIn, sal_uInt32 nSize, Gr
                     }
 
                     if( bAlignment )
-                        rIn.SeekRel( 1 );
+                        rIn.Ignore( 1 );
                 }
 
                 aBmp.ReleaseAccess( pAcc );
@@ -2074,23 +2034,14 @@ static sal_Bool lcl_ImportBackgroundGraphic( SvStream& rIn, sal_uInt32 nSize, Gr
             }
         }
     }
-    rIn.SetNumberFormatInt( nOldNumberFormat );
-
     return bRetValue;
 }
 
 
-UINT32 ImportExcel8::BGPic( UINT32 n )
+void ImportExcel8::BGPic( void )
 {
     // no documentation available, but it might be, that it's only wmf format
-    DBG_ASSERT( n <= 0xFFFF, "*ImportExcel8::BGPic(): record to long!" );
     DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::BGPic(): f... no style sheet!" );
-
-    UINT32              nSumLen;
-    UINT32              nNextRecord;
-
-    SvMemoryStream*     pMemStr = CreateContinueStream( ( UINT16 ) n, nSumLen, nNextRecord, TRUE );
-    pMemStr->Seek( STREAM_SEEK_TO_BEGIN );
 
 //  BOOL                b = FALSE;
 //  if( b )
@@ -2101,36 +2052,29 @@ UINT32 ImportExcel8::BGPic( UINT32 n )
 //  }
 
     Graphic             aGraphic;
-    if( lcl_ImportBackgroundGraphic( *pMemStr, nSumLen, aGraphic ) )
+    if( lcl_ImportBackgroundGraphic( aIn, aGraphic ) )
         pStyleSheetItemSet->Put( SvxBrushItem( aGraphic, GPOS_AREA ) );
-
-    delete pMemStr;
-
-    return nNextRecord;
 }
 
 
-UINT32 ImportExcel8::Msodrawinggroup( const UINT32 n )
+void ImportExcel8::Msodrawinggroup( void )
 {
-    DBG_ASSERT( n <= 0xFFFF, "*ImportExcel8::Msodrawinggroup(): Record zu lang!" );
-
-    UINT32              nSumLen;
-    UINT32              nNextRecord;
-
-    const DffRecordHeader* pLatestRecHd =
-                aExcStreamConsumer.Consume( CreateContinueStream( ( UINT16 ) n, nSumLen, nNextRecord, TRUE ), 0 );
-
-    return nNextRecord;
+    SvMemoryStream* pMemStrm = new SvMemoryStream;
+    aIn.CopyRecordToStream( *pMemStrm );
+    const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( pMemStrm, 0 );
 }
 
 
-void ImportExcel8::Msodrawing( const UINT32 nL )
+void ImportExcel8::Msodrawing( void )
 {
     bCond4EscherCont = TRUE;
-    const UINT32        nFallBack = aIn.Tell();
+    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
+    ULONG nL = aIn.GetRecLen();
 
     if ( !aExcStreamConsumer.GetStream() )
         return;
+
+    aIn.PushPosition();
 
     if( bTabStartDummy )
     {// Dummy fuer ungueltigen ersten Shape einfuegen
@@ -2138,10 +2082,12 @@ void ImportExcel8::Msodrawing( const UINT32 nL )
 
         bTabStartDummy = FALSE;
     }
-    const UINT32 nS = aExcStreamConsumer.GetStream()->Tell();
+    const ULONG nS = aExcStreamConsumer.GetStream()->Tell();
     if( nL )
     {
-        const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( &aIn, nL );
+        SvMemoryStream* pMemStrm = new SvMemoryStream;
+        aIn.CopyRecordToStream( *pMemStrm );
+        const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( pMemStrm, 0 );
         if ( pLatestRecHd )
         {
             switch ( pLatestRecHd->nRecType )
@@ -2162,7 +2108,6 @@ void ImportExcel8::Msodrawing( const UINT32 nL )
                 break;
             }
         }
-        nBytesLeft = 0;
     }
     if( bLeadingTxo )
     {
@@ -2183,7 +2128,8 @@ void ImportExcel8::Msodrawing( const UINT32 nL )
             {
                 UINT16  nFBT;
 
-                aIn.Seek( nFallBack + 2 );
+                aIn.PopPosition();
+                aIn.Ignore( 2 );
 
                 aIn >> nFBT;
 
@@ -2197,7 +2143,7 @@ void ImportExcel8::Msodrawing( const UINT32 nL )
 }
 
 
-void ImportExcel8::Msodrawingselection( const UINT32 n )
+void ImportExcel8::Msodrawingselection( void )
 {
 }
 
@@ -2222,55 +2168,17 @@ void ImportExcel8::SXSelect( void )
 }
 
 
-UINT32 ImportExcel8::Sst( void )
+void ImportExcel8::Sst( void )
 {
-    SvStream*           pStr;
+    aIn.Ignore( 8 );
 
-    UINT16              n = ( UINT16 ) nBytesLeft;
-    UINT32              nSumLen;
-    UINT32              nNextRecord;
-    UINT32List          aCutPosList;
-    SvMemoryStream*     pMemStr = CreateContinueStream( n, nSumLen, nNextRecord, FALSE, &aCutPosList );
-    INT32               nReadSize;
+    ShStrTabEntry* pEntry;
 
-    if( pMemStr )
-    {// Struktur mit Folge-Records
-        nReadSize = ( INT32 ) nSumLen;
-        pStr = pMemStr;
-        pStr->Seek( STREAM_SEEK_TO_BEGIN );
-    }
-    else
-    {// 'Pure' Tabelle
-        pStr = &aIn;
-        nReadSize = ( INT32 ) n;
-    }
-
-    pStr->SeekRel( 8 );
-    nReadSize -= 8;
-
-    ShStrTabEntry*      p;
-
-    while( nReadSize > 0 )
+    while( aIn.GetRecLeft() )
     {
-        p = CreateUnicodeEntry( *pStr, nReadSize, eQuellChar, 0, &aCutPosList );
-        aSharedStringTable.Append( p );
+        pEntry = XclImpHelper::CreateUnicodeEntry( aIn, eQuellChar );
+        aSharedStringTable.Append( pEntry );
     }
-
-    if( pMemStr )
-        delete pMemStr;
-
-    return nNextRecord;
-}
-
-
-SvMemoryStream* ImportExcel8::CreateContinueStream( const UINT16 n, UINT32& rSLen, UINT32& rNPR,
-    const BOOL bForceSingle, UINT32List* pCutPosList )
-{
-    bCond4EscherCont = FALSE;
-    SvMemoryStream* pStrm = ImportTyp::CreateContinueStream( aIn, n, rSLen, rNPR, bForceSingle, pCutPosList );
-    if( pStrm )
-        nBytesLeft = 0;
-    return pStrm;
 }
 
 
@@ -2339,7 +2247,7 @@ void ImportExcel8::Condfmt( void )
 void ImportExcel8::Cf( void )
 {
     if( pActCondForm )
-        pActCondForm->ReadCf( aIn, ( UINT16 ) nBytesLeft, *pFormConv );
+        pActCondForm->ReadCf( aIn, *pFormConv );
 }
 
 
@@ -2354,8 +2262,6 @@ void ImportExcel8::Labelsst( void )
     UINT32                      nSst;
 
     aIn >> nRow >> nCol >> nXF >> nSst;
-
-    nBytesLeft -= 10;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
@@ -2380,11 +2286,10 @@ void ImportExcel8::Label( void )
 {
     UINT16  nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
-    nBytesLeft -= 6;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ShStrTabEntry*  p = CreateUnicodeEntry( aIn, nBytesLeft, eQuellChar );
+        ShStrTabEntry*  p = XclImpHelper::CreateUnicodeEntry( aIn, eQuellChar );
 
         ScBaseCell*     pCell = CreateCellFromShStrTabEntry( p, nXF );
         if( pCell )
@@ -2407,13 +2312,13 @@ void ImportExcel8::Tabid( void )
 {
     DBG_ASSERT( pExcRoot->pImpTabIdBuffer, "ImportExcel8::Tabid - missing tab id buffer" );
     if( pExcRoot->pImpTabIdBuffer )
-        pExcRoot->pImpTabIdBuffer->Fill( aIn, (UINT16)(nBytesLeft >> 1) );
+        pExcRoot->pImpTabIdBuffer->Fill( aIn, (UINT16)(aIn.GetRecLen() >> 1) );
 }
 
 
 void ImportExcel8::Supbook( void )
 {
-    pExcRoot->pCurrSupbook = new XclImpSupbook( aIn, nBytesLeft, *pExcRoot );
+    pExcRoot->pCurrSupbook = new XclImpSupbook( aIn, *pExcRoot );
     pExcRoot->pSupbookBuffer->Append( pExcRoot->pCurrSupbook );
 }
 
@@ -2424,6 +2329,8 @@ void ImportExcel8::Txo( void )
         pActTxo->Clear();
     else
         pActTxo = new TxoCont;
+
+    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
 
     pActTxo->ReadTxo( aIn );
 
@@ -2444,7 +2351,7 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
 {
     if( bHasBasic )
     {
-        String  aName( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
+        String aName( aIn.ReadUniString( eQuellChar ) );
 
         DBG_ASSERT( pExcRoot->pExtDocOpt, "-ImportExcel8::Codename(): nothing there to store!" );
 
@@ -2461,17 +2368,16 @@ void ImportExcel8::Dv( void )
     UINT32      nFlags;
 
     aIn >> nFlags;
-    nBytesLeft -= sizeof( nFlags );
 
-    String      aPromptTitle( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
-    String      aErrorTitle( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
-    String      aPromptMessage( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
-    String      aErrorMessage( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
+    String      aPromptTitle( aIn.ReadUniString( eQuellChar ) );
+    String      aErrorTitle( aIn.ReadUniString( eQuellChar ) );
+    String      aPromptMessage( aIn.ReadUniString( eQuellChar ) );
+    String      aErrorMessage( aIn.ReadUniString( eQuellChar ) );
 
     // vals
-    if( nBytesLeft > 8 )
+    if( aIn.GetRecLeft() > 8 )
     {
-        Ignore( nBytesLeft - 8 );
+        aIn.Ignore( aIn.GetRecLeft() - 8 );
 
         UINT16  nR1, nR2, nC1, nC2;
 
@@ -2527,14 +2433,11 @@ static void lcl_GetAbs( String& rPath, UINT16 nDl, SfxObjectShell* pDocShell )
 void ImportExcel8::Hlink( void )
 {
     UINT16 nRF, nRL, nCF, nCL;
-    ReadX( nRF );
-    ReadX( nRL );
-    ReadX( nCF );
-    ReadX( nCL );
-    Ignore( 20 );
-
     UINT32 nFlags;
-    ReadX( nFlags );
+
+    aIn >> nRF >> nRL >> nCF >> nCL;
+    aIn.Ignore( 20 );
+    aIn >> nFlags;
 
     UINT16  nLevel = 0;             // counter for level to climb down in path
     String* pLongname = NULL;       // link / file name
@@ -2545,37 +2448,36 @@ void ImportExcel8::Hlink( void )
     // description (ignore)
     if( nFlags & EXC_HLINK_DESCR )
     {
-        ReadX( nStrLen );
-        Ignore( nStrLen << 1 );
+        aIn >> nStrLen;
+        aIn.IgnoreRawUniString( (UINT16) nStrLen, TRUE );
     }
 
     // network path
     if( nFlags & EXC_HLINK_NET )
     {
-        ReadX( nStrLen );
-        pLongname = new String( ReadWString( (UINT16)(nStrLen << 1), TRUE ) );
+        aIn >> nStrLen;
+        pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, TRUE ) );
         lcl_GetAbs( *pLongname, 0, pD->GetDocumentShell() );
     }
     // file link or URL
     else if( nFlags & EXC_HLINK_BODY )
     {
         UINT32 nID;
-        ReadX( nID );
+        aIn >> nID;
         switch( nID )
         {
             case EXC_HLINK_ID_FILE:
             {
-                Ignore( 12 );
-                ReadX( nLevel );
-                ReadX( nStrLen );
-                pShortname = new String( ReadCString( (UINT16) nStrLen, TRUE ) );
-                Ignore( 24 );
-                ReadX( nStrLen );
+                aIn.Ignore( 12 );
+                aIn >> nLevel >> nStrLen;
+                pShortname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, FALSE ) );
+                aIn.Ignore( 24 );
+                aIn >> nStrLen;
                 if( nStrLen )
                 {
-                    ReadX( nStrLen );
-                    Ignore( 2 );
-                    pLongname = new String( ReadWString( (UINT16) nStrLen, TRUE ) );
+                    aIn >> nStrLen;
+                    aIn.Ignore( 2 );
+                    pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16)(nStrLen >> 1), TRUE ) );
                     lcl_GetAbs( *pLongname, nLevel, pD->GetDocumentShell() );
                 }
                 else
@@ -2584,9 +2486,9 @@ void ImportExcel8::Hlink( void )
             break;
             case EXC_HLINK_ID_URL:
             {
-                Ignore( 12 );
-                ReadX( nStrLen );
-                pLongname = new String( ReadWString( (UINT16) nStrLen, TRUE ) );
+                aIn.Ignore( 12 );
+                aIn >> nStrLen;
+                pLongname = new String( aIn.ReadRawUniString( eQuellChar, (UINT16)(nStrLen >> 1), TRUE ) );
             }
             break;
             default:
@@ -2597,11 +2499,11 @@ void ImportExcel8::Hlink( void )
     // text mark
     if( nFlags & EXC_HLINK_MARK )
     {
-        ReadX( nStrLen );
-        pTextmark = new String( ReadWString( (UINT16)(nStrLen << 1), TRUE ) );
+        aIn >> nStrLen;
+        pTextmark = new String( aIn.ReadRawUniString( eQuellChar, (UINT16) nStrLen, TRUE ) );
     }
 
-    DBG_ASSERT( !nBytesLeft, "ImportExcel8::HLink - record size mismatch" );
+    DBG_ASSERT( !aIn.GetRecLeft(), "ImportExcel8::HLink - record size mismatch" );
 
     if( !pLongname && pShortname )
     {
@@ -2637,7 +2539,6 @@ void ImportExcel8::Dimensions( void )
     UINT16  nColFirst, nColLast;
 
     aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-    nBytesLeft -= 12;
 
     if( nRowLast > MAXROW )
         nRowLast = MAXROW;
@@ -2665,9 +2566,9 @@ void ImportExcel8::Name( void )
     UINT16              nSheet;
 
     aIn >> nOpt;
-    aIn.SeekRel( 1 );
+    aIn.Ignore( 1 );
     aIn >> nLenName >> nLenDef >> nSheet;
-    aIn.SeekRel( 2 );
+    aIn.Ignore( 2 );
     aIn >> nLen;            // length of custom menu text
     nLenSeekRel += nLen;
     aIn >> nLen;            // length of description text
@@ -2676,17 +2577,13 @@ void ImportExcel8::Name( void )
     nLenSeekRel += nLen;
     aIn >> nLen;            // length of status bar text
     nLenSeekRel += nLen;
-    nBytesLeft -= 14;
-
-    pFormConv->Reset( nLenDef );
 
     // Namen einlesen
-    String              aName( ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar, nLenName ) );
+    String              aName( aIn.ReadUniString( eQuellChar, nLenName ) );
     // jetzt steht Lesemarke an der Formel
 
     sal_Unicode         cFirstChar = aName.GetChar( 0 );
 
-    const UINT32        nFormStart = aIn.Tell();
     const BOOL          bHidden = TRUEBOOL( nOpt & EXC_NAME_HIDDEN );
     const BOOL          bBuiltIn = TRUEBOOL( nOpt & EXC_NAME_BUILTIN );
     const BOOL          bPrintArea = bBuiltIn && ( cFirstChar == EXC_BUILTIN_PRINTAREA );
@@ -2698,31 +2595,26 @@ void ImportExcel8::Name( void )
     BOOL                bSkip = FALSE;
 
     if( bBuiltIn )
-    {// Built-in name
-        aName.AssignAscii( GetExcBuiltInName( cFirstChar ) );
-    }
+        aName.AssignAscii( GetBuiltInName( cFirstChar ) );  // built-in name
     else
-        aName = ExcelNameToScName( aName );
+        XclImpHelper::ConvertName( aName );
 
+    pFormConv->Reset();
     if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
         // function or command?
         pFormConv->GetDummy( pErgebnis );
     else if( bBuiltIn )
     {
-        if( bPrintArea )
-        {// Druckbereich
-            long nAnzBytes = nLenDef;
-            pFormConv->Convert( *pPrintRanges, nAnzBytes, FT_RangeName );
-        }
-        else if( bPrintTitles )
-        {// Druckbereich
-            long nAnzBytes = nLenDef;
-            pFormConv->Convert( *pPrintTitles, nAnzBytes, FT_RangeName );
-        }
-        aIn.Seek( nFormStart );
+        aIn.PushPosition();
 
-        long nAnzBytes = nLenDef;
-        pFormConv->Convert( pErgebnis, nAnzBytes, FT_RangeName );
+        if( bPrintArea )
+            pFormConv->Convert( *pPrintRanges, nLenDef, FT_RangeName );
+        else if( bPrintTitles )
+            pFormConv->Convert( *pPrintTitles, nLenDef, FT_RangeName );
+
+        aIn.PopPosition();
+
+        pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );
 
         // AutoFilter
         if( pErgebnis && (bAutoFilter || bCriteria || bExtract) )
@@ -2743,10 +2635,7 @@ void ImportExcel8::Name( void )
         }
     }
     else
-    {// Formel
-        long nAnzBytes = nLenDef;
-        pFormConv->Convert( pErgebnis, nAnzBytes, FT_RangeName );
-    }
+        pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );     // formula
 
     if( !bSkip )
     {
@@ -2764,20 +2653,19 @@ void ImportExcel8::Style( void )
     UINT16      nXf;
 
     aIn >> nXf;
-    nBytesLeft -= sizeof( nXf );
 
     if( !( nXf & 0x8000 ) )
     {
         nXf &= 0x0FFF;  // only bit 0...11 is used for XF-index
 
-        pExcRoot->pXF_Buffer->SetStyle( nXf, ReadUnicodeString( aIn, nBytesLeft, eQuellChar ) );
+        pExcRoot->pXF_Buffer->SetStyle( nXf, aIn.ReadUniString( eQuellChar ) );
     }
 }
 
 
-void ImportExcel8::GetHFString( String& r )
+void ImportExcel8::GetHFString( String& rStr )
 {
-    r = ::ReadUnicodeString( aIn, nBytesLeft, eQuellChar );
+    aIn.AppendUniString( rStr, eQuellChar );
 }
 
 
@@ -2968,68 +2856,6 @@ void ImportExcel8::InsertHyperlink( const UINT16 nCol, const UINT16 nRow, const 
 }
 
 
-String ImportExcel8::ReadWString( UINT16 nLen, const BOOL b )
-{
-    String          aString;
-    DBG_ASSERT( sizeof( sal_Unicode ) == 2, "ImportExcel8::ReadWString(): sal_Unicode not Excel-conform" );
-
-    if( b )
-    {
-        if( ( INT32 ) nLen > nBytesLeft )
-        {
-            aIn.SeekRel( nBytesLeft );
-            nLen = 0;
-            nBytesLeft = 0;
-        }
-        else
-        {
-            DBG_ASSERT( nLen % 2 == 0, "*ImportExcel8::ReadWString(): Unicode with odd number of bytes!" );
-
-            nLen /= 2;
-            nBytesLeft -= nLen * 2;
-        }
-    }
-
-    sal_Unicode     c;
-    while( nLen )
-    {
-        aIn >> c;
-        if( c )
-            aString += c;
-        nLen--;
-    }
-
-    return aString;
-}
-
-
-String ImportExcel8::ReadCString( UINT16 n, const BOOL b )
-{
-    if( b && ( INT32 ) n > nBytesLeft )
-    {
-        aIn.SeekRel( nBytesLeft );
-        nBytesLeft = 0;
-        n = 0;
-    }
-
-    if( n )
-    {
-        sal_Char*   p = new sal_Char[ n + 1 ];
-
-        aIn.Read( p, n );
-
-        if( b )
-            nBytesLeft -= n;
-
-        p[ n ] = 0x00;
-
-        return String( p, eQuellChar );
-    }
-    else
-        return EMPTY_STRING;
-}
-
-
 void ImportExcel8::CreateTmpCtrlStorage( void )
 {
 //  if( pExcRoot->pCtrlStorage )
@@ -3072,41 +2898,46 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
 //___________________________________________________________________
 
+inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
+{
+    rStrm >> rXti.nSupbook >> rXti.nFirst >> rXti.nLast;
+    return rStrm;
+}
+
+
+
 XclImpXtiBuffer::~XclImpXtiBuffer()
 {
     for( XclImpXti* pXti = (XclImpXti*) List::First(); pXti; pXti = (XclImpXti*) List::Next() )
         delete pXti;
 }
 
-void XclImpXtiBuffer::Read( SvStream& rIn, INT32& rBytesLeft, UINT32 nNumOfEntries )
+void XclImpXtiBuffer::Read( XclImpStream& rIn, UINT32 nNumOfEntries )
 {
     XclImpXti* pXti;
 
     while( nNumOfEntries )
     {
         pXti = new XclImpXti;
-        rIn >> pXti->nSupbook >> pXti->nFirst >> pXti->nLast;
+        rIn >> *pXti;
         List::Insert( pXti, LIST_APPEND );
         nNumOfEntries--;
     }
-    rBytesLeft -= nNumOfEntries * 6;
 }
 
 
 
-XclImpSupbook::XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot )
+XclImpSupbook::XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot )
 {
     UINT16 nTabCnt;
     rIn >> nTabCnt;
-    rBytesLeft -= 2;
 
-    if( rBytesLeft < 2 + 2 * nTabCnt )
+    if( rIn.GetRecLeft() < (ULONG)(2 + 2 * nTabCnt) )
     {
         // shortened record without strings
         bSelf = TRUE;
 
-        rIn.SeekRel( rBytesLeft );
-        rBytesLeft = 0;
+        rIn.Seek( rIn.GetRecLen() );
     }
     else
     {
@@ -3115,7 +2946,7 @@ XclImpSupbook::XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRo
         String aTabName;
         XclImpSupbookTab* pNewTab;
 
-        ReadDocName( rIn, rExcRoot, rBytesLeft, aFileName, bSelf );
+        ReadDocName( rIn, aFileName, bSelf );
         String aURL( ScGlobal::GetAbsDocName( aFileName, rExcRoot.pDoc->GetDocumentShell() ) );
 
         if( nTabCnt )
@@ -3123,7 +2954,7 @@ XclImpSupbook::XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRo
             while( nTabCnt )
             {
                 pNewTab = new XclImpSupbookTab;
-                ReadTabName( rIn, rExcRoot, rBytesLeft, pNewTab->aName );
+                ReadTabName( rIn, rExcRoot, pNewTab->aName );
 
                 if( rExcRoot.pExtDocOpt->nLinkCnt < 1 )
                 {
@@ -3164,28 +2995,14 @@ XclImpSupbook::~XclImpSupbook()
 void XclImpSupbook::ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf )
 {
     String sTabName;
-    XclImpHelper::DecodeExternsheet( rStrm, rDocName, sTabName, rSelf );
+    XclImpHelper::DecodeExternsheetUni( rStrm, rDocName, sTabName, rSelf );
 }
 
 //static
 void XclImpSupbook::ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName )
 {
-    rStrm.ReadUniString( rTabName, *rExcRoot.pCharset );
-    ::ExcelNameToScName( rTabName );
-}
-
-//static
-void XclImpSupbook::ReadDocName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rDocName, BOOL& rSelf )
-{
-    String sTabName;
-    ::EncodeExternSheetUnicode( rStrm, rDocName, sTabName, rBytesLeft, rSelf );
-}
-
-//static
-void XclImpSupbook::ReadTabName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rTabName )
-{
-    rTabName = ::ReadUnicodeString( rStrm, rBytesLeft, *rExcRoot.pCharset, 0 );
-    ::ExcelNameToScName( rTabName );
+    rStrm.AppendUniString( rTabName, *rExcRoot.pCharset );
+    XclImpHelper::ConvertName( rTabName );
 }
 
 UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const
@@ -3298,7 +3115,7 @@ BOOL AutoFilterData::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const
             (nRow == StartRow()) && (nTab == Tab()));
 }
 
-void AutoFilterData::ReadAutoFilter( SvStream& rStrm, INT32& nLeft )
+void AutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 {
     UINT16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
@@ -3323,7 +3140,7 @@ void AutoFilterData::ReadAutoFilter( SvStream& rStrm, INT32& nLeft )
             aEntry.eConnect = SC_AND;
             aEntry.pStr->Assign( String::CreateFromInt32( (sal_Int32) nCntOfTop10 ) );
 
-            rStrm.SeekRel( 20 );
+            rStrm.Ignore( 20 );
             nFirstEmpty++;
         }
     }
@@ -3350,22 +3167,22 @@ void AutoFilterData::ReadAutoFilter( SvStream& rStrm, INT32& nLeft )
                 {
                     case EXC_AFOPER_LESS:
                         aEntry.eOp = SC_LESS;
-                        break;
+                    break;
                     case EXC_AFOPER_EQUAL:
                         aEntry.eOp = SC_EQUAL;
-                        break;
+                    break;
                     case EXC_AFOPER_LESSEQUAL:
                         aEntry.eOp = SC_LESS_EQUAL;
-                        break;
+                    break;
                     case EXC_AFOPER_GREATER:
                         aEntry.eOp = SC_GREATER;
-                        break;
+                    break;
                     case EXC_AFOPER_NOTEQUAL:
                         aEntry.eOp = SC_NOT_EQUAL;
-                        break;
+                    break;
                     case EXC_AFOPER_GREATEREQUAL:
                         aEntry.eOp = SC_GREATER_EQUAL;
-                        break;
+                    break;
                     default:
                         aEntry.eOp = SC_EQUAL;
                 }
@@ -3374,37 +3191,37 @@ void AutoFilterData::ReadAutoFilter( SvStream& rStrm, INT32& nLeft )
                 {
                     case EXC_AFTYPE_RK:
                         rStrm >> nRK;
-                        rStrm.SeekRel( 4 );
-                        CreateFromDouble( *aEntry.pStr, ImportExcel::RkToDouble( nRK ) );
-                        break;
+                        rStrm.Ignore( 4 );
+                        CreateFromDouble( *aEntry.pStr, XclImpHelper::GetDoubleFromRK( nRK ) );
+                    break;
                     case EXC_AFTYPE_DOUBLE:
                         rStrm >> fVal;
                         CreateFromDouble( *aEntry.pStr, fVal );
-                        break;
+                    break;
                     case EXC_AFTYPE_STRING:
-                        rStrm.SeekRel( 4 );
+                        rStrm.Ignore( 4 );
                         rStrm >> nStrLen[ nE ];
-                        rStrm.SeekRel( 3 );
+                        rStrm.Ignore( 3 );
                         aEntry.pStr->Erase();
-                        break;
+                    break;
                     case EXC_AFTYPE_BOOLERR:
                         rStrm >> nBoolErr >> nVal;
-                        rStrm.SeekRel( 6 );
+                        rStrm.Ignore( 6 );
                         aEntry.pStr->Assign( String::CreateFromInt32( (sal_Int32) nVal ) );
                         bIgnore = (BOOL) nBoolErr;
-                        break;
+                    break;
                     case EXC_AFTYPE_EMPTY:
                         aEntry.bQueryByString = FALSE;
                         aEntry.nVal = SC_EMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
-                        break;
+                    break;
                     case EXC_AFTYPE_NOTEMPTY:
                         aEntry.bQueryByString = FALSE;
                         aEntry.nVal = SC_NONEMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
-                        break;
+                    break;
                     default:
-                        rStrm.SeekRel( 8 );
+                        rStrm.Ignore( 8 );
                         bIgnore = TRUE;
                 }
 
@@ -3420,14 +3237,12 @@ void AutoFilterData::ReadAutoFilter( SvStream& rStrm, INT32& nLeft )
                 }
             }
             else
-                rStrm.SeekRel( 10 );
+                rStrm.Ignore( 10 );
         }
 
-        nLeft -= 20;
         for( nE = 0; nE < 2; nE++ )
             if( nStrLen[ nE ] && pEntryStr[ nE ] )
-                pEntryStr[ nE ]->Assign( ::ReadUnicodeString(
-                    rStrm, nLeft, *pExcRoot->pCharset, nStrLen[ nE ] ) );
+                pEntryStr[ nE ]->Assign( rStrm.ReadUniString( *pExcRoot->pCharset, nStrLen[ nE ] ) );
     }
 }
 

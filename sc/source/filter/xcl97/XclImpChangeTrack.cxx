@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 11:00:40 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
 #endif
-#ifndef _SPSTRING_HXX
-#include "spstring.hxx"
-#endif
 
 //___________________________________________________________________
 
@@ -108,6 +105,7 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     pChangeTrack( NULL ),
     pInStrm( NULL ),
     pStrm( NULL ),
+    pFmlConv( NULL ),
     nTabIdCount( 0 ),
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
@@ -135,7 +133,8 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
             if( pStrm )
             {
                 pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
-                if( pChangeTrack )
+                pFmlConv = new XclImpChTrFmlConverter( pExcRoot, *pStrm, *this );
+                if( pChangeTrack && pFmlConv )
                 {
                     sOldUsername = pChangeTrack->GetUser();
                     pChangeTrack->SetUseFixDateTime( TRUE );
@@ -149,6 +148,8 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
 
 XclImpChangeTrack::~XclImpChangeTrack()
 {
+    if( pFmlConv )
+        delete pFmlConv;
     if( pChangeTrack )
         delete pChangeTrack;
     if( pStrm )
@@ -247,18 +248,11 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
 {
     sal_uInt16 nFmlSize;
     *pStrm >> nFmlSize;
-    sal_Int32 nTmpSize = nFmlSize;
-
-    // move token array to memory stream
-    SvMemoryStream aMemStrm;
-    pStrm->CopyToStream( aMemStrm, nFmlSize );
-    aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
 
     // read the formula, 3D tab refs from extended data
-    XclImpChTrFmlConverter aFmlConv( pExcRoot, aMemStrm, *this );
-    aFmlConv.Reset( nTmpSize, rPosition );
     const ScTokenArray* pArray = NULL;
-    BOOL bOK = (aFmlConv.Convert( pArray, nTmpSize ) == ConvOK);
+    pFmlConv->Reset( rPosition );
+    BOOL bOK = (pFmlConv->Convert( pArray, nFmlSize ) == ConvOK);
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -292,8 +286,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_STRING:
         {
-            String sString;
-            pStrm->ReadUniString( sString, *pExcRoot->pCharset );
+            String sString( pStrm->ReadUniString( *pExcRoot->pCharset ) );
             if( pStrm->IsValid() )
                 rpCell = new ScStringCell( sString );
         }
@@ -360,8 +353,7 @@ void XclImpChangeTrack::ReadChTrInsert()
 void XclImpChangeTrack::ReadChTrInfo()
 {
     pStrm->Ignore( 32 );
-    String sUsername;
-    pStrm->ReadUniString( sUsername, *pExcRoot->pCharset );
+    String sUsername( pStrm->ReadUniString( *pExcRoot->pCharset ) );
     if( !pStrm->IsValid() ) return;
 
     if( sUsername.Len() )
@@ -544,7 +536,7 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 // virtual, called from ExcToSc8::Convert()
 BOOL XclImpChTrFmlConverter::Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab )
 {
-    Ignore( 2 );
+    aIn.Ignore( 2 );
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab );
 }
 

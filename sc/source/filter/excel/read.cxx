@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,25 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 
-#include "root.hxx"
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
+#ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
+#endif
+#ifndef _EXCIMP8_HXX
 #include "excimp8.hxx"
+#endif
+#ifndef _FLTPRGRS_HXX
 #include "fltprgrs.hxx"
-
-#include "biffdump.hxx"
-#include "fontbuff.hxx"
-
+#endif
 #ifndef _SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
 #endif
+
+#include "root.hxx"
+#include "biffdump.hxx"
+#include "fontbuff.hxx"
 
 #ifdef DBG_UTIL
 ByteString& AddRecordName( UINT16 nOpcode, ByteString& rRet );
@@ -96,12 +104,6 @@ ByteString& AddRecordName( UINT16 nOpcode, ByteString& rRet );
 
 FltError ImportExcel::Read( void )
 {
-    UINT16      nOpcode;            // aktueller Opcode
-    UINT16      nLaengeRec;         // Laenge aktueller Record
-    UINT32      nTempPos;           // Temporaer fuer Z_Biff5Pre fuer
-                                    //  alte Stream-Pos
-    UINT32      nNextRecord;        // Stream-Pos des naechsten Records
-
     const BOOL  bWithDrawLayer = pD->GetDrawLayer() != NULL;
 
     enum Zustand {
@@ -132,30 +134,22 @@ FltError ImportExcel::Read( void )
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
     FltError            eLastErr = eERR_OK;
+    UINT16              nOpcode;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
     FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
 
-    const UINT32        nLimitPos = pPrgrsBar->GetStreamLen();
-
-    nNextRecord = aIn.Tell();
-
     while( eAkt != Z_Ende )
     {
-        if( aIn.Tell() >= nLimitPos )
+        aIn.StartNextRecord();
+        nOpcode = aIn.GetRecNum();
+
+        if( !aIn.IsValid() )
         {
-#ifdef __DBG_UTIL
             eAkt = Z_Ende;
-#endif
             break;
         }
-
-        aIn >> nOpcode >> nLaengeRec;
-
-        nBytesLeft = nLaengeRec;
-        nNextRecord += 4;
-        nNextRecord += nLaengeRec;  // alles klar zum Seeken
 
         if( eAkt != Z_Biff5Pre && eAkt != Z_Biff5WPre )
             pPrgrsBar->Progress();
@@ -216,9 +210,7 @@ FltError ImportExcel::Read( void )
 
                             nBdshtTab = 0;
 
-                            aIn.Seek( nNextRecord );
-                            nBytesLeft = 0;
-                            nTempPos = nNextRecord; // und Position merken
+                            aIn.StoreUserPosition();    // und Position merken
                         }
 
                         DBG_ASSERT( pExcRoot->eDateiTyp != Biff5,
@@ -566,7 +558,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5W;
-                        nNextRecord = nTempPos; // und zurueck an alte Position
+                        aIn.SeekUserPosition(); // und zurueck an alte Position
                         break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
@@ -820,9 +812,7 @@ FltError ImportExcel::Read( void )
                                 aColRowBuff.Reset();
                                 pFltTab->Reset();
 
-                                aIn.Seek( nNextRecord );
-                                nBytesLeft = 0;
-                                nTempPos = nNextRecord; // und Position merken
+                                aIn.StoreUserPosition();    // und Position merken
                                 break;
                             case Biff5C:
                                 eAkt = Z_Biff5C;
@@ -852,12 +842,8 @@ FltError ImportExcel::Read( void )
                     case 0x08:  Row25(); break;         // ROW          [ 2  5]
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5I;
-                        nNextRecord = nTempPos; // und zurueck an alte Position
+                        aIn.SeekUserPosition(); // und zurueck an alte Position
                         aColRowBuff.Apply( nTab );
-#ifdef DBG_UTIL
-aIn.Seek( nNextRecord );
-#endif
-
                         break;
                     case 0x1A:  Verticalpagebreaks(); break;
                     case 0x1B:  Horizontalpagebreaks(); break;
@@ -969,25 +955,10 @@ aIn.Seek( nNextRecord );
                 break;
             default: DBG_ERROR( "-ImportExcel::Read(): Zustand vergessen!" );
         }
-
-
-#ifdef DBG_UTIL
-{
-if( nNextRecord < aIn.Tell() && nOpcode != 0x0A )
-{
-    ByteString aDeb( "Biff +ImportExcel::Read(): over drive with " );
-    AddRecordName( nOpcode, aDeb );
-    DBG_WARNING( aDeb.GetBuffer() );
-}
-}
-#endif
-
-        aIn.Seek( nNextRecord );        // zum naechsten Record
     }
 
     pD->CalcAfterLoad();
 
-{
     ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
 
     UINT16                  nTabLast;// = pExcRoot->pTabNameBuff->GetLastIndex();
@@ -999,7 +970,6 @@ if( nNextRecord < aIn.Tell() && nOpcode != 0x0A )
     UINT16                  nTabCount;
     for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
         pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
-}
 
     PostDocLoad();
 
@@ -1030,10 +1000,6 @@ FltError ImportExcel8::Read( void )
     CreateTmpCtrlStorage();
 
     UINT16              nOpcode;            // aktueller Opcode
-    UINT16              nLaengeRec;         // Laenge aktueller Record
-    UINT32              nTempPos;           // Temporaer fuer Z_Biff8Pre fuer
-                                            //  alte Stream-Pos
-    UINT32              nNextRecord;        // Stream-Pos des naechsten Records
 
     const BOOL          bWithDrawLayer = pD->GetDrawLayer() != NULL;
 
@@ -1055,36 +1021,29 @@ FltError ImportExcel8::Read( void )
     FltError            eLastErr = eERR_OK;
 
     DBG_ASSERT( &aIn != NULL,
-        "-ImportExcel::Read(): Kein Stream - wie dass?!" );
+        "-ImportExcel8::Read(): Kein Stream - wie dass?!" );
 
     FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
     pExcRoot->pProgress = pPrgrsBar;
 
-    const UINT32        nLimitPos = pPrgrsBar->GetStreamLen();
-
-    nNextRecord = aIn.Tell();
-
     while( eAkt != Z_Ende )
     {
-        if( aIn.Tell() >= nLimitPos )
+        aIn.StartNextRecord();
+        nOpcode = aIn.GetRecNum();
+        if( !aIn.IsValid() )
         {
-#ifdef __DBG_UTIL
             eAkt = Z_Ende;
-#endif
             break;
         }
-
-        aIn >> nOpcode >> nLaengeRec;
-
-        nBytesLeft = nLaengeRec;
-        nNextRecord += 4;
-        nNextRecord += nLaengeRec;
 
         if( eAkt != Z_Biff8Pre && eAkt != Z_Biff8WPre )
             pPrgrsBar->Progress();
 
         if( nOpcode != 0x5D && nOpcode != 0x3C )    // no obj-record and no cont-record
             bLeadingObjRec = FALSE;
+
+        if( nOpcode != 0x003C )
+            aIn.InitializeRecord( TRUE );           // enable internal CONTINUE handling
 
         switch( eAkt )
         {
@@ -1104,9 +1063,7 @@ FltError ImportExcel8::Read( void )
 
                             nBdshtTab = 0;
 
-                            aIn.Seek( nNextRecord );
-                            nBytesLeft = 0;
-                            nTempPos = nNextRecord; // und Position merken
+                            aIn.StoreUserPosition();
                         }
 
                         DBG_ASSERT( pExcRoot->eDateiTyp != Biff8,
@@ -1122,7 +1079,7 @@ FltError ImportExcel8::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = Z_Biff8W;
-                        nNextRecord = nTempPos; // und zurueck an alte Position
+                        aIn.SeekUserPosition();         // und zurueck an alte Position
                         break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         if( Filepass() )
@@ -1165,10 +1122,8 @@ FltError ImportExcel8::Read( void )
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
                     case 0xE0:  Xf(); break;            // XF           [    5   ]
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
-                    case 0xEB:
-                        nNextRecord = Msodrawinggroup( nLaengeRec );
-                        break;
-                    case 0xFC:  nNextRecord = Sst();break;// SST        [      8 ]
+                    case 0xEB:  Msodrawinggroup(); break;
+                    case 0xFC:  Sst(); break;           // SST      [      8 ]
                     case 0x013D: Tabid(); break;        // TABID        [      8 ] // for change tracking
                     case 0x01AE: Supbook(); break;      // SUPBOOK      [      8 ]
                     case 0x01BA: Codename( TRUE ); break;
@@ -1236,8 +1191,7 @@ FltError ImportExcel8::Read( void )
                         break;
                     case 0x5D:
                         if( bWithDrawLayer )
-                            Obj( nNextRecord + 8 ); // 'lokaler' Stream
-
+                            Obj();
                         eAkt = Z_Biff8T;
                         break;
                     case 0x7E:                          // RK           [    5   ]
@@ -1250,7 +1204,7 @@ FltError ImportExcel8::Read( void )
                     case 0xA1:  Setup(); break;         // SETUP        [   45   ]
                     case 0xAE:  Scenman(); break;
                     case 0xAF:
-                        nNextRecord = Scenario( nLaengeRec );
+                        Scenario();
                         eAkt = Z_Biff8T;
                         break;
                     case 0xBD:                          // MULRK        [    5   ]
@@ -1267,11 +1221,11 @@ FltError ImportExcel8::Read( void )
                         break;
                     case 0xE5:  Cellmerging(); break;
                     case 0xEC:
-                        Msodrawing( nLaengeRec );
+                        Msodrawing();
                         eAkt = Z_Biff8T;
                         break;
                     case 0xED:
-                        Msodrawingselection( nLaengeRec );
+                        Msodrawingselection();
                         eAkt = Z_Biff8T;
                         break;
                     case 0xFD:                          // LABELSST     [      8 ]
@@ -1324,14 +1278,8 @@ FltError ImportExcel8::Read( void )
                         NeueTabelle();
                         if( pExcRoot->eDateiTyp == Biff8C )
                         {
-                            if( bWithDrawLayer &&
-                                pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
-                            {
-                                aIn.Seek( nNextRecord );
-
-                                ReadChart8( *pPrgrsBar, nLimitPos, FALSE ); // zunaechst Return vergessen
-                                nNextRecord = aIn.Tell();
-                            }
+                            if( bWithDrawLayer && pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
+                                ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                             else
                             {// Stream-Teil mit Chart ueberlesen
                                 ePrev = eAkt;
@@ -1370,15 +1318,15 @@ FltError ImportExcel8::Read( void )
                         bCond4EscherCont = FALSE;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345   ]
-                    case 0x3C:  Cont( nLaengeRec ); break;
+                    case 0x3C:  Cont(); break;
                     case 0x5D:                          // OBJ          [ 2345   ]
                         if( bWithDrawLayer )
-                            Obj( nNextRecord + 8 ); // 'lokaler' Stream);
+                            Obj();
                         break;
                     case 0x7E:  Rk(); break;            // RK           [    5   ]
                     case 0xA0:  Scl(); break;           // SCL          [   45   ]
                     case 0xAE:  Scenman(); break;
-                    case 0xAF:  nNextRecord = Scenario( nLaengeRec ); break;
+                    case 0xAF:  Scenario(); break;
                     case 0xB0:  SXView(); break;        // SXVIEW                 ##++##
                     case 0xB1:  SXVd(); break;          // SXVD                   ##++##
                     case 0xB2:  SXVi(); break;          // SXVI                   ##++##
@@ -1390,8 +1338,8 @@ FltError ImportExcel8::Read( void )
                     case 0xC5:  SXDi(); break;          // SXDI                   ##++##
                     case 0xD6:  Rstring(); break;       // RSTRING      [    5   ]
                     case 0xE5:  Cellmerging(); break;
-                    case 0xEC:  Msodrawing( nLaengeRec ); break;
-                    case 0xED:  Msodrawingselection( nLaengeRec ); break;
+                    case 0xEC:  Msodrawing(); break;
+                    case 0xED:  Msodrawingselection(); break;
                     case 0xF0:  SXRule(); break;        // SXRULE                 ##++##
                     case 0xF1:  SXEx(); break;          // SXEX                   ##++##
                     case 0xF2:  SXFilt(); break;        // SXFILT                 ##++##
@@ -1414,11 +1362,7 @@ FltError ImportExcel8::Read( void )
                         Bof5();
                         if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
                             pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
-                        {
-                            aIn.Seek( nNextRecord );
-                            ReadChart8( *pPrgrsBar, nLimitPos, FALSE ); // zunaechst Return vergessen
-                            nNextRecord = aIn.Tell();
-                        }
+                            ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                         else
                         {
                             ePrev = eAkt;
@@ -1450,9 +1394,7 @@ FltError ImportExcel8::Read( void )
                                 aColRowBuff.Reset();
                                 pFltTab->Reset();
 
-                                aIn.Seek( nNextRecord );
-                                nBytesLeft = 0;
-                                nTempPos = nNextRecord; // und Position merken
+                                aIn.StoreUserPosition();
                                 break;
                             case Biff8C:
                                 if ( pActEscherObj )
@@ -1463,14 +1405,11 @@ FltError ImportExcel8::Read( void )
                                 pActEscherObj = new ExcEscherObj( 0, 0, nTab, pExcRoot );
                                 // erstmal irgendeine Groesse setzen
                                 pActEscherObj = new ExcEscherChart( pActEscherObj );
-                                aIn.Seek( nNextRecord );
                                 pExcRoot->bChartTab = TRUE;
-
-                                ReadChart8( *pPrgrsBar, nLimitPos, TRUE );
+                                ReadChart8( *pPrgrsBar, TRUE );
                                 pExcRoot->bChartTab = FALSE;
                                 EndSheet();
                                 nTab++;
-                                nNextRecord = aIn.Tell();
                                 break;
                             case Biff8V:
                             default:
@@ -1494,12 +1433,8 @@ FltError ImportExcel8::Read( void )
                     case 0x08:  Row25(); break;         // ROW          [ 2  5   ]
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = Z_Biff8I;
-                        nNextRecord = nTempPos; // und zurueck an alte Position
+                        aIn.SeekUserPosition();         // und zurueck an alte Position
                         aColRowBuff.Apply( nTab );
-#ifdef DBG_UTIL
-aIn.Seek( nNextRecord );
-#endif
-
                         break;
                     case 0x12:  Protect(); break;
                     case 0x1A:  Verticalpagebreaks(); break;
@@ -1518,7 +1453,7 @@ aIn.Seek( nNextRecord );
                     case 0x9B:  FilterMode(); break;    // FILTERMODE
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
-                    case 0xE9:  nNextRecord = BGPic( nLaengeRec ); break;
+                    case 0xE9:  BGPic(); break;
                     case 0x01BA: Codename( FALSE ); break;
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345   ]
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
@@ -1554,8 +1489,6 @@ aIn.Seek( nNextRecord );
                 break;
             default: DBG_ERROR( "-ImportExcel8::Read(): Zustand vergessen!" );
         }
-
-        aIn.Seek( nNextRecord );        // zum naechsten Record
     }
 
     pD->CalcAfterLoad();

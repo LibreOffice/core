@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,13 @@
 
 #include "tool.h"
 #include "decl.h"
-#include "spstring.hxx"
 #include "root.hxx"
 #include "lotrange.hxx"
 #include "namebuff.hxx"
+
+#ifndef _SC_XCLIMPHELPER_HXX
+#include "XclImpHelper.hxx"
+#endif
 
 #pragma optimize("",off)
 
@@ -598,7 +601,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
     static UINT16       nDouble = 0;
 
     String              aScName( rOrgName );
-    ExcelNameToScName( aScName );
+    XclImpHelper::ConvertName( aScName );
 
     register ENTRY*     pInsert = new ENTRY( rOrgName, aScName, rCRD );
 

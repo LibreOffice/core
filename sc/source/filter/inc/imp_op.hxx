@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:21:24 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
 #ifndef _FLTTYPES_HXX
 #include "flttypes.hxx"
 #endif
@@ -86,43 +89,34 @@
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
 #endif
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
-#endif
 
+class SfxItemSet;
+class SvStream;
 
 class ScFormulaCell;
 class SdrObject;
+class ScDocument;
+struct ScToken;
+class ScToken2;
+class ScExtDocOptions;
+class _ScRangeListTabs;
+
 class FontBuffer;
 class XF_Buffer;
 class ValueFormBuffer;
-class SpString;
-class ScDocument;
 class ExcelToSc;
-struct ScToken;
-class ScToken2;
-class SfxItemSet;
-class ScExtDocOptions;
-class _ScRangeListTabs;
 class AutoFilterBuffer;
-
-enum StringInfoLen
-{
-    LenByte = 0,    // 1 Byte lange Stringlaengeninfo
-    LenWord = 1     // 2 Byte   "       "
-};
-
-
 
 
 class ImportTyp
 {
 protected:
-    SvStream&           aIn;            // Eingabe-Stream
+    XclImpStream        aIn;            // input stream
     CharSet             eQuellChar;     // Quell-Zeichensatz
-    ScDocument*         pD;         // Dokument
+    ScDocument*         pD;             // Dokument
     ScExtDocOptions*    pExtOpt;        // optionale extended Options
     UINT16              nTab;           // z.Zt. bearbeitete Tabelle
+
 public:
                         ImportTyp( SvStream&, ScDocument*, CharSet eSrc );
     virtual             ~ImportTyp();
@@ -130,14 +124,6 @@ public:
     virtual FltError    Read( void );
 
     ScExtDocOptions&    GetExtOpt( void );
-
-    static SvMemoryStream* CreateContinueStream(
-                            SvStream& rStream,                  // input stream
-                            const UINT16 nBaseRecordLen,        // size of start record
-                            UINT32& rSummaryLen,                // return: size of memory stream
-                            UINT32& rNextPureRecord,            // return: position of next regular record
-                            const BOOL bForceSingle = FALSE,    // force creating a stream without continue record
-                            UINT32List* pCutPosList = NULL );   // list of stream position (im mem stream)
 };
 
 
@@ -175,7 +161,6 @@ private:
     ExcelChartData*         pUsedChartLast;     // benutzte Chart-Daten, letzter
 
 protected:
-    INT32                   nBytesLeft;         // Restbytes des aktuelle Records
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
     ValueFormBuffer*        pValueFormBuffer;   // ... Number-Formats
@@ -351,12 +336,8 @@ protected:
                                 BYTE nFlag, BOOL bShrFmla );
                                             //      -> excform.cxx
 
-    void                    ReadExcString( StringInfoLen eLen, ByteString& aStr );
-    void                    ReadExcString( StringInfoLen eLen, String& aStr );
     void                    ResetBof( void );
-    void                    ExcToScName( SpString& rName );
     void                    EndSheet( void );
-    ByteString              ReadExcString( StringInfoLen eLen );
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
@@ -371,16 +352,6 @@ protected:
     ScEditEngineDefaulter&  GetEdEng( void ) const;
     virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
-    inline void             Ignore( const UINT32 nNumOfBytes );
-    inline UINT8            Read1( void );
-    inline UINT16           Read2( void );
-    inline UINT32           Read4( void );
-    inline double           Read8( void );
-    inline void             ReadX( UINT8& r );
-    inline void             ReadX( UINT16& r );
-    inline void             ReadX( UINT32& r );
-    inline void             ReadX( double& r );
-
     virtual void            PostDocLoad( void );
     virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
                                         ByteString& rUnconvertedText, const UINT16 nXF );
@@ -392,83 +363,7 @@ public:
     virtual                 ~ImportExcel( void );
 
     virtual FltError        Read( void );
-
-    static double           RkToDouble( const UINT32& nRk );
 };
-
-
-
-
-inline void ImportExcel::Ignore( const UINT32 n )
-{
-    aIn.SeekRel( n );
-    nBytesLeft -= n;
-}
-
-
-inline UINT8 ImportExcel::Read1( void )
-{
-    UINT8   n;
-    aIn >> n;
-    nBytesLeft -= sizeof( n );
-    return n;
-}
-
-
-inline UINT16 ImportExcel::Read2( void )
-{
-    UINT16  n;
-    aIn >> n;
-    nBytesLeft -= sizeof( n );
-    return n;
-}
-
-
-inline UINT32 ImportExcel::Read4( void )
-{
-    UINT32  n;
-    aIn >> n;
-    nBytesLeft -= sizeof( n );
-    return n;
-}
-
-
-inline double ImportExcel::Read8( void )
-{
-    double  f;
-    aIn >> f;
-    nBytesLeft -= sizeof( f );
-    return f;
-}
-
-
-inline void ImportExcel::ReadX( UINT8& r )
-{
-    aIn >> r;
-    nBytesLeft -= sizeof( r );
-}
-
-
-inline void ImportExcel::ReadX( UINT16& r )
-{
-    aIn >> r;
-    nBytesLeft -= sizeof( r );
-}
-
-
-inline void ImportExcel::ReadX( UINT32& r )
-{
-    aIn >> r;
-    nBytesLeft -= sizeof( r );
-}
-
-
-inline void ImportExcel::ReadX( double& r )
-{
-    aIn >> r;
-    nBytesLeft -= sizeof( r );
-}
-
 
 #endif
 

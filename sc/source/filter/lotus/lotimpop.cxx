@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include "global.hxx"
 
 #include "root.hxx"
+#include "flttools.hxx"
 #include "lotimpop.hxx"
-#include "spstring.hxx"
 #include "lotfntbf.hxx"
 #include "lotform.hxx"
 #include "tool.h"

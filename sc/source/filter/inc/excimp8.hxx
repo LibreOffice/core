@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ private:
     UINT16                          nFormCnt;
     UINT16                          nStepCount;
 
-    void                            ReadTxo( SvStream& );
-    void                            ReadCont( SvStream&, RootData&, ScEditEngineDefaulter& );
+    void                            ReadTxo( XclImpStream& );
+    void                            ReadCont( XclImpStream&, RootData&, ScEditEngineDefaulter& );
 public:
     inline                          TxoCont( void );
     virtual                         ~TxoCont();
@@ -313,7 +313,7 @@ public:
     inline  void                SetLinked( BOOL bVal )      { bLinked = (bVal != 0); }
     inline  void                SetBlipId( UINT32 nVal )    { nBlipId = nVal; }
 
-    void                        ReadPictFmla( SvStream&, UINT16 nLen );
+    void                        ReadPictFmla( XclImpStream&, UINT16 nLen );
     void                        CreateSdrOle( Biff8MSDffManager&, UINT32 nOLEImpFlags = 0 );
 };
 
@@ -427,12 +427,11 @@ class ExcCondForm : protected ExcRoot//, List
         ScConditionalFormat*    pScCondForm;
     protected:
     public:
-                                ExcCondForm( /*const UINT16 nTab, */RootData* pRootData );
+                                ExcCondForm( RootData* pRootData );
         virtual                 ~ExcCondForm();
 
-        void                    Read( SvStream& rIn );
-        void                    ReadCf( SvStream& rIn, const UINT16 nRecLen,
-                                        ExcelToSc& rFormConverter );
+        void                    Read( XclImpStream& rIn );
+        void                    ReadCf( XclImpStream& rIn, ExcelToSc& rFormConverter );
         void                    Apply( void );
 };
 
@@ -469,7 +468,7 @@ class ExcStreamConsumer
 
     public :
 
-        const DffRecordHeader*  Consume( SvStream* pStrm, sal_uInt32 nLen );    // owns stream if nLen != 0
+        const DffRecordHeader*  Consume( SvStream* pStrm, sal_uInt32 nLen );    // owns stream if nLen == 0
         sal_Bool                AppendData( sal_Char* pBuf, sal_uInt32 nLen );
         SvStream*               GetStream() const { return pStrm; };
 
@@ -483,7 +482,7 @@ class XclImpTabIdBuffer : protected UINT16List
 private:
     void                        Append( UINT16 nTabId );
 public:
-    void                        Fill( SvStream& rStrm, UINT16 nCount );
+    void                        Fill( XclImpStream& rStrm, UINT16 nCount );
     UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
 };
 
@@ -531,17 +530,17 @@ class ImportExcel8 : public ImportExcel
         void                    Externsheet( void );            // 0x17
         void                    Externname( void );             // 0x23
         void                    Font( void );                   // 0x31
-        void                    Cont( const UINT16 nLenRecord );// 0x3C
+        void                    Cont( void );                   // 0x3C
         void                    Dconref( void );                // 0x51
         void                    Xct( void );                    // 0x59
         void                    Crn( void );                    // 0x5A
-        void                    Obj( const UINT32 nLimitPos );  // 0x5D
+        void                    Obj( void );                    // 0x5D
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B
         void                    AutoFilterInfo( void );         // 0x9D
         void                    AutoFilter( void );             // 0x9E
         void                    Scenman( void );                // 0xAE
-        UINT32                  Scenario( const UINT16 nLenRecord );
+        void                    Scenario( void );               // 0xAF
         void                    SXView( void );                 // 0xB0
         void                    SXVd( void );                   // 0xB1
         void                    SXVi( void );                   // 0xB2
@@ -553,16 +552,15 @@ class ImportExcel8 : public ImportExcel
         void                    Xf( void );                     // 0xE0
         void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
-        UINT32                  BGPic( UINT32 nLenRecord );     // 0xE9     background picture (guess so, no documentation)
-        UINT32                  Msodrawinggroup( const UINT32 nLenRecord );     // 0xEB
-                                                                // liefert Pos vom Folgerecord
-        void                    Msodrawing( const UINT32 nLenRecord );          // 0xEC
-        void                    Msodrawingselection( const UINT32 nLenRecord ); // 0xED
+        void                    BGPic( void );                  // 0xE9     background picture (guess so, no documentation)
+        void                    Msodrawinggroup( void );        // 0xEB
+        void                    Msodrawing( void );             // 0xEC
+        void                    Msodrawingselection( void );    // 0xED
         void                    SXRule( void );                 // 0xF0
         void                    SXEx( void );                   // 0xF1
         void                    SXFilt( void );                 // 0xF2
         void                    SXSelect( void );               // 0xF7
-        UINT32                  Sst( void );                    // 0xFC
+        void                    Sst( void );                    // 0xFC
                                                                 // liefert Pos vom Folgerecord
         ScBaseCell*             CreateCellFromShStrTabEntry( const ShStrTabEntry*,
                                                                 const UINT16 nXF );
@@ -651,26 +649,10 @@ class ImportExcel8 : public ImportExcel
         void                    EndChartObj( void );
         virtual void            PostDocLoad( void );
 
-        virtual FltError        ReadChart8( FilterProgressBar&, const UINT32 nLimitPos,
-                                            const BOOL bOwnTab );
+        virtual FltError        ReadChart8( FilterProgressBar&, const BOOL bOwnTab );
                                 // -> read.cxx
-        SvMemoryStream*         CreateContinueStream(
-                                        const UINT16 nBaseRecordLen,        // Laenge vom Start-Record
-                                        UINT32& rSummaryLen,                // rueck: Laenge vom Memory Stream
-                                        UINT32& rNextPureRecord,
-                                        const BOOL bForceSingle = FALSE,    // erzeugt Memory-Stream auch bei Single-Record
-                                        UINT32List* pCutPosList = NULL      // opt. Liste mit Streampos (im Mem-Stream) der
-                                                                            //  Schnittstellen
-                                        );
-                                // rueck: neue Pos naechster Rec
-                                // muss mit aIn-Pos direkt am Record-Body-Anfang gerufen werden
-                                // return = NULL -> normaler Record, weitermachen wie gewohnt
-                                // return != NULL -> statt aIn Memory-Stream verwenden und nach Gebrauch
-                                //      selbst zerstoeren, Pos von aIn ist dann UNDEFINIERT
         void                    InsertHyperlink( const UINT16 nCol, const UINT16 nRow,
                                                     const String& rURL );
-        String                  ReadWString( UINT16 nAnzBytes, const BOOL bDecBytesLeft = FALSE );
-        String                  ReadCString( UINT16 nAnzBytes, const BOOL bDecBytesLeft = FALSE );
         void                    CreateTmpCtrlStorage( void );
                                     // if possible generate a SvxMSConvertOCXControls compatibel storage
         inline ExcChart*        GetActChartData( void );
@@ -705,7 +687,7 @@ protected:
 public:
     virtual                     ~XclImpXtiBuffer();
 
-    void                        Read( SvStream& rIn, INT32& rBytesLeft, UINT32 nNumOfEntries );
+    void                        Read( XclImpStream& rIn, UINT32 nNumOfEntries );
     inline const XclImpXti*     Get( UINT32 nIndex ) const
                                     { return (const XclImpXti*) List::GetObject( nIndex ); }
 };
@@ -727,14 +709,11 @@ private:
                                     { return (const XclImpSupbookTab*) List::GetObject( nIndex ); }
 
 public:
-                                XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot );
+                                XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot );
     virtual                     ~XclImpSupbook();
 
     static void                 ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf );
     static void                 ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName );
-
-    static void                 ReadDocName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rDocName, BOOL& rSelf );
-    static void                 ReadTabName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rTabName );
 
     inline const String&        GetName() const         { return aFileName; }
     UINT16                      GetScTabNum( UINT16 nExcTabNum ) const;
@@ -792,7 +771,7 @@ public:
     inline UINT16               EndRow() const      { return aParam.nRow2; }
     BOOL                        HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const;
 
-    void                        ReadAutoFilter( SvStream& rStrm, INT32& nLeft );
+    void                        ReadAutoFilter( XclImpStream& rStrm );
 
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );

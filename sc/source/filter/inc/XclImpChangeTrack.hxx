@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
 #endif
+#ifndef _SC_XCLIMPHELPER_HXX
+#include "XclImpHelper.hxx"
+#endif
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
 #endif
@@ -91,6 +94,7 @@
 class ScBaseCell;
 class ScChangeAction;
 class ScChangeTrack;
+class XclImpChTrFmlConverter;
 
 //___________________________________________________________________
 
@@ -116,10 +120,10 @@ private:
     XclImpChTrRecHeader         aRecHeader;
     String                      sOldUsername;
 
-    UINT32List                  aCutPosList;    // cut positions for string input
     ScChangeTrack*              pChangeTrack;
     SvStream*                   pInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
+    XclImpChTrFmlConverter*     pFmlConv;       // special formula converter
     sal_uInt16                  nTabIdCount;
     sal_Bool                    bGlobExit;      // global exit loop
 
@@ -190,7 +194,7 @@ inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
 
 inline double XclImpChangeTrack::ReadRK()
 {
-    return ImportExcel::RkToDouble( pStrm->ReaduInt32() );
+    return XclImpHelper::GetDoubleFromRK( pStrm->ReaduInt32() );
 }
 
 inline sal_Bool XclImpChangeTrack::ReadBool()
@@ -219,7 +223,7 @@ inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
 
 inline void XclImpChangeTrack::ReadString( String& rString )
 {
-    pStrm->ReadUniString( rString, *pExcRoot->pCharset );
+    pStrm->AppendUniString( rString, *pExcRoot->pCharset );
 }
 
 inline void XclImpChangeTrack::IgnoreString()
@@ -241,14 +245,14 @@ private:
 public:
     inline                      XclImpChTrFmlConverter(
                                     RootData* pRootData,
-                                    SvStream& rStrm,
+                                    XclImpStream& rStrm,
                                     XclImpChangeTrack& rXclChTr );
     virtual                     ~XclImpChTrFmlConverter();
 };
 
 inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
         RootData* pRootData,
-        SvStream& rStrm,
+        XclImpStream& rStrm,
         XclImpChangeTrack& rXclChTr ) :
     ExcelToSc8( pRootData, rStrm, nDummy ),
     rChangeTrack( rXclChTr )

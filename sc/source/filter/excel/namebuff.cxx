@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include "compiler.hxx"
 #include "scextopt.hxx"
 
-#include "spstring.hxx"
 #include "namebuff.hxx"
 #include "root.hxx"
 #include "tokstack.hxx"

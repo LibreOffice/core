@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excscen.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 
 struct RootData;
-
+class XclImpStream;
 
 
 
@@ -106,7 +106,7 @@ protected:
 
     void                        Apply( ScDocument& rDoc, const BOOL bLast = FALSE );
 public:
-                                ExcScenario( SvStream& rIn, const RootData& rRoot );
+                                ExcScenario( XclImpStream& rIn, const RootData& rRoot );
     virtual                     ~ExcScenario();
 };
 
