@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-09 10:11:19 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 09:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #define _CPPUHELPER_INTERFACECONTAINER_H_
 
-#include <stl/hash_map>
-#include <stl/functional>
+#include <hash_map>
+#include <functional>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>

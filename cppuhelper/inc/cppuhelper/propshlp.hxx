@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 09:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include <rtl/alloc.h>
 
-#include <stl/hash_map>
+#include <hash_map>
 
 #include <cppuhelper/interfacecontainer.hxx>
 
