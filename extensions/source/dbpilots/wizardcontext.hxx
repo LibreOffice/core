@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:13:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ namespace dbp
         // the column names of the object the form is bound to (table, query or SQL statement)
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                     aFieldNames;
+
+        sal_Bool bEmbedded;
     };
 
 //.........................................................................
