@@ -1,6 +1,6 @@
     <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
-        <prop oor:name="URLPattern"><value>private:factory/swriter/GlobalDocument*</value></prop>
+        <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>sxg</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.sun.xml.writer.global</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
