@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-01 18:03:07 $
+ *  last change: $Author: pluby $ $Date: 2000-12-31 20:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@
 // ==================================================================
 
 SalBitmap::SalBitmap() :
-        mnBitCount  ( 0 )
+        mhPixMap( 0 ),
+        mnBitCount( 0 )
 {
 }
 
@@ -122,6 +123,8 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 
 void SalBitmap::Destroy()
 {
+    maSize = Size();
+    mnBitCount = 0;
 }
 
 // ------------------------------------------------------------------
@@ -135,6 +138,8 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
     pBuffer->mnWidth = maSize.Width();
     pBuffer->mnHeight = maSize.Height();
     pBuffer->mnScanlineSize = AlignedWidth4Bytes( pBuffer->mnWidth * mnBitCount );
+    pBuffer->mnFormat |= BMP_FORMAT_16BIT_TC_MASK;
+    pBuffer->maColorMask = ColorMask( 0x7b00, 0x03e0, 0x001f);
     pBuffer->mpBits = new BYTE[ pBuffer->mnScanlineSize * pBuffer->mnHeight ];
 
     return pBuffer;
