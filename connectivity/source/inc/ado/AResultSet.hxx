@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,11 @@
 #ifndef _CONNECTIVITY_ADO_ASTATEMENT_HXX_
 #include "ado/AStatement.hxx"
 #endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/CommonTools.hxx"
+//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+//#include "connectivity/CommonTools.hxx"
+//#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -132,7 +135,7 @@ namespace connectivity
                                                     ::com::sun::star::sdbcx::XDeleteRows,
                                                     ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public OBaseMutex,
+        class OResultSet :  public comphelper::OBaseMutex,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:07:09 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 namespace connectivity
 {
@@ -122,7 +125,7 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public OBaseMutex,
+        class OStatement_Base       :   public comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>

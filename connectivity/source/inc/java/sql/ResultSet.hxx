@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:42:22 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ namespace connectivity
                                                                                                 ::com::sun::star::sdbc::XColumnLocate,
                                                                                                 ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
-    class java_sql_ResultSet :  public OBaseMutex,
+    class java_sql_ResultSet :  public comphelper::OBaseMutex,
                                 public  java_sql_ResultSet_BASE,
                                 public  java_lang_Object,
                                 public  ::cppu::OPropertySetHelper,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:09:53 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _CONNECTIVITY_FILE_FANALYZER_HXX_
 #include "file/fanalyzer.hxx"
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 namespace connectivity
 {
@@ -124,7 +127,7 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public  OBaseMutex,
+        class OStatement_Base       :   public  comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::comphelper::OPropertyContainer,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>

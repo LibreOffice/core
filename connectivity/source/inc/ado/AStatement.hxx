@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,11 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/CommonTools.hxx"
+//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+//#include "connectivity/CommonTools.hxx"
+//#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 #ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
 #include "ado/AConnection.hxx"
@@ -121,7 +124,7 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public OBaseMutex,
+        class OStatement_Base       :   public comphelper::OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,

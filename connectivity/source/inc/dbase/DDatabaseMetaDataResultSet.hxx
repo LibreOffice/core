@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:40:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace connectivity
         DECLARE_STL_VECTOR(::com::sun::star::uno::Any,ORow);
         DECLARE_STL_VECTOR(ORow, ORows);
 
-        class ODatabaseMetaDataResultSet :  public OBaseMutex,
+        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
                                             public  ODatabaseMetaDataResultSet_BASE,
                                             public  ::comphelper::OPropertyContainer,
                                             public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

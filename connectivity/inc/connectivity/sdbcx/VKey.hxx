@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:35:02 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,11 @@
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/CommonTools.hxx"
+//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+//#include "connectivity/CommonTools.hxx"
+//#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
@@ -93,7 +96,7 @@ namespace connectivity
     namespace sdbcx
     {
 
-        class OKey :    public OBaseMutex,
+        class OKey :    public comphelper::OBaseMutex,
                         public OColumns_BASE,
                         public IRefreshableColumns,
                         public ::comphelper::OPropertyArrayUsageHelper<OKey>,

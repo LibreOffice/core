@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,11 @@
 #ifndef _CONNECTIVITY_ADO_ASTATEMENT_HXX_
 #include "ado/AStatement.hxx"
 #endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/CommonTools.hxx"
+//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+//#include "connectivity/CommonTools.hxx"
+//#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 
 namespace connectivity
@@ -118,7 +121,7 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class ODatabaseMetaDataResultSet :  public OBaseMutex,
+        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:35:43 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #include "file/FConnection.hxx"
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 namespace connectivity
 {
     namespace file
@@ -79,7 +82,7 @@ namespace connectivity
         //************ Class: java.sql.DatabaseMetaDataDate
         //**************************************************************
 
-        class ODatabaseMetaData :   public  OBaseMutex,
+        class ODatabaseMetaData :   public  comphelper::OBaseMutex,
                                                                         public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData >
         {
         protected:
