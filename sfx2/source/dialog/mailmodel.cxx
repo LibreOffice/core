@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:52:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,10 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
                                                                         pFilterName ? pFilterName : pPassItem,
                                                                         pFilterName ? pPassItem : 0L, 0L );
+
+        // #i30432# notify that export is finished - the Writer may want to restore removed content
+        pDisp->Execute( SID_MAIL_EXPORT_FINISHED, SFX_CALLMODE_SYNCHRON );
+
         BOOL bRet = pRet ? pRet->GetValue() : FALSE;
 
         delete pFilterName;
