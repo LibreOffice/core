@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:20:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,14 +686,14 @@ String RID_WEBOLE_TOOLBOX
     Text [ dutch ] = "Object" ;
     Text [ spanish ] = "Objeto/Web" ;
     Text [ english_us ] = "Object/Web" ;
-    Text[ chinese_simplified ] = "ε―Ήθ±΅/δΈ‡η»΄η½‘";
+    Text[ chinese_simplified ] = "ε―Ήθ±΅/Web";
     Text[ russian ] = "Ξαϊεκς";
     Text[ polish ] = "Obiekt";
     Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ/Web";
     Text[ chinese_traditional ] = "η‰©δ»¶/Web";
     Text[ arabic ] = "ίΗΖδ";
     Text[ dutch ] = "Object";
-    Text[ chinese_simplified ] = "ε―Ήθ±΅/δΈ‡η»΄η½‘";
+    Text[ chinese_simplified ] = "ε―Ήθ±΅/Web";
     Text[ greek ] = "Αντικείμενο";
     Text[ korean ] = "κ°μ²΄/μ›Ή";
     Text[ turkish ] = "Nesne/Web";
