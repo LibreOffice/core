@@ -1,4 +1,4 @@
-j2	sj2	:	jlibs sandbox svtools NULL
+j2	sj2	:	sandbox svtools NULL
 j2	sj2										usr1	-	all	j2_mkout NULL
 j2	sj2\stardiv\net\protocol\appletresource	nmake	-	all	j2_pappres NULL
 j2	sj2\stardiv\unoctrl						nmake	-	all	j2_staructrl NULL
