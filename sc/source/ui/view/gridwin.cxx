@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:53:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2760,7 +2760,7 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
                     //  Is a draw object selected?
 
                     SdrView* pDrawView = pViewSh->GetSdrView();
-                    if (pDrawView && pDrawView->HasMarked())
+                    if (pDrawView && pDrawView->AreObjectsMarked())
                     {
                         // #100442#; the conext menu should open in the middle of the selected objects
                         Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
@@ -2912,7 +2912,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
 
     if ( !bHitSelected )
     {
-        BOOL bWasDraw = ( pDrawView && pDrawView->HasMarked() );
+        BOOL bWasDraw = ( pDrawView && pDrawView->AreObjectsMarked() );
         BOOL bHitDraw = FALSE;
         if ( pDrawView )
         {
