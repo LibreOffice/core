@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
     TEMPPRINTER() = ImplPrnDlgListBoxSelect( &maLbName, &maBtnProperties,
                                              mpPrinter, TEMPPRINTER() );
     ImplSetInfo();
+    ImplCheckOK(); // Check if "OK" button can be enabled now!
 
     return 0;
 }
