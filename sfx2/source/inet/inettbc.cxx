@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 13:12:56 $
+ *  last change: $Author: pb $ $Date: 2001-04-12 05:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,7 @@ SfxURLBox::SfxURLBox( Window* pParent, INetProtocol eSmart )
         bAutoCompleteMode( FALSE ),
         bOnlyDirectories( FALSE ),
         bCtrlClick( FALSE ),
+        bHistoryDisabled( FALSE ),
         pCtx( 0 ),
         eSmartProtocol( eSmart )
 {
@@ -667,20 +668,23 @@ void SfxURLBox::SetSmartProtocol( INetProtocol eProt )
 void SfxURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     Clear();
-    SfxPickList_Impl* pPickList = SfxPickList_Impl::Get();
-    const ULONG nCount = pPickList->HistoryPickEntryCount();
-    INetURLObject aCurObj;
-    for( USHORT nPos = 0; nPos < nCount; nPos++ )
+    if ( !bHistoryDisabled )
     {
-        String aEntry = pPickList->GetHistoryPickEntry( nPos )->aTitle;
-        if ( eSmartProtocol != INET_PROT_NOT_VALID )
+        SfxPickList_Impl* pPickList = SfxPickList_Impl::Get();
+        const ULONG nCount = pPickList->HistoryPickEntryCount();
+        INetURLObject aCurObj;
+        for( USHORT nPos = 0; nPos < nCount; nPos++ )
         {
-            aCurObj.SetURL( aEntry );
-            if( aCurObj.GetProtocol() != eSmartProtocol )
-                continue;
-        }
+            String aEntry = pPickList->GetHistoryPickEntry( nPos )->aTitle;
+            if ( eSmartProtocol != INET_PROT_NOT_VALID )
+            {
+                aCurObj.SetURL( aEntry );
+                if( aCurObj.GetProtocol() != eSmartProtocol )
+                    continue;
+            }
 
-        InsertEntry( aEntry );
+            InsertEntry( aEntry );
+        }
     }
 }
 
@@ -1017,6 +1021,12 @@ String SfxURLBox::GetURL()
     }
 
     return aObj.GetMainURL();
+}
+
+void SfxURLBox::DisableHistory()
+{
+    bHistoryDisabled = TRUE;
+    UpdatePicklistForSmartProtocol_Impl();
 }
 
 //***************************************************************************

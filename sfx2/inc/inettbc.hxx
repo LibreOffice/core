@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-08 10:11:59 $
+ *  last change: $Author: pb $ $Date: 2001-04-12 05:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@ friend class SfxURLBox_Impl;
     BOOL                            bOnlyDirectories;
     BOOL                            bModified;
     BOOL                            bTryAutoComplete: 1,
-                                    bCtrlClick: 1;
+                                    bCtrlClick: 1,
+                                    bHistoryDisabled;
 
     BOOL                            ProcessKey( const KeyCode& rCode );
     void                            TryAutoComplete( BOOL bForward, BOOL bForce );
@@ -118,6 +119,7 @@ public:
     BOOL                            IsCtrlOpen()
                                     { return bCtrlClick; }
     String                          GetURL();
+    void                            DisableHistory();
 };
 
 #if _SOLAR__PRIVATE
