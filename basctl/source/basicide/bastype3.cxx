@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,8 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
                 {
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
                     pVar = ((StarBASIC*)pVar)->FindModule( aName );
+
+                    nType = BASICIDE_TYPE_MODULE;
                 }
                 break;
                 case OBJTYPE_METHOD:
@@ -527,7 +529,13 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
 
     if ( nType != BASICIDE_TYPE_DIALOG )
     {
-        return SbxItem( SID_BASICIDE_ARG_SBX, pVar );
+        SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pVar );
+        aSbxItem.SetShell( pShell );
+        aSbxItem.SetLibName( aLibName );
+        aSbxItem.SetName( aName );
+        aSbxItem.SetType( nType );
+        return aSbxItem;
+        //return SbxItem( SID_BASICIDE_ARG_SBX, pVar );
     }
 
     return SbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aName, nType );

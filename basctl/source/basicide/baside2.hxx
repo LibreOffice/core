@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-16 11:03:09 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,12 @@ private:
     ModulWindowLayout*  pLayout;
     String              aCurPath;
 
+    // new
+    SfxObjectShell*     m_pShell;
+    String              m_aLibName;
+    String              m_aModName;
+    ::rtl::OUString     m_aModule;
+
     DECL_LINK( BasicErrorHdl, StarBASIC * );
     long                BasicBreakHdl( StarBASIC* pBasic );
 
@@ -387,6 +393,11 @@ protected:
 public:
                     TYPEINFO();
                     ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBasic, SbModule* pModule );
+
+                    // new CTOR
+                    ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBasic,
+                            SfxObjectShell* pShell, String aLibName, String aModName, ::rtl::OUString& aModule );
+
                     ~ModulWindow();
 
     virtual void    ExecuteCommand( SfxRequest& rReq );
@@ -423,7 +434,7 @@ public:
 //  void            InsertFromObjectCatalog( ObjectCatalog* pObjDlg );
 
     BOOL            ToggleBreakPoint( ULONG nLine );
-    void            RenameModule( const String& rNewName );
+    BOOL            RenameModule( const String& rNewName );
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
@@ -449,6 +460,16 @@ public:
     virtual void        BasicStopped();
 
     virtual SfxUndoManager* GetUndoManager();
+
+    // new
+    SfxObjectShell*         GetShell() const { return m_pShell; }
+    void                    SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
+
+    const String&           GetLibName() const { return m_aLibName; }
+    void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+
+    const String&           GetModName() const { return m_aModName; }
+    void                    SetModName( const String& aName ) { m_aModName = aName; }
 };
 
 class ModulWindowLayout: public Window

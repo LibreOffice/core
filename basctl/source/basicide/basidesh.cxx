@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ void BasicIDEShell::UpdateWindows()
                                 {
                                     OUString aDialogName = pNames[ i ];
                                     if ( !FindDlgWin( pLib, aDialogName, FALSE ) )  // this find only looks for non-suspended windows;
-                                        CreateDlgWin( pLib, aDialogName );          // suspended windows are handled in CreateDlgWinr
+                                        CreateDlgWin( pLib, aDialogName );          // suspended windows are handled in CreateDlgWin
                                 }
                             }
                         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,17 +447,30 @@ void LibPage::NewLib()
                 }
 
                 // Ein Modul anlegen:
-                SbModule* pModule = BasicIDE::CreateModule( pLib, String(), TRUE );
-                DBG_ASSERT( pModule , "Modul wurde nicht erzeugt!" );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pModule );
-
-                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-                if( pDispatcher )
+                try
                 {
-                    pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                    String aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+                    ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
+
+                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
+                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
+                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                    if( pDispatcher )
+                    {
+                        pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
+                                              SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                    }
+                }
+                catch ( container::ElementExistException& e )
+                {
+                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR( aBStr.GetBuffer() );
+                }
+                catch ( container::NoSuchElementException& e )
+                {
+                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR( aBStr.GetBuffer() );
                 }
             }
         }

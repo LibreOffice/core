@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-21 09:57:57 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,25 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas, SbModule*
     xModule = pModule;
     SetBackground();
 }
+
+// new CTOR
+ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
+                           SfxObjectShell* pShell, String aLibName, String aModName, ::rtl::OUString& aModule )
+        :IDEBaseWindow( pParent, pBas )
+        ,aXEditorWindow( this )
+        ,m_pShell( pShell )
+        ,m_aLibName( aLibName )
+        ,m_aModName( aModName )
+        ,m_aModule( aModule )
+{
+    DBG_CTOR( ModulWindow, 0 );
+    nValid = VALIDWINDOW;
+    pLayout = pParent;
+    aXEditorWindow.Show();
+    xModule = (SbModule*)pBas->FindModule( aModName );
+    SetBackground();
+}
+
 
 __EXPORT ModulWindow::~ModulWindow()
 {
@@ -1106,13 +1125,29 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 }
 
 
-
-void ModulWindow::RenameModule( const String& rNewName )
+BOOL ModulWindow::RenameModule( const String& rNewName )
 {
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
-    xModule->SetName( rNewName );
-}
+    BOOL bDone = TRUE;
 
+    try
+    {
+        BasicIDE::RenameModule( m_pShell, m_aLibName, m_aModName, rNewName );
+        BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+    }
+    catch ( container::ElementExistException& )
+    {
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+        bDone = FALSE;
+    }
+    catch ( container::NoSuchElementException& e )
+    {
+        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aBStr.GetBuffer() );
+        bDone = FALSE;
+    }
+
+    return bDone;
+}
 
 
 BOOL __EXPORT ModulWindow::IsModified()

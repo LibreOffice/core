@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <svtools/textview.hxx>
 #include <svtools/xtextedt.hxx>
 #include <sfx2/sfxdefs.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 {
@@ -223,19 +227,53 @@ void BasicIDEShell::CreateModulWindowLayout()
 ModulWindow* BasicIDEShell::CreateBasWin( StarBASIC* pBasic, String aModName )
 {
     bCreatingWindow = TRUE;
+
     ULONG nKey = 0;
     ModulWindow* pWin = 0;
 
-    SbModule* pModule = pBasic->FindModule( aModName );
-    if ( !pModule )
-        pModule = BasicIDE::CreateModule( pBasic, aModName, TRUE );
-    else    // Vielleicht gibt es ein suspendiertes?
-        pWin = FindBasWin( pBasic, aModName, FALSE, TRUE );
+    // Vielleicht gibt es ein suspendiertes?
+    pWin = FindBasWin( pBasic, aModName, FALSE, TRUE );
 
     if ( !pWin )
     {
-        pWin = new ModulWindow( pModulLayout, pBasic, pModule );
-        nKey = InsertWindowInTable( pWin );
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        if ( pBasMgr )
+        {
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            String aLibName = pBasic->GetName();
+
+            if ( aModName.Len() == 0 )
+                aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+
+            try
+            {
+                ::rtl::OUString aModule;
+                if ( BasicIDE::HasModule( pShell, aLibName, aModName ) )
+                {
+                    // get module
+                    aModule = BasicIDE::GetModule( pShell, aLibName, aModName );
+                }
+                else
+                {
+                    // create module
+                    aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+                }
+
+                // new module window
+                pWin = new ModulWindow( pModulLayout, pBasic, pShell, aLibName, aModName, aModule );
+                nKey = InsertWindowInTable( pWin );
+            }
+            catch ( container::ElementExistException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+        }
     }
     else
     {
@@ -249,7 +287,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( StarBASIC* pBasic, String aModName )
         }
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
     }
-    pTabBar->InsertPage( (USHORT)nKey, pModule->GetName() );
+    pTabBar->InsertPage( (USHORT)nKey, aModName );
     pTabBar->Sort();
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     if ( !pCurWin )
@@ -267,11 +305,10 @@ ModulWindow* BasicIDEShell::FindBasWin( StarBASIC* pBasic, const String& rModNam
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            String aMod( ((ModulWindow*)pWin)->GetModuleName() );
+            String aMod( ((ModulWindow*)pWin)->GetModName() );
             if ( !pBasic )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
-            else if (  ( pWin->GetBasic() == pBasic ) &&
-                    ( ( rModName.Len() == 0 ) || ( aMod == rModName ) ) )
+            else if ( ( pWin->GetBasic() == pBasic ) && ( aMod == rModName ) )
             {
                 pModWin = (ModulWindow*)pWin;
             }

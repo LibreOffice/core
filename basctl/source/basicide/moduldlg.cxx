@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-26 09:00:01 $
+ *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,47 +110,32 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
     {
         SbxItem aSbxItem = GetSbxItem( pEntry );
         aSbxItem.SetName( rNewText );
-        SbxVariable* pVar = (SbxVariable*)aSbxItem.GetSbx();
+        SfxObjectShell* pShell = aSbxItem.GetShell();
+        String aLibName = aSbxItem.GetLibName();
+        USHORT nType = aSbxItem.GetType();
 
-        if ( pVar )
+        try
         {
-            // modules
-            SbxVariable* pBasic = pVar->GetParent();
-            DBG_ASSERT( pBasic->ISA( StarBASIC ), "Parent kein Basic ?!" );
-
-            // Pruefen, ob mit dem Namen vorhanden...
-            // Nicht im QueryDrop, zu Aufwendig!
-            // #63718# Darf aber 'case-sensitiv umbenannt' werden.
-            if ( ( aCurText.CompareIgnoreCaseToAscii( rNewText ) != COMPARE_EQUAL ) &&
-                 ( ( pVar->ISA( SbModule ) && ((StarBASIC*)pBasic)->FindModule( rNewText ) ) ) )
+            if ( nType == BASICIDE_TYPE_MODULE )
             {
-                ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-                return FALSE;
+                BasicIDE::RenameModule( pShell, aLibName, aCurText, rNewText );
             }
-            pVar->SetName( rNewText );
-            BasicIDE::MarkDocShellModified( (StarBASIC*)pBasic );
-        }
-        else if ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
-        {
-            // dialogs
-            SfxObjectShell* pShell = aSbxItem.GetShell();
-            String aLibName = aSbxItem.GetLibName();
-
-            try
+            else if ( nType == BASICIDE_TYPE_DIALOG )
             {
                 BasicIDE::RenameDialog( pShell, aLibName, aCurText, rNewText );
-                BasicIDE::MarkDocShellModified( pShell );
             }
-            catch ( container::ElementExistException& )
-            {
-                ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-                return FALSE;
-            }
-            catch ( container::NoSuchElementException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
+
+            BasicIDE::MarkDocShellModified( pShell );
+        }
+        catch ( container::ElementExistException& )
+        {
+            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+            return FALSE;
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
         }
 
         SfxViewFrame* pCurFrame = SfxViewFrame::Current();
@@ -313,30 +298,23 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
 
     // get sbx item
     SbxItem aSbxItem = GetSbxItem( FirstSelected() );
-    SbxObject* pObj = (SbxObject*)aSbxItem.GetSbx();
 
     // get source shell, library name and module/dialog name
     SfxObjectShell* pSourceShell = aSbxItem.GetShell();
     String aSourceLibName = aSbxItem.GetLibName();
     String aSourceName = aSbxItem.GetName();
+    USHORT nType = aSbxItem.GetType();
 
     // get source basic
-    StarBASIC* pSourceBasic = 0;
-    if ( pObj )
-    {
-        pSourceBasic = BasicIDE::FindBasic( pObj );
-    }
+    BasicManager* pSourceBasMgr;
+    if ( pSourceShell )
+        pSourceBasMgr = pSourceShell->GetBasicManager();
     else
-    {
-        BasicManager* pSourceBasMgr;
-        if ( pSourceShell )
-            pSourceBasMgr = pSourceShell->GetBasicManager();
-        else
-            pSourceBasMgr = SFX_APP()->GetBasicManager();
+        pSourceBasMgr = SFX_APP()->GetBasicManager();
 
-        if ( pSourceBasMgr )
-            pSourceBasic = pSourceBasMgr->GetLib( aSourceLibName );
-    }
+    StarBASIC* pSourceBasic = 0;
+    if ( pSourceBasMgr )
+        pSourceBasic = pSourceBasMgr->GetLib( aSourceLibName );
     DBG_ASSERT( pSourceBasic, "Woher kommt das Object?" );
 
     // get dispatcher
@@ -344,59 +322,34 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
     DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
     SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
 
-    if ( pObj ) // module
+    if ( bMove )    // move
     {
-        SbxVariableRef xObj = pObj;     // festhalten waehrend Remove!
-        DBG_ASSERT( !xObj->ISA( SbMethod ), "Move/Copy fuer Methoden nicht implementiert!" );
-        DBG_ASSERT( xObj->ISA( SbModule), "Move fuer unbekanntes Objekt nicht implementiert!" );
-
-        if ( bMove )    // move
+        // remove source module/dialog window
+        if ( pSourceBasic != pDestBasic )
         {
-            // BasicIDE bescheid sagen, dass Sbx verschwindet
-            if ( pSourceBasic != pDestBasic )
+            if( pDispatcher )
             {
-                if( pDispatcher )
-                {
-                    pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
-                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                }
+                pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
+                                      SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
             }
+        }
 
-            // Sbx aus dem Basic entfernen und in das andere Basic haengen...
-            pSourceBasic->Remove( xObj );
-            pDestBasic->Insert( xObj );
-            BasicIDE::MarkDocShellModified( pSourceBasic );
-            BasicIDE::MarkDocShellModified( pDestBasic );
-        }
-        else    // copy
+        try
         {
-            // Wie ?!
-            SvMemoryStream aTmpStream;
-            BOOL bDone = xObj->Store( aTmpStream );
-            aTmpStream.Seek( 0L );
-            DBG_ASSERT( bDone, "Temporaeres Speichern fehlgeschlagen!" );
-            SbxBaseRef xNewSbx = SbxBase::Load( aTmpStream );
-            DBG_ASSERT( xNewSbx.Is() && xNewSbx->ISA( SbxVariable ), "Kein Object erzeugt, oder Object keine Variable!" );
-            DBG_ASSERT( xNewSbx->ISA( SbModule) || ( ((SbxVariable*)(SbxBase*)xNewSbx)->GetSbxId() == GetDialogSbxId() ), "Copy fuer unbekanntes Objekt nicht implementiert!" );
-            pDestBasic->Insert( (SbxVariable*)(SbxBase*)xNewSbx );
-            BasicIDE::MarkDocShellModified( pDestBasic );
-        }
-    }
-    else if ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG )  // dialog
-    {
-        if ( bMove )    // move
-        {
-            // remove source dialog window
-            if ( pSourceBasic != pDestBasic )
+            if ( nType == BASICIDE_TYPE_MODULE )    // module
             {
-                if( pDispatcher )
-                {
-                    pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
-                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                }
-            }
+                // get module
+                ::rtl::OUString aModule = BasicIDE::GetModule( pSourceShell, aSourceLibName, aSourceName );
 
-            try
+                // remove module from source library
+                BasicIDE::RemoveModule( pSourceShell, aSourceLibName, aSourceName );
+                BasicIDE::MarkDocShellModified( pSourceShell );
+
+                // insert module into target library
+                BasicIDE::InsertModule( pDestShell, aDestLibName, aSourceName, aModule );
+                BasicIDE::MarkDocShellModified( pDestShell );
+            }
+            else if ( nType == BASICIDE_TYPE_DIALOG )   // dialog
             {
                 // get dialog
                 Reference< io::XInputStreamProvider > xISP( BasicIDE::GetDialog( pSourceShell, aSourceLibName, aSourceName ) );
@@ -412,20 +365,32 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                     BasicIDE::MarkDocShellModified( pDestShell );
                 }
             }
-            catch ( container::ElementExistException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
-            catch ( container::NoSuchElementException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
         }
-        else    // copy
+        catch ( container::ElementExistException& e )
         {
-            try
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+        }
+    }
+    else    // copy
+    {
+        try
+        {
+            if ( nType == BASICIDE_TYPE_MODULE )    // module
+            {
+                // get module
+                ::rtl::OUString aModule = BasicIDE::GetModule( pSourceShell, aSourceLibName, aSourceName );
+
+                // insert module into target library
+                BasicIDE::InsertModule( pDestShell, aDestLibName, aSourceName, aModule );
+                BasicIDE::MarkDocShellModified( pDestShell );
+            }
+            else if ( nType == BASICIDE_TYPE_DIALOG )   // dialog
             {
                 // get dialog
                 Reference< io::XInputStreamProvider > xISP( BasicIDE::GetDialog( pSourceShell, aSourceLibName, aSourceName ) );
@@ -437,16 +402,16 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                     BasicIDE::MarkDocShellModified( pDestShell );
                 }
             }
-            catch ( container::ElementExistException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
-            catch ( container::NoSuchElementException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
+        }
+        catch ( container::ElementExistException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
         }
     }
 
@@ -780,41 +745,51 @@ void ObjectPage::NewModule()
     DBG_ASSERT( pLib, "Keine Lib!" );
     if ( pLib )
     {
-        NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_MOD );
-        pNewDlg->SetObjectName( BasicIDE::CreateModuleName( pLib, String() ) );
-        if ( pNewDlg->Execute() )
+        String aLibName = pLib->GetName();
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
+        if ( pBasMgr )
         {
-            String aModName( pNewDlg->GetObjectName() );
-            if ( !BasicIDE::FindModule( pLib, aModName ) )
-            {
-                SbModule* pModule = BasicIDE::CreateModule( pLib, aModName, TRUE );
-                DBG_ASSERT( pModule , "Modul wurde nicht erzeugt!" );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pModule );
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_MOD );
+            pNewDlg->SetObjectName( BasicIDE::CreateModuleName( pShell, aLibName ) );
 
-                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-                if( pDispatcher )
-                {
-                    pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                }
-                SvLBoxEntry* pLibEntry = aBasicBox.FindLibEntry( pLib );
-                DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
-                USHORT nImgId = IMGID_MODULE;
-                SvLBoxEntry* pEntry = aBasicBox.InsertEntry( pModule->GetName(), aBasicBox.GetImage( nImgId ), aBasicBox.GetImage( nImgId ), pLibEntry, FALSE, LIST_APPEND );
-                DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
-                pEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
-                aBasicBox.SetCurEntry( pEntry );
-                aBasicBox.Select( aBasicBox.GetCurEntry() );        // OV-Bug?!
-            }
-            else
+            if ( pNewDlg->Execute() )
             {
-                ErrorBox( this, WB_OK | WB_DEF_OK,
-                        String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+                String aModName( pNewDlg->GetObjectName() );
+
+                try
+                {
+                    ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
+                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
+                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
+                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                    if( pDispatcher )
+                    {
+                        pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
+                                              SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                    }
+                    SvLBoxEntry* pLibEntry = aBasicBox.FindLibEntry( pLib );
+                    DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
+                    SvLBoxEntry* pEntry = aBasicBox.InsertEntry( aModName, aBasicBox.GetImage( IMGID_MODULE ), aBasicBox.GetImage( IMGID_MODULE ), pLibEntry, FALSE, LIST_APPEND );
+                    DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
+                    pEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
+                    aBasicBox.SetCurEntry( pEntry );
+                    aBasicBox.Select( aBasicBox.GetCurEntry() );        // OV-Bug?!
+                }
+                catch ( container::ElementExistException& )
+                {
+                    ErrorBox( this, WB_OK | WB_DEF_OK,
+                            String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+                }
+                catch ( container::NoSuchElementException& e )
+                {
+                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR( aBStr.GetBuffer() );
+                }
             }
+            delete pNewDlg;
         }
-        delete pNewDlg;
     }
 }
 
@@ -877,13 +852,14 @@ void ObjectPage::DeleteCurrent()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     DBG_ASSERT( pCurEntry, "Kein aktueller Eintrag!" );
     SbxItem aSbxItem = aBasicBox.GetSbxItem( pCurEntry );
-    SbxVariableRef xVar = (SbxVariable*)aSbxItem.GetSbx();
+    SfxObjectShell* pShell = aSbxItem.GetShell();
+    String aLibName = aSbxItem.GetLibName();
+    String aName = aSbxItem.GetName();
+    USHORT nType = aSbxItem.GetType();
 
-    if (  xVar.Is() && ( xVar->ISA( SbModule ) && QueryDelModule( xVar->GetName(), this ) ) )
+    if ( ( nType == BASICIDE_TYPE_MODULE && QueryDelModule( aName, this ) ) ||
+         ( nType == BASICIDE_TYPE_DIALOG && QueryDelDialog( aName, this ) ) )
     {
-        // module
-        StarBASICRef xBasic = BasicIDE::FindBasic( xVar );
-        DBG_ASSERT( xBasic.Is(), "Basic nicht gefunden!" );
         aBasicBox.GetModel()->Remove( pCurEntry );
         if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
             aBasicBox.Select( aBasicBox.GetCurEntry() );
@@ -895,29 +871,18 @@ void ObjectPage::DeleteCurrent()
             pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
                                   SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
         }
-        xBasic->Remove( xVar );
-        BasicIDE::MarkDocShellModified( xBasic );
-    }
-    else if ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && QueryDelDialog( aSbxItem.GetName(), this ) )
-    {
-        // dialog
-        aBasicBox.GetModel()->Remove( pCurEntry );
-        if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
-            aBasicBox.Select( aBasicBox.GetCurEntry() );
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
-                                  SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-        }
-        SfxObjectShell* pShell = aSbxItem.GetShell();
-        String aLibName = aSbxItem.GetLibName();
-        String aName = aSbxItem.GetName();
+
         try
         {
-            BasicIDE::RemoveDialog( pShell, aLibName, aName );
+            if ( nType == BASICIDE_TYPE_MODULE )
+            {
+                BasicIDE::RemoveModule( pShell, aLibName, aName );
+            }
+            else if ( nType == BASICIDE_TYPE_DIALOG )
+            {
+                BasicIDE::RemoveDialog( pShell, aLibName, aName );
+            }
+
             BasicIDE::MarkDocShellModified( pShell );
         }
         catch ( container::NoSuchElementException& e )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+#   last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ SLOFILES =  \
 
 EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
+                $(SLO)$/basides2.obj	\
                 $(SLO)$/basides3.obj	\
                 $(SLO)$/baside3.obj		\
                 $(SLO)$/basobj2.obj		\
