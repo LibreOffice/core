@@ -19,6 +19,7 @@
 <xsl:template match="/Readme">
   <!-- creates the HTML-output-->
   <xsl:if test="$type='html'">
+   <!-- the outputname for htlm-files-->
     <xt:document method="html" href="{$file}">
                   <html>
 	<!-- HTML utf-8 encoding enable -->
@@ -47,26 +48,50 @@
 
 
 <xsl:template match="Paragraph">
-	<!-- looks if the given parameters meet the xmlattributes or all -->
+	<!-- match the given parameters one of the xmlattributes?  -->
 	<xsl:if test="@os=$os1 or @os='all'">
 		<xsl:if test="@cpuname=$cp1 or @cpuname='all'">
 			<xsl:if test="@gui=$gui1 or @gui='all'">
 				<xsl:if test="@com=$com1 or  @com='all'">
+					<!--html-output -->
 					<xsl:if test="$type='html'">
 						<xsl:element name="{@style}">
 							<xsl:apply-templates/>
 						</xsl:element>
 					</xsl:if>
+					<!--text-output -->
 					<xsl:if test="$type='text'">
 						<xsl:if test="@style='h1' or @style='h2' or  @style='h3' or  @style='H1' or @style='H2' or  @style='H3'">
-							<xsl:text>&#xA;------------------------------------------------------------&#xA;</xsl:text>
+							<xsl:choose>
+								<xsl:when test='$os1="WNT"'>
+									<xsl:text>&#xD;&#xA;------------------------------------------------------------&#xD;&#xA;</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>&#xA;------------------------------------------------------------&#xA;</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>								
 						</xsl:if>
+						<!-- enter an carriage return line feed -->
 						<xsl:if test="@style='p' or @style='P'">
-							<xsl:text>&#xA;</xsl:text>
+							<xsl:choose>
+								<xsl:when test='$os1="WNT"'>
+									<xsl:text>&#xD;&#xA;</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>&#xA;</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>								
 						</xsl:if>
 						<xsl:apply-templates/>
 						<xsl:if test="@style='h1' or @style='h2' or  @style='h3' or  @style='hr' or  @style='H1' or @style='H2' or  @style='H3' or  @style='HR'">
-							<xsl:text>------------------------------------------------------------&#xA;</xsl:text>
+							<xsl:choose>
+								<xsl:when test='$os1="WNT"'>
+									<xsl:text>------------------------------------------------------------&#xD;&#xA;</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>------------------------------------------------------------&#xA;</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>								
 						</xsl:if>
 					</xsl:if>
 				</xsl:if>
@@ -76,7 +101,7 @@
 </xsl:template>
 
 <xsl:template match="List">
-	<!-- creates the listoutput, the html-tags will be ignored if textoutput has been choosen -->
+	<!-- creates the listoutput, the html-tags will be ignored if textoutput is choosen -->
 	<xsl:choose>
 	<xsl:when test="@Enum='false'">
 		<ul type="circle">
@@ -102,7 +127,14 @@
 		<xsl:if test="@xml:lang=$lang1">
 			<xsl:text>- </xsl:text>
 			<xsl:apply-templates/>
-			<xsl:text>&#xA;</xsl:text>
+			<xsl:choose>
+				<xsl:when test='$os1="WNT"'>
+					<xsl:text>&#xD;&#xA;</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>&#xA;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>								
 		</xsl:if>
 	</xsl:if>
 </xsl:template>
@@ -116,7 +148,7 @@
 	</xsl:if>
 </xsl:template>
 
-<!-- these tmplate will be used if no attribute xml:lang exists -->
+<!-- these template will be used if no attribute xml:lang exists -->
 <xsl:template match="Section/Paragraph/Text[not (@xml:lang)]">
 	<xsl:call-template name="out"/>
 </xsl:template>
@@ -126,18 +158,18 @@
 	<!--  creates output with an extra CR/LF -->
 	<xsl:if test="@Wrap='true'">
 		<xsl:if test="$type='html'">
-			<xsl:if test=" @style='b ' or @style='B ' or @style='i ' or @style='I ' or @style='u ' or @style='U '">
-				<xsl:element name="{@style}">
-					<xsl:call-template name="linked"/>
-				</xsl:element>
-			</xsl:if>
-			<xsl:if test="@style='none'">
-				<xsl:call-template name="linked"/>
-			</xsl:if>
 			<xsl:element name="br"/>
+			<xsl:call-template name="prelinked"/>
 		</xsl:if>
 		<xsl:if test="$type='text'">
-			<xsl:text>&#xA;</xsl:text>
+			<xsl:choose>
+				<xsl:when test='$os1="WNT"'>
+					<xsl:text>&#xD;&#xA;</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>&#xA;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>								
 			<xsl:call-template name="linked"/>
 		</xsl:if>
 	</xsl:if>
@@ -145,25 +177,28 @@
 	<!-- here without the extra CR/LF-->
 	<xsl:if test="@Wrap='false'">
 		<xsl:if test="$type='html'">
-			<xsl:if test=" @style='b ' or @style='B ' or @style='i ' or @style='I ' or @style='u ' or @style='U '">
-				<xsl:element name="{@style}">
-					<xsl:call-template name="linked"/>
-				</xsl:element>
-			</xsl:if>
-			<xsl:if test="@style='none'">
-				<xsl:call-template name="linked"/>
-			</xsl:if>
+			<xsl:call-template name="prelinked"/>
 		</xsl:if>
-	
 		<xsl:if test="$type='text'">
 			<xsl:call-template name="linked"/>
 		</xsl:if>
 	</xsl:if>
 </xsl:template>
 
+<xsl:template name="prelinked">
+	<xsl:if test=" @style='b ' or @style='B ' or @style='i ' or @style='I ' or @style='u ' or @style='U '">
+		<xsl:element name="{@style}">
+			<xsl:call-template name="linked"/>
+		</xsl:element>
+	</xsl:if>
+	<xsl:if test="@style='none'">
+		<xsl:call-template name="linked"/>
+	</xsl:if>
+</xsl:template>
+
 <xsl:template name="linked">
 	<xsl:if test="$type='html'">
-		<!--this template creates a link if an url attribute true -->
+		<!--this template creates a link if the url attribute is true -->
 		<xsl:if test="@url='false'">
 			<xsl:apply-templates/>
 		</xsl:if>
@@ -178,6 +213,7 @@
 				<a><xsl:attribute name="href"><xsl:text>http://</xsl:text><xsl:apply-templates/></xsl:attribute><xsl:apply-templates/></a>	
 	      		</xsl:if>
 	      	</xsl:if>
+	      	<!-- this code is needed for the line before an link, if not an <p> will be added-->
 	      	<xsl:if test="@url='ahead'">
 	      		<xsl:apply-templates/>
 	      	</xsl:if>
@@ -185,7 +221,14 @@
 	<xsl:if test="$type='text'">
 		<xsl:if test="@url='false'">
 			<xsl:apply-templates/>
-			<xsl:text>&#xA;</xsl:text>
+			<xsl:choose>
+				<xsl:when test='$os1="WNT"'>
+					<xsl:text>&#xD;&#xA;</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>&#xA;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>								
 		</xsl:if>
 		<xsl:if test="@url='true' or @url='ahead'">
 			<xsl:apply-templates/>
