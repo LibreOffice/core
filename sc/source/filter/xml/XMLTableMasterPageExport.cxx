@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-17 09:30:57 $
+ *  last change: $Author: sab $ $Date: 2003-02-14 09:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
             rtl::OUString sLeft (xLeft->getString());
             rtl::OUString sRight (xRight->getString());
 
-            if (sCenter.getLength() || sLeft.getLength() || sRight.getLength() || bDisplay)
+            if (sCenter.getLength() || sLeft.getLength() || sRight.getLength() || !bDisplay)
             {
                 if( !bDisplay )
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
