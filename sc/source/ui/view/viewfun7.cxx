@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-07-12 17:01:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,7 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
             aSet.Put(XFillBitmapItem(String(), aXOBitmap));
 
-//-/            pPickObj->SetAttributes(aSet, FALSE);
-            pPickObj->SetItemSetAndBroadcast(aSet);
+            pPickObj->SetMergedItemSetAndBroadcast(aSet);
 
             bRet = TRUE;
         }
