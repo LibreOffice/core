@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:28:25 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 09:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     };
     String STR_PAGETITLE_ADABAS_STATISTIC
     {
-        Text = "Adabas D Statistic" ;
+        Text = "Adabas D Statistik" ;
         Text [english] = "Adabas D statistic" ;
         Text [ english_us ] = "Adabas D Statistics";
         Text [ portuguese ] = "Adabas D - Estatística";
@@ -642,7 +642,7 @@ TabPage PAGE_GENERAL
         HelpId = HID_DSADMIN_URL_GENERAL;
         Pos = MAP_APPFONT ( 7 , 54 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "D~atenquelle URL" ;
+        Text = "D~atenquellen-URL" ;
         Text [ english ] = "~Data source URL" ;
         Text [ english_us ] = "~Data source URL" ;
         Text [ portuguese ] = "~Fonte de dados URL:";
@@ -3304,6 +3304,9 @@ String STR_CALCDOC_DOESNOTEXIST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.68  2001/07/26 22:28:25  kz
+ *  Merge SRC638: 27.07.01 - 00:28:14
+ *
  *  Revision 1.67  2001/07/24 20:31:37  rt
  *  Merge SRC638: 24.07.01 - 22:30:48
  *
