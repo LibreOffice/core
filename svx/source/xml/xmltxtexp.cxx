@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-20 12:05:22 $
+ *  last change: $Author: cl $ $Date: 2001-07-20 12:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,14 +537,14 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
             // create output stream and active data source
-#if 0
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( rStream ) );
-#else
+
+/* testcode
             const OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
             SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
             aMedium.IsRemote();
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
-#endif
+*/
 
 
             uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
@@ -556,9 +556,9 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             aExporter.exportDoc();
 
-#if 1
+/* testcode
             aMedium.Commit();
-#endif
+*/
 
         }
         while( 0 );
