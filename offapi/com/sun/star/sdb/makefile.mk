@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-22 10:40:51 $
+#   last change: $Author: vg $ $Date: 2005-02-17 10:50:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ IDLFILES=\
     DatabaseAccessDataSource.idl\
     DatabaseContext.idl \
     DatabaseDocument.idl \
+    OfficeDatabaseDocument.idl \
     DatabaseEnvironment.idl \
     DataColumn.idl \
     DataSettings.idl \
