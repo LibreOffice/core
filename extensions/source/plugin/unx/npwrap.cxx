@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:03:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ int main( int argc, char **argv)
     if( nChild == 0 )
     {
         char pidbuf[16];
-        const char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb", "pluginapp.bin", pidbuf, NULL };
+        char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb", "pluginapp.bin", pidbuf, NULL };
         sprintf( pidbuf, "%d", nPID );
         execvp( pArgs[0], pArgs );
         _exit(255);
