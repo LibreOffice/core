@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.50 $
-# Date:        $Date: 2005-03-01 17:17:28 $
+# Version:     $Revision: 1.51 $
+# Date:        $Date: 2005-03-07 17:28:47 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -39,8 +39,8 @@ use File::Basename;
 #--------------------------------------------------------
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
-     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGW,
-     $platform, $cygwinver, $machine_type, $empty, $no_ant, $no_stl, $no_gcc_include, 
+     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $platform,
+     $cygwinver, $machine_type, $empty, $no_ant, $no_stl, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
@@ -112,15 +112,6 @@ $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
 $L              = " -L";            # library search path
 $D              = " -D";            # define search path
-$Solaris        = "SunOS";          # return of uname command on Solaris
-$Linux          = "Linux";          # return of uname command on Linux
-$NetBSD         = "NetBSD";	        # return of uname command on NetBSD
-$FreeBSD        = "FreeBSD";        # return of uname command on FreeBSD
-$Tru64          = "OSF1";           # return of uname command of Tru64
-$Irix           = "IRIX";           # return of uname command of Irix on a 32 bit platform
-$Irix64         = "IRIX64";         # return of uname command of Irix on a 64 bit platform
-$Winnt          = "WINNT";          # return of uname command on Windows NT
-$Macosx         = "Darwin";         # return of uname command on Mac OS X/Darwin
 $empty          = "";               # used as argument
 $no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
@@ -155,15 +146,16 @@ print ("Setting up the environment for building OpenOffice.org $newline");
 #
 # A. Checking the platform first.
 #
-$platform = `uname`;       # probing the platform
-if ( $platform =~ m/CYGWIN/g )
-{   $platform = $Winnt;
+if ('@LOCAL_SOLENV@' eq "DEFAULT")
+{  $platform          = `../solenv/bin/config.guess`;
+}
+else
+{  $platform           = `PosixFormat('@LOCAL_SOLENV@')/bin/config.guess`;
+
 }
 
 chomp( $platform );
 
-$machine_type = `uname -m`;
-chomp( $machine_type );
 # get perls idea for OS
 # needed to differentiate cygwin/native perl on windows
 $perl_os = $^O;
@@ -215,9 +207,9 @@ $comment              = "#";           # UNIX script comment character
 $comment4nt           = "rem";         # Windows 4nt script comment character
 
 # Setting platform dependent constant values.
-if ( $platform eq "$Solaris" ) 
+if ( $platform =~ m/solaris/ ) 
 {     print "Setting Solaris specific values... ";
-   if ($machine_type eq "i86pc")
+   if ($platform =~ m/^i[3456]86/)
    {  
       if ( $CC =~ "gcc") {
          $outfile        = "SolarisIntelGccEnv.Set";
@@ -272,10 +264,10 @@ if ( $platform eq "$Solaris" )
    $OS             = "SOLARIS";
    $PATH_SEPERATOR = $ps;
 }
-elsif ( $platform eq "$NetBSD" ) 
+elsif ( $platform =~ m/netbsd/ ) 
 {
 #Set machine_type specific values: 
-   if ($machine_type eq "i386")
+   if ($platform =~ m/^i[3456]86/)
    {  print "Setting NetBSD Intel specific values... ";
       $outfile        = "NetBSDIntelEnv.Set"; 
       $CPU            = "I";
@@ -286,7 +278,7 @@ elsif ( $platform eq "$NetBSD" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
    }
-   elsif ($machine_type eq "sparc")
+   elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
       $outfile        = "NetBSDSparcEnv.Set"; 
       $CPU            = "S";
@@ -297,7 +289,7 @@ elsif ( $platform eq "$NetBSD" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
-   elsif ($machine_type eq "powerpc")
+   elsif ($machine_type =~ m/powerpc/)
    {  print "Setting NetBSD PPC specific values... ";
       $outfile        = "NetBSDPPCEnv.Set"; 
       $CPU            = "P";
@@ -309,7 +301,7 @@ elsif ( $platform eq "$NetBSD" )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    }
    else
-   { print "Unsupported NetBSD architecture: $machine_type \n";
+   { print "Unsupported NetBSD architecture: $platform \n";
      exit 1;
    }
    #Conditional setting depending on gcc3:
@@ -329,7 +321,7 @@ elsif ( $platform eq "$NetBSD" )
       $PATH_SEPERATOR = $ps;
       $XPVERSION      = "3"; 
 }
-elsif ( $platform eq "$FreeBSD" ) 
+elsif ( $platform =~ m/freebsd/ ) 
 {     print "Setting FreeBSD specific values... ";
       $outfile        = "FreeBSDEnv.Set"; 
       $BIG_SVX        = "TRUE";
@@ -354,7 +346,7 @@ elsif ( $platform eq "$FreeBSD" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
 } 
-elsif ( $platform eq "$Linux" ) 
+elsif ( $platform =~ m/linux-gnu/ ) 
 {
 # General Linux settings:
       $CVER           = "C300";
@@ -371,7 +363,7 @@ elsif ( $platform eq "$Linux" )
       $XPVERSION      = "3"; 
 
 #Set machine_type specific values: 
-   if (($machine_type eq "i686") or ($machine_type eq "i586"))
+   if ($platform =~ m/^i[3456]86/)
    {  print "Setting Linux Intel specific values... ";
       $outfile        = "LinuxIntelEnv.Set"; 
       $CPU            = "I";
@@ -388,7 +380,7 @@ elsif ( $platform eq "$Linux" )
          $OUTPATH     = "unxlngi4";
       }
    }
-   elsif ($machine_type eq "x86_64")
+   elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
       $outfile        = "LinuxAMDEnv.Set";
       $CPU            = "X";
@@ -400,7 +392,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
    }
-   elsif (($machine_type eq "sparc") or ($machine_type eq "sparc64"))
+   elsif ($platform =~ m/^sparc/)
  
    {  print "Setting Linux Sparc specific values... ";
       $outfile        = "LinuxSparcEnv.Set"; 
@@ -412,7 +404,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
-   elsif (($machine_type eq "ppc") or ($machine_type eq "ppc64"))
+   elsif ($platform =~ m/^powerpc/)
    {  print "Setting Linux PPC specific values... ";
       $outfile        = "LinuxPPCEnv.Set"; 
       $CPU            = "P";
@@ -423,7 +415,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    }
-   elsif (($machine_type eq "s390") or ($machine_type eq "s390x"))
+   elsif ($platform =~ m/^s390/)
    {  print "Setting Linux S/390 specific values... ";
       $outfile        = "LinuxS390Env.Set";
       $CPU            = "3";
@@ -434,7 +426,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."native_threads";
    }
-   elsif ($machine_type eq "alpha") 
+   elsif ($machine_type =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
       $CPU            = "A";
@@ -445,7 +437,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
    }
-   elsif ($machine_type eq "armv4l") 
+   elsif ($machine_type =~ m/^arm[45]l/) 
    {  print "Setting Linux ARM specific values... ";
       $outfile        = "LinuxARMEnv.Set"; 
       $CPU            = "R";
@@ -460,7 +452,7 @@ elsif ( $platform eq "$Linux" )
    $INPATH         = $OUTPATH.$PROEXT;
    $GVERDIR        = $INPATH;
 }
-elsif ( $platform eq "$Tru64" ) 
+elsif ( $platform =~ m/osf1/ ) 
 {     print "Setting Tru64 specific values... ";
       $outfile        = "Tru64AlphaEnv.Set"; 
       $BIG_SVX        = "TRUE";
@@ -484,7 +476,7 @@ elsif ( $platform eq "$Tru64" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
 } 
-elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
+elsif ( $platform =~ m/irix/ )
 {     print "Setting Irix specific values... ";
       $outfile        = "IrixMipsEnv.Set";
       $BIG_SVX        = "TRUE";
@@ -515,7 +507,7 @@ elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
 }
-elsif ( $platform eq "$Winnt" ) 
+elsif ( $platform =~ m/cygwin/ ) 
 { 
       $COMPATH        = PosixFormat('@COMPATH@');
       $MSPDB_PATH     = PosixFormat('@MSPDB_PATH@');
@@ -597,7 +589,7 @@ elsif ( $platform eq "$Winnt" )
 
   }
 }
-elsif ( $platform eq "$Macosx" ) 
+elsif ( $platform =~ m/darwin/ ) 
 {     print "Setting Mac OS X/Darwin specific values... ";
       $outfile        = "MacosxEnv.Set"; 
       $BIG_SVX        = "TRUE";
@@ -617,16 +609,14 @@ elsif ( $platform eq "$Macosx" )
       $PATH_SEPERATOR = $ps;
       # GUIBASE is set below; may be "aqua" or "unx".
 }
-elsif ( $platform eq "AIX" )
+elsif ( $platform =~ m/aix/ )
 {
-   $machine_type = `uname -p`;  # trust AIX to be different!
-   chomp( $machine_type );
-   if( $machine_type ne "powerpc" )
+   if( $machine_type !~ m/^powerpc/ )
    {
 	print "\nAIX has only been ported and tested on powerpc\n";
 	AddWarning( "set_soenv", "Machine type $machine_type has not been tested");
    }
-   print "Setting Linux PPC specific values... ";
+   print "Setting AIX PPC specific values... ";
    $outfile        = "aixPPCEnv.Set"; 
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
@@ -680,7 +670,7 @@ else
 # JAVA_HOME as argument from autoconf.
 $JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
 
-if ( $platform eq "$Winnt" ) {
+if ( $platform =~ m/cygwin/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. Tcsh path.
@@ -697,7 +687,7 @@ if ( '@STLPORT4@' eq $no_stl )
 }
 
 # ml.exe assembler path for Windows users.
-if ($platform eq "$Winnt")
+if ($platform =~ m/cygwin/)
 {  $ASM_PATH = PosixFormat('@ASM_HOME@');
 }
 #
@@ -711,7 +701,7 @@ $BIN                  = $ds."bin";
 $LIB                  = $ds."lib";
 $LIB64                = $ds."lib";
 $LIB64               .= "64"
-if ($platform eq "Linux" && $machine_type eq "x86_64");
+if ($platform =~ m/x86_64-.*-linux-gnu/);
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
@@ -759,7 +749,7 @@ if ($STLPORT4 ne $no_stl) {
 
 
 # Windows NT only variables
-if ($platform eq "$Winnt")
+if ($platform =~ m/cygwin/)
 {  
    if ( $JAVA_HOME ne "" )
    {
@@ -792,7 +782,7 @@ $XINC                 = PosixFormat('@XINC@'); # X11 includes
 
 
 # Mac OS X/Darwin only variables.
-if ( $platform eq "$Macosx" )
+if ( $platform =~ m/darwin/ )
 {  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
       $GUIBASE  = "aqua";
@@ -860,7 +850,7 @@ $CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
 $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
 
 # Paths to run time shared libraries.
-if ($platform eq "$Solaris") 
+if ($platform =~ m/solaris/) 
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.$USR_DT.$LIB.
                         $ps.$USR_OPENWIN.$LIB.
@@ -872,9 +862,7 @@ if ($platform eq "$Solaris")
                         $ps.$JRETHREADDIR.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
 }
-elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
-       ($platform eq "$Tru64") || ($platform eq "$FreeBSD") ||
-	   ($platform eq "AIX") )
+elsif ($platform =~ m/linux-gnu|netbsd|osf1|freebsd|aix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
                         $ps.$JRELIBDIR.
@@ -885,7 +873,7 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                        $ps.$ENV{'LD_LIBRARY_PATH'};
 }
-elsif ($platform eq "$Irix" || $platform eq "$Irix64")
+elsif ($platform =~ m/irix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
                         $ps.$JRELIBDIR.
@@ -895,17 +883,17 @@ elsif ($platform eq "$Irix" || $platform eq "$Irix64")
                         $ps.$par_dir.$LIB.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
 }
-elsif ($platform eq "$Macosx")
+elsif ($platform =~ m/darwin/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $ps_STLPORT_LIB;
 }
-elsif ($platform ne $Winnt )
+elsif ($platform !~ m/cygwin/)
 {  AddWarning( "set_soenv", "$platform not configured for runtime shared libraries" );
 }
 	
 # Compiler directives.
-if ($platform eq "$Solaris") 
+if ($platform =~ m/solaris/) 
 {  $SOLARDEF          = $D."UNX".
                         $D.$COM.
                         $D.$GVER.
@@ -921,17 +909,14 @@ if ($platform eq "$Solaris")
                         $D."SUPD=$UPD".
                         $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
 }
-elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
-	($platform eq "$FreeBSD") || ($platform eq "$Tru64") ||
-	($platform eq "$Irix") || ($platform eq "$Irix64") ||
-	($platform eq "AIX") )
+elsif ($platform =~ m/linux-gnu|netbsd|freebsd|osf1|irix|aix/)
 {  $SOLARDEF          = $D."UNX".
                         $D.$COM.
                         $D.$CVER.
                         $D.$GVER.
                         $D.$OS.
                         $D.$CPUNAME;
-    if  ($platform eq "$FreeBSD")
+    if  ($platform =~ m/freebsd/)
     {  $SOLARDEF     .= $D."X86".
                         $D."OSVERSION=$OSVERSION".
                         " @PTHREAD_CFLAGS@";
@@ -944,15 +929,15 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
     $SOLARDEF        .= $D."SUPD=$UPD".
                         $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
 }
-elsif ($platform eq "$Macosx") {
+elsif ($platform =~ m/darwin/) {
 	;
 }
-elsif ($platform ne $Winnt )
+elsif ($platform !~ m/cygwin/ )
 {  AddWarning( "set_soenv", "$platform not configured for compiler directives" );
 }
 
 # Location used by the linker to create libraries.
-if ($platform eq "$Solaris") 
+if ($platform =~ m/solaris/) 
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$ds."lib.solaris.2.6".
                         $L.$LIB.
@@ -961,23 +946,20 @@ if ($platform eq "$Solaris")
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
-	($platform eq "$Tru64") || ($platform eq "$Irix") ||
-	($platform eq "$Irix64") || ($platform eq "$FreeBSD") ||
-	($platform eq "AIX"))
+elsif ($platform =~ m/linux-gnu|netbsd|osf1|irix|freebsd|aix/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
-elsif ($platform eq "$Macosx") 
+elsif ($platform =~ m/darwin/) 
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
-elsif ($platform ne $Winnt )
+elsif ($platform !~ m/cygwin/ )
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
 }
 
 # Windows NT only variables
-if ($platform eq "$Winnt")
+if ($platform =~ m/cygwin/)
 {  $COMP_ENV          = $OUTPATH;
 
    $JAVAHOME          = '$JAVA_HOME';
@@ -1005,16 +987,13 @@ if ($platform eq "$Winnt")
 }
      
 # The general environment path.
-if (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
-    ($platform eq "$Tru64")  || ($platform eq "$Irix") ||
-    ($platform eq "$Irix64") || ($platform eq "$FreeBSD") ||
-    ($platform eq "AIX")     || ($platform eq "$Solaris"))
+if ($platform =~ m/linux-gnu|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
-   if ($platform eq "$Solaris") {
+   if ($platform =~ m/solaris/) {
 	$PATH .= $ps.$USR_CCS.$BIN;
    }
 
@@ -1032,7 +1011,7 @@ if (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
                                         @javaBits);
 }
 
-elsif ($platform eq "$Winnt")
+elsif ($platform =~ m/cygwin/)
 {  # The PATH variable is completely created from scratch. Everything that is not
    # needed is appended to the end.
 
@@ -1132,7 +1111,7 @@ elsif ($platform eq "$Winnt")
    }
 }
 
-elsif ($platform eq $Macosx)
+elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1162,7 +1141,7 @@ else
 }
 
 # Linker library search directory paths. 
-if ($platform eq "$Solaris") 
+if ($platform =~ m/solaris/) 
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
@@ -1185,10 +1164,7 @@ if ($platform eq "$Solaris")
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
-	($platform eq "$Tru64")  || ($platform eq "$Irix") ||
-	($platform eq "$Irix64") || ($platform eq "AIX") ||
-	($platform eq "$FreeBSD"))
+elsif ($platform =~ m/linux-gnu|netbasd|osf1|irix|aix|freebsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
@@ -1200,13 +1176,13 @@ elsif (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform eq "$Winnt")
+elsif ($platform =~ m/cygwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $L.$par_dir.$LIB.
                         $L_STLPORT_LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
 } 
-elsif ($platform eq "$Macosx") 
+elsif ($platform =~ m/darwin/) 
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $L_STLPORT_LIB.
                         $L.$USR_LIB;
@@ -1225,25 +1201,25 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if (($platform eq "$Solaris") or ($platform eq "$Linux") or ($platform eq "$Tru64") or ($platform eq "$FreeBSD") or ($platform eq "$NetBSD") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
+if ($platform =~ m/solaris|linux-gnu|osf1|freebsd|netbsd|irix/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
-if ($platform eq "$Linux" || $platform eq "$FreeBSD" || $platform eq "$NetBSD")
+if ($platform =~ m/linux|freebsd|netbsd/)
 {
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform eq "$Solaris" && $CC !=~ "gcc")
+if ($platform =~ m/solaris/ && $CC !=~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
-if ($platform eq "$Solaris")
+if ($platform =~ m/solaris/)
 {   my $temp;
     $temp =~ s:$COMPATH:/bin\$:;
     $SOLARINC         .= $I.$temp.$ds."include";
 }
-if ($platform eq "$Linux")
+if ($platform =~ m/linux-gnu/)
 {
 # This simply adds an include path, so even cases that break the FHS work
    $SOLARINC         .= $STLPORT_inc_stlport;
@@ -1256,21 +1232,21 @@ if ($platform eq "$Linux")
 	#include system dependent Java include directory
 	if (!($JDK eq "gcj"))
 	{
-   		if ($platform eq "$Solaris")
+   		if ($platform =~ m/solaris/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
    		}
-   		elsif  (($platform eq "$Linux") || ($platform eq "$Tru64"))
+   		elsif  ($platform =~ m/linux-gnu|osf1/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
    		}
-   		elsif ($platform eq "$FreeBSD")
+   		elsif ($platform =~ m/freebsd/)
    		{
       		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."freebsd";
       		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."bsd";
    		}
-   		elsif ($platform eq "$NetBSD")
+   		elsif ($platform =~ m/netbsd/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
    		}
-   		elsif (($platform eq $Irix) || ($platform eq $Irix64))
+   		elsif ($platform =~ m/irix/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
    		}
 
@@ -1279,16 +1255,15 @@ if ($platform eq "$Linux")
    		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
 	}
     #The tail, if needed
-    if (($platform eq "$Linux") || ($platform eq "$FreeBSD") ||
-	   ($platform eq "$NetBSD"))
+    if ($platform =~ m/linux-gnu|freebsd|netbsd/)
     {  $SOLARINC  .= $I.$XINC;
     }
-    elsif ($platform eq "$Tru64") 
+    elsif ($platform =~ m/osf1/)
     {  $SOLARINC  .= $I.$XINC.
                      $I.$USR.$INCLUDE;
     }
 }
-elsif ($platform eq "$Winnt")
+elsif ($platform =~ m/cygwin/)
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
                         $I.'$JAVA_HOME'.$ds."include".
@@ -1304,7 +1279,7 @@ elsif ($platform eq "$Winnt")
       }
    }
 }
-elsif ($platform eq "$Macosx")
+elsif ($platform =~ m/darwin/)
 {  $SOLARINC         .= $STLPORT_stlport.
 						$I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
@@ -1471,12 +1446,11 @@ ToFile( "PSPRINT",           "TRUE",             "e" );
 # There may be a better way to do this, like splitting unxmacxp into two, but
 # hopefully this hack will work for now...
 
-if ($platform eq "$Macosx")
+if ($platform =~ m/darwin/)
 {
     my $macosxCdefs="";
     
-    if( ! -e "/usr/bin/osascript" ) {
-        # no command line applescript.  Chances are we're on a Darwin system
+    if( ! -x "/usr/bin/sw_vers" ) {
         
         ToFile( "BUILD_OS_DARWIN", "TRUE", "e");
 
@@ -1508,121 +1482,21 @@ if ($platform eq "$Macosx")
         $macosxCdefs.=" -DBUILD_OS_APPLEOSX";
         ToFile("BUILD_OS_APPLEOSX", "TRUE", "e");
         
-        my $majorScript = <<EOF;
-on Num32ToHex(num)
-	if num < 0 then
-		set num to (2 ^ 32) + num
-	end if
-	set out to ""
-	repeat with idx from 7 to 0 by -1
-		set bas to (16 ^ idx) as integer
-		if num >= bas then
-			set mult to ((num - (num mod bas)) / bas) as integer
-			set out to out & character mult of "123456789ABCDEF"
-			set num to (num - bas * mult)
-		else
-			set out to out & "0"
-		end if
-	end repeat
-	return out
-end Num32ToHex
+        open OSXVER, "/usr/bin/sw_vers -productVersion |";
+        while (<OSXVER>) {
+            if (/^\s*(\d+?)\.(\d+?)\.(\d+?)\s*$/) {
+                ToFile("BUILD_OS_MAJOR", $1, "e");
+                $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $1;
 
-tell application "Finder"
-	system attribute "sysv"
-end tell
+                ToFile("BUILD_OS_MINOR", $2, "e");
+                $macosxCdefs.=" -DBUILD_OS_MINOR=" . $2;
 
-Num32ToHex(result)
-return (text 5 through 6 of result)
-EOF
-        open BLECH, ">/tmp/os$$";
-        print BLECH $majorScript;
-        close BLECH;
-        
-        open OSXMAJ, "/usr/bin/osascript </tmp/os$$|";
-        
-        my $tmp=<OSXMAJ>;
-        chomp $tmp;
-        $macosxCdefs.=" -DBUILD_OS_MAJOR=" . $tmp;
-        ToFile("BUILD_OS_MAJOR", $tmp, "e");
-        close OSXMAJ;
-        unlink "/tmp/os$$";
-        
-        my $minorScript = <<EOF;
-on Num32ToHex(num)
-	if num < 0 then
-		set num to (2 ^ 32) + num
-	end if
-	set out to ""
-	repeat with idx from 7 to 0 by -1
-		set bas to (16 ^ idx) as integer
-		if num >= bas then
-			set mult to ((num - (num mod bas)) / bas) as integer
-			set out to out & character mult of "123456789ABCDEF"
-			set num to (num - bas * mult)
-		else
-			set out to out & "0"
-		end if
-	end repeat
-	return out
-end Num32ToHex
-
-tell application "Finder"
-	system attribute "sysv"
-end tell
-
-Num32ToHex(result)
-return (text 7 through 7 of result)
-EOF
-        
-        open BLECH, ">/tmp/os$$";
-        print BLECH $minorScript;
-        close BLECH;
-        
-        open OSXMIN, "/usr/bin/osascript </tmp/os$$|";
-        $tmp=<OSXMIN>;
-        chomp $tmp;
-        $macosxCdefs.=" -DBUILD_OS_MINOR=" . $tmp;
-        ToFile("BUILD_OS_MINOR", $tmp, "e");
-        close OSXMIN;
-        unlink "/tmp/os$$";
-        
-        my $revScript = <<EOF;
-on Num32ToHex(num)
-	if num < 0 then
-		set num to (2 ^ 32) + num
-	end if
-	set out to ""
-	repeat with idx from 7 to 0 by -1
-		set bas to (16 ^ idx) as integer
-		if num >= bas then
-			set mult to ((num - (num mod bas)) / bas) as integer
-			set out to out & character mult of "123456789ABCDEF"
-			set num to (num - bas * mult)
-		else
-			set out to out & "0"
-		end if
-	end repeat
-	return out
-end Num32ToHex
-
-tell application "Finder"
-	system attribute "sysv"
-end tell
-
-Num32ToHex(result)
-return (text 8 through 8 of result)
-EOF
-        open BLECH, ">/tmp/os$$";
-        print BLECH $revScript;
-        close BLECH;
-                
-        open OSXREV, "/usr/bin/osascript </tmp/os$$|";
-        $tmp=<OSXREV>;
-        chomp $tmp;
-        $macosxCdefs.=" -DBUILD_OS_REV=" . $tmp;
-        ToFile("BUILD_OS_REV", $tmp, "e");
-        close OSXREV;
-        unlink "/tmp/os$$";
+                ToFile("BUILD_OS_REV", $3, "e");
+                $macosxCdefs.=" -DBUILD_OS_REV=" . $3;
+                last;
+            }
+        }
+        close(OSXVER);
     }
     
     if ( $GUIBASE eq "aqua" ) {
@@ -1673,7 +1547,7 @@ ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
 ToFile( "Variable values.",  $empty,             "c" );
-if ( $platform eq "$Winnt" )
+if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
@@ -1712,11 +1586,11 @@ if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
    ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
 }
-if ( $platform eq "$Macosx" )
+if ( $platform =~ m/darwin/ )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
 }
 else {
-  if ( $platform eq "$Irix" || $platform eq "$Irix64" ) { 
+  if ( $platform =~ m/irix/ ) {
     ToFile( "LD_LIBRARYN32_PATH",   $LD_LIBRARY_PATH,   "e" );
   }
   else {
@@ -1808,12 +1682,12 @@ ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-if ($platform ne "$Winnt")
+if ($platform !~ m/cygwin/)
 {  ToFile( "TEMP",              $TEMP,              "e" );
    ToFile( "TMP",               $TEMP,              "e" );
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
-if ( $platform eq "$Winnt" )
+if ( $platform =~ m/cygwin/ )
 {
    # these variables marked with "j" are used with cygwin only
    ToFile( "ILIB",              $ILIB,              "j" );
@@ -1824,7 +1698,7 @@ if ( $platform eq "$Winnt" )
    ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
    ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
 }
-if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' eq "4nt" )) {
+if (( $platform =~ m/cygwin/ ) and ( '@USE_SHELL@' eq "4nt" )) {
   my ($tempstring);
   $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."deliver.pl");
   if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
@@ -1846,7 +1720,7 @@ if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' eq "4nt" )) {
 ToFile( "USE_SHELL",         '@USE_SHELL@',         "e" );
 if ($SYSTEM_PYTHON eq "NO")
 {
-  if ( $platform eq "$Winnt" ) {
+  if ( $platform =~ m/cygwin/ ) {
     ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
     ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
   } else {
@@ -1862,13 +1736,13 @@ ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
 ToFile( "alias zipdep",      $zipdep,            "a" );
-if ( $platform ne "$Winnt" )
+if ( $platform !~ m/cygwin/ )
 {  ToFile( "alias nmake",       $nmake,             "a" );
 }
 # write make command for dmake for windows
 # (x = write as is)
 
-if ( $platform eq "$Winnt" and '@USE_SHELL@' eq "4nt" )
+if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
 {
   ToFile( "build the dmake executable.", $empty, "c");
   ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include \^ set LIB=\%COMPATH\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
@@ -1878,7 +1752,7 @@ if ( $platform eq "$Winnt" and '@USE_SHELL@' eq "4nt" )
   ToFile( "  ", $empty, "x");
 }
 # on Solaris and FreeBSD, set GNUCOPY and GNUPATCH
-if ($platform eq "$Solaris" or $platform eq "$FreeBSD")
+if ($platform =~ m/solaris|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
   ToFile( "GNUCOPY",	"@GNUCP@",	"e");
@@ -2023,7 +1897,7 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-if ($platform ne "$Winnt") {
+if ($platform !~ m/cygwin/ ) {
 	print "You may now run $tmp in $SRC_ROOT\n";
 }
 if ( $Warning ne "" ) {
@@ -2046,7 +1920,7 @@ if ( $Warning ne "" ) {
 #-------------------------------------------------------------
 sub CheckPathName 
 {  my $retrn = $_[ 0 ];
-   if (($platform ne "$Winnt") or ( '@USE_SHELL@' ne "4nt" ))
+   if (($platform =~ m/cygwin/) or ( '@USE_SHELL@' ne "4nt" ))
    {  # Check if the first character is not a '/'.
       if ( !( $_[ 0 ] =~ /^\// ) ) 
       {  $retrn = $ds.$_[ 0 ];
@@ -2067,7 +1941,7 @@ sub CheckPathName
 #-------------------------------------------------------------
 sub CheckPathExist 
 {  my $dir = $_[ 0 ];
-   if ( !( -d $dir ) and $platform ne "$Winnt") 
+   if ( !( -d $dir ) and $platform !~ m/cygwin/) 
    {  printf "The directory $_[ 0 ] does not exist. Want to create it (y/n)?: ";
       my $answer = <STDIN>; 
       chomp( $answer );
@@ -2084,7 +1958,7 @@ sub CheckPathExist
       return "false";
    }
    else
-   {   # Don't check under "$Winnt". The path is possibly posix and you could use a native NT perl!  
+   {   # Don't check under Windows. The path is possibly posix and you could use a native NT perl!  
 	   return "true";
    }
 }
@@ -2200,7 +2074,7 @@ sub ToFile
    }
    elsif ( $_[ 2 ] eq "j" )
    {
-      if ((defined $_[ 1 ]) and ( $platform eq "$Winnt" )) 
+      if ((defined $_[ 1 ]) and ( $platform =~ m/cygwin/ )) 
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
          $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
          $win_format_var =~ s/\\/\\\\/g;
@@ -2238,8 +2112,8 @@ sub ToFile
 sub PosixFormat
 {  my ( $variable, $d1, $d2 );
    $variable = $_[ 0 ];
-   # ToDo: Do the replacement only if "Winnt" and var contains "\" and ":"
-   if ( $platform eq "$Winnt" )
+   # ToDo: Do the replacement only if Windows and var contains "\" and ":"
+   if ( $platform =~ m/cygwin/ )
    {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables
        $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables twice!
    	   if ( ( $variable =~ /\\/ ) and ( $variable =~ /:/ ) )
@@ -2353,7 +2227,7 @@ sub WinFormat
 sub CheckBuildEnv 
 {  my ( $src_root );
    $src_root  = $_[ 0 ];
-   if ( !( -d $src_root ) and $platform ne "$Winnt") 
+   if ( !( -d $src_root ) and $platform !~ m/cygwin/) 
    {  return 0;
    }
    return 1;
