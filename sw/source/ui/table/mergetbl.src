@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:02:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ ModalDialog DLG_MERGE_TABLE
     Text[ chinese_simplified ] = "θΏζ¥θ΅¨ζ Ό";
     Text[ chinese_traditional ] = "ι€£ζ¥θ΅¨ζ Ό";
     Text[ arabic ] = "ζΥα ΗαΜΟΗζα";
-    Text[ greek ] = "Ένωση πινάκων";
+    Text[ greek ] = "Συγχώνευση πινάκων";
     Text[ korean ] = "ν‘ λ³‘ν•©";
     Text[ turkish ] = "Tablolarύ birleώtir";
     Text[ language_user1 ] = " ";
@@ -219,6 +219,7 @@ ModalDialog DLG_MERGE_TABLE
     Text[ hindi ] = "ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¤Ώΰ¤―ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤®ΰ¤Ώΰ¤²ΰ¤Ύΰ¤“";
     Text[ slovak ] = "ZlΓΊΔiΕ¥ tabuΔΎky";
 };
+
 
 
 
