@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:30:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
 
     // diverse Pointer
-    pImp->pAutoSaveTimer = new Timer;
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
 
     /////////////////////////////////////////////////////////////////
@@ -362,10 +361,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppDispat->Push(*this);
     pAppDispat->Flush();
     pAppDispat->DoActivate_Impl( sal_True );
-
-    SvtSaveOptions aSaveOptions;
-    pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
-    pImp->pAutoSaveTimer->SetTimeoutHdl( LINK( pApp, SfxApplication, AutoSaveHdl_Impl ) );
 
 //(dv)  if ( !pAppData_Impl->bBean )
 //(mba)        doFirstTimeInit();
