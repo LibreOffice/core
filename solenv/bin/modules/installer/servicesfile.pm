@@ -2,9 +2,6 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.14 $
-#
-#   last change: $Author: hr $ $Date: 2004-11-09 18:32:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,35 +74,28 @@ use installer::systemactions;
 # Adding the newly created file into the files collector
 ################################################################
 
-sub add_services_file_into_filearray
+sub add_services_sourcepath_into_filearray
 {
     my ( $filesarrayref, $servicesfile, $servicesname ) = @_;
 
-    # Some data are set now, others are taken from the file "gid_File_Lib_Vcl"
+    my $found = 0;
+    my $onefile;
 
-    my %servicesfile = ();  # This has to be done always, not only once
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        $onefile = ${$filesarrayref}[$i];
+        my $name = $onefile->{'Name'};
 
-    # Taking the data from the "gid_File_Lib_Vcl"
+        if ( $servicesname eq $name )
+        {
+            $found = 1;
+            $onefile->{'sourcepath'} = $servicesfile;   # setting the sourcepath!
+            last;
+        }
+    }
 
-    my $vclgid = "gid_File_Lib_Vcl";
-    my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
+    if ( ! $found ) { installer::exiter::exit_program("ERROR: Did not find $servicesname in files collector!", "add_services_sourcepath_into_filearray"); }
 
-    # copying all base data
-    installer::converter::copy_item_object($vclfile, \%servicesfile);
-
-    # and overriding all new values
-
-    $servicesfile{'ismultilingual'} = 0;
-    $servicesfile{'sourcepath'} = $servicesfile;
-    $servicesfile{'Name'} = $servicesname;
-    $servicesfile{'UnixRights'} = "644";
-    $servicesfile{'gid'} = "gid_File_Rdb_Services";
-
-    my $destinationpath = $vclfile->{'destination'};
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
-    $servicesfile{'destination'} = $destinationpath . $servicesname;
-
-    push(@{$filesarrayref}, \%servicesfile);
 }
 
 ############################################################################
@@ -116,36 +106,29 @@ sub add_legacy_binfilters_rdb_file_into_filearray
 {
     my ( $filesarrayref, $includepatharrayref ) = @_;
 
-    # Some data are set now, others are taken from the file "gid_File_Lib_Vcl"
-
-    my %legacyfile = ();    # This has to be done always, not only once
-
     my $legacyfilename = "legacy_binfilters.rdb";
 
     my $legacyfilesourceref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$legacyfilename, $includepatharrayref, 1);
     if ( $$legacyfilesourceref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $legacyfilename!", "add_legacy_binfilters_rdb_file_into_filearray"); }
 
-    # Taking the data from the "gid_File_Lib_Vcl"
+    my $found = 0;
+    my $onefile;
 
-    my $vclgid = "gid_File_Lib_Vcl";
-    my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        $onefile = ${$filesarrayref}[$i];
+        my $name = $onefile->{'Name'};
 
-    # copying all base data
-    installer::converter::copy_item_object($vclfile, \%legacyfile);
+        if ( $legacyfilename eq $name )
+        {
+            $found = 1;
+            $onefile->{'sourcepath'} = $$legacyfilesourceref;   # setting the sourcepath!
+            last;
+        }
+    }
 
-    # and overriding all new values
+    if ( ! $found ) { installer::exiter::exit_program("ERROR: Did not find $legacyfilename in files collector!", "add_legacy_binfilters_rdb_file_into_filearray"); }
 
-    $legacyfile{'ismultilingual'} = 0;
-    $legacyfile{'sourcepath'} = $$legacyfilesourceref;
-    $legacyfile{'Name'} = $legacyfilename;
-    $legacyfile{'UnixRights'} = "644";
-    $legacyfile{'gid'} = "gid_File_Rdb_Legacy_Binfilters";
-
-    my $destinationpath = $vclfile->{'destination'};
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
-    $legacyfile{'destination'} = $destinationpath . $legacyfilename;
-
-    push(@{$filesarrayref}, \%legacyfile);
 }
 
 ################################################################
@@ -396,10 +379,13 @@ sub register_all_components
     {
         my $onefile = ${$filesarrayref}[$i];
         my $styles = "";
+        my $regmergefile = "";
+
+        if ( $onefile->{'Regmergefile'} ) { $regmergefile = $onefile->{'Regmergefile'}; }
 
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
 
-        if ( $styles =~ /\bUNO_COMPONENT\b/ )
+        if (( $styles =~ /\bUNO_COMPONENT\b/ ) && ( $regmergefile eq "" ))  # regmergefiles will not be registered with regcomp
         {
             my $filename = $onefile->{'Name'};
 
@@ -777,7 +763,7 @@ sub create_services_rdb
 
     # Adding the services.rdb to the filearray
 
-    add_services_file_into_filearray( $filesarrayref, $servicesfile, $servicesname );
+    add_services_sourcepath_into_filearray( $filesarrayref, $servicesfile, $servicesname );
 
     # Setting the global variable $installer::globals::services_rdb_created
 
