@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 11:31:42 $
+ *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define M_E( a, p, l, t, c ) \
-    { a, XML_NAMESPACE_##p, XML_##l, t, c }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c }
 
 #define M_ED( a, p, l, t, c ) \
-    { a, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c }
+
+#define M_END() \
+    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
 
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
@@ -362,7 +365,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     // RES_PARATR_VERTALIGN
     M_E( "ParaVertAlignment", STYLE, VERTICAL_ALIGN,    XML_TYPE_TEXT_VERTICAL_ALIGN, 0 ),
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLTextPropMap[] =
@@ -513,7 +516,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_ED( "ParaIsHangingPunctuation", STYLE, PUNCTUATION_WRAP, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
     M_ED( "ParaIsForbiddenRules", STYLE, LINE_BREAK, XML_TYPE_TEXT_LINE_BREAK, 0 ),
     M_E( "TabStopDistance", STYLE, TAB_STOP_DISTANCE, XML_TYPE_MEASURE, 0 ),
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLFramePropMap[] =
@@ -646,23 +650,23 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_ROTATION
     // not required (exported as svg:transform attribute)
     // RES_GRFATR_LUMINANCE
-    { "AdjustLuminance",  XML_NAMESPACE_DRAW, XML_LUMINANCE,            XML_TYPE_PERCENT16, 0 },        // signed?
+    M_E( "AdjustLuminance",  DRAW, LUMINANCE,           XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_CONTRAST
-    { "AdjustContrast", XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 },        // signed?
+    M_E( "AdjustContrast",  DRAW,   CONTRAST,           XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_CHANNELR
-    { "AdjustRed",      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 },        // signed?
+    M_E( "AdjustRed",       DRAW, RED,                  XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_CHANNELG
-    { "AdjustGreen",    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 },        // signed?
+    M_E( "AdjustGreen",     DRAW, GREEN,                XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_CHANNELB
-    { "AdjustBlue",     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 },        // signed?
+    M_E( "AdjustBlue",      DRAW, BLUE,                 XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_GAMMA
-    { "Gamma",          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE, 0 },           // signed?
+    M_E( "Gamma",           DRAW, GAMMA,                XML_TYPE_DOUBLE, 0 ),           // signed?
     // RES_GRFATR_INVERT
-    { "GraphicIsInverted", XML_NAMESPACE_DRAW, XML_COLOR_INVERSION,     XML_TYPE_BOOL, 0 },
+    M_E( "GraphicIsInverted", DRAW, COLOR_INVERSION,        XML_TYPE_BOOL, 0 ),
     // RES_GRFATR_TRANSPARENCY
-    { "Transparency",   XML_NAMESPACE_DRAW, XML_TRANSPARENCY,       XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 },
+    M_E( "Transparency",    DRAW, TRANSPARENCY,     XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_DRAWMODE
-    { "GraphicColorMode", XML_NAMESPACE_DRAW, XML_COLOR_MODE,           XML_TYPE_COLOR_MODE, 0 },
+    M_E( "GraphicColorMode", DRAW, COLOR_MODE,          XML_TYPE_COLOR_MODE, 0 ),
     // special entries for floating frames
     M_E( "",            DRAW,   FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
     M_E( "",            DRAW,   FRAME_DISPLAY_BORDER,   XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_BORDER ),
@@ -675,7 +679,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "",            DRAW,   DRAW_ASPECT,            XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_OLE_DRAW_ASPECT ),
     M_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLShapePropMap[] =
@@ -706,7 +710,8 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
     M_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLSectionPropMap[] =
@@ -742,14 +747,14 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_E( "EndnoteNumberingSuffix",      TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
     M_E( "EndnoteIsCollectAtTextEnd",   TEXT,   ENDNOTES_CONFIGURATION,     MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
 
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLRubyPropMap[] =
 {
     M_E( "RubyAdjust",  STYLE, RUBY_ALIGN, XML_TYPE_TEXT_RUBY_ADJUST, 0 ),
     M_E( "RubyIsAbove", STYLE, RUBY_POSITION, XML_TYPE_TEXT_RUBY_POSITION, 0 ),
-    { 0, 0, XML_TOKEN_INVALID, 0 }
+    M_END()
 };
 
 XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )

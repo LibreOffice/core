@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:14 $
+ *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,32 +86,35 @@ namespace xmloff
 {
 //.........................................................................
 
+#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
+#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 }
+
     XMLPropertyMapEntry aControlStyleProperties[] =
     {
-        { PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,       XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 },
-        { PROPERTY_ALIGN,           XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 },
-        { PROPERTY_BORDER,          XML_NAMESPACE_FO,       XML_BORDER,                 XML_TYPE_CONTROL_BORDER, 0 },
-        { "FontCharWidth",          XML_NAMESPACE_STYLE,    XML_FONT_CHAR_WIDTH,        XML_TYPE_NUMBER16, 0 },
-        { "FontCharset",            XML_NAMESPACE_STYLE,    XML_FONT_CHARSET,           XML_TYPE_TEXT_FONTENCODING, 0 },
-        { "FontFamily",             XML_NAMESPACE_STYLE,    XML_FONT_FAMILY_GENERIC,    XML_TYPE_TEXT_FONTFAMILY, 0 },
-        { "FontHeight",             XML_NAMESPACE_FO,       XML_FONT_SIZE,              XML_TYPE_CHAR_HEIGHT, 0 },
-        { "FontKerning",            XML_NAMESPACE_STYLE,    XML_LETTER_KERNING,         XML_TYPE_BOOL, 0 },
-        { "FontName",               XML_NAMESPACE_STYLE,    XML_FONT_NAME,              XML_TYPE_STRING, 0 },
-        { "FontOrientation",        XML_NAMESPACE_STYLE,    XML_ROTATION_ANGLE,         XML_TYPE_ROTATION_ANGLE, 0 },
-        { "FontPitch",              XML_NAMESPACE_STYLE,    XML_FONT_PITCH,             XML_TYPE_TEXT_FONTPITCH, 0 },
-        { "FontSlant",              XML_NAMESPACE_FO,       XML_FONT_STYLE,             XML_TYPE_TEXT_POSTURE, 0 },
-        { "FontStrikeout",          XML_NAMESPACE_STYLE,    XML_TEXT_CROSSING_OUT,      XML_TYPE_TEXT_CROSSEDOUT, 0 },
-        { "FontStyleName",          XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,        XML_TYPE_STRING, 0 },
-        { "FontUnderline",          XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE,         XML_TYPE_TEXT_UNDERLINE, 0 },
-        { "FontWeight",             XML_NAMESPACE_FO,       XML_FONT_WEIGHT,            XML_TYPE_TEXT_WEIGHT, 0 },
-        { "FontWidth",              XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 },
-        { "FontWordLineMode",       XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 },
-        { "TextColor",              XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 },
-        { PROPERTY_FORMATKEY,       XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING, 0 },
-        { "FontEmphasisMark",       XML_NAMESPACE_STYLE,    XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 },
-        { "FontRelief",             XML_NAMESPACE_STYLE,    XML_FONT_RELIEF,            XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 },
-        { "TextLineColor",          XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
-        { 0, 0, XML_TOKEN_INVALID, 0 }
+        MAP( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,        XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),
+        MAP( PROPERTY_ALIGN,            XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
+        MAP( PROPERTY_BORDER,           XML_NAMESPACE_FO,       XML_BORDER,                 XML_TYPE_CONTROL_BORDER, 0 ),
+        MAP( "FontCharWidth",           XML_NAMESPACE_STYLE,    XML_FONT_CHAR_WIDTH,        XML_TYPE_NUMBER16, 0 ),
+        MAP( "FontCharset",         XML_NAMESPACE_STYLE,    XML_FONT_CHARSET,           XML_TYPE_TEXT_FONTENCODING, 0 ),
+        MAP( "FontFamily",              XML_NAMESPACE_STYLE,    XML_FONT_FAMILY_GENERIC,    XML_TYPE_TEXT_FONTFAMILY, 0 ),
+        MAP( "FontHeight",              XML_NAMESPACE_FO,       XML_FONT_SIZE,              XML_TYPE_CHAR_HEIGHT, 0 ),
+        MAP( "FontKerning",         XML_NAMESPACE_STYLE,    XML_LETTER_KERNING,         XML_TYPE_BOOL, 0 ),
+        MAP( "FontName",                XML_NAMESPACE_STYLE,    XML_FONT_NAME,              XML_TYPE_STRING, 0 ),
+        MAP( "FontOrientation",     XML_NAMESPACE_STYLE,    XML_ROTATION_ANGLE,         XML_TYPE_ROTATION_ANGLE, 0 ),
+        MAP( "FontPitch",               XML_NAMESPACE_STYLE,    XML_FONT_PITCH,             XML_TYPE_TEXT_FONTPITCH, 0 ),
+        MAP( "FontSlant",               XML_NAMESPACE_FO,       XML_FONT_STYLE,             XML_TYPE_TEXT_POSTURE, 0 ),
+        MAP( "FontStrikeout",           XML_NAMESPACE_STYLE,    XML_TEXT_CROSSING_OUT,      XML_TYPE_TEXT_CROSSEDOUT, 0 ),
+        MAP( "FontStyleName",           XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,        XML_TYPE_STRING, 0 ),
+        MAP( "FontUnderline",           XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE,         XML_TYPE_TEXT_UNDERLINE, 0 ),
+        MAP( "FontWeight",              XML_NAMESPACE_FO,       XML_FONT_WEIGHT,            XML_TYPE_TEXT_WEIGHT, 0 ),
+        MAP( "FontWidth",               XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 ),
+        MAP( "FontWordLineMode",        XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 ),
+        MAP( "TextColor",               XML_NAMESPACE_FO,       XML_COLOR,                  XML_TYPE_COLOR, 0 ),
+        MAP( PROPERTY_FORMATKEY,        XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,        XML_TYPE_STRING, 0 ),
+        MAP( "FontEmphasisMark",        XML_NAMESPACE_STYLE,    XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
+        MAP( "FontRelief",              XML_NAMESPACE_STYLE,    XML_FONT_RELIEF,            XML_TYPE_TEXT_FONT_RELIEF|MID_FLAG_MULTI_PROPERTY, 0 ),
+        MAP( "TextLineColor",           XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,   XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
+        MAP_END()
     };
 
     //=====================================================================
@@ -151,6 +154,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/06/29 21:07:14  dvo
+ *  #86004# changes sXML_* strings to XML_* tokens
+ *
  *  Revision 1.10  2001/06/07 12:28:30  fs
  *  #86096# FontEmphasisMark/FontRelief/TextLineColor
  *
