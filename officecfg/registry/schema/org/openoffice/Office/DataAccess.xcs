@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-24 10:53:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-24 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 			</info>
 			<prop oor:name="Value" oor:type="oor:any">
 				<info>
-					<desc xml:lang="en-US">Describes the value for an embedded database setting.</desc>
+                    <desc>Describes the value for an embedded database setting.</desc>
 				</info>
 			</prop>
 		</group>
