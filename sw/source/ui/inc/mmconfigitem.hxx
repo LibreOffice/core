@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 11:45:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 17:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ public:
     void                SetTargetView(SwView* pView);
 
     SwView*             GetSourceView();
-    void                SetSourceView(SwView* pView) {m_pSourceView = pView;}
+    void                SetSourceView(SwView* pView);
 
     //helper methods
     ::rtl::OUString     GetAssignedColumn(sal_uInt32 nColumn)const;
