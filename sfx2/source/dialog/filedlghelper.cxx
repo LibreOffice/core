@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-26 11:59:13 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 14:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     friend class FileDialogHelper;
 
     Reference < XFilePicker >   mxFileDlg;
+    Reference < XNameAccess >   mxFilterCFG;
 
     SfxFilterMatcher       *mpMatcher;
     GraphicFilter          *mpGraphicFilter;
@@ -323,6 +324,8 @@ private:
 
     void                    setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
     void                    setDialogHelpId( const sal_Int32 _nHelpId );
+
+    sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
@@ -578,14 +581,36 @@ sal_Bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedContr
 }
 
 // ------------------------------------------------------------------------
-struct CheckFilterOptionsCapability
+sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _pFilter )
 {
-    sal_Bool operator() ( const SfxFilter* _pFilter )
+    sal_Bool bResult = sal_False;
+
+    if( mxFilterCFG.is() && _pFilter )
     {
-        return  _pFilter
-            &&  ( 0 != ( _pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) );
+        try {
+               Sequence < PropertyValue > aProps;
+               Any aAny = mxFilterCFG->getByName( _pFilter->GetName() );
+               if ( aAny >>= aProps )
+               {
+                   ::rtl::OUString aServiceName;
+                   sal_Int32 nPropertyCount = aProps.getLength();
+                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                       {
+                        ::rtl::OUString aServiceName;
+                           aProps[nProperty].Value >>= aServiceName;
+                        if( aServiceName.getLength() )
+                            bResult = sal_True;
+                    }
+            }
+        }
+        catch( Exception& )
+        {
+        }
     }
-};
+
+    return bResult;
+}
 
 // ------------------------------------------------------------------------
 
@@ -596,7 +621,7 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
 
     updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
-        CheckFilterOptionsCapability()( getCurentSfxFilter() )
+        CheckFilterOptionsCapability( getCurentSfxFilter() )
     );
 }
 
@@ -997,7 +1022,15 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
         mbHasPassword = sal_True;
+
         m_bHaveFilterOptions = sal_True;
+        if( xFactory.is() )
+        {
+            mxFilterCFG = Reference< XNameAccess >(
+                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                UNO_QUERY );
+        }
+
         mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
