@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace dbaui
     public:
         OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
 
-        inline void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
+        inline void SetOriginalWidth(long nWidth) { OSL_ENSURE(m_nNextWidth =! 0,"Width is 0!");m_nNextWidth = nWidth; }
 
         virtual void Undo();
         virtual void Redo() { Undo(); }

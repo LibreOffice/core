@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:28 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,16 +121,18 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 //------------------------------------------------------------------------------
 void OTabFieldCellModifiedUndoAct::Undo()
 {
-    String strNext = pOwner->GetCellContents(m_nCellIndex, m_nColumnPostion);
-    pOwner->SetCellContents(m_nCellIndex, m_nColumnPostion, m_strNextCellContents);
+    USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+    String strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
+    pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
     m_strNextCellContents = strNext;
 }
 
 //------------------------------------------------------------------------------
 void OTabFieldSizedUndoAct::Undo()
 {
-    long nNextWidth = pOwner->GetColumnWidth(m_nColumnPostion);
-    pOwner->SetColWidth(m_nColumnPostion, m_nNextWidth);
+    USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+    long nNextWidth = pOwner->GetColumnWidth(nColumnId);
+    pOwner->SetColWidth(nColumnId, m_nNextWidth);
     m_nNextWidth = nNextWidth;
 }
 // -----------------------------------------------------------------------------
