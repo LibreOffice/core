@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:08:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_simplified ] = "Ν·ΟΞ/Φ°Ξρ(~T)";
         Text[ russian ] = "Òθςσλ/Δξλζνξρςό";
         Text[ polish ] = "Tytu³/Stanowisko";
-        Text[ japanese ] = "¨‘‚«/–πE(~T)";
+        Text[ japanese ] = "¨‘‚«/•”(~T)";
         Text[ chinese_traditional ] = "ΐY»Ξ/ΒΎ°Θ(~T)";
         Text[ arabic ] = "ΗαγΣγμ ΗαζΩνέν/ΗαγΡίÒ";
         Text[ greek ] = "Τίτλος/Θέση";
@@ -562,7 +562,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "~Ort/Land/Postnr";
         Text[ polish ] = "Ulica/Wojewσdztwo/Kod pocztowy";
         Text[ portuguese_brazilian ] = "Staat/PLZ/~L.";
-        Text[ japanese ] = "“s“Ή•{§–Ό/‘–Ό/—X•Φ”Τ†";
+        Text[ japanese ] = "“s“Ή•{§–Ό/B–Ό/—X•Φ”Τ†";
         Text[ chinese_simplified ] = "½Φµΐ/ΉϊΌÒ/ΣΚ±ΰ(~S)";
         Text[ chinese_traditional ] = "µσΉD/°κ®a/¶l»Ό°ΟΈΉ(~S)";
         Text[ arabic ] = "ΗαγΟνδΙ/ΗαΘαΟ/ΗαΡγÒ ΗαΘΡνΟν";
@@ -588,11 +588,11 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "Observera att gatu- och postadress anvδnds fφr berδkningen av registreringsnyckeln. Fram till registreringen kan anvδndardata inte δndras. Vill du δndra de hδr anvδndardata nu?";
         Text[ polish ] = "NaleΏy uwzglκdniζ, Ώe podanie nazwy ulicy, kodu pocztowego i miejscowoci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji danych tych nie bκdzie moΏna zmieniζ. Czy chcesz je zmieniζ teraz?";
         Text[ portuguese_brazilian ] = "Bitte beachten Sie, da? Stra?e, Postleitzahl und Ort f? die Berechnung des Registrierungsschl?sels herangezogen werden. Bis zur Registrierung k?nen diese Benutzerdaten nicht mehr ge?ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch ?ndern?";
-        Text[ japanese ] = "s’¬‘Ί–Ό‚β—X•Φ”Τ†‚βB–ΌA“s“Ή•{§–Ό‚Ν“o^·°‚π”­s‚·‚ιθ‚ª‚©‚θ‚Ζ‚Θ‚θ‚ά‚·B“o^‚ªΟ‚ή‚ά‚Ε‚ΝΥ°»ή°Γή°ΐ‚Ν•ΟX‚Ε‚«‚ά‚Ή‚ρB‚±‚ΜΥ°»ή°Γή°ΐ‚π΅•ΟX‚µ‚ά‚·‚©H";
+        Text[ japanese ] = "s’¬‘Ί–ΌA—X•Φ”Τ†A“s“Ή•{§–Ό‚Ν“o^·°‚π”­s‚·‚ιθ‚ª‚©‚θ‚Ζ‚Θ‚θ‚ά‚·B“o^‚ªΟ‚ή‚ά‚Ε‚ΝΥ°»ή°Γή°ΐ‚Ν•ΟX‚Ε‚«‚ά‚Ή‚ρB‚±‚ΜΥ°»ή°Γή°ΐ‚π΅•ΟX‚µ‚ά‚·‚©H";
         Text[ chinese_simplified ] = "ΗλΧΆÒβ£Ί½Φµΐ£¬ΣΚ±ΰΊΝ³ΗΚΠΚΗΣΓΐ΄Ιϊ³ΙΧΆ²αΓάΒλµΔΚύΎέ΅£ΤΪΥύΚ½ΧΆ²αΗ°Δϊ²»ΔάΤΩΈόΈΔΥβΠ©ΣΓ»§ΧΚΑΟ΅£ΔϊΟΦΤΪÒªΈόΈΔΥβΠ©ΣΓ»§ΧΚΑΟΒπ£Ώ";
         Text[ chinese_traditional ] = "½Πµω·N±zΏι¤JªΊµσΉD¤Ξ«°¥«µ¥Έκ®Ζ¬O¥Ξ¨Σ²£¥Νµω¥UΑδ½X΅C¥Ώ¦΅µω¥U®Ι±z¤£―ΰ­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅C±z²{¦b­n­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅H";
         Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗαΘνΗδΗΚ ΗαΞΗΥΙ ΘΗαΤΗΡΪ ζΗαΡγÒ ΗαΘΡνΟν ζΗαγΟνδΙ ΚΟΞα Φγδ ΗαΘνΗδΗΚ ΗααΗÒγΙ αΕδΤΗΑ γέΚΗΝ ΗαΚΣΜνα. αΗ νγίδί ΚΫννΡ ΘνΗδΗΚ Ηαγ";
-        Text[ greek ] = "Παρακαλώ προσέξτε ότι η οδός, ο Τ.Κ. και η πόλη χρησιμοποιούνται για τον δημιουργία του κλειδιού δήλωσης. Έως την δήλωση δεν θα μπορέσετε να ?";
+        Text[ greek ] = "Παρακαλώ προσέξτε ότι η οδός, ο Τ.Κ. και η πόλη χρησιμοποιούνται για τον δημιουργία του κλειδιού δήλωσης. Έως την δήλωση δεν θα μπορέσετε να ? ";
         Text[ korean ] = "ΑΦΌÒ³ª ΏμΖνΉψΘ£ µξΐΊ µξ·Ο Ε° ±ΈΌΊΏ΅ ΐΜΏλµΘ΄Ω΄Β »η½Ηΐ» Έν½ΙΗΟ½Κ½ΓΏΐ. µξ·ΟΐΜ ΏΟ·αµΙ ¶§±ξΑφ΄Β ΐΜ »ηΏλΐΪ µ¥ΐΜΕΝΈ¦ ΄υ ΐΜ»σ ΉΩ²ά Όφ Ύψ½ΐ΄Ο΄Ω. Αφ±έΐΜ¶σµµ ΐΜ »ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟ½Γ°Ϊ½ΐ?";
         Text[ turkish ] = "Cadde, posta kodu ve ώehir bilgilerinin kayύt kodunun oluώturulmasύ iηin kullanύldύπύnύ dikkate alύn. Kayύt yapύlana kadar bu kullanύcύ verileri deπiώtirilemez. Kullanύcύ verilerini ώimdi deπiώtirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
@@ -633,7 +633,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ chinese_traditional ] = "±z¤wΈgΕά§σ¨Ο¥ΞªΜΈκ®Ζ΅C\n³oΌΛ±zªΊµω¥U΄N·|µL®Δ΅C\n±z»έ­n¤@­Σ·sªΊ΅M¥B¥²¶·¦b30¤Ρ¤§¤ΊΏι¤JªΊµω¥U±KΑδ½X΅C\n±z―ΰ°χ¦b¥\\―ΰªν»΅©ϊ΅Aµω¥U¤§¤U§δ¨μµω¥Uªν®ζ΅C\n―u­n­Χ§ο¨Ο¥ΞªΜΈκ®Ζ΅H";
     Message[ arabic ] = "αήΟ ήγΚ ΘΚΪΟνα ΘνΗδΗΚ ΗαγΣΚΞΟγ.\nΗαΡΜΗΑ γαΗΝΩΙ Γδ εΠΗ ΗαΚΪΟνα Σζέ νΜΪα ΗαΚΣΜνα ΫνΡ ΥΗαΝ.\nΣζέ ΚΝΚΗΜ Εαμ γέΚΗΝ ΚΣΜνα ΜΟνΟ΅ νΜΘ ΕΟΞΗαε ΞαΗα ΗαΛαΗΛνδ νζγΗπ ΗαήΗΟγνδ.\nνγίδί ΗαΝΥζα Ϊαμ ΗΣΚγΗΡΙ ΗαΚΣΜνα έν ήΗΖγΙ \"γΣΗΪΟΙ\" ΚΝΚ \"ΚΣΜνα\"...\nεα ΚΡνΟ ΘΗαΚΓίνΟ ΚΫννΡ ΘνΗδΗΚ ΗαγΣΚΞΟγΏ";
     Message[ greek ] = "Αλλάξατε τα δεδομένα του χρήστη.\nΠροσέξτε ότι με αυτή την ενέργεια παύει να ισχύει η δήλωση.\nΣε αυτή τη περίπτωση θα χρειαστείτε ένα νέο κλειδί δήλωσης, το οποίο θα πρέπει να εισαχθεί μέσα στο χρονικό διάστημα των επομένων 30 ημερών.\nΤη φόρμα δήλωσης θα τη βρείτε στο μενού Βοήθεια - Δήλωση...\nΘέλετε πραγματικά να αλλάξετε τα δεδομένα του χρήστη;";
-    Message[ korean ] = "»ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟΌΜ½ΐ΄Ο΄Ω.\n±Χ·Ξ ΐΞΗΨ µξ·ΟΐΜ Ή«ΘΏΘ­µΘ΄Ω΄Β Α΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ. \n±Χ·―Έι ΎΥΐΈ·Ξ 30ΐΟ³»Ώ΅ ΐΤ·ΒΗΨΎί ΗÒ »υ µξ·Ο Ε°°΅ ΗΚΏδΗΥ΄Ο΄Ω.\nµξ·Ο Ύη½ΔΐΊ µµΏςΈ»-µξ·Ο... Έή΄ΊΏ΅Ό­ Γ£ΐ» Όφ ΐΦ½ΐ΄Ο΄Ω.\n»ηΏλΐΪ µ¥ΐΜΕΝΈ¦΅΅Α¤Έ» Ί―°ζΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "»ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟΌΜ½ΐ΄Ο΄Ω.\n±Χ·Ξ ΐΞΗΨ µξ·ΟΐΜ Ή«ΘΏΘ­µΘ΄Ω΄Β Α΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.\n±Χ·―Έι ΎΥΐΈ·Ξ 30ΐΟ³»Ώ΅ ΐΤ·ΒΗΨΎί ΗÒ »υ µξ·Ο Ε°°΅ ΗΚΏδΗΥ΄Ο΄Ω.\nµξ·Ο Ύη½ΔΐΊ µµΏςΈ»-µξ·Ο... Έή΄ΊΏ΅Ό­ Γ£ΐ» Όφ ΐΦ½ΐ΄Ο΄Ω.\n»ηΏλΐΪ µ¥ΐΜΕΝΈ¦΅΅Α¤Έ» Ί―°ζΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Kullanύcύ verilerini deπiώtirdiniz.\nBu nedenle kayύt iώlemi de iptal edilecektir.\nEn geη 30 gόn iηerisinde yeni bir kayύt koduύ girmeniz gerekiyor.\nέlgili kayύt formunu mφnόde, \"Yardύm - Kayύt...\" altύnda bulabilirsiniz.\nKullanύcύ verilerini gerηekten deπiώtirmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirarα el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los prσximos 30 dνas.\nEl formulario de registro lo encuentra en el menϊ Ayuda - Registro...\nΏDesea realmente modificar los datos de usuario?";
@@ -935,4 +935,5 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
