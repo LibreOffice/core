@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:00:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ protected:
     sal_Bool                    mbIsPlaceholder;
     sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
-    sal_Int32                   mnShapeId;
+    rtl::OUString               maShapeId;
     rtl::OUString               maLayerName;
 
     SdXMLImExTransform2D        mnTransform;
@@ -363,10 +363,10 @@ private:
 
     USHORT      mnType;
 
-    sal_Int32   mnStartShapeId;
-    sal_Int32   mnStartGlueId;
-    sal_Int32   mnEndShapeId;
-    sal_Int32   mnEndGlueId;
+    rtl::OUString   maStartShapeId;
+    sal_Int32       mnStartGlueId;
+    rtl::OUString   maEndShapeId;
+    sal_Int32       mnEndGlueId;
 
     sal_Int32   mnDelta1;
     sal_Int32   mnDelta2;
