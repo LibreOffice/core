@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:20:46 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,34 +374,34 @@ TabPage RID_SCPAGE_CALC
         Text [ dutch ] = "30.12.1899 ( ~Standaard )" ;
         Text [ spanish ] = "30.12.1899 (~Estándar)" ;
         Text [ ENGLISH_US ] = "12/30/1899 (defa~ult)" ;
-        QuickHelpText [ english_us ] = "Value 0 corresponds to 12/30/1899!" ;
+        QuickHelpText [ english_us ] = "Value 0 corresponds to 12/30/1899" ;
         QuickHelpText [ dutch ] = "0 komt overeen met 30.12.1899" ;
-        QuickHelpText [ portuguese ] = "0 corresponde a 30/12/1899!" ;
-        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1899-12-30!" ;
-        QuickHelpText [ spanish ] = "El valor 0 corresponde al 30.12.1899!" ;
+        QuickHelpText [ portuguese ] = "0 corresponde a 30/12/1899" ;
+        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1899-12-30" ;
+        QuickHelpText [ spanish ] = "El valor 0 corresponde al 30.12.1899" ;
         Text[ chinese_simplified ] = "30.12.1899 ±ê×¼(~R)";
         Text[ russian ] = "30.12.1899 ( ~ñòàíäàğò )";
         Text[ polish ] = "30.12.1899 (~domyœlnie)";
         Text[ japanese ] = "12/30/1899 (•W€)(~R)";
         Text[ chinese_traditional ] = "30.12.1899 (¼Ğ·Ç)";
         Text[ arabic ] = "12/30/1899 (ŞíÇÓí)";
-        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 30.12.1899!";
-        QuickHelpText[ french ] = "La valeur zéro correspond au 30.12.1899!";
-        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 30.12.1899!";
-        QuickHelpText[ japanese ] = "’l 0 ‚ğ 12/30/1899 ‚Æ‚İ‚È‚·!";
-        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 30.12.1899!";
-        QuickHelpText[ chinese_traditional ] = "¼Æ­È 0 ¬Û·í©ó 12.30.1899!";
+        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 30.12.1899";
+        QuickHelpText[ french ] = "La valeur zéro correspond au 30.12.1899";
+        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 30.12.1899";
+        QuickHelpText[ japanese ] = "’l 0 ‚ğ 12/30/1899 ‚Æ‚İ‚È‚·";
+        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 30.12.1899";
+        QuickHelpText[ chinese_traditional ] = "¼Æ­È 0 ¬Û·í©ó 12.30.1899";
         QuickHelpText[ arabic ] = "0 corresponds to 12/30/1899";
-        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899!";
+        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899";
         Text[ greek ] = "30/12/1899 (~ĞñïåğéëïãŞ)";
         Text[ korean ] = "12/30/1899 (~Ç¥ÁØ)";
-        QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 30/12/1899!";
+        QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 30/12/1899";
         QuickHelpText[ korean ] = "°ª0Àº 12/30/1899¿¡¡¡ÀÏÄ¡!";
         Text[ turkish ] = "30.12.1899 ( ~Standart )";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Wert 0 entspricht dem 30.12.1899";
         Text[ catalan ] = "30.12.1899 (~Estándar)";
-        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 12.30.1899!";
+        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 12.30.1899";
         QuickHelpText[ catalan ] = "El valor 0 corresponde al 30.12.1899";
     };
     RadioButton BTN_DATESC10
@@ -424,34 +424,34 @@ TabPage RID_SCPAGE_CALC
         Text [ dutch ] = "01.01.1900 ( Star~Calc 1.0 )" ;
         Text [ spanish ] = "01.01.1900 (Star~Calc 1.0)" ;
         Text [ ENGLISH_US ] = "01/01/1900 (Star~Calc 1.0)" ;
-        QuickHelpText [ english_us ] = "Value 0 corresponds to 01/01/1900!" ;
+        QuickHelpText [ english_us ] = "Value 0 corresponds to 01/01/1900" ;
         QuickHelpText [ dutch ] = "0 komt overeen met 01.01.1900" ;
-        QuickHelpText [ portuguese ] = "0 corresponde a 01/01/1900!" ;
-        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1900-01-01!" ;
+        QuickHelpText [ portuguese ] = "0 corresponde a 01/01/1900" ;
+        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1900-01-01" ;
         Text[ chinese_simplified ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ russian ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ polish ] = "01.01.1900 (Star~Calc 1.0)";
         Text[ japanese ] = "01/01/1900 (Star~Calc 1.0)";
         Text[ chinese_traditional ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ arabic ] = "01/01/1900 ( Star~Calc 1.0)";
-        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 01.01.1900!";
-        QuickHelpText[ french ] = "La valeur zéro correspond au 01.01.1900!";
-        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 01.01.1900!";
-        QuickHelpText[ japanese ] = "’l 0 ‚ğ 01/01/1900 ‚Æ‚İ‚È‚·!";
-        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 01.01.1900!";
-        QuickHelpText[ chinese_traditional ] = "¼Æ­È 0 ¬Û·í©ó 01.01.1900!";
+        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 01.01.1900";
+        QuickHelpText[ french ] = "La valeur zéro correspond au 01.01.1900";
+        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 01.01.1900";
+        QuickHelpText[ japanese ] = "’l 0 ‚ğ 01/01/1900 ‚Æ‚İ‚È‚·";
+        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 01.01.1900";
+        QuickHelpText[ chinese_traditional ] = "¼Æ­È 0 ¬Û·í©ó 01.01.1900";
         QuickHelpText[ arabic ] = "0 corresponds to 01/01/1900";
-        QuickHelpText[ spanish ] = "El valor 0 corresponde al 01.01.1900!";
-        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 01/01/1900!";
+        QuickHelpText[ spanish ] = "El valor 0 corresponde al 01.01.1900";
+        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 01/01/1900";
         Text[ greek ] = "01.01.1900 (Star~Calc 1.0)";
         Text[ korean ] = "01/01/1900 (Star~Calc 1.0)";
-        QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 01/01/1900!";
+        QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 01/01/1900";
         QuickHelpText[ korean ] = "°ª0Àº 01/01/1900¿¡¡¡ÀÏÄ¡!";
         Text[ turkish ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Wert 0 entspricht dem 01.01.1900";
         Text[ catalan ] = "01.01.1900 (Star~Calc 1.0)";
-        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 1.1.1900!";
+        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 1.1.1900";
         QuickHelpText[ catalan ] = "El valor 0 corresponde al 01.01.1900";
     };
     RadioButton BTN_DATE1904
@@ -487,8 +487,8 @@ TabPage RID_SCPAGE_CALC
         Text[ arabic ] = "01/01/1904~";
         QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 01.01.1904";
         QuickHelpText[ french ] = "La valeur zéro correspond au 01.01.1904";
-        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 01.01.1904!";
-        QuickHelpText[ japanese ] = "0’l‚Í01.01.1904‚É‘Š“–!";
+        QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 01.01.1904";
+        QuickHelpText[ japanese ] = "0’l‚Í01.01.1904‚É‘Š“–";
         QuickHelpText[ chinese_simplified ] = "0 ±íÊ¾ 01/01/1904";
         QuickHelpText[ chinese_traditional ] = "0 ±íÊ¾ 01/01/1904";
         QuickHelpText[ arabic ] = "0 corresponds to 01/01/1904";
@@ -496,12 +496,12 @@ TabPage RID_SCPAGE_CALC
         Text[ greek ] = "~01/01/1904";
         Text[ korean ] = "01/01/1904";
         QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôéò 01/01/1904";
-        QuickHelpText[ korean ] = "°ª0Àº 01/01/1904¿¡¡¡ÀÏÄ¡!";
+        QuickHelpText[ korean ] = "°ª0Àº 01/01/1904¿¡¡¡ÀÏÄ¡";
         Text[ turkish ] = "~01.01.1904";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Wert 0 entspricht dem 01.01.1904";
         Text[ catalan ] = "~01.01.1904";
-        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 1.1.1904!";
+        QuickHelpText[ finnish ] = "0 vastaa päivämäärää 1.1.1904";
         QuickHelpText[ catalan ] = "El valor 0 corresponde al 01.01.1904";
     };
     FixedLine FL_SEPARATOR
@@ -677,7 +677,7 @@ TabPage RID_SCPAGE_CALC
         Text [ italian ] = "Permetti espressioni regolari nelle ~formule" ;
         Text [ spanish ] = "Permitir expresiones regulares en fórmulas" ;
         Text [ french ] = "Autoriser les caractères génériques dans les ~formules" ;
-        Text [ dutch ] = "Enable regular expressions in formulas" ;
+        Text [ dutch ] = "Gangbare uitdrukkingen in ~formules mogelijk" ;
         Text [ swedish ] = "Tillåt reguljära uttryck i ~formler" ;
         Text [ danish ] = "Enable regular expressions in formulas" ;
         Text [ portuguese_brazilian ] = "Enable regular expressions in formulas" ;
@@ -973,7 +973,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ english_us ] = "~Discard" ;
         Text [ italian ] = "~Non salvare" ;
         Text [ spanish ] = "~Rechazar" ;
-        Text [ french ] = "~Ignorer" ;
+        Text [ french ] = "~Rejeter" ;
         Text [ dutch ] = "~Verwerpen" ;
         Text [ swedish ] = "A~vslå" ;
         Text [ danish ] = "Forkast" ;
@@ -1127,12 +1127,12 @@ TabPage RID_SCPAGE_CONTENT
         Text[ french ] = "Aides visuelles";
         Text[ spanish ] = "Ayuda óptica";
         Text[ finnish ] = "Linien";
-        Text[ italian ] = "Linee";
+        Text[ italian ] = "Supporti visivi";
         Text[ danish ] = "Visual aids";
         Text[ swedish ] = "Optisk hjälp";
         Text[ polish ] = "Pomoc optyczna";
         Text[ portuguese_brazilian ] = "Visual aids";
-        Text[ japanese ] = "‹Šo•â•";
+        Text[ japanese ] = "ËŞ¼Ş­±Ù•â•";
         Text[ korean ] = "Visual aids";
         Text[ chinese_simplified ] = "ÏßÌõ¸¨Öú";
         Text[ chinese_traditional ] = "½u±ø»²§U";
@@ -1279,7 +1279,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Proste uchwyty";
         Text[ portuguese_brazilian ] = "~Farbige Handles";
-        Text[ japanese ] = "g‚¢‚â‚·‚¢ÊİÄŞÙ(~S)";
+        Text[ japanese ] = "¼İÌßÙ‚ÈÊİÄŞÙ(~S)";
         Text[ korean ] = "´Ü¼øÇÑ ÇÚµé(~S)";
         Text[ chinese_simplified ] = "±ê×¼¿Øµã";
         Text[ chinese_traditional ] = "¼Ğ·Ç±±ÂI";
@@ -1914,7 +1914,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "~Unidade de medida";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
-        Text[ dutch ] = "Measurement unit";
+        Text[ dutch ] = "~Maateenheid";
         Text[ french ] = "~Unité de mesure";
         Text[ spanish ] = "Unidad de medida";
         Text[ italian ] = "Unità di misura";
@@ -2240,7 +2240,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "~Tabulação";
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ greek ] = "Ó~ôçëïèİôçò";
-        Text[ dutch ] = "Tabstop";
+        Text[ dutch ] = "~Tabstop";
         Text[ french ] = "~Tabulation";
         Text[ spanish ] = "Tabulador";
         Text[ italian ] = "Tabulazione";
@@ -2316,7 +2316,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "Actualizar ligações ao carregar";
         Text[ russian ] = "Îáíîâëÿòü ññûëêè ïğè çàãğóçêå";
         Text[ greek ] = "Åíçìİñùóç ôùí óõíäİóåùí êáôÜ ôç öüñôùóç";
-        Text[ dutch ] = "Koppelingen bij het openen actualiseren";
+        Text[ dutch ] = "Koppelingen bij het laden actualiseren";
         Text[ french ] = "Actualiser les liens au chargement";
         Text[ spanish ] = "Actualizar vínculos al cargar";
         Text[ finnish ] = "Päivitä linkit ladattaessa";
@@ -2766,7 +2766,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "~Utilizar parâmetros da impressora para a formatação do texto";
         Text[ russian ] = "Ïğèìåíèòü äëÿ ôîğìàòèğîâàíèÿ òåêñòà ïàğàìåòğû ïğèíòåğà";
         Text[ greek ] = "×ñŞóç ~äéáóôÜóåùí åêôığùóçò ãéá ôçí ìïñöïğïßçóç ôïõ êåéìİíïõ";
-        Text[ dutch ] = "Use printer metrics for text formatting";
+        Text[ dutch ] = "~Printermaten voor tekstopmaak gebruiken";
         Text[ french ] = "Utiliser les paramètres de l'~imprimante pour le formatage du texte";
         Text[ spanish ] = "Usar los parámetros de la impresora para el formato de texto";
         Text[ finnish ] = "Use printer metrics for text formatting";
@@ -2808,7 +2808,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ portuguese ] = "Páginas";
         Text[ russian ] = "Ñòğàíèöû";
         Text[ greek ] = "Óåëßäåò";
-        Text[ dutch ] = "Pages";
+        Text[ dutch ] = "Pagina's";
         Text[ french ] = "Pages";
         Text[ spanish ] = "Páginas";
         Text[ finnish ] = "Pages";
@@ -2835,7 +2835,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ portuguese ] = "~Não imprimir páginas vazias";
         Text[ russian ] = "~Ïîäàâëÿòü âûâîä ïóñòûõ ñòğàíèö";
         Text[ greek ] = "~Suppress output of empty pages";
-        Text[ dutch ] = "~Suppress output of empty pages";
+        Text[ dutch ] = "~Weergave van lege pagina's onderdrukken";
         Text[ french ] = "~Ignorer les pages vides pour l'impression";
         Text[ spanish ] = "~No imprimir páginas vacías";
         Text[ finnish ] = "~Suppress output of empty pages";
@@ -2862,7 +2862,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ portuguese ] = "Folhas";
         Text[ russian ] = "Ëèñòû";
         Text[ greek ] = "Ğßíáêåò";
-        Text[ dutch ] = "Sheets";
+        Text[ dutch ] = "Werkbladen";
         Text[ french ] = "Feuilles";
         Text[ spanish ] = "Hojas";
         Text[ finnish ] = "Sheets";
@@ -2889,7 +2889,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ portuguese ] = "~Imprimir somente as folhas seleccionadas";
         Text[ russian ] = "~Ïå÷àòü òîëüêî âûäåëåííûõ ëèñòîâ";
         Text[ greek ] = "Åêôığùóç ìü~íï ôùí åğéëåãìİíùí ğéíÜêùí";
-        Text[ dutch ] = "~Print only selected sheets";
+        Text[ dutch ] = "~Alleen geselecteerde werkbladen afdrukken";
         Text[ french ] = "~Imprimer uniquement les feuilles sélectionnées";
         Text[ spanish ] = "~Imprimir sólo tablas seleccionadas";
         Text[ finnish ] = "~Print only selected sheets";
@@ -2907,6 +2907,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ catalan ] = "~Print only selected sheets";
     };
 };
+
 
 
 
