@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framelistanalyzer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:44:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_______________________________________________
@@ -218,7 +218,7 @@ void FrameListAnalyzer::impl_analyze()
         try
         {
             css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
-            css::uno::Reference< dcss::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
         }
@@ -288,7 +288,7 @@ void FrameListAnalyzer::impl_analyze()
                 try
                 {
                     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
-                    css::uno::Reference< dcss::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+                    css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
                     ::rtl::OUString sModule = xModuleMgr->identify(xFrame);
                     if (sModule.equals(SERVICENAME_STARTMODULE))
                     {
