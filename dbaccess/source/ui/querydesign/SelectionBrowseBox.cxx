@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:45:02 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 14:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
             case BROW_ORDER_ROW:
             {
-                strOldCellContents = String((sal_uInt16)pEntry->GetOrderDir());
+                strOldCellContents = String::CreateFromInt32((sal_uInt16)pEntry->GetOrderDir());
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
                 if (nIdx == sal_uInt16(-1))
                     nIdx = 0;
@@ -1651,7 +1651,7 @@ void OSelectionBrowseBox::CellModified()
             {
                 OTableFieldDesc*    pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[GetCurColumnId() - 1];
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
-                if(!m_bOrderByUnRelated && nIdx > 0 && nIdx != sal_uInt16(-1))
+                if(!m_bOrderByUnRelated && nIdx > 0 && nIdx != sal_uInt16(-1) && !pEntry->IsEmpty())
                 {
                     m_pVisibleCell->GetBox().Check();
                     pEntry->SetVisible(sal_True);
