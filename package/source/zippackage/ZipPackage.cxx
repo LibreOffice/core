@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:29:56 $
+ *  last change: $Author: mtg $ $Date: 2001-08-22 16:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ struct SuffixGenerator
         mpSuffixMid[1] = 'a'; // first generated suffix will be .ab
     }
     void generateFileName( OUString &rFileName, const OUString &rPrefix );
+    void generateFileName( OUString &rFileName, const OUString &rPrefix, sal_uInt16 nDiskNum);
 };
 
 void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPrefix )
@@ -163,6 +164,16 @@ void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPr
     }
     aStringBuf.append ( rPrefix );
     aStringBuf.appendAscii ( mpSuffix );
+    rFileName = aStringBuf.makeStringAndClear();
+}
+void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPrefix, sal_uInt16 nDiskNum)
+{
+    // same file prefix, different extension
+    OUStringBuffer aStringBuf;
+    aStringBuf.append ( rPrefix );
+    aStringBuf.appendAscii ( nDiskNum < 10 ? "00" : nDiskNum < 100 ? "0" : "" );
+    aStringBuf.append ( static_cast < sal_Int32 > ( nDiskNum-1) );
+
     rFileName = aStringBuf.makeStringAndClear();
 }
 
@@ -710,8 +721,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
             throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
                     static_cast < OWeakObject * > ( this ), makeAny( r ) );
         }
-        Reference < XActiveDataSink > xSink = new ZipPackageSink;
         /*
+        Reference < XActiveDataSink > xSink = new ZipPackageSink;
          * We want to reference the temp file, not the one we just wrote
         try
         {
@@ -771,7 +782,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
             if ( nDiskNum == 1 )
                 sFileName = sURL.copy ( 1 + nLastSlash );
             else
-                aGenerator.generateFileName ( sFileName, sFilePrefix );
+                aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
             if ( bIsRemovable )
             {
                 if ( nDiskNum > 1 && RequestDisk( sMountPath, nDiskNum ) < 0 )
@@ -790,15 +801,36 @@ void SAL_CALL ZipPackage::commitChanges(  )
             else
             {
                 OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
-                do
+                if ( xTempSeek->getLength() > static_cast < sal_Int64 > ( aInfo.getFreeSpace() ) )
                 {
-                    eRet = writeSegment ( sFullPath, xTempIn );
-                    if (eRet == e_Aborted)
-                        return;
-                    else if ( eRet == e_Retry )
-                        xTempSeek->seek ( nCurrentPos );
+                    // no room on the hard drive, display a message and return
+                    HandleError (  osl_File_E_NOSPC, EC_YES, sFullPath );
+                    return;
                 }
-                while ( eRet == e_Retry );
+                else if ( nSegmentSize < 0 )
+                {
+                    try
+                    {
+                        pContent->writeStream ( xTempIn, sal_True );
+                    }
+                    catch (::com::sun::star::uno::Exception& r)
+                    {
+                        throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
+                                static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                    }
+                }
+                else
+                {
+                    do
+                    {
+                        eRet = writeSegment ( sFullPath, xTempIn );
+                        if (eRet == e_Aborted)
+                            return;
+                        else if ( eRet == e_Retry )
+                            xTempSeek->seek ( nCurrentPos );
+                    }
+                    while ( eRet == e_Retry );
+                }
             }
         }
         while ( eRet != e_Finished );
@@ -986,10 +1018,9 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, Reference < XI
     FileBase::RC aRC;
     Sequence < sal_Int8 > aBuffer ( nSegmentSize );
 
-    sal_Int32 nRead = n_ConstBufferSize;
     sal_uInt64 nWritten;
 
-    nRead = xInBuffer->readBytes ( aBuffer, static_cast < sal_Int32 > ( nSegmentSize ) );
+    sal_Int32 nRead = xInBuffer->readBytes ( aBuffer, static_cast < sal_Int32 > ( nSegmentSize ) );
 
     File aFile ( rFileName );
     aRC = aFile.open ( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
@@ -1395,7 +1426,7 @@ Reference < XInputStream > ZipPackage::unSpanFile ( Reference < XInputStream > &
     {
         //pBuffer->nextSegment( ++nDiskNum);
         nDiskNum++;
-        aGenerator.generateFileName ( sFileName, sFilePrefix );
+        aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
         if ( bIsRemovable )
         {
             // We need an interaction handler to request disks
