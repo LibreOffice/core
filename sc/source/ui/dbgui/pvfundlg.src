@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:25:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,12 +362,12 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ chinese_simplified ] =
     {
             < "×Ü¼Æ" ; Default ; > ;
-        < "¼ÆÊý" ; Default ; > ;
+        < "ÊýÄ¿" ; Default ; > ;
         < "Æ½¾ùÖµ" ; Default ; > ;
         < "×î´ó" ; Default ; > ;
         < "×îÐ¡" ; Default ; > ;
         < "³Ë»ý" ; Default ; > ;
-        < "¼ÆÊý(Ö»Êý×Ö)" ; Default ; > ;
+        < "ÊýÄ¿(Ö»Êý×Ö)" ; Default ; > ;
         < "±ê×¼Æ«²î(³éÑù)" ; Default ; > ;
         < "±ê×¼Æ«²î(È«²¿»ùÊý)" ; Default ; > ;
         < "·½²î(³éÑù)" ; Default ; > ;
@@ -418,7 +418,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ chinese_traditional ] =
     {
             < "¤p­p" ; Default ; > ;
-        < "­p¼Æ" ; Default ; > ;
+        < "¼Æ¥Ø" ; Default ; > ;
         < "¥­§¡­È" ; Default ; > ;
         < "³Ì¤j" ; Default ; > ;
         < "³Ì¤p" ; Default ; > ;
@@ -673,6 +673,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ catalan ] = "Campo de datos";
     Text[ finnish ] = "Tietokenttä";
 };
+
 
 
 
