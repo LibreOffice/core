@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-09 15:17:54 $
+#   last change: $Author: dv $ $Date: 2001-07-09 15:32:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,8 +92,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/ucbhelp.obj
 
 SRCFILES = \
-        explorer.src	\
-        iodlg.src
+        explorer.src
 
 # --- Targets ------------------------------------------------------
 
