@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:36:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ String STR_POOLCHR_PAGENO
     Text [ portuguese_brazilian ] = "Seitenzahl" ;
     Text[ chinese_simplified ] = "Ò³Âë";
     Text[ russian ] = "Íîìåğ ñòğàíèöû";
-    Text[ polish ] = "Ilo?æ stron";
+    Text[ polish ] = "Iloœæ stron";
     Text[ japanese ] = "Íß°¼Ş”Ô†";
     Text[ chinese_traditional ] = "­¶½X";
     Text[ arabic ] = "ÑŞã ÇáÕİÍÉ";
@@ -393,7 +393,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ italian ] = "Voce principale per indice analitico";
     Text[ danish ] = "Stikordsregister hovedelement";
     Text[ swedish ] = "Sakregister huvudpost";
-    Text[ polish ] = "Zestaw hase³ Wpis g³ówny";
+    Text[ polish ] = "Skorowidz: wpis g³ówny";
     Text[ portuguese_brazilian ] = "Main index entry";
     Text[ japanese ] = "õˆø‚Ìå€–Ú";
     Text[ korean ] = "Å°¿öµå »öÀÎ¡¡ÁÖÇ×¸ñ";
@@ -550,7 +550,7 @@ String STR_POOLCHR_HTML_CODE
     Text [ portuguese_brazilian ] = "Quelltext" ;
     Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò";
-    Text[ polish ] = "Tekst ?ród³owy";
+    Text[ polish ] = "Tekst Ÿród³owy";
     Text[ japanese ] = "¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "­ì©lÀÉ";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ";
@@ -1021,7 +1021,7 @@ String STR_POOLCOLL_STANDARD
     Text [ portuguese_brazilian ] = "Standard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -1102,7 +1102,7 @@ String STR_POOLCOLL_TEXT_NEGIDENT
     Text [ portuguese_brazilian ] = "Textk?per Einzug negativ" ;
     Text[ chinese_simplified ] = "ÕıÎÄ·´ÏòËõ½ø";
     Text[ russian ] = "Îáğàòíûé îòñòóï";
-    Text[ polish ] = "Neg.wciêcie obszaru tekstu";
+    Text[ polish ] = "Negatywne wciêcie tekstu";
     Text[ japanese ] = "–{•¶Ï²Å½²İÃŞİÄ";
     Text[ chinese_traditional ] = "¤º¤å¤Ï¦VÁY±Æ";
     Text[ arabic ] = "ÅÒÇÍÉ ÌÓã äÕ ÓáÈíÉ";
@@ -1288,7 +1288,7 @@ String STR_POOLCOLL_CONFRONTATION
     Text [ portuguese_brazilian ] = "Gegen?erstellung" ;
     Text[ chinese_simplified ] = "Ëõ½ø";
     Text[ russian ] = "Îòñòóïû";
-    Text[ polish ] = "Konfrontacja";
+    Text[ polish ] = "Przeciwstawienie";
     Text[ japanese ] = "²İÃŞİÄ";
     Text[ chinese_traditional ] = "ÁY±Æ";
     Text[ arabic ] = "ãæÇÌåÉ";
@@ -2829,7 +2829,7 @@ String STR_POOLCOLL_TABLE
     Text [ portuguese_brazilian ] = "Tabellen Inhalt" ;
     Text[ chinese_simplified ] = "±í¸ñÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå òàáëèöû";
-    Text[ polish ] = "Zawarto?æ tabeli";
+    Text[ polish ] = "Zawartoœæ tabeli";
     Text[ japanese ] = "•\\‚Ì“à—e";
     Text[ chinese_traditional ] = "ªí®æ¤º®e";
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáÌÏæá";
@@ -2882,7 +2882,7 @@ String STR_POOLCOLL_FRAME
     Text [ portuguese_brazilian ] = "Rahmeninhalt" ;
     Text[ chinese_simplified ] = "¿òÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå ğàìêè";
-    Text[ polish ] = "Zawarto?æ ramki";
+    Text[ polish ] = "Zawartoœæ ramki";
     Text[ japanese ] = "˜g‚Ì“à—e";
     Text[ chinese_traditional ] = "°T®Ø¤º®e";
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáßÇÏÑ";
@@ -3145,12 +3145,12 @@ String STR_POOLCOLL_TOX_IDXH
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis ?berschrift" ;
     Text[ chinese_simplified ] = "Ë÷Òı±êÌâ";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëÿ";
-    Text[ polish ] = "Tytu³ zestawu hase³";
+    Text[ polish ] = "Tytu³ skorowidza";
     Text[ japanese ] = "õˆø Œ©o‚µ";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı ¼ĞÃD";
     Text[ arabic ] = "ÚäæÇä ÇáİåÑÓ ÇáÃÈÌÏí";
     Text[ greek ] = "Åğéêåöáëßäá åõñåôçñßïõ ëİîåùí";
-    Text[ korean ] = "Ç¥Á¦¡¡»öÀÎ";
+    Text[ korean ] = "»öÀÎ Ç¥Á¦";
     Text[ turkish ] = "Alfabetik dizin başlığı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezado del índice alfabético";
@@ -3171,7 +3171,7 @@ String STR_POOLCOLL_TOX_IDX1
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 1" ;
     Text[ chinese_simplified ] = "Ë÷Òı 1";
     Text[ russian ] = "Óêàçàòåëü 1";
-    Text[ polish ] = "Zestaw hase³ 1";
+    Text[ polish ] = "Skorowidz 1";
     Text[ japanese ] = "õˆø 1";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı 1";
     Text[ arabic ] = "İåÑÓ ÃÈÍÏí 1";
@@ -3197,7 +3197,7 @@ String STR_POOLCOLL_TOX_IDX2
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 2" ;
     Text[ chinese_simplified ] = "Ë÷Òı 2";
     Text[ russian ] = "Óêàçàòåëü 2";
-    Text[ polish ] = "Zestaw hase³ 2";
+    Text[ polish ] = "Skorowidz 2";
     Text[ japanese ] = "õˆø 2";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı 2";
     Text[ arabic ] = "İåÑÓ ÃÈÌÏí 2";
@@ -3223,7 +3223,7 @@ String STR_POOLCOLL_TOX_IDX3
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis 3" ;
     Text[ chinese_simplified ] = "Ë÷Òı 3";
     Text[ russian ] = "Óêàçàòåëü 3";
-    Text[ polish ] = "Zestaw hase³ 3";
+    Text[ polish ] = "Skorowidz 3";
     Text[ japanese ] = "õˆø 3";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı 3";
     Text[ arabic ] = "İåÑÓ ÃÈÌÏí 3";
@@ -3249,7 +3249,7 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text [ portuguese_brazilian ] = "Stichwortverzeichnis Trenner" ;
     Text[ chinese_simplified ] = "Ë÷Òı·Ö¸ô·û";
     Text[ russian ] = "Ğàçäåëèòåëü ïğåäìåòíîãî óêàçàòåëÿ";
-    Text[ polish ] = "Separator zestawu hase³";
+    Text[ polish ] = "Separator skorowidza";
     Text[ japanese ] = "õˆø ¾ÊßÚ°À";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı ¤À¹j²Å";
     Text[ arabic ] = "İÇÕá ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -3276,7 +3276,7 @@ String STR_POOLCOLL_TOX_CNTNTH
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis ?berschrift" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼±êÌâ";
     Text[ russian ] = "Çàãîëîâîê îãëàâëåíèÿ";
-    Text[ polish ] = "Tytu³ spisu tre?ci";
+    Text[ polish ] = "Tytu³ spisu treœci";
     Text[ japanese ] = "–ÚŸ Œ©o‚µ";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı¼ĞÃD";
     Text[ arabic ] = "ÚäæÇä İåÑÓ ÇáãÍÊæíÇÊ";
@@ -3302,7 +3302,7 @@ String STR_POOLCOLL_TOX_CNTNT1
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 1" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 1";
     Text[ russian ] = "Îãëàâëåíèå 1";
-    Text[ polish ] = "Spis tre?ci 1";
+    Text[ polish ] = "Spis treœci 1";
     Text[ japanese ] = "–ÚŸ 1";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 1";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 1";
@@ -3328,7 +3328,7 @@ String STR_POOLCOLL_TOX_CNTNT2
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 2" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 2";
     Text[ russian ] = "Îãëàâëåíèå 2";
-    Text[ polish ] = "Spis tre?ci 2";
+    Text[ polish ] = "Spis treœci 2";
     Text[ japanese ] = "–ÚŸ 2";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 2";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 2";
@@ -3354,7 +3354,7 @@ String STR_POOLCOLL_TOX_CNTNT3
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 3" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 3";
     Text[ russian ] = "Îãëàâëåíèå 3";
-    Text[ polish ] = "Spis tre?ci 3";
+    Text[ polish ] = "Spis treœci 3";
     Text[ japanese ] = "–ÚŸ 3";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 3";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 3";
@@ -3380,7 +3380,7 @@ String STR_POOLCOLL_TOX_CNTNT4
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 4" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 4";
     Text[ russian ] = "Îãëàâëåíèå 4";
-    Text[ polish ] = "Spis tre?ci 4";
+    Text[ polish ] = "Spis treœci 4";
     Text[ japanese ] = "–ÚŸ 4";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 4";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 4";
@@ -3406,7 +3406,7 @@ String STR_POOLCOLL_TOX_CNTNT5
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 5" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 5";
     Text[ russian ] = "Îãëàâëåíèå 5";
-    Text[ polish ] = "Spis tre?ci 5";
+    Text[ polish ] = "Spis treœci 5";
     Text[ japanese ] = "–ÚŸ 5";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 5";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 5";
@@ -3432,7 +3432,7 @@ String STR_POOLCOLL_TOX_CNTNT6
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 6" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 6";
     Text[ russian ] = "Îãëàâëåíèå 6";
-    Text[ polish ] = "Spis tre?ci 6";
+    Text[ polish ] = "Spis treœci 6";
     Text[ japanese ] = "–ÚŸ 6";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 6";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 6";
@@ -3458,7 +3458,7 @@ String STR_POOLCOLL_TOX_CNTNT7
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 7" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 7";
     Text[ russian ] = "Îãëàâëåíèå 7";
-    Text[ polish ] = "Spis tre?ci 7";
+    Text[ polish ] = "Spis treœci 7";
     Text[ japanese ] = "–ÚŸ 7";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 7";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 7";
@@ -3484,7 +3484,7 @@ String STR_POOLCOLL_TOX_CNTNT8
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 8" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 8";
     Text[ russian ] = "Îãëàâëåíèå 8";
-    Text[ polish ] = "Spis tre?ci 8";
+    Text[ polish ] = "Spis treœci 8";
     Text[ japanese ] = "–ÚŸ 8";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 8";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 8";
@@ -3510,7 +3510,7 @@ String STR_POOLCOLL_TOX_CNTNT9
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 9" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 9";
     Text[ russian ] = "Îãëàâëåíèå 9";
-    Text[ polish ] = "Spis tre?ci 9";
+    Text[ polish ] = "Spis treœci 9";
     Text[ japanese ] = "–ÚŸ 9";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 9";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 9";
@@ -3536,7 +3536,7 @@ String STR_POOLCOLL_TOX_CNTNT10
     Text [ portuguese_brazilian ] = "Inhaltsverzeichnis 10" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼ 10";
     Text[ russian ] = "Îãëàâëåíèå 10";
-    Text[ polish ] = "Spis tre?ci 10";
+    Text[ polish ] = "Spis treœci 10";
     Text[ japanese ] = "–ÚŸ 10";
     Text[ chinese_traditional ] = "¤º®e¥Ø¿ı 10";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ 10";
@@ -3955,7 +3955,7 @@ String STR_POOLCOLL_TOX_TABLESH
     Text[ polish ] = "Indeks tabeli Tytu³";
     Text[ portuguese_brazilian ] = "Table index heading";
     Text[ japanese ] = "•\\õˆøŒ©o‚µ";
-    Text[ korean ] = "Ç¥¡¡»öÀÎ Á¦¸ñ";
+    Text[ korean ] = "Å×ÀÌºí »öÀÎ Ç¥Á¦";
     Text[ chinese_simplified ] = "±í¸ñÄ¿Â¼±êÌâ";
     Text[ chinese_traditional ] = "ªí®æ¥Ø¿ı¼ĞÃD";
     Text[ arabic ] = "ÚäæÇä İåÑÓ ÇáÌÏæá";
@@ -4188,7 +4188,7 @@ String STR_POOLCOLL_HTML_DD
     Text [ portuguese_brazilian ] = "Listeninhalt" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİ";
     Text[ russian ] = "Ñïèñîê ñîäåğæàíèÿ";
-    Text[ polish ] = "Zawarto?æ listy";
+    Text[ polish ] = "Zawartoœæ listy";
     Text[ japanese ] = "Ø½Ä‚Ì“à—e";
     Text[ chinese_traditional ] = "²M³æ¤º®e";
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáŞÇÆãÉ";
@@ -4732,7 +4732,7 @@ String STR_POOLPAGE_STANDARD
     Text [ portuguese_brazilian ] = "Standard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
