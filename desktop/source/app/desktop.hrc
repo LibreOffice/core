@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-17 08:56:52 $
+ *  last change: $Author: ghiggins $ $Date: 2002-05-24 13:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,4 +91,5 @@
 
 #define STR_SETUP_ERR_CANNOT_START          (RID_DESKTOP_STRING_START+160)
 
+#define STR_SSO_REQUEST                     (RID_DESKTOP_STRING_START+170)
 #endif // _DESKTOP_HRC_

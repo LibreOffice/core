@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:06:19 $
+ *  last change: $Author: ghiggins $ $Date: 2002-05-24 13:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,14 @@ String STR_ASK_START_SETUP_MANUALLY
     Text[ arabic ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ catalan ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
 };
+
+String STR_SSO_REQUEST
+{
+    Text = "Bitte geben Sie ihren Benutzernamen und ihr Passwort ein. ";
+    Text[ ENGLISH ] = "Please enter you Single Signon username and password. ";
+    Text[ english_us ] = "Please enter you Single Signon username and password. ";
+};
+
 
 
 
