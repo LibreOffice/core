@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:05:46 $
+ *  last change: $Author: os $ $Date: 2002-09-19 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         return;
                     }
 
-                    if( !bApi && !ULONG_MAX == nFound)
+                    if( !bApi && ULONG_MAX != nFound)
                     {
                         String aText( SW_RES( STR_NB_REPLACED ) );
                         const xub_StrLen nPos = aText.Search( String::CreateFromAscii("XX") );
@@ -872,6 +872,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2002/09/13 13:05:46  os
+    #100992# changed treatment of maximum undoable replace operations
+
     Revision 1.10  2002/06/27 09:01:45  mba
     #100714#: macro recording
 
