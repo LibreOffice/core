@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:25:03 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7152,4 +7152,32 @@ String RID_SVXITEMS_BRUSH_CHAR
     Text[ turkish ] = "Karakter artalaný";
     Text[ language_user1 ] = " ";
 };
+
+
+String RID_SVXITEMS_EMPHASISMARK_NONE
+{
+    Text = "keine";
+    Text [ English ] = "none" ;
+};
+String RID_SVXITEMS_EMPHASISMARK_DOTSABOVE
+{
+    Text = "Punkte darüber";
+    Text [ English ] = "Dots above" ;
+};
+String RID_SVXITEMS_EMPHASISMARK_DOTSBELOW
+{
+    Text = "Punkte darunter";
+    Text [ English ] = "Dots below" ;
+};
+String RID_SVXITEMS_EMPHASISMARK_SIDEDOTS
+{
+    Text = "Komma darüber";
+    Text [ English ] = "Comma above" ;
+};
+String RID_SVXITEMS_EMPHASISMARK_CIRCLEABOVE
+{
+    Text = "Kreis darüber";
+    Text [ English ] = "Ring above" ;
+};
+
  // ********************************************************************** EOF

@@ -549,6 +549,7 @@ hedabu: ..\inc\grfcrop.hxx %_DEST%\inc%_EXT%\svx\grfcrop.hxx
 hedabu: ..\inc\unonrule.hxx %_DEST%\inc%_EXT%\svx\unonrule.hxx
 hedabu: ..\inc\svx3ditems.hxx %_DEST%\inc%_EXT%\svx\svx3ditems.hxx
 hedabu: ..\inc\msocximex.hxx %_DEST%\inc%_EXT%\svx\msocximex.hxx
+hedabu: ..\inc\emphitem.hxx %_DEST%\inc%_EXT%\svx\emphitem.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml

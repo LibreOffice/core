@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:10:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 12:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #define ITEMID_NOLINEBREAK      0
 #define ITEMID_NOHYPHENHERE     0
 #define ITEMID_BLINK            0
+#define ITEMID_EMPHASISMARK     0
 
 #include <svtools/sbx.hxx>
 #define GLOBALOVERFLOW3
@@ -197,6 +198,7 @@
 #include "nhypitem.hxx"
 #include "lcolitem.hxx"
 #include "blnkitem.hxx"
+#include "emphitem.hxx"
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
 #include "langtab.hxx"
@@ -236,6 +238,8 @@ TYPEINIT1_AUTOFACTORY(SvxNoLinebreakItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxNoHyphenItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxLineColorItem, SvxColorItem);
 TYPEINIT1_AUTOFACTORY(SvxBlinkItem, SfxBoolItem);
+TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxEnumItem);
+
 
 // class SvxFontListItem -------------------------------------------------
 
@@ -3660,6 +3664,200 @@ sal_Bool SvxBlinkItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const 
     rUnitConverter.convertBool( aOut, GetValue() );
     rValue = aOut.makeStringAndClear();
     return sal_True;
+#else
+    return sal_False;
+#endif
+}
+
+// class SvxEmphaisMarkItem ---------------------------------------------------
+
+SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark eValue,
+                                        const USHORT nId )
+    : SfxEnumItem( nId, eValue )
+{
+}
+
+// -----------------------------------------------------------------------
+
+USHORT SvxEmphasisMarkItem::GetValueCount() const
+{
+    return EMPHASISMARK_CIRCLE_ABOVE - EMPHASISMARK_NONE + 1;
+}
+
+// -----------------------------------------------------------------------
+
+SfxPoolItem* SvxEmphasisMarkItem::Clone( SfxItemPool * ) const
+{
+    return new SvxEmphasisMarkItem( *this );
+}
+
+// -----------------------------------------------------------------------
+
+SvStream& SvxEmphasisMarkItem::Store( SvStream& rStrm,
+                                     USHORT nItemVersion ) const
+{
+    rStrm << (BYTE)GetValue();
+    return rStrm;
+}
+
+// -----------------------------------------------------------------------
+
+SfxPoolItem* SvxEmphasisMarkItem::Create( SvStream& rStrm, USHORT ) const
+{
+    BYTE nValue;
+    rStrm >> nValue;
+    return new SvxEmphasisMarkItem( (FontEmphasisMark)nValue, Which() );
+}
+
+//------------------------------------------------------------------------
+
+SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    XubString&          rText,
+    const International *
+)   const
+{
+    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            return ePres;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            rText = GetValueTextByPos( GetValue() );
+            return ePres;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+// -----------------------------------------------------------------------
+
+XubString SvxEmphasisMarkItem::GetValueTextByPos( USHORT nPos ) const
+{
+    DBG_ASSERT( nPos <= GetValueCount(), "enum overflow!" );
+    return SVX_RESSTR( RID_SVXITEMS_EMPHASISMARK_BEGIN + nPos );
+}
+
+sal_Bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+#if 0
+    switch( nMemberId )
+    {
+    case MID_WEIGHT:
+    {
+        rVal <<= (float)( VCLUnoHelper::ConvertFontWeight(
+                                (FontWeight)GetValue() ) );
+    }
+    break;
+    }
+#endif
+    return sal_True;
+}
+
+sal_Bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+#if 0
+    float fValue;
+    switch( nMemberId )
+    {
+    case MID_WEIGHT:
+        if(!(rVal >>= fValue))
+        {
+            sal_Int32 nValue;
+            if(!(rVal >>= nValue))
+                return sal_False;
+            fValue = (float)nValue;
+        }
+        SetValue( VCLUnoHelper::ConvertFontWeight(fValue) );
+        break;
+    }
+#endif
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxEmphasisMarkItem::importXML( const OUString& rValue,
+                                sal_uInt16 nMemberId,
+                                const SvXMLUnitConverter& rUnitConverter )
+{
+#ifndef SVX_LIGHT
+#if 0
+    sal_uInt16 nWeight = 0;
+
+    if( rValue.compareToAscii( sXML_weight_normal ) )
+    {
+        nWeight = 400;
+    }
+    else if( rValue.compareToAscii( sXML_weight_bold ) )
+    {
+        nWeight = 700;
+    }
+    else
+    {
+        sal_Int32 nTemp;
+        if( !rUnitConverter.convertNumber( nTemp, rValue, 100, 900 ) )
+            return sal_False;
+        nWeight = nTemp;
+    }
+
+    for( int i = 0; aFontWeightMap[i].eWeight != USHRT_MAX; i++ )
+    {
+        if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )
+        {
+            sal_uInt16 nDiff1 = aFontWeightMap[i].nValue - nWeight;
+            sal_uInt16 nDiff2 = nWeight - aFontWeightMap[i+1].nValue;
+
+            if( nDiff1 < nDiff2 )
+                SetValue( aFontWeightMap[i].eWeight );
+            else
+                SetValue( aFontWeightMap[i+1].eWeight );
+
+            return sal_True;
+        }
+    }
+
+    SetValue( WEIGHT_DONTKNOW );
+#endif
+#endif
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxEmphasisMarkItem::exportXML(
+                            OUString& rValue, sal_uInt16 nMemberId,
+                            const SvXMLUnitConverter& rUnitConverter ) const
+{
+#ifndef SVX_LIGHT
+#if 0
+    sal_uInt16 nWeight = 0;
+
+    for( int i = 0; aFontWeightMap[i].eWeight != -1; i++ )
+    {
+        if( aFontWeightMap[i].eWeight == GetValue() )
+        {
+             nWeight = aFontWeightMap[i].nValue;
+             break;
+        }
+    }
+
+    OUStringBuffer aOut;
+
+    if( 400 == nWeight )
+        aOut.appendAscii( sXML_weight_normal );
+    else if( 700 == nWeight )
+        aOut.appendAscii( sXML_weight_bold );
+    else
+        rUnitConverter.convertNumber( aOut, (sal_Int32) nWeight );
+
+    rValue = aOut.makeStringAndClear();
+//  return sal_True;
+#endif
+    return sal_False;
 #else
     return sal_False;
 #endif
