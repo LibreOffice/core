@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:54:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,43 +564,23 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
 
     if ( aFactoryShortName.equalsAscii( "scalc" ) )
     {
-        if ( !bIsTemplate )
-            nResult = BMP_128X128_CALC_DOC;
-        else
-            nResult = BMP_128X128_CALC_TEMP;
-    }
-    else if ( aFactoryShortName.equalsAscii( "schart" ) )
-    {
-        nResult = BMP_128X128_CHART_DOC;
+        nResult = BMP_128X128_CALC_DOC;
     }
     else if ( aFactoryShortName.equalsAscii( "sdraw" ) )
     {
-        if ( !bIsTemplate )
-            nResult = BMP_128X128_DRAW_DOC;
-        else
-            nResult = BMP_128X128_DRAW_TEMP;
+        nResult = BMP_128X128_DRAW_DOC;
     }
     else if ( aFactoryShortName.equalsAscii( "simpress" ) )
     {
-        if ( !bIsTemplate )
-            nResult = BMP_128X128_IMPRESS_DOC;
-        else
-            nResult = BMP_128X128_IMPRESS_TEMP;
-    }
-    else if ( aFactoryShortName.equalsAscii( "swriter/GlobalDocument" ) )
-    {
-        nResult = BMP_128X128_MASTER_DOC;
+        nResult = BMP_128X128_IMPRESS_DOC;
     }
     else if ( aFactoryShortName.equalsAscii( "smath" ) )
     {
         nResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "swriter" ) )
+    else if ( aFactoryShortName.equalsAscii( "swriter" ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
     {
-        if ( !bIsTemplate )
-            nResult = BMP_128X128_WRITER_DOC;
-        else
-            nResult = BMP_128X128_WRITER_TEMP;
+        nResult = BMP_128X128_WRITER_DOC;
     }
 
     return nResult;
