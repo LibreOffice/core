@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-10 17:08:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
             { 0, "",
                 {SO3_SCH_CLASSID_60, SO3_SCH_CLASSID_50,
                  SO3_SCH_CLASSID_40, SO3_SCH_CLASSID_30 }},
+            { 0, "",
+                {SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50,    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
+                 SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50 }}, // ver 5.0, it is purpose to have double entrys here.
             { 0xffff,0 }
         };
         for( const _ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
