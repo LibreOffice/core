@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 12:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@
 
 using namespace rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
@@ -128,7 +127,6 @@ namespace bib
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
 
     //=====================================================================
     //= BibGridwin
@@ -137,10 +135,10 @@ namespace bib
                 :public DockingWindow
     {
     private:
-            Reference< XWindow >            m_xGridWin;
-            Reference< XControlModel >      m_xGridModel;
-            Reference< XControl >           m_xControl;
-            Reference< XControlContainer >  m_xControlContainer;
+            Reference< awt::XWindow >           m_xGridWin;
+            Reference< awt::XControlModel >     m_xGridModel;
+            Reference< awt::XControl >          m_xControl;
+            Reference< awt::XControlContainer > m_xControlContainer;
 
     protected:
 
@@ -151,11 +149,11 @@ namespace bib
             BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
             ~BibGridwin();
 
-            void createGridWin(const Reference< XControlModel > & xDbForm);
-            void changeGridModel(const Reference< XControlModel > & xGModel);
+            void createGridWin(const Reference< awt::XControlModel > & xDbForm);
+            void changeGridModel(const Reference< awt::XControlModel > & xGModel);
             void disposeGridWin();
 
-            const Reference< XControlContainer >& getControlContainer() const { return m_xControlContainer; }
+            const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
     };
 
     //---------------------------------------------------------------------
@@ -176,12 +174,12 @@ namespace bib
         if(m_xGridWin.is())
         {
             ::Size aSize = GetOutputSizePixel();
-            m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::SIZE);
+            m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::SIZE);
         }
     }
 
     //---------------------------------------------------------------------
-    void BibGridwin::createGridWin(const uno::Reference< XControlModel > & xGModel)
+    void BibGridwin::createGridWin(const uno::Reference< awt::XControlModel > & xGModel)
     {
         m_xGridModel = xGModel;
 
@@ -199,7 +197,7 @@ namespace bib
                     rtl::OUString aControlName;
                     aAny >>= aControlName;
 
-                    m_xControl = Reference< XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
+                    m_xControl = Reference< awt::XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
                     DBG_ASSERT( m_xControl.is(), "no GridControl created" )
                     if ( m_xControl.is() )
                         m_xControl->setModel( m_xGridModel );
@@ -209,14 +207,14 @@ namespace bib
                 {
                     // Peer als Child zu dem FrameWindow
                     m_xControlContainer->addControl(C2U("GridControl"), m_xControl);
-                    m_xGridWin=uno::Reference< XWindow > (m_xControl, UNO_QUERY );
+                    m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
                         // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     ::Size aSize = GetOutputSizePixel();
-                    m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), PosSize::POSSIZE);
+                    m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);
                 }
             }
         }
@@ -233,7 +231,7 @@ namespace bib
     }
 
     //---------------------------------------------------------------------
-    void BibGridwin::changeGridModel(const uno::Reference< XControlModel > & xGModel)
+    void BibGridwin::changeGridModel(const uno::Reference< awt::XControlModel > & xGModel)
     {
         m_xGridModel = xGModel;
 
@@ -304,9 +302,9 @@ namespace bib
     }
 
     //---------------------------------------------------------------------
-    Reference< XControlContainer > BibBeamer::getControlContainer()
+    Reference< awt::XControlContainer > BibBeamer::getControlContainer()
     {
-        Reference< XControlContainer > xReturn;
+        Reference< awt::XControlContainer > xReturn;
         if ( pGridWin )
             xReturn = pGridWin->getControlContainer();
         return xReturn;
