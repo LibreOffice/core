@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:44:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2580,7 +2580,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                      (rSur.GetSurround() != SURROUND_THROUGHT &&
                       !rSur.IsContour()) )
                 {
-                    if ( USHRT_MAX != aSortObjs.Seek_Entry( pO ) )
+                    if ( aSortObjs.Seek_Entry( pO ) )
                         continue;
 
                     FASTBOOL bSub = TRUE;
