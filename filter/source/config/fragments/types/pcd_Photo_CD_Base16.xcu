@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_PCD_Photo_CD_Base16</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PCD - Photo CD Base16</value>
+            <value>PCD - Photo CD Base16</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
