@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:09:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@
 
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <miscopt.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
 #endif
 
 using namespace ::rtl;
@@ -404,7 +411,11 @@ throw (::com::sun::star::uno::RuntimeException)
         try
         {
             com::sun::star::util::URL aTargetURL;
-            Sequence<PropertyValue>   aArgs;
+            Sequence<PropertyValue>   aArgs( 1 );
+
+            // Provide key modifier information to dispatch function
+            aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+            aArgs[0].Value  = makeAny( KeyModifier );
 
             aTargetURL.Complete = aCommandURL;
             if ( m_pImpl->m_xUrlTransformer.is() )
@@ -695,6 +706,22 @@ sal_Bool ToolboxController::hasBigImages() const
     }
 
     return ( eOptSymbolSet == SFX_SYMBOLS_LARGE );
+}
+
+sal_Bool ToolboxController::isHighContrast() const
+{
+    sal_Bool bHighContrast( sal_False );
+
+    Reference< XWindow > xWindow = m_pImpl->m_xParentWindow;
+    if ( xWindow.is() )
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow )
+            bHighContrast = ( ((ToolBox *)pWindow)->GetBackground().GetColor().IsDark() );
+    }
+
+    return bHighContrast;
 }
 
 void ToolboxController::updateStatus()
