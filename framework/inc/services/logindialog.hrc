@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-06 17:24:57 $
+ *  last change: $Author: cd $ $Date: 2001-10-01 09:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,18 @@
 #define RID_FT_SERVER                   5
 #define RID_ED_USERNAME                 6
 #define RID_ED_PASSWORD                 7
-#define RID_CB_SERVER                   8
-#define RID_PB_OK                       9
-#define RID_PB_CANCEL                   10
-#define RID_FT_SECURITYPROXY            11
-#define RID_ED_SECURITYPROXY            12
+#define RID_FL_SERVER                   8
+#define RID_CB_SERVER                   9
+#define RID_FL_PROXYSETTINGS            10
+#define RID_RB_NOPROXY                  11
+#define RID_RB_USEBROWSERPROXY          12
+#define RID_RB_USECUSTOMPROXY           13
+#define RID_FT_SECURITYPROXY            15
+#define RID_FT_SECURITYPROXYHOST        16
+#define RID_ED_SECURITYPROXYHOST        17
+#define RID_FT_SECURITYPROXYPORT        18
+#define RID_ED_SECURITYPROXYPORT        19
+#define RID_FL_BUTTONS                  20
+#define RID_PB_OK                       21
+#define RID_PB_CANCEL                   22
+#define RID_PB_ADDITIONALSETTINGS       23
