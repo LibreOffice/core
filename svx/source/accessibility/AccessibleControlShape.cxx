@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:00:26 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void AccessibleControlShape::Init()
         //
 
         // get the control which belongs to our model (relative to our view)
-        const Window* pViewWindow = mrShapeTreeInfo.GetWindow();
+        const Window* pViewWindow = mShapeTreeInfo.GetWindow();
         SdrUnoObj* pUnoObjectImpl = PTR_CAST( SdrUnoObj, getSdrObject() );
         OSL_ENSURE( pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no SdrUnoObj!" );
 
@@ -364,7 +364,7 @@ void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSour
         mpParent->ReplaceChild (this,
             ShapeTypeHandler::Instance().CreateAccessibleObject (
                 AccessibleShapeInfo (mxShape, getAccessibleParent(), mpParent, mnIndex),
-                mrShapeTreeInfo));
+                mShapeTreeInfo));
     }
     else
         AccessibleShape::disposing( _rSource );
