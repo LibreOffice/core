@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:00:30 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,17 @@ InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFac
 StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_TIMEFIELD;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_TIMEFIELD;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 4 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_TIMEFIELD;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_TIMEFIELD;
+
     return aSupported;
 }
 
@@ -166,7 +172,7 @@ Sequence<Type> OTimeModel::_getTypes()
 DBG_NAME( OTimeModel )
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD, sal_False )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
             ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
 {
@@ -218,19 +224,12 @@ void OTimeModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(11)
-        DECL_PROP1(NAME,                    ::rtl::OUString,        BOUND);
-        DECL_PROP2(CLASSID,                 sal_Int16,              READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP3(DEFAULT_TIME,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TAG,                     ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
-        DECL_PROP1(CONTROLSOURCE,           ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,           BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
@@ -336,6 +335,23 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool _bPostReset )
         m_aSaveValue = aControlValue;
     }
     return sal_True;
+}
+
+//------------------------------------------------------------------------------
+Any OTimeModel::translateControlValueToValidatableValue( ) const
+{
+    Any aValidatableValue( getControlValue() );
+    if ( aValidatableValue.hasValue() )
+    {
+        sal_Int32 nTime = 0;
+        OSL_ENSURE( aValidatableValue >>= nTime, "OTimeModel::translateControlValueToValidatableValue: invalid time!" );
+        if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
+            // "invalid time" in VCL is different from "invalid time" in UNO
+            aValidatableValue <<= ::com::sun::star::util::Time( -1, -1, -1, -1 );
+        else
+            aValidatableValue <<= DBTypeConversion::toTime( nTime );
+    }
+    return aValidatableValue;
 }
 
 //------------------------------------------------------------------------------
