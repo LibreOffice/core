@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,116 +64,25 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-using namespace std;
-using namespace rtl;
-using namespace vos;
 using namespace webdav_ucp;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
+using namespace com::sun::star;
 
-std::vector< DAVSession * > DAVSessionFactory::sActiveSessions;
-
-ORef< DAVSession > DAVSessionFactory::createDAVSession(
-                    const ::rtl::OUString & inUri,
-                    const Reference< XMultiServiceFactory > & rxSMgr )
+vos::ORef< DAVSession > DAVSessionFactory::createDAVSession(
+                const ::rtl::OUString & inUri,
+                const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    if ( !m_pProxySettings )
+        m_pProxySettings = new ProxySettings( rxSMgr );
+
     DAVSession * theSession = GetExistingSession( inUri );
     if ( theSession == NULL )
     {
-        ProxyConfig aProxyConfig;
-
-        try
-        {
-            // Read proxy config from config db.
-
-            Reference< XMultiServiceFactory > xConfigProv(
-                        rxSMgr->createInstance(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration.ConfigurationProvider" ) ),
-                        UNO_QUERY );
-
-            OUString aRootKey
-                = OUString::createFromAscii( "org.openoffice.Inet/Proxy/HTTP" );
-
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ] <<= aRootKey;
-
-            Reference< XInterface > xInterface(
-                        xConfigProv->createInstanceWithArguments(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration.ConfigurationAccess" ),
-                        aArguments ) );
-
-            VOS_ENSURE( xInterface.is(),
-                        "DAVSessionFactory::createDAVSession - No config access!" );
-
-            if ( xInterface.is() )
-            {
-                Reference< XNameAccess > xNameAccess( xInterface, UNO_QUERY );
-
-                VOS_ENSURE( xNameAccess.is(),
-                            "DAVSessionFactory::createDAVSession - No name access!" );
-
-                if ( xNameAccess.is() )
-                {
-                    try
-                    {
-                        if ( !( xNameAccess->getByName(
-                                OUString::createFromAscii( "Name" ) )
-                                    >>= aProxyConfig.aName ) )
-                        {
-                            VOS_ENSURE( sal_False,
-                                        "DAVSessionFactory::createDAVSession - "
-                                        "Error getting config item value!" );
-                        }
-                    }
-                    catch ( NoSuchElementException& )
-                    {
-                        // getByName
-                    }
-                    catch ( WrappedTargetException& )
-                    {
-                        // getByName
-                    }
-
-                    try
-                    {
-                        Any aValue = xNameAccess->getByName(
-                                OUString::createFromAscii( "Port" ) );
-                        if ( aValue.hasValue() &&
-                             !( aValue >>= aProxyConfig.nPort ) )
-                        {
-                            VOS_ENSURE( sal_False,
-                                        "DAVSessionFactory::createDAVSession - "
-                                        "Error getting config item value!" );
-                        }
-                    }
-                    catch ( NoSuchElementException& )
-                    {
-                        // getByName
-                    }
-                    catch ( WrappedTargetException& )
-                    {
-                        // getByName
-                    }
-                }
-            }
-        }
-        catch ( RuntimeException& )
-        {
-            throw;
-        }
-        catch ( Exception& )
-        {
-            // createInstance, createInstanceWithArguments
-        }
-
-        theSession = new NeonSession( inUri, aProxyConfig );
+        theSession = new NeonSession( this,
+                                      inUri,
+                                      m_pProxySettings->getProxy( inUri ) );
         sActiveSessions.push_back( theSession );
     }
 
@@ -182,6 +91,8 @@ ORef< DAVSession > DAVSessionFactory::createDAVSession(
 
 void DAVSessionFactory::ReleaseDAVSession( DAVSession * inSession )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     std::vector< DAVSession * >::iterator theIterator =
                                             sActiveSessions.begin();
     while ( theIterator != sActiveSessions.end() )
@@ -195,8 +106,10 @@ void DAVSessionFactory::ReleaseDAVSession( DAVSession * inSession )
     }
 }
 
-DAVSession * DAVSessionFactory::GetExistingSession( const OUString & inUri )
+DAVSession * DAVSessionFactory::GetExistingSession( const rtl::OUString & inUri )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     DAVSession * theSession = NULL;
     std::vector< DAVSession * >::iterator theIterator =
                                             sActiveSessions.begin();

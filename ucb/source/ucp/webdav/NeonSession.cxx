@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,15 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::ucb;
 using namespace webdav_ucp;
 
-sal_Bool    NeonSession::sSockInited        = sal_False;
+sal_Bool NeonSession::sSockInited = sal_False;
 
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
-NeonSession::NeonSession( const OUString & inUri, const ProxyConfig& rProxyCfg )
+NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
+                          const OUString& inUri,
+                          const ProxyConfig& rProxyCfg )
+: m_pSessionFactory( pSessionFactory )
 {
     Init();
     NeonUri theUri( inUri );
@@ -100,6 +103,10 @@ NeonSession::NeonSession( const OUString & inUri, const ProxyConfig& rProxyCfg )
     if ( mNeonLockSession == NULL )
         throw DAVException( DAVException::DAV_SESSION_CREATE );
     */
+
+    // Register redirect callbacks.
+    http_redirect_register(
+            mHttpSession, RedirectConfirm, RedirectNotify, this );
 }
 
 // -------------------------------------------------------------------
@@ -107,7 +114,7 @@ NeonSession::NeonSession( const OUString & inUri, const ProxyConfig& rProxyCfg )
 // -------------------------------------------------------------------
 NeonSession::~NeonSession( )
 {
-    DAVSessionFactory::ReleaseDAVSession( this );
+    m_pSessionFactory->ReleaseDAVSession( this );
 
     if ( mHttpSession != NULL )
     {
@@ -588,3 +595,27 @@ int NeonSession::NeonAuth( void *       inUserData,
 
     return theRetVal;
 }
+
+/* Get confirmation from the user that a redirect from
+ * URI 'src' to URI 'dest' is acceptable. Should return:
+ *   Non-Zero to FOLLOW the redirect
+ *   Zero to NOT follow the redirect
+ */
+
+// static
+int NeonSession::RedirectConfirm(
+                    void * userdata, const char * src, const char * dest )
+{
+    return 1;
+}
+
+/* Notify the user that a redirect has been automatically
+ * followed from URI 'src' to URI 'dest'
+ */
+
+// static
+void NeonSession::RedirectNotify(
+                    void * userdata, const char * src, const char * dest )
+{
+}
+

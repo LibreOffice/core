@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-30 16:06:47 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ public:
        ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
        ::ucb::ContentProviderImplHelper* pProvider,
        const ::com::sun::star::uno::Reference<
-       ::com::sun::star::ucb::XContentIdentifier >& Identifier )
+       ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+       DAVSessionFactory* pSessionFactory )
     throw ( ::com::sun::star::ucb::ContentCreationException );
   Content( const ::com::sun::star::uno::Reference<
        ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,

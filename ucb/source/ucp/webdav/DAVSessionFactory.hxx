@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,16 @@
 #ifndef _DAVSESSIONFACTORY_HXX_
 #define _DAVSESSIONFACTORY_HXX_
 
-#include <stl/vector>
+#include <vector>
 #include <rtl/ustring.hxx>
 #include <vos/ref.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _PROXYCONFIG_HXX_
+#include "proxyconfig.hxx"
 #endif
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -76,34 +80,30 @@ namespace com { namespace sun { namespace star { namespace lang {
 namespace webdav_ucp
 {
 
-struct ProxyConfig
-{
-    ::rtl::OUString aName;
-    sal_Int32       nPort;
-
-    ProxyConfig() : nPort( 0 ) {}
-    ProxyConfig( const ::rtl::OUString& rName, sal_Int32 Port )
-    : aName( rName ), nPort( Port ) {}
-};
-
 class DAVSession;
+
 class DAVSessionFactory
 {
-    private:
-        static std::vector< DAVSession * >  sActiveSessions;
+        osl::Mutex m_aMutex;
+        ProxySettings* m_pProxySettings;
+        std::vector< DAVSession * > sActiveSessions;
 
     public:
-        static ::vos::ORef< DAVSession >
+        DAVSessionFactory() : m_pProxySettings( 0 ) {}
+        ~DAVSessionFactory() { delete m_pProxySettings; }
+
+        ::vos::ORef< DAVSession >
         createDAVSession( const ::rtl::OUString & inUri,
                           const ::com::sun::star::uno::Reference<
                                ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr );
 
-        static void ReleaseDAVSession( DAVSession * inSession );
+        void ReleaseDAVSession( DAVSession * inSession );
 
     private:
-        static DAVSession * GetExistingSession( const ::rtl::OUString & inUri );
+        DAVSession * GetExistingSession( const ::rtl::OUString & inUri );
 };
 
 }; // namespace webdav_ucp
+
 #endif // _DAVSESSIONFACTORY_HXX_

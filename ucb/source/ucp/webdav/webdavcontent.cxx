@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-22 11:27:00 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,8 @@ void ContentProperties::setValues(DAVResource& resource)
 // ctr for content on an existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
                     ::ucb::ContentProviderImplHelper* pProvider,
-                    const Reference< XContentIdentifier >& Identifier )
+                    const Reference< XContentIdentifier >& Identifier,
+                  DAVSessionFactory* pSessionFactory )
   throw ( ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   _transient( sal_False ),
@@ -334,7 +335,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
     try
       {
         // set the webdav session
-          _pWebdavSession = DAVSessionFactory::createDAVSession(
+          _pWebdavSession = pSessionFactory->createDAVSession(
                                 Identifier->getContentIdentifier(), rxSMgr );
           _pWebdavSession->setServerAuthListener( &webdavAuthListener );
     }

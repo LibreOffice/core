@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,8 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
 
     try
     {
-      xContent = new ::webdav_ucp::Content( m_xSMgr, this, xCanonicId );
+      xContent = new ::webdav_ucp::Content(
+                          m_xSMgr, this, xCanonicId, &m_aDAVSessionFactory );
     }
     catch (ContentCreationException e)
     {

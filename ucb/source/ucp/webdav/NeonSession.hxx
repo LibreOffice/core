@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include "DAVSession.hxx"
 #include "NeonTypes.hxx"
 #include <osl/mutex.hxx>
-#include <stl/vector>
+#include <vector>
 
 namespace webdav_ucp
 {
@@ -82,10 +82,11 @@ class NeonSession : public DAVSession
         sal_Int32               mPort;
 
         // Authentication stuff
-        DAVAuthListener         *mListener;
+        DAVAuthListener *       mListener;
         com::sun::star::uno::Reference<
          com::sun::star::ucb::XCommandEnvironment > mEnv;
 
+        DAVSessionFactory *     m_pSessionFactory;
 
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *    mNeonLockSession;
@@ -93,7 +94,9 @@ class NeonSession : public DAVSession
         static sal_Bool         sSockInited;
 
     public:
-        NeonSession( const rtl::OUString & inUri, const ProxyConfig& rProxyCfg );
+        NeonSession( DAVSessionFactory* psessionFactory,
+                     const rtl::OUString& inUri,
+                     const ProxyConfig& rProxyCfg );
         virtual ~NeonSession( );
 
 
@@ -206,6 +209,13 @@ class NeonSession : public DAVSession
                                   char **       inUserName,
                                   char **       inPassWord );
 
+        // Redirection callbacks.
+        static int RedirectConfirm( void *       userdata,
+                                     const char * src,
+                                    const char * dest );
+        static void RedirectNotify( void *       userdata,
+                                     const char * src,
+                                    const char * dest );
 };
 
 }; // namespace_ucp

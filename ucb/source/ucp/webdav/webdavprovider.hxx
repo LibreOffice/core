@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _WEBDAV_UCP_PROVIDER_HXX
 #define _WEBDAV_UCP_PROVIDER_HXX
 
+#ifndef _DAVSESSIONFACTORY_HXX_
+#include "DAVSessionFactory.hxx"
+#endif
+
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
@@ -108,6 +112,8 @@ namespace webdav_ucp {
 
 class ContentProvider : public ::ucb::ContentProviderImplHelper
 {
+    DAVSessionFactory m_aDAVSessionFactory;
+
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
