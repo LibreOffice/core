@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-10 14:30:11 $
+ *  last change: $Author: pluby $ $Date: 2000-10-10 17:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,9 @@ namespace star
 /** */ //for docpp
 namespace uno
 {
-#if ! (defined(__GNUC__) && defined(__APPLE__))
 //__________________________________________________________________________________________________
 template< class E >
 typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
-#endif
 
 //__________________________________________________________________________________________________
 template< class E >
@@ -205,17 +203,6 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 
 // generic sequence template
 template< class S >
-#if (defined(__GNUC__) && defined(__APPLE__))
-inline ::com::sun::star::uno::Type
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * )
-{
-    typelib_TypeDescriptionReference * pType = 0;
-    const ::com::sun::star::uno::Type & rElementType = ::getCppuType(
-        (::com::sun::star::uno::Sequence< S >::ElementType *)0 );
-    ::typelib_static_sequence_type_init( &pType, rElementType.getTypeLibType() );
-    return ::com::sun::star::uno::Type( pType );
-}
-#else
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * )
 {
@@ -230,14 +217,14 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * )
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         & ::com::sun::star::uno::Sequence< S >::s_pType );
 }
-#endif
 
 #if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
 static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
 #endif
 
 // char sequence
-inline const ::com::sun::star::uno::Type & SAL_CALL getCharSequenceCppuType()
+inline const ::com::sun::star::uno::Type &
+SAL_CALL getCharSequenceCppuType()
 {
 #if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)) )
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
