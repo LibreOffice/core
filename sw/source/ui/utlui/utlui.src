@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:43:45 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 18:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄ¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò\"";
         Text[ polish ] = "U?yj szablonu \"Obszar tekstowy\"";
-        Text[ japanese ] = "\"–{•¶\"‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "u–{•¶v‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÌÓã ÇáäÕ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Óşìá êåéìİíïõ\"";
@@ -451,7 +451,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄËõ½ø¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ïåğâàÿ ñòğîêà ñ îòñòóïîì\"";
         Text[ polish ] = "U¿yj szablonu \"Wciêcie obszaru tekstowego\"";
-        Text[ japanese ] = "\"–{•¶²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "u–{•¶²İÃŞİÄv‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş ğñşôçò ãñáììŞò\"";
@@ -475,7 +475,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄ¸ºÏòËõ½ø¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îáğàòíûé îòñòóï\"";
         Text[ polish ] = "U¿yj szablonu \"Neg. wciêcie obszaru tekstu\"";
-        Text[ japanese ] = "\"–{•¶Ï²Å½²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "u–{•¶Ï²Å½²İÃŞİÄv‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å­tÁY±Æ¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã äÕ ÓáÈíÉ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"ÁñíçôéêŞ åóï÷Ş óşìáôïò êåéìİíïõ\"";
@@ -499,7 +499,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄËõ½ø¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò ñ îòñòóïîì\"";
         Text[ polish ] = "U?yj szablonu \"Wysuniecie obszaru tekst.\"";
-        Text[ japanese ] = "\"–{•¶²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "u–{•¶²İÃŞİÄv‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ (ÇáÓØÑ ÇáÃæá)\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş óşìáôïò êåéìİíïõ\"";
@@ -523,7 +523,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°±êÌâ $(ARG1)¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Çàãîëîâîê $(ARG1)\"";
         Text[ polish ] = "U¿yj szablonu \"Tytu³ $(ARG1)\"";
-        Text[ japanese ] = "\"Œ©o‚µ$(ARG1)\" ‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "uŒ©o‚µ $(ARG1)v‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¼ĞÃD $(ARG1)¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÚäæÇä $(ARG1)\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åğéêåöáëßäá $(ARG1)\"";
@@ -547,7 +547,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_simplified ] = "Éè¶¨¡°ÏîÄ¿·ûºÅ¡±»ò¡°±àºÅ¡±ÑùÊ½";
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ñïèñîê\" èëè \"Íóìåğàöèÿ\"";
         Text[ polish ] = "U¿yj szablonu \"Wypunktowanie\" lub \"Numerowanie\"";
-        Text[ japanese ] = "\"‰Óğ‘‚«\" ‚Ü‚½‚Í \"”Ô†•t‚¯\"‚Ì½À²Ùİ’è";
+        Text[ japanese ] = "u‰Óğ‘‚«v‚Ü‚½‚Íu”Ô†•t‚¯v‚Ì½À²Ùİ’è";
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¶µ¥Ø²Å¸¹¡¨©M¡§½s¸¹¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÊÚÏÇÏ\" Ãæ \"ÊÑŞíã\"";
         Text[ greek ] = "Ïñéóìüò óôõë \"Êïõêßäá\" Ş \"Áñßèìçóç\"";
@@ -649,7 +649,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ spanish ] = "Tras insertar el AutoTexto";
     TEXT[ italian ] = "Dopo aver inserito il testo automatico";
     TEXT[ danish ] = "Efter input af AutoTekst";
-    TEXT[ swedish ] = "Efter att AutoText infogats";
+    TEXT[ swedish ] = "När AutoText har infogats";
     TEXT[ polish ] = "Wstaw za autotekstem";
     TEXT[ portuguese_brazilian ] = "Nach AutoText einfügen";
     TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚µ‚½Œã";
@@ -669,7 +669,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
     Text [ italian ] = "Mouse sull'oggetto" ;
     Text [ spanish ] = "Ratón sobre objeto" ;
     Text [ french ] = "Souris sur l'objet" ;
-    Text [ dutch ] = "Muis boven object" ;
+    Text [ dutch ] = "Muis over object" ;
     Text [ swedish ] = "Mus över objekt" ;
     Text [ danish ] = "Mus over objekt" ;
     Text [ portuguese ] = "Rato sobre objecto" ;
@@ -739,7 +739,7 @@ String STR_EVENT_IMAGE_LOAD
 {
     TEXT = "Grafik laden erfolgreich" ;
     TEXT [ English ] = "Graphic load" ;
-    Text [ dutch ] = "Laden van afbeelding oké" ;
+    Text [ dutch ] = "Afbeelding met succes geladen" ;
     Text [ english_us ] = "Graphics load successful" ;
     Text [ swedish ] = "Laddning av grafik lyckades" ;
     Text [ danish ] = "Indlæsning af grafik fuldført" ;
@@ -763,7 +763,7 @@ String STR_EVENT_IMAGE_ABORT
 {
     TEXT = "Grafik laden abgebrochen" ;
     TEXT [ English ] = "Graphic load abord" ;
-    Text [ dutch ] = "Afbeelding laden afgebroken" ;
+    Text [ dutch ] = "Laden van afbeelding gestopt" ;
     Text [ english_us ] = "Graphics load terminated" ;
     Text [ swedish ] = "Laddning av grafik avbröts" ;
     Text [ danish ] = "Indlæsning af grafik afbrudt" ;
