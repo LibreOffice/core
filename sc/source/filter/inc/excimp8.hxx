@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:20:10 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,11 +574,9 @@ class ImportExcel8 : public ImportExcel
         void                    Cf( void );                     // 0x01B1
         void                    Dval( void );                   // 0x01B2
         void                    Txo( void );                    // 0x01B6
+        void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
         void                    Dv( void );                     // 0x01BE
-        void                    Hlink( void );
-        String*                 ReadFileHlink( void );
-        String*                 ReadURLHlink( void );
         void                    Dimensions( void );             // 0x0200
         void                    Name( void );                   // 0x0218
         void                    Style( void );
