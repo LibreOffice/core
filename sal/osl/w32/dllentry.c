@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 13:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <systools/win32/comdlg9x.h>
 #include <systools/win32/user9x.h>
 
+#include <osl/diagnose.h>
+#include <sal/types.h>
+
 
 #define _DIRW9X_INITIALIZE_
 #include "dirW9X.h"
@@ -76,11 +79,10 @@ extern HRESULT (WINAPI *_CoInitializeEx) (LPVOID pvReserved, DWORD dwCoInit);
 extern LPWSTR *lpArgvW;
 
 extern DWORD    g_dwTLSTextEncodingIndex;
+extern void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void);
 
 /* remember plattform */
 DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
-
-#include <osl/diagnose.h>
 
 #define ERR_GENERAL_WRONG_CPU       101
 #define ERR_WINSOCK_INIT_FAILED     102
@@ -133,90 +135,96 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
-        {
-            OSVERSIONINFO aInfo;
-            WORD wVersionRequested;
-            WSADATA wsaData;
-            int error;
+            {
+                OSVERSIONINFO aInfo;
+                WORD wVersionRequested;
+                WSADATA wsaData;
+                int error;
 #ifdef _M_IX86
-            SYSTEM_INFO SystemInfo;
+                SYSTEM_INFO SystemInfo;
 
-            GetSystemInfo(&SystemInfo);
+                GetSystemInfo(&SystemInfo);
 
-            if ((SystemInfo.dwProcessorType != PROCESSOR_INTEL_486) &&
-                (SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
-                showMessage(ERR_GENERAL_WRONG_CPU);
+                if ((SystemInfo.dwProcessorType != PROCESSOR_INTEL_486) &&
+                    (SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
+                    showMessage(ERR_GENERAL_WRONG_CPU);
 #endif
-            wVersionRequested = MAKEWORD(2, 2);
+                wVersionRequested = MAKEWORD(2, 2);
 
-            error = WSAStartup(wVersionRequested, &wsaData);
-            if (error == 0)
-            {
-                WORD wMajorVersionRequired = 1;
-                WORD wMinorVersionRequired = 1;
-
-                if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
-                    (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
-                    ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
-                    showMessage(ERR_WINSOCK_WRONG_VERSION);
-            }
-            else
-                showMessage(ERR_WINSOCK_INIT_FAILED);
-
-            /* initialize Win9x unicode functions */
-            aInfo.dwOSVersionInfoSize = sizeof(aInfo);
-            if (GetVersionEx(&aInfo))
-            {
-                Kernel9xInit(&aInfo);
-                Advapi9xInit(&aInfo);
-                Comdlg9xInit(&aInfo);
-                Shell9xInit(&aInfo);
-                User9xInit(&aInfo);
-
-                if (aInfo.dwPlatformId==VER_PLATFORM_WIN32_NT)
+                error = WSAStartup(wVersionRequested, &wsaData);
+                if (error == 0)
                 {
-                    lpfnFindFirstFile = FindFirstFileW;
-                    lpfnFindNextFile = FindNextFileW;
-                    lpfnCreateFile = CreateFileW;
-                    lpfnSetFileAttributes = SetFileAttributesW;
-                    lpfnSearchPath = SearchPathW;
-                    lpfnCreateProcess = CreateProcessW;
-                    lpfnCreateProcessAsUser = CreateProcessAsUserW;
-                    lpfnGetEnvironmentVariable=GetEnvironmentVariableW;
-                    lpfnWNetAddConnection2=WNetAddConnection2W;
-                    lpfnWNetCancelConnection2=WNetCancelConnection2W;
-                    lpfnWNetGetUser=WNetGetUserW;
-                    lpfnGetWindowsDirectory=GetWindowsDirectoryW;
-                    lpfnCreateDirectory=CreateDirectoryW;
-                    lpfnWritePrivateProfileString=WritePrivateProfileStringW;
-                    lpfnGetPrivateProfileString=GetPrivateProfileStringW;
+                    WORD wMajorVersionRequired = 1;
+                    WORD wMinorVersionRequired = 1;
+
+                    if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
+                        (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
+                        ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
+                        showMessage(ERR_WINSOCK_WRONG_VERSION);
+                }
+                else
+                    showMessage(ERR_WINSOCK_INIT_FAILED);
+
+                /* initialize Win9x unicode functions */
+                aInfo.dwOSVersionInfoSize = sizeof(aInfo);
+                if (GetVersionEx(&aInfo))
+                {
+                    Kernel9xInit(&aInfo);
+                    Advapi9xInit(&aInfo);
+                    Comdlg9xInit(&aInfo);
+                    Shell9xInit(&aInfo);
+                    User9xInit(&aInfo);
+
+                    if (aInfo.dwPlatformId==VER_PLATFORM_WIN32_NT)
+                    {
+                        lpfnFindFirstFile = FindFirstFileW;
+                        lpfnFindNextFile = FindNextFileW;
+                        lpfnCreateFile = CreateFileW;
+                        lpfnSetFileAttributes = SetFileAttributesW;
+                        lpfnSearchPath = SearchPathW;
+                        lpfnCreateProcess = CreateProcessW;
+                        lpfnCreateProcessAsUser = CreateProcessAsUserW;
+                        lpfnGetEnvironmentVariable=GetEnvironmentVariableW;
+                        lpfnWNetAddConnection2=WNetAddConnection2W;
+                        lpfnWNetCancelConnection2=WNetCancelConnection2W;
+                        lpfnWNetGetUser=WNetGetUserW;
+                        lpfnGetWindowsDirectory=GetWindowsDirectoryW;
+                        lpfnCreateDirectory=CreateDirectoryW;
+                        lpfnWritePrivateProfileString=WritePrivateProfileStringW;
+                        lpfnGetPrivateProfileString=GetPrivateProfileStringW;
+                    }
+
+                    g_dwPlatformId = aInfo.dwPlatformId;
                 }
 
-                g_dwPlatformId = aInfo.dwPlatformId;
+                g_dwTLSTextEncodingIndex = TlsAlloc();
+
+    //          InitDCOM();
+
+                break;
             }
 
-            g_dwTLSTextEncodingIndex = TlsAlloc();
-
-//          InitDCOM();
-
-            break;
-        }
-
         case DLL_PROCESS_DETACH:
-        {
-            Advapi9xDeInit();
-            Comdlg9xDeInit();
-            Kernel9xDeInit();
-            Shell9xDeInit();
-            User9xDeInit();
+            {
+                Advapi9xDeInit();
+                Comdlg9xDeInit();
+                Kernel9xDeInit();
+                Shell9xDeInit();
+                User9xDeInit();
 
-            WSACleanup();
-            if (lpArgvW)
-                GlobalFree(lpArgvW);
+                WSACleanup();
+                if (lpArgvW)
+                    GlobalFree(lpArgvW);
+                break;
+
+                TlsFree( g_dwTLSTextEncodingIndex );
+            }
+        case DLL_THREAD_ATTACH:
             break;
 
-            TlsFree( g_dwTLSTextEncodingIndex );
-        }
+        case DLL_THREAD_DETACH:
+            _osl_callThreadKeyCallbackOnThreadDetach();
+            break;
     }
 
     return (sal_True);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 10:56:58 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 13:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,59 @@ typedef struct _TLS
 {
     DWORD                           dwIndex;
     oslThreadKeyCallbackFunction    pfnCallback;
+    struct _TLS                     *pNext, *pPrev;
 } TLS, *PTLS;
+
+static  PTLS    g_pThreadKeyList = NULL;
+
+static void AddKeyToList( PTLS pTls )
+{
+    if ( pTls )
+    {
+        pTls->pNext = g_pThreadKeyList;
+        pTls->pPrev = 0;
+
+        if ( g_pThreadKeyList )
+            g_pThreadKeyList->pPrev = pTls;
+
+        g_pThreadKeyList = pTls;
+    }
+}
+
+static void RemoveKeyFromList( PTLS pTls )
+{
+    if ( pTls )
+    {
+        if ( pTls->pPrev )
+            pTls->pPrev->pNext = pTls->pNext;
+        else
+        {
+            OSL_ASSERT( pTls == g_pThreadKeyList );
+            g_pThreadKeyList = pTls->pNext;
+        }
+
+        if ( pTls->pNext )
+            pTls->pNext->pPrev = pTls->pPrev;
+    }
+}
+
+void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach()
+{
+    PTLS    pTls = g_pThreadKeyList;
+
+    while ( pTls )
+    {
+        if ( pTls->pfnCallback )
+        {
+            void    *pValue = TlsGetValue( pTls->dwIndex );
+
+            if ( pValue )
+                pTls->pfnCallback( pValue );
+        }
+
+        pTls = pTls->pNext;
+    }
+}
 
 /*****************************************************************************/
 /* osl_createThreadKey */
@@ -600,7 +652,8 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
             rtl_freeMemory( pTls );
             pTls = 0;
         }
-
+        else
+            AddKeyToList( pTls );
     }
 
     return ((oslThreadKey)pTls);
@@ -615,6 +668,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
     {
         PTLS    pTls = (PTLS)Key;
 
+        RemoveKeyFromList( pTls );
         TlsFree( pTls->dwIndex );
         rtl_freeMemory( pTls );
     }
@@ -651,7 +705,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 
         fSuccess = TlsSetValue( pTls->dwIndex, pData );
 
-        if ( fSuccess && pTls->pfnCallback )
+        if ( fSuccess && pTls->pfnCallback && pOldData )
             pTls->pfnCallback( pOldData );
 
         return (fSuccess != FALSE);
@@ -758,6 +812,9 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
 /*************************************************************************
 *
 *    $Log: not supported by cvs2svn $
+*    Revision 1.2  2000/09/29 10:56:58  hro
+*    osl_createThreadKeyData with callback function paramater, osl_setThreadKeyData works
+*
 *    Revision 1.1.1.1  2000/09/18 15:17:23  hr
 *    initial import
 *
