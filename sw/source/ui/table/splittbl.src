@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:02:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα (με στυλ)";
         Text[ korean ] = "μ¤νƒ€μΌμ„ μ μ©ν• μ‚¬μ©μ μ •μ μ λª©(~U)";
         Text[ turkish ] = "~Φzel baώlύk (biηim uygula)";
-        Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "~Encapηalament propi, amb estils";
         Text[ finnish ] = "~Mukautettu otsikko (kδytδ tyyliδ)";
         Text[ thai ] = "ΰΈΰΈ³~ΰΈ«ΰΈ™ΰΈ”ΰΈ«ΰΈ±ΰΈ§ΰΈ‚ΰΉ‰ΰΈ­ΰΉ€ΰΈ­ΰΈ‡ (ΰΉƒΰΈΰΉ‰ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°)";
@@ -285,6 +285,7 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ hindi ] = "ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤…ΰ¤²ΰ¤—ΰ¤Ύΰ¤¨ΰ¤Ύ";
     Text[ slovak ] = "RozdeliΕ¥ tabuΔΎku";
 };
+
 
 
 
