@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-31 16:25:35 $
+ *  last change: $Author: aw $ $Date: 2001-08-01 15:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,11 +374,12 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
         if( bRet )
         {
             SdFilter*   pFilter = NULL;
+            SfxMedium* pMedium = 0L;
 
             if( bBinary )
             {
-                SfxMedium   aMedium( pStore );
-                pFilter = new SdBINFilter( aMedium, *this, sal_True );
+                pMedium = new SfxMedium( pStore );
+                pFilter = new SdBINFilter( *pMedium, *this, sal_True );
             }
             else if( bXML )
             {
@@ -389,7 +390,11 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
             }
 
             bRet = pFilter ? pFilter->Import() : FALSE;
-            delete pFilter;
+
+            if(pFilter)
+                delete pFilter;
+            if(pMedium)
+                delete pMedium;
         }
     }
     else
