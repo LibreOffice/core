@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:41 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,6 @@ namespace basegfx
     {
         class B2DPolygon;
     } // end of namespace polygon
-
-    namespace vector
-    {
-        enum B2DVectorOrientation;
-    } // end of namespace vector
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -132,9 +127,6 @@ namespace basegfx
             // closed state
             sal_Bool isClosed() const;
             void setClosed(sal_Bool bNew);
-
-            // Check and evtl. correct orientations of contained Polygons
-            ::basegfx::vector::B2DVectorOrientation checkOrientations();
 
             // flip polygon direction
             void flip();

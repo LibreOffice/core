@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,13 @@ namespace basegfx
         {
         }
 
-        B2DQuadraticBezier::B2DQuadraticBezier(const point::B2DPoint& rStart, const point::B2DPoint& rEnd)
+        B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd)
         :   maStartPoint(rStart),
             maEndPoint(rEnd)
         {
         }
 
-        B2DQuadraticBezier::B2DQuadraticBezier(const point::B2DPoint& rStart, const point::B2DPoint& rControl, const point::B2DPoint& rEnd)
+        B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rControl, const ::basegfx::point::B2DPoint& rEnd)
         :   maStartPoint(rStart),
             maEndPoint(rEnd),
             maControlPoint(rControl)

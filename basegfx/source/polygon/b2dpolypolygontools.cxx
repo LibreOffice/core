@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:24:43 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,20 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -81,17 +93,84 @@ namespace basegfx
         {
             // B2DPolyPolygon tools
 
-            // Check and evtl. correct orientations of contained Polygons
-            ::basegfx::vector::B2DVectorOrientation checkOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate)
+            void correctOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate)
             {
-                ::basegfx::vector::B2DVectorOrientation eRetval(::basegfx::vector::ORIENTATION_NEUTRAL);
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+                sal_uInt32 nIndexOfOutmostPolygon(0L);
+                sal_Bool bIndexOfOutmostPolygonSet(sal_False);
 
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getPolygon(a);
 
+                    if(aCandidate.count() > 2L)
+                    {
+                        ::basegfx::vector::B2DVectorOrientation aOrientation =
+                            ::basegfx::polygon::tools::getOrientation(aCandidate);
+                        sal_Bool bDoFlip(::basegfx::vector::ORIENTATION_POSITIVE != aOrientation);
 
+                        // init values for depth and compare point for
+                        // inside test. Since the ordering makes only sense when assuming
+                        // that there are no intersections, the inside test is done with
+                        // any point of the candidate, so teke the first one.
+                        sal_uInt32 nDepth(0L);
+                        const ::basegfx::point::B2DPoint aTestPoint(aCandidate.getB2DPoint(0L));
 
+                        // loop over other polygons and calculate depth
+                        for(sal_uInt32 b(0L); b < nPolygonCount; b++)
+                        {
+                            if(b != a)
+                            {
+                                ::basegfx::polygon::B2DPolygon aComparePolygon = rCandidate.getPolygon(b);
 
+                                if(::basegfx::polygon::tools::isInside(aComparePolygon, aTestPoint))
+                                {
+                                    nDepth++;
+                                }
+                            }
+                        }
 
-                return eRetval;
+                        // if nDepth is odd it is a hole
+                        sal_Bool bIsHole(1L == (nDepth & 0x00000001));
+
+                        // does polygon need to be flipped?
+                        if((bDoFlip && !bIsHole) || (!bDoFlip && bIsHole))
+                        {
+                            aCandidate.flip();
+
+                            // write back changed polygon
+                            rCandidate.setPolygon(a, aCandidate);
+                        }
+
+                        // remember the index if it's the outmost polygon
+                        if(!bIndexOfOutmostPolygonSet && 0L == nDepth)
+                        {
+                            bIndexOfOutmostPolygonSet = sal_True;
+                            nIndexOfOutmostPolygon = a;
+                        }
+                    }
+                }
+
+                // if the outmost polygon is not the first, move it in front
+                if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
+                {
+                    ::basegfx::polygon::B2DPolygon aOutmostPolygon = rCandidate.getPolygon(nIndexOfOutmostPolygon);
+                    rCandidate.remove(nIndexOfOutmostPolygon);
+                    rCandidate.insert(0L, aOutmostPolygon);
+                }
+            }
+
+            void removeIntersections(::basegfx::polygon::B2DPolyPolygon& rCandidate,
+                sal_Bool bForceOrientation, sal_Bool bInvertRemove)
+            {
+                ::basegfx::polygon::B2DPolyPolygonCutter aCutter;
+
+                aCutter.addPolyPolygon(rCandidate, bForceOrientation);
+                aCutter.removeSelfIntersections();
+                aCutter.removeDoubleIntersections();
+                aCutter.removeIncludedPolygons(!bInvertRemove);
+                rCandidate.clear();
+                aCutter.getPolyPolygon(rCandidate);
             }
         } // end of namespace tools
     } // end of namespace polygon

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:54 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 class ImplB2DPolyPolygon
 {
-    typedef ::std::vector< basegfx::polygon::B2DPolygon >   PolygonVector;
+    typedef ::std::vector< ::basegfx::polygon::B2DPolygon > PolygonVector;
 
     PolygonVector                                   maPolygons;
     sal_uInt32                                      mnRefCount;
@@ -127,17 +127,17 @@ public:
         return sal_True;
     }
 
-    const basegfx::polygon::B2DPolygon& getPolygon(sal_uInt32 nIndex) const
+    const ::basegfx::polygon::B2DPolygon& getPolygon(sal_uInt32 nIndex) const
     {
         return maPolygons[nIndex];
     }
 
-    void setPolygon(sal_uInt32 nIndex, const basegfx::polygon::B2DPolygon& rPolygon)
+    void setPolygon(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rPolygon)
     {
         maPolygons[nIndex] = rPolygon;
     }
 
-    void insert(sal_uInt32 nIndex, const basegfx::polygon::B2DPolygon& rPolygon, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
         {
@@ -148,7 +148,7 @@ public:
         }
     }
 
-    void insert(sal_uInt32 nIndex, const basegfx::polygon::B2DPolyPolygon& rPolyPolygon)
+    void insert(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolyPolygon& rPolyPolygon)
     {
         const sal_uInt32 nCount = rPolyPolygon.count();
 
@@ -402,12 +402,6 @@ namespace basegfx
                 implForceUniqueCopy();
                 mpPolyPolygon->setClosed(bNew);
             }
-        }
-
-        ::basegfx::vector::B2DVectorOrientation B2DPolyPolygon::checkOrientations()
-        {
-            implForceUniqueCopy();
-            return ::basegfx::polygon::tools::checkOrientations(*this);
         }
 
         void B2DPolyPolygon::flip()

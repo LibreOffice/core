@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:46 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace basegfx
 
             @see B2DTuple
         */
-        class B2DVector : public tuple::B2DTuple
+        class B2DVector : public ::basegfx::tuple::B2DTuple
         {
         public:
             /** Create a 2D Vector
@@ -137,7 +137,7 @@ namespace basegfx
             /** constructor with tuple to allow copy-constructing
                 from B2DTuple-based classes
             */
-            B2DVector(const B2DTuple& rTuple)
+            B2DVector(const ::basegfx::tuple::B2DTuple& rTuple)
             :   B2DTuple(rTuple)
             {}
 
@@ -147,7 +147,7 @@ namespace basegfx
             /** assignment operator to allow assigning the results
                 of B2DTuple calculations
             */
-            B2DVector& operator=( const B2DTuple& rVec );
+            B2DVector& operator=( const ::basegfx::tuple::B2DTuple& rVec );
 
             /** Calculate the length of this 2D Vector
 

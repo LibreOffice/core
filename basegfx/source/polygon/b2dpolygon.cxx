@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:54 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,15 +82,15 @@
 
 class CoordinateData2D
 {
-    basegfx::point::B2DPoint                                maPoint;
+    ::basegfx::point::B2DPoint                              maPoint;
 
 public:
     CoordinateData2D() {}
-    CoordinateData2D(const basegfx::point::B2DPoint& rData) : maPoint(rData) {}
+    CoordinateData2D(const ::basegfx::point::B2DPoint& rData) : maPoint(rData) {}
     ~CoordinateData2D() {}
 
-    const basegfx::point::B2DPoint& getCoordinate() const { return maPoint; }
-    void setCoordinate(const basegfx::point::B2DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
+    const ::basegfx::point::B2DPoint& getCoordinate() const { return maPoint; }
+    void setCoordinate(const ::basegfx::point::B2DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
     sal_Bool operator==(const CoordinateData2D& rData ) const { return (maPoint == rData.getCoordinate()); }
 };
 
@@ -128,12 +128,12 @@ public:
         return (maVector == rCandidate.maVector);
     }
 
-    const basegfx::point::B2DPoint& getCoordinate(sal_uInt32 nIndex) const
+    const ::basegfx::point::B2DPoint& getCoordinate(sal_uInt32 nIndex) const
     {
         return maVector[nIndex].getCoordinate();
     }
 
-    void setCoordinate(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rValue)
+    void setCoordinate(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue)
     {
         maVector[nIndex].setCoordinate(rValue);
     }
@@ -229,18 +229,18 @@ public:
 
 class ControlVectorPair2D
 {
-    basegfx::vector::B2DVector                              maVectorA;
-    basegfx::vector::B2DVector                              maVectorB;
+    ::basegfx::vector::B2DVector                            maVectorA;
+    ::basegfx::vector::B2DVector                            maVectorB;
 
 public:
     ControlVectorPair2D() {}
     ~ControlVectorPair2D() {}
 
-    const basegfx::vector::B2DVector& getVectorA() const { return maVectorA; }
-    void setVectorA(const basegfx::vector::B2DVector& rValue) { if(rValue != maVectorA) maVectorA = rValue; }
+    const ::basegfx::vector::B2DVector& getVectorA() const { return maVectorA; }
+    void setVectorA(const ::basegfx::vector::B2DVector& rValue) { if(rValue != maVectorA) maVectorA = rValue; }
 
-    const basegfx::vector::B2DVector& getVectorB() const { return maVectorB; }
-    void setVectorB(const basegfx::vector::B2DVector& rValue) { if(rValue != maVectorB) maVectorB = rValue; }
+    const ::basegfx::vector::B2DVector& getVectorB() const { return maVectorB; }
+    void setVectorB(const ::basegfx::vector::B2DVector& rValue) { if(rValue != maVectorB) maVectorB = rValue; }
 
     sal_Bool operator==(const ControlVectorPair2D& rData ) const
         { return (maVectorA == rData.getVectorA() && maVectorB == rData.getVectorB()); }
@@ -305,12 +305,12 @@ public:
         return (0L != mnUsedVectors);
     }
 
-    const basegfx::vector::B2DVector& getVectorA(sal_uInt32 nIndex) const
+    const ::basegfx::vector::B2DVector& getVectorA(sal_uInt32 nIndex) const
     {
         return maVector[nIndex].getVectorA();
     }
 
-    void setVectorA(sal_uInt32 nIndex, const basegfx::vector::B2DVector& rValue)
+    void setVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
     {
         sal_Bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorA().equalZero());
         sal_Bool bIsUsed(!rValue.equalZero());
@@ -323,7 +323,7 @@ public:
             }
             else
             {
-                maVector[nIndex].setVectorA(basegfx::vector::B2DVector::getEmptyVector());
+                maVector[nIndex].setVectorA(::basegfx::vector::B2DVector::getEmptyVector());
                 mnUsedVectors--;
             }
         }
@@ -337,12 +337,12 @@ public:
         }
     }
 
-    const basegfx::vector::B2DVector& getVectorB(sal_uInt32 nIndex) const
+    const ::basegfx::vector::B2DVector& getVectorB(sal_uInt32 nIndex) const
     {
         return maVector[nIndex].getVectorB();
     }
 
-    void setVectorB(sal_uInt32 nIndex, const basegfx::vector::B2DVector& rValue)
+    void setVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
     {
         sal_Bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorB().equalZero());
         sal_Bool bIsUsed(!rValue.equalZero());
@@ -355,7 +355,7 @@ public:
             }
             else
             {
-                maVector[nIndex].setVectorB(basegfx::vector::B2DVector::getEmptyVector());
+                maVector[nIndex].setVectorB(::basegfx::vector::B2DVector::getEmptyVector());
                 mnUsedVectors--;
             }
         }
@@ -577,17 +577,17 @@ public:
         return sal_False;
     }
 
-    const basegfx::point::B2DPoint& getPoint(sal_uInt32 nIndex) const
+    const ::basegfx::point::B2DPoint& getPoint(sal_uInt32 nIndex) const
     {
         return maPoints.getCoordinate(nIndex);
     }
 
-    void setPoint(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rValue)
+    void setPoint(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue)
     {
         maPoints.setCoordinate(nIndex, rValue);
     }
 
-    void insert(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
         {
@@ -602,7 +602,7 @@ public:
         }
     }
 
-    const basegfx::point::B2DPoint& getControlPointA(sal_uInt32 nIndex) const
+    const ::basegfx::vector::B2DVector& getControlVectorA(sal_uInt32 nIndex) const
     {
         if(mpControlVector)
         {
@@ -610,11 +610,11 @@ public:
         }
         else
         {
-            return basegfx::point::B2DPoint::getEmptyPoint();
+            return ::basegfx::vector::B2DVector::getEmptyVector();
         }
     }
 
-    void setControlPointA(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rValue)
+    void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
     {
         if(!mpControlVector)
         {
@@ -641,7 +641,7 @@ public:
         return (mpControlVector && mpControlVector->isUsed());
     }
 
-    const basegfx::point::B2DPoint& getControlPointB(sal_uInt32 nIndex) const
+    const ::basegfx::vector::B2DVector& getControlVectorB(sal_uInt32 nIndex) const
     {
         if(mpControlVector)
         {
@@ -649,11 +649,11 @@ public:
         }
         else
         {
-            return basegfx::point::B2DPoint::getEmptyPoint();
+            return ::basegfx::vector::B2DVector::getEmptyVector();
         }
     }
 
-    void setControlPointB(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rValue)
+    void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
     {
         if(!mpControlVector)
         {
@@ -751,10 +751,10 @@ public:
                     const sal_uInt32 nVectorSource(nCoorSource ? nCoorSource - 1L : nCount - 1L);
 
                     // get source data
-                    const basegfx::point::B2DPoint& rSourceCoor = pCoordinateCopy->getCoordinate(nCoorSource);
-                    const basegfx::point::B2DPoint& rVectorSourceCoor = pCoordinateCopy->getCoordinate(nVectorSource);
-                    const basegfx::vector::B2DVector& rVectorSourceA = pVectorCopy->getVectorA(nVectorSource);
-                    const basegfx::vector::B2DVector& rVectorSourceB = pVectorCopy->getVectorB(nVectorSource);
+                    const ::basegfx::point::B2DPoint& rSourceCoor = pCoordinateCopy->getCoordinate(nCoorSource);
+                    const ::basegfx::point::B2DPoint& rVectorSourceCoor = pCoordinateCopy->getCoordinate(nVectorSource);
+                    const ::basegfx::vector::B2DVector& rVectorSourceA = pVectorCopy->getVectorA(nVectorSource);
+                    const ::basegfx::vector::B2DVector& rVectorSourceB = pVectorCopy->getVectorB(nVectorSource);
 
                     // copy point data
                     maPoints.setCoordinate(a, rSourceCoor);
@@ -763,12 +763,12 @@ public:
                     if(rVectorSourceA.equalZero())
                     {
                         // unused, use zero vector
-                        mpControlVector->setVectorB(a, basegfx::vector::B2DVector::getEmptyVector());
+                        mpControlVector->setVectorB(a, ::basegfx::vector::B2DVector::getEmptyVector());
                     }
                     else
                     {
                         // calculate new vector relative to new point
-                        basegfx::vector::B2DVector aNewVectorB((rVectorSourceA + rVectorSourceCoor) - rSourceCoor);
+                        ::basegfx::vector::B2DVector aNewVectorB((rVectorSourceA + rVectorSourceCoor) - rSourceCoor);
                         mpControlVector->setVectorB(a, aNewVectorB);
                     }
 
@@ -776,12 +776,12 @@ public:
                     if(rVectorSourceB.equalZero())
                     {
                         // unused, use zero vector
-                        mpControlVector->setVectorA(a, basegfx::vector::B2DVector::getEmptyVector());
+                        mpControlVector->setVectorA(a, ::basegfx::vector::B2DVector::getEmptyVector());
                     }
                     else
                     {
                         // calculate new vector relative to new point
-                        basegfx::vector::B2DVector aNewVectorA((rVectorSourceB + rVectorSourceCoor) - rSourceCoor);
+                        ::basegfx::vector::B2DVector aNewVectorA((rVectorSourceB + rVectorSourceCoor) - rSourceCoor);
                         mpControlVector->setVectorA(a, aNewVectorA);
                     }
                 }
@@ -1006,14 +1006,14 @@ namespace basegfx
             return mpPolygon->count();
         }
 
-        point::B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
+        ::basegfx::point::B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             return mpPolygon->getPoint(nIndex);
         }
 
-        void B2DPolygon::setB2DPoint(sal_uInt32 nIndex, const point::B2DPoint& rValue)
+        void B2DPolygon::setB2DPoint(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue)
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
@@ -1024,7 +1024,7 @@ namespace basegfx
             }
         }
 
-        void B2DPolygon::insert(sal_uInt32 nIndex, const point::B2DPoint& rPoint, sal_uInt32 nCount)
+        void B2DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount)
         {
             DBG_ASSERT(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
 
@@ -1035,7 +1035,7 @@ namespace basegfx
             }
         }
 
-        void B2DPolygon::append(const point::B2DPoint& rPoint, sal_uInt32 nCount)
+        void B2DPolygon::append(const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount)
         {
             if(nCount)
             {
@@ -1044,39 +1044,39 @@ namespace basegfx
             }
         }
 
-        point::B2DPoint B2DPolygon::getControlPointA(sal_uInt32 nIndex) const
+        ::basegfx::vector::B2DVector B2DPolygon::getControlVectorA(sal_uInt32 nIndex) const
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-            return mpPolygon->getControlPointA(nIndex);
+            return mpPolygon->getControlVectorA(nIndex);
         }
 
-        void B2DPolygon::setControlPointA(sal_uInt32 nIndex, const point::B2DPoint& rValue)
+        void B2DPolygon::setControlVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-            if(mpPolygon->getControlPointA(nIndex) != rValue)
+            if(mpPolygon->getControlVectorA(nIndex) != rValue)
             {
                 implForceUniqueCopy();
-                mpPolygon->setControlPointA(nIndex, rValue);
+                mpPolygon->setControlVectorA(nIndex, rValue);
             }
         }
 
-        point::B2DPoint B2DPolygon::getControlPointB(sal_uInt32 nIndex) const
+        ::basegfx::vector::B2DVector B2DPolygon::getControlVectorB(sal_uInt32 nIndex) const
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-            return mpPolygon->getControlPointB(nIndex);
+            return mpPolygon->getControlVectorB(nIndex);
         }
 
-        void B2DPolygon::setControlPointB(sal_uInt32 nIndex, const point::B2DPoint& rValue)
+        void B2DPolygon::setControlVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
         {
             DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-            if(mpPolygon->getControlPointB(nIndex) != rValue)
+            if(mpPolygon->getControlVectorB(nIndex) != rValue)
             {
                 implForceUniqueCopy();
-                mpPolygon->setControlPointB(nIndex, rValue);
+                mpPolygon->setControlVectorB(nIndex, rValue);
             }
         }
 

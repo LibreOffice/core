@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:47 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace basegfx
 
             @see B3DTuple
         */
-        class B3DVector : public tuple::B3DTuple
+        class B3DVector : public ::basegfx::tuple::B3DTuple
         {
         public:
             /** Create a 3D Vector
@@ -121,7 +121,7 @@ namespace basegfx
             /** constructor with tuple to allow copy-constructing
                 from B3DTuple-based classes
             */
-            B3DVector(const B3DTuple& rTuple)
+            B3DVector(const ::basegfx::tuple::B3DTuple& rTuple)
             :   B3DTuple(rTuple)
             {}
 
@@ -131,7 +131,7 @@ namespace basegfx
             /** assignment operator to allow assigning the results
                 of B3DTuple calculations
             */
-            B3DVector& operator=( const B3DTuple& rVec )
+            B3DVector& operator=( const ::basegfx::tuple::B3DTuple& rVec )
             {
                 mfX = rVec.getX();
                 mfY = rVec.getY();
@@ -277,7 +277,7 @@ namespace basegfx
 
             static const B3DVector& getEmptyVector()
             {
-                return (const B3DVector&) B3DTuple::getEmptyTuple();
+                return (const B3DVector&) ::basegfx::tuple::B3DTuple::getEmptyTuple();
             }
         };
 

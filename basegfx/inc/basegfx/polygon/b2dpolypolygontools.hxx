@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:24:04 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,22 @@ namespace basegfx
         {
             // B2DPolyPolygon tools
 
-            // Check and evtl. correct orientations of contained Polygons
-            ::basegfx::vector::B2DVectorOrientation checkOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate);
+            // Check and evtl. correct orientations of all contained Polygons so that
+            // the orientations of contained polygons will variate to express areas and
+            // holes
+            void correctOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate);
 
+            // Remove all intersections, the self intersections and the in-between
+            // polygon intersections. After this operation there are no more intersections
+            // in the given PolyPolygon. Only closed polygons are handled. The non-closed
+            // polygons or the ones with less than 3 points are preserved, but not
+            // computed.
+            // bForceOrientation: If sal_True, the orientations of all contained polygons
+            // is changed to ORIENTATION_POSITIVE before computing.
+            // bInvertRemove: if sal_True, created polygons which are inside others and
+            // have the same orientation are removed (cleanup).
+            void removeIntersections(::basegfx::polygon::B2DPolyPolygon& rCandidate,
+                sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
 
         } // end of namespace tools
     } // end of namespace polygon

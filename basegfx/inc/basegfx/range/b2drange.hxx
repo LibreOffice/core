@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:43 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,14 @@ namespace basegfx
                 return (
                     maRangeX.isInside(rRange.maRangeX)
                     && maRangeY.isInside(rRange.maRangeY)
+                    );
+            }
+
+            sal_Bool overlaps(const B2DRange& rRange) const
+            {
+                return (
+                    maRangeX.overlaps(rRange.maRangeX)
+                    && maRangeY.overlaps(rRange.maRangeY)
                     );
             }
 

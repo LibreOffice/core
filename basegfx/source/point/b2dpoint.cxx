@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@ namespace basegfx
 {
     namespace point
     {
-        B2DPoint& B2DPoint::operator=( const B2DTuple& rPoint )
+        B2DPoint& B2DPoint::operator=( const ::basegfx::tuple::B2DTuple& rPoint )
         {
             mfX = rPoint.getX();
             mfY = rPoint.getY();
             return *this;
         }
 
-        B2DPoint& B2DPoint::operator*=( const matrix::B2DHomMatrix& rMat )
+        B2DPoint& B2DPoint::operator*=( const ::basegfx::matrix::B2DHomMatrix& rMat )
         {
             const double fTempX( rMat.get(0,0)*mfX +
                                 rMat.get(0,1)*mfY +

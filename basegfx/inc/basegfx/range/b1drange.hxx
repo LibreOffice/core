@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:43 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,11 @@ namespace basegfx
             sal_Bool isInside(const B1DRange& rRange) const
             {
                 return maRange.isInside(rRange.maRange);
+            }
+
+            sal_Bool overlaps(const B1DRange& rRange) const
+            {
+                return maRange.overlaps(rRange.maRange);
             }
 
             void expand(double fValue)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:56 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace basegfx
             return *this;
         }
 
-        B2DVector& B2DVector::operator=( const B2DTuple& rVec )
+        B2DVector& B2DVector::operator=( const ::basegfx::tuple::B2DTuple& rVec )
         {
             mfX = rVec.getX();
             mfY = rVec.getY();
@@ -118,7 +118,7 @@ namespace basegfx
 
         const B2DVector& B2DVector::getEmptyVector()
         {
-            return (const B2DVector&) B2DTuple::getEmptyTuple();
+            return (const B2DVector&) ::basegfx::tuple::B2DTuple::getEmptyTuple();
         }
 
         B2DVector& B2DVector::operator*=( const matrix::B2DHomMatrix& rMat )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace basegfx
 
             @see B2DTuple
         */
-        class B2DPoint : public tuple::B2DTuple
+        class B2DPoint : public ::basegfx::tuple::B2DTuple
         {
         public:
             /** Create a 2D Point
@@ -123,7 +123,7 @@ namespace basegfx
             /** constructor with tuple to allow copy-constructing
                 from B2DTuple-based classes
             */
-            B2DPoint(const B2DTuple& rTuple)
+            B2DPoint(const ::basegfx::tuple::B2DTuple& rTuple)
             :   B2DTuple(rTuple)
             {}
 
@@ -133,18 +133,18 @@ namespace basegfx
             /** assignment operator to allow assigning the results
                 of B2DTuple calculations
             */
-            B2DPoint& operator=( const B2DTuple& rPoint );
+            B2DPoint& operator=( const ::basegfx::tuple::B2DTuple& rPoint );
 
             /** Transform point by given transformation matrix.
 
                 The translational components of the matrix are, in
                 contrast to B2DVector, applied.
             */
-            B2DPoint& operator*=( const matrix::B2DHomMatrix& rMat );
+            B2DPoint& operator*=( const ::basegfx::matrix::B2DHomMatrix& rMat );
 
             static const B2DPoint& getEmptyPoint()
             {
-                return (const B2DPoint&) tuple::B2DTuple::getEmptyTuple();
+                return (const B2DPoint&) ::basegfx::tuple::B2DTuple::getEmptyTuple();
             }
         };
     } // end of namespace point

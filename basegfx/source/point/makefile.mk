@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:26:15 $
+#   last change: $Author: aw $ $Date: 2003-11-06 16:30:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ TARGET=point
 # --- Files -------------------------------------
 
 SLOFILES= \
-                $(SLO)$/b3dpoint.obj		\
+                $(SLO)$/b2dpoint.obj		\
                 $(SLO)$/b2dhompoint.obj		\
                 $(SLO)$/b3dpoint.obj		\
                 $(SLO)$/b3dhompoint.obj

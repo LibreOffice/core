@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:47 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace basegfx
         {
         }
 
-        B2DCubicBezier::B2DCubicBezier(const point::B2DPoint& rStart, const point::B2DPoint& rEnd)
+        B2DCubicBezier::B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd)
         :   maStartPoint(rStart),
             maEndPoint(rEnd),
             maControlPointA(rStart),
@@ -93,8 +93,8 @@ namespace basegfx
         {
         }
 
-        B2DCubicBezier::B2DCubicBezier(const point::B2DPoint& rStart, const point::B2DPoint& rControlPointA,
-            const point::B2DPoint& rControlPointB, const point::B2DPoint& rEnd)
+        B2DCubicBezier::B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rControlPointA,
+            const ::basegfx::point::B2DPoint& rControlPointB, const ::basegfx::point::B2DPoint& rEnd)
         :   maStartPoint(rStart),
             maEndPoint(rEnd),
             maControlPointA(rControlPointA),

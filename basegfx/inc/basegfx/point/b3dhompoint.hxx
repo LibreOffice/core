@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:38 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace basegfx
         {
         protected:
             /// This member contains the coordinate part of the point
-            tuple::B3DTuple                             maTuple;
+            ::basegfx::tuple::B3DTuple                  maTuple;
 
             /// This Member holds the homogenous part of the point
             double                                      mfW;

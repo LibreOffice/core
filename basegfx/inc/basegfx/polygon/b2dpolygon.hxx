@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:39 $
+ *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,11 @@ namespace basegfx
     {
         class B2DPoint;
     } // end of namespace point
+
+    namespace vector
+    {
+        class B2DVector;
+    } // end of namespace vector
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -116,18 +121,18 @@ namespace basegfx
             sal_uInt32 count() const;
 
             // Coordinate interface
-            point::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
-            void setB2DPoint(sal_uInt32 nIndex, const point::B2DPoint& rValue);
+            ::basegfx::point::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
+            void setB2DPoint(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue);
 
             // Coordinate insert/append
-            void insert(sal_uInt32 nIndex, const point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
-            void append(const point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+            void insert(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+            void append(const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
 
-            // ControlPoint interface
-            point::B2DPoint getControlPointA(sal_uInt32 nIndex) const;
-            void setControlPointA(sal_uInt32 nIndex, const point::B2DPoint& rValue);
-            point::B2DPoint getControlPointB(sal_uInt32 nIndex) const;
-            void setControlPointB(sal_uInt32 nIndex, const point::B2DPoint& rValue);
+            // ControlVector interface
+            ::basegfx::vector::B2DVector getControlVectorA(sal_uInt32 nIndex) const;
+            void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue);
+            ::basegfx::vector::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
+            void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue);
             sal_Bool areControlPointsUsed() const;
 
             // insert/append other 2D polygons
@@ -154,7 +159,7 @@ namespace basegfx
             void removeDoublePoints();
 
             // isInside tests for B2dPoint and other B2dPolygon. On border is not inside.
-            sal_Bool isInside(const point::B2DPoint& rPoint);
+            sal_Bool isInside(const ::basegfx::point::B2DPoint& rPoint);
             sal_Bool isInside(const B2DPolygon& rPolygon);
         };
     } // end of namespace polygon
