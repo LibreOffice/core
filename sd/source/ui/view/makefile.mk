@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:15:28 $
+#   last change: $Author: vg $ $Date: 2003-06-04 11:04:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,8 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         clview.cxx		\
         zoomlist.cxx	\
         unmodpg.cxx		\
-        drgrfob.cxx
+        drgrfob.cxx		\
+        WindowUpdater.cxx
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdoutl.obj  \
@@ -205,7 +206,8 @@ SLOFILES =	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
-        $(SLO)$/drgrfob.obj
+        $(SLO)$/drgrfob.obj \
+        $(SLO)$/WindowUpdater.obj
 
 
 # --- Tagets -------------------------------------------------------
