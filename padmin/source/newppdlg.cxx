@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:43:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,13 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_PPDIMPORT_DLG ) ),
         m_aOKBtn( this, PaResId( RID_PPDIMP_BTN_OK ) ),
         m_aCancelBtn( this, PaResId( RID_PPDIMP_BTN_CANCEL ) ),
-        m_aSearchBtn( this, PaResId( RID_PPDIMP_BTN_SEARCH ) ),
+        m_aPathTxt( this, PaResId( RID_PPDIMP_TXT_PATH ) ),
         m_aPathBox( this, PaResId( RID_PPDIMP_LB_PATH ) ),
+        m_aSearchBtn( this, PaResId( RID_PPDIMP_BTN_SEARCH ) ),
         m_aDriverTxt( this, PaResId( RID_PPDIMP_TXT_DRIVER ) ),
         m_aDriverLB( this, PaResId( RID_PPDIMP_LB_DRIVER ) ),
         m_aPathGroup( this, PaResId( RID_PPDIMP_GROUP_PATH ) ),
         m_aDriverGroup( this, PaResId( RID_PPDIMP_GROUP_DRIVER ) ),
-        m_aPathTxt( this, PaResId( RID_PPDIMP_TXT_PATH ) ),
         m_aLoadingPPD( PaResId( RID_PPDIMP_STR_LOADINGPPD ) )
 {
     FreeResource();
@@ -214,8 +214,6 @@ void PPDImportDialog::Import()
 
 IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
     if( pButton == &m_aCancelBtn )
     {
         EndDialog( 0 );
