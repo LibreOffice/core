@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:27:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 00:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "§R°£(~D)...";
         Text[ arabic ] = "ΝΠέ...";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "Α¦°Ε...";
+        Text[ korean ] = "Α¦°Ε(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Eliminar...";
     };
@@ -424,7 +424,7 @@ String RID_STR_BTNDEL
     Text[ chinese_traditional ] = "§R°£(~D)";
     Text[ arabic ] = "ΝΠέ...";
     Text[ greek ] = "Διαγραφή";
-    Text[ korean ] = "Α¦°Ε...";
+    Text[ korean ] = "Α¦°Ε(~D)...";
     Text[ turkish ] = "Sil...";
     Text[ catalan ] = "~Eliminar...";
 };
@@ -535,6 +535,7 @@ String RID_STR_RUN
     Text[ turkish ] = "Yόrόt";
     Text[ catalan ] = "Ejecutar";
 };
+
 
 
 
