@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-12-08 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,14 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
         InsertUndo( pUndo );
     }
 
+    BOOL bCheckLanguage = FALSE;
+    if ( GetStatus().DoOnlineSpelling() )
+    {
+        bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_ON ) ||
+                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SFX_ITEM_ON ) ||
+                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SFX_ITEM_ON );
+    }
+
     // ueber die Absaetze iterieren...
     for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
@@ -563,7 +571,11 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
         else if ( bCharAttribFound )
         {
             if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
+            {
                 pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
+                if ( bCheckLanguage )
+                    pNode->GetWrongList()->MarkInvalid( nStartPos, nEndPos );
+            }
         }
     }
 }
