@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:41:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 2, 1, 75, pVersionMap2 );
     SetVersionMap( 3, 1, 86, pVersionMap3 );
     SetVersionMap( 4, 1,121, pVersionMap4 );
+    // OD 2004-01-21 #i18732# - apply new version map
+    SetVersionMap( 5, 1,130, pVersionMap5 );
 }
 
 
