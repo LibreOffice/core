@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:46:26 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,9 @@ static void getPaLib()
     }
 }
 
-inline PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
+inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
 
-inline TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
+inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
 
 static struct
 {
