@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,21 +80,13 @@ enum { CB_NOCHECK, CB_CHECK, CB_DONTKNOW };
 //= OCheckBoxModel
 //==================================================================
 class OCheckBoxModel    :public OBoundControlModel
-                        ,public OPropertyChangeListener
                         ,public ::comphelper::OAggregationArrayUsageHelper< OCheckBoxModel >
 {
-    ::rtl::OUString     m_sReferenceValue;  // Referenzwert zum Checken des Buttons
-    sal_Int16           m_nDefaultChecked;      // Soll beim Reset gecheckt werden ?
-    sal_Bool            m_bInReset;
-
-    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
+    ::rtl::OUString     m_sReferenceValue;              // Referenzwert zum Checken des Buttons
+    sal_Int16           m_nDefaultChecked;              // Soll beim Reset gecheckt werden ?
 
 protected:
     sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
-
-    virtual void            _onValueChanged();
-    virtual void            _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual ::com::sun::star::uno::Any  _getControlValue() const;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OCheckBoxModel );
@@ -122,13 +114,7 @@ public:
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    // OPropertyChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-
-    // XReset
-    virtual void SAL_CALL reset() throw(::com::sun::star::uno::RuntimeException);
-
-// OAggregationArrayUsageHelper
+    // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
@@ -136,15 +122,23 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
-    virtual void SAL_CALL disposing();
-
-protected:
-    virtual void        _reset();
-    virtual sal_Bool    _commit();
-
-    void implConstruct();
-
     DECLARE_XCLONEABLE();
+
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+    virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( );
+    virtual ::com::sun::star::uno::Any
+                            translateControlValueToExternalValue( );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
 };
 
 //==================================================================
