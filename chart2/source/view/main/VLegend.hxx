@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-08 17:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,22 @@
 #ifndef _VLEGEND_HXX
 #define _VLEGEND_HXX
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
+#include <drafts/com/sun/star/chart2/XDataSeriesTreeParent.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -72,6 +88,42 @@ namespace chart
 
 class VLegend
 {
+public:
+    VLegend( const ::com::sun::star::uno::Reference<
+                 ::drafts::com::sun::star::chart2::XLegend > & xLegend );
+
+    void SAL_CALL init( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShapes >& xTargetPage,
+                        const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+
+    void createShapes();
+
+    void setMaxSize( const ::com::sun::star::awt::Size & rSize );
+
+    void changePosition( const ::com::sun::star::awt::Point & rPos );
+
+protected:
+
+    void createLegendEntries(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes > & xShapeContainer,
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xParent,
+        sal_Int32 & nOutCurrentHeight );
+
+private:
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes >            m_xTarget;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
+    ::com::sun::star::uno::Reference<
+                    ::drafts::com::sun::star::chart2::XLegend >     m_xLegend;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShape >             m_xShape;
+
+    ::com::sun::star::awt::Size                                     m_aMaxSize;
+    ::com::sun::star::awt::Rectangle                                m_aBoundRect;
 };
 
 //.............................................................................

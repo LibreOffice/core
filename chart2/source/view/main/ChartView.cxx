@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-08 17:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "TitleHelper.hxx"
+#include "LegendHelper.hxx"
+#include "VLegend.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
 #include <drafts/com/sun/star/chart2/AxisOrientation.hpp>
@@ -230,7 +232,7 @@ void getCoordinateOrigin( double* fCoordinateOrigin, const uno::Reference< XBoun
     }
     catch( uno::Exception& ex)
     {
-        ex;
+        ASSERT_EXCEPTION( ex );
     }
 }
 
@@ -264,7 +266,7 @@ sal_Int32 getDimension( const uno::Reference< XDiagram >& xDiagram )
             }
             catch( beans::UnknownPropertyException ex )
             {
-                ex;
+                ASSERT_EXCEPTION( ex );
             }
             break;
         }
@@ -300,7 +302,7 @@ sal_Int32 getDimension( const uno::Reference< XDiagram >& xDiagram )
 const VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem >& rVCooSysList
                                     , const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
 {
-    for( sal_Int32 nC=0; nC < rVCooSysList.size(); nC++)
+    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
     {
         const VCoordinateSystem& rVCooSys = rVCooSysList[nC];
         if(rVCooSys.getModel()==xCooSys)
@@ -333,7 +335,7 @@ void getAxesAndAddToCooSys( uno::Sequence< uno::Reference< XAxis > >& rAxisList
         for( sal_Int32 nA = 0; nA < rAxisList.getLength(); nA++ )
         {
             uno::Reference< XAxis > xAxis( rAxisList[nA] );
-            for( sal_Int32 nC=0; nC < rVCooSysList.size(); nC++)
+            for( size_t nC=0; nC < rVCooSysList.size(); nC++)
             {
                 if(xAxis->getCoordinateSystem() == rVCooSysList[nC].getModel() )
                 {
@@ -355,7 +357,7 @@ void addGridsToCooSys(  const uno::Reference< XDiagram >& xDiagram
         for( sal_Int32 nA = 0; nA < aGridList.getLength(); nA++ )
         {
             uno::Reference< XGrid > xGrid( aGridList[nA] );
-            for( sal_Int32 nC=0; nC < rVCooSysList.size(); nC++)
+            for( size_t nC=0; nC < rVCooSysList.size(); nC++)
             {
                 if(xGrid->getCoordinateSystem() == rVCooSysList[nC].getModel() )
                 {
@@ -435,7 +437,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                     addCooSysToList(rVCooSysList,xScaleGroup->getCoordinateSystem(),fCoordinateOrigin);
                 }
 
-                uno::Reference< XStackableScaleGroup > xStackGroup = uno::Reference< XStackableScaleGroup >::query( xYSlot );
+                xStackGroup.set( uno::Reference< XStackableScaleGroup >::query( xYSlot ));
                 StackMode aYStackMode = StackMode_NONE;
                 if(xStackGroup.is())
                     aYStackMode = xStackGroup->getStackMode();
@@ -448,12 +450,12 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
 
                     VDataSeries* pTestSeries = new VDataSeries( xDataSeries, getDefaultStyle(nS) );
                     //virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
-                    sal_Int32 nXSlot = 0;
+                    sal_Int32 nXSlot2 = 0;
                     if(aYStackMode==StackMode_NONE)
-                        nXSlot=-1;
+                        nXSlot2=-1;
                     //@todo
-                    apPlotter->addSeries( pTestSeries, nXSlot );
-                   // apPlotter->addSeries( pTestSeries, nXSlot, nYSlot );
+                    apPlotter->addSeries( pTestSeries, nXSlot2 );
+                   // apPlotter->addSeries( pTestSeries, nXSlot2, nYSlot );
                     /*
                     if(nN==nSeriesCount-1)
                         apPlotter->addSeries( pTestSeries, -1 );
@@ -472,7 +474,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
 
 
         //------------ iterate through all coordinate systems
-        for( sal_Int32 nC=0; nC < rVCooSysList.size(); nC++)
+        for( size_t nC=0; nC < rVCooSysList.size(); nC++)
         {
             //------------ create explicit scales and increments
             VCoordinateSystem& rVCooSys = rVCooSysList[nC];
@@ -550,19 +552,22 @@ void ChartViewImpl::getExplicitValuesForMeter(
     rfExplicitOrigin = pVCooSys->getOriginByDimension( nDim );
 }
 
-bool getPosAndSizeForDiagram( awt::Point& rPos, awt::Size& rSize, const awt::Size& rPageSize, sal_Int32 nYOffset )
+bool getPosAndSizeForDiagram(
+    awt::Point& rPos, awt::Size& rSize, const awt::Size& rPageSize,
+    sal_Int32 nXOffsetFromRight, sal_Int32 nYOffset )
 {
     if(rPageSize.Width <= 0 || rPageSize.Height <= 0 )
         return false;
 
-    long nHeight = (rPageSize.Height-nYOffset)*5/6;
+    long nHeight = (rPageSize.Height-nYOffset) * 5 / 6;
     long nOffsetY = (rPageSize.Height-nYOffset)-nHeight;
     nOffsetY /= 2;
     nOffsetY += nYOffset;
 
-    long nWidth = rPageSize.Width*5/6;
+    long nWidth = (rPageSize.Width) * 5 / 6;
     long nOffsetX = rPageSize.Width-nWidth;
     nOffsetX /= 2;
+    nWidth -= nXOffsetFromRight;
 
     if( nHeight <= 0 || nWidth <= 0 )
         return false;
@@ -591,13 +596,38 @@ void createTitle( const uno::Reference< XTitle >& xTitle
     }
 }
 
+void createLegend( const uno::Reference< XLegend > & xLegend
+                   , awt::Rectangle & rOutSpaceLeft
+                   , const uno::Reference< drawing::XShapes>& xPageShapes
+                   , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+    )
+{
+    if( xLegend.is())
+    {
+        VLegend aVLegend( xLegend );
+        aVLegend.init( xPageShapes, xShapeFactory );
+        // legend width is 1/6 of the total space
+        long nWidth = rOutSpaceLeft.Width / 6;
+        aVLegend.setMaxSize( awt::Size( nWidth, rOutSpaceLeft.Height ));
+        aVLegend.createShapes();
+        // legend is anchored to (right/middle) position
+        aVLegend.changePosition(
+            awt::Point( rOutSpaceLeft.X + rOutSpaceLeft.Width,
+                        rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)));
+
+        rOutSpaceLeft.Width -= nWidth;
+    }
+}
+
 bool ChartViewImpl::create( const awt::Size& rPageSize )
 {
     uno::Reference<drawing::XShapes> xPageShapes =
         uno::Reference<drawing::XShapes>( m_xDrawPage, uno::UNO_QUERY );
 
+    sal_Int32 nXOffsetFromRight = 0;
     sal_Int32 nYOffset = 0;
     sal_Int32 nXPosition = rPageSize.Width/2;
+//     sal_Int32 nYPosition = rPageSize.Height/2;
 
     //------------ create main title shape
     createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel )
@@ -611,10 +641,18 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     if(nYOffset>=rPageSize.Height)
         return true;
 
+    //------------ create legend
+    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height );
+    createLegend( LegendHelper::getLegend( m_xChartModel )
+                  , aSpaceLeft, xPageShapes, m_xShapeFactory );
+    // assume that the legend is on the right
+    // todo: adapt diagram size to correct legend position
+    nXOffsetFromRight = rPageSize.Width - aSpaceLeft.Width;
+
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
     awt::Size  aSizeDia;
-    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, rPageSize, nYOffset ) )
+    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, rPageSize, nXOffsetFromRight, nYOffset ) )
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
                     , aPosDia ,aSizeDia

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-08 17:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,40 @@
 #include "LegendHelper.hxx"
 #include "macros.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
+// static
 rtl::OUString LegendHelper::getIdentifierForLegend()
 {
     static rtl::OUString m_aIdentifier( C2U( "@legend" ) );
     return m_aIdentifier;
+}
+
+// static
+uno::Reference< chart2::XLegend > LegendHelper::getLegend(
+    const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< chart2::XLegend > xResult;
+
+    uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+    if( xChartDoc.is())
+    {
+        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getDiagram());
+        if( xDia.is())
+            xResult.set( xDia->getLegend() );
+    }
+
+    return xResult;
 }
 
 //.............................................................................

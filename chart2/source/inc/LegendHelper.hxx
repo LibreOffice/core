@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2003-10-08 17:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -79,6 +86,11 @@ class LegendHelper
 {
 public:
     static rtl::OUString getIdentifierForLegend();
+
+    static ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XLegend >
+        getLegend( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xModel );
 };
 
 //.............................................................................
