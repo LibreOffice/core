@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:52:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_SELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -195,7 +198,15 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
 void SAL_CALL AccessibleComponentBase::grabFocus (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Ignored
+    uno::Reference<XAccessibleContext> xContext (this, uno::UNO_QUERY);
+    uno::Reference<XAccessibleSelection> xSelection (
+        xContext->getAccessibleParent(), uno::UNO_QUERY);
+    if (xSelection.is())
+    {
+        // Do a single selection on this object.
+        xSelection->clearAccessibleSelection();
+        xSelection->selectAccessibleChild (xContext->getAccessibleIndexInParent());
+    }
 }
 
 
