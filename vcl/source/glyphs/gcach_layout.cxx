@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.6 $
- *  last change: $Author: hdu $ $Date: 2002-04-30 08:20:07 $
+ *  $Revision: 1.7 $
+ *  last change: $Author: hdu $ $Date: 2002-05-29 17:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
     Point aNewPos( 0, 0 );
     bool bWantFallback = false;
     int nOldGlyphId = -1;
+    int nGlyphWidth = 0;
     for( int i = 0; i < nGlyphCount; ++i )
     {
         int nLogicalIndex = bRightToLeft ? rArgs.mnEndCharIndex-1-i : rArgs.mnFirstCharIndex+i;
@@ -166,22 +167,60 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
         if( !nGlyphIndex )
             bWantFallback = true;
 
+        // apply pair kerning if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
             int nKern = pFont->GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            aNewPos += Point( nKern, 0 );
+            nGlyphWidth += nKern;
             nOldGlyphId = nGlyphIndex;
         }
-        // TODO: apply asian kerning if requested too
+
+        // update position of this glyph using all previous info
+        aNewPos.X() += nGlyphWidth;
 
         const GlyphMetric& rGM = pFont->GetGlyphMetric( nGlyphIndex );
-        int nGlyphWidth = rGM.GetCharWidth();
+        nGlyphWidth = rGM.GetCharWidth();
         pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos,
             GlyphItem::CLUSTER_START, nGlyphWidth );
-
-        aNewPos += Point( nGlyphWidth, 0 );
     }
 
+    // apply asian kerning if requested
+    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
+    &&  !rArgs.mpDXArray && !rArgs.mnLayoutWidth && !bRightToLeft )
+    {
+        bool bVertical = false; // TODO
+
+        const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnFirstCharIndex;
+        // #99658# also do asian kerning one beyond substring
+        int nLen = nGlyphCount;
+        if( rArgs.mnFirstCharIndex + nLen < rArgs.mnLength )
+            ++nLen;
+        long nOffset = 0;
+        for( int i = 1; i < nLen; ++i )
+        {
+            if( (0x3000 == (0xFF00 & pStr[i-1]))
+            &&  (0x3000 == (0xFF00 & pStr[i])) )
+            {
+                long nKernFirst = +SalLayout::CalcAsianKerning( pStr[i-1], true, bVertical );
+                long nKernNext  = -SalLayout::CalcAsianKerning( pStr[i], false, bVertical );
+
+                long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
+                if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
+                {
+                    nGlyphWidth = pGlyphBuffer[i-1].mnWidth;
+                    nDelta = (nDelta * nGlyphWidth + 2) / 4;
+                    if( i == nGlyphCount )
+                        pGlyphBuffer[i].mnWidth += nDelta;
+                    nOffset += nDelta;
+                }
+            }
+
+            if( i < nGlyphCount )
+                pGlyphBuffer[i].maLinearPos.X() += nOffset;
+        }
+    }
+
+    // create layout object
     ServerFontLayout* pSalLayout = new ServerFontLayout( pFont, rArgs );
     pSalLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
     pSalLayout->SetWantFallback( bWantFallback );
@@ -344,7 +383,7 @@ float IcuFontFromServerFont::getXPixelsPerEm() const
     const ImplFontSelectData& r = mpServerFont->GetFontSelData();
     float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
 #ifdef DEBUG
-    fprintf(stderr,"mnWidth %d\n",(int)fX);
+    fprintf(stderr,"mnXPixel4PM %f\n", fX );
 #endif
     return fX;
 }
@@ -355,7 +394,7 @@ float IcuFontFromServerFont::getYPixelsPerEm() const
 {
     float fY = mpServerFont->GetFontSelData().mnHeight;
 #ifdef DEBUG
-    fprintf(stderr,"mnHeight %d\n",(int)fY);
+    fprintf(stderr,"mnYPixel4EM %f\n", fY );
 #endif
     return fY;
 }
@@ -364,13 +403,14 @@ float IcuFontFromServerFont::getYPixelsPerEm() const
 
 float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"xu2p\n");
-#endif
     // assumption: pixels==points
     float fPoints = xUnits;
-    fPoints *= mpServerFont->GetFontSelData().mnWidth;
+    const ImplFontSelectData& r = mpServerFont->GetFontSelData();
+    fPoints *= r.mnWidth ? r.mnWidth : r.mnHeight;
     fPoints /= mpServerFont->GetEmUnits();
+#ifdef DEBUG
+    fprintf(stderr,"xu2p( %f ) => %f\n", xUnits, fPoints );
+#endif
     return fPoints;
 }
 
@@ -378,13 +418,13 @@ float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 
 float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"yu2p\n");
-#endif
-    // assumption: pixels==points
+    // TODO: remove assumption pixels==points
     float fPoints = yUnits;
     fPoints *= mpServerFont->GetFontSelData().mnHeight;
     fPoints /= mpServerFont->GetEmUnits();
+#ifdef DEBUG
+    fprintf(stderr,"yu2p( %f ) => %f\n", yUnits, fPoints );
+#endif
     return fPoints;
 }
 
@@ -403,12 +443,14 @@ void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) con
 
 float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"xp2u\n");
-#endif
     float fPixels = xPixels;
     fPixels *= mpServerFont->GetEmUnits();
-    fPixels /= mpServerFont->GetFontSelData().mnWidth;
+    const ImplFontSelectData& r = mpServerFont->GetFontSelData();
+    fPixels /= r.mnWidth ? r.mnWidth : r.mnHeight;
+#ifdef DEBUG
+    fprintf(stderr,"xp2u( %f ) => %f\n", xPixels, fPixels );
+    fprintf(stderr,"\t* em=%d / mnW=%d\n", mpServerFont->GetEmUnits(), mpServerFont->GetFontSelData().mnWidth );
+#endif
     return fPixels;
 }
 
@@ -416,12 +458,12 @@ float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
 
 float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"yp2u\n");
-#endif
     float fPixels = yPixels;
     fPixels *= mpServerFont->GetEmUnits();
     fPixels /= mpServerFont->GetFontSelData().mnHeight;
+#ifdef DEBUG
+    fprintf(stderr,"yp2u( %f ) => %f\n", yPixels, fPixels );
+#endif
     return fPixels;
 }
 
@@ -429,25 +471,25 @@ float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 
 void IcuFontFromServerFont::pixelsToUnits( LEPoint &pixels, LEPoint &units ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"pp2u\n");
-#endif
     units.fX = xPixelsToUnits( pixels.fX );
     units.fY = yPixelsToUnits( pixels.fY );
+#ifdef DEBUG
+    fprintf(stderr,"pp2u( %f, %f ) => ( %f, %f )\n", pixels.fX, pixels.fY, units.fX, units.fY );
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void IcuFontFromServerFont::transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"tfu\n");
-#endif
     //TODO: replace dummy implementation
     Point aOrig( (int)(xFunits + 0.5), (int)(yFunits + 0.5) );
     Point aDest = mpServerFont->TransformPoint( aOrig );
     pixels.fX = aDest.X();
     pixels.fY = aDest.Y();
+#ifdef DEBUG
+    fprintf(stderr,"tfu( %f, %f ) => ( %f, %f )\n", xFunits, yFunits, pixels.fX, pixels.fY );
+#endif
 }
 
 // =======================================================================
@@ -519,7 +561,7 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
         // TODO: cache multiple layout engines when multiple scripts are used
         delete mpIcuLE;
         meScriptCode = eScriptCode;
-        le_int32 eLangCode = 0;
+        le_int32 eLangCode = 0; // TODO: get better value
         mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, rcIcu );
         if( LE_FAILURE(rcIcu) )
         {
