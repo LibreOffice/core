@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:03:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ String CorrespondenceMsgError
     Text[ portuguese_brazilian ] = "Erro";
     Text[ japanese ] = "エラーが発生しました。";
     Text[ korean ] = "오류가 발생했습니다.";
-    Text[ chinese_simplified ] = "已经发生一个错误！";
+    Text[ chinese_simplified ] = "发生错误";
     Text[ chinese_traditional ] = "已經發生一個錯誤！";
     Text[ arabic ] = "���";
     Text[ turkish ] = "Hata olu�tu.";
