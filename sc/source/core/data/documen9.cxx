@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:05:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,72 +386,72 @@ void ScDocument::DeleteColorTable()
     delete pColorTable;
 }
 
-void ScDocument::LoadDrawLayer(SvStream& rStream)
-{
-    InitDrawLayer();                        // anlegen
-    pDrawLayer->Load(rStream);
+//BFS03void ScDocument::LoadDrawLayer(SvStream& rStream)
+//BFS03{
+//BFS03 InitDrawLayer();                        // anlegen
+//BFS03 pDrawLayer->Load(rStream);
+//BFS03
+//BFS03 //  nMaxTableNumber ist noch nicht initialisiert
+//BFS03
+//BFS03 sal_uInt16 nTableCount = 0;
+//BFS03 while ( nTableCount <= MAXTAB && pTab[nTableCount] )
+//BFS03     ++nTableCount;
+//BFS03
+//BFS03 sal_uInt16 nPageCount = pDrawLayer->GetPageCount();
+//BFS03 if ( nPageCount > nTableCount && nTableCount != 0 )
+//BFS03 {
+//BFS03     //  Manchmal sind beim Kopieren/Verschieben/Undo von Tabellen zuviele
+//BFS03     //  (leere) Pages in der Tabelle stehengeblieben. Weg damit!
+//BFS03
+//BFS03     DBG_ERROR("zuviele Draw-Pages in der Datei");
+//BFS03
+//BFS03     for (sal_uInt16 i=nTableCount; i<nPageCount; i++)
+//BFS03         pDrawLayer->DeletePage(nTableCount);
+//BFS03 }
+//BFS03
+//BFS03 //  Controls auf richtigen Layer setzen
+//BFS03 //  (zumindest in Dateien aus der 502 koennen sie falsch sein,
+//BFS03 //   wegen des fehlenden Layers in alten Dateien)
+//BFS03
+//BFS03 nPageCount = pDrawLayer->GetPageCount();
+//BFS03 for (sal_uInt16 i=0; i<nPageCount; i++)
+//BFS03 {
+//BFS03     SdrPage* pPage = pDrawLayer->GetPage(i);
+//BFS03     SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+//BFS03     SdrObject* pObject = aIter.Next();
+//BFS03     while (pObject)
+//BFS03     {
+//BFS03         if ( pObject->ISA(SdrUnoObj) && pObject->GetLayer() != SC_LAYER_CONTROLS )
+//BFS03         {
+//BFS03             pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+//BFS03             DBG_ERROR("Control war auf falschem Layer");
+//BFS03         }
+//BFS03         pObject = aIter.Next();
+//BFS03     }
+//BFS03 }
+//BFS03}
 
-    //  nMaxTableNumber ist noch nicht initialisiert
-
-    sal_uInt16 nTableCount = 0;
-    while ( nTableCount <= MAXTAB && pTab[nTableCount] )
-        ++nTableCount;
-
-    sal_uInt16 nPageCount = pDrawLayer->GetPageCount();
-    if ( nPageCount > nTableCount && nTableCount != 0 )
-    {
-        //  Manchmal sind beim Kopieren/Verschieben/Undo von Tabellen zuviele
-        //  (leere) Pages in der Tabelle stehengeblieben. Weg damit!
-
-        DBG_ERROR("zuviele Draw-Pages in der Datei");
-
-        for (sal_uInt16 i=nTableCount; i<nPageCount; i++)
-            pDrawLayer->DeletePage(nTableCount);
-    }
-
-    //  Controls auf richtigen Layer setzen
-    //  (zumindest in Dateien aus der 502 koennen sie falsch sein,
-    //   wegen des fehlenden Layers in alten Dateien)
-
-    nPageCount = pDrawLayer->GetPageCount();
-    for (sal_uInt16 i=0; i<nPageCount; i++)
-    {
-        SdrPage* pPage = pDrawLayer->GetPage(i);
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
-        {
-            if ( pObject->ISA(SdrUnoObj) && pObject->GetLayer() != SC_LAYER_CONTROLS )
-            {
-                pObject->NbcSetLayer(SC_LAYER_CONTROLS);
-                DBG_ERROR("Control war auf falschem Layer");
-            }
-            pObject = aIter.Next();
-        }
-    }
-}
-
-void ScDocument::StoreDrawLayer(SvStream& rStream) const
-{
-    if (pDrawLayer)
-    {
-        //  SetSavePortable wird mit VCL nicht mehr gebraucht
-        //BOOL bIndep = SFX_APP()->GetOptions().IsIndepGrfFmt();
-        //pDrawLayer->SetSavePortable( bIndep );
-
-        SvtSaveOptions aSaveOpt;
-        SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
-
-        BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
-        BOOL bCompr = bNative || ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
-
-        pDrawLayer->SetSaveCompressed( bCompr );
-        pDrawLayer->SetSaveNative( bNative );
-
-        pDrawLayer->GetItemPool().SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-        pDrawLayer->Store(rStream);
-    }
-}
+//BFS03void ScDocument::StoreDrawLayer(SvStream& rStream) const
+//BFS03{
+//BFS03 if (pDrawLayer)
+//BFS03 {
+//BFS03     //  SetSavePortable wird mit VCL nicht mehr gebraucht
+//BFS03     //BOOL bIndep = SFX_APP()->GetOptions().IsIndepGrfFmt();
+//BFS03     //pDrawLayer->SetSavePortable( bIndep );
+//BFS03
+//BFS03     SvtSaveOptions aSaveOpt;
+//BFS03     SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
+//BFS03
+//BFS03     BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
+//BFS03     BOOL bCompr = bNative || ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
+//BFS03
+//BFS03     pDrawLayer->SetSaveCompressed( bCompr );
+//BFS03     pDrawLayer->SetSaveNative( bNative );
+//BFS03
+//BFS03     pDrawLayer->GetItemPool().SetFileFormatVersion( (USHORT)rStream.GetVersion() );
+//BFS03     pDrawLayer->Store(rStream);
+//BFS03 }
+//BFS03}
 
 BOOL ScDocument::DrawGetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
 {
