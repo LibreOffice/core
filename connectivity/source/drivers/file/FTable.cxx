@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 10:43:21 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #ifndef _CONNECTIVITY_FILE_TABLE_HXX_
 #include "file/FTable.hxx"
 #endif
@@ -93,6 +95,7 @@ OFileTable::OFileTable(OConnection* _pConnection) : OTable_TYPEDEF(_pConnection-
                 ,m_nFilePos(0)
                 ,m_nBufferSize(0)
                 ,m_pBuffer(NULL)
+                ,m_pFileStream(NULL)
 {
     construct();
     ::std::vector< ::rtl::OUString> aVector;
@@ -116,6 +119,7 @@ OFileTable::OFileTable( OConnection* _pConnection,
                 ,m_nFilePos(0)
                 ,m_nBufferSize(0)
                 ,m_pBuffer(NULL)
+                ,m_pFileStream(NULL)
 {
     m_aColumns = new OSQLColumns();
     construct();
