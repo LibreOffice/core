@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-02 15:25:46 $
+ *  last change: $Author: vg $ $Date: 2002-09-11 09:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <svx/writingmodeitem.hxx>
+#include "writingmodeitem.hxx"
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include <escherex.hxx>
