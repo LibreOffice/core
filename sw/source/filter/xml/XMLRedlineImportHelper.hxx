@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ public:
         const ::rtl::OUString& rId,         /// use to identify this redline
         const ::rtl::OUString& rAuthor,     /// name of the author
         const ::rtl::OUString& rComment,    /// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime);     /// date+time
+        const ::com::sun::star::util::DateTime& rDateTime, /// date+time
+        sal_Bool bMergeLastParagraph);      /// merge last paragraph?
 
     /// create a text section for the redline, and return an
     /// XText/XTextCursor that may be used to write into it.

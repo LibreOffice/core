@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ public:
         const ::rtl::OUString& rId,         /// use to identify this redline
         const ::rtl::OUString& rAuthor,     /// name of the author
         const ::rtl::OUString& rComment,    /// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime);     /// date+time
+        const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
+        sal_Bool bMergeLastPara);           /// merge last paragraph
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
             ::com::sun::star::uno::Reference<   /// needed to get the document

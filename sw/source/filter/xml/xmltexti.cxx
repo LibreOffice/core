@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,12 +745,14 @@ void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,
-    const util::DateTime& rDateTime)
+    const util::DateTime& rDateTime,
+    sal_Bool bMergeLastPara)
 {
     // create redline helper on demand
     DBG_ASSERT(NULL != pRedlineHelper, "helper should have been created in constructor");
     if (NULL != pRedlineHelper)
-        pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
+        pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
+                            bMergeLastPara);
 }
 
 Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(

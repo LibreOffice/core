@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,6 @@ sal_Bool XTextRangeOrNodeIndexPosition::IsValid()
 }
 
 
-
 //
 // RedlineInfo: temporary storage for redline data
 //
@@ -297,6 +296,7 @@ public:
     OUString sAuthor;               /// change author string
     OUString sComment;              /// change comment string
     util::DateTime aDateTime;       /// change DateTime
+    sal_Bool bMergeLastParagraph;   /// the SwRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -311,6 +311,9 @@ public:
 
     /// next redline info (for hierarchical redlines)
     RedlineInfo* pNextRedline;
+
+    /// store whether we expect an adjustment for this redline
+    sal_Bool bNeedsAdjustment;
 };
 
 RedlineInfo::RedlineInfo() :
@@ -321,7 +324,9 @@ RedlineInfo::RedlineInfo() :
     aAnchorStart(),
     aAnchorEnd(),
     pContentIndex(NULL),
-    pNextRedline(NULL)
+    pNextRedline(NULL),
+    bNeedsAdjustment( sal_False ),
+    bMergeLastParagraph( sal_False )
 {
 }
 
@@ -386,11 +391,36 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 {
     // delete all left over (and obviously incomplete) RedlineInfos (and map)
     RedlineMapType::iterator aFind = aRedlineMap.begin();
-    if (aRedlineMap.end() != aFind)
+    for( ; aRedlineMap.end() != aFind; aFind++ )
     {
-        // get RedlineInfo* and delete; the RedlineInfo should not be complete
         RedlineInfo* pInfo = aFind->second;
-        DBG_ASSERT(! IsReady(pInfo), "forgotten RedlineInfo (now deleted)");
+
+        // left-over redlines. Insert them if possible (but assert),
+        // and delete the incomplete ones. Finally, delete it.
+        if( IsReady(pInfo) )
+        {
+            DBG_ERROR("forgotten RedlineInfo; now inserted");
+            InsertIntoDocument( pInfo );
+        }
+        else
+        {
+            // try if only the adjustment was missing
+            pInfo->bNeedsAdjustment = sal_False;
+            if( IsReady(pInfo) )
+            {
+                DBG_ERROR("RedlineInfo without adjustment; now inserted");
+                InsertIntoDocument( pInfo );
+            }
+            else
+            {
+                // this situation occurs if redlines aren't closed
+                // (i.e. end without start, or start without
+                // end). This may well be a problem in the file,
+                // rather than the code.
+                DBG_ERROR("incomplete redline (maybe file was corrupt); "
+                          "now deleted");
+            }
+        }
         delete pInfo;
     }
     aRedlineMap.clear();
@@ -437,7 +467,8 @@ void XMLRedlineImportHelper::Add(
     const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,
-    const util::DateTime& rDateTime)
+    const util::DateTime& rDateTime,
+    sal_Bool bMergeLastPara)
 {
     // we need to do the following:
     // 1) parse type string
@@ -474,6 +505,7 @@ void XMLRedlineImportHelper::Add(
     pInfo->sAuthor = rAuthor;
     pInfo->sComment = rComment;
     pInfo->aDateTime = rDateTime;
+    pInfo->bMergeLastParagraph = bMergeLastPara;
 
 
     // ad 3)
@@ -557,9 +589,16 @@ void XMLRedlineImportHelper::SetCursor(
         {
             // outside of paragraph: remember SwNodeIndex
             if (bStart)
+            {
                 pInfo->aAnchorStart.SetAsNodeIndex(rRange);
+            }
             else
+            {
                 pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
+            }
+
+            // also remember that we expect an adjustment for this redline
+            pInfo->bNeedsAdjustment = sal_True;
         }
         else
         {
@@ -601,54 +640,15 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
 
-        DBG_ASSERT(pInfo->aAnchorStart.IsValid(),
-                   "AdjustStartNodeCursor may only be called after SetCursor");
-        if (!pInfo->aAnchorStart.IsValid())
-            return;
+        pInfo->bNeedsAdjustment = sal_False;
 
-        SwDoc* pDoc = pInfo->aAnchorStart.GetDoc();
-
-
-        // OK, we have the redline. Now find the proper start node for
-        // the range and do the necessary sanity checking. If
-        // successful, set the start node as the new redline start.
-        SwUnoInternalPaM aUnoPaM(*pDoc);
-        sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM(aUnoPaM, rRange);
-        DBG_ASSERT(bSuccess, "illegal range");
-
-        // adjustment only supported for tables and sections
-        SwNode& rNode = aUnoPaM.GetPoint()->nNode.GetNode();
-        SwNode* pTblNode = rNode.FindTableNode();
-        SwNode* pSctnNode = rNode.FindSectionNode();
-        if ((NULL != pTblNode) || (NULL != pSctnNode))
+        // if now ready, insert into document
+        if( IsReady(pInfo) )
         {
-            // find the closest
-            SwNode* pStartNode = NULL;
-            if (pTblNode == NULL)
-            {
-                pStartNode = pSctnNode;
-            }
-            else if (pSctnNode == NULL)
-            {
-                pStartNode = pTblNode;
-            }
-            else
-            {
-                pStartNode = (pSctnNode->GetIndex() > pTblNode->GetIndex()) ?
-                    pSctnNode : pTblNode;
-            }
-
-            // pStartNode is our start node candidate. Now check for distance
-            // between previous start node
-            // ...skip for now
-
-            SwNodeIndex aIndex(pStartNode->GetDoc()->GetNodes(),
-                               pStartNode->GetIndex());
-            pInfo->aAnchorStart.Set(aIndex);
+            InsertIntoDocument(pInfo);
+            aRedlineMap.erase(rId);
+            delete pInfo;
         }
-        // else: we are neither inside a table nor a section -> ignore
-
-
     }
     // else: can't find redline -> ignore
 }
@@ -656,8 +656,11 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
 
 inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 {
+    // we can insert a redline if we have start & end, and we don't
+    // expect adjustments for either of these
     return ( pRedline->aAnchorEnd.IsValid() &&
-             pRedline->aAnchorStart.IsValid()   );
+             pRedline->aAnchorStart.IsValid() &&
+             !pRedline->bNeedsAdjustment );
 }
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
@@ -708,8 +711,16 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
         // create redline (using pRedlineData which gets copied in SwRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
-        SwRedline* pRedline = new SwRedline(*pRedlineData, aPaM);
-        delete pRedlineData;
+        SwRedline* pRedline =
+            new SwRedline( pRedlineData, *aPaM.GetPoint(), TRUE,
+                           !pRedlineInfo->bMergeLastParagraph, FALSE );
+
+        // set mark
+        if( aPaM.HasMark() )
+        {
+            pRedline->SetMark();
+            *(pRedline->GetMark()) = *aPaM.GetMark();
+        }
 
         // set content node (if necessary)
         if (NULL != pRedlineInfo->pContentIndex)
