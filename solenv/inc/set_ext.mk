@@ -2,9 +2,9 @@
 #
 #   $RCSfile: set_ext.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-17 15:11:09 $
+#   last change: $Author: hjs $ $Date: 2001-10-08 17:29:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,13 @@
 #
 #*************************************************************************
 
+.IF "$(OS)"=="SOLARIS"
+wrapper_override_cc_wrapper=AUTO
+#wrapper_override_cc_wrapper=FALSE
+wrapper_use_clean_sourcecheck=TRUE
+.ENDIF          # "$(OS)"=="SOLARIS"
 
+.EXPORT : wrapper_override_cc_wrapper wrapper_use_clean_sourcecheck
 
 #defaults
 TARFILE_ROOTDIR*=$(TARFILE_NAME)
