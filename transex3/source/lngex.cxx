@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bUTF8;
 BOOL bULF; // ULF = Unicode Language File
+bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
@@ -98,6 +99,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bErrorLog = TRUE;
     bUTF8 = TRUE;
     bULF = FALSE;
+    bQuiet = false;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
@@ -118,6 +120,9 @@ BOOL ParseCommandLine( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-QQ" ) {
+            bQuiet = true;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
@@ -221,25 +226,29 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
-    fprintf( stdout, "\nUlfEx 1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
-    fprintf( stdout, "====================================================================\n" );
-
     if ( !ParseCommandLine( argc, argv )) {
         Help();
         return 1;
     }
-
-    fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
+    if( !bQuiet ){
+        fprintf( stdout, "\nUlfEx 1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
+        fprintf( stdout, "====================================================================\n" );
+        fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
+    }else
+    {
+        fprintf(stdout, ".");
+        fflush( stdout );
+    }
 
     if ( sOutputFile.Len()) {
-        LngParser aParser( sInputFile, bUTF8, bULF );
+        LngParser aParser( sInputFile, bUTF8, bULF , bQuiet );
         if ( bMergeMode )
             aParser.Merge( sMergeSrc, sOutputFile );
         else
             aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }
 
-    fprintf( stdout, "\n=================================================\n\n" );
+    if( !bQuiet ) fprintf( stdout, "\n=================================================\n\n" );
 
     return 0;
 }
