@@ -1,0 +1,58 @@
+package org.openoffice.netbeans.modules.office.actions;
+
+import org.openide.nodes.Node;
+import org.openide.util.HelpCtx;
+import org.openide.util.RequestProcessor;
+import org.openide.util.actions.CookieAction;
+
+/**
+ *
+ * @author  adams
+ * @version 1.0
+ */
+public class MountDocumentAction extends CookieAction
+{
+    public MountDocumentAction()
+    {
+    }
+
+    public java.lang.String getName()
+    {
+        return "Mount Document"; //NOI18N
+    }
+
+    public HelpCtx getHelpCtx()
+    {
+        return HelpCtx.DEFAULT_HELP;
+    }
+
+    protected int mode()
+    {
+        // enable duplication for as many qualifying nodes as are selected:
+        return CookieAction.MODE_ALL;
+    }
+
+    protected java.lang.Class[] cookieClasses()
+    {
+        // just the DuplicateCookie:
+        return new Class[] {OfficeDocumentCookie.class};
+    }
+
+    protected void performAction(final Node[] activatedNodes)
+    {
+        RequestProcessor.getDefault().post(new Runnable()
+        {
+            public void run()
+            {
+                for (int i=0; i<activatedNodes.length; i++)
+                {
+                    OfficeDocumentCookie cookie = (OfficeDocumentCookie)activatedNodes[i].getCookie(OfficeDocumentCookie.class);
+                    if (cookie != null)
+                    {
+                        cookie.mount();
+                    }
+                }
+            }
+        });
+    }
+}
