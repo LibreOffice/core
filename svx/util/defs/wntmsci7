@@ -23452,3 +23452,7 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx164883058@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx222508598@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx1266426659@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx933330307@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx185913207@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?GetUILightState@Svx3DWin@@ABE_NAAVImageButton@@@Z
+?SetUILightState@Svx3DWin@@AAEXAAVImageButton@@_N@Z
