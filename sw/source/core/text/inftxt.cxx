@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 09:39:59 $
+ *  last change: $Author: fme $ $Date: 2001-11-15 16:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
+      bFtnInside( rNew.IsFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -381,7 +382,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
-    bStopUnderFlow = sal_False;
+    bStopUnderFlow = bFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
     nDirection = DIR_LEFT2RIGHT;
@@ -409,6 +410,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
+      bFtnInside( rNew.IsFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -922,8 +924,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         if ( GetTxtFrm()->IsVertical() )
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
 
-        const Rectangle aRect( aTmpRect.Pos(),
-                               Size( aTmpRect.Width(), aTmpRect.Height() ) );
+        const Rectangle aRect( aTmpRect.SVRect() );
 #else
         const Rectangle aRect( aTmp, aSize );
 #endif

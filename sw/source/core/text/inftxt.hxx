@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: fme $ $Date: 2001-11-15 16:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,8 @@ public:
     inline void SetURLNotify( const sal_Bool bNew ) { bURLNotify = bNew; }
     inline sal_Bool StopUnderFlow() const { return bStopUnderFlow; }
     inline void SetStopUnderFlow( const sal_Bool bNew ) { bStopUnderFlow = bNew; }
-    inline void SetUnderFnt( SwFont* pNew )
-        { pUnderFnt = pNew; }
+    inline sal_Bool IsFtnInside() const { return bFtnInside; }
+    inline void SetFtnInside( const sal_Bool bNew ) { bFtnInside = bNew; }
     inline sal_Bool IsMulti() const { return bMulti; }
     inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
     inline sal_Bool IsFirstMulti() const { return bFirstMulti; }
@@ -282,6 +282,7 @@ public:
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
     inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }
+
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }
@@ -298,6 +299,7 @@ public:
     inline const SwFont *GetFont() const { return pFnt; }
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     void SelectFont();
+    inline void SetUnderFnt( SwFont* pNew ) { pUnderFnt = pNew; }
     inline SwFont* GetUnderFnt() const { return pUnderFnt; }
     inline void SelectOut() const
     { if( pVsh ) ((SwTxtSizeInfo*)this)->_SelectOut(); }
@@ -693,9 +695,6 @@ public:
     inline void SetNumDone( const sal_Bool bNew ) { bNumDone = bNew; }
     inline sal_Bool IsArrowDone() const { return bArrowDone; }
     inline void SetArrowDone( const sal_Bool bNew ) { bArrowDone = bNew; }
-    inline sal_Bool IsFtnInside() const { return bFtnInside; }
-    inline void SetFtnInside( const sal_Bool bNew ) { bFtnInside = bNew; }
-
 
     // Fuer SwTxtPortion::Hyphenate
     inline sal_Bool IsSoftHyph( const xub_StrLen nPos ) const;
