@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 12:45:55 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     }
     sal_Bool bStorage = pFilter->UsesStorage();
     if( bStorage )
-        rMedium.GetStorage();
+        rMedium.GetOutputStorage( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
     else
         rMedium.GetOutStream();
     if( rMedium.GetErrorCode() )
