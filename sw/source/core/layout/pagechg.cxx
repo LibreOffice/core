@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:14:24 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,18 @@ SwPageFrm::~SwPageFrm()
                     ((SwFlyFreeFrm*)pFly)->SetPage ( 0 );
             }
             else if ( pObj->GetUserCall() )
-                ((SwDrawContact*)pObj->GetUserCall())->ChgPage( 0 );
+            {
+                // OD 24.06.2003 #108784# - consider 'virtual' drawing objects
+                if ( pObj->ISA(SwDrawVirtObj) )
+                {
+                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                    pDrawVirtObj->SetPageFrm( 0 );
+                }
+                else
+                {
+                    ((SwDrawContact*)pObj->GetUserCall())->ChgPage( 0 );
+                }
+            }
         }
         delete pSortedObjs;
         pSortedObjs = 0;        //Auf 0 setzen, sonst rauchts beim Abmdelden von Flys!
@@ -472,10 +483,26 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             SwPageFrm *pPg = pPage->IsEmptyPage() ? (SwPageFrm*)pPage->GetNext() : pPage;
             if ( bSdrObj )
             {
-                SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pSdrObj);
-                if ( pContact->GetAnchor() )
-                    pContact->DisconnectFromLayout( FALSE );
-                pPg->SwFrm::AppendDrawObj( pContact );
+                // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+                if ( pSdrObj->ISA(SwDrawVirtObj) )
+                {
+                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
+                    SwDrawContact* pContact =
+                            static_cast<SwDrawContact*>(GetUserCall(&(pDrawVirtObj->GetReferencedObj())));
+                    if ( pContact )
+                    {
+                        pDrawVirtObj->RemoveFromWriterLayout();
+                        pDrawVirtObj->RemoveFromDrawingPage();
+                        pPg->SwFrm::AppendVirtDrawObj( pContact, pDrawVirtObj );
+                    }
+                }
+                else
+                {
+                    SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pSdrObj);
+                    if ( pContact->GetAnchor() )
+                        pContact->DisconnectFromLayout( FALSE );
+                    pPg->SwFrm::AppendDrawObj( pContact );
+                }
             }
             else
             {
@@ -1572,38 +1599,59 @@ void SwRootFrm::RemoveSuperfluous()
     //bei der ersten nicht leeren Seite wird die Schleife beendet.
     do
     {
-        FASTBOOL bFlys = 0 != pPage->GetSortedObjs();
-        if ( bFlys )
+        bool bExistEssentialObjs = ( 0 != pPage->GetSortedObjs() );
+        if ( bExistEssentialObjs )
         {
             //Nur weil die Seite Flys hat sind wir noch lange nicht fertig,
             //denn wenn alle Flys an generischem Inhalt haengen, so ist sie
             //trotzdem ueberfluessig (Ueberpruefung auf DocBody sollte reichen).
-            //DrawObjekte haengen niemals an generischem Inhalt.
-            FASTBOOL bOnlyGen = TRUE;
+            // OD 19.06.2003 #108784# - consider that drawing objects in
+            // header/footer are supported now.
+            bool bOnlySuperfluosObjs = true;
             SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
-            for ( USHORT i = 0; bOnlyGen && i < rObjs.Count(); ++i )
+            for ( USHORT i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
                 if ( pO->IsWriterFlyFrame() )
                 {
-                    SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                    while ( bOnlyGen && pFly )
+                    SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    // OD 19.06.2003 #108784# - correction
+                    if ( !pFly->GetAnchor()->FindFooterOrHeader() )
                     {
-                        if ( pFly->IsFlyLayFrm() ||
-                             (pFly->GetAnchor()->IsInDocBody() &&
-                              !pFly->GetAnchor()->IsInFly()) )
-                            bOnlyGen = FALSE;
-                        else
-                            pFly = pFly->GetAnchor()->FindFlyFrm();
+                        bOnlySuperfluosObjs = false;
                     }
                 }
                 else
-                    bOnlyGen = FALSE;
+                {
+                    // OD 19.06.2003 #108784# - determine, if drawing object
+                    // isn't anchored in header/footer frame. If so, drawing
+                    // object isn't superfluos.
+                    SwFrm* pAnchorFrm = 0L;
+                    if ( pO->ISA(SwDrawVirtObj) )
+                    {
+                        pAnchorFrm = static_cast<SwDrawVirtObj*>(pO)->GetAnchorFrm();
+                    }
+                    else
+                    {
+                        SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(pO->GetUserCall());
+                        pAnchorFrm = pDrawContact ? pDrawContact->GetAnchor() : 0L;
+                    }
+                    if ( pAnchorFrm )
+                    {
+                        if ( !pAnchorFrm->FindFooterOrHeader() )
+                        {
+                            bOnlySuperfluosObjs = false;
+                        }
+                    }
+                }
             }
-            bFlys = !bOnlyGen;
+            bExistEssentialObjs = !bOnlySuperfluosObjs;
         }
 
-        if ( pPage->FindFirstBodyCntnt() || pPage->FindFtnCont() || bFlys )
+        // OD 19.06.2003 #108784# - optimization: check first, if essential objects
+        // exists.
+        if ( bExistEssentialObjs || pPage->FindFirstBodyCntnt() || pPage->FindFtnCont() )
         {
             if ( pPage->IsFtnPage() )
             {
