@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,8 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
     {
         if ( CF_ENHMETAFILE == aFormatEtc.getClipformat() )
             byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
+        else if (CF_HDROP == aFormatEtc.getClipformat())
+            byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
         else
         {
             clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
@@ -652,11 +654,11 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     rtl_getGlobalProcessId(arId);
     if( ! memcmp( arId, arProcCaller,16))
     {
-        if( m_rDataObject)
+        if (m_rDataObject.is())
         {
-            IDataObject * pObj= static_cast<IDataObject*>( m_rDataObject) ;
+            IDataObject* pObj= m_rDataObject.get();
             pObj->AddRef();
-            retVal.setValue( & pObj, getCppuType( (sal_uInt32*)0));
+            retVal.setValue( &pObj, getCppuType((sal_uInt32*)0));
         }
     }
     return retVal;
