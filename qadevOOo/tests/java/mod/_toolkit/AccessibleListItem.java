@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListItem.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Date: 2004-11-02 12:14:17 $
+ *  last change: $Date: 2005-03-01 20:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@ import util.utils;
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
