@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:58:59 $
+ *  last change: $Author: mt $ $Date: 2002-04-25 15:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,10 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
         Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
         if ( pClient->GetWindowPeer() )
-            pClient->GetWindowPeer()->dispose();
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            xComp->dispose();
+        }
 
         pChild = pNextChild;
     }
@@ -292,7 +295,10 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         Window* pClient = pOverlap->GetWindow( WINDOW_CLIENT );
 
         if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
-            pClient->GetWindowPeer()->dispose();
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            xComp->dispose();
+        }
 
         pOverlap = pNextOverlap;
     }
