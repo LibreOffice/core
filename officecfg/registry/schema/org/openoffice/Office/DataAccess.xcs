@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:52:39 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,17 +495,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">left</desc>
-							<desc xml:lang="el">left</desc>
-							<desc xml:lang="nl">left</desc>
+							<desc xml:lang="el">Αριστερά</desc>
+							<desc xml:lang="nl">Links</desc>
 							<desc xml:lang="fr">À gauche</desc>
-							<desc xml:lang="fi">left</desc>
-							<desc xml:lang="cs">left</desc>
-							<desc xml:lang="da">left</desc>
+							<desc xml:lang="fi">Vasen</desc>
+							<desc xml:lang="cs">Vlevo</desc>
+							<desc xml:lang="da">Venstre</desc>
 							<desc xml:lang="zh-CN">向左</desc>
 							<desc xml:lang="zh-TW">向左</desc>
-							<desc xml:lang="ar">left</desc>
-							<desc xml:lang="he">left</desc>
-							<desc xml:lang="ca">left</desc>
+							<desc xml:lang="ar">يسار</desc>
+							<desc xml:lang="he">‮שמאל‬</desc>
+							<desc xml:lang="ca">Esquerra</desc>
 							<desc xml:lang="pt">Esquerda</desc>
 							<desc xml:lang="ru">Слева</desc>
 							<desc xml:lang="es">Izquierda</desc>
@@ -523,24 +523,24 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">center</desc>
-							<desc xml:lang="el">center</desc>
-							<desc xml:lang="nl">center</desc>
+							<desc xml:lang="el">Κέντρο</desc>
+							<desc xml:lang="nl">Midden</desc>
 							<desc xml:lang="fr">Milieu</desc>
-							<desc xml:lang="fi">center</desc>
-							<desc xml:lang="cs">center</desc>
-							<desc xml:lang="da">center</desc>
+							<desc xml:lang="fi">Keskellä</desc>
+							<desc xml:lang="cs">Na střed</desc>
+							<desc xml:lang="da">Midte</desc>
 							<desc xml:lang="zh-CN">居中</desc>
 							<desc xml:lang="zh-TW">居中</desc>
-							<desc xml:lang="ar">center</desc>
-							<desc xml:lang="he">center</desc>
-							<desc xml:lang="ca">center</desc>
+							<desc xml:lang="ar">الوسط</desc>
+							<desc xml:lang="he">‮מרכז‬</desc>
+							<desc xml:lang="ca">Centre</desc>
 							<desc xml:lang="pt">~Centrado</desc>
 							<desc xml:lang="ru">По середине</desc>
-							<desc xml:lang="es">center</desc>
+							<desc xml:lang="es">Centrado</desc>
 							<desc xml:lang="it">Al centro</desc>
 							<desc xml:lang="sv">Mitten</desc>
 							<desc xml:lang="pl">Pośrodku</desc>
-							<desc xml:lang="pt-BR">center</desc>
+							<desc xml:lang="pt-BR">Centro</desc>
 							<desc xml:lang="ja">中央</desc>
 							<desc xml:lang="ko">가운데</desc>
 							<desc xml:lang="tr">Orta</desc>
@@ -551,17 +551,17 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">right</desc>
-							<desc xml:lang="el">right</desc>
-							<desc xml:lang="nl">right</desc>
+							<desc xml:lang="el">Δεξιά</desc>
+							<desc xml:lang="nl">Rechts</desc>
 							<desc xml:lang="fr">À droite</desc>
-							<desc xml:lang="fi">right</desc>
-							<desc xml:lang="cs">right</desc>
-							<desc xml:lang="da">right</desc>
+							<desc xml:lang="fi">Oikea</desc>
+							<desc xml:lang="cs">Vpravo</desc>
+							<desc xml:lang="da">Højre</desc>
 							<desc xml:lang="zh-CN">向右</desc>
 							<desc xml:lang="zh-TW">向右</desc>
-							<desc xml:lang="ar">right</desc>
-							<desc xml:lang="he">right</desc>
-							<desc xml:lang="ca">right</desc>
+							<desc xml:lang="ar">يمين</desc>
+							<desc xml:lang="he">‮ימין‬</desc>
+							<desc xml:lang="ca">Dreta</desc>
 							<desc xml:lang="pt">Direita</desc>
 							<desc xml:lang="ru">Справа</desc>
 							<desc xml:lang="es">A la derecha</desc>
@@ -4246,17 +4246,17 @@
 					<enumeration oor:value="end-of-field">
 						<info>
 							<desc xml:lang="en-US">End</desc>
-							<desc xml:lang="el">End</desc>
-							<desc xml:lang="nl">End</desc>
+							<desc xml:lang="el">Τέλος</desc>
+							<desc xml:lang="nl">Einde</desc>
 							<desc xml:lang="fr">Fin</desc>
-							<desc xml:lang="fi">End</desc>
-							<desc xml:lang="cs">End</desc>
-							<desc xml:lang="da">End</desc>
+							<desc xml:lang="fi">Loppu</desc>
+							<desc xml:lang="cs">Konec</desc>
+							<desc xml:lang="da">Slut</desc>
 							<desc xml:lang="zh-CN">结束</desc>
 							<desc xml:lang="zh-TW">結束</desc>
-							<desc xml:lang="ar">End</desc>
-							<desc xml:lang="he">End</desc>
-							<desc xml:lang="ca">End</desc>
+							<desc xml:lang="ar">نهاية</desc>
+							<desc xml:lang="he">Ende</desc>
+							<desc xml:lang="ca">Final</desc>
 							<desc xml:lang="pt">Fim</desc>
 							<desc xml:lang="ru">Конец</desc>
 							<desc xml:lang="es">Fin</desc>
@@ -4274,17 +4274,17 @@
 					<enumeration oor:value="complete-field">
 						<info>
 							<desc xml:lang="en-US">Complete</desc>
-							<desc xml:lang="el">Complete</desc>
-							<desc xml:lang="nl">Complete</desc>
+							<desc xml:lang="el">Ολοκληρώθηκε</desc>
+							<desc xml:lang="nl">Klaar</desc>
 							<desc xml:lang="fr">Terminer</desc>
-							<desc xml:lang="fi">Complete</desc>
-							<desc xml:lang="cs">Complete</desc>
-							<desc xml:lang="da">Complete</desc>
+							<desc xml:lang="fi">Valmis</desc>
+							<desc xml:lang="cs">~Hotovo</desc>
+							<desc xml:lang="da">Udfør</desc>
 							<desc xml:lang="zh-CN">完成</desc>
 							<desc xml:lang="zh-TW">完成</desc>
-							<desc xml:lang="ar">Complete</desc>
-							<desc xml:lang="he">Complete</desc>
-							<desc xml:lang="ca">Complete</desc>
+							<desc xml:lang="ar">تم</desc>
+							<desc xml:lang="he">‮הסתיים‬</desc>
+							<desc xml:lang="ca">Completa</desc>
 							<desc xml:lang="pt">Concluir</desc>
 							<desc xml:lang="ru">Готово</desc>
 							<desc xml:lang="es">Terminado</desc>
@@ -5231,6 +5231,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
