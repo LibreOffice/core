@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:23:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,13 @@ BOOL SwEditWin::RulerColumnDrag( SwView& rView , const MouseEvent& rMEvt, BOOL b
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
             !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
             !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
+}
+
+// #i23726#
+BOOL SwEditWin::RulerMarginDrag( SwView& rView , const MouseEvent& rMEvt)
+{
+    SvxRuler& rRuler = rView.GetHLineal();
+    return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 
 Dialog* GetSearchDialog()
