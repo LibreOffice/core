@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:19:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,6 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "sdpage.hxx"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_FU_SCALE_HXX
 #include "fuscale.hxx"
 #endif
