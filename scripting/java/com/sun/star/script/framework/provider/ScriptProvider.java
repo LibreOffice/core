@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-19 08:23:43 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:02:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,14 +60,14 @@
 ************************************************************************/
 package com.sun.star.script.framework.provider;
 
+import com.sun.star.container.XNameContainer;
+
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.frame.XModel;
-
-import com.sun.star.ucb.XFileIdentifierConverter;
 
 import com.sun.star.util.XMacroExpander;
 
@@ -81,6 +81,8 @@ import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.Property;
+
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.beans.XIntrospectionAccess;
@@ -94,6 +96,9 @@ import com.sun.star.script.CannotConvertException;
 import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 
@@ -101,20 +106,30 @@ import com.sun.star.script.framework.log.LogUtils;
 
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.container.XMLParserFactory;
-import com.sun.star.script.framework.container.ContainerCache;
 import com.sun.star.script.framework.container.ParcelContainer;
+import com.sun.star.script.framework.container.ParsedScriptUri;
+import com.sun.star.script.framework.container.UnoPkgContainer;
 
-import com.sun.star.script.framework.io.XStorageHelper;
+import com.sun.star.ucb.Command;
+import com.sun.star.ucb.XContentProvider;
+import com.sun.star.ucb.XContent;
+import com.sun.star.ucb.XCommandProcessor;
+import com.sun.star.ucb.XContentIdentifier;
+import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.ucb.XSimpleFileAccess;
 
+import com.sun.star.sdbc.XRow;
 
 import com.sun.star.script.framework.browse.ProviderBrowseNode;
 import com.sun.star.script.framework.browse.DialogFactory;
+
+import com.sun.star.deployment.XPackage;
 
 
 import java.util.*;
 public abstract class ScriptProvider
     implements XScriptProvider, XBrowseNode, XPropertySet, XInvocation,
-               XInitialization, XTypeProvider, XServiceInfo
+               XInitialization, XTypeProvider, XServiceInfo, XNameContainer
 {
     private final String[] __serviceNames = {
         "drafts.com.sun.star.script.provider.ScriptProviderFor",
@@ -123,18 +138,20 @@ public abstract class ScriptProvider
 
     public final static String CLASSPATH = "classpath";
 
-    private String language;
-    private XScriptContext m_xScriptContext;
+    protected String language;
+    protected String contextUrl;
 
     protected XComponentContext m_xContext;
     protected XMultiComponentFactory m_xMultiComponentFactory;
-    protected XPropertySet m_xInvocationContext;
+    protected XModel m_xModel;
+    protected ParcelContainer m_container;
 
     // proxies to helper objects which implement interfaces
     private XPropertySet m_xPropertySetProxy;
     private XInvocation m_xInvocationProxy;
    // TODO should this be implemented in this class
     private XBrowseNode m_xBrowseNodeProxy;
+    private XScriptContext m_xScriptContext;
 
     public ScriptProvider( XComponentContext ctx, String language )
     {
@@ -179,76 +196,80 @@ public abstract class ScriptProvider
         LogUtils.DEBUG( "ScriptProvider: constructor - finished." );
     }
 
-    public XScriptContext getScriptingContext()
+    synchronized public XScriptContext getScriptingContext()
     {
+        if ( m_xScriptContext == null )
+        {
+            m_xScriptContext = ScriptContext.createContext( m_xModel, m_xContext, m_xMultiComponentFactory );
+        }
         return m_xScriptContext;
     }
-
     public void initialize( Object[] aArguments )
         throws com.sun.star.uno.Exception
     {
         LogUtils.DEBUG( "entering XInit for language " + language);
+        boolean isPkgProvider = false;
         if( aArguments.length == 1 )
         {
-            if (AnyConverter.isObject(aArguments[0]) == true)
+            if (AnyConverter.isString(aArguments[0]) == true)
             {
-                m_xInvocationContext =
-                    (XPropertySet) AnyConverter.toObject(
-                        new com.sun.star.uno.Type(XPropertySet.class),
-                        aArguments[0]);
+                String sCtxUrl = AnyConverter.toString(aArguments[0]);
+                LogUtils.DEBUG("creating Application, path: " + sCtxUrl );
+                contextUrl = sCtxUrl;
+                // TODO no support for packages in documents yet
+                if ( sCtxUrl.startsWith( "vnd.sun.star.tdoc" ) )
+                {
+                    m_container = new ParcelContainer( m_xContext, contextUrl, language );
+                    m_xModel = getModelFromDocUrl( sCtxUrl );
+                }
+                else
+                {
 
-                 XModel xModel =
-                    (XModel) AnyConverter.toObject(
-                        new com.sun.star.uno.Type(XModel.class),
-                        m_xInvocationContext.getPropertyValue(
-                            "SCRIPTING_DOC_REF"));
-                XStorageHelper.addNewModel( xModel );
-                ContainerCache cache = new ContainerCache( m_xContext, xModel );
-                ParcelContainer parcelContainer = cache.getContainer( language, xModel );
+                    if ( sCtxUrl.startsWith( "share" ) )
+                    {
+                        contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
+                    }
+                    else if ( sCtxUrl.startsWith( "user" ) )
+                    {
+                        contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                    }
 
-                // TODO should be done for provider, no need to proxy this anymore
-                m_xBrowseNodeProxy = new ProviderBrowseNode( this, parcelContainer );
-
-                m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
-                m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
-
-            }
-            else if (AnyConverter.isString(aArguments[0]) == true)
-            {
-                String sPath = AnyConverter.toString(aArguments[0]);
-                LogUtils.DEBUG("creating Application, path: " + sPath);
-
-
-                // TODO m_xInvocationProxy, m_xPropertySetProxy in ctor, otherwise bridge will
-                // have problems as it does some introspection on the XPropertySet
-                // interface ( which is null if initialise is not called
-
-
-                ContainerCache cache = new ContainerCache( m_xContext );
-                // TODO fix up where paths are fixed up
-                // currently path is also fixed up by macro expander
-                ParcelContainer parcelContainer = cache.getContainer( language, sPath );
-                LogUtils.DEBUG("******* CONTAINER retrieved is " + parcelContainer );
+                    if ( sCtxUrl.endsWith( "uno_packages") )
+                    {
+                        isPkgProvider = true;
+                    }
+                    if ( sCtxUrl.endsWith( "uno_packages") &&  !sCtxUrl.equals( contextUrl ) )
+                    {
+                        contextUrl = PathUtils.make_url( contextUrl, "uno_packages" );
+                    }
+                    if ( isPkgProvider )
+                    {
+                        m_container = new UnoPkgContainer( m_xContext, contextUrl, language );
+                    }
+                    else
+                    {
+                        m_container = new ParcelContainer( m_xContext, contextUrl, language );;
+                    }
+                }
+                LogUtils.DEBUG("Modified Application path is: " + contextUrl );
+                LogUtils.DEBUG("isPkgProvider is: " + isPkgProvider );
 
 
                 // TODO should all be done in this class instead of
                 // deleagation????
-                m_xBrowseNodeProxy = new ProviderBrowseNode( this, parcelContainer );
+                m_xBrowseNodeProxy = new ProviderBrowseNode( this,
+                    m_container, m_xContext );
 
                 m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
                 m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
-            }
-            else if ( AnyConverter.getType(aArguments[0]).equals( Type.VOID ) )
-            {
-                // Default type, implies this provider to be used for
-                // execution of application ( user/share ) scripts only
+
+
             }
             else
             {
                 throw new com.sun.star.uno.RuntimeException(
                     "ScriptProvider created with invalid argument");
             }
-
         }
         else
         {
@@ -257,7 +278,6 @@ public abstract class ScriptProvider
             LogUtils.DEBUG( "ScriptProviderFor" + language +
                 " initialized without a context");
         }
-        m_xScriptContext = ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory );
         LogUtils.DEBUG( "leaving XInit" );
     }
 
@@ -268,7 +288,7 @@ public abstract class ScriptProvider
      */
     public com.sun.star.uno.Type[] getTypes()
     {
-        Type[] retValue = new Type[ 7 ];
+        Type[] retValue = new Type[ 8 ];
         retValue[ 0 ] = new Type( XScriptProvider.class );
         retValue[ 1 ] = new Type( XBrowseNode.class );
         retValue[ 2 ] = new Type( XInitialization.class );
@@ -276,6 +296,7 @@ public abstract class ScriptProvider
         retValue[ 4 ] = new Type( XServiceInfo.class );
         retValue[ 5 ] = new Type( XPropertySet.class );
         retValue[ 6 ] = new Type( XInvocation.class );
+        retValue[ 7 ] = new Type( com.sun.star.container.XNameContainer.class );
         return retValue;
     }
 
@@ -331,7 +352,7 @@ public abstract class ScriptProvider
 
     public abstract XScript getScript( /*IN*/String scriptURI )
         throws com.sun.star.uno.RuntimeException,
-               com.sun.star.lang.IllegalArgumentException;
+               ScriptFrameworkErrorException;
 
     // TODO need to encapsulate this better,
     // Some factory concept for creating/accessing Editor
@@ -344,36 +365,47 @@ public abstract class ScriptProvider
     // This method is used to get the ScriptEditor for this ScriptProvider
     public abstract ScriptEditor getScriptEditor();
 
-    // TODO should throw appropriate exception
-    public ScriptMetaData  getScriptData( /*IN*/String scriptURI )
+    public ScriptMetaData  getScriptData( /*IN*/String scriptURI ) throws ScriptFrameworkErrorException
+
     {
-
-        ScriptMetaData scriptData = null;
-
-        XModel xModel = null;
-        if ( m_xInvocationContext != null ) // not application script
+        ParsedScriptUri details = null;
+        try
         {
-            try
+            details = m_container.parseScriptUri( scriptURI );
+            ScriptMetaData scriptData = m_container.findScript( details );
+            if ( scriptData == null )
             {
-                xModel = (XModel) AnyConverter.toObject(
-                   new com.sun.star.uno.Type(XModel.class),
-                       m_xInvocationContext.getPropertyValue(
-                           "SCRIPTING_DOC_REF"));
+                // TODO specify the correct error Type
+                throw new ScriptFrameworkErrorException( details.function + " does not exist",
+                    null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
             }
-            catch ( com.sun.star.lang.WrappedTargetException ignore )
-            {
-            }
-            catch ( com.sun.star.beans.UnknownPropertyException ignore )
-            {
-            }
-            catch ( com.sun.star.lang.IllegalArgumentException ignore )
-            {
-            }
+            return scriptData;
         }
-        ContainerCache cache = new ContainerCache( m_xContext, xModel  );
+        catch (  com.sun.star.lang.IllegalArgumentException ila )
+        {
+            // TODO specify the correct error Type
+            throw new ScriptFrameworkErrorException( ila.getMessage(),
+                null, scriptURI, language, ScriptFrameworkErrorType.UNKNOWN );
+        }
+        catch ( com.sun.star.container.NoSuchElementException nse )
+        {
+            // TODO specify the correct error Type
+            throw new ScriptFrameworkErrorException( nse.getMessage(),
+                null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
+        }
+        catch ( com.sun.star.lang.WrappedTargetException wta )
+        {
+            // TODO specify the correct error Type
+            Exception wrapped = (Exception)wta.TargetException;
+            String message = wta.getMessage();
+            if ( wrapped != null )
+            {
+                message = wrapped.getMessage();
+            }
+            throw new ScriptFrameworkErrorException( message,
+                null, details.function, language, ScriptFrameworkErrorType.UNKNOWN );
+        }
 
-        scriptData = cache.findScript( scriptURI );
-        return scriptData;
     }
 
 
@@ -504,5 +536,169 @@ public abstract class ScriptProvider
         m_xPropertySetProxy.removeVetoableChangeListener(
             PropertyName, aListener);
     }
+    public java.lang.Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
+    {
+        // TODO needs implementing?
+        if ( true )
+        {
+            throw new com.sun.star.uno.RuntimeException(
+                "getByName not implemented" );
+        }
+        return new Object();
+    }
+
+    public String[] getElementNames()
+    {
+        // TODO needs implementing?
+        String[] result = new String[0];
+        if ( true )
+        {
+            throw new com.sun.star.uno.RuntimeException(
+                "getElementNames not implemented" );
+
+        }
+        return result;
+    }
+
+
+    // Performs the getRegStatus functionality for the PkgMgr
+    public boolean hasByName( String aName )
+    {
+        boolean result = false;
+        if ( ((UnoPkgContainer)m_container).hasRegisteredUnoPkgContainer( aName ) )
+        {
+            result = true;
+        }
+        return result;
+    }
+
+    public com.sun.star.uno.Type getElementType()
+    {
+        // TODO at the moment this returns void indicating
+        // type is unknown should indicate XPackage ? do we implement XPackage
+        return new Type();
+    }
+
+    public boolean hasElements()
+    {
+        // TODO needs implementing?
+        boolean result = false;
+        if ( true )
+        {
+            throw new com.sun.star.uno.RuntimeException(
+                "hasElements not implemented" );
+
+        }
+        return result;
+    }
+    public void replaceByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
+    {
+        // TODO needs implementing
+        if ( true )
+        {
+            throw new com.sun.star.uno.RuntimeException(
+                "replaceByName not implemented" );
+
+        }
+    }
+
+    public void insertByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.ElementExistException, com.sun.star.lang.WrappedTargetException
+    {
+        LogUtils.DEBUG("Provider for " + language + " received register for package " + aName );
+        XPackage newPackage = ( XPackage ) UnoRuntime.queryInterface( XPackage.class, aElement );
+        if ( aName.length() == 0 )
+        {
+            throw new  com.sun.star.lang.IllegalArgumentException( "Empty name" );
+        }
+        if ( newPackage == null )
+        {
+            throw new com.sun.star.lang.IllegalArgumentException( "No package supplied" );
+        }
+
+        ((UnoPkgContainer)m_container).processUnoPackage( newPackage, language  );
+    }
+
+    // de-register for library only !!
+    public void removeByName( String Name ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
+    {
+        LogUtils.DEBUG("In ScriptProvider.removeByName() for " + Name + " this provider = " + language );
+        ParcelContainer c = ((UnoPkgContainer)m_container).getRegisteredUnoPkgContainer( Name );
+        if ( c != null )
+        {
+            String libName = Name.substring( Name.lastIndexOf( "/" ) + 1 );
+            LogUtils.DEBUG("Deregistering library " + libName );
+            if ( c.removeParcel( libName ) )
+            {
+                ((UnoPkgContainer)m_container).deRegisterPackageContainer( Name );
+            }
+            else
+            {
+                throw new com.sun.star.container.NoSuchElementException( libName + " cannot be removed from container." );
+            }
+        }
+        else
+        {
+            throw new com.sun.star.container.NoSuchElementException( Name + " doesn't exist for " + language );
+        }
+        // TODO see if we want to remove the ParcelContainer is no Parcels/Libraries left
+    }
+private  XModel getModelFromDocUrl( String docUrl )
+{
+        LogUtils.DEBUG("getModelFromDocUrl - searching for match for ->" + docUrl + "<-" );
+        XModel xModel = null;
+        try
+        {
+            Object[] args = new String[] {"Local", "Office" };
+
+            Object ucb = m_xMultiComponentFactory.createInstanceWithArgumentsAndContext( "com.sun.star.ucb.UniversalContentBroker", args, m_xContext );
+
+
+            XContentIdentifierFactory xFac  =  ( XContentIdentifierFactory )
+                UnoRuntime.queryInterface( XContentIdentifierFactory.class,
+                    ucb );
+
+
+            XContentIdentifier xCntId = xFac.createContentIdentifier( docUrl );
+
+
+            XContentProvider xCntAccess = ( XContentProvider )
+                UnoRuntime.queryInterface( XContentProvider.class,
+                    ucb );
+
+
+            XContent xCnt = xCntAccess.queryContent( xCntId );
+
+
+            XCommandProcessor xCmd = ( XCommandProcessor )
+                UnoRuntime.queryInterface( XCommandProcessor.class, xCnt );
+
+
+            Property[] pArgs = new Property[ ] { new Property() };
+            pArgs[ 0 ].Name = "DocumentModel";
+            pArgs[ 0 ].Handle = -1;
+
+            Command command = new Command();
+
+            command.Handle = -1;
+            command.Name = "getPropertyValues";
+            command.Argument = pArgs;
+
+            com.sun.star.ucb.XCommandEnvironment env = null ;
+            Object result =  xCmd.execute( command, 0, env ) ;
+
+            XRow values = ( XRow ) UnoRuntime.queryInterface( XRow.class,
+                result );
+
+            xModel = ( XModel )  UnoRuntime.queryInterface( XModel.class,
+                values.getObject( 1, null ) );
+        }
+        catch ( Exception ignore )
+        {
+            LogUtils.DEBUG("Failed to get model exception " + ignore );
+
+        }
+        return xModel;
+    }
+
 
 }
