@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:02:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,16 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // ---------------------------------------------------------------------------
+// -----------------------------------------------------------------
+class SbaSelectionList: public List , public SvRefBase
+{
+public:
+    SbaSelectionList():
+        List(CONTAINER_MAXBLOCKSIZE,100,100){}
+};
+
+SV_DECL_IMPL_REF(SbaSelectionList)
+
 
 class ScDBDocFunc
 {
