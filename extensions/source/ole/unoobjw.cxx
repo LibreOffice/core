@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-09-17 14:15:46 $
+ *  last change: $Author: jl $ $Date: 2001-10-18 12:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,12 +699,20 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
     sal_Bool ret = sal_False;
     HRESULT hr;
 
-    if( !(pDest->vt & VT_BYREF)  && (pDest->vt == VT_DISPATCH)  )
+    if( !(pDest->vt & VT_BYREF)  && (pDest->vt == VT_DISPATCH) ||
+        (pDest->vt == (VT_VARIANT | VT_BYREF) &&
+        pDest->pvarVal->vt == VT_DISPATCH) )
     {
+        CComPtr<IDispatch> spDisp;
+        if( pDest->vt == VT_DISPATCH)
+            spDisp= pDest->pdispVal;
+        else
+            spDisp= pDest->pvarVal->pdispVal;
+
         CComPtr <IJScriptValueObject> spValue;
 
         // special Handling for a JScriptValue object
-        if( SUCCEEDED( pDest->pdispVal->QueryInterface( __uuidof( IJScriptValueObject),
+        if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
             reinterpret_cast<void**> (&spValue))))
 
         {
@@ -731,7 +739,7 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
             if(  bstrNullIndex)
             {
                 CComPtr<IDispatchEx> pdispEx;
-                if( SUCCEEDED( hr= pDest->pdispVal->QueryInterface( IID_IDispatchEx, (void**)&pdispEx)))
+                if( SUCCEEDED( hr= spDisp->QueryInterface( IID_IDispatchEx, (void**)&pdispEx)))
                 {
                     DISPID dispid;
                     if( SUCCEEDED(hr= pdispEx->GetDispID( bstrNullIndex, fdexNameEnsure, &dispid)))

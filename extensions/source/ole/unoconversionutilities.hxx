@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
+ *  last change: $Author: jl $ $Date: 2001-10-18 12:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1505,14 +1505,23 @@ sal_Bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, A
     bHandled= sal_False;
     HRESULT hr= S_OK;
 
-    if( var->vt == VT_DISPATCH)
+    // jscript and Visual Basic
+    if( (var->vt == VT_DISPATCH)  ||
+        (var->vt == (VT_VARIANT | VT_BYREF) &&
+        var->pvarVal->vt == VT_DISPATCH ))
     {
         CComPtr <IJScriptValueObject> spValue;
         VARIANT_BOOL varBool;
         CComBSTR bstrType;
         CComVariant varValue;
 
-        if( SUCCEEDED( var->pdispVal->QueryInterface( __uuidof( IJScriptValueObject),
+        CComPtr<IDispatch> spDisp;
+        if( var->vt == VT_DISPATCH)
+            spDisp= var->pdispVal;
+        else
+            spDisp= var->pvarVal->pdispVal;
+
+        if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
             reinterpret_cast<void**> (&spValue))))
         {
             // Out Parameter --------------------------------------------------
