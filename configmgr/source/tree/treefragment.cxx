@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treefragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:09:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,13 +135,17 @@ configmgr::node::Attributes TreeFragment::getAttributes() const
     default: OSL_ASSERT(false); break; // not reachable
     }
 
-    aResult.bWritable   = ! (this->header.state & State::flag_readonly);
+    aResult.setRemovability(!!(this->header.state & State::flag_removable),
+                            !!(this->header.state & State::flag_mandatory));
+
 
     OSL_ASSERT( header.count != 0 );
     NodeInfo const & aRootNodeInfo = this->nodes[0].node.info;
 
-    aResult.bFinalized  = !!(aRootNodeInfo.flags & Flags::finalized);
-    aResult.bLocalized  = !!(aRootNodeInfo.flags & Flags::localized);
+    aResult.setAccess(  !!(this->header.state & State::flag_readonly),
+                        !!(aRootNodeInfo.flags & Flags::finalized)  );
+
+    aResult.setLocalized ( !!(aRootNodeInfo.flags & Flags::localized));
 
     return aResult;
 }
