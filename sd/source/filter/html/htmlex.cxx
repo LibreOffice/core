@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:08:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,9 @@
 #endif
 
 #include "drawdoc.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "sdpage.hxx"
 #include "sdattr.hxx"
 #include "glob.hrc"
@@ -478,28 +480,32 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
 // =====================================================================
 // Konstruktor fuer die Html Export Hilfsklasse
 // =====================================================================
-HtmlExport::HtmlExport( OUString aPath, const Sequence< PropertyValue >& rParams, SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell )
-:   pDoc(pExpDoc),
-    m_aPath( aPath ),
-    m_aHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
-    m_aIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
-    m_pImageFiles(NULL),
-    m_pHTMLFiles(NULL),
-    m_pPageNames(NULL),
-    m_pTextFiles(NULL),
-    m_bUserAttr(false),
-    m_bDocColors(false),
-    m_bContentsPage(false),
-    m_nButtonThema(-1),
-    m_bNotes(false),
-    m_eEC(NULL),
-    pDocSh( pDocShell ),
-    m_eMode( PUBLISH_HTML ),
-    m_eFormat( FORMAT_JPG ),
-    m_nCompression( -1 ),
-    m_nWidthPixel( PUB_LOWRES_WIDTH ),
-    m_bDownload( false ),
-    m_eScript( SCRIPT_ASP )
+HtmlExport::HtmlExport(
+    OUString aPath,
+    const Sequence< PropertyValue >& rParams,
+    SdDrawDocument* pExpDoc,
+    ::sd::DrawDocShell* pDocShell )
+    :   pDoc(pExpDoc),
+        m_aPath( aPath ),
+        m_aHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
+        m_aIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
+        m_pImageFiles(NULL),
+        m_pHTMLFiles(NULL),
+        m_pPageNames(NULL),
+        m_pTextFiles(NULL),
+        m_bUserAttr(false),
+        m_bDocColors(false),
+        m_bContentsPage(false),
+        m_nButtonThema(-1),
+        m_bNotes(false),
+        m_eEC(NULL),
+        pDocSh( pDocShell ),
+        m_eMode( PUBLISH_HTML ),
+        m_eFormat( FORMAT_JPG ),
+        m_nCompression( -1 ),
+        m_nWidthPixel( PUB_LOWRES_WIDTH ),
+        m_bDownload( false ),
+        m_eScript( SCRIPT_ASP )
 {
     FASTBOOL bChange = pDoc->IsChanged();
 
