@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:30:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,58 @@
 
 namespace basegfx
 {
+    namespace
+    {
+        class B2DExtraPolygonInfo
+        {
+            B2DRange                                maRange;
+            sal_Int32                               mnDepth;
+            B2VectorOrientation                     meOrinetation;
+
+        public:
+            B2DExtraPolygonInfo()
+            {
+            }
+
+            void init(const B2DPolygon& rCandidate)
+            {
+                maRange = tools::getRange(rCandidate);
+                meOrinetation = tools::getOrientation(rCandidate);
+                mnDepth = (ORIENTATION_NEGATIVE == meOrinetation) ? -1L : 0L;
+            }
+
+            const B2DRange& getRange() const { return maRange; }
+            B2VectorOrientation getOrientation() const { return meOrinetation; }
+
+            sal_Int32 getDepth() const { return mnDepth; }
+
+            void changeDepth(B2VectorOrientation eOrientation)
+            {
+                if(ORIENTATION_POSITIVE == eOrientation)
+                {
+                    mnDepth++;
+                }
+                else if(ORIENTATION_NEGATIVE == eOrientation)
+                {
+                    mnDepth--;
+                }
+            }
+        };
+    } // end of anonymous namespace
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
     namespace tools
     {
         // B2DPolyPolygon tools
 
-        void correctOrientations(B2DPolyPolygon& rCandidate)
+//BFS08     void correctOrientations(B2DPolyPolygon& rCandidate)
+        B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate)
         {
+            B2DPolyPolygon aRetval;
             const sal_uInt32 nPolygonCount(rCandidate.count());
             sal_uInt32 nIndexOfOutmostPolygon(0L);
             bool bIndexOfOutmostPolygonSet(false);
@@ -109,9 +155,8 @@ namespace basegfx
 
                 if(aCandidate.count() > 2L)
                 {
-                    B2VectorOrientation aOrientation =
-                        tools::getOrientation(aCandidate);
-                    bool bDoFlip(ORIENTATION_POSITIVE != aOrientation);
+                    B2VectorOrientation aOrientation = tools::getOrientation(aCandidate);
+                    bool bDoFlip(ORIENTATION_NEGATIVE == aOrientation);
 
                     // init values for depth and compare point for
                     // inside test. Since the ordering makes only sense when assuming
@@ -141,9 +186,6 @@ namespace basegfx
                     if((bDoFlip && !bIsHole) || (!bDoFlip && bIsHole))
                     {
                         aCandidate.flip();
-
-                        // write back changed polygon
-                        rCandidate.setB2DPolygon(a, aCandidate);
                     }
 
                     // remember the index if it's the outmost polygon
@@ -153,28 +195,181 @@ namespace basegfx
                         nIndexOfOutmostPolygon = a;
                     }
                 }
+
+                // add to result
+                aRetval.append(aCandidate);
             }
 
             // if the outmost polygon is not the first, move it in front
             if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
             {
                 B2DPolygon aOutmostPolygon = rCandidate.getB2DPolygon(nIndexOfOutmostPolygon);
-                rCandidate.remove(nIndexOfOutmostPolygon);
-                rCandidate.insert(0L, aOutmostPolygon);
+                aRetval.remove(nIndexOfOutmostPolygon);
+                aRetval.insert(0L, aOutmostPolygon);
             }
+
+            return aRetval;
         }
 
-        void removeIntersections(B2DPolyPolygon& rCandidate,
-            bool bForceOrientation, bool bInvertRemove)
+//BFS08     void removeIntersections(B2DPolyPolygon& rCandidate,
+//BFS08         bool bForceOrientation, bool bInvertRemove)
+//BFS08     {
+//BFS08         B2DPolyPolygonCutter aCutter;
+//BFS08
+//BFS08         aCutter.addPolyPolygon(rCandidate, bForceOrientation);
+//BFS08         aCutter.removeSelfIntersections();
+//BFS08         aCutter.removeDoubleIntersections();
+//BFS08         aCutter.removeIncludedPolygons(!bInvertRemove);
+//BFS08         rCandidate.clear();
+//BFS08         aCutter.getPolyPolygon(rCandidate);
+//BFS08     }
+        B2DPolyPolygon removeIntersections(const B2DPolyPolygon& rCandidate)
         {
-            B2DPolyPolygonCutter aCutter;
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeIntersections: ATM works not for curves (!)");
+            B2DPolyPolygon aRetval;
 
-            aCutter.addPolyPolygon(rCandidate, bForceOrientation);
-            aCutter.removeSelfIntersections();
-            aCutter.removeDoubleIntersections();
-            aCutter.removeIncludedPolygons(!bInvertRemove);
-            rCandidate.clear();
-            aCutter.getPolyPolygon(rCandidate);
+            if(rCandidate.count() > 1L)
+            {
+                B2DPolyPolygonCutter aCutter;
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                    aCandidate.removeDoublePoints();
+                    aRetval.append(aCandidate);
+                }
+
+                aCutter.addPolyPolygon(aRetval);
+                aCutter.removeDoubleIntersections();
+
+                aRetval = aCutter.getPolyPolygon();
+            }
+            else
+            {
+                aRetval = rCandidate;
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon removeAllIntersections(const B2DPolyPolygon& rCandidate)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeAllIntersections: ATM works not for curves (!)");
+            B2DPolyPolygon aRetval;
+
+            if(rCandidate.count() > 1L)
+            {
+                B2DPolyPolygonCutter aCutter;
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    B2DPolyPolygon aCandidate = removeIntersections(rCandidate.getB2DPolygon(a), true);
+                    aRetval.append(aCandidate);
+                }
+
+                aCutter.addPolyPolygon(aRetval);
+                aCutter.removeDoubleIntersections();
+
+                aRetval = aCutter.getPolyPolygon();
+            }
+            else
+            {
+                aRetval = rCandidate;
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon removeNeutralPolygons(const B2DPolyPolygon& rCandidate, bool bUseOr)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeNeutralOrientedPolygons: ATM works not for curves (!)");
+            B2DPolyPolygon aRetval;
+            B2DPolyPolygon aLocalCandidate;
+            sal_uInt32 nCount(rCandidate.count());
+            sal_uInt32 a;
+
+            // sort out neutral polygons
+            for(a = 0L; a < nCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                const B2VectorOrientation aOrientation(getOrientation(aCandidate));
+
+                if(ORIENTATION_NEUTRAL != aOrientation)
+                {
+                    aLocalCandidate.append(aCandidate);
+                }
+            }
+
+            // get new count
+            nCount = aLocalCandidate.count();
+
+            if(nCount > 1L)
+            {
+                B2DExtraPolygonInfo* pPolygonInfos = new B2DExtraPolygonInfo[nCount];
+
+                // initialize polygon infos
+                for(a = 0L; a < nCount; a++)
+                {
+                    const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
+                    pPolygonInfos[a].init(aCandidate);
+                }
+
+                // get all includes
+                for(a = 0L; a < nCount; a++)
+                {
+                    B2DExtraPolygonInfo& rInfoA = pPolygonInfos[a];
+
+                    for(sal_uInt32 b(0L); b < nCount; b++)
+                    {
+                        B2DExtraPolygonInfo& rInfoB = pPolygonInfos[b];
+
+                        if(a != b && rInfoA.getRange().isInside(rInfoB.getRange()))
+                        {
+                            // volume B in A, test pA, pB for inclusion, with border
+                            const B2DPolygon aCandidateA(aLocalCandidate.getB2DPolygon(a));
+                            const B2DPolygon aCandidateB(aLocalCandidate.getB2DPolygon(b));
+
+                            if(isInside(aCandidateA, aCandidateB, true))
+                            {
+                                // pB is inside pA
+                                rInfoB.changeDepth(rInfoA.getOrientation());
+                            }
+                        }
+                    }
+                }
+
+                // copy non-removables
+                for(a = 0L; a < nCount; a++)
+                {
+                    B2DExtraPolygonInfo& rInfo = pPolygonInfos[a];
+
+                    if(bUseOr)
+                    {
+                        if(rInfo.getDepth() == 0L)
+                        {
+                            const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
+                            aRetval.append(aCandidate);
+                        }
+                    }
+                    else
+                    {
+                        if(rInfo.getDepth() >= 1L)
+                        {
+                            const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
+                            aRetval.append(aCandidate);
+                        }
+                    }
+                }
+
+                // delete infos
+                delete[] pPolygonInfos;
+            }
+            else
+            {
+                aRetval = aLocalCandidate;
+            }
+
+            return aRetval;
         }
 
         B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound)
@@ -253,6 +448,90 @@ namespace basegfx
                 {
                     B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
                     aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+                }
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon mergeDashedLines(const B2DPolyPolygon& rCandidate)
+        {
+            B2DPolyPolygon aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            if(nPolygonCount)
+            {
+                B2DPolygon aMergePolygon;
+
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    if(aMergePolygon.count())
+                    {
+                        B2DPolygon aNewCandidate = rCandidate.getB2DPolygon(a);
+
+                        if(aNewCandidate.count())
+                        {
+                            // does aNewCandidate start where aMergePolygon ends?
+                            if(aNewCandidate.getB2DPoint(0L) == aMergePolygon.getB2DPoint(aMergePolygon.count() - 1L))
+                            {
+                                // copy remaining points to aMergePolygon
+                                for(sal_uInt32 a(1L); a < aNewCandidate.count(); a++)
+                                {
+                                    aMergePolygon.append(aNewCandidate.getB2DPoint(a));
+                                }
+                            }
+                            else
+                            {
+                                // new start point, add aMergePolygon
+                                aRetval.append(aMergePolygon);
+
+                                // set aMergePolygon to the new polygon
+                                aMergePolygon = aNewCandidate;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // set aMergePolygon to the new polygon
+                        aMergePolygon = rCandidate.getB2DPolygon(a);
+                    }
+                }
+
+                // append the last used merge polygon
+                if(aMergePolygon.count())
+                {
+                    aRetval.append(aMergePolygon);
+                }
+
+                // test if last and first need to be appended, too
+                if(aRetval.count() > 1)
+                {
+                    B2DPolygon aFirst = aRetval.getB2DPolygon(0L);
+                    B2DPolygon aLast = aRetval.getB2DPolygon(aRetval.count() - 1L);
+
+                    if(aFirst.getB2DPoint(0L) == aLast.getB2DPoint(aLast.count() - 1L))
+                    {
+                        // copy remaining points to aLast
+                        for(sal_uInt32 a(1L); a < aFirst.count(); a++)
+                        {
+                            aLast.append(aFirst.getB2DPoint(a));
+                        }
+
+                        // create new retval
+                        B2DPolyPolygon aNewRetval;
+
+                        // copy the unchanged part polygons
+                        for(sal_uInt32 b(1L); b < aRetval.count() - 1L; b++)
+                        {
+                            aNewRetval.append(aRetval.getB2DPolygon(b));
+                        }
+
+                        // append new part polygon
+                        aNewRetval.append(aLast);
+
+                        // use as return value
+                        aRetval = aNewRetval;
+                    }
                 }
             }
 
