@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:21:40 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5377,7 +5377,7 @@ String RID_STR_EVT_KEYUP
     Text [ swedish ] = "Efter tangenttryck" ;
     Text [ danish ] = "Knap sluppet" ;
     Text [ italian ] = "Dopo aver premuto il tasto" ;
-    Text [ spanish ] = "Tecla soltada" ;
+    Text [ spanish ] = "Despuιs de haber pulsado la tecla" ;
     Text [ french ] = "Aprθs avoir lβchι la touche" ;
     Text [ dutch ] = "Toets losgelaten" ;
     Text[ chinese_simplified ] = "ζ”ΎεΌ€ζ‰ι”®";
@@ -6680,7 +6680,7 @@ String RID_STR_HELPURL
     Text[ russian ] = "URL οξμξωθ";
     Text[ dutch ] = "Help URL";
     Text[ french ] = "URL de l'aide";
-    Text[ spanish ] = "Ayuda URL";
+    Text[ spanish ] = "URL de la Ayuda";
     Text[ italian ] = "URL della Guida";
     Text[ danish ] = "Hjζlp-URL";
     Text[ swedish ] = "Hjδlp-URL";
@@ -7569,7 +7569,7 @@ String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
 {
     Text = "WIE kann bei diesem Feld nicht benutzt werden!";
     Text [ ENGLISH ] = "LIKE can not be used with this field!";
-    Text[ english_us ] = "LIKE cannot be used with this field!";
+    Text[ english_us ] = "LIKE cannot be used with this field.";
     Text[ portuguese ] = "COMO nγo pode ser utilizado neste campo!";
     Text[ greek ] = "Δεν είναι δυνατόν να γίνει χρήση του 'LIKE' σε αυτό το πεδίο!";
     Text[ dutch ] = "ALS kan niet worden gebruikt bij dit veld!";
