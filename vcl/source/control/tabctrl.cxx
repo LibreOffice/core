@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-19 16:03:24 $
+ *  last change: $Author: tbe $ $Date: 2002-11-08 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,6 +1506,8 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
     mbFormat = TRUE;
     if ( IsUpdateMode() )
         Invalidate();
+
+    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) nPageId );
 }
 
 // -----------------------------------------------------------------------
@@ -1542,6 +1544,8 @@ void TabControl::RemovePage( USHORT nPageId )
         mbFormat = TRUE;
         if ( IsUpdateMode() )
             Invalidate();
+
+        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) nPageId );
     }
 }
 
@@ -1565,6 +1569,8 @@ void TabControl::Clear()
     mbFormat = TRUE;
     if ( IsUpdateMode() )
         Invalidate();
+
+    ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVEDALL );
 }
 
 // -----------------------------------------------------------------------
