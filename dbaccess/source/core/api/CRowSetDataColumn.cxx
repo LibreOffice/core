@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-13 07:16:28 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 14:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,8 +274,9 @@ Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObjec
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumns::disposing(void)
 {
-    clear_NoDispose();
-    //  ORowSetDataColumns_BASE::disposing();
+    //  clear_NoDispose();
     m_aColumns.clear();
+    ORowSetDataColumns_BASE::disposing();
+    //  m_aColumns.clear();
 }
 
