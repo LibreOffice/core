@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-06 09:03:14 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 21:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ Menu RID_POPUP_TAB
             Text[ chinese_simplified ] = "ÒΖ¶―/Έ΄ΦΖ(~M)...";
             Text[ russian ] = "Οεπεμερςθςό/ρκξοθπξβΰςό...";
             Text[ polish ] = "Przesuρ/Kopiuj...";
-            Text[ japanese ] = "Ϊ“®/ΊΛί°(~M)...";
+            Text[ japanese ] = "Ϊ“®‚ά‚½‚ΝΊΛί°(~M)...";
             Text[ chinese_traditional ] = "²Ύ°Κ/½Ζ»s(~M)...";
             Text[ arabic ] = "ΕÒΗΝΙ/δΣΞ...";
             Text[ greek ] = "Μετακίνηση/Α~ντιγραφή...";
@@ -1178,7 +1178,7 @@ String RID_POPUP_AUDIT
     Text[ chinese_simplified ] = "ΥμΜ½-³δΜξ-µ―³φΚ½²Λµ¥";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ πεζθμΰ ηΰλθβκθ ηΰβθρθμξρςθ";
     Text[ polish ] = "Menu podrκczne dla trybu wype³niania detektywa";
-    Text[ japanese ] = "•\\¦ΐsΣ°Δή‚ΜΞί―Μί±―ΜίÒΖ­°";
+    Text[ japanese ] = "ΔΪ°½ΐsΣ°Δή‚ΜΞί―Μί±―ΜίÒΖ­°";
     Text[ chinese_traditional ] = "°»±΄-¶ρ¤J-§ΦΕγ¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αζΦΪ ΚΪΘΖΙ ΗαγΞΘΡ";
     Text[ greek ] = "Αναδυόμενο μενού για την κατάσταση γεμίσματος του ανιχνευτή";
@@ -1367,7 +1367,7 @@ Menu RID_POPUP_AUDIT
             Text[ chinese_simplified ] = "½αΚψ³δΜξΔ£Κ½(~F)";
             Text[ russian ] = "Ηΰκξνχθςό πεζθμ ηΰλθβκθ";
             Text[ polish ] = "Zakoρcz tryb wype³niania";
-            Text[ japanese ] = "•\\¦ΐsΣ°Δή‚ΜI—Ή";
+            Text[ japanese ] = "ΐsΣ°Δή‚ΜI—Ή(~E)";
             Text[ chinese_traditional ] = "µ²§τ¥R¶ρΌÒ¦΅(~F)";
             Text[ arabic ] = "ΕδεΗΑ ζΦΪ ΗαΚΪΘΖΙ";
             Text[ greek ] = "~Τερματισμός κατάστασης γεμίσματος";
