@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:07:57 $
+ *  last change: $Author: jl $ $Date: 2000-10-17 09:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ protected:
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr, sal_Bool& bHandled);
 
-    sal_Bool convertVARIANTARGS( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
+    HRESULT convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
                             Sequence<Any>& rSeq);
 
     vos::ORefCount                      m_refCount;
