@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:35:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-22 07:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,6 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
     else
         nErr = loadMacro( aURL.Complete );
 
-    nErr = loadMacro( aURL.Complete );
     if( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
