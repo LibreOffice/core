@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,15 @@ using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
 XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
-                           com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
+                           Reference < XInputStream > xNewZipStream,
                            const vos::ORef < EncryptionData > &rData,
-                           sal_Bool bNewRawStream,
-                           sal_Bool bIsEncrypted )
+                           sal_Int8 nStreamMode,
+                           sal_Bool bIsEncrypted,
+                          const ::rtl::OUString& aMediaType )
 : maEntry ( rEntry )
 , mxData ( rData )
-, mbRawStream ( bNewRawStream )
+, mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
+, mbWrappedRaw ( nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbFinished ( sal_False )
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
@@ -109,6 +111,7 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
 , mnZipSize ( 0 )
 , mnZipCurrent ( 0 )
 , mnHeaderToRead ( 0 )
+, mbCheckCRC( sal_True )
 {
     mnZipCurrent = maEntry.nOffset;
     if ( mbRawStream )
@@ -122,11 +125,11 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
         mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
     }
     sal_Bool bHaveEncryptData = ( !rData.isEmpty() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
-    sal_Bool bMustDecrypt = ( !bNewRawStream && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
+    sal_Bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
         ZipFile::StaticGetCipher ( rData, maCipher );
-    if ( bHaveEncryptData && !bMustDecrypt && bIsEncrypted )
+    if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
     {
         // if we have the data needed to decrypt it, but didn't want it decrypted (or
         // we couldn't decrypt it due to wrong password), then we prepend this
@@ -136,11 +139,50 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
         maHeader.realloc  ( n_ConstHeaderSize +
                             rData->aInitVector.getLength() +
                             rData->aSalt.getLength() +
-                            rData->aDigest.getLength() );
+                            rData->aDigest.getLength() +
+                            aMediaType.getLength() * sizeof( sal_Unicode ) );
         sal_Int8 * pHeader = maHeader.getArray();
-        ZipFile::StaticFillHeader ( rData, rEntry.nSize, pHeader );
+        ZipFile::StaticFillHeader ( rData, rEntry.nSize, aMediaType, pHeader );
         mnHeaderToRead = static_cast < sal_Int16 > ( maHeader.getLength() );
     }
+}
+
+// allows to read package raw stream
+XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
+                    const vos::ORef < EncryptionData > &rData )
+: mxData ( rData )
+, mbRawStream ( sal_False )
+, mbWrappedRaw ( sal_False )
+, mbFinished ( sal_False )
+, mxZipStream ( xRawStream )
+, mxZipSeek ( xRawStream, UNO_QUERY )
+, maInflater ( sal_True )
+, maCipher ( NULL )
+, mnMyCurrent ( 0 )
+, mnZipEnd ( 0 )
+, mnZipSize ( 0 )
+, mnZipCurrent ( 0 )
+, mnHeaderToRead ( 0 )
+, mbCheckCRC( sal_False )
+{
+    // for this scenario maEntry is not set !!!
+    OSL_ENSURE( mxZipSeek.is(), "The stream must be seekable!\n" );
+
+    // skip raw header, it must be already parsed to rData
+    mnZipCurrent = n_ConstHeaderSize + rData->aInitVector.getLength() +
+                            rData->aSalt.getLength() + rData->aDigest.getLength();
+
+    try {
+        if ( mxZipSeek.is() )
+            mnZipSize = mxZipSeek->getLength();
+    } catch( Exception& )
+    {
+        // in case of problem the size will stay set to 0
+    }
+
+    mnZipEnd = mnZipCurrent + mnZipSize;
+
+    ZipFile::StaticGetCipher ( rData, maCipher );
 }
 
 XUnbufferedStream::~XUnbufferedStream()
@@ -153,24 +195,66 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     sal_Int32 nRequestedBytes = nBytesToRead;
-    if ( mnMyCurrent + nRequestedBytes > mnZipSize )
-        nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize - mnMyCurrent );
+    OSL_ENSURE( !mnHeaderToRead || mbWrappedRaw, "Only encrypted raw stream can be provided with header!" );
+    if ( mnMyCurrent + nRequestedBytes > mnZipSize + mnHeaderToRead )
+        nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize + mnHeaderToRead - mnMyCurrent );
 
     sal_Int32 nRead = 0, nLastRead = 0, nTotal = 0;
     aData.realloc ( nRequestedBytes );
     if ( nRequestedBytes )
     {
-        if ( mnHeaderToRead )
+        if ( mbRawStream )
         {
-            sal_Int16 nToRead = static_cast < sal_Int16 > ( nRequestedBytes > mnHeaderToRead ? mnHeaderToRead : nRequestedBytes );
-            memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nToRead );
-            mnHeaderToRead -= nToRead;
-            if ( mnHeaderToRead == 0 )
-                maHeader.realloc ( 0 );
+            sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
+
+            if ( mbWrappedRaw && mnHeaderToRead )
+            {
+                sal_Int16 nHeadRead = static_cast < sal_Int16 > ( nRequestedBytes > mnHeaderToRead ?
+                                                                    mnHeaderToRead : nRequestedBytes );
+                memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nHeadRead );
+                mnHeaderToRead -= nHeadRead;
+                if ( mnHeaderToRead == 0 )
+                    maHeader.realloc ( 0 );
+
+                if ( nHeadRead < nRequestedBytes )
+                {
+                    sal_Int32 nToRead = nRequestedBytes - nHeadRead;
+                    nToRead = ( nDiff < nToRead ) ? nDiff : nToRead;
+
+                    Sequence< sal_Int8 > aPureData( nToRead );
+                    mxZipSeek->seek ( mnZipCurrent );
+                    nRead = mxZipStream->readBytes ( aPureData, nToRead );
+                    mnZipCurrent += nRead;
+
+                    aPureData.realloc( nRead );
+                    if ( mbCheckCRC )
+                        maCRC.update( aPureData );
+
+                    aData.realloc( nHeadRead + nRead );
+
+                    sal_Int8* pPureBuffer = aPureData.getArray();
+                    sal_Int8* pBuffer = aData.getArray();
+                    for ( sal_Int32 nInd = 0; nInd < nRead; nInd++ )
+                        pBuffer[ nHeadRead + nInd ] = pPureBuffer[ nInd ];
+                }
+
+                nRead += nHeadRead;
+            }
+            else
+            {
+                mxZipSeek->seek ( mnZipCurrent );
+
+                nRead = mxZipStream->readBytes (
+                                        aData,
+                                        static_cast < sal_Int32 > ( nDiff < nRequestedBytes ? nDiff : nRequestedBytes ) );
+
+                mnZipCurrent += nRead;
+
+                if ( mbWrappedRaw && mbCheckCRC )
+                    maCRC.update( aData );
+            }
         }
-
-
-        if ( !mbRawStream )
+        else
         {
             while ( 0 == ( nLastRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead ) ) ||
                   ( nRead + nLastRead != nRequestedBytes && mnZipCurrent < mnZipEnd ) )
@@ -197,11 +281,13 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, 8192L ) );
                     sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, nToRead );
                     mnZipCurrent += nZipRead;
-                    // maCompBuffer now has the uncompressed data, check if we need to decrypt
+                    // maCompBuffer now has the data, check if we need to decrypt
                     // before passing to the Inflater
                     if ( maCipher )
                     {
-                        maCRC.update( maCompBuffer );
+                        if ( mbCheckCRC )
+                            maCRC.update( maCompBuffer );
+
                         Sequence < sal_Int8 > aCryptBuffer ( nZipRead );
                         rtlCipherError aResult = rtl_cipher_decode ( maCipher,
                                       maCompBuffer.getConstArray(),
@@ -221,25 +307,15 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 }
             }
         }
-        else
-        {
-            sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
-            mxZipSeek->seek ( mnZipCurrent );
-            nRead = mxZipStream->readBytes (
-                                        aData,
-                                        static_cast < sal_Int32 > ( nDiff < nRequestedBytes ? nDiff : nRequestedBytes ) );
-
-            mnZipCurrent += nRead;
-        }
 
         mnMyCurrent += nRead + nLastRead;
         nTotal = nRead + nLastRead;
         if ( nTotal < nRequestedBytes)
             aData.realloc ( nTotal );
 
-        if ( !mbRawStream )
+        if ( mbCheckCRC && ( !mbRawStream || mbWrappedRaw ) )
         {
-            if ( !maCipher )
+            if ( !maCipher && !mbWrappedRaw )
                 maCRC.update( aData );
 
             if ( mnZipSize == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
