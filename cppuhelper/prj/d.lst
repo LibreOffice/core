@@ -58,8 +58,9 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\bin\cppuhelper*.dll %_DEST%\bin%_EXT%\cppuhelper*.dll
 ..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib%_EXT%\*
 
-..\%__SRC%\lib\libcppuhelper*.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libcppuhelper*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libcppuhelper*.so* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libcppuhelper*.dylib* %_DEST%\lib%_EXT%\*
+
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\misc\cppuhelper*.pdb %_DEST%\misc%_EXT%\*
@@ -70,3 +71,5 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
+
+linklib: libcppuhelper*.so.*.*.*
