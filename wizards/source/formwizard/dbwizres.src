@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 23:07:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,25 @@ String RID_DB_COMMON_START + 14
     Text = "Es konnte keine Verbindung zur Datenbank hergestellt werden!";
     Text [ english ] = "A Connection to the database could not be established";
     Text[ english_us ] = "A Connection to the database could not be established";
+    Text[ portuguese ] = "A Connection to the database could not be established";
+    Text[ russian ] = "Ñîåäèíèòüñÿ ñ áàçîé äàííûõ íåâîçìîæíî.";
+    Text[ greek ] = "A Connection to the database could not be established";
+    Text[ dutch ] = "A Connection to the database could not be established";
+    Text[ french ] = "A Connection to the database could not be established";
+    Text[ spanish ] = "¡No se pudo realizar una conexión a la base de datos!";
+    Text[ finnish ] = "A Connection to the database could not be established";
+    Text[ italian ] = "A Connection to the database could not be established";
+    Text[ danish ] = "A Connection to the database could not be established";
+    Text[ swedish ] = "Det gick inte att upprätta en förbindelse till databasen!";
+    Text[ polish ] = "Brak po³¹czenia z baz¹ danych!";
+    Text[ portuguese_brazilian ] = "A Connection to the database could not be established";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ö‚ÌÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "A Connection to the database could not be established";
+    Text[ chinese_simplified ] = "ÎŞ·¨ºÍÊı¾İ¿â½¨Á¢Á¬½Ó£¡";
+    Text[ chinese_traditional ] = "µLªk³s½u¨ì¸ê®Æ®w¡I";
+    Text[ turkish ] = "A Connection to the database could not be established";
+    Text[ arabic ] = "A Connection to the database could not be established";
+    Text[ catalan ] = "A Connection to the database could not be established";
 };
 
 String RID_DB_COMMON_START + 20
@@ -452,6 +471,25 @@ String RID_DB_COMMON_START + 20
     Text = "~Hilfe";
     Text [ english ] = "~Help";
     Text[ english_us ] = "~Help";
+    Text[ portuguese ] = "~Help";
+    Text[ russian ] = "Ñï~ğàâêà";
+    Text[ greek ] = "~Help";
+    Text[ dutch ] = "~Help";
+    Text[ french ] = "~Help";
+    Text[ spanish ] = "Ay~uda";
+    Text[ finnish ] = "~Help";
+    Text[ italian ] = "~Help";
+    Text[ danish ] = "~Help";
+    Text[ swedish ] = "~Hjälp";
+    Text[ polish ] = "Po~moc";
+    Text[ portuguese_brazilian ] = "~Help";
+    Text[ japanese ] = "ÍÙÌß(~H)";
+    Text[ korean ] = "~Help";
+    Text[ chinese_simplified ] = "°ïÖú(~H)";
+    Text[ chinese_traditional ] = "»¡©ú";
+    Text[ turkish ] = "~Help";
+    Text[ arabic ] = "~Help";
+    Text[ catalan ] = "~Help";
 };
 
 // ============================================================================
@@ -1717,21 +1755,21 @@ String RID_DB_FORM_WIZARD_START + 22
     Text = "Geben Sie den Titel ein";
     Text [ english_us ] = "~Document title";
     Text[ portuguese ] = "~Título do documento";
-    Text[ russian ] = "~Çàãîëîâîê äîêóìåíòà";
+    Text[ russian ] = "~Ââåäèòå çàãîëîâîê";
     Text[ dutch ] = "~Naam document";
     Text[ french ] = "Titre du ~document";
-    Text[ spanish ] = "~Título del documento";
+    Text[ spanish ] = "Escriba el título";
     Text[ italian ] = "~Titolo del documento";
     Text[ danish ] = "~Dokumenttitel";
     Text[ swedish ] = "~Dokumentnamn";
-    Text[ polish ] = "~Tytu³ dokumentu";
+    Text[ polish ] = "Podaj tytu³";
     Text[ portuguese_brazilian ] = "~Dokumententitel";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÀ²ÄÙ";
-    Text[ chinese_simplified ] = "ÎÄµµ±êÌâ";
-    Text[ chinese_traditional ] = "¤å¥ó¼ĞÃD";
+    Text[ japanese ] = "À²ÄÙ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢";
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸ö±êÌâ";
+    Text[ chinese_traditional ] = "½Ğ¿é¤J¤@­Ó¤å¥ó¼ĞÃD";
     Text[ arabic ] = "~ÚäæÇä ÇáãÓÊäÏ";
     Text[ dutch ] = "~Naam document";
-    Text[ chinese_simplified ] = "ÎÄµµ±êÌâ";
+    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸ö±êÌâ";
     Text[ greek ] = "Ôßôëïò åããñÜöïõ";
     Text[ korean ] = "¹®¼­ Á¦¸ñ";
     Text[ turkish ] = "~Belge başlığı";
@@ -1982,6 +2020,25 @@ String RID_DB_FORM_WIZARD_START + 32
     Text = "Beschriftungen";
     Text [ english ] = "Alignment";
     Text [ english_us ] = "Alignment";
+    Text[ portuguese ] = "Alignment";
+    Text[ russian ] = "Ïîäïèñè";
+    Text[ greek ] = "Alignment";
+    Text[ dutch ] = "Alignment";
+    Text[ french ] = "Alignment";
+    Text[ spanish ] = "Etiquetas";
+    Text[ finnish ] = "Alignment";
+    Text[ italian ] = "Alignment";
+    Text[ danish ] = "Alignment";
+    Text[ swedish ] = "Etiketter";
+    Text[ polish ] = "Etykiety";
+    Text[ portuguese_brazilian ] = "Alignment";
+    Text[ japanese ] = "×ÍŞÙ‚ÌˆÊ’u";
+    Text[ korean ] = "Alignment";
+    Text[ chinese_simplified ] = "±êÇ©";
+    Text[ chinese_traditional ] = "¼ĞÅÒ";
+    Text[ turkish ] = "Alignment";
+    Text[ arabic ] = "Alignment";
+    Text[ catalan ] = "Alignment";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
@@ -1989,6 +2046,25 @@ String RID_DB_FORM_WIZARD_START + 33
     Text = "Beschriftungsfelder linksbündig ausrichten";
     Text [ english ] = "Align Labels on left Edge";
     Text [ english_us ] = "Align Labels on left Edge";
+    Text[ portuguese ] = "Align Labels on left Edge";
+    Text[ russian ] = "Âûğîâíÿòü ïîëÿ ïîäïèñåé ïî ëåâîìó êğàş";
+    Text[ greek ] = "Align Labels on left Edge";
+    Text[ dutch ] = "Align Labels on left Edge";
+    Text[ french ] = "Align Labels on left Edge";
+    Text[ spanish ] = "Ajustar a la izquierda los campos de etiquetas";
+    Text[ finnish ] = "Align Labels on left Edge";
+    Text[ italian ] = "Align Labels on left Edge";
+    Text[ danish ] = "Align Labels on left Edge";
+    Text[ swedish ] = "Vänsterjustera etikettfält";
+    Text[ polish ] = "Wyrównaj pola etykiety do lewej";
+    Text[ portuguese_brazilian ] = "Align Labels on left Edge";
+    Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ‚ğ¶‘µ‚¦";
+    Text[ korean ] = "Align Labels on left Edge";
+    Text[ chinese_simplified ] = "±êÇ©×Ö¶ÎÏò×ó¶ÔÆë";
+    Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì¾a¥ª¹ï»ô";
+    Text[ turkish ] = "Align Labels on left Edge";
+    Text[ arabic ] = "Align Labels on left Edge";
+    Text[ catalan ] = "Align Labels on left Edge";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
@@ -1996,6 +2072,25 @@ String RID_DB_FORM_WIZARD_START + 34
     Text = "Beschriftungsfelder rechtsbündig ausrichten";
     Text [ english ] = "Align Labels on right Edge";
     Text [ english_us ] = "Align Labels on right Edge";
+    Text[ portuguese ] = "Align Labels on right Edge";
+    Text[ russian ] = "Âûğîâíÿòü ïîëÿ ïîäïèñåé ïî ïğàâîìó êğàş";
+    Text[ greek ] = "Align Labels on right Edge";
+    Text[ dutch ] = "Align Labels on right Edge";
+    Text[ french ] = "Align Labels on right Edge";
+    Text[ spanish ] = "Ajustar a la derecha los campos de etiquetas";
+    Text[ finnish ] = "Align Labels on right Edge";
+    Text[ italian ] = "Align Labels on right Edge";
+    Text[ danish ] = "Align Labels on right Edge";
+    Text[ swedish ] = "Högerjustera etikettfält";
+    Text[ polish ] = "Wyrównaj pola etykiety do prawej";
+    Text[ portuguese_brazilian ] = "Align Labels on right Edge";
+    Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ‚ğ‰E‘µ‚¦";
+    Text[ korean ] = "Align Labels on right Edge";
+    Text[ chinese_simplified ] = "±êÇ©×Ö¶ÎÏòÓÒ¶ÔÆë";
+    Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì¾a¥k¹ï»ô";
+    Text[ turkish ] = "Align Labels on right Edge";
+    Text[ arabic ] = "Align Labels on right Edge";
+    Text[ catalan ] = "Align Labels on right Edge";
 };
 
 String RID_DB_FORM_WIZARD_START + 35
@@ -2003,6 +2098,25 @@ String RID_DB_FORM_WIZARD_START + 35
     Text = "Anordnung der DB-Felder";
     Text [ english ] = "Arrangement of DB Fields";
     Text [ english_us ] = "Arrangement of DB Fields";
+    Text[ portuguese ] = "Arrangement of DB Fields";
+    Text[ russian ] = "Ğàñïîëîæåíèå ïîëåé áàçû äàííûõ";
+    Text[ greek ] = "Arrangement of DB Fields";
+    Text[ dutch ] = "Arrangement of DB Fields";
+    Text[ french ] = "Arrangement of DB Fields";
+    Text[ spanish ] = "Ajuste de los campos de la base de datos";
+    Text[ finnish ] = "Arrangement of DB Fields";
+    Text[ italian ] = "Arrangement of DB Fields";
+    Text[ danish ] = "Arrangement of DB Fields";
+    Text[ swedish ] = "Placering av DB-fält";
+    Text[ polish ] = "Rozmieszczenie pól bazy danych";
+    Text[ portuguese_brazilian ] = "Arrangement of DB Fields";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚Ì®—ñ";
+    Text[ korean ] = "Arrangement of DB Fields";
+    Text[ chinese_simplified ] = "¶ÔÆëÊı¾İ¿â×Ö¶Î";
+    Text[ chinese_traditional ] = "¹ï»ô¸ê®Æ®wÄæ¦ì";
+    Text[ turkish ] = "Arrangement of DB Fields";
+    Text[ arabic ] = "Arrangement of DB Fields";
+    Text[ catalan ] = "Arrangement of DB Fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 36
@@ -2010,6 +2124,25 @@ String RID_DB_FORM_WIZARD_START + 36
     Text = "In Spalten-Beschriftungen links";
     Text [ english ] = "Columnar - Labels left";
     Text [ english_us ] = "Columnar - Labels left";
+    Text[ portuguese ] = "Columnar - Labels left";
+    Text[ russian ] = "Êîëîíêè - ïîäïèñè ñëåâà";
+    Text[ greek ] = "Columnar - Labels left";
+    Text[ dutch ] = "Columnar - Labels left";
+    Text[ french ] = "Columnar - Labels left";
+    Text[ spanish ] = "En columnas - Etiquetas a la izquierda";
+    Text[ finnish ] = "Columnar - Labels left";
+    Text[ italian ] = "Columnar - Labels left";
+    Text[ danish ] = "Columnar - Labels left";
+    Text[ swedish ] = "Till vänster i kolumnetiketter";
+    Text[ polish ] = "W kolumnach - etykiety po lewej";
+    Text[ portuguese_brazilian ] = "Columnar - Labels left";
+    Text[ japanese ] = "—“‚ÅA×ÍŞÙ‚Í¶‚É";
+    Text[ korean ] = "Columnar - Labels left";
+    Text[ chinese_simplified ] = "ÔÚÁĞÄÚ - ±êÇ©Ïò×ó";
+    Text[ chinese_traditional ] = "¦bÄæ¦ì? - ¼ĞÅÒ¦V¥ª";
+    Text[ turkish ] = "Columnar - Labels left";
+    Text[ arabic ] = "Columnar - Labels left";
+    Text[ catalan ] = "Columnar - Labels left";
 };
 
 String RID_DB_FORM_WIZARD_START + 37
@@ -2017,6 +2150,25 @@ String RID_DB_FORM_WIZARD_START + 37
     Text = "In Spalten - Beschriftungen oben";
     Text [ english ] = "Columnar - Labels on Top";
     Text [ english_us ] = "Columnar - Labels on Top";
+    Text[ portuguese ] = "Columnar - Labels on Top";
+    Text[ russian ] = "Êîëîíêè - ïîäïèñè ñâåğõó";
+    Text[ greek ] = "Columnar - Labels on Top";
+    Text[ dutch ] = "Columnar - Labels on Top";
+    Text[ french ] = "Columnar - Labels on Top";
+    Text[ spanish ] = "En columnas - Etiquetas arriba";
+    Text[ finnish ] = "Columnar - Labels on Top";
+    Text[ italian ] = "Columnar - Labels on Top";
+    Text[ danish ] = "Columnar - Labels on Top";
+    Text[ swedish ] = "Uppe i kolumnetiketter";
+    Text[ polish ] = "W kolumnach - etykiety u góry";
+    Text[ portuguese_brazilian ] = "Columnar - Labels on Top";
+    Text[ japanese ] = "—“‚ÅA×ÍŞÙ‚Íã‚É";
+    Text[ korean ] = "Columnar - Labels on Top";
+    Text[ chinese_simplified ] = "ÔÚÁĞÄÚ - ±êÇ©ÏòÉÏ";
+    Text[ chinese_traditional ] = "¦bÄæ¦ì? - ¼ĞÅÒ¦V¤W";
+    Text[ turkish ] = "Columnar - Labels on Top";
+    Text[ arabic ] = "Columnar - Labels on Top";
+    Text[ catalan ] = "Columnar - Labels on Top";
 };
 
 String RID_DB_FORM_WIZARD_START + 38
@@ -2024,6 +2176,25 @@ String RID_DB_FORM_WIZARD_START + 38
     Text = "In Blöcken - Beschriftungen links";
     Text [ english ] = "In Blocks - Labels left";
     Text [ english_us ] = "Inf Blocks - Labels left";
+    Text[ portuguese ] = "Inf Blocks - Labels left";
+    Text[ russian ] = "Áëîêè - ïîäïèñè ñëåâà";
+    Text[ greek ] = "Inf Blocks - Labels left";
+    Text[ dutch ] = "Inf Blocks - Labels left";
+    Text[ french ] = "Inf Blocks - Labels left";
+    Text[ spanish ] = "En bloques - Etiquetas a la izquierda";
+    Text[ finnish ] = "Inf Blocks - Labels left";
+    Text[ italian ] = "Inf Blocks - Labels left";
+    Text[ danish ] = "Inf Blocks - Labels left";
+    Text[ swedish ] = "Inf Blocks - Labels left";
+    Text[ polish ] = "W blokach - etykiety po lewej";
+    Text[ portuguese_brazilian ] = "Inf Blocks - Labels left";
+    Text[ japanese ] = "ÌŞÛ¯¸‚ÅA×ÍŞÙ‚Í¶‚É";
+    Text[ korean ] = "Inf Blocks - Labels left";
+    Text[ chinese_simplified ] = "ÔÚÌõ¿éÄÚ - ±êÇ©Ïò×ó";
+    Text[ chinese_traditional ] = "¦b±ø¶ô? - ¼ĞÅÒ¦V¥ª";
+    Text[ turkish ] = "Inf Blocks - Labels left";
+    Text[ arabic ] = "Inf Blocks - Labels left";
+    Text[ catalan ] = "Inf Blocks - Labels left";
 };
 
 String RID_DB_FORM_WIZARD_START + 39
@@ -2031,6 +2202,25 @@ String RID_DB_FORM_WIZARD_START + 39
     Text = "In Blöcken - Beschriftungen oben";
     Text [ english ] = "In Blocks - Labels oben";
     Text [ english_us ] = "In Blocks - Labels oben";
+    Text[ portuguese ] = "In Blocks - Labels oben";
+    Text[ russian ] = "Áëîêè - ïîäïèñè ñâåğõó";
+    Text[ greek ] = "In Blocks - Labels oben";
+    Text[ dutch ] = "In Blocks - Labels oben";
+    Text[ french ] = "In Blocks - Labels oben";
+    Text[ spanish ] = "En bloques - Etiquetas arriba";
+    Text[ finnish ] = "In Blocks - Labels oben";
+    Text[ italian ] = "In Blocks - Labels oben";
+    Text[ danish ] = "In Blocks - Labels oben";
+    Text[ swedish ] = "In Blocks - Labels oben";
+    Text[ polish ] = "W blokach - etykiety u góry";
+    Text[ portuguese_brazilian ] = "In Blocks - Labels oben";
+    Text[ japanese ] = "ÌŞÛ¯¸‚ÅA×ÍŞÙ‚Íã‚É";
+    Text[ korean ] = "In Blocks - Labels oben";
+    Text[ chinese_simplified ] = "ÔÚÌõ¿éÄÚ - ±êÇ©ÏòÉÏ";
+    Text[ chinese_traditional ] = "¦b±ø¶ô? - ¼ĞÅÒ¦V¤W";
+    Text[ turkish ] = "In Blocks - Labels oben";
+    Text[ arabic ] = "In Blocks - Labels oben";
+    Text[ catalan ] = "In Blocks - Labels oben";
 };
 
 String RID_DB_FORM_WIZARD_START + 40
@@ -2038,6 +2228,25 @@ String RID_DB_FORM_WIZARD_START + 40
     Text = "Als Datenblatt";
     Text [ english ] = "As Grid";
     Text [ english_us ] = "As Grid";
+    Text[ portuguese ] = "As Grid";
+    Text[ russian ] = "Êàê ëèñò äàííûõ";
+    Text[ greek ] = "As Grid";
+    Text[ dutch ] = "As Grid";
+    Text[ french ] = "As Grid";
+    Text[ spanish ] = "Como hoja de datos";
+    Text[ finnish ] = "As Grid";
+    Text[ italian ] = "As Grid";
+    Text[ danish ] = "As Grid";
+    Text[ swedish ] = "As Grid";
+    Text[ polish ] = "Jako siatkê";
+    Text[ portuguese_brazilian ] = "As Grid";
+    Text[ japanese ] = "ÃŞ°À•\\‚Æ‚µ‚Ä";
+    Text[ korean ] = "As Grid";
+    Text[ chinese_simplified ] = "µ±×÷Êı¾İ±í";
+    Text[ chinese_traditional ] = "·í§@¸ê®Æªí";
+    Text[ turkish ] = "As Grid";
+    Text[ arabic ] = "As Grid";
+    Text[ catalan ] = "As Grid";
 };
 
 
@@ -2048,6 +2257,25 @@ String RID_DB_FORM_WIZARD_START + 45
     Text [ english_us ] = "Choose Database";
     Text[ language_user1 ] = "Titel der ersten Seite des Autopiloten";
 
+    Text[ portuguese ] = "Choose Database";
+    Text[ russian ] = "Âûáîğ áàçû äàííûõ";
+    Text[ greek ] = "Choose Database";
+    Text[ dutch ] = "Choose Database";
+    Text[ french ] = "Choose Database";
+    Text[ spanish ] = "Seleccionar base de datos";
+    Text[ finnish ] = "Choose Database";
+    Text[ italian ] = "Choose Database";
+    Text[ danish ] = "Choose Database";
+    Text[ swedish ] = "Databasurval";
+    Text[ polish ] = "Wybór bazy danych";
+    Text[ portuguese_brazilian ] = "Choose Database";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì‘I‘ğ";
+    Text[ korean ] = "Choose Database";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İ¿â";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w";
+    Text[ turkish ] = "Choose Database";
+    Text[ arabic ] = "Choose Database";
+    Text[ catalan ] = "Choose Database";
 };
 
 String RID_DB_FORM_WIZARD_START + 46
@@ -2057,6 +2285,25 @@ String RID_DB_FORM_WIZARD_START + 46
     Text [ english_us ] = "Layout";
     Text[ language_user1 ] = "Titel der zweiten Seite des Autopiloten";
 
+    Text[ portuguese ] = "Layout";
+    Text[ russian ] = "Îôîğìëåíèå";
+    Text[ greek ] = "Layout";
+    Text[ dutch ] = "Layout";
+    Text[ french ] = "Layout";
+    Text[ spanish ] = "Diseño";
+    Text[ finnish ] = "Layout";
+    Text[ italian ] = "Layout";
+    Text[ danish ] = "Layout";
+    Text[ swedish ] = "Utformning";
+    Text[ polish ] = "Uk³ad";
+    Text[ portuguese_brazilian ] = "Layout";
+    Text[ japanese ] = "Ú²±³Ä";
+    Text[ korean ] = "Layout";
+    Text[ chinese_simplified ] = "°æÊ½";
+    Text[ chinese_traditional ] = "ª©¦¡";
+    Text[ turkish ] = "Layout";
+    Text[ arabic ] = "Layout";
+    Text[ catalan ] = "Layout";
 };
 
 String RID_DB_FORM_WIZARD_START + 47
@@ -2065,6 +2312,25 @@ String RID_DB_FORM_WIZARD_START + 47
     Text [ english ] = "Completion";
     Text [ english_us ] = "Completion";
     Text[ language_user1 ] = "Titel der dritten Seite des Autopiloten";
+    Text[ portuguese ] = "Completion";
+    Text[ russian ] = "Completion";
+    Text[ greek ] = "Completion";
+    Text[ dutch ] = "Completion";
+    Text[ french ] = "Completion";
+    Text[ spanish ] = "Terminar";
+    Text[ finnish ] = "Completion";
+    Text[ italian ] = "Completion";
+    Text[ danish ] = "Completion";
+    Text[ swedish ] = "Completion";
+    Text[ polish ] = "Utwórz";
+    Text[ portuguese_brazilian ] = "Completion";
+    Text[ japanese ] = "Š®¬";
+    Text[ korean ] = "Completion";
+    Text[ chinese_simplified ] = "Íê³É";
+    Text[ chinese_traditional ] = "§¹¦¨";
+    Text[ turkish ] = "Completion";
+    Text[ arabic ] = "Completion";
+    Text[ catalan ] = "Completion";
 };
 
 String RID_DB_FORM_WIZARD_START + 50
@@ -2073,6 +2339,25 @@ String RID_DB_FORM_WIZARD_START + 50
     Text [ english ] = "Presentation of Binary Fields";
     Text [ english_us ] = "Presentation of Binary Fields";
     Text[ language_user1 ] = "Überschrift einiger Dialog Controls";
+    Text[ portuguese ] = "Presentation of Binary Fields";
+    Text[ russian ] = "Ïğåäñòàâëåíèå áèíàğíîãî ïîëÿ";
+    Text[ greek ] = "Presentation of Binary Fields";
+    Text[ dutch ] = "Presentation of Binary Fields";
+    Text[ french ] = "Presentation of Binary Fields";
+    Text[ spanish ] = "Representación de campo binario";
+    Text[ finnish ] = "Presentation of Binary Fields";
+    Text[ italian ] = "Presentation of Binary Fields";
+    Text[ danish ] = "Presentation of Binary Fields";
+    Text[ swedish ] = "Presentation av binära fält";
+    Text[ polish ] = "Wygl¹d pola binarnego";
+    Text[ portuguese_brazilian ] = "Presentation of Binary Fields";
+    Text[ japanese ] = "2i–@Ì¨°ÙÄŞ‚Ì•\\¦";
+    Text[ korean ] = "Presentation of Binary Fields";
+    Text[ chinese_simplified ] = "¶ş½øÖÆ×Ö¶ÎÏÔÊ¾";
+    Text[ chinese_traditional ] = "¤G¤¸Äæ¦ìÅã¥Ü";
+    Text[ turkish ] = "Presentation of Binary Fields";
+    Text[ arabic ] = "Presentation of Binary Fields";
+    Text[ catalan ] = "Presentation of Binary Fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 51
@@ -2081,6 +2366,25 @@ String RID_DB_FORM_WIZARD_START + 51
     Text [ english ] = "Ignore Binary Fields";
     Text [ english_us ] = "Ignore Binary Fields";
     Text[ language_user1 ] = "Label eines Radio-Buttons";
+    Text[ portuguese ] = "Ignore Binary Fields";
+    Text[ russian ] = "Èãíîğèğîâàòü áèíàğíûå ïîëÿ";
+    Text[ greek ] = "Ignore Binary Fields";
+    Text[ dutch ] = "Ignore Binary Fields";
+    Text[ french ] = "Ignore Binary Fields";
+    Text[ spanish ] = "Ignorar campos binarios";
+    Text[ finnish ] = "Ignore Binary Fields";
+    Text[ italian ] = "Ignore Binary Fields";
+    Text[ danish ] = "Ignore Binary Fields";
+    Text[ swedish ] = "Ignorera binära fält";
+    Text[ polish ] = "Ignoruj pola binarne";
+    Text[ portuguese_brazilian ] = "Ignore Binary Fields";
+    Text[ japanese ] = "2i–@Ì¨°ÙÄŞ‚ğ–³‹‚·‚é";
+    Text[ korean ] = "Ignore Binary Fields";
+    Text[ chinese_simplified ] = "ºöÂÔ¶ş½øÖÆ×Ö¶Î";
+    Text[ chinese_traditional ] = "©¿²¤¤G¤¸Äæ¦ì";
+    Text[ turkish ] = "Ignore Binary Fields";
+    Text[ arabic ] = "Ignore Binary Fields";
+    Text[ catalan ] = "Ignore Binary Fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 52
@@ -2089,6 +2393,25 @@ String RID_DB_FORM_WIZARD_START + 52
     Text [ english ] = "Binary Fields as Images";
     Text [ english_us ] = "Binary Fields as Images";
     Text[ language_user1 ] = "Label eines Radio-Buttons";
+    Text[ portuguese ] = "Binary Fields as Images";
+    Text[ russian ] = "Áèíàğíûå ïîëÿ â âèäå ğèñóíêîâ";
+    Text[ greek ] = "Binary Fields as Images";
+    Text[ dutch ] = "Binary Fields as Images";
+    Text[ french ] = "Binary Fields as Images";
+    Text[ spanish ] = "Campos binarios como imágenes";
+    Text[ finnish ] = "Binary Fields as Images";
+    Text[ italian ] = "Binary Fields as Images";
+    Text[ danish ] = "Binary Fields as Images";
+    Text[ swedish ] = "Binära fält som grafik";
+    Text[ polish ] = "Pola binarne jako grafiki";
+    Text[ portuguese_brazilian ] = "Binary Fields as Images";
+    Text[ japanese ] = "2i–@Ì¨°ÙÄŞ‚ğ}‚Å";
+    Text[ korean ] = "Binary Fields as Images";
+    Text[ chinese_simplified ] = "¶ş½øÖÆ×Ö¶Îµ±×÷Í¼ĞÎ";
+    Text[ chinese_traditional ] = "¤G¤¸Äæ¦ì·í§@¹Ï§Î";
+    Text[ turkish ] = "Binary Fields as Images";
+    Text[ arabic ] = "Binary Fields as Images";
+    Text[ catalan ] = "Binary Fields as Images";
 };
 
 
@@ -2136,7 +2459,7 @@ String RID_DB_FORM_WIZARD_START + 56
     Text[ swedish ] = "Sida vid sida";
     Text[ polish ] = "P³ytki";
     Text[ portuguese_brazilian ] = "Tiling";
-    Text[ japanese ] = "À²Ùó(~T)";
+    Text[ japanese ] = "•À‚×‚Ä•\\¦(~T)";
     Text[ korean ] = "~Tiling";
     Text[ chinese_simplified ] = "Æ½ÆÌ(~T)";
     Text[ chinese_traditional ] = "¥­¾Q(~T)";
@@ -2163,7 +2486,7 @@ String RID_DB_FORM_WIZARD_START + 57
     Text[ swedish ] = "~Skalat";
     Text[ polish ] = "Skalowany";
     Text[ portuguese_brazilian ] = "~Scaled";
-    Text[ japanese ] = "’iŠKó(~S)";
+    Text[ japanese ] = "Šg‘å‚µ‚Ä•\\¦(~S)";
     Text[ korean ] = "~Scaled";
     Text[ chinese_simplified ] = "²ÉÓÃÏÔÊ¾±ÈÀı(~S)";
     Text[ chinese_traditional ] = "±Ä¥ÎÅã¥Ü¤ñ¨Ò(~S)";
@@ -2178,6 +2501,25 @@ String RID_DB_FORM_WIZARD_START + 60
     Text = "Verzeichnispfad";
     Text[English] = "Directory Path";
     Text[ English_us ] = "Directory Path";
+    Text[ portuguese ] = "Directory Path";
+    Text[ russian ] = "Ïóòü ïàïêè";
+    Text[ greek ] = "Directory Path";
+    Text[ dutch ] = "Directory Path";
+    Text[ french ] = "Directory Path";
+    Text[ spanish ] = "Ruta del directorio";
+    Text[ finnish ] = "Directory Path";
+    Text[ italian ] = "Directory Path";
+    Text[ danish ] = "Directory Path";
+    Text[ swedish ] = "Katalogsökväg";
+    Text[ polish ] = "Œcie¿ka katalogu";
+    Text[ portuguese_brazilian ] = "Directory Path";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØÊß½";
+    Text[ korean ] = "Directory Path";
+    Text[ chinese_simplified ] = "Ä¿Â¼Â·¾¶";
+    Text[ chinese_traditional ] = "¥Ø¿ı¸ô®|";
+    Text[ turkish ] = "Directory Path";
+    Text[ arabic ] = "Directory Path";
+    Text[ catalan ] = "Directory Path";
 };
 
 
@@ -2219,7 +2561,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ dutch ] = "Er is geen database geïnstalleerd. U heeft tenminste één database nodig om de autopiloot voor query's te kunnen starten.";
     Text[ french ] = "Aucune base de données n'est installée. Vous avez besoin d'au moins une base de données afin de pouvoir lancer l'AutoPilote de requête.";
     Text[ spanish ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para consultas.";
-    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il pilota automatico per le ricerche.";
+    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il Pilota automatico per le ricerche.";
     Text[ danish ] = "Der er ikke installeret en database. Der kræves mindst en database for at kunne starte AutoPiloten for forespørgsler.";
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för sökningar.";
     Text[ polish ] = "Nie zainstalowano bazy danych. Do uruchomienia AutoPilota kwerend potrzebna jest co najmniej jedna baza danych.";
@@ -3149,7 +3491,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ dutch ] = "Er is geen database geïnstalleerd. U heeft tenminste één database nodig om de autopiloot voor berichten te kunnen starten.";
     Text[ french ] = "Aucune base de données n'est installée. Vous avez besoin d'au moins une base de données afin de pouvoir lancer l'AutoPilote d'états.";
     Text[ spanish ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para informes.";
-    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il pilota automatico per i rapporti.";
+    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il Pilota automatico per i rapporti.";
     Text[ danish ] = "Der er ikke installeret en database. Der kræves mindst en database for at kunne starte AutoPiloten for rapporter.";
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för rapporter.";
     Text[ polish ] = "Nie zainstalowana ¿adnej bazy danych. Wymagana jest co najmniej jedna baza danych, aby uruchomiæ AutoPilota raportów.";
@@ -4153,7 +4495,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ dutch ] = "Er is geen database geïnstalleerd. U heeft ten minste één database nodig om de autopiloot voor tabellen te kunnen starten.";
     Text[ french ] = "Aucune base de données n'est installée. Vous avez besoin d'au moins une base de données afin de pouvoir lancer l'AutoPilote de table.";
     Text[ spanish ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para tablas.";
-    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il pilota automatico per le tabelle.";
+    Text[ italian ] = "Non è stato installato nessun database. È necessario installare almeno un database per poter avviare il Pilota automatico per le tabelle.";
     Text[ danish ] = "Der er ikke installeret en database. Der kræves mindst en database for at kunne starte AutoPiloten for tabeller.";
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för tabeller.";
     Text[ polish ] = "Nie zainstalowano ¿adnej bazy danych. Do uruchomienia AutoPilota tabeli potrzeba co najmniej jednej bazy danych.";
@@ -5642,5 +5984,6 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ catalan ] = "No, I only wish to use the value for display purposes";
     Text[ finnish ] = "~Nein, ich möchte den Wert nur zum Anzeigen verwenden.";
 };
+
 
 
