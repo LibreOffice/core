@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-24 11:23:09 $
+ *  last change: $Author: os $ $Date: 2002-08-16 13:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,10 @@ const SwPropNameTab aPropNameTab = {
 /* 0628 UNO_NAME_ANCHOR_POSITION */     {MAP_CHAR_LEN("AnchorPosition")},
 /* 0629 UNO_NAME_TEXT_READING */        {MAP_CHAR_LEN("TextReading")},
 /* 0630 UNO_NAME_PRIMARY_KEY_READING */ {MAP_CHAR_LEN("PrimaryKeyReading")},
-/* 0631 UNO_NAME_SECONDARY_KEY_READING */   {MAP_CHAR_LEN("SecondaryKeyReading")}
+/* 0631 UNO_NAME_SECONDARY_KEY_READING */   {MAP_CHAR_LEN("SecondaryKeyReading")},
+/* 0632 UNO_NAME_BACK_GRAPHIC_TRANSPARENCY*/ {MAP_CHAR_LEN("BackGraphicTransparency")},
+/* 0633 UNO_NAME_BACK_COLOR_R_G_B */        {MAP_CHAR_LEN("BackColorRGB")},
+/* 0634 UNO_NAME_BACK_COLOR_TRANSPARENCY */ {MAP_CHAR_LEN("BackColorTransparency")}
 };
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-14 07:41:54 $
+ *  last change: $Author: os $ $Date: 2002-08-16 13:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,10 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
     case TP_BACKGROUND:
         if( DLG_FRM_STD == nDlgType )
+        {
             ((SvxBackgroundTabPage&)rPage).ShowSelector();
+            ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+        }
         break;
 
     case TP_BORDER:
@@ -274,62 +277,3 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
-
-
-/*-----------------25.02.94 21:22-------------------
-   $Log: not supported by cvs2svn $
-   Revision 1.1.1.1  2000/09/18 17:14:37  hr
-   initial import
-
-   Revision 1.196  2000/09/18 16:05:33  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.195  2000/08/25 14:10:11  jp
-   Graphic Crop-Attribut and TabPage exported to SVX
-
-   Revision 1.194  2000/06/20 14:47:24  os
-   #70060# less occurences of columns in HTML
-
-   Revision 1.193  1998/07/17 08:18:06  OS
-   SfxxSmallMacroTabPage einsetzen #52809#
-
-
-      Rev 1.192   17 Jul 1998 10:18:06   OS
-   SfxxSmallMacroTabPage einsetzen #52809#
-
-      Rev 1.191   15 Jun 1998 21:15:48   MH
-   add: list.hxx
-
-      Rev 1.190   16 Apr 1998 13:11:10   OS
-   Rahmenanpassung die zweite
-
-      Rev 1.189   06 Apr 1998 09:48:24   OS
-   HTML-Anpassungen
-
-      Rev 1.188   28 Nov 1997 19:41:18   MA
-   includes
-
-      Rev 1.187   24 Nov 1997 17:40:14   MA
-   include
-
-      Rev 1.186   03 Nov 1997 13:19:48   MA
-   precomp entfernt
-
-      Rev 1.185   01 Sep 1997 13:29:54   OS
-   DLL-Umstellung
-
-      Rev 1.184   15 Aug 1997 12:13:22   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.183   11 Aug 1997 12:45:16   MH
-   chg: header
-
-      Rev 1.182   03 Jul 1997 12:54:34   OS
-   SwSwMode jetzt mit BYTE #41255#
-
-      Rev 1.181   29 Apr 1997 15:04:48   OS
-   Hintergrund auch fuer OLE
-
---------------------------------------------------*/
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 10:24:57 $
+ *  last change: $Author: os $ $Date: 2002-08-16 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
     {
         uno::Any* pCol = 0;
         GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
+        uno::Any* pRGBCol = 0;
+        GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
+        uno::Any* pColTrans = 0;
+        GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
         uno::Any* pTrans = 0;
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
         uno::Any* pGrLoc = 0;
@@ -373,20 +377,34 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
         uno::Any* pGrFilter = 0;
         GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
+        uno::Any* pGrTranparency = 0;
+        GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
 
-        if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc)
+        if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc ||
+                            pGrTranparency || pColTrans || pRGBCol)
         {
             SvxBrushItem aBrush ( static_cast < const SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
             if(pCol )
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
+            if(pColTrans)
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+            if(pRGBCol)
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
             if(pTrans)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
+            {
+                // don't overwrite transparency with a non-transparence flag
+                if(!pColTrans || Any2Bool( *pTrans ))
+                    bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
+            }
             if(pGrURL)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
             if(pGrFilter)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
             if(pGrLoc)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
+            if(pGrTranparency)
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
+
             rToSet.Put(aBrush);
         }
     }
@@ -1106,7 +1124,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     {
         sal_Bool bNextFrame = sal_False;
         if ( pCur->nFlags & PropertyAttribute::READONLY)
-            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
@@ -1692,7 +1710,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         if (!pCur)
             throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pCur->nFlags & PropertyAttribute::READONLY)
-            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         BOOL bNextFrame;
         if( pCur->nWID &&
@@ -1764,7 +1782,7 @@ Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         if(pCur)
         {
             if ( pCur->nFlags & PropertyAttribute::READONLY )
-                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if ( pCur->nWID < RES_FRMATR_END )
             {
                 const SfxPoolItem& rDefItem =
