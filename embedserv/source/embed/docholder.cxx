@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:08:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,10 @@ DocumentHolder::~DocumentHolder()
 
 void DocumentHolder::OnPosRectChanged(LPRECT lpRect) const
 {
+    lpRect->left += m_aBorder.left;
+    lpRect->right -= m_aBorder.right;
+    lpRect->top += m_aBorder.top;
+    lpRect->bottom -= m_aBorder.bottom;
     if(m_pIOleIPSite)
         m_pIOleIPSite->OnPosRectChange(lpRect);
 }
@@ -403,12 +407,16 @@ HRESULT DocumentHolder::InPlaceActivate(
             SetParent(m_hWndxWinParent,hWndSite);
             ShowWindow(m_hWndxWinParent,SW_SHOW);  //Make visible.
         }
-        m_xEditWindow->setPosSize(
-            m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
-            m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
-            rcPos.right-rcPos.left,
-            rcPos.bottom - rcPos.top,
-            awt::PosSize::POSSIZE);
+
+        if ( !m_xFrame.is() )
+            // initially set size to "empty", this guarantees that the final resize
+            // is always executed (will be done by "SetObjectRects" after getting internal border)
+            m_xEditWindow->setPosSize(
+                0,
+                0,
+                0,
+                0,
+                awt::PosSize::POSSIZE);
         m_xEditWindow->setVisible(sal_True);
     }
 
@@ -462,7 +470,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         if(xComponentLoader.is())
         {
             uno::Any aAny;
-            uno::Sequence<beans::PropertyValue> aSeq(2);
+            uno::Sequence<beans::PropertyValue> aSeq(3);
 
             aAny <<= uno::Reference<uno::XInterface>(
                 GetDocument(),uno::UNO_QUERY);
@@ -477,6 +485,14 @@ HRESULT DocumentHolder::InPlaceActivate(
             aSeq[1] = beans::PropertyValue(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
+            aAny <<= (sal_Int16) 3;
+            aSeq[2] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("PluginMode")),
                 -1,
                 aAny,
                 beans::PropertyState_DIRECT_VALUE);
@@ -518,6 +534,10 @@ HRESULT DocumentHolder::InPlaceActivate(
                         "private:resource/menubar/menubar" )));
         }
     }
+
+    // get document border and resize rects according to border
+    GetDocumentBorder( &m_aBorder );
+    SetObjectRects( &rcPos, &rcClip );
 
     m_pOLEInterface->ShowObject();
 
@@ -665,8 +685,20 @@ BOOL DocumentHolder::InPlaceMenuCreate(void)
     m_nMenuShared = hMenu;
     m_nOLEMenu = OleCreateMenuDescriptor(m_nMenuShared,&mgw);
 
-    m_pIOleIPFrame->SetMenu(
-        m_nMenuShared,m_nOLEMenu,::GetWindow(m_hWndxWinParent,GW_CHILD));
+    uno::Reference<awt::XSystemDependentWindowPeer> xSysDepWin(m_xContainerWindow,uno::UNO_QUERY);
+    if(xSysDepWin.is()) {
+        uno::Sequence<sal_Int8> aProcessIdent(16);
+        rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
+        uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
+        sal_Int32 tmp;
+        aAny >>= tmp;
+        HWND aHwnd = (HWND) tmp;
+        m_pIOleIPFrame->SetMenu(
+            m_nMenuShared,m_nOLEMenu,aHwnd);
+    }
+    else
+        m_pIOleIPFrame->SetMenu(
+            m_nMenuShared,m_nOLEMenu,::GetWindow(m_hWndxWinParent,GW_CHILD));
     return TRUE;
 }
 
@@ -1123,6 +1155,32 @@ HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
     return E_FAIL;
 }
 
+HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
+{
+    if ( pRect && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "DocumentBorder" ) )
+            {
+                uno::Sequence< sal_Int32 > aRect;
+                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
+                {
+                    pRect->left   = aRect[0];
+                    pRect->top    = aRect[1];
+                    pRect->right  = aRect[2];
+                    pRect->bottom = aRect[3];
+
+                    return S_OK;
+                }
+
+                break;
+            }
+    }
+
+    return E_FAIL;
+}
+
 HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 {
     if ( pSize && m_xDocument.is() )
@@ -1169,7 +1227,18 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 HRESULT DocumentHolder::SetContRects(LPCRECT aRect)
 {
     if(m_xContainerWindow.is()) {
-        m_xContainerWindow->setPosSize(
+        RECT wi;
+        memset(&wi,0,sizeof(wi));
+        if(m_pIOleIPFrame) {
+            m_pIOleIPFrame->GetBorder((LPRECT)&wi);
+            m_xContainerWindow->setPosSize(
+                0,0,
+                wi.right - wi.left,
+                wi.bottom - wi.top,
+                awt::PosSize::POSSIZE);
+        }
+        else
+           m_xContainerWindow->setPosSize(
             0,0,
             aRect->right - aRect->left,
             aRect->bottom - aRect->top,
@@ -1184,6 +1253,15 @@ HRESULT DocumentHolder::SetContRects(LPCRECT aRect)
 
 HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 {
+    ((LPRECT)aRect)->left -= m_aBorder.left;
+    ((LPRECT)aRect)->right += m_aBorder.right;
+    ((LPRECT)aRect)->top -= m_aBorder.top;
+    ((LPRECT)aRect)->bottom += m_aBorder.bottom;
+    ((LPRECT)aClip)->left -= m_aBorder.left;
+    ((LPRECT)aClip)->right += m_aBorder.right;
+    ((LPRECT)aClip)->top -= m_aBorder.top;
+    ((LPRECT)aClip)->bottom += m_aBorder.bottom;
+
     if(m_pCHatchWin)
         m_pCHatchWin->RectsSet((LPRECT)aRect, (LPRECT)aClip);
     if(m_xEditWindow.is()) {
@@ -1236,7 +1314,7 @@ DocumentHolder::getContainerWindow(
 
         RECT wi;
         memset(&wi,0,sizeof(wi));
-        if(xWin.is() && GetWindowRect(hWnd,(LPRECT)&wi)) {
+        if(xWin.is() && m_pIOleIPFrame->GetBorder((LPRECT)&wi) == NOERROR) {
             xWin->setVisible(true);
             xWin->setPosSize(
                 0,0,
@@ -1302,10 +1380,21 @@ DocumentHolder::setDockingAreaSpace(
     if( m_pIOleIPFrame ) {
         RECT aRect;
         GetClientRect(m_hWndxWinCont,&aRect);
-        HRGN hrgn = CreateRectRgn(
+        HRGN hrgn1 = CreateRectRgn(
             0,0,
             aRect.right,BorderSpace.Y);
-        SetWindowRgn(m_hWndxWinCont,hrgn,true);
+        HRGN hrgn2 = CreateRectRgn(aRect.right-BorderSpace.Width,0,aRect.right,aRect.bottom);
+        CombineRgn(hrgn1,hrgn1,hrgn2,RGN_OR);
+        DeleteObject(hrgn2);
+        hrgn2 = CreateRectRgn(0,aRect.bottom-BorderSpace.Height,aRect.right,aRect.bottom);
+        CombineRgn(hrgn1,hrgn1,hrgn2,RGN_OR);
+        DeleteObject(hrgn2);
+        hrgn2 = CreateRectRgn(0,0,BorderSpace.X,aRect.bottom);
+        CombineRgn(hrgn1,hrgn1,hrgn2,RGN_OR);
+        DeleteObject(hrgn2);
+
+        SetWindowRgn(m_hWndxWinCont,hrgn1,true);
+        // not:: DeleteObject(hrgn1);
         m_pIOleIPFrame->SetBorderSpace(&bw);
     }
 }
