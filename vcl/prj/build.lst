@@ -1,4 +1,4 @@
-vc	vcl	:	nas freetype psprint rsc sot ucbhelper unotools rvpapi icu unoil ridljar x11_extensions NULL
+vc	vcl	:	boost nas freetype psprint rsc sot ucbhelper unotools rvpapi icu unoil ridljar x11_extensions NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\source\unotypes						nmake	-	all	vc_unot NULL
 vc	vcl\source\glyphs						nmake	-	all	vc_glyphs vc_unot NULL
