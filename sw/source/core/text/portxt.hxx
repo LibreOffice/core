@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ public:
 
     // zaehlt die Spaces fuer Blocksatz
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf, xub_StrLen& rCnt ) const;
-    xub_StrLen GetCrsrOfst( const KSHORT nOfst, SwTxtSizeInfo &rSizeInf ) const;
 
     sal_Bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
 
