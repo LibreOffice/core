@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:32:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,16 +1287,20 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) thro
 {
     try
     {
-        sal_Int32 nHandle = PROPERTY_ID_NAME;
         osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+        if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
+            return;
 
+        sal_Int32 nHandle = PROPERTY_ID_NAME;
         Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
-        aGuard.clear();
         Any aNew = makeAny(newName);
+
+        aGuard.clear();
         fire(&nHandle, &aNew, &aOld, 1, sal_True );
         m_pImpl->m_aProps.aTitle = newName;
         fire(&nHandle, &aNew, &aOld, 1, sal_False );
 
+        ::osl::ClearableGuard< ::osl::Mutex > aGuard2( m_aMutex );
         if ( m_xEmbeddedObject.is() && m_xEmbeddedObject->getCurrentState() == EmbedStates::ACTIVE )
             updateDocumentTitle();
     }
