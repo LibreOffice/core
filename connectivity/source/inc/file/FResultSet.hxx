@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 11:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,8 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             const ORowSetValue& getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // clear insert row
+            void clearInsertRow();
         protected:
 
             using OResultSet_BASE::rBHelper;
