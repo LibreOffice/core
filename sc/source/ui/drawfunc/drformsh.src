@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:51:48 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
         Text [ portuguese_brazilian ] = "~Organizar" ; \
         Text [ portuguese ] = "~Disposi��o" ; \
         Text [ finnish ] = "~J�rjest�" ; \
-        Text [ danish ] = "Pl~acering" ; \
+        Text [ danish ] = "~Arranger" ; \
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "~Placering" ; \
         Text [ dutch ] = "~Positie" ; \
@@ -115,7 +115,7 @@
                     Text [ portuguese_brazilian ] = "A~van�ar" ; \
                     Text [ portuguese ] = "~Trazer para a frente" ; \
                     Text [ finnish ] = "Siirr� ~eteenp�in" ; \
-                    Text [ danish ] = "F~lyt fremad" ; \
+                    Text [ danish ] = "~Flyt fremad" ; \
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~�ngre fram" ; \
                     Text [ dutch ] = "Naar ~voren" ; \
@@ -136,6 +136,8 @@
                     Text[ hebrew ] = "W~eiter nach vorn";\
                     Text[ hindi ] = "~आगे की ओर लाओ";\
                     Text[ slovak ] = "Preniesť ~bližšie";\
+                    Text[ hungarian ] = "~Előrébb hozás";\
+                    Text[ slovenian ] = "Postavi ~naprej";\
                 };\
                 MenuItem\
                 {\
@@ -170,6 +172,8 @@
                     Text[ hebrew ] = "Weiter ~nach hinten";\
                     Text[ hindi ] = "~पीछे की ओर भेजो";\
                     Text[ slovak ] = "P~reniesť ďalej";\
+                    Text[ hungarian ] = "Hátrébb ~küldés";\
+                    Text[ slovenian ] = "Pošlji na~zaj";\
                 };\
                 MenuItem\
                 {\
@@ -201,6 +205,8 @@
         Text[ hebrew ] = "‮סידור‬";\
         Text[ hindi ] = "~क्रम में रखो";\
         Text[ slovak ] = "Usporiad~ať";\
+        Text[ hungarian ] = "~Elrendezés";\
+        Text[ slovenian ] = "~Razporedi";\
     };
 
 #define MN_ANCHORSUB \
@@ -231,7 +237,7 @@
                     Text [ spanish ] = "A la ~p�gina" ; \
                     Text [ french ] = "� la ~page" ; \
                     Text [ swedish ] = "Vid ~sidan" ; \
-                    Text [ danish ] = "Til ~siden" ; \
+                    Text [ danish ] = "Til ~side" ; \
                     Text [ portuguese_brazilian ] = "Na P�gin~a" ; \
                     Text [ portuguese ] = "~Na p�gina" ; \
                     Text[ chinese_simplified ] = "在页面上(~A)";\
@@ -250,6 +256,8 @@
                     Text[ hebrew ] = "An der ~Seite";\
                     Text[ hindi ] = "पृ~ष्ठ केलिए";\
                     Text[ slovak ] = "K stránk~e";\
+                    Text[ hungarian ] = "~Oldalra";\
+                    Text[ slovenian ] = "Na str~an";\
                 };\
                 MenuItem\
                 {\
@@ -263,7 +271,7 @@
                     Text [ spanish ] = "A la ~celda" ; \
                     Text [ french ] = "� la ~cellule" ; \
                     Text [ swedish ] = "Vid ~cellen" ; \
-                    Text [ danish ] = "Til cellen" ; \
+                    Text [ danish ] = "Til ~celle" ; \
                     Text [ portuguese ] = "~Na c�lula" ; \
                     Text [ portuguese_brazilian ] = "Na ~C�lula" ; \
                     Text[ chinese_simplified ] = "在单元格上(~C)";\
@@ -282,6 +290,8 @@
                     Text[ hebrew ] = "An der ~Zelle";\
                     Text[ hindi ] = "~कोष्ठ केलिए";\
                     Text[ slovak ] = "K ~bunke";\
+                    Text[ hungarian ] = "~Cellára";\
+                    Text[ slovenian ] = "Na ~celico";\
                 };\
             };\
         };\
@@ -305,6 +315,8 @@
         Text[ hebrew ] = "~Verankerung";\
         Text[ hindi ] = "ऐ~न्कर";\
         Text[ slovak ] = "~Ukotviť";\
+        Text[ hungarian ] = "~Horgony";\
+        Text[ slovenian ] = "Zas~idraj";\
     };
 
 #define MN_ALIGNSUB \
@@ -374,6 +386,8 @@
         Text[ hebrew ] = "Aus~richtung";\
         Text[ hindi ] = "पं~क्तिकरण";\
         Text[ slovak ] = "~Zarovnanie";\
+        Text[ hungarian ] = "~Igazítás";\
+        Text[ slovenian ] = "Po~ravnava";\
     };
 
 
@@ -391,7 +405,7 @@ String RID_OBJECTBAR_DRAWFORM
     Text [ english_us ] = "Controls Toolbar" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas de Controles" ;
     Text [ swedish ] = "Kontrollf�ltlist" ;
-    Text [ danish ] = "Kontrolelementlinje" ;
+    Text [ danish ] = "Kontrolelementv�rkt�jslinje" ;
     Text [ italian ] = "Barra dei campi di controllo" ;
     Text [ spanish ] = "Barra de campos de control" ;
     Text [ french ] = "Barre de contr�les" ;
@@ -414,6 +428,8 @@ String RID_OBJECTBAR_DRAWFORM
     Text[ hebrew ] = "Kontrollfeldleiste";
     Text[ hindi ] = "औज़ार डन्डे का नियंत्रण";
     Text[ slovak ] = "Panel ovládacích nástrojov";
+    Text[ hungarian ] = "Vezérlőelemek eszköztár";
+    Text[ slovenian ] = "Orodna vrstica za kontrolnike";
 };
 
 ToolBox RID_OBJECTBAR_DRAWFORM
@@ -596,6 +612,8 @@ String RID_POPUP_DRAWFORM
     Text[ hebrew ] = "Popup-Menü für Formularobjekte";
     Text[ hindi ] = "फ़ॉर्म वस्तुओं केलिए पाप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu pre formuláre";
+    Text[ hungarian ] = "Legördülő menü űrlap objektumokhoz";
+    Text[ slovenian ] = "Pojavni meni za predmete obrazca";
 };
  //
  //     Popup-Menue fuer (Uno-) Controls
@@ -620,6 +638,7 @@ Menu RID_POPUP_DRAWFORM
         ITEM_GROUP_MENU
     };
 };
+
 
 
 
