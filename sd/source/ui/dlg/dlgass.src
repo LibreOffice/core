@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Aper�u";
         Text[ spanish ] = "Pre~visualizaci�n";
         Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
+        Text[ danish ] = "~Eksempel";
         Text[ swedish ] = "F�rhands~visning";
         Text[ polish ] = "~Podgl�d";
         Text[ portuguese_brazilian ] = "~Visualizar";
@@ -114,6 +114,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Vorschau";
         Text[ hindi ] = "~पूर्वदृश्य";
         Text[ slovak ] = "~Náhľad";
+        Text[ hungarian ] = "~Előnézet";
+        Text[ slovenian ] = "~Predogled";
     };
 
     CheckBox CB_STARTWITH
@@ -130,7 +132,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "~Ne plus afficher cette bo�te de dialogue";
         Text[ spanish ] = "~No mostrar m�s este di�logo";
         Text[ italian ] = "Non mostrare pi� questo dialogo";
-        Text[ danish ] = "Vis denne dialog ikke igen";
+        Text[ danish ] = "~Vis ikke denne dialog igen";
         Text[ swedish ] = "Visa inte den h�r ~dialogen mer";
         Text[ polish ] = "Ni~e pokazuj wi�cej tego okna dialogowego";
         Text[ portuguese_brazilian ] = "~N�o mostrar mais esta caixa de di�logo";
@@ -149,6 +151,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Diesen Dialog ~nicht mehr zeigen";
         Text[ hindi ] = "इस डयलॉग को ~फिर से मत दिखाओ";
         Text[ slovak ] = "Tento ~dialóg už viackrát nezobrazovať";
+        Text[ hungarian ] = "~Ne jelenjen meg újra ez a párbeszédablak.";
+        Text[ slovenian ] = "~Tega okna ne kaži več";
     };
 
     // Seite 1
@@ -177,7 +181,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Type";
         Text[ spanish ] = "Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "F";
+        Text[ danish ] = "Type";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Tipo";
@@ -196,6 +200,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
 
     RadioButton RB_PAGE1_EMPTY
@@ -212,7 +218,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Pr�sentation vierge";
         Text[ spanish ] = "~Presentaci�n vac�a";
         Text[ italian ] = "Presentazione vuota";
-        Text[ danish ] = "Tom pr�sentation";
+        Text[ danish ] = "~Tom pr�sentation";
         Text[ swedish ] = "T~om presentation";
         Text[ polish ] = "Pu~sta prezentacja";
         Text[ portuguese_brazilian ] = "Apresenta��o ~vazia";
@@ -231,6 +237,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Leere Präsentation";
         Text[ hindi ] = "~प्रस्तुति को खाली करो";
         Text[ slovak ] = "Prázdna pr~ezentácia";
+        Text[ hungarian ] = "Ü~res bemutató";
+        Text[ slovenian ] = "Pr~azna predstavitev";
     };
 
     RadioButton RB_PAGE1_TEMPLATE
@@ -246,7 +254,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "~� partir d'un mod�le";
         Text[ spanish ] = "~De plantilla";
         Text[ italian ] = "Da modello";
-        Text[ danish ] = "Fra skabelon";
+        Text[ danish ] = "~Fra skabelon";
         Text[ swedish ] = "Fr�n ~mall";
         Text[ polish ] = "~Na podstawie szablonu";
         Text[ portuguese_brazilian ] = "~A partir do modelo";
@@ -265,6 +273,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Aus Vorlage";
         Text[ hindi ] = "~नमूने से";
         Text[ slovak ] = "Otvoriť zo ša~blóny";
+        Text[ hungarian ] = "~Bemutató sablon alapján";
+        Text[ slovenian ] = "~Iz predloge";
     };
 
     RadioButton RB_PAGE1_OPEN
@@ -280,7 +290,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "~Ouvrir une pr�sentation existante";
         Text[ spanish ] = "~Abrir una presentaci�n existente";
         Text[ italian ] = "Apertura di una presentazione esistente";
-        Text[ danish ] = "�bn en eksisterende pr�sentation";
+        Text[ danish ] = "~�bn en eksisterende pr�sentation";
         Text[ swedish ] = "~�ppna en redan befintlig presentation";
         Text[ polish ] = "~Otw�rz istniej�c� prezentacj�";
         Text[ portuguese_brazilian ] = "Abrir ~uma apresenta��o existente";
@@ -299,6 +309,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Öffnen einer vorhandenen Präsentation";
         Text[ hindi ] = "~अस्तित्व में रहनेवाला प्रस्तुति को खोलो";
         Text[ slovak ] = "~Otvoriť existujúcu prezentáciu";
+        Text[ hungarian ] = "Létező bemutató ~megnyitása";
+        Text[ slovenian ] = "~Odpri obstoječo predstavitev";
     };
 
     ListBox LB_PAGE1_REGION
@@ -352,7 +364,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "~Style de page" ;
         Text [ dutch ] = "Kies een pagina-~opmaakprofiel" ;
         Text [ swedish ] = "V�lj en ~sidformatmall" ;
-        Text [ danish ] = "V�lg en ~sidetypografi" ;
+        Text [ danish ] = "~V�lg et diasdesign" ;
         Text [ portuguese ] = "Seleccione um estilo de ~p�gina" ;
         Text[ chinese_simplified ] = "请选择一个页面样式。(~S)";
         Text[ russian ] = "�������� ����� ������";
@@ -372,6 +384,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Wählen Sie eine ~Seitenvorlage";
         Text[ hindi ] = "~स्लइड डिसैन चुनो";
         Text[ slovak ] = "Vybrať vzhľad ~snímkov";
+        Text[ hungarian ] = "Dia látván~ytervének kiválasztása";
+        Text[ slovenian ] = "I~zberite oblikovanje diapozitiva";
     };
 
     ListBox LB_PAGE2_REGION
@@ -424,6 +438,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Wählen Sie ein Ausgabemedium";
         Text[ hindi ] = "औटपुट् माध्यम को चुनो";
         Text[ slovak ] = "Vybrať výstupné médium";
+        Text[ hungarian ] = "Válassza ki a kimeneti médiumot";
+        Text[ slovenian ] = "Izberite izhodni medij";
     };
 
     RadioButton RB_PAGE2_MEDIUM5
@@ -441,7 +457,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Original";
         Text[ spanish ] = "~Original";
         Text[ italian ] = "~Originale";
-        Text[ danish ] = "Original";
+        Text[ danish ] = "~Original";
         Text[ swedish ] = "Original";
         Text[ polish ] = "~Orygina�";
         Text[ portuguese_brazilian ] = "~Original";
@@ -459,6 +475,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Original";
         Text[ hindi ] = "~यथार्थ";
         Text[ slovak ] = "Pôv~odné (originálne)";
+        Text[ hungarian ] = "E~redeti";
+        Text[ slovenian ] = "~Izvirnik";
     };
 
     RadioButton RB_PAGE2_MEDIUM1
@@ -494,6 +512,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Bildschirm";
         Text[ hindi ] = "~परदा";
         Text[ slovak ] = "Ob~razovka";
+        Text[ hungarian ] = "Képer~nyő";
+        Text[ slovenian ] = "Za~slon";
     };
 
     RadioButton RB_PAGE2_MEDIUM2
@@ -510,7 +530,7 @@ ModalDialog DLG_ASS
         Text [ spanish ] = "~Diapositiva" ;
         Text [ french ] = "Diapo" ;
         Text [ swedish ] = "~Dia" ;
-        Text [ danish ] = "Dias" ;
+        Text [ danish ] = "~Dias" ;
         Text [ portuguese ] = "~Diapositivo" ;
         Text[ chinese_simplified ] = "幻灯片(~D)";
         Text[ polish ] = "~Slajd";
@@ -530,6 +550,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Dia";
         Text[ hindi ] = "~स्लइड";
         Text[ slovak ] = "S~nímok";
+        Text[ hungarian ] = "~Dia";
+        Text[ slovenian ] = "Diapo~zitiv";
     };
 
     RadioButton RB_PAGE2_MEDIUM3
@@ -566,6 +588,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "F~olie";
         Text[ hindi ] = "~ओवरहेड शीट्";
         Text[ slovak ] = "~Fólia";
+        Text[ hungarian ] = "Vetítővás~zon";
+        Text[ slovenian ] = "Prosoj~nica";
     };
 
     RadioButton RB_PAGE2_MEDIUM4
@@ -602,6 +626,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Papier";
         Text[ hindi ] = "~कागज";
         Text[ slovak ] = "P~apier";
+        Text[ hungarian ] = "~Papír";
+        Text[ slovenian ] = "P~apir";
     };
 
     // Seite 3
@@ -648,6 +674,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Wählen Sie einen Diawechsel";
         Text[ hindi ] = "स्लइड परिवर्तन को चुनो";
         Text[ slovak ] = "Vybrať prechod snímkov";
+        Text[ hungarian ] = "Válasszon egy diaátmenetet";
+        Text[ slovenian ] = "Izberite prehod med diapozitivi";
     };
 
     FixedText FT_PAGE3_EFFECT
@@ -683,6 +711,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Effekt";
         Text[ hindi ] = "~प्रभाव";
         Text[ slovak ] = "~Efekt";
+        Text[ hungarian ] = "~Hatás";
+        Text[ slovenian ] = "~Učinek";
     };
 
     ListBox LB_PAGE3_EFFECT
@@ -728,6 +758,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Geschwindigkeit";
         Text[ hindi ] = "~गति";
         Text[ slovak ] = "Rýchlo~sť";
+        Text[ hungarian ] = "Se~besség";
+        Text[ slovenian ] = "~Hitrost";
     };
 
     ListBox LB_PAGE3_SPEED
@@ -773,6 +805,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Wählen Sie die Art der Präsentation";
         Text[ hindi ] = "प्रस्तुति वर्ग को चुनो";
         Text[ slovak ] = "Vybrať typ prezentácie (prechodu snímkov)";
+        Text[ hungarian ] = "Válassza ki a bemutató típusát";
+        Text[ slovenian ] = "Izberite vrsto predstavitve";
     };
 
     RadioButton RB_PAGE3_LIVE
@@ -789,7 +823,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Standard";
         Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "Standard";
-        Text[ danish ] = "Standard";
+        Text[ danish ] = "Standar~d";
         Text[ swedish ] = "~Standard";
         Text[ polish ] = "Domy�~lnie";
         Text[ portuguese_brazilian ] = "~Padr�o";
@@ -808,6 +842,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzia (ručne)";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
 
     RadioButton RB_PAGE3_KIOSK
@@ -824,7 +860,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Automatique";
         Text[ spanish ] = "~Autom�tico";
         Text[ italian ] = "Automatico";
-        Text[ danish ] = "Automatisk";
+        Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "~Automatisk";
         Text[ polish ] = "~Automatycznie";
         Text[ portuguese_brazilian ] = "~Autom�tico";
@@ -843,6 +879,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~स्वचालित";
         Text[ slovak ] = "~Automatická";
+        Text[ hungarian ] = "A~utomatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
 
     FixedText FT_PAGE3_TIME
@@ -878,6 +916,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Stand~dauer";
         Text[ hindi ] = "~पृष्ठ का अंतराल";
         Text[ slovak ] = "Dĺžk~a pohľadu na stránku";
+        Text[ hungarian ] = "~Megjelenítés hossza";
+        Text[ slovenian ] = "Tra~janje strani";
     };
 
     TimeField TMF_PAGE3_TIME
@@ -938,6 +978,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Pausendauer";
         Text[ hindi ] = "~रुकावट की अंतराल";
         Text[ slovak ] = "Dĺž~ka pauzy";
+        Text[ hungarian ] = "S~zünet hossza";
+        Text[ slovenian ] = "T~rajanje premora";
     };
 
     TimeField TMF_PAGE3_BREAK
@@ -999,6 +1041,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Logo einblenden";
         Text[ hindi ] = "~संकेत दिखाओ";
         Text[ slovak ] = "Zobraziť l~ogo";
+        Text[ hungarian ] = "~Logó megjelenítése";
+        Text[ slovenian ] = "P~okaži logotip";
     };
 
     // Seite 4
@@ -1045,6 +1089,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Nennen Sie Ihre Grundgedanken";
         Text[ hindi ] = "आपका मूलभूत विचारों का वर्णन करो";
         Text[ slovak ] = "Popíšte Vaše základné myšlienky";
+        Text[ hungarian ] = "Vázolja elképzeléseit nagy vonalakban";
+        Text[ slovenian ] = "Opišite osnovno idejo";
     };
 
     FixedText FT_PAGE4_ASKNAME
@@ -1081,6 +1127,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Wie ist Ihr Name oder der Name Ihrer Firma?";
         Text[ hindi ] = "आपका नाम अथवा आपका संस्था का नाम क्या है?";
         Text[ slovak ] = "Aké je vaše meno alebo meno Vašej firmy?";
+        Text[ hungarian ] = "Írja be a saját vagy a cége nevét.";
+        Text[ slovenian ] = "Vpišite svoje ime ali ime svojega podjetja";
     };
     Edit EDT_PAGE4_ASKNAME
     {
@@ -1123,6 +1171,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Was ist der Themenbereich Ihrer Präsentation?";
         Text[ hindi ] = "आपका प्रस्तुति का विषय क्या है?";
         Text[ slovak ] = "Aký je obsah vašej prezentácie?";
+        Text[ hungarian ] = "Mi a bemutató tárgya?";
+        Text[ slovenian ] = "Kaj je predmet vaše predstavitve?";
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
@@ -1165,6 +1215,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "Weitere darzustellende Gedanken?";
         Text[ hindi ] = "और भी विचारों को प्स्तुत करना है ?";
         Text[ slovak ] = "Ďalšie prezentované myšlienky?";
+        Text[ hungarian ] = "További javaslatok megjelenítése?";
+        Text[ slovenian ] = "Druge ideje, ki jih želite predstaviti?";
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
@@ -1221,6 +1273,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Wählen Sie die gewünschten Seiten";
         Text[ hindi ] = "~आपकी पृष्ठों को चुनिए";
         Text[ slovak ] = "Vyberte vaše strán~ky";
+        Text[ hungarian ] = "Vál~assza ki az oldalakat";
+        Text[ slovenian ] = "Iz~berite strani";
     };
 
     Control CT_PAGE5_PAGELIST
@@ -1266,6 +1320,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Zusammenfassung erstellen";
         Text[ hindi ] = "~सारांश उत्पन्न करो";
         Text[ slovak ] = "Vytvo~riť súhrn";
+        Text[ hungarian ] = "Öss~zegzés készítése";
+        Text[ slovenian ] = "Ustva~rite povzetek";
     };
 
     // generell
@@ -1299,7 +1355,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "<< Pr�c�dent" ;
         Text [ dutch ] = "<< Vor~ige" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
-        Text [ danish ] = "<< Tilbage" ;
+        Text [ danish ] = "<< ~Tilbage" ;
         Text [ portuguese_brazilian ] = "<< ~Voltar" ;
         Text [ portuguese ] = "<< ~Anterior" ;
         Text[ chinese_simplified ] = "<< 返回(~B)";
@@ -1319,6 +1375,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "<< ‮הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
         Text[ slovak ] = "<< ~Späť";
+        Text[ hungarian ] = "<< ~Vissza";
+        Text[ slovenian ] = "<< N~azaj";
     };
 
     PushButton BUT_NEXT
@@ -1336,7 +1394,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "Suivant >>" ;
         Text [ dutch ] = "~Volgende >>" ;
         Text [ swedish ] = "~N�sta >>" ;
-        Text [ danish ] = "N�ste >>" ;
+        Text [ danish ] = "~N�ste >>" ;
         Text [ portuguese_brazilian ] = "~Pr�ximo >>" ;
         Text [ portuguese ] = "~Seguinte >>" ;
         Text[ chinese_simplified ] = "继续(~N) >>";
@@ -1356,6 +1414,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "‮הבא‬ >>";
         Text[ hindi ] = "~आगे >>";
         Text[ slovak ] = "Ď~alší >>";
+        Text[ hungarian ] = "~Tovább>>";
+        Text[ slovenian ] = "~Naprej >>";
     };
 
     OKButton BUT_FINISH
@@ -1372,7 +1432,7 @@ ModalDialog DLG_ASS
         Text [ spanish ] = "~Crear" ;
         Text [ french ] = "Cr�er" ;
         Text [ swedish ] = "~F�rdigst�ll" ;
-        Text [ danish ] = "Udf�r" ;
+        Text [ danish ] = "~Opret" ;
         Text [ portuguese ] = "~Criar" ;
         Text [ portuguese_brazilian ] = "~Criar" ;
         Text[ chinese_simplified ] = "完成(~C)";
@@ -1392,6 +1452,8 @@ ModalDialog DLG_ASS
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~उत्पन्न करो";
         Text[ slovak ] = "V~ytvoriť";
+        Text[ hungarian ] = "~Kész";
+        Text[ slovenian ] = "~Ustvari";
     };
     Text[ english_us ] = "AutoPilot Presentation";
     Text[ portuguese ] = "AutoPiloto Apresenta��o";
@@ -1419,7 +1481,11 @@ ModalDialog DLG_ASS
     Text[ hebrew ] = "AutoPilot Präsentation";
     Text[ hindi ] = "ओटोपैलट् प्रस्तुति";
     Text[ slovak ] = "Sprievodca prezentáciou";
+    Text[ hungarian ] = "Bemutatótündér";
+    Text[ slovenian ] = "Avtopilot: predstavitev";
 };
+
+
 
 
 
