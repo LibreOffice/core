@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:26:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
-    nSrcTab     = pViewData ? pViewData->GetTabNo() : 0;
+    nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
     // fuer leichteren Zugriff:
     aFieldLbArr  [0] = &aLbField1;
@@ -236,7 +236,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     FillFieldLists();
 
-    for ( USHORT i=0; i<3; i++ )
+    for ( SCSIZE i=0; i<3; i++ )
     {
         String  aValStr;
         USHORT  nCondPos     = 0;
@@ -246,7 +246,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
         if ( rEntry.bDoQuery )
         {
             nCondPos     = (USHORT)rEntry.eOp;
-            nFieldSelPos = GetFieldSelPos( rEntry.nField );
+            nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
             if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
             {
@@ -268,7 +268,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
         aCondLbArr [i]->SelectEntryPos( nCondPos );
         aValueEdArr[i]->SetText( aValStr );
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
-        UpdateValueList( i+1 );
+        UpdateValueList( static_cast<USHORT>(i+1) );
     }
 
     // Disable/Enable Logik:
@@ -375,11 +375,11 @@ void ScFilterDlg::FillFieldLists()
     if ( pDoc )
     {
         String  aFieldName;
-        USHORT  nTab        = nSrcTab;
-        USHORT  nFirstCol   = theQueryData.nCol1;
-        USHORT  nFirstRow   = theQueryData.nRow1;
-        USHORT  nMaxCol     = theQueryData.nCol2;
-        USHORT  col = 0;
+        SCTAB   nTab        = nSrcTab;
+        SCCOL   nFirstCol   = theQueryData.nCol1;
+        SCROW   nFirstRow   = theQueryData.nRow1;
+        SCCOL   nMaxCol     = theQueryData.nCol2;
+        SCCOL   col = 0;
         USHORT  i=1;
 
         for ( col=nFirstCol; col<=nMaxCol; col++ )
@@ -389,13 +389,7 @@ void ScFilterDlg::FillFieldLists()
             {
                 aFieldName  = aStrColumn;
                 aFieldName += ' ';
-                if ( col < 26 )
-                    aFieldName += (sal_Unicode)( 'A' + col );
-                else
-                {
-                    aFieldName += (sal_Unicode)( 'A' + ( col / 26 ) - 1 );
-                    aFieldName += (sal_Unicode)( 'A' + ( col % 26 ) );
-                }
+                aFieldName += ColToAlpha( col );
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
@@ -427,12 +421,12 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
         {
             WaitObject aWaiter( this );     // auch wenn nur die ListBox gefuellt wird
 
-            USHORT nColumn = theQueryData.nCol1 + nFieldSelPos - 1;
+            SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if (!pEntryLists[nColumn])
             {
-                USHORT nTab      = nSrcTab;
-                USHORT nFirstRow = theQueryData.nRow1;
-                USHORT nLastRow  = theQueryData.nRow2;
+                SCTAB nTab       = nSrcTab;
+                SCROW nFirstRow = theQueryData.nRow1;
+                SCROW nLastRow   = theQueryData.nRow2;
 
                 //  erstmal ohne die erste Zeile
 
@@ -489,7 +483,7 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
         USHORT nFieldSelPos = aFieldLbArr[nList-1]->GetSelectEntryPos();
         if ( nFieldSelPos )
         {
-            USHORT nColumn = theQueryData.nCol1 + nFieldSelPos - 1;
+            SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if ( pEntryLists[nColumn] )
             {
                 USHORT nPos = nHeaderPos[nColumn];
@@ -543,10 +537,10 @@ void ScFilterDlg::ClearValueList( USHORT nList )
 
 //----------------------------------------------------------------------------
 
-USHORT ScFilterDlg::GetFieldSelPos( USHORT nField )
+USHORT ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
-        return nField - theQueryData.nCol1 + 1;
+        return static_cast<USHORT>(nField - theQueryData.nCol1 + 1);
     else
         return 0;
 }
@@ -560,7 +554,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     USHORT          nConnect1 = aLbConnect1.GetSelectEntryPos();
     USHORT          nConnect2 = aLbConnect2.GetSelectEntryPos();
     BOOL            bCopyPosOk;
-    USHORT i;
+    SCSIZE i;
 
     if ( aBtnCopyResult.IsChecked() )
     {
@@ -612,7 +606,8 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
                 rEntry.bQueryByString = TRUE;
             }
 
-            rEntry.nField = nField ? ( theQueryData.nCol1 + nField - 1 ) : 0;
+            rEntry.nField = nField ? (theQueryData.nCol1 +
+                    static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
             rEntry.eOp    = eOp;
         }
     }
@@ -648,7 +643,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     //  nur die drei eingestellten - alles andere zuruecksetzen
 
-    USHORT nEC = theParam.GetEntryCount();
+    SCSIZE nEC = theParam.GetEntryCount();
     for (i=3; i<nEC; i++)                               // alles ueber 3
         theParam.GetEntry(i).bDoQuery = FALSE;          // zuruecksetzen
 
