@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:30:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
@@ -115,17 +115,17 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
-#include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationListener.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <com/sun/star/ui/XImageManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -164,7 +164,7 @@ class AddonMenu;
 class AddonPopupMenu;
 class MenuBarManager : public com::sun::star::frame::XStatusListener                ,
                        public com::sun::star::frame::XFrameActionListener           ,
-                       public drafts::com::sun::star::ui::XUIConfigurationListener  ,
+                       public com::sun::star::ui::XUIConfigurationListener          ,
                        public com::sun::star::lang::XComponent                      ,
                        public com::sun::star::awt::XSystemDependentMenuPeer         ,
                        public ThreadHelpBase                                        ,
@@ -221,9 +221,9 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // XSystemDependentMenuPeer
         virtual ::com::sun::star::uno::Any SAL_CALL getMenuHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw (::com::sun::star::uno::RuntimeException);
@@ -270,7 +270,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             ::rtl::OUString                                                                             aTitle;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >                xSubMenuManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >                      xMenuItemDispatch;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XPopupMenuController >   xPopupMenuController;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XPopupMenuController >   xPopupMenuController;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >                       xPopupMenu;
             KeyCode                                                                                     aKeyCode;
         };
@@ -279,7 +279,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void             CreatePicklistArguments(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
-        static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
+        static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
 
@@ -301,14 +301,14 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Menu*                                                                                          m_pVCLMenu;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                            m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                   m_xUICommandLabels;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >         m_xPopupMenuControllerRegistration;
         ::std::vector< MenuItemHandler* >                                                              m_aMenuItemHandlerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xDocImageManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xDocImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xModuleImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xDocAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xModuleAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xGlobalAcceleratorManager;
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&        mxServiceFactory;
 };
