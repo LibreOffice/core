@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storagehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:36:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #endif
 
 #include <comphelper/fileformat.h>
@@ -268,7 +272,10 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
         nResult = SOFFICE_FILEFORMAT_8;
     }
     else
-        throw uno::Exception();
+    {
+        // the mediatype is not known
+        throw beans::IllegalTypeException();
+    }
 
     return nResult;
 }
