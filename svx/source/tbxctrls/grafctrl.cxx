@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,12 @@
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
 #endif
+#ifndef _SFXTBXMGR_HXX //autogen
+#include <sfx2/tbxmgr.hxx>
+#endif
 
 #include "svxids.hrc"
+#include "grafctrl.hrc"
 #include "dialogs.hrc"
 #include "itemwin.hxx"
 #include "dialmgr.hxx"
@@ -475,6 +479,156 @@ void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
         SelectEntryPos( ((SfxUInt16Item*)pItem)->GetValue() );
     else
         SetNoSelection();
+}
+
+// -----------------------
+// - ImplGrafFilterPopup -
+// -----------------------
+
+class ImplGrafFilterPopup : public SfxPopupWindow
+{
+private:
+
+    SvxGrafFilterToolBoxControl*    mpParent;
+    SfxToolBoxManager               maTbxMgr;
+    ResId                           maResIdWin;
+    ResId                           maResIdTbx;
+    WindowAlign                     meTbxAlign;
+    Link                            maSelectHdl;
+
+                                    DECL_LINK( TbxSelectHdl, void* );
+
+public:
+                                    ImplGrafFilterPopup( USHORT nId, SvxGrafFilterToolBoxControl* pParent,
+                                                         WindowAlign eAlign,
+                                                         const ResId& rResIdWin, const ResId& rResIdTbx,
+                                                         SfxBindings& rBindings );
+                                    ~ImplGrafFilterPopup();
+
+    virtual SfxPopupWindow*         Clone() const;
+    virtual void                    PopupModeEnd();
+
+    void                            StartSelection() { maTbxMgr.GetToolBox().StartSelection(); }
+    void                            Update();
+};
+
+// -----------------------------------------------------------------------------
+
+ImplGrafFilterPopup::ImplGrafFilterPopup( USHORT nId, SvxGrafFilterToolBoxControl* pParent,
+                                          WindowAlign eAlign,
+                                          const ResId& rResIdWin, const ResId& rResIdTbx,
+                                          SfxBindings& rBindings ) :
+    SfxPopupWindow  ( nId, rResIdWin, rBindings ),
+    mpParent        ( pParent ),
+    maTbxMgr        ( this, GetBindings(), rResIdTbx ),
+    maResIdWin      ( rResIdWin ),
+    maResIdTbx      ( rResIdTbx ),
+    meTbxAlign      ( eAlign )
+{
+    maTbxMgr.UseDefault();
+
+    maSelectHdl = maTbxMgr.GetToolBox().GetSelectHdl();
+    maTbxMgr.GetToolBox().SetSelectHdl( LINK( this, ImplGrafFilterPopup, TbxSelectHdl ) );
+
+    FreeResource();
+
+    const Size aSize( maTbxMgr.CalcWindowSizePixel() );
+    maTbxMgr.SetPosSizePixel( Point(), aSize );
+    SetOutputSizePixel( aSize );
+}
+
+// -----------------------------------------------------------------------------
+
+ImplGrafFilterPopup::~ImplGrafFilterPopup()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPopupWindow* ImplGrafFilterPopup::Clone() const
+{
+    return( new ImplGrafFilterPopup( GetId(), mpParent, meTbxAlign,
+                                     maResIdWin, maResIdTbx,
+                                     (SfxBindings&) GetBindings() ) );
+}
+
+// -----------------------------------------------------------------------------
+
+void ImplGrafFilterPopup::Update()
+{
+    ToolBox* pBox = &maTbxMgr.GetToolBox();
+    maTbxMgr.Activate( pBox );
+    maTbxMgr.Deactivate( pBox );
+}
+
+// -----------------------------------------------------------------------------
+
+void ImplGrafFilterPopup::PopupModeEnd()
+{
+    maTbxMgr.GetToolBox().EndSelection();
+    SfxPopupWindow::PopupModeEnd();
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( ImplGrafFilterPopup, TbxSelectHdl, void*, EMPTYARG )
+{
+    const USHORT nSlotId = maTbxMgr.GetToolBox().GetCurItemId();
+
+    if( IsInPopupMode() )
+        EndPopupMode();
+
+    GetBindings().GetDispatcher()->Execute( nSlotId, SFX_CALLMODE_ASYNCHRON );
+
+    return 0;
+}
+
+// -------------------------------
+// - SvxGrafFilterToolBoxControl -
+// -------------------------------
+
+SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, SfxEnumItem );
+
+// -----------------------------------------------------------------------------
+
+SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
+    SfxToolBoxControl( nId, rTbx, rBind )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SvxGrafFilterToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
+{
+    return SFX_POPUPWINDOW_ONCLICK;
+}
+
+// -----------------------------------------------------------------------------
+
+SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
+{
+    ImplGrafFilterPopup* pWin = new ImplGrafFilterPopup( GetId(), this, GetToolBox().GetAlign(),
+                                                         SVX_RES( RID_SVXTBX_GRFFILTER ),
+                                                         SVX_RES( TBX_GRFFILTER ),
+                                                         GetBindings() );
+    pWin->StartPopupMode( &GetToolBox(), TRUE );
+    pWin->StartSelection();
+    pWin->Show();
+
+    return pWin;
 }
 
 // -------------------------

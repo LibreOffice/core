@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,24 @@
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
+
+// -------------------------------
+// - SvxGrafFilterToolBoxControl -
+// -------------------------------
+
+class SvxGrafFilterToolBoxControl : public SfxToolBoxControl
+{
+public:
+
+                                SFX_DECL_TOOLBOX_CONTROL();
+
+                                SvxGrafFilterToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+                                ~SvxGrafFilterToolBoxControl();
+
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+};
 
 // -------------------------
 // - SvxGrafToolBoxControl -

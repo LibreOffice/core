@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,19 @@
 #define HID_AUTOCORR_HELP_END                   (HID_SVX_START + 350)
 
 #define HID_SVXPAGE_GRFCROP                     (HID_SVX_START + 355)
+
+#define HID_GRFFILTER                           (HID_SVX_START + 360)
+#define HID_GRFFILTER_INVERT                    (HID_SVX_START + 361)
+#define HID_GRFFILTER_SMOOTH                    (HID_SVX_START + 362)
+#define HID_GRFFILTER_SHARPEN                   (HID_SVX_START + 363)
+#define HID_GRFFILTER_REMOVENOISE               (HID_SVX_START + 364)
+#define HID_GRFFILTER_SOBEL                     (HID_SVX_START + 365)
+#define HID_GRFFILTER_MOSAIC                    (HID_SVX_START + 366)
+#define HID_GRFFILTER_EMBOSS                    (HID_SVX_START + 367)
+#define HID_GRFFILTER_POSTER                    (HID_SVX_START + 368)
+#define HID_GRFFILTER_POPART                    (HID_SVX_START + 369)
+#define HID_GRFFILTER_SEPIA                     (HID_SVX_START + 370)
+#define HID_GRFFILTER_SOLARIZE                  (HID_SVX_START + 371)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+#   last change: $Author: ka $ $Date: 2000-11-18 11:23:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,8 @@ SRCFILES = \
         colrctrl.src			\
         linectrl.src			\
         tbcontrl.src			\
-        tbxdraw.src
+        tbxdraw.src				\
+        grafctrl.src			
 
 .ENDIF
 

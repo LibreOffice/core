@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 16:29:58 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,9 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
 
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
 {
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER ) )
+        rSet.DisableItem( SID_GRFFILTER );
+
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_INVERT ) )
         rSet.DisableItem( SID_GRFFILTER_INVERT );
 
