@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 18:20:03 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:05:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -322,6 +322,19 @@ rescharset_35=$(finn$(LANG_GUI))
 RCLANGFLAGS_35+= -d FINNISH
 iso_35=fi
 
+.IF "$(RES_HUNG)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=36
+.ENDIF
+completelangext+=36
+hung$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_36=hung
+longlang_36=hungarian
+langext_36=36
+rsclang_36=-lgHUNGARIAN
+rescharset_36=$(hung$(LANG_GUI))
+RCLANGFLAGS_3g+= -d HUNGARIAN
+iso_36=hu
+
 .IF "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=66
 .ENDIF          # "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
@@ -386,6 +399,19 @@ rsclang_43=-lgSLOVAK
 rescharset_43=$(slovak$(LANG_GUI))
 RCLANGFLAGS_43+= -d SLOVAK
 iso_43=sk
+
+.IF "$(RES_SLOVENIAN)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=50
+.ENDIF 
+completelangext+=50
+slovenian$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_50=slovenian
+longlang_50=slovenian
+langext_50=50
+rsclang_50=-lgSLOVENIAN
+rescharset_50=$(slovenian$(LANG_GUI))
+RCLANGFLAGS_50+= -d SLOVENIAN
+iso_50=sl
 
 .IF "$(RES_ESTONIAN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=77
