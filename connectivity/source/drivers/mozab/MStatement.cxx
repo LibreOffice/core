@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     m_aParser(_pConnection->getDriver()->getMSFactory())
 {
     m_pConnection->acquire();
+    OSL_TRACE("In/Out: OStatement_Base::OStatement_Base" );
 }
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
@@ -369,11 +370,13 @@ OResultSet* OStatement_Base::createResultSet()
 
 void OStatement_Base::initializeResultSet( OResultSet* _pResult )
 {
+    OSL_TRACE("In : initializeResultSet");
     _pResult->setColumnMapping(m_aColMapping);
     _pResult->setOrderByColumns(m_aOrderbyColumnNumber);
     _pResult->setOrderByAscending(m_aOrderbyAscending);
     _pResult->setBindingRow(m_aRow);
     _pResult->setTable(m_pTable);
+    OSL_TRACE("Out : initializeResultSet");
 }
 
 // -------------------------------------------------------------------------
