@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:42:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,40 +62,15 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=svarray
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-CXXFILES= \
-    svarray.cxx
-
-.IF "$(GUI)"!="DOS"
-CXXFILES+= \
-    hashtab.cxx \
-    hashcont.cxx
-.ENDIF
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="DOS"
-OBJFILES= \
-    $(OBJ)$/svarray.obj
-
-.IF "$(GUI)"!="DOS"
-OBJFILES+= \
-    $(OBJ)$/hashtab.obj \
-    $(OBJ)$/hashcont.obj
-.ENDIF
-
-SLOFILES=\
-    $(SLO)$/memempty.obj
-
-.ELSE
 SLOFILES=\
     $(SLO)$/hashtab.obj \
     $(SLO)$/hashcont.obj \
@@ -110,9 +85,8 @@ LIB2OBJFILES=\
     $(OBJ)$/hashcont.obj \
     $(OBJ)$/svarray.obj
 
-.ENDIF		#"$(GUI)"=="WIN" || "$(GUI)"=="DOS"
-
 # --- Targets -------------------------------------------------------
 
 
 .INCLUDE :  target.mk
+
