@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:21:49 $
+ *  last change: $Author: mba $ $Date: 2002-09-04 08:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1645,6 +1645,7 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
         aTitle = pMed->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     else
     {
+        pMed = GetMedium();
         aTitle = GetTitle(SFX_TITLE_CAPTION);
         String aName(aTitle);
         if ( nDocViewNumber )
@@ -1654,7 +1655,7 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
         }
     }
 
-    if ( IsReadOnly() )
+    if ( IsReadOnlyUI() || pMed && pMed->IsReadOnly() )
         aTitle += String( SfxResId(STR_READONLY) );
     return aTitle;
 }
