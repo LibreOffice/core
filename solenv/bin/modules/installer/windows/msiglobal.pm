@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:57:12 $
+#   last change: $Author: kz $ $Date: 2004-10-15 14:47:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -952,6 +952,11 @@ sub execute_packaging
 
     chdir($to);
 
+    # changing the tmp directory, because makecab.exe generates temporary cab files
+    my $origtemppath = "";
+    if ( $ENV{'TMP'} ) { $origtemppath = $ENV{'TMP'}; }
+    $ENV{'TMP'} = $installer::globals::temppath;    # setting TMP to the new unique directory!
+
     for ( my $i = 0; $i <= $#{$localpackjobref}; $i++ )
     {
         my $systemcall = ${$localpackjobref}[$i];
@@ -972,6 +977,9 @@ sub execute_packaging
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
+
+    # setting back to the original tmp directory
+    $ENV{'TMP'} = $origtemppath;
 
     chdir($from);
 }
