@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:43:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,16 @@
 #ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 
 
 #include <tools/errcode.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <svtools/cntwids.hrc>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
@@ -116,8 +119,6 @@ using namespace vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-
-#define SfxIOException_Impl( nErr ) ::com::sun::star::io::IOException()
 
 //=============================================================================
 
@@ -152,10 +153,10 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "References"      , 10, WID_REFERENCES,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "ReplyTo"         , 7 , WID_REPLY_TO,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "SaveVersionOnClose", 18 , SID_VERSION, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+    { "Subject"         , 7 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Template"        , 8 , MID_DOCINFO_TEMPLATE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "TemplateFileName", 16, SID_TEMPLATE_NAME, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "TemplateDate"    , 12, MID_DOCINFO_TEMPLATEDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "Theme"           , 5 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Title"           , 5 , WID_TITLE,          &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     {0,0,0,0,0}
 };
@@ -821,14 +822,14 @@ SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 
 //-----------------------------------------------------------------------------
 
-SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName, sal_Bool bWrite )
+uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName, sal_Bool bWrite )
 {
     // Medium erstellen
     if ( _pMedium )
         delete _pMedium;
 
     _pMedium = new SfxMedium( rName, bWrite ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY, sal_True );
-    if ( !_pMedium->GetStorage() || SVSTREAM_OK != _pMedium->GetError() )
+    if ( !_pMedium->GetStorage().is() || SVSTREAM_OK != _pMedium->GetError() )
         // Datei existiert nicht oder ist kein Storage
         return NULL;
 
@@ -840,9 +841,8 @@ SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName
         return NULL;
 
     // Storage "offnen
-    SvStorageRef xStor = _pMedium->GetStorage();
-    DBG_ASSERT( xStor.Is(), "no storage" );
-    xStor->SetVersion( _pFilter ? _pFilter->GetVersion() : SOFFICE_FILEFORMAT_CURRENT );
+    uno::Reference< embed::XStorage > xStor = _pMedium->GetStorage();
+    DBG_ASSERT( xStor.is(), "no storage" );
     return xStor;
 }
 
@@ -882,19 +882,21 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::setUserFieldValue( sal_Int16 nIn
 }
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
+void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUString& aURL)
+    throw( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
     String aName( aURL );
-    SvStorage* pStorage = GetStorage_Impl( aName, sal_False );
-    if ( pStorage )
+    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aName, sal_False );
+    uno::Reference< container::XNameAccess > xStorNameAccess( xStorage, uno::UNO_QUERY );
+    if ( xStorNameAccess.is() )
     {
-        if ( !_pInfo )
-            _pInfo = new SfxDocumentInfo;
-
-        if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+        try
         {
+            if ( !_pInfo )
+                _pInfo = new SfxDocumentInfo;
+
             // import from XML meta data using SAX parser
             uno::Reference< XInterface > xXMLParser = _xFactory->createInstance(
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) );
@@ -904,72 +906,59 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
                 xml::sax::InputSource aParserInput;
                 aParserInput.sSystemId = aURL;
 
-                SvStorageStreamRef xDocStream;
-                String sDocName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")) );
-                if ( pStorage->IsStream(sDocName) )
-                    xDocStream = pStorage->OpenStream( sDocName, STREAM_READ | STREAM_NOCREATE );
-                xDocStream->SetBufferSize( 16*1024 );
-                aParserInput.aInputStream = new ::utl::OInputStreamWrapper( *xDocStream );
-
-                // create importer service
-                sal_Bool bOASIS = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
-                const sal_Char *pServiceName = bOASIS
-                    ? "com.sun.star.document.XMLOasisMetaImporter"
-                    : "com.sun.star.document.XMLMetaImporter";
-
-                Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
-                        rtl::OUString::createFromAscii(pServiceName),
-                        Sequence < Any >() ), UNO_QUERY );
-
-                // connect importer with this object
-                Reference < document::XImporter > xImporter( xDocHandler, UNO_QUERY );
-                if ( xImporter.is() )
-                    xImporter->setTargetDocument( this );
-
-                // connect parser and filter
-                Reference < xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-                xParser->setDocumentHandler( xDocHandler );
-
-                // parse
-                try
+                ::rtl::OUString aDocName = ::rtl::OUString::createFromAscii( "meta.xml" );
+                if ( xStorNameAccess->hasByName( aDocName ) && xStorage->isStreamElement( aDocName ) )
                 {
-                    xParser->parseStream( aParserInput );
-                    bOK = sal_True;
-                }
-                catch( ::com::sun::star::uno::Exception& )
-                {
+                    uno::Reference< io::XStream > xStorageStream =
+                            xStorage->openStreamElement( aDocName, embed::ElementModes::READ );
+
+                    aParserInput.aInputStream = xStorageStream->getInputStream();
+
+                    if ( aParserInput.aInputStream.is() )
+                    {
+                        sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+                        const sal_Char *pServiceName = bOasis
+                            ? "com.sun.star.document.XMLOasisMetaImporter"
+                            : "com.sun.star.document.XMLMetaImporter";
+
+                        // create importer service
+                        Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
+                                rtl::OUString::createFromAscii(pServiceName),
+                                Sequence < Any >() ), UNO_QUERY );
+
+                        // connect importer with this object
+                        Reference < document::XImporter > xImporter( xDocHandler, UNO_QUERY );
+                        if ( xImporter.is() )
+                            xImporter->setTargetDocument( this );
+
+                        // connect parser and filter
+                        Reference < xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                        xParser->setDocumentHandler( xDocHandler );
+
+                        // parse
+                        xParser->parseStream( aParserInput );
+                        bOK = sal_True;
+                    }
                 }
             }
         }
-        else
-            bOK = _pInfo->Load( pStorage );
+        catch( uno::Exception& )
+        {
+        }
     }
 
     DELETEZ( _pMedium );
     if ( !bOK )
-        throw SfxIOException_Impl( ERRCODE_IO_CANTREAD );
+        throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTREAD );
 }
 
 //-----------------------------------------------------------------------------
 
 void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Bool bOK = sal_False;
-    String aName( aURL );
-    SvStorage* pStor = GetStorage_Impl( aName, sal_True );
-    if ( pStor )
-    {
-        if ( !_pInfo )
-            _pInfo = new SfxDocumentInfo;
-
-        // DocInfo speichern
-        bOK = _pInfo->Save( pStor ) && pStor->Commit();
-    }
-
-    DELETEZ( _pMedium );
-    if ( !bOK )
-        throw SfxIOException_Impl( ERRCODE_IO_CANTREAD );
+    // TODO: the old code seems to be oriented to SO5 documents
+    //       a storing for new formats is required
+    throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTWRITE );
 }
 
 //=============================================================================
