@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:59:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@ public:
     {}
 };
 
+
+/** A collection of data that is stored for every master page in the
+    container.
+*/
 class MasterPageDescriptor
 {
 public:
@@ -182,8 +186,11 @@ public:
 
     String msURL;
     String msPageName;
+    /// The actual master page.
     SdPage* mpMasterPage;
+    /// A slide that uses the master page.
     SdPage* mpSlide;
+    /// Preview of the master page.  May be empty.
     Image maPreview;
     ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
 };
@@ -296,6 +303,7 @@ private:
     SdDrawDocument* mpDocument;
     PreviewRenderer maPreviewRenderer;
 
+    /// The time to wait (in milliseconds) between the creation of previews.
     static const int DELAYED_CREATION_TIMEOUT=250;
     DECL_LINK(DelayedPreviewCreation, Timer *);
     ::sd::DrawDocShell* LoadDocument (
@@ -723,17 +731,32 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             AllComparator(sURL,sPageName,pMasterPage)));
     if (aEntry == maContainer.end())
     {
-        aResult = maContainer.size();
-        SdPage* pLocalMasterPage = CopyMasterPageToLocalDocument (pMasterPage);
-        SdPage* pLocalSlide = GetSlideForMasterPage(pLocalMasterPage);
-        maContainer.push_back (
-            MasterPageDescriptor (
+        bool bIgnore = false;
+        SdPage* pLocalMasterPage = NULL;
+        SdPage* pLocalSlide = NULL;
+        if (pMasterPage != NULL)
+        {
+            // When a master page is given then copy it to the local document.
+            pLocalMasterPage = CopyMasterPageToLocalDocument (pMasterPage);
+            pLocalSlide = GetSlideForMasterPage(pLocalMasterPage);
+            bIgnore = (pLocalMasterPage==NULL || pLocalSlide==NULL);
+        }
+        else
+            // When no master page is given then at least the URL has to be
+            // there.
+            bIgnore = (sURL.Len() == 0);
+
+        if ( ! bIgnore)
+        {
+            aResult = maContainer.size();
+            maContainer.push_back (MasterPageDescriptor (
                 sURL,
                 sPageName,
                 pLocalMasterPage,
                 pLocalSlide,
                 aPreview,
                 aResult));
+        }
     }
     else
     {
@@ -783,6 +806,9 @@ SdPage* MasterPageContainer::Implementation::GetPageObjectForToken (
                     maContainer[aToken].mpSlide
                         = GetSlideForMasterPage(pPageObject);
                     maContainer[aToken].msPageName = pPageObject->GetName();
+                    // Delete an existing substitution. The next request for
+                    // a preview will create the real one.
+                    maContainer[aToken].maPreview = Image();
                     //AF delete pDocumentShell;
                 }
             }
@@ -848,18 +874,35 @@ SdPage* MasterPageContainer::Implementation::CopyMasterPageToLocalDocument (
         if (pMasterPage == NULL)
             break;
 
+        // Check the presence of the target document.
         if (mpDocument == NULL)
             break;
+        // Check the presence of the source document.
         SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(
             pMasterPage->GetModel());
         if (pSourceDocument == NULL)
             break;
+
+        // Test if the master pages of both the slide and its notes page are
+        // present.  This is not the case when we are called during the
+        // creation of the slide master page because then the notes master
+        // page is not there.
+        USHORT nSourceMasterPageCount = pSourceDocument->GetMasterPageCount();
+        if (nSourceMasterPageCount%2 == 0)
+            // There should be 1 handout page + n slide masters + n notes
+            // masters = 2*n+1.  An even value indicates that a new slide
+            // master but not yet the notes master has been inserted.
+            break;
+        USHORT nIndex = pMasterPage->GetPageNum();
+        if (nSourceMasterPageCount <= nIndex+1)
+            break;
+        // Get the slide master page.
         if (pMasterPage != static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(pMasterPage->GetPageNum())))
+            pSourceDocument->GetMasterPage(nIndex)))
             break;
         // Get the notes master page.
         SdPage* pNotesMasterPage = static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(pMasterPage->GetPageNum()+1));
+            pSourceDocument->GetMasterPage(nIndex+1));
         if (pNotesMasterPage == NULL)
             break;
 
@@ -1072,8 +1115,7 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
                 nWidth,
                 SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
 
-            // Do not copy this bitmap to the container or it will not be
-            // replaced when the real preview becomes available.
+            maContainer[aToken].maPreview = aPreview;
         }
     }
 
@@ -1147,18 +1189,18 @@ void MasterPageContainer::Implementation::RemoveCallback (
     RequestQueue aTemporaryQueue;
     while ( ! maRequestQueue.empty())
     {
-    PreviewCreationRequest aRequest (maRequestQueue.front());
-    maRequestQueue.pop();
-    if (aRequest.maCallback != rCallback)
-        aTemporaryQueue.push (aRequest);
+        PreviewCreationRequest aRequest (maRequestQueue.front());
+        maRequestQueue.pop();
+        if (aRequest.maCallback != rCallback)
+            aTemporaryQueue.push (aRequest);
     }
 
     // Move the entries back to the queue member to reverse the order
     // of the temprorary queue.
     while ( ! aTemporaryQueue.empty())
     {
-    maRequestQueue.push (aTemporaryQueue.front());
-    aTemporaryQueue.pop();
+        maRequestQueue.push (aTemporaryQueue.front());
+        aTemporaryQueue.pop();
     }
 
     // Start the timer again when there are entries left.
@@ -1189,17 +1231,14 @@ SdPage* MasterPageContainer::Implementation::GetSlideForMasterPage (
                 PK_STANDARD);
             if (pCandidate != NULL)
             {
-          //                USHORT nMasterPageCount (pCandidate->GetMasterPageCount());
-          //                for (USHORT i=0; i<nMasterPageCount; i++)
-          //                {
-          if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
-          == pMasterPage)
-        {
-          bFound = true;
-          break;
-        }
-          //                }
+                if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
+                    == pMasterPage)
+                {
+                    bFound = true;
+                    break;
+                }
             }
+
             if (nPageIndex == 0)
                 break;
             else
@@ -1248,18 +1287,14 @@ BitmapEx MasterPageContainer::Implementation::LoadPreviewFromURL (
                 {
                     if (xDocStorage.is())
                     {
-                        // !!! IMPORTANT: The current implementation has a
-                        // bug - The storage name is "Thumbnail" instead of
-                        // "Thumbnails", it will be fixed soon. After it is
-                        // fixed the code below must be adjusted.
-                        uno::Reference<embed::XStorage> xThumbnailStor (
+                        uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnail"),
+                                ::rtl::OUString::createFromAscii("Thumbnails"),
                                 embed::ElementModes::READ));
-                        if (xThumbnailStor.is())
+                        if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
-                                xThumbnailStor->cloneStreamElement(
+                                xStorage->cloneStreamElement(
                                     ::rtl::OUString::createFromAscii(
                                         "thumbnail.png")));
                             if (xThumbnailCopy.is())
@@ -1279,16 +1314,20 @@ BitmapEx MasterPageContainer::Implementation::LoadPreviewFromURL (
 
                 try
                 {
+                    // An (older) implementation had a bug - The storage
+                    // name was "Thumbnail" instead of "Thumbnails".  The
+                    // old name is still used as fallback but this code can
+                    // be removed soon.
                     if ( ! xIStream.is())
                     {
-                        uno::Reference<embed::XStorage> xThumbnailStor (
+                        uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnails"),
+                                ::rtl::OUString::createFromAscii("Thumbnail"),
                                 embed::ElementModes::READ));
-                        if (xThumbnailStor.is())
+                        if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
-                                xThumbnailStor->cloneStreamElement(
+                                xStorage->cloneStreamElement(
                                     ::rtl::OUString::createFromAscii(
                                         "thumbnail.png")));
                             if (xThumbnailCopy.is())
