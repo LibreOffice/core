@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTimeField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
+ *  last change: $Author: tbe $ $Date: 2002-09-24 15:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,113 +72,97 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XTimeField
-/** gives access to the time value and formatting information of a time field.
+/** gives access to the value and settings of a time field.
  */
 interface XTimeField: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setTime
-    /** sets the time value to display in the time field.
+    /** sets the time value which is displayed in the time field.
+
+        <p>The time value must be specified in the format HHMMSShh,
+        where HH are hours, MM are minutes, SS are seconds and hh are
+        hundredth seconds.</p>
      */
     [oneway] void setTime( [in] long Time );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::getTime
-    /** @returns
-                    the time value which is currently displayed in the time field.
+    /** returns the time value which is currently displayed in the time field.
      */
     long getTime();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setMin
-    /** sets the minimum value to accept by the user.
+    /** sets the minimum time value that can be entered by the user.
      */
-    [oneway] void setMin( [in] long Date );
+    [oneway] void setMin( [in] long Time );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::getMin
-    /** @returns
-                    the currently set minimum value accepted by the user.
+    /** returns the currently set minimum time value that can be entered by
+        the user.
      */
     long getMin();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setMax
-    /** sets the maximum value to accept by the user.
+    /** sets the maximum time value that can be entered by the user.
      */
-    [oneway] void setMax( [in] long Date );
+    [oneway] void setMax( [in] long Time );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::getMax
-    /** @returns
-                    the currently set maximum value accepted by the user.
+    /** returns the currently set maximum time value that can be entered by
+        the user.
      */
     long getMax();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setFirst
-    /** sets the first value to set on "Pos1" key.
+    /** sets the first value to be set on POS1 key.
      */
-    [oneway] void setFirst( [in] long Date );
+    [oneway] void setFirst( [in] long Time );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::getFirst
-    /** @returns
-                    the currently set first value which is set on "Pos1" key.
+    /** returns the currently set first value which is set on POS1 key.
      */
     long getFirst();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setLast
-    /** sets the last value to set on "End" key.
+    /** sets the last value to be set on END key.
      */
-    [oneway] void setLast( [in] long Date );
+    [oneway] void setLast( [in] long Time );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::getLast
-    /** @returns
-                    the currently set last value which is set on "End" key.
+    /** returns the currently set last value which is set on END key.
      */
     long getLast();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setEmpty
-    /** sets the empty value for the time.
+    /** sets an empty value for the time.
      */
     void setEmpty();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::isEmpty
-    /** @returns
-                    whether currently the empty value is set for the time.
+    /** returns whether currently an empty value is set for the time.
      */
     boolean isEmpty();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTimeField::setStrictFormat
-    /** determines if the format is checked, even during editing.
+    /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTimeField::isStrictFormat
-    /** @returns
-                    whether the format is currently checked even during editing.
+    /** returns whether the format is currently checked during user input.
      */
     boolean isStrictFormat();
 
@@ -188,27 +172,4 @@ interface XTimeField: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:54  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:10  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:54  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:17  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif
