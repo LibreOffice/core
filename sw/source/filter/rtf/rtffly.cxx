@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:55:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,11 @@
 #ifndef __SGI_STL_UTILITY
 #include <utility>
 #endif
+// --> OD 2004-06-30 #i27767#
+#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
+#include <fmtwrapinfluenceonobjpos.hxx>
+#endif
+// <--
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
@@ -552,7 +557,10 @@ void SwRTFParser::SetFlysInDoc()
                 for (myIter aIter = rDeque.begin(); aIter != aEnd; ++aIter)
                 {
                     aIter->second.SetAnchor(&aPos);
-                    aPrevFmts[pCurrentAnchor].push_back(*aIter);
+                    // --> OD 2004-06-30 #i27767# - push on front to keep order
+                    // of objects for the correct object positioning
+                    //aPrevFmts[pCurrentAnchor].push_back(*aIter);
+                    aPrevFmts[pCurrentAnchor].push_front(*aIter);
                 }
                 rDeque.clear();
                 aEndNd--;
@@ -603,10 +611,12 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         InsertPara();
 
     // RTF-Defaults setzen:
-    SwFmtAnchor aAnchor(FLY_PAGE);
+    // --> OD 2004-06-24 #i27767#
+    SwFmtAnchor aAnchor( FLY_AT_CNTNT );
 
-    SwFmtHoriOrient aHori( 0, HORI_LEFT, /*FRAME*/REL_PG_PRTAREA );
-    SwFmtVertOrient aVert( 0, VERT_TOP, REL_PG_PRTAREA );
+    SwFmtHoriOrient aHori( 0, HORI_LEFT, FRAME );
+    SwFmtVertOrient aVert( 0, VERT_TOP, FRAME );
+    // <--
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP );
 
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
@@ -617,7 +627,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     int nOpenBrakets = GetOpenBrakets();
 
     if( !pSet )
+    {
         pSet = &aSet;
+    }
     else
     {
         // die Werte aus dem uebergebenen!
@@ -1002,6 +1014,11 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     pSet->Put( aAnchor );
     pSet->Put( aHori );
     pSet->Put( aVert );
+
+    // --> OD 2004-06-30 #i27767# - set wrapping style influence
+    pSet->Put( SwFmtWrapInfluenceOnObjPos(
+                    text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ));
+    // <--
 
     if( !( aFrmDir == pSet->Get( RES_FRAMEDIR )) )
         pSet->Put( aFrmDir );
