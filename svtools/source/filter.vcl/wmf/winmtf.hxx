@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
+ *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,23 @@ struct LOGFONTW
 #define PS_DASHDOTDOT           4
 #define PS_NULL                 5
 #define PS_INSIDEFRAME          6
+#define PS_USERSTYLE            7
+#define PS_ALTERNATE            8
+#define PS_STYLE_MASK           15
+
+#define PS_ENDCAP_ROUND     0x000
+#define PS_ENDCAP_SQUARE    0x100
+#define PS_ENDCAP_FLAT      0x200
+#define PS_ENDCAP_MASK      0xF00
+
+#define PS_JOIN_ROUND       0x0000
+#define PS_JOIN_BEVEL       0x1000
+#define PS_JOIN_MITER       0x2000
+#define PS_JOIN_MASK        0xF000
+
+#define PS_COSMETIC         0x00000
+#define PS_GEOMETRIC        0x10000
+#define PS_TYPE_MASK        0xF0000
 
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
@@ -625,7 +642,7 @@ class WinMtfOutput
         void                ClosePath(){ aPathObj.ClosePath(); };
         const PolyPolygon&  GetPathObj(){ return aPathObj; };
 
-        void                MoveTo( const Point& rPoint ) { maActPos = ImplMap( rPoint ); };
+        void                MoveTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
         void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
         void                DrawPixel( const Point& rSource, const Color& rColor );
         void                DrawLine( const Point& rSource, const Point& rDest );

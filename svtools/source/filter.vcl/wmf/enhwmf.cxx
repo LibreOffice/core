@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
+ *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_MOVETOEX :
             {
                 *pWMF >> nX32 >> nY32;
-                pOut->MoveTo( Point( nX32, nY32 ) );
+                pOut->MoveTo( Point( nX32, nY32 ), bRecordPath );
             }
             break;
 
@@ -608,6 +608,60 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         aLineInfo.SetDotCount( nDotCount );
                     }
                     pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
+                }
+            }
+            break;
+
+            case EMR_EXTCREATEPEN :
+            {
+                sal_Int32   elpHatch;
+                sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
+                Color       aColorRef;
+
+                *pWMF >> nIndex;
+                if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                {
+                    *pWMF >> offBmi >> cbBmi >> offBits >> cbBits >>  nStyle >> nWidth >> nBrushStyle;
+                     aColorRef = ReadColor();
+                     *pWMF >> elpHatch >> elpNumEntries;
+
+                    LineInfo    aLineInfo;
+                    if ( nWidth )
+                        aLineInfo.SetWidth( nWidth );
+
+                    sal_Bool bTransparent = sal_False;
+                    sal_uInt16 nDashCount = 0;
+                    sal_uInt16 nDotCount = 0;
+
+                    switch( nStyle & PS_STYLE_MASK )
+                    {
+                        case PS_DASHDOTDOT :
+                            nDotCount++;
+                        case PS_DASHDOT :
+                            nDashCount++;
+                        case PS_DOT :
+                            nDotCount++;
+                        break;
+                        case PS_DASH :
+                            nDashCount++;
+                        break;
+                        case PS_NULL :
+                            bTransparent = sal_True;
+                            aLineInfo.SetStyle( LINE_NONE );
+                        break;
+
+                        default :
+                        case PS_INSIDEFRAME :
+                        case PS_SOLID :
+                            aLineInfo.SetStyle( LINE_SOLID );
+                    }
+                    if ( nDashCount | nDotCount )
+                    {
+                        aLineInfo.SetStyle( LINE_DASH );
+                        aLineInfo.SetDashCount( nDashCount );
+                        aLineInfo.SetDotCount( nDotCount );
+                    }
+                    pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
                 }
             }
             break;
@@ -1138,7 +1192,6 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags", 0 );         break;
             case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode", 0 );             break;
             case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush", 0 );        break;
-            case EMR_EXTCREATEPEN :             WinMtfAssertHandler( "ExtCreatePen", 0 );           break;
             case EMR_SETBRUSHORGEX :            WinMtfAssertHandler( "SetBrushOrgEx", 0 );          break;
             case EMR_SETMETARGN :               WinMtfAssertHandler( "SetMetArgn", 0 );             break;
             case EMR_SETMITERLIMIT :            WinMtfAssertHandler( "SetMiterLimit", 0 );          break;

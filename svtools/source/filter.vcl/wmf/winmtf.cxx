@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-10 17:43:37 $
+ *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,6 +946,16 @@ void WinMtfOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
 void WinMtfOutput::DrawPixel( const Point& rSource, const Color& rColor )
 {
     mpGDIMetaFile->AddAction( new MetaPixelAction( ImplMap( rSource), rColor ) );
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::MoveTo( const Point& rPoint, sal_Bool bRecordPath )
+{
+    Point aDest( ImplMap( rPoint ) );
+    if ( bRecordPath )
+        aPathObj.AddPoint( aDest );
+    maActPos = aDest;
 }
 
 //-----------------------------------------------------------------------------------
