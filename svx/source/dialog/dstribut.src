@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:15:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,17 +114,17 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¡ÂÁ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "Geen";
-        Text[ french ] = "Aucune";
+        Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
         Text[ danish ] = "Ingen";
         Text[ swedish ] = "~Ingen";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
-        Text[ japanese ] = "Ç»Çµ";
-        Text[ korean ] = "æ¯¿Ω";
-        Text[ chinese_simplified ] = "Œﬁ";
-        Text[ chinese_traditional ] = "µL";
+        Text[ japanese ] = "Ç»Çµ(~N)";
+        Text[ korean ] = "æ¯¿Ω(~N)";
+        Text[ chinese_simplified ] = "Œﬁ(~N)";
+        Text[ chinese_traditional ] = "µL(~N)";
         Text[ arabic ] = "»œÊ‰";
         Text[ turkish ] = "Yok";
         Text[ catalan ] = "Ninguno";
@@ -149,10 +149,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "~V‰nster";
         Text[ polish ] = "Z lewej";
         Text[ portuguese_brazilian ] = "Left";
-        Text[ japanese ] = "ç∂";
-        Text[ korean ] = "øﬁ¬ ";
-        Text[ chinese_simplified ] = "◊Û";
-        Text[ chinese_traditional ] = "¶V•™";
+        Text[ japanese ] = "ç∂(~L)";
+        Text[ korean ] = "øﬁ¬ (~L)";
+        Text[ chinese_simplified ] = "◊Û(~L)";
+        Text[ chinese_traditional ] = "¶V•™(~L)";
         Text[ arabic ] = "Ì”«—";
         Text[ turkish ] = "Sol";
         Text[ catalan ] = "Izquierda";
@@ -170,17 +170,17 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "Minnden";
-        Text[ french ] = "Au milieu";
+        Text[ french ] = "Milieu";
         Text[ spanish ] = "Centro";
         Text[ italian ] = "Al centro";
         Text[ danish ] = "Midte";
         Text[ swedish ] = "~Mitten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
-        Text[ japanese ] = "íÜâõ";
-        Text[ korean ] = "∞°øÓµ•";
-        Text[ chinese_simplified ] = "÷––ƒ";
-        Text[ chinese_traditional ] = "©~§§";
+        Text[ japanese ] = "íÜâõ(~C)";
+        Text[ korean ] = "∞°øÓµ•(~C)";
+        Text[ chinese_simplified ] = "÷––ƒ(~C)";
+        Text[ chinese_traditional ] = "©~§§(~C)";
         Text[ arabic ] = "Ê”ÿ";
         Text[ turkish ] = "Orta";
         Text[ catalan ] = "Centro";
@@ -205,10 +205,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "~AvstÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
-        Text[ japanese ] = "ä‘äu";
-        Text[ korean ] = "∞£∞›";
-        Text[ chinese_simplified ] = "º‰∏Ù";
-        Text[ chinese_traditional ] = "∂°πj";
+        Text[ japanese ] = "ä‘äu(~S)";
+        Text[ korean ] = "∞£∞›(~S)";
+        Text[ chinese_simplified ] = "º‰∏Ù(~S)";
+        Text[ chinese_traditional ] = "∂°πj(~S)";
         Text[ arabic ] = "«· »«⁄œ";
         Text[ turkish ] = "Aral˝k";
         Text[ catalan ] = "Espacio";
@@ -233,10 +233,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "Hˆge~r";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right";
-        Text[ japanese ] = "âE";
-        Text[ korean ] = "ø¿∏•¬ ";
-        Text[ chinese_simplified ] = "”“";
-        Text[ chinese_traditional ] = "¶V•k";
+        Text[ japanese ] = "âE(~R)";
+        Text[ korean ] = "ø¿∏•¬ (~R)";
+        Text[ chinese_simplified ] = "”“(~R)";
+        Text[ chinese_traditional ] = "¶V•k(~R)";
         Text[ arabic ] = "Ì„Ì‰";
         Text[ turkish ] = "Sa";
         Text[ catalan ] = "Derecha";
@@ -322,17 +322,17 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¡ÂÁ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "Geen";
-        Text[ french ] = "Aucune";
+        Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
         Text[ danish ] = "Ingen";
         Text[ swedish ] = "Ing~en";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
-        Text[ japanese ] = "Ç»Çµ";
-        Text[ korean ] = "æ¯¿Ω";
-        Text[ chinese_simplified ] = "Œﬁ";
-        Text[ chinese_traditional ] = "µL";
+        Text[ japanese ] = "Ç»Çµ(~O)";
+        Text[ korean ] = "æ¯¿Ω(~O)";
+        Text[ chinese_simplified ] = "Œﬁ(~O)";
+        Text[ chinese_traditional ] = "µL(~O)";
         Text[ arabic ] = "»œÊ‰";
         Text[ turkish ] = "Yok";
         Text[ catalan ] = "Ninguno";
@@ -357,10 +357,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "~Uppe";
         Text[ polish ] = "U gÛry";
         Text[ portuguese_brazilian ] = "Top";
-        Text[ japanese ] = "è„";
-        Text[ korean ] = "¿ß";
-        Text[ chinese_simplified ] = "…œ";
-        Text[ chinese_traditional ] = "¶V§W";
+        Text[ japanese ] = "è„(~T)";
+        Text[ korean ] = "¿ß(~T)";
+        Text[ chinese_simplified ] = "…œ(~T)";
+        Text[ chinese_traditional ] = "¶V§W(~T)";
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "‹st";
         Text[ catalan ] = "Arriba";
@@ -378,17 +378,17 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "Midden";
-        Text[ french ] = "Au milieu";
+        Text[ french ] = "Milieu";
         Text[ spanish ] = "Centro";
         Text[ italian ] = "Al centro";
         Text[ danish ] = "Midte";
         Text[ swedish ] = "M~itten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
-        Text[ japanese ] = "íÜâõ";
-        Text[ korean ] = "∞°øÓµ•";
-        Text[ chinese_simplified ] = "÷––ƒ";
-        Text[ chinese_traditional ] = "©~§§";
+        Text[ japanese ] = "íÜâõ(~E)";
+        Text[ korean ] = "∞°øÓµ•(~E)";
+        Text[ chinese_simplified ] = "÷––ƒ(~E)";
+        Text[ chinese_traditional ] = "©~§§(~E)";
         Text[ arabic ] = "Ê”ÿ";
         Text[ turkish ] = "Orta";
         Text[ catalan ] = "Centro";
@@ -413,10 +413,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "Av~stÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
-        Text[ japanese ] = "ä‘äu";
-        Text[ korean ] = "∞£∞›";
-        Text[ chinese_simplified ] = "º‰∏Ù";
-        Text[ chinese_traditional ] = "∂°πj";
+        Text[ japanese ] = "ä‘äu(~P)";
+        Text[ korean ] = "∞£∞›(~P)";
+        Text[ chinese_simplified ] = "º‰∏Ù(~P)";
+        Text[ chinese_traditional ] = "∂°πj(~P)";
         Text[ arabic ] = "«· »«⁄œ";
         Text[ turkish ] = "Aral˝k";
         Text[ catalan ] = "Espacio";
@@ -441,10 +441,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ swedish ] = "~Nere";
         Text[ polish ] = "Na dole";
         Text[ portuguese_brazilian ] = "Bottom";
-        Text[ japanese ] = "â∫";
-        Text[ korean ] = "æ∆∑°";
-        Text[ chinese_simplified ] = "œ¬";
-        Text[ chinese_traditional ] = "¶V§U";
+        Text[ japanese ] = "â∫(~B)";
+        Text[ korean ] = "æ∆∑°(~B)";
+        Text[ chinese_simplified ] = "œ¬(~B)";
+        Text[ chinese_traditional ] = "¶V§U(~B)";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Alt";
         Text[ catalan ] = "Abajo";
@@ -513,6 +513,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 };
 
 // ********************************************************************** EOF
+
 
 
 
