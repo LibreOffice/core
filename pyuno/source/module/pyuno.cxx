@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:00:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,8 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
                 }
                 else if( tcMe == com::sun::star::uno::TypeClass_INTERFACE )
                 {
-                    if( me->members->xInvocation == other->members->xInvocation )
+                    if( me->members->wrappedObject == other->members->wrappedObject )
+//                     if( me->members->xInvocation == other->members->xInvocation )
                         return 0;
                 }
             }
@@ -718,7 +719,7 @@ PyObject* PyUNO_new_UNCHECKED (
     self = PyObject_NEW (PyUNO, &PyUNOType);
     if (self == NULL)
         return NULL; //NULL == error
-    self->members = new PyUNOInternals ();
+    self->members = new PyUNOInternals();
 
     arguments[0] <<= targetInterface;
     {
