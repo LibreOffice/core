@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 10:21:41 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
     TextSelection aSel( rSel );
     aSel.Justify();
 
-    BOOL bSearchInSelection = rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE;
+    BOOL bSearchInSelection = rSearchOptions.searchFlag & (USHORT)util::SearchFlags::REG_NOT_BEGINOFLINE;
 
     TextPaM aStartPaM( aSel.GetEnd() );
     if ( aSel.HasRange() && ( ( bSearchInSelection && bForward ) || ( !bSearchInSelection && !bForward ) ) )
@@ -348,7 +348,7 @@ USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAl
 
         // HideSelection();
         TextSelection aSel;
-        BOOL bSearchInSelection = rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE;
+        BOOL bSearchInSelection = rSearchOptions.searchFlag & (USHORT)util::SearchFlags::REG_NOT_BEGINOFLINE;
         if ( bSearchInSelection )
         {
             aSel = GetSelection();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 10:31:35 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,7 +1572,7 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPorti
     i18n::LineBreakHyphenationOptions aHyphOptions( NULL, uno::Sequence< beans::PropertyValue >(), 1 );
     i18n::LineBreakUserOptions aUserOptions;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
-    USHORT nBreakPos = aLBR.breakIndex;
+    USHORT nBreakPos = (USHORT)aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
         nBreakPos = nMaxBreakPos;
 
@@ -2349,8 +2349,8 @@ String TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
         TextNode* pNode = mpDoc->GetNodes().GetObject(  rCursorPos.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
-        aSel.GetStart().GetIndex() = aBoundary.startPos;
-        aSel.GetEnd().GetIndex() = aBoundary.endPos;
+        aSel.GetStart().GetIndex() = (USHORT)aBoundary.startPos;
+        aSel.GetEnd().GetIndex() = (USHORT)aBoundary.endPos;
         aWord = pNode->GetText().Copy( aSel.GetStart().GetIndex(), aSel.GetEnd().GetIndex() - aSel.GetStart().GetIndex() );
         if ( pStartOfWord )
             *pStartOfWord = aSel.GetStart();
