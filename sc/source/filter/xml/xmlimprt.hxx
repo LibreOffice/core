@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ using namespace rtl;
 
 enum ScXMLDocTokens
 {
+    XML_TOK_DOC_VIEW_SETTINGS,
     XML_TOK_DOC_FONTDECLS,
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
@@ -769,6 +770,8 @@ public:
     // namespace office
     SvXMLImportContext *CreateMetaContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
+    SvXMLImportContext *CreateViewSettingsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
@@ -888,6 +891,8 @@ public:
 
     void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
     sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
+
+    ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
 };
 
 #endif

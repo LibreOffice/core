@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:43:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ class ScXMLExport : public SvXMLExport
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
 
+    virtual void _ExportViewSettings();
     virtual void _ExportFontDecls();
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 14:53:58 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,13 @@ void ScXMLExport::_ExportMeta()
         AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+}
+
+void ScXMLExport::_ExportViewSettings()
+{
+    SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_TABLE, sXML_view_settings, sal_True, sal_True);
+    if (pChangeTrackingExportHelper)
+        pChangeTrackingExportHelper->WriteChangeViewSettings();
 }
 
 void ScXMLExport::_ExportFontDecls()
@@ -1641,7 +1648,7 @@ void ScXMLExport::_ExportAutoStyles()
             }
 
             //GetFormExport()->exportAutoStyles();
-            GetPageExport()->exportAutoStyles();
+              GetPageExport()->exportAutoStyles();
 
             nProgressValue = nOldProgressValue + nProgressObjects;
             GetProgressBarHelper()->SetValue(nProgressValue);

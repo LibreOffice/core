@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:38:06 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #endif
 #ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
 #include "XMLTableShapeImportHelper.hxx"
+#endif
+#ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
+#include "XMLChangeTrackingImportHelper.hxx"
+#endif
+#ifndef _SC_XMLVIEWSETTINGSCONTEXT_HXX
+#include "XMLViewSettingsContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -728,6 +734,9 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
+    case XML_TOK_DOC_VIEW_SETTINGS:
+        pContext = GetScImport().CreateViewSettingsContext(nPrefix, rLocalName, xAttrList);
+        break;
     case XML_TOK_DOC_FONTDECLS:
         pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
         break;
@@ -1340,7 +1349,8 @@ ScXMLImport::ScXMLImport() :
     sSC_currency(RTL_CONSTASCII_USTRINGPARAM(sXML_currency)),
     sSC_string(RTL_CONSTASCII_USTRINGPARAM(sXML_string)),
     sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean)),
-    bRemoveLastChar(sal_False)
+    bRemoveLastChar(sal_False),
+    pChangeTrackingImportHelper(NULL)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1432,6 +1442,8 @@ ScXMLImport::~ScXMLImport()
     uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->removeActionLock();
+    if (pChangeTrackingImportHelper)
+        delete pChangeTrackingImportHelper;
 }
 
 void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )
@@ -1451,6 +1463,14 @@ void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XCompon
 }
 
 // ---------------------------------------------------------------------
+
+SvXMLImportContext *ScXMLImport::CreateViewSettingsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+{
+    SvXMLImportContext *pContext= new ScXMLViewSettingsContext( *this, nPrefix,
+                                        rLocalName, xAttrList);
+    return pContext;
+}
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList)
@@ -1560,4 +1580,11 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
     if (bFound)
         aValidation = *aItr;
     return bFound;
+}
+
+ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
+{
+    if (!pChangeTrackingImportHelper)
+        pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
+    return pChangeTrackingImportHelper;
 }
