@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:40:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         long nCount = aColNames.getLength();
         for (long n = 0; n < nCount; n++)
         {
-            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], n );
+            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], (USHORT)n );
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
@@ -952,7 +952,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         aTabCols.SetRight( nWidth  );
         aTabCols.SetRightMax( nWidth );
         if( nCols )
-            for( USHORT n = 0, nStep = nWidth / (nCols+1), nW = nStep;
+            for( USHORT n = 0, nStep = (USHORT)(nWidth / (nCols+1)), nW = nStep;
                     n < nCols; ++n, nW += nStep )
             {
                 aTabCols.Insert( nW, FALSE, n );
@@ -1126,7 +1126,7 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                     sTxt.Erase( 0, nSttPos-1 );
                 }
 
-                sTxt.Erase( 0, rFndCol.sColumn.getLength() + 2 );
+                sTxt.Erase( 0, (xub_StrLen)(rFndCol.sColumn.getLength() + 2) );
                 nSttPos = 0;
 
                 USHORT nSubType = 0;
@@ -1423,33 +1423,20 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
             if(xSourceProps.is())
             {
-                Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
-                if(aFormats.hasValue())
-                {
-                    Reference<XNumberFormatsSupplier> xSuppl;
-                    aFormats >>= xSuppl;
-                    if(xSuppl.is())
-                    {
+              Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+              if(aFormats.hasValue())
+              {
+                  Reference<XNumberFormatsSupplier> xSuppl;
+                  aFormats >>= xSuppl;
+                  if(xSuppl.is())
+                  {
                         Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                         Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
                         aNull >>= aDBFormatData.aNullDate;
-                    }
-                }
-            }
-            if(xSourceProps.is())
-            {
-                Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
-                if(aFormats.hasValue())
-                {
-                    Reference<XNumberFormatsSupplier> xSuppl;
-                    aFormats >>= xSuppl;
-                    if(xSuppl.is())
-                    {
-                        Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                        Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                        aNull >>= aDBFormatData.aNullDate;
-                    }
-                }
+                        if(aDBFormatData.xFormatter.is())
+                            aDBFormatData.xFormatter->attachNumberFormatsSupplier(xSuppl);
+                  }
+              }
             }
             aDBFormatData.aLocale = SvxCreateLocale( rSh.GetCurLang() );
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
@@ -1534,9 +1521,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 DBL_MAX != nValue )
                             {
                                 Color* pCol;
-                                SvNumberFormatter& rNFmtr =
-                                                    *rSh.GetNumberFormatter();
-                                rNFmtr.GetOutputString( nValue,
+                                if(rNumFmtr.GetType(pDBCol->DB_ColumnData.nFormat) & NUMBERFORMAT_DATE)
+                                {
+                                    ::Date aStandard(1,1,1900);
+                                    if (*rNumFmtr.GetNullDate() != aStandard)
+                                        nValue += (aStandard - *rNumFmtr.GetNullDate());
+                                }
+                                rNumFmtr.GetOutputString( nValue,
                                             pDBCol->DB_ColumnData.nFormat,
                                             sIns, &pCol );
                             }
@@ -1885,7 +1876,7 @@ void SwInsertDBColAutoPilot::Commit()
         else
         {
             pSubValues[4].Value <<= rtl::OUString(sTmp);
-            eLang = GetAppLanguage();
+            eLang = (LanguageType)GetAppLanguage();
         }
 
         if( eLang != ePrevLang )
@@ -1957,7 +1948,7 @@ void SwInsertDBColAutoPilot::Load()
                 sal_Bool bFound = sal_False;
                 for(sal_Int32 nRealColumn = 0; nRealColumn < aDBColumns.Count(); nRealColumn++)
                 {
-                    if(aDBColumns[nRealColumn]->sColumn == sColumn)
+                    if(aDBColumns[(USHORT)nRealColumn]->sColumn == sColumn)
                     {
                         bFound = sal_True;
                         break;
