@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-29 18:43:38 $
+ *  last change: $Author: nn $ $Date: 2002-05-02 09:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,9 @@ USHORT ScPreview::GetOptimalZoom(BOOL bWidthOnly)
 
 void ScPreview::SetXOffset( long nX )
 {
+    if ( aOffset.X() == nX )
+        return;
+
     if (bValid)
     {
         long nDif = LogicToPixel(aOffset).X() - LogicToPixel(Point(nX,0)).X();
@@ -701,6 +704,9 @@ void ScPreview::SetXOffset( long nX )
 
 void ScPreview::SetYOffset( long nY )
 {
+    if ( aOffset.Y() == nY )
+        return;
+
     if (bValid)
     {
         long nDif = LogicToPixel(aOffset).Y() - LogicToPixel(Point(0,nY)).Y();
