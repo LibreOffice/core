@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:28:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -109,6 +113,10 @@
 #endif
 #ifndef  _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
@@ -186,9 +194,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 using namespace rtl;
 using namespace ucb;
+using namespace comphelper;
 
 //=============================================================================
 
@@ -1222,46 +1232,34 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     else
         return sal_False;
 
-    aQueryForFilter += OUString::createFromAscii( ":iflags=54:eflags=64:default_first" ); // template export filter
+    aQueryForFilter += OUString::createFromAscii( ":iflags=54:eflags=64" ); // template export filter
 
     // Find a template filter for the document type
     Reference< XMULTISERVICEFACTORY > rServiceManager = ::comphelper::getProcessServiceFactory();
     if( !rServiceManager.is() )
         return sal_False;
 
-    Reference< XNAMEACCESS > rFilterCFG(
+    Reference< XContainerQuery > rFilterCFG(
         rServiceManager->createInstance( OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
         UNO_QUERY );
 
-    if( !rFilterCFG.is() )
+    if( !rFilterCFG.is())
         return sal_False;
 
-    OUString aFilterName;
-    Sequence< OUString > aFoundFilterNames;
-    Any aFilterNameAny = rFilterCFG->getByName( aQueryForFilter );
-    aFilterNameAny >>= aFoundFilterNames;
-    if( aFoundFilterNames.getLength() )
-        aFilterName = aFoundFilterNames[0];
-
-    if( !aFilterName.getLength() ) // no filter - no template
+    Reference< XEnumeration > rResult = rFilterCFG->createSubSetEnumerationByQuery(aQueryForFilter);
+    if( !rResult.is() || !rResult->hasMoreElements() )
         return sal_False;
 
-    // find a type
-    OUString aTypeName;
-    Sequence< PROPERTYVALUE > aFilterProps;
-    Any aPropSeqAny = rFilterCFG->getByName( aFilterName );
-    aPropSeqAny >>= aFilterProps;
+    // use first template only!
+    SequenceAsHashMap aFilterProps(rResult->nextElement());
 
-    for( ind = 0; !aTypeName.getLength() && ind < aFilterProps.getLength(); ind++ )
-        if( aFilterProps[ind].Name.equals( OUString::createFromAscii( "Type" ) ) )
-            aFilterProps[ind].Value >>= aTypeName;
-
-    if( !aTypeName.getLength() )
+    // find a type (and the filter name)
+    OUString aFilterName = aFilterProps.getUnpackedValueOrDefault( OUString::createFromAscii( "Name" ), OUString() );
+    OUString aTypeName   = aFilterProps.getUnpackedValueOrDefault( OUString::createFromAscii( "Type" ), OUString() );
+    if( !aTypeName.getLength() || !aFilterName.getLength() )
         return sal_False;
 
-    // Find an extention and a mime-type for the type
-    OUString aExt;
-    OUString aMimeType;
+    // Find an extension and a mime-type for the type
     Reference< XNAMEACCESS > rTypeDetection(
         rServiceManager->createInstance( OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
         UNO_QUERY );
@@ -1269,23 +1267,13 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     if( !rTypeDetection.is() )
         return sal_False;
 
-    Sequence< PROPERTYVALUE > aTypeProps;
-    Any aTypePropsAny = rTypeDetection->getByName( aTypeName );
-    aTypePropsAny >>= aTypeProps;
-
-    for( ind = 0; ( !aMimeType.getLength() || !aExt.getLength() ) && ind < aTypeProps.getLength(); ind++ )
-        if( aTypeProps[ind].Name.equals( OUString::createFromAscii( "Extensions" ) ) )
-        {
-            Sequence< OUString > aExts;
-            aTypeProps[ind].Value >>= aExts;
-            if( aExts.getLength() )
-                aExt = aExts[0];
-        }
-        else if( aTypeProps[ind].Name.equals( OUString::createFromAscii( "MediaType" ) ) )
-            aTypeProps[ind].Value >>= aMimeType;
-
-    if( !aExt.getLength() )
+    SequenceAsHashMap aTypeProps( rTypeDetection->getByName( aTypeName ) );
+    Sequence< OUString > aAllExt = aTypeProps.getUnpackedValueOrDefault( OUString::createFromAscii( "Extensions" ), Sequence< OUString >() );
+    if (!aAllExt.getLength())
         return sal_False;
+
+    OUString aMimeType = aTypeProps.getUnpackedValueOrDefault( OUString::createFromAscii( "MediaType"  ), OUString() );
+    OUString aExt      = aAllExt[0];
 
     // construct destination url
     OUString    aTargetURL;
