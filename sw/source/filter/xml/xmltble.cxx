@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-29 13:18:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 16:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     const SwFmtVertOrient *pVertOrient = 0;
     const SvxBrushItem *pBrush = 0;
     const SvxBoxItem *pBox = 0;
-    sal_uInt32 nNumFormat = 0;  // compare number formats by their number
+    const SwTblBoxNumFormat *pNumFmt = 0;
 
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -455,14 +455,18 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     if ( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOXATR_FORMAT,
                                                 sal_False, &pItem ) )
-        nNumFormat = ((const SwTblBoxNumFormat *)pItem)->GetValue();
+        pNumFmt = (const SwTblBoxNumFormat *)pItem;
 
     // empty styles have not to be exported
-    if( !pVertOrient && !pBrush && !pBox )
+    if( !pVertOrient && !pBrush && !pBox && !pNumFmt )
         return sal_False;
 
-    // order is: -/-/box, -/brush/-, -/brush/box,
-    //           vert/-/-, vert/-/box, vert/brush/-, vert/brush/box
+    // order is: -/-/-/num,
+    //           -/-/box/-, --/-/box/num,
+    //           -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
+    //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
+    //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
+    //           vert/brush/box/num
     sal_uInt32 nCount = Count();
     sal_Bool bInsert = sal_True;
     sal_uInt32 i;
@@ -471,7 +475,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         const SwFmtVertOrient *pTestVertOrient = 0;
         const SvxBrushItem *pTestBrush = 0;
         const SvxBoxItem *pTestBox = 0;
-        sal_uInt32 nTestNumFormat = 0;
+        const SwTblBoxNumFormat *pTestNumFmt = 0;
         const SwFrmFmt *pTestFmt = GetObject(i);
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, sal_False,
@@ -517,7 +521,18 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
         if ( SFX_ITEM_SET == rTestSet.GetItemState( RES_BOXATR_FORMAT,
                                                 sal_False, &pItem ) )
-            nTestNumFormat = ((const SwTblBoxNumFormat *)pItem)->GetValue();
+        {
+            if( !pNumFmt )
+                break;
+
+            pTestNumFmt = (const SwTblBoxNumFormat *)pItem;
+        }
+        else
+        {
+            if( pNumFmt )
+                continue;
+
+        }
 
         if( pVertOrient &&
             pVertOrient->GetVertOrient() != pTestVertOrient->GetVertOrient() )
@@ -529,8 +544,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         if( pBox && ( *pBox != *pTestBox ) )
             continue;
 
-        // compare formats based on value (rather than presentation)
-        if( nNumFormat != nTestNumFormat )
+        if( pNumFmt && pNumFmt->GetValue() != pTestNumFmt->GetValue() )
             continue;
 
         // found!
