@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SplitterData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 18:59:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import com.sun.star.filter.config.tools.utils.*;
 /**
  *  Data container for class Splitter.
  *
- *  @author  Andreas Schlüns
+ *
  */
 public class SplitterData
 {
