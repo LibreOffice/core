@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-06-14 11:43:15 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_LINENUMBER :
         case FN_NUMBER_NEWSTART :
         case FN_NUMBER_NEWSTART_AT :
+        case FN_FORMAT_DROPCAPS :
+        case SID_ATTR_BORDER_INNER :
+        case SID_ATTR_BORDER_OUTER :
+        case SID_ATTR_BORDER_SHADOW :
+        case SID_ATTR_TABSTOP :
         {
             USHORT nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
