@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2003-06-26 15:23:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,33 +70,48 @@
             		<info>
 				<desc xml:lang="en-US">Describes an UNO service, which is registered for a special event.</desc>
 				<desc xml:lang="zh-CN">描述为特殊事件注册的 UNO 服务。</desc>
+				<desc xml:lang="x-comment">?????????? UNO ???!; Describes an UNO service, which is registered for a special event.</desc>
+				<desc xml:lang="ja">UNO サービスを記述します。UNO サービスは、特殊なイベントに対して登録するものです。</desc>
 			</info>
             		<prop oor:name="Service" oor:type="xs:string">
                 		<info>
 					<desc xml:lang="en-US">Must contain an UNO implementation(!) name of the implemented job component.</desc>
 					<desc xml:lang="zh-CN">指定实现作业的 UNO 服务名称。</desc>
+					<desc xml:lang="x-comment">??????? UNO ?????!; Must contain an UNO implementation(!) name of the implemented job component.</desc>
+					<desc xml:lang="ja">実装されたジョブコンポーネントの UNO 実装名が含まれている必要があります。</desc>
 				</info>
             		</prop>
             		<group oor:name="Arguments" oor:extensible="true">
                 		<info>
 					<desc xml:lang="en-US">Can be filled with any argument, which is under control of the job component.</desc>
-					<desc xml:lang="zh-CN">指定作业自己的配置数据。</desc>
+					<desc xml:lang="zh-CN">可以采用任何一个受制于作业组件的参数填写。</desc>
+					<desc xml:lang="x-comment">????????????!; Can be filled with any argument, which is under control of the job component.</desc>
+					<desc xml:lang="ja">ジョブコンポーネントの管理下にある引数を指定できます。</desc>
 				</info>
             		</group>
         	</group>
         	<group oor:name="TimeStamp">
             		<info>
 				<desc xml:lang="en-US">Is used to enable/disable a job execution related to a triggered event.</desc>
+				<desc xml:lang="x-comment">Is used to enable/disable a job execution related to a triggered event.</desc>
+				<desc xml:lang="ja">トリガーされたイベントに対応したジョブ実行を、有効または無効にするために使用します。</desc>
+				<desc xml:lang="zh-CN">将会随通信事件发生而使用启动/关闭一个作业。</desc>
 			</info>
             		<prop oor:name="AdminTime" oor:type="xs:string">
                 		<info>
 					<desc xml:lang="en-US">If it's newer then UserTime, the job will be reactivated next time.</desc>
+					<desc xml:lang="x-comment">If it&apos;s newer then UserTime, the job will be reactivated next time.</desc>
+					<desc xml:lang="ja">UserTime より新しいジョブは、次回再度アクティブになります。</desc>
+					<desc xml:lang="zh-CN">如果是新的，那就是 UserTime ，将会在下一次重新启动作业。</desc>
 				</info>
                 		<value>2003-01-01T00:00:00+00:00</value>
             		</prop>
             		<prop oor:name="UserTime" oor:type="xs:string">
                 		<info>
 					<desc xml:lang="en-US">If it's newer then AdminTime, the job is deactivated for execution.</desc>
+					<desc xml:lang="x-comment">If it&apos;s newer then AdminTime, the job is deactivated for execution.</desc>
+					<desc xml:lang="ja">AdminTime より新しいジョブは、実行対象から除外されます。</desc>
+					<desc xml:lang="zh-CN">如果是新的，那就是 AdminTime ，将会在下一次关闭作业。</desc>
 				</info>
                 		<value>2003-01-01T00:00:00+00:00</value>
             		</prop>
@@ -104,12 +119,16 @@
         	<group oor:name="Event">
             		<info>
 				<desc xml:lang="en-US">Describe a state, which can be detected at runtime and will be used to start jobs, which are registered for it.</desc>
-				<desc xml:lang="zh-CN">描述可将 UNO 服务注册为其作业的事件。</desc>
+				<desc xml:lang="zh-CN">描述一个可在运行时间发现的、用来启动注册事件的状态。</desc>
+				<desc xml:lang="x-comment">???? UNO ????????????!; Describe a state, which can be detected at runtime and will be used to start jobs, which are registered for it.</desc>
+				<desc xml:lang="ja">実行時に検出され、登録されたジョブを開始するために使用される状態を記述します。</desc>
 			</info>
             		<set oor:name="JobList" oor:node-type="TimeStamp">
                 		<info>
 					<desc xml:lang="en-US">This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc>
-					<desc xml:lang="zh-CN">指定是否可以为事件注册作业。</desc>
+					<desc xml:lang="zh-CN">此列单包含当通信事件发生时所有应该要执行的注册作业。</desc>
+					<desc xml:lang="x-comment">??????????????!; This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc>
+					<desc xml:lang="ja">このリストには、登録されているすべてのジョブが含まれています。登録されているジョブは、対応するイベントがトリガーされると実行されます。</desc>
 				</info>
             		</set>
         	</group>
@@ -118,17 +137,22 @@
 		<set oor:name="Jobs" oor:node-type="Job">
             		<info>
 				<desc xml:lang="en-US">This list contains all well known job components and it's properties.</desc>
-				<desc xml:lang="zh-CN">含有所有注册作业的列单。</desc>
+				<desc xml:lang="zh-CN">含有所有注册作业及其属性的列单。</desc>
+				<desc xml:lang="x-comment">????????????!; This list contains all well known job components and it&apos;s properties.</desc>
+				<desc xml:lang="ja">このリストには、既存のジョブコンポーネントと、そのプロパティが含まれます。</desc>
 			</info>
 		</set>
 		<set oor:name="Events" oor:node-type="Event">
             		<info>
 				<desc xml:lang="en-US">Here jobs can be bound to events and can be enabled/disable by using TimeStamp values.</desc>
-				<desc xml:lang="zh-CN">含有所有可能事件的列单。</desc>
+				<desc xml:lang="zh-CN">这里的由 TimeStamp 值可以启用或关闭的连接事件。</desc>
+				<desc xml:lang="x-comment">????????????!; Here jobs can be bound to events and can be enabled/disable by using TimeStamp values.</desc>
+				<desc xml:lang="ja">ここにあるジョブはイベントと関連付けられており、TimeStamp 値を使用して有効または無効にすることができます。</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
