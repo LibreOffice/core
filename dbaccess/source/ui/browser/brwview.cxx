@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-01 14:41:26 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 
@@ -194,12 +197,9 @@ UnoDataBrowserView::~UnoDataBrowserView()
 
     delete m_pSplitter;
     m_pSplitter = NULL;
-    if(m_pTreeView)
-    {
-        delete m_pTreeView;
-        m_pTreeView = NULL;
-    }
-    if(m_pStatus)
+    setTreeView(NULL);
+
+    if ( m_pStatus )
     {
         delete m_pStatus;
         m_pStatus = NULL;
@@ -231,11 +231,15 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     {
         if (m_pTreeView)
         {
+            ::dbaui::notifySystemWindow(this,m_pTreeView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+
             Window* pDeleteIt = m_pTreeView;
             m_pTreeView = NULL;
             delete pDeleteIt;
         }
         m_pTreeView = _pTreeView;
+        if ( m_pTreeView )
+            ::dbaui::notifySystemWindow(this,m_pTreeView,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
 }
 // -------------------------------------------------------------------------
@@ -376,8 +380,8 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
                 m_pVclControl->GrabFocus();
-            else if ( m_pVclControl && pLeft && pLeft->IsVisible() && m_pVclControl->HasChildPathFocus() )
-                pLeft->GrabFocus();
+//          else if ( m_pVclControl && pLeft && pLeft->IsVisible() && m_pVclControl->HasChildPathFocus() )
+//              pLeft->GrabFocus();
             nDone = 1L;
         }
         else if (       !rKeyCode.IsMod1()
@@ -396,8 +400,8 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 
             if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
                 m_pVclControl->GrabFocus();
-            else if ( m_pVclControl && pRight && pRight->IsVisible() && m_pVclControl->HasChildPathFocus() )
-                pRight->GrabFocus();
+//          else if ( m_pVclControl && pRight && pRight->IsVisible() && m_pVclControl->HasChildPathFocus() )
+//              pRight->GrabFocus();
             else
                 nDone = 0L;
         }
