@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ public:
 
 // ----------------------------------------------------------------------
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
