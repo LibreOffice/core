@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:44:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,20 +418,16 @@ static void ImplLogMetricToDevFontDataW( const LOGFONTW* pLogFont,
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
-                            BOOL bReplaceFont )
+void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
 {
     XubString aFontName( ImplSalGetUniString( rLogFont.lfFaceName ) );
     if ( aFontName.Len() )
     {
-        if ( bReplaceFont )
-        {
-            rFont.SetName( aFontName );
-            rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-            rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-            rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-            rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
-        }
+        rFont.SetName( aFontName );
+        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
+        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
+        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
+        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
 
         long nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
@@ -461,20 +457,16 @@ void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
-                            BOOL bReplaceFont )
+void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
     XubString aFontName( rLogFont.lfFaceName );
     if ( aFontName.Len() )
     {
-        if ( bReplaceFont )
-        {
-            rFont.SetName( aFontName );
-            rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-            rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-            rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-            rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
-        }
+        rFont.SetName( aFontName );
+        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
+        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
+        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
+        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
 
         long nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
