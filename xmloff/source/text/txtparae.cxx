@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,13 +1866,6 @@ void XMLTextParagraphExport::exportTextGraphic(
     }
 }
 
-//OUString XMLTextParagraphExport::exportTextEmbeddedGraphic(
-//  const Reference < XPropertySet >& rPropSet )
-//{
-//  OUString sEmpty;
-//  return sEmpty;
-//}
-
 void XMLTextParagraphExport::exportShape(
         const Reference < XTextContent > & rTxtCntnt,
         sal_Bool bAutoStyles )
@@ -1912,14 +1905,18 @@ void XMLTextParagraphExport::_exportTextEmbedded(
 
     Reference < XModel > xEmbeddedModel;
     Reference < XEmbeddedObjectSupplier > xEOSupplier( rPropSet, UNO_QUERY );
-    if( xEOSupplier.is() )
-        xEmbeddedModel = Reference < XModel >( xEOSupplier->getEmbeddedObject(),
-                                               UNO_QUERY );
-    const sal_Char *pElem = xEmbeddedModel.is() ? sXML_foreign_object
-                                                : sXML_object;
+//  if( xEOSupplier.is() )
+//      xEmbeddedModel = Reference < XModel >( xEOSupplier->getEmbeddedObject(),
+//                                             UNO_QUERY );
+    const sal_Char *pElem = xEmbeddedModel.is() ? sXML_object
+                                                : sXML_object_ole;
 
     // xlink:href
-    OUString sURL = exportTextEmbeddedObject( rPropSet );
+    OUString sStreamName, sClassId;
+    getTextEmbeddedObjectProperties( rPropSet, sStreamName, sClassId );
+
+    OUString sURL( GetExport().GetObjectsPath() );
+    sURL += sStreamName;
     GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                                    sXML_simple );
@@ -1927,6 +1924,9 @@ void XMLTextParagraphExport::_exportTextEmbedded(
                                    sXML_embed );
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
                                    sXML_onRequest );
+
+    if( !xEmbeddedModel.is() )
+        GetExport().AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               pElem, sal_False, sal_True );
@@ -1985,11 +1985,10 @@ void XMLTextParagraphExport::exportTextEmbedded(
     }
 }
 
-OUString XMLTextParagraphExport::exportTextEmbeddedObject(
-    const Reference < XPropertySet >& rPropSet )
+void XMLTextParagraphExport::getTextEmbeddedObjectProperties(
+    const Reference < XPropertySet >& rPropSet,
+    OUString& rStreamName, OUString& rClassId ) const
 {
-    OUString sEmpty;
-    return sEmpty;
 }
 
 void XMLTextParagraphExport::_exportTextRange(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:46 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     OUString    sChainNextName;
     OUString    sHRef;
     OUString    sFilterName;
+    OUString    sClassId;
 
     sal_Int32   nX = 0;
     sal_Int32   nY = 0;
@@ -461,6 +462,9 @@ XMLTextFrameContext::XMLTextFrameContext(
                 }
             }
             break;
+        case XML_TOK_TEXT_FRAME_CLASS_ID:
+            sClassId = rValue;
+            break;
         }
     }
 
@@ -471,7 +475,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     if( XML_TEXT_FRAME_OLE == nType )
     {
         xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
-                                                    sHRef );
+                                                    GetImport(), sHRef,
+                                                    sClassId );
     }
     else
     {

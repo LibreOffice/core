@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:38:39 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,7 @@ XML_CONSTASCII_ACTION( sXML_circle, "circle" );
 XML_CONSTASCII_ACTION( sXML_citation_body_style_name, "citation-body-style-name" );
 XML_CONSTASCII_ACTION( sXML_citation_style_name, "citation-style-name" );
 XML_CONSTASCII_ACTION( sXML_class, "class" );
+XML_CONSTASCII_ACTION( sXML_class_id, "class-id" );
 XML_CONSTASCII_ACTION( sXML_clip, "clip" );
 XML_CONSTASCII_ACTION( sXML_clockwise, "clockwise" );
 XML_CONSTASCII_ACTION( sXML_close, "close" );
@@ -1030,6 +1031,7 @@ XML_CONSTASCII_ACTION( sXML_object_index, "object-index" );
 XML_CONSTASCII_ACTION( sXML_object_index_entry_template, "object-index-entry-template" );
 XML_CONSTASCII_ACTION( sXML_object_index_source, "object-index-source" );
 XML_CONSTASCII_ACTION( sXML_object_name, "object-name");
+XML_CONSTASCII_ACTION( sXML_object_ole, "object_ole" );
 XML_CONSTASCII_ACTION( sXML_objects, "objects" );
 XML_CONSTASCII_ACTION( sXML_odd_page, "odd-page" );
 XML_CONSTASCII_ACTION( sXML_offset, "offset" );
