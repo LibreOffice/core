@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:45:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ void OWriteStream_Impl::Revert()
 uno::Sequence< beans::PropertyValue > OWriteStream_Impl::GetStreamProperties()
 {
     if ( !m_aProps.getLength() )
-        m_aProps = ReadStreamProperties();
+        m_aProps = ReadPackageStreamProperties();
 
     return m_aProps;
 }
@@ -758,7 +758,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
 }
 
 //-----------------------------------------------
-uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadStreamProperties()
+uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProperties()
 {
     uno::Sequence< beans::PropertyValue > aResult( 4 );
 
@@ -1164,7 +1164,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit()
         xDataToCopy = m_xPackageStream->getDataStream();
 
     // in case of new inserted package stream it is possible that input stream still was not set
-    return CreateReadonlyCopyBasedOnData( xDataToCopy, ReadStreamProperties(), m_bUseCommonPass );
+    GetStreamProperties();
+    return CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass );
 }
 
 //-----------------------------------------------
@@ -1249,7 +1250,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const ::rt
     }
 
     // in case of new inserted package stream it is possible that input stream still was not set
-    return CreateReadonlyCopyBasedOnData( xDataToCopy, ReadStreamProperties(), sal_False );
+    GetStreamProperties();
+    return CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, sal_False );
 }
 
 //===============================================
