@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:57:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ extern void ConvertHalfwitdhToFullwidth( String& rString );
 
 /*****************************************************************************/
 BOOL PFormEntrys::GetText( ByteString &rReturn,
-    USHORT nTyp, USHORT nLangIndex, BOOL bDel )
+    //USHORT nTyp, USHORT nLangIndex, BOOL bDel )
+    USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
     BOOL bReturn = false;
@@ -101,6 +102,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
             bTitleFirst[ nLangIndex ] = FALSE;
             break;
     }
+    //printf("Returning '%s'\n",rReturn.GetBuffer());
     return bReturn;
 }
 
@@ -113,28 +115,45 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
 MergeData::~MergeData()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ )
-        delete GetObject( i );
 }
 
 /*****************************************************************************/
-PFormEntrys *MergeData::GetPFormEntrys( ResData *pResData )
+PFormEntrys* MergeData::GetPFormEntrys( ResData *pResData )
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ ) {
-        if ( *GetObject( i ) == pResData->sPForm )
-            return GetObject( i );
+//    if( pResData->sPForm.Len() && aMap.find( pResData->sPForm ) != aMap.end() ){
+    if( aMap.find( ByteString("HACK") ) != aMap.end() ){
+        return aMap[ ByteString("HACK") ];
     }
-    return 0;
+    else{
+        return 0;
+    }
 }
+
+void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
+//    aMap.insert( PFormEntrysHashMap::value_type( rPFO , pfEntrys ) );
+    aMap.insert( PFormEntrysHashMap::value_type( ByteString("HACK") , pfEntrys ) );
+
+}
+
+PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
+    if( aMap.find( ByteString("HACK") ) != aMap.end() ){
+//    if( aMap.find( rPFO ) != aMap.end() ){
+        return aMap[ rPFO ];
+    }
+    else{
+        return 0;
+    }
+}
+
 
 /*****************************************************************************/
 PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
 /*****************************************************************************/
 {
-    PFormEntrys *pEntrys = new PFormEntrys( rPForm );
-    Insert( pEntrys, LIST_APPEND );
-    return pEntrys;
+    PFormEntrys* pFEntrys = new PFormEntrys( rPForm );
+    aMap.insert( PFormEntrysHashMap::value_type( rPForm , pFEntrys ) );
+    return pFEntrys;
 }
 
 /*****************************************************************************/
@@ -155,22 +174,34 @@ BOOL MergeData::operator==( ResData *pData )
 #define FFORMAT_NEW     0x0001
 #define FFORMAT_OLD     0x0002
 
+/*void MergeDataFile::Quote( ByteString& sText ){
+    for( int x=0; x < sText.Len(); x++ ){
+        if( sText.GetChar( x ) == '\"' ){
+            if( x > 1 && sText.GetChar( x-1) != '\\' ){
+                sText.Insert('\\', x);
+                x++;
+            }else{
+                sText.Insert('\\',0);
+                x++;
+            }
+        }
+    }
+}*/
 /*****************************************************************************/
-MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
+MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
                             CharSet aCharSet, BOOL bUTF8 )
 /*****************************************************************************/
                 : bErrorLog( bErrLog )
 {
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     aInputStream.SetStreamCharSet( aCharSet );
-
     ByteString sLine;
 
     ByteString sTYP;
     ByteString sGID;
     ByteString sLID;
     ByteString sPFO;
-    USHORT nLANG;
+    ByteString nLANG;
     ByteString sTEXT;
     ByteString sQHTEXT;
     ByteString sTITLE;
@@ -178,31 +209,56 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
     fprintf( stdout, "Scanning File %s ...\n", rFileName.GetBuffer());
 
     ULONG nFileFormat = FFORMAT_UNKNOWN;
-
+    if( !aInputStream.IsOpen() ) {
+        printf("ERROR : Can't open %s\n", rFileName.GetBuffer());
+        exit( -1 );
+    }
     while ( !aInputStream.IsEof()) {
         aInputStream.ReadLine( sLine );
         sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, aCharSet );
 
-        if ( sLine.GetTokenCount( '\t' ) == 15 ) {
+        if ( sLine.GetTokenCount( '\t' ) == 15  ) {
             if ( nFileFormat != FFORMAT_NEW ) {
                 nFileFormat = FFORMAT_NEW;
                 fprintf( stdout, "File detection: Version 2.0 detected!\n" );
             }
-              sTYP = sLine.GetToken( 3, '\t' );
-            sGID = sLine.GetToken( 4, '\t' );
-            sLID = sLine.GetToken( 5, '\t' );
-            sPFO = sLine.GetToken( 7, '\t' );
-            nLANG = sLine.GetToken( 9, '\t' ).ToInt32();
+            // Merge While Build speedup
+            if(
+                 ( sLine.GetToken( 1 ,'\t').Search( sFile ) != STRING_NOTFOUND )
+                 //( sLine.GetToken( 1 ,'\t').Search( sFile ) > 0 )
+                ){
+                sTYP = sLine.GetToken( 3, '\t' );
+                sGID = sLine.GetToken( 4, '\t' );
+                sLID = sLine.GetToken( 5, '\t' );
+                sPFO = sLine.GetToken( 7, '\t' );
+                sPFO = ByteString("HACK");
+                nLANG = sLine.GetToken( 9, '\t' );
 
-            if ( bUTF8 )
-                sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+    /*          if ( bUTF8 )
+                    sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+    */
+                sTEXT = sLine.GetToken( 10, '\t' );
+    //            printf("%s\n",sTEXT.GetBuffer());
+    //            Quote( sTEXT );
+    //            printf("%s\n",sTEXT.GetBuffer());
 
-            sTEXT = sLine.GetToken( 10, '\t' );
-            sQHTEXT = sLine.GetToken( 12, '\t' );
-            sTITLE = sLine.GetToken( 13, '\t' );
+                sQHTEXT = sLine.GetToken( 12, '\t' );
+                sTITLE = sLine.GetToken( 13, '\t' );
 
-            if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
-                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
+                //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
+                nLANG.EraseLeadingAndTrailingChars();
+                if ( !nLANG.EqualsIgnoreCaseAscii( "de" ) && !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
+                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
+                    if( nLANG.Len() > 0 ){
+                        bool bFound = false;
+                        for( int x = 0; x < aLanguages.size(); x++ ){
+                            if( aLanguages[ x ].Equals( nLANG ) )
+                                bFound = true;
+                        }
+                        if( !bFound )   aLanguages.push_back( nLANG );
+                    }
+                }
+            }
         }
         else if ( sLine.GetTokenCount( '\t' ) == 10 ){
             if ( nFileFormat != FFORMAT_OLD ) {
@@ -217,11 +273,13 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
                 sLID = sLID.Copy( 1 ); sLID.Erase( sLID.Len() - 1 );
             sPFO = sLine.GetToken( 4, '\t' );
                 sPFO = sPFO.Copy( 1 ); sPFO.Erase( sPFO.Len() - 1 );
-            nLANG = sLine.GetToken( 5, '\t' ).ToInt32();
+            nLANG = sLine.GetToken( 5, '\t' );
 
-            if ( bUTF8 )
-                sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
-            if (( nLANG == JAPANESE ) && ( Export::GetCharSet( nLANG ) == RTL_TEXTENCODING_UTF8 )) {
+//          if ( bUTF8 )
+//              sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+
+            if (( nLANG.EqualsIgnoreCaseAscii( JAPANESE_ISO ))) // == JAPANESE )
+            {
                 String sSLine( sLine, RTL_TEXTENCODING_UTF8 );
                 ConvertHalfwitdhToFullwidth( sSLine );
                 sLine = ByteString( sSLine, RTL_TEXTENCODING_UTF8 );
@@ -229,13 +287,27 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
 
             sTEXT = sLine.GetToken( 6, '\t' );
                 sTEXT = sTEXT.Copy( 1 ); sTEXT.Erase( sTEXT.Len() - 1 );
+       //     Quote( sTEXT );
+
             sQHTEXT = sLine.GetToken( 8, '\t' );
                 sQHTEXT = sQHTEXT.Copy( 1 ); sQHTEXT.Erase( sQHTEXT.Len() - 1 );
             sTITLE = sLine.GetToken( 9, '\t' );
                 sTITLE = sTITLE.Copy( 1 ); sTITLE.Erase( sTITLE.Len() - 1 );
 
-            if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
+            //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
+            nLANG.EraseLeadingAndTrailingChars();
+            if ( !nLANG.EqualsIgnoreCaseAscii("de") && !nLANG.EqualsIgnoreCaseAscii("en-US") ){
                 InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
+                if( nLANG.Len() > 0 ){
+                    bool bFound = false;
+                    for( int x = 0; x < aLanguages.size(); x++ ){
+                        if( aLanguages[ x ].Equals( nLANG ) )
+                            bFound = true;
+                     }
+                     if( !bFound )   aLanguages.push_back( nLANG );
+
+                }
+            }
         }
     }
     aInputStream.Close();
@@ -246,17 +318,14 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
 MergeDataFile::~MergeDataFile()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ ) {
-        MergeData *pData = GetObject( i );
-        delete pData;
-    }
 }
 
 /*****************************************************************************/
 void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
 /*****************************************************************************/
 {
-    if ( bErrorLog ) {
+// Ivo
+    /*  if ( bErrorLog ) {
         DirEntry aDirEntry( String( rFileName, RTL_TEXTENCODING_ASCII_US ));
         aDirEntry.SetExtension( String( "err", RTL_TEXTENCODING_ASCII_US ));
         sErrorLog = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
@@ -285,7 +354,7 @@ void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
         }
     }
     if ( aErrLog.IsOpen())
-        aErrLog.Close();
+        aErrLog.Close(); */
 }
 
 /*****************************************************************************/
@@ -300,7 +369,9 @@ void MergeDataFile::WriteError( const ByteString &rLine )
     else
         fprintf( stderr, "%s\n", rLine.GetBuffer());
 }
-
+std::vector<ByteString> MergeDataFile::GetLanguages(){
+    return aLanguages;
+}
 /*****************************************************************************/
 MergeData *MergeDataFile::GetMergeData( ResData *pResData )
 /*****************************************************************************/
@@ -316,12 +387,12 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData )
     pResData->sGId = sGID;
     pResData->sId = sLID;
 
-    for ( ULONG i = 0; i < Count(); i++ ) {
-        if ( *GetObject( i ) == pResData ) {
-            pResData->sGId = sOldG;
-            pResData->sId = sOldL;
-            return GetObject( i );
-        }
+    ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId );
+
+    if( aMap.find( sKey ) != aMap.end() ){
+        pResData->sGId = sOldG;
+        pResData->sId = sOldL;
+        return aMap[ sKey ];
     }
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
@@ -343,7 +414,7 @@ PFormEntrys *MergeDataFile::GetPFormEntrys( ResData *pResData )
 void MergeDataFile::InsertEntry(
                     const ByteString &rTYP, const ByteString &rGID,
                     const ByteString &rLID, const ByteString &rPFO,
-                    USHORT nLANG, const ByteString &rTEXT,
+                    const ByteString &nLANG, const ByteString &rTEXT,
                     const ByteString &rQHTEXT, const ByteString &rTITLE )
 /*****************************************************************************/
 {
@@ -352,79 +423,36 @@ void MergeDataFile::InsertEntry(
     long int i;
 
     // search for MergeData
-    for ( i = Count() - 1; i >= 0 && !bFound; i-- ) {
-        pData = GetObject( i );
-        if (( pData->sLID == rLID ) &&
-            ( pData->sGID == rGID ) &&
-            ( pData->sTyp == rTYP )) bFound = TRUE;
-    }
-
-    if ( !bFound ) {
-        // create new MergeData, cause no one exists with current properties
+    ByteString sKey = CreateKey( rTYP , rGID , rLID );
+    if( aMap.find( sKey ) != aMap.end() ){
+        pData = aMap[ sKey ];
+    }else{
         pData = new MergeData( rTYP, rGID, rLID );
-        Insert( pData, LIST_APPEND );
+        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID ) , pData ) );
     }
 
     bFound = FALSE;
-    PFormEntrys *pFEntrys = NULL;
+    PFormEntrys *pFEntrys = 0;
 
     // search for PFormEntrys
-    for ( i = pData->Count() - 1; i >= 0 && !bFound; i-- ) {
-        pFEntrys = pData->GetObject( i );
-        if ( *pFEntrys == rPFO )
-            bFound = TRUE;
-    }
 
-    if ( !bFound ) {
+    pFEntrys = pData->GetPFObject( rPFO );
+    if( !pFEntrys ){
         // create new PFormEntrys, cause no one exists with current properties
         pFEntrys = new PFormEntrys( rPFO );
-        pData->Insert( pFEntrys, LIST_APPEND );
+        pData->Insert( rPFO , pFEntrys );
     }
 
     // finaly insert the cur string
-    pFEntrys->InsertEntry( GetLangIndex( nLANG ),
-                           rTEXT, rQHTEXT, rTITLE );
-
+    pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
+}
+ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID ){
+    ByteString sKey( rTYP );
+    sKey.Append( '-' );
+    sKey.Append( rGID );
+    sKey.Append( '-' );
+    sKey.Append( rLID  );
+    return sKey.ToUpperAscii();
 }
 
-/*****************************************************************************/
-USHORT MergeDataFile::GetLangIndex( USHORT nId )
-/*****************************************************************************/
-{
-    switch ( nId ) {
-        case COMMENT: return COMMENT_INDEX;
-        case ENGLISH_US: return ENGLISH_US_INDEX;
-        case PORTUGUESE: return PORTUGUESE_INDEX;
-        case RUSSIAN: return RUSSIAN_INDEX;
-        case GREEK: return GREEK_INDEX;
-        case DUTCH: return DUTCH_INDEX;
-        case FRENCH: return FRENCH_INDEX;
-        case SPANISH: return SPANISH_INDEX;
-        case FINNISH: return FINNISH_INDEX;
-        case HUNGARIAN: return HUNGARIAN_INDEX;
-        case ITALIAN: return ITALIAN_INDEX;
-        case CZECH: return CZECH_INDEX;
-        case SLOVAK: return SLOVAK_INDEX;
-        case ENGLISH: return ENGLISH_INDEX;
-        case DANISH: return DANISH_INDEX;
-        case SWEDISH: return SWEDISH_INDEX;
-        case NORWEGIAN: return NORWEGIAN_INDEX;
-        case POLISH: return POLISH_INDEX;
-        case GERMAN: return GERMAN_INDEX;
-        case PORTUGUESE_BRAZILIAN: return PORTUGUESE_BRAZILIAN_INDEX;
-        case JAPANESE: return JAPANESE_INDEX;
-        case KOREAN: return KOREAN_INDEX;
-        case CHINESE_SIMPLIFIED: return CHINESE_SIMPLIFIED_INDEX;
-        case CHINESE_TRADITIONAL: return CHINESE_TRADITIONAL_INDEX;
-        case TURKISH: return TURKISH_INDEX;
-        case ARABIC: return ARABIC_INDEX;
-        case HEBREW: return HEBREW_INDEX;
-        case CATALAN: return CATALAN_INDEX;
-        case THAI: return THAI_INDEX;
-        case HINDI: return HINDI_INDEX;
-        case ESTONIAN: return ESTONIAN_INDEX;
-        case SLOVENIAN: return SLOVENIAN_INDEX;
-        case EXTERN: return EXTERN_INDEX;
-    }
-    return 0xFFFF;
-}
+
