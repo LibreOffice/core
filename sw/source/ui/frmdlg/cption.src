@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:37:22 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ ModalDialog DLG_CAPTION
     Text[ chinese_simplified ] = "±Í«©";
     Text[ russian ] = "œÓ‰ÔËÒ¸";
     Text[ polish ] = "Opis";
-    Text[ japanese ] = "◊ÕﬁŸ";
+    Text[ japanese ] = "ê}ï\\î‘çÜ";
     Text[ chinese_traditional ] = "º–≈“";
     Text[ arabic ] = " ”„Ì…  Ê÷ÌÕÌ…";
     Text[ greek ] = "≈È„Ò·ˆﬁ";
@@ -602,7 +602,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         };
         stringlist [ swedish ] =
         {
-            < "Inga" ; > ;
+            < "Ingen" ; > ;
         };
         stringlist [ danish ] =
         {
@@ -673,7 +673,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         TEXT [ English ] = "~Separator" ;
         Text [ english_us ] = "~Separator" ;
         Text [ portuguese_brazilian ] = "~Trenner" ;
-        Text [ swedish ] = "A~vdelare" ;
+        Text [ swedish ] = "Skilje~tecken" ;
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
