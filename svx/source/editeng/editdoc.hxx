@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 15:31:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ public:
 
 
     void            ResortAttribs();
+    void            OptimizeRanges( SfxItemPool& rItemPool );
 
     USHORT          Count()                 { return aAttribs.Count(); }
     void            Clear()                 { aAttribs.Remove( 0, aAttribs.Count()); }

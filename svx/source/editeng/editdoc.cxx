@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 11:46:59 $
+ *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,6 +1894,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos,
     }
 }
 
+
 // -------------------------------------------------------------------------
 // class EditCharAttribList
 // -------------------------------------------------------------------------
@@ -1958,6 +1959,33 @@ void CharAttribList::ResortAttribs()
     if ( Count() )
     {
         qsort( (void*)aAttribs.GetData(), aAttribs.Count(), sizeof( EditCharAttrib* ), CompareStart );
+    }
+}
+
+void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
+{
+    for ( USHORT n = 0; n < aAttribs.Count(); n++ )
+    {
+        EditCharAttrib* pAttr = aAttribs.GetObject( n );
+        for ( USHORT nNext = n+1; nNext < aAttribs.Count(); nNext++ )
+        {
+            EditCharAttrib* p = aAttribs.GetObject( nNext );
+            if ( ( p->GetStart() == pAttr->GetEnd() ) && ( p->Which() == pAttr->Which() ) )
+            {
+                if ( *p->GetItem() == *pAttr->GetItem() )
+                {
+                    pAttr->GetEnd() = p->GetEnd();
+                    aAttribs.Remove( nNext );
+                    rItemPool.Remove( *p->GetItem() );
+                    delete p;
+                }
+                break;  // only 1 attr with same which can start here.
+            }
+            else if ( p->GetStart() > pAttr->GetEnd() )
+            {
+                break;
+            }
+        }
     }
 }
 

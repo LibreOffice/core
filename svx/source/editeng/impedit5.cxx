@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-28 13:06:33 $
+ *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,12 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
 
     aSel.Adjust( aEditDoc );
 
+#ifdef DEBUG
+//    if ( ( aSel.Min().GetNode() == aSel.Max().GetNode() ) && ( bOnlyHardAttrib == EditEngineAttribs_All ) )
+//        return GetAttribs( aEditDoc.GetPos( aSel.Min().GetNode() ), aSel.Min().GetIndex(), aSel.Max().GetIndex(), GETATTRIBS_ALL );
+#endif
+
+
     SfxItemSet aCurSet( GetEmptyItemSet() );
 
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
@@ -506,6 +512,99 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
 
     return aCurSet;
 }
+
+
+SfxItemSet ImpEditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal_uInt8 nFlags ) const
+{
+    // MT: #94002# Optimized function with less Puts(), which cause unnecessary cloning from default items.
+    // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
+
+    DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
+
+    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
+
+    SfxItemSet aAttribs( ((ImpEditEngine*)this)->GetEmptyItemSet() );
+
+    if ( pNode )
+    {
+        if ( nEnd > pNode->Len() )
+            nEnd = pNode->Len();
+
+        DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
+
+        if ( nStart > nEnd )
+            nStart = nEnd;
+
+        // StyleSheet / Parattribs...
+
+        if ( pNode->GetStyleSheet() && ( nFlags & GETATTRIBS_STYLESHEET ) )
+            aAttribs.Set( pNode->GetStyleSheet()->GetItemSet(), TRUE );
+
+        if ( nFlags & GETATTRIBS_PARAATTRIBS )
+            aAttribs.Put( pNode->GetContentAttribs().GetItems() );
+
+        // CharAttribs...
+
+        if ( nFlags & GETATTRIBS_PARAATTRIBS )
+        {
+            // Make testing easier...
+            pNode->GetCharAttribs().OptimizeRanges( ((ImpEditEngine*)this)->GetEditDoc().GetItemPool() );
+
+            const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
+            for ( USHORT nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+            {
+                EditCharAttrib* pAttr = rAttrs.GetObject( nAttr );
+
+                if ( nStart == nEnd )
+                {
+                    USHORT nCursorPos = nStart;
+                    if ( ( pAttr->GetStart() <= nCursorPos ) && ( pAttr->GetEnd() >= nCursorPos ) )
+                    {
+                        // To be used the attribute has to start BEFORE the position, or it must be a
+                        // new empty attr AT the position, or we are on position 0.
+                        if ( ( pAttr->GetStart() < nCursorPos ) || pAttr->IsEmpty() || !nCursorPos )
+                        {
+                            // maybe this attrib ends here and a new attrib with 0 Len may follow and be valid here,
+                            // but that s no problem, the empty item will come later and win.
+                            aAttribs.Put( *pAttr->GetItem() );
+                        }
+                    }
+                }
+                else
+                {
+                    // Check every attribute covering the area, partial or full.
+                    if ( ( pAttr->GetStart() < nEnd ) && ( pAttr->GetEnd() > nStart ) )
+                    {
+                        if ( ( pAttr->GetStart() <= nStart ) && ( pAttr->GetEnd() >= nEnd ) )
+                        {
+                            // full coverage
+                            aAttribs.Put( *pAttr->GetItem() );
+                        }
+                        else
+                        {
+                            // OptimizeRagnge() assures that not the same attr can follow for full coverage
+                            // only partial, check with current, when using para/styhe, otherwise invalid.
+                            if ( !( nFlags & (GETATTRIBS_PARAATTRIBS|GETATTRIBS_STYLESHEET) ) ||
+                                ( *pAttr->GetItem() != aAttribs.Get( pAttr->Which() ) ) )
+                            {
+                                aAttribs.InvalidateItem( pAttr->Which() );
+                            }
+                        }
+                    }
+                }
+
+                if ( pAttr->GetStart() > nEnd )
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    return aAttribs;
+}
+
 
 void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE nSpecial )
 {

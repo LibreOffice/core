@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:57:58 $
+ *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,6 +1363,13 @@ SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib 
         ConvertSelection( rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos ) );
     return pImpEditEngine->GetAttribs( aSel, bOnlyHardAttrib );
 }
+
+SfxItemSet EditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal_uInt8 nFlags ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetAttribs( nPara, nStart, nEnd, nFlags );
+}
+
 
 Font EditEngine::GetStandardFont( sal_uInt16 nPara )
 {
