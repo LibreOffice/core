@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-31 11:01:43 $
+ *  last change: $Author: ama $ $Date: 2000-12-14 09:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             const long nPrtHeightDiff = Frm().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
             Frm().Height( aFrmRect.Height() );
-            Frm().Width ( aFrmRect.Width() );
+            Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
             {
                 ColLock();  //Grow/Shrink locken.
