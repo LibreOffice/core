@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ String RID_STR_TABLES_CONTAINER
     Identifier = ID_TREE_ADMINISTRATE ; \
     HelpId = HID_BROWSER_DSADMINISTRATE ;   \
     Text [ de ] = "~Datenbankdatei bearbeiten ..." ;    \
-    Text [ en-US ] = "Edit ~Data Base File..." ;
+    Text [ en-US ] = "Edit ~Database File..." ;
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
