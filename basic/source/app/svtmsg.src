@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 09:12:19 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,7 +1556,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： ﾃﾞｽｸﾄｯﾌﾟにｱｸﾃｨﾌﾞﾌﾚｰﾑがありません。";
-    Text[ korean ] = "슬롯 ID를　실행하지　못했습니다.";
+    Text[ korean ] = "실행하지　못했습니다. 바탕화면에 ActiveFrame이 없습니다.";
     Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ arabic ] = "Slot ID could not be run";
@@ -1580,7 +1580,7 @@ String S_NO_MENU
     Text[ polish ] = "There is no menu at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "There is no Help button at ($Arg1)";
-    Text[ korean ] = "($Arg1)에 도움말 버튼이 없습니다.";
+    Text[ korean ] = "($Arg1)에 메뉴가 없습니다.";
     Text[ chinese_simplified ] = "There is no menu at ($Arg1)";
     Text[ chinese_traditional ] = "There is no menu at ($Arg1)";
     Text[ arabic ] = "There is no Help button at ($Arg1)";
@@ -1588,6 +1588,7 @@ String S_NO_MENU
     Text[ catalan ] = "No existe bot�n Ayuda para ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
 };
+
 
 
 
