@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 12:47:47 $
+#   last change: $Author: kz $ $Date: 2004-11-27 09:28:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET=miscconfiggeneral
 
 ZIPFLAGS                =
 ZIP1TARGET      = $(CONFIG_SERVER_NOLANG_TARGET)
-ZIP1LIST        = wizard$/* wizard$/*$/* wizard$/*$/*$/*
+ZIP1LIST        = wizard$/* wizard$/*$/* wizard$/*$/*$/* wizard$/*$/*$/*$/*
 
 
 ZIP2TARGET      = $(CONFIG_USER_TARGET)
