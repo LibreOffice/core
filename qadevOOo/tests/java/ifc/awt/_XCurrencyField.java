@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCurrencyField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:38 $
+ *  last change:$Date: 2003-09-08 10:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.awt;
 
+import lib.MultiMethodTest;
 
 import com.sun.star.awt.XCurrencyField;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.awt.XCurrencyField</code>
@@ -92,14 +92,14 @@ import lib.MultiMethodTest;
 public class _XCurrencyField extends MultiMethodTest {
 
     public XCurrencyField oObj = null;
-    private double val = 0 ;
-    private double min = 0 ;
-    private double max = 0 ;
-    private double first = 0 ;
-    private double last = 0 ;
-    private double spin = 0 ;
-    private short digits = 0 ;
-    private boolean strict = true ;
+    private double val = 0;
+    private double min = 0;
+    private double max = 0;
+    private double first = 0;
+    private double last = 0;
+    private double spin = 0;
+    private short digits = 0;
+    private boolean strict = true;
 
     /**
     * Sets value changed and then compares it to get value. <p>
@@ -112,10 +112,9 @@ public class _XCurrencyField extends MultiMethodTest {
     public void _setValue() {
         requiredMethod("getValue()");
 
-        boolean result = true ;
-        oObj.setValue(val + 1.1) ;
+        oObj.setValue(val + 1.1);
 
-        tRes.tested("setValue()", oObj.getValue() == val + 1.1) ;
+        tRes.tested("setValue()", oObj.getValue() == val + 1.1);
     }
 
     /**
@@ -123,9 +122,9 @@ public class _XCurrencyField extends MultiMethodTest {
     * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _getValue() {
-        val = oObj.getValue() ;
+        val = oObj.getValue();
 
-        tRes.tested("getValue()", true) ;
+        tRes.tested("getValue()", true);
     }
 
     /**
@@ -137,11 +136,11 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setMin() {
-        requiredMethod("getMin()") ;
+        requiredMethod("getMin()");
 
-        oObj.setMin(min + 1.1) ;
+        oObj.setMin(min + 1.1);
 
-        tRes.tested("setMin()", oObj.getMin() == min + 1.1) ;
+        tRes.tested("setMin()", oObj.getMin() == min + 1.1);
     }
 
     /**
@@ -150,10 +149,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getMin() {
 
-        boolean result = true ;
-        min = oObj.getMin() ;
+        boolean result = true;
+        min = oObj.getMin();
 
-        tRes.tested("getMin()", result) ;
+        tRes.tested("getMin()", result);
     }
 
     /**
@@ -165,13 +164,13 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setMax() {
-        requiredMethod("getMax()") ;
+        requiredMethod("getMax()");
 
-        boolean result = true ;
-        oObj.setMax(max + 1.1) ;
-        result = oObj.getMax() == max + 1.1 ;
+        boolean result = true;
+        oObj.setMax(max + 1.1);
+        result = oObj.getMax() == max + 1.1;
 
-        tRes.tested("setMax()", result) ;
+        tRes.tested("setMax()", result);
     }
 
     /**
@@ -180,10 +179,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getMax() {
 
-        boolean result = true ;
-        max = oObj.getMax() ;
+        boolean result = true;
+        max = oObj.getMax();
 
-        tRes.tested("getMax()", result) ;
+        tRes.tested("getMax()", result);
     }
 
     /**
@@ -195,14 +194,14 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setFirst() {
-        requiredMethod("getFirst()") ;
+        requiredMethod("getFirst()");
 
-        boolean result = true ;
-        oObj.setFirst(first + 1.1) ;
-        double ret = oObj.getFirst() ;
-        result = ret == first + 1.1 ;
+        boolean result = true;
+        oObj.setFirst(first + 1.1);
+        double ret = oObj.getFirst();
+        result = ret == first + 1.1;
 
-        tRes.tested("setFirst()", result) ;
+        tRes.tested("setFirst()", result);
     }
 
     /**
@@ -211,10 +210,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getFirst() {
 
-        boolean result = true ;
-        first = oObj.getFirst() ;
+        boolean result = true;
+        first = oObj.getFirst();
 
-        tRes.tested("getFirst()", result) ;
+        tRes.tested("getFirst()", result);
     }
 
     /**
@@ -226,15 +225,15 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setLast() {
-        requiredMethod("getLast()") ;
+        requiredMethod("getLast()");
 
-        boolean result = true ;
-        oObj.setLast(last + 1.1) ;
-        double ret = oObj.getLast() ;
+        boolean result = true;
+        oObj.setLast(last + 1.1);
+        double ret = oObj.getLast();
 
-        result = ret == last + 1.1 ;
+        result = ret == last + 1.1;
 
-        tRes.tested("setLast()", result) ;
+        tRes.tested("setLast()", result);
     }
 
     /**
@@ -243,10 +242,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getLast() {
 
-        boolean result = true ;
-        last = oObj.getLast() ;
+        boolean result = true;
+        last = oObj.getLast();
 
-        tRes.tested("getLast()", result) ;
+        tRes.tested("getLast()", result);
     }
 
     /**
@@ -258,13 +257,13 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setSpinSize() {
-        requiredMethod("getSpinSize()") ;
+        requiredMethod("getSpinSize()");
 
-        boolean result = true ;
-        oObj.setSpinSize(spin + 1.1) ;
-        result = oObj.getSpinSize() == spin + 1.1 ;
+        boolean result = true;
+        oObj.setSpinSize(spin + 1.1);
+        result = oObj.getSpinSize() == spin + 1.1;
 
-        tRes.tested("setSpinSize()", result) ;
+        tRes.tested("setSpinSize()", result);
     }
 
     /**
@@ -273,10 +272,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getSpinSize() {
 
-        boolean result = true ;
-        spin = oObj.getSpinSize() ;
+        boolean result = true;
+        spin = oObj.getSpinSize();
 
-        tRes.tested("getSpinSize()", result) ;
+        tRes.tested("getSpinSize()", result);
     }
 
     /**
@@ -288,15 +287,15 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setDecimalDigits() {
-        requiredMethod("getDecimalDigits()") ;
+        requiredMethod("getDecimalDigits()");
 
-        boolean result = true ;
-        oObj.setDecimalDigits((short)(digits + 1)) ;
+        boolean result = true;
+        oObj.setDecimalDigits((short) (digits + 1));
 
-        short res = oObj.getDecimalDigits() ;
-        result = res == ((short)digits + 1) ;
+        short res = oObj.getDecimalDigits();
+        result = res == ((short) digits + 1);
 
-        tRes.tested("setDecimalDigits()", result) ;
+        tRes.tested("setDecimalDigits()", result);
     }
 
     /**
@@ -305,10 +304,10 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _getDecimalDigits() {
 
-        boolean result = true ;
-        digits = oObj.getDecimalDigits() ;
+        boolean result = true;
+        digits = oObj.getDecimalDigits();
 
-        tRes.tested("getDecimalDigits()", result) ;
+        tRes.tested("getDecimalDigits()", result);
     }
 
     /**
@@ -320,13 +319,13 @@ public class _XCurrencyField extends MultiMethodTest {
     * </ul>
     */
     public void _setStrictFormat() {
-        requiredMethod("isStrictFormat()") ;
+        requiredMethod("isStrictFormat()");
 
-        boolean result = true ;
-        oObj.setStrictFormat(!strict) ;
-        result = oObj.isStrictFormat() == !strict ;
+        boolean result = true;
+        oObj.setStrictFormat(!strict);
+        result = oObj.isStrictFormat() == !strict;
 
-        tRes.tested("setStrictFormat()", result) ;
+        tRes.tested("setStrictFormat()", result);
     }
 
     /**
@@ -335,11 +334,9 @@ public class _XCurrencyField extends MultiMethodTest {
     */
     public void _isStrictFormat() {
 
-        boolean result = true ;
-        strict = oObj.isStrictFormat() ;
+        boolean result = true;
+        strict = oObj.isStrictFormat();
 
-        tRes.tested("isStrictFormat()", result) ;
+        tRes.tested("isStrictFormat()", result);
     }
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataTransferProviderAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:37 $
+ *  last change:$Date: 2003-09-08 10:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,16 @@
 package ifc.awt;
 
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.awt.XDataTransferProviderAccess;
 import com.sun.star.awt.XWindow;
 import com.sun.star.datatransfer.clipboard.XClipboard;
 import com.sun.star.datatransfer.dnd.XDragGestureRecognizer;
 import com.sun.star.datatransfer.dnd.XDragSource;
 import com.sun.star.datatransfer.dnd.XDropTarget;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.awt.XDataTransferProviderAccess</code>

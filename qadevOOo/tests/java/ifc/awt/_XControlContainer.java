@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControlContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:38 $
+ *  last change:$Date: 2003-09-08 10:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.awt;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.awt.XControlContainer</code>
