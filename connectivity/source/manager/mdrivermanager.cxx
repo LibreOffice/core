@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:56 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 07:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,20 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+namespace connectivity
+{
+namespace sdbc
+{
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -189,6 +200,126 @@ OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& 
                     m_aDriversBS.push_back(xDriver);
             }
         }
+    }
+    initializeDriverPreferences();
+}
+
+//--------------------------------------------------------------------------
+void OSDBCDriverManager::initializeDriverPreferences()
+{
+    if (!m_aDriversBS.size())
+        // nothing to do
+        return;
+
+    try
+    {
+        // some strings we need
+        const ::rtl::OUString sConfigurationProviderServiceName =
+            ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        const ::rtl::OUString sDriverManagerConfigLocation =
+            ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/DriverManager");
+        const ::rtl::OUString sDriverPreferenceLocation =
+            ::rtl::OUString::createFromAscii("DriverPreferences");
+        const ::rtl::OUString sNodePathArgumentName =
+            ::rtl::OUString::createFromAscii("nodepath");
+        const ::rtl::OUString sNodeAccessServiceName =
+            ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+
+        // create a configuration provider
+        Reference< XMultiServiceFactory > xConfigurationProvider(
+            m_xServiceFactory->createInstance(sConfigurationProviderServiceName),
+            UNO_QUERY);
+        OSL_ENSURE(xConfigurationProvider.is(), "OSDBCDriverManager::initializeDriverPreferences: could not instantiate the configuration provider!");
+        if (xConfigurationProvider.is())
+        {
+            // one argument for creating the node access: the path to the configuration node
+            Sequence< Any > aCreationArgs(1);
+            aCreationArgs[0] <<= PropertyValue(sNodePathArgumentName, 0, makeAny(sDriverManagerConfigLocation), PropertyState_DIRECT_VALUE);
+
+            // create the node access
+            Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
+
+            OSL_ENSURE(xDriverManagerNode.is(), "OSDBCDriverManager::initializeDriverPreferences: could not open my configuration node!");
+            if (xDriverManagerNode.is())
+            {
+                // obtain the preference list
+                Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
+                Sequence< ::rtl::OUString > aDriverOrder;
+#ifdef _DEBUG
+                sal_Bool bSuccess =
+#endif
+                aPreferences >>= aDriverOrder;
+                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "OSDBCDriverManager::initializeDriverPreferences: invalid value for the preferences node (no string sequence but not NULL)!");
+
+                if (!aDriverOrder.getLength())
+                    // nothing to do
+                    return;
+
+                // we have a list of driver implementation names which specify the order to use
+
+                // first collect the implementation names of our bootstrapped drivers
+                DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int);
+                MapString2Int aDriverImplNames;
+                for (   ConstBootstrappedDriversIterator aDriverLoop = m_aDriversBS.begin();
+                        aDriverLoop != m_aDriversBS.end();
+                        ++aDriverLoop
+                    )
+                {
+                    Reference< XServiceInfo > xDriverSI(*aDriverLoop, UNO_QUERY);
+                    OSL_ENSURE(xDriverSI.is(), "OSDBCDriverManager::initializeDriverPreferences: encountered a driver without service info!");
+                    if (xDriverSI.is())
+                        aDriverImplNames[xDriverSI->getImplementationName()] = sal_Int32(aDriverLoop - m_aDriversBS.begin());
+                }
+
+                BootstrappedDrivers aSortedDrivers;
+                    // this will be the sorted drivers
+                ::std::set< sal_Int32 > aPreferedDriversOriginalPos;
+                    // the drivers in m_aDriversBS which have been inserted in aSortedDrivers
+
+                // loop through the sequence telling us the preferred driver order
+                const ::rtl::OUString* pDriverOrder = aDriverOrder.getConstArray();
+                const ::rtl::OUString* pDriverOrderEnd = pDriverOrder + aDriverOrder.getLength();
+                sal_Int32 nPreferredDriverInsertPosition = 0;
+                    // the position in m_aDriversBS where the current preferred driver is to be inserted
+                for (;pDriverOrder < pDriverOrderEnd; ++pDriverOrder)
+                {
+                    MapString2IntIterator aThisDriverPos = aDriverImplNames.find(*pDriverOrder);
+                    if (aDriverImplNames.end() != aThisDriverPos)
+                    {   // we know this driver
+                        sal_Int32 nThisDriverPos = aThisDriverPos->second;
+
+                        aSortedDrivers.push_back(m_aDriversBS[nThisDriverPos]);
+                        aPreferedDriversOriginalPos.insert(nThisDriverPos);
+                    }
+                }
+
+                if (aPreferedDriversOriginalPos.size() != m_aDriversBS.size())
+                {
+                    // we still have drivers in m_aDriversBS which have not been inserted into aSortedDrivers
+                    // -> copy the remaining drivers
+                    sal_Int32 i = 0;
+                    for (   ConstBootstrappedDriversIterator aDriverLoop = m_aDriversBS.begin();
+                            aDriverLoop != m_aDriversBS.end();
+                            ++aDriverLoop, ++i
+                        )
+                    {
+                        if (aPreferedDriversOriginalPos.end() == aPreferedDriversOriginalPos.find(i))
+                        {   // the driver has not been inserted into aSortedDrivers, yet
+                            aSortedDrivers.push_back(*aDriverLoop);
+                        }
+                    }
+                }
+
+                OSL_ENSURE(m_aDriversBS.size() == aSortedDrivers.size(), "OSDBCDriverManager::initializeDriverPreferences: inconsistence!");
+
+                // now we have it ...
+                m_aDriversBS = aSortedDrivers;
+            }
+        }
+    }
+    catch (Exception&)
+    {
+        OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPreferences: caught an exception while sorting the drivers!");
     }
 }
 
@@ -400,5 +531,8 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
 
     return Reference< XDriver >();
 }
+
+}   // namespace connectivity
+}   // namespace sdbc
 
 
