@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEditorForJavaScript.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:04:38 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 13:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.log.LogUtils;
@@ -89,14 +89,13 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     // global ScriptEditorForJavaScript instance
     private static ScriptEditorForJavaScript theScriptEditorForJavaScript;
 
-    // global list of ScriptEditors, key is URL of file being edited
-    private static Map BEING_EDITED = new HashMap();
-
     // template for JavaScript scripts
     private static String JSTEMPLATE;
 
-    private Main rhinoWindow;
+    static private Main rhinoWindow;
     private URL scriptURL;
+    // global list of ScriptEditors, key is URL of file being edited
+    private static Map BEING_EDITED = new HashMap();
 
     static {
         try {
@@ -162,7 +161,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      */
     public boolean isModified()
     {
-        return rhinoWindow.isModified();
+        return rhinoWindow.isModified( scriptURL );
     }
 
     /**
@@ -172,7 +171,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      */
     public String getText()
     {
-        return rhinoWindow.getText();
+        return rhinoWindow.getText( scriptURL );
     }
 
     /**
@@ -182,7 +181,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      */
     public String getURL()
     {
-        return rhinoWindow.getURL();
+        return scriptURL.toString();
     }
 
     /**
@@ -226,17 +225,28 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             URL url = entry.getSourceURL();
 
             // check if there is already an editing session for this script
-            if (BEING_EDITED.containsKey(url))
+            //if (BEING_EDITED.containsKey(url))
+            if ( rhinoWindow != null  )
             {
                 ScriptEditorForJavaScript editor =
                     (ScriptEditorForJavaScript) BEING_EDITED.get(url);
-
-                editor.rhinoWindow.toFront();
+                if ( editor == null )
+                {
+                    editor = new ScriptEditorForJavaScript( context, url );
+                    editor.edit( context, entry );
+                }
+                else
+                {
+                    rhinoWindow.showScriptWindow( url );
+                }
             }
             else
             {
-                new ScriptEditorForJavaScript(context, url);
+                ScriptEditorForJavaScript editor =
+                    new ScriptEditorForJavaScript( context, url );
+
             }
+            rhinoWindow.toFront();
         }
         catch ( IOException e )
         {
@@ -253,21 +263,17 @@ public class ScriptEditorForJavaScript implements ScriptEditor
 
     private ScriptEditorForJavaScript(XScriptContext context, URL url)
     {
-        this.rhinoWindow = initUI(context);
-        this.rhinoWindow.openFile(url);
+        initUI();
+        Scriptable scope = getScope( context );
+        this.rhinoWindow.openFile(url, scope, new closeHandler( url ) );
 
-        this.rhinoWindow.addWindowListener(
-            new WindowAdapter()
-            {
-                public void windowClosing(WindowEvent e) {
-                    shutdown();
-                }
-            }
-        );
 
         this.scriptURL = url;
+        synchronized( ScriptEditorForJavaScript.class )
+        {
+            BEING_EDITED.put(url, this);
+        }
 
-        BEING_EDITED.put(url, this);
     }
 
     /**
@@ -278,7 +284,8 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     public Object execute() throws Exception
     {
         rhinoWindow.toFront();
-        return this.rhinoWindow.runSelectedWindow( scriptURL );
+
+        return this.rhinoWindow.runScriptWindow( scriptURL );
     }
 
     /**
@@ -288,49 +295,50 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     public void indicateErrorLine( int lineNum )
     {
         this.rhinoWindow.toFront();
-        this.rhinoWindow.highlighLineInSelectedWindow( scriptURL, lineNum );
+        this.rhinoWindow.highlighLineInScriptWindow( scriptURL, lineNum );
     }
     // This code is based on the main method of the Rhino Debugger Main class
     // We pass in the XScriptContext in the global scope for script execution
-    private Main initUI(final XScriptContext xsctxt) {
+    private void initUI() {
         try {
-            final Main sdb = new Main("Rhino JavaScript Debugger");
-            swingInvoke(new Runnable() {
+            synchronized ( ScriptEditorForJavaScript.class )
+            {
+                if ( this.rhinoWindow != null )
+                {
+                    return;
+                }
+
+                final Main sdb = new Main("Rhino JavaScript Debugger");
+                swingInvoke(new Runnable() {
                     public void run() {
                         sdb.pack();
                         sdb.setSize(640, 640);
                         sdb.setVisible(true);
                     }
-                });
-            sdb.setExitAction(new Runnable() {
+                    });
+                sdb.setExitAction(new Runnable() {
                     public void run() {
                         sdb.clearAllBreakpoints();
                         sdb.dispose();
                         shutdown();
                     }
                 });
-            Context.addContextListener(sdb);
-            sdb.setScopeProvider(new ScopeProvider() {
-                public Scriptable getScope() {
-                        Context ctxt = Context.enter();
-                        ImporterTopLevel scope = new ImporterTopLevel(ctxt);
-
-                        Scriptable jsCtxt = Context.toObject(xsctxt, scope);
-                        scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
-
-                        Scriptable jsArgs = Context.toObject(
-                            new Object[0], scope);
-                        scope.put("ARGUMENTS", scope, jsArgs);
-
-                        Context.exit();
-                        return scope;
+                Context.addContextListener(sdb);
+                sdb.setScopeProvider(new ScopeProvider() {
+                    public Scriptable getScope() {
+                        return org.mozilla.javascript.tools.shell.Main.getScope();
                     }
                 });
-            return sdb;
+                sdb.addWindowListener( new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        shutdown();
+                    }
+                });
+                this.rhinoWindow = sdb;
+            }
         } catch (Exception exc) {
             LogUtils.DEBUG( LogUtils.getTrace( exc ) );
         }
-        return null;
     }
 
     private static void swingInvoke(Runnable f) {
@@ -347,13 +355,57 @@ public class ScriptEditorForJavaScript implements ScriptEditor
 
     private void shutdown()
     {
-        // remove this editor from the list of open editors
-        if (BEING_EDITED.containsKey(scriptURL)) {
-            BEING_EDITED.remove(scriptURL);
-        }
-
         // dereference Rhino Debugger window
         this.rhinoWindow = null;
         this.scriptURL = null;
+        // remove all scripts from BEING_EDITED
+        synchronized( BEING_EDITED )
+        {
+            java.util.Iterator iter = BEING_EDITED.keySet().iterator();
+            java.util.Vector keysToRemove = new java.util.Vector();
+            while ( iter.hasNext() )
+            {
+
+                URL key = (URL)iter.next();
+                keysToRemove.add( key );
+            }
+            for ( int i=0; i<keysToRemove.size(); i++ )
+            {
+                BEING_EDITED.remove( keysToRemove.elementAt( i ) );
+            }
+            keysToRemove = null;
+        }
+
+    }
+    private Scriptable getScope(XScriptContext xsctxt )
+    {
+        Context ctxt = Context.enter();
+        ImporterTopLevel scope = new ImporterTopLevel(ctxt);
+
+        Scriptable jsCtxt = Context.toObject(xsctxt, scope);
+        scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
+
+        Scriptable jsArgs = Context.toObject(
+           new Object[0], scope);
+        scope.put("ARGUMENTS", scope, jsArgs);
+
+        Context.exit();
+        return scope;
+    }
+
+    class closeHandler implements Runnable
+    {
+        URL url;
+        closeHandler( URL url )
+        {
+            this.url = url;
+        }
+        public void run()
+        {
+            synchronized( BEING_EDITED )
+            {
+                Object o = BEING_EDITED.remove( this.url );
+            }
+        }
     }
 }
