@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:16:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,10 +264,6 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 
         aRect = SwRect( pO->PixelToLogic( aTmpRect ) );
 
-#ifdef USED
-        Rectangle aBla( rRect.SVRect() );
-        DbgRect aDbg1( pO, aBla, COL_LIGHTRED );
-#endif
         SetOutDev( pSh, pVirDev );
 
         if( pVirDev->GetFillColor() != pOut->GetFillColor() )
@@ -294,10 +290,6 @@ void SwLayVout::_Flush()
 {
     ASSERT( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
     Rectangle aTmp( aRect.SVRect() );
-#ifdef USED
-    DbgRect aDbg1( pOut, aTmp );
-    DbgRect aDbg2( pVirDev, aTmp, COL_YELLOW );
-#endif
     pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),
                       aRect.Pos(), aRect.SSize(), *pVirDev );
     SetOutDev( pSh, pOut );
