@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:52:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,7 @@ class FuSlideShow;
 |*
 \************************************************************************/
 
-class DrawView
-    : public ::sd::View
+class DrawView : public ::sd::View
 {
 public:
     TYPEINFO();
@@ -94,7 +93,7 @@ public:
     virtual ~DrawView (void);
 
     virtual void MarkListHasChanged();
-    void InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc=NULL );
+    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
@@ -117,7 +116,6 @@ public:
     virtual void HidePage(SdrPageView* pPV);
 
     void    PresPaint(const Region& rRegion);
-    DECL_LINK(PaintProc, SdrPaintProcRec*);
 
     void    SetAnimationMode(BOOL bStart);
     void    HideAndAnimateObject(SdrObject* pObj);
@@ -131,6 +129,8 @@ protected:
     virtual void ModelHasChanged();
 
 private:
+    friend class DrawViewRedirector;
+
     DrawDocShell*   pDocShell;
     DrawViewShell* pDrawViewShell;
     VirtualDevice*      pVDev;
