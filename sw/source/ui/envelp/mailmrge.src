@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "~Registos seleccionados" ;
         Text [ finnish ] = "~Selected records" ;
         Text [ danish ] = "Markerede dataposter" ;
-        Text [ french ] = "Enregistrements ~sélectionnés" ;
+        Text [ french ] = "Enregistrements ~marqués" ;
         Text [ swedish ] = "Markerade ~dataposter" ;
         Text [ dutch ] = "~Gemarkeerde records" ;
         Text [ spanish ] = "~Registros seleccionados" ;
@@ -162,7 +162,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_simplified ] = "´Ó(~F)£º";
         Text[ russian ] = "Îò:";
         Text[ polish ] = "Od:";
-        Text[ japanese ] = "n‚ß:(~F)";
+        Text[ japanese ] = "n‚ß(~F):";
         Text[ chinese_traditional ] = "±q(~F)¡G";
         Text[ arabic ] = "ãä:";
         Text[ greek ] = "Áğü:";
@@ -201,7 +201,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_simplified ] = "ÖÁ(~T)£º";
         Text[ russian ] = "Äî:";
         Text[ polish ] = "Do:";
-        Text[ japanese ] = "I‚è:(~T)";
+        Text[ japanese ] = "I‚è(~T):";
         Text[ chinese_traditional ] = "¦¬¥óªÌ(~T)";
         Text[ arabic ] = "Åáì:";
         Text[ greek ] = "Ğñïò:";
@@ -593,7 +593,7 @@ ModalDialog DLG_MAILMERGE
         Text [ dutch ] = "Aanhangsels" ;
         Text [ portuguese ] = "Anexos" ;
         Text[ chinese_simplified ] = "¸½¼ş";
-        Text[ russian ] = "Ïğèëîæåíèÿ";
+        Text[ russian ] = "Âëîæåíèÿ";
         Text[ polish ] = "Za³¹czniki";
         Text[ japanese ] = "“Y•t";
         Text[ chinese_traditional ] = "´¡¤JÀÉ®×";
@@ -778,7 +778,7 @@ ModalDialog DLG_MAILMERGE
     Text[ japanese ] = "·‚µ‚İˆóü";
     Text[ chinese_traditional ] = "¦X¨Ö¦C¦L";
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
-    Text[ greek ] = "ÏìáäéêŞ åğéóôïëŞ";
+    Text[ greek ] = "Åãêıêëéïò åğéóôïëŞ";
     Text[ korean ] = "ÆíÁö º´ÇÕ";
     Text[ turkish ] = "Standart mektup";
     Text[ language_user1 ] = " ";
