@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ab $ $Date: 2002-06-11 11:09:37 $
+ *  last change: $Author: ab $ $Date: 2002-08-07 08:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2248,7 +2248,7 @@ SbxVariable* findUnoClass( const String& rName )
 
 SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
 {
-    SbxVariable* pRes = SbxObject::Find( rName, t );
+    SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_VARIABLE );
 
     // Wenn nichts gefunden wird, ist das Sub-Modul noch nicht bekannt
     if( !pRes )
