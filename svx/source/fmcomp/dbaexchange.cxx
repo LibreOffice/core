@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:40:59 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 10:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
@@ -117,7 +118,8 @@ namespace svx
 
     //--------------------------------------------------------------------
     OColumnTransferable::OColumnTransferable(const Reference< XPropertySet >& _rxForm,
-            const ::rtl::OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn, sal_Int32 _nFormats)
+            const ::rtl::OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn,
+            const Reference< XConnection >& _rxConnection, sal_Int32 _nFormats)
         :m_nFormatFlags(_nFormats)
     {
         OSL_ENSURE(_rxForm.is(), "OColumnTransferable::OColumnTransferable: invalid form!");
@@ -181,8 +183,13 @@ namespace svx
 
         implConstruct(sDatasource, nCommandType, sCommand, _rFieldName);
 
-        if (_rxColumn.is() && ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR))
-            m_aDescriptor[daColumnObject] <<= _rxColumn;
+        if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
+        {
+            if (_rxColumn.is())
+                m_aDescriptor[daColumnObject] <<= _rxColumn;
+            if (_rxConnection.is())
+                m_aDescriptor[daConnection] <<= _rxConnection;
+        }
     }
 
     //--------------------------------------------------------------------
@@ -384,6 +391,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/04/11 12:40:59  fs
+ *  added a data access descriptor format
+ *
  *  Revision 1.2  2001/03/27 14:38:28  fs
  *  swap the order in which the clipboard formats are added
  *
