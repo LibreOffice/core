@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Controller.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:07:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 
     <p>
     Such components can be loaded into a <type>Frame</type> inside a <type>Desktop</type>
-    environment. A controller is a recher component then a pure window, but full featured
+    environment. A controller is a richer component then a pure window, but full featured
     components need a <type>XModel</type> interface too.
     <br>
     (see service <type scope="com::sun::star::document">OfficeDocument</type> for further information)
