@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
+#   last change: $Author: jbu $ $Date: 2001-09-26 16:42:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,8 @@ APP1OBJS=	\
                 $(OBJ)$/testbyteseq.obj		\
                 $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj			\
-                $(OBJ)$/testlogfile.obj
+                $(OBJ)$/testlogfile.obj		\
+                $(OBJ)$/test_file.obj
 OBJFILES= \
     $(APP1OBJS) \
     $(APP2OBJS) 
