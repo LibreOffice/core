@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:07:14 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
@@ -74,7 +73,6 @@
 #include <util/util.hxx>
 
 #include "MasterScriptProviderFactory.hxx"
-#include "ActiveMSPList.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -85,7 +83,7 @@ namespace func_provider
 
 MasterScriptProviderFactory::MasterScriptProviderFactory(
     Reference< XComponentContext > const & xComponentContext )
-    : m_xComponentContext( xComponentContext )
+    : m_xComponentContext( xComponentContext ), m_MSPList(0)
 {
     OSL_TRACE("MasterScriptProviderFactory is being created!");
 }
@@ -93,6 +91,7 @@ MasterScriptProviderFactory::MasterScriptProviderFactory(
 MasterScriptProviderFactory::~MasterScriptProviderFactory()
 {
     OSL_TRACE("MasterScriptProviderFactory is being destructed!");
+    if (m_MSPList) delete m_MSPList;
 }
 
 
@@ -105,13 +104,28 @@ Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( lang::IllegalArgumentException, RuntimeException)
 {
     OSL_TRACE("In MasterScriptProviderFactory::createScriptProvider()" );
-    Reference< provider::XScriptProvider > xMsp( ActiveMSPList::instance( m_xComponentContext ).createMSP( context ), UNO_QUERY_THROW );
+    Reference< provider::XScriptProvider > xMsp( getActiveMSPList().createMSP( context ), UNO_QUERY_THROW );
     return xMsp;
 }
 
 //############################################################################
 // Helper methods
 //############################################################################
+
+ActiveMSPList&
+MasterScriptProviderFactory::getActiveMSPList()
+{
+    if ( !m_MSPList )
+    {
+        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+        if ( !m_MSPList )
+        {
+           m_MSPList = new ActiveMSPList( m_xComponentContext );
+           m_MSPListHolder = m_MSPList;
+        }
+    }
+    return *m_MSPList;
+}
 
 //############################################################################
 // Namespace global methods for setting up MasterScriptProviderFactory service
