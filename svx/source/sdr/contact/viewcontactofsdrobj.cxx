@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:46:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,20 +128,11 @@ namespace sdr
                             break;
                         }
                         case SDRTEXTANI_SCROLL:
-                        {
-                            pRetval = new sdr::animation::AInfoScrollText(rTextObj);
-                            break;
-                        }
                         case SDRTEXTANI_ALTERNATE:
-                        {
-                            pRetval = new sdr::animation::AInfoScrollText(rTextObj, sal_True);
-                            break;
-                        }
                         case SDRTEXTANI_SLIDE:
                         {
-                            // for simple scroll in just use the same. The parameters will be
-                            // defaulted as necessary.
-                            pRetval = new sdr::animation::AInfoScrollText(rTextObj, sal_False, sal_True);
+                            // #i38135# Use new implementation of AInfoScrollText
+                            pRetval = new sdr::animation::AInfoScrollText(rTextObj);
                             break;
                         }
                     }
@@ -690,6 +681,9 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
                         // created by CreateAnimationInfo() may have changed. Do this
                         // by destroying an existing AnimationInfo.
                         DeleteAnimationInfo();
+
+                        // #i38135# now remember new type
+                        meRememberedAnimationKind = rTextObj.GetTextAniKind();
                     }
                 }
             }
