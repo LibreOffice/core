@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:52:53 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String RID_STR_STANDARD
     Text [ english_us ] = "Default" ;
     Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ swedish ] = "Standard" ;
-    Text [ danish ] = "Normal" ;
+    Text [ danish ] = "Standard" ;
     Text [ italian ] = "Standard" ;
     Text [ spanish ] = "Predeterminado" ;
     Text [ french ] = "Par dÈfaut" ;
@@ -86,8 +86,9 @@ String RID_STR_STANDARD
     Text[ arabic ] = "ﬁÌ«”Ì";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Predeterminado";
-    Text[ finnish ] = "Vakio";
+    Text[ catalan ] = "Per defecte";
+    Text[ finnish ] = "Oletusarvo";
+    Text[ thai ] = "‡∏Ñ‡πà‡∏≤‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
@@ -112,8 +113,9 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ arabic ] = "⁄«„";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "General";
+    Text[ catalan ] = "Continguts";
     Text[ finnish ] = "Yleist‰";
+    Text[ thai ] = "‡∏ó‡∏±‡πà‡∏ß‡πÑ‡∏õ";
 };
 String RID_STR_PROPPAGE_DATA
 {
@@ -138,8 +140,9 @@ String RID_STR_PROPPAGE_DATA
     Text[ arabic ] = "»Ì«‰« ";
     Text[ turkish ] = "Veriler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Datos";
+    Text[ catalan ] = "Dades";
     Text[ finnish ] = "Tiedot";
+    Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
 };
 String RID_STR_BOOL
 {
@@ -166,11 +169,15 @@ String RID_STR_BOOL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No;SÌ";
     Text[ finnish ] = "Ei;Kyll‰";
+    Text[ thai ] = "‡πÑ‡∏°‡πà‡πÉ‡∏ä‡πà;‡πÉ‡∏ä‡πà";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/08/24 10:52:53  kz
+ *  Merge SRC638: 24.08.01 - 12:51:34
+ *
  *  Revision 1.14  2001/08/21 21:04:26  kz
  *  Merge SRC638: 21.08.01 - 23:03:51
  *
