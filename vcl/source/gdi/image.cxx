@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:16:51 $
+ *  last change: $Author: sb $ $Date: 2002-08-22 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,28 @@ BOOL Image::operator==( const Image& rImage ) const
     }
 
     return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void Image::ClearCaches()
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_IMAGE:
+                ImplImageBmp * pBmp
+                    = ((ImplImageData*)mpImplData->mpData)->mpImageBitmap;
+                if ( pBmp )
+                    pBmp->ClearCaches();
+                break;
+
+            // nothing to do for cases IMAGETYPE_BITMAP and IMAGETYPE_IMAGEREF
+        }
+    }
 }
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-21 08:16:13 $
+ *  last change: $Author: sb $ $Date: 2002-08-22 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ void ImplImageBmp::Create( long nItemWidth, long nItemHeight, USHORT nInitSize )
     delete[] pInfoAry;
     pInfoAry = new BYTE[ nSize ];
     memset( pInfoAry, 0, nSize );
-    ImplClearCaches();
+    ClearCaches();
 }
 
 // -----------------------------------------------------------------------
@@ -154,7 +154,7 @@ void ImplImageBmp::Create( const Bitmap& rBmp, const Bitmap& rMaskBmp,
 {
     BYTE nStyle = IMPSYSIMAGEITEM_NOTFREE;
 
-    ImplClearCaches();
+    ClearCaches();
 
     if ( bColor || !!rMaskBmp )
         nStyle |= IMPSYSIMAGEITEM_MASK;
@@ -188,7 +188,7 @@ void ImplImageBmp::Expand( USHORT nGrowSize )
     const USHORT    nOldSize = nSize;
     BYTE*           pNewAry = new BYTE[ nSize += nGrowSize ];
 
-    ImplClearCaches();
+    ClearCaches();
 
     aBmp.Expand( nDX, 0UL );
     aMask.Expand( nDX, 0UL );
@@ -210,7 +210,7 @@ void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
     const Rectangle aSrcRect( aSrcPos, aSize );
     const Rectangle aDstRect( aPos, aSize );
 
-    ImplClearCaches();
+    ClearCaches();
 
     aBmp.CopyPixel( aDstRect, aSrcRect );
 
@@ -233,7 +233,7 @@ void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT n
     const Rectangle aSrcRect( aSrcPos, aSize );
     const Rectangle aDstRect( aPos, aSize );
 
-    ImplClearCaches();
+    ClearCaches();
 
     aBmp.CopyPixel( aDstRect, aSrcRect, &rImageBmp.aBmp );
 
@@ -256,7 +256,7 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp )
     const Rectangle aSrcRect( aNullPos, aSize );
     const Rectangle aDstRect( aPos, aSize );
 
-    ImplClearCaches();
+    ClearCaches();
 
     aBmp.CopyPixel( aDstRect, aSrcRect, &rBmp );
     pInfoAry[ nPos ] &= ~IMPSYSIMAGEITEM_MASK;
@@ -270,7 +270,7 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp, const Bitmap& rMask
     const Rectangle aSrcRect( aNullPos, aSize );
     const Rectangle aDstRect( aPos, aSize );
 
-    ImplClearCaches();
+    ClearCaches();
 
     aBmp.CopyPixel( aDstRect, aSrcRect, &rBmp );
     aMask.CopyPixel( aDstRect, aSrcRect, &rMaskBmp );
@@ -296,7 +296,7 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp, const Color& rColor
 
 void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount )
 {
-    ImplClearCaches();
+    ClearCaches();
 
     if( !aDisa.IsEmpty() )
         aDisa.SetEmpty();
@@ -312,7 +312,7 @@ void ImplImageBmp::Merge( USHORT nPos, USHORT nSrcPos )
         Replace( nPos, nSrcPos );
     else
     {
-        ImplClearCaches();
+        ClearCaches();
 
         const Point         aSrcPos( nSrcPos * aSize.Width(), 0L ), aPos( nPos * aSize.Width(), 0L );
         const Rectangle     aSrcRect( aSrcPos, aSize );
@@ -828,7 +828,7 @@ void ImplImageBmp::ImplUpdatePaintBmp( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ImplClearCaches()
+void ImplImageBmp::ClearCaches()
 {
     aBmpEx.SetEmpty();
     aBmpDisp.SetEmpty();
