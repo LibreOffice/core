@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:09:33 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "닫기";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tanca";
+        Text[ catalan ] = "Tanca";
         Text[ thai ] = "ปิด";
     };
     PushButton BTN_FILES
@@ -184,7 +184,7 @@ ModalDialog DLG_ORGANIZE
         Text[ chinese_traditional ] = "通訊錄(~A)...";
         Text[ turkish ] = "~Address Book...";
         Text[ arabic ] = "���� ��������...";
-        Text[ catalan ] = "~Libreta de direcciones...";
+        Text[ catalan ] = "Llibreta d'~adreces...";
         Text[ finnish ] = "~Osoitekirja";
         Text[ thai ] = "สมุด~ที่อยู่...";
     };
@@ -313,8 +313,8 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ catalan ] =
     {
-            < "Plantillas de documento" ; Default ; > ;
-        < "Documentos" ; Default ; > ;
+            < "Plantilles" ; Default ; > ;
+        < "Documents" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -447,8 +447,8 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ catalan ] =
     {
-            < "Plantillas de documento" ; Default ; > ;
-        < "Documentos" ; Default ; > ;
+            < "Plantilles" ; Default ; > ;
+        < "Documents" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -649,7 +649,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "템플릿 가져오기...";
                     Text[ turkish ] = "�ablonu i�e aktar...";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "I~mportar plantilla...";
+                    Text[ catalan ] = "Importa plantilla...";
                     Text[ thai ] = "นำเข้าแม่แบบ...";
                 };
                 MenuItem
@@ -679,7 +679,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "템플릿 내보내기...";
                     Text[ turkish ] = "�ablonu d��a aktar...";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "E~xportar plantilla...";
+                    Text[ catalan ] = "Exporta plantilla...";
                     Text[ thai ] = "ส่งออกแม่แบบ...";
                 };
                 MenuItem
@@ -743,7 +743,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "프린터 설정...";
                     Text[ turkish ] = "Yaz�c� ayarlar�";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Configuraci�n de la impresora...";
+                    Text[ catalan ] = "~Configuraci� de la impressora...";
                     Text[ thai ] = "ตั้งค่าเครื่องพิมพ์...";
                 };
                 MenuItem
@@ -777,7 +777,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "업데이트";
                     Text[ turkish ] = "G�ncelle";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Actualizar";
+                    Text[ catalan ] = "Actualitza";
                     Text[ thai ] = "ปรับปรุง";
                 };
                 MenuItem
@@ -808,7 +808,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "設定成標準樣式";
                     Text[ turkish ] = "Set As Default Template";
                     Text[ arabic ] = "Set As Default Template";
-                    Text[ catalan ] = "Set As Default Template";
+                    Text[ catalan ] = "Estableix com a plantilla per defecte";
                     Text[ thai ] = "ตั้งเป็นค่าเริ่มต้นแม่แบบ";
                 };
                 MenuItem
@@ -835,7 +835,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "重設標準樣式";
                     Text[ turkish ] = "Reset Default Template";
                     Text[ arabic ] = "Reset Default Template";
-                    Text[ catalan ] = "Reset Default Template";
+                    Text[ catalan ] = "Restaura la plantilla per defecte";
                     Text[ thai ] = "ตั้งค่าเริ่มต้นแม่แบบใหม่";
                 };
             };
@@ -850,7 +850,7 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "명령";
         Text[ turkish ] = "Komutlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Comandos";
+        Text[ catalan ] = "Ordres";
         Text[ thai ] = "คำสั่ง";
     };
     Image IMG_OPENED_FOLDER
@@ -926,7 +926,7 @@ ModalDialog DLG_ORGANIZE
     Text[ korean ] = "서식 문서 관리";
     Text[ turkish ] = "Belge �ablonlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Administrar plantillas";
+    Text[ catalan ] = "Organitza les plantilles";
     Text[ thai ] = "การจัดการแม่แบบ";
 };
  // ********************************************************************** EOF
