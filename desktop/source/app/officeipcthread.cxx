@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-09-18 13:54:18 $
+ *  last change: $Author: as $ $Date: 2001-09-26 09:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,14 @@ using namespace ::com::sun::star::frame;
 #define LOOKUP_SEQUENCE "InternalIPC::Lookup"
 #define LOOKUP_LENGTH 19
 
+String GetURL_Impl( const String& rName );
+
 namespace desktop
 {
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 OSecurity           OfficeIPCThread::maSecurity;
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
-
 
 class ImplForeignAppEventClass
 {
@@ -275,6 +276,14 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         for( ULONG i=0; i < nCount; i++ )
         {
             aInfo.getCommandArg( i, aDummy );
+            // Make absolute pathes from relative ones!
+            // It's neccessary to use current working directory of THESE office instance and not of
+            // currently running once, which get these information by using pipe.
+            // Otherwhise relativ pathes are not right for his environment ...
+            if( aDummy.indexOf('-',0) != 0 )
+            {
+                aDummy = GetURL_Impl( aDummy );
+            }
             aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
             aArguments += '|';
         }

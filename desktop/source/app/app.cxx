@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mav $ $Date: 2001-09-26 09:16:22 $
+ *  last change: $Author: as $ $Date: 2001-09-26 09:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 #ifndef AUTOMATION_HXX
 #include <automation/automation.hxx>
@@ -1338,14 +1341,22 @@ String GetURL_Impl( const String& rName )
     // so in the remote case we can't handle relative filenames as arguments, because they
     // are parsed relative to the program path
     // the file system of the client is addressed through the "file:" protocol
-    ::rtl::OUString aProgName, aTmp;
-    ::vos::OStartupInfo aInfo;
-    aInfo.getExecutableFile( aProgName );
-    aTmp = aProgName;
-    INetURLObject aObj( aTmp );
+
+    // Get current working directory to support relativ pathes
+    ::rtl::OUString aWorkingDir;
+    osl_getProcessWorkingDir( &aWorkingDir.pData );
+
+    // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
+    // Attention: "setFianlSlash()" is neccessary for calling "smartRel2Abs()"!!!
+    // Otherwhise last part will be ignored and wrong result will be returned!!!
+    // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
+    // But if we add a seperator - he doesn't do it anymore.
+    INetURLObject aObj( aWorkingDir );
+    aObj.setFinalSlash();
+
     bool bWasAbsolute;
-    INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
-    String aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute );
+    String        aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     ::osl::FileStatus aStatus( FileStatusMask_FileURL );
     ::osl::DirectoryItem aItem;
