@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 14:24:54 $
+ *  last change: $Author: vg $ $Date: 2002-07-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,8 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     Size aWndSize( GetSizePixel() );
     Font aFont( aVD.GetFont() );
     Color aBackCol( GetSettings().GetStyleSettings().GetWindowColor() );
-    Rectangle aRect( Point(), aWndSize );
+    Point aTmpPoint;
+    Rectangle aRect( aTmpPoint, aWndSize );
 
     aFont.SetTransparent( TRUE );
     aVD.SetFont( aFont );
