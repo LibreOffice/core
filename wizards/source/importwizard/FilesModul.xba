@@ -81,7 +81,8 @@ End Sub
 
 
 Sub ConvertAllDocuments(sFilterName())
-Dim FileProperties(2) as new com.sun.star.beans.PropertyValue
+Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
+Dim PWFileProperties(2) as New com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
 Dim OpenProperties(3) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
@@ -211,16 +212,23 @@ Dim iOverwrite as Integer
 				End If
 				If bDoSave Then
 					On Local Error Goto NOSAVING
-					FileProperties(0).Name = &quot;FilterName&quot;
-					FileProperties(0).Value = CurFilterName
-					FileProperties(1).Name = &quot;Overwrite&quot;
-					FileProperties(1).Value = True
+					&apos; Todo: Due to bug #93651 the handling of the fileProperties has to be handled without Redimensioning
 					If bIsPassWordProtected Then
-						FileProperties(2).Name = &quot;PassWord&quot;
-						FileProperties(2).Value = sCurPassWord
+						PWFileProperties(0).Name = &quot;FilterName&quot;
+						PWFileProperties(0).Value = CurFilterName
+						PWFileProperties(1).Name = &quot;Overwrite&quot;
+						PWFileProperties(1).Value = True
+						PWFileProperties(2).Name = &quot;Password&quot;
+						PWFileProperties(2).Value = sCurPassWord
+						oDocument.StoreAsUrl(TargetFile, PWFileProperties())
+					Else
+						FileProperties(0).Name = &quot;FilterName&quot;
+						FileProperties(0).Value = CurFilterName
+						FileProperties(1).Name = &quot;Overwrite&quot;
+						FileProperties(1).Value = True
+						oDocument.StoreAsUrl(TargetFile,FileProperties())
 					End If
 					&apos; Todo: Make sure that an errorbox pops up when saving fails
-					oDocument.StoreAsUrl(TargetFile,FileProperties())
 					NOSAVING:
 					If Err &lt;&gt; 0 Then
 						sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
@@ -477,11 +485,13 @@ Dim bIsPassWordProtected as Boolean
 Dim i as Integer
 Dim oArgs()
 Dim MaxIndex as Integer
+Dim sblabla as String
 	bIsPassWordProtected = false
  	oArgs() = oDocument.getArgs()
  	MaxIndex = Ubound(oArgs())
 	For i = 0 To MaxIndex
-		If oArgs(i).Name = &quot;PassWord&quot; Then
+		sblabla = oArgs(i).Name
+		If oArgs(i).Name = &quot;Password&quot; Then
 			bIsPassWordProtected = True
 			sCurPassWord = oArgs(i).Value
 			Exit For

@@ -289,7 +289,6 @@ End Function
 
 
 Sub FillStep_Summary()
-&apos; Todo: Angabe über die Vorlagengruppen,bzw. Template-Exportpfad
 	ImportDialogArea.Title = sTitle
 	With ImportDialog
 		.SummaryTextbox.Text = MakeSummaryString()
@@ -338,27 +337,27 @@ Sub	SetupMSConfiguration()
 
 &apos; See definition of Filtername-Array about meaning of fields
 	MSFilterName(0,0) = &quot;doc&quot;
-	MSFilterName(0,1) = &quot;swriter: StarOffice XML (Writer)&quot;
+	MSFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
 	MSFilterName(0,2) = &quot;sxw&quot;
 
 	MSFilterName(1,0) = &quot;xls&quot;
-	MSFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
+	MSFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	MSFilterName(1,2) = &quot;sxc&quot;
 
 	MSFilterName(2,0) = &quot;ppt&quot;
-	MSFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)&quot;
+	MSFilterName(2,1) = &quot;StarOffice XML (Impress)&quot;
 	MSFilterName(2,2) = &quot;sxi&quot;
 
 	MSFilterName(3,0) = &quot;dot&quot;
-	MSFilterName(3,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+	MSFilterName(3,1) = &quot;writer_StarOffice_XML_Writer_Template&quot;
 	MSFilterName(3,2) = &quot;stw&quot;
 
 	MSFilterName(4,0) = &quot;xlt&quot;
-	MSFilterName(4,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;
+	MSFilterName(4,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	MSFilterName(4,2) = &quot;stc&quot;
 
 	MSFilterName(5,0) = &quot;pot&quot;
-	MSFilterName(5,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template&quot;
+	MSFilterName(5,1) = &quot;impress_StarOffice_XML_Impress_Template&quot;
 	MSFilterName(5,2) = &quot;sti&quot;
 End Sub
 
@@ -371,35 +370,34 @@ Sub SetupXMLConfiguration()
 	MaxApplCount = 4
 
 	XMLFilterName(0,0) = &quot;sdw&quot;
-	XMLFilterName(0,1) = &quot;swriter: StarOffice XML (Writer)&quot;
+	XMLFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
 	XMLFilterName(0,2) = &quot;sxw&quot;
 
 	XMLFilterName(1,0) = &quot;sdc&quot;
-	XMLFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
+	XMLFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	XMLFilterName(1,2) = &quot;sxc&quot;
-&apos; Todo: Gepacktes &apos;sdp&apos; Format berücksichtigen
 	XMLFilterName(2,0) = &quot;sdd|sda&quot;
-	XMLFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
+	XMLFilterName(2,1) = &quot;StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
 	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
 
 	XMLFilterName(3,0) = &quot;smf&quot;
-	XMLFilterName(3,1) = &quot;smath: StarOffice XML (Math)&quot;
+	XMLFilterName(3,1) = &quot;StarOffice XML (Math)&quot;
 	XMLFilterName(3,2) = &quot;sxm&quot;
 
 	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/x-starwriter|application/vnd.stardivision.writer/web&quot;
-	XMLFilterName(4,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template|swriter/web: writer_web_StarOffice_XML_Writer_Web_Template&quot;
+	XMLFilterName(4,1) = &quot;writer_StarOffice_XML_Writer_Template|writer_web_StarOffice_XML_Writer_Web_Template&quot;
 	XMLFilterName(4,2) = &quot;stw|stw&quot;
 
 	XMLFilterName(5,0) = &quot;application/vnd.stardivision.calc;application/x-starcalc&quot;
-	XMLFilterName(5,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;
+	XMLFilterName(5,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	XMLFilterName(5,2) = &quot;stc&quot;
 
 	XMLFilterName(6,0) = &quot;application/vnd.stardivision.impress;application/x-starimpress|application/vnd.stardivision.draw;application/x-stardraw&quot;
-	XMLFilterName(6,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template|sdraw: draw_StarOffice_XML_Draw_Template&quot;
+	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
 	XMLFilterName(6,2) = &quot;sti|std&quot;
 
 	XMLFilterName(7,0) = &quot;sgl&quot;
-	XMLFilterName(7,1) = &quot;swriter/GlobalDocument: writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
+	XMLFilterName(7,1) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
 	XMLFilterName(7,2) = &quot;sxg&quot;
 End Sub
 
@@ -488,8 +486,6 @@ End Function
 
 
 Sub InitializeProgressPage(oDialog as Object)
-  &apos;oDialog.LabelRetrieval.Label = &quot;&quot;
-  &apos;oDialog.LabelCurProgress.Label = &quot;&quot;
   oDialog.LabelRetrieval.FontWeight = com.sun.star.awt.FontWeight.NORMAL
   oDialog.LabelCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
 End Sub

@@ -3,8 +3,6 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
 
 &apos;  *****  BASIC  *****
-&apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
-&apos; Evt. Erkennen der Arbeitsverzeichnisse von MS Office
 Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
