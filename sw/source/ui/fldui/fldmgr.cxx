@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
+#endif
 #ifndef _FLDUI_HRC
 #include <fldui.hrc>
 #endif
@@ -254,7 +256,7 @@ enum
     GRP_DOC_END     =  GRP_DOC_BEGIN + 11,
 
     GRP_FKT_BEGIN   =  GRP_DOC_END,
-    GRP_FKT_END     =  GRP_FKT_BEGIN + 7,
+    GRP_FKT_END     =  GRP_FKT_BEGIN + 8,
 
     GRP_REF_BEGIN   =  GRP_FKT_END,
     GRP_REF_END     =  GRP_REF_BEGIN + 2,
@@ -362,6 +364,7 @@ static const SwFldPack __FAR_DATA aSwFlds[] =
 
     // Funktion
     TYP_CONDTXTFLD,     0,                  0,              0,                  0,
+    TYP_DROPDOWN,       0,                  0,              0,                  0,
     TYP_INPUTFLD,       FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0,
     TYP_MACROFLD,       0,                  0,              0,                  0,
     TYP_JUMPEDITFLD,    0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END,
@@ -1559,7 +1562,18 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                             pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ), nFormatId );
             bPageVar = TRUE;
             break;
-
+        case TYP_DROPDOWN :
+        {
+            pFld = new SwDropDownField(pCurShell->GetFldType( 0, RES_DROPDOWN ));
+            xub_StrLen nTokenCount = rData.sPar2.Len() ? rData.sPar2.GetTokenCount(DB_DELIM) : 0;
+            Sequence<OUString> aEntries(nTokenCount);
+            OUString* pArray = aEntries.getArray();
+            for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
+                pArray[nToken] = rData.sPar2.GetToken(nToken, DB_DELIM);
+            ((SwDropDownField*)pFld)->SetItems(aEntries);
+            ((SwDropDownField*)pFld)->SetName(rData.sPar1);
+        }
+        break;
         default:
         {   ASSERT(!this, "Falscher Feldtyp");
             return FALSE;
@@ -1618,6 +1632,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     rSh.StartAllAction();
 
     BOOL bSetPar2 = TRUE;
+    BOOL bSetPar1 = TRUE;
     String sPar1( rPar1 );
     String sPar2( rPar2 );
 
@@ -1695,13 +1710,26 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                     ((SwGetRefField*)pCurFld)->SetSeqNo( (USHORT)rPar2.Copy( nPos + 1 ).ToInt32());
             }
             break;
+        case TYP_DROPDOWN:
+        {
+            xub_StrLen nTokenCount = sPar2.Len() ? sPar2.GetTokenCount(DB_DELIM) : 0;
+            Sequence<OUString> aEntries(nTokenCount);
+            OUString* pArray = aEntries.getArray();
+            for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
+                pArray[nToken] = sPar2.GetToken(nToken, DB_DELIM);
+            ((SwDropDownField*)pCurFld)->SetItems(aEntries);
+            ((SwDropDownField*)pCurFld)->SetName(sPar1);
+            bSetPar1 = bSetPar2 = FALSE;
+        }
+        break;
     }
 
     // Format setzen
     // Format wegen NumberFormatter vor SetPar2 einstellen!
     pCurFld->ChangeFormat(nFormat);
 
-    pCurFld->SetPar1( sPar1 );
+    if(bSetPar1)
+        pCurFld->SetPar1( sPar1 );
     if( bSetPar2 )
         pCurFld->SetPar2( sPar2 );
 
@@ -1837,7 +1865,8 @@ void SwFieldType::_GetFldName()
         STR_JUMPEDITFLD,
         STR_SCRIPTFLD,
         STR_AUTHORITY,
-        STR_COMBINED_CHARS
+        STR_COMBINED_CHARS,
+        STR_DROPDOWN
     };
 
     // Infos fuer Felder einfuegen
