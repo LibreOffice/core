@@ -8060,3 +8060,4 @@ CreateWindow
 ?ImpInsertNewStandardFormat@SvNumberFormatter@@AAEPAVSvNumberformat@@ABUNumberFormatCode@i18n@star@sun@com@@KGEF@Z
 ?IsAnyEnabled@SvtCJKOptions@@QBEEXZ
 ?SetAll@SvtCJKOptions@@QAEXE@Z
+?GetProperLanguage@SvNumberFormatter@@SAGG@Z
