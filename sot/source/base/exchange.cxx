@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,9 +242,17 @@ namespace
             /*120 SOT_FORMATSTR_ID_EMF*/                    { "application/x-openoffice-emf;windows_formatname=\"Image EMF\"", "Windows Enhanced MetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*121 SOT_FORMATSTR_ID_BIFF_8*/                 { "application/x-openoffice-biff-8;windows_formatname=\"Biff8\"", "Biff8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*122 SOT_FORMATSTR_ID_BMP*/                    { "image/bmp", "Windows Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*123 SOT_FORMATSTR_ID_HTML_NO_COMMENT */       { "application/x-openoffice-html-no-comment;windows_formatname=\"HTML Format\"", "HTML (no comment)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*123 SOT_FORMATSTR_ID_HTML_NO_COMMENT */       { "application/x-openoffice-html-no-comment;windows_formatname=\"HTML Format\"", "HTML (no comment)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*124 SOT_FORMATSTR_ID_STARWRITER_8*/          { "application/x-vnd.oasis.openoffice.text", "Writer 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*125 SOT_FORMATSTR_ID_STARWRITERWEB_8*/       { "application/x-vnd.oasis.openoffice.text-web", "Writer/Web 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*126 SOT_FORMATSTR_ID_STARWRITERGLOB_8*/      { "application/x-vnd.oasis.openoffice.text-global", "Writer/Global 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*127 SOT_FORMATSTR_ID_STARWDRAW_8*/           { "application/x-vnd.oasis.openoffice.drawing", "Draw 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*128 SOT_FORMATSTR_ID_STARIMPRESS_8*/         { "application/x-vnd.oasis.openoffice.presentation", "Impress 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*129 SOT_FORMATSTR_ID_STARCALC_8*/            { "application/x-vnd.oasis.openoffice.spreadsheet", "Calc 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { "application/x-vnd.oasis.openoffice.chart", "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { "application/x-vnd.oasis.openoffice.math", "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
             };
-            return &aInstance[0];
+        return &aInstance[0];
         }
     };
 
