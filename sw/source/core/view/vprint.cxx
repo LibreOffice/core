@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:06:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,8 +1604,15 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rO
             pDoc->GetRootFrm()->Lower()->InvalidateSize();
         }
 
+        // --> FME 2005-02-10 #119474#
+        // CalcPagesForPrint() should not be necessary here. The pages in the
+        // visible area will be formatted in SwRootFrm::Paint().
+        // Removing this gives us a performance gain during saving the
+        // document because the thumbnail creation will not trigger a complete
+        // formatting of the document.
         // Seiten fuers Drucken formatieren
-        pSh->CalcPagesForPrint( SHRT_MAX );
+        // pSh->CalcPagesForPrint( SHRT_MAX );
+        // <--
 
         //#39275# jetzt will der Meyer doch ein Clipping
         pOleOut->Push( PUSH_CLIPREGION );
