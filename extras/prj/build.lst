@@ -4,17 +4,17 @@ er	extras									usr1	-	all	er_mkout NULL
 er	extras\source\autotext\lang				nmake	-	all	er_atxt NULL
 er	extras\source\database					nmake	-	all	er_datbs NULL
 er	extras\source\gallery					nmake	-	all	er_gal NULL
-er	extras\source\gallery\bullets			nmake	-	all	er_gbull NULL
-er	extras\source\gallery\gallery_sound		nmake	-	all	er_gsnd NULL
-er	extras\source\gallery\gallery_system	nmake	-	all	er_gsys NULL
-er	extras\source\gallery\htmlexpo			nmake	-	all	er_ghtml NULL
-er	extras\source\gallery\rulers			nmake	-	all	er_grulr NULL
-er	extras\source\gallery\sounds			nmake	-	all	er_gsnds NULL
-er	extras\source\gallery\www-back			nmake	-	all	er_gwbck NULL
-er  extras\source\migration                 nmake  -    all er_migr NULL
-er  extras\source\migration\lang            nmake  -    all er_migrl NULL
+er      extras\source\gallery\bullets                           nmake   -       all     er_gbull NULL
+er      extras\source\gallery\gallery_sound                     nmake   -       all     er_gsnd NULL
+er      extras\source\gallery\gallery_system                    nmake   -       all     er_gsys NULL
+er      extras\source\gallery\htmlexpo                          nmake   -       all     er_ghtml NULL
+er      extras\source\gallery\rulers                            nmake   -       all     er_grulr NULL
+er      extras\source\gallery\sounds                            nmake   -       all     er_gsnds NULL
+er      extras\source\gallery\www-back                          nmake   -       all     er_gwbck NULL
+er      extras\source\migration                                 nmake  -        all     er_migr NULL
+er      extras\source\migration\lang                            nmake  -        all     er_migrl NULL
 er	extras\source\misc_config				nmake	-	all	er_mcnf NULL
-er	extras\source\misc_config\lang			nmake	-	all	er_mcnfl er_mcnf NULL
+er      extras\source\misc_config\lang                          nmake   -       all     er_mcnfl er_mcnf NULL
 er	extras\source\palettes\lang				nmake	-	all	er_pall er_mcnfl NULL
 er	extras\source\palettes					nmake	-	all	er_palet NULL
 er	extras\source\symbols					nmake	-	all	er_symb NULL
@@ -22,7 +22,6 @@ er      extras\source\templates\layout\lang                     nmake   -       
 er      extras\source\templates\presnt\lang                     nmake   -       all     er_tprel NULL
 er      extras\source\templates\wizard\agenda\lang              nmake   -       all     er_twagl NULL
 er      extras\source\templates\wizard\bitmap                   nmake   -       all     er_twbmp NULL
-er      extras\source\templates\wizard\desktop                  nmake   -       all     er_twdk NULL
 er      extras\source\templates\wizard\desktop\lang             nmake   -       all     er_twdkl NULL
 er      extras\source\templates\wizard\fax\lang                 nmake   -       all     er_twfal NULL
 er      extras\source\templates\wizard\letter\lang              nmake   -       all     er_twlel NULL
