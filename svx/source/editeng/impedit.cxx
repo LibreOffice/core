@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
+ *  last change: $Author: mt $ $Date: 2002-07-02 10:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,13 +1244,21 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
     if ( rxClipboard.is() && GetEditSelection().HasRange() )
     {
         uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( GetEditSelection() );
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        rxClipboard->setContents( xData, NULL );
 
-        // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
-        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-        if( xFlushableClipboard.is() )
-            xFlushableClipboard->flushClipboard();
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+        try
+        {
+            rxClipboard->setContents( xData, NULL );
+
+            // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
+            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
 
         Application::AcquireSolarMutex( nRef );
 
@@ -1268,8 +1276,18 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
 {
     if ( rxClipboard.is() )
     {
+        uno::Reference< datatransfer::XTransferable > xDataObj;
+
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
+
+        try
+        {
+            xDataObj = rxClipboard->getContents();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
+
         Application::AcquireSolarMutex( nRef );
 
         if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
