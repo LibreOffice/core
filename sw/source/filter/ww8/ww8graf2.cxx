@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:33:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,9 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
             // Name als P-String einlesen
             rFileName = WW8ReadPString(*pSt, eStructCharSet, 0);
             if (rFileName.Len())
-                rFileName = URIHelper::SmartRelToAbs(rFileName);
+                rFileName = URIHelper::SmartRel2Abs(
+                    INetURLObject(sBaseURL), rFileName,
+                    URIHelper::GetMaybeFileHdl());
             *pbInDoc = false;       // Datei anschliessend nicht loeschen
             return rFileName.Len() != 0;        // Einlesen OK
     }
