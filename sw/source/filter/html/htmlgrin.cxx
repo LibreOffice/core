@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-14 14:21:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
@@ -473,11 +476,9 @@ void SwHTMLParser::InsertImage()
                 aClass = pOption->GetString();
                 break;
             case HTML_O_SRC:
-                ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
-                        "<IMG>: Base URL ist zerschossen" );
                 sGrfNm = pOption->GetString();
                 if( !InternalImgToPrivateURL(sGrfNm) )
-                    sGrfNm = INetURLObject::RelToAbs( sGrfNm );
+                    sGrfNm = INetURLObject::GetAbsURL( sBaseURL, sGrfNm );
                 break;
             case HTML_O_ALIGN:
                 eVertOri =
@@ -1071,9 +1072,7 @@ void SwHTMLParser::InsertBodyOptions()
     if( aBackGround.Len() && !pCSS1Parser->IsBodyBackgroundSet() )
     {
         // Hintergrundgrafik aus "BACKGROUND"
-        ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
-                "<BODY>: Base URL ist zerschossen" );
-        aBrushItem.SetGraphicLink( INetURLObject::RelToAbs( aBackGround ) );
+        aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( sBaseURL, aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
         bSetBrush = TRUE;
         pCSS1Parser->SetBodyBackgroundSet();
@@ -1332,9 +1331,7 @@ ANCHOR_SETEVENT:
     {
         if( sHRef.Len() )
         {
-            ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
-                    "<A>: Base URL ist zerschossen" );
-            sHRef = INetURLObject::RelToAbs( sHRef );
+            sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef );
         }
         else
         {
