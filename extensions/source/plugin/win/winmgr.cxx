@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-16 12:13:17 $
+ *  last change: $Author: pl $ $Date: 2001-05-30 11:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,8 +360,6 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                         OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
                         OUString aExtToken( aExtToken2.getStr(), aExtToken2.getLength(), RTL_TEXTENCODING_MS_1252 );
 #endif
-                        if (! aExtToken.getLength())
-                            break;
 
                         rDescr.PluginName = aName;
                         rDescr.Description = aComment;

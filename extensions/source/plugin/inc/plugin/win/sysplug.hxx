@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-02 14:37:04 $
+ *  last change: $Author: pl $ $Date: 2001-05-30 11:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,37 @@
 #pragma pack( pop, 8 )
 
 #include <plugin/plcom.hxx>
-
+#include <vcl/threadex.hxx>
 
 //==================================================================================================
-class PluginComm_Impl
-    : public PluginComm
+class PluginComm_Impl :
+    public PluginComm,
+    public ::vcl::SolarThreadExecutor
+
 {
+    enum CallType {
+        eNPP_Destroy,
+        eNPP_DestroyStream,
+        eNPP_GetJavaClass,
+        eNPP_Initialize,
+        eNPP_New,
+        eNPP_NewStream,
+        eNPP_Print,
+        eNPP_SetWindow,
+        eNPP_Shutdown,
+        eNPP_StreamAsFile,
+        eNPP_URLNotify,
+        eNPP_Write,
+        eNPP_WriteReady,
+        eNPP_GetValue,
+        eNPP_SetValue,
+        eNP_Initialize
+    };
+
+    void*               m_aArgs[ 8 ];
+    CallType            m_eCall;
+
+    virtual long        doIt();
 public:
                         PluginComm_Impl( const rtl::OUString& rMIME, const rtl::OUString& rName, HWND hWnd );
     virtual             ~PluginComm_Impl();
