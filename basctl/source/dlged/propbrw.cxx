@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 14:01:00 $
+ *  last change: $Author: tbe $ $Date: 2001-10-08 12:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,6 @@ PropBrwMgr::PropBrwMgr( Window *pParent, sal_uInt16 nId,
                 ((PropBrw*)pWindow)->Update( pDrawView );
         }
     }
-
-    // don't delete the property browser when faded out in module windows
-    SetHideNotDelete( sal_True );
 }
 
 //----------------------------------------------------------------------------
