@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-05 13:43:42 $
+ *  last change: $Author: ssa $ $Date: 2002-04-12 09:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4169,13 +4169,13 @@ static BOOL ImplHandleIMECompositionInput( SalFrame* pFrame,
                     USHORT   nSalAttr;
                     if ( nWinAttr == ATTR_TARGET_CONVERTED )
                     {
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE | SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
                         aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
                     }
                     else if ( nWinAttr == ATTR_CONVERTED )
                         nSalAttr = SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
                     else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
                     else if ( nWinAttr == ATTR_INPUT_ERROR )
                         nSalAttr = SAL_EXTTEXTINPUT_ATTR_REDTEXT | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
                     else /* ( nWinAttr == ATTR_INPUT ) */
