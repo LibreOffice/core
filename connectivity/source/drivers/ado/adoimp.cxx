@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 06:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
 // -------------------------------------------------------------------------
 sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
 {
-    sal_Int32 nType;
+    sal_Int32 nType = DataType::VARCHAR;;
     switch (eType)
     {
         case adUnsignedSmallInt:
