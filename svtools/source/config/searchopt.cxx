@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 10:59:04 $
+ *  last change: $Author: obo $ $Date: 2001-02-19 16:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
-#include <com/sun/star/i18n/transliterationmodules.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
