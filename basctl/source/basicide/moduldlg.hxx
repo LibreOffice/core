@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 22:45:02 $
+ *  last change: $Author: tbe $ $Date: 2001-12-11 17:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@ public:
     BasicCheckBox&  GetLibBox()                 { return aLibBox; }
     BOOL            IsReference() const         { return aReferenceBox.IsChecked(); }
     BOOL            IsReplace() const           { return aReplaceBox.IsChecked(); }
+
+    void            EnableReference( BOOL b )   { aReferenceBox.Enable( b ); }
+    void            EnableReplace( BOOL b )     { aReplaceBox.Enable( b ); }
 };
 
 
