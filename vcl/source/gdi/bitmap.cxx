@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-24 14:14:26 $
+ *  last change: $Author: thb $ $Date: 2002-10-22 17:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1521,6 +1521,8 @@ BOOL Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
             for( long nX = 0L; nX < nWidth; nX++ )
                 if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
                     pAcc->SetPixel( nY, nX, aReplace );
+
+        bRet = TRUE;
     }
 
     ( (Bitmap&) rMask ).ReleaseAccess( pMaskAcc );
@@ -1917,6 +1919,8 @@ BOOL Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
         }
+
+        bRet = TRUE;
     }
 
     ( (Bitmap&) rMask ).ReleaseAccess( pMaskAcc );
