@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:31:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 09:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, s
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfChar )( IMPL_RTL_STRCODE* pStr,
                                                     IMPL_RTL_STRCODE c )
 {
-    *pStr = c;
+    *pStr++ = c;
     *pStr = 0;
     return 1;
 }
