@@ -3,6 +3,7 @@
 ..\%__SRC%\bin\*.aff %_DEST%\bin%_EXT%\*.aff
 ..\%__SRC%\bin\*.dic %_DEST%\bin%_EXT%\*.dic
 ..\%__SRC%\bin\*.lst %_DEST%\bin%_EXT%\*.lst
+..\%__SRC%\bin\thencode* %_DEST%\bin%_EXT%
 
 ..\%__SRC%\bin\lth* %_DEST%\bin%_EXT%\lth*
 ..\%__SRC%\lib\ilth* %_DEST%\lib%_EXT%\ilth*
