@@ -1,0 +1,247 @@
+/*************************************************************************
+ *
+ *  $RCSfile: soldlg.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-02-26 14:51:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <dtsodcmp.hrc>
+#include "soldlg.hrc"
+
+//========================================================================
+// Dialogs
+ModalDialog RID_SD_DIALOG_NEWPROJECT
+{
+    OutputSize = TRUE;
+    Text = "New Project";
+    PosSize = MAP_SYSFONT(18,18,142,142);
+    SVLook = TRUE;
+    MOVEABLE = TRUE;
+    CLOSEABLE = TRUE;
+    OKButton BTN_OK
+    {
+        PosSize = MAP_SYSFONT(5,123,40,14);
+        TabStop = TRUE;
+        Hide = FALSE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL {
+        PosSize = MAP_SYSFONT(50,123,40,14);
+        TabStop = TRUE;
+    };
+    FixedText FT_PRJNAME {
+        PosSize = MAP_SYSFONT( 5, 10, 100, 10 );
+        Text = "Project Name";
+    };
+    Edit EDIT_PRJNAME {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,20,132,10);
+    };
+    FixedText FT_PRJSHORT {
+        PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
+        Text = "Project Short Name";
+    };
+    Edit EDIT_PRJSHORT {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,40,132,10);
+    };
+    FixedText FT_PRJDEPS {
+        PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
+        Text = "Project Depends on";
+    };
+    Edit EDIT_PRJDEPS {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,60,132,10);
+    };
+};
+
+ModalDialog RID_SD_DIALOG_NEWDIRECTORY
+{
+    OutputSize = TRUE;
+    Text = "New Directory";
+    PosSize = MAP_SYSFONT(18,18,142,142);
+    SVLook = TRUE;
+    MOVEABLE = TRUE;
+    CLOSEABLE = TRUE;
+    OKButton BTN_OK
+    {
+        PosSize = MAP_SYSFONT(5,123,40,14);
+        TabStop = TRUE;
+        Hide = FALSE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL {
+        PosSize = MAP_SYSFONT(50,123,40,14);
+        TabStop = TRUE;
+    };
+    FixedText FT_DIRNAME {
+        PosSize = MAP_SYSFONT( 5, 10, 132, 10 );
+        Text = "Directory Name ( with projectname )";
+    };
+    Edit EDIT_DIRNAME {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,20,132,10);
+    };
+    FixedText FT_DIRFLAG {
+        PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
+        Text = "Directory Flag";
+    };
+    Edit EDIT_DIRFLAG {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,40,132,10);
+    };
+    FixedText FT_DIRDEPS {
+        PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
+        Text = "Directory Depends on";
+    };
+    Edit EDIT_DIRDEPS {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,60,132,10);
+    };
+    FixedText FT_DIRACTION {
+        PosSize = MAP_SYSFONT( 5, 70, 100, 10 );
+        Text = "What To Do";
+    };
+    Edit EDIT_DIRACTION {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,80,132,10);
+    };
+    FixedText FT_DIRENV {
+        PosSize = MAP_SYSFONT( 5, 90, 100, 10 );
+        Text = "Which Environments";
+    };
+    Edit EDIT_DIRENV {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,100,132,10);
+    };
+};
+
+
+ModalDialog RID_SD_DIALOG_HELP
+{
+    OutputSize = TRUE;
+    Text = "Help";
+    PosSize = MAP_SYSFONT(18,18,242,242);
+    SVLook = TRUE;
+    MOVEABLE = TRUE;
+    CLOSEABLE = TRUE;
+    OKButton BTN_OK
+    {
+        PosSize = MAP_SYSFONT(101,223,40,14);
+        TabStop = TRUE;
+        Hide = FALSE;
+        DefButton = TRUE;
+    };
+    MultiLineEdit EDIT_HELP {
+        Border = TRUE;
+        PosSize = MAP_SYSFONT(5,5,232,213);
+    };
+};
+
+ModalDialog DLG_VERSIONSELECT {
+    OutputSize = TRUE;
+    Pos = MAP_APPFONT( 92, 40 );
+    Size = MAP_APPFONT( 161, 98 );
+    Text = "Open workspace";
+    Moveable = TRUE;
+    Closeable = TRUE;
+    ListBox DLG_VERSIONSELECT_LISTBOX {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 8, 16 );
+            Size = MAP_APPFONT( 96, 72 );
+            TabStop = TRUE;
+        };
+    GroupBox DLG_VERSIONSELECT_GROUP {
+            Pos = MAP_APPFONT( 4, 4 );
+            Size = MAP_APPFONT( 104, 88 );
+            Text = "Workspaces";
+        };
+    OKButton DLG_VERSIONSELECT_OK {
+            Pos = MAP_APPFONT( 116, 64 );
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+        };
+    CancelButton DLG_VERSIONSELECT_CANCEL {
+            Pos = MAP_APPFONT( 116, 80 );
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+        };
+};
+
+ModelessDialog DLG_AUTOARRANGE {
+    OutputSize = TRUE;
+    Pos = MAP_APPFONT( 40, 12 );
+    Size = MAP_APPFONT( 225, 82 );
+    Text = "Autoarrange";
+    Moveable = TRUE;
+    GroupBox DLG_AUTOARRANGE_GROUP {
+            Pos = MAP_APPFONT( 4, 4 );
+            Size = MAP_APPFONT( 216, 72 );
+            Text = "Progress";
+        };
+    FixedText DLG_AUTOARRANGE_TEXT_MODULE {
+            Pos = MAP_APPFONT( 8, 16 );
+            Size = MAP_APPFONT( 208, 10 );
+            Text = "";
+        };
+    FixedText DLG_AUTOARRANGE_TEXT_OVERALL {
+            Pos = MAP_APPFONT( 8, 48 );
+            Size = MAP_APPFONT( 208, 10 );
+            Text = "";
+        };
+};
+
