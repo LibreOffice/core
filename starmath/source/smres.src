@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:18:18 $
+ *  last change: $Author: kz $ $Date: 2001-04-10 20:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ ModalDialog RID_FONTDIALOG
         Text [ portuguese ] = "Atributos" ;
         Text [ finnish ] = "Tyylit" ;
         Text [ danish ] = "Attributter" ;
-        Text [ french ] = "Styles" ;
+        Text [ french ] = "Attributs" ;
         Text [ swedish ] = "Attribut" ;
         Text [ dutch ] = "Attributen" ;
         Text [ spanish ] = "Atributos" ;
@@ -2612,7 +2612,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ danish ] = "Udskriftsformat" ;
         Text [ french ] = "Format d'impression" ;
         Text [ swedish ] = "Utskriftsformat" ;
-        Text [ dutch ] = "Afdrukopmaak" ;
+        Text [ dutch ] = "Afdrukformaat" ;
         Text [ spanish ] = "Formato de impresión" ;
         Text [ english_us ] = "Print format" ;
         Text[ chinese_simplified ] = "´òÓ¡¸ñÊ½";
@@ -9835,7 +9835,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ portuguese ] = "StarOffice 6.0 Formula";
     Text[ russian ] = "Ôîðìóëà â %PRODUCTNAME 6.0";
     Text[ greek ] = "%PRODUCTNAME 6.0 Ôýðïò";
-    Text[ dutch ] = "StarOffice 6.0 Formula";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Formule";
     Text[ french ] = "%PRODUCTNAME 6.0 Formule";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Fórmula";
     Text[ italian ] = "StarOffice 6.0 Formula";
