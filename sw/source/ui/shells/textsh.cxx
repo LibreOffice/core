@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 14:18:34 $
+ *  last change: $Author: os $ $Date: 2002-05-06 07:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     switch( nSlot )
     {
+    case FN_INSERT_STRING:
+        if( pItem )
+            rSh.InsertByWord(((const SfxStringItem *)pItem)->GetValue());
+    break;
     case FN_INSERT_SOFT_HYPHEN:
         if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( TRUE, 0 ) &&
             CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( TRUE, -1 ))
@@ -1061,6 +1065,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2002/04/05 14:18:34  os
+    #96840# decrease use of open files
+
     Revision 1.12  2002/02/01 12:47:56  jp
     Task #92291#: add new character skip modifier
 

@@ -9129,4 +9129,34 @@ SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
     ToolBoxConfig = TRUE,
     GroupId = GID_FRAME;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem Insert FN_INSERT_STRING
+( SfxStringItem StringName FN_INSERT_STRING )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Synchron;
+
+    /* plugin: */
+    Container = FALSE,
+
+    /* api: */
+    Export = TRUE,
+    IsCollection = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 13:50:27 $
+ *  last change: $Author: os $ $Date: 2002-05-06 07:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_SYMBOL        (FN_INSERT + 28)    /* Sonderzeichen */
 #define FN_POSTIT               (FN_INSERT + 29)    /* PostIt einfuegen/bearbeiten */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Tabelle */
-// schon im Svx definiert
+#define FN_INSERT_STRING        (FN_INSERT+31)
 #define FN_INSERT_COLS          (FN_INSERT + 32)    /* Spalten einfuegen */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Rahmen einfuegen aktiv */
 #define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Rahmen einfuegen */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 15:22:02 $
+ *  last change: $Author: os $ $Date: 2002-05-06 07:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,19 @@ void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
 {
     if ( aInBuffer.Len() )
     {
+        SfxMacro *pMacro = SfxRequest::GetRecordingMacro();
+        if ( pMacro )
+        {
+            //Shell ermitteln
+            SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
+            // Request generieren und recorden
+            if (pSfxShell)
+            {
+                SfxRequest aReq( *pSfxShell, FN_INSERT_STRING );
+                aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, aInBuffer ) );
+                aReq.Done();
+            }
+        }
         pSh->Insert( aInBuffer );
         aInBuffer.Erase();
         bFlushCharBuffer = FALSE;
