@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
+ *  last change: $Author: obr $ $Date: 2001-05-07 11:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
 #include <com/sun/star/awt/XDisplayConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 #ifdef REMOTE_APPSERVER
@@ -563,9 +566,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
             if ( xFactory.is() )
             {
-                // remember clipboard here
-                mpFrameData->mxClipboard = Reference< XClipboard > ( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
-
                 /*
                  * IMHO this belongs in the platform dependend part of vcl, but the vcl guys say it
                  * is better to implement it here to reduce dependencies on the other ports like Mac etc.
@@ -575,27 +575,70 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
                 if( pEnvData )
                 {
+                    Sequence< Any > aClipboardAL, aSelectionAL;
+                    OUString aClipboardSN, aSelectionSN;
+
                     Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                     OUString aDragSourceSN, aDropTargetSN;
 
 #if defined WNT
+                    aClipboardSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
+
                     aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
                     aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
                     aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                     aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
 
 #elif defined UNX
+
+                    aClipboardSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
+                    aSelectionSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
+
                     aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
                     aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
 
-                    // need second parameter for drop target
-//                  aDropTargetAL.realloc( 2 );
+                    aClipboardAL.realloc( 2 );
+                      aClipboardAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                      aClipboardAL[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
+
+                    aSelectionAL.realloc( 2 );
+                      aSelectionAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                      aSelectionAL[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 1 ] = makeAny( pEnvData->aShellWindow );
 #endif
                     // FIXME: add service names for macos etc. here
+
+                    // remember clipboard instance here
+                    if( aClipboardSN.getLength() )
+                    {
+                        mpFrameData->mxClipboard = Reference< XClipboard > ( xFactory->createInstance( aClipboardSN ), UNO_QUERY );
+
+                        if( mpFrameData->mxClipboard.is() && aClipboardAL.getLength() )
+                        {
+                            Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxClipboard, UNO_QUERY );
+
+                            if( xInit.is() )
+                                xInit->initialize( aClipboardAL );
+                        }
+                    }
+
+                    // remember primary selection here
+                    if( aSelectionSN.getLength() )
+                    {
+                        mpFrameData->mxSelection = Reference< XClipboard > ( xFactory->createInstance( aSelectionSN ), UNO_QUERY );
+
+                        if( mpFrameData->mxSelection.is() && aSelectionAL.getLength() )
+                        {
+                            Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxSelection, UNO_QUERY );
+
+                            if( xInit.is() )
+                                xInit->initialize( aSelectionAL );
+                        }
+                    }
+
 
                     if( aDragSourceSN.getLength() )
                         mpFrameData->mxDragSource = Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
