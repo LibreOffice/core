@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:46:27 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,19 @@
 
 #include "options.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-    class XInterface;
-    template <class> class Sequence;
-    template <class> class Reference;
-}   }   }   }
+namespace com { namespace sun { namespace star {
+    namespace uno
+    {
+        class Any;
+        class XInterface;
+        template <class> class Sequence;
+        template <class> class Reference;
+    }
+    namespace beans
+    {
+        struct PropertyValue;
+    }
+}   }   }
 
 namespace rtl { class OUString; }
 
@@ -97,6 +104,7 @@ namespace configmgr
     namespace uno       = css::uno;
     namespace script    = css::script;
     namespace lang      = css::lang;
+    namespace beans     = css::beans;
     using ::rtl::OUString;
 
     class ISubtree;
@@ -125,21 +133,51 @@ namespace configmgr
         struct FactoryArguments
         {
             /// possible arguments, given only in small letters.
-            static rtl::OUString sUser;         // name of the user
-            static rtl::OUString sNodePath;     // requested node path
-            static rtl::OUString sDepth;        // depth of the tree
-            static rtl::OUString sLocale;       // desired locale
-            static rtl::OUString sNoCache;      // cache disabling
-            static rtl::OUString sLazyWrite;    // lasy write data
+            enum Argument
+            {
+                ARG_NODEPATH,   // requested node path
+                ARG_DEPTH,      // depth of the tree
+                ARG_USER,       // name of the user - only for admin
+                ARG_LOCALE,     // desired locale
+                ARG_NOCACHE,    // cache disabling
+                ARG_ASYNC,      // lasy write data
 
+                _arg_count,
+                ARG_NOT_FOUND = _arg_count
+            };
+            static sal_Char const * const asciiArgumentNames[];
+
+            static OUString getArgumentName(Argument _which) SAL_THROW( () );
+            static Argument lookupArgument(OUString const& sArgumentName) SAL_THROW( () );
+
+            static OUString getUserArgumentName()               SAL_THROW(()) { return getArgumentName(ARG_USER);     }
+            static OUString getNodePathArgumentName()           SAL_THROW(()) { return getArgumentName(ARG_NODEPATH); }
+            static OUString getDepthArgumentNameArgumentName()  SAL_THROW(()) { return getArgumentName(ARG_DEPTH);    }
+            static OUString getLocaleArgumentName()             SAL_THROW(()) { return getArgumentName(ARG_LOCALE);   }
+            static OUString getNoCacheArgumentName()            SAL_THROW(()) { return getArgumentName(ARG_NOCACHE);  }
+            static OUString getAsyncArgumentName()              SAL_THROW(()) { return getArgumentName(ARG_ASYNC);    }
         public:
-            static void extractArgs(const uno::Sequence<uno::Any>& _rArgs,
-                                    ::rtl::OUString& /* [out] */ _rNodeAccessor,
-                                    ::rtl::OUString& /* [out] */ _rUser,
-                                    ::rtl::OUString& /* [out] */ _rLocale,
-                                    sal_Int32& /* [out] */ _nLevels,
-                                    bool& /* [out] */ _bNoCache,
-                                    bool& /* [out] */ _bLazyWrite) throw (lang::IllegalArgumentException);
+            /** extracts arguments from the argument sequence into to the parameter variables
+
+                <p>unknown arguments are ignored</p>
+
+                @throws com::sun::star::lang::IllegalArgumentException
+                    if an element of _rArgs had the wrong type or
+                    if the value of a known argument has the wrong type or
+                    if the value of a known argument is out of range (sometimes)
+                    or if no non-empty node path argument could be extracted,
+            */
+            static void extractArgs(    const uno::Sequence<uno::Any>& _rArgs,
+                                        OUString&   /* [out] */ _rNodeAccessor,
+                                        sal_Int32&  /* [out] */ _nLevels,
+                                        vos::ORef<OOptions> /* [in/out] */ xOptions
+                                   ) SAL_THROW( (lang::IllegalArgumentException) );
+
+            static bool extractOneArgument( beans::PropertyValue const& aCurrent,
+                                            OUString&   /* [out] */ _rNodeAccessor,
+                                            sal_Int32&  /* [out] */ _nLevels,
+                                            vos::ORef<OOptions> /* [in/out] */ _xOptions
+                                          ) SAL_THROW( () );
 
         };
 

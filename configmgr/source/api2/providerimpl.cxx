@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-18 16:20:59 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,157 +509,235 @@ namespace configmgr
     //=============================================================================
     //= OProvider::FactoryArguments
     //=============================================================================
-    rtl::OUString OProviderImpl::FactoryArguments::sUser(ASCII("user"));
-    rtl::OUString OProviderImpl::FactoryArguments::sNodePath(ASCII("nodepath"));
-    rtl::OUString OProviderImpl::FactoryArguments::sDepth(ASCII("depth"));
-    rtl::OUString OProviderImpl::FactoryArguments::sLocale(ASCII("locale"));
-    rtl::OUString OProviderImpl::FactoryArguments::sNoCache(ASCII("nocache"));
-    rtl::OUString OProviderImpl::FactoryArguments::sLazyWrite(ASCII("lazywrite"));
 
-#ifdef DBG_UTIL
-    //-----------------------------------------------------------------------------
-    bool lookup(const rtl::OUString& rName)
+    sal_Char const * const  OProviderImpl::FactoryArguments::asciiArgumentNames[] =
     {
-        // allowed arguments
-        static HashSet aArgs;
-        if (aArgs.empty())
-        {
-            aArgs.insert(OProviderImpl::FactoryArguments::sUser);
-            aArgs.insert(OProviderImpl::FactoryArguments::sNodePath);
-            aArgs.insert(OProviderImpl::FactoryArguments::sDepth);
-            aArgs.insert(OProviderImpl::FactoryArguments::sLocale);
-            aArgs.insert(OProviderImpl::FactoryArguments::sNoCache);
-            aArgs.insert(OProviderImpl::FactoryArguments::sLazyWrite);
-        }
+       "nodepath",  // ARG_NODEPATH,   // requested node path
+       "depth",     // ARG_DEPTH,      // depth of the tree
+       "user",      // ARG_USER,       // name of the user - only for admin
+       "locale",    // ARG_LOCALE,     // desired locale
+       "nocache",   // ARG_NOCACHE,    // cache disabling
+       "lazywrite"  // ARG_ASYNC,      // lasy write data
+    };
 
-        HashSet::const_iterator it = aArgs.find(rName);
-        return it != aArgs.end() ? true : false;
+    OUString OProviderImpl::FactoryArguments::getArgumentName(Argument _which) SAL_THROW( () )
+    {
+        OSL_ASSERT(sizeof asciiArgumentNames/sizeof 0[asciiArgumentNames] == _arg_count);
+        OSL_PRECOND(_which < _arg_count, "Illegal argument selector in OProviderImpl::FactoryArguments::getArgumentName");
+
+        return OUString::createFromAscii(asciiArgumentNames[_which]);
     }
 
-    //-----------------------------------------------------------------------------
-    bool checkArgs(const uno::Sequence<uno::Any>& _rArgs) throw (lang::IllegalArgumentException)
+    OProviderImpl::FactoryArguments::Argument
+        OProviderImpl::FactoryArguments::lookupArgument(const rtl::OUString& rName)
+            SAL_THROW( () )
     {
-        // PRE: a Sequence with some possible arguments
-        beans::PropertyValue aCurrent;
-        const uno::Any* pCurrent = _rArgs.getConstArray();
+        OUString sCheck( rName.toAsciiLowerCase() );
 
-        bool bParamOk = false;
-        for (sal_Int32 i=0; i<_rArgs.getLength(); ++i, ++pCurrent)
+        typedef sal_Char const * const * ArgNameIter;
+
+        ArgNameIter const pFirst = asciiArgumentNames;
+        ArgNameIter const pLast  = pFirst + _arg_count;
+
+        ArgNameIter it = pFirst;
+
+        for(; it != pLast; ++it)
         {
-            if (*pCurrent >>= aCurrent)
+            if (0 == sCheck.compareToAscii(*it))
             {
-                if (!lookup(aCurrent.Name))
-                {
-                    rtl::OString aStr = "The argument '";
-                    aStr += rtl::OUStringToOString(aCurrent.Name,RTL_TEXTENCODING_ASCII_US).getStr();
-                    aStr += "' could not be extracted.";
-                    OSL_ENSURE(false, aStr.getStr());
-                }
-            }
-            else if (i > 0 || pCurrent->getValueTypeClass() != uno::TypeClass_STRING)
-            {
-                OSL_ENSURE(false, "operator >>= failed.");
-            }
-            else
-            {
-                OSL_ENSURE(_rArgs.getLength() <= 2, "Too many arguments for legacy parameters.");
                 break;
             }
         }
-        return true;
+
+        OSL_ASSERT( Argument(pLast-pFirst) ==  ARG_NOT_FOUND );
+        return static_cast<Argument>(it - pFirst);
     }
-#endif
 
     //-----------------------------------------------------------------------------------
-    void OProviderImpl::FactoryArguments::extractArgs(const uno::Sequence<uno::Any>& _rArgs,
-                                                      OUString& /* [out] */ _rNodeAccessor,
-                                                      OUString& /* [out] */ _rUser,
-                                                      OUString& /* [out] */ _rLocale,
-                                                      sal_Int32& /* [out] */ _nLevels,
-                                                      bool& /* [out] */ _bNoCache,
-                                                      bool& /* [out] */ _bLazyWrite)
-        throw (lang::IllegalArgumentException)
+
+    bool OProviderImpl::FactoryArguments::extractOneArgument(beans::PropertyValue const& aCurrent,
+                            OUString&   /* [out] */ _rNodeAccessor,
+                            sal_Int32&  /* [out] */ _nLevels,
+                            vos::ORef<OOptions> /* [in/out] */ _xOptions )
+        SAL_THROW( () )
     {
-
-#ifdef DBG_UTIL
-        checkArgs(_rArgs);
-#endif
-        ::rtl::OUString sUser, sPath, sLocale;
-        sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
-        sal_Bool bNoCache = sal_False;
-        sal_Bool bLazyWrite = sal_False;
-
-        // the args have to be a sequence of property values, currently three property names are recognized
-        beans::PropertyValue aCurrent;
-        sal_Bool bAnyPropValue = sal_False;
-        const uno::Any* pCurrent = _rArgs.getConstArray();
-        for (sal_Int32 i=0; i<_rArgs.getLength(); ++i, ++pCurrent)
+        switch ( lookupArgument(aCurrent.Name) )
         {
-            if (*pCurrent >>= aCurrent)
+        case ARG_NODEPATH:
             {
-                sal_Bool bExtractSuccess = sal_True;    // defaulted to TRUE, so we skip unknown arguments
-                if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sNodePath))
-                    bExtractSuccess = (aCurrent.Value >>= sPath);
-                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sUser))
-                    bExtractSuccess = (aCurrent.Value >>= sUser);
-                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sDepth))
-                    bExtractSuccess = (aCurrent.Value >>= nLevelDepth);
-                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sLocale))
-                    bExtractSuccess = (aCurrent.Value >>= sLocale);
-                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sNoCache))
-                    bExtractSuccess = (aCurrent.Value >>= bNoCache);
-                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sLazyWrite))
-                    bExtractSuccess = (aCurrent.Value >>= bLazyWrite);
-/*
-#ifdef DBG_UTIL
+                OUString sStringVal;
+                if (aCurrent.Value >>= sStringVal)
+                    _rNodeAccessor = sStringVal;
                 else
+                    return false;
+            }
+            break;
+
+        case ARG_DEPTH:
+            {
+                sal_Int32 nIntVal;
+                if (aCurrent.Value >>= nIntVal)
+                    _nLevels = nIntVal;
+                else
+                    return false;
+            }
+            break;
+
+        case ARG_USER:
+            {
+                OUString sStringVal;
+                if (aCurrent.Value >>= sStringVal)
+                    _xOptions->setUser(sStringVal);
+                else
+                    return false;
+            }
+            break;
+
+        case ARG_LOCALE:
+            {
+                OUString    sStringVal;
+                if (aCurrent.Value >>= sStringVal)
                 {
-                    ::rtl::OString sMessage(RTL_CONSTASCII_STRINGPARAM("OProviderImpl::extractArgs : unknown argument name: "));
-                    sMessage += ::rtl::OString(aCurrent.Name.getStr(), aCurrent.Name.getLength(), RTL_TEXTENCODING_ASCII_US);
-                    sMessage += ::rtl::OString(RTL_CONSTASCII_STRINGPARAM("!"));
-                    OSL_ENSURE(sal_False, sMessage.getStr());
+                    _xOptions->setLocale(sStringVal);
+                    break;
                 }
-#endif
-*/
+                #if 0
+                lang::Locale aLocale;
+                if (aCurrent.Value >>= aLocale)
+                {
+                    _xOptions->setLocale(aLocale);
+                    break;
+                }
+                #endif
 
-                if (!bExtractSuccess)
-                    throw   lang::IllegalArgumentException(
-                                    (OUString(RTL_CONSTASCII_USTRINGPARAM("The argument ")) += aCurrent.Name) += OUString(RTL_CONSTASCII_USTRINGPARAM(" could not be extracted.")),
-                                    uno::Reference<uno::XInterface>(),
-                                    sal_Int16(i)
-                            );
+                return false;
+            }
+            break;
 
-                bAnyPropValue = sal_True;
+        case ARG_NOCACHE:
+            {
+                sal_Bool bBoolVal;
+                if (aCurrent.Value >>= bBoolVal)
+                    _xOptions->setNoCache(!!bBoolVal);
+                else
+                    return false;
+            }
+            break;
+
+        case ARG_ASYNC:
+            {
+                sal_Bool bBoolVal;
+                if (aCurrent.Value >>= bBoolVal)
+                    _xOptions->setLazyWrite(!!bBoolVal);
+                else
+                    return false;
+            }
+            break;
+
+        case ARG_NOT_FOUND:
+                {
+                    rtl::OString sMessage(RTL_CONSTASCII_STRINGPARAM("Unknown argument \""));
+                    sMessage += rtl::OUStringToOString(aCurrent.Name, RTL_TEXTENCODING_ASCII_US);
+                    sMessage += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\" !\n- Parameter will be ignored -\n"));
+                    CFG_TRACE_WARNING( "provider: %s", sMessage.getStr() );
+            #ifdef DBG_UTIL
+                    OSL_ENSURE(false, sMessage.getStr());
+            #endif
+                }
+            break;
+
+        default:
+            CFG_TRACE_ERROR( "Known argument is not handled" );
+            OSL_ENSURE(false, "Known argument is not handled");
+            break;
+        }
+        return true;
+    }
+
+     //-----------------------------------------------------------------------------------
+    static
+    void failIllegal(sal_Int32 _nArg = -1)
+        SAL_THROW( (lang::IllegalArgumentException) )
+    {
+        OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
+         throw lang::IllegalArgumentException(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Arguments must be PropertyValues.")),
+                    uno::Reference<uno::XInterface>(),
+                    sal_Int16(_nArg)
+                );
+   }
+
+     //-----------------------------------------------------------------------------------
+    static
+    bool extractLegacyArguments(    const uno::Sequence<uno::Any>& _rArgs,
+                                    OUString&   /* [out] */ _rNodeAccessor,
+                                    sal_Int32&  /* [out] */ _nLevels )
+        SAL_THROW( () )
+    {
+          // compatibility : formerly, you could specify the node path as first arg and the (optional) depth
+            // as second arg
+            switch (_rArgs.getLength() )
+            {
+            default:
+                return false;
+
+            case 2:
+                if (! (_rArgs[1] >>= _nLevels) )
+                    return false;
+
+                // fall thru
+            case 1:
+                if (! (_rArgs[0] >>= _rNodeAccessor) )
+                    return false;
+
+                // fall thru
+            case 0:
+                return true;
+            }
+    }
+
+    //-----------------------------------------------------------------------------------
+    void OProviderImpl::FactoryArguments::extractArgs(  const uno::Sequence<uno::Any>& _rArgs,
+                                                        OUString&   /* [out] */ _rNodeAccessor,
+                                                        sal_Int32&  /* [out] */ _nLevels,
+                                                        vos::ORef<OOptions> /* [in/out] */ _xOptions )
+        SAL_THROW( (lang::IllegalArgumentException) )
+    {
+        _nLevels = ITreeProvider::ALL_LEVELS; // setting a fallback
+
+        // the args have to be a sequence of property values
+        bool bLegacyFormat = false;
+
+        for (sal_Int32 i=0; i<_rArgs.getLength(); ++i)
+        {
+            beans::PropertyValue aCurrent;
+            if (_rArgs[i] >>= aCurrent)
+            {
+                if ( !extractOneArgument(aCurrent,_rNodeAccessor,_nLevels,_xOptions) )
+                {
+                    OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("The argument "));
+                    sMessage += aCurrent.Name;
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" has the wrong type.\n- Found type "));
+                    sMessage += aCurrent.Value.getValueType().getTypeName();
+                    throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),sal_Int16(i));
+                }
+            }
+            else
+            {
+                if (i == 0)// try compatibility format
+                    if ( extractLegacyArguments(_rArgs,_rNodeAccessor,_nLevels))
+                        break;
+
+                failIllegal(i);
+                OSL_ASSERT(false);
             }
         }
 
-        if (!bAnyPropValue)
+        if (_rNodeAccessor.getLength() == 0)
         {
-            // compatibility : formerly, you could specify the node path as first arg and the (optional) depth
-            // as second arg
-            if (_rArgs.getLength() > 0)
-                if (! (_rArgs[0] >>= sPath) )
-                    throw   lang::IllegalArgumentException(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM("The node path specified is invalid.")),
-                                    uno::Reference<uno::XInterface>(),
-                                    0
-                            );
-
-            if (_rArgs.getLength() > 1)
-                if (! (_rArgs[1] >>= nLevelDepth) )
-                    throw   lang::IllegalArgumentException(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM("The fetch depth specified is invalid.")),
-                                    uno::Reference<uno::XInterface>(),
-                                    1
-                            );
+            OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Missing argument: no nodepath was provided"));
+            throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),-1);
         }
-
-        _rNodeAccessor = sPath; //IConfigSession::composeNodeAccessor(sPath, sUser);
-        _nLevels = nLevelDepth;
-        _rLocale = sLocale;
-        _rUser = sUser;
-        _bNoCache = (bNoCache != sal_False);
-        _bLazyWrite = bLazyWrite;
     }
 // class OOptions
     //..........................................................................

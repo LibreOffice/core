@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#include "hashhelper.hxx"
-
 namespace configmgr
 {
     namespace css   = ::com::sun::star;
@@ -109,15 +107,18 @@ namespace configmgr
         CFG_TRACE_INFO("config provider: going to create a read access instance");
 
         // extract the args
-        ::rtl::OUString sUser, sPath, sLocale;
+        OUString sPath;
         sal_Int32 nLevels;
-        bool bNoCache;
-        bool bLazyWrite; // no need here
-
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLazyWrite);
-
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, xOptions);
+
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
+        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
+
+        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
+
+        OUString sUser = xOptions->getUser();
         if (sUser.getLength())
         {
             if (xOptions->getDefaultUser() == sUser)
@@ -141,13 +142,6 @@ namespace configmgr
                 throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
             }
         }
-
-        xOptions->setLocale(sLocale);
-        if (bNoCache) xOptions->setNoCache(bNoCache);
-
-        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
-        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
-        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
@@ -182,23 +176,18 @@ namespace configmgr
         CFG_TRACE_INFO("config provider: going to create an update access instance");
 
         // extract the args
-        ::rtl::OUString sUser, sPath, sLocale;
+        OUString sPath;
         sal_Int32 nLevels;
-        bool bNoCache;
-        bool bLazyWrite;
-
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLazyWrite);
-#ifdef LLA_PRIVAT_DEBUG
-        // HACK for Test only
-        ConfigurationName aName(sPath);
-        if (!aName.isEmpty() && aName.moduleName().equalsIgnoreCase(ASCII("org.openoffice.Office.Common")))
-        {
-            // bLazyWrite = true;
-        }
-        bLazyWrite = true;
-#endif
-
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, xOptions);
+
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
+        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
+
+        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
+
+        OUString sUser = xOptions->getUser();
         if (sUser.getLength())
         {
             if (xOptions->getDefaultUser() == sUser)
@@ -222,14 +211,6 @@ namespace configmgr
                 throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
             }
         }
-
-        if (sLocale.getLength())    xOptions->setLocale(sLocale);
-        if (bNoCache)               xOptions->setNoCache(bNoCache);
-        if (bLazyWrite)             xOptions->setLazyWrite(bLazyWrite);
-
-        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
-        CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
-        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
