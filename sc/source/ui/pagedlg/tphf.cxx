@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-01 14:37:07 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 12:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
         String              aText;
         SfxSingleTabDialog* pDlg
             = new SfxSingleTabDialog( pViewSh->GetViewFrame(), this,
-                                      aDataSet, 42, FALSE );
+                                      aDataSet, 42 );
         BOOL bRightPage =   aCntSharedBox.IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 
