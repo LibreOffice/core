@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:34 $
+ *  last change: $Author: lla $ $Date: 2001-01-18 13:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,8 @@ void OTreeCacheWriteScheduler::runDisposer()
                         ++it)
                     {
                         rtl::OUString sName = it->first;
-                        auto_ptr<SubtreeChange> aSubtreeChange = it->second;
+                        // LLA->JB: Is this a hack?
+                        auto_ptr<SubtreeChange> aSubtreeChange = auto_ptr<SubtreeChange>(it->second);
                         ConfigurationName aName; // MUST be empty, we have the ptr to the root obj
                         m_rTreeManager.sessionUpdate(xTaskOption, aName, aSubtreeChange);
                     }
