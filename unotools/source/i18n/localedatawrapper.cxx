@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 12:08:10 $
+ *  last change: $Author: er $ $Date: 2001-08-07 16:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,10 +716,11 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
 {
     Sequence< Currency > aCurrSeq = getAllCurrencies();
     sal_Int32 nCnt = aCurrSeq.getLength();
+    Currency const * const pCurrArr = aCurrSeq.getArray();
     sal_Int32 nElem;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
-        if ( aCurrSeq[nElem].Default )
+        if ( pCurrArr[nElem].Default )
             break;
     }
     if ( nElem >= nCnt )
@@ -736,9 +737,9 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
             return ;
         }
     }
-    aCurrSymbol = aCurrSeq[nElem].Symbol;
-    aCurrBankSymbol = aCurrSeq[nElem].BankSymbol;
-    nCurrDigits = aCurrSeq[nElem].DecimalPlaces;
+    aCurrSymbol = pCurrArr[nElem].Symbol;
+    aCurrBankSymbol = pCurrArr[nElem].BankSymbol;
+    nCurrDigits = pCurrArr[nElem].DecimalPlaces;
 }
 
 
@@ -834,23 +835,35 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return ;
     }
-    sal_Int32 nElem;
-    sal_Int32 nNeg = -1;
-    sal_Int32 nDef = -1;
-    // find a negative code and a default (not necessarily the same)
+    // find a negative code (medium preferred) and a default (medium preferred) (not necessarily the same)
+    NumberFormatCode const * const pFormatArr = aFormatSeq.getArray();
+    sal_Int32 nElem, nDef, nNeg, nMedium;
+    nDef = nNeg = nMedium = -1;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
-        if ( aFormatSeq[nElem].Code.indexOf( ';' ) >= 0 )
+        if ( pFormatArr[nElem].Type == KNumberFormatType::MEDIUM )
         {
-            nNeg = nElem;
-            if ( nDef >= 0 )
-                break;
+            if ( pFormatArr[nElem].Default )
+            {
+                nDef = nElem;
+                nMedium = nElem;
+                if ( pFormatArr[nElem].Code.indexOf( ';' ) >= 0 )
+                    nNeg = nElem;
+            }
+            else
+            {
+                if ( (nNeg == -1 || nMedium == -1) && pFormatArr[nElem].Code.indexOf( ';' ) >= 0 )
+                    nNeg = nElem;
+                if ( nMedium == -1 )
+                    nMedium = nElem;
+            }
         }
-        if ( aFormatSeq[nElem].Default )
+        else
         {
-            nDef = nElem;
-            if ( nNeg >= 0 )
-                break;
+            if ( nDef == -1 && pFormatArr[nElem].Default )
+                nDef = nElem;
+            if ( nNeg == -1 && pFormatArr[nElem].Code.indexOf( ';' ) >= 0 )
+                nNeg = nElem;
         }
     }
 
@@ -861,7 +874,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 
     // positive format
     nElem = (nDef >= 0 ? nDef : (nNeg >= 0 ? nNeg : 0));
-    scanCurrFormatImpl( aFormatSeq[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
+    scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
     if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND )
     {
@@ -888,7 +901,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         nCurrNegativeFormat = nCurrFormatDefault;
     else
     {
-        const ::rtl::OUString& rCode = aFormatSeq[nNeg].Code;
+        const ::rtl::OUString& rCode = pFormatArr[nNeg].Code;
         sal_Int32 nDelim = rCode.indexOf( ';' );
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
 #ifndef PRODUCT
@@ -1064,18 +1077,36 @@ void LocaleDataWrapper::getDateFormatsImpl()
         nDateFormat = nLongDateFormat = DMY;
         return ;
     }
-    // find a default, a medium, and a long
-    sal_Int32 nDef, nMedium, nLong;
+    // find a default (medium preferred), a medium (default preferred), and a long (default preferred)
+    NumberFormatCode const * const pFormatArr = aFormatSeq.getArray();
+    sal_Int32 nElem, nDef, nMedium, nLong;
     nDef = nMedium = nLong = -1;
-    sal_Int32 nElem;
     for ( nElem = 0; nElem < nCnt; nElem++ )
     {
-        if ( nDef == -1 && aFormatSeq[nElem].Default )
+        if ( nDef == -1 && pFormatArr[nElem].Default )
             nDef = nElem;
-        if ( nMedium == -1 && aFormatSeq[nElem].Type == KNumberFormatType::MEDIUM )
-            nMedium = nElem;
-        if ( nLong == -1 && aFormatSeq[nElem].Type == KNumberFormatType::LONG )
-            nLong = nElem;
+        switch ( pFormatArr[nElem].Type )
+        {
+            case KNumberFormatType::MEDIUM :
+            {
+                if ( pFormatArr[nElem].Default )
+                {
+                    nDef = nElem;
+                    nMedium = nElem;
+                }
+                else if ( nMedium == -1 )
+                    nMedium = nElem;
+            }
+            break;
+            case KNumberFormatType::LONG :
+            {
+                if ( pFormatArr[nElem].Default )
+                    nLong = nElem;
+                else if ( nMedium == -1 )
+                    nLong = nElem;
+            }
+            break;
+        }
     }
     if ( nDef == -1 )
     {
@@ -1087,8 +1118,8 @@ void LocaleDataWrapper::getDateFormatsImpl()
         else
             nDef = 0;
     }
-    DateFormat nDF = scanDateFormatImpl( aFormatSeq[nDef].Code );
-    if ( aFormatSeq[nDef].Type == KNumberFormatType::LONG )
+    DateFormat nDF = scanDateFormatImpl( pFormatArr[nDef].Code );
+    if ( pFormatArr[nDef].Type == KNumberFormatType::LONG )
     {
         nLongDateFormat = nDF;
         if ( nMedium == -1 )
