@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:52:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,19 @@ sal_uInt32 FileStream::checkAccessMode(FileAccessMode mode)
         return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
     }
     return osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
+}
+
+bool FileStream::write(void const * buffer, sal_uInt64 size) {
+    while (size > 0) {
+        sal_uInt64 written;
+        if (osl_writeFile(m_file, buffer, size, &written) != osl_File_E_None) {
+            return false;
+        }
+        OSL_ASSERT(written <= size);
+        size -= written;
+        buffer = static_cast< char const * >(buffer) + written;
+    }
+    return true;
 }
 
 FileStream &operator<<(FileStream& o, sal_uInt32 i) {
