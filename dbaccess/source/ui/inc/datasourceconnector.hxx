@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 
 class Window;
 //.........................................................................
@@ -110,6 +113,11 @@ namespace dbaui
         /// create a data source connection
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bShowError = sal_True) const;
+
+        /// create a data source connection
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                    connect(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource
+                            , sal_Bool _bShowError = sal_True) const;
 
     private:
         void implConstruct();
