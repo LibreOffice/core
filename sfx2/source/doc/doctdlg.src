@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ ENGLISH ] = "document templates" ;
     Text [ norwegian ] = "Rediger dokumetmal" ;
     Text [ italian ] = "Modelli" ;
-    Text [ portuguese_brazilian ] = "Editar o modelo do documento" ;
+    Text [ portuguese_brazilian ] = "Modelos de documentos" ;
     Text [ portuguese ] = "Modelos de documentos" ;
     Text [ finnish ] = "Mallit" ;
     Text [ danish ] = "Dokumentskabeloner" ;
@@ -84,7 +84,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ english_us ] = "Templates" ;
     Text[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
     Text[ russian ] = "Øàáëîíû";
-    Text[ polish ] = "Szablony dokumentu";
+    Text[ polish ] = "Szablony";
     Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
     Text[ chinese_traditional ] = "æ–‡ä»¶æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
@@ -107,7 +107,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ french ] = "Nouveau modèle de document" ;
         Text [ swedish ] = "Ny dokumentmall" ;
         Text [ danish ] = "Ny dokumentskabelon" ;
-        Text [ portuguese_brazilian ] = "Neue Dokumentvorlage" ;
+        Text [ portuguese_brazilian ] = "Novo modelo" ;
         Text [ portuguese ] = "Novo modelo" ;
         Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£æ ·å¼";
         Text[ russian ] = "Íîâûé øàáëîí";
@@ -116,12 +116,15 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æ–‡ä»¶æ¨£å¼";
         Text[ arabic ] = "ŞÇáÈ ãÓÊäÏ ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá ğñüôõğïõ åããñÜöïõ";
-        Text[ korean ] = "ìƒˆ ë¬¸ì„œ í…œí”Œë¦¿";
-        Text[ turkish ] = "Yeni belge şablonu";
+        Text[ korean ] = "ìƒˆ ì„œì‹ íŒŒì¼";
+        Text[ turkish ] = "Yeni şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nova plantilla";
         Text[ finnish ] = "Uusi malli";
         Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹ƒà¸«à¸¡à¹ˆ";
+        Text[ czech ] = "NovÃ¡ Å¡ablona";
+        Text[ hebrew ] = "â€®×ª×‘× ×™×ª ×—×“×©×”â€¬";
+        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¨à¤®à¥‚à¤¨à¤¾";
     };
     Edit ED_NAME
     {
@@ -154,10 +157,13 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ arabic ] = "ŞæÇáÈ";
         Text[ greek ] = "Ğñüôõğá";
         Text[ korean ] = "ì„œì‹ íŒŒì¼";
-        Text[ turkish ] = "Şablon";
+        Text[ turkish ] = "Şablonlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plantilles";
         Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
+        Text[ czech ] = "Å ablony";
+        Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
+        Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
     };
     FixedText FT_SECTION
     {
@@ -167,7 +173,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ ENGLISH ] = "~Groups" ;
         Text [ norwegian ] = "~Grupper" ;
         Text [ italian ] = "~Categorie" ;
-        Text [ portuguese_brazilian ] = "~Grupos" ;
+        Text [ portuguese_brazilian ] = "~Categorias" ;
         Text [ portuguese ] = "~Categorias" ;
         Text [ finnish ] = "~Luokat" ;
         Text [ danish ] = "Områder" ;
@@ -178,7 +184,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ english_us ] = "~Categories" ;
         Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
         Text[ russian ] = "Êàòåãîğèè";
-        Text[ polish ] = "Obszary";
+        Text[ polish ] = "~Kategorie";
         Text[ japanese ] = "ç¯„å›²(~C)";
         Text[ chinese_traditional ] = "åˆ†é¡(~C)";
         Text[ arabic ] = "äØÇŞÇÊ";
@@ -188,6 +194,9 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Categories";
         Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
+        Text[ czech ] = "Kategorie";
+        Text[ hebrew ] = "â€®×¡×™×•×•×’×™×â€¬";
+        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
     };
     ListBox LB_SECTION
     {
@@ -214,7 +223,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ english_us ] = "~Templates" ;
         Text[ chinese_simplified ] = "æ ·å¼(~T)";
         Text[ russian ] = "Øàáëîíû";
-        Text[ polish ] = "Szablony";
+        Text[ polish ] = "~Szablony";
         Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ(~T)";
         Text[ chinese_traditional ] = "æ¨£å¼(~T)";
         Text[ arabic ] = "ŞæÇáÈ";
@@ -224,6 +233,9 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Plantilles";
         Text[ thai ] = "à¹~à¸¡à¹ˆà¹à¸šà¸š";
+        Text[ czech ] = "Å ablony";
+        Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
+        Text[ hindi ] = "~à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
     };
     ListBox LB_STYLESHEETS
     {
@@ -262,7 +274,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ swedish ] = "~Redigera" ;
         Text [ danish ] = "Rediger" ;
         Text [ portuguese ] = "~Editar" ;
-        Text [ portuguese_brazilian ] = "~Bearbeiten" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
         Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Text[ russian ] = "~Ïğàâêà";
         Text[ polish ] = "~Edytuj";
@@ -276,6 +288,9 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "~Edita";
         Text[ finnish ] = "~Muokkaa";
         Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
+        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
     };
     PushButton BT_ORGANIZE
     {
@@ -285,7 +300,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ English ] = "~Manage..." ;
         Text [ norwegian ] = "~Styre..." ;
         Text [ italian ] = "Gestisci..." ;
-        Text [ portuguese_brazilian ] = "~Gerenciar..." ;
+        Text [ portuguese_brazilian ] = "~Gerenciador..." ;
         Text [ portuguese ] = "~Gerir..." ;
         Text [ finnish ] = "~Järjestelytyökalu..." ;
         Text [ danish ] = "Administrer..." ;
@@ -296,19 +311,34 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ english_us ] = "~Organizer..." ;
         Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
         Text[ russian ] = "Óïğàâëåíèå...";
-        Text[ polish ] = "Zarz¹dzaj...";
+        Text[ polish ] = "~Zarz¹dzaj...";
         Text[ japanese ] = "ç®¡ç†(~O)...";
         Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
         Text[ arabic ] = "ÇáÅÏÑÇÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
         Text[ korean ] = "ê´€ë¦¬(~O)...";
-        Text[ turkish ] = "Yönet...";
+        Text[ turkish ] = "~Yönet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Organitzador...";
         Text[ thai ] = "~à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸š...";
+        Text[ czech ] = "OrganizÃ¡tor...";
+        Text[ hebrew ] = "â€®×¡×“×¨×Ÿ...â€¬";
+        Text[ hindi ] = "~à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾à¤ªà¤•...";
     };
     Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
+    Text[ czech ] = "Å ablony";
+    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
+    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
 };
+
+
+
+
+
+
+
+
+
 
 
 
