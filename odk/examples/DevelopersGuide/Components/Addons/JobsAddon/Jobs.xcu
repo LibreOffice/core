@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="Jobs">
+        <node oor:name="AsyncJob" oor:op="replace">
+            <prop oor:name="Service" oor:type="xs:string">
+                <value>com.sun.star.comp.framework.java.services.AsyncJob</value>
+            </prop>
+            <node oor:name="Arguments">
+                <prop oor:name="arg_1" oor:type="xs:string" oor:op="replace">
+                    <value>val_1</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+    <node oor:name="Events">
+        <node oor:name="onFirstVisibleTask">
+            <node oor:name="JobList">
+                <node oor:name="AsyncJob" oor:op="replace"/>
+            </node>
+        </node>
+        <node oor:name="onMyOwnJobEvent">
+            <node oor:name="JobList">
+                <node oor:name="AsyncJob" oor:op="replace"/>
+            </node>
+        </node>
+    </node>
+</oor:component-data>
