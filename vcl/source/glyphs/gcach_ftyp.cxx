@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.64 $
- *  last change: $Author: hdu $ $Date: 2001-11-27 15:49:43 $
+ *  $Revision: 1.65 $
+ *  last change: $Author: obo $ $Date: 2001-11-28 11:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
     nGlyphIndex &= 0x00ffffff;
 }
 
-int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT )
+int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
 {
     FT_Vector aVector;
     FT_Matrix aMatrix;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-23 15:59:47 $
+ *  last change: $Author: obo $ $Date: 2001-11-28 11:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ class FreetypeServerFont : public ServerFont
 protected:
 friend GlyphCache;
 
-    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* );
+    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
