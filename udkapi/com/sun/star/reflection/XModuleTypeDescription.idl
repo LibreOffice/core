@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XModuleTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:31:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 
     @since #107627#
   */
-interface XModuleTypeDescription : com::sun::star::reflection::XTypeDescription
+published interface XModuleTypeDescription : com::sun::star::reflection::XTypeDescription
 {
     /** Returns the type descriptions for the members of this module.
 
