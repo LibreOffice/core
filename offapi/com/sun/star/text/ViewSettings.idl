@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-19 12:02:07 $
+ *  last change: $Author: os $ $Date: 2002-09-20 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,15 +141,21 @@ service ViewSettings
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHoriRuler
-    /** If this property is <TRUE/>, the horizontal ruler is displayed.
+         * ShowHoriRuler and ShowVertRuler determine whether a ruler is visible.
+         */
+        [property] boolean ShowRulers;
+
+        //-------------------------------------------------------------------------
+
+        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+           the horizontal ruler is displayed.
      */
     [property] boolean ShowHoriRuler;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHoriScrollBar
-    /** If this property is <TRUE/>, the horizontal scroll bar is displayed.
+        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+           the horizontal scroll bar is displayed.
      */
     [property] boolean ShowHoriScrollBar;
 
@@ -286,6 +292,9 @@ service ViewSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/08/19 12:02:07  tl
+    #101597# ShowOnlineLayout, ZoomType and Zoomvalue added.
+
     Revision 1.5  2002/03/07 10:51:54  os
     #96678# enable right alignment of the vertical ruler
 
