@@ -1091,11 +1091,11 @@ Optional Packages:
                           Usage: --with-local-solver=<absolute path to solver>
 
   --with-lang             Use this option to build OpenOffice.org with
-                          additional language support. US English is always
+                          additional language support. English (US) is always
                           included by default. Separate multiple languages with
-                          commas. For all languages, use --with-lang=ALL.
+                          space. For all languages, use --with-lang=ALL.
 
-                          Usage: --with-lang=SPAN,SWED,TURK
+                          Usage: --with-lang="es sw tu cs sk"
 
   --with-dict             Use this option to build OpenOffice.org with
                           dictionary support. ALL dictionaries are always
@@ -12370,11 +12370,7 @@ else
 fi
 
 
-if test -z "$with_lang"; then
-   WITH_LANG=,ENUS,
-else
-   WITH_LANG=","$with_lang","
-fi
+WITH_LANG="$with_lang"
 
 
 if test -z "$with_dict"; then
