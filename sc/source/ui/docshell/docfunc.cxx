@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:57:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,7 +1040,8 @@ BOOL ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
                     pUndoDoc, bMulti, &rPattern ) );
     }
 
-    BOOL bPaintExt = pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
+    // While loading XML it is not neccessary to ask HasAttrib. It needs too much time.
+    BOOL bPaintExt = pDoc->IsImportingXML() || pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
     pDoc->ApplySelectionPattern( rPattern, rMark );
 
     if (!bPaintExt)
