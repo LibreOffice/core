@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:45:58 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,9 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     //from class Window
     virtual void    SetHelpId( ULONG nHelpId ) ;
     virtual void    SetText( const XubString& rStr ) ;
+private:
+    Link aCheckNameHdl;
+    DECL_LINK( CheckNameHdl, Window*);
 };
 //for SvxNameDialog end
 
@@ -469,6 +472,33 @@ class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 
 };
 //add for SvxMeasureDialog & SvxConnectionDialog end
+
+//add for SvxPostItDialog begin
+class SvxPostItDialog;
+class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
+{
+    DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog );
+    virtual void                SetText( const XubString& rStr );  //From class Window
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual void                SetPrevHdl( const Link& rLink ) ;
+    virtual void                SetNextHdl( const Link& rLink ) ;
+    virtual void                EnableTravel(BOOL bNext, BOOL bPrev) ;
+    virtual String              GetNote() ;
+    virtual void                SetNote(const String& rTxt) ;
+    virtual void                ShowLastAuthor(const String& rAuthor, const String& rDate) ;
+    virtual void                DontChangeAuthor() ;
+    virtual void                HideAuthor() ;
+    virtual void                SetReadonlyPostIt(BOOL bDisable) ;
+    virtual BOOL                IsOkEnabled() const  ;
+    virtual Window *            GetWindow();
+private:
+    Link aNextHdl;
+    Link aPrevHdl;
+    DECL_LINK( NextHdl, Window*);
+    DECL_LINK( PrevHdl, Window*);
+};
+//add for SvxPostItDialog end
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
@@ -632,12 +662,18 @@ public:
                                                                         const SdrView* pView,
                                                                         const ResId& rResId
                                                                         );
+    virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent, //add for SvxPostItDialog
+                                                                        const SfxItemSet& rCoreSet,
+                                                                        const ResId& rResId,
+                                                                        BOOL bPrevNext = FALSE, BOOL bRedline = FALSE );
+
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId );
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc(USHORT nId );
 
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId );
+    virtual DialogGetRanges         GetDialogGetRangesFunc( USHORT nId ); //add for SvxPostItDialog
 };
 
 #endif
