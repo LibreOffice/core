@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 08:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, sal_Boo
 
     // fire the event
     if (_bFireEvent)
-        fire(&nHandle, &aOldConnection, &aNewConnection, 1, sal_False);
+        fire(&nHandle, &aNewConnection, &aOldConnection, 1, sal_False);
 
     // register as event listener for the new connection
     xComponent = Reference< XComponent >(m_xActiveConnection, UNO_QUERY);
