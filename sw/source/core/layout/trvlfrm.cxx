@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:16:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2516,7 +2516,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( !pO->IsWriterFlyFrame() )
+                if ( !pO->ISA(SwVirtFlyDrawObj) )
                     continue;
                 const SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
                 const SwLayoutFrm *pFly = pObj->GetFlyFrm();
