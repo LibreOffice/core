@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dv $ $Date: 2001-02-21 13:00:58 $
+#   last change: $Author: dv $ $Date: 2001-03-23 15:09:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ SLOFILES =	\
         $(SLO)$/docfac.obj \
         $(SLO)$/docfilt.obj \
         $(SLO)$/doctempl.obj \
+        $(SLO)$/doctemplates.obj \
         $(SLO)$/docvor.obj \
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
@@ -106,6 +107,8 @@ SLOFILES =	\
 EXCEPTIONSFILES=$(SLO)$/objuno.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfile.obj \
+        $(SLO)$/doctempl.obj \
+        $(SLO)$/doctemplates.obj \
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/objxtor.obj \
         $(SLO)$/xmlversion.obj
