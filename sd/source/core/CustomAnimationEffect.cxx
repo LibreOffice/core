@@ -1,0 +1,3060 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CustomAnimationEffect.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:45:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONFILL_HPP_
+#include <com/sun/star/animations/AnimationFill.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
+#include <com/sun/star/presentation/EffectCommands.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTPRESETCLASS_HPP_
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_PARAGRAPHTARGET_HPP_
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_SHAPEANIMATIONSUBTYPE_HPP_
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
+#include <com/sun/star/animations/XCommand.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATETRANSFORM_HPP_
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
+#include <com/sun/star/animations/Event.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_EVENTTRIGGER_HPP_
+#include <com/sun/star/animations/EventTrigger.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
+#include <com/sun/star/animations/Timing.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATE_HPP_
+#include <com/sun/star/animations/XAnimate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+
+#include <algorithm>
+
+#ifndef _SD_CUSTOMANIMATIONEFFECT_HXX
+#include "CustomAnimationEffect.hxx"
+#endif
+#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
+#include <CustomAnimationPreset.hxx>
+#endif
+
+#ifndef _SD_ANIMATIONS_HXX_
+#include "animations.hxx"
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::animations;
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::container::XEnumerationAccess;
+using ::com::sun::star::container::XEnumeration;
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::container::XChild;
+using ::com::sun::star::container::XElementAccess;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::lang::XInitialization;
+using ::com::sun::star::drawing::XShapes;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::text::XText;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::util::XCloneable;
+
+namespace sd
+{
+
+CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+:   mnNodeType(-1),
+    mnPresetClass(-1),
+    mfBegin(-1.0),
+    mfDuration(-1.0),
+    mnMasterRel(0),
+    mbHasAfterEffect(false),
+    mfIterateInterval(0.0),
+    mnIterateType(0),
+    mnParaDepth( -1 ),
+    mbHasText(sal_False),
+    mnTargetSubItem(0),
+    mnGroupId(-1),
+    mpEffectSequence(0),
+    mnCommand(0)
+{
+    setNode( xNode );
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+{
+    mxNode = xNode;
+    mxAudio.clear();
+
+    Sequence< NamedValue > aUserData( mxNode->getUserData() );
+    sal_Int32 nLength = aUserData.getLength();
+    const NamedValue* p = aUserData.getConstArray();
+
+    while( nLength-- )
+    {
+        if( p->Name.equalsAscii( "node-type" ) )
+        {
+            p->Value >>= mnNodeType;
+        }
+        else if( p->Name.equalsAscii( "preset-id" ) )
+        {
+            p->Value >>= maPresetId;
+        }
+        else if( p->Name.equalsAscii( "preset-sub-type" ) )
+        {
+            p->Value >>= maPresetSubType;
+        }
+        else if( p->Name.equalsAscii( "preset-class" ) )
+        {
+            p->Value >>= mnPresetClass;
+        }
+        else if( p->Name.equalsAscii( "preset-property" ) )
+        {
+            p->Value >>= maProperty;
+        }
+        else if( p->Name.equalsAscii( "group-id" ) )
+        {
+            p->Value >>= mnGroupId;
+        }
+
+        p++;
+    }
+
+    // get effect start time
+    mxNode->getBegin() >>= mfBegin;
+
+    mfAcceleration = mxNode->getAcceleration();
+    mfDecelerate = mxNode->getDecelerate();
+    mbAutoReverse = mxNode->getAutoReverse();
+
+    // get iteration data
+    Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+    if( xIter.is() )
+    {
+        mfIterateInterval = xIter->getIterateInterval();
+        mnIterateType = xIter->getIterateType();
+        maTarget = xIter->getTarget();
+        mnTargetSubItem = xIter->getSubItem();
+    }
+    else
+    {
+        mfIterateInterval = 0.0f;
+        mnIterateType = 0;
+    }
+
+    // calculate effect duration and get target shape
+    Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+    if( xEnumerationAccess.is() )
+    {
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+        if( xEnumeration.is() )
+        {
+            while( xEnumeration->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                if( !xChildNode.is() )
+                    continue;
+
+                if( xChildNode->getType() == AnimationNodeType::AUDIO )
+                {
+                    mxAudio.set( xChildNode, UNO_QUERY );
+                }
+                else if( xChildNode->getType() == AnimationNodeType::COMMAND )
+                {
+                    Reference< XCommand > xCommand( xChildNode, UNO_QUERY );
+                    if( xCommand.is() )
+                    {
+                        mnCommand = xCommand->getCommand();
+                        if( !maTarget.hasValue() )
+                            maTarget = xCommand->getTarget();
+                    }
+                }
+                else
+                {
+                    double fBegin = 0.0;
+                    double fDuration = 0.0;
+                    xChildNode->getBegin() >>= fBegin;
+                    xChildNode->getDuration() >>= fDuration;
+
+                    fDuration += fBegin;
+                    if( fDuration > mfDuration )
+                        mfDuration = fDuration;
+
+                    // no target shape yet?
+                    if( !maTarget.hasValue() )
+                    {
+                        // go get it boys!
+                        Reference< XAnimate > xAnimate( xChildNode, UNO_QUERY );
+                        if( xAnimate.is() )
+                        {
+                            maTarget = xAnimate->getTarget();
+                            mnTargetSubItem = xAnimate->getSubItem();
+                            checkForText();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffect::~CustomAnimationEffect()
+{
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr CustomAnimationEffect::clone() const
+{
+    Reference< XCloneable > xCloneable( mxNode, UNO_QUERY_THROW );
+    Reference< XAnimationNode > xNode( xCloneable->createClone(), UNO_QUERY_THROW );
+    return CustomAnimationEffectPtr( new CustomAnimationEffect( xNode ) );
+}
+
+// --------------------------------------------------------------------
+
+sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode >& xNode )
+{
+    sal_Int16 nNodeType = -1;
+
+    if( xNode.is() )
+    {
+        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        sal_Int32 nLength = aUserData.getLength();
+        if( nLength )
+        {
+            const NamedValue* p = aUserData.getConstArray();
+            while( nLength-- )
+            {
+                if( p->Name.equalsAscii( "node-type" ) )
+                {
+                    p->Value >>= nNodeType;
+                    break;
+                }
+                p++;
+            }
+        }
+    }
+
+    return nNodeType;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
+{
+    if( mnNodeType != nNodeType )
+    {
+        mnNodeType = nNodeType;
+        if( mxNode.is() )
+        {
+            // first try to find a "node-type" entry in the user data
+            // and change it
+            Sequence< NamedValue > aUserData( mxNode->getUserData() );
+            sal_Int32 nLength = aUserData.getLength();
+            bool bFound = false;
+            if( nLength )
+            {
+                NamedValue* p = aUserData.getArray();
+                while( nLength-- )
+                {
+                    if( p->Name.equalsAscii( "node-type" ) )
+                    {
+                        p->Value <<= mnNodeType;
+                        bFound = true;
+                        break;
+                    }
+                    p++;
+                }
+            }
+
+            // no "node-type" entry inside user data, so add it
+            if( !bFound )
+            {
+                nLength = aUserData.getLength();
+                aUserData.realloc( nLength + 1);
+                aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+                aUserData[nLength].Value <<= mnNodeType;
+            }
+
+            mxNode->setUserData( aUserData );
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
+{
+    mnGroupId = nGroupId;
+    if( mxNode.is() )
+    {
+        // first try to find a "group-id" entry in the user data
+        // and change it
+        Sequence< NamedValue > aUserData( mxNode->getUserData() );
+        sal_Int32 nLength = aUserData.getLength();
+        bool bFound = false;
+        if( nLength )
+        {
+            NamedValue* p = aUserData.getArray();
+            while( nLength-- )
+            {
+                if( p->Name.equalsAscii( "group-id" ) )
+                {
+                    p->Value <<= mnGroupId;
+                    bFound = true;
+                    break;
+                }
+                p++;
+            }
+        }
+
+        // no "node-type" entry inside user data, so add it
+        if( !bFound )
+        {
+            nLength = aUserData.getLength();
+            aUserData.realloc( nLength + 1);
+            aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "group-id" ) );
+            aUserData[nLength].Value <<= mnGroupId;
+        }
+
+        mxNode->setUserData( aUserData );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::checkForText()
+{
+    Reference< XText > xText;
+
+    if( maTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    {
+        // calc para depth
+        ParagraphTarget aParaTarget;
+        maTarget >>= aParaTarget;
+
+        xText = Reference< XText >::query( aParaTarget.Shape );
+
+        // get paragraph
+        if( xText.is() )
+        {
+            Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+            if( xEA.is() )
+            {
+                Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
+                if( xEnumeration.is() )
+                {
+                    mbHasText = xEnumeration->hasMoreElements();
+
+                    sal_Int32 nPara = aParaTarget.Paragraph;
+
+                    while( xEnumeration->hasMoreElements() && nPara-- )
+                        xEnumeration->nextElement();
+
+                    if( xEnumeration->hasMoreElements() )
+                    {
+                        Reference< XPropertySet > xParaSet;
+                        xEnumeration->nextElement() >>= xParaSet;
+                        if( xParaSet.is() )
+                        {
+                            const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
+                            xParaSet->getPropertyValue( strNumberingLevel ) >>= mnParaDepth;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        maTarget >>= xText;
+        mbHasText = xText.is() && xText->getString().getLength();
+    }
+
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget )
+{
+    try
+    {
+        maTarget = rTarget;
+
+        // first, check special case for random node
+        Reference< XInitialization > xInit( mxNode, UNO_QUERY );
+        if( xInit.is() )
+        {
+            const Sequence< Any > aArgs( &maTarget, 1 );
+            xInit->initialize( aArgs );
+        }
+        else
+        {
+            Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+            if( xIter.is() )
+            {
+                xIter->setTarget(maTarget);
+            }
+            else
+            {
+                Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+                if( xEnumerationAccess.is() )
+                {
+                    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                    if( xEnumeration.is() )
+                    {
+                        while( xEnumeration->hasMoreElements() )
+                        {
+                            Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                            if( xAnimate.is() )
+                                xAnimate->setTarget( rTarget );
+                        }
+                    }
+                }
+            }
+        }
+        checkForText();
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setTarget(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
+{
+    try
+    {
+        mnTargetSubItem = nSubItem;
+
+        Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+        if( xIter.is() )
+        {
+            xIter->setSubItem(mnTargetSubItem);
+        }
+        else
+        {
+            Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+            if( xEnumerationAccess.is() )
+            {
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                if( xEnumeration.is() )
+                {
+                    while( xEnumeration->hasMoreElements() )
+                    {
+                        Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                        if( xAnimate.is() )
+                            xAnimate->setSubItem( mnTargetSubItem );
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setTargetSubItem(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setDuration( double fDuration )
+{
+    if( (mfDuration != -1.0) && (mfDuration != fDuration) ) try
+    {
+        double fScale = fDuration / mfDuration;
+        mfDuration = fDuration;
+
+        // calculate effect duration and get target shape
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xChildNode.is() )
+                        continue;
+
+
+                    double fBegin = 0.0;
+                    xChildNode->getBegin() >>= fBegin;
+                    if(  fBegin != 0.0 )
+                    {
+                        fBegin *= fScale;
+                        xChildNode->setBegin( makeAny( fBegin ) );
+                    }
+
+                    double fDuration = 0.0;
+                    xChildNode->getDuration() >>= fDuration;
+                    if( fDuration != 0.0 )
+                    {
+                        fDuration *= fScale;
+                        xChildNode->setDuration( makeAny( fDuration ) );
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setDuration(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setBegin( double fBegin )
+{
+    if( mxNode.is() ) try
+    {
+        mfBegin = fBegin;
+        mxNode->setBegin( makeAny( fBegin ) );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setBegin(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setAcceleration( double fAcceleration )
+{
+    if( mxNode.is() ) try
+    {
+        mfAcceleration = fAcceleration;
+        mxNode->setAcceleration( fAcceleration );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setAcceleration(), exception cought!" );
+    }
+}
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setDecelerate( double fDecelerate )
+{
+    if( mxNode.is() ) try
+    {
+        mfDecelerate = fDecelerate;
+        mxNode->setDecelerate( fDecelerate );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setDecelerate(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
+{
+    if( mxNode.is() ) try
+    {
+        mbAutoReverse = bAutoReverse;
+        mxNode->setAutoReverse( bAutoReverse );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::CustomAnimationEffect::setAutoReverse(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+{
+    sal_Int16 nNodeType = mnNodeType;
+    Any aTarget = maTarget;
+
+    double fBegin = mfBegin;
+    double fDuration = mfDuration;
+    double fAcceleration = mfAcceleration;
+    double fDecelerate = mfDecelerate ;
+    sal_Bool bAutoReverse = mbAutoReverse;
+    Reference< XAudio > xAudio( mxAudio );
+    sal_Int16 nIterateType = mnIterateType;
+    double fIterateInterval = mfIterateInterval;
+
+    setNode( xNode );
+
+    mxAudio = xAudio;
+    setNodeType( nNodeType );
+    setTarget( aTarget );
+    setDuration( fDuration );
+    setBegin( fBegin );
+
+    setAcceleration( fAcceleration );
+    setDecelerate( fDecelerate );
+    setAutoReverse( bAutoReverse );
+
+    if( nIterateType != mnIterateType )
+        setIterateType( nIterateType );
+
+    if( mnIterateType && ( fIterateInterval != mfIterateInterval ) )
+        setIterateInterval( fIterateInterval );
+}
+
+// --------------------------------------------------------------------
+
+Reference< XShape > CustomAnimationEffect::getTargetShape() const
+{
+    Reference< XShape > xShape;
+    maTarget >>= xShape;
+    if( !xShape.is() )
+    {
+        ParagraphTarget aParaTarget;
+        if( maTarget >>= aParaTarget )
+            xShape = aParaTarget.Shape;
+    }
+
+    return xShape;
+}
+
+// --------------------------------------------------------------------
+
+Any CustomAnimationEffect::getRepeatCount() const
+{
+    if( mxNode.is() )
+    {
+        return mxNode->getRepeatCount();
+    }
+    else
+    {
+        Any aAny;
+        return aAny;
+    }
+}
+
+// --------------------------------------------------------------------
+
+Any CustomAnimationEffect::getEnd() const
+{
+    if( mxNode.is() )
+    {
+        return mxNode->getEnd();
+    }
+    else
+    {
+        Any aAny;
+        return aAny;
+    }
+}
+
+// --------------------------------------------------------------------
+
+sal_Int16 CustomAnimationEffect::getFill() const
+{
+    if( mxNode.is() )
+        return mxNode->getFill();
+    else
+        return 0;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
+{
+    if( mxNode.is() )
+        mxNode->setRepeatCount( rRepeatCount );
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setEnd( const Any& rEnd )
+{
+    if( mxNode.is() )
+        mxNode->setEnd( rEnd );
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setFill( sal_Int16 nFill )
+{
+    if( mxNode.is() )
+        mxNode->setFill( nFill );
+}
+
+// --------------------------------------------------------------------
+
+Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const throw (Exception)
+{
+    DBG_ASSERT( mbHasAfterEffect, "sd::CustomAnimationEffect::createAfterEffectNode(), this node has no after effect!" );
+
+    Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+
+    const char* pServiceName = maDimColor.hasValue() ?
+        "com.sun.star.animations.AnimateColor" : "com.sun.star.animations.AnimateSet";
+
+    Reference< XAnimate > xAnimate( xMsf->createInstance(OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+
+    Any aTo;
+    OUString aAttributeName;
+
+    if( maDimColor.hasValue() )
+    {
+        aTo = maDimColor;
+        aAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) );
+    }
+    else
+    {
+        aTo = makeAny( (sal_Bool)sal_False );
+        aAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( "Visibility" ) );
+    }
+
+    Any aBegin;
+    if( mnMasterRel == 0 ) // sameClick
+    {
+        Event aEvent;
+
+        aEvent.Source <<= getNode();
+        aEvent.Trigger = EventTrigger::END_EVENT;
+        aEvent.Repeat = 0;
+
+        aBegin <<= aEvent;
+    }
+    else
+    {
+        aBegin <<= (double)0.0;
+    }
+
+    xAnimate->setBegin( aBegin );
+    xAnimate->setTo( aTo );
+    xAnimate->setAttributeName( aAttributeName );
+
+    xAnimate->setDuration( makeAny( (double)0.001 ) );
+    xAnimate->setFill( AnimationFill::HOLD );
+    xAnimate->setTarget( maTarget );
+
+    return Reference< XAnimationNode >( xAnimate, UNO_QUERY_THROW );
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
+{
+    if( mnIterateType != nIterateType ) try
+    {
+        // do we need to exchange the container node?
+        if( (mnIterateType == 0) || (nIterateType == 0) )
+        {
+            sal_Int16 nTargetSubItem = mnTargetSubItem;
+
+            Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+            const char * pServiceName =
+                nIterateType ? "com.sun.star.animations.IterateContainer" : "com.sun.star.animations.ParallelTimeContainer";
+            Reference< XTimeContainer > xNewContainer(
+                xMsf->createInstance( OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+
+            Reference< XTimeContainer > xOldContainer( mxNode, UNO_QUERY_THROW );
+            Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            while( xEnumeration->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                xOldContainer->removeChild( xChildNode );
+                xNewContainer->appendChild( xChildNode );
+            }
+
+            Reference< XAnimationNode > xNewNode( xNewContainer, UNO_QUERY_THROW );
+
+            xNewNode->setBegin( mxNode->getBegin() );
+            xNewNode->setDuration( mxNode->getDuration() );
+            xNewNode->setEnd( mxNode->getEnd() );
+            xNewNode->setEndSync( mxNode->getEndSync() );
+            xNewNode->setRepeatCount( mxNode->getRepeatCount() );
+            xNewNode->setFill( mxNode->getFill() );
+            xNewNode->setFillDefault( mxNode->getFillDefault() );
+            xNewNode->setRestart( mxNode->getRestart() );
+            xNewNode->setRestartDefault( mxNode->getRestartDefault() );
+            xNewNode->setAcceleration( mxNode->getAcceleration() );
+            xNewNode->setDecelerate( mxNode->getDecelerate() );
+            xNewNode->setAutoReverse( mxNode->getAutoReverse() );
+            xNewNode->setRepeatDuration( mxNode->getRepeatDuration() );
+            xNewNode->setEndSync( mxNode->getEndSync() );
+            xNewNode->setRepeatCount( mxNode->getRepeatCount() );
+            xNewNode->setUserData( mxNode->getUserData() );
+
+            mxNode = xNewNode;
+
+            Any aTarget;
+            if( nIterateType )
+            {
+                Reference< XIterateContainer > xIter( mxNode, UNO_QUERY_THROW );
+                xIter->setTarget(maTarget);
+                xIter->setSubItem( nTargetSubItem );
+            }
+            else
+            {
+                aTarget = maTarget;
+            }
+
+            Reference< XEnumerationAccess > xEA( mxNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
+            while( xE->hasMoreElements() )
+            {
+                Reference< XAnimate > xAnimate( xE->nextElement(), UNO_QUERY );
+                if( xAnimate.is() )
+                {
+                    xAnimate->setTarget( aTarget );
+                    xAnimate->setSubItem( nTargetSubItem );
+                }
+            }
+        }
+
+        mnIterateType = nIterateType;
+
+        // if we have an iteration container, we must set its type
+        if( mnIterateType )
+        {
+            Reference< XIterateContainer > xIter( mxNode, UNO_QUERY_THROW );
+            xIter->setIterateType( nIterateType );
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::CustomAnimationEffect::setIterateType(), Exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
+{
+    if( mfIterateInterval != fIterateInterval )
+    {
+        Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+
+        DBG_ASSERT( xIter.is(), "sd::CustomAnimationEffect::setIterateInterval(), not an iteration node" );
+        if( xIter.is() )
+        {
+            mfIterateInterval = fIterateInterval;
+            xIter->setIterateInterval( fIterateInterval );
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue )
+{
+    Any aProperty;
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() && !aProperty.hasValue() )
+                {
+                    Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xAnimate.is() )
+                        continue;
+
+                    if( xAnimate->getType() == nNodeType )
+                    {
+                        if( xAnimate->getAttributeName() == rAttributeName )
+                        {
+                            switch( eValue )
+                            {
+                            case VALUE_FROM: aProperty = xAnimate->getFrom(); break;
+                            case VALUE_TO:   aProperty = xAnimate->getTo(); break;
+                            case VALUE_BY:   aProperty = xAnimate->getBy(); break;
+                            case VALUE_FIRST:
+                            case VALUE_LAST:
+                                {
+                                    Sequence<Any> aValues( xAnimate->getValues() );
+                                    if( aValues.hasElements() )
+                                        aProperty =  aValues[ eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1 ];
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::getProperty(), exception cought!" );
+    }
+
+    return aProperty;
+}
+
+// --------------------------------------------------------------------
+
+bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const Any& rValue )
+{
+    bool bChanged = false;
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xAnimate.is() )
+                        continue;
+
+                    if( xAnimate->getType() == nNodeType )
+                    {
+                        if( xAnimate->getAttributeName() == rAttributeName )
+                        {
+                            switch( eValue )
+                            {
+                            case VALUE_FROM:
+                                if( xAnimate->getFrom() != rValue )
+                                {
+                                    xAnimate->setFrom( rValue );
+                                    bChanged = true;
+                                }
+                                break;
+                            case VALUE_TO:
+                                if( xAnimate->getTo() != rValue )
+                                {
+                                    xAnimate->setTo( rValue );
+                                    bChanged = true;
+                                }
+                                break;
+                            case VALUE_BY:
+                                if( xAnimate->getTo() != rValue )
+                                {
+                                    xAnimate->setBy( rValue );
+                                    bChanged = true;
+                                }
+                                break;
+                            case VALUE_FIRST:
+                            case VALUE_LAST:
+                                {
+                                    Sequence<Any> aValues( xAnimate->getValues() );
+                                    if( !aValues.hasElements() )
+                                        aValues.realloc(1);
+
+                                    sal_Int32 nIndex = eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1;
+
+                                    if( aValues[ nIndex ] != rValue )
+                                    {
+                                        aValues[ nIndex ] = rValue;
+                                        xAnimate->setValues( aValues );
+                                        bChanged = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setProperty(), exception cought!" );
+    }
+
+    return bChanged;
+}
+
+// --------------------------------------------------------------------
+
+static bool implIsColorAttribute( const OUString& rAttributeName )
+{
+    return rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FillColor") ) ||
+           rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("LineColor") ) ||
+           rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CharColor") );
+}
+
+// --------------------------------------------------------------------
+
+Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
+{
+    Any aColor;
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() && !aColor.hasValue() )
+                {
+                    Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xAnimate.is() )
+                        continue;
+
+                    switch( xAnimate->getType() )
+                    {
+                    case AnimationNodeType::SET:
+                    case AnimationNodeType::ANIMATE:
+                        if( !implIsColorAttribute( xAnimate->getAttributeName() ) )
+                            break;
+                    case AnimationNodeType::ANIMATECOLOR:
+                        Sequence<Any> aValues( xAnimate->getValues() );
+                        if( aValues.hasElements() )
+                        {
+                            if( aValues.getLength() > nIndex )
+                                aColor = aValues[nIndex];
+                        }
+                        else if( nIndex == 0 )
+                            aColor = xAnimate->getFrom();
+                        else
+                            aColor = xAnimate->getTo();
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::getColor(), exception cought!" );
+    }
+
+    return aColor;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
+{
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xAnimate.is() )
+                        continue;
+
+                    switch( xAnimate->getType() )
+                    {
+                    case AnimationNodeType::SET:
+                    case AnimationNodeType::ANIMATE:
+                        if( !implIsColorAttribute( xAnimate->getAttributeName() ) )
+                            break;
+                    case AnimationNodeType::ANIMATECOLOR:
+                    {
+                        Sequence<Any> aValues( xAnimate->getValues() );
+                        if( aValues.hasElements() )
+                        {
+                            if( aValues.getLength() > nIndex )
+                            {
+                                aValues[nIndex] = rColor;
+                                xAnimate->setValues( aValues );
+                            }
+                        }
+                        else if( (nIndex == 0) && xAnimate->getFrom().hasValue() )
+                            xAnimate->setFrom(rColor);
+                        else if( (nIndex == 1) && xAnimate->getTo().hasValue() )
+                            xAnimate->setTo(rColor);
+                    }
+                    break;
+
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setColor(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, EValue eValue )
+{
+    Any aProperty;
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() && !aProperty.hasValue() )
+                {
+                    Reference< XAnimateTransform > xTransform( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xTransform.is() )
+                        continue;
+
+                    if( xTransform->getTransformType() == nTransformType )
+                    {
+                        switch( eValue )
+                        {
+                        case VALUE_FROM: aProperty = xTransform->getFrom(); break;
+                        case VALUE_TO:   aProperty = xTransform->getTo(); break;
+                        case VALUE_BY:   aProperty = xTransform->getBy(); break;
+                        case VALUE_FIRST:
+                        case VALUE_LAST:
+                            {
+                                Sequence<Any> aValues( xTransform->getValues() );
+                                if( aValues.hasElements() )
+                                    aProperty =  aValues[ eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1 ];
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::getTransformationProperty(), exception cought!" );
+    }
+
+    return aProperty;
+}
+
+// --------------------------------------------------------------------
+
+bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const Any& rValue )
+{
+    bool bChanged = false;
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XAnimateTransform > xTransform( xEnumeration->nextElement(), UNO_QUERY );
+                    if( !xTransform.is() )
+                        continue;
+
+                    if( xTransform->getTransformType() == nTransformType )
+                    {
+                        switch( eValue )
+                        {
+                        case VALUE_FROM:
+                            if( xTransform->getFrom() != rValue )
+                            {
+                                xTransform->setFrom( rValue );
+                                bChanged = true;
+                            }
+                            break;
+                        case VALUE_TO:
+                            if( xTransform->getTo() != rValue )
+                            {
+                                xTransform->setTo( rValue );
+                                bChanged = true;
+                            }
+                            break;
+                        case VALUE_BY:
+                            if( xTransform->getBy() != rValue )
+                            {
+                                xTransform->setBy( rValue );
+                                bChanged = true;
+                            }
+                            break;
+                        case VALUE_FIRST:
+                        case VALUE_LAST:
+                            {
+                                Sequence<Any> aValues( xTransform->getValues() );
+                                if( !aValues.hasElements() )
+                                    aValues.realloc(1);
+
+                                sal_Int32 nIndex = eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1;
+                                if( aValues[nIndex] != rValue )
+                                {
+                                    aValues[nIndex] = rValue;
+                                    xTransform->setValues( aValues );
+                                    bChanged = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setTransformationProperty(), exception cought!" );
+    }
+
+    return bChanged;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume /* = 1.0 */ )
+{
+    DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
+
+    if( !mxAudio.is() ) try
+    {
+        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+        Reference< XAudio > xAudio( xMsf->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Audio") ) ), UNO_QUERY_THROW );
+        xAudio->setSource( rSource );
+        xAudio->setVolume( fVolume );
+        setAudio( xAudio );
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::createAudio(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >& xRootNode )
+{
+    Reference< XCommand > xCommand;
+
+    if( xRootNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( !xCommand.is() && xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY );
+            if( xNode.is() && (xNode->getType() == AnimationNodeType::COMMAND) )
+                xCommand.set( xNode, UNO_QUERY_THROW );
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::findCommandNode(), exception caught!" );
+    }
+
+    return xCommand;
+}
+
+void CustomAnimationEffect::removeAudio()
+{
+    Reference< XAnimationNode > xChild;
+
+    if( mxAudio.is() )
+    {
+        xChild.set( mxAudio, UNO_QUERY );
+        mxAudio.clear();
+    }
+    else if( mnCommand == EffectCommands::STOPAUDIO )
+    {
+        xChild.set( findCommandNode( mxNode ), UNO_QUERY );
+        mnCommand = 0;
+    }
+
+    if( xChild.is() )
+    {
+        Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY );
+        if( xContainer.is() )
+            xContainer->removeChild( xChild );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animations::XAudio >& xAudio )
+{
+    if( mxAudio != xAudio )
+    {
+        removeAudio();
+        mxAudio = xAudio;
+        Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY );
+        Reference< XAnimationNode > xChild( mxAudio, UNO_QUERY );
+        if( xContainer.is() && xChild.is() )
+            xContainer->appendChild( xChild );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setStopAudio()
+{
+    if( mnCommand != EffectCommands::STOPAUDIO ) try
+    {
+        if( mxAudio.is() )
+            removeAudio();
+
+        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+        Reference< XCommand > xCommand( xMsf->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Command") ) ), UNO_QUERY_THROW );
+
+        xCommand->setCommand( EffectCommands::STOPAUDIO );
+
+        Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY_THROW );
+        Reference< XAnimationNode > xChild( xCommand, UNO_QUERY_THROW );
+        xContainer->appendChild( xChild );
+
+        mnCommand = EffectCommands::STOPAUDIO;
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setStopAudio(), exception caught!" );
+    }
+}
+
+// ====================================================================
+
+EffectSequenceHelper::EffectSequenceHelper()
+: mnSequenceType( EffectNodeType::DEFAULT )
+{
+}
+
+// --------------------------------------------------------------------
+
+EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot )
+: mxSequenceRoot( xSequenceRoot ), mnSequenceType( EffectNodeType::DEFAULT )
+{
+    Reference< XAnimationNode > xNode( mxSequenceRoot, UNO_QUERY_THROW );
+    create( xNode );
+}
+
+// --------------------------------------------------------------------
+
+EffectSequenceHelper::~EffectSequenceHelper()
+{
+    reset();
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::reset()
+{
+    EffectSequence::iterator aIter( maEffects.begin() );
+    EffectSequence::iterator aEnd( maEffects.end() );
+    if( aIter != aEnd )
+    {
+        CustomAnimationEffectPtr pEffect = (*aIter++);
+        pEffect->setEffectSequence(0);
+    }
+    maEffects.clear();
+}
+
+Reference< XAnimationNode > EffectSequenceHelper::getRootNode() const
+{
+    Reference< XAnimationNode > xRoot( mxSequenceRoot, UNO_QUERY );
+    return xRoot;
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
+{
+    pEffect->setEffectSequence( this );
+    maEffects.push_back(pEffect);
+    rebuild();
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect )
+{
+    pEffect->setEffectSequence( this );
+    maEffects.insert( rPos, pEffect );
+    rebuild();
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPresetPtr& pPreset, const Any& rTarget, double fDuration /* = -1.0 */ )
+{
+    CustomAnimationEffectPtr pEffect;
+
+    if( pPreset.get() )
+    {
+        OUString strEmpty;
+        Reference< XAnimationNode > xNode( pPreset->create( strEmpty ) );
+        if( xNode.is() )
+        {
+            // first, filter all only ui relevant user data
+            std::vector< NamedValue > aNewUserData;
+            Sequence< NamedValue > aUserData( xNode->getUserData() );
+            sal_Int32 nLength = aUserData.getLength();
+            const NamedValue* p = aUserData.getConstArray();
+            bool bFilter = false;
+
+            while( nLength-- )
+            {
+                if( !p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "text-only" ) ) &&
+                    !p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-property" ) ) )
+                {
+                    aNewUserData.push_back( *p );
+                    bFilter = true;
+                }
+                p++;
+            }
+
+            if( bFilter )
+            {
+                aUserData = ::comphelper::containerToSequence< NamedValue, std::vector< NamedValue > >( aNewUserData );
+                xNode->setUserData( aUserData );
+            }
+
+            // check target, maybe we need to force it to text
+            Any aTarget( rTarget );
+            sal_Int16 nSubItem;
+
+            if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            {
+                nSubItem = ShapeAnimationSubType::ONLY_TEXT;
+            }
+            if( pPreset->isTextOnly() )
+            {
+                Reference< XShape > xShape;
+                aTarget >>= xShape;
+                if( xShape.is() )
+                {
+                    // thats bad, we target a shape here but the effect is only for text
+                    // so change subitem
+                    nSubItem = ShapeAnimationSubType::ONLY_TEXT;
+                }
+                nSubItem = ShapeAnimationSubType::AS_WHOLE;
+            }
+
+            // now create effect from preset
+
+            pEffect.reset( new CustomAnimationEffect( xNode ) );
+            pEffect->setEffectSequence( this );
+            pEffect->setTarget( aTarget );
+            pEffect->setTargetSubItem( nSubItem );
+            if( fDuration != -1.0 )
+                pEffect->setDuration( fDuration );
+
+            maEffects.push_back(pEffect);
+
+            rebuild();
+        }
+    }
+
+    DBG_ASSERT( pEffect.get(), "sd::EffectSequenceHelper::append(), failed!" );
+    return pEffect;
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, const OUString& rPresetSubType, double fDuration /* = -1.0 */ )
+{
+    if( pEffect.get() && pPreset.get() ) try
+    {
+        Reference< XAnimationNode > xNewNode( pPreset->create( rPresetSubType ) );
+        if( xNewNode.is() )
+        {
+            pEffect->replaceNode( xNewNode );
+            if( fDuration != -1.0 )
+                pEffect->setDuration( fDuration );
+        }
+
+        rebuild();
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::EffectSequenceHelper::replace(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, double fDuration /* = -1.0 */ )
+{
+    OUString strEmpty;
+    replace( pEffect, pPreset, strEmpty, fDuration );
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
+{
+    if( pEffect.get() )
+    {
+        pEffect->setEffectSequence( 0 );
+        maEffects.remove( pEffect );
+    }
+
+    rebuild();
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::rebuild()
+{
+    implRebuild();
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::implRebuild()
+{
+    try
+    {
+        // first we delete all time containers on the first two levels
+        Reference< XEnumerationAccess > xEnumerationAccess( mxSequenceRoot, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+            Reference< XTimeContainer > xChildContainer( xChildNode, UNO_QUERY_THROW );
+
+            Reference< XEnumerationAccess > xChildEnumerationAccess( xChildNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xChildEnumeration( xChildEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            while( xChildEnumeration->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xNode( xChildEnumeration->nextElement(), UNO_QUERY_THROW );
+                xChildContainer->removeChild( xNode );
+            }
+
+            mxSequenceRoot->removeChild( xChildNode );
+        }
+
+        // second, rebuild main sequence
+        EffectSequence::iterator aIter( maEffects.begin() );
+        EffectSequence::iterator aEnd( maEffects.end() );
+        if( aIter != aEnd )
+        {
+            AfterEffectNodeList aAfterEffects;
+
+            CustomAnimationEffectPtr pEffect = (*aIter++);
+
+            bool bFirst = true;
+            do
+            {
+                // create a par container for the next click node and all following with and after effects
+                Reference< XTimeContainer > xOnClickContainer( createParallelTimeContainer() );
+
+                Event aEvent;
+                if( mxEventSource.is() )
+                {
+                    aEvent.Source <<= mxEventSource;
+                    aEvent.Trigger = EventTrigger::ON_CLICK;
+                }
+                else
+                {
+                    aEvent.Trigger = EventTrigger::ON_NEXT;
+                }
+                aEvent.Repeat = 0;
+
+                Any aBegin( makeAny( aEvent ) );
+                if( bFirst )
+                {
+                    // if the first node is not a click action, this click container
+                    // must not have INDEFINITE begin but start at 0s
+                    bFirst = false;
+                    if( pEffect->getNodeType() != EffectNodeType::ON_CLICK )
+                        aBegin <<= (double)0.0;
+                }
+
+                xOnClickContainer->setBegin( aBegin );
+
+                Reference< XAnimationNode > xOnClickContainerNode( xOnClickContainer, UNO_QUERY_THROW );
+                mxSequenceRoot->appendChild( xOnClickContainerNode );
+
+                double fBegin = 0.0;
+
+                do
+                {
+                    // create a par container for the current click or after effect node and all following with effects
+                    Reference< XTimeContainer > xWithContainer( createParallelTimeContainer() );
+                    Reference< XAnimationNode > xWithContainerNode( xWithContainer, UNO_QUERY_THROW );
+                    xWithContainer->setBegin( makeAny( fBegin ) );
+                    xOnClickContainer->appendChild( xWithContainerNode );
+
+                    double fDuration = 0.0;
+                    do
+                    {
+                        Reference< XAnimationNode > xEffectNode( pEffect->getNode() );
+                        xWithContainer->appendChild( xEffectNode );
+
+                        if( pEffect->hasAfterEffect() )
+                        {
+                            Reference< XAnimationNode > xAfterEffect( pEffect->createAfterEffectNode() );
+                            AfterEffectNode a( xAfterEffect, xEffectNode, pEffect->getMasterRel() );
+                            aAfterEffects.push_back( a );
+                        }
+
+                        double fTemp = pEffect->getBegin() + pEffect->getDuration();
+                        if( fTemp > fDuration )
+                            fDuration = fTemp;
+
+                        if( aIter != aEnd )
+                            pEffect = (*aIter++);
+                        else
+                            pEffect.reset();
+                    }
+                    while( pEffect.get() && (pEffect->getNodeType() == EffectNodeType::WITH_PREVIOUS) );
+
+                    fBegin += fDuration;
+                }
+                while( pEffect.get() && (pEffect->getNodeType() != EffectNodeType::ON_CLICK) );
+            }
+            while( pEffect.get() );
+
+            // process after effect nodes
+            std::for_each( aAfterEffects.begin(), aAfterEffects.end(), stl_process_after_effect_node_func );
+
+            updateTextGroups();
+
+            // reset duration, might have been altered (see below)
+            mxSequenceRoot->setDuration( Any() );
+        }
+        else
+        {
+            // empty sequence, set duration to 0.0 explicitely
+            // (otherwise, this sequence will never end)
+            mxSequenceRoot->setDuration( makeAny((double)0.0) );
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::EffectSequenceHelper::rebuild(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+Reference< XTimeContainer > EffectSequenceHelper::createParallelTimeContainer() const
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.ParallelTimeContainer" ) );
+    return Reference< XTimeContainer >( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
+}
+
+// --------------------------------------------------------------------
+
+stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xSearchNode )
+: mxSearchNode( xSearchNode )
+{
+}
+
+// --------------------------------------------------------------------
+
+bool stl_CustomAnimationEffect_search_node_predict::operator()( CustomAnimationEffectPtr pEffect ) const
+{
+    return pEffect->getNode() == mxSearchNode;
+}
+
+// --------------------------------------------------------------------
+
+static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
+ throw(Exception)
+{
+    Reference< XEnumerationAccess > xEnumerationAccess( xParent, UNO_QUERY_THROW );
+    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration() );
+    if( xEnumeration.is() )
+    {
+        Reference< XInterface > x;
+        while( xEnumeration->hasMoreElements() && !xNext.is() )
+        {
+            if( (xEnumeration->nextElement() >>= x) && (x == xCurrent) )
+            {
+                if( xEnumeration->hasMoreElements() )
+                    xEnumeration->nextElement() >>= xNext;
+            }
+        }
+    }
+    return xNext.is();
+}
+
+// --------------------------------------------------------------------
+
+void stl_process_after_effect_node_func(AfterEffectNode& rNode)
+{
+    try
+    {
+        if( rNode.mxNode.is() && rNode.mxMaster.is() )
+        {
+            // set master node
+            Reference< XAnimationNode > xMasterNode( rNode.mxMaster, UNO_QUERY_THROW );
+            Sequence< NamedValue > aUserData( rNode.mxNode->getUserData() );
+            sal_Int32 nSize = aUserData.getLength();
+            aUserData.realloc(nSize+1);
+            aUserData[nSize].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "master-element" ) );
+            aUserData[nSize].Value <<= xMasterNode;
+            rNode.mxNode->setUserData( aUserData );
+
+            // insert after effect node into timeline
+            Reference< XTimeContainer > xContainer( rNode.mxMaster->getParent(), UNO_QUERY_THROW );
+
+            if( rNode.mnMasterRel == 0 ) // sameClick
+            {
+                // insert the aftereffect after its effect is animated
+                xContainer->insertAfter( rNode.mxNode, rNode.mxMaster );
+            }
+            else // nextClick
+            {
+                Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+                // insert the aftereffect in the next group
+
+                Reference< XTimeContainer > xClickContainer( xContainer->getParent(), UNO_QUERY_THROW );
+                Reference< XTimeContainer > xSequenceContainer( xClickContainer->getParent(), UNO_QUERY_THROW );
+
+                Reference< XTimeContainer > xNextContainer;
+
+                // first try if we have an after effect container
+                if( !implFindNextContainer( xClickContainer, xContainer, xNextContainer ) )
+                {
+                    Reference< XTimeContainer > xNextClickContainer;
+                    // if not, try to find the next click effect container
+                    if( implFindNextContainer( xSequenceContainer, xClickContainer, xNextClickContainer ) )
+                    {
+                        Reference< XEnumerationAccess > xEnumerationAccess( xNextClickContainer, UNO_QUERY_THROW );
+                        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                        if( xEnumeration->hasMoreElements() )
+                        {
+                            // the next container is the first child container
+                            xEnumeration->nextElement() >>= xNextContainer;
+                        }
+                        else
+                        {
+                            // this does not yet have a child container, create one
+                            const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer") );
+                            xNextContainer = Reference< XTimeContainer >::query( xMsf->createInstance(aServiceName) );
+
+                            if( xNextContainer.is() )
+                            {
+                                Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
+                                xNode->setBegin( makeAny( (double)0.0 ) );
+//                              xNode->setFill( AnimationFill::HOLD );
+                                xNextClickContainer->appendChild( xNode );
+                            }
+                        }
+                        DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not find/create container!" );
+                    }
+                }
+
+                // if we don't have a next container, we add one to the sequence container
+                if( !xNextContainer.is() )
+                {
+                    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer") );
+                    Reference< XTimeContainer > xNewClickContainer( xMsf->createInstance(aServiceName), UNO_QUERY_THROW );
+
+                    Reference< XAnimationNode > xNewClickNode( xNewClickContainer, UNO_QUERY_THROW );
+
+                    Event aEvent;
+                    aEvent.Trigger = EventTrigger::ON_NEXT;
+                    aEvent.Repeat = 0;
+                    xNewClickNode->setBegin( makeAny( aEvent ) );
+
+                    Reference< XAnimationNode > xRefNode( xClickContainer, UNO_QUERY_THROW );
+                    xSequenceContainer->insertAfter( xNewClickNode, xRefNode );
+
+                    xNextContainer = Reference< XTimeContainer >::query( xMsf->createInstance(aServiceName) );
+
+                    DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not create container!" );
+                    if( xNextContainer.is() )
+                    {
+                        Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
+                        xNode->setBegin( makeAny( (double)0.0 ) );
+//                      xNode->setFill( AnimationFill::HOLD );
+                        xNewClickContainer->appendChild( xNode );
+                    }
+                }
+
+                if( xNextContainer.is() )
+                {
+                    xNextContainer->appendChild( rNode.mxNode );
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "ppt::stl_process_after_effect_node_func::operator(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffectPtr& pEffect )
+{
+    return std::find( maEffects.begin(), maEffects.end(), pEffect );
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
+{
+    bool bChanges = false;
+
+    EffectSequence::iterator aIter( maEffects.begin() );
+    while( aIter != maEffects.end() )
+    {
+        if( (*aIter)->getTargetShape() == xShape )
+        {
+            (*aIter)->setEffectSequence( 0 );
+            bChanges = true;
+            aIter = maEffects.erase( aIter );
+        }
+        else
+        {
+            aIter++;
+        }
+    }
+
+    if( bChanges )
+        rebuild();
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
+{
+    ParagraphTarget aParaTarget;
+    if( !(aTarget >>= aParaTarget ) )
+        return;
+
+    EffectSequence::iterator aIter( maEffects.begin() );
+    while( aIter != maEffects.end() )
+    {
+        if( (*aIter)->getTargetShape() == aParaTarget.Shape )
+            (*aIter)->checkForText();
+        aIter++;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTarget )
+{
+    ParagraphTarget aParaTarget;
+    if( !(aTarget >>= aParaTarget ) )
+        return;
+
+    bool bChanges = false;
+    bool bErased = false;
+
+    EffectSequence::iterator aIter( maEffects.begin() );
+    while( aIter != maEffects.end() )
+    {
+        Any aIterTarget( (*aIter)->getTarget() );
+        if( aIterTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+        {
+            ParagraphTarget aIterParaTarget;
+            if( (aIterTarget >>= aIterParaTarget) && (aIterParaTarget.Shape == aParaTarget.Shape) )
+            {
+                if( aIterParaTarget.Paragraph == aParaTarget.Paragraph )
+                {
+                    // delete this effect if it targets the disposed paragraph directly
+                    (*aIter)->setEffectSequence( 0 );
+                    aIter = maEffects.erase( aIter );
+                    bChanges = true;
+                    bErased = true;
+                }
+                else
+                {
+                    if( aIterParaTarget.Paragraph > aParaTarget.Paragraph )
+                    {
+                        // shift all paragraphs after disposed paragraph
+                        aIterParaTarget.Paragraph--;
+                        (*aIter)->setTarget( makeAny( aIterParaTarget ) );
+                    }
+                }
+            }
+        }
+        else if( (*aIter)->getTargetShape() == aParaTarget.Shape )
+        {
+            (*aIter)->checkForText();
+        }
+
+        if( bErased )
+            bErased = false;
+        else
+            aIter++;
+    }
+
+    if( bChanges )
+        rebuild();
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationTextGroup::CustomAnimationTextGroup( const Reference< XShape >& rTarget, sal_Int32 nGroupId )
+:   maTarget( rTarget ),
+    mnGroupId( nGroupId )
+{
+    reset();
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationTextGroup::reset()
+{
+    mnTextGrouping = -1;
+    mbAnimateForm = false;
+    mbTextReverse = false;
+    mfGroupingAuto = -1.0;
+    mnLastPara = -1; // used to check for TextReverse
+
+    int i = 5;
+    while( i-- ) mnDepthFlags[i] = 0;
+
+    maEffects.clear();
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
+{
+    maEffects.push_back( pEffect );
+
+    Any aTarget( pEffect->getTarget() );
+    if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    {
+        // now look at the paragraph
+        ParagraphTarget aParaTarget;
+        aTarget >>= aParaTarget;
+
+        if( mnLastPara != -1 )
+            mbTextReverse = mnLastPara > aParaTarget.Paragraph;
+
+        mnLastPara = aParaTarget.Paragraph;
+
+        const sal_Int32 nParaDepth = pEffect->getParaDepth();
+
+        // only look at the first 5 levels
+        if( nParaDepth < 5 )
+        {
+            // our first paragraph with this level?
+            if( mnDepthFlags[nParaDepth] == 0 )
+            {
+                // so set it to the first found
+                mnDepthFlags[nParaDepth] = (sal_Int8)pEffect->getNodeType();
+            }
+            else if( mnDepthFlags[nParaDepth] != pEffect->getNodeType() )
+            {
+                mnDepthFlags[nParaDepth] = -1;
+            }
+
+            if( pEffect->getNodeType() == EffectNodeType::AFTER_PREVIOUS )
+                mfGroupingAuto = pEffect->getBegin();
+
+            mnTextGrouping = 0;
+            while( (mnTextGrouping < 5) && (mnDepthFlags[mnTextGrouping] > 0) )
+                mnTextGrouping++;
+        }
+    }
+    else
+    {
+        // if we have an effect with the shape as a target, we animate the background
+        mbAnimateForm = pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_TEXT;
+    }
+}
+
+// --------------------------------------------------------------------
+
+class TextGroupMapImpl : public std::map< sal_Int32, CustomAnimationTextGroup* >
+{
+public:
+    CustomAnimationTextGroup* findGroup( sal_Int32 nGroupId );
+};
+
+// --------------------------------------------------------------------
+
+CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId )
+{
+    CustomAnimationTextGroupPtr aPtr;
+
+    CustomAnimationTextGroupMap::iterator aIter( maGroupMap.find( nGroupId ) );
+    if( aIter != maGroupMap.end() )
+        aPtr = (*aIter).second;
+
+    return aPtr;
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::updateTextGroups()
+{
+    maGroupMap.clear();
+
+    // first create all the groups
+    EffectSequence::iterator aIter( maEffects.begin() );
+    const EffectSequence::iterator aEnd( maEffects.end() );
+    while( aIter != aEnd )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter++) );
+
+        const sal_Int32 nGroupId = pEffect->getGroupId();
+
+        if( nGroupId == -1 )
+            continue; // trivial case, no group
+
+        CustomAnimationTextGroupPtr pGroup = findGroup( nGroupId );
+        if( !pGroup.get() )
+        {
+            pGroup.reset( new CustomAnimationTextGroup( pEffect->getTargetShape(), nGroupId ) );
+            maGroupMap[nGroupId] = pGroup;
+        }
+
+        pGroup->addEffect( pEffect );
+    }
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse )
+{
+    // first finde a free group-id
+    sal_Int32 nGroupId = 0;
+
+    CustomAnimationTextGroupMap::iterator aIter( maGroupMap.begin() );
+    const CustomAnimationTextGroupMap::iterator aEnd( maGroupMap.end() );
+    while( aIter != aEnd )
+    {
+        if( (*aIter).first == nGroupId )
+        {
+            nGroupId++;
+            aIter = maGroupMap.begin();
+        }
+        else
+        {
+            aIter++;
+        }
+    }
+
+    Reference< XShape > xTarget( pEffect->getTargetShape() );
+
+    CustomAnimationTextGroupPtr pTextGroup( new CustomAnimationTextGroup( xTarget, nGroupId ) );
+    maGroupMap[nGroupId] = pTextGroup;
+
+    bool bUsed = false;
+
+    // do we need to target the shape?
+    if( (nTextGrouping == 0) || bAnimateForm )
+    {
+        sal_Int16 nSubItem;
+        if( nTextGrouping == 0)
+            nSubItem = bAnimateForm ? ShapeAnimationSubType::AS_WHOLE : ShapeAnimationSubType::ONLY_TEXT;
+        else
+            nSubItem = ShapeAnimationSubType::ONLY_BACKGROUND;
+
+        pEffect->setTarget( makeAny( xTarget ) );
+        pEffect->setTargetSubItem( nSubItem );
+        pEffect->setEffectSequence( this );
+        pEffect->setGroupId( nGroupId );
+
+        pTextGroup->addEffect( pEffect );
+        bUsed = true;
+    }
+
+    pTextGroup->mnTextGrouping = nTextGrouping;
+    pTextGroup->mfGroupingAuto = fTextGroupingAuto;
+    pTextGroup->mbTextReverse = bTextReverse;
+
+    // now add an effect for each paragraph
+    createTextGroupParagraphEffects( pTextGroup, pEffect, bUsed );
+
+    notify_listeners();
+
+    return pTextGroup;
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed )
+{
+    Reference< XShape > xTarget( pTextGroup->maTarget );
+
+    sal_Int32 nTextGrouping = pTextGroup->mnTextGrouping;
+    double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
+    sal_Bool bTextReverse = pTextGroup->mbTextReverse;
+
+    // now add an effect for each paragraph
+    if( nTextGrouping >= 0 ) try
+    {
+        EffectSequence::iterator aInsertIter( find( pEffect ) );
+
+        sal_Int16 nPara = 0, nParaCount = 0;
+
+        const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
+        Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
+
+        while( xEnumeration->hasMoreElements()  )
+        {
+            xEnumeration->nextElement();
+            nParaCount++;
+        }
+
+        ParagraphTarget aTarget;
+        aTarget.Shape = xTarget;
+        aTarget.Paragraph = bTextReverse ? nParaCount - 1 : 0;
+
+        if( nParaCount )
+        {
+            // danger, if bTextReverse then nParaCount will be counted downwards
+            // so don't use it as a value inside the loop
+            while( nParaCount && (aTarget.Paragraph < nParaCount) )
+            {
+                CustomAnimationEffectPtr pNewEffect;
+                if( bUsed )
+                {
+                    // clone a new effect from first effect
+                    pNewEffect = pEffect->clone();
+                    ++aInsertIter;
+                    aInsertIter = maEffects.insert( aInsertIter, pNewEffect );
+                }
+                else
+                {
+                    // reuse first effect if its not yet used
+                    pNewEffect = pEffect;
+                    bUsed = true;
+                    aInsertIter = find( pNewEffect );
+                }
+
+                // set target and group-id
+                pNewEffect->setTarget( makeAny( aTarget ) );
+                pNewEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
+                pNewEffect->setGroupId( pTextGroup->mnGroupId );
+                pNewEffect->setEffectSequence( this );
+
+                // set correct node type
+                if( pNewEffect->getParaDepth() < nTextGrouping )
+                {
+                    if( fTextGroupingAuto == -1.0 )
+                    {
+                        pNewEffect->setNodeType( EffectNodeType::ON_CLICK );
+                        pNewEffect->setBegin( 0.0 );
+                    }
+                    else
+                    {
+                        pNewEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                        pNewEffect->setBegin( fTextGroupingAuto );
+                    }
+                }
+                else
+                {
+                    pNewEffect->setNodeType( EffectNodeType::WITH_PREVIOUS );
+                    pNewEffect->setBegin( 0.0 );
+                }
+
+                pTextGroup->addEffect( pNewEffect );
+
+                if( bTextReverse )
+                {
+                    aTarget.Paragraph--;
+                    nParaCount--;
+                }
+                else
+                {
+                    aTarget.Paragraph++;
+                }
+            }
+        }
+        notify_listeners();
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::EffectSequenceHelper::createTextGroup(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping )
+{
+    if( pTextGroup->mnTextGrouping == nTextGrouping )
+    {
+        // first case, trivial case, do nothing
+    }
+    else if( (pTextGroup->mnTextGrouping == -1) && (nTextGrouping >= 0) )
+    {
+        // second case, we need to add new effects for each paragraph
+
+        CustomAnimationEffectPtr pEffect( pTextGroup->maEffects.front() );
+
+        pTextGroup->mnTextGrouping = nTextGrouping;
+        createTextGroupParagraphEffects( pTextGroup, pEffect, true );
+        notify_listeners();
+    }
+    else if( (pTextGroup->mnTextGrouping >= 0) && (nTextGrouping == -1 ) )
+    {
+        // third case, we need to remove effects for each paragraph
+
+        EffectSequence aEffects( pTextGroup->maEffects );
+        pTextGroup->reset();
+
+        EffectSequence::iterator aIter( aEffects.begin() );
+        const EffectSequence::iterator aEnd( aEffects.end() );
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect( (*aIter++) );
+
+            if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+                remove( pEffect );
+            else
+                pTextGroup->addEffect( pEffect );
+        }
+        notify_listeners();
+    }
+    else
+    {
+        // fourth case, we need to change the node types for the text nodes
+        double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
+
+        EffectSequence aEffects( pTextGroup->maEffects );
+        pTextGroup->reset();
+
+        EffectSequence::iterator aIter( aEffects.begin() );
+        const EffectSequence::iterator aEnd( aEffects.end() );
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect( (*aIter++) );
+
+            if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            {
+                // set correct node type
+                if( pEffect->getParaDepth() < nTextGrouping )
+                {
+                    if( fTextGroupingAuto == -1.0 )
+                    {
+                        pEffect->setNodeType( EffectNodeType::ON_CLICK );
+                        pEffect->setBegin( 0.0 );
+                    }
+                    else
+                    {
+                        pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                        pEffect->setBegin( fTextGroupingAuto );
+                    }
+                }
+                else
+                {
+                    pEffect->setNodeType( EffectNodeType::WITH_PREVIOUS );
+                    pEffect->setBegin( 0.0 );
+                }
+            }
+
+            pTextGroup->addEffect( pEffect );
+
+        }
+        notify_listeners();
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm )
+{
+    if( pTextGroup->mbAnimateForm == bAnimateForm )
+    {
+        // trivial case, do nothing
+    }
+    else
+    {
+        double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
+
+        EffectSequence aEffects( pTextGroup->maEffects );
+        pTextGroup->reset();
+
+        EffectSequence::iterator aIter( aEffects.begin() );
+        const EffectSequence::iterator aEnd( aEffects.end() );
+
+        // first insert if we have to
+        if( bAnimateForm )
+        {
+            EffectSequence::iterator aInsertIter( find( (*aIter) ) );
+
+            CustomAnimationEffectPtr pEffect;
+            if( (aEffects.size() == 1) && ((*aIter)->getTarget().getValueType() != ::getCppuType((const ParagraphTarget*)0) ) )
+            {
+                // special case, only one effect and that targets whole text,
+                // convert this to target whole shape
+                pEffect = (*aIter++);
+                pEffect->setTargetSubItem( ShapeAnimationSubType::AS_WHOLE );
+            }
+            else
+            {
+                pEffect = (*aIter)->clone();
+                pEffect->setTarget( makeAny( (*aIter)->getTargetShape() ) );
+                pEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_BACKGROUND );
+                maEffects.insert( aInsertIter, pEffect );
+            }
+
+            pTextGroup->addEffect( pEffect );
+        }
+
+        if( !bAnimateForm && (aEffects.size() == 1) )
+        {
+            CustomAnimationEffectPtr pEffect( (*aIter) );
+            pEffect->setTarget( makeAny( (*aIter)->getTargetShape() ) );
+            pEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
+            pTextGroup->addEffect( pEffect );
+        }
+        else
+        {
+            // readd the rest to the group again
+            while( aIter != aEnd )
+            {
+                CustomAnimationEffectPtr pEffect( (*aIter++) );
+
+                if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+                {
+                    pTextGroup->addEffect( pEffect );
+                }
+                else
+                {
+                    DBG_ASSERT( !bAnimateForm, "sd::EffectSequenceHelper::setAnimateForm(), something is wrong here!" );
+                    remove( pEffect );
+                }
+            }
+        }
+        notify_listeners();
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto )
+{
+    sal_Int32 nTextGrouping = pTextGroup->mnTextGrouping;
+
+    EffectSequence aEffects( pTextGroup->maEffects );
+    pTextGroup->reset();
+
+    EffectSequence::iterator aIter( aEffects.begin() );
+    const EffectSequence::iterator aEnd( aEffects.end() );
+    while( aIter != aEnd )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter++) );
+
+        if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+        {
+            // set correct node type
+            if( pEffect->getParaDepth() < nTextGrouping )
+            {
+                if( fTextGroupingAuto == -1.0 )
+                {
+                    pEffect->setNodeType( EffectNodeType::ON_CLICK );
+                    pEffect->setBegin( 0.0 );
+                }
+                else
+                {
+                    pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                    pEffect->setBegin( fTextGroupingAuto );
+                }
+            }
+            else
+            {
+                pEffect->setNodeType( EffectNodeType::WITH_PREVIOUS );
+                pEffect->setBegin( 0.0 );
+            }
+        }
+
+        pTextGroup->addEffect( pEffect );
+
+    }
+    notify_listeners();
+}
+
+// --------------------------------------------------------------------
+
+struct ImplStlTextGroupSortHelper
+{
+    ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
+    bool operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 );
+    bool mbReverse;
+    sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
+};
+
+// --------------------------------------------------------------------
+
+sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationEffectPtr& p1 )
+{
+    const Any aTarget(p1->getTarget());
+    if( aTarget.hasValue() && aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    {
+        ParagraphTarget aParaTarget;
+        aTarget >>= aParaTarget;
+        return aParaTarget.Paragraph;
+    }
+    else
+    {
+        return mbReverse ? 0x7fffffff : -1;
+    }
+}
+
+// --------------------------------------------------------------------
+
+bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 )
+{
+    if( mbReverse )
+    {
+        return getTargetParagraph( p2 ) < getTargetParagraph( p1 );
+    }
+    else
+    {
+        return getTargetParagraph( p1 ) < getTargetParagraph( p2 );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bTextReverse )
+{
+    if( pTextGroup->mbTextReverse == bTextReverse )
+    {
+        // do nothing
+    }
+    else
+    {
+        std::vector< CustomAnimationEffectPtr > aSortedVector(pTextGroup->maEffects.size());
+        std::copy( pTextGroup->maEffects.begin(), pTextGroup->maEffects.end(), aSortedVector.begin() );
+        ImplStlTextGroupSortHelper aSortHelper( bTextReverse );
+        std::sort( aSortedVector.begin(), aSortedVector.end(), aSortHelper );
+
+        pTextGroup->reset();
+
+        std::vector< CustomAnimationEffectPtr >::iterator aIter( aSortedVector.begin() );
+        const std::vector< CustomAnimationEffectPtr >::iterator aEnd( aSortedVector.end() );
+
+        if( aIter != aEnd )
+        {
+            pTextGroup->addEffect( (*aIter ) );
+            EffectSequence::iterator aInsertIter( find( (*aIter++) ) );
+            while( aIter != aEnd )
+            {
+                CustomAnimationEffectPtr pEffect( (*aIter++) );
+                maEffects.erase( find( pEffect ) );
+                aInsertIter = maEffects.insert( ++aInsertIter, pEffect );
+                pTextGroup->addEffect( pEffect );
+            }
+        }
+        notify_listeners();
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::addListener( ISequenceListener* pListener )
+{
+    if( std::find( maListeners.begin(), maListeners.end(), pListener ) == maListeners.end() )
+        maListeners.push_back( pListener );
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
+{
+    maListeners.remove( pListener );
+}
+
+// --------------------------------------------------------------------
+
+struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
+{
+    void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
+};
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::notify_listeners()
+{
+    stl_notify_listeners_func aFunc;
+    std::for_each( maListeners.begin(), maListeners.end(), aFunc );
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+{
+    DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::create(), illegal argument" );
+
+    if( xNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+            createEffectsequence( xChildNode );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::EffectSequenceHelper::create(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode >& xNode )
+{
+    DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::createEffectsequence(), illegal argument" );
+
+    if( xNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+
+            createEffects( xChildNode );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::EffectSequenceHelper::createEffectsequence(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNode )
+{
+    DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::createEffects(), illegal argument" );
+
+    if( xNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+
+            switch( xChildNode->getType() )
+            {
+            // found an effect
+            case AnimationNodeType::PAR:
+            case AnimationNodeType::ITERATE:
+                {
+                    CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xChildNode ) );
+
+                    if( pEffect->mnNodeType != -1 )
+                    {
+                        pEffect->setEffectSequence( this );
+                        maEffects.push_back(pEffect);
+                    }
+                }
+                break;
+
+            // found an after effect
+            case AnimationNodeType::SET:
+            case AnimationNodeType::ANIMATECOLOR:
+                {
+                    processAfterEffect( xChildNode );
+                }
+                break;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::EffectSequenceHelper::createEffects(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >& xNode )
+{
+    try
+    {
+        Reference< XAnimationNode > xMaster;
+
+        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        sal_Int32 nLength = aUserData.getLength();
+        const NamedValue* p = aUserData.getConstArray();
+
+        while( nLength-- )
+        {
+            if( p->Name.equalsAscii( "master-element" ) )
+            {
+                p->Value >>= xMaster;
+                break;
+            }
+            p++;
+        }
+
+        // only process if this is a valid after effect
+        if( xMaster.is() )
+        {
+            CustomAnimationEffectPtr pMasterEffect;
+
+            // find the master effect
+            stl_CustomAnimationEffect_search_node_predict aSearchPredict( xMaster );
+            EffectSequence::iterator aIter( std::find_if( maEffects.begin(), maEffects.end(), aSearchPredict ) );
+            if( aIter != maEffects.end() )
+                pMasterEffect = (*aIter );
+
+            if( pMasterEffect.get() )
+            {
+                pMasterEffect->setHasAfterEffect( true );
+
+                // find out what kind of after effect this is
+                if( xNode->getType() == AnimationNodeType::ANIMATECOLOR )
+                {
+                    // its a dim
+                    Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
+                    pMasterEffect->setDimColor( xAnimate->getTo() );
+                    pMasterEffect->setMasterRel( 0 );
+                }
+                else
+                {
+                    // its a hide
+                    Reference< XChild > xNodeChild( xNode, UNO_QUERY_THROW );
+                    Reference< XChild > xMasterChild( xMaster, UNO_QUERY_THROW );
+                    pMasterEffect->setMasterRel( xNodeChild->getParent() == xMasterChild->getParent() ? 2 : 0 );
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::EffectSequenceHelper::processAfterEffect(), exception cought!" );
+    }
+}
+
+
+
+// ====================================================================
+
+MainSequence::MainSequence()
+{
+    Reference< XAnimationNode > xNode(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY);
+    if( xNode.is() )
+    {
+        Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+        aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
+        xNode->setUserData( aUserData );
+    }
+    init( xNode );
+}
+
+MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+{
+    init( xNode );
+}
+
+void MainSequence::init( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+{
+    mnSequenceType = EffectNodeType::MAIN_SEQUENCE;
+
+    if( xNode.is() ) try
+    {
+        reset();
+
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+            sal_Int32 nNodeType = CustomAnimationEffect::get_node_type( xChildNode );
+            if( nNodeType == EffectNodeType::MAIN_SEQUENCE )
+            {
+                mxSequenceRoot.set( xChildNode, UNO_QUERY );
+                create( xChildNode );
+            }
+            else if( nNodeType == EffectNodeType::INTERACTIVE_SEQUENCE )
+            {
+                Reference< XTimeContainer > xInteractiveRoot( xChildNode, UNO_QUERY_THROW );
+                InteractiveSequencePtr pIS( new InteractiveSequence( xInteractiveRoot, this ) );
+                pIS->addListener( this );
+                maInteractiveSequenceList.push_back( pIS );
+            }
+        }
+
+        // see if we have a mainsequence at all. if not, create one...
+        if( !mxSequenceRoot.is() )
+        {
+            mxSequenceRoot = Reference< XTimeContainer >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))));
+            if( mxSequenceRoot.is() )
+            {
+                uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+                aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+                aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
+                mxSequenceRoot->setUserData( aUserData );
+
+                // empty sequence until now, set duration to 0.0
+                // explicitely (otherwise, this sequence will never
+                // end)
+                mxSequenceRoot->setDuration( makeAny((double)0.0) );
+
+                Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
+                Reference< XTimeContainer > xParent( xNode, UNO_QUERY_THROW );
+                xParent->appendChild( xMainSequenceNode );
+            }
+        }
+
+        updateTextGroups();
+
+        notify_listeners();
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::MainSequence::MainSequence(), exception cought!" );
+        return;
+    }
+
+    DBG_ASSERT( mxSequenceRoot.is(), "sd::MainSequence::MainSequence(), found no main sequence!" );
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::reset()
+{
+    EffectSequenceHelper::reset();
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+        (*aIter)->reset();
+    maInteractiveSequenceList.clear();
+}
+
+// --------------------------------------------------------------------
+
+InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
+{
+    InteractiveSequencePtr pIS;
+
+    // create a new interactive sequence container
+    Reference< XTimeContainer > xISRoot( ::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY );
+    DBG_ASSERT( xISRoot.is(), "sd::MainSequence::createInteractiveSequence(), could not create \"com.sun.star.animations.SequenceTimeContainer\"!");
+    if( xISRoot.is() )
+    {
+        uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+        aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ;
+        xISRoot->setUserData( aUserData );
+
+        Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
+        Reference< XAnimationNode > xISNode( xISRoot, UNO_QUERY_THROW );
+        Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
+        xParent->appendChild( xISNode );
+    }
+    pIS.reset( new InteractiveSequence( xISRoot, this) );
+    pIS->setTriggerShape( xShape );
+    pIS->addListener( this );
+    maInteractiveSequenceList.push_back( pIS );
+    return pIS;
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::disposeShape( const Reference< XShape >& xShape )
+{
+    EffectSequenceHelper::disposeShape( xShape );
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    {
+        if( (*aIter)->getTriggerShape() == xShape )
+        {
+            aIter = maInteractiveSequenceList.erase( aIter );
+        }
+        else
+        {
+            (*aIter++)->disposeShape( xShape );
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
+{
+    EffectSequenceHelper::insertTextRange( aTarget );
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    {
+        (*aIter)->insertTextRange( aTarget );
+    }
+}
+// --------------------------------------------------------------------
+
+void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
+{
+    EffectSequenceHelper::disposeTextRange( aTarget );
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    {
+        (*aIter)->disposeTextRange( aTarget );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::rebuild()
+{
+    implRebuild();
+}
+
+void MainSequence::implRebuild()
+{
+    EffectSequenceHelper::implRebuild();
+
+    InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
+    const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
+    while( aIter != aEnd )
+    {
+        InteractiveSequencePtr pIS( (*aIter) );
+        if( pIS->maEffects.empty() )
+        {
+            // remove empty interactive sequences
+            aIter = maInteractiveSequenceList.erase( aIter );
+
+            Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
+            Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
+            Reference< XAnimationNode > xISNode( pIS->mxSequenceRoot, UNO_QUERY_THROW );
+            xParent->removeChild( xISNode );
+        }
+        else
+        {
+            pIS->implRebuild();
+            aIter++;
+        }
+    }
+
+    notify_listeners();
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::notify_change()
+{
+    notify_listeners();
+}
+
+// --------------------------------------------------------------------
+
+bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape )
+{
+    EffectSequenceHelper* pOldSequence = pEffect->getEffectSequence();
+
+    EffectSequenceHelper* pNewSequence = 0;
+    if( xTriggerShape.is() )
+    {
+        InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
+        const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
+        while( aIter != aEnd )
+        {
+            InteractiveSequencePtr pIS( (*aIter++) );
+            if( pIS->getTriggerShape() == xTriggerShape )
+            {
+                pNewSequence = pIS.get();
+                break;
+            }
+        }
+
+        if( !pNewSequence )
+            pNewSequence = createInteractiveSequence( xTriggerShape ).get();
+    }
+    else
+    {
+        pNewSequence = this;
+    }
+
+    if( pOldSequence != pNewSequence )
+    {
+        pOldSequence->maEffects.remove( pEffect );
+        pNewSequence->maEffects.push_back( pEffect );
+        pEffect->setEffectSequence( pNewSequence );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
+// ====================================================================
+
+InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence )
+: EffectSequenceHelper( xSequenceRoot ), mpMainSequence( pMainSequence )
+{
+    mnSequenceType = EffectNodeType::INTERACTIVE_SEQUENCE;
+
+    try
+    {
+        if( mxSequenceRoot.is() )
+        {
+            Reference< XEnumerationAccess > xEnumerationAccess( mxSequenceRoot, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            while( !mxEventSource.is() && xEnumeration->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+
+                Event aEvent;
+                if( (xChildNode->getBegin() >>= aEvent) && (aEvent.Trigger == EventTrigger::ON_CLICK) )
+                    aEvent.Source >>= mxEventSource;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::InteractiveSequence::InteractiveSequence(), exception cought!" );
+        return;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void InteractiveSequence::rebuild()
+{
+    mpMainSequence->rebuild();
+}
+
+void InteractiveSequence::implRebuild()
+{
+    EffectSequenceHelper::implRebuild();
+}
+
+};
