@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:09:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-23 09:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,19 +180,10 @@ InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiSe
 //------------------------------------------------------------------------------
 Sequence<Type> OImageControlModel::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my base class
-        Sequence<Type> aBaseClassTypes = OBoundControlModel::_getTypes();
-
-        Sequence<Type> aOwnTypes(1);
-        Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((Reference<XImageProducerSupplier>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
-    return aTypes;
+    return concatSequences(
+        OBoundControlModel::_getTypes(),
+        OImageControlModel_Base::getTypes()
+    );
 }
 
 DBG_NAME(OImageControlModel)
@@ -222,6 +213,16 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
     m_bReadOnly = _pOriginal->m_bReadOnly;
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        // simulate a propertyChanged event for the ImageURL
+        // 2003-05-15 - #109591# - fs@openoffice.org
+        Any aImageURL;
+        getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
+        _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //------------------------------------------------------------------
@@ -283,11 +284,12 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OBoundControlModel::queryAggregation(_rType);
+    // oder matters: we want to "override" the XImageProducer interface of the aggreate with out
+    // own XImageProducer interface, thus we need to query OImageControlModel_Base first
+
+    Any aReturn = OImageControlModel_Base::queryInterface( _rType );
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<XImageProducerSupplier*>(this)
-        );
+        aReturn = OBoundControlModel::queryAggregation( _rType );
 
     return aReturn;
 }
@@ -323,8 +325,6 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
 
     // SvStream am xInStream setzen
     String aPath = getString(rEvt.NewValue);
-    //  INetURLObject aURLObj(getString(rEvt.NewValue));
-    //  String aPath = INetURLObject::decode(aURLObj.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
     SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream(aPath, STREAM_READ);
     sal_Bool bSetNull = (NULL == pFileStream) || (ERRCODE_NONE != pFileStream->GetErrorCode());
@@ -348,7 +348,7 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         else
         {
             GetImageProducer()->setImage( xInStream );
-            m_xImageProducer->startProduction();
+            GetImageProducer()->startProduction();
         }
 
         // usually the setBinaryStream should close the input, but just in case ....
@@ -364,12 +364,11 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
     {
         if (m_xColumnUpdate.is())
             m_xColumnUpdate->updateNull();
-        else
-        {
-            Reference<XInputStream> xInStream;
-            GetImageProducer()->setImage( xInStream );
-            m_xImageProducer->startProduction();
-        }
+
+        Reference< com::sun::star::io::XInputStream > xNull;
+        GetImageProducer()->setImage(xNull);
+        GetImageProducer()->startProduction();
+
         delete pFileStream;
     }
 }
@@ -426,7 +425,7 @@ void OImageControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(9)
+    FRM_BEGIN_PROP_HELPER(8)
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_IMAGE_URL, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
@@ -437,7 +436,6 @@ void OImageControlModel::fillProperties(
         DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,       BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,       BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
-        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,           BOUND);
     FRM_END_PROP_HELPER();
 }
 
@@ -552,13 +550,35 @@ void OImageControlModel::_reset()
 //------------------------------------------------------------------------------
 void OImageControlModel::UpdateFromField()
 {
-    Reference<XInputStream>  xInStream;
-    xInStream = m_xColumn->getBinaryStream();
-
+    Reference<XInputStream>  xInStream = m_xColumn->getBinaryStream();
     GetImageProducer()->setImage(xInStream);
-
-    m_xImageProducer->startProduction();
+    GetImageProducer()->startProduction();
 }
+
+//--------------------------------------------------------------------
+Reference< XImageProducer > SAL_CALL OImageControlModel::getImageProducer() throw ( RuntimeException)
+{
+    return this;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageControlModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
+{
+    GetImageProducer()->addConsumer( _rxConsumer );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageControlModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException)
+{
+    GetImageProducer()->removeConsumer( _rxConsumer );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
+{
+    GetImageProducer()->startProduction();
+}
+
 
 //==================================================================
 // OImageControlControl
@@ -633,6 +653,13 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
 void SAL_CALL OImageControlControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& Parent) throw( RuntimeException )
 {
     OBoundControl::createPeer(_rxToolkit, Parent);
+    // the following is not necessary anymore. The aggregated control (from the toolkit project)
+    // itself will register as image consumer at the image producer, so there's no need to do this ourself.
+    // This holds since our model is an XImageProducer itself, and thus hiding the XImageProducer of the aggregated
+    // model. Before, we had two ImageProducers working in parallel.
+    // 2003-05-15 - 109591 - fs@openoffice.org
+
+/**
     if (!m_xControl.is())
         return;
 
@@ -650,6 +677,7 @@ void SAL_CALL OImageControlControl::createPeer(const Reference<XToolkit>& _rxToo
 
     xImageProducer->addConsumer(xImageConsumer);
     xImageProducer->startProduction();
+*/
 }
 
 //------------------------------------------------------------------------------
