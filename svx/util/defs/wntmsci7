@@ -23656,3 +23656,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?_ForEach@WritingDirectionInfos@@QAEXGGP6AEABUWritingDirectionInfo@@PAX@Z1@Z
 ?_grow@WritingDirectionInfos@@IAEXG@Z
 ??1WritingDirectionInfos@@QAE@XZ
+?ToggleAllSelectedLines@SvxFrameSelector@@AAEXXZ
+?ToggleOneLine@SvxFrameSelector@@AAEXAAVSvxFrameLine@@@Z
+?SvxGetNumRule@@YA_NV?$Reference@VXIndexReplace@container@star@sun@com@@@uno@star@sun@com@@AAVSvxNumRule@@@Z
