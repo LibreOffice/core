@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salcolorutils.cxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-26 20:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,7 @@ CTabHandle CopyCTabRGBDirect ( CTabHandle hCTab )
 
 CTabHandle CopyPixMapCTab ( PixMapHandle hPixMap )
 {
-    CTabHandle  hCTabCopy = NULL;
+    CTabHandle  hCTabCopy       = NULL;
     short       nPixMapBitDepth = GetPixDepth( hPixMap );
 
     if ( nPixMapBitDepth <= kEightBitColor )
