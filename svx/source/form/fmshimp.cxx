@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 11:42:22 $
+ *  last change: $Author: oj $ $Date: 2001-11-22 13:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2043,17 +2043,20 @@ void FmXFormShell::CloseExternalFormViewer()
     if (!xCommLink.is())
         return;
 
-    URL aCloseUrl;
-        // tool windows (like the task local beamer used for the grid) are assumed to close when dispatching an empty URL
+    xExternalViewFrame->setComponent(NULL,NULL);
+    ::comphelper::disposeComponent(xExternalViewFrame);
 
-    Reference< ::com::sun::star::frame::XDispatch> xCloser(xCommLink->queryDispatch(aCloseUrl, ::rtl::OUString::createFromAscii("_self"), 0));
-    DBG_ASSERT(xCloser.is(), "FmXFormShell::CloseExternalFormViewer : don't know how to close the tool frame !");
-    if (xCloser.is())
-        xCloser->dispatch(aCloseUrl, Sequence< PropertyValue>());
+//  URL aCloseUrl;
+//      // tool windows (like the task local beamer used for the grid) are assumed to close when dispatching an empty URL
+//
+//  Reference< ::com::sun::star::frame::XDispatch> xCloser(xCommLink->queryDispatch(aCloseUrl, ::rtl::OUString::createFromAscii("_self"), 0));
+//  DBG_ASSERT(xCloser.is(), "FmXFormShell::CloseExternalFormViewer : don't know how to close the tool frame !");
+//  if (xCloser.is())
+//      xCloser->dispatch(aCloseUrl, Sequence< PropertyValue>());
 
-    m_xExternalViewController = NULL;
+    m_xExternalViewController   = NULL;
     m_xExtViewTriggerController = NULL;
-    m_xExternalDisplayedForm = NULL;
+    m_xExternalDisplayedForm    = NULL;
 }
 
 //------------------------------------------------------------------------------
