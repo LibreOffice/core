@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 08:50:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 07:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,28 @@ void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet
 void XMLShapeExport::ImpExportNewTrans_GetMatrix3D(Matrix3D& rMat,
     const uno::Reference< beans::XPropertySet >& xPropSet)
 {
-    uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+    // --> OD 2004-08-09 #i28749# - Get <TransformationInHoriL2R>, if it exist
+    // and if the document is exported into the OpenOffice.org file format.
+    // This property only exists at service com::sun::star::text::Shape - the
+    // Writer UNO service for shapes.
+    // This code is needed, because the positioning attributes in the
+    // OpenOffice.org file format are given in horizontal left-to-right layout
+    // regardless the layout direction the shape is in. In the OASIS Open Office
+    // file format the positioning attributes are correctly given in the layout
+    // direction the shape is in. Thus, this code provides the conversion from
+    // the OASIS Open Office file format to the OpenOffice.org file format.
+    uno::Any aAny;
+    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+         xPropSet->getPropertySetInfo()->hasPropertyByName(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("TransformationInHoriL2R"))) )
+    {
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TransformationInHoriL2R")));
+    }
+    else
+    {
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+    }
+    // <--
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
     rMat[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
