@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:26:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,9 +1622,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                         // #96717# in theorie, if we don't have a url we shouldn't even
                         // export this ole shape. But practical its to risky right now
                         // to change this so we better dispose this on load
-                        ::rtl::OUString aResolvedURL = rExport.AddEmbeddedObject( sURL );
-                        if ( aResolvedURL.getLength() )
-                                sURL = aResolvedURL;
+                        sURL = rExport.AddEmbeddedObject( sURL );
 
                         rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
                         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
