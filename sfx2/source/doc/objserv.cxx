@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:37:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,14 +203,7 @@
 #include "msgpool.hxx"
 #include "objface.hxx"
 
-// xmlsec05, check with SFX team
-// MT: HACK
 #include "../appl/app.hrc"
-#if 0
-#include <unotools/tempfile.hxx>
-#include <osl/file.hxx>
-#endif
-#include <storagehelper.hxx>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
@@ -375,7 +368,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     USHORT nId = rReq.GetSlot();
 
-    if( nId == SID_SIGNATURE )
+    if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
 //      Reference< com::sun::star::embed::XStorage > xStore;
 //      Reference< com::sun::star::security::XDocumentDigitalSignatures > xD(
@@ -384,7 +377,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 //          xD->ShowPackageSignatures( xStore );
 
         if ( QueryHiddenInformation( WhenSigning, NULL ) == RET_YES )
-            SignDocumentContent();
+            ( SID_SIGNATURE == nId ) ? SignDocumentContent() : SignScriptingContent();
         return;
     }
 
@@ -1154,6 +1147,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 rSet.Put( SfxUInt16Item( SID_SIGNATURE, GetDocumentSignatureState() ) );
                 break;
             }
+            case SID_MACRO_SIGNATURE:
+            {
+                rSet.Put( SfxUInt16Item( SID_SIGNATURE, GetScriptingSignatureState() ) );
+                break;
+            }
         }
     }
 }
@@ -1360,8 +1358,6 @@ void SfxObjectShell::StateView_Impl(SfxItemSet &rSet)
 }
 
 
-// xmlsec05, check with SFX team
-
 sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 {
     sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
@@ -1370,8 +1366,7 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     {
         *pState = SIGNATURESTATE_NOSIGNATURES;
 
-        // XMLSEC05: MT: When MAV09 is integrated, remove GetName().Len().
-        if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium()) )
+        if ( GetMedium() && GetMedium()->GetName().Len() && GetMedium()->GetStorage().is() && IsOwnStorageFormat_Impl( *GetMedium()) )
         {
             try
             {
@@ -1380,28 +1375,22 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 
                 if ( xD.is() )
                 {
-                    // HACK: No Storage API befoer CWS MAV09
-                    rtl::OUString aDocFileNameURL = GetMedium()->GetName();
-                    uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-                            aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
-                    if ( xStore.is() )
+                    ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
+                    if ( bScriptingContent )
+                        aInfos = xD->VerifyScriptingContentSignatures( GetMedium()->GetStorage() );
+                    else
+                        aInfos = xD->VerifyDocumentContentSignatures( GetMedium()->GetStorage() );
+
+                    int nInfos = aInfos.getLength();
+                    if( nInfos )
                     {
-                        ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
-                        if ( bScriptingContent )
-                            aInfos = xD->VerifyScriptingContentSignatures( xStore );
-                        else
-                            aInfos = xD->VerifyDocumentContentSignatures( xStore );
-                        int nInfos = aInfos.getLength();
-                        if( nInfos )
+                        *pState = SIGNATURESTATE_SIGNATURES_OK;
+                        for ( int n = 0; n < nInfos; n++ )
                         {
-                            *pState = SIGNATURESTATE_SIGNATURES_OK;
-                            for ( int n = 0; n < nInfos; n++ )
+                            if ( !aInfos[n].SignatureIsValid )
                             {
-                                if ( !aInfos[n].SignatureIsValid )
-                                {
-                                    *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
-                                    break; // we know enough
-                                }
+                                *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
+                                break; // we know enough
                             }
                         }
                     }
@@ -1426,8 +1415,6 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 {
     if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
     {
-        // Document must be stored....
-        // xmlsec05, check with SFX team
         if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
         {
             int nId = SID_SAVEDOC;
@@ -1448,7 +1435,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         return;
     }
 
-    // TODO/LATER: may need additional fixing
+    // xmlsec05 TODO/LATER: may need additional fixing
     // if ( !IsHandsOff() )
        //   DoHandsOff();
 
@@ -1468,10 +1455,9 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
 
     Invalidate( SID_SIGNATURE );
+    Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
 }
-
-
 
 sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
 {
@@ -1492,3 +1478,4 @@ void SfxObjectShell::SignScriptingContent()
 {
     ImplSign( TRUE );
 }
+
