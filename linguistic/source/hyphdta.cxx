@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdta.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:45:48 $
+ *  last change: $Author: tl $ $Date: 2001-07-04 13:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,7 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
     nHyphenationPos (nHPos),
     nHyphPos        (nPos)
 {
-    OUString aTmp( rHyphWord );
-    RemoveHyphens( aTmp );
-    RemoveControlChars( aTmp );
-    bIsAltSpelling = rWord != aTmp;
+    bIsAltSpelling = rWord != rHyphWord;
 }
 
 

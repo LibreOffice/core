@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-03 12:26:08 $
+ *  last change: $Author: tl $ $Date: 2001-07-04 13:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,13 @@ Reference< XHyphenatedWord > SAL_CALL
     if (bWordModified  &&  xRes.is())
         xRes = RebuildHyphensAndControlChars( rWord, xRes );
 
+    if (xRes.is()  &&  xRes->getWord() != rWord)
+    {
+        xRes = new HyphenatedWord( rWord, nLanguage, xRes->getHyphenationPos(),
+                                   xRes->getHyphenatedWord(),
+                                   xRes->getHyphenPos() );
+    }
+
     return xRes;
 }
 
@@ -513,6 +520,13 @@ Reference< XHyphenatedWord > SAL_CALL
     if (bWordModified  &&  xRes.is())
         xRes = RebuildHyphensAndControlChars( rWord, xRes );
 
+    if (xRes.is()  &&  xRes->getWord() != rWord)
+    {
+        xRes = new HyphenatedWord( rWord, nLanguage, xRes->getHyphenationPos(),
+                                   xRes->getHyphenatedWord(),
+                                   xRes->getHyphenPos() );
+    }
+
     return xRes;
 }
 
@@ -616,6 +630,13 @@ Reference< XPossibleHyphens > SAL_CALL
                 }
             }
         }   // if (xEntry.is())
+    }
+
+    if (xRes.is()  &&  xRes->getWord() != rWord)
+    {
+        xRes = new PossibleHyphens( rWord, nLanguage,
+                                    xRes->getPossibleHyphens(),
+                                    xRes->getHyphenationPositions() );
     }
 
     return xRes;
