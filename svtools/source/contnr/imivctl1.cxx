@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:35:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,7 @@ BOOL SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     if( pEntry )
         MakeEntryVisible( pEntry, FALSE );
 
-    if( rMEvt.IsShift() )
+    if( rMEvt.IsShift() && eSelectionMode != SINGLE_SELECTION )
     {
         if( pEntry )
             SetCursor_Impl( pCursor, pEntry, rMEvt.IsMod1(), rMEvt.IsShift(), TRUE);
@@ -1403,7 +1403,7 @@ BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 #endif
 
         case KEY_SPACE:
-            if( pCursor )
+            if( pCursor && eSelectionMode != SINGLE_SELECTION )
             {
                 if( !bMod1 )
                 {
