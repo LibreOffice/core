@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:05:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,3 +820,4 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
 };
 
  // ********************************************************************** EOF
+
