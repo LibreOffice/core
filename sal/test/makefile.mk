@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kr $ $Date: 2002-01-07 16:16:14 $
+#   last change: $Author: sb $ $Date: 2002-09-24 10:31:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET=saltest
 TARGETTYPE=CUI
 LIBTARGET=NO
 USE_LDUMP2=TRUE
+ENABLE_EXCEPTIONS=TRUE
 #LDUMP2=LDUMP3
 
 
