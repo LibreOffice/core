@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-23 18:07:40 $
+ *  last change: $Author: mm $ $Date: 2001-02-27 10:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,9 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     {
         pOwnSvApp = new Application_Impl();
     }
+#ifndef REMOTE_APPSERVER
     InitSalMain();
+#endif
 
 #ifdef WNT
     // remember data, copied from WinMain
@@ -702,7 +704,9 @@ void DeInitVCL()
 
     DeInitTools();
 
+#ifndef REMOTE_APPSERVER
     DeInitSalMain();
+#endif
     if( pOwnSvApp )
     {
         delete pOwnSvApp;
