@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:52:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ hebrew ] = "Funktion übernehmen";
         QuickHelpText[ hindi ] = "फंक्शन् लागू करो";
         QuickHelpText[ slovak ] = "Použiť funkciu";
+        QuickHelpText[ hungarian ] = "Függvény alkalmazása";
+        QuickHelpText[ slovenian ] = "Uporabi funkcijo";
     };
     ListBox LB_CATEGORY
     {
@@ -254,15 +256,15 @@ TabPage RID_SCTAB_FUNCTION
             < "Alle" ; Default ; > ;
             < "Database" ; Default ; > ;
             < "Dato og klokkesl�t" ; Default ; > ;
-            < "Finans" ; Default ; > ;
+            < "Finansiel" ; Default ; > ;
             < "Information" ; Default ; > ;
             < "Logisk" ; Default ; > ;
-            < "Matematik" ; Default ; > ;
+            < "Matematisk" ; Default ; > ;
             < "Matrix" ; Default ; > ;
-            < "Statistik" ; Default ; > ;
+            < "Statistisk" ; Default ; > ;
             < "Regneark" ; Default ; > ;
             < "Tekst" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "AddIn" ; Default ; > ;
              //         < "Brugerdefineret"; Default; >;
         };
         StringList [ french ] =
@@ -589,6 +591,38 @@ TabPage RID_SCTAB_FUNCTION
         < "Text" ; Default ; > ;
         < "Prídavok" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Utoljára használt" ; Default ; > ;
+        < "Összes" ; Default ; > ;
+        < "Adatbázis" ; Default ; > ;
+        < "Dátum és idő" ; Default ; > ;
+        < "Pénzügyi" ; Default ; > ;
+        < "Információ" ; Default ; > ;
+        < "Logikai" ; Default ; > ;
+        < "Matematikai" ; Default ; > ;
+        < "Adattömb" ; Default ; > ;
+        < "Statisztikai" ; Default ; > ;
+        < "Munkafüzet" ; Default ; > ;
+        < "Szöveg" ; Default ; > ;
+        < "Kiegészítő" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Nazadnje uporabljeno" ; Default ; > ;
+        < "Vse" ; Default ; > ;
+        < "Zbirka podatkov" ; Default ; > ;
+        < "Datum in čas" ; Default ; > ;
+        < "Finance" ; Default ; > ;
+        < "Informacije" ; Default ; > ;
+        < "Logika" ; Default ; > ;
+        < "Matematika" ; Default ; > ;
+        < "Matrika" ; Default ; > ;
+        < "Statistika" ; Default ; > ;
+        < "Preglednica" ; Default ; > ;
+        < "Besedilo" ; Default ; > ;
+        < "Dodatek" ; Default ; > ;
+    };
     };
     ListBox LB_FUNCTION
     {
@@ -608,7 +642,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "~Luokka" ;
-        Text [ danish ] = "Kategori" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ french ] = "~Cat�gorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Categorie" ;
@@ -629,6 +663,8 @@ TabPage RID_SCTAB_FUNCTION
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Kategória";
+        Text[ hungarian ] = "~Kategória";
+        Text[ slovenian ] = "~Kategorija";
     };
     FixedText FT_FUNCTION
     {
@@ -641,7 +677,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ portuguese_brazilian ] = "~Fun��o" ;
         Text [ portuguese ] = "~Fun��o" ;
         Text [ finnish ] = "~Funktio" ;
-        Text [ danish ] = "Funktion" ;
+        Text [ danish ] = "~Funktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Funktion" ;
         Text [ dutch ] = "~Functie" ;
@@ -662,6 +698,8 @@ TabPage RID_SCTAB_FUNCTION
         Text[ hebrew ] = "‮פונקציה‬";
         Text[ hindi ] = "~फ़ंक्शन्";
         Text[ slovak ] = "~Funkcia";
+        Text[ hungarian ] = "~Függvény";
+        Text[ slovenian ] = "~Funkcija";
     };
 };
 TabPage RID_SCTAB_STRUCT
@@ -688,7 +726,7 @@ TabPage RID_SCTAB_STRUCT
         Text [ english_us ] = "~Structure" ;
         Text [ portuguese_brazilian ] = "~Estrutura" ;
         Text [ swedish ] = "~Struktur" ;
-        Text [ danish ] = "Struktur" ;
+        Text [ danish ] = "~Struktur" ;
         Text [ italian ] = "~Struttura" ;
         Text [ spanish ] = "~Estructura" ;
         Text [ french ] = "Structure" ;
@@ -709,6 +747,8 @@ TabPage RID_SCTAB_STRUCT
         Text[ hebrew ] = "‮מבנה‬";
         Text[ hindi ] = "~बनावट";
         Text[ slovak ] = "Štruktú~ra";
+        Text[ hungarian ] = "Str~uktúra";
+        Text[ slovenian ] = "Z~gradba";
     };
     Image BMP_STR_CLOSE
     {
@@ -779,6 +819,8 @@ TabPage RID_SCTAB_STRUCT
         Text[ hebrew ] = "=?";
         Text[ hindi ] = "=?";
         Text[ slovak ] = "=?";
+        Text[ hungarian ] = "=?";
+        Text[ slovenian ] = "=?";
     };
     String STR_STRUCT_ERR2
     {
@@ -809,6 +851,8 @@ TabPage RID_SCTAB_STRUCT
         Text[ hebrew ] = "‮שגיאה‬";
         Text[ hindi ] = "गलती";
         Text[ slovak ] = "Chyba";
+        Text[ hungarian ] = "Hiba";
+        Text[ slovenian ] = "Napaka";
     };
 };
 ModelessDialog RID_SCDLG_FORMULA
@@ -856,6 +900,8 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ hebrew ] = "‮פונקציות‬";
                 Text[ hindi ] = "फ़ंक्शन्स";
                 Text[ slovak ] = "Funkcie";
+                Text[ hungarian ] = "Függvények";
+                Text[ slovenian ] = "Funkcije";
             };
             PageItem
             {
@@ -887,6 +933,8 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ hebrew ] = "‮מבנה‬";
                 Text[ hindi ] = "बनावट";
                 Text[ slovak ] = "Štruktúra";
+                Text[ hungarian ] = "Struktúra";
+                Text[ slovenian ] = "Zgradba";
             };
         };
     };
@@ -929,7 +977,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ english_us ] = "For~mula" ;
         Text [ portuguese_brazilian ] = "~F�rmula" ;
         Text [ swedish ] = "F~ormel" ;
-        Text [ danish ] = "Formel" ;
+        Text [ danish ] = "For~mel" ;
         Text [ italian ] = "Formula" ;
         Text [ spanish ] = "~F�rmula" ;
         Text [ french ] = "Formule" ;
@@ -951,6 +999,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮נוסחה‬";
         Text[ hindi ] = "सू~त्र";
         Text[ slovak ] = "Vz~orec";
+        Text[ hungarian ] = "~Képlet";
+        Text[ slovenian ] = "For~mula";
     };
     Control ED_FORMULA
     {
@@ -992,6 +1042,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮תוצאה של פונקציה‬";
         Text[ hindi ] = "फ़ंक्शन्स का नतीजा";
         Text[ slovak ] = "Výsledok funkcie";
+        Text[ hungarian ] = "Fv. eredménye:";
+        Text[ slovenian ] = "Rezultat funkcije";
     };
     Window WND_RESULT
     {
@@ -1032,6 +1084,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮תוצאה‬";
         Text[ hindi ] = "नतीजा";
         Text[ slovak ] = "Výsledok";
+        Text[ hungarian ] = "Eredmény";
+        Text[ slovenian ] = "Rezultat";
     };
     Window WND_FORMULA_RESULT
     {
@@ -1073,6 +1127,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮מערך‬";
         Text[ hindi ] = "श्रेणी";
         Text[ slovak ] = "Pole";
+        Text[ hungarian ] = "Tömb";
+        Text[ slovenian ] = "Matrika";
     };
     Edit ED_REF
     {
@@ -1112,6 +1168,8 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ hebrew ] = "Vergrößern";
         QuickHelpText[ hindi ] = "बड़ा करो";
         QuickHelpText[ slovak ] = "Maximalizovať";
+        QuickHelpText[ hungarian ] = "Maximalizálás";
+        QuickHelpText[ slovenian ] = "Maksimiraj";
     };
      //
     HelpButton BTN_HELP
@@ -1139,7 +1197,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese_brazilian ] = "<< ~Anterior" ;
         Text [ portuguese ] = "<<~Anterior" ;
         Text [ finnish ] = "<< ~Edellinen" ;
-        Text [ danish ] = "<< Tilbage" ;
+        Text [ danish ] = "<< ~Tilbage" ;
         Text [ french ] = "<< Pr�c�dent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ dutch ] = "<< ~Vorige" ;
@@ -1160,6 +1218,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮<< הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
         Text[ slovak ] = "<< ~Späť";
+        Text[ hungarian ] = "<< ~Vissza";
+        Text[ slovenian ] = "<< N~azaj";
     };
     PushButton BTN_FORWARD
     {
@@ -1173,7 +1233,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese_brazilian ] = "~Pr�ximo >>" ;
         Text [ portuguese ] = ">>~Seguinte" ;
         Text [ finnish ] = "~Seuraava >>" ;
-        Text [ danish ] = "N�ste >>" ;
+        Text [ danish ] = "~N�ste >>" ;
         Text [ french ] = "Suivant >>" ;
         Text [ swedish ] = "~N�sta >>" ;
         Text [ dutch ] = "~Volgende >>" ;
@@ -1194,6 +1254,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮הבא >>‬";
         Text[ hindi ] = "~आगे >>";
         Text[ slovak ] = "Ď~alší >>";
+        Text[ hungarian ] = "~Tovább >>";
+        Text[ slovenian ] = "~Naprej >>";
     };
     OKButton BTN_END
     {
@@ -1212,7 +1274,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese_brazilian ] = "Assistente: Fun��es" ;
         Text [ portuguese ] = "Fun��o AutoPiloto" ;
         Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
-        Text [ danish ] = "FunktionsAutoPilot" ;
+        Text [ danish ] = "AutoPilot: Funktioner" ;
         Text [ french ] = "AutoPilote de fonctions" ;
         Text [ swedish ] = "Funktionsautopilot" ;
         Text [ dutch ] = "Functie-AutoPiloot" ;
@@ -1233,6 +1295,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮טייס אוטומטי: פונקציות‬";
         Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स";
         Text[ slovak ] = "Sprievodca: Funkcie";
+        Text[ hungarian ] = "Függvénytündér";
+        Text[ slovenian ] = "Avtopilot: funkcije";
     };
     String STR_TITLE2
     {
@@ -1243,7 +1307,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese_brazilian ] = "Assistente: Fun��es -" ;
         Text [ portuguese ] = "Fun��o AutoPiloto  -" ;
         Text [ finnish ] = "Ohjattu toiminto: Funktiot  -" ;
-        Text [ danish ] = "FunktionsAutoPilot  -" ;
+        Text [ danish ] = "AutoPilot: Funktioner -" ;
         Text [ french ] = "AutoPilote de fonctions -" ;
         Text [ swedish ] = "Funktionsautopilot  -  " ;
         Text [ dutch ] = "Functie-AutoPiloot -" ;
@@ -1264,8 +1328,11 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ hebrew ] = "‮טייס אוטומטי: פונקציות‬";
         Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स  -";
         Text[ slovak ] = "Sprievodca: Funkcie  -";
+        Text[ hungarian ] = "Függvénytündér - ";
+        Text[ slovenian ] = "Avtopilot: funkcije  -";
     };
 };
+
 
 
 
