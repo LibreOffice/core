@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:24:46 $
+ *  last change: $Author: khong $ $Date: 2002-05-30 06:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,22 @@ OUString SAL_CALL NumToText_CJK::transliterate( const OUString& inStr, sal_Int32
                 offset[count++] = i - len + startPos;
             }
             else {
+                sal_Bool notZero = sal_False;
+                for (sal_Int32 begin = 0, end = len % multiplierExponent[0];
+                    end <= len; begin = end, end += multiplierExponent[0]) {
                 sal_Int32 _count = count;
-                for (sal_Int32 begin = 0, end = len % MultiplierExponent_CJK[0];
-                    end <= len; begin = end, end += MultiplierExponent_CJK[0])
-                numberMaker(srcStr->buffer, begin, end - begin, newStr->buffer, count,
+                notZero |= numberMaker(srcStr->buffer, begin, end - begin, newStr->buffer, count,
                         end == len ? 0 : multiplierChar[0], offset, i - len + startPos);
-                if (_count == count && ! (numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
+                if (count > 0 && newStr->buffer[count-1] == numberChar[0])
+                    count--;
+                if (notZero && _count == count) {
+                    if (end != len) {
+                    newStr->buffer[count] = multiplierChar[0];
+                    offset[count++] = i - len + startPos;
+                    }
+                }
+                }
+                if (! notZero && ! (numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
                 newStr->buffer[count] = numberChar[0];
                 offset[count++] = i - len + startPos;
                 }
@@ -162,8 +172,23 @@ OUString SAL_CALL NumToText_CJK::transliterate( const OUString& inStr, sal_Int32
 sal_Bool SAL_CALL NumToText_CJK::numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
     sal_Unicode *dst, sal_Int32& count, sal_Unicode multiChar, Sequence< sal_Int32 >& offset, sal_Int32 startPos)
 {
-    if ( len == 1 ) {
-        if (str[begin] != NUMBER_ZERO) {
+    if ( len <= multiplierExponent[exponentCount-1] ) {
+        if (multiplierExponent[exponentCount-1] > 1) {
+        sal_Int16 i;
+        sal_Bool notZero = false;
+        for (i = 0; i < len; i++, begin++) {
+            if (notZero || str[begin] != NUMBER_ZERO) {
+            dst[count] = numberChar[str[begin] - NUMBER_ZERO];
+            offset[count++] = begin + startPos;
+            notZero = sal_True;
+            }
+        }
+        if (notZero && multiChar > 0) {
+            dst[count] = multiChar;
+            offset[count++] = begin + startPos;
+        }
+        return notZero;
+        } else if (str[begin] != NUMBER_ZERO) {
         if (!(numberFlag & NUMBER_OMIT_ONE) || multiChar == 0 || str[begin] != NUMBER_ONE) {
             dst[count] = numberChar[str[begin] - NUMBER_ZERO];
             offset[count++] = begin + startPos;
@@ -172,7 +197,7 @@ sal_Bool SAL_CALL NumToText_CJK::numberMaker(const sal_Unicode *str, sal_Int32 b
             dst[count] = multiChar;
             offset[count++] = begin + startPos;
         }
-        } else if (!(numberFlag & NUMBER_OMIT_ZERO) && dst[count-1] != numberChar[0]) {
+        } else if (!(numberFlag & NUMBER_OMIT_ZERO) && count > 0 && dst[count-1] != numberChar[0]) {
         dst[count] = numberChar[0];
         offset[count++] = begin + startPos;
         }
@@ -180,17 +205,17 @@ sal_Bool SAL_CALL NumToText_CJK::numberMaker(const sal_Unicode *str, sal_Int32 b
     } else {
         sal_Bool printPower = sal_False;
         sal_Int16 last = 0;
-        for (sal_Int16 i = 1; i <= ExponentCount_CJK; i++) {
-        sal_Int32 tmp = len - (i == ExponentCount_CJK ? 0 : MultiplierExponent_CJK[i]);
+        for (sal_Int16 i = 1; i <= exponentCount; i++) {
+        sal_Int32 tmp = len - (i == exponentCount ? 0 : multiplierExponent[i]);
         if (tmp > 0) {
             printPower |= numberMaker(str, begin, tmp, dst, count,
-                (i == ExponentCount_CJK ? 0 : multiplierChar[i]), offset, startPos);
+                (i == exponentCount ? 0 : multiplierChar[i]), offset, startPos);
             begin += tmp;
             len -= tmp;
         }
         }
         if (printPower) {
-        if (dst[count-1] == numberChar[0])
+        if (count > 0 && dst[count-1] == numberChar[0])
             count--;
         if (multiChar > 0) {
             dst[count] = multiChar;
@@ -201,32 +226,36 @@ sal_Bool SAL_CALL NumToText_CJK::numberMaker(const sal_Unicode *str, sal_Int32 b
     }
 }
 
-#define TRANSLITERATION_NUMTOTEXT( name, _number, flag ) \
+#define TRANSLITERATION_NUMTOTEXT( name, _number, _short, flag ) \
 NumToText##name::NumToText##name() \
 { \
     number = NumberChar_##_number; \
     numberChar = NumberChar[NumberChar_##_number]; \
-    multiplierChar = MultiplierChar_CJK[Multiplier_##_number]; \
+    multiplierChar = MultiplierChar_##_short[Multiplier_##_number]; \
+    exponentCount = ExponentCount_##_short; \
+    multiplierExponent = MultiplierExponent_##_short; \
     numberFlag = flag; \
     transliterationName = "NumToText"#name; \
     implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
 }
-TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, Lower_zh, 0 )
-TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, Upper_zh, 0 )
-TRANSLITERATION_NUMTOTEXT( Lower_zh_TW, Lower_zh, 0 )
-TRANSLITERATION_NUMTOTEXT( Upper_zh_TW, Upper_zh_TW, 0 )
+TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, Upper_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Lower_zh_TW, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Upper_zh_TW, Upper_zh_TW, CJK, 0 )
 #define Multiplier_Lower_ko Multiplier_Upper_zh_TW
 #define Multiplier_Upper_ko Multiplier_Upper_zh_TW
-TRANSLITERATION_NUMTOTEXT( FormalLower_ko, Lower_ko, NUMBER_OMIT_ZERO )
-TRANSLITERATION_NUMTOTEXT( FormalUpper_ko, Upper_ko, NUMBER_OMIT_ZERO )
-TRANSLITERATION_NUMTOTEXT( FormalHangul_ko, Hangul_ko, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalLower_ko, Lower_ko, CJK, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalUpper_ko, Upper_ko, CJK, NUMBER_OMIT_ZERO )
+TRANSLITERATION_NUMTOTEXT( FormalHangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ZERO )
 #define NUMBER_OMIT_ALL ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE|NUMBER_OMIT_ONLY_ZERO )
-TRANSLITERATION_NUMTOTEXT( InformalLower_ko, Lower_ko, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( InformalUpper_ko, Upper_ko, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( InformalHangul_ko, Hangul_ko, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiLongTraditional_ja_JP, Traditional_ja, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( KanjiLongModern_ja_JP, Modern_ja, NUMBER_OMIT_ALL )
-TRANSLITERATION_NUMTOTEXT( Date_zh, Lower_zh, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalLower_ko, Lower_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalUpper_ko, Upper_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( InformalHangul_ko, Hangul_ko, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiLongTraditional_ja_JP, Traditional_ja, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiLongModern_ja_JP, Modern_ja, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( Date_zh, Lower_zh, CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiShortTraditional_ja_JP, Traditional_ja, short_CJK, NUMBER_OMIT_ALL )
+TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, Modern_ja, short_CJK, NUMBER_OMIT_ALL )
 #undef TRANSLITERATION_NUMTOTEXT
 
 #define TRANSLITERATION_NUMTOTEXT( name ) \

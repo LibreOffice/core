@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-24 22:38:19 $
+ *  last change: $Author: khong $ $Date: 2002-05-30 06:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharFullwidth )
 IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToCharHangul_ko )
 IMPL_CREATEINSTANCE( NumToCharLower_ko )
 IMPL_CREATEINSTANCE( NumToCharUpper_ko )
@@ -283,6 +284,7 @@ IMPL_CREATEINSTANCE( CharToNumLower_zh_TW )
 IMPL_CREATEINSTANCE( CharToNumUpper_zh_TW )
 IMPL_CREATEINSTANCE( CharToNumFullwidth )
 IMPL_CREATEINSTANCE( CharToNumKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( CharToNumKanjiTraditional_ja_JP )
 IMPL_CREATEINSTANCE( CharToNumHangul_ko )
 IMPL_CREATEINSTANCE( CharToNumLower_ko )
 IMPL_CREATEINSTANCE( CharToNumUpper_ko )
@@ -297,6 +299,8 @@ IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextKanjiShortModern_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextKanjiShortTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextFormalHangul_ko )
 IMPL_CREATEINSTANCE( NumToTextFormalLower_ko )
 IMPL_CREATEINSTANCE( NumToTextFormalUpper_ko )
@@ -565,6 +569,7 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
     IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_ko),
     IMPL_TRANSLITERATION_ITEM (NumToCharHangul_ko),
@@ -580,6 +585,7 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_TW),
     IMPL_TRANSLITERATION_ITEM (CharToNumFullwidth),
     IMPL_TRANSLITERATION_ITEM (CharToNumKanjiShort_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (CharToNumKanjiTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (CharToNumLower_ko),
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_ko),
     IMPL_TRANSLITERATION_ITEM (CharToNumHangul_ko),
@@ -594,6 +600,8 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortModern_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalHangul_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalUpper_ko),

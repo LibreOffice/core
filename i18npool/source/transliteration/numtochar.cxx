@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-04-04 22:32:05 $
+ *  last change: $Author: khong $ $Date: 2002-05-30 06:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TRANSLITERATION_NUMTOCHAR( Lower_zh_TW, Lower_zh )
 TRANSLITERATION_NUMTOCHAR( Upper_zh_CN, Upper_zh )
 TRANSLITERATION_NUMTOCHAR( Upper_zh_TW, Upper_zh_TW )
 TRANSLITERATION_NUMTOCHAR( KanjiShort_ja_JP, Modern_ja )
+TRANSLITERATION_NUMTOCHAR( KanjiTraditional_ja_JP, Traditional_ja )
 TRANSLITERATION_NUMTOCHAR( Lower_ko, Lower_ko )
 TRANSLITERATION_NUMTOCHAR( Upper_ko, Upper_ko )
 TRANSLITERATION_NUMTOCHAR( Hangul_ko, Hangul_ko )

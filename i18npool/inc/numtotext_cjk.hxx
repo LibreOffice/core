@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:23:22 $
+ *  last change: $Author: khong $ $Date: 2002-05-30 06:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ protected:
     sal_Int16 numberFlag;
     sal_Int16 bulletCount;
     sal_Int16 number;
+    sal_Int16 exponentCount;
+    sal_Int16 *multiplierExponent;
 
 private:
     sal_Bool SAL_CALL numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
@@ -104,6 +106,8 @@ TRANSLITERATION_NUMTOTEXT_CJK ( FormalUpper_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalHangul_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongModern_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongTraditional_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( KanjiShortModern_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( KanjiShortTraditional_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( AIUFullWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( AIUHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( IROHAFullWidth_ja_JP )
