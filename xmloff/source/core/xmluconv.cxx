@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: sab $ $Date: 2001-10-29 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,5 +1910,21 @@ void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>&
             }
         }
     }
+}
+
+void SvXMLUnitConverter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource)
+{
+    sal_uInt32 nLength(rSource.getLength());
+    rtl::OUStringBuffer sBuffer(nLength);
+    for (sal_uInt32 i = 0; i < nLength; i++)
+    {
+        sal_Unicode cChar = rSource[i];
+        if (!(cChar < 0x0020) ||
+            (cChar == 0x0009) ||        // TAB
+            (cChar == 0x000A) ||        // LF
+            (cChar == 0x000D))          // legal character
+            sBuffer.append(cChar);
+    }
+    rTarget = sBuffer.makeStringAndClear();
 }
 
