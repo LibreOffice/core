@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:24:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
@@ -834,6 +840,14 @@ USHORT  SwAuthorityField::GetHandlePosition() const
     DBG_ASSERT(pAuthType, "no field type")
     return pAuthType->GetPosition(nHandle);
 }
+
+String SwAuthorityField::GetDescription() const
+{
+    return SW_RES(STR_AUTHORITY);
+}
+
+
+
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -962,5 +976,4 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
     }
     return pSrcTyp;
 }
-
 
