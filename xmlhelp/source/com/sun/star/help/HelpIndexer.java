@@ -199,7 +199,7 @@ public class HelpIndexer {
             System.out.println( "Indexing..." );
               Enumeration enum = _hashDocInfo.elements();
             int cut = 0;
-             while( enum.hasMoreElements() && cut < 10000000 )
+             while( enum.hasMoreElements() && cut < 100000000 )
              {
                   try
                 {
@@ -476,7 +476,7 @@ public class HelpIndexer {
             table = new Db( null,0 );
 
             String fileName = HelpDatabases.getInstallDirectory()
-                              + _language
+                            + _language
                             + File.separator
                             + _module
                                + ".ht";
@@ -511,10 +511,18 @@ public class HelpIndexer {
          {
               if( test.getNodeName().equals( "help:key-word" ) )
             {
-                String keyword = (( Element ) test).getAttribute( "value" );
-                String getJump = (( Element ) test).getAttribute( "tag" );
-                if( ! keyword.equals("") && !id.equals("") )
-                    _keywords.insert( keyword,id + "#" + getJump );
+                Element element = ( Element ) test;
+
+                String isEmbedded = element.getAttribute( "embedded" );
+
+                if( isEmbedded != null && isEmbedded.equals( "false" ) )
+                {
+                    String keyword = element.getAttribute( "value" );
+                    String getJump = element.getAttribute( "tag" );
+
+                    if( ! keyword.equals("") && !id.equals("") )
+                        _keywords.insert( keyword,id + "#" + getJump );
+                }
              }
           }
     }
