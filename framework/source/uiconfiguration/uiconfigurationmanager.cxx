@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 11:28:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,10 +333,13 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     {
                         try
                         {
-                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             MenuConfiguration aMenuCfg( m_xServiceManager );
-                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
-                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
+                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
+                            if ( pRootItemContainer )
+                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            else
+                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
                         catch ( ::com::sun::star::lang::WrappedTargetException& )
