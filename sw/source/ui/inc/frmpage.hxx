@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 11:36:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@ class SwFrmPage: public SfxTabPage
     MetricField     aAtVertPosED;
     FixedText       aVertRelationFT;
     ListBox         aVertRelationLB;
+    // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
+    CheckBox        aFollowTextFlowCB;
     FixedLine       aPositionFL;
     BOOL            bAtHorzPosModified;
     BOOL            bAtVertPosModified;
