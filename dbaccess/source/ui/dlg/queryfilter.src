@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:54:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ japanese ] = "ζΌ”η®—ε­";
         Text[ chinese_traditional ] = "ζ·εΎ‘";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
-        Text[ greek ] = "Σύνδεση";
+        Text[ greek ] = "Τελεστής";
         Text[ korean ] = "μ—°μ‚°μ";
         Text[ turkish ] = "έώlemci";
         Text[ language_user1 ] = " ";
@@ -582,12 +582,12 @@ ModalDialog DLG_FILTERCRIT
         Text[ danish ] = "=;<>;<;<=;>;>=;som;ikke som;tom;ikke tom";
         Text[ swedish ] = "=;<>;<;<=;>;>=;lika med;inte lika med;noll;inte noll";
         Text[ polish ] = " =;<>;<;<=;>;>=;jak;nie jak;puste;niepuste";
-        Text[ portuguese_brazilian ] = "O servidor relatou o seguinte erro:\n$(ARG1)";
+        Text[ portuguese_brazilian ] = "=;<>;<;<=;>;>=;equivalente;nγo equivalente;vazio;nγo vazio";
         Text[ japanese ] = "=;<>;<;<=;>;>=;like;not like;η©Ί;η©Ίγ§γªγ„";
         Text[ chinese_simplified ] = "=;<>;<;<=;>;>=;η­‰δΊ;δΈη­‰δΊ;η©ΊηΌΊ;δΈη©ΊηΌΊ";
         Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;η­‰ζ–Ό;δΈη­‰ζ–Ό;η©ΊηΌΊ;δΈη©ΊηΌΊ";
         Text[ arabic ] = "=;<>;<;<=;>;>=;γΛα;ανΣ γΛα;ΞΗαν;ανΣ ΞΗανΗπ";
-        Text[ greek ] = "=;<>;<;<=;>;>=;όπως;όχι όπως;κενό;όχι κενό";
+        Text[ greek ] = "=;<>;<;<=;>;>=;όπως;όχι όπως;μηδενικός χαρακτήρας;όχι μηδενικός χαρακτήρας";
         Text[ korean ] = "=;<>;<;<=;>;>=;κ°™μ;κ°™μ§€ μ•μ;λΉ„μ–΄ μλ”;λΉ„μ–΄μμ§€μ•μ";
         Text[ turkish ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ language_user1 ] = " ";
@@ -604,6 +604,7 @@ ModalDialog DLG_FILTERCRIT
     Text[ hindi ] = "ΰ¤«ΰ¤Ώΰ¤²ΰ¥ΰ¤ΰ¤°";
     Text[ slovak ] = "Filter";
 };
+
 
 
 
