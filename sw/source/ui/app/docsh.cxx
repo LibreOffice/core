@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 14:18:36 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1246,13 +1246,17 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
 
         case FN_NEW_GLOBAL_DOC:
-            if ( ISA(SwGlobalDocShell) )
+            if ( ISA(SwGlobalDocShell) || SwIoSystem::GetFilterOfFormat(
+                                    String::CreateFromAscii( FILTER_XML ),
+                                        GetFactory().GetFilterContainer()) )
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_NEW_HTML_DOC:
-            // ??? oder sollte das immer gehen??
-            if( ISA( SwWebDocShell ) )
+            if( ISA( SwWebDocShell ) ||
+                0 == SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
+                            RTL_CONSTASCII_STRINGPARAM( "HTML" )),
+                            GetFactory().GetFilterContainer()) )
                 rSet.DisableItem( nWhich );
             break;
 
