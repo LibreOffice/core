@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:15:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,7 +1607,7 @@ String STR_UNDO_REPLACE
     Text [ swedish ] = "Ersätt" ;
     Text [ finnish ] = "Korvaa" ;
     Text [ english_us ] = "Replace" ;
-    Text[ chinese_simplified ] = "¸üÌæ";
+    Text[ chinese_simplified ] = "Ìæ»»";
     Text[ russian ] = "çàìåíèòü";
     Text[ polish ] = "Zamieñ";
     Text[ japanese ] = "’uŠ·";
@@ -5474,7 +5474,7 @@ String STR_UNDO_CHANGE_PAGEBORDER
     Text [ ENGLISH ] = "change page borders" ;
     Text [ dutch ] = "Marges veranderen" ;
     Text [ english_us ] = "Modify page margins" ;
-    Text [ italian ] = "Modifica bordi pagina" ;
+    Text [ italian ] = "Modifica margini" ;
     Text [ spanish ] = "Modificar márgenes de página" ;
     Text [ french ] = "Modifier les marges" ;
     Text [ swedish ] = "Ändra sidmarginaler" ;
@@ -7530,7 +7530,7 @@ String STR_EFFECT_FADE_TO_CENTER
     Text [ spanish ] = "Recuadro entrante" ;
     Text [ english_us ] = "Fade To Center" ;
     Text[ chinese_simplified ] = "×ÔÍâÏòÄÚÏûÊ§";
-    Text[ russian ] = "Íàïëûâ âî âíóòğü";
+    Text[ russian ] = "Çàñëîíÿòü âî âíóòğü";
     Text[ polish ] = "Zanikaj do wewn¹trz";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö‚µ‚¾‚¢‚É•\\¦";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò ğñïò ôï êİíôñï";
@@ -7557,7 +7557,7 @@ String STR_EFFECT_FADE_FROM_CENTER
     Text [ spanish ] = "Recuadro saliente" ;
     Text [ english_us ] = "Fade From Center" ;
     Text[ chinese_simplified ] = "´ÓÖĞÑëÒş³ö";
-    Text[ russian ] = "Íàïëûâ íàğóæó";
+    Text[ russian ] = "Çàñëîíÿòü íàğóæó";
     Text[ polish ] = "Zanikaj na zewn¹trz";
     Text[ japanese ] = "“à‚©‚çŠO‚Ö‚µ‚¾‚¢‚É•\\¦";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò ğñïò ôá İîù";
@@ -8606,7 +8606,7 @@ String STR_EFFECT_PATH
     Text [ portuguese ] = "Mover ao longo da curva" ;
     Text [ portuguese_brazilian ] = "an Kurve entlang" ;
     Text[ chinese_simplified ] = "ÑØ×ÅÇúÏß";
-    Text[ russian ] = "âäîëü êğèâîé";
+    Text[ russian ] = "Äâèæåíèå ïî êğèâîé";
     Text[ polish ] = "Przesuñ wzd³u¿ krzywej";
     Text[ japanese ] = "‹Èü‚É‚»‚Á‚Ä";
     Text[ greek ] = "ÊáôÜ ìŞêïò êáìğıëçò";
@@ -9056,8 +9056,8 @@ String STR_EFFECT_SPIRALIN_L
     Text [ portuguese ] = "Espiral para dentro, à esquerda" ;
     Text [ portuguese_brazilian ] = "Spirale nach innen links" ;
     Text[ chinese_simplified ] = "Ë³Ê±ÕëÄÚĞı";
-    Text[ russian ] = "Ñïèğàëü âî âíóòğü ñëåâà";
-    Text[ polish ] = "Spirala do œrodka z lewej";
+    Text[ russian ] = "Ñïèğàëü âî âíóòğü ïî ÷àñîâîé ñòğåëêå";
+    Text[ polish ] = "Spirala do œrodka zgodnie z ruchem wskazówek zegara";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö¶‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ áñéóôåñÜ";
     Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿ŞÂÊÀ¸·Î ³ª¼±";
@@ -9081,8 +9081,8 @@ String STR_EFFECT_SPIRALIN_R
     Text [ portuguese ] = "Espiral para dentro, à direita" ;
     Text [ portuguese_brazilian ] = "Spirale nach innen rechts" ;
     Text[ chinese_simplified ] = "ÄæÊ±ÕëÄÚĞı";
-    Text[ russian ] = "Ñïèğàëü âî âíóòğü âïğàâî";
-    Text[ polish ] = "Spirala do œrodka z prawej";
+    Text[ russian ] = "Ñïèğàëü âî âíóòğü ïğîòèâ ÷àñîâîé ñòğåëêè";
+    Text[ polish ] = "Spirala do œrodka w kierunku przeciwnym do ruchu wskazówek zegara";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö‰E‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ äåîéÜ";
     Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª¼±";
@@ -9107,8 +9107,8 @@ String STR_EFFECT_SPIRALOUT_L
     Text [ portuguese ] = "Espiral para fora, à esquerda" ;
     Text [ portuguese_brazilian ] = "Spirale nach au?en links" ;
     Text[ chinese_simplified ] = "Ë³Ê±ÕëÍâĞı";
-    Text[ russian ] = "Ñïèğàëü íàğóæó ñëåâà";
-    Text[ polish ] = "Spirala na zewn¹trz z lewej";
+    Text[ russian ] = "Ñïèğàëü íàğóæó ïî ÷àñîâîé ñòğåëêå";
+    Text[ polish ] = "Spirala na zewn¹trz zgodnie z ruchem wskazówek zegara";
     Text[ japanese ] = "“à‚©‚çŠO‚Ö¶‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åîùôåñéêÜ áñéóôåñÜ";
     Text[ korean ] = "¹Ù±ùÂÊÀ¸·Î ¿ŞÂÊÀ¸·Î ³ª¼±";
@@ -9133,8 +9133,8 @@ String STR_EFFECT_SPIRALOUT_R
     Text [ portuguese ] = "Espiral para fora, à direita" ;
     Text [ portuguese_brazilian ] = "Spirale nach au?en rechts" ;
     Text[ chinese_simplified ] = "ÄæÊ±ÕëÍâĞı";
-    Text[ russian ] = "Ñïèğàëü íàğóæó âïğàâî";
-    Text[ polish ] = "Spirala na zewn¹trz z prawej";
+    Text[ russian ] = "Ñïèğàëü íàğóæó ïğîòèâ ÷àñîâîé ñòğåëêè";
+    Text[ polish ] = "Spirala na zewn¹trz w kierunku przeciwnym do ruchu wskazówek zegara";
     Text[ japanese ] = "“à‚©‚çŠO‚Ö‰E‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åîùôåñéêÜ äåîéÜ";
     Text[ korean ] = "¹Ù±ùÂÊÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª¼±";
@@ -12408,7 +12408,7 @@ String STR_HTMLEXP_NOFRAMES
     Text[ dutch ] = "Uw browser ondersteunt helaas geen frames";
     Text[ spanish ] = "Lamentablemente su navegador no acepta Frames";
     Text[ english_us ] = "Unfortunately your browser does not support floating frames.";
-    Text[ chinese_simplified ] = "ºÜÒÅº¶£¬ÄúµÄä¯ÀÀÆ÷²»Ö§³Ö¿ò¼Ü¡£";
+    Text[ chinese_simplified ] = "ºÜÒÅº¶£¬ÄúµÄä¯ÀÀÆ÷²»Ö§³Ö¿ò¶ÔÏó¡£";
     Text[ russian ] = "Ê ñîæàëåíèş, Âàø áğàóçåğ íå ïîääåğæèâàåò êàäğû";
     Text[ polish ] = "Przegl¹darka stosowana przez u¿ytkownika nie obs³uguje niestety ramek";
     Text[ japanese ] = "c”O‚È‚ª‚çÕ°»Ş°‚ÌÌŞ×³»Ş‚ÍÌÚ°Ñ‚ğx‰‡‚µ‚Ü‚¹‚ñ";
@@ -12460,13 +12460,13 @@ String STR_HTMLEXP_LASTPAGE
     Text[ dutch ] = "Laaatste pagina";
     Text[ spanish ] = "Última página";
     Text[ english_us ] = "Last page";
-    Text[ chinese_simplified ] = "Î²Ò³";
+    Text[ chinese_simplified ] = "×îºóÒ»Ò³";
     Text[ russian ] = "Ïîñëåäíÿÿ ñòğàíèöà";
     Text[ polish ] = "Ostatnia strona";
     Text[ japanese ] = "ÅŒã‚ÌÍß°¼Ş";
     Text[ greek ] = "Ôåëåõôáßá óåëßäá";
     Text[ korean ] = "¸¶Áö¸· ÂÊ";
-    Text[ chinese_traditional ] = "§À­¶";
+    Text[ chinese_traditional ] = "³Ì«á¤@­¶";
     Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
     Text[ turkish ] = "Son sayfa";
     Text[ catalan ] = "Última página";
@@ -13371,6 +13371,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
