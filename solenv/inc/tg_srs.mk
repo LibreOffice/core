@@ -45,7 +45,7 @@ $(SRCTARGET) : $(SRCFILES)
     @+type $(mktmp $(SRCFILES:+"\n")) > $(TMP)$/$(TARGET).tra
     @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
     +type $(TMP)$/$(TARGET).art | $(SORT) -u  > $(TMP)$/$(TARGET).tra
-    +call resp.bat r:\bat\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
+    +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
     @+-del $(TMP)$/$(TARGET).tra
     @+-del $(TMP)$/$(TARGET).art
 .ENDIF
@@ -120,7 +120,7 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
     @+type $(mktmp $(SRC$(TNR)FILES:+"\n")) > $(TMP)$/$(TARGET).tra
     @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
     +type $(TMP)$/$(TARGET).art | $(SORT) -u > $(TMP)$/$(TARGET).tra
-    +call resp.bat r:\bat\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
+    +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
     @+del $(TMP)$/$(TARGET).art
     @+del $(TMP)$/$(TARGET).tra
 .ENDIF
