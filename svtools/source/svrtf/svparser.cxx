@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:52:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ struct SvParser_Impl
     ULONG           nlLineNr;           // akt. Zeilen Nummer
     ULONG           nlLinePos;          // akt. Spalten Nummer
     long            nTokenValue;        // zusaetzlicher Wert (RTF)
+    BOOL            bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // akt. Token
     sal_Unicode     nNextCh;            // akt. Zeichen
 
@@ -121,6 +122,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     , nlLinePos( 1 )
     , pImplData( 0 )
     , nTokenValue( 0 )
+    , bTokenHasValue( false )
     , eState( SVPAR_NOTSTARTED )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
     , bDownloadingFile( FALSE )
@@ -469,6 +471,7 @@ int SvParser::GetNextToken()
     {
         aToken.Erase();     // Token-Buffer loeschen
         nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
+        bTokenHasValue = false;
 
         nRet = _GetNextToken();
         if( SVPAR_PENDING == eState )
@@ -484,6 +487,7 @@ int SvParser::GetNextToken()
     {
         --nTokenStackPos;
         nTokenValue = pTokenStackPos->nTokenValue;
+        bTokenHasValue = pTokenStackPos->bTokenHasValue;
         aToken = pTokenStackPos->sToken;
         nRet = pTokenStackPos->nTokenId;
     }
@@ -492,6 +496,7 @@ int SvParser::GetNextToken()
     {
         pTokenStackPos->sToken = aToken;
         pTokenStackPos->nTokenValue = nTokenValue;
+        pTokenStackPos->bTokenHasValue = bTokenHasValue;
         pTokenStackPos->nTokenId = nRet;
     }
     else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
@@ -513,6 +518,7 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
     // und die Werte zurueck
     aToken = pTokenStackPos->sToken;
     nTokenValue = pTokenStackPos->nTokenValue;
+    bTokenHasValue = pTokenStackPos->bTokenHasValue;
 
     return pTokenStackPos->nTokenId;
 }
@@ -570,6 +576,7 @@ void SvParser::SaveState( int nToken )
     pImplData->nlLineNr = nlLineNr;
     pImplData->nlLinePos = nlLinePos;
     pImplData->nTokenValue= nTokenValue;
+    pImplData->bTokenHasValue = bTokenHasValue;
     pImplData->nNextCh = nNextCh;
 }
 
@@ -584,6 +591,7 @@ void SvParser::RestoreState()
         nlLineNr = pImplData->nlLineNr;
         nlLinePos = pImplData->nlLinePos;
         nTokenValue= pImplData->nTokenValue;
+        bTokenHasValue=pImplData->bTokenHasValue;
         nNextCh = pImplData->nNextCh;
 
         pImplData->nSaveToken = pImplData->nToken;
