@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cpp_bridgetest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:01:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #using <mscorlib.dll>
 #using <System.dll>
+#using <cli_basetypes.dll>
 #using <cli_types.dll>
 #using <cli_ure.dll>
 #using <cli_types_bridgetest.dll>
@@ -264,7 +265,7 @@ static void assign( TestElement* rData,
                     float fFloat, double fDouble,
                     TestEnum eEnum, String* rStr,
                     Object* xTest,
-                    Any rAny )
+                    uno::Any rAny )
 {
     rData->Bool = bBool;
     rData->Char = cChar;
