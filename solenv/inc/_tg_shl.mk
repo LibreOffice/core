@@ -151,9 +151,9 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL1SONAME=$(SONAME_SWITCH)$(SHL1TARGETN:b:b)
+SHL1SONAME=$(SONAME_SWITCH)$(SHL1TARGETN:f)
 .ELSE
-SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:b:b)\"
+SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -370,10 +370,8 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL1TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL1TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL1TARGETN:f:b:b) $(SHL1TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL1TARGETN:b)
+    +cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -551,9 +549,9 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL2SONAME=$(SONAME_SWITCH)$(SHL2TARGETN:b:b)
+SHL2SONAME=$(SONAME_SWITCH)$(SHL2TARGETN:f)
 .ELSE
-SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:b:b)\"
+SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -770,10 +768,8 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL2TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL2TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL2TARGETN:f:b:b) $(SHL2TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL2TARGETN:b)
+    +cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -951,9 +947,9 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL3SONAME=$(SONAME_SWITCH)$(SHL3TARGETN:b:b)
+SHL3SONAME=$(SONAME_SWITCH)$(SHL3TARGETN:f)
 .ELSE
-SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:b:b)\"
+SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -1170,10 +1166,8 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL3TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL3TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL3TARGETN:f:b:b) $(SHL3TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL3TARGETN:b)
+    +cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -1351,9 +1345,9 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL4SONAME=$(SONAME_SWITCH)$(SHL4TARGETN:b:b)
+SHL4SONAME=$(SONAME_SWITCH)$(SHL4TARGETN:f)
 .ELSE
-SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:b:b)\"
+SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -1570,10 +1564,8 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL4TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL4TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL4TARGETN:f:b:b) $(SHL4TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL4TARGETN:b)
+    +cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -1751,9 +1743,9 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL5SONAME=$(SONAME_SWITCH)$(SHL5TARGETN:b:b)
+SHL5SONAME=$(SONAME_SWITCH)$(SHL5TARGETN:f)
 .ELSE
-SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:b:b)\"
+SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -1970,10 +1962,8 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL5TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL5TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL5TARGETN:f:b:b) $(SHL5TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL5TARGETN:b)
+    +cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -2151,9 +2141,9 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL6SONAME=$(SONAME_SWITCH)$(SHL6TARGETN:b:b)
+SHL6SONAME=$(SONAME_SWITCH)$(SHL6TARGETN:f)
 .ELSE
-SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:b:b)\"
+SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -2370,10 +2360,8 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL6TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL6TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL6TARGETN:f:b:b) $(SHL6TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL6TARGETN:b)
+    +cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -2551,9 +2539,9 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL7SONAME=$(SONAME_SWITCH)$(SHL7TARGETN:b:b)
+SHL7SONAME=$(SONAME_SWITCH)$(SHL7TARGETN:f)
 .ELSE
-SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:b:b)\"
+SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -2770,10 +2758,8 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL7TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL7TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL7TARGETN:f:b:b) $(SHL7TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL7TARGETN:b)
+    +cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -2951,9 +2937,9 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL8SONAME=$(SONAME_SWITCH)$(SHL8TARGETN:b:b)
+SHL8SONAME=$(SONAME_SWITCH)$(SHL8TARGETN:f)
 .ELSE
-SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:b:b)\"
+SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -3170,10 +3156,8 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL8TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL8TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL8TARGETN:f:b:b) $(SHL8TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL8TARGETN:b)
+    +cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -3351,9 +3335,9 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL9SONAME=$(SONAME_SWITCH)$(SHL9TARGETN:b:b)
+SHL9SONAME=$(SONAME_SWITCH)$(SHL9TARGETN:f)
 .ELSE
-SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:b:b)\"
+SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -3570,10 +3554,8 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL9TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL9TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL9TARGETN:f:b:b) $(SHL9TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL9TARGETN:b)
+    +cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
@@ -3751,9 +3733,9 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL10SONAME=$(SONAME_SWITCH)$(SHL10TARGETN:b:b)
+SHL10SONAME=$(SONAME_SWITCH)$(SHL10TARGETN:f)
 .ELSE
-SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:b:b)\"
+SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -3970,10 +3952,8 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL10TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL10TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL10TARGETN:f:b:b) $(SHL10TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL10TARGETN:b)
+    +cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
