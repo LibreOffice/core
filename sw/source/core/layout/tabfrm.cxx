@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:30:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,11 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+// --> collapsing borders FME 2005-05-27 #i29550#
+#ifndef _SVX_BOXITEM_HXX //autogen
+#include <svx/boxitem.hxx>
+#endif
+// <--
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
@@ -269,7 +274,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva );
 BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom );
 // OD 2004-02-18 #106629# - correct type of 1st parameter
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm *pRow );
-
+SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
 
 /*************************************************************************
 |*  START: local helper functions for repeated headlines
@@ -513,7 +518,7 @@ void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
 
                         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
                         const SwBorderAttrs &rAttrs = *aAccess.Get();
-                        nMinHeight = Max( nMinHeight, (long)(rAttrs.CalcTop() + rAttrs.CalcBottom()) );
+                        nMinHeight = Max( nMinHeight, lcl_CalcTopAndBottomMargin( *(SwLayoutFrm*)pCell, rAttrs ) );
                         pCell = pCell->GetNext();
                     }
 
@@ -1189,6 +1194,31 @@ void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom )
               ( bAll ||
               (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(), nBottom ) < 0 ) );
 }
+
+// --> collapsing borders FME 2005-05-27 #i29550#
+void lcl_InvalidateAllLowersPrt( SwLayoutFrm* pLayFrm )
+{
+    pLayFrm->_InvalidatePrt();
+    pLayFrm->_InvalidateSize();
+    pLayFrm->SetCompletePaint();
+
+    SwFrm* pFrm = pLayFrm->Lower();
+
+    while ( pFrm )
+    {
+        if ( pFrm->IsLayoutFrm() )
+            lcl_InvalidateAllLowersPrt( (SwLayoutFrm*)pFrm );
+        else
+        {
+            pFrm->_InvalidatePrt();
+            pFrm->_InvalidateSize();
+            pFrm->SetCompletePaint();
+        }
+
+        pFrm = pFrm->GetNext();
+    }
+}
+// <-- collapsing
 
 BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
 {
@@ -2206,6 +2236,10 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     long nRightOffset = Max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    if ( IsCollapsingBorders() )
+        nLower += GetBottomLineSize();
+    // <-- collapsing
 
     if ( !bValidPrtArea )
     {   bValidPrtArea = TRUE;
@@ -2641,6 +2675,10 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             SetDerivedR2L( sal_False );
             CheckDirChange();
             break;
+        case RES_COLLAPSING_BORDERS :
+            rInvFlags |= 0x02;
+            lcl_InvalidateAllLowersPrt( this );
+            break;
         case RES_UL_SPACE:
             rInvFlags |= 0x1C;
             /* kein Break hier */
@@ -3066,7 +3104,14 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, bool bInsertContent ):
     SwLayoutFrm( rLine.GetFrmFmt() ),
     pTabLine( &rLine ),
     pFollowRow( 0 ),
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    mnTopMarginForLowers( 0 ),
+    mnBottomMarginForLowers( 0 ),
+    mnBottomLineSize( 0 ),
+    // <-- collapsing
+    // --> split table rows
     bIsFollowFlowRow( false ),
+    // <-- split table rows
     bIsRepeatedHeadline( false )
 {
     nType = FRMC_ROW;
@@ -3225,10 +3270,31 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
 SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttrs& rAttrs )
 {
     const SwTabFrm* pTab = rCell.FindTabFrm();
-    if ( pTab->IsVertical() != rCell.IsVertical() )
-        return rAttrs.CalcLeft( &rCell ) + rAttrs.CalcRight( &rCell );
+    SwTwips nTopSpace = 0;
+    SwTwips nBottomSpace = 0;
+
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    if ( pTab->IsCollapsingBorders() && rCell.Lower() && !rCell.Lower()->IsRowFrm() )
+    {
+        nTopSpace    = ((SwRowFrm*)rCell.GetUpper())->GetTopMarginForLowers();
+        nBottomSpace = ((SwRowFrm*)rCell.GetUpper())->GetBottomMarginForLowers();
+    }
+    // <-- collapsing
     else
-        return rAttrs.CalcTop() + rAttrs.CalcBottom();
+    {
+        if ( pTab->IsVertical() != rCell.IsVertical() )
+        {
+            nTopSpace    = rAttrs.CalcLeft( &rCell );
+            nBottomSpace = rAttrs.CalcRight( &rCell );
+        }
+        else
+        {
+            nTopSpace    = rAttrs.CalcTop();
+            nBottomSpace = rAttrs.CalcBottom();
+        }
+    }
+
+    return nTopSpace + nBottomSpace;
 }
 
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
@@ -3296,7 +3362,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
     SwCellFrm* pLow = static_cast<SwCellFrm*>(_pRow->Lower());
     while ( pLow )
     {
-    SwTwips nTmp = ::lcl_CalcMinCellHeight( pLow );
+        SwTwips nTmp = ::lcl_CalcMinCellHeight( pLow );
         if ( ( 0 != pLow->IsVertical() ) == ( 0 != bVert ) && nTmp > nHeight )
             nHeight = nTmp;
         pLow = static_cast<SwCellFrm*>(pLow->GetNext());
@@ -3305,6 +3371,105 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
         nHeight = Max( nHeight, rSz.GetHeight() );
     return nHeight;
 }
+
+// --> collapsing borders FME 2005-05-27 #i29550#
+
+// Calculate the maximum of (TopLineSize + TopLineDist) over all lowers:
+USHORT lcl_GetTopSpace( const SwRowFrm& rRow )
+{
+    USHORT nTopSpace = 0;
+    for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
+          pCurrLower = (SwCellFrm*)pCurrLower->GetNext() )
+    {
+        USHORT nTmpTopSpace = 0;
+        if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
+            nTmpTopSpace = lcl_GetTopSpace( *(SwRowFrm*)pCurrLower->Lower() );
+        else
+        {
+            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SvxBoxItem& rBoxItem = rSet.GetBox();
+            nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, sal_True );
+        }
+        nTopSpace  = Max( nTopSpace, nTmpTopSpace );
+    }
+    return nTopSpace;
+}
+
+// Calculate the maximum of TopLineDist over all lowers:
+USHORT lcl_GetTopLineDist( const SwRowFrm& rRow )
+{
+    USHORT nTopLineDist = 0;
+    for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
+          pCurrLower = (SwCellFrm*)pCurrLower->GetNext() )
+    {
+        USHORT nTmpTopLineDist = 0;
+        if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
+            nTmpTopLineDist = lcl_GetTopLineDist( *(SwRowFrm*)pCurrLower->Lower() );
+        else
+        {
+            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SvxBoxItem& rBoxItem = rSet.GetBox();
+            nTmpTopLineDist = rBoxItem.GetDistance( BOX_LINE_TOP );
+        }
+        nTopLineDist = Max( nTopLineDist, nTmpTopLineDist );
+    }
+    return nTopLineDist;
+}
+
+// Calculate the maximum of BottomLineSize over all lowers:
+USHORT lcl_GetBottomLineSize( const SwRowFrm& rRow )
+{
+    USHORT nBottomLineSize = 0;
+    for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
+          pCurrLower = (SwCellFrm*)pCurrLower->GetNext() )
+    {
+        USHORT nTmpBottomLineSize = 0;
+        if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
+        {
+            SwFrm* pRow = pCurrLower->Lower();
+            while ( pRow->GetNext() )
+                pRow = pRow->GetNext();
+            nTmpBottomLineSize = lcl_GetBottomLineSize( *(SwRowFrm*)pRow );
+        }
+        else
+        {
+            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SvxBoxItem& rBoxItem = rSet.GetBox();
+            nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, sal_True ) -
+                                 rBoxItem.GetDistance( BOX_LINE_BOTTOM );
+        }
+        nBottomLineSize = Max( nBottomLineSize, nTmpBottomLineSize );
+    }
+    return nBottomLineSize;
+}
+
+// Calculate the maximum of BottomLineDist over all lowers:
+USHORT lcl_GetBottomLineDist( const SwRowFrm& rRow )
+{
+    USHORT nBottomLineDist = 0;
+    for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
+          pCurrLower = (SwCellFrm*)pCurrLower->GetNext() )
+    {
+        USHORT nTmpBottomLineDist = 0;
+        if ( pCurrLower->Lower() && pCurrLower->Lower()->IsRowFrm() )
+        {
+            SwFrm* pRow = pCurrLower->Lower();
+            while ( pRow->GetNext() )
+                pRow = pRow->GetNext();
+            nTmpBottomLineDist = lcl_GetBottomLineDist( *(SwRowFrm*)pRow );
+        }
+        else
+        {
+            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SvxBoxItem& rBoxItem = rSet.GetBox();
+            nTmpBottomLineDist = rBoxItem.GetDistance( BOX_LINE_BOTTOM );
+        }
+        nBottomLineDist = Max( nBottomLineDist, nTmpBottomLineDist );
+    }
+    return nBottomLineDist;
+}
+
+// <-- collapsing
 
 void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 {
@@ -3322,6 +3487,87 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
         aPrt.Top( 0 );
         aPrt.Width ( aFrm.Width() );
         aPrt.Height( aFrm.Height() );
+
+        // --> collapsing borders FME 2005-05-27 #i29550#
+        // Here we calculate the top-printing area for the lower cell frames
+        SwTabFrm* pTabFrm = FindTabFrm();
+        if ( pTabFrm->IsCollapsingBorders() )
+        {
+            const USHORT nTopSpace        = lcl_GetTopSpace(       *this );
+            const USHORT nTopLineDist     = lcl_GetTopLineDist(    *this );
+            const USHORT nBottomLineSize  = lcl_GetBottomLineSize( *this );
+            const USHORT nBottomLineDist  = lcl_GetBottomLineDist( *this );
+
+            // Get the previous row, calculate prt top for lowers:
+            const SwRowFrm* pPreviousRow = (SwRowFrm*)GetPrev();
+            if ( pTabFrm->IsFollow() &&
+                 ( !pPreviousRow || this == pTabFrm->GetFirstNonHeadlineRow() ) )
+            {
+                const SwTable* pTable = pTabFrm->GetTable();
+                SwTableLine* pPrevTabLine = 0;
+
+                USHORT nIdx = 0;
+                const SwTableLines& rLines = GetTabLine()->GetUpper() ?
+                                             GetTabLine()->GetUpper()->GetTabLines() :
+                                             pTable->GetTabLines();
+
+                while ( rLines[ nIdx ] != GetTabLine() )
+                    ++nIdx;
+
+                if ( nIdx > 0 )
+                {
+                    --nIdx;
+                    pPrevTabLine = pTable->GetTabLines()[ nIdx ];
+
+                    SwClientIter aIter( *pPrevTabLine->GetFrmFmt() );
+                    SwClient* pLast;
+                    for ( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+                    {
+                       ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
+                                    "Non-row frame registered in table line" )
+                        SwRowFrm* pRow = (SwRowFrm*)pLast;
+                        if ( pRow->GetTabLine() == pPrevTabLine )
+                        {
+                            pPreviousRow = pRow;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            USHORT nTopPrtMargin = nTopSpace;
+            if ( pPreviousRow )
+            {
+                const USHORT nTmpPrtMargin = pPreviousRow->GetBottomLineSize() + nTopLineDist;
+                if ( nTmpPrtMargin > nTopPrtMargin )
+                    nTopPrtMargin = nTmpPrtMargin;
+            }
+
+            // table has to be notified if it has to change its lower
+            // margin due to changes of nBottomLineSize:
+            if ( !GetNext() && nBottomLineSize != GetBottomLineSize() )
+                 pTabFrm->_InvalidatePrt();
+
+            // If there are rows nested inside this row, the nested rows
+            // may not have been calculated yet. Therefore the
+            // ::lcl_CalcMinRowHeight( this ) operation later in this
+            // function cannot consider the correct border values. We
+            // have to trigger the invalidation of the outer row frame
+            // manually:
+            // Note: If any further invalidations should be necessary, we
+            // should consider moving the invalidation stuff to the
+            // appropriate SwNotify object.
+            if ( GetUpper()->GetUpper()->IsRowFrm() &&
+                 ( nBottomLineDist != GetBottomMarginForLowers() ||
+                   nTopPrtMargin   != GetTopMarginForLowers() ) )
+                GetUpper()->GetUpper()->_InvalidateSize();
+
+            SetBottomMarginForLowers( nBottomLineDist );    //  3.
+            SetBottomLineSize( nBottomLineSize );           //  4.
+            SetTopMarginForLowers( nTopPrtMargin );         //  5.
+
+        }
+// <-- collapsing
     }
 
     while ( !bValidSize )
@@ -3800,14 +4046,28 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         bValidPrtArea = TRUE;
 
         //Position einstellen.
-        SwTwips nLeftSpace = pAttrs->CalcLeft( this );
-        // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
-        SwTwips nRightSpace = pAttrs->CalcRight( this );
-        (this->*fnRect->fnSetXMargins)( nLeftSpace, nRightSpace );
         if ( Lower() )
         {
-            SwTwips nTopSpace = pAttrs->CalcTop();
-            SwTwips nBottomSpace = pAttrs->CalcBottom();
+            SwTwips nTopSpace, nBottomSpace, nLeftSpace, nRightSpace;
+            // --> collapsing borders FME 2005-05-27 #i29550#
+            if ( pTab->IsCollapsingBorders() && !Lower()->IsRowFrm()  )
+            {
+                const SvxBoxItem& rBoxItem = pAttrs->GetBox();
+                nLeftSpace   = rBoxItem.GetDistance( BOX_LINE_LEFT );
+                nRightSpace  = rBoxItem.GetDistance( BOX_LINE_RIGHT );
+                nTopSpace    =  ((SwRowFrm*)GetUpper())->GetTopMarginForLowers();
+                nBottomSpace =  ((SwRowFrm*)GetUpper())->GetBottomMarginForLowers();
+            }
+            else
+            {
+            // <-- collapsing
+                // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
+                nLeftSpace   = pAttrs->CalcLeft( this );
+                nRightSpace  = pAttrs->CalcRight( this );
+                nTopSpace    = pAttrs->CalcTop();
+                nBottomSpace = pAttrs->CalcBottom();
+            }
+            (this->*fnRect->fnSetXMargins)( nLeftSpace, nRightSpace );
             (this->*fnRect->fnSetYMargins)( nTopSpace, nBottomSpace );
         }
     }
@@ -4029,6 +4289,28 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         CheckDirChange();
     }
 
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    if ( bAttrSetChg &&
+         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, FALSE, &pItem ) )
+    {
+        SwFrm* pTmpUpper = GetUpper();
+        while ( pTmpUpper->GetUpper() && !pTmpUpper->GetUpper()->IsTabFrm() )
+            pTmpUpper = pTmpUpper->GetUpper();
+
+        SwTabFrm* pTabFrm = (SwTabFrm*)pTmpUpper->GetUpper();
+        if ( pTabFrm->IsCollapsingBorders() )
+        {
+            // Invalidate lowers of this and next row:
+            lcl_InvalidateAllLowersPrt( (SwRowFrm*)pTmpUpper );
+            pTmpUpper = pTmpUpper->GetNext();
+            if ( pTmpUpper )
+                lcl_InvalidateAllLowersPrt( (SwRowFrm*)pTmpUpper );
+            else
+                pTabFrm->InvalidatePrt();
+        }
+    }
+    // <-- collapsing
+
     SwLayoutFrm::Modify( pOld, pNew );
 }
 
@@ -4100,6 +4382,28 @@ bool SwTabFrm::IsLayoutSplitAllowed() const
 {
     return GetFmt()->GetLayoutSplit().GetValue();
 }
+
+// --> collapsing borders FME 2005-05-27 #i29550#
+
+USHORT SwTabFrm::GetBottomLineSize() const
+{
+    ASSERT( IsCollapsingBorders(),
+            "BottomLineSize only required for collapsing borders" )
+
+    const SwFrm* pTmp = Lower();
+    while ( pTmp->GetNext() )
+        pTmp = pTmp->GetNext();
+
+    return ((SwRowFrm*)pTmp)->GetBottomLineSize();
+}
+
+bool SwTabFrm::IsCollapsingBorders() const
+{
+    return ((SfxBoolItem&)GetFmt()->GetAttrSet().Get( RES_COLLAPSING_BORDERS )).GetValue();
+}
+
+// <-- collapsing
+
 
 //
 // Local helper function to calculate height of first text row
@@ -4240,4 +4544,5 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
 
     return nTmpHeight;
 }
+
 
