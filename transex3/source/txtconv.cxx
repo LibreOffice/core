@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtconv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
+ *  last change: $Author: nf $ $Date: 2001-12-05 11:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 // local includes
 #include "utf8conv.hxx"
 
+extern void ConvertHalfwitdhToFullwidth( String& rString );
+
 /*****************************************************************************/
 void Help()
 /*****************************************************************************/
@@ -91,6 +93,7 @@ void Help()
     fprintf( stdout, "          MS_1254 => Turkish\n" );
     fprintf( stdout, "          MS_1255 => Hebrew\n" );
     fprintf( stdout, "          MS_1256 => Arabic\n" );
+    fprintf( stdout, "          HW2FW   => Only with -t, converts half to full width katakana" );
     fprintf( stdout, "\n" );
 }
 
@@ -110,6 +113,8 @@ int _cdecl main( int argc, char *argv[] )
     if ( ByteString( argv[ 1 ] ) == "-t" || ByteString( argv[ 1 ] ) == "-f" ) {
         rtl_TextEncoding nEncoding;
 
+        BOOL bHW2FW = FALSE;
+
         ByteString sCharset( argv[ 2 ] );
         sCharset.ToUpperAscii();
 
@@ -125,6 +130,7 @@ int _cdecl main( int argc, char *argv[] )
         else if ( sCharset == "MS_1255" )   nEncoding = RTL_TEXTENCODING_MS_1255;
         else if ( sCharset == "MS_1256" )   nEncoding = RTL_TEXTENCODING_MS_1256;
         else if ( sCharset == "MS_1257" )   nEncoding = RTL_TEXTENCODING_MS_1257;
+        else if (( sCharset == "HW2FW" ) && ( ByteString( argv[ 1 ] ) == "-t" )) bHW2FW = TRUE;
 
         else {
             Help();
@@ -159,10 +165,17 @@ int _cdecl main( int argc, char *argv[] )
         while ( !aGSI.IsEof()) {
 
             aGSI.ReadLine( sGSILine );
-            if ( ByteString( argv[ 1 ] ) == "-t" )
-                sGSILine = UTF8Converter::ConvertToUTF8( sGSILine, nEncoding );
-            else
-                sGSILine = UTF8Converter::ConvertFromUTF8( sGSILine, nEncoding );
+            if ( bHW2FW ) {
+                String sConverter( sGSILine, RTL_TEXTENCODING_UTF8 );
+                ConvertHalfwitdhToFullwidth( sConverter );
+                sGSILine = ByteString( sConverter, RTL_TEXTENCODING_UTF8 );
+            }
+            else {
+                if ( ByteString( argv[ 1 ] ) == "-t" )
+                    sGSILine = UTF8Converter::ConvertToUTF8( sGSILine, nEncoding );
+                else
+                    sGSILine = UTF8Converter::ConvertFromUTF8( sGSILine, nEncoding );
+            }
 
             if ( aOutput.IsOpen())
                 aOutput.WriteLine( sGSILine );
