@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:51:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,8 +829,14 @@ WinSalGraphics::~WinSalGraphics()
 
 void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = GetDeviceCaps( mhDC, LOGPIXELSX );
-    rDPIY = GetDeviceCaps( mhDC, LOGPIXELSY );
+    rDPIX = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSX );
+    rDPIY = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSY );
+
+    // #111139# this fixes the symptom of div by zero on startup
+    // however, printing will fail most likely as communication with
+    // the printer seems not to work in this case
+    if( !rDPIX || !rDPIY )
+        rDPIX = rDPIY = 600;
 }
 
 // -----------------------------------------------------------------------
