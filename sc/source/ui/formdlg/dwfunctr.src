@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:13:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ DockingWindow FID_FUNCTION_BOX
         < "Statystyka" ; Default ; > ;
         < "Arkusz kalkulacyjny" ; Default ; > ;
         < "Tekst" ; Default ; > ;
-        < "Dodatki (Ad-In)" ; Default ; > ;
+        < "Add-in" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -453,8 +453,8 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ korean ] =
     {
-            < "마지막으로 사용함" ; Default ; > ;
-        < "모두" ; Default ; > ;
+            < "마지막으로 사용된" ; Default ; > ;
+        < "전체" ; Default ; > ;
         < "데이터베이스" ; Default ; > ;
         < "날짜&시간" ; Default ; > ;
         < "회계" ; Default ; > ;
@@ -463,9 +463,9 @@ DockingWindow FID_FUNCTION_BOX
         < "수학" ; Default ; > ;
         < "행렬" ; Default ; > ;
         < "통계" ; Default ; > ;
-        < "스프레드시트" ; Default ; > ;
+        < "표" ; Default ; > ;
         < "텍스트" ; Default ; > ;
-        < "애드　인" ; Default ; > ;
+        < "추가" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -619,6 +619,7 @@ DockingWindow FID_FUNCTION_BOX
     Text[ finnish ] = "Toiminnot";
 };
  // ********************************************************************** EOF
+
 
 
 
