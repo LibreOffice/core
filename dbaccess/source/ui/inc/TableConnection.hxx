@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,33 +61,52 @@
 #ifndef DBAUI_TABLECONNECTION_HXX
 #define DBAUI_TABLECONNECTION_HXX
 
-#ifndef _SV_GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
-#include "ConnectionLine.hxx"
-#endif
-#ifndef _VECTOR_
+//#ifndef _SV_GEN_HXX
+//#include <tools/gen.hxx>
+//#endif
+//#ifndef DBAUI_CONNECTIONLINE_HXX
+//#include "ConnectionLine.hxx"
+//#endif
 #include <vector>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility
+{
+    class XAccessible;
+}}}}}
+
+class Point;
+class Rectangle;
 
 namespace dbaui
 {
     class OTableConnectionData;
     class OTableWindow;
     class OJoinTableView;
+    class OConnectionLine;
+
+    DBG_NAMEEX(OTableConnection);
     class OTableConnection
     {
         ::std::vector<OConnectionLine*> m_vConnLine;
         OTableConnectionData*           m_pData;
-        OJoinTableView*             m_pParent;
+        OJoinTableView*                 m_pParent;
+        mutable ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > m_xAccessible;
 
         BOOL                            m_bSelected;
 
         void Init();
+        /** clearLineData loops through the vector and deletes all lines
+        */
+        void clearLineData();
 
     protected:
         OConnectionLine* CreateConnLine( const OConnectionLine& rConnLine );
@@ -108,7 +127,7 @@ namespace dbaui
         void        Select();
         void        Deselect();
         BOOL        IsSelected() const { return m_bSelected; }
-        BOOL        CheckHit( const Point& rMousePos );
+        BOOL        CheckHit( const Point& rMousePos ) const;
         bool        Invalidate();
         void        UpdateLineList();
 
@@ -116,13 +135,23 @@ namespace dbaui
         OTableWindow* GetDestWin() const;
 
         bool RecalcLines();
+        /** isTableConnection
+            @param  _pTable the table where we should check if we belongs to it
 
-        Rectangle   GetBoundingRect();
+            @return true when the source or the destination window are equal
+        */
+        bool isTableConnection(const OTableWindow* _pTable)
+        {
+            return (_pTable == GetSourceWin() || _pTable == GetDestWin());
+        }
+
+        Rectangle   GetBoundingRect() const;
 
         OTableConnectionData*           GetData() const { return m_pData; }
         const ::std::vector<OConnectionLine*>* GetConnLineList() const { return &m_vConnLine; }
-        OJoinTableView*                 GetParent(){ return m_pParent; }
+        OJoinTableView*                 GetParent() const { return m_pParent; }
         virtual void                    Draw( const Rectangle& rRect );
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > getAccessible() const;
     };
 }
 #endif // DBAUI_TABLECONNECTION_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,12 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
 #endif
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 namespace dbaui
@@ -84,10 +85,11 @@ namespace dbaui
 
     //==================================================================
     /*
-        the class OTableConnectionData contains all connectiondata which exists between two windows
+        the class OTableConnectionData contains all connection data which exists between    two windows
     **/
     class OTableConnectionData
     {
+
     protected:
         String m_aSourceWinName;
         String m_aDestWinName;
@@ -103,6 +105,7 @@ namespace dbaui
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
+        OTableConnectionData& operator=( const OTableConnectionData& rConnData );
     public:
         TYPEINFO();
         OTableConnectionData();
@@ -117,11 +120,15 @@ namespace dbaui
         virtual OTableConnectionData* NewInstance() const;
             // (von OTableConnectionData abgeleitete Klasse muessen entsprechend eine Instanz ihrer Klasse liefern)
 
-        OTableConnectionData& operator=( const OTableConnectionData& rConnData );
+
 
         BOOL SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         BOOL AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         void ResetConnLines( BOOL bUseDefaults = TRUE );
+
+        /** normalizeLines moves the empty lines to the back
+        */
+        void normalizeLines();
             // loescht die Liste der ConnLines, bei bUseDefaults == TRUE werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
@@ -133,6 +140,11 @@ namespace dbaui
         virtual void SetSourceWinName( const String& rSourceWinName ){ m_aSourceWinName = rSourceWinName; }
         virtual void SetDestWinName( const String& rDestWinName ){ m_aDestWinName = rDestWinName; }
         virtual void SetConnName( const String& rConnName ){ m_aConnName = rConnName; }
+        /** Update create a new connection
+
+            @return true if successful
+        */
+        virtual BOOL Update(){ return TRUE; }
     };
 
 }

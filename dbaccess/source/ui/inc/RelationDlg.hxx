@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 15:12:29 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,92 +68,35 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-
-#ifndef _EDIT_HXX //autogen
-#include <vcl/edit.hxx>
-#endif
-
-#ifndef _SV_LSTBOX_HXX //autogen
-#include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
-#include <svtools/editbrowsebox.hxx>
-#endif
-
+//#ifndef _EDIT_HXX //autogen
+//#include <vcl/edit.hxx>
+//#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef DBAUI_RTABLECONNECTIONDATA_HXX
-#include "RTableConnectionData.hxx"
+#ifndef DBAUI_JOINTABLEVIEW_HXX
+#include "JoinTableView.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
+#ifndef DBAUI_RELCONTROLIFACE_HXX
+#include "RelControliFace.hxx"
 #endif
 
 
 namespace dbaui
 {
-    //========================================================================
-    class ORelationDialog;
-    typedef ::svt::EditBrowseBox ORelationControl_Base;
-    class ORelationControl : public ORelationControl_Base
-    {
-        friend class ORelationDialog;
-
-        ULONG                                                                           m_nDeActivateEvent;
-        ::svt::ListBoxControl*                                                          m_pListCell;
-        ORelationTableConnectionData*                                                   m_pConnData;
-        long                                                                            m_nDataPos;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSourceDef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDestDef;
-
-        void SetDef(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xDest,sal_Int32 _nPos);
-        void fillListBox(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest,long nRow,USHORT nColumnId);
-    public:
-        ORelationControl( ORelationDialog* pParent );
-        virtual ~ORelationControl();
-
-        void SetSourceDef(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xNewSource);
-        void SetDestDef(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xNewDest);
-
-    protected:
-        virtual void Resize();
-
-        virtual long PreNotify(NotifyEvent& rNEvt );
-
-        virtual BOOL IsTabAllowed(BOOL bForward) const;
-
-        virtual void Init(ORelationTableConnectionData* _pConnData);
-        virtual void Init() { ORelationControl_Base::Init(); }
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
-        virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
-        virtual BOOL SeekRow( long nRow );
-        virtual BOOL SaveModified();
-        virtual String GetCellText( long nRow, USHORT nColId );
-
-        virtual void CellModified();
-
-    private:
-
-        DECL_LINK( AsynchActivate, void* );
-        DECL_LINK( AsynchDeactivate, void* );
-    };
-
     class OJoinTableView;
+    class OTableListBoxControl;
+    class ORelationTableConnectionData;
     //========================================================================
     class ORelationDialog : public ModalDialog
+                            ,public IRelationControlInterface
     {
-        FixedLine   aFL_InvolvedTables;
-        ListBox     m_lmbLeftTable,
-                    m_lmbRightTable;
 
-        FixedLine    aFL_InvolvedFields;
+        OTableListBoxControl*               m_pTableControl;
+        OJoinTableView::OTableWindowMap*    m_pTableMap;
 
         FixedLine    aFL_CascUpd;
         RadioButton aRB_NoCascUpd,
@@ -170,13 +113,11 @@ namespace dbaui
         CancelButton aPB_CANCEL;
         HelpButton  aPB_HELP;
 
-        ORelationControl*                                                       m_pRC_Tables;
+
         ORelationTableConnectionData*                                           m_pConnData;
         ORelationTableConnectionData*                                           m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
-        String                                                                  m_strCurrentLeft;
-        String                                                                  m_strCurrentRight;
         BOOL                                                                    m_bTriedOneUpdate;
 
     public:
@@ -185,18 +126,34 @@ namespace dbaui
                         BOOL bAllowTableSelect = FALSE );
         virtual ~ORelationDialog();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection(){ return m_xConnection; }
-
-        void NotifyCellChange();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection(){ return m_xConnection; }
 
         virtual short Execute();
 
+        /** getTableMap gives acces to the table window map
+            @retrun the table window from the join view
+        */
+        OJoinTableView::OTableWindowMap* getTableMap() const { return m_pTableMap; }
+
+        /** getConnectionData returns the current connection data
+            @return the current connectiondata
+        */
+        virtual OTableConnectionData* getConnectionData() const;
+
+        /** setValid set the valid inside, can be used for OK buttons
+            @param  _bValid true when the using control allows an update
+        */
+        virtual void setValid(sal_Bool _bValid);
+
+        /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
+            @param  _pConnectionData    the connection which exists between the new tables
+        */
+        virtual void notifyConnectionChange(OTableConnectionData* _pConnectionData);
     protected:
         void Init(ORelationTableConnectionData* _pConnData);
 
     private:
         DECL_LINK( OKClickHdl, Button* );
-        DECL_LINK( OnTableChanged, ListBox* );
     };
 }
 #endif // DBAUI_RELATIONDIALOG_HXX

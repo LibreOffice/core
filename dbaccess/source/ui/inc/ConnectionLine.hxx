@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,7 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
 #endif
-#ifndef INCLUDED_FUNCTIONAL
-#define INCLUDED_FUNCTIONAL
 #include <functional>
-#endif
 
 class SvLBoxEntry;
 class OutputDevice;
@@ -92,6 +89,7 @@ namespace dbaui
     **/
     class OConnectionLineData;
     class OTableConnection;
+    class OTableWindow;
     class OConnectionLine
     {
         OTableConnection*       m_pTabConn;
@@ -104,7 +102,6 @@ namespace dbaui
                                 m_aDestConnPos;
         Point                   m_aSourceDescrLinePos,
                                 m_aDestDescrLinePos;
-
     public:
         OConnectionLine( OTableConnection* pConn, const String& rSourceFieldName = String(),
                          const String& rDestFieldName = String() );
@@ -124,12 +121,14 @@ namespace dbaui
         void                SetSourceFieldName( const String& rSourceFieldName );
         void                SetDestFieldName( const String& rDestFieldName );
         BOOL                Connect( const String& rSourceFieldName, const String& rDestFieldName );
-        BOOL                IsValid();
+        BOOL                IsValid() const;
 
         Rectangle           GetSourceTextPos() const;
         Rectangle           GetDestTextPos() const;
 
         OConnectionLineDataRef  GetData() const { return m_pData; }
+
+        Point               getMidPoint() const;
     };
     /// unary_function Functor object for class OConnectionLine returntype is void
     /// draws a connectionline object on outputdevice
@@ -151,7 +150,7 @@ namespace dbaui
     {
         inline bool operator()(const OConnectionLine* lhs,const Point& rhs) const
         {
-            return lhs->CheckHit(rhs);
+            return lhs->IsValid() && lhs->CheckHit(rhs);
         }
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
-#include "QueryTableView.hxx"
-#endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
@@ -104,8 +101,6 @@ namespace dbaui
 
     class OQueryDesignView : public OQueryView
     {
-        friend class OQueryViewSwitch;
-
         enum ChildFocusState
         {
             SELECTION,
@@ -121,61 +116,6 @@ namespace dbaui
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
 
-        ::rtl::OUString QuoteField( const ::rtl::OUString& rValue, sal_Int32 aType );
-        void            InitFromParseNode();
-        void            GetTable( ::rtl::OUString& rDatabase, ::rtl::OUString& rTable, ::rtl::OUString& rAlias, ::connectivity::OSQLParseNode* pNode );
-
-        void            GenerateInnerJoinCriterias(::rtl::OUString& _rJoinCrit,const ::std::vector<OTableConnection*>*  _pConnList);
-        // erzeugt das Group Argument, falls vorhanden
-        ::rtl::OUString GenerateGroupBy(OTableFields& _rFieldList, sal_Bool bMulti );
-        // erzeugt Where und Having Argument, falls vorhanden
-        sal_Bool        GenerateCriterias(::rtl::OUString& aRetStr,::rtl::OUString& rHavingStr/*,::rtl::OUString& rOrderStr*/, OTableFields& _rFieldList, sal_Bool bMulti );
-        ::rtl::OUString GenerateOrder( OTableFields& _rFieldList , sal_Bool bMulti);
-        // Erzeugt die SelectList. bAlias mu"s gesetzt sein, wenn mehr als 1 Tabelle vorhanden ist
-        ::rtl::OUString GenerateSelectList(OTableFields& _rFieldList,sal_Bool bAlias);
-        // Erzeugt die Tabellenliste mit Joins aus pConnList, wenn bJoin == True. pConnList kann == NULL wenn bJoin == sal_False
-        ::rtl::OUString GenerateFromClause(const OJoinTableView::OTableWindowMap*   pTabMap,::std::vector<OTableConnection*>*   pConnList);
-
-        ::rtl::OUString BuildACriteria( const ::rtl::OUString& rVal, sal_Int32 aType );
-        int             InstallFields( const ::connectivity::OSQLParseNode* pNode, OJoinTableView::OTableWindowMap* pTabList );
-
-        // nLevel gibt die Zeile an in der die Bedingungen eingetragen werden sollen
-        int         GetSelectionCriteria(const  ::connectivity::OSQLParseNode* pNode ,int &nLevel,  sal_Bool bJoinWhere=sal_False);
-        void        GetHavingCriteria(const  ::connectivity::OSQLParseNode* pNode ,int &nLevel);
-
-        int         GetORCriteria(const ::connectivity::OSQLParseNode * pCondition, int& nLevel,  sal_Bool bHaving = sal_False );
-        int         GetANDCriteria(const ::connectivity::OSQLParseNode * pCondition, const int nLevel,  sal_Bool bHaving);
-        int         ComparsionPredicate( const ::connectivity::OSQLParseNode * pCondition, const int nLevel,  sal_Bool bHaving );
-
-        void        GetOrderCriteria( const ::connectivity::OSQLParseNode* pNode );
-        void        GetGroupCriteria( const ::connectivity::OSQLParseNode* pNode );
-
-        sal_Bool    GetInnerJoinCriteria(const ::connectivity::OSQLParseNode *pCondition);
-        void        FillOuterJoins(const ::connectivity::OSQLParseNode* pParseNode);
-        sal_Bool    InsertJoin(const ::connectivity::OSQLParseNode *pNode);
-        sal_Bool    InsertJoinConnection(const ::connectivity::OSQLParseNode *pNode, const EJoinType& _eJoinType);
-
-        sal_Bool    FillDragInfo(const ::connectivity::OSQLParseNode* pTableRef,OTableFieldDescRef& aDragInfo);
-
-        sal_Bool    HasFields();
-        ::rtl::OUString     BuildTable(const OQueryTableWindow* pEntryTab);
-
-        ::rtl::OUString     BuildJoin(OQueryTableWindow* pLh, OQueryTableWindow* pRh, OQueryTableConnectionData* pData);
-        ::rtl::OUString     BuildJoin(const ::rtl::OUString &rLh, OQueryTableWindow* pRh, OQueryTableConnectionData* pData);
-        ::rtl::OUString     BuildJoin(OQueryTableWindow* pLh, const ::rtl::OUString &rRh, OQueryTableConnectionData* pData);
-        ::rtl::OUString     BuildJoin(const ::rtl::OUString& rLh, const ::rtl::OUString& rRh, OQueryTableConnectionData* pData);
-
-        ::rtl::OUString     BuildJoinCriteria(OConnectionLineDataVec* pLineDataList,OQueryTableConnectionData* pData);
-
-        void        GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUString &aJoin,OQueryTableWindow* pEntryTabTo);
-        void        JoinCycle(OQueryTableConnection* pEntryConn,::rtl::OUString &rJoin,OQueryTableWindow* pEntryTabTo);
-
-        int         InsertColumnRef(const ::connectivity::OSQLParseNode * pColumnRef,
-                                    ::rtl::OUString& aColumnName,const ::rtl::OUString& aColumnAlias,
-                                    ::rtl::OUString& aTableRange,OTableFieldDescRef& aInfo,
-                                    OJoinTableView::OTableWindowMap* pTabList);
-
-        sal_Int32   GetColumnFormatKey(const ::connectivity::OSQLParseNode* pColumnRef);
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryDesignView();
@@ -211,7 +151,7 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        sal_Bool HasTable() const {return m_pTableView->GetTabWinMap()->size() != 0;}
+        sal_Bool HasTable() const;
         sal_Bool InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
         // save the position of the table window and the pos of the splitters
         void SaveTabWinUIConfig(OQueryTableWindow* pWin);
@@ -228,6 +168,7 @@ namespace dbaui
         void stopTimer();
         void startTimer();
         void reset();
+        void InitFromParseNode();
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,

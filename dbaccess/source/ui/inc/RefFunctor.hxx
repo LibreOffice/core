@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RefFunctor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-09 08:24:25 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ namespace dbaui
         {
             m_aFunction(_aType.getBodyPtr());
         }
+//      inline void operator()(const ::vos::ORef<T>& _aType)
+//      {
+//          m_aFunction(_aType.getBodyPtr());
+//      }
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaui

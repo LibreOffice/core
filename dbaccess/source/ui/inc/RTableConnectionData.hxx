@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace dbaui
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
+        ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );
     public:
         ORelationTableConnectionData();
         ORelationTableConnectionData( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables);
@@ -123,7 +124,7 @@ namespace dbaui
         virtual void CopyFrom(const OTableConnectionData& rSource);
         virtual OTableConnectionData* NewInstance() const { return new ORelationTableConnectionData(); }
 
-        ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );
+
 
         ::rtl::OUString GetDatabaseName() const { return m_sDatabaseName; }
 
@@ -133,6 +134,12 @@ namespace dbaui
 
         virtual void SetSourceWinName( const String& rSourceWinName );
         virtual void SetDestWinName( const String& rDestWinName );
+        /** Update create a new relation
+
+            @return true if successful
+        */
+        virtual BOOL Update();
+
 
         void        SetCardinality();
         void        SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
@@ -142,7 +149,6 @@ namespace dbaui
         sal_Int32   GetDeleteRules() const { return m_nDeleteRules; }
         sal_Int32   GetCardinality() const { return m_nCardinality; }
 
-        BOOL        Update();
         BOOL        IsConnectionPossible();
         void        ChangeOrientation();
         BOOL        DropRelation();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,12 +465,21 @@
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
 #define PB_FORMAT                       RID_UNTYPED_START +  3
 #define FIXED_NO_CONNECTION             RID_UNTYPED_START +  4
+#define LB_LEFT_TABLE                   RID_UNTYPED_START +  5
+#define LB_RIGHT_TABLE                  RID_UNTYPED_START +  6
+#define LB_CONTROL                      RID_UNTYPED_START +  7
+#define FL_INVOLVED_TABLES              RID_UNTYPED_START +  8
+#define FL_INVOLVED_FIELDS              RID_UNTYPED_START +  9
+
 
 #endif // _DBU_RESOURCE_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.65  2002/01/24 17:38:31  fs
+ *  incorporate the improvements suggested during code review of genericcontroller.*
+ *
  *  Revision 1.64  2001/10/05 06:57:19  oj
  *  #84000# impl multiselction for queries and link docs
  *

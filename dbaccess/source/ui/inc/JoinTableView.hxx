@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
+class SfxUndoAction;
 namespace dbaui
 {
     class OTableConnection;
@@ -171,6 +172,8 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void GetFocus();
         virtual void KeyInput( const KeyEvent& rEvt );
+        // Accessibility
+        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
         // own methods
         ScrollBar* GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
@@ -198,7 +201,7 @@ namespace dbaui
         ULONG           GetTabWinCount();
         Point           GetScrollOffset() const { return m_aScrollOffset; }
 
-        OJoinDesignView*            getDesignView() { return m_pView; }
+        OJoinDesignView*            getDesignView() const { return m_pView; }
         OTableWindow*               GetWindow( const String& rName );
 
         OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
@@ -211,7 +214,22 @@ namespace dbaui
 
 
         BOOL                        ExistsAConn(const OTableWindow* pFromWin) const;
-        OTableConnection*           GetTabConn(OTableWindow* pLhs,OTableWindow* pRhs, OTableConnection* _rpFirstAfter = NULL);
+
+        /** getTableConnections searchs for all connections of a table
+            @param  _pFromWin   the table for which connections should be found
+
+            @return an iterator which can be used to travel all connections of the table
+        */
+        ::std::vector<OTableConnection*>::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
+
+        /** getConnectionCount returns how many connection belongs to single table
+            @param  _pFromWin   the table for which connections should be found
+
+            @return the count of connections wich belongs to this table
+        */
+        sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
+
+        OTableConnection*           GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,const OTableConnection* _rpFirstAfter = NULL) const;
 
         // clears the window map and connection vector without destroying it
         // that means teh data of the windows and connection will be untouched
@@ -241,6 +259,15 @@ namespace dbaui
         */
         virtual void lookForUiActivities();
 
+        // wird nach Verschieben/Groessenaenderung der TabWins aufgerufen (die Standardimplementation reicht die neuen Daten einfach
+        // an die Daten des Wins weiter)
+        virtual void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
+            // die Position ist "virtuell" : der Container hat sozusagen eine virtuelle Flaeche, von der immer nur ein bestimmter Bereich
+            // - der mittels der Scrollbar veraendert werden kann - zu sehen ist. Insbesondere hat ptOldPosition immer positive Koordinaten,
+            // auch wenn er einen Punkt oberhalb des aktuell sichtbaren Bereichs bezeichnet, dessen physische Ordinate eigentlich
+            // negativ ist.
+        virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
+
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
@@ -253,27 +280,29 @@ namespace dbaui
         virtual void Resize();
 
         virtual void dragFinished( );
-//      virtual BOOL Drop( const DropEvent& rEvt );
-//      virtual BOOL QueryDrop( DropEvent& rEvt );
-
-        // wird nach Verschieben/Groessenaenderung der TabWins aufgerufen (die Standardimplementation reicht die neuen Daten einfach
-        // an die Daten des Wins weiter)
-        virtual void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
-            // die Position ist "virtuell" : der Container hat sozusagen eine virtuelle Flaeche, von der immer nur ein bestimmter Bereich
-            // - der mittels der Scrollbar veraendert werden kann - zu sehen ist. Insbesondere hat ptOldPosition immer positive Koordinaten,
-            // auch wenn er einen Punkt oberhalb des aktuell sichtbaren Bereichs bezeichnet, dessen physische Ordinate eigentlich
-            // negativ ist.
-        virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
-            // hier ist die Position (die sich waehrend des Sizings aendern kann) physisch, da waehrend des Sizens nicht gescrollt wird
+        // hier ist die Position (die sich waehrend des Sizings aendern kann) physisch, da waehrend des Sizens nicht gescrollt wird
         virtual void Command(const CommandEvent& rEvt);
 
         virtual void EnsureVisible(const OTableWindow* _pWin);
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
                                              const ::rtl::OUString& _rWinName);
+
     private:
         void    InitColors();
         BOOL    ScrollWhileDragging();
+
+        /** executePopup opens the context menu to delate a connection
+            @param  _aPos               the position where the popup menu should appear
+            @param  _pSelConnection     the connection which should be deleted
+        */
+        void executePopup(const Point& _aPos,OTableConnection* _pSelConnection);
+
+        /** invalidateAndModify invalidates this window without children and
+            set the controller modified
+            @param  _pAction a possible undo action to add at the controller
+        */
+        void invalidateAndModify(SfxUndoAction *_pAction=NULL);
     };
 }
 #endif // DBAUI_JOINTABLEVIEW_HXX

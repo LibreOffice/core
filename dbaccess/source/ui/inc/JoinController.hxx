@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,12 @@ namespace dbaui
 
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
+
+        /** addUndoActionAndInvalidate adds an undo action to the undoManager,
+            additionally invalidates the UNDO and REDO slot
+            @param  pAction the undo action to add
+        */
+        void addUndoActionAndInvalidate(SfxUndoAction *pAction);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);

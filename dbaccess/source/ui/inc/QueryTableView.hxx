@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ namespace dbaui
     {
         Link    m_lnkTabWinsChangeHandler;
 
-        void addConnections(const OQueryTableWindow* _pSource,const OQueryTableWindow* _pDest,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxForeignKeyColumns);
     protected:
         virtual void ConnDoubleClicked(OTableConnection* pConnection);
         virtual void KeyInput(const KeyEvent& rEvt);
@@ -161,6 +160,10 @@ namespace dbaui
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
                                              const ::rtl::OUString& _rWinName);
+
+        /** createNewConnection opens the join dialog and allows to create a new join connection
+        */
+        void createNewConnection();
     };
 }
 #endif // DBAUI_QUERYTABLEVIEW_HXX

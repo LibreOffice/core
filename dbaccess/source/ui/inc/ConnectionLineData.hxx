@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,23 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #define DBAUI_CONNECTIONLINEDATA_HXX
 
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
+#ifndef _VOS_REFERNCE_HXX_
+#include <vos/refernce.hxx>
+#endif
+#include <vector>
+
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef INCLUDED_VECTOR
-#define INCLUDED_VECTOR
-#include <vector>
-#endif
+
 #ifndef DBAUI_REFFUNCTOR_HXX
 #include "RefFunctor.hxx"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 namespace dbaui
@@ -106,9 +108,8 @@ namespace dbaui
         OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
 
-
         // eine Kopie der eigenen Instanz liefern (das ist mir irgendwie angenehmer als ein virtueller Zuweisungsoperator)
-        virtual void CopyFrom(const OConnectionLineData& rSource);
+        void CopyFrom(const OConnectionLineData& rSource);
 
         // Memberzugriff (schreiben)
         void SetFieldName(EConnectionSide nWhich, const ::rtl::OUString& strFieldName)
@@ -129,9 +130,9 @@ namespace dbaui
         ::rtl::OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
         ::rtl::OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
 
-        virtual BOOL IsValid();
-        virtual void Reset();
-        virtual OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
+        bool IsValid() const;
+        bool Reset();
+        OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
 
     //------------------------------------------------------------------

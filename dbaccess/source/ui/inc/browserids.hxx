@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #define ID_QUERY_TABLENAME                  (SID_SBA_START + 42) // Tabellennamen anzeigen
 #define ID_QUERY_ALIASNAME                  (SID_SBA_START + 43) // Aliasnamen anzeigen
 #define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // Distinct anzeigen
+#define ID_QUERY_EDIT_JOINCONNECTION        (SID_SBA_START + 45) // show-edit Join
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
 

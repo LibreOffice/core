@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace dbaui
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
 
-        OJoinTableView* getTableView() { return m_pTableView; }
+        OJoinTableView* getTableView() const { return m_pTableView; }
         void zoomTableView(const Fraction& _rFraction);
         void SaveUIConfig();
     protected:
