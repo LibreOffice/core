@@ -18829,3 +18829,9 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ?Create@SvXMLGraphicHelper@@SAPAV1@W4SvXMLGraphicHelperMode@@@Z
 ?Init@SvXMLGraphicHelper@@IAEXPAVSotStorage@@W4SvXMLGraphicHelperMode@@E@Z
 ?KeyInput@SvxRectCtl@@UAEXABVKeyEvent@@@Z
+??0PPTNumberFormatCreator@@IAE@PAVPPTExtParaProv@@@Z
+??0PPTPortionObj@@QAE@ABUPPTStyleSheet@@KK@Z
+??0PPTStyleSheet@@QAE@ABVDffRecordHeader@@AAVSvStream@@AAVSdrPowerPointImport@@ABUPPTTextSpecInfo@@@Z
+??0PptSlidePersistEntry@@QAE@XZ
+??1PPTNumberFormatCreator@@IAE@XZ
+?GetGraphic@PPTExtParaProv@@QBEEKAAVGraphic@@@Z
