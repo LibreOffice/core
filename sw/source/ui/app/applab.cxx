@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 08:18:46 $
+ *  last change: $Author: os $ $Date: 2001-10-02 12:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,8 @@ static sal_uInt16 nBCTitleNo = 0;
             SvxULSpaceItem aULMargin;
             aLRMargin.SetLeft ((sal_uInt16) rItem.lLeft );
             aULMargin.SetUpper((sal_uInt16) rItem.lUpper);
-            aLRMargin.SetRight(0);
-            aULMargin.SetLower(0);
+            aLRMargin.SetRight(MINLAY/2);
+            aULMargin.SetLower(MINLAY/2);
             rFmt.SetAttr(aLRMargin);
             rFmt.SetAttr(aULMargin);
 
@@ -404,8 +404,8 @@ static sal_uInt16 nBCTitleNo = 0;
 
             // Einstellen der Seitengroesse
             rFmt.SetAttr(SwFmtFrmSize(ATT_FIX_SIZE,
-                                        rItem.lLeft  + rItem.nCols * rItem.lHDist,
-                                        rItem.lUpper + rItem.nRows * rItem.lVDist));
+                                        rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY,
+                                        rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY));
 
             // Numerierungsart
             SvxNumberType aType;
