@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:56:33 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,14 +940,14 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         if( pG->IsClusterStart() )
         {
             // calculate original and adjusted cluster width
-            int nOldClusterWidth = pG->mnOrigWidth;
+            int nOldClusterWidth = pG->mnNewWidth;
             int nNewClusterWidth = pNewGlyphWidths[i];
             GlyphItem* pClusterG = pG + 1;
             for( int j = i; ++j < mnGlyphCount; ++pClusterG )
             {
                 if( pClusterG->IsClusterStart() )
                     break;
-                nOldClusterWidth += pClusterG->mnOrigWidth;
+                nOldClusterWidth += pClusterG->mnNewWidth;
                 nNewClusterWidth += pNewGlyphWidths[j];
             }
             int nDiff = nNewClusterWidth - nOldClusterWidth;
