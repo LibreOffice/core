@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:50 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
 #endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -112,14 +115,10 @@
 // - SalSound-Callback  -
 // ----------------------
 
-#ifndef REMOTE_APPSERVER
-
 void SalSoundProc( void* pInst, SoundNotification eNotification, ULONG nError )
 {
     ( (Sound*) pInst )->ImplNotify( eNotification, nError );
 }
-
-#endif
 
 // ---------
 // - Sound -
@@ -137,20 +136,10 @@ Sound::Sound( Window* pWindow ) :
             mbPlaying       ( FALSE ),
             mbLoopMode      ( FALSE )
 {
-#ifndef REMOTE_APPSERVER
-
-    mpSound = new SalSound;
-    mpSound->Create();
+    mpSound = ImplGetSVData()->mpDefInst->CreateSalSound();
 
     if( mpSound->IsValid() )
         mpSound->SetNotifyProc( this, SalSoundProc );
-
-#else
-
-    mpSound = new RMSound;
-    mpSound->Create( this );
-
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -203,23 +192,7 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
         mbLoopMode = FALSE;
         bRet = TRUE;
 
-#ifdef REMOTE_APPSERVER
-        if( mpSoundData )
-        {
-            SvMemFree( mpSoundData );
-            mpSoundData = NULL;
-        }
-
-        // if IFace is init., destroy it and create a new one
-        if( maSoundName.Len() )
-        {
-            delete mpSound;
-            mpSound = new RMSound;
-            mpSound->Create( this );
-        }
-#else
-        mpSound->Init( NULL, rSoundName, mnSoundLen );
-#endif
+        mpSound->Init( rSoundName, mnSoundLen );
     }
     else if( mpSound->IsValid() )
     {
@@ -230,11 +203,7 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
         // #106654# Accept only local sound files
         if( aSoundURL.GetProtocol() == INET_PROT_FILE )
         {
-#ifdef REMOTE_APPSERVER
-            aSoundName = aSoundURL.GetMainURL( INetURLObject::NO_DECODE );
-#else
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL( INetURLObject::NO_DECODE ), aSoundName );
-#endif
+            utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL( INetURLObject::NO_DECODE ), aSoundName );
             bValidName = TRUE;
         }
         else if( aSoundURL.GetProtocol() == INET_PROT_NOT_VALID &&
@@ -250,11 +219,11 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
 
             // #106654# Don't set bRet to true for invalid sound file
             // names, but init with empty string, anyway
-            mpSound->Init( NULL, aSoundName, mnSoundLen );
+            mpSound->Init( aSoundName, mnSoundLen );
         }
 
         if( bValidName )
-            bRet = mpSound->Init( NULL, aSoundName, mnSoundLen );
+            bRet = mpSound->Init( aSoundName, mnSoundLen );
     }
 
     maSoundName = rSoundName;
@@ -271,6 +240,7 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
 
 BOOL Sound::SetSoundData( const BYTE* pSoundData, ULONG nDataLen )
 {
+#if 0
     BOOL bRet;
 
     if( mpSoundData )
@@ -280,7 +250,7 @@ BOOL Sound::SetSoundData( const BYTE* pSoundData, ULONG nDataLen )
     HMEMCPY( mpSoundData, pSoundData, nDataLen );
 
     if( mpSound->IsValid() )
-        bRet = mpSound->Init( NULL, mpSoundData, mnDataLen, mnSoundLen );
+        bRet = mpSound->Init( mpSoundData, mnDataLen, mnSoundLen );
     else
         bRet = FALSE;
 
@@ -290,6 +260,10 @@ BOOL Sound::SetSoundData( const BYTE* pSoundData, ULONG nDataLen )
         ImplNotify( SOUND_NOTIFY_ERROR, SOUNDERR_GENERAL_ERROR );
 
     return bRet;
+#else
+    ImplNotify( SOUND_NOTIFY_ERROR, SOUNDERR_GENERAL_ERROR );
+    return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -297,10 +271,6 @@ BOOL Sound::SetSoundData( const BYTE* pSoundData, ULONG nDataLen )
 void Sound::SetStartTime( ULONG nStartTime )
 {
     mnStartTime = nStartTime;
-
-#ifdef REMOTE_APPSERVER
-    mpSound->SetStartTime( nStartTime );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -308,10 +278,6 @@ void Sound::SetStartTime( ULONG nStartTime )
 void Sound::SetPlayTime( ULONG nPlayTime )
 {
     mnPlayTime = nPlayTime;
-
-#ifdef REMOTE_APPSERVER
-    mpSound->SetStartTime( nPlayTime );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -319,10 +285,6 @@ void Sound::SetPlayTime( ULONG nPlayTime )
 void Sound::SetLoopMode( BOOL bLoop )
 {
     mbLoopMode = bLoop;
-
-#ifdef REMOTE_APPSERVER
-    mpSound->SetStartTime( bLoop );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -330,10 +292,6 @@ void Sound::SetLoopMode( BOOL bLoop )
 void Sound::ClearError()
 {
     mnErrorCode = 0;
-
-#ifdef REMOTE_APPSERVER
-    mpSound->ClearError();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -344,12 +302,7 @@ void Sound::Play()
 
     if( mpSound->IsValid() && !mnErrorCode )
     {
-#ifndef REMOTE_APPSERVER
         mpSound->Play( mnStartTime, mnPlayTime, mbLoopMode );
-#else
-        mpSound->Play();
-#endif
-
         mbPlaying = TRUE;
     }
     else
