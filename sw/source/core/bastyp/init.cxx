@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:34:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-09 17:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,9 +958,9 @@ void _InitCore()
     // the frame attributes (RES_FRMATR_*) for binary filters.
     SwAttrPool::pVersionMap5 = new USHORT[ 130 ];
     for( i = 1; i <= 109; i++ )
-        SwAttrPool::pVersionMap4[ i-1 ] = i;
+        SwAttrPool::pVersionMap5[ i-1 ] = i;
     for ( i = 110; i <= 130; ++i )
-        SwAttrPool::pVersionMap4[ i-1 ] = i + 6;
+        SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
     pBreakIt = new SwBreakIt;
     const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
