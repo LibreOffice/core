@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-26 17:14:12 $
+ *  last change: $Author: ssa $ $Date: 2001-12-07 13:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1969,16 +1969,25 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
 
         case SALEVENT_SHUTDOWN:
-            if ( Application::GetAppWindow() == ((WorkWindow*)pInst)->ImplGetWindow() )
             {
-                if ( GetpApp()->QueryExit() )
+                static bool bInQueryExit = false;
+                if( !bInQueryExit )
                 {
-                    // Message-Schleife beenden
-                    Application::Quit();
-                    return FALSE;
+                    bInQueryExit = true;
+                    if ( GetpApp()->QueryExit() )
+                    {
+                        // Message-Schleife beenden
+                        Application::Quit();
+                        return FALSE;
+                    }
+                    else
+                    {
+                        bInQueryExit = false;
+                        return TRUE;
+                    }
                 }
                 else
-                    return TRUE;
+                    return FALSE;
             }
             break;
 
