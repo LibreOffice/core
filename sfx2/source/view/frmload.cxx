@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-31 06:44:10 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
@@ -101,6 +104,7 @@
 #include <svtools/ehdl.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -406,14 +410,18 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     // Internal filters may have "old" names that must be retrieved from a table using a static method in class SfxFilterContainer, or it may have
     // a "new name that follows the rules for filter names that can be used as configuration keys.
 
+    Reference < XInputStream > xStream;
     String aURL;
+    BOOL bWasReadOnly = FALSE, bReadOnly = FALSE;
     ::rtl::OUString sTemp;
     rtl::OUString aTypeName;            // a name describing the type ( from MediaDescriptor )
     String aPreselectedFilterName;      // a name describing the filter to use ( from MediaDescriptor )
     const SfxFilter* pFilter = NULL, *pExternalFilter = NULL;
 
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = nPropertyCount;
+    sal_Int32 nIndexOfFilterName = nPropertyCount;          // filter name and input stream could be put into the descriptor
+    sal_Int32 nIndexOfInputStream = lDescriptor.getLength();
+    sal_Int32 nIndexOfReadOnlyFlag = lDescriptor.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -436,6 +444,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             // remember index of property to get access to it later
             nIndexOfFilterName = nProperty;
         }
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InpuStream")) )
+            nIndexOfInputStream = nProperty;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
+            nIndexOfReadOnlyFlag = nProperty;
     }
 
     // detect using SfxFilter names
@@ -529,14 +541,20 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         SfxApplication* pApp = SFX_APP();
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
         TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
+        SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+        bWasReadOnly = pItem && pItem->GetValue();
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SfxMedium aMedium( aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
         BOOL bIsStorage = aMedium.IsStorage();
         if ( bIsStorage )
             aMedium.GetStorage();
         else
             aMedium.GetInStream();
+
+        // remember input stream and put it into the descriptor later
+        xStream = aMedium.GetInputStream();
+        bReadOnly = aMedium.IsReadOnly();
 
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
@@ -653,6 +671,28 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     {
         aFilterName.Erase();
         aTypeName = ::rtl::OUString();
+    }
+
+    if ( nIndexOfInputStream == nPropertyCount && xStream.is() )
+    {
+        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        sal_Int32 nIndex = lDescriptor.getLength();
+        lDescriptor.realloc( lDescriptor.getLength() + 1 );
+        lDescriptor[nIndex].Name = ::rtl::OUString::createFromAscii("InputStream");
+        lDescriptor[nIndex].Value <<= xStream;
+    }
+
+    if ( bReadOnly != bWasReadOnly )
+    {
+        if ( nIndexOfReadOnlyFlag == nPropertyCount )
+        {
+            sal_Int32 nIndex = lDescriptor.getLength();
+            lDescriptor.realloc( lDescriptor.getLength() + 1 );
+            lDescriptor[nIndex].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            lDescriptor[nIndex].Value <<= bReadOnly;
+        }
+        else
+            lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
     }
 
     return aTypeName;
