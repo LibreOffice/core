@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:33:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
 };
 
 #define MN_SW_GLOBAL
-#include "swmn.hrc"
-#define MN_SW_PORTAL
 #include "swmn.hrc"
 
 
