@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:45:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcBundlesheet8( RootData& rRootData, UINT16 nTab );
+                                ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const String& rString );
 
     virtual ULONG               GetLen() const;
@@ -628,7 +628,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab );
+                                ExcWindow28( const XclExpRoot& rRoot, SCTAB nScTab );
     virtual                     ~ExcWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -774,7 +774,7 @@ private:
 
 protected:
 public:
-                                ExcEScenario( ScDocument& rDoc, UINT16 nTab );
+                                ExcEScenario( ScDocument& rDoc, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
@@ -798,7 +798,7 @@ private:
 
 protected:
 public:
-                                ExcEScenarioManager( ScDocument& rDoc, UINT16 nTab );
+                                ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab );
     virtual                     ~ExcEScenarioManager();
 
     virtual void                Save( XclExpStream& rStrm );
