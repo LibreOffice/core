@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:37:03 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,6 +1875,58 @@ void TabBar::SetCurPageId( USHORT nPageId )
             Invalidate( pItem->maRect );
             if ( pOldItem )
                 Invalidate( pOldItem->maRect );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void TabBar::MakeVisible( USHORT nPageId )
+{
+    if ( !IsReallyVisible() )
+        return;
+
+    USHORT nPos = GetPagePos( nPageId );
+
+    // Wenn Item nicht existiert, dann nichts machen
+    if ( nPos != TAB_PAGE_NOTFOUND )
+    {
+        if ( nPos < mnFirstPos )
+            SetFirstPageId( nPageId );
+        else
+        {
+            ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
+
+            // sichtbare Breite berechnen
+            long nWidth = mnOutWidth;
+            if ( nWidth > TABBAR_OFFSET_X )
+                nWidth -= TABBAR_OFFSET_X;
+
+            if ( mbFormat || pItem->maRect.IsEmpty() )
+            {
+                mbFormat = TRUE;
+                ImplFormat();
+            }
+
+            while ( (pItem->maRect.Right() > nWidth) ||
+                    pItem->maRect.IsEmpty() )
+            {
+                USHORT nNewPos = mnFirstPos+1;
+                // Dafuer sorgen, das min. die aktuelle TabPages als
+                // erste TabPage sichtbar ist
+                if ( nNewPos >= nPos )
+                {
+                    SetFirstPageId( nPageId );
+                    break;
+                }
+                else
+                    SetFirstPageId( GetPageId( nNewPos ) );
+                ImplFormat();
+                // Falls erste Seite nicht weitergeschaltet wird, dann
+                // koennen wir abbrechen
+                if ( nNewPos != mnFirstPos )
+                    break;
+            }
         }
     }
 }

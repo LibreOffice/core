@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,7 @@ public:
 
     void            SetFirstPageId( USHORT nPageId );
     USHORT          GetFirstPageId() const { return GetPageId( mnFirstPos ); }
+    void            MakeVisible( USHORT nPageId );
 
     void            SelectPage( USHORT nPageId, BOOL bSelect = TRUE );
     void            SelectPageRange( BOOL bSelect = FALSE,
