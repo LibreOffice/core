@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:54:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #endif
 #ifndef _DBAUI_DOCUMENTAUTOLINKER_HXX_
 #include "documentautolinker.hxx"
+#endif
+#ifndef _SVTOOLS_TEMPLDLG_HXX
+#include <svtools/templdlg.hxx>
 #endif
 
 //......................................................................
@@ -467,10 +470,11 @@ namespace dbaui
 
             case ID_FORM_NEW_TEMPLATE:
             {
-                SfxNewFileDialog aChooseTemplate(m_pDialogParent);
-                if (RET_OK != aChooseTemplate.Execute())
+                SvtDocumentTemplateDialog aDialog( m_pDialogParent, SvtDocumentTemplateDialog::SelectOnly() );
+                if ( ( RET_OK == aDialog.Execute() ) && aDialog.IsFileSelected() )
+                    sDocumentURL = aDialog.GetSelectedFileURL( );
+                else
                     return sal_False;
-                sDocumentURL = aChooseTemplate.GetTemplateFileName();
             }
             break;
         }
@@ -560,6 +564,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/26 11:54:33  fs
+ *  initial checkin - access to the data source associated bookmarks
+ *
  *
  *  Revision 1.0 24.04.01 14:56:54  fs
  ************************************************************************/
