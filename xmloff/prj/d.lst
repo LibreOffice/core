@@ -82,3 +82,4 @@ hedabu: ..\source\text\XMLTextShapeImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\XML
 hedabu: ..\inc\XMLFontAutoStylePool.hxx %_DEST%\inc%_EXT%\xmloff\XMLFontAutoStylePool.hxx
 hedabu: ..\inc\XMLFontStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLFontStylesContext.hxx
 hedabu: ..\inc\ProgressBarHelper.hxx %_DEST%\inc%_EXT%\xmloff\ProgressBarHelper.hxx
+hedabu: ..\inc\formlayerexport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerexport.hxx
