@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hjs $ $Date: 2002-06-11 18:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #endif
 
 #ifndef _WINIMPLHELPER_HXX_
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #endif
 
 #ifndef _FILEOPENDLG_HXX_
