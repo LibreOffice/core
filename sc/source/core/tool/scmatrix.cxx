@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-01 14:05:52 $
+ *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,8 +319,9 @@ void ScMatrix::PutEmpty(ULONG nIndex)
         ResetIsString();
     if ( bIsString[nIndex] && pMat[nIndex].pS )
         delete pMat[nIndex].pS;
-    pMat[nIndex].pS = NULL;
     bIsString[nIndex] = SC_MATVAL_EMPTY;
+    pMat[nIndex].pS = NULL;
+    pMat[nIndex].fVal = 0.0;
 }
 
 double ScMatrix::GetDouble(USHORT nC, USHORT nR) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 18:38:10 $
+ *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ void ScInterpreter::ScNeg()
                     ULONG nCount = nC * nR;
                     for ( ULONG j=0; j<nCount; ++j )
                     {
-                        if ( !pMat->IsString(j) )
+                        if ( pMat->IsValueOrEmpty(j) )
                             pResMat->PutDouble( -pMat->GetDouble(j), j );
                         else
                             pResMat->PutString(

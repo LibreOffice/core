@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
+ *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,7 +1350,7 @@ ScMatrix* ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                     pResMat->PutDouble( SolarMath::ApproxAdd( pMat1->GetDouble(i,j),
                                        pMat2->GetDouble(i,j)), i, j);
                 else
@@ -1384,7 +1384,7 @@ ScMatrix* ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                     pResMat->PutDouble( SolarMath::ApproxSub( pMat1->GetDouble(i,j),
                                        pMat2->GetDouble(i,j)), i, j);
                 else
@@ -1418,7 +1418,7 @@ ScMatrix* ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                     pResMat->PutDouble(pMat1->GetDouble(i,j) *
                                        pMat2->GetDouble(i,j), i, j);
                 else
@@ -1452,7 +1452,7 @@ ScMatrix* ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                     pResMat->PutDouble(pMat1->GetDouble(i,j) /
                                        pMat2->GetDouble(i,j), i, j);
                 else
@@ -1486,7 +1486,7 @@ ScMatrix* ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                     pResMat->PutDouble(pow(pMat1->GetDouble(i,j),
                                            pMat2->GetDouble(i,j)), i, j);
                 else
@@ -1529,6 +1529,7 @@ ScMatrix* ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
                 else
                     pResMat->PutString(ScGlobal::GetRscString(
                                                     STR_NO_VALUE), i, j);
+//! TODO: Xcl does concatenate value strings
             }
         }
         nRetMat = nMatInd;
