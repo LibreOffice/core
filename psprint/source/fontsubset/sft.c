@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-25 09:23:12 $
+ *  last change: $Author: pl $ $Date: 2002-10-25 15:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.15 2002-09-25 09:23:12 hdu Exp $
+/* $Id: sft.c,v 1.16 2002-10-25 15:12:09 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2063,7 +2063,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     cmap = TrueTypeTableNew_cmap();
 
     for (i=0; i < nGlyphs; i++) {
-        cmapAdd(cmap, 0x0100, encoding[i], gID[i]);
+        cmapAdd(cmap, 0x010000, encoding[i], gID[i]);
     }
 
     /**                       cvt                           **/
