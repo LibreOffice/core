@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,12 +145,14 @@ namespace dbaccess
     //==========================================================================
     class OQuery;
     class OCommandsListener;
+    class IWarningsContainer;
     class OQueryContainer   :public OQueryContainer_Base
                             ,public OConfigurationFlushable
     {
     protected:
 
         ::cppu::OWeakObject&        m_rParent;
+        IWarningsContainer*         m_pWarnings;
         ::osl::Mutex&               m_rMutex;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                     m_xCommandDefinitions;
@@ -194,12 +196,20 @@ namespace dbaccess
             @param          _rxMasterQueries    the container for the "master objects", i.e. the objects implementing
                                                 the <type scope="com::sun::star::sdb">CommandDefinition</type> service
                                                 which this container's elements extend
+            @param _pWarnings
+                specifies a warnings container (May be <NULL/>)
+                <p>Any errors which occur during the lifetime of the query container,
+                which cannot be reported as exceptionts (for instance in methods where throwing an SQLException is
+                not allowed) will be appended to this container.</p>
+                <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
+                Usually, it's the same object as referenced by _rConnection</p>
         */
         OQueryContainer(::cppu::OWeakObject& _rConnection,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::utl::OConfigurationTreeRoot& _rRootConfigNode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            IWarningsContainer* _pWarnings
             );
         ~OQueryContainer();
 
@@ -210,8 +220,8 @@ namespace dbaccess
 
     // ::com::sun::star::uno::XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
+        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
     // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -273,6 +283,9 @@ namespace dbaccess
         OQuery* implCreateWrapper(const ::rtl::OUString& _rName);
         /// create a query object wrapping a CommandDefinition. The returned object is acquired once.
         OQuery* implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDesc);
+
+        // removes the object with the given number from m_aQueriesIndexed as well as m_aQueries
+        void    implRemove( sal_Int32 nIndex );
 
         /// search the index of the object with the given name within m_aQueriesIndexed
         sal_Int32 implGetIndex(const ::rtl::OUString& _rName);
