@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 13:05:42 $
+ *  last change: $Author: mib $ $Date: 2002-08-05 14:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
+#endif
+#ifndef _SVX_PAPERINF_HXX //autogen
+#include <svx/paperinf.hxx>
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
@@ -2746,7 +2749,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
             {
                 if( USHRT_MAX != nPgDscPos )
                 {
-                    m_pDoc->_GetPageDesc(nPgDscPos).ResetAllMasterAttr();
+                    SwPageDesc& rPageDesc = m_pDoc->_GetPageDesc(nPgDscPos);
+                    rPageDesc.ResetAllMasterAttr();
 
                     SvxLRSpaceItem aLR;
                     sal_Int32 nSize = GetMetricVal ( CM_1) * 2;
@@ -2759,7 +2763,26 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     pTargetFmt->SetAttr ( aUL );
 
                     SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-                    SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
+                    SwFmtFrmSize aFrmSz( ATT_FIX_SIZE );
+                    if( RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId() )
+                    {
+                        if( m_pDoc->GetPrt() )
+                        {
+                            const Size aPhysSize( SvxPaperInfo::GetPaperSize(
+                                        static_cast<Printer*>( m_pDoc->GetPrt() )) );
+                            aFrmSz.SetSize( aPhysSize );
+                        }
+                        else
+                        {
+                            aFrmSz.SetWidth( LONG_MAX );
+                            aFrmSz.SetHeight( LONG_MAX );
+                        }
+
+                    }
+                    else
+                    {
+                        aFrmSz = pStdPgDsc->GetMaster().GetFrmSize();
+                    }
                     if( pStdPgDsc->GetLandscape() )
                     {
                         SwTwips nTmp = aFrmSz.GetHeight();
