@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:48:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ namespace sdr
             TextProperties::ItemSetChanged(rSet);
 
             // local changes, removing cached objects
-            rObj.mXRenderedCustomShape = NULL;
+            rObj.InvalidateRenderGeometry();
         }
         void CustomShapeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
