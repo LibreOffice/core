@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-17 14:29:32 $
+ *  last change: $Author: cl $ $Date: 2002-07-26 09:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,7 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
             break;
 
         sal_Bool bPrinter(OUTDEV_PRINTER == pOut->GetOutDevType());
-        const sal_uInt16 nOldDrawMode((sal_uInt16)pOut->GetDrawMode());
+        const sal_uInt32 nOldDrawMode(pOut->GetDrawMode());
 
         // DrawMode temp. zuruecksetzen
         pOut->SetDrawMode(DRAWMODE_DEFAULT);
