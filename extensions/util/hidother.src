@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:22:28 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ hidspecial HID_PROP_PROGRESSVALUE               { HelpId = HID_PROP_PROGRESSVALU
 hidspecial HID_PROP_PROGRESSVALUE_MIN           { HelpId = HID_PROP_PROGRESSVALUE_MIN; }
 hidspecial HID_PROP_PROGRESSVALUE_MAX           { HelpId = HID_PROP_PROGRESSVALUE_MAX; }
 hidspecial HID_PROP_SCROLLVALUE                 { HelpId = HID_PROP_SCROLLVALUE; }
+hidspecial HID_PROP_SCROLLVALUE_MIN             { HelpId = HID_PROP_SCROLLVALUE_MIN; }
 hidspecial HID_PROP_SCROLLVALUE_MAX             { HelpId = HID_PROP_SCROLLVALUE_MAX; }
 hidspecial HID_PROP_LINEINCREMENT               { HelpId = HID_PROP_LINEINCREMENT; }
 hidspecial HID_PROP_BLOCKINCREMENT              { HelpId = HID_PROP_BLOCKINCREMENT; }
@@ -162,3 +163,13 @@ hidspecial HID_PROP_BOUND_CELL                  { HelpId = HID_PROP_BOUND_CELL; 
 hidspecial HID_PROP_LIST_CELL_RANGE             { HelpId = HID_PROP_LIST_CELL_RANGE; }
 hidspecial HID_PROP_CELL_EXCHANGE_TYPE          { HelpId = HID_PROP_CELL_EXCHANGE_TYPE; }
 hidspecial HID_PROP_SELECTEDITEMS               { HelpId = HID_PROP_SELECTEDITEMS; }
+hidspecial HID_PROP_SCROLLVALUEMIN              { HelpId = HID_PROP_SCROLLVALUE_MIN; }
+hidspecial HID_PROP_DEFAULT_SCROLLVALUE         { HelpId = HID_PROP_DEFAULT_SCROLLVALUE; }
+hidspecial HID_PROP_REPEAT_DELAY                { HelpId = HID_PROP_REPEAT_DELAY; }
+hidspecial HID_PROP_SYMBOLCOLOR                 { HelpId = HID_PROP_SYMBOLCOLOR; }
+hidspecial HID_PROP_SPINVALUE                   { HelpId = HID_PROP_SPINVALUE; }
+hidspecial HID_PROP_SPINVALUE_MIN               { HelpId = HID_PROP_SPINVALUE_MIN; }
+hidspecial HID_PROP_SPINVALUE_MAX               { HelpId = HID_PROP_SPINVALUE_MAX; }
+hidspecial HID_PROP_DEFAULT_SPINVALUE           { HelpId = HID_PROP_DEFAULT_SPINVALUE; }
+hidspecial HID_PROP_SPININCREMENT               { HelpId = HID_PROP_SPININCREMENT; }
+hidspecial HID_PROP_REPEAT                      { HelpId = HID_PROP_REPEAT; }
