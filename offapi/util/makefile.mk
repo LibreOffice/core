@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:59:19 $
+#   last change: $Author: rt $ $Date: 2003-04-17 10:23:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,8 +171,10 @@ ALLTAR: $(REGISTRYCHECKFLAG)
 
 # special work necessary for i18n reservedWords
 # ATTENTION: no special handling for other types is allowed.
+# JSC -> temporary special handling for sheet/SheetSortDescriptor and text/BaseIndex
+# only for build reasons, otherwise the build will break, the changes are not really incompatible
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords && echo > $(REGISTRYCHECKFLAG)
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords -x /UCR/com/sun/star/sheet/SheetSortDescriptor -x /UCR/com/sun/star/text/BaseIndex && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
