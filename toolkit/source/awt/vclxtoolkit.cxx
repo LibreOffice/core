@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ts $ $Date: 2001-02-05 09:33:16 $
+ *  last change: $Author: obr $ $Date: 2001-02-21 15:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_AWT_WINDOWCLASS_HPP_
 #include <com/sun/star/awt/WindowClass.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
@@ -130,6 +133,10 @@
 #include <vcl/sysdata.hxx>
 
 #include <tools/debug.hxx>
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 
 
@@ -345,6 +352,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XToolkit*, this ),
+                                        static_cast < ::com::sun::star::awt::XDataTransfer * > (this),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
@@ -800,4 +808,62 @@ Window* VCLXToolkit::CreateComponent( VCLXWindow** ppNewComp,
 }
 
 
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Window * pWindow = VCLUnoHelper::GetWindow( window );
+
+    if( pWindow )
+        return pWindow->GetDragGestureRecognizer();
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer >();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Window * pWindow = VCLUnoHelper::GetWindow( window );
+
+    if( pWindow )
+        return pWindow->GetDragSource();
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Window * pWindow = VCLUnoHelper::GetWindow( window );
+
+    if( pWindow )
+        return pWindow->GetDropTarget();
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const ::rtl::OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( clipboardName.getLength() == 0 )
+    {
+        if( !mxClipboard.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            if ( xFactory.is() )
+            {
+                // remember clipboard here
+                mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
+                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), ::com::sun::star::uno::UNO_QUERY );
+            }
+        }
+
+        return mxClipboard;
+    }
+
+    else if( clipboardName.equals( ::rtl::OUString::createFromAscii("Selection") ) )
+    {
+        if( !mxSelection.is() )
+            ;
+
+        return mxSelection;
+    }
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >();
+}
 
