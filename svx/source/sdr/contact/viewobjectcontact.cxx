@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:08:48 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,14 @@ namespace sdr
         {
             if(IsPainted())
             {
-                if(!IsInvalidated())
+                if(IsInvalidated())
+                {
+                    // #i37394# Object changes again, but is currently invalidated. That
+                    // means, it's original position is invalidated. But it's new position
+                    // maybe not invalidated yet.
+                    GetObjectContact().ObjectGettingPotentiallyVisible(*this);
+                }
+                else
                 {
                     // invalidate last paint area
                     GetObjectContact().InvalidatePartOfView(GetPaintedRectangle());
