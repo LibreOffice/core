@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.5 2001-02-26 14:53:39 cl Exp $
+	$Id: form.mod,v 1.6 2001-02-28 11:29:41 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -107,8 +107,6 @@
                     %convert-empty;
                     %data-field;>
 
-<!ELEMENT form:textarea (form:properties?, script:events?)>
-<!ATTLIST form:textarea %current-value; >
 <!ELEMENT form:textarea (form:properties?, office:events?)>
 <!ATTLIST form:textarea %current-value;
                         %disabled;
