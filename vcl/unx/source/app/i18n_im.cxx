@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:43:28 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,31 +113,6 @@ IMServerKinput2 ()
                                       && (strcmp(p_xmodifiers, "@im=kinput2") == 0);
 
     return b_kinput2;
-}
-
-extern "C" Bool CallDoneAfterResetIC()
-{
-    const static char* p_xicpolicy = getenv ("SAL_XIMRESETPOLICY");
-    static Bool b_once = False;
-    static Bool b_call = False;
-
-    if (b_once == False)
-    {
-        b_once = True;
-
-        if (p_xicpolicy && (strcasecmp(p_xicpolicy, "force") == 0))
-            b_call = True;
-        else
-        if (p_xicpolicy && (strcasecmp(p_xicpolicy, "none") == 0))
-            b_call = False;
-        else
-        if (IMServerKinput2())
-            b_call = True;
-        else
-            b_call = False;
-    }
-
-    return b_call;
 }
 
 class XKeyEventOp : XKeyEvent
