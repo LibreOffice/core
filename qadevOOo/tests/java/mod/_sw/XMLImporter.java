@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:20 $
+ *  last change:$Date: 2003-05-27 13:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public class XMLImporter extends TestCase {
     * New text document created.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -147,7 +147,7 @@ public class XMLImporter extends TestCase {
     public synchronized TestEnvironment createTestEnvironment
             ( TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
 
         try {

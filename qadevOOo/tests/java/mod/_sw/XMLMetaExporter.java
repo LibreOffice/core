@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLMetaExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:20 $
+ *  last change:$Date: 2003-05-27 13:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class XMLMetaExporter extends TestCase {
      * New text document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -155,7 +155,7 @@ public class XMLMetaExporter extends TestCase {
             ( TestParameters tParam, PrintWriter log ) throws StatusException {
         final String TITLE = "Title for testing of XMLMetaExporter";
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
 
         Filter = new MetaFilterChecker(log);
