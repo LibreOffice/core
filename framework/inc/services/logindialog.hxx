@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-05-10 10:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
-#define __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
+#ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
+#define __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -90,11 +90,7 @@
 #include <macros/xserviceinfo.hxx>
 #endif
 
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
-#endif
-
-#include <services/logindialog.hrc>
+#include <logindialog.hrc>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -178,6 +174,26 @@
 
 namespace framework{
 
+#define ANY                                 ::com::sun::star::uno::Any
+#define EXCEPTION                           ::com::sun::star::uno::Exception
+#define ILLEGALARGUMENTEXCEPTION            ::com::sun::star::lang::IllegalArgumentException
+#define IPROPERTYARRAYHELPER                ::cppu::IPropertyArrayHelper
+#define OBROADCASTHELPER                    ::cppu::OBroadcastHelper
+#define OPROPERTYSETHELPER                  ::cppu::OPropertySetHelper
+#define OUSTRING                            ::rtl::OUString
+#define OWEAKOBJECT                         ::cppu::OWeakObject
+#define PROPERTY                            ::com::sun::star::beans::Property
+#define REFERENCE                           ::com::sun::star::uno::Reference
+#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
+#define SEQUENCE                            ::com::sun::star::uno::Sequence
+#define XDIALOG                             ::com::sun::star::awt::XDialog
+#define XMULTISERVICEFACTORY                ::com::sun::star::lang::XMultiServiceFactory
+#define XPROPERTYSETINFO                    ::com::sun::star::beans::XPropertySetInfo
+#define XSERVICEINFO                        ::com::sun::star::lang::XServiceInfo
+#define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
+#define PROPERTYVALUE                       ::com::sun::star::beans::PropertyValue
+#define LOCALE                              ::com::sun::star::lang::Locale
+
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -237,6 +253,7 @@ namespace framework{
 
 #define PROPERTYNAME_CONNECTIONTYPE             DECLARE_ASCII("ConnectionType"                  )
 #define PROPERTYNAME_LANGUAGE                   DECLARE_ASCII("Language"                        )
+#define PROPERTYNAME_PARENTWINDOW               DECLARE_ASCII("ParentWindow"                    )
 #define PROPERTYNAME_PASSWORD                   DECLARE_ASCII("Password"                        )
 #define PROPERTYNAME_SERVER                     DECLARE_ASCII("Server"                          )
 #define PROPERTYNAME_SERVERHISTORY              DECLARE_ASCII("ServerHistory"                   )
@@ -248,16 +265,17 @@ namespace framework{
 
 #define PROPERTYHANDLE_CONNECTIONTYPE           1
 #define PROPERTYHANDLE_LANGUAGE                 2
-#define PROPERTYHANDLE_PASSWORD                 3
-#define PROPERTYHANDLE_SERVER                   4
-#define PROPERTYHANDLE_SERVERHISTORY            5
-#define PROPERTYHANDLE_USERNAME                 6
-#define PROPERTYHANDLE_COMPRESSED               7
-#define PROPERTYHANDLE_COMPRESSEDSECURE         8
-#define PROPERTYHANDLE_PLAIN                    9
-#define PROPERTYHANDLE_SECURE                   10
+#define PROPERTYHANDLE_PARENTWINDOW             3
+#define PROPERTYHANDLE_PASSWORD                 4
+#define PROPERTYHANDLE_SERVER                   5
+#define PROPERTYHANDLE_SERVERHISTORY            6
+#define PROPERTYHANDLE_USERNAME                 7
+#define PROPERTYHANDLE_COMPRESSED               8
+#define PROPERTYHANDLE_COMPRESSEDSECURE         9
+#define PROPERTYHANDLE_PLAIN                    10
+#define PROPERTYHANDLE_SECURE                   11
 
-#define PROPERTYCOUNT                           10
+#define PROPERTYCOUNT                           11
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -265,29 +283,31 @@ namespace framework{
 
 struct tIMPL_DialogData
 {
-    ::rtl::OUString                         sUserName               ;
-    ::rtl::OUString                         sPassword               ;
-    css::uno::Sequence< ::rtl::OUString >   seqServerList           ;
-    sal_Int32                               nActiveServer           ;
-    ::rtl::OUString                         sConnectionType         ;
-    css::lang::Locale                       aLanguage               ;
-    sal_Int32                               nPortPlain              ;
-    sal_Int32                               nPortSecure             ;
-    sal_Int32                               nPortCompressedSecure   ;
-    sal_Int32                               nPortCompressed         ;
+    OUSTRING                sUserName               ;
+    OUSTRING                sPassword               ;
+    SEQUENCE< OUSTRING >    seqServerList           ;
+    sal_Int32               nActiveServer           ;
+    OUSTRING                sConnectionType         ;
+    LOCALE                  aLanguage               ;
+    sal_Int32               nPortPlain              ;
+    sal_Int32               nPortSecure             ;
+    sal_Int32               nPortCompressedSecure   ;
+    sal_Int32               nPortCompressed         ;
+    ANY                     aParentWindow           ;
 
     // default ctor to initialize empty structure.
     tIMPL_DialogData()
-        :   sUserName               ( ::rtl::OUString()                                         )
-        ,   sPassword               ( ::rtl::OUString()                                         )
-        ,   seqServerList           ( css::uno::Sequence< ::rtl::OUString >()                   )
-        ,   nActiveServer           ( 1                                                         )
-        ,   sConnectionType         ( ::rtl::OUString()                                         )
-        ,   aLanguage               ( ::rtl::OUString(), ::rtl::OUString(), ::rtl::OUString()   )
-        ,   nPortPlain              ( 0                                                         )
-        ,   nPortSecure             ( 0                                                         )
-        ,   nPortCompressedSecure   ( 0                                                         )
-        ,   nPortCompressed         ( 0                                                         )
+        :   sUserName               ( OUSTRING()                            )
+        ,   sPassword               ( OUSTRING()                            )
+        ,   seqServerList           ( SEQUENCE< OUSTRING >()                )
+        ,   nActiveServer           ( 1                                     )
+        ,   sConnectionType         ( OUSTRING()                            )
+        ,   aLanguage               ( OUSTRING(), OUSTRING(), OUSTRING()    )
+        ,   nPortPlain              ( 0                                     )
+        ,   nPortSecure             ( 0                                     )
+        ,   nPortCompressedSecure   ( 0                                     )
+        ,   nPortCompressed         ( 0                                     )
+        ,   aParentWindow           (                                       )
     {
     }
 
@@ -303,6 +323,7 @@ struct tIMPL_DialogData
         ,   nPortSecure             ( aCopyDataSet.nPortSecure              )
         ,   nPortCompressedSecure   ( aCopyDataSet.nPortCompressedSecure    )
         ,   nPortCompressed         ( aCopyDataSet.nPortCompressed          )
+        ,   aParentWindow           ( aCopyDataSet.aParentWindow            )
     {
     }
 
@@ -319,6 +340,7 @@ struct tIMPL_DialogData
         nPortSecure             = aCopyDataSet.nPortSecure              ;
         nPortCompressedSecure   = aCopyDataSet.nPortCompressedSecure    ;
         nPortCompressed         = aCopyDataSet.nPortCompressed          ;
+        aParentWindow           = aCopyDataSet.aParentWindow            ;
         return *this;
     }
 };
@@ -348,13 +370,14 @@ class cIMPL_Dialog  :   public ModalDialog
 
             @seealso    method setValues()
 
-            @param      "aLanguage", identifier to describe ressource language
+            @param      "aLanguage" , identifier to describe ressource language
+            @param      "pParent"   , parent window handle for dialog! If is it NULL -> no parent exist ...
             @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        cIMPL_Dialog( LanguageType aLanguage );
+        cIMPL_Dialog( LanguageType aLanguage, Window* pParent );
 
         /*-****************************************************************************************************//**
             @short      default dtor
@@ -457,13 +480,13 @@ class cIMPL_Dialog  :   public ModalDialog
                 OWeakObject
 *//*-*************************************************************************************************************/
 
-class LoginDialog   :   public css::lang::XTypeProvider         ,
-                        public css::lang::XServiceInfo          ,
-                        public css::awt::XDialog                ,
-                        public OMutexMember                     ,   // Order of baseclasses is neccessary for right initialization!
-                        public ::cppu::OBroadcastHelper         ,
-                        public ::cppu::OPropertySetHelper       ,
-                        public ::cppu::OWeakObject
+class LoginDialog   :   public XTYPEPROVIDER                ,
+                        public XSERVICEINFO                 ,
+                        public XDIALOG                      ,
+                        public OMutexMember                 ,   // Order of baseclasses is neccessary for right initialization!
+                        public OBROADCASTHELPER             ,
+                        public OPROPERTYSETHELPER           ,
+                        public OWEAKOBJECT
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -487,7 +510,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         LoginDialog( const css::uno::Reference< css::lang::XMultiServiceFactory >& sFactory );
+         LoginDialog( const REFERENCE< XMULTISERVICEFACTORY >& sFactory );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -527,7 +550,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL setTitle( const OUSTRING& sTitle ) throw( RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      return the current title of this dialog
@@ -541,7 +564,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ::rtl::OUString SAL_CALL getTitle() throw( css::uno::RuntimeException );
+        virtual OUSTRING SAL_CALL getTitle() throw( RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      show the dialog and return user reaction
@@ -558,7 +581,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    We return 0(FALSE).
         *//*-*****************************************************************************************************/
 
-        virtual sal_Int16 SAL_CALL execute() throw( css::uno::RuntimeException );
+        virtual sal_Int16 SAL_CALL execute() throw( RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      not implemented yet!
@@ -572,7 +595,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL endExecute() throw( css::uno::RuntimeException );
+        virtual void SAL_CALL endExecute() throw( RUNTIMEEXCEPTION );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -606,10 +629,10 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    IllegalArgumentException, if you call this with an invalid argument
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
-                                                                      css::uno::Any&        aOldValue       ,
-                                                                    sal_Int32           nHandle         ,
-                                                            const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(         ANY&        aConvertedValue ,
+                                                                      ANY&      aOldValue       ,
+                                                                    sal_Int32   nHandle         ,
+                                                            const   ANY&        aValue          ) throw( ILLEGALARGUMENTEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      set value of a transient property
@@ -627,8 +650,8 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    An exception is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32       nHandle ,
-                                                                  const css::uno::Any&  aValue  ) throw( css::uno::Exception );
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
+                                                                  const ANY&        aValue  ) throw( EXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      get value of a transient property
@@ -644,8 +667,8 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
-                                                      sal_Int32     nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue( ANY&        aValue  ,
+                                                      sal_Int32 nHandle ) const;
 
         /*-****************************************************************************************************//**
             @short      return structure and information about transient properties
@@ -660,7 +683,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual IPROPERTYARRAYHELPER& SAL_CALL getInfoHelper();
 
         /*-****************************************************************************************************//**
             @short      return propertysetinfo
@@ -677,7 +700,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
+        virtual REFERENCE< XPROPERTYSETINFO > SAL_CALL getPropertySetInfo();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -697,7 +720,7 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        const SEQUENCE< PROPERTY > impl_getStaticPropertyDescriptor();
 
         /*-****************************************************************************************************//**
             @short      helper method to check if a property will change his value
@@ -711,25 +734,30 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_tryToChangeProperty(  const   ::rtl::OUString&                        sProperty       ,
-                                            const   css::uno::Any&                          aValue          ,
-                                                    css::uno::Any&                          aOldValue       ,
-                                                    css::uno::Any&                          aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   OUSTRING&               sProperty       ,
+                                            const   ANY&                    aValue          ,
+                                                    ANY&                    aOldValue       ,
+                                                    ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
 
-        sal_Bool impl_tryToChangeProperty(  const   css::uno::Sequence< ::rtl::OUString >&  seqProperty     ,
-                                            const   css::uno::Any&                          aValue          ,
-                                                    css::uno::Any&                          aOldValue       ,
-                                                    css::uno::Any&                          aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   SEQUENCE< OUSTRING >&   seqProperty     ,
+                                            const   ANY&                    aValue          ,
+                                                    ANY&                    aOldValue       ,
+                                                    ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
 
-        sal_Bool impl_tryToChangeProperty(  const   sal_Int32&                              nProperty       ,
-                                            const   css::uno::Any&                          aValue          ,
-                                                    css::uno::Any&                          aOldValue       ,
-                                                    css::uno::Any&                          aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   sal_Int32&              nProperty       ,
+                                            const   ANY&                    aValue          ,
+                                                    ANY&                    aOldValue       ,
+                                                    ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
 
-        sal_Bool impl_tryToChangeProperty(  const   css::lang::Locale&                      aProperty       ,
-                                            const   css::uno::Any&                          aValue          ,
-                                                    css::uno::Any&                          aOldValue       ,
-                                                    css::uno::Any&                          aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   LOCALE&                 aProperty       ,
+                                            const   ANY&                    aValue          ,
+                                                    ANY&                    aOldValue       ,
+                                                    ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
+
+        sal_Bool impl_tryToChangeProperty(  const   ANY&                    aProperty       ,
+                                            const   ANY&                    aValue          ,
+                                                    ANY&                    aOldValue       ,
+                                                    ANY&                    aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
 
         /*-****************************************************************************************************//**
             @short      search and open profile
@@ -772,9 +800,9 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_addServerToHistory(           css::uno::Sequence< ::rtl::OUString >&  seqHistory      ,
-                                                sal_Int32&                              nActiveServer   ,
-                                        const   ::rtl::OUString&                        sServer         );
+        void impl_addServerToHistory(           SEQUENCE< OUSTRING >&   seqHistory      ,
+                                                sal_Int32&              nActiveServer   ,
+                                        const   OUSTRING&               sServer         );
 
         /*-****************************************************************************************************//**
             @short      helper methods to read/write  properties from/to ini file
@@ -790,25 +818,25 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
             @onerror    Assertions are shown.
         *//*-*****************************************************************************************************/
 
-        void                                    impl_writeUserName              (   const   ::rtl::OUString&                        sUserName       );
-        void                                    impl_writeActiveServer          (           sal_Int32                               nActiveServer   );
-        void                                    impl_writeServerHistory         (   const   css::uno::Sequence< ::rtl::OUString >&  lHistory        );
-        void                                    impl_writeConnectionType        (   const   ::rtl::OUString&                        sConnectionType );
-        void                                    impl_writeLanguage              (   const   css::lang::Locale&                      aLanguage       );
-        void                                    impl_writePortPlain             (           sal_Int32                               nPort           );
-        void                                    impl_writePortSecure            (           sal_Int32                               nPort           );
-        void                                    impl_writePortCompressedSecure  (           sal_Int32                               nPort           );
-        void                                    impl_writePortCompressed        (           sal_Int32                               nPort           );
+        void                    impl_writeUserName              (   const   OUSTRING&               sUserName       );
+        void                    impl_writeActiveServer          (           sal_Int32               nActiveServer   );
+        void                    impl_writeServerHistory         (   const   SEQUENCE< OUSTRING >&   lHistory        );
+        void                    impl_writeConnectionType        (   const   OUSTRING&               sConnectionType );
+        void                    impl_writeLanguage              (   const   LOCALE&                 aLanguage       );
+        void                    impl_writePortPlain             (           sal_Int32               nPort           );
+        void                    impl_writePortSecure            (           sal_Int32               nPort           );
+        void                    impl_writePortCompressedSecure  (           sal_Int32               nPort           );
+        void                    impl_writePortCompressed        (           sal_Int32               nPort           );
 
-        ::rtl::OUString                         impl_readUserName               (                                                                   );
-        sal_Int32                               impl_readActiveServer           (                                                                   );
-        css::uno::Sequence< ::rtl::OUString >   impl_readServerHistory          (                                                                   );
-        ::rtl::OUString                         impl_readConnectionType         (                                                                   );
-        css::lang::Locale                       impl_readLanguage               (                                                                   );
-        sal_Int32                               impl_readPortPlain              (                                                                   );
-        sal_Int32                               impl_readPortSecure             (                                                                   );
-        sal_Int32                               impl_readPortCompressedSecure   (                                                                   );
-        sal_Int32                               impl_readPortCompressed         (                                                                   );
+        OUSTRING                impl_readUserName               (                                                   );
+        sal_Int32               impl_readActiveServer           (                                                   );
+        SEQUENCE< OUSTRING >    impl_readServerHistory          (                                                   );
+        OUSTRING                impl_readConnectionType         (                                                   );
+        LOCALE                  impl_readLanguage               (                                                   );
+        sal_Int32               impl_readPortPlain              (                                                   );
+        sal_Int32               impl_readPortSecure             (                                                   );
+        sal_Int32               impl_readPortCompressedSecure   (                                                   );
+        sal_Int32               impl_readPortCompressed         (                                                   );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -833,8 +861,8 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
 
     private:
 
-        static sal_Bool impldbg_checkParameter_LoginDialog  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    );
-        static sal_Bool impldbg_checkParameter_setTitle     (   const   ::rtl::OUString&                                        sTitle      );
+        sal_Bool impldbg_checkParameter_LoginDialog (   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory    );
+        sal_Bool impldbg_checkParameter_setTitle    (   const   OUSTRING&                           sTitle      );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -845,15 +873,15 @@ class LoginDialog   :   public css::lang::XTypeProvider         ,
 
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory          ;   /// reference to factory, which has created this instance
-        ::rtl::OUString                                             m_sININame          ;   /// full qualified path to profile UNC-notation
-        Config*                                                     m_pINIManager       ;   /// manager for full access to ini file
-        sal_Bool                                                    m_bInExecuteMode    ;   /// protection against setting of properties during showing of dialog
-        cIMPL_Dialog*                                               m_pDialog           ;   /// VCL dialog
-        tIMPL_DialogData                                            m_aPropertySet      ;
+        REFERENCE< XMULTISERVICEFACTORY >       m_xFactory          ;   /// reference to factory, which has created this instance
+        OUSTRING                                m_sININame          ;   /// full qualified path to profile UNC-notation
+        Config*                                 m_pINIManager       ;   /// manager for full access to ini file
+        sal_Bool                                m_bInExecuteMode    ;   /// protection against setting of properties during showing of dialog
+        cIMPL_Dialog*                           m_pDialog           ;   /// VCL dialog
+        tIMPL_DialogData                        m_aPropertySet      ;
 
 };      //  class LoginDialog
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
+#endif  //  #ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
