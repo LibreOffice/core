@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:07:32 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:12:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,28 +57,14 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_lib_uno_environments_java
+
 PACKAGE := com$/sun$/star$/lib$/uno$/environments$/java
-TARGET  := test_com_sun_star_lib_uno_environments_java
+JAVATESTFILES := java_environment_Test.java
+JARFILES := ridl.jar sandbox.jar
 
-# --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# Files --------------------------------------------------------
-
-
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/java_environment_Test.class
-
-
-# --- Targets ------------------------------------------------------
-
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
