@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:00:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,8 @@ void ScTempDocCache::Clear()
 BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                     ScDocument* pDestDoc, const ScAddress& rDestPos )
 {
-    USHORT nSrcTab = rSrcRange.aStart.Tab();
-    USHORT nDestTab = rDestPos.Tab();
+    SCTAB nSrcTab = rSrcRange.aStart.Tab();
+    SCTAB nDestTab = rDestPos.Tab();
 
     ScRange aNewRange( rDestPos, ScAddress(
                 rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + rDestPos.Col(),
@@ -397,9 +397,9 @@ void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRow
     aRef.Ref1.nTab = 0;
     aRef.Ref2.nTab = 0;
     aRef.Ref1.nCol = 0;
-    aRef.Ref1.nRow = (USHORT) nStartRow;
-    aRef.Ref2.nCol = (USHORT) (nColCount - 1);
-    aRef.Ref2.nRow = (USHORT) (nStartRow + nRowCount - 1);
+    aRef.Ref1.nRow = (SCROW) nStartRow;
+    aRef.Ref2.nCol = (SCCOL) (nColCount - 1);
+    aRef.Ref2.nRow = (SCROW) (nStartRow + nRowCount - 1);
     rArray.AddDoubleReference(aRef);
 }
 
@@ -500,7 +500,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                 const sal_Int16* pColArr = pRowArr[nRow].getConstArray();
                 for (long nCol=0; nCol<nColCount; nCol++)
                     if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (USHORT) nCol, (USHORT) nDocRow, 0, pColArr[nCol] );
+                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
                     else
                         bOverflow = TRUE;
                 ++nDocRow;
@@ -526,7 +526,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                 const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
                 for (long nCol=0; nCol<nColCount; nCol++)
                     if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (USHORT) nCol, (USHORT) nDocRow, 0, pColArr[nCol] );
+                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
                     else
                         bOverflow = TRUE;
                 ++nDocRow;
@@ -552,7 +552,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                 const double* pColArr = pRowArr[nRow].getConstArray();
                 for (long nCol=0; nCol<nColCount; nCol++)
                     if ( nCol <= MAXCOL && nDocRow <= MAXROW )
-                        pDoc->SetValue( (USHORT) nCol, (USHORT) nDocRow, 0, pColArr[nCol] );
+                        pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, pColArr[nCol] );
                     else
                         bOverflow = TRUE;
                 ++nDocRow;
@@ -580,7 +580,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                     if ( nCol <= MAXCOL && nDocRow <= MAXROW )
                     {
                         if ( pColArr[nCol].getLength() )
-                            pDoc->PutCell( (USHORT) nCol, (USHORT) nDocRow, 0,
+                            pDoc->PutCell( (SCCOL) nCol, (SCROW) nDocRow, 0,
                                             new ScStringCell( pColArr[nCol] ) );
                     }
                     else
@@ -627,14 +627,14 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                             //  variable as byte, short or long if it's an integer number.
                             double fVal;
                             rElement >>= fVal;
-                            pDoc->SetValue( (USHORT) nCol, (USHORT) nDocRow, 0, fVal );
+                            pDoc->SetValue( (SCCOL) nCol, (SCROW) nDocRow, 0, fVal );
                         }
                         else if ( eElemClass == uno::TypeClass_STRING )
                         {
                             rtl::OUString aUStr;
                             rElement >>= aUStr;
                             if ( aUStr.getLength() )
-                                pDoc->PutCell( (USHORT) nCol, (USHORT) nDocRow, 0,
+                                pDoc->PutCell( (SCCOL) nCol, (SCROW) nDocRow, 0,
                                                             new ScStringCell( aUStr ) );
                         }
                         else
@@ -672,7 +672,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                     else
                     {
                         // copy data
-                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (USHORT)nDocRow, 0 ) ) )
+                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (SCROW)nDocRow, 0 ) ) )
                             bOverflow = TRUE;
                     }
 
@@ -699,7 +699,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     uno::Any aRet;
     if ( !bArgErr && !bOverflow && nDocRow <= MAXROW )
     {
-        ScAddress aFormulaPos( 0, (USHORT)nDocRow, 0 );
+        ScAddress aFormulaPos( 0, (SCROW)nDocRow, 0 );
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos, &aTokenArr, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
