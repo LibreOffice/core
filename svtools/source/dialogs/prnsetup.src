@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:14:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ String STR_SVT_PRNDLG_PENDING
     Text [ ENGLISH ] = "Pending deletion" ;
     Text [ portuguese ] = "Eliminar pendente" ;
     Text [ english_us ] = "Pending deletion" ;
-    Text [ portuguese_brazilian ] = "Löschen anstehend" ;
+    Text [ portuguese_brazilian ] = "L?chen anstehend" ;
     Text [ swedish ] = "Radering i vänteläge" ;
     Text [ danish ] = "Slet igangværende" ;
     Text [ italian ] = "Cancellazione in attesa" ;
@@ -518,7 +518,7 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text [ dutch ] = "Postvak UIT is vol" ;
     Text[ chinese_simplified ] = "Êä³ö»º³åÇøÒçÂú";
     Text[ russian ] = "Óñòğîéñòâî âûäà÷è çàïîëíåíî";
-    Text[ polish ] = "Zasobnik wyjœciowy zape³niony";
+    Text[ polish ] = "Zasobnik wyj?ciowy zape³niony";
     Text[ japanese ] = "ˆóü±³ÄÌß¯Ä—p‚Ì—eŠí‚ª‚¢‚Á‚Ï‚¢‚Å‚·B";
     Text[ chinese_traditional ] = "¿é¥X½w½Ä°Ï·¸º¡";
     Text[ arabic ] = "ÏÑÌ ÇáÅÎÑÇÌ ããÊáÆ";
@@ -639,7 +639,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text [ ENGLISH ] = "Out of memory" ;
     Text [ portuguese ] = "Memória insuficiente" ;
     Text [ english_us ] = "Insufficient memory" ;
-    Text [ portuguese_brazilian ] = "Nicht genügend Speicher" ;
+    Text [ portuguese_brazilian ] = "Nicht gen?end Speicher" ;
     Text [ swedish ] = "Ej tillräckligt med minne" ;
     Text [ danish ] = "Ikke nok hukommelse" ;
     Text [ italian ] = "Non c'è abbastanza memoria" ;
@@ -726,7 +726,7 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text [ dutch ] = "Standaardprinter" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
     Text[ russian ] = "Ñòàíäàğòíûé ïğèíòåğ";
-    Text[ polish ] = "Drukarka domyœlna";
+    Text[ polish ] = "Drukarka domy?lna";
     Text[ japanese ] = "•W€ÌßØİÀ";
     Text[ chinese_traditional ] = "Àq»{¦Lªí¾÷";
     Text[ arabic ] = "ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ";
@@ -862,7 +862,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ dutch ] = "~Eigenschappen..." ;
         Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
         Text[ russian ] = "~Ñâîéñòâà...";
-        Text[ polish ] = "W³aœciwoœci...";
+        Text[ polish ] = "W³a?ciwo?ci...";
         Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
         Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
