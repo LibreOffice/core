@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:12:53 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:08:34 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -196,14 +196,14 @@ $(SAMPLE_NAME) : $(COMP_REGISTERFLAG) $(APP1_BINARY)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
 	@echo --------
 	@echo The simple C++ component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description. You can also load the "$(QM)SimpleComponent.odt$(QM)" document containing
 	@echo a StarBasic macro which uses this component.
 	@echo -
-	@echo make SimpleComponent.odt.load
+	@echo $(MAKE) SimpleComponent.odt.load
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/%$(EXE_EXT)

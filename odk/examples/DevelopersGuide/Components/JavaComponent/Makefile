@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:14:20 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:08:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -187,8 +187,8 @@ JavaComponentExample : $(REGISTERFLAG) $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP1_NAME).local
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).local
 	@echo --------
 	@echo The Java components were installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the
