@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:19:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String RID_SVXSTR_ALL_FILES
     Text[ hebrew ] = "<Alle Dateien>";
     Text[ hindi ] = "<सब फाइलें>";
     Text[ slovak ] = "<všetky súbory>";
+    Text[ hungarian ] = "<Minden fájl>";
+    Text[ slovenian ] = "<Vse datoteke>";
 };
 Resource RID_SVXRES_IMPORTGRAPHIC
 {
@@ -128,6 +130,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "<Alle Formate>";
         Text[ hindi ] = "<सब रचनाएँ>";
         Text[ slovak ] = "<všetky formáty>";
+        Text[ hungarian ] = "<Minden formátum>";
+        Text[ slovenian ] = "<Vse oblike zapisa>";
     };
     String STR_UNKNOWN_FORMAT
     {
@@ -160,6 +164,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "Unbekanntes Dateiformat";
         Text[ hindi ] = "अज्ञात फाइल रचना!";
         Text[ slovak ] = "Neznámy formát súboru!";
+        Text[ hungarian ] = "Ismeretlen fájlformátum!";
+        Text[ slovenian ] = "Neznana oblika zapisa datoteke!";
     };
     String STR_PATH_NOT_FOUND1
     {
@@ -170,7 +176,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ portuguese_brazilian ] = "O diret�rio" ;
         Text [ portuguese ] = "O direct�rio '" ;
         Text [ finnish ] = "Hakemistoa" ;
-        Text [ danish ] = "Biblioteket '" ;
+        Text [ danish ] = "Kataloget '" ;
         Text [ french ] = "Le r�pertoire '" ;
         Text [ swedish ] = "Katalogen '" ;
         Text [ dutch ] = "Map '" ;
@@ -192,6 +198,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "Das Verzeichnis '";
         Text[ hindi ] = "डैरक्टरी '";
         Text[ slovak ] = "Adresár '";
+        Text[ hungarian ] = "A könyvtár '";
+        Text[ slovenian ] = "Mapa '";
     };
     String STR_PATH_NOT_FOUND2
     {
@@ -202,7 +210,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ portuguese_brazilian ] = " n�o existe." ;
         Text [ portuguese ] = "' n�o existe." ;
         Text [ finnish ] = "' ei ole olemassa." ;
-        Text [ danish ] = "' findes ikke." ;
+        Text [ danish ] = "' findes ikke" ;
         Text [ french ] = "' n'existe pas." ;
         Text [ swedish ] = "' finns inte." ;
         Text [ dutch ] = "' bestaat niet." ;
@@ -224,6 +232,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "' existiert nicht.";
         Text[ hindi ] = "' अस्तित्व में नहीं है";
         Text[ slovak ] = "' neexistuje";
+        Text[ hungarian ] = "' nem létezik";
+        Text[ slovenian ] = "' ne obstaja";
     };
     String STR_FLT_BMP
     {
@@ -250,7 +260,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo da figura" ;
         TEXT [ portuguese ] = "Imposs�vel abrir ficheiro gr�fico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
-        TEXT [ danish ] = "Det er ikke muligt at �bne grafikfilen" ;
+        TEXT [ danish ] = "Grafikfil kan ikke �bnes" ;
         TEXT [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
         TEXT [ swedish ] = "Grafikfil kan inte �ppnas" ;
         TEXT [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
@@ -272,6 +282,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
         TEXT[ hindi ] = "सुचित्र फाइल को नहीं खोल सकते है";
         TEXT[ slovak ] = "Nie je možné otvoriť grafický súbor";
+        TEXT[ hungarian ] = "A képfájlt nem lehet megnyitni";
+        TEXT[ slovenian ] = "Grafične datoteke ni mogoče odpreti";
     };
     String STR_GRFILTER_IOERROR
     {
@@ -282,7 +294,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ portuguese_brazilian ] = "N�o foi poss�vel ler o arquivo da figura" ;
         TEXT [ portuguese ] = "Imposs�vel ler ficheiro gr�fico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
-        TEXT [ danish ] = "Det er ikke muligt at l�se grafikfilen" ;
+        TEXT [ danish ] = "Grafikfil kan ikke l�ses" ;
         TEXT [ french ] = "Impossible de lire le fichier graphique !" ;
         TEXT [ swedish ] = "Grafikfil kan inte l�sas" ;
         TEXT [ dutch ] = "Grafisch bestand is onleesbaar" ;
@@ -304,6 +316,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
         TEXT[ hindi ] = "सुचित्र फाइल को नहीं पढ़ सकते है";
         TEXT[ slovak ] = "Nie je možné načítať grafický súbor";
+        TEXT[ hungarian ] = "A képfájl nem olvasható";
+        TEXT[ slovenian ] = "Grafične datoteke ni mogoče brati";
     };
     String STR_GRFILTER_FORMATERROR
     {
@@ -336,6 +350,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Unbekanntes Grafikformat";
         TEXT[ hindi ] = "अज्ञात सुचित्र रचना";
         TEXT[ slovak ] = "Neznámy grafický formát";
+        TEXT[ hungarian ] = "Ismeretlen képformátum";
+        TEXT[ slovenian ] = "Neznana oblika zapisa grafike";
     };
     String STR_GRFILTER_VERSIONERROR
     {
@@ -368,6 +384,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
         TEXT[ hindi ] = "सुचित्र फाइल का आवृत्ति को समर्थन नहीं करता है";
         TEXT[ slovak ] = "Nepodporovaná verzia obrázku";
+        TEXT[ hungarian ] = "A képfájl verziója nem támogatott";
+        TEXT[ slovenian ] = "Različice grafične datoteke ni mogoče podpreti";
     };
     String STR_GRFILTER_FILTERERROR
     {
@@ -400,6 +418,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Grafikfilter nicht gefunden";
         TEXT[ hindi ] = "सुचित्र फ़िल्टर नहीं मिला";
         TEXT[ slovak ] = "Grafický filter nebol nájdený";
+        TEXT[ hungarian ] = "A grafikus szűrő nem található";
+        TEXT[ slovenian ] = "Grafičnega filtra ni mogoče najti";
     };
     String STR_GRFILTER_TOOBIG
     {
@@ -410,7 +430,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ portuguese_brazilian ] = "N�o h� mem�ria suficiente para inserir a imagem" ;
         TEXT [ portuguese ] = "Mem�ria insuficiente para inserir a imagem." ;
         TEXT [ finnish ] = "Muisti ei riit� kuvan lis��miseen." ;
-        TEXT [ danish ] = "Ikke tilstr�kkelig hukommelse til at inds�tte grafik" ;
+        TEXT [ danish ] = "Ikke tilstr�kkelig hukommelse til inds�tning af grafik" ;
         TEXT [ french ] = "M�moire insuffisante pour l'insertion de l'image" ;
         TEXT [ swedish ] = "Inte tillr�ckligt med minne f�r att infoga grafiken" ;
         TEXT [ dutch ] = "Niet genoeg geheugen voor invoegen van grafische afbeelding." ;
@@ -432,6 +452,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
         TEXT[ hindi ] = "सुचित्र को जोड़ने केलिए अपर्याप्त मेमरी";
         TEXT[ slovak ] = "Nedostatok pamäti na vloženie obrázku";
+        TEXT[ hungarian ] = "A kép beillesztéséhez kevés a memória";
+        TEXT[ slovenian ] = "Na voljo ni dovolj pomnilnika za vstavljanje grafike";
     };
     String STR_PROPERTIES
     {
@@ -442,7 +464,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ portuguese ] = "~Propriedades..." ;
         Text [ finnish ] = "~Ominaisuudet..." ;
-        Text [ danish ] = "Egenskaber..." ;
+        Text [ danish ] = "~Egenskaber..." ;
         Text [ french ] = "Propri�t�s..." ;
         Text [ swedish ] = "~Egenskaper..." ;
         Text [ dutch ] = "Eigens~chappen..." ;
@@ -464,6 +486,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "‮מאפינים...‬";
         Text[ hindi ] = "~विशेषतायें...";
         Text[ slovak ] = "Vlastnos~ti...";
+        Text[ hungarian ] = "~Tulajdonságok...";
+        Text[ slovenian ] = "~Lastnosti...";
     };
     String STR_HOME
     {
@@ -496,6 +520,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "~Standard";
         Text[ hindi ] = "स्टान्डर्ड";
         Text[ slovak ] = "Štandardný";
+        Text[ hungarian ] = "Standard";
+        Text[ slovenian ] = "Standardno";
     };
     String STR_LINK
     {
@@ -506,7 +532,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ portuguese_brazilian ] = "~Vincular" ;
         Text [ portuguese ] = "~Ligar" ;
         Text [ finnish ] = "~Linkit�" ;
-        Text [ danish ] = "K�d" ;
+        Text [ danish ] = "~K�d" ;
         Text [ french ] = "~Lien" ;
         Text [ swedish ] = "L�~nka" ;
         Text [ dutch ] = "~Koppelen" ;
@@ -528,6 +554,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "~Verknüpfen";
         Text[ hindi ] = "~लिंक";
         Text[ slovak ] = "~Odkaz";
+        Text[ hungarian ] = "~Kapcsolat";
+        Text[ slovenian ] = "~Povezava";
     };
     String STR_PREVIEW
     {
@@ -538,7 +566,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ portuguese_brazilian ] = "Vi~sualizar" ;
         Text [ portuguese ] = "~Visualizar" ;
         Text [ finnish ] = "Esi~katselu" ;
-        Text [ danish ] = "Eksempel" ;
+        Text [ danish ] = "~Eksempel" ;
         Text [ french ] = "A~per�u" ;
         Text [ swedish ] = "~F�rhandsvisning" ;
         Text [ dutch ] = "~Voorbeeld" ;
@@ -560,6 +588,8 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "V~orschau";
         Text[ hindi ] = "पूर्व~दृश्य";
         Text[ slovak ] = "~Náhľad";
+        Text[ hungarian ] = "~Előnézet";
+        Text[ slovenian ] = "Pr~edogled";
     };
     String STR_FILTER
     {
@@ -571,7 +601,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ french ] = "~Filtre..." ;
         Text [ dutch ] = "~Filter..." ;
         Text [ swedish ] = "Fi~lter..." ;
-        Text [ danish ] = "Filter..." ;
+        Text [ danish ] = "~Filter..." ;
         Text [ portuguese_brazilian ] = "~Filtro..." ;
         Text [ portuguese ] = "~Filtro..." ;
         Text[ chinese_simplified ] = "筛选(~F)...";
@@ -591,9 +621,13 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "~फ़िल्टर...";
         Text[ slovak ] = "~Filter...";
+        Text[ hungarian ] = "~Szűrő...";
+        Text[ slovenian ] = "~Filter...";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
