@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HXX_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
+#include <com/sun/star/io/XInputStreamProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 
@@ -77,38 +77,34 @@ namespace xmlscript
 
 #define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
 #define XMLNS_DIALOGS_UID 1
-#define XMLNS_DIALOGS_PREFIX "dialog"
+#define XMLNS_DIALOGS_PREFIX "dlg"
 
 
 //==================================================================================================
 SAL_DLLEXPORT void
-SAL_CALL exportDialogModels(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameContainer > > const & rInModels )
-    throw (::com::sun::star::uno::Exception);
+SAL_CALL exportDialogModel(
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
 //==================================================================================================
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importDialogModels(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameContainer > > * pOutModels )
-    throw (::com::sun::star::uno::Exception);
+SAL_CALL importDialogModel(
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
+
+// additional functions for convenience
 
 //==================================================================================================
-SAL_DLLEXPORT void
-SAL_CALL exportDialogModelsToByteSequence(
-    ::com::sun::star::uno::Sequence< sal_Int8 > * pOutBytes,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameContainer > > const & rInModels )
-    throw (::com::sun::star::uno::Exception);
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >
+SAL_CALL exportDialogModel(
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
 //==================================================================================================
 SAL_DLLEXPORT void
-SAL_CALL importDialogModelsFromByteSequence(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameContainer > > * pOutModels,
-    ::com::sun::star::uno::Sequence< sal_Int8 > const & rInBytes )
-    throw (::com::sun::star::uno::Exception);
+SAL_CALL importDialogModel(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInput,
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
 
 };
 

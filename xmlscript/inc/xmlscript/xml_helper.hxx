@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ struct NameSpaceUid
     ::rtl::OUString     sURI;
     sal_Int32           nUid;
 
-    NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ )
+    inline NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ ) SAL_THROW( () )
         : sURI( sURI_ )
         , nUid( nUid_ )
         {}
@@ -100,18 +100,18 @@ SAL_CALL createDocumentHandler(
     sal_Int32 nUnknownNamespaceUid,
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::XImporter > const & xImporter,
     bool bSingleThreadedUse = true )
-    throw ();
+    SAL_THROW( () );
 
 //==================================================================================================
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
-    throw ();
+    SAL_THROW( () );
 //==================================================================================================
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
     ::rtl::ByteSequence * pOutData )
-    throw ();
+    SAL_THROW( () );
 
 };
 
