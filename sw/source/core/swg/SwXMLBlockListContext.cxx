@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-01 19:35:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,37 @@ SvXMLImportContext *SwXMLTextBlockDocumentContext::CreateChildContext(
 SwXMLTextBlockDocumentContext::~SwXMLTextBlockDocumentContext ( void )
 {
 }
+
+
+SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
+   SwXMLTextBlockImport& rImport,
+   sal_uInt16 nPrefix,
+   const OUString& rLocalName,
+   const com::sun::star::uno::Reference<
+   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
+    rLocalRef(rImport),
+    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+{
+}
+
+SvXMLImportContext *SwXMLTextBlockTextContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+    if (nPrefix == XML_NAMESPACE_TEXT &&
+        IsXMLToken ( rLocalName, XML_P ) )
+        pContext = new SwXMLTextBlockParContext (rLocalRef, nPrefix, rLocalName, xAttrList);
+    else
+        pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
+    return pContext;
+}
+SwXMLTextBlockTextContext::~SwXMLTextBlockTextContext ( void )
+{
+}
+
+
 SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
@@ -237,7 +268,10 @@ SvXMLImportContext *SwXMLTextBlockBodyContext::CreateChildContext(
     const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    if (nPrefix == XML_NAMESPACE_TEXT &&
+    if (nPrefix == XML_NAMESPACE_OFFICE &&
+        IsXMLToken ( rLocalName, XML_TEXT ) )
+        pContext = new SwXMLTextBlockTextContext (rLocalRef, nPrefix, rLocalName, xAttrList);
+    else if (nPrefix == XML_NAMESPACE_TEXT &&
         IsXMLToken ( rLocalName, XML_P ) )
         pContext = new SwXMLTextBlockParContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
