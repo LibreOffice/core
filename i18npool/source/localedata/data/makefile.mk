@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.19 $
+#*  $Revision: 1.20 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-04-28 15:24:42 $
+#*  last change: $Author: vg $ $Date: 2003-06-12 10:48:54 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -164,6 +164,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_pl_PL.cxx  \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
+    $(MISC)$/localedata_ro_RO.cxx  \
     $(MISC)$/localedata_ru_RU.cxx  \
     $(MISC)$/localedata_sl_SI.cxx  \
     $(MISC)$/localedata_sv_FI.cxx  \
@@ -280,6 +281,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pt_BR.obj	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
+    $(SLO)$/localedata_ro_RO.obj	\
     $(SLO)$/localedata_sl_SI.obj	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
@@ -333,4 +335,4 @@ LIB4OBJFILES=$(SHL4OBJS)
 $(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
-    +$(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb $(SOLARBINDIR)$/types.rdb
+    +$(WRAPCMD) $(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb $(SOLARBINDIR)$/types.rdb
