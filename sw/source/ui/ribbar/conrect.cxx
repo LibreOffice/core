@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:13:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     if( bRet )
     {
         SdrView *pSdrView = pSh->GetDrawView();
-        const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         SdrObject* pObj = rMarkList.GetMark(0) ? rMarkList.GetMark(0)->GetObj()
                                                : 0;
         switch( pWin->GetDrawMode() )
