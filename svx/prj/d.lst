@@ -1,4 +1,3 @@
-touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 ..\%__SRC%\misc\svx.hid %_DEST%\bin%_EXT%\svx.hid
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
 ..\%__SRC%\inc\fren\svxslots.ilb %_DEST%\inc%_EXT%\fren\svxslots.ilb
