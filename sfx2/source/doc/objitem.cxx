@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 11:58:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 //#include "objshimp.hxx"
 #include "objitem.hxx"
 
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+
 //====================================================================
 
 TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
@@ -97,23 +101,50 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    // HACK: don't use for UI relevant slots!
-    rVal <<= reinterpret_cast< sal_Int64 >( pObjSh );
-    return sal_True;
+    if ( pObjSh )
+    {
+        // This item MUST provide a model. Please don't change this, there are UNO-based
+        // implementations which need it!!
+        rVal <<= pObjSh->GetModel();
+    }
+    else
+    {
+        rVal <<= ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >();
+    }
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
 
 sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    // HACK: don't use for UI relevant slots!
-    sal_Int64 nVal;
-    if ( rVal >>= nVal )
+    // This item MUST have a model. Please don't change this, there are UNO-based
+    // implementations which need it!!
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
+
+    if ( rVal >>= xModel )
     {
-        pObjSh = reinterpret_cast< SfxObjectShell* >( nVal );
-        return sal_True;
+        if ( xModel.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
+                xModel, ::com::sun::star::uno::UNO_QUERY );
+            if ( xTunnel.is() )
+            {
+                ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+                sal_Int64 nHandle = xTunnel->getSomething( aSeq );
+                if ( nHandle )
+                {
+                    pObjSh = (SfxObjectShell*)(sal_Int32*)nHandle;
+                    return TRUE;
+                }
+            }
+        }
+
+        pObjSh = 0;
+        return TRUE;
     }
-    return sal_False;
+
+    return FALSE;
 }
 
 //=========================================================================
