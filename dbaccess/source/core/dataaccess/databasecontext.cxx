@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 07:50:50 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 15:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ namespace dbaccess
 //============================================================
 //= ODatabaseContext
 //==========================================================================
-DBG_NAME(ODatabaseContext);
+DBG_NAME(ODatabaseContext)
 //--------------------------------------------------------------------------
 Reference< XInterface >
     ODatabaseContext_CreateInstance(const Reference< XMultiServiceFactory >  & xServiceManager)
