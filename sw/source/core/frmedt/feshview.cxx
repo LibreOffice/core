@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:03:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,16 +288,6 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
                 }
                 bUnmark = TRUE;
             }
-#ifdef USED
-            else
-            {
-                SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
-                SwFrmFmt *pFrmFmt = FindFrmFmt( pObj );
-                if( pFrmFmt &&
-                    FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
-                    bUnmark = TRUE;
-            }
-#endif
         }
         if ( bUnmark )
             pDView->UnmarkAll();
@@ -766,16 +756,6 @@ long SwFEShell::Drag( const Point *pPt, BOOL )
     if ( Imp()->GetDrawView()->IsDragObj() )
     {
         Scroll( *pPt );
-
-#ifdef USED
-JP 31.01.96: der Wunsch ist, das Orthogonale Resizen nur vom Benutzer
-             vorgegeben werden kann.  (beschlossen und verkuendet: ST/WP/..)
-        //OLE wird immer proportional resized.
-        if ( !Imp()->GetDrawView()->IsMoveOnlyDragObj( TRUE ) &&
-             GetCntType() == CNT_OLE )
-            Imp()->GetDrawView()->SetOrtho( TRUE );
-#endif
-
         Imp()->GetDrawView()->MovDragObj( *pPt );
         Imp()->GetDrawView()->ShowDragAnchor();
         ::FrameNotify( this, FLY_DRAG );
@@ -1151,14 +1131,6 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
                     ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
 }
 #endif
-
-Rectangle *SwFEShell::IsAnchorAtPos( const Point &rPt ) const
-{
-    if ( !Imp()->HasDrawView() )
-        return 0;
-    else
-        return Imp()->GetDrawView()->IsAnchorAtPos( rPt );
-}
 
 /*************************************************************************
 |*
@@ -1538,58 +1510,6 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
         }
         return bRet;
     }
-}
-
-/*************************************************************************
-|*
-|*  SwFEShell::ControlCount(), GotoControl()
-|*
-|*  Ersterstellung      MA 22. Jul. 96
-|*  Letzte Aenderung    MA 22. Jul. 96
-|*
-*************************************************************************/
-
-ULONG SwFEShell::ControlCount() const
-{
-    INT32 nRet = 0;
-    if ( Imp()->HasDrawView() )
-    {
-        SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
-        const ULONG nObjs = pPage->GetObjCount();
-        for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-        {
-            if ( pPage->GetObj( nObj )->ISA( SdrUnoObj ) )
-                ++nRet;
-        }
-    }
-    return nRet;
-}
-
-BOOL SwFEShell::GotoControl( ULONG nIndex )
-{
-    if ( Imp()->HasDrawView() )
-    {
-        ULONG nIdx = 0;
-        SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
-        const ULONG nObjs = pPage->GetObjCount();
-        for( ULONG nObj = 0; nObj < nObjs; ++nObj )
-        {
-            SdrObject *pObj = pPage->GetObj( nObj );
-            if ( pObj->ISA( SdrUnoObj ) )
-            {
-                if ( nIdx == nIndex )
-                {
-                    SelectObj( Point(), 0, pObj );
-                    if( !ActionPend() )
-                        MakeVisible( pObj->GetCurrentBoundRect() );
-                    CallChgLnk();
-                    return TRUE;
-                }
-                ++nIdx;
-            }
-        }
-    }
-    return FALSE;
 }
 
 /*************************************************************************
