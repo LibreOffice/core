@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:20:50 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:14:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,22 +72,65 @@ LIBTARGET=no
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+IMGLST_SRS=$(SRS)$/dbui.srs
+BMP_IN=$(PRJ)$/win/imglst
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
-        dbinsdlg.src	\
-        dbui.src
+        addresslistdialog.src \
+        createaddresslistdialog.src \
+        customizeaddresslistdialog.src \
+        dbinsdlg.src    \
+        dbui.src \
+        dbtablepreviewdialog.src \
+        mailmergechildwindow.src \
+        mailmergewizard.src \
+        mmdocselectpage.src \
+        mmlayoutpage.src \
+        mmoutputpage.src \
+        mmoutputtypepage.src \
+        mmaddressblockpage.src \
+        mmgreetingspage.src \
+        mmmergepage.src \
+        mmpreparemergepage.src \
+        selectdbtabledialog.src \
 
 SLOFILES =  \
+        $(SLO)$/addresslistdialog.obj \
+        $(SLO)$/createaddresslistdialog.obj \
+        $(SLO)$/customizeaddresslistdialog.obj \
         $(SLO)$/dbinsdlg.obj \
         $(SLO)$/dbmgr.obj \
         $(SLO)$/dbtree.obj \
+        $(SLO)$/dbtablepreviewdialog.obj \
+        $(SLO)$/maildispatcher.obj \
+        $(SLO)$/mailmergehelper.obj \
+        $(SLO)$/mailmergewizard.obj \
+        $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mmconfigitem.obj \
+        $(SLO)$/mmdocselectpage.obj \
+        $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmoutputpage.obj \
+        $(SLO)$/mmoutputtypepage.obj \
+        $(SLO)$/mmaddressblockpage.obj \
+        $(SLO)$/mmgreetingspage.obj \
+        $(SLO)$/mmmergepage.obj \
+        $(SLO)$/mmpreparemergepage.obj \
         $(SLO)$/dbui.obj \
+        $(SLO)$/selectdbtabledialog.obj \
         $(SLO)$/swdbtoolsclient.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/addresslistdialog.obj \
         $(SLO)$/dbinsdlg.obj \
         $(SLO)$/dbmgr.obj \
+        $(SLO)$/dbtablepreviewdialog.obj \
+        $(SLO)$/dbtree.obj \
+        $(SLO)$/maildispatcher.obj \
+        $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mmconfigitem.obj \
+        $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmoutputpage.obj \
         $(SLO)$/dbtree.obj
         
 LIB1TARGET = $(SLB)$/$(TARGET).lib
@@ -96,6 +139,10 @@ LIB1OBJFILES =	\
         $(SLO)$/dbmgr.obj \
         $(SLO)$/dbtree.obj \
         $(SLO)$/dbui.obj \
+        $(SLO)$/maildispatcher.obj \
+        $(SLO)$/mailmergehelper.obj \
+        $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mmconfigitem.obj \
         $(SLO)$/swdbtoolsclient.obj
 
 # --- Tagets -------------------------------------------------------
