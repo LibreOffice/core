@@ -37,7 +37,7 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
         BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
 		If IsMissing(oDocument) Then
-      oDocument = ThisComponent
+      		oDocument = ThisComponent
 		End If
 		If oDocument.IsReadOnly then
 			MMessage = GetResText(SAMPLES)
@@ -49,11 +49,7 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
 				mFileProperties(0).Value = True
 				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_default&quot;,0, mFileProperties())
 				PrepareForEditing() = oNewDocument
-&apos;        		If IsFatOffice() Then
-          			&apos; If opened within a FatOffice Environment close doc.
-          			&apos; Note: Due to a bug in Web office it is not possible to close the doc there
-					oDocument.Dispose()
- &apos;       		End If
+				DisposeDocument(oDocument)
 			Else
 				PrepareForEditing() = NULL
 			End If
