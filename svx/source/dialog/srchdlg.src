@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-11 20:48:44 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 20:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,16 +544,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ English ] = "Match character width" ;
         Text[ english_us ] = "Match character width";
         Text[ portuguese ] = "Formas de largura média e normal";
-        Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
+        Text[ russian ] = "Ó÷èòûâàòü øèğèíó çíàêîâ";
         Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
         Text[ dutch ] = "Halve/normale breedte";
         Text[ french ] = "Respecter la chasse";
-        Text[ spanish ] = "Formas con ancho medio o normal";
+        Text[ spanish ] = "Considerar ancho de carácter";
         Text[ finnish ] = "Halb-/normalbreite Formen";
         Text[ italian ] = "Considera la larghezza dei caratteri";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Anpassa till teckenbredd";
-        Text[ polish ] = "Formy po³owy/zwyk³ej szerokoœci";
+        Text[ polish ] = "Uwzglêdnij szerokoœæ znaków";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "å…¨è§’ã¨åŠè§’";
         Text[ korean ] = "ë°˜í­/ì „í­ í˜•ì‹";
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
