@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 08:17:55 $
+ *  last change: $Author: os $ $Date: 2001-07-20 13:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,11 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 
     Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     Link aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
+    Link aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
     for(USHORT i = 0; i < 8; i++)
     {
         aEditArr[i]->SetModifyHdl(aEditLk);
+        aEditArr[i]->SetJumpHdl(aJumpLk);
         if(!i || 7 == i)
             aEditArr[i]->SetScrollHdl(aScrollLk);
     }
@@ -651,7 +653,7 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
     if(aScrollSB.IsEnabled())
     {
         //scroll forward
-        if(*pParam > 0 && aEditArr[7]->HasFocus())
+        if(*pParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
         {
             if(aScrollSB.GetRangeMax() > aScrollSB.GetThumbPos())
             {
@@ -661,7 +663,7 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
             }
         }
         //scroll backward
-        else if(aScrollSB.GetThumbPos() && aEditArr[0]->HasFocus())
+        else if(aScrollSB.GetThumbPos() && (aEditArr[0]->HasFocus()||aEditArr[1]->HasFocus()) )
         {
             aScrollSB.SetThumbPos(aScrollSB.GetThumbPos() - 1);
             aEditArr[1]->GrabFocus();
@@ -672,6 +674,36 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
     }
     return nRet;
 }
+/* -----------------------------20.07.2001 15:18------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
+{
+    USHORT nIndex = USHRT_MAX;
+    for(USHORT i = 0; i < 8; i++)
+    {
+        if(aEditArr[i]->HasFocus())
+            nIndex = i;
+    }
+    if(nIndex < 8)
+    {
+        if(*pParam > 0)
+        {
+            if(nIndex < 6)
+                aEditArr[nIndex + 2]->GrabFocus();
+            else if( EditScrollHdl_Impl(pParam))
+                aEditArr[nIndex]->GrabFocus();
+        }
+        else
+        {
+            if(nIndex > 1)
+                aEditArr[nIndex - 2]->GrabFocus();
+            else if( EditScrollHdl_Impl(pParam))
+                aEditArr[nIndex]->GrabFocus();
+        }
+    }
+    return 0;
+};
 /* -----------------------------19.06.01 11:33--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -847,11 +879,17 @@ long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pKEvt->GetKeyCode();
         USHORT nMod = rKeyCode.GetModifier();
-        if(rKeyCode.GetCode() == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
+        USHORT nCode = rKeyCode.GetCode();
+        if( nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
             if(aScrollHdl.IsSet() && aScrollHdl.Call(&nParam))
                 nHandled = 1;
+        }
+        else if(KEY_UP == nCode || KEY_DOWN == nCode)
+        {
+            sal_Int32 nParam = KEY_UP == nCode ? -1 : 1;
+            aJumpHdl.Call(&nParam);
         }
     }
     if(!nHandled)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 08:17:55 $
+ *  last change: $Author: os $ $Date: 2001-07-20 13:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,14 @@ struct SvxRubyData_Impl;
 class RubyEdit  : public Edit
 {
     Link    aScrollHdl;
+    Link    aJumpHdl;
     virtual void        GetFocus();
     virtual long        PreNotify( NotifyEvent& rNEvt );
 public:
     RubyEdit(Window* pParent, const ResId& rResId) :
         Edit(pParent, rResId){}
     void    SetScrollHdl(Link& rLink) {aScrollHdl = rLink;}
+    void    SetJumpHdl(Link& rLink) {aJumpHdl = rLink;}
 };
 
 
@@ -175,6 +177,7 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(CharStyleHdl_Impl, ListBox*);
     DECL_LINK(EditModifyHdl_Impl, Edit*);
     DECL_LINK(EditScrollHdl_Impl, sal_Int32*);
+    DECL_LINK(EditJumpHdl_Impl, sal_Int32*);
 
     void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
     void                GetText();
