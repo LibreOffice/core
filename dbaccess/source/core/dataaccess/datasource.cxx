@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-23 10:07:13 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
     // some kind of default
+    DBG_CTOR(ODatabaseSource,NULL);
     m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
     m_aTableFilter.realloc(1);
     m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
@@ -509,6 +510,8 @@ void ODatabaseSource::disposing()
             xConn->close();
     }
     m_aConnections.clear();
+
+    m_aRenameNode.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -900,8 +903,9 @@ public:
 
     void operator()(OWeakConnection& _xConnection)
     {
-                Reference< XConnection > xCon (_xConnection);
-                Reference< XUnoTunnel > xTunnel(xCon, UNO_QUERY);
+        Reference<XConnection> xConn(_xConnection);
+        Reference< XUnoTunnel > xTunnel(xConn, UNO_QUERY);
+
         OConnection* pObjectImpl = NULL;
         if (xTunnel.is())
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,9 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                                         m_xServiceFactory;
 
-    OBookmarkContainer      m_aBookmarks;
-    OCommandContainer       m_aCommandDefinitions;
+    OBookmarkContainer              m_aBookmarks;
+    OCommandContainer               m_aCommandDefinitions;
+    ::utl::OConfigurationNode       m_aRenameNode;      // is set when the datasource was removed to allow the renaming
 
 // <properties>
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
@@ -326,6 +327,10 @@ protected:
     void    initializeDocuments(sal_Bool _bRead = sal_True);
     void    flushDocuments();
     void    flushTables();
+
+    ::utl::OConfigurationNode getRenameNode() const { return m_aRenameNode; }
+    void setRenameNode(const ::utl::OConfigurationNode& _aOldNode) { m_aRenameNode = _aOldNode; }
+    void clearRenameNode() { m_aRenameNode.clear(); }
 };
 
 //........................................................................

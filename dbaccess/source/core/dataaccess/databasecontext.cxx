@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,9 +381,18 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     if (m_aRootNode.hasByName(_rName))
         throw ElementExistException();
 
+    OConfigurationNode aObjectNode;
+    // here we have to check if the datasource should only be renamed
+    ::utl::OConfigurationNode aTreeNode = pObjectImpl->getRenameNode();
+    if(aTreeNode.isValid() && m_aRootNode.isValid())
+    {
+        aObjectNode = m_aRootNode.appendNode(_rName,aTreeNode);
+        OSL_VERIFY(m_aRootNode.commit());
+        pObjectImpl->clearRenameNode();
+    }
+    else
+        aObjectNode = getObjectNode(_rName, sal_True);
 
-    sal_Bool bSuccess = sal_False;
-    OConfigurationNode aObjectNode = getObjectNode(_rName, sal_True);
     if (!aObjectNode.isValid())
         // TODO: a better error message
         throw InvalidRegistryException();
@@ -509,7 +518,10 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
                 pObjectImpl = reinterpret_cast<ODatabaseSource*> (xTunnel->getSomething(ODatabaseSource::getUnoTunnelImplementationId()));
             DBG_ASSERT(pObjectImpl, "ODatabaseContext::revokeObject : there is an object which is no ODatabaseSource !");
             if (pObjectImpl)
+            {
+                pObjectImpl->setRenameNode(m_aRootNode.openNode(_rName));
                 pObjectImpl->removed();
+            }
         }
         m_aDatabaseObjects.erase(aExistent);
     }
