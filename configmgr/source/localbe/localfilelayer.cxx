@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:08:23 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@ LocalFileLayer::~LocalFileLayer(void) {}
 //------------------------------------------------------------------------------
 
 void SAL_CALL LocalFileLayer::readData(
-        const uno::Reference<backend::XLayerHandler>& xHandler) {
+        const uno::Reference<backend::XLayerHandler>& xHandler)
+    throw (uno::RuntimeException)
+{
     osl::File blobFile(mFileUrl) ;
     osl::FileBase::RC errorCode = blobFile.open(OpenFlag_Read) ;
 
@@ -119,8 +121,16 @@ void SAL_CALL LocalFileLayer::readData(
 }
 //------------------------------------------------------------------------------
 
-uno::Reference<backend::XLayerHandler>
-SAL_CALL LocalFileLayer::getWriteHandler(void) {
+void SAL_CALL LocalFileLayer::replaceWith(
+        const uno::Reference<backend::XLayer>& aNewLayer)
+    throw (uno::RuntimeException)
+{
+    aNewLayer->readData(getLayerWriter()) ;
+}
+//------------------------------------------------------------------------------
+
+const uno::Reference<backend::XLayerHandler>&
+LocalFileLayer::getLayerWriter(void) const {
     uno::Reference<io::XOutputStream> stream = new LocalOutputStream(mFileUrl) ;
     uno::Sequence<uno::Any> arguments(1) ;
 

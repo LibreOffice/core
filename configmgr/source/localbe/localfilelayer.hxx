@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:08:23 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,22 @@ class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
         ~LocalFileLayer(void) ;
         // XUpdatableLayer
         virtual void SAL_CALL readData(
-                const uno::Reference<backend::XLayerHandler>& xHandler) ;
-        virtual uno::Reference<backend::XLayerHandler>
-            SAL_CALL getWriteHandler(void) ;
+                const uno::Reference<backend::XLayerHandler>& xHandler)
+            throw (uno::RuntimeException) ;
+        virtual void SAL_CALL replaceWith(
+                const uno::Reference<backend::XLayer>& aNewLayer)
+            throw (uno::RuntimeException) ;
         // XTimeStamped
-        virtual rtl::OUString SAL_CALL getTimestamp(void) {
-            return mTimestamp ;
-        }
+        virtual rtl::OUString SAL_CALL getTimestamp(void)
+            throw (uno::RuntimeException) { return mTimestamp ; }
 
+        /**
+          Returns the reference to the layer writer.
+
+          @return   layer writer reference
+          */
+        const uno::Reference<backend::XLayerHandler>&
+            getLayerWriter(void) const ;
         /**
           Returns a timestamp in the official backend format
           YYYYMMDDhhmmssZ associated to a file defined by its URL.
