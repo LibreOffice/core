@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:59:13 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 
 void ScDBFunc::ToggleAutoFilter()
 {
-    ScDocShellModificator aModificator( *(GetViewData()->GetDocShell()) );
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShellModificator aModificator( *pDocSh );
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
@@ -342,6 +343,16 @@ void ScDBFunc::ToggleAutoFilter()
             pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
         }
 
+        // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
+
+        String aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+        ScRange aRange;
+        pDBData->GetArea( aRange );
+        pDocSh->GetUndoManager()->AddUndoAction(
+            new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), FALSE ) );
+
         pDBData->SetAutoFilter(FALSE);
 
         //  Filter aufheben (incl. Paint / Undo)
@@ -351,6 +362,8 @@ void ScDBFunc::ToggleAutoFilter()
             aParam.GetEntry(i).bDoQuery = FALSE;
         aParam.bDuplicate = TRUE;
         Query( aParam, NULL, TRUE );
+
+        pDocSh->GetUndoManager()->LeaveListAction();
 
         bPaint = TRUE;
     }
@@ -372,6 +385,11 @@ void ScDBFunc::ToggleAutoFilter()
                 }
             }
 
+            ScRange aRange;
+            pDBData->GetArea( aRange );
+            pDocSh->GetUndoManager()->AddUndoAction(
+                new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), TRUE ) );
+
             pDBData->SetAutoFilter(TRUE);
 
             for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
@@ -380,8 +398,7 @@ void ScDBFunc::ToggleAutoFilter()
                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
                 pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | SC_MF_AUTO ) );
             }
-            GetViewData()->GetDocShell()->PostPaint( aParam.nCol1, nRow, nTab,
-                                                     aParam.nCol2, nRow, nTab,
+            pDocSh->PostPaint( aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab,
                                                      PAINT_GRID );
             bPaint = TRUE;
         }
@@ -407,7 +424,10 @@ void ScDBFunc::ToggleAutoFilter()
 
 void ScDBFunc::HideAutoFilter()
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShellModificator aModificator( *pDocSh );
+
+    ScDocument* pDoc = pDocSh->GetDocument();
 
     ScQueryParam aParam;
     ScDBData* pDBData = GetDBData( FALSE );
@@ -424,9 +444,15 @@ void ScDBFunc::HideAutoFilter()
         pDoc->ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
     }
 
+    ScRange aRange;
+    pDBData->GetArea( aRange );
+    pDocSh->GetUndoManager()->AddUndoAction(
+        new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), FALSE ) );
+
     pDBData->SetAutoFilter(FALSE);
 
-    GetViewData()->GetDocShell()->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
+    pDocSh->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
+    aModificator.SetDocumentModified();
 
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_AUTO_FILTER );
