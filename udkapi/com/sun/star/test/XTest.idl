@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTest.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:34:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module test {
 /**
     A simple interface to test a service or interface implementation.
 */
-interface XTest: com::sun::star::uno::XInterface
+published interface XTest: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /**
