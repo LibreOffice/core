@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 11:56:27 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLEDOCUMENT_HXX
-#define _SC_ACCESSIBILITY_ACCESSIBLEDOCUMENT_HXX
+#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
+#define _SC_ACCESSIBLEDOCUMENT_HXX
 
-#ifndef _SVTOOLS_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_BASE_HXX
+#ifndef _SVTOOLS_ACCESSIBLE_DOCUMENT_BASE_HXX
 #include <svtools/AccessibleDocumentBase.hxx>
 #endif
 

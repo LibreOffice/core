@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 08:50:59 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLESPREADSHEET_HXX
-#define _SC_ACCESSIBILITY_ACCESSIBLESPREADSHEET_HXX
+#ifndef _SC_ACCESSIBLESPREADSHEET_HXX
+#define _SC_ACCESSIBLESPREADSHEET_HXX
 
 #include "AccessibleTableBase.hxx"
 
@@ -103,6 +103,25 @@ private:
     com::sun::star::table::CellRangeAddress
         getRange(const com::sun::star::uno::Reference<
         com::sun::star::sheet::XSpreadsheetView>& rxSheetView);
+    com::sun::star::table::CellRangeAddress
+        getRange(const com::sun::star::uno::Reference<
+        com::sun::star::sheet::XSpreadsheet>& rxSheet);
+
+    sal_Bool IsDefunc(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsEditable(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsCompleteSheetSelected(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsShowing(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsVisible(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 10:04:09 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HPP_
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #endif
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLEDOCUMENT_HXX
+#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
 #endif
 

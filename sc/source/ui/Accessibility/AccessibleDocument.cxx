@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 11:57:22 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLEDOCUMENT_HXX
+#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
 #endif
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLESPREADSHEET_HXX
+#ifndef _SC_ACCESSIBLESPREADSHEET_HXX
 #include "AccessibleSpreadsheet.hxx"
 #endif
 #ifndef SC_UNONAMES_HXX

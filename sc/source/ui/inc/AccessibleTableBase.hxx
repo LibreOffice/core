@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 08:51:28 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBILITY_ACCESSIBLETABLEBASE_HXX
-#define _SC_ACCESSIBILITY_ACCESSIBLETABLEBASE_HXX
+#ifndef _SC_ACCESSIBLETABLEBASE_HXX
+#define _SC_ACCESSIBLETABLEBASE_HXX
 
-#ifndef _SVTOOLS_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
+#ifndef _SVTOOLS_ACCESSIBLE_CONTEXT_BASE_HXX
 #include <svtools/AccessibleContextBase.hxx>
 #endif
 
