@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BufferSizeExceededException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,13 @@ module com {  module sun {  module star {  module io {
 
 // DocMerge from xml: exception com::sun::star::io::BufferSizeExceededException
 /** is thrown by instances which need to buffer data.
-
     <p>It indicates that not enough system resources are available for
     extending the buffer. (May also indicate that the internal buffer
     has grown to a larger size than 2G. Some current implementations do
     not support larger buffers.)
     </p>
  */
-exception BufferSizeExceededException: com::sun::star::io::IOException
+published exception BufferSizeExceededException: com::sun::star::io::IOException
 {
 };
 
