@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class AstExpression;
 class AstArray;
 class AstMember;
 
-#include <parser.h>
+#include <parser.hxx>
 
 sal_Int32		beginLine = 0;
 ::rtl::OString	docu;

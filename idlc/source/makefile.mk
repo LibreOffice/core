@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2001-04-18 11:04:25 $
+#   last change: $Author: hjs $ $Date: 2002-03-06 13:23:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 
 # --- Files --------------------------------------------------------
@@ -101,6 +99,9 @@ CXXFILES=   \
             astarray.cxx \
             astunion.cxx \
             astexpression.cxx
+
+YACCTARGET=$(MISC)$/parser.cxx
+YACCFILES=parser.yy
 
 OBJFILES=   \
             $(OBJ)$/scanner.obj	\
@@ -146,8 +147,3 @@ $(MISC)$/stripped_scanner.ll : scanner.ll
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
-$(MISC)$/parser.cxx: parser.yy
-    +bison -v -d -o$(MISC)$/parser.cxx parser.yy
-    +$(COPY) $(MISC)$/parser.cxx.h $(OUT)$/inc$/parser.h
-# with line statements (for debugging)
-#	+bison -v -d -o$(MISC)$/parser.cxx parser.yy
