@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:42:56 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
 |*    RscTypCont::InitClassImageList()
 *************************************************************************/
 RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscTop * pClassBitmap,
-                                         RscTop * pClassColor )
+                                         RscTop * pClassColor, RscCont * pStrLst )
 {
     HASHID      nId;
     RscTop *    pClassImageList;
@@ -255,27 +255,23 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper, RscTop * pClassBitmap,
     pClassImageList->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
     aNmTb.Put( nId, CLASSNAME, pClassImageList );
 
-    // Variablen anlegen
-    nId = aNmTb.Put( "ImageBitmap", VARNAME );
-    pClassImageList->SetVariable( nId, pClassBitmap, NULL, 0,
-                                  RSC_IMAGELIST_IMAGEBITMAP );
-    nId = aNmTb.Put( "MaskBitmap", VARNAME );
-    pClassImageList->SetVariable( nId, pClassBitmap, NULL, 0,
-                                  RSC_IMAGELIST_MASKBITMAP );
+    nId = aNmTb.Put( "Prefix", VARNAME );
+    pClassImageList->SetVariable( nId, &aString );
+
     nId = aNmTb.Put( "MaskColor", VARNAME );
     pClassImageList->SetVariable( nId, pClassColor, NULL,
                                   VAR_SVDYNAMIC, RSC_IMAGELIST_MASKCOLOR );
-    {
-        RscCont * pCont;
 
-        pCont = new RscCont( pHS->Insert( "USHORT *" ), RSC_NOTYPE );
-        pCont->SetTypeClass( &aIdUShort );
-        aBaseLst.Insert( pCont, LIST_APPEND );
-
-        nId = aNmTb.Put( "IdList", VARNAME );
-        pClassImageList->SetVariable( nId, pCont, NULL, 0,
+    RscCont * pCont = new RscCont( pHS->Insert( "USHORT *" ), RSC_NOTYPE );
+    pCont->SetTypeClass( &aIdUShort );
+    aBaseLst.Insert( pCont, LIST_APPEND );
+    nId = aNmTb.Put( "IdList", VARNAME );
+    pClassImageList->SetVariable( nId, pCont, NULL, 0,
                                       RSC_IMAGELIST_IDLIST );
-    }
+
+    nId = aNmTb.Put( "FileList", VARNAME );
+    pClassImageList->SetVariable( nId, pStrLst );
+
     nId = aNmTb.Put( "IdCount", VARNAME );
     pClassImageList->SetVariable( nId, &aUShort, NULL, 0,
                                   RSC_IMAGELIST_IDCOUNT );
