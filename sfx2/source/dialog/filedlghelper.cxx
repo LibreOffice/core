@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-23 07:17:26 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 10:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -174,6 +177,9 @@
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
+#endif
+#ifndef _PICKERHELPER_HXX
+#include <svtools/pickerhelper.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -256,7 +262,6 @@ namespace sfx2
 
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
-
 
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
@@ -1206,26 +1211,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
 {
-    try
-    {
-        // does the dialog haver a help URL property?
-        Reference< XPropertySet > xDialogProps( mxFileDlg, UNO_QUERY );
-        Reference< XPropertySetInfo > xInfo;
-        if ( xDialogProps.is() )
-            xInfo = xDialogProps->getPropertySetInfo( );
-        const ::rtl::OUString sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
-
-        if ( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
-        {   // yep
-            ::rtl::OUString sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-            sId += ::rtl::OUString::valueOf( _nHelpId );
-            xDialogProps->setPropertyValue( sHelpURLPropertyName, makeAny( sId ) );
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_ERROR( "FileDialogHelper_Impl::setDialogHelpId: caught an exception while setting the help id!" );
-    }
+    svt::SetDialogHelpId( mxFileDlg, _nHelpId );
 }
 
 // ------------------------------------------------------------------------
