@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-28 11:25:31 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #define BasicDocShell
 #include <baside.hxx>
+
+
+TYPEINIT1(BasicDocShell, SfxObjectShell);
+DBG_NAME(BasicDocShell);
 
 
 SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, sbasic )

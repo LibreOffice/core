@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 16:25:45 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
-#include <vcsbx.hxx>
 #include <sbxitem.hxx>
 #include <vcl/rcid.h>
 #include <helpid.hrc>
@@ -98,6 +97,9 @@
 #ifndef _SFX_MINFITEM_HXX //autogen
 #include <sfx2/minfitem.hxx>
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 class SvxSearchItem;
@@ -122,6 +124,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             DBG_ASSERT( pBasic, "Aktuellen Fenster ohne Basic ?!" );
             if ( pCurWin->ISA( ModulWindow ) )
             {
+                // module
                 SbModule* pModule = ((ModulWindow*)pCurWin)->GetModule();
                 DBG_ASSERT( pModule, "DELETECURRENT: Modul nicht gefunden!" );
                 if ( QueryDelModule( pModule->GetName(), pCurWin ) )
@@ -134,13 +137,24 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             }
             else
             {
-                SbxObject* pDlg = ((DialogWindow*)pCurWin)->GetDialog();
-                DBG_ASSERT( pDlg, "DELETECURRENT: Dialog nicht gefunden!" );
-                if ( QueryDelDialog( pDlg->GetName(), pCurWin ) )
+                // dialog
+                DialogWindow* pWin = (DialogWindow*)pCurWin;
+                SfxObjectShell* pShell = pWin->GetShell();
+                String aLibName = pWin->GetLibName();
+                String aName = pWin->GetDialogName();
+                if ( QueryDelDialog( aName, pCurWin ) )
                 {
-                    pBasic->GetObjects()->Remove( pDlg );
-                    RemoveWindow( pCurWin, TRUE );
-                    BasicIDE::MarkDocShellModified( pBasic );
+                    try
+                    {
+                        BasicIDE::RemoveDialog( pShell, aLibName, aName );
+                        RemoveWindow( pCurWin, TRUE );
+                        BasicIDE::MarkDocShellModified( pShell );
+                    }
+                    catch ( container::NoSuchElementException& e )
+                    {
+                        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                        DBG_ERROR( aBStr.GetBuffer() );
+                    }
                 }
             }
         }
@@ -449,7 +463,14 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             else
             {
                 DialogWindow* pViewWin = (DialogWindow*)pWin;
-                pViewWin->RenameDialog( rModName.GetValue() );
+                if ( !pViewWin->RenameDialog( rModName.GetValue() ) )
+                {
+                    // set old name in TabWriter
+                    USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
+                    DBG_ASSERT( nId, "No entry in Tabbar!" );
+                    if ( nId )
+                        pTabBar->SetPageText( nId, pViewWin->GetDialogName() );
+                }
             }
             BasicIDE::MarkDocShellModified( pWin->GetBasic() );
         }
@@ -585,16 +606,33 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             SbxObject* pSbxObject = (SbxObject*)rSbxItem.GetSbx();
-            IDEBaseWindow* pWin = FindWindow( pSbxObject, FALSE );
-            if ( pWin )
+            if ( pSbxObject )
             {
-                // TabWriter updaten
-                USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
-                DBG_ASSERT( nId, "Kein Eintrag in der Tabbar!" );
-                if ( nId )
-                    pTabBar->SetPageText( nId, pSbxObject->GetName() );
-                if( pWin->IsA( TYPE( DialogWindow ) ) )
-                    ((DialogWindow*)pWin)->UpdateBrowser();
+                // module
+                IDEBaseWindow* pWin = FindWindow( pSbxObject, FALSE );
+                if ( pWin )
+                {
+                    // TabWriter updaten
+                    USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
+                    DBG_ASSERT( nId, "Kein Eintrag in der Tabbar!" );
+                    if ( nId )
+                        pTabBar->SetPageText( nId, pSbxObject->GetName() );
+                }
+            }
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
+            {
+                // dialog
+                /*
+                IDEBaseWindow* pWin = FindWindow( rSbxItem.GetShell(), rSbxItem.GetLibName(), rSbxItem.GetName(), BASICIDE_TYPE_DIALOG, FALSE );
+                if ( pWin )
+                {
+                    // update TabWriter
+                    USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
+                    DBG_ASSERT( nId, "No entry in Tabbar!" );
+                    if ( nId )
+                        pTabBar->SetPageText( nId, rSbxItem.GetName() );
+                }
+                */
             }
         }
         break;
@@ -602,16 +640,32 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
+            StarBASIC* pBasic;
             SbxObject* pSbxObject = (SbxObject*)rSbxItem.GetSbx();
-            StarBASIC* pBasic = BasicIDE::FindBasic( pSbxObject );
+            if ( pSbxObject )
+            {
+                pBasic = BasicIDE::FindBasic( pSbxObject );
+            }
+            else
+            {
+                BasicManager* pBasMgr;
+                SfxObjectShell* pShell = rSbxItem.GetShell();
+                if ( pShell )
+                    pBasMgr = pShell->GetBasicManager();
+                else
+                    pBasMgr = SFX_APP()->GetBasicManager();
+
+                if ( pBasMgr )
+                    pBasic = pBasMgr->GetLib( rSbxItem.GetLibName() );
+            }
             DBG_ASSERT( pBasic, "Basic fuer das Object nicht gefunden!" );
             if ( !pCurBasic || ( pBasic == pCurBasic ) )
             {
                 IDEBaseWindow* pWin = 0;
-                if ( pSbxObject->ISA( SbModule ) )
+                if ( pSbxObject && pSbxObject->ISA( SbModule ) )
                     pWin = FindBasWin( pBasic, pSbxObject->GetName(), TRUE );
-                else if ( pSbxObject->GetSbxId() == SBXID_DIALOG )
-                    pWin = FindDlgWin( pBasic, pSbxObject->GetName(), TRUE );
+                else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
+                    pWin = FindDlgWin( pBasic, rSbxItem.GetName(), TRUE );
             }
         }
         break;
@@ -620,7 +674,17 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             SbxObject* pSbxObject = (SbxObject*)rSbxItem.GetSbx();
-            IDEBaseWindow* pWin = FindWindow( pSbxObject, TRUE );
+            IDEBaseWindow* pWin = 0;
+            if ( pSbxObject )
+            {
+                // module
+                pWin = FindWindow( pSbxObject, TRUE );
+            }
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
+            {
+                // dialog
+                pWin = FindWindow( rSbxItem.GetShell(), rSbxItem.GetLibName(), rSbxItem.GetName(), BASICIDE_TYPE_DIALOG, TRUE );
+            }
             if ( pWin )
                 RemoveWindow( pWin, TRUE );
         }
@@ -630,13 +694,29 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             SbxVariable* pSbx = (SbxVariable*)rSbxItem.GetSbx();
-            StarBASIC* pBasic = BasicIDE::FindBasic( pSbx );
+            StarBASIC* pBasic;
+            if ( pSbx )
+            {
+                pBasic = BasicIDE::FindBasic( pSbx );
+            }
+            else
+            {
+                BasicManager* pBasMgr;
+                SfxObjectShell* pShell = rSbxItem.GetShell();
+                if ( pShell )
+                    pBasMgr = pShell->GetBasicManager();
+                else
+                    pBasMgr = SFX_APP()->GetBasicManager();
+
+                if ( pBasMgr )
+                    pBasic = pBasMgr->GetLib( rSbxItem.GetLibName() );
+            }
             DBG_ASSERT( pBasic, "Basic nicht gefunden!" );
             if ( pCurBasic && ( pCurBasic != pBasic ) )
                 SetCurBasic( pBasic );
             IDEBaseWindow* pWin = 0;
-            if ( pSbx->GetSbxId() == SBXID_DIALOG )
-                pWin = FindDlgWin( pBasic, pSbx->GetName(), TRUE );
+            if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
+                pWin = FindDlgWin( pBasic, rSbxItem.GetName(), TRUE );
             else if ( pSbx->ISA( SbModule ) )
                 pWin = FindBasWin( pBasic, pSbx->GetName(), TRUE );
             else if ( pSbx->ISA( SbMethod ) )
@@ -971,7 +1051,36 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const SbxObject* pObj, BOOL bFindSuspe
             }
             else
             {
-                if ( ((DialogWindow*)pWin)->GetDialog() == pObj )
+                //if ( ((DialogWindow*)pWin)->GetDialog() == pObj )
+                //  return pWin;
+                DBG_ERROR( "BasicIDEShell::FindWindow: Don't use this method for dialogs!" );
+            }
+        }
+        pWin = aIDEWindowTable.Next();
+    }
+    return 0;
+}
+
+IDEBaseWindow* BasicIDEShell::FindWindow( SfxObjectShell* pShell, const String& rLibName, const String& rName, USHORT nType, BOOL bFindSuspended )
+{
+    IDEBaseWindow* pWin = aIDEWindowTable.First();
+    while ( pWin )
+    {
+        if ( !pWin->IsSuspended() || bFindSuspended )
+        {
+            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            {
+                // implementation for ModulWindow missing !!!
+
+                //if ( ((ModulWindow*)pWin)->GetModule() == pObj )
+                //  return pWin;
+            }
+            else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+            {
+                if ( ((DialogWindow*)pWin)->GetShell() == pShell &&
+                     ((DialogWindow*)pWin)->GetLibName() == rLibName &&
+                     ((DialogWindow*)pWin)->GetDialogName() == rName &&
+                     nType == BASICIDE_TYPE_DIALOG )
                     return pWin;
             }
         }

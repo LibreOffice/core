@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:27:57 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,18 +76,32 @@
 #include <basidesh.hrc>
 #include <objdlg.hxx>
 #include <bastypes.hxx>
+#include <basdoc.hxx>
 
 #include <baside2.hxx>
+#include <baside3.hxx>
 
+#ifndef _BASCTL_DLGED_HXX
+#include "dlged.hxx"
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
+#include <xmlscript/xmldlg_imexp.hxx>
+#endif
 
-using namespace ::com::sun::star::uno;
+using namespace comphelper;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 
 // In bastype3.cxx:
@@ -166,35 +180,238 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
     return pMethod;
 }
 
-String BasicIDE::CreateDialogName( StarBASIC* pBasic, const String& rDlgName )
+Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
+    throw(NoSuchElementException)
 {
-    String aDlgName( rDlgName );
-    if ( aDlgName.Len() == 0 )
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer;
+    if( pShell )
     {
-        String aDlgStdName( RTL_CONSTASCII_USTRINGPARAM( "Dialog" ) );
-        //String aDlgStdName( IDEResId( RID_STR_STDDIALOGNAME ) );
-        BOOL bValid = FALSE;
-        USHORT i = 1;
-        while ( !bValid )
-        {
-            aDlgName = aDlgStdName;
-            aDlgName += String::CreateFromInt32( i );
-            if ( !BasicIDE::FindDialog( pBasic, aDlgName ) )
-                bValid = TRUE;
-
-            i++;
-        }
+        // document
+        xLibContainer = Reference< script::XLibraryContainer >( pShell->GetDialogContainer(), UNO_QUERY );
     }
+    else
+    {
+        // application
+        xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
+    }
+
+    // get library
+    Reference< container::XNameContainer > xLib;
+    rtl::OUString aOULibName( rLibName );
+    if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
+    {
+        Any aElement = xLibContainer->getByName( aOULibName );
+        aElement >>= xLib;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialogLibrary: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    // load library
+    if( bLoadLibrary && !xLibContainer->isLibraryLoaded( aOULibName ) )
+        xLibContainer->loadLibrary( aOULibName );
+
+    return xLib;
+}
+
+String BasicIDE::CreateDialogName( SfxObjectShell* pShell, const String& rLibName )
+{
+    String aDlgName;
+    String aDlgStdName( RTL_CONSTASCII_USTRINGPARAM( "Dialog" ) );
+    //String aDlgStdName( IDEResId( RID_STR_STDDIALOGNAME ) );
+    BOOL bValid = FALSE;
+    USHORT i = 1;
+    while ( !bValid )
+    {
+        aDlgName = aDlgStdName;
+        aDlgName += String::CreateFromInt32( i );
+        if ( !BasicIDE::FindDialog( pShell, rLibName, aDlgName ).is() )
+            bValid = TRUE;
+
+        i++;
+    }
+
     return aDlgName;
 }
 
-SbxObject* BasicIDE::CreateDialog( StarBASIC* pBasic, const String& rDlgName )
+Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+    throw(ElementExistException, NoSuchElementException)
 {
-    String aDlgName = CreateDialogName( pBasic, rDlgName );
-    SbxObject* pDlg = pBasic->MakeObject( aDlgName, String( RTL_CONSTASCII_USTRINGPARAM( "Dialog" ) ) );
-    BasicIDE::MarkDocShellModified( pBasic );
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
 
-    return pDlg;
+    // create dialog
+    Reference< io::XInputStreamProvider > xISP;
+    rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && !xLib->hasByName( aOUDlgName ) )
+    {
+        // create new dialog model
+        Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+        Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+
+        // set name property
+        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+        Any aName;
+        aName <<= aOUDlgName;
+        xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+
+        // export dialog model
+        xISP = ::xmlscript::exportDialogModel( xDialogModel );
+        Any aElement;
+        aElement <<= xISP;
+
+        // insert dialog into library
+        xLib->insertByName( aOUDlgName, aElement );
+
+        // doc shell modified
+        BasicIDE::MarkDocShellModified( pShell );   // here?
+    }
+    else
+    {
+        throw ElementExistException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateDialog: ElementExistException!") ),
+            Reference<XInterface>() );
+    }
+
+    return xISP;
+}
+
+void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, const String& rOldName, const String& rNewName )
+    throw(ElementExistException, NoSuchElementException)
+{
+    rtl::OUString aOUOldName( rOldName );
+    rtl::OUString aOUNewName( rNewName );
+
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    // rename dialog
+    if( xLib.is() && xLib->hasByName( aOUOldName ) )
+    {
+        if ( xLib->hasByName( aOUNewName ) )
+        {
+            throw ElementExistException(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: ElementExistException!") ),
+                Reference<XInterface>() );
+        }
+
+        // get dialog
+        Any aElement = xLib->getByName( aOUOldName );
+
+        // remove dialog from dialog container
+        xLib->removeByName( aOUOldName );
+
+        // create dialog model
+        Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+        Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+
+        Reference< io::XInputStreamProvider > xISP;
+        aElement >>= xISP;
+        if( xISP.is() )
+        {
+            // import dialog model
+            Reference< io::XInputStream > xInput( xISP->createInputStream() );
+            ::xmlscript::importDialogModel( xInput, xDialogModel );
+
+            // set new name as property
+            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+            Any aName;
+            aName <<= aOUNewName;
+            xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+
+            // export dialog model
+            xISP = ::xmlscript::exportDialogModel( xDialogModel );
+            aElement <<= xISP;
+        }
+
+        // insert dialog by new name in dialog container
+        xLib->insertByName( aOUNewName, aElement );
+    }
+    else
+    {
+        throw NoSuchElementException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    if ( pIDEShell )
+    {
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_DIALOG, FALSE );
+        if ( pWin )
+        {
+            // set new name in dialog window
+            ((DialogWindow*)pWin)->SetDialogName( rNewName );
+
+            // get dialog model from dialog editor and set new name as property
+            Reference< container::XNameContainer > xDlgModel = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
+            if( xDlgModel.is() )
+            {
+                Reference< beans::XPropertySet > xPSet( xDlgModel, UNO_QUERY );
+                Any aName;
+                aName <<= aOUNewName;
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+            }
+
+            // update property browser
+            ((DialogWindow*)pWin)->UpdateBrowser();
+
+            // update tabwriter
+            USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+            DBG_ASSERT( nId, "No entry in Tabbar!" );
+            if ( nId )
+                (pIDEShell->GetTabBar())->SetPageText( nId, rNewName );
+        }
+    }
+}
+
+void BasicIDE::RemoveDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+    throw(NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    // remove dialog
+    rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+    {
+        xLib->removeByName( aOUDlgName );
+    }
+    else
+    {
+        throw NoSuchElementException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RemoveDialog: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+}
+
+void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName,
+                             const Reference< io::XInputStreamProvider >& xISP )
+    throw(ElementExistException, NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    // insert dialog into library
+    rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && !xLib->hasByName( aOUDlgName ) )
+    {
+        Any aElement;
+        aElement <<= xISP;
+        xLib->insertByName( aOUDlgName, aElement );
+    }
+    else
+    {
+        throw ElementExistException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::InsertDialog: ElementExistException!") ),
+            Reference<XInterface>() );
+    }
 }
 
 String BasicIDE::CreateModuleName( StarBASIC* pBasic, const String& rModName )
@@ -239,24 +456,31 @@ SbModule* BasicIDE::CreateModule( StarBASIC* pBasic, const String& rModName, BOO
     return pModule;
 }
 
-
-
-SbxObject* BasicIDE::FindDialog( StarBASIC* pBasic, const String& rDlgName )
+Reference< io::XInputStreamProvider > BasicIDE::FindDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
 {
-    pBasic->GetAll( SbxCLASS_OBJECT );
-
-    USHORT nObjs = pBasic->GetObjects()->Count();
-    for ( USHORT nObject = 0; nObject < nObjs; nObject++ )
+    // get library
+    Reference< container::XNameContainer > xLib;
+    try
     {
-        SbxVariable* pVar = pBasic->GetObjects()->Get( nObject );
-        if ( ( pVar->GetSbxId() == GetDialogSbxId() ) && ( pVar->GetName() == rDlgName ) )
-            return (SbxObject*)pVar;
+        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+    }
+    catch ( container::NoSuchElementException& e )
+    {
+        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aBStr.GetBuffer() );
     }
 
-    return 0;
+    // find dialog
+    Reference< io::XInputStreamProvider > xISP;
+    rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+    {
+        Any aElement = xLib->getByName( aOUDlgName );
+        aElement >>= xISP;
+    }
+
+    return xISP;
 }
-
-
 
 StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 {
@@ -435,6 +659,25 @@ void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
             pObjCatalog->UpdateEntries();
 }
 
+void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
+{
+    // Muss ja nicht aus einem Document kommen...
+    if ( pShell )
+    {
+        pShell->SetModified();
+        SfxBindings& rBindings = BasicIDE::GetBindings();
+        rBindings.Invalidate( SID_SAVEDOC );
+        rBindings.Update( SID_SAVEDOC );
+
+    }
+
+    // Objectcatalog updaten...
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    ObjectCatalog* pObjCatalog = pIDEShell ? pIDEShell->GetObjectCatalog() : 0;
+    if ( pObjCatalog )
+        pObjCatalog->UpdateEntries();
+}
+
 void BasicIDE::RunMethod( SbMethod* pMethod )
 {
     SbxValues aRes;
@@ -549,6 +792,7 @@ SvStrings* BasicIDE::CreateBasicLibBoxEntries()
         // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
         // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
         if ( !pDocShell || ( ( pBasicMgr != SFX_APP()->GetBasicManager() )
+                                && !pDocShell->ISA(BasicDocShell)
                                 && ( SfxViewFrame::GetFirst( pDocShell ) ) ) )
         {
             String aBasMgr;

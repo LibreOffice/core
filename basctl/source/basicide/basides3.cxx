@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:25:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,118 +73,79 @@
 #include <baside3.hxx>
 #include <basobj.hxx>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
+#include <xmlscript/xmldlg_imexp.hxx>
+#endif
 
-using namespace ::com::sun::star::uno;
+using namespace comphelper;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 
 
-DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName, SbxObject* pDlg )
+DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName )
 {
     bCreatingWindow = TRUE;
 
     ULONG nKey = 0;
     DialogWindow* pWin = 0;
 
-    BOOL bCreatedDialog = FALSE;
-    if ( !pDlg )
-    {
-        pDlg = BasicIDE::FindDialog( pBasic, aDlgName );
-        if ( !pDlg )
-        {
-            pDlg = BasicIDE::CreateDialog( pBasic, aDlgName );
-            bCreatedDialog = TRUE;
-        }
-        DBG_ASSERT( pDlg, "Es wurde kein Dialog erzeugt!" );
-    }
-    else    // Vielleicht gibt es ein suspendiertes?
-        pWin = FindDlgWin( pBasic, aDlgName, FALSE, TRUE );
-
-    VCSbxDialogRef xNewDlg = (VCSbxDialog*)pDlg;
+    // Vielleicht gibt es ein suspendiertes?
+    pWin = FindDlgWin( pBasic, aDlgName, FALSE, TRUE );
 
     if ( !pWin )
     {
-#ifdef _DLGEDITOR_
-
-        // Document or application
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasMgr )
         {
-            Reference< script::XLibraryContainer > xLibContainer;
-            String aLibName = pBasic->GetName();
-            String aDlgName = xNewDlg->GetName();
-
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            if( pShell )
-            {
-                xLibContainer = uno::Reference< script::XLibraryContainer >
-                    ( pShell->GetDialogContainer(), uno::UNO_QUERY );
-            }
-            else
-            {
-                // Application
-                xLibContainer = uno::Reference< script::XLibraryContainer >
-                    ( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
-            }
-            uno::Reference< container::XNameAccess > xLib;
+            String aLibName = pBasic->GetName();
 
-            // Check if the lib/dialog already exists
-            rtl::OUString aOULibName( aLibName );
-            if( xLibContainer->hasByName( aOULibName ) )
-            {
-                Any aElement = xLibContainer->getByName( aOULibName );
-                aElement >>= xLib;
-            }
+            if ( aDlgName.Len() == 0 )
+                aDlgName = BasicIDE::CreateDialogName( pShell, aLibName );
 
-            Reference< container::XNameContainer > xLibNC;
-            if( !xLib.is() )
+            Reference< io::XInputStreamProvider > xISP( BasicIDE::FindDialog( pShell, aLibName, aDlgName ) );
+            if ( !xISP.is() )
             {
-                xLibNC = xLibContainer->createLibrary( aOULibName );
-                xLib = Reference< container::XNameAccess >( xLibNC, uno::UNO_QUERY );
-            }
-
-            // Does the dialog exist?
-            rtl::OUString aOUDlgName( aDlgName );
-            BOOL bCreateWin = FALSE;
-            if( xLib->hasByName( aOUDlgName ) )
-            {
-                bCreateWin = TRUE;
-            }
-            else
-            {
-                if( !xLibNC.is() )
-                    xLibNC = Reference< container::XNameContainer >( xLib, uno::UNO_QUERY );
-                if( xLibNC.is() )
+                try
                 {
-                    bCreateWin = TRUE;
+                    xISP = BasicIDE::CreateDialog( pShell, aLibName, aDlgName );
                 }
-                else
+                catch ( container::ElementExistException& e )
                 {
-                    // TODO: ReadOnlyLib
+                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR( aBStr.GetBuffer() );
+                }
+                catch ( container::NoSuchElementException& e )
+                {
+                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR( aBStr.GetBuffer() );
                 }
             }
-            if( bCreateWin )
+
+            if ( xISP.is() )
             {
-                // New dialog window
-                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic,
-                                         xLibContainer, aLibName, aDlgName );
+                // create dialog model
+                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+                Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+                    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+                Reference< XInputStream > xInput( xISP->createInputStream() );
+                ::xmlscript::importDialogModel( xInput, xDialogModel );
+
+                // new dialog window
+                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pBasic, pShell, aLibName, aDlgName, xDialogModel );
+                nKey = InsertWindowInTable( pWin );
             }
         }
-
-        if( !pWin )
-        {
-            // Something went wrong: Return old stuff
-            pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic );
-        }
-#else
-        pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic );
-#endif
-        nKey = InsertWindowInTable( pWin );
     }
     else
     {
@@ -198,8 +159,9 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName, S
         }
         DBG_ASSERT( nKey, "CreateDlgWin: Kein Key - Fenster nicht gefunden!" );
     }
+
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
-    pTabBar->InsertPage( (USHORT)nKey, xNewDlg->GetName() );
+    pTabBar->InsertPage( (USHORT)nKey, aDlgName );
     if ( !pCurWin )
         SetCurWindow( pWin, FALSE, FALSE );
 
@@ -218,8 +180,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( StarBASIC* pBasic, const String& rDlgNa
             String aDlgStr( ((DialogWindow*)pWin)->GetDialogName() );
             if ( !pBasic )  // nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
-            else if ( ( pWin->GetBasic() == pBasic ) &&
-                ( ( rDlgName.Len() == 0 ) || ( aDlgStr == rDlgName ) ) )
+            else if ( ( pWin->GetBasic() == pBasic ) && ( aDlgStr == rDlgName ) )
                 pDlgWin = (DialogWindow*)pWin;
         }
         pWin = aIDEWindowTable.Next();

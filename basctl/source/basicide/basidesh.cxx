@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-03 16:00:33 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,23 +694,6 @@ void BasicIDEShell::UpdateWindows()
             if ( pDocShell )
                 StartListening( *pDocShell, TRUE );
 
-            // Access dialog container
-            Reference< script::XLibraryContainer > xDialogContainer;
-            Reference< container::XNameAccess > xDialogAccess;
-            if( pDocShell )
-            {
-                xDialogContainer = Reference< script::XLibraryContainer >
-                        ( pDocShell->GetDialogContainer(), uno::UNO_QUERY );
-            }
-            else
-            {
-                // Application
-                xDialogContainer = uno::Reference< script::XLibraryContainer >
-                    ( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
-            }
-            if( xDialogContainer.is() )
-                xDialogAccess = Reference< container::XNameAccess >( xDialogContainer, uno::UNO_QUERY );
-
             USHORT nLibs = pBasicMgr->GetLibCount();
             for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
             {
@@ -724,6 +707,7 @@ void BasicIDEShell::UpdateWindows()
 
                         LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib );
 
+                        // modules
                         for ( USHORT nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
                         {
                             SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
@@ -736,47 +720,28 @@ void BasicIDEShell::UpdateWindows()
                             }
                         }
 
-                        // Access dialog container
-                        if( xDialogAccess.is() )
+                        // dialogs
+                        try
                         {
-                            rtl::OUString aLibName( pLib->GetName() );
-                            if( xDialogAccess->hasByName( aLibName ) )
+                            Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( pDocShell, pLib->GetName(), TRUE );
+
+                            if( xLib.is() )
                             {
-                                Reference< container::XNameAccess > xLib;
-                                Any aElement = xDialogAccess->getByName( aLibName );
-                                aElement >>= xLib;
-                                if( xLib.is() )
+                                Sequence< OUString > aNames = xLib->getElementNames();
+                                sal_Int32 nNameCount = aNames.getLength();
+                                const OUString* pNames = aNames.getConstArray();
+                                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
                                 {
-                                    Sequence< OUString > aNames = xLib->getElementNames();
-                                    sal_Int32 nNameCount = aNames.getLength();
-                                    const OUString* pNames = aNames.getConstArray();
-                                    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
-                                    {
-                                        OUString aDialogName = pNames[ i ];
-                                        if ( !FindDlgWin( pLib, aDialogName, FALSE ) )
-                                            CreateDlgWin( pLib, aDialogName, NULL );
-                                    }
+                                    OUString aDialogName = pNames[ i ];
+                                    if ( !FindDlgWin( pLib, aDialogName, FALSE ) )  // this find only looks for non-suspended windows;
+                                        CreateDlgWin( pLib, aDialogName );          // suspended windows are handled in CreateDlgWinr
                                 }
                             }
                         }
-                        else
+                        catch ( container::NoSuchElementException& e )
                         {
-                            DBG_ERROR( "Dialog Container not found!" );
-
-                            /*
-                            // Und ein BasigDialog-Fenster...
-                            pLib->GetAll( SbxCLASS_OBJECT );
-                            for ( USHORT nObj = 0; nObj < pLib->GetObjects()->Count(); nObj++ )
-                            {
-                                SbxVariable* pVar = pLib->GetObjects()->Get( nObj );
-                                if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == GetDialogSbxId() ) )
-                                {
-                                    SbxObject* pObj = (SbxObject*)pVar;
-                                    if ( !FindDlgWin( pLib, pObj->GetName(), FALSE ) )
-                                        CreateDlgWin( pLib, pObj->GetName(), pObj );
-                                }
-                            }
-                            */
+                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                            DBG_ERROR( aBStr.GetBuffer() );
                         }
                     }
                 }

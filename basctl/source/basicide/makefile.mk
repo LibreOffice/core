@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ab $ $Date: 2001-03-03 14:56:17 $
+#   last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ PROJECTPCHSOURCE=ide_pch
 CDEFS+=-DBASICDEBUG
 .ENDIF
 
-CDEFS+=-D_DLGEDITOR_
 
 # --- Allgemein ----------------------------------------------------------
 
@@ -112,7 +111,14 @@ SLOFILES =  \
             $(SLO)$/objdlg.obj	\
             $(SLO)$/tbxctl.obj
 
-EXCEPTIONSFILES=$(SLO)$/moduldl2.obj
+EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
+                $(SLO)$/basides1.obj	\
+                $(SLO)$/basides3.obj	\
+                $(SLO)$/baside3.obj		\
+                $(SLO)$/basobj3.obj		\
+                $(SLO)$/bastype2.obj	\
+                $(SLO)$/moduldlg.obj	\
+                $(SLO)$/moduldl2.obj
 
 SRCFILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
 

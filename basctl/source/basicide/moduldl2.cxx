@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-21 10:16:42 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,35 @@ void LibPage::NewLib()
             if ( bCreateLib )
             {
                 StarBASIC* pLib = pBasMgr->CreateLib( aLibName );
+
+                // get shell
+                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+                // get library container
+                Reference< script::XLibraryContainer > xBasicLibContainer;
+                Reference< script::XLibraryContainer > xDialogLibContainer;
+                if( pShell )
+                {
+                    // document
+                    xBasicLibContainer  = Reference< script::XLibraryContainer >( pShell->GetBasicContainer(), UNO_QUERY );
+                    xDialogLibContainer = Reference< script::XLibraryContainer >( pShell->GetDialogContainer(), UNO_QUERY );
+                }
+                else
+                {
+                    // application
+                    xBasicLibContainer  = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+                    xDialogLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
+                }
+
+                rtl::OUString aOULibName( aLibName );
+
+                // create basic library
+                if( xBasicLibContainer.is() && !xBasicLibContainer->hasByName( aOULibName ) )
+                    xBasicLibContainer->createLibrary( aOULibName );
+
+                // create dialog library
+                if( xDialogLibContainer.is() && !xDialogLibContainer->hasByName( aOULibName ) )
+                    xDialogLibContainer->createLibrary( aOULibName );
 
                 SvLBoxEntry* pEntry = aLibBox.InsertEntry( aLibName );
                 USHORT nPos = (USHORT)aLibBox.GetModel()->GetAbsPos( pEntry );

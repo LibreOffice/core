@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-11 09:16:12 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,14 @@
 
 #pragma hdrstop
 #define _SI_NOSBXCONTROLS
-#include <vcsbx.hxx>
+#include <vcsbxdef.hxx>
 #include <svtools/sbx.hxx>
-#include <sidll.hxx>
 #include <bastype2.hxx>
 #include <basobj.hxx>
 #include <baside2.hrc>
 #include <iderid.hxx>
 #include <bastypes.hxx>
+#include <basdoc.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -99,10 +99,13 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     if ( ( pUser->GetType() == OBJTYPE_SUBOBJ ) ||
          ( pUser->GetType() == OBJTYPE_OBJECT ) )
     {
+        // don't expand dialogs and controls (sbx dialogs removed)
+        /*
         SbxObject* pObj = FindObject( pEntry );
         DBG_ASSERT( pObj, "RequestingChilds: Kein gueltiges Objekt");
         if ( pObj )
             ScanSbxObject( pObj, pEntry );
+        */
     }
     else if ( pUser->GetType() == OBJTYPE_LIB )
     {
@@ -195,11 +198,14 @@ void BasicTreeListBox::ScanAllBasics()
     SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
     while ( pDocShell )
     {
-        // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
-        // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
-        BasicManager* pBasMgr = pDocShell->GetBasicManager();
-        if ( ( pBasMgr != SFX_APP()->GetBasicManager() ) && ( SfxViewFrame::GetFirst( pDocShell ) ) )
-            ScanBasic( pBasMgr, pDocShell->GetTitle( SFX_TITLE_FILENAME ) );
+        if ( !pDocShell->ISA(BasicDocShell) )
+        {
+            // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
+            // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
+            BasicManager* pBasMgr = pDocShell->GetBasicManager();
+            if ( ( pBasMgr != SFX_APP()->GetBasicManager() ) && ( SfxViewFrame::GetFirst( pDocShell ) ) )
+                ScanBasic( pBasMgr, pDocShell->GetTitle( SFX_TITLE_FILENAME ) );
+        }
         pDocShell = SfxObjectShell::GetNext( *pDocShell );
     }
 }
@@ -386,7 +392,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 }
                 break;
                 case OBJTYPE_METHOD:
-                case OBJTYPE_METHODINOBJ:
+                //case OBJTYPE_METHODINOBJ:     // sbx dialogs removed
                 {
                     DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
                     pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
@@ -395,14 +401,20 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 case OBJTYPE_OBJECT:
                 case OBJTYPE_SUBOBJ:
                 {
+                    // sbx dialogs removed
+                    /*
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt" );
                     pVar = ((SbxObject*)pVar)->GetObjects()->Find( aName, SbxCLASS_OBJECT );
+                    */
                 }
                 break;
                 case OBJTYPE_PROPERTY:
                 {
+                    // sbx dialogs removed
+                    /*
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt(Property)" );
                     pVar = ((SbxObject*)pVar)->GetProperties()->Find( aName, SbxCLASS_PROPERTY );
+                    */
                 }
                 break;
                 default:    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
@@ -414,6 +426,111 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
     }
 
     return pVar;
+}
+
+SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
+{
+    if ( !pEntry )
+        return SbxItem( SID_BASICIDE_ARG_SBX, NULL );
+
+    BasicManager* pBasMgr = 0;
+    EntryArray aEntries;
+
+    while ( pEntry )
+    {
+        USHORT nDepth = GetModel()->GetDepth( pEntry );
+        switch ( nDepth )
+        {
+            case 4:
+            case 3:
+            case 2:
+            case 1: {
+                        aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+                        break;
+                    }
+            case 0: pBasMgr = ((BasicManagerEntry*)pEntry->GetUserData())->GetBasicManager();
+                    break;
+        }
+        pEntry = GetParent( pEntry );
+    }
+
+    DBG_ASSERT( pBasMgr, "Fuer den Eintrag keinen BasicManager gefunden!" );
+    SfxObjectShell* pShell;
+    if ( pBasMgr )
+        pShell = BasicIDE::FindDocShell( pBasMgr );
+
+    SbxVariable* pVar = 0;
+    String aLibName;
+    String aName;
+    USHORT nType;
+    if ( pBasMgr && aEntries.Count() )
+    {
+        for ( USHORT n = 0; n < aEntries.Count(); n++ )
+        {
+            SvLBoxEntry* pLE = aEntries[n];
+            DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
+            BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
+            DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
+            aName = GetEntryText( pLE );
+
+            switch ( pBE->GetType() )
+            {
+                case OBJTYPE_LIB:
+                {
+                    aLibName = aName;
+                    pVar = pBasMgr->GetLib( aName );
+                }
+                break;
+                case OBJTYPE_MODULE:
+                {
+                    DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
+                    pVar = ((StarBASIC*)pVar)->FindModule( aName );
+                }
+                break;
+                case OBJTYPE_METHOD:
+                //case OBJTYPE_METHODINOBJ:     // sbx dialogs removed
+                {
+                    DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
+                    pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
+                }
+                break;
+                case OBJTYPE_OBJECT:
+                {
+                    nType = BASICIDE_TYPE_DIALOG;
+                }
+                break;
+                case OBJTYPE_SUBOBJ:
+                {
+                    // sbx dialogs removed
+                    /*
+                    DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt" );
+                    pVar = ((SbxObject*)pVar)->GetObjects()->Find( aName, SbxCLASS_OBJECT );
+                    */
+                }
+                break;
+                case OBJTYPE_PROPERTY:
+                {
+                    // sbx dialogs removed
+                    /*
+                    DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt(Property)" );
+                    pVar = ((SbxObject*)pVar)->GetProperties()->Find( aName, SbxCLASS_PROPERTY );
+                    */
+                }
+                break;
+                default:    DBG_ERROR( "GetSbxItem: Unbekannter Typ!" );
+                            pVar = 0;
+            }
+            if ( !pVar )
+                break;
+        }
+    }
+
+    if ( nType != BASICIDE_TYPE_DIALOG )
+    {
+        return SbxItem( SID_BASICIDE_ARG_SBX, pVar );
+    }
+
+    return SbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aName, nType );
 }
 
 
@@ -512,23 +629,3 @@ String GetLibFromMgrAndLib( const String& rMgrAndLib )
             rMgrAndLib.GetTokenCount( '.' ) - 1, '.' ) );
     return aLib;
 }
-
-
-void EnableBasicDialogs( BOOL bEnable )
-{
-    SiDLL* pSiDLL = SI_DLL();
-    USHORT nDlgs = pSiDLL->GetSbxDlgCount();
-    for ( USHORT nDlg = 0; nDlg < nDlgs; nDlg++ )
-    {
-        VCSbxDialog* pVCDlg = pSiDLL->GetSbxDlg( nDlg );
-        Dialog* pRealDlg = pVCDlg->GetDialog();
-        if ( pRealDlg )
-        {
-            if ( bEnable )
-                pRealDlg->Enable();
-            else
-                pRealDlg->Disable();
-        }
-    }
-}
-

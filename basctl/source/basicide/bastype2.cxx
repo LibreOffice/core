@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-23 11:20:52 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,29 +206,45 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarB
         }
     }
 
-    // ...und dann die lebenden Objecte.
+    // dialogs
     if ( pLib && ( nMode & BROWSEMODE_OBJS ) )
     {
-        pLib->GetAll( SbxCLASS_OBJECT );
-        for ( USHORT nObject = 0; nObject < pLib->GetObjects()->Count(); nObject++ )
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
+        if ( pBasMgr )
         {
-            SbxVariable* pVar = pLib->GetObjects()->Get( nObject );
-#ifndef BASICDEBUG
-            if ( pVar->GetSbxId() == GetDialogSbxId() )
-#endif
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            String aLibName = pLib->GetName();
+
+            // get library
+            Reference< container::XNameContainer > xLib;
+            try
             {
-                // Dialoge erhalten ChildsOnDemand und koennen
-                // jederzeit weiter aufgeklappt werden...
-                SvLBoxEntry* pEntry = FindEntry( pLibRootEntry, pVar->GetName(), OBJTYPE_OBJECT );
-                if ( !pEntry )
+                xLib = BasicIDE::GetDialogLibrary( pShell, aLibName );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+
+            if( xLib.is() )
+            {
+                Sequence< rtl::OUString > aNames = xLib->getElementNames();
+                sal_Int32 nNameCount = aNames.getLength();
+                const rtl::OUString* pNames = aNames.getConstArray();
+                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
                 {
-                    pEntry = InsertEntry( pVar->GetName(), aImages.GetImage( IMGID_OBJECT ), aImages.GetImage( IMGID_OBJECT ), pLibRootEntry, TRUE, LIST_APPEND );
-                    pEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
+                    String aDlgName = pNames[ i ];
+                    SvLBoxEntry* pEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
+                    if ( !pEntry )
+                    {
+                        pEntry = InsertEntry( aDlgName, aImages.GetImage( IMGID_OBJECT ), aImages.GetImage( IMGID_OBJECT ), pLibRootEntry, TRUE, LIST_APPEND );
+                        pEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
+                    }
                 }
             }
         }
     }
-
 }
 
 void BasicTreeListBox::UpdateEntries()
@@ -265,7 +281,7 @@ void BasicTreeListBox::UpdateEntries()
         Select( pNewCurrent, TRUE );
 }
 
-void BasicTreeListBox::ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry )
+void BasicTreeListBox::ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry )     // not called anymore (sbx dialogs removed)
 {
     // die Methoden des Objects...
     if ( nMode & BROWSEMODE_SUBS )

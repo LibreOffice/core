@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ protected:
 
 
 public:
+                        TYPEINFO();
+
                         SFX_DECL_SIMPLE_OBJECTFACTORY( BasicDocShell );
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH );
                         BasicDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );

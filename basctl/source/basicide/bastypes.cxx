@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,20 +850,41 @@ LibInfo* LibInfos::GetInfo( StarBASIC* pLib, BOOL bCreateIfNotExist )
 }
 
 
-SbxItem::SbxItem(USHORT nWhich, const SbxBase* p ) : SfxPoolItem( nWhich )
+SbxItem::SbxItem(USHORT nWhich, const SbxBase* p )
+    :SfxPoolItem( nWhich )
+    ,pSbx(p)
+    ,m_pShell(NULL)
+    ,m_nType(0)
 {
-    pSbx = p;
+}
+
+SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, const String& aName, USHORT nType )
+    :SfxPoolItem( nWhich )
+    ,pSbx(NULL)
+    ,m_pShell(pShell)
+    ,m_aLibName(aLibName)
+    ,m_aName(aName)
+    ,m_nType(nType)
+{
 }
 
 SbxItem::SbxItem(const SbxItem& rCopy) : SfxPoolItem( rCopy )
 {
     pSbx = rCopy.pSbx;
+    m_pShell = rCopy.m_pShell;
+    m_aLibName = rCopy.m_aLibName;
+    m_aName = rCopy.m_aName;
+    m_nType = rCopy.m_nType;
 }
 
 int SbxItem::operator==( const SfxPoolItem& rCmp) const
 {
     DBG_ASSERT( rCmp.ISA( SbxItem ), "==: Kein SbxItem!" );
-    return ( SfxPoolItem::operator==( rCmp ) && ( pSbx == ((const SbxItem&)rCmp).pSbx ) );
+    return ( SfxPoolItem::operator==( rCmp ) && ( pSbx == ((const SbxItem&)rCmp).pSbx )
+                                             && ( m_pShell == ((const SbxItem&)rCmp).m_pShell )
+                                             && ( m_aLibName == ((const SbxItem&)rCmp).m_aLibName )
+                                             && ( m_aName == ((const SbxItem&)rCmp).m_aName )
+                                             && ( m_nType == ((const SbxItem&)rCmp).m_nType ) );
 }
 
 SfxPoolItem *SbxItem::Clone( SfxItemPool* ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 11:23:48 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,7 @@
 #include "propbrw.hxx"
 #endif
 
-#ifndef __VC_VCSBXDEF_HXX
-#include "vcsbx.hxx"
-#endif
+#include <vcsbxdef.hxx>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>

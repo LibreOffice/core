@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
+#endif
+#ifndef _SBXITEM_HXX
+#include <sbxitem.hxx>
 #endif
 
 #define OBJTYPE_BASICMANAGER    1L
@@ -137,6 +140,9 @@ public:
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
     SvLBoxEntry*    FindLibEntry( StarBASIC* pLib );
+
+    // new dialogs
+    SbxItem         GetSbxItem( SvLBoxEntry* pEntry );
 };
 
 /****************************************

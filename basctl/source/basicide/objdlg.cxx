@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 14:12:28 $
+ *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,11 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
     {
-        SbxVariable* pSbx = FindVariable( GetCurEntry() );
+        SbxItem aSbxItem = GetSbxItem( GetCurEntry() );
+        SbxVariable* pSbx = (SbxVariable*)aSbxItem.GetSbx();
+
         if ( pSbx && pSbx->ISA( SbMethod ) )
         {
-            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pSbx );
             SfxViewFrame* pCurFrame = SfxViewFrame::Current();
             DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
             SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
@@ -272,11 +273,10 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             }
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
-            SbxVariable* pSbx = aMacroTreeList.FindVariable(pCurEntry );
-            if ( pSbx )
+            SbxItem aSbxItem = aMacroTreeList.GetSbxItem( pCurEntry );
+            SbxVariable* pSbx = (SbxVariable*)aSbxItem.GetSbx();
+            if ( pSbx || aSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
             {
-                DBG_ASSERT( pSbx->ISA( SbxVariable ), "Var?!" );
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pSbx );
                 if( pDispatcher )
                 {
                     pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
@@ -341,7 +341,8 @@ void ObjectCatalog::CheckButtons()
     if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) ||
          ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_LIB ) )
     {
-        aToolBox.EnableItem( TBITEM_PROPS, TRUE );
+        //aToolBox.EnableItem( TBITEM_PROPS, TRUE );
+        aToolBox.EnableItem( TBITEM_PROPS, FALSE );
     }
     else
         aToolBox.EnableItem( TBITEM_PROPS, FALSE );
