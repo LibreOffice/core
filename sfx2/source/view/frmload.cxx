@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:15:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         bLoadState = sal_True;
     }
 
-    return NULL;
+    return 0 ;
 }
 
 SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
