@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:12:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,13 +891,15 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
         SfxStyleSheetBasePool* pMyPool   = GetStyleSheetPool();
         SetOrganizerSearchMask(pHisPool);
         SetOrganizerSearchMask(pMyPool);
+        SfxStyleSheetBase* pHisSheet = NULL;
 
-        SfxStyleSheetBase* pHisSheet = (*pHisPool)[nSourceIdx2];
+        if ( pHisPool && pHisPool->Count() > nSourceIdx2 )
+            pHisSheet = (*pHisPool)[nSourceIdx2];
 
         // Einfuegen ist nur dann noetig, wenn ein StyleSheet
         // zwischen unterschiedlichen(!) Pools bewegt wird
 
-        if (pMyPool != pHisPool)
+        if ( pHisSheet && pMyPool != pHisPool )
         {
             if (INDEX_IGNORE == nIdx2)
             {
