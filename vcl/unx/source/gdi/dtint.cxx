@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:58:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ DtIntegrator::DtIntegrator() :
         mnRefCount( 0 ),
         mnSystemLookCommandProcess( -1 )
 {
-    mpSalDisplay = GetSalData()->GetDefDisp();
+    mpSalDisplay = GetSalData()->GetDisplay();
     mpDisplay = mpSalDisplay->GetDisplay();
     aIntegratorList.Insert( this, LIST_APPEND );
     static const char* pHome = getenv( "HOME" );
@@ -119,7 +119,7 @@ DtIntegrator::~DtIntegrator()
 
 DtIntegrator* DtIntegrator::CreateDtIntegrator()
 {
-    SalDisplay* pSalDisplay = GetSalData()->GetDefDisp();
+    SalDisplay* pSalDisplay = GetSalData()->GetDisplay();
     Display* pDisplay = pSalDisplay->GetDisplay();
 
     for( unsigned int i = 0; i < aIntegratorList.Count(); i++ )
