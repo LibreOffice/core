@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ struct ContentInfo
     //-------------------------------------------------------------------------
     /** Additional attributes.
 
-        <p>These flags contain extra information on the content, like it's kind
-        ( KIND_FOLDER, KIND_DOCUMENT, KIND_LINK ).
+        <p>These flags contain extra information on the content, like its kind
+        (KIND_FOLDER, KIND_DOCUMENT, KIND_LINK).
 
         <p>It is highly recommended to fill these flags very accurately, as
         they are very important when transferring contents between different
@@ -106,17 +106,18 @@ struct ContentInfo
     /** This field contains a list with the properties which must be set at
         a content that was just created using
         <member>XContentCreator::createNewContent</member> before it can be
-        committed ( via executing the command "insert" at the new content ).
-        If one of the properties is missing, the insert command will fail.
+        committed (by executing the command "insert" at the new content).
+
+        <p>If one of the properties is missing, the insert command will fail.
 
         <p>In example, a new file system folder content will need a title. The
         Properties member of the ContentInfo provided for this kind of
         content must include the property "Title".
 
         <p><b>Important:</b> The required properties must have one of the
-        following basic data types ( in order to make it possible to implement
+        following basic data types (in order to make it possible to implement
         client applications with a small set of generic input methods for the
-        values ):
+        values):
 
         <p>
         <ul>

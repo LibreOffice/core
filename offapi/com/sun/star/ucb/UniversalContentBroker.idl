@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@ module com { module sun { module star { module ucb {
 /** is a one-instance service that provides access to a set of
     <type>Content</type>s via <type>ContentProvider</type>s.
 
-    <p>If the instance is created with two arguments of type
-    <type>string</type>, these two strings are used to configure the newly
-    instantiated broker; see the description of the required
+    <p>If the instance is created with two arguments of type string,
+    these two strings are used to configure the newly instantiated broker;
+    see the description of the required
     <type scope="com::sun::star::lang">XInitialization</type> interface for
     details.
 
@@ -115,8 +115,8 @@ service UniversalContentBroker
         must be called at the Broker. The implementation of this method must
         call
         <member scope="com::sun::star::lang">XEventListener::disposing</member>
-        on the registered listeners ( the providers holding the Broker must be
-        those listeners ) and release the appropriate object references. At
+        on the registered listeners (the providers holding the Broker must be
+        those listeners) and release the appropriate object references. At
         the other hand, the implementation of XEventListener::disposing must
         release its appropriate references.
 
@@ -152,10 +152,9 @@ service UniversalContentBroker
 
         <p>The
         <member scope="com::sun::star::lang"XInitialization::initialize</member>
-        method should be called with two arguments of type
-        <type>string</type>. These strings are used as a pair of keys to
-        retrieve a set of content provider descriptions from the configuration
-        management (stored at
+        method should be called with two arguments of type string. These strings
+        are used as a pair of keys to retrieve a set of content provider
+        descriptions from the configuration management (stored at
         <code>org.openoffice.ucb.Configuration.ContentProviders.<var>key<sub>1</sub></var>.SecondaryKeys.<var>key<sub>2</sub></var>.ProviderData</code>
         within the configuration management's hierarchy). The retrieved
         descriptions are in turn used to register the corresponding content

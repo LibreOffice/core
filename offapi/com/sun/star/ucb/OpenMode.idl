@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,13 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** These are the possible values for the
-    <member>OpenCommandArgument::Mode</member>.
+/** These are the possible values for <member>OpenCommandArgument::Mode</member>.
 */
 constants OpenMode
 {
     //-------------------------------------------------------------------------
-    /** open a folder, include all children in result set ( documents and
-        folders ).
+    /** open a folder, include all children in result set (documents and
+        folders).
     */
     const short ALL = 0;
 

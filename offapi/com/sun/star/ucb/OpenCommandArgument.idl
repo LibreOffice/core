@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,21 +81,23 @@ module com { module sun { module star { module ucb {
 struct OpenCommandArgument
 {
     //-------------------------------------------------------------------------
-    /** The mode should be one of the <type>OpenMode</type> constants.
+    /** A mode.
+
+        <p>The value can be one of the <type>OpenMode</type> constants.
     */
     long Mode;
 
     //-------------------------------------------------------------------------
-    /** The tasks priority, in the range <code>0</code> (highest) to
+    /** The command's priority, in the range <code>0</code> (highest) to
         <code>65535</code> (lowest).
     */
     long Priority;
 
     //-------------------------------------------------------------------------
-    /** The data sink to write the contents into ( supporting either
-        <type scope="com::sun::star::io">XActiveDataSink</type> or
-        <type scope="com::sun::star::io">XOutputStream</type> ) or
-        <type scope="com::sun::star::io">XActiveDataStreamer</type>.
+    /** The data sink to write the contents into (supporting either
+        <type scope="com::sun::star::io">XActiveDataSink</type>,
+        <type scope="com::sun::star::io">XOutputStream</type> or
+        <type scope="com::sun::star::io">XActiveDataStreamer</type>).
 
         <p>XActiveDataSink and XOutputStream give the caller read-only
         access to the contents. XActiveDataStreamer offers both read and
@@ -106,7 +108,7 @@ struct OpenCommandArgument
         interface <type scope="com::sun::star::io">XInputStream</type>. It is
         highly recommended that this object also implements the interface
         <type scope="com::sun::star::io">XSeekable</type>, if this can be done
-        without wasting resources ( i.e. allocating huge memory buffers ).
+        without wasting resources (i.e. allocating huge memory buffers).
         The implementation object has to be supplied to the data sink.
     */
     com::sun::star::uno::XInterface Sink;

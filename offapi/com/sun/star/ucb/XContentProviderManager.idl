@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         the content provider to register.
 
         <p>This may be <NULL/>, in which case a later
-        <member>XContentProvider::queryContent</metmber> with an
+        <member>XContentProvider::queryContent</member> with an
         <type>XContentIdentifier</type> that matches the <var>Scheme</var>
         will simply return <NULL/>. These "dummy" content providers are useful
         in combination with other content providers that are registered on a
@@ -138,24 +138,24 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         <li><code>sescape = "\" (DQUOTE / "\")</code></li>
         </ul>
 
-        <p>A <code>&lt;scheme&gt:<code/> matches any URL of exactly the given
+        <p>A <code>&lt;scheme&gt:</code> matches any URL of exactly the given
         scheme (ignoring case), keeping the extension from URL schemes to URL
-        templates backwards compatible.  The <code>&lt;simple&gt:<code/>
+        templates backwards compatible.  The <code>&lt;simple&gt:</code>
         regexps match any URL starting with a given string literal, followed
-        by arbitrary characters (<code>&lt;simple-prefix&gt:<code/>), or
+        by arbitrary characters (<code>&lt;simple-prefix&gt:</code>), or
         by arbitrary characters that start with one of '/', '?', or '#', if any
-        (<code>&lt;simple-authority&gt:<code/>), or by arbitrary characters not
+        (<code>&lt;simple-authority&gt:</code>), or by arbitrary characters not
         including any of '/', '?', or '#', followed by a given string literal,
         followed by arbitrary characters that start with one of '/', '?', or
         '#', if any. The comparision of string literals is done ignoring the
-        case of ASCII letters.  The <code>&lt;translation&gt:<code/> regexps
-        match the same URLs as their <code>&lt;simple&gt:<code/> counterparts,
+        case of ASCII letters.  The <code>&lt;translation&gt:</code> regexps
+        match the same URLs as their <code>&lt;simple&gt:</code> counterparts,
         but they also describe how a (local) URL is mapped to another (remote)
         URL.  This mapping is only relevant for methods of the
         <type>RemoteAccessContentProvider</type>'s
           <type>XParameterizedContentProvider</type> interface; in all other
-        cases, <code>&lt;translation&gt:<code/> regexps have the same semantics
-        as their <code>&lt;simple&gt:<code/> counterparts.
+        cases, <code>&lt;translation&gt:</code> regexps have the same semantics
+        as their <code>&lt;simple&gt:</code> counterparts.
 
         @param ReplaceExisting
         <TRUE/>: replace the provider possibly registered for the given URL

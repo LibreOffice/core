@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WelcomeDynamicResultSetStruct.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** This struct is to be contained in the first notification of an
-    <type>XDynamicResultSet</type>
+    <type>XDynamicResultSet</type>.
 
     @see XDynamicResultSet
     @see ListEvent

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedContentResultSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,14 +99,14 @@ service CachedContentResultSet
      //-------------------------------------------------------------------------
     /** contains the direction for fetching rows from an underlying database.
 
-    <p>could contain a value of constants group
-    <type scope="com::sun::star::sdbc">FetchDirection</type>.
+    <p>The value can be one of the
+    <type scope="com::sun::star::sdbc">FetchDirection</type> constants group.
 
     <p>The default value is implementation specific.
 
-    <p>If you set <var>FetchDirection</var> to UNKNOWN, an implementation
-    specific <type scope="com::sun::star::sdbc">FetchDirection</type> will be
-    used.
+    <p>If you set the value to
+    <member scope="com::sun::star::sdbc">FetchDirection::UNKNOWN</member> an
+    implementation specific direction will be used.
     */
     [property] long FetchDirection;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentCreator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-30 10:46:56 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A creator for new (persistent) contents ( like file system folders ).
+/** A creator for new (persistent) contents, like file system folders.
 
     <p>Creation of a new (persistent) content:
     <ol>
         <li>newObject = creator.createNewContent( ... )
-        <li>initialize the new object ( i.e. newObject.Property1 = ... )
+        <li>initialize the new object (i.e. newObject.Property1 = ...)
         <li>let the new content execute the command "insert". That command
             commits the data and makes the new content persistent.
     </ol>

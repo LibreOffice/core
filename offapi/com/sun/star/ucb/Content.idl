@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ service Content
         //       contained, that are unknown to the content!
         void
             setPropertyValues
-                sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &lt; aValues
+                sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &gt; aValues
 
         -----------------------------------------------------------------------
         Optional commands:
@@ -318,8 +318,8 @@ service Content
 
         // <b>Important note:</b> A client that wants to transfer data should
         // not execute this command, but it should execute the command
-        // "globalTransfer" at the/ <type>UniversalContentBroker</type>
-        // instance. This command is able to transfer all kind of content
+        // "globalTransfer" at the <type>UniversalContentBroker</type>.
+        // This command is able to transfer all kind of content
         // supported by that UCB.
         //
         // This command transfers (copies/moves) an object from one location
@@ -631,7 +631,7 @@ service Content
     //-------------------------------------------------------------------------
     /** creates new contents (i.e. creates a new folder in another folder
         somewhere in the local file system).
-     *
+
         <p>A content is "new", if it does not physically exist before creating
         it using this interface.
 

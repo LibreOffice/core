@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandEnvironment.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-12 13:26:50 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,7 @@ interface XCommandEnvironment : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** returns the command's interaction handler.
 
-        @descr
-        If called multiple times, this method should consistently return the
+        <p>If called multiple times, this method should consistently return the
         same value (to allow caching).
 
         @returns
@@ -103,8 +102,7 @@ interface XCommandEnvironment : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** returns the command's progress handler.
 
-        @descr
-        If called multiple times, this method should consistently return the
+        <p>If called multiple times, this method should consistently return the
         same value (to allow caching).
 
         @returns

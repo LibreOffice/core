@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Store.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,13 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** creates implementations of the service <typePropertySetRegistry</type>.
+/** creates instances of the service <type>PropertySetRegistry</type>.
   */
 service Store
 {
     //-------------------------------------------------------------------------
     /** A factory for propertyset registries. This factory must create
-        implementations of the service <typePropertySetRegistry</type>
+        instances of the service <typePropertySetRegistry</type>
      */
     interface com::sun::star::ucb::XPropertySetRegistryFactory;
 };
