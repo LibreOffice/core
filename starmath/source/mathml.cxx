@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-11 15:43:30 $
+ *  last change: $Author: cmc $ $Date: 2000-12-11 16:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,37 +1059,8 @@ public:
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
-    void EndElement();
 };
 
-void SmXMLTableRowContext_Impl::EndElement()
-{
-    SmNodeArray aRelationArray;
-    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    USHORT nSize = rNodeStack.Count()-nElementCount;
-
-    if (nSize)
-    {
-        aRelationArray.SetSize(nSize);
-        for(USHORT i=rNodeStack.Count()-nElementCount;i > 0;i--)
-            aRelationArray.Put(i-1,rNodeStack.Pop());
-    }
-    else //Multiple newlines result in empty row elements
-    {
-        aRelationArray.SetSize(1);
-        SmToken aToken;
-        aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
-        aToken.nLevel = 5;
-        aToken.eType = TNEWLINE;
-        aRelationArray.Put(0,new SmLineNode(aToken));
-    }
-
-    SmToken aDummy;
-    SmStructureNode *pSNode = new SmExpressionNode(aDummy);
-    pSNode->SetSubNodes(aRelationArray);
-    rNodeStack.Push(pSNode);
-}
 
 class SmXMLTableContext_Impl : public SmXMLTableRowContext_Impl
 {
@@ -1449,16 +1420,33 @@ void SmXMLRowContext_Impl::EndElement()
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    aRelationArray.SetSize(rNodeStack.Count()-nElementCount);
+    USHORT nSize = rNodeStack.Count()-nElementCount;
 
-    for(USHORT i=rNodeStack.Count()-nElementCount;i > 0;i--)
-        aRelationArray.Put(i-1,rNodeStack.Pop());
+    if (nSize)
+    {
+        aRelationArray.SetSize(nSize);
+        for(USHORT i=rNodeStack.Count()-nElementCount;i > 0;i--)
+            aRelationArray.Put(i-1,rNodeStack.Pop());
+    }
+    else //Multiple newlines result in empty row elements
+    {
+        aRelationArray.SetSize(1);
+        SmToken aToken;
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+        aToken.eType = TNEWLINE;
+        aRelationArray.Put(0,new SmLineNode(aToken));
+    }
 
     SmToken aDummy;
     SmStructureNode *pSNode = new SmExpressionNode(aDummy);
     pSNode->SetSubNodes(aRelationArray);
     rNodeStack.Push(pSNode);
 }
+
+
+
 
 SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
