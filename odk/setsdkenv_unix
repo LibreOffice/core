@@ -26,6 +26,12 @@ SDK_CPP_HOME=
 # Example: SDK_JAVA_HOME=/usr/local/j2sdk1.4.0
 SDK_JAVA_HOME=
 
+# Environment variable to enable auto deployment of example components
+# Example: SDK_AUTO_DEPLOYMENT=YES
+# SDK_AUTO_DEPLOYMENT=YES
+# export SDK_AUTO_DELOYMENT
+
+
 # ANT installation directory.
 # Example: SDK_ANT=/windows/daten/moving/jakarta-ant-1.4
 # SDK_ANT=

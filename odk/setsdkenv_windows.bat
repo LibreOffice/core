@@ -26,6 +26,10 @@ REM Java installation directory.
 REM Example: set SDK_JAVA_HOME=C:\Programme\Java\J2SDK_Forte\jdk1.4.0
 set SDK_JAVA_HOME=
 
+REM Environment variable to enable auto deployment of example components
+REM Example: set SDK_AUTO_DEPLOYMENT=YES
+REM set SDK_AUTO_DEPLOYMENT=YES
+
 REM ANT installation directory.
 REM Example: set SDK_ANT=D:\jakarta-ant-1.4
 REM set SDK_ANT=
