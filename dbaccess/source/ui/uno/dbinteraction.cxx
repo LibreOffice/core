@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:23:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
+#endif
+#ifndef SFX_QUERYSAVEDOCUMENT_HXX
+#include <sfx2/QuerySaveDocument.hxx>
 #endif
 #ifndef _DBU_UNO_HRC_
 #include "dbu_uno.hrc"
@@ -420,15 +423,7 @@ namespace dbaui
         if ( -1 != nApprovePos )
         {
             // fragen, ob gespeichert werden soll
-            String aText( ModuleRes( STR_QUERY_SAVE_DOCUMENT ) );
-            aText.SearchAndReplace( String::CreateFromAscii("$(DOC)"),
-                                    _rDocuRequest.Name );
-
-            QueryBox aQBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
-            aQBox.SetButtonText( BUTTONID_NO, ModuleRes( STR_NOSAVEANDCLOSE ) );
-            aQBox.SetButtonText( BUTTONID_YES, ModuleRes( STR_SAVEDOC ) );
-
-            nRet = aQBox.Execute();
+            nRet = ExecuteQuerySaveDocument(NULL,_rDocuRequest.Name);
         }
 
         if ( RET_CANCEL == nRet )
