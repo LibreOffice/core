@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:49:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,12 @@
 #include <svxenum.hxx>
 #pragma hdrstop
 
-#define _SVX_ALIGN_CXX
-
 #include "dialogs.hrc"
 #include "align.hrc"
 #include "rotmodit.hxx"
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-#define ITEMID_ORIENTATION      SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 #define ITEMID_FRAMEDIR         SID_ATTR_FRAMEDIRECTION
@@ -109,717 +106,244 @@
 #include <svtools/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 
-// item connections ------------------------------------------------------
+namespace svx {
 
-typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify > SvxVerJustItemWrapper;
-typedef sfx::ListBoxConnection< SvxVerJustItemWrapper > SvxVerJustConnection;
+// item connections ===========================================================
 
-static const SvxVerJustConnection::MapEntryType pVerJustMap[] =
+// horizontal alignment -------------------------------------------------------
+
+typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify > HorJustItemWrapper;
+typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
+
+static const HorJustConnection::MapEntryType s_pHorJustMap[] =
+{
+    { ALIGNDLG_HORALIGN_STD,    SVX_HOR_JUSTIFY_STANDARD    },
+    { ALIGNDLG_HORALIGN_LEFT,   SVX_HOR_JUSTIFY_LEFT        },
+    { ALIGNDLG_HORALIGN_CENTER, SVX_HOR_JUSTIFY_CENTER      },
+    { ALIGNDLG_HORALIGN_RIGHT,  SVX_HOR_JUSTIFY_RIGHT       },
+    { ALIGNDLG_HORALIGN_BLOCK,  SVX_HOR_JUSTIFY_BLOCK       },
+    { ALIGNDLG_HORALIGN_FILL,   SVX_HOR_JUSTIFY_REPEAT      },
+    { LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
+};
+
+// vertical alignment ---------------------------------------------------------
+
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify > VerJustItemWrapper;
+typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
+
+static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 {
     { ALIGNDLG_VERALIGN_STD,    SVX_VER_JUSTIFY_STANDARD    },
     { ALIGNDLG_VERALIGN_TOP,    SVX_VER_JUSTIFY_TOP         },
     { ALIGNDLG_VERALIGN_MID,    SVX_VER_JUSTIFY_CENTER      },
     { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
-    { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
     { LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
 };
 
-// static ----------------------------------------------------------------
+// cell rotate mode -----------------------------------------------------------
 
-static USHORT pRanges[] =
+typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode > RotateModeItemWrapper;
+typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
+
+static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
 {
-    SID_ATTR_ALIGN_HOR_JUSTIFY,
-    SID_ATTR_ALIGN_LINEBREAK,
+    { IID_BOTTOMLOCK,           SVX_ROTATE_MODE_BOTTOM      },
+    { IID_TOPLOCK,              SVX_ROTATE_MODE_TOP         },
+    { IID_CELLLOCK,             SVX_ROTATE_MODE_STANDARD    },
+    { VALUESET_ITEM_NOTFOUND,   SVX_ROTATE_MODE_STANDARD    }
+};
+
+// ============================================================================
+
+static USHORT s_pRanges[] =
+{
+    SID_ATTR_ALIGN_HOR_JUSTIFY,SID_ATTR_ALIGN_VER_JUSTIFY,
+    SID_ATTR_ALIGN_STACKED,SID_ATTR_ALIGN_LINEBREAK,
     SID_ATTR_ALIGN_INDENT,SID_ATTR_ALIGN_INDENT,
     SID_ATTR_ALIGN_DEGREES,SID_ATTR_ALIGN_DEGREES,
     SID_ATTR_ALIGN_LOCKPOS,SID_ATTR_ALIGN_LOCKPOS,
     SID_ATTR_ALIGN_HYPHENATION,SID_ATTR_ALIGN_HYPHENATION,
     SID_ATTR_ALIGN_ASIANVERTICAL,SID_ATTR_ALIGN_ASIANVERTICAL,
     SID_ATTR_FRAMEDIRECTION,SID_ATTR_FRAMEDIRECTION,
+    SID_ATTR_ALIGN_SHRINKTOFIT,SID_ATTR_ALIGN_SHRINKTOFIT,
     0
 };
 
-//--------------------------------------------------------------
-// class SvxAlignmentTabPage
-//--------------------------------------------------------------
-// Konstruktor
+// ============================================================================
 
-SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
-                                          const SfxItemSet& rCoreAttrs ) :
+AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
 
-    aFlAlignment    ( this, ResId( FL_ALIGNMENT ) ),
-    aFtHorAlign     ( this, ResId( FT_HORALIGN ) ),
-    aLbHorAlign     ( this, ResId( LB_HORALIGN ) ),
-    aFtIndent       ( this, ResId( FT_INDENT ) ),
-    aEdIndent       ( this, ResId( ED_INDENT ) ),
-    aFtVerAlign     ( this, ResId( FT_VERALIGN ) ),
-    aLbVerAlign     ( this, ResId( LB_VERALIGN ) ),
+    maFlAlignment   ( this, ResId( FL_ALIGNMENT ) ),
+    maFtHorAlign    ( this, ResId( FT_HORALIGN ) ),
+    maLbHorAlign    ( this, ResId( LB_HORALIGN ) ),
+    maFtIndent      ( this, ResId( FT_INDENT ) ),
+    maEdIndent      ( this, ResId( ED_INDENT ) ),
+    maFtVerAlign    ( this, ResId( FT_VERALIGN ) ),
+    maLbVerAlign    ( this, ResId( LB_VERALIGN ) ),
 
-    aWinOrient      ( this,ResId(CTR_DIAL),ResId(BTN_TXTSTACKED),
-                        ResId(FT_DEGREES),ResId(NF_DEGREES),ResId(FT_BORDER_LOCK),
-                        ResId(CTR_BORDER_LOCK),ResId(FL_ORIENTATION)),   //@ 12.09.97
-    aBtnAsianVert   ( this, ResId( BTN_ASIAN_VERTICAL ) ),
+    maFlOrient      ( this, ResId( FL_ORIENTATION ) ),
+    maCtrlDial      ( this, ResId( CTR_DIAL ) ),
+    maFtRotate      ( this, ResId( FT_DEGREES ) ),
+    maNfRotate      ( this, ResId( NF_DEGREES ) ),
+    maFtRefEdge     ( this, ResId( FT_BORDER_LOCK ) ),
+    maVsRefEdge     ( this, ResId( CTR_BORDER_LOCK ) ),
+    maCbStacked     ( this, ResId( BTN_TXTSTACKED ) ),
+    maCbAsianMode   ( this, ResId( BTN_ASIAN_VERTICAL ) ),
+    maOrientHlp     ( this, maCtrlDial, maNfRotate, maCbStacked ),
 
-    aFlSpace        ( this, ResId( FL_SPACE ) ),
-    aFtLeftSpace    ( this, ResId( FT_LEFTSPACE ) ),
-    aEdLeftSpace    ( this, ResId( ED_LEFTSPACE ) ),
-    aFtRightSpace   ( this, ResId( FT_RIGHTSPACE ) ),
-    aEdRightSpace   ( this, ResId( ED_RIGHTSPACE ) ),
-    aFtTopSpace     ( this, ResId( FT_TOPSPACE ) ),
-    aEdTopSpace     ( this, ResId( ED_TOPSPACE ) ),
-    aFtBottomSpace  ( this, ResId( FT_BOTTOMSPACE ) ),
-    aEdBottomSpace  ( this, ResId( ED_BOTTOMSPACE ) ),
-
-    aFlWrap         ( this, ResId( FL_WRAP ) ),
-    aBtnWrap        ( this, ResId( BTN_WRAP ) ),
-    aBtnHyphen      ( this, ResId( BTN_HYPH ) ),
-    aFtTextFlow     ( this, ResId( FT_TEXTFLOW ) ),
-    aLbFrameDir     ( this, ResId( LB_FRAMEDIR ) ),
-
-    bHyphenDisabled ( FALSE )
+    maFlProperties  ( this, ResId( FL_WRAP ) ),
+    maBtnWrap       ( this, ResId( BTN_WRAP ) ),
+    maBtnHyphen     ( this, ResId( BTN_HYPH ) ),
+    maBtnShrink     ( this, ResId( BTN_SHRINK ) ),
+    maFtFrameDir    ( this, ResId( FT_TEXTFLOW ) ),
+    maLbFrameDir    ( this, ResId( LB_FRAMEDIR ) )
 {
-    aLbHorAlign.SetSelectHdl( LINK( this, SvxAlignmentTabPage, HorAlignSelectHdl_Impl ) );
-    aBtnWrap.SetClickHdl( LINK( this, SvxAlignmentTabPage, WrapClickHdl_Impl ) );
+    InitVsRefEgde();
+
+    // windows to be disabled, if stacked text is turned ON
+    maOrientHlp.AddDependentWindow( maFtRotate,     STATE_CHECK );
+    maOrientHlp.AddDependentWindow( maFtRefEdge,    STATE_CHECK );
+    maOrientHlp.AddDependentWindow( maVsRefEdge,    STATE_CHECK );
+    // windows to be disabled, if stacked text is turned OFF
+    maOrientHlp.AddDependentWindow( maCbAsianMode,  STATE_NOCHECK );
+
+    Link aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
+
+    maLbHorAlign.SetSelectHdl( aLink );
+    maBtnWrap.SetClickHdl( aLink );
 
     // Asian vertical mode
-    if( SvtCJKOptions().IsVerticalTextEnabled() )
-        aWinOrient.SetTxtStackedClickHdl( LINK( this, SvxAlignmentTabPage, TxtStackedClickHdl_Impl ) );
-    else
-        aBtnAsianVert.Hide();
+    maCbAsianMode.Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
     // CTL frame direction
-    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+    maLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {
-        aFtTextFlow.Hide();
-        aLbFrameDir.Hide();
+        maFtFrameDir.Hide();
+        maLbFrameDir.Hide();
     }
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rCoreAttrs );
-
-    switch ( eFUnit )
-    {
-        //  #103396# the default value (1pt) can't be accurately represented in
-        //  inches or pica with two decimals, so point is used instead.
-        case FUNIT_PICA:
-        case FUNIT_INCH:
-        case FUNIT_FOOT:
-        case FUNIT_MILE:
-            eFUnit = FUNIT_POINT;
-            break;
-
-        case FUNIT_CM:
-        case FUNIT_M:
-        case FUNIT_KM:
-            eFUnit = FUNIT_MM;
-            break;
-    }
-    SetFieldUnit( aEdLeftSpace, eFUnit );
-    SetFieldUnit( aEdRightSpace, eFUnit );
-    SetFieldUnit( aEdTopSpace, eFUnit );
-    SetFieldUnit( aEdBottomSpace, eFUnit );
-
-    FillForLockMode();
     FreeResource();
 
-    AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, aEdIndent, FUNIT_TWIP ) );
-    AddItemConnection( new SvxVerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, aLbVerAlign, pVerJustMap ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_LINEBREAK, aBtnWrap ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, maFtHorAlign, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, maLbHorAlign, s_pHorJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_INDENT, maFtIndent, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, maEdIndent, FUNIT_TWIP, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_VER_JUSTIFY, maFtVerAlign, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new VerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, maLbVerAlign, s_pVerJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new DialControlConnection( SID_ATTR_ALIGN_DEGREES, maCtrlDial, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_DEGREES, maFtRotate, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_LOCKPOS, maFtRefEdge, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new RotateModeConnection( SID_ATTR_ALIGN_LOCKPOS, maVsRefEdge, s_pRotateModeMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new OrientStackedConnection( SID_ATTR_ALIGN_STACKED, maOrientHlp ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_STACKED, maCbStacked, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_ASIANVERTICAL, maCbAsianMode, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_LINEBREAK, maBtnWrap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_HYPHENATION, maBtnHyphen, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, maBtnShrink, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, maFtFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, maLbFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
 }
 
-//------------------------------------------------------------------------
-
-SvxAlignmentTabPage::~SvxAlignmentTabPage()
+AlignmentTabPage::~AlignmentTabPage()
 {
 }
 
-// LockMode in WinOrientation initialisieren -----------------------------
-
-void SvxAlignmentTabPage::FillForLockMode()
+SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
-    ResId TmpId( GetBackground().GetColor().IsDark()? IL_LOCK_BMPS_HC : IL_LOCK_BMPS );
-    ImageList   aIlLock( TmpId );
-    Size        aItemSize = aIlLock.GetImage(IID_BOTTOMLOCK).GetSizePixel();
-    Size        aSize;
-
-    ValueSet&   rValSet = aWinOrient.GetVSLockMode();
-
-    rValSet.SetColCount( 3 );
-    rValSet.SetStyle( rValSet.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    aSize = rValSet.CalcWindowSizePixel( aItemSize );
-
-    rValSet.SetSizePixel( aSize );
-    //aWinOrient.GetVSLockMode().SetColCount( 5 );
-    rValSet.InsertItem( 1, aIlLock.GetImage( IID_BOTTOMLOCK ), String( ResId( STR_BOTTOMLOCK ) ) );
-    rValSet.InsertItem( 2, aIlLock.GetImage( IID_TOPLOCK ), String( ResId( STR_TOPLOCK ) ) );
-    rValSet.InsertItem( 3, aIlLock.GetImage( IID_CELLLOCK ),String( ResId( STR_CELLLOCK ) ) );
-    rValSet.SetNoSelection();
-    rValSet.Show();
+    return new AlignmentTabPage( pParent, rAttrSet );
 }
 
-//------------------------------------------------------------------------
-
-void SvxAlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+USHORT* AlignmentTabPage::GetRanges()
 {
-    SfxTabPage::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-    {
-        svt::OLocalResourceAccess   aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
-        aWinOrient.GetVSLockMode().Clear();
-        FillForLockMode();
-
-        aWinOrient.HandleUpdatedSystemsettings();
-    }
+    return s_pRanges;
 }
 
-//------------------------------------------------------------------------
-
-USHORT* SvxAlignmentTabPage::GetRanges()
+void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 {
-    return pRanges;
-}
-
-// -----------------------------------------------------------------------
-
-SfxTabPage* SvxAlignmentTabPage::Create( Window* pParent,
-                                         const SfxItemSet& rAttrSet )
-{
-    return ( new SvxAlignmentTabPage( pParent, rAttrSet ) );
-}
-
-// -----------------------------------------------------------------------
-
-const SfxPoolItem* SvxAlignmentTabPage::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlotId ) const
-{
-    return (rItemSet.GetItemState( GetWhich( nSlotId ), TRUE ) >= SFX_ITEM_DEFAULT) ?
-        GetItem( rItemSet, nSlotId ) : NULL;
-}
-
-void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
-{
-    // automatic item connections
     SfxTabPage::Reset( rCoreAttrs );
-
-    const SfxPoolItem* pItem;
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_HOR_JUSTIFY );
-    if ( pItem )
-    {
-        USHORT nPos = ALIGNDLG_HORALIGN_STD;
-        switch ( (SvxCellHorJustify)
-            ( (const SvxHorJustifyItem*)pItem )->GetValue() )
-        {
-            case SVX_HOR_JUSTIFY_LEFT:      nPos = ALIGNDLG_HORALIGN_LEFT;      break;
-            case SVX_HOR_JUSTIFY_CENTER:    nPos = ALIGNDLG_HORALIGN_CENTER;    break;
-            case SVX_HOR_JUSTIFY_RIGHT:     nPos = ALIGNDLG_HORALIGN_RIGHT;     break;
-            case SVX_HOR_JUSTIFY_BLOCK:     nPos = ALIGNDLG_HORALIGN_BLOCK;     break;
-        }
-        aLbHorAlign.SelectEntryPos( nPos );
-    }
-    else
-        aLbHorAlign.SetNoSelection();
-
-#if 0
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
-    if ( pItem )
-    {
-        // Einzug in Twips -> umrechnen in Point
-        USHORT nVal = (USHORT)( (const SfxUInt16Item*)pItem )->GetValue();
-        nVal /= 20;
-        aEdIndent.SetValue( nVal );
-    }
-    else
-        aEdIndent.SetText( String() );
-#endif
-
-#if 0
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_VER_JUSTIFY );
-    if ( pItem )
-    {
-        USHORT nPos = ALIGNDLG_VERALIGN_STD;
-        switch ( (SvxCellVerJustify)
-                    ( (const SvxVerJustifyItem*)pItem )->GetValue() )
-        {
-            case SVX_VER_JUSTIFY_TOP:       nPos = ALIGNDLG_VERALIGN_TOP;       break;
-            case SVX_VER_JUSTIFY_CENTER:    nPos = ALIGNDLG_VERALIGN_MID;       break;
-            case SVX_VER_JUSTIFY_BOTTOM:    nPos = ALIGNDLG_VERALIGN_BOTTOM;    break;
-        }
-        aLbVerAlign.SelectEntryPos( nPos );
-    }
-    else
-        aLbVerAlign.SetNoSelection();
-#endif
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_ORIENTATION );
-    aWinOrient.SetNoDegrees();
-    if ( pItem )
-    {
-        switch ( (SvxCellOrientation)
-                    ( (const SvxOrientationItem*)pItem )->GetValue() )
-        {
-            case SVX_ORIENTATION_STANDARD:
-                    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_DEGREES );
-                    if(pItem)
-                    {
-                        aWinOrient.SetDegrees(
-                            ((const SfxInt32Item*) pItem)->GetValue()/100);
-                    }
-                    break;
-            case SVX_ORIENTATION_TOPBOTTOM: aWinOrient.SetDegrees(270); break;
-            case SVX_ORIENTATION_STACKED:   aWinOrient.SetStackedTxt(TRUE); break;
-            case SVX_ORIENTATION_BOTTOMTOP: aWinOrient.SetDegrees(90); break;
-            default:                        aWinOrient.SetDegrees(0);
-        };
-    }
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_LOCKPOS );
-    if( pItem )
-    {
-        aWinOrient.SetRotateMode((SvxRotateMode)
-                        ( (const SvxRotateModeItem*)pItem )->GetValue() );
-    }
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_ASIANVERTICAL );
-    if( pItem )
-    {
-        aBtnAsianVert.EnableTriState( FALSE );
-        aBtnAsianVert.SetState( TriState(
-            ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK ) );
-    }
-    else
-    {
-        aBtnAsianVert.EnableTriState();
-        aBtnAsianVert.SetState( TriState( STATE_DONTKNOW ) );
-    }
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_MARGIN );
-    if( pItem )
-    {
-        const SvxMarginItem* pMarginAttr = (const SvxMarginItem*)pItem;
-
-        aEdLeftSpace.SetValue( aEdLeftSpace.Normalize( (long)
-                        (pMarginAttr->GetLeftMargin()) ),
-                        FUNIT_TWIP );
-        aEdRightSpace.SetValue( aEdRightSpace.Normalize( (long)
-                        (pMarginAttr->GetRightMargin()) ),
-                        FUNIT_TWIP );
-        aEdTopSpace.SetValue( aEdTopSpace.Normalize( (long)
-                        (pMarginAttr->GetTopMargin()) ),
-                        FUNIT_TWIP );
-        aEdBottomSpace.SetValue ( aEdBottomSpace.Normalize( (long)
-                        (pMarginAttr->GetBottomMargin()) ),
-                        FUNIT_TWIP );
-    }
-    else // DON'T-KNOW
-    {
-        aEdLeftSpace.SetText    ( String() );
-        aEdRightSpace.SetText   ( String() );
-        aEdTopSpace.SetText     ( String() );
-        aEdBottomSpace.SetText  ( String() );
-    }
-
-#if 0
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_LINEBREAK );
-    if ( pItem )
-    {
-        aBtnWrap.EnableTriState( FALSE );
-        aBtnWrap.SetState( ( (const SfxBoolItem*)pItem )->GetValue()
-                           ? TriState( STATE_CHECK )
-                           : TriState( STATE_NOCHECK ) );
-    }
-    else
-    {
-        aBtnWrap.EnableTriState();
-        aBtnWrap.SetState( TriState( STATE_DONTKNOW ) );
-    }
-#endif
-
-    if (rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_HYPHENATION),TRUE) == SFX_ITEM_UNKNOWN)
-        bHyphenDisabled = TRUE;
-    else
-    {
-        pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_ALIGN_HYPHENATION );
-        if ( pItem )
-        {
-            aBtnHyphen.EnableTriState( FALSE );
-            aBtnHyphen.SetState( ( (const SfxBoolItem*)pItem )->GetValue()
-                               ? TriState( STATE_CHECK )
-                               : TriState( STATE_NOCHECK ) );
-        }
-        else
-        {
-            aBtnHyphen.EnableTriState();
-            aBtnHyphen.SetState( TriState( STATE_DONTKNOW ) );
-        }
-    }
-
-    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_FRAMEDIRECTION );
-    if( pItem )
-    {
-        SvxFrameDirection eDir = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
-        aLbFrameDir.SelectEntryValue( eDir );
-    }
-    else
-        aLbFrameDir.SetNoSelection();
-
-    HorAlignSelectHdl_Impl( NULL );
-
-//    aBtnWrap.SaveValue();  // TriStateButton
+    UpdateEnableControls();
 }
 
-// -----------------------------------------------------------------------
-
-BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+int AlignmentTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    BOOL                bAttrsChanged   = FALSE;
-    const SfxItemSet&   rOldSet         = GetItemSet();
-    USHORT              nWhich;
-    TriState            eState;
-    const SfxPoolItem*  pOld            = 0;
-    bool                bSelected       = false;
-
-    // automatic item connections
-    bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
-
-    // Horizontale Ausrichtung
-    nWhich = GetWhich( SID_ATTR_ALIGN_HOR_JUSTIFY );
-    USHORT nTmp = USHRT_MAX;
-
-    switch( aLbHorAlign.GetSelectEntryPos() )
-    {
-        case ALIGNDLG_HORALIGN_STD:     nTmp = SVX_HOR_JUSTIFY_STANDARD;    break;
-        case ALIGNDLG_HORALIGN_LEFT:    nTmp = SVX_HOR_JUSTIFY_LEFT;        break;
-        case ALIGNDLG_HORALIGN_CENTER:  nTmp = SVX_HOR_JUSTIFY_CENTER;      break;
-        case ALIGNDLG_HORALIGN_RIGHT:   nTmp = SVX_HOR_JUSTIFY_RIGHT;       break;
-        case ALIGNDLG_HORALIGN_BLOCK:   nTmp = SVX_HOR_JUSTIFY_BLOCK;       break;
-    }
-    bSelected = aLbHorAlign.GetSelectEntryCount() > 0;
-    pOld = GetUniqueItem( rOldSet, SID_ATTR_ALIGN_HOR_JUSTIFY );
-
-    DBG_ASSERT( !bSelected || (USHRT_MAX != nTmp) || !aLbHorAlign.IsEnabled(), "no button checked" );
-        // if aLbHorAlign is disabled SetFlags was called with the WBA_NO_HORIZONTAL flag set
-        // 67977 - 30.07.99 - FS
-
-    if ( bSelected && (!pOld || (((const SvxHorJustifyItem*)pOld)->GetValue() != nTmp)) )
-    {
-        rCoreAttrs.Put( SvxHorJustifyItem( (SvxCellHorJustify)nTmp, nWhich ) );
-        bAttrsChanged |= TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-
-#if 0
-    nWhich = GetWhich( SID_ATTR_ALIGN_INDENT );
-    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
-    nTmp = aEdIndent.GetValue() * 20; // Point in twips
-
-    if ( !pOld || ( (const SfxUInt16Item*)pOld )->GetValue() != nTmp )
-    {
-        rCoreAttrs.Put( SfxUInt16Item( nWhich, nTmp ) );
-        bAttrsChanged |= TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-#endif
-
-#if 0
-    // Vertikale Ausrichtung
-    nWhich = GetWhich( SID_ATTR_ALIGN_VER_JUSTIFY );
-    nTmp = USHRT_MAX;
-
-    switch( aLbVerAlign.GetSelectEntryPos() )
-    {
-        case ALIGNDLG_VERALIGN_STD:     nTmp = SVX_VER_JUSTIFY_STANDARD;    break;
-        case ALIGNDLG_VERALIGN_TOP:     nTmp = SVX_VER_JUSTIFY_TOP;         break;
-        case ALIGNDLG_VERALIGN_MID:     nTmp = SVX_VER_JUSTIFY_CENTER;      break;
-        case ALIGNDLG_VERALIGN_BOTTOM:  nTmp = SVX_VER_JUSTIFY_BOTTOM;      break;
-    }
-    bSelected = aLbVerAlign.GetSelectEntryCount() > 0;
-    pOld = GetUniqueItem( rOldSet, SID_ATTR_ALIGN_VER_JUSTIFY );
-
-    DBG_ASSERT( !bSelected || (USHRT_MAX != nTmp) || !aLbVerAlign.IsEnabled(), "no button checked" );
-        // if aLbVerAlign is disabled SetFlags was called with the WBA_NO_VERTICAL flag set
-        // 67977 - 30.07.99 - FS
-
-    if ( bSelected && (!pOld || (((const SvxVerJustifyItem*)pOld )->GetValue() != nTmp)) )
-    {
-        rCoreAttrs.Put( SvxVerJustifyItem( (SvxCellVerJustify)nTmp, nWhich ) );
-        bAttrsChanged |= TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-#endif
-
-    if ( aWinOrient.HasDegrees() )
-    {
-        // Schreibrichtung
-        nWhich = GetWhich( SID_ATTR_ALIGN_ORIENTATION );
-
-        nTmp = SVX_ORIENTATION_STANDARD;
-
-        if ( aWinOrient.IsStackedTxt() )
-            nTmp = SVX_ORIENTATION_STACKED;
-        else if ( aWinOrient.GetDegrees()==90 )
-            nTmp = SVX_ORIENTATION_BOTTOMTOP;
-        else if ( aWinOrient.GetDegrees()==270 )
-            nTmp = SVX_ORIENTATION_TOPBOTTOM;
-
-        pOld = GetUniqueItem( rOldSet, SID_ATTR_ALIGN_ORIENTATION );
-
-        if ( !pOld || ( (const SvxOrientationItem*)pOld )->GetValue() != nTmp )
-        {
-            rCoreAttrs.Put(
-                SvxOrientationItem( (SvxCellOrientation)nTmp, nWhich ) );
-            bAttrsChanged |= TRUE;
-        }
-        else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-            rCoreAttrs.ClearItem( nWhich );
-
-        // Schreibwinkel
-        nWhich = GetWhich( SID_ATTR_ALIGN_DEGREES );
-
-        long nDegrees=aWinOrient.GetDegrees()*100L;
-
-        pOld = GetUniqueItem( rOldSet, SID_ATTR_ALIGN_DEGREES );
-
-        if ( !pOld || ( (const SfxInt32Item*)pOld )->GetValue() != nDegrees )
-        {
-            rCoreAttrs.Put(SfxInt32Item( nWhich,nDegrees) );
-            bAttrsChanged |= TRUE;
-        }
-        else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-            rCoreAttrs.ClearItem( nWhich );
-    }
-
-    // Bezugskante
-
-    nWhich = GetWhich( SID_ATTR_ALIGN_LOCKPOS );
-
-    SvxRotateMode nRotMode=aWinOrient.GetRotateMode();
-
-    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_LOCKPOS );
-
-    if(aWinOrient.IsSelRotateMode())
-    {
-        if ( !pOld ||
-            ((SvxRotateMode)((const SvxRotateModeItem*)pOld )->GetValue()) != nRotMode )
-        {
-            rCoreAttrs.Put(SvxRotateModeItem( nRotMode,nWhich) );
-            bAttrsChanged |= TRUE;
-        }
-        else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-            rCoreAttrs.ClearItem( nWhich );
-    }
-
-    // Asian vertical mode
-    nWhich = GetWhich( SID_ATTR_ALIGN_ASIANVERTICAL );
-    eState = aBtnAsianVert.GetState();
-    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_ASIANVERTICAL );
-
-    if ( !pOld || (((const SfxBoolItem*)pOld )->GetValue() != (eState == STATE_CHECK)) ||
-        (aBtnAsianVert.IsTriStateEnabled() && (eState != STATE_DONTKNOW)) ) // changed from "don't care"
-    {
-        rCoreAttrs.Put( SfxBoolItem( nWhich, (eState == STATE_CHECK) ) );
-        bAttrsChanged = TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-
-    // Abst"ande zum Zellinhalt
-
-    // #106224# all edits empty: do nothing
-    if( aEdLeftSpace.GetText().Len() || aEdRightSpace.GetText().Len() ||
-        aEdTopSpace.GetText().Len() || aEdBottomSpace.GetText().Len() )
-    {
-        nWhich = GetWhich( SID_ATTR_ALIGN_MARGIN );
-        SvxMarginItem aMargin(
-            (INT16)aEdLeftSpace.Denormalize(
-                aEdLeftSpace.GetValue( FUNIT_TWIP ) ),
-            (INT16)aEdTopSpace.Denormalize(
-                aEdTopSpace.GetValue( FUNIT_TWIP ) ),
-            (INT16)aEdRightSpace.Denormalize(
-                aEdRightSpace.GetValue( FUNIT_TWIP ) ),
-            (INT16)aEdBottomSpace.Denormalize(
-                aEdBottomSpace.GetValue( FUNIT_TWIP ) ),
-            nWhich );
-        pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_MARGIN );
-
-        if ( !pOld || !( *(const SvxMarginItem*)pOld == aMargin ) )
-        {
-            rCoreAttrs.Put( aMargin );
-            bAttrsChanged |= TRUE;
-        }
-        else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-            rCoreAttrs.ClearItem( nWhich );
-    }
-
-#if 0
-    // Zeilenumbruch
-    nWhich = GetWhich( SID_ATTR_ALIGN_LINEBREAK );
-    eState = aBtnWrap.GetState();
-    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_LINEBREAK );
-
-    if( !pOld || (((const SfxBoolItem*)pOld )->GetValue() != (eState == STATE_CHECK)) ||
-        (aBtnWrap.IsTriStateEnabled() && (eState != STATE_DONTKNOW)) ) // changed from "don't care"
-    {
-        rCoreAttrs.Put( SfxBoolItem( nWhich, (eState == STATE_CHECK) ) );
-        bAttrsChanged = TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-#endif
-
-    // Hyphenation
-    nWhich = GetWhich( SID_ATTR_ALIGN_HYPHENATION );
-    eState = aBtnHyphen.GetState();
-    pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_HYPHENATION );
-
-    if ( !pOld || (((const SfxBoolItem*)pOld )->GetValue() != (eState == STATE_CHECK)) ||
-        (aBtnHyphen.IsTriStateEnabled() && (eState != STATE_DONTKNOW)) ) // changed from "don't care"
-    {
-        rCoreAttrs.Put( SfxBoolItem( nWhich, (eState == STATE_CHECK) ) );
-        bAttrsChanged = TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-
-    // CTL frame direction
-    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
-    pOld = GetUniqueItem( rOldSet, SID_ATTR_FRAMEDIRECTION );
-    SvxFrameDirection eDir = aLbFrameDir.GetSelectEntryValue();
-    bSelected = aLbFrameDir.GetSelectEntryCount() > 0;
-
-    if( bSelected && (!pOld || (((const SvxFrameDirectionItem*)pOld)->GetValue() != eDir)) )
-    {
-        rCoreAttrs.Put( SvxFrameDirectionItem( eDir, nWhich ) );
-        bAttrsChanged = TRUE;
-    }
-    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
-
-    return bAttrsChanged;
-}
-
-//------------------------------------------------------------------------
-
-int SvxAlignmentTabPage::DeactivatePage( SfxItemSet* pSet )
-{
-    if ( pSet )
+    if( pSet )
         FillItemSet( *pSet );
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxAlignmentTabPage, HorAlignSelectHdl_Impl, ListBox *, EMPTYARG )
+void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    BOOL bChecked = (aLbHorAlign.GetSelectEntryPos() == ALIGNDLG_HORALIGN_LEFT);
-    aFtIndent.Enable( bChecked );
-    aEdIndent.Enable( bChecked );
-    EnableHyphen_Impl();
+    SfxTabPage::DataChanged( rDCEvt );
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        svt::OLocalResourceAccess aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
+        InitVsRefEgde();
+    }
+}
+
+void AlignmentTabPage::InitVsRefEgde()
+{
+    // remember selection - is deleted in call to ValueSet::Clear()
+    USHORT nSel = maVsRefEdge.GetSelectItemId();
+
+    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS );
+    ImageList aImageList( aResId );
+    Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
+
+    maVsRefEdge.Clear();
+    maVsRefEdge.SetStyle( maVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
+
+    maVsRefEdge.SetColCount( 3 );
+    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( ResId( STR_BOTTOMLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( ResId( STR_TOPLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( ResId( STR_CELLLOCK ) ) );
+
+    maVsRefEdge.SetSizePixel( maVsRefEdge.CalcWindowSizePixel( aItemSize ) );
+
+    maVsRefEdge.SelectItem( nSel );
+}
+
+void AlignmentTabPage::UpdateEnableControls()
+{
+    USHORT nHorAlign = maLbHorAlign.GetSelectEntryPos();
+    bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
+    bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
+    bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
+
+    // indent edit field only for left alignment
+    maFtIndent.Enable( bHorLeft );
+    maEdIndent.Enable( bHorLeft );
+
+    // rotation/stacked disabled for fill alignment
+    maOrientHlp.Enable( !bHorFill );
+
+    // hyphenation only for automatic line breaks or for block alignment
+    maBtnHyphen.Enable( maBtnWrap.IsChecked() || bHorBlock );
+
+    // shrink only without automatic line break, and not for block and fill
+    maBtnShrink.Enable( (maBtnWrap.GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill );
+
+    // visibility of fixed lines
+    maFlAlignment.Show( maLbHorAlign.IsVisible() || maEdIndent.IsVisible() || maLbVerAlign.IsVisible() );
+    maFlOrient.Show( maCtrlDial.IsVisible() || maVsRefEdge.IsVisible() || maCbStacked.IsVisible() || maCbAsianMode.IsVisible() );
+    maFlProperties.Show( maBtnWrap.IsVisible() || maBtnHyphen.IsVisible() || maBtnShrink.IsVisible() || maLbFrameDir.IsVisible() );
+}
+
+IMPL_LINK( AlignmentTabPage, UpdateEnableHdl, void*, EMPTYARG )
+{
+    UpdateEnableControls();
     return 0;
 }
 
-//------------------------------------------------------------------------
+// ============================================================================
 
-IMPL_LINK( SvxAlignmentTabPage, WrapClickHdl_Impl, TriStateBox *, EMPTYARG )
-{
-    EnableHyphen_Impl();
-    return 0;
-}
+} // namespace svx
 
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxAlignmentTabPage, TxtStackedClickHdl_Impl, void *, EMPTYARG )
-{
-    aBtnAsianVert.Enable( aWinOrient.IsStackedTxt() );
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-void SvxAlignmentTabPage::EnableHyphen_Impl()
-{
-    BOOL bWrap = (aBtnWrap.GetState() == STATE_CHECK);
-    BOOL bBlock = (aLbHorAlign.GetSelectEntryPos() == ALIGNDLG_HORALIGN_BLOCK);
-    BOOL bEnable = ( ( bWrap || bBlock ) && !bHyphenDisabled );
-    aBtnHyphen.Enable( bEnable );
-}
-
-//------------------------------------------------------------------------
-
-void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
-{
-    /* This method allows to disable specific control groups. */
-
-    if ( ( nFlags & WBA_NO_ORIENTATION ) == WBA_NO_ORIENTATION )
-    {
-        aWinOrient.Disable();
-        aBtnAsianVert.Disable();
-    }
-
-    if ( ( nFlags & WBA_NO_LINEBREAK ) == WBA_NO_LINEBREAK )
-    {
-        aFlWrap.Disable();
-        aBtnWrap.Disable();
-        aFtTextFlow.Disable();
-        aLbFrameDir.Disable();
-    }
-
-    if ( nFlags & ( WBA_NO_LINEBREAK | WBA_NO_HYPHENATION ) )
-    {
-        //  WBA_NO_LINEBREAK also disables hyphenation
-
-        bHyphenDisabled = TRUE;
-        aBtnHyphen.Disable();
-    }
-
-    if ( ( nFlags & WBA_NO_HORIZONTAL ) == WBA_NO_HORIZONTAL )
-    {
-        aFtHorAlign.Disable();
-        aLbHorAlign.Disable();
-        aFtIndent.Disable();
-        aEdIndent.Disable();
-    }
-
-    if ( ( nFlags & WBA_NO_LEFTINDENT ) == WBA_NO_LEFTINDENT )
-    {
-        aFtIndent.Hide();
-        aEdIndent.Hide();
-    }
-
-    if ( ( nFlags & WBA_NO_VERTICAL ) == WBA_NO_VERTICAL )
-    {
-        aFtVerAlign.Disable();
-        aLbVerAlign.Disable();
-    }
-
-    if ( ( nFlags & WBA_NO_GRIDLINES ) == WBA_NO_GRIDLINES )
-    {
-        aFlSpace.Disable();
-        aFtLeftSpace.Disable();
-        aEdLeftSpace.Disable();
-        aFtRightSpace.Disable();
-        aEdRightSpace.Disable();
-        aFtTopSpace.Disable();
-        aEdTopSpace.Disable();
-        aFtBottomSpace.Disable();
-        aEdBottomSpace.Disable();
-    }
-}
-
-void SvxAlignmentTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
-{
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
-    if (pFlagItem)
-        SetFlags(pFlagItem->GetValue());
-}
