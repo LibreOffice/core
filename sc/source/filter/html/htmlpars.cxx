@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:27:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <so3/transbnd.hxx>
-
+#include <sfx2/docfile.hxx>
 
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
