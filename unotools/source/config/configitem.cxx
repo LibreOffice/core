@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-30 10:01:23 $
+ *  last change: $Author: os $ $Date: 2000-11-30 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,15 @@ using namespace com::sun::star::container;
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
+#ifdef DBG_UTIL
+inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, Exception& rEx)
+{
+    OString sMsg(cText);
+    sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
+    OSL_ENSURE(sal_False, sMsg.getStr());
+}
+#endif
+
 namespace utl{
     class ConfigChangeListener_Impl : public cppu::WeakImplHelper1
     <
@@ -194,7 +203,7 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
  ---------------------------------------------------------------------------*/
 void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    OSL_DEBUG_ONLY("ConfigChangeListener_Impl::disposing");
+    OSL_ENSURE(sal_False, "ConfigChangeListener_Impl::disposing");
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
@@ -237,13 +246,9 @@ ConfigItem::~ConfigItem()
             }
             catch(Exception& rEx)
             {
-    #ifdef DBG_UTIL
-                OString sMsg("Exception from commitChanges(): ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
-    #endif
+#ifdef DBG_UTIL
+    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
             }
         }
         RemoveListener();
@@ -255,7 +260,7 @@ ConfigItem::~ConfigItem()
  ---------------------------------------------------------------------------*/
 void    ConfigItem::Commit()
 {
-    OSL_DEBUG_ONLY("Base class called");
+    OSL_ENSURE(sal_False, "Base class called");
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -272,17 +277,13 @@ void    ConfigItem::ReleaseConfigMgr()
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from commitChanges(): ");
-            sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
 #endif
         }
         bHasChangedProperties = sal_False;
     }
     RemoveListener();
-    OSL_ENSHURE(pManager, "ConfigManager already released");
+    OSL_ENSURE(pManager, "ConfigManager already released");
     pManager = 0;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
@@ -300,7 +301,7 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
  ---------------------------------------------------------------------------*/
 void    ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames)
 {
-    OSL_DEBUG_ONLY("Base class called");
+    OSL_ENSURE(sal_False, "Base class called");
 }
 /* -----------------------------29.08.00 15:10--------------------------------
 
@@ -336,7 +337,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 sMsg += OString(pNames[i].getStr(),
                     pNames[i].getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
+                OSL_ENSURE(sal_False, sMsg.getStr());
             }
 #else
             catch(Exception&){}
@@ -387,11 +388,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 #ifdef DBG_UTIL
             catch(Exception& rEx)
             {
-                OString sMsg("Exception from PutProperties: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
+                lcl_CFG_DBG_EXCEPTION("Exception from PutProperties: ", rEx);
             }
 #else
             catch(Exception&){}
@@ -405,11 +402,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from commitChanges(): ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+        lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
 #endif
         }
     }
@@ -482,11 +475,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 #ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-            OString sMsg("Exception from GetNodeNames: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            lcl_CFG_DBG_EXCEPTION("Exception from GetNodeNames: ", rEx);
         }
 #else
         catch(Exception&){}
@@ -527,11 +516,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 catch(Exception& rEx)
                 {
         #ifdef DBG_UTIL
-                    OString sMsg("Exception from commitChanges(): ");
-                    sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                         RTL_TEXTENCODING_ASCII_US);
-                    OSL_DEBUG_ONLY(sMsg.getStr());
+                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
         #endif
                 }
             }
@@ -539,11 +524,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from GetNodeNames: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            lcl_CFG_DBG_EXCEPTION("Exception from ClearNodeSet", rEx);
 #endif
             bRet = sal_False;
         }
@@ -582,23 +563,15 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
             }
             catch(Exception& rEx)
             {
-    #ifdef DBG_UTIL
-                OString sMsg("Exception from commitChanges(): ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
-    #endif
+#ifdef DBG_UTIL
+                lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
             }
         }
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from GetNodeNames: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+        lcl_CFG_DBG_EXCEPTION("Exception from GetNodeNames: ", rEx);
 #endif
             bRet = sal_False;
         }
@@ -627,90 +600,106 @@ sal_Bool ConfigItem::SetSetProperties(
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
-            const PropertyValue* pProperties = rValues.getConstArray();
-            Sequence< OUString > aSubNodeNames(rValues.getLength());
-            OUString* pSubNodeNames = aSubNodeNames.getArray();
-            sal_Int32 nNodeLength = rNode.getLength() + 1;
-            OUString sLastSubNode;
-            sal_Int32 nSubIndex = 0;
-
-            for(sal_Int32 i = 0; i < rValues.getLength(); i++)
-            {
-                OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                if(sSubNode.indexOf('/') >= 0)
-                    sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
-                if(sLastSubNode != sSubNode)
-                {
-                    pSubNodeNames[nSubIndex++] = sSubNode;
-                }
-                sLastSubNode = sSubNode;
-            }
-            aSubNodeNames.realloc(nSubIndex);
-            pSubNodeNames = aSubNodeNames.getArray();
 
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            for(sal_Int32 j = 0; j < nSubIndex; j++)
+            sal_Int32 nNodeLength = rNode.getLength() + 1;
+            if(xFac.is())
             {
-                if(!xCont->hasByName(pSubNodeNames[j]))
+                const PropertyValue* pProperties = rValues.getConstArray();
+                Sequence< OUString > aSubNodeNames(rValues.getLength());
+                OUString* pSubNodeNames = aSubNodeNames.getArray();
+                OUString sLastSubNode;
+                sal_Int32 nSubIndex = 0;
+
+                for(sal_Int32 i = 0; i < rValues.getLength(); i++)
                 {
-                    //create if not available
-                    if(!xFac.is())
-                        return sal_False;
-                    Reference<XInterface> xInst = xFac->createInstance();
-                    Any aVal; aVal <<= xInst;
-                    xCont->insertByName(pSubNodeNames[j], aVal);
-                    //node changes must be commited before values can be changed
+                    OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
+                    if(sSubNode.indexOf('/') >= 0)
+                        sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                    if(sLastSubNode != sSubNode)
+                    {
+                        pSubNodeNames[nSubIndex++] = sSubNode;
+                    }
+                    sLastSubNode = sSubNode;
+                }
+                aSubNodeNames.realloc(nSubIndex);
+                pSubNodeNames = aSubNodeNames.getArray();
+
+                for(sal_Int32 j = 0; j < nSubIndex; j++)
+                {
+                    if(!xCont->hasByName(pSubNodeNames[j]))
+                    {
+                        Reference<XInterface> xInst = xFac->createInstance();
+                        Any aVal; aVal <<= xInst;
+                        xCont->insertByName(pSubNodeNames[j], aVal);
+                        //node changes must be commited before values can be changed
+                        try
+                        {
+                            xBatch->commitChanges();
+                        }
+                        catch(Exception& rEx)
+                        {
+#ifdef DBG_UTIL
+                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
+                        }
+                    }
+                    //set values
+                }
+                Sequence< OUString > aSetNames(rValues.getLength());
+                OUString* pSetNames = aSetNames.getArray();
+                Sequence< Any> aSetValues(rValues.getLength());
+                Any* pSetValues = aSetValues.getArray();
+                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
+                {
+                    pSetNames[k] =  pProperties[k].Name;
+                    pSetValues[k] = pProperties[k].Value;
+                }
+                try
+                {
+                    xBatch->commitChanges();
+                }
+                catch(Exception& rEx)
+                {
+#ifdef DBG_UTIL
+                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
+                }
+                bRet = PutProperties(aSetNames, aSetValues);
+            }
+            else
+            {
+                //if no factory is available then the node contains basic data elements
+                const PropertyValue* pValues = rValues.getConstArray();
+                for(int nValue = 0; nValue < rValues.getLength();nValue++)
+                {
                     try
                     {
+                        OSL_ENSURE(pValues[nValue].Name.getLength() > nNodeLength,"incorrect path");
+                        OUString sSubNode = pValues[nValue].Name.copy(nNodeLength);
+                        OSL_ENSURE(sSubNode.indexOf('/') == -1,     "incorrect path");
+                        if(xCont->hasByName(sSubNode))
+                            xCont->replaceByName(sSubNode, pValues[nValue].Value);
+                        else
+                            xCont->insertByName(sSubNode, pValues[nValue].Value);
+
+                        //node changes must be commited before values can be changed
                         xBatch->commitChanges();
                     }
                     catch(Exception& rEx)
                     {
-            #ifdef DBG_UTIL
-                        OString sMsg("Exception from commitChanges(): ");
-                        sMsg += OString(rEx.Message.getStr(),
-                            rEx.Message.getLength(),
-                             RTL_TEXTENCODING_ASCII_US);
-                        OSL_DEBUG_ONLY(sMsg.getStr());
-            #endif
+#ifdef DBG_UTIL
+                        lcl_CFG_DBG_EXCEPTION("Exception from setSetProperties(): ", rEx);
+#endif
                     }
                 }
-                //set values
             }
-            Sequence< OUString > aSetNames(rValues.getLength());
-            OUString* pSetNames = aSetNames.getArray();
-            Sequence< Any> aSetValues(rValues.getLength());
-            Any* pSetValues = aSetValues.getArray();
-            for(sal_Int32 k = 0; k < rValues.getLength(); k++)
-            {
-                pSetNames[k] =  pProperties[k].Name;
-                pSetValues[k] = pProperties[k].Value;
-            }
-            try
-            {
-                xBatch->commitChanges();
-            }
-            catch(Exception& rEx)
-            {
-    #ifdef DBG_UTIL
-                OString sMsg("Exception from commitChanges(): ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
-    #endif
-            }
-            bRet = PutProperties(aSetNames, aSetValues);
 
         }
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from GetNodeNames: ");
-            sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            lcl_CFG_DBG_EXCEPTION("Exception from SetSetProperties: ", rEx);
 #endif
             bRet = sal_False;
         }
@@ -739,126 +728,157 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
-            const PropertyValue* pProperties = rValues.getConstArray();
-            //remove unknown members first
-
-            Sequence< OUString > aSubNodeNames(rValues.getLength());
-            OUString* pSubNodeNames = aSubNodeNames.getArray();
-            sal_Int32 nNodeLength = rNode.getLength() + 1;
-            OUString sLastSubNode;
-            sal_Int32 nSubIndex = 0;
-
-            for(sal_Int32 i = 0; i < rValues.getLength(); i++)
-            {
-                OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                if(sSubNode.indexOf('/') >= 0)
-                    sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
-                if(sLastSubNode != sSubNode)
-                {
-                    pSubNodeNames[nSubIndex++] = sSubNode;
-                }
-                sLastSubNode = sSubNode;
-            }
-            aSubNodeNames.realloc(nSubIndex);
-            pSubNodeNames = aSubNodeNames.getArray();
-
-            Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
-            const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
-            for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
-            {
-                sal_Bool bFound = sal_False;
-                for(sal_Int32 j = 0; j < nSubIndex; j++)
-                    if(pSubNodeNames[j] == pContainerSubNodes[nContSub])
-                    {
-                        bFound = sal_True;
-                        break;
-                    }
-                if(!bFound)
-                {
-                    xCont->removeByName(pContainerSubNodes[nContSub]);
-                    //node changes must be commited before values can be changed
-                    try
-                    {
-                        xBatch->commitChanges();
-                    }
-                    catch(Exception& rEx)
-                    {
-            #ifdef DBG_UTIL
-                        OString sMsg("Exception from commitChanges(): ");
-                        sMsg += OString(rEx.Message.getStr(),
-                            rEx.Message.getLength(),
-                             RTL_TEXTENCODING_ASCII_US);
-                        OSL_DEBUG_ONLY(sMsg.getStr());
-            #endif
-                    }
-                }
-            }
-
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            for(sal_Int32 j = 0; j < nSubIndex; j++)
+            if(xFac.is())
             {
-                if(!xCont->hasByName(pSubNodeNames[j]))
+                const PropertyValue* pProperties = rValues.getConstArray();
+                //remove unknown members first
+
+                Sequence< OUString > aSubNodeNames(rValues.getLength());
+                OUString* pSubNodeNames = aSubNodeNames.getArray();
+                sal_Int32 nNodeLength = rNode.getLength() + 1;
+                OUString sLastSubNode;
+                sal_Int32 nSubIndex = 0;
+
+                for(sal_Int32 i = 0; i < rValues.getLength(); i++)
                 {
-                    //create if not available
-                    if(!xFac.is())
-                        return sal_False;
-                    Reference<XInterface> xInst = xFac->createInstance();
-                    Any aVal; aVal <<= xInst;
-                    xCont->insertByName(pSubNodeNames[j], aVal);
-                    //node changes must be commited before values can be changed
+                    OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
+                    if(sSubNode.indexOf('/') >= 0)
+                        sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                    if(sLastSubNode != sSubNode)
+                    {
+                        pSubNodeNames[nSubIndex++] = sSubNode;
+                    }
+                    sLastSubNode = sSubNode;
+                }
+                aSubNodeNames.realloc(nSubIndex);
+                pSubNodeNames = aSubNodeNames.getArray();
+
+                Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
+                const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
+                for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
+                {
+                    sal_Bool bFound = sal_False;
+                    for(sal_Int32 j = 0; j < nSubIndex; j++)
+                        if(pSubNodeNames[j] == pContainerSubNodes[nContSub])
+                        {
+                            bFound = sal_True;
+                            break;
+                        }
+                    if(!bFound)
+                    {
+                        xCont->removeByName(pContainerSubNodes[nContSub]);
+                        //node changes must be commited before values can be changed
+                        try
+                        {
+                            xBatch->commitChanges();
+                        }
+                        catch(Exception& rEx)
+                        {
+#ifdef DBG_UTIL
+                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
+                        }
+                    }
+                }
+
+                for(sal_Int32 j = 0; j < nSubIndex; j++)
+                {
+                    if(!xCont->hasByName(pSubNodeNames[j]))
+                    {
+                        //create if not available
+                        Reference<XInterface> xInst = xFac->createInstance();
+                        Any aVal; aVal <<= xInst;
+                        xCont->insertByName(pSubNodeNames[j], aVal);
+                        //node changes must be commited before values can be changed
+                        try
+                        {
+                            xBatch->commitChanges();
+                        }
+                        catch(Exception& rEx)
+                        {
+#ifdef DBG_UTIL
+                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
+                        }
+                    }
+                    //set values
+                }
+                Sequence< OUString > aSetNames(rValues.getLength());
+                OUString* pSetNames = aSetNames.getArray();
+                Sequence< Any> aSetValues(rValues.getLength());
+                Any* pSetValues = aSetValues.getArray();
+                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
+                {
+                    pSetNames[k] =  pProperties[k].Name;
+                    pSetValues[k] = pProperties[k].Value;
+                }
+
+                //node changes must be commited before values can be changed
+                try
+                {
+                    xBatch->commitChanges();
+                }
+                catch(Exception& rEx)
+                {
+#ifdef DBG_UTIL
+                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
+                }
+                bRet = PutProperties(aSetNames, aSetValues);
+            }
+            else
+            {
+                const PropertyValue* pValues = rValues.getConstArray();
+
+                //remove unspecified container elements
+                Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
+                const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
+                for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
+                {
+                    sal_Bool bFound = sal_False;
+                    const OUString& rSubName = pContainerSubNodes[nContSub];
+                    for(int nValue = 0; nValue < rValues.getLength();nValue++)
+                    {
+                        if(pValues[nValue].Name == rSubName)
+                        {
+                            bFound = sal_True;
+                            break;
+                        }
+                    }
+
+                    if(!bFound)
+                        xCont->removeByName(rSubName);
+                }
+
+                //if no factory is available then the node contains basic data elements
+                for(int nValue = 0; nValue < rValues.getLength();nValue++)
+                {
                     try
                     {
+                        OSL_ENSURE(pValues[nValue].Name.indexOf('/') == -1,
+                            "incorrect path");
+                        if(xCont->hasByName(pValues[nValue].Name))
+                            xCont->replaceByName(pValues[nValue].Name, pValues[nValue].Value);
+                        else
+                            xCont->insertByName(pValues[nValue].Name, pValues[nValue].Value);
+
+                        //node changes must be commited before values can be changed
                         xBatch->commitChanges();
                     }
                     catch(Exception& rEx)
                     {
-            #ifdef DBG_UTIL
-                        OString sMsg("Exception from commitChanges(): ");
-                        sMsg += OString(rEx.Message.getStr(),
-                            rEx.Message.getLength(),
-                             RTL_TEXTENCODING_ASCII_US);
-                        OSL_DEBUG_ONLY(sMsg.getStr());
-            #endif
+#ifdef DBG_UTIL
+                        lcl_CFG_DBG_EXCEPTION("Exception from setSetProperties(): ", rEx);
+#endif
                     }
                 }
-                //set values
             }
-            Sequence< OUString > aSetNames(rValues.getLength());
-            OUString* pSetNames = aSetNames.getArray();
-            Sequence< Any> aSetValues(rValues.getLength());
-            Any* pSetValues = aSetValues.getArray();
-            for(sal_Int32 k = 0; k < rValues.getLength(); k++)
-            {
-                pSetNames[k] =  pProperties[k].Name;
-                pSetValues[k] = pProperties[k].Value;
-            }
-
-            //node changes must be commited before values can be changed
-            try
-            {
-                xBatch->commitChanges();
-            }
-            catch(Exception& rEx)
-            {
-    #ifdef DBG_UTIL
-                OString sMsg("Exception from commitChanges(): ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-                OSL_DEBUG_ONLY(sMsg.getStr());
-    #endif
-            }
-            bRet = PutProperties(aSetNames, aSetValues);
-
         }
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            OString sMsg("Exception from GetNodeNames: ");
-                sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            lcl_CFG_DBG_EXCEPTION("ReplaceSetProperties", rEx);
 #endif
             bRet = sal_False;
         }
