@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpinEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:10 $
+ *  last change: $Author: tbe $ $Date: 2002-09-24 15:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::SpinEvent
 /** specifies a spin button event.
  */
 struct SpinEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SpinEvent::dummy1
-    /** This is dummy field only. Ignore.
+    /** This is a dummy field only. Please ignore.
      */
     short dummy1;
 
@@ -90,24 +88,4 @@ struct SpinEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:05  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:51  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:13  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif
