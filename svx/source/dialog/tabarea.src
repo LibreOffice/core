@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:45:59 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ chinese_traditional ] = "透明模式";
         Text[ turkish ] = "Transparency mode";
         Text[ arabic ] = "Transparency mode";
-        Text[ catalan ] = "Transparency mode";
+        Text[ catalan ] = "Mode transpar�ncia";
         Text[ thai ] = "โหมดโปร่งแสง";
     };
     RadioButton RBT_TRANS_OFF
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Saydam de�il";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ei l�pikuultavuutta";
-        Text[ catalan ] = "~Sin transparencia";
+        Text[ catalan ] = "~Sense transpar�ncia";
         Text[ thai ] = "ไ~ม่โปร่งแสง";
     };
     RadioButton RBT_TRANS_LINEAR
@@ -158,7 +158,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ chinese_traditional ] = "透明(~T)";
         Text[ turkish ] = "~Do�rusal saydaml�k";
         Text[ arabic ] = "������ ����";
-        Text[ catalan ] = "~Transparencia lineal";
+        Text[ catalan ] = "~Transpar�ncia lineal";
         Text[ thai ] = "โ~ปร่งแสง";
     };
     MetricField MTR_TRANSPARENT
@@ -201,7 +201,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ chinese_traditional ] = "透明圖案";
         Text[ turkish ] = "~Saydaml�k ge�isi";
         Text[ arabic ] = "���� ��������";
-        Text[ catalan ] = "~Gradiente transparencia";
+        Text[ catalan ] = "~Gradient transpar�ncia";
         Text[ thai ] = "ไล่ระดับสี";
     };
     FixedText FT_TRGR_TYPE
@@ -230,7 +230,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Tip";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Tyyp~pi";
-        Text[ catalan ] = "Ti~po";
+        Text[ catalan ] = "Ti~pus";
         Text[ thai ] = "ชนิ~ด";
     };
     ListBox LB_TRGR_GRADIENT_TYPES
@@ -444,7 +444,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
             < "Axial" ; Default ; > ;
             < "Radial" ; Default ; > ;
             < "Elipsoide" ; Default ; > ;
-            < "Cuadrado" ; Default ; > ;
+            < "Quadrat" ; Default ; > ;
             < "Rectangular" ; Default ; > ;
         };
     StringList [ thai ] =
@@ -483,7 +483,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~X kayd�r";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski~X";
-        Text[ catalan ] = "Centro ~X";
+        Text[ catalan ] = "Centre ~X";
         Text[ thai ] = "ศูนย์กลาง ~X";
     };
     MetricField MTR_TRGR_CENTER_X
@@ -527,7 +527,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Y kayd�r";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski~Y";
-        Text[ catalan ] = "Centro ~Y";
+        Text[ catalan ] = "Centre ~Y";
         Text[ thai ] = "ศูนย์กลาง ~Y";
     };
     MetricField MTR_TRGR_CENTER_Y
@@ -571,7 +571,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~A��";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kulma";
-        Text[ catalan ] = "~Angulo";
+        Text[ catalan ] = "~Angle";
         Text[ thai ] = "~มุม";
     };
     MetricField MTR_TRGR_ANGLE
@@ -607,7 +607,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ arabic ] = "����";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ finnish ] = " asteet";
-        CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " องศา";
     };
     FixedText FT_TRGR_BORDER
@@ -635,7 +635,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ arabic ] = "����";
         Text[ turkish ] = "~Kenar";
         Text[ finnish ] = "~Reuna";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "~Vores";
         Text[ thai ] = "เ~ส้นขอบ";
     };
     MetricField MTR_TRGR_BORDER
@@ -678,7 +678,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ arabic ] = "���� �����";
         Text[ turkish ] = "~Ba�lang�� de�eri";
         Text[ finnish ] = "~Aloitusarvo";
-        Text[ catalan ] = "~Valor inicial";
+        Text[ catalan ] = "Valor ~inicial";
         Text[ thai ] = "ค่าเ~ริ่ม";
     };
     MetricField MTR_TRGR_START_VALUE
@@ -721,7 +721,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ arabic ] = "���� �������";
         Text[ turkish ] = "~Son de�er";
         Text[ finnish ] = "~Lopetusarvo";
-        Text[ catalan ] = "~Valor final";
+        Text[ catalan ] = "Valor ~final";
         Text[ thai ] = "ค่า~สิ้นสุด";
     };
     MetricField MTR_TRGR_END_VALUE
@@ -770,7 +770,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     Text[ arabic ] = "��������";
     Text[ turkish ] = "Saydaml�k";
     Text[ finnish ] = "L�pikuultavuus";
-    Text[ catalan ] = "Transparencia";
+    Text[ catalan ] = "Transpar�ncia";
     Text[ thai ] = "โปร่งแสง";
 };
 
@@ -803,7 +803,7 @@ TabPage RID_SVXPAGE_AREA
     Text[ korean ] = "개체 채우기";
     Text[ turkish ] = "Y�zey";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Relleno";
+    Text[ catalan ] = "Ompliment";
 
     FixedLine FL_PROP
     {
@@ -830,7 +830,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "充填";
         Text[ turkish ] = "Fill";
         Text[ arabic ] = "Fill";
-        Text[ catalan ] = "Fill";
+        Text[ catalan ] = "Omple";
         Text[ thai ] = "เติม";
     };
     RadioButton RBT_FILL_OFF
@@ -858,7 +858,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "無充填";
         Text[ turkish ] = "No Fill";
         Text[ arabic ] = "No Fill";
-        Text[ catalan ] = "No Fill";
+        Text[ catalan ] = "No omplis";
         Text[ thai ] = "ไม่มี";
     };
     RadioButton RBT_COLOR
@@ -915,7 +915,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "彩色圖案";
         Text[ turkish ] = "Grad~yan";
         Text[ arabic ] = "���� �����";
-        Text[ catalan ] = "~Gradiente";
+        Text[ catalan ] = "~Gradient";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "ไล่ระดับสี";
     };
@@ -944,7 +944,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "陰影線";
         Text[ turkish ] = "Hatching";
         Text[ arabic ] = "Hatching";
-        Text[ catalan ] = "Hatching";
+        Text[ catalan ] = "Trama";
         Text[ thai ] = "แรเงา";
     };
     RadioButton RBT_BITMAP
@@ -972,7 +972,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "點陣圖";
         Text[ turkish ] = "B~it e�lem";
         Text[ arabic ] = "���� �����";
-        Text[ catalan ] = "Bit~map";
+        Text[ catalan ] = "~Mapa de bits";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "บิทแม็ป";
     };
@@ -1049,7 +1049,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Ad�m";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lis�ykset";
-        Text[ catalan ] = "Incremento";
+        Text[ catalan ] = "Increment";
         Text[ thai ] = "ส่วนเพิ่ม";
     };
     TriStateBox TSB_STEPCOUNT
@@ -1079,7 +1079,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "~otomatik";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "A~utomaattinen";
-        Text[ catalan ] = "Autom�tic";
+        Text[ catalan ] = "~Autom�tic";
         Text[ thai ] = "อั~ตโนมัติ";
     };
     NumericField NUM_FLD_STEPCOUNT
@@ -1126,7 +1126,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Artalan ~rengi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Taustav�ri";
-        Text[ catalan ] = "Color de ~fondo";
+        Text[ catalan ] = "Color de ~fons";
         Text[ thai ] = "สี~พื้นหลัง";
     };
     ListBox LB_HATCHBCKGRDCOLOR
@@ -1167,7 +1167,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Boyutlar";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Koko";
-        Text[ catalan ] = "Tama�o";
+        Text[ catalan ] = "Mida";
         Text[ thai ] = "ขนาด";
     };
     TriStateBox TSB_ORIGINAL
@@ -1197,7 +1197,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "~As�l";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Alkuper�inen";
-        Text[ catalan ] = "Ori~ginal";
+        Text[ catalan ] = "~Original";
         Text[ thai ] = "~ต้นฉบับ";
     };
     TriStateBox TSB_SCALE
@@ -1227,7 +1227,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "G�re~celi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Suhteellinen";
-        Text[ catalan ] = "Rel~ativo";
+        Text[ catalan ] = "Re~latiu";
         Text[ thai ] = "สัม~พัทธ์";
     };
     FixedText FT_X_SIZE
@@ -1256,7 +1256,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "~Geni�lik";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Le~veys";
-        Text[ catalan ] = "A~ncho";
+        Text[ catalan ] = "Ampla~da";
         Text[ thai ] = "ความก~ว้าง";
     };
     MetricField MTR_FLD_X_SIZE
@@ -1351,7 +1351,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Sijainti";
-        Text[ catalan ] = "Posici�n";
+        Text[ catalan ] = "Posici�";
         Text[ thai ] = "ตำแหน่ง";
     };
 
@@ -1477,7 +1477,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "~D��e";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vierekk�in";
-        Text[ catalan ] = "A~zulejar";
+        Text[ catalan ] = "~Mosaic";
         Text[ thai ] = "~ซ้อนทับ";
     };
     TriStateBox TSB_STRETCH
@@ -1507,7 +1507,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "~Boyuta uydur";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Automaattinen sovitus";
-        Text[ catalan ] = "Aju~star";
+        Text[ catalan ] = "Aju~sta";
         Text[ thai ] = "~พอดีอัตโนมัติ";
     };
     FixedLine FL_OFFSET
@@ -1536,7 +1536,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Kayd�rma";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Siirtym�";
-        Text[ catalan ] = "Desplazamiento";
+        Text[ catalan ] = "Despla�ament";
         Text[ thai ] = "ออฟเซต";
     };
     RadioButton RBT_ROW
@@ -1594,7 +1594,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "S~�tun";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarake";
-        Text[ catalan ] = "~Columna";
+        Text[ catalan ] = "Colu~mna";
         Text[ thai ] = "คอลั~มน์";
     };
     MetricField MTR_FLD_OFFSET
@@ -1642,7 +1642,7 @@ TabPage RID_SVXPAGE_SHADOW
     Text[ turkish ] = "G�lge";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Varjo ";
-    Text[ catalan ] = "Sombra";
+    Text[ catalan ] = "Ombra";
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -1668,7 +1668,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
         Text[ thai ] = "คุณสมบัติ";
     };
     TriStateBox TSB_SHOW_SHADOW
@@ -1697,7 +1697,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ chinese_traditional ] = "使用陰影(~U)";
         Text[ turkish ] = "~g�r�nt�le";
         Text[ arabic ] = "�����";
-        Text[ catalan ] = "~Mostrar";
+        Text[ catalan ] = "A~ctivat";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "ใ~ช้เงา";
     };
@@ -1726,7 +1726,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ chinese_traditional ] = "對齊(~P)";
         Text[ turkish ] = "Konum";
         Text[ arabic ] = "������";
-        Text[ catalan ] = "Posici�n";
+        Text[ catalan ] = "Posici�";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "~ตำแหน่ง";
     };
@@ -1763,7 +1763,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ chinese_traditional ] = "間隔(~D)";
         Text[ turkish ] = "~Uzakl�k";
         Text[ arabic ] = "�����";
-        Text[ catalan ] = "~Distancia";
+        Text[ catalan ] = "~Dist�ncia";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "~ระยะ";
     };
@@ -1820,7 +1820,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ korean ] = "색(~C)";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~lor";
+        Text[ catalan ] = "~Color";
         Text[ thai ] = "~สี";
     };
     FixedText FT_TRANSPARENT
@@ -1848,7 +1848,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ chinese_traditional ] = "透明(~T)";
         Text[ turkish ] = "~Saydaml�k";
         Text[ arabic ] = "������";
-        Text[ catalan ] = "Tran~sparencia";
+        Text[ catalan ] = "Tran~spar�ncia";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "ความเ~ข้มของสี";
     };
@@ -1920,7 +1920,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
         Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_LINE_DISTANCE
@@ -1950,7 +1950,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "간격(~S)";
         Text[ turkish ] = "~Aral�k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "E~spacio";
+        Text[ catalan ] = "E~spaiat";
         Text[ thai ] = "~ระยะห่าง";
     };
     MetricField MTR_FLD_DISTANCE
@@ -1996,7 +1996,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "각도(~N)";
         Text[ turkish ] = "A~��";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ngulo";
+        Text[ catalan ] = "A~ngle";
         Text[ thai ] = "~มุม";
     };
     MetricField MTR_FLD_ANGLE
@@ -2034,7 +2034,7 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText[ korean ] = "도";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " องศา";
     };
     Control CTL_ANGLE
@@ -2072,7 +2072,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "선 유형(~L)";
         Text[ turkish ] = "�iz~gi tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de ~l�nea";
+        Text[ catalan ] = "Tipus de ~l�nia";
         Text[ thai ] = "ชนิดของเ~ส้น";
     };
     ListBox LB_LINE_TYPE
@@ -2222,8 +2222,8 @@ TabPage RID_SVXPAGE_HATCH
     };
     StringList [ catalan ] =
     {
-            < "Sencillo" ; Default ; > ;
-        < "Cruzado" ; Default ; > ;
+            < "Senzill" ; Default ; > ;
+        < "Encreuat" ; Default ; > ;
         < "Triple" ; Default ; > ;
     };
     StringList [ thai ] =
@@ -2260,7 +2260,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "선 색상(~C)";
         Text[ turkish ] = "�izgi ~rengi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Color de l�nea";
+        Text[ catalan ] = "~Color de l�nia";
         Text[ thai ] = "~สีของเส้น";
     };
     ListBox LB_LINE_COLOR
@@ -2313,7 +2313,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "추가(~A)...";
         Text[ turkish ] = "E~kle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~�adir...";
+        Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
@@ -2344,7 +2344,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "수정(~M)...";
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar...";
+        Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_DELETE
@@ -2375,7 +2375,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ korean ] = "삭제(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
@@ -2422,7 +2422,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tarama tablosu y�kle";
-        QuickHelpText[ catalan ] = "Cargar tabla de tramas";
+        QuickHelpText[ catalan ] = "Carrega la taula de trames";
         QuickHelpText[ thai ] = "Load Hatches List";
     };
     ImageButton BTN_SAVE
@@ -2469,7 +2469,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tarama tablosunu kaydet";
-        QuickHelpText[ catalan ] = "Guardar tabla de tramas";
+        QuickHelpText[ catalan ] = "Desa la taula de trames";
         QuickHelpText[ thai ] = "Save Hatches List";
     };
     Text[ chinese_simplified ] = "阴影线";
@@ -2482,7 +2482,7 @@ TabPage RID_SVXPAGE_HATCH
     Text[ korean ] = "해칭";
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tramas";
+    Text[ catalan ] = "Ombreig";
     Text[ thai ] = "ขีด";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
@@ -2529,7 +2529,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
         Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_PIXEL_EDIT
@@ -2557,7 +2557,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ chinese_traditional ] = "編輯圖案";
         Text[ turkish ] = "Pattern Edit";
         Text[ arabic ] = "Pattern Edit";
-        Text[ catalan ] = "Pattern Edit";
+        Text[ catalan ] = "Edici� de patrons";
         Text[ thai ] = "ตัวแก้ไขลวดลาย";
     };
     Control CTL_PIXEL
@@ -2592,7 +2592,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ chinese_traditional ] = "前景顏色(~F)";
         Text[ turkish ] = "~�nalan";
         Text[ arabic ] = "��������";
-        Text[ catalan ] = "~Primer plano";
+        Text[ catalan ] = "P~rimer pla";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "สีพื้น~หน้า";
     };
@@ -2630,7 +2630,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ chinese_traditional ] = "背景顏色(~B)";
         Text[ turkish ] = "A~rtalan";
         Text[ arabic ] = "�������";
-        Text[ catalan ] = "~Fondo";
+        Text[ catalan ] = "~Fons";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "สี~พื้นหลัง";
     };
@@ -2684,7 +2684,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ korean ] = "추가(~A)...";
         Text[ turkish ] = "~Ekle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir...";
+        Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
@@ -2715,7 +2715,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ korean ] = "변경(~M)...";
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar...";
+        Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_IMPORT
@@ -2746,7 +2746,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ korean ] = "가져오기(~I)...";
         Text[ turkish ] = "�~�e aktar...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Importar...";
+        Text[ catalan ] = "~Importa...";
         Text[ thai ] = "~นำเข้า...";
     };
     PushButton BTN_DELETE
@@ -2777,7 +2777,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ korean ] = "삭제(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
@@ -2821,7 +2821,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ korean ] = "비트맵 목록 로드";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bitmaptabelle laden";
-        QuickHelpText[ catalan ] = "Cargar tabla de bitmaps";
+        QuickHelpText[ catalan ] = "Carrega la taula de mapes de bits";
         QuickHelpText[ thai ] = "Load Bitmap List";
     };
     ImageButton BTN_SAVE
@@ -2865,7 +2865,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ korean ] = "비트맵 목록 저장";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bitmaptabelle sichern";
-        QuickHelpText[ catalan ] = "Guardar tabla de bitmaps";
+        QuickHelpText[ catalan ] = "Desa la taula de mapes de bits";
         QuickHelpText[ thai ] = "Save Bitmap List";
     };
     Text[ chinese_simplified ] = "位图图案";
@@ -2878,7 +2878,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text[ korean ] = "비트맵 패턴";
     Text[ turkish ] = "Bit e�lem";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modelos de bitmap";
+    Text[ catalan ] = "Patrons de mapa de bits";
     Text[ thai ] = "ลวดลายบิทแม็ป";
 };
  // RID_SVXPAGE_GRADIENT -----------------------------------------------------
@@ -2925,7 +2925,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
         Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_TYPE
@@ -2955,7 +2955,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "유형(~P)";
         Text[ turkish ] = "~Tip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ti~po";
+        Text[ catalan ] = "Ti~pus";
         Text[ thai ] = "ชนิ~ด";
     };
     ListBox LB_GRADIENT_TYPES
@@ -3178,7 +3178,7 @@ TabPage RID_SVXPAGE_GRADIENT
         < "Axial" ; Default ; > ;
         < "Radial" ; Default ; > ;
         < "Elipsoide" ; Default ; > ;
-        < "Cuadrado" ; Default ; > ;
+        < "Quadrat" ; Default ; > ;
         < "Rectangular" ; Default ; > ;
     };
     StringList [ thai ] =
@@ -3218,7 +3218,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "중앙 ~X";
         Text[ turkish ] = "~X kayd�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Centro ~X";
+        Text[ catalan ] = "Centre ~X";
         Text[ thai ] = "ศูนย์กลาง ~X";
     };
     MetricField MTR_CENTER_X
@@ -3263,7 +3263,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "중앙 ~Y";
         Text[ turkish ] = "~Y kayd�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Centro ~Y";
+        Text[ catalan ] = "Centre ~Y";
         Text[ thai ] = "ศูนย์กลาง ~Y";
     };
     MetricField MTR_CENTER_Y
@@ -3308,7 +3308,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "각도(~N)";
         Text[ turkish ] = "A~��";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "�n~gulo";
+        Text[ catalan ] = "A~ngle";
         Text[ thai ] = "~มุม";
     };
     MetricField MTR_ANGLE
@@ -3346,7 +3346,7 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText[ korean ] = "도";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " องศา";
     };
     FixedText FT_BORDER
@@ -3376,7 +3376,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "여백(~B)";
         Text[ turkish ] = "~Kenar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "~Vores";
         Text[ thai ] = "เ~ส้นขอบ";
     };
     MetricField MTR_BORDER
@@ -3421,7 +3421,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ greek ] = "���";
         Text[ korean ] = "시작(~F)";
         Text[ turkish ] = "~�lk";
-        Text[ catalan ] = "~De";
+        Text[ catalan ] = "~Des de";
         Text[ thai ] = "~จาก";
     };
     ListBox LB_COLOR_FROM
@@ -3543,7 +3543,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "추가(~A)...";
         Text[ turkish ] = "E~kle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A�ad~ir...";
+        Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
@@ -3574,7 +3574,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "수정(~M)...";
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar...";
+        Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_DELETE
@@ -3605,7 +3605,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "삭제(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
@@ -3649,7 +3649,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ korean ] = "경사도 목록 로드";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle laden";
-        QuickHelpText[ catalan ] = "Cargar tabla de gradientes";
+        QuickHelpText[ catalan ] = "Carrega la taula de gradients";
         QuickHelpText[ thai ] = "Load Gradients List";
     };
     ImageButton BTN_SAVE
@@ -3693,7 +3693,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ korean ] = "경사도 목록 저장";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle sichern";
-        QuickHelpText[ catalan ] = "Guardar tabla de gradientes";
+        QuickHelpText[ catalan ] = "Desa la taula de gradients";
         QuickHelpText[ thai ] = "Save Gradients List";
     };
     Text[ chinese_simplified ] = "彩色图案";
@@ -3706,7 +3706,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text[ korean ] = "그라디언트";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gradientes de color";
+    Text[ catalan ] = "Gradacions";
     Text[ thai ] = "ไล่ระดับสี";
 };
  // RID_SVXPAGE_COLOR --------------------------------------------------------
@@ -3754,7 +3754,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
         Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_NAME
@@ -3784,7 +3784,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "이름(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ thai ] = "~ชื่อ";
     };
     Edit EDT_NAME
@@ -3821,7 +3821,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "색(~O)";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~lor";
+        Text[ catalan ] = "C~olor";
         Text[ thai ] = "~สี";
     };
     ListBox LB_COLOR
@@ -3861,7 +3861,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "색상표";
         Text[ turkish ] = "Renk tablosu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Color table";
+        Text[ catalan ] = "Taula de colors";
         Text[ thai ] = "ตารางสี";
     };
     Control CTL_COLORTABLE
@@ -4112,7 +4112,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "추가(~A)";
         Text[ turkish ] = "E~kle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir";
+        Text[ catalan ] = "~Afegeix";
         Text[ thai ] = "เ~พิ่ม";
     };
     PushButton BTN_WORK_ON
@@ -4143,7 +4143,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "편집(~E)...";
         Text[ turkish ] = "D~�zenle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "E~ditar...";
+        Text[ catalan ] = "~Edita...";
         Text[ thai ] = "แ~ก้ไข...";
     };
     PushButton BTN_DELETE
@@ -4174,7 +4174,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "삭제(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ลบ...";
     };
     PushButton BTN_MODIFY
@@ -4205,7 +4205,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ korean ] = "수정(~M)";
         Text[ turkish ] = "~De�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M~odificar";
+        Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     ImageButton BTN_LOAD
@@ -4249,7 +4249,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ korean ] = "색상 목록 琯?";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtabelle laden";
-        QuickHelpText[ catalan ] = "Cargar tabla de colores";
+        QuickHelpText[ catalan ] = "Carrega la taula de colors";
         QuickHelpText[ thai ] = "Load Color List";
     };
     ImageButton BTN_SAVE
@@ -4293,7 +4293,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ korean ] = "색상 목록 저장";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtabelle sichern";
-        QuickHelpText[ catalan ] = "Guardar tabla de colores";
+        QuickHelpText[ catalan ] = "Desa la taula de colors";
         QuickHelpText[ thai ] = "Save Color List";
     };
     Text[ chinese_simplified ] = "颜色";
@@ -4306,7 +4306,7 @@ TabPage RID_SVXPAGE_COLOR
     Text[ korean ] = "색상";
     Text[ turkish ] = "Renkler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Colores";
+    Text[ catalan ] = "Colors";
     Text[ thai ] = "สี";
 };
  // RID_SVXDLG_AREA ----------------------------------------------------------
@@ -4362,7 +4362,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ korean ] = "면";
                 Text[ turkish ] = "Y�zey";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Relleno";
+                Text[ catalan ] = "Omplement";
                 Text[ thai ] = "พื้นที่";
             };
             PageItem
@@ -4391,7 +4391,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "G�lge";
                 Text[ language_user1 ] = " ";
                 Text[ finnish ] = "Varjo ";
-                Text[ catalan ] = "Sombra";
+                Text[ catalan ] = "Ombra";
                 Text[ thai ] = "เงา";
             };
             PageItem
@@ -4418,7 +4418,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ arabic ] = "��������";
                 Text[ turkish ] = "Saydaml�k";
                 Text[ finnish ] = "L�pikuultavuus";
-                Text[ catalan ] = "Transparencia";
+                Text[ catalan ] = "Transpar�ncia";
                 Text[ thai ] = "โปร่งแสง";
             };
             PageItem
@@ -4448,7 +4448,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ korean ] = "색상";
                 Text[ turkish ] = "Renkler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Colores";
+                Text[ catalan ] = "Colors";
                 Text[ thai ] = "สี";
             };
             PageItem
@@ -4478,7 +4478,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ korean ] = "그라디언트";
                 Text[ turkish ] = "Gradyan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Gradientes";
+                Text[ catalan ] = "Gradacions";
                 Text[ thai ] = "ไล่ระดับสี";
             };
             PageItem
@@ -4508,7 +4508,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ korean ] = "해칭";
                 Text[ turkish ] = "Tarama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tramas";
+                Text[ catalan ] = "Ombreig";
                 Text[ thai ] = "แรเงา";
             };
             PageItem
@@ -4538,7 +4538,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ korean ] = "비트맵 패턴";
                 Text[ turkish ] = "Bit e�lem";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modelos de bitmap";
+                Text[ catalan ] = "Mapes de bits";
                 Text[ thai ] = "บิทแม็ป";
             };
         };
@@ -4553,7 +4553,7 @@ TabDialog RID_SVXDLG_AREA
     Text[ korean ] = "면";
     Text[ turkish ] = "Y�zey";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Relleno";
+    Text[ catalan ] = "Omplement";
     Text[ thai ] = "พื้นที่";
 };
 
