@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2342,11 +2342,11 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CONNECTION),            WID_CONNECTION,             CPPU_E2T(CPPUTYPE_REFCONNECTION), PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_MODEL),                 WID_MODEL,                  CPPU_E2T(CPPUTYPE_REFMODEL),    PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_DATA_SOURCE_NAME),      WID_DATA_SOURCE_NAME,       CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
-                    { SW_PROP_NMID(UNO_NAME_DATA_COMMAND),          WID_DATA_COMMAND,           CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_DAD_COMMAND),           WID_DATA_COMMAND,           CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_FILTER),                WID_FILTER,                 CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_DOCUMENT_URL),          WID_DOCUMENT_URL,           CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_OUTPUT_URL),            WID_OUTPUT_URL,             CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
-                    { SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE),     WID_DATA_COMMAND_TYPE,      CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_DAD_COMMAND_TYPE),      WID_DATA_COMMAND_TYPE,      CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_OUTPUT_TYPE),           WID_OUTPUT_TYPE,            CPPU_E2T(CPPUTYPE_INT16),       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_ESCAPE_PROCESSING),     WID_ESCAPE_PROCESSING,      CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_SINGLE_PRINT_JOBS),     WID_SINGLE_PRINT_JOBS,      CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
