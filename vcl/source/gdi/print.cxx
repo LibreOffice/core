@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-29 15:00:31 $
+ *  last change: $Author: pl $ $Date: 2001-11-02 11:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ using namespace com::sun::star::lang;
 #ifdef DO_TAB_CHECK
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 using namespace com::sun::star::beans;
 
 static const char* pHead = "StarOffice 6.0";
@@ -183,8 +184,12 @@ static void doTab( Printer* pPrinter )
 {
     static bool bChecked    = false;
     static bool bDoTab      = true;
+    static ::std::list<String> aLines;
     if( ! bChecked )
     {
+        bChecked = true;
+        for( int i = 0; i < sizeof(pLines)/sizeof(pLines[0]); i++ )
+            aLines.push_back( String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 ) );
         try
         {
             Reference< XMultiServiceFactory > xFac( ::comphelper::getProcessServiceFactory() );
@@ -194,9 +199,20 @@ static void doTab( Printer* pPrinter )
                 if( xHolder.is() )
                 {
                     Any aMaterial( xHolder->getMaterial() );
-                    sal_Bool bIs = sal_False;
-                    aMaterial >>= bIs;
-                    bDoTab = ! bIs;
+                    aLines.clear();
+                    bDoTab = aMaterial.hasValue();
+                    if( bDoTab )
+                    {
+                        Sequence< NamedValue > aSeq;
+                        aMaterial >>= aSeq;
+                        for( int i = 0; i < aSeq.getLength(); i++ )
+                        {
+                            ::rtl::OUString aLine;
+                            aSeq[i].Value >>= aLine;
+                            if( aLine.getLength() )
+                                aLines.push_back( aLine );
+                        }
+                    }
                 }
             }
         }
@@ -233,14 +249,14 @@ static void doTab( Printer* pPrinter )
 
         pPrinter->SetFont( aNormalFont );
         int nNormHeigth = pPrinter->GetTextHeight();
-        for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
+        ::std::list<String>::const_iterator it;
+        for( it = aLines.begin(); it != aLines.end(); ++it )
         {
-            String aLine = String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
-            w = pPrinter->GetTextWidth( aLine );
+            w = pPrinter->GetTextWidth( *it );
             nWidth = w > nWidth ? w : nWidth;
         }
         nWidth += 100;
-        nHeight += nNormHeigth * (sizeof(pLines)/sizeof( pLines[0] ) + 1);
+        nHeight += nNormHeigth * (aLines.size() + 1);
 
         Point aTopLeft( aPaperSize.Width() - nWidth - 50,
                         aPaperSize.Height() - nHeight - 50 );
@@ -250,12 +266,11 @@ static void doTab( Printer* pPrinter )
         pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + nHeight - (3*nBigHeight/2) ),
                             Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + nHeight - (3*nBigHeight/2) ) );
 
-        int nY = aTopLeft.Y() + (nHeight-nNormHeigth*sizeof(pLines)/sizeof(pLines[0]))/2;
-        for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
+        int nY = aTopLeft.Y() + (nHeight-nNormHeigth*aLines.size())/2;
+        for( it = aLines.begin(); it != aLines.end(); ++it )
         {
-            String aLine = String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
-            w = pPrinter->GetTextWidth( aLine );
-            pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, nY ), aLine );
+            w = pPrinter->GetTextWidth( *it );
+            pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, nY ), *it );
             nY += nNormHeigth;
         }
         pPrinter->SetFont( aBigBoldFont );
@@ -2147,7 +2162,8 @@ BOOL Printer::EndPage()
         return FALSE;
 
 #ifdef DO_TAB_CHECK
-    doTab( this );
+    if( mpPrinter )
+        doTab( this );
 #endif
 
     mbInPrintPage = FALSE;
