@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#include <tools/urlobj.hxx>
 #pragma hdrstop
 
 #define _SVX_SELCTRL_CXX
@@ -88,11 +89,10 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 // class SvxSelectionModeControl -----------------------------------------
 
-SvxSelectionModeControl::SvxSelectionModeControl( USHORT nId,
-                                                  StatusBar& rStb,
-                                                  SfxBindings& rBind ) :
-    SfxStatusBarControl( nId, rStb, rBind ),
-
+SvxSelectionModeControl::SvxSelectionModeControl( USHORT nSlotId,
+                                                  USHORT nId,
+                                                  StatusBar& rStb ) :
+    SfxStatusBarControl( nSlotId, nId, rStb ),
     nState( 0 )
 {
 }
@@ -122,8 +122,17 @@ void SvxSelectionModeControl::Click()
     nState++;
     if ( nState > 2 )
         nState = 0;
-    SfxUInt16Item aState( GetId(), nState );
-    GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aState, 0L );
+
+    ::com::sun::star::uno::Any a;
+    SfxUInt16Item aState( GetSlotId(), nState );
+    INetURLObject aObj( m_aCommandURL );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = aObj.GetURLPath();
+    aState.QueryValue( a );
+    aArgs[0].Value = a;
+
+    execute( aArgs );
 }
 
 // -----------------------------------------------------------------------
