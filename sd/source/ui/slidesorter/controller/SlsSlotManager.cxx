@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:42:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,9 +932,9 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     }
     else
     {
-        SvEmbeddedObject* pObj = pTransferClip->GetDocShell();
+        SfxObjectShell* pShell = pTransferClip->GetDocShell();
 
-        if( !pObj || ( (DrawDocShell*) pObj)->GetDoc()->GetPageCount() <= 1 )
+        if( !pShell || ( (DrawDocShell*) pShell)->GetDoc()->GetPageCount() <= 1 )
         {
             // Eigene Clipboard-Daten haben nur eine Seite
             rSet.DisableItem(SID_PASTE);
