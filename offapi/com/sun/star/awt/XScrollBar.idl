@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScrollBar.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:01:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** gives access to the value and settings of a scroll bar and makes it possible
     to register adjustment event listeners.
  */
-interface XScrollBar: com::sun::star::uno::XInterface
+published interface XScrollBar: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

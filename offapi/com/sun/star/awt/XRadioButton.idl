@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRadioButton.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:01:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** gives access to the state of a radio button and makes it possible
     to register item event listeners.
  */
-interface XRadioButton: com::sun::star::uno::XInterface
+published interface XRadioButton: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
