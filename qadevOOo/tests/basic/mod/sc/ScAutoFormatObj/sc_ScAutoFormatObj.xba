@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAutoFormatObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:09 $ 
+'*  last change:$Date: 2003-08-07 15:06:32 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -89,6 +89,11 @@ On Error Goto ErrHndl
     oFormats = createUnoService("com.sun.star.sheet.TableAutoFormats")
 
     oNewFormat = oDoc.createInstance("com.sun.star.sheet.TableAutoFormat")
+
+    if oFormats.hasByName(cObjectName) then
+    	oFormats.removeByName(cObjectName)
+    end if
+
     oFormats.insertByName(cObjectName, oNewFormat)
 
     oObj = oNewFormat
