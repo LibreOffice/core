@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:17:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ greek ] =
     {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
+         < "Ñõèìßóåéò ðåñéãñÜììáôïò" ; 0; > ;
+        < "ÁñéóôåñÞ ãñáììÞ ðåñéãñÜììáôïò" ; 1; > ;
+        < "ÄåîéÜ ãñáììÞ ðåñéãñÜììáôïò" ; 2; > ;
+        < "ÐÜíù ãñáììÞ ðåñéãñÜììáôïò" ; 3; > ;
+        < "ÊÜôù ãñáììÞ ðåñéãñÜììáôïò" ; 4; > ;
+        < "Ïñéæüíôéá ãñáììÞ ðåñéãñÜììáôïò" ; 5; > ;
+        < "Êáôáêüñõöç ãñáììÞ ðåñéãñÜììáôïò" ; 6; > ;
     };
     ItemList [ dutch ] =
     {
@@ -189,13 +189,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ danish ] =
     {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
+         < "Kantindstilling" ; 0; > ;
+        < "Venstre kantlinje" ; 1; > ;
+        < "Højre kantlinje" ; 2; > ;
+        < "Topkantlinje" ; 3; > ;
+        < "Bundkantlinje" ; 4; > ;
+        < "Vandret kantlinje" ; 5; > ;
+        < "Lodret kantlinje" ; 6; > ;
     };
     ItemList [ swedish ] =
     {
@@ -347,6 +347,26 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "VodorovnÃ¡ ohraniÄujÃºca Äiara" ; 5; > ;
         < "ZvislÃ¡ ohraniÄujÃºca Äiara" ; 6; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "SzegÃ©ly beÃ¡llÃ­tÃ¡sa" ; 0; > ;
+        < "Bal oldali szegÃ©ly" ; 1; > ;
+        < "Jobb oldali szegÃ©ly" ; 2; > ;
+        < "FelsÅ‘ szegÃ©ly" ; 3; > ;
+        < "AlsÃ³ szegÃ©ly" ; 4; > ;
+        < "VÃ­zszintes szegÃ©ly" ; 5; > ;
+        < "FÃ¼ggÅ‘leges szegÃ©ly" ; 6; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Nastavitev obrob" ; 0; > ;
+        < "Leva Ärta obrobe" ; 1; > ;
+        < "Desna Ärta obrobe" ; 2; > ;
+        < "Zgornja Ärta obrobe" ; 3; > ;
+        < "Spodnja Ärta obrobe" ; 4; > ;
+        < "Vodoravna Ärta obrobe" ; 5; > ;
+        < "NavpiÄna Ärta obrobe" ; 6; > ;
+    };
     };
     StringArray ARR_DESCRIPTIONS
     {
@@ -412,13 +432,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ greek ] =
     {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
+         < "Ñõèìßóåéò ðåñéãñÜììáôïò" ; 0; > ;
+        < "ÁñéóôåñÞ ãñáììÞ ðåñéãñÜììáôïò" ; 1; > ;
+        < "ÄåîéÜ ãñáììÞ ðåñéãñÜììáôïò" ; 2; > ;
+        < "ÐÜíù ãñáììÞ ðåñéãñÜììáôïò" ; 3; > ;
+        < "ÊÜôù ãñáììÞ ðåñéãñÜììáôïò" ; 4; > ;
+        < "Ïñéæüíôéá ãñáììÞ ðåñéãñÜììáôïò" ; 5; > ;
+        < "Êáôáêüñõöç ãñáììÞ ðåñéãñÜììáôïò" ; 6; > ;
     };
     ItemList [ dutch ] =
     {
@@ -472,13 +492,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ danish ] =
     {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
+         < "Kantindstilling" ; 0; > ;
+        < "Venstre kantlinje" ; 1; > ;
+        < "Højre kantlinje" ; 2; > ;
+        < "Topkantlinje" ; 3; > ;
+        < "Bundkantlinje" ; 4; > ;
+        < "Vandret kantlinje" ; 5; > ;
+        < "Lodret kantlinje" ; 6; > ;
     };
     ItemList [ swedish ] =
     {
@@ -630,8 +650,29 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "VodorovnÃ¡ ohraniÄujÃºca Äiara" ; 5; > ;
         < "ZvislÃ¡ ohraniÄujÃºca Äiara" ; 6; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "SzegÃ©ly beÃ¡llÃ­tÃ¡sa" ; 0; > ;
+        < "Bal oldali szegÃ©ly" ; 1; > ;
+        < "Jobb oldali szegÃ©ly" ; 2; > ;
+        < "FelsÅ‘ szegÃ©ly" ; 3; > ;
+        < "AlsÃ³ szegÃ©ly" ; 4; > ;
+        < "VÃ­zszintes szegÃ©ly" ; 5; > ;
+        < "FÃ¼ggÅ‘leges szegÃ©ly" ; 6; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Nastavitev obrobe" ; 0; > ;
+        < "Leva Ärta obrobe" ; 1; > ;
+        < "Desna Ärta obrobe" ; 2; > ;
+        < "Zgornja Ärta obrobe" ; 3; > ;
+        < "Spodnja Ärta obrobe" ; 4; > ;
+        < "Vodoravna Ärta obrobe" ; 5; > ;
+        < "NavpiÄna Ärta obrobe" ; 6; > ;
+    };
     };
 };
+
 
 
 
