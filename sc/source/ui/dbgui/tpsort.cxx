@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 16:09:50 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 09:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,20 +134,21 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
                           ScResId( RID_SCPAGE_SORT_FIELDS ),
                           rArgSet ),
         //
+        aFlSort1        ( this, ScResId( FL_SORT1  ) ),
         aLbSort1        ( this, ScResId( LB_SORT1  ) ),
-        aBtnUp1         ( this, ScResId( BTN_UP1     ) ),
+        aBtnUp1         ( this, ScResId( BTN_UP1   ) ),
         aBtnDown1       ( this, ScResId( BTN_DOWN1 ) ),
-        aGbSort1        ( this, ScResId( GB_SORT1  ) ),
         //
+        aFlSort2        ( this, ScResId( FL_SORT2  ) ),
         aLbSort2        ( this, ScResId( LB_SORT2  ) ),
-        aBtnUp2         ( this, ScResId( BTN_UP2     ) ),
+        aBtnUp2         ( this, ScResId( BTN_UP2   ) ),
         aBtnDown2       ( this, ScResId( BTN_DOWN2 ) ),
-        aGbSort2        ( this, ScResId( GB_SORT2  ) ),
         //
+        aFlSort3        ( this, ScResId( FL_SORT3  ) ),
         aLbSort3        ( this, ScResId( LB_SORT3  ) ),
-        aBtnUp3         ( this, ScResId( BTN_UP3     ) ),
+        aBtnUp3         ( this, ScResId( BTN_UP3   ) ),
         aBtnDown3       ( this, ScResId( BTN_DOWN3 ) ),
-        aGbSort3        ( this, ScResId( GB_SORT3  ) ),
+
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
@@ -202,9 +203,9 @@ void ScTabPageSortFields::Init()
     aDirBtnArr[1][1]    = &aBtnDown2;
     aDirBtnArr[2][0]    = &aBtnUp3;
     aDirBtnArr[2][1]    = &aBtnDown3;
-    aGbArr[0]           = &aGbSort1;
-    aGbArr[1]           = &aGbSort2;
-    aGbArr[2]           = &aGbSort3;
+    aFlArr[0]           = &aFlSort1;
+    aFlArr[1]           = &aFlSort2;
+    aFlArr[2]           = &aFlSort3;
 }
 
 //------------------------------------------------------------------------
@@ -404,7 +405,7 @@ void ScTabPageSortFields::DisableField( USHORT nField )
         aSortLbArr[nField]   ->Disable();
         aDirBtnArr[nField][0]->Disable();
         aDirBtnArr[nField][1]->Disable();
-        aGbArr[nField]       ->Disable();
+        aFlArr[nField]       ->Disable();
     }
 }
 
@@ -419,7 +420,7 @@ void ScTabPageSortFields::EnableField( USHORT nField )
         aSortLbArr[nField]   ->Enable();
         aDirBtnArr[nField][0]->Enable();
         aDirBtnArr[nField][1]->Enable();
-        aGbArr[nField]       ->Enable();
+        aFlArr[nField]       ->Enable();
     }
 }
 
@@ -528,15 +529,15 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
             aLbSort2.SelectEntryPos( 0 );
             aLbSort3.SelectEntryPos( 0 );
 
-            if ( aGbSort2.IsEnabled() )
+            if ( aFlSort2.IsEnabled() )
                 DisableField( 2 );
 
-            if ( aGbSort3.IsEnabled() )
+            if ( aFlSort3.IsEnabled() )
                 DisableField( 3 );
         }
         else
         {
-            if ( !aGbSort2.IsEnabled() )
+            if ( !aFlSort2.IsEnabled() )
                 EnableField( 2 );
         }
     }
@@ -545,12 +546,12 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
         if ( aSelEntry == aStrUndefined )
         {
             aLbSort3.SelectEntryPos( 0 );
-            if ( aGbSort3.IsEnabled() )
+            if ( aFlSort3.IsEnabled() )
                 DisableField( 3 );
         }
         else
         {
-            if ( !aGbSort3.IsEnabled() )
+            if ( !aFlSort3.IsEnabled() )
                 EnableField( 3 );
         }
     }
@@ -576,8 +577,9 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
         aBtnSortUser    ( this, ScResId( BTN_SORT_USER ) ),
         aLbSortUser     ( this, ScResId( LB_SORT_USER ) ),
-        aLineLang       ( this, ScResId( FL_LANGUAGE ) ),
+        aFtLanguage     ( this, ScResId( FT_LANGUAGE ) ),
         aLbLanguage     ( this, ScResId( LB_LANGUAGE ) ),
+        aFtAlgorithm    ( this, ScResId( FT_ALGORITHM ) ),
         aLbAlgorithm    ( this, ScResId( LB_ALGORITHM ) ),
         aLineDirection  ( this, ScResId( FL_DIRECTION ) ),
         aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
@@ -1053,6 +1055,7 @@ IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
         //  for LANGUAGE_SYSTEM no algorithm can be selected because
         //  it wouldn't necessarily exist for other languages
         //  -> leave list box empty if LANGUAGE_SYSTEM is selected
+        aFtAlgorithm.Enable( FALSE );           // nothing to select
         aLbAlgorithm.Enable( FALSE );           // nothing to select
     }
     else
@@ -1072,6 +1075,7 @@ IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
             aLbAlgorithm.InsertEntry( sUser, LISTBOX_APPEND );
         }
         aLbAlgorithm.SelectEntryPos( 0 );       // first entry is default
+        aFtAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
         aLbAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
     }
 

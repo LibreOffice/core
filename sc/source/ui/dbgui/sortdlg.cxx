@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 09:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #include "tpsort.hxx"
 #include "sortdlg.hxx"
 #include "scresid.hxx"
@@ -76,10 +72,7 @@
 
 #pragma hdrstop
 
-SEG_EOFGLOBALS()
-
 //==================================================================
-#pragma SEG_FUNCDEF(sortdlg_01)
 
 ScSortDlg::ScSortDlg( Window*           pParent,
                       const SfxItemSet* pArgSet ) :
@@ -95,56 +88,7 @@ ScSortDlg::ScSortDlg( Window*           pParent,
     FreeResource();
 }
 
-#pragma SEG_FUNCDEF(sortdlg_02)
-
 __EXPORT ScSortDlg::~ScSortDlg()
 {
 }
-
-// -----------------------------------------------------------------------
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.11  2000/09/17 14:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.10  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.9  1996/10/29 13:04:12  NN
-    ueberall ScResId statt ResId
-
-
-      Rev 1.8   29 Oct 1996 14:04:12   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.7   27 Jan 1995 12:37:44   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.6   25 Jan 1995 18:23:28   MO
-   tpsort.hxx-include
-
-      Rev 1.5   24 Jan 1995 21:04:08   MO
-   TP_FIELDS/TP_OPTIONS anstatt Res-Ids der Pages
-
-      Rev 1.4   22 Jan 1995 15:10:12   SC
-   2.37 Anpassung
-
-      Rev 1.3   18 Jan 1995 13:56:24   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.2   21 Dec 1994 18:17:52   MO
-   Dialog fungiert als Vermittler zwischen den beiden TabPages.
-   -> zusaetzliche Datenmember+Zugriffsfunktionen
-
-      Rev 1.1   14 Dec 1994 13:51:58   MO
-   Globale ResIds jetzt in sc.hrc
-
-      Rev 1.0   13 Dec 1994 20:51:10   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
