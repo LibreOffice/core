@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: mhu $ $Date: 2002-09-01 18:48:30 $
+#   last change: $Author: sb $ $Date: 2002-10-02 15:35:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,8 @@ SLOFILES= \
         $(SLO)$/tdmgr.obj		\
         $(SLO)$/implementationentry.obj	\
         $(SLO)$/access_control.obj	\
-        $(SLO)$/macro_expander.obj
+        $(SLO)$/macro_expander.obj \
+        $(SLO)$/unourl.obj
 
 .IF "$(UNIXVERSIONNAMES)" != ""
 SHL1TARGET=$(TARGET)$(COMID)
@@ -173,8 +174,7 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
-SHL1LIBS= \
-        $(SLB)$/$(TARGET).lib
+SHL1OBJS = $(SLOFILES)
 
 # xxx todo: in progress when moving down cfgmgr+interfaces to udk
 # \
@@ -189,6 +189,7 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
+"ERROR: gcc2_linux_intel.map lacks symbols from cppuhelper/unourl.hxx"
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
