@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ italian ] = "~Adatta larghezza a testo" ;
         Text [ spanish ] = "Ajus~tar ancho al texto" ;
         Text [ french ] = "Adapter ~largeur au texte" ;
-        Text [ swedish ] = "Anpassa br~edd till text" ;
+        Text [ swedish ] = "Anpassa ~bredd till text" ;
         Text [ danish ] = "Tilpas bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
@@ -151,7 +151,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ italian ] = "A~datta altezza a testo" ;
         Text [ spanish ] = "~Ajustar altura al texto" ;
         Text [ french ] = "Adapter la h~auteur au texte" ;
-        Text [ swedish ] = "Anpassa höjd ~till text" ;
+        Text [ swedish ] = "Anpassa höj~d till text" ;
         Text [ danish ] = "Tilpas højde til tekst" ;
         Text [ portuguese ] = "Ajustar ~altura ao texto" ;
         Text [ portuguese_brazilian ] = "H~?e an Text anpassen" ;
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ italian ] = "Adatta alla cornice" ;
         Text [ spanish ] = "Aju~star al marco" ;
         Text [ french ] = "Adapter au ca~dre" ;
-        Text [ swedish ] = "Anpassa till r~am" ;
+        Text [ swedish ] = "~Anpassa till ram" ;
         Text [ danish ] = "Tilpas til rammen" ;
         Text [ portuguese ] = "Adaptar à ~moldura" ;
         Text [ portuguese_brazilian ] = "Am R~ahmen anpassen" ;
@@ -484,7 +484,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ italian ] = "A tutta larghezza" ;
         Text [ spanish ] = "Todo el a~ncho" ;
         Text [ french ] = "Sur toute la ~largeur" ;
-        Text [ swedish ] = "Hel ~bredd" ;
+        Text [ swedish ] = "Hel b~redd" ;
         Text [ danish ] = "Hele bredden" ;
         Text [ portuguese ] = "~Largura toda" ;
         Text [ portuguese_brazilian ] = "Ganze ~Breite" ;
@@ -515,5 +515,6 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text[ finnish ] = "Teksti";
 };
  // ********************************************************************** EOF
+
 
 
