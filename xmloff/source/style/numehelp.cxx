@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-08 07:13:34 $
+ *  last change: $Author: er $ $Date: 2001-06-08 12:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
     {
         aFormat.nType = GetCellType(nNumberFormat, bIsStandard, xNumberFormatsSupplier);
         aFormat.bIsStandard = bIsStandard;
-        if (aFormat.nType == util::NumberFormat::CURRENCY)
+        if ((aFormat.nType & ~util::NumberFormat::DEFINED) == util::NumberFormat::CURRENCY)
             if (GetCurrencySymbol(nNumberFormat, aFormat.sCurrency, xNumberFormatsSupplier))
                 sCurrency = aFormat.sCurrency;
         aNumberFormats.insert(aFormat);
@@ -368,7 +368,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
     sal_Bool bIsStandard;
     sal_Int16 nTypeKey = GetCellType(nNumberFormat, bIsStandard, rXMLExport.GetNumberFormatsSupplier());
     rtl::OUString sCurrency;
-    if (nTypeKey == util::NumberFormat::CURRENCY)
+    if ((nTypeKey & ~util::NumberFormat::DEFINED) == util::NumberFormat::CURRENCY)
         GetCurrencySymbol(nNumberFormat, sCurrency, rXMLExport.GetNumberFormatsSupplier());
     WriteAttributes(rXMLExport, nTypeKey, rValue, sCurrency, nNamespace, bExportValue);
 }
