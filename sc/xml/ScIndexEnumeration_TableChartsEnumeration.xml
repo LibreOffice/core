@@ -11,7 +11,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com.sun.star.sheet.TableChartsEnumeration</supported-service>
+        <supported-service>com.sun.star.table.TableChartsEnumeration</supported-service>
         <type>com.sun.star.beans.Property</type>
         <type>com.sun.star.beans.PropertyChangeEvent</type>
         <type>com.sun.star.beans.PropertyVetoException</type>
