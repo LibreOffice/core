@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 13:33:39 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,12 @@
 #include <svx/unonrule.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
+
 #include "servuno.hxx"
+#include "unonames.hxx"
 #include "cellsuno.hxx"
 #include "fielduno.hxx"
 #include "styleuno.hxx"
@@ -84,6 +89,9 @@
 #include "drwlayer.hxx"
 #include "confuno.hxx"
 #include "shapeuno.hxx"
+#include "cellvaluebinding.hxx"
+#include "celllistsource.hxx"
+#include "addruno.hxx"
 
 // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #ifndef _XMLEOHLP_HXX
@@ -133,7 +141,13 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.document.ExportGraphicObjectResolver",    // SC_SERVICE_EXPORT_GOR
         "com.sun.star.document.ImportGraphicObjectResolver",    // SC_SERVICE_IMPORT_GOR
         "com.sun.star.document.ExportEmbeddedObjectResolver",   // SC_SERVICE_EXPORT_EOR
-        "com.sun.star.document.ImportEmbeddedObjectResolver"    // SC_SERVICE_IMPORT_EOR
+        "com.sun.star.document.ImportEmbeddedObjectResolver",   // SC_SERVICE_IMPORT_EOR
+
+        SC_SERVICENAME_VALBIND,                    // SC_SERVICE_VALBIND
+        SC_SERVICENAME_LISTCELLBIND,               // SC_SERVICE_LISTCELLBIND
+        SC_SERVICENAME_LISTSOURCE,                 // SC_SERVICE_LISTSOURCE
+        SC_SERVICENAME_CELLADDRESS,                // SC_SERVICE_CELLADDRESS
+        SC_SERVICENAME_RANGEADDRESS                // SC_SERVICE_RANGEADDRESS
     };
 
 //
@@ -175,7 +189,13 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_EXPORT_GOR
         "",                                         // SC_SERVICE_IMPORT_GOR
         "",                                         // SC_SERVICE_EXPORT_EOR
-        ""                                          // SC_SERVICE_IMPORT_EOR
+        "",                                         // SC_SERVICE_IMPORT_EOR
+
+        "",                                         // SC_SERVICE_VALBIND
+        "",                                         // SC_SERVICE_LISTCELLBIND
+        "",                                         // SC_SERVICE_LISTSOURCE
+        "",                                         // SC_SERVICE_CELLADDRESS
+        ""                                          // SC_SERVICE_RANGEADDRESS
     };
 
 
@@ -324,6 +344,31 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_IMPORT_EOR:
             if (pDocShell)
                 xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
+            break;
+
+        case SC_SERVICE_VALBIND:
+        case SC_SERVICE_LISTCELLBIND:
+            if (pDocShell)
+            {
+                sal_Bool bListPos = ( nType == SC_SERVICE_LISTCELLBIND );
+                uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
+                xRet = *new calc::OCellValueBinding( xDoc, bListPos );
+            }
+            break;
+        case SC_SERVICE_LISTSOURCE:
+            if (pDocShell)
+            {
+                uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
+                xRet = *new calc::OCellListSource( xDoc );
+            }
+            break;
+        case SC_SERVICE_CELLADDRESS:
+        case SC_SERVICE_RANGEADDRESS:
+            if (pDocShell)
+            {
+                sal_Bool bRange = ( nType == SC_SERVICE_RANGEADDRESS );
+                xRet = *new ScAddressConversionObj( pDocShell, bRange );
+            }
             break;
     }
     return xRet;
