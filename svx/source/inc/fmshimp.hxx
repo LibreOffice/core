@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@
 #endif
 
 #include <queue>
+#include <set>
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
@@ -364,14 +365,12 @@ class FmXFormShell  :public FmXFormShell_BASE
     // nur im designmode verfuegbar
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> m_xForms;
 
-    // aktuell selektiertes Object (Form oder Control)
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>       m_xSelObject;
-
-    // aktuelles Control, keine Form
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>       m_xCurControl;
-
-    // aktuelle Form
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>           m_xCurForm;
+    // the currently selected objects, as to be displayed in the property browser
+    InterfaceBag                                                                m_aCurrentSelection;
+    /// the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >           m_xCurrentForm;
+    /// the last selection/marking of controls only. Necessary to implement the "Control properties" slot
+    InterfaceBag                                                                m_aLastKnownMarkedControls;
 
 
         // und das ist ebenfalls fuer's 'gefunden' : Beim Finden in GridControls brauche ich die Spalte, bekomme aber
@@ -508,15 +507,37 @@ public:
     inline const ::svx::ControllerFeatures& getNavControllerFeatures() const
         { return m_aNavControllerFeatures.isAssigned() ? m_aNavControllerFeatures : m_aActiveControllerFeatures; }
 
-    // nur im design mode verwenden, aktuell selektiertes Formular oder Control
-    void    setCurForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xF);
-    void    setCurControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xObj);
-    void    setCurControl(const SdrMarkList& rMarkList);
-    void    setSelObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xObj);
+    /** announces a new "current selection"
+        @return
+            <TRUE/> if and only if the to-bet-set selection was different from the previous selection
+    */
+    bool    setCurrentSelection( const InterfaceBag& _rSelection );
 
-    const   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getCurForm() const {return m_xCurForm;}
-    const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& getCurControl() const {return m_xCurControl;}
-    const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& getSelObject() const {return m_xSelObject;}
+    /** sets the new selection to the last known marked controls
+    */
+    bool    selectLastMarkedControls();
+
+    /** retrieves the current selection
+    */
+    void    getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const;
+
+    /** sets a new current selection as indicated by a mark list
+        @return
+            <TRUE/> if and only if the to-bet-set selection was different from the previous selection
+    */
+    bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
+
+    /// returns the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+                getCurrentForm() const { return m_xCurrentForm; }
+    void        forgetCurrentForm();
+    /// returns whether the last known marking contained only controls
+    sal_Bool    onlyControlsAreMarked() const { return !m_aLastKnownMarkedControls.empty(); }
+
+    /// determines whether the current selection consists of exactly the given object
+    bool    isSolelySelected(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject
+            );
 
     /// handles a MouseButtonDown event of the FmFormView
     void handleMouseButtonDown( const SdrViewEvent& _rViewEvent );
@@ -527,11 +548,10 @@ public:
     sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
     sal_Bool canNavigate() const    {return m_xNavigationController.is();}
 
-    void ShowProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rxObject, sal_Bool bShow=sal_True );
+    void ShowSelectionProperties( sal_Bool bShow );
     sal_Bool IsPropBrwOpen() const;
 
     void DetermineSelection(const SdrMarkList& rMarkList);
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> DetermineCurForm(const SdrMarkList& rMarkList, sal_Bool&);
     void SetSelection(const SdrMarkList& rMarkList);
     void SetSelectionDelayed(FmFormView* pView);
 
@@ -548,16 +568,19 @@ public:
 
     static PopupMenu* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
-    sal_Bool ConvertControlTo(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xModel, sal_uInt16 nTargetObjectId);
-        // umwandeln eines Controls
-    static  sal_Bool IsControlConversionSlot(sal_uInt16 nSlotId);
-        // ein gueltiger ControlConversionSlot
-    static  sal_Bool IsConversionPossible(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xContext, sal_Int16 nConversionSlot);
-        // Konvertierung der Komponente mit geg. Slot moeglich
-    static  void CheckControlConversionSlots(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xContext, Menu& rMenu);
-        // iteriertes IsConversionPossible
-    sal_Bool ExecuteControlConversionSlot(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xContext, sal_uInt16 nSlotId);
-        // verkapptes ConvertControlTo
+
+    /// checks whethere a given control conversion slot can be applied to the current selection
+           bool canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot );
+    /// enables or disables all conversion slots in a menu, according to the current selection
+           void checkControlConversionSlotsForCurrentSelection( Menu& rMenu );
+    /// executes a control conversion slot for a given object
+           bool executeControlConversionSlot( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxObject, sal_uInt16 _nSlotId );
+    /** executes a control conversion slot for the current selection
+        @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
+    */
+           bool executeControlConversionSlot( sal_uInt16 _nSlotId );
+    /// checks whether the given slot id denotes a control conversion slot
+    static bool isControlConversionSlot( sal_uInt16 _nSlotId );
 
     void    ExecuteTextAttribute( SfxRequest& _rReq );
     void    GetTextAttributeState( SfxItemSet& _rSet );
