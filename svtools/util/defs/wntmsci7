@@ -9409,3 +9409,4 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?set@?$Reference@VXDispatch@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatch@frame@345@@Z
 ?set@?$Reference@VXDispatchProvider@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatchProvider@frame@345@@Z
 ?set@?$Reference@VXFrame@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXFrame@frame@345@@Z
+?GetStandardName@SvNumberFormatter@@QAE?AVString@@G@Z
