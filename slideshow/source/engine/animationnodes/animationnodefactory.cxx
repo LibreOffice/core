@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:11:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,11 @@ namespace presentation
                 }
             };
 
+            /** Create animation nodes for text iterations
+
+                This method clones the animation nodes below xIterNode
+                for every iterated shape entity.
+             */
             bool implCreateIteratedNodes( const uno::Reference< animations::XIterateContainer >&    xIterNode,
                                           BaseContainerNodeSharedPtr&                               rParent,
                                           const NodeContext&                                        rContext )
@@ -306,6 +311,7 @@ namespace presentation
                 AttributableShapeSharedPtr  pTargetShape(
                     lookupAttributableShape( rContext.maContext.mpLayerManager,
                                              xTargetShape ) );
+                const DocTreeNodeSupplier&  rTreeNodeSupplier( pTargetShape->getTreeNodeSupplier() );
                 ShapeSubsetSharedPtr        pTargetSubset;
 
                 NodeContext aContext( rContext );
@@ -315,14 +321,21 @@ namespace presentation
                 // paragraph)
                 if( bParagraphTarget )
                 {
+                    ENSURE_AND_RETURN(
+                        aTarget.Paragraph >= 0 &&
+                        rTreeNodeSupplier.getNumberOfTreeNodes(
+                            DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) > aTarget.Paragraph,
+                        "implCreateIteratedNodes(): paragraph index out of range" );
+
                     pTargetSubset.reset(
                         new ShapeSubset(
                             pTargetShape,
-                            DocTreeNode::createFromShape(
-                                pTargetShape,
+                            // retrieve index aTarget.Paragraph of
+                            // type PARAGRAPH from this shape
+                            rTreeNodeSupplier.getTreeNode(
                                 aTarget.Paragraph,
                                 DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ),
-                            rContext.maContext.mpLayerManager ));
+                            rContext.maContext.mpLayerManager ) );
 
                     // iterate target is not the whole shape, but only
                     // the selected paragraph - subset _must_ be
@@ -393,8 +406,7 @@ namespace presentation
                 // slideshow engine, only that the text won't be
                 // currently visible, because animations are always in
                 // the foreground)
-                if( pTargetSubset->getSubsetShape()->getNumberOfTreeNodes() > 0 &&
-                    nSubItem != ::com::sun::star::presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
+                if( nSubItem != ::com::sun::star::presentation::ShapeAnimationSubType::ONLY_BACKGROUND )
                 {
                     // determine type of subitem iteration (logical
                     // text unit to animate)
@@ -428,7 +440,7 @@ namespace presentation
                         // will not animate the whole paragraph, when
                         // only the paragraph is animated at all.
                         OSL_ENSURE( false,
-                            "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
+                                    "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
                     }
                     else
                     {
@@ -445,46 +457,57 @@ namespace presentation
                         // effects are all the same).
                         aContext.mbIsIndependentSubset = false;
 
-                        // create document tree for given subitem type
-                        DocTreeNode::VectorOfDocTreeNodes aTreeNodes;
+                        // determine number of nodes for given subitem
+                        // type
+                        sal_Int32 nTreeNodes( 0 );
                         if( bParagraphTarget )
                         {
                             // create the iterated subset _relative_ to
                             // the given paragraph index (i.e. animate the
                             // given subset type, but only when it's part
                             // of the given paragraph)
-                            generateSubsets( aTreeNodes,
-                                             pTargetShape,
-                                             eIterateNodeType,
-                                             aTarget.Paragraph );
+                            nTreeNodes = rTreeNodeSupplier.getNumberOfSubsetTreeNodes(
+                                pTargetShape->getSubsetNode(),
+                                eIterateNodeType );
                         }
                         else
                         {
                             // generate normal subset
-                            generateSubsets( aTreeNodes,
-                                             pTargetShape,
-                                             eIterateNodeType );
+                            nTreeNodes = rTreeNodeSupplier.getNumberOfTreeNodes(
+                                eIterateNodeType );
                         }
 
 
                         // iterate node, generate copies of the children for each subset
                         // -------------------------------------------------------------
 
-                        const ::std::size_t nTreeNodeChildren( aTreeNodes.size() );
-
                         // NodeContext::mnStartDelay contains additional node delay. This will
                         // make the duplicated nodes for each iteration start increasingly later.
                         aContext.mnStartDelay = nIntervalTimeout;
 
-                        for( ::std::size_t i=0; i<nTreeNodeChildren; ++i )
+                        for( sal_Int32 i=0; i<nTreeNodes; ++i )
                         {
-                            // TODO(F1): This might not always be correct (e.g. if there's
-                            // geometry inbetween the text output)
-
                             // create subset with the corresponding tree nodes
-                            aContext.mpMasterShapeSubset.reset(
-                                new ShapeSubset( pTargetSubset,
-                                                 aTreeNodes[i] ) );
+                            if( bParagraphTarget )
+                            {
+                                // create subsets relative to paragraph subset
+                                aContext.mpMasterShapeSubset.reset(
+                                    new ShapeSubset(
+                                        pTargetSubset,
+                                        rTreeNodeSupplier.getSubsetTreeNode(
+                                            pTargetShape->getSubsetNode(),
+                                            i,
+                                            eIterateNodeType ) ) );
+                            }
+                            else
+                            {
+                                // create subsets from main shape
+                                aContext.mpMasterShapeSubset.reset(
+                                    new ShapeSubset( pTargetSubset,
+                                                     rTreeNodeSupplier.getTreeNode(
+                                                         i,
+                                                         eIterateNodeType ) ) );
+                            }
 
                             CloningNodeCreator aCreator( rParent, aContext );
                             if( !::anim::for_each_childNode( xNode,
