@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "drwtrans.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
+#include "drawview.hxx"
 #include "viewdata.hxx"
 #include "scmod.hxx"
 
@@ -111,7 +112,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pBookmark( NULL ),
     bGraphic( FALSE ),
     bGrIsBit( FALSE ),
-    bOleObj( FALSE )
+    bOleObj( FALSE ),
+    pDragSourceView( NULL ),
+    bDragWasInternal( FALSE )
 {
     //
     //  check what kind of objects are contained
@@ -229,9 +232,15 @@ ScDrawTransferObj::~ScDrawTransferObj()
         DBG_ERROR("ScDrawTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
     }
+    if ( pScMod->GetDragData().pDrawTransfer == this )
+    {
+        DBG_ERROR("ScDrawTransferObj wasn't released");
+        pScMod->ResetDragObject();
+    }
 
     delete pModel;
     delete pBookmark;
+    delete pDragSourceView;
 
     Application::GetSolarMutex().release();     //! ???
 }
@@ -428,12 +437,52 @@ void ScDrawTransferObj::ObjectReleased()
 
 void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    //! test for internal move
-
-    if ( nDropAction == DND_ACTION_MOVE )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal )
     {
-        //! delete selected objects in source document
+        //  move: delete source objects
+
+        if ( pDragSourceView )
+            pDragSourceView->DeleteMarked();
     }
+
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetDragData().pDrawTransfer == this )
+        pScMod->ResetDragObject();
+
+    DELETEZ( pDragSourceView );
+
+    TransferableHelper::DragFinished( nDropAction );
+}
+
+void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, USHORT nTab )
+{
+    rDest.ShowPagePgNum( nTab, Point() );
+    SdrPageView* pDestPV = rDest.GetPageViewPvNum(0);
+    DBG_ASSERT(pDestPV,"PageView ??!?!");
+
+    const SdrMarkList& rMarkList = rSource.GetMarkList();
+    ULONG nCount = rMarkList.GetMarkCount();
+    for (ULONG i=0; i<nCount; i++)
+    {
+        SdrMark* pMark = rMarkList.GetMark(i);
+        SdrObject* pObj = pMark->GetObj();
+
+        rDest.MarkObj(pObj, pDestPV);
+    }
+}
+
+void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
+{
+    DELETEZ( pDragSourceView );
+    pDragSourceView = new SdrView( pView->GetModel() );
+    lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
+
+    //! add as listener with document, delete pDragSourceView if document gone
+}
+
+void ScDrawTransferObj::SetDragWasInternal()
+{
+    bDragWasInternal = TRUE;
 }
 
 SvInPlaceObjectRef ScDrawTransferObj::GetSingleObject()

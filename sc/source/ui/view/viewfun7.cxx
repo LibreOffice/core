@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,7 @@
 #include "drawview.hxx"
 #include "scmod.hxx"
 #include "drwlayer.hxx"
+#include "drwtrans.hxx"
 #include "globstr.hrc"
 
 extern Point aDragStartDiff;
@@ -432,21 +433,23 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
     }
 
-#ifdef OLD_DND
-    SdrView* pDragEditView = SC_MOD()->GetDragData().pSdrView;
-    if (pDragEditView)
+    SdrView* pDragEditView = NULL;
+    ScModule* pScMod = SC_MOD();
+    const ScDragData& rData = pScMod->GetDragData();
+    ScDrawTransferObj* pDrawTrans = rData.pDrawTransfer;
+    if (pDrawTrans)
     {
+        pDragEditView = pDrawTrans->GetDragSourceView();
+
         aPos -= aDragStartDiff;
         if (aPos.X() < 0) aPos.X() = 0;
         if (aPos.Y() < 0) aPos.Y() = 0;
     }
-#endif
 
     ScDrawView* pDrawView = GetScDrawView();
     if (bGroup)
         pDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
 
-#ifdef OLD_DND
     BOOL bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pDrawView->GetModel() );
     if (bSameDoc)
     {
@@ -498,7 +501,6 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         }
     }
     else
-#endif
     {
         bPasteIsMove = FALSE;       // kein internes Verschieben passiert
 

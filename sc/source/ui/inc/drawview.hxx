@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ public:
     void            GetScale( Fraction& rFractX, Fraction& rFractY ) const;
     void            RecalcScale();
     void            UpdateWorkArea();
+    USHORT          GetTab() const      { return nTab; }
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:21:59 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ class SvxBoxItem;
 class SvxBoxInfoItem;
 class SfxStyleSheet;
 class SfxPoolItem;
-class SvDataObject;
 class EditTextObject;
 struct ScSolveParam;
 struct ScTabOpParam;
@@ -153,7 +152,6 @@ public:
 
     void            PasteFromSystem();
     BOOL            PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
-//  void            ImportString(const String& rString, USHORT nStartCol, USHORT nStartRow);
 
     BOOL            DropFiles( const DropEvent& );
     BOOL            DropFile( const DropEvent&, const String& );
@@ -163,15 +161,9 @@ public:
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                                 BOOL bGroup = FALSE );
 
-    BOOL            PasteOnDrawObject( SvDataObject* pObject, SdrObject* pHitObj, BOOL bLink );
-    BOOL            PasteDataObject( SvDataObject* pObject, USHORT nPosX, USHORT nPosY,
-                                        Window* pWin = NULL, Point* pLogicPos = NULL );
-    BOOL            LinkDataObject( SvDataObject* pObject, USHORT nPosX, USHORT nPosY,
-                                        Window* pWin = NULL, Point* pLogicPos = NULL );
-
-    BOOL            PasteDataFormat( ULONG nFormatId, SvDataObject* pObject,
-                                        USHORT nPosX, USHORT nPosY,
-                                        Window* pWin = NULL, Point* pLogicPos = NULL );
+    BOOL            PasteOnDrawObject( const ::com::sun::star::uno::Reference<
+                                            ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                        SdrObject* pHitObj, BOOL bLink );
 
     BOOL            PasteDataFormat( ULONG nFormatId,
                                         const ::com::sun::star::uno::Reference<
@@ -184,8 +176,10 @@ public:
     BOOL            PasteMetaFile( const Point&, const GDIMetaFile& );
     BOOL            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const String& rFile, const String& rFilter );
-    BOOL            PasteBookmark( SvDataObject* pObject, USHORT nPosX, USHORT nPosY );
-    BOOL            PasteDDE( SvDataObject* pObject );
+    BOOL            PasteBookmark( ULONG nFormatId,
+                                const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                USHORT nPosX, USHORT nPosY );
     BOOL            PasteDDE( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
@@ -368,7 +362,9 @@ protected:
 
 
 private:
-    void            PasteRTF( USHORT nCol, USHORT nStartRow, SvDataObject* pObject );
+    void            PasteRTF( USHORT nCol, USHORT nStartRow,
+                                const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
     USHORT          GetOptimalColWidth( USHORT nCol, USHORT nTab, BOOL bFormula );
 
     void            StartFormatArea();

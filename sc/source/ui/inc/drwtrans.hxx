@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:26:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 class SdrModel;
 class ScDocShell;
 class INetBookmark;
+class SdrView;
+class ScDrawView;
 
 class ScDrawTransferObj : public TransferableHelper
 {
@@ -92,6 +94,11 @@ private:
     BOOL                            bGraphic;
     BOOL                            bGrIsBit;
     BOOL                            bOleObj;
+                                    // source information for drag&drop:
+                                    // (view is needed to handle drawing obejcts)
+    SdrView*                        pDragSourceView;
+    BOOL                            bDragWasInternal;
+
 
     void                InitDocShell();
     SvInPlaceObjectRef  GetSingleObject();
@@ -109,6 +116,11 @@ public:
     virtual void        DragFinished( sal_Int8 nDropAction );
 
     SdrModel*           GetModel()  { return pModel; }
+
+    void                SetDragSource( ScDrawView* pView );
+    void                SetDragWasInternal();
+
+    SdrView*            GetDragSourceView()     { return pDragSourceView; }
 
     static ScDrawTransferObj* GetOwnClipboard();
 };

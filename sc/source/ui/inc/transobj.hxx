@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:26:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,15 @@
 #include "global.hxx"
 #endif
 
+class ScDocShell;
+class ScMarkData;
+
+namespace com { namespace sun { namespace star {
+    namespace sheet {
+        class XSheetCellRanges;
+    }
+}}}
+
 
 class ScTransferObj : public TransferableHelper
 {
@@ -83,8 +92,10 @@ private:
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SvEmbeddedObjectRef             aDocShellRef;
+    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
     USHORT                          nDragHandleX;
     USHORT                          nDragHandleY;
+    BOOL                            bDragWasInternal;
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, USHORT nStartX, USHORT nStartY,
@@ -110,8 +121,13 @@ public:
     const ScRange&      GetRange() const        { return aBlock; }
     USHORT              GetDragHandleX() const  { return nDragHandleX; }
     USHORT              GetDragHandleY() const  { return nDragHandleY; }
+    ScDocShell*         GetSourceDocShell();
+    ScDocument*         GetSourceDocument();
+    ScMarkData          GetSourceMarkData();
 
     void                SetDragHandlePos( USHORT nX, USHORT nY );
+    void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
+    void                SetDragWasInternal();
 
     static ScTransferObj* GetOwnClipboard();
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:26:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,6 @@ private:
 
     BOOL            DropScroll( const Point& rMousePos );
 
-    BOOL            QueryDropPrivate( DropEvent& rEvt );
-    BOOL            DropPrivate( const DropEvent& rEvt );
-
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
 
@@ -304,8 +301,6 @@ private:
 protected:
     virtual void    Resize( const Size& rSize );
     virtual void    Paint( const Rectangle& rRect );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    GetFocus();
     virtual void    LoseFocus();

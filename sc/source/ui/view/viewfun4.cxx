@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-29 14:06:03 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/transfer.hxx>
 #include <svtools/urlbmk.hxx>
 #include <vcl/drag.hxx>
 #include <vcl/system.hxx>
@@ -122,10 +123,13 @@ BOOL bPasteIsDrop = FALSE;
 
 //==================================================================
 
-void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow, SvDataObject* pObject )
+void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
+                                const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
 {
-    if ( pObject->HasFormat( EditEngine::RegisterClipboardFormatName() ) )
-    {   // EditEngine eigen wg. Drag&Drop und PasteSpecial
+    TransferableDataHelper aDataHelper( rxTransferable );
+    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EDITENGINE ) )
+    {
         HideAllCursors();
 
         ScDocument* pUndoDoc = NULL;
@@ -203,18 +207,21 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow, SvDataObject* pOb
     }
     else
     {
-        SvData aData( FORMAT_RTF );
-        if (pObject->GetData( &aData ))
-        {
-            HideAllCursors();
-            ScDocShell* pDocSh = GetViewData()->GetDocShell();
-            ScImportExport aImpEx( pDocSh->GetDocument(),
-                ScAddress( nStartCol, nStartRow, GetViewData()->GetTabNo() ) );
-            aImpEx.ImportData( aData );
-            AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
-            pDocSh->UpdateOle(GetViewData());
-            ShowAllCursors();
-        }
+        HideAllCursors();
+        ScDocShell* pDocSh = GetViewData()->GetDocShell();
+        ScImportExport aImpEx( pDocSh->GetDocument(),
+            ScAddress( nStartCol, nStartRow, GetViewData()->GetTabNo() ) );
+
+        String aStr;
+        SotStorageStreamRef xStream;
+        if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
+            aImpEx.ImportStream( *xStream, SOT_FORMAT_RTF );
+        else if ( aDataHelper.GetString( SOT_FORMAT_RTF, aStr ) )
+            aImpEx.ImportString( aStr, SOT_FORMAT_RTF );
+
+        AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
+        pDocSh->UpdateOle(GetViewData());
+        ShowAllCursors();
     }
 }
 
@@ -587,26 +594,18 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     return FALSE;
 }
 
-BOOL ScViewFunc::PasteBookmark( SvDataObject* pObject, USHORT nPosX, USHORT nPosY )
+BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
+                                const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                USHORT nPosX, USHORT nPosY )
 {
-    ULONG nFormat = INetBookmark::HasFormat(*pObject);
     INetBookmark aBookmark;
-    BOOL bFound = aBookmark.Paste(*pObject,nFormat);
-    if ( !bFound )
-    {
-        USHORT nCount = DragServer::GetItemCount();
-        for( USHORT i = 0; i < nCount && !bFound; i++ )
-            if ( aBookmark.PasteDragServer(i) )
-                bFound = TRUE;
-    }
-    if ( !bFound )
-        return FALSE;       // gibt kein Bookmark (keine Assertion -
-                            //  bei Datenauszuegen vom Desktop wird FALSE zurueckgegeben)
+    TransferableDataHelper aDataHelper( rxTransferable );
+    if ( !aDataHelper.GetINetBookmark( nFormatId, aBookmark ) )
+        return FALSE;
 
     InsertBookmark( aBookmark.GetDescription(), aBookmark.GetURL(), nPosX, nPosY );
     return TRUE;
-
-    //! aus DragServer ggf. noch weitere Items einfuegen !!!!
 }
 
 void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,

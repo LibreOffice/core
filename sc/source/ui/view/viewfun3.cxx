@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:31:52 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,177 +493,34 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
 //----------------------------------------------------------------------------
 //      P A S T E
 
-//  Drag & Drop
-BOOL ScViewFunc::PasteDataObject( SvDataObject* pObject, USHORT nPosX, USHORT nPosY,
-                                    Window* pWin, Point* pLogicPos )
-{
-    ULONG nFormatId = 0;
-
-    ULONG nSba     = SOT_FORMATSTR_ID_SBA_DATAEXCHANGE;
-    ULONG nField   = Exchange::RegisterFormatName(
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(SBA_FIELDEXCHANGE_FORMAT)));
-    ULONG nDDE     = SOT_FORMATSTR_ID_LINK;
-    ULONG nBiff    = Exchange::RegisterFormatName(
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
-
-    //  eine DB-Tabelle aus dem Explorer hat Sba und Bookmark -> Bookmark nur wenn nicht Sba
-
-    if ( INetBookmark::HasFormat(*pObject) && !pObject->HasFormat(nSba) )
-        if (PasteBookmark( pObject, nPosX, nPosY ))
-            return TRUE;
-
-        //  als erstes SvDraw-Model, dann Grafik (darf nur bei einzelner Grafik drinstehen)
-
-    if (pObject->HasFormat(SOT_FORMATSTR_ID_DRAWING))
-        nFormatId = SOT_FORMATSTR_ID_DRAWING;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_SVXB))
-        nFormatId = SOT_FORMATSTR_ID_SVXB;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_EMBED_SOURCE))
-    {
-        //  Wenn es vom Writer kommt, statt OLE RTF einfuegen
-
-        SvObjectDescriptor aDesc( pObject );
-        //  GlobalName vom Writer wie da in docsh.cxx
-        SvGlobalName aWriterName( SO3_SW_CLASSID );
-        SvGlobalName aSwWebName( SO3_SWWEB_CLASSID );
-        if ((aDesc.GetClassName() == aWriterName || aDesc.GetClassName() == aSwWebName) &&
-                pObject->HasFormat(FORMAT_RTF))
-            nFormatId = FORMAT_RTF;
-        else
-            nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
-    }
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_LINK_SOURCE))
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
-    else if (pObject->HasFormat(nSba))      // Sba muss vor RTF kommen, damit bei Daten aus dem
-        nFormatId = nSba;                   // Beamer importiert wird (RTF kopiert nur die Inhalte)
-    else if (pObject->HasFormat(nField))
-        nFormatId = nField;
-    else if (pObject->HasFormat(nBiff))     // before xxx_OLE formats
-        nFormatId = nBiff;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE))
-        nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_LINK_SOURCE_OLE))
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
-    else if (pObject->HasFormat(FORMAT_RTF))
-        nFormatId = FORMAT_RTF;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_HTML))
-        nFormatId = SOT_FORMATSTR_ID_HTML;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
-        nFormatId = SOT_FORMATSTR_ID_HTML_SIMPLE;
-    else if (pObject->HasFormat(SOT_FORMATSTR_ID_SYLK))
-        nFormatId = SOT_FORMATSTR_ID_SYLK;
-    else if (pObject->HasFormat(nDDE))
-        nFormatId = nDDE;
-    else if (pObject->HasFormat(FORMAT_STRING))
-        nFormatId = FORMAT_STRING;
-    else if (pObject->HasFormat(FORMAT_GDIMETAFILE))
-        nFormatId = FORMAT_GDIMETAFILE;
-    else if (pObject->HasFormat(FORMAT_BITMAP))
-        nFormatId = FORMAT_BITMAP;
-    else if (pObject->HasFormat(FORMAT_FILE))
-        nFormatId = FORMAT_FILE;
-
-    if (nFormatId)
-        return PasteDataFormat( nFormatId, pObject, nPosX, nPosY, pWin, pLogicPos );
-    else
-        return FALSE;
-}
-
-//  Drag & Drop als Link
-BOOL ScViewFunc::LinkDataObject( SvDataObject* pObject, USHORT nPosX, USHORT nPosY,
-                                    Window* pWin, Point* pLogicPos )
-{
-    ULONG nFormatId = 0;
-
-    //  Links: nur OLE-Link / DDE
-    //! bei OLE-Link auch Unterscheidung, ob's vom Writer kommt ???
-
-    ULONG nDDE     = SOT_FORMATSTR_ID_LINK;
-
-    if (pObject->HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
-    else if (pObject->HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
-    else if (pObject->HasFormat(nDDE))
-        nFormatId = nDDE;
-
-    if (nFormatId)
-        return PasteDataFormat( nFormatId, pObject, nPosX, nPosY, pWin, pLogicPos );
-
-    if (pObject->HasFormat(FORMAT_FILE))
-    {
-        SvData aData( FORMAT_FILE );
-        if (pObject->GetData( &aData ))
-        {
-            //  Datei als Link einfuegen
-
-            String aFile;
-            aData.GetData( aFile );
-            SfxStringItem aNameItem( FID_INSERT_FILE, aFile );
-            Point aPos;
-            if (pLogicPos) aPos = *pLogicPos;
-            SfxPointItem aPosItem( FN_PARAM_1, aPos );
-            SfxBoolItem aLinkItem( FN_PARAM_2, TRUE );
-            SfxDispatcher* pDisp = GetViewData()->GetViewShell()->GetViewFrame()->GetDispatcher();
-            if (pDisp)
-                pDisp->Execute( FID_INSERT_FILE, SFX_CALLMODE_ASYNCHRON,
-                                    &aNameItem, &aPosItem, &aLinkItem, 0L );
-            return TRUE;
-        }
-    }
-
-    //  #66028# Internet Explorer draggt URLs als Link
-    if ( INetBookmark::HasFormat(*pObject) )
-        if (PasteBookmark( pObject, nPosX, nPosY ))
-            return TRUE;
-
-    return FALSE;
-}
-
-BOOL ScViewFunc::PasteOnDrawObject( SvDataObject* pObject, SdrObject* pHitObj, BOOL bLink )
+BOOL ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTransferable>& rxTransferable,
+                                    SdrObject* pHitObj, BOOL bLink )
 {
     BOOL bRet = FALSE;
     if ( bLink )
     {
-        if ( pObject->HasFormat(SOT_FORMATSTR_ID_SVXB) )
+        TransferableDataHelper aDataHelper( rxTransferable );
+        if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
         {
-            SvData aData(SOT_FORMATSTR_ID_SVXB);
-            if ( pObject->GetData( &aData ) )
+            SotStorageStreamRef xStm;
+            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
             {
-                Graphic* pGraphic = NULL;
-                if ( aData.GetData( (SvDataCopyStream**) &pGraphic,
-                                    Graphic::StaticType(), TRANSFER_MOVE ) )
-                {
-                    bRet = ApplyGraphicToObject( pHitObj, *pGraphic );
-                }
-                delete pGraphic;
+                Graphic aGraphic;
+                *xStm >> aGraphic;
+                bRet = ApplyGraphicToObject( pHitObj, aGraphic );
             }
         }
-        else if ( pObject->HasFormat(FORMAT_GDIMETAFILE) )
+        else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
         {
-            SvData aData(FORMAT_GDIMETAFILE);
-            if ( pObject->GetData( &aData ) )
-            {
-                GDIMetaFile* pMtf = NULL;
-                if (aData.GetData(&pMtf, TRANSFER_MOVE))
-                {
-                    bRet = ApplyGraphicToObject( pHitObj, Graphic(*pMtf) );
-                }
-                delete pMtf;
-            }
+            GDIMetaFile aMtf;
+            if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+                bRet = ApplyGraphicToObject( pHitObj, Graphic(aMtf) );
         }
-        else if ( pObject->HasFormat(FORMAT_BITMAP) )
+        else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
         {
-            SvData aData(FORMAT_BITMAP);
-            if ( pObject->GetData( &aData ) )
-            {
-                Bitmap* pBmp = NULL;
-                if (aData.GetData(&pBmp, TRANSFER_MOVE))
-                {
-                    bRet = ApplyGraphicToObject( pHitObj, Graphic(*pBmp) );
-                }
-                delete pBmp;
-            }
+            Bitmap aBmp;
+            if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ) )
+                bRet = ApplyGraphicToObject( pHitObj, Graphic(aBmp) );
         }
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
             USHORT nHandleX = (nPosX >= (short) nStartX) ? nPosX - nStartX : 0;
             USHORT nHandleY = (nPosY >= (short) nStartY) ? nPosY - nStartY : 0;
             pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
+
+            pTransferObj->SetDragSource( pDocSh, rMark );
 
             Window* pWindow = pViewData->GetActiveWin();
             SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D

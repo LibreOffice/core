@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 19:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "impex.hxx"
 #include "cell.hxx"
 #include "printfun.hxx"
+#include "docfunc.hxx"
 #include "scmod.hxx"
 
 // for InitDocShell
@@ -94,6 +95,9 @@
 #include "stlpool.hxx"
 #include "viewdata.hxx"
 #include "dociter.hxx"
+#include "cellsuno.hxx"
+
+using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -149,7 +153,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     aObjDesc( rDesc ),
     pDoc( pClipDoc ),
     nDragHandleX( 0 ),
-    nDragHandleY( 0 )
+    nDragHandleY( 0 ),
+    bDragWasInternal( FALSE )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
 
@@ -248,7 +253,7 @@ void ScTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
 }
 
-sal_Bool ScTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bOK = sal_False;
@@ -305,8 +310,7 @@ sal_Bool ScTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavo
                 if ( aObj.ExportString( aString, nFormat ) )
                     bOK = SetString( aString, rFlavor );
             }
-            else if ( rFlavor.DataType.equals( ::getCppuType(
-                                    (const ::com::sun::star::uno::Sequence< sal_Int8 >*) 0 ) ) )
+            else if ( rFlavor.DataType.equals( ::getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) ) )
             {
                 //  SetObject converts a stream into a Int8-Sequence
                 bOK = SetObject( &aObj, SCTRANS_TYPE_IMPEX, rFlavor );
@@ -367,7 +371,7 @@ sal_Bool ScTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavo
 }
 
 sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                        const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream
 
@@ -431,14 +435,22 @@ void ScTransferObj::ObjectReleased()
 
 void ScTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    if ( nDropAction == DND_ACTION_MOVE )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal )
     {
-        //! ...
+        //  move: delete source data
+        ScDocShell* pSourceSh = GetSourceDocShell();
+        if (pSourceSh)
+        {
+            ScMarkData aMarkData = GetSourceMarkData();
+            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL, TRUE, FALSE );
+        }
     }
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetDragData().pCellTransfer == this )
         pScMod->ResetDragObject();
+
+    xDragSourceRanges = NULL;       // don't keep source after dropping
 
     TransferableHelper::DragFinished( nDropAction );
 }
@@ -447,6 +459,47 @@ void ScTransferObj::SetDragHandlePos( USHORT nX, USHORT nY )
 {
     nDragHandleX = nX;
     nDragHandleY = nY;
+}
+
+void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark )
+{
+    ScRangeList aRanges;
+    rMark.FillRangeListWithMarks( &aRanges, FALSE );
+    xDragSourceRanges = new ScCellRangesObj( pSourceShell, aRanges );
+}
+
+void ScTransferObj::SetDragWasInternal()
+{
+    bDragWasInternal = TRUE;
+}
+
+ScDocument* ScTransferObj::GetSourceDocument()
+{
+    ScDocShell* pSourceDocSh = GetSourceDocShell();
+    if (pSourceDocSh)
+        return pSourceDocSh->GetDocument();
+    return NULL;
+}
+
+ScDocShell* ScTransferObj::GetSourceDocShell()
+{
+    ScCellRangesBase* pRangesObj = ScCellRangesBase::getImplementation( xDragSourceRanges );
+    if (pRangesObj)
+        return pRangesObj->GetDocShell();
+
+    return NULL;    // none set
+}
+
+ScMarkData ScTransferObj::GetSourceMarkData()
+{
+    ScMarkData aMarkData;
+    ScCellRangesBase* pRangesObj = ScCellRangesBase::getImplementation( xDragSourceRanges );
+    if (pRangesObj)
+    {
+        const ScRangeList& rRanges = pRangesObj->GetRangeList();
+        aMarkData.MarkFromRangeList( rRanges, FALSE );
+    }
+    return aMarkData;
 }
 
 //
