@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 17:04:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,19 +108,13 @@ bool impl_maybeGetAttribute(uno::Reference< sax::XAttributeList > const& xAttrib
 {
     OSL_PRECOND( xAttribs.is(), "ERROR: NULL Attribute list");
 
-    sal_Int16 const nEnd = xAttribs->getLength();
-
-    for(sal_Int16 nIndex = 0; nIndex < nEnd; ++nIndex)
+    OUString aValue = xAttribs->getValueByName(aAttributeName);
+    if( aValue.getLength()!=0)
     {
-        if (xAttribs->getNameByIndex(nIndex).equals(aAttributeName))
-        {
-            rAttributeValue = xAttribs->getValueByIndex(nIndex);
-            break;
-        }
+        rAttributeValue = aValue;
+        return true;
     }
-    // nIndex >= nEnd if not found
-
-    return nIndex < nEnd; // broke out of loop when found
+    return false;
 }
 // -----------------------------------------------------------------------------
 
@@ -131,8 +125,8 @@ ElementInfo ElementParser::parseElementInfo(OUString const& _sTag, SaxAttributeL
 
     ElementInfo aInfo( this->getName(_sTag,_xAttribs,aType), aType );
 
-    aInfo.op    = this->getOperation(_xAttribs);
-    aInfo.flags = this->getNodeFlags(_xAttribs);
+    aInfo.op    = this->getOperation(_xAttribs,aType);
+    aInfo.flags = this->getNodeFlags(_xAttribs,aType);
 
     return aInfo;
 }
@@ -272,10 +266,15 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
 }
 // -----------------------------------------------------------------------------
 
-Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs) const
+Operation::Enum ElementParser::getOperation(SaxAttributeList const& xAttribs,ElementType::Enum _eType) const
 {
     OUString sOpName;
-    if ( ! this->maybeGetAttribute(xAttribs,ATTR_OPERATION, sOpName) )
+    if ((_eType != ElementType::property) && (_eType !=ElementType::node))
+    {
+        return Operation::none;
+    }
+
+    if ( !this->maybeGetAttribute(xAttribs,ATTR_OPERATION, sOpName) )
         return Operation::none;
 
     if (sOpName.equals(OPERATION_MODIFY))
@@ -301,7 +300,7 @@ bool ElementParser::getLanguage(SaxAttributeList const& xAttribs, OUString& _rsL
 // -----------------------------------------------------------------------------
 
 /// reads attributes for nodes from the attribute list
-ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttribs) const
+ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttribs,ElementType::Enum _eType) const
 {
     namespace NodeAttribute   = drafts::com::sun::star::configuration::backend::NodeAttribute;
     namespace SchemaAttribute = drafts::com::sun::star::configuration::backend::SchemaAttribute;
@@ -310,24 +309,45 @@ ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttr
 
     ElementInfo::FlagsType aResult = 0;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_NULLABLE, bValue) && ! bValue)
-        aResult |= SchemaAttribute::REQUIRED;
+    switch(_eType)
+    {
+        case ElementType::property :
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_NULLABLE, bValue) && ! bValue)
+                aResult |= SchemaAttribute::REQUIRED;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_LOCALIZED, bValue) && bValue)
+                aResult |= SchemaAttribute::LOCALIZED;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_READONLY, bValue) && bValue)
+                aResult |= NodeAttribute::READONLY;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_FINALIZED, bValue) && bValue)
+                aResult |= NodeAttribute::FINALIZED;
+            break;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_LOCALIZED, bValue) && bValue)
-        aResult |= SchemaAttribute::LOCALIZED;
+        case ElementType::node:
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_FINALIZED, bValue) && bValue)
+                aResult |= NodeAttribute::FINALIZED;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_MANDATORY, bValue) && bValue)
+                aResult |= NodeAttribute::MANDATORY;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_READONLY, bValue) && bValue)
+                aResult |= NodeAttribute::READONLY;
+            break;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_EXTENSIBLE, bValue) && bValue)
-        aResult |= SchemaAttribute::EXTENSIBLE;
+        case ElementType::group:
+        case ElementType::set:
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_EXTENSIBLE, bValue) && bValue)
+                aResult |= SchemaAttribute::EXTENSIBLE;
+            break;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_FINALIZED, bValue) && bValue)
-        aResult |= NodeAttribute::FINALIZED;
+        case ElementType::layer:
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_READONLY, bValue) && bValue)
+                aResult |= NodeAttribute::READONLY;
+            if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_FINALIZED, bValue) && bValue)
+                aResult |= NodeAttribute::FINALIZED;
+            break;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_MANDATORY, bValue) && bValue)
-        aResult |= NodeAttribute::MANDATORY;
+        default:
+            break;
 
-    if (this->maybeGetAttribute(xAttribs, ATTR_FLAG_READONLY, bValue) && bValue)
-        aResult |= NodeAttribute::READONLY;
-
+    }
     return aResult;
 }
 // -----------------------------------------------------------------------------
