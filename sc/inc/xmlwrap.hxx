@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:18:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,9 @@
 
 class ScDocument;
 class SfxMedium;
-class SvStorage;
 class ScMySharedData;
+
+#include <tools/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { class PropertyValue; }
@@ -84,6 +85,7 @@ namespace com { namespace sun { namespace star {
     namespace task { class XStatusIndicator; }
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
+    namespace embed { class XStorage; }
     namespace xml {
         namespace sax { struct InputSource; } }
 } } }
@@ -92,7 +94,7 @@ class ScXMLImportWrapper
 {
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
-    SvStorage*      pStorage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
         com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
@@ -115,8 +117,8 @@ class ScXMLImportWrapper
         ScMySharedData*& pSharedData);
 
 public:
-    ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS);
-    BOOL Import(sal_Bool bStylesOnly);
+    ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
+    BOOL Import(sal_Bool bStylesOnly, ErrCode& );
     BOOL Export(sal_Bool bStylesOnly);
 };
 
