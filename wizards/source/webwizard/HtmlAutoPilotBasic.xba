@@ -19,7 +19,6 @@ Public NumberOfLayouts%, NumberOfStyles%
 &apos; Filled with title, previous, next, home, top, bullet, background, file name
 Public Style(8, MaxStyles) as String
 
-&apos; Filled with title, file name
 Public Layout$(2, MaxLayouts)
 
 Public TextureDir$, BulletDir$, GraphicsDir$, GalleryDir$, PhotosDir$
@@ -131,7 +130,7 @@ On Local Error Goto ErrorOcurred
 		End If
 		oBaseDocument.UnlockControllers
 		oViewCursor.GotoStart(False)
-	ToggleDialogControls(True, &quot;lbTemplate&quot;)
+		ToggleDialogControls(True, &quot;lbTemplate&quot;)
 	End If
 End Sub
 
@@ -205,10 +204,9 @@ Sub EndDialog()
 		AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;WebWizard.HtmlAutoPilotBasic.SetEvent()&quot;)
 		&apos; Call the Store template dialog
 		DispatchSlot(5538)
-	Else
-		SetEvent()
+		AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;&quot;)
 	End If
-&apos;	MainDialog.EndExecute()
+	SetEvent()
 End Sub
 
 
@@ -237,7 +235,9 @@ Dim SavePath as String
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	GetPaths()
-	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
+	oBaseDocument = ThisComponent
+&apos;	oBaseDocument.LockControllers()
+
 	&apos; Note: The sub DirectoryNameoutofPath should be change, so that the last character is a slash
 	SavePath = DirectoryNameoutofPath(oBaseDocument.Url, &quot;/&quot;) &amp; &quot;/&quot;
 
@@ -258,11 +258,11 @@ Dim SavePath as String
 		.GetUserFieldValue(3) = &quot;&quot;
 	End With
 
-&apos;	&apos; Reset events
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;&quot;)
 	oBaseDocument.Store
+&apos;	oBaseDocument.UnlockControllers()
 End Sub
 
 		
