@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 08:04:20 $
+ *  last change: $Author: oj $ $Date: 2002-05-08 10:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,14 +437,14 @@ String STR_ERROR_OCCURED_WHILE_COPYING
 
 String STR_DATASOURCE_GRIDCONTROL_NAME
 {
-    Text = "Datenquellen Tabellenansicht" ;
-    Text [ ENGLISH ] = "Datasource tableview" ;
+    Text = "Tabellenansicht der Datenquelle" ;
+    Text [ ENGLISH ] = "Data source table view" ;
 };
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
 {
-    Text = "Zeigt die ausgewählte Tabelle/Abfrage an." ;
-    Text [ ENGLISH ] = "Shows the selected table/query." ;
+    Text = "Zeigt die ausgewählte Tabelle oder Abfrage an." ;
+    Text [ ENGLISH ] = "Shows the selected table or query." ;
 };
 
 
