@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-12 17:54:28 $
+#   last change: $Author: vg $ $Date: 2002-12-13 13:14:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.78 $ ';
+$id_str = ' $Revision: 1.79 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -125,7 +125,6 @@ $deliver = 0;
 $CurrentPrj = '';
 $no_projects = 0;
 $only_dependent = 0;
-$StandDir = &get_stand_dir();
 $build_from = '';
 $build_from_opt = '';
 $build_since = '';
@@ -136,6 +135,7 @@ $child = 0;
 $locked = 0; # lock for signal handler
 
 &get_options;
+$StandDir = &get_stand_dir();
 &provide_consistency if (defined $ENV{CWS_WORK_STAMP});
 
 $deliver_commando = $ENV{DELIVER};
@@ -252,7 +252,7 @@ sub BuildAll {
         };
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
             $orig_prj = '';
-            $orig_prj = $` if ($Prj =~ /\.lnk/o);
+            $orig_prj = $` if ($Prj =~ /\.lnk$/o);
             if ($build_from_opt) {
                 if (($build_from_opt ne $Prj) &&
                     ($build_from_opt ne $orig_prj)) {
@@ -581,22 +581,14 @@ sub PickPrjToBuild {
 # Make a decision if the project should be built on this platform
 #
 sub CheckPlatform {
-    my ($Platform);
-    $Platform = shift;
-    if ($Platform eq 'all') {
-        return 1;
-    } elsif (($ENV{GUI} eq 'WNT') &&
-                            (($Platform eq 'w') || ($Platform eq 'n'))) {
-        return 1;
-    } elsif (($ENV{GUI} eq 'WIN') && ($Platform eq 'w')) {
-        return 1;
-    } elsif (($ENV{GUI} eq 'UNX') && ($Platform eq 'u')) {
-        return 1;
-    } elsif (($ENV{GUI} eq 'MAC') && ($Platform eq 'm')) {
-        return 1;
-    } elsif (($ENV{GUI} eq 'OS2') && ($Platform eq 'p')) {
-        return 1;
-    };
+    my $Platform = shift;
+    return 1 if ($Platform eq 'all');
+    return 1 if (($ENV{GUI} eq 'WIN') && ($Platform eq 'w'));
+    return 1 if (($ENV{GUI} eq 'UNX') && ($Platform eq 'u'));
+    return 1 if (($ENV{GUI} eq 'MAC') && ($Platform eq 'm'));
+    return 1 if (($ENV{GUI} eq 'OS2') && ($Platform eq 'p'));
+    return 1 if (($ENV{GUI} eq 'WNT') &&
+                       (($Platform eq 'w') || ($Platform eq 'n')));
     return 0;
 };
 
@@ -613,8 +605,7 @@ sub RemoveFromDependencies {
     foreach $Prj (keys %$Dependencies) {
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
             if ((${$$Dependencies{$Prj}}[$i] eq $ExclPrj) ||
-                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig))
-            {
+                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig)) {
                 splice (@{$$Dependencies{$Prj}}, $i, 1);
                 $i = 0;
                 last;
@@ -634,9 +625,7 @@ sub FindIndepPrj {
     @Prjs = keys %$Dependencies;
     if ($#Prjs != -1) {
         foreach $Prj (@Prjs) {
-            if (&IsHashNative($Prj)) {
-                next;
-            };
+            next if (&IsHashNative($Prj));
             @PrjDeps = @{$$Dependencies{$Prj}};
             return $Prj if ($#PrjDeps == -1);
         };
@@ -668,13 +657,9 @@ sub FindIndepPrj {
 # Check if given entry is HASH-native, that is not a user-defined data
 #
 sub IsHashNative {
-    my ($Prj);
-    $Prj = shift;
-    if ($Prj =~ /^HASH\(0x[\d | a | b | c | d | e | f]{6,}\)/) {
-        return 1;
-    } else {
-        return 0;
-    };
+    my $Prj = shift;
+    return 1 if ($Prj =~ /^HASH\(0x[\d | a | b | c | d | e | f]{6,}\)/);
+    return 0;
 };
 
 #
@@ -788,6 +773,11 @@ sub get_options {
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
         &print_error('-PP switch is disabled for windows!\n');
+    };
+    if ($incompartible && (!defined $ENV{CWS_WORK_STAMP})) {
+        print "-incomp_from switch is implemented for cws only!\n";
+        print "Ignored...";
+        $incompartible = '';
     };
 };
 
@@ -1202,7 +1192,9 @@ sub ensure_clear_module {
     if ($module_type eq 'lnk') {
         $$Prj =~ /\.lnk$/;
         if ( $^O eq 'MSWin32' ) {
-            rename("$StandDir$$Prj", "$StandDir$`.backup.lnk");
+            if(!rename("$StandDir$$Prj", "$StandDir$`.backup.lnk")) {
+                &print_error("Cannot rename $StandDir$$Prj to $StandDir$`.backup.lnk");
+            };
         } else {
             unlink $StandDir.$$Prj;
         };
