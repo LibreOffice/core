@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-23 14:08:17 $
+ *  last change: $Author: ama $ $Date: 2001-04-25 10:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ class SwDoc
 
     void _CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
                         sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
-    sal_Bool SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
+    sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt* );
     SwFmt* CopyFmt( const SwFmt& rFmt, const SvPtrarr& rFmtArr,
