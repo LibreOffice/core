@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-11 07:30:12 $
+ *  last change: $Author: tl $ $Date: 2002-10-14 10:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,14 @@ service SortDescriptor
      //-------------------------------------------------------------------------
     /** specifies the algorithm for the compare operator (collator).
 
-        @see com::sun::star::i18n::XCollator
+            The collator algorithm may be defined for sepearte keys in specific
+            implementations. For those this property may not need to be set.
+
+            @see <type scope"com::sun::star::text">TextSortDescriptor</type>
+
+            @see com::sun::star::i18n::XCollator
      */
-    [property] string CollatorAlgorithm;
+        [optional, property] string CollatorAlgorithm;
 };
 
 //=============================================================================
