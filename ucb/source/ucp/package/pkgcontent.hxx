@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
+ *  last change: $Author: kso $ $Date: 2002-06-19 12:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
@@ -149,7 +152,8 @@ struct ContentProperties
 class ContentProvider;
 
 class Content : public ::ucb::ContentImplHelper,
-                public com::sun::star::ucb::XContentCreator
+                public com::sun::star::ucb::XContentCreator,
+                public com::sun::star::lang::XInitialization
 {
     enum ContentState { TRANSIENT,  // created via CreateNewContent,
                                        // but did not process "insert" yet
@@ -350,6 +354,13 @@ public:
                 com::sun::star::ucb::XContent > SAL_CALL
     createNewContent( const com::sun::star::ucb::ContentInfo& Info )
         throw( com::sun::star::uno::RuntimeException );
+
+    // XInitialization
+    virtual void SAL_CALL
+    initialize( const com::sun::star::uno::Sequence<
+                    com::sun::star::uno::Any >& aArguments )
+        throw( com::sun::star::uno::Exception,
+               com::sun::star::uno::RuntimeException );
 
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.

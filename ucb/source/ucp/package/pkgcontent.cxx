@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 07:59:21 $
+ *  last change: $Author: kso $ $Date: 2002-06-19 12:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,10 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     if ( isFolder() )
         aRet = cppu::queryInterface(
                 rType, static_cast< star::ucb::XContentCreator * >( this ) );
+    else
+        aRet = cppu::queryInterface( rType,
+            static_cast< star::ucb::XContentCreator * >( this ),
+            static_cast< lang::XInitialization * >( this ) );
 
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
@@ -426,7 +430,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
+                    CPPU_TYPE_REF( star::ucb::XContentCreator ),
+                    CPPU_TYPE_REF( lang::XInitialization ) ); // !!
                   pCollection = &aCollection;
             }
             else
@@ -441,7 +446,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( star::ucb::XCommandInfoChangeNotifier ),
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-                    CPPU_TYPE_REF( container::XChild ) );
+                    CPPU_TYPE_REF( container::XChild ),
+                    CPPU_TYPE_REF( lang::XInitialization ) );
                   pCollection = &aCollection;
             }
         }
@@ -838,6 +844,22 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
                     "createNewContent called on non-folder object!" );
         return uno::Reference< star::ucb::XContent >();
     }
+}
+
+//=========================================================================
+//
+// XInitialization methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL Content::initialize( const uno::Sequence< uno::Any >& aArguments )
+    throw( uno::Exception, uno::RuntimeException )
+{
+    uno::Reference< lang::XInitialization > xPackageInit =
+        uno::Reference< lang::XInitialization >( getPackage(), uno::UNO_QUERY );
+    if ( xPackageInit.is() )
+        xPackageInit->initialize( aArguments );
 }
 
 //=========================================================================
