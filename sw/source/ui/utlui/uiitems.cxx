@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2001-04-27 12:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,12 @@
 
 #include "utlui.hrc"
 #include "attrdesc.hrc"
+#ifndef _UNOMID_H
+#include <unomid.h>
+#endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 // Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
 static const USHORT __FAR_DATA nFtnLines[] = {
@@ -158,8 +162,94 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
+/* -----------------------------26.04.01 12:25--------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bRet = sal_True;
+    switch(nMemberId & ~CONVERT_TWIPS)
+    {
+        case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetHeight());break;
+        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)TWIP_TO_MM100(aFtnInfo.GetLineWidth());break;
+        case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFtnInfo.GetLineColor().GetColor();break;
+        case MID_LINE_RELWIDTH     :
+        {
+            Fraction aTmp( 100, 1 );
+            aTmp *= aFtnInfo.GetWidth();
+            rVal <<= (sal_Int8)(long)aTmp;
+        }
+        break;
+        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//com::sun::star::text::HorizontalAdjust
+        case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
+        case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
+        default:
+            bRet = sal_False;
+    }
+    return bRet;
+}
+/* -----------------------------26.04.01 12:26--------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
+{
+    sal_Int32 nSet32;
+    sal_Bool bRet = sal_True;
+    switch(nMemberId  & ~CONVERT_TWIPS)
+    {
+        case MID_LINE_COLOR        :
+            rVal >>= nSet32;
+            aFtnInfo.SetLineColor(nSet32);
+        break;
+        case MID_FTN_HEIGHT:
+        case MID_LINE_TEXT_DIST    :
+        case MID_LINE_FOOTNOTE_DIST:
+                rVal >>= nSet32;
+                if(nSet32 < 0)
+                    bRet = sal_False;
+                else
+                {
+                    nSet32 = MM100_TO_TWIP(nSet32);
+                    switch(nMemberId & ~CONVERT_TWIPS)
+                    {
+                        case MID_FTN_HEIGHT:            aFtnInfo.SetHeight(nSet32);    break;
+                        case MID_LINE_TEXT_DIST:        aFtnInfo.SetTopDist(nSet32);break;
+                        case MID_LINE_FOOTNOTE_DIST:    aFtnInfo.SetBottomDist(nSet32);break;
+                    }
+                }
+        break;
+        case MID_LINE_WEIGHT       :
+        {
+            sal_Int16 nSet; rVal >>= nSet;
+            if(nSet >= 0)
+                aFtnInfo.SetLineWidth(MM100_TO_TWIP(nSet));
+            else
+                bRet = sal_False;
+        }
+        break;
+        case MID_LINE_RELWIDTH     :
+        {
+            sal_Int8 nSet; rVal >>= nSet;
+            if(nSet < 0)
+                bRet = sal_False;
+            else
+                aFtnInfo.SetWidth(Fraction(nSet, 100));
+        }
+        break;
+        case MID_LINE_ADJUST       :
+        {
+            sal_Int16 nSet; rVal >>= nSet;
+            if(nSet >= 0 && nSet < 3) //com::sun::star::text::HorizontalAdjust
+                aFtnInfo.SetAdj((SwFtnAdj)nSet);
+            else
+                bRet = sal_False;
+        }
+        break;
+        default:
+            bRet = sal_False;
+    }
+    return bRet;
+}
 
 SwPtrItem::SwPtrItem( const USHORT nId, void* pPtr ) :
     SfxPoolItem( nId ),
@@ -272,99 +362,5 @@ SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool *pPool ) const
     return new SwBackgroundDestinationItem(Which(), GetValue());
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.37  2000/09/18 16:06:19  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.36  2000/05/26 16:55:03  os
-    includes removed
-
-    Revision 1.35  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.34  2000/03/23 07:55:38  os
-    UNO III
-
-    Revision 1.33  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.32  1999/09/01 08:41:58  OS
-    #66082# GetPresentation: new Parameter
-
-
-      Rev 1.31   01 Sep 1999 10:41:58   OS
-   #66082# GetPresentation: new Parameter
-
-      Rev 1.30   23 Feb 1999 10:22:36   OS
-   #61767# Kapitelnumerierung funktioniert wieder
-
-      Rev 1.29   27 Jan 1999 10:00:32   OS
-   #56371# TF_ONE51
-
-      Rev 1.28   26 Jun 1998 17:35:36   OS
-   SwBGDestItem mit Which #51751#
-
-      Rev 1.27   17 Jun 1998 18:19:06   OS
-   SwBackgroundDestinationItem
-
-      Rev 1.26   27 May 1998 13:40:12   OS
-   Put/QueryValue fuer SwUINumRuleItem
-
-      Rev 1.25   24 Mar 1998 13:46:28   JP
-   SwUINumRule: CTORen mit Name oder NumRule, nicht mehr mit NumRulePointer
-
-      Rev 1.24   29 Nov 1997 15:08:58   MA
-   includes
-
-      Rev 1.23   21 Nov 1997 12:10:18   MA
-   includes
-
-      Rev 1.22   17 Nov 1997 10:21:32   JP
-   Umstellung Numerierung
-
-      Rev 1.21   03 Nov 1997 13:59:22   MA
-   precomp entfernt
-
-      Rev 1.20   06 Sep 1997 10:58:32   OS
-   PenStyle der Fussnoten per Basic funktioniert #43272#
-
-      Rev 1.19   11 Nov 1996 10:54:14   MA
-   ResMgr
-
-      Rev 1.18   28 Aug 1996 15:42:40   OS
-   includes
-
-      Rev 1.17   20 Aug 1996 16:24:56   OS
-   SwPtrItem jetzt hier
-
-      Rev 1.16   25 Mar 1996 13:31:50   OS
-   Bugs im SwPageFtnInfoItem behoben
-
-      Rev 1.15   31 Jan 1996 09:43:46   OS
-   Masseinheit fuer SwPageFtnInfoItem
-
-      Rev 1.14   04 Dec 1995 16:05:52   OS
-   Set/FillVariable impl.
-
-      Rev 1.13   27 Nov 1995 18:55:14   OS
-   Umstellung 303a
-
-      Rev 1.12   24 Nov 1995 16:57:24   OM
-   PCH->PRECOMPILED
-
-      Rev 1.11   16 Nov 1995 18:30:36   OS
-   neu: Get/SetVariable, nicht impl.
-
-      Rev 1.10   08 Nov 1995 12:17:22   OS
-   Change => Set
-
-      Rev 1.9   11 Oct 1995 17:50:54   MA
-   fix: __EXPORT'iert
-
-      Rev 1.8   28 Sep 1995 08:05:46   OS
-   Typen fuer MSC richtig gecastet
-
-------------------------------------------------------------------------*/
 
 
