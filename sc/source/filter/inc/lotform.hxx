@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,13 @@ private:
     // ---------------------------------------------------------------
     static FUNC_TYPE    IndexToType( BYTE );
     static DefTokenId   IndexToToken( BYTE );
-    static FUNC_TYPE    IndexToTypeWK3( BYTE );
-    static DefTokenId   IndexToTokenWK3( BYTE );
+    static FUNC_TYPE    IndexToTypeWK123( BYTE );
+    static DefTokenId   IndexToTokenWK123( BYTE );
     void                DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtName );
     void                LotusRelToScRel( UINT16 nCol, UINT16 nRow,
                             SingleRefData& rSRD );
     BOOL                bWK3;       // alternative Codeumsetzung statt fuer < WK1
+        BOOL                            bWK123;         // alternative for 123
     // -------------------------------------------------------------------
     void                ReadSRD( SingleRefData& rSRD, BYTE nFlags );
     inline void         ReadCRD( ComplRefData& rCRD, BYTE nFlags );
@@ -137,7 +138,7 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-                        LotusToSc( SvStream& aStr, CharSet eSrc );
+                        LotusToSc( SvStream& aStr, CharSet eSrc, BOOL b );
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -158,7 +159,7 @@ inline void LotusToSc::ReadCRD( ComplRefData& rCRD, BYTE nRelBit )
 
 inline void LotusToSc::SetWK3( void )
 {
-    bWK3 = TRUE;
+        bWK3 = TRUE;
 }
 
 
