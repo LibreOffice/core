@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:59:24 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,7 @@ protected:
     SwTwips mnFlyAnchorOfstNoWrap;
     FASTBOOL     bHadFollow;
     FASTBOOL     bInvaKeep;
-#ifdef ACCESSIBLE_LAYOUT
     FASTBOOL     bValidSize;
-#endif
 
 public:
     SwFrmNotify( SwFrm *pFrm );
@@ -240,11 +238,26 @@ private:
     bool    mbChkHeightOfLastLine;
     SwTwips mnHeightOfLastLine;
 
+    // OD 2004-02-26 #i25029#
+    bool        mbInvalidatePrevPrtArea;
+    bool        mbBordersJoinedWithPrev;
+
     SwCntntFrm *GetCnt() { return (SwCntntFrm*)pFrm; }
 
 public:
     SwCntntNotify( SwCntntFrm *pCntFrm );
     ~SwCntntNotify();
+
+    // OD 2004-02-26 #i25029#
+    void SetInvalidatePrevPrtArea()
+    {
+        mbInvalidatePrevPrtArea = true;
+    }
+
+    void SetBordersJoinedWithPrev()
+    {
+        mbBordersJoinedWithPrev = true;
+    }
 };
 
 //SwBorderAttrs kapselt die Berechnung fuer die Randattribute inclusive
@@ -315,12 +328,20 @@ class SwBorderAttrs : public SwCacheObj
 
     void _IsLine();
 
-    void _GetTopLine   ( const SwFrm *pFrm );
-    void _GetBottomLine( const SwFrm *pFrm );
+    // OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
+    // If set, its value is taken for testing, if borders/shadow have to joined
+    // with previous frame.
+    void _GetTopLine   ( const SwFrm& _rFrm,
+                         const SwFrm* _pPrevFrm = 0L );
+    void _GetBottomLine( const SwFrm& _rFrm );
 
     // OD 21.05.2003 #108789# - private methods to calculate cached values
     // <bJoinedWithPrev> and <bJoinedWithNext>.
-    void _CalcJoinedWithPrev( const SwFrm& _rFrm );
+    // OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
+    // If set, its value is taken for testing, if borders/shadow have to joined
+    // with previous frame.
+    void _CalcJoinedWithPrev( const SwFrm& _rFrm,
+                              const SwFrm* _pPrevFrm = 0L );
     void _CalcJoinedWithNext( const SwFrm& _rFrm );
 
     // OD 21.05.2003 #108789# - internal helper method for methods
@@ -362,12 +383,20 @@ public:
     inline BOOL IsBorderDist() const { return bBorderDist; }
 
     //Sollen obere bzw. untere Umrandung fuer den Frm ausgewertet werden?
-    inline USHORT GetTopLine   ( const SwFrm *pFrm ) const;
-    inline USHORT GetBottomLine( const SwFrm *pFrm ) const;
+    // OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
+    // If set, its value is taken for testing, if borders/shadow have to joined
+    // with previous frame.
+    inline USHORT GetTopLine   ( const SwFrm& _rFrm,
+                                 const SwFrm* _pPrevFrm = 0L ) const;
+    inline USHORT GetBottomLine( const SwFrm& _rFrm ) const;
     inline void   SetGetCacheLine( BOOL bNew ) const;
     // OD 21.05.2003 #108789# - accessors for cached values <bJoinedWithPrev>
     // and <bJoinedWithPrev>
-    BOOL JoinedWithPrev( const SwFrm& _rFrm ) const;
+    // OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
+    // If set, its value is taken for testing, if borders/shadow have to joined
+    // with previous frame.
+    BOOL JoinedWithPrev( const SwFrm& _rFrm,
+                         const SwFrm* _pPrevFrm = 0L ) const;
     BOOL JoinedWithNext( const SwFrm& _rFrm ) const;
 };
 
@@ -428,16 +457,22 @@ public:
 
 
 //Sollen obere bzw. untere Umrandung fuer den Frm ausgewertet werden?
-inline USHORT SwBorderAttrs::GetTopLine   ( const SwFrm *pFrm ) const
+// OD 2004-02-26 #i25029# - add optional 2nd parameter <_pPrevFrm>
+// If set, its value is taken for testing, if borders/shadow have to joined
+// with previous frame.
+inline USHORT SwBorderAttrs::GetTopLine ( const SwFrm& _rFrm,
+                                          const SwFrm* _pPrevFrm ) const
 {
-    if ( !bCachedGetTopLine )
-        ((SwBorderAttrs*)this)->_GetTopLine( pFrm );
+    if ( !bCachedGetTopLine || _pPrevFrm )
+    {
+        const_cast<SwBorderAttrs*>(this)->_GetTopLine( _rFrm, _pPrevFrm );
+    }
     return nGetTopLine;
 }
-inline USHORT SwBorderAttrs::GetBottomLine( const SwFrm *pFrm ) const
+inline USHORT SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
 {
     if ( !bCachedGetBottomLine )
-        ((SwBorderAttrs*)this)->_GetBottomLine( pFrm );
+        const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrm );
     return nGetBottomLine;
 }
 inline void SwBorderAttrs::SetGetCacheLine( BOOL bNew ) const
