@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 11:51:44 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
