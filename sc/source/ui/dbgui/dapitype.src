@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:36:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ danish ] = "Datakilde som er registreret i %PRODUCTNAME";
         Text[ swedish ] = "Datak�lla som �r registrerad i %PRODUCTNAME";
         Text[ polish ] = "�r�d�o ~danych zarejestrowane w %PRODUCTNAME";
-        Text[ portuguese_brazilian ] = "Fontes de ~dados registrada em %PRODUCTNAME";
+        Text[ portuguese_brazilian ] = "Fonte de ~dados registrada em %PRODUCTNAME";
         Text[ japanese ] = "%PRODUCTNAME に登録したデータソース(~D)";
         Text[ korean ] = "%PRODUCTNAME에 등록된 데이터 원본(~D)";
         Text[ chinese_simplified ] = "在 %PRODUCTNAME 中登记的数据源(~D)";
@@ -178,7 +178,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ danish ] = "Ekstern kilde/gr�nseflade";
         Text[ swedish ] = "Extern k�lla/gr�nssnitt";
         Text[ polish ] = "~Zewn�trzne �r�d�o lub zewn�trzny interfejs";
-        Text[ portuguese_brazilian ] = "Origem/Interface ~externa";
+        Text[ portuguese_brazilian ] = "Fonte / Interface ~externa";
         Text[ japanese ] = "外部ソース/インターフェイス(~E)";
         Text[ korean ] = "외부 원본/인터페이스(~E)";
         Text[ chinese_simplified ] = "外部源/界面(~E)";
@@ -753,7 +753,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     StringList [ greek ] =
     {
-            < "�������" ; Default ; > ;
+            < "�����" ; Default ; > ;
         < "�������" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
@@ -809,10 +809,10 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Planilha" ; Default ; > ;
+            < "Tabela" ; Default ; > ;
         < "Consulta" ; Default ; > ;
         < "Sql" ; Default ; > ;
-        < "SQL [Nativo]" ; Default ; > ;
+        < "SQL [Native]" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -967,6 +967,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
     Text[ slovak ] = "Vyber zdroj dát";
 };
+
 
 
 
