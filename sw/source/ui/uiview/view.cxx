@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 10:52:27 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1670,4 +1670,10 @@ BOOL SwView::IsPasteSpecialAllowed()
     }
     return bPasteSpecialState;
 }
+/* -----------------------------12.07.01 13:25--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwView::NotifyDBChanged()
+{
+    GetViewImpl()->GetUNOObject_Impl()->NotifyDBChanged();
+}

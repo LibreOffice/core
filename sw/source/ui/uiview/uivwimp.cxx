@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 18:18:43 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,9 +287,6 @@ void SwView_Impl::AddClipboardListener()
         pClipEvtLstnr->AddRemoveListener( TRUE );
     }
 }
-
-
-
 // ------------------------- SwScannerEventListener ---------------------
 
 SwScannerEventListener::~SwScannerEventListener()
@@ -376,66 +373,5 @@ JP 4.7.2001: change for WebTop - get Clipboard from the Window.
     {
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/04/30 15:59:56  jp
-    use Clipboard state listener instead of polling
-
-    Revision 1.2  2000/11/07 14:38:25  os
-    Dispatch interface for database component
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.14  2000/09/18 16:06:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.13  2000/09/07 15:59:32  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.12  2000/06/26 10:44:13  jp
-    must change: GetAppWindow->GetDefaultDevice
-
-    Revision 1.11  2000/05/29 08:03:23  os
-    new scanner interface
-
-    Revision 1.10  2000/05/09 14:43:13  os
-    BASIC interface partially removed
-
-    Revision 1.9  2000/03/23 07:50:24  os
-    UNO III
-
-    Revision 1.8  1999/01/27 08:58:26  OS
-    #56371# TF_ONE51
-
-
-      Rev 1.7   27 Jan 1999 09:58:26   OS
-   #56371# TF_ONE51
-
-      Rev 1.6   30 Sep 1998 11:37:50   OS
-   #52654# ueberfluessigen Aufruf entfernt
-
-      Rev 1.5   02 Jun 1998 15:51:16   OS
-   TF_STARONE raus; Ctor nicht mehr inline
-
-      Rev 1.4   03 Apr 1998 14:38:28   OS
-   UnoObject fuer die View reaktiviert
-
-      Rev 1.3   04 Feb 1998 17:28:44   OS
-   Starone raus
-
-      Rev 1.2   29 Jan 1998 09:21:06   OS
-   TF_STARONE
-
-      Rev 1.1   19 Jan 1998 14:59:14   OS
-   UNO-Aenderungen
-
-      Rev 1.0   16 Dec 1997 11:58:48   OS
-   Impl-Pointer fuer UNO
-
-------------------------------------------------------------------------*/
 
 

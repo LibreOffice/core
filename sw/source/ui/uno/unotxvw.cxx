@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 08:53:50 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _UNOTXVW_HXX
 #include <unotxvw.hxx>
+#endif
+#ifndef _UNODISPATCH_HXX
+#include <unodispatch.hxx>
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
@@ -182,6 +185,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
 using namespace rtl;
 
 SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
@@ -1001,6 +1006,24 @@ void SwXTextView::NotifySelChanged()
         (*pObj)->selectionChanged(aEvent);
     }
 }
+/* -----------------------------12.07.01 13:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextView::NotifyDBChanged()
+{
+    URL aURL;
+    aURL.Complete = C2U(SwXDispatch::GetDBChangeURL());
+
+    sal_uInt16 nCount = aSelChangedListeners.Count();
+    for ( sal_uInt16 i = nCount; i--; )
+    {
+        Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+        Reference<XDispatch> xDispatch((*pObj), UNO_QUERY);
+        if(xDispatch.is())
+            xDispatch->dispatch(aURL, Sequence<PropertyValue>(0));
+    }
+}
+
 /* -----------------------------06.04.00 11:07--------------------------------
 
  ---------------------------------------------------------------------------*/

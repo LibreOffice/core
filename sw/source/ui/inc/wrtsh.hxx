@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:51:42 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,9 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     void    NoEdit(BOOL bHideCrsr = TRUE);
     void    Edit();
     BOOL    IsNoEdit() const { return bNoEdit; }
+
+    // change current data base and notify
+    void ChgDBData(const SwDBData& SwDBData);
 
     // Loeschen
     long    DelToEndOfLine();
@@ -572,6 +575,7 @@ private:
     FASTBOOL MoveBookMark(  BookMarkMove eFuncId,
                             USHORT nPos = 0,
                             BOOL bStart = TRUE );
+
 };
 
 inline void SwWrtShell::ResetCursorStack()

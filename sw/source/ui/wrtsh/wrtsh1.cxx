@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 14:43:51 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,78 +1551,13 @@ void SwWrtShell::NewCoreSelection()
 }
 
 // --------------
+void SwWrtShell::ChgDBData(const SwDBData& aDBData)
+{
+    SwEditShell::ChgDBData(aDBData);
+    //notify the db-beamer if available
+    GetView().NotifyDBChanged();
+}
 
-
-/*************************************************************************
-
-   $Log: not supported by cvs2svn $
-   Revision 1.10  2001/04/24 10:07:58  ama
-   Fix #77923#: Automatic contour refreshing after OLE editing
-
-   Revision 1.9  2001/03/09 17:16:29  jp
-   remove SvData usage
-
-   Revision 1.8  2001/03/01 12:33:03  jp
-   Bug #74707#: use new flag CheckForOLEInCaption
-
-   Revision 1.7  2001/02/23 12:45:30  os
-   Complete use of DefaultNumbering component
-
-   Revision 1.6  2000/11/14 18:28:14  jp
-   use moduleoptions
-
-   Revision 1.5  2000/10/27 14:29:47  os
-   sba includes removed
-
-   Revision 1.4  2000/10/25 15:36:07  jp
-   use CharClass/BreakIt instead of old WordSelection
-
-   Revision 1.3  2000/10/25 12:06:30  jp
-   Spellchecker/Hyphenator are not longer member of the shells
-
-   Revision 1.2  2000/10/06 13:41:54  jp
-   should changes: don't use IniManager
-
-   Revision 1.1.1.1  2000/09/18 17:14:53  hr
-   initial import
-
-   Revision 1.342  2000/09/18 16:06:27  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.341  2000/08/17 11:36:19  jp
-   remove the SW graphicmanager
-
-   Revision 1.340  2000/08/04 10:54:03  jp
-   Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; remove unused methods
-
-   Revision 1.339  2000/07/04 15:19:25  tl
-   XHyphenator1 => XHyphenator
-
-   Revision 1.338  2000/06/27 17:42:38  jp
-   Bug #76332#: internal SplitNode don't insert a new node before a table
-
-   Revision 1.337  2000/06/26 13:28:29  os
-   InsertDBColumnCntnt removed
-
-   Revision 1.336  2000/05/19 12:58:39  jp
-   use WordSelection class for check chars
-
-   Revision 1.335  2000/05/19 11:00:26  jp
-   Changes for Unicode
-
-   Revision 1.334  2000/04/20 12:51:14  os
-   GetName() returns String&
-
-   Revision 1.333  2000/04/19 11:18:25  os
-   UNICODE
-
-   Revision 1.332  2000/03/30 13:26:18  os
-   UNO III
-
-   Revision 1.331  2000/03/23 07:51:11  os
-   UNO III
-
-*************************************************************************/
 
 
 

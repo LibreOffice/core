@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:45:47 $
+ *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ public:
 
     //XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+    static const sal_Char* GetDBChangeURL();
 };
 
 #endif
