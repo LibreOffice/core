@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:41:50 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ turkish ] = "Alan seçimi:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selecció de camp:";
-    Text[ finnish ] = "Kentt?valinta:";
+    Text[ finnish ] = "Kenttävalinta:";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
@@ -169,6 +169,7 @@ String RID_MAP_QUESTION
     Text[ catalan ] = "Voleu editar la disposició de les columnes?";
     Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
 };
+
 
 
 
