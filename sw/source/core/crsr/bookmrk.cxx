@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:43:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,9 @@ TYPEINIT1( SwBookmark, SwModify );  //rtti
 
 SwBookmark::SwBookmark(const SwPosition& aPos)
     : SwModify( 0 ),
+    pPos2( 0 ),
     aStartMacro( aEmptyStr, aEmptyStr ),
     aEndMacro  ( aEmptyStr, aEmptyStr ),
-    pPos2( 0 ),
     eMarkType( BOOKMARK )
 {
     pPos1 = new SwPosition( aPos );
@@ -101,12 +101,12 @@ SwBookmark::SwBookmark(const SwPosition& aPos)
 SwBookmark::SwBookmark(const SwPosition& aPos, const KeyCode& rCode,
                         const String& rName, const String& rShortName )
     : SwModify( 0 ),
+    pPos2( 0 ),
     aStartMacro( aEmptyStr, aEmptyStr ),
     aEndMacro  ( aEmptyStr, aEmptyStr ),
-    aCode(rCode),
     aName(rName),
     aShortName(rShortName),
-    pPos2( 0 ),
+    aCode(rCode),
     eMarkType( BOOKMARK )
 {
     pPos1 = new SwPosition(aPos);
