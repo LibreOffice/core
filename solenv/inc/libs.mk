@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-15 16:29:07 $
+#   last change: $Author: obo $ $Date: 2001-07-04 14:45:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,6 +156,7 @@ HELPLIB=-lhlp$(UPD)$(DLLPOSTFIX)
 CHANELLIB=-lcha$(UPD)$(DLLPOSTFIX)
 .ENDIF
 BASICLIB=-lsb$(UPD)$(DLLPOSTFIX)
+BASICLIGHTLIB=-lsbl$(UPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(UPD)$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
 HM2LIBSH=-lhmwrpdll
@@ -301,6 +302,7 @@ CHANELLIB=$(LIBPRE) ich.lib
 INETLIBSH=$(LIBPRE) inetdll.lib
 INETLIBST=$(LIBPRE) inetwrap.lib
 BASICLIB=$(LIBPRE) basic.lib
+BASICLIGHTLIB=$(LIBPRE) basicl.lib
 SO2LIB=$(LIBPRE) so2.lib
 TKTLIB=$(LIBPRE) tkt.lib
 SJLIB=$(LIBPRE) sj.lib
