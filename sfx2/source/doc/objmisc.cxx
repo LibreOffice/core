@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:55:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,9 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
 
-#include <drafts/com/sun/star/script/provider/XScript.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/provider/XScript.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -146,7 +146,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
