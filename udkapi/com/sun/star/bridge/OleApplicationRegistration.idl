@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleApplicationRegistration.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:38:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
     <p>
     @deprecated
  */
-service OleApplicationRegistration
+published service OleApplicationRegistration
 {
 
     interface com::sun::star::uno::XInterface;
