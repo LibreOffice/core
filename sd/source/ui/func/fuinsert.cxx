@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:11:43 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
 
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
@@ -382,7 +385,16 @@ FuInsertOLE::FuInsertOLE (
         if ( xObj.is() )
         {
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+            awt::Size aSz;
+            try
+            {
+                aSz = xObj->getVisualAreaSize( nAspect );
+            }
+            catch ( embed::NoVisualAreaSizeException& )
+            {
+                // the default size will be set later
+            }
+
             Size aSize( aSz.Width, aSz.Height );
 
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
@@ -547,7 +559,16 @@ FuInsertOLE::FuInsertOLE (
             //    aIPObj->OnDocumentPrinterChanged( pDocSh->GetPrinter(FALSE) );
 
             BOOL bInsertNewObject = TRUE;
-            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+            awt::Size aSz;
+            try
+            {
+                aSz = xObj->getVisualAreaSize( nAspect );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {
+                // the default size will be set later
+            }
+
             Size aSize( aSz.Width, aSz.Height );
 
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
@@ -623,14 +644,20 @@ FuInsertOLE::FuInsertOLE (
                     //  New size must be set in SdrObject, or a wrong scale will be set at
                     //  ActivateObject.
 
-                    aSz = xObj->getVisualAreaSize( nAspect );
-                    Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
-                                    MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
-                    if ( aNewSize != aSize )
+                    try
                     {
-                        aRect.SetSize( aNewSize );
-                        pObj->SetLogicRect( aRect );
+                        aSz = xObj->getVisualAreaSize( nAspect );
+
+                        Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
+                                        MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
+                        if ( aNewSize != aSize )
+                        {
+                            aRect.SetSize( aNewSize );
+                            pObj->SetLogicRect( aRect );
+                        }
                     }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {}
 
                     if (bCreateNew)
                     {
