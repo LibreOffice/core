@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 16:22:32 $
+ *  last change: $Author: rt $ $Date: 2001-08-24 20:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ String STR_FILE_NOT_FOUND
     Text[ japanese ] = "οΎο½§ο½²οΎ™γ€%1γ€γ―οΎοΎο½½γ€%2γ€γ«θ¦‹γ¤γ‹γ‚γΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "\"%1\" νμΌμ„\"%2\" κ²½λ΅μ—μ„ μ°Ύμ§€γ€€λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε¨θ·―εΎ„\"%2\"δΈ­ζ— ζ³•ζ‰Ύε°ζ–‡δ»¶\"%1\"γ€‚";
-    Text[ chinese_traditional ] = "η„΅ζ³•ε¨θ·―εΎ‘\"%2\"ε…§ζ‰Ύε°ζª”ζ΅\"%1\"γ€‚";
+    Text[ chinese_traditional ] = "η„΅ζ³•ε¨θ·―εΎ‘<%2>ε…§ζ‰Ύε°ζª”ζ΅<%1>γ€‚";
     Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ Ηαγαέ \"%1\" έν ΗαγΣΗΡ \"%2\".";
     Text[ turkish ] = "Dosya \"%1\" \"%2\" veri yolunda bulunamadύ.";
     Text[ catalan ] = "No se pudo encontrar el archivo \"%1\" en la ruta \"%2\".";
@@ -1408,7 +1408,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Νΰηβΰνθÿ ξαϊεκςξβ";
         Text[ greek ] = "Ονόματα αντικειμένου";
         Text[ dutch ] = "Obje~ctnamen";
-        Text[ french ] = "~Noms d'objets";
+        Text[ french ] = "Noms d'objet";
         Text[ spanish ] = "Nombres de o~bjeto";
         Text[ italian ] = "~Nome oggetti";
         Text[ danish ] = "Objektnavne";
@@ -2344,7 +2344,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Òθο κλώχΰ";
         Text[ greek ] = "Key type";
         Text[ dutch ] = "Key type";
-        Text[ french ] = "Type de critθre";
+        Text[ french ] = "Type de clι";
         Text[ spanish ] = "Tipo de clave";
         Text[ finnish ] = "Key type";
         Text[ italian ] = "Tipo chiave";
@@ -4050,7 +4050,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Κλώχ ρξπςθπξβκθ";
         Text[ greek ] = "Κλειδί ταξινόμησης";
         Text[ dutch ] = "Sorteersleutel";
-        Text[ french ] = "Critθre de tri";
+        Text[ french ] = "Clι de tri";
         Text[ spanish ] = "Criterios de ordenaciσn";
         Text[ italian ] = "Criteri";
         Text[ danish ] = "Sorteringsnψgle";
@@ -4590,7 +4590,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ russian ] = "1-ι κλώχ";
             Text[ greek ] = "1. Κλειδί";
             Text[ dutch ] = "1e sleutel";
-            Text[ french ] = "1re clι";
+            Text[ french ] = "Clι 1";
             Text[ spanish ] = "1era clave";
             Text[ italian ] = "1° criterio";
             Text[ danish ] = "1. nψgle";
@@ -4615,7 +4615,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ russian ] = "2-ι κλώχ";
             Text[ greek ] = "2. Κλειδί";
             Text[ dutch ] = "2e sleutel";
-            Text[ french ] = "2θme clι";
+            Text[ french ] = "Clι 2";
             Text[ spanish ] = "2da llave";
             Text[ italian ] = "2° criterio";
             Text[ danish ] = "2. nψgle";
@@ -4805,6 +4805,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
