@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueChanger.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:16:18 $
+ *  last change:$Date: 2003-11-18 16:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public class ValueChanger {
 
    if (oldValue instanceof Boolean) {
      boolean oldbool = ((Boolean) oldValue).booleanValue();
-     newValue = new Boolean(!oldbool);
+     newValue = Boolean.valueOf(!oldbool);
    } else
 
    if (oldValue instanceof Integer) {
