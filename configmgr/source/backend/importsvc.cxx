@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:15:23 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ MergeImportService::InputHandler MergeImportService::createImportHandler(Backend
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    InputHandler aHandler( new ImportMergeHandler(xBackend, ImportMergeHandler::merge, aEntity) );
+    InputHandler aHandler( new ImportMergeHandler(xBackend, ImportMergeHandler::merge, aEntity, m_bSendNotification) );
 
     return aHandler;
 }
@@ -201,6 +201,7 @@ ImportService::ImportService(CreationArg _xContext, ServiceInfoHelper const & aS
 , m_xContext(_xContext)
 , m_xDestinationBackend()
 , m_aServiceInfo(aSvcInfo)
+, m_bSendNotification(false)
 {
     if (!m_xContext.is())
     {
@@ -220,8 +221,13 @@ ImportService::Backend ImportService::createDefaultBackend() const
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool ImportService::setImplementationProperty(OUString const & , uno::Any const & )
+sal_Bool ImportService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
 {
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Notify")))
+    {
+        return (aValue >>= m_bSendNotification);
+    }
+
     return false;
 }
 // -----------------------------------------------------------------------------
