@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.34 $
+*   $Revision: 1.35 $
 *
-*   last change: $Author: rt $ $Date: 2004-09-08 14:26:55 $
+*   last change: $Author: pjunck $ $Date: 2004-10-22 11:39:08 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _FORMS_LISTBOX_HXX_
 #include "ListBox.hxx"
 #endif
+
 #ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
 #endif
@@ -70,12 +71,6 @@
 #endif
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
 #endif
 #ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
@@ -86,6 +81,13 @@
 #ifndef _FORMS_BASELISTBOX_HXX_
 #include "BaseListBox.hxx"
 #endif
+#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
+#include "listenercontainers.hxx"
+#endif
+#ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
+#include "componenttools.hxx"
+#endif
+
 #ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
 #endif
@@ -98,6 +100,14 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
+#include <comphelper/listenernotification.hxx>
+#endif
+
+#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
+#include <cppuhelper/queryinterface.hxx>
+#endif
+
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
@@ -107,9 +117,6 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
-#include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -129,29 +136,24 @@
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
-#include <com/sun/star/awt/XListBox.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #include <algorithm>
@@ -175,6 +177,93 @@ namespace frm
     using namespace ::dbtools;
 
     //==================================================================
+    //= ChangeListeners
+    //==================================================================
+    typedef EventListeners<   XChangeListener
+                          >   ChangeListeners_Base;
+    class ChangeListeners : public ChangeListeners_Base
+    {
+    public:
+        inline ChangeListeners( ::cppu::OWeakObject& _rInstigator, ::osl::Mutex& _rMutex )
+            :ChangeListeners_Base( _rInstigator, _rMutex )
+        {
+        }
+
+    protected:
+        virtual bool    implNotify(
+                            const Reference< XChangeListener >& _rxListener,
+                            const EventObject& _rEvent
+                        )   SAL_THROW( ( Exception ) );
+    };
+
+    //------------------------------------------------------------------
+    bool ChangeListeners::implNotify( const Reference< XChangeListener >& _rxListener, const EventObject& _rEvent )   SAL_THROW( ( Exception ) )
+    {
+        _rxListener->changed( _rEvent );
+        return true;
+    }
+
+    //==================================================================
+    //= ItemListeners
+    //==================================================================
+    typedef ::comphelper::OListenerContainerBase<   XItemListener
+                                                ,   ItemEvent
+                                                >   ItemListeners_Base;
+    class ItemListeners : public ItemListeners_Base
+    {
+    protected:
+        ::cppu::OWeakObject& m_rInstigator;
+
+    public:
+        inline ItemListeners( ::cppu::OWeakObject& _rInstigator, ::osl::Mutex& _rMutex )
+            :ItemListeners_Base( _rMutex )
+            ,m_rInstigator( _rInstigator )
+        {
+        }
+
+    public:
+        inline void itemStateChanged( const ItemEvent& _rEvent )
+        {
+            ItemListeners_Base::notify( _rEvent );
+        }
+
+        inline void disposing()
+        {
+            EventObject aEvent( m_rInstigator );
+            ItemListeners_Base::disposing( aEvent );
+        }
+
+    protected:
+        virtual bool    implNotify(
+                            const Reference< XItemListener >& _rxListener,
+                            const ItemEvent& _rEvent
+                        )   SAL_THROW( ( Exception ) );
+    };
+
+    //------------------------------------------------------------------
+    bool ItemListeners::implNotify( const Reference< XItemListener >& _rxListener, const ItemEvent& _rEvent )   SAL_THROW( ( Exception ) )
+    {
+        ItemEvent aEvent( _rEvent );
+        aEvent.Source = m_rInstigator;
+        _rxListener->itemStateChanged( aEvent );
+        return true;
+    }
+
+    //==================================================================
+    //= ItemEvent
+    //==================================================================
+    class ItemEventDescription : public EventDescription
+    {
+    private:
+        ItemEvent   m_aEvent;
+
+    public:
+        ItemEventDescription( const ItemEvent& _rUnoEvent ) : m_aEvent( _rUnoEvent ) { }
+
+        const ItemEvent& getEvent() const { return m_aEvent; }
+    };
+
+    //==================================================================
     //= OListBoxModel
     //==================================================================
     //------------------------------------------------------------------
@@ -186,14 +275,12 @@ namespace frm
     //------------------------------------------------------------------------------
     Sequence< Type> OListBoxModel::_getTypes()
     {
-        return ::comphelper::concatSequences(
-            ::comphelper::concatSequences(
+        return TypeBag(
             OBoundControlModel::_getTypes(),
             OListBoxModel_BASE::getTypes(),
-            OEntryListHelper::getTypes()
-            ),
+            OEntryListHelper::getTypes(),
             OErrorBroadcaster::getTypes()
-            );
+        ).getTypes();
     }
 
 
@@ -1516,18 +1603,21 @@ namespace frm
     //------------------------------------------------------------------------------
     Sequence< Type> OListBoxControl::_getTypes()
     {
-        return concatSequences(
+        return TypeBag(
             OBoundControl::_getTypes(),
             OListBoxControl_BASE::getTypes()
-            );
+        ).getTypes();
     }
 
     //------------------------------------------------------------------
     Any SAL_CALL OListBoxControl::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
-        Any aReturn = OBoundControl::queryAggregation(_rType);
-        if (!aReturn.hasValue())
-            aReturn = OListBoxControl_BASE::queryInterface(_rType);
+        Any aReturn = OListBoxControl_BASE::queryInterface( _rType );
+
+        if  (   !aReturn.hasValue()
+            ||  _rType.equals( XTypeProvider::static_type() )
+            )
+            aReturn = OBoundControl::queryAggregation( _rType );
 
         return aReturn;
     }
@@ -1535,8 +1625,10 @@ namespace frm
     DBG_NAME(OListBoxControl);
     //------------------------------------------------------------------------------
     OListBoxControl::OListBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
-        :OBoundControl(_rxFactory, VCL_CONTROL_LISTBOX)
-        ,m_aChangeListeners(m_aMutex)
+        :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
+        ,m_pChangeListeners( new ChangeListeners( *this, m_aMutex ) )
+        ,m_pItemListeners( new ItemListeners( *this, m_aMutex ) )
+        ,m_pItemBroadcaster( NULL )
     {
         DBG_CTOR(OListBoxControl,NULL);
 
@@ -1548,12 +1640,13 @@ namespace frm
                 xComp->addFocusListener(this);
 
             // als ItemListener anmelden
-            Reference<XListBox> xListbox;
-            if (query_aggregation(m_xAggregate, xListbox))
-                xListbox->addItemListener(this);
+            if ( query_aggregation( m_xAggregate, m_xAggregateListBox ) )
+                m_xAggregateListBox->addItemListener(this);
         }
         // Refcount bei 2 fuer angemeldete Listener
         decrement(m_refCount);
+
+        doSetDelegator();
 
         m_aChangeTimer.SetTimeout(500);
         m_aChangeTimer.SetTimeoutHdl(LINK(this,OListBoxControl,OnTimeout));
@@ -1567,6 +1660,9 @@ namespace frm
             acquire();
             dispose();
         }
+
+        doResetDelegator();
+        m_xAggregateListBox.clear();
 
         DBG_DTOR(OListBoxControl,NULL);
     }
@@ -1588,7 +1684,7 @@ namespace frm
     void SAL_CALL OListBoxControl::focusGained(const FocusEvent& _rEvent) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_aChangeListeners.getLength()) // only if there are listeners
+        if ( !m_pChangeListeners->empty() ) // only if there are listeners
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             if (xSet.is())
@@ -1609,9 +1705,24 @@ namespace frm
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(RuntimeException)
     {
-        // call the changelistener delayed
+        // forward this to our listeners
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            if ( !m_pItemListeners->empty() )
+            {
+                if ( !m_pItemBroadcaster )
+                {
+                    m_pItemBroadcaster = new AsyncEventNotifier( this );
+                    m_pItemBroadcaster->acquire();
+                    m_pItemBroadcaster->create();
+                }
+                m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ) );
+            }
+        }
+
+        // and do the handling for the ChangeListeners
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
-        if (m_aChangeTimer.IsActive())
+        if ( m_aChangeTimer.IsActive() )
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
@@ -1621,7 +1732,7 @@ namespace frm
         }
         else
         {
-            if (m_aChangeListeners.getLength() && m_aCurrentSelection.hasValue())
+            if ( !m_pChangeListeners->empty() && m_aCurrentSelection.hasValue() )
             {
                 Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
                 if (xSet.is())
@@ -1667,13 +1778,13 @@ namespace frm
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxControl::addChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
-        m_aChangeListeners.addInterface(_rxListener);
+        m_pChangeListeners->addListener( _rxListener );
     }
 
     //------------------------------------------------------------------------------
     void SAL_CALL OListBoxControl::removeChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
-        m_aChangeListeners.removeInterface(_rxListener);
+        m_pChangeListeners->removeListener( _rxListener );
     }
 
     // OComponentHelper
@@ -1683,18 +1794,199 @@ namespace frm
         if (m_aChangeTimer.IsActive())
             m_aChangeTimer.Stop();
 
-        EventObject aEvt(static_cast< XWeak*>(this));
-        m_aChangeListeners.disposeAndClear(aEvt);
+        m_pChangeListeners->disposing();
+        m_pItemListeners->disposing();
+
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            if ( m_pItemBroadcaster )
+            {
+                m_pItemBroadcaster->release();
+                m_pItemBroadcaster = NULL;
+            }
+        }
 
         OBoundControl::disposing();
     }
 
     //------------------------------------------------------------------------------
+    void OListBoxControl::processEvent( const EventReference& _rEvent )
+    {
+        const ItemEventDescription* pItemEvent = static_cast< const ItemEventDescription* >( _rEvent.get() );
+        m_pItemListeners->itemStateChanged( pItemEvent->getEvent() );
+    }
+
+    //------------------------------------------------------------------------------
+    XComponentRef OListBoxControl::getComponent()
+    {
+        return XComponentRef( queryInterface( XComponent::static_type() ), UNO_QUERY );
+    }
+
+    //------------------------------------------------------------------------------
     IMPL_LINK(OListBoxControl, OnTimeout, void*, EMPTYTAG)
     {
-        EventObject aEvt(static_cast< XWeak*>(this));
-        NOTIFY_LISTENERS(m_aChangeListeners, XChangeListener, changed, aEvt);
-        return 1;
+        return m_pChangeListeners->notify();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
+    {
+        m_pItemListeners->addListener( l );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
+    {
+        m_pItemListeners->removeListener( l );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::addActionListener( const Reference< XActionListener >& l ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->addActionListener( l );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::removeActionListener( const Reference< XActionListener >& l ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->removeActionListener( l );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::addItem( const ::rtl::OUString& aItem, ::sal_Int16 nPos ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->addItem( aItem, nPos );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::addItems( const Sequence< ::rtl::OUString >& aItems, ::sal_Int16 nPos ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->addItems( aItems, nPos );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->removeItems( nPos, nCount );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL OListBoxControl::getItemCount(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getItemCount();
+        return 0;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL OListBoxControl::getItem( ::sal_Int16 nPos ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getItem( nPos );
+        return ::rtl::OUString( );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL OListBoxControl::getItems(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getItems();
+        return Sequence< ::rtl::OUString >( );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL OListBoxControl::getSelectedItemPos(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getSelectedItemPos();
+        return 0;
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::sal_Int16 > SAL_CALL OListBoxControl::getSelectedItemsPos(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getSelectedItemsPos();
+        return Sequence< ::sal_Int16 >( );
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL OListBoxControl::getSelectedItem(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getSelectedItem();
+        return ::rtl::OUString( );
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL OListBoxControl::getSelectedItems(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getSelectedItems();
+        return Sequence< ::rtl::OUString >( );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, ::sal_Bool bSelect ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->selectItemPos( nPos, bSelect );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, ::sal_Bool bSelect ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->selectItemsPos( aPositions, bSelect );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::selectItem( const ::rtl::OUString& aItem, ::sal_Bool bSelect ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->selectItem( aItem, bSelect );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->isMutipleMode();
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::setMultipleMode( ::sal_Bool bMulti ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->setMultipleMode( bMulti );
+    }
+
+    //--------------------------------------------------------------------
+    ::sal_Int16 SAL_CALL OListBoxControl::getDropDownLineCount(  ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            return m_xAggregateListBox->getDropDownLineCount();
+        return 0;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::setDropDownLineCount( ::sal_Int16 nLines ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->setDropDownLineCount( nLines );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OListBoxControl::makeVisible( ::sal_Int16 nEntry ) throw (RuntimeException)
+    {
+        if ( m_xAggregateListBox.is() )
+            m_xAggregateListBox->makeVisible( nEntry );
     }
 
 //.........................................................................
