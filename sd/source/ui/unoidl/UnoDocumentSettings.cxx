@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-04 10:57:23 $
+ *  last change: $Author: cl $ $Date: 2002-11-12 09:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE
 };
 
 #define MID_PRINTER 1
@@ -291,6 +291,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -807,6 +808,17 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 break;
 
             }
+            case HANDLE_UPDATEFROMTEMPLATE:
+            {
+                sal_Bool bValue;
+                if( *pValues >>= bValue )
+                {
+                    SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
+                    rInfo.SetQueryLoadTemplate( bValue );
+                    bOk = sal_True;
+                }
+            }
+            break;
             default:
                 throw UnknownPropertyException();
 
@@ -1046,6 +1058,13 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 *pValue <<= (sal_Bool)pDoc->IsKernAsianPunctuation();
                 break;
             }
+
+            case HANDLE_UPDATEFROMTEMPLATE:
+            {
+                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
+                *pValue <<= (sal_Bool)rInfo.IsQueryLoadTemplate();
+            }
+            break;
 
             default:
                 throw UnknownPropertyException();
