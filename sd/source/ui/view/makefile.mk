@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 11:04:54 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:35:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,70 +72,9 @@ AUTOSEG=true
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = $(PRJ)$/util$/sd.cxx \
-        sdview.cxx		\
-        sdview2.cxx 	\
-        sdview3.cxx 	\
-        sdview4.cxx 	\
-        sdview5.cxx 	\
-        viewshel.cxx	\
-        viewshe2.cxx	\
-        viewshe3.cxx	\
-        sdwindow.cxx	\
-        drviewsh.cxx	\
-        drviews1.cxx	\
-        drviews2.cxx	\
-        drviews3.cxx	\
-        drviews4.cxx	\
-        drviews5.cxx	\
-        drviews6.cxx	\
-        drviews7.cxx	\
-        drviews8.cxx	\
-        drviews9.cxx	\
-        drviewsa.cxx	\
-        drviewsb.cxx	\
-        drviewsc.cxx	\
-        drviewsd.cxx	\
-        drviewse.cxx	\
-        drviewsf.cxx	\
-        drviewsg.cxx	\
-        drviewsi.cxx	\
-        drviewsj.cxx	\
-        drvwshrg.cxx	\
-        drawview.cxx	\
-        grviewsh.cxx	\
-        slidvish.cxx	\
-        slidview.cxx	\
-        outlnvsh.cxx	\
-        outlnvs2.cxx	\
-        presvish.cxx	\
-        prvwshll.cxx	\
-        outlview.cxx	\
-        tabcontr.cxx	\
-        layertab.cxx	\
-        showview.cxx	\
-        showwin.cxx 	\
-        bmcache.cxx 	\
-        drstdob.cxx 	\
-        grstdob.cxx 	\
-        drbezob.cxx 	\
-        drglueob.cxx 	\
-        drtxtob.cxx 	\
-        drtxtob1.cxx 	\
-        sdruler.cxx 	\
-        sdoutl.cxx		\
-        SdOutlinerIterator.cxx \
-        frmview.cxx 	\
-        clview.cxx		\
-        zoomlist.cxx	\
-        unmodpg.cxx		\
-        drgrfob.cxx		\
-        WindowUpdater.cxx
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdoutl.obj  \
