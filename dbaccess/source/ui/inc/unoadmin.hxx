@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:07:47 $
+ *  last change: $Author: fs $ $Date: 2000-11-01 16:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public:
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            SAL_CALL Create(const ::com::sun::star::uno::Reference< starlang::XMultiServiceFactory >&);
+            SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -125,7 +125,7 @@ protected:
 // OGenericUnoDialog overridables
     virtual Dialog* createDialog(Window* _pParent);
     virtual void destroyDialog();
-    virtual void implInitialize(const staruno::Any& _rValue);
+    virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 };
 
 //.........................................................................
@@ -137,6 +137,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/31 08:07:47  fs
+ *  support an initial selection
+ *
  *  Revision 1.1  2000/10/25 12:49:14  fs
  *  moved herein from ..\dlg
  *

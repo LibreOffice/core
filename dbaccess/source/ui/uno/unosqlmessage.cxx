@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:08:47 $
+ *  last change: $Author: fs $ $Date: 2000-11-01 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,48 +94,52 @@ namespace dbaui
 {
 //.........................................................................
 
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::beans;
+
 //=========================================================================
 //-------------------------------------------------------------------------
-OSQLMessageDialog::OSQLMessageDialog(const staruno::Reference< starlang::XMultiServiceFactory >& _rxORB)
+OSQLMessageDialog::OSQLMessageDialog(const Reference< XMultiServiceFactory >& _rxORB)
     :OGenericUnoDialog(_rxORB)
 {
-    registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, starbeans::PropertyAttribute::TRANSIENT,
+    registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT,
         &m_aException, ::getCppuType(static_cast<SQLException*>(NULL)));
 }
 
 //-------------------------------------------------------------------------
-staruno::Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(staruno::RuntimeException)
+Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
 //-------------------------------------------------------------------------
-staruno::Reference< staruno::XInterface > SAL_CALL OSQLMessageDialog::Create(const staruno::Reference< starlang::XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OSQLMessageDialog(_rxFactory));
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OSQLMessageDialog::getImplementationName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL OSQLMessageDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString OSQLMessageDialog::getImplementationName_Static() throw(staruno::RuntimeException)
+::rtl::OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("org.openoffice.comp.sdb.OSQLMessageDialog");
 }
 
 //-------------------------------------------------------------------------
-::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(staruno::RuntimeException)
+::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 //-------------------------------------------------------------------------
-::comphelper::StringSequence OSQLMessageDialog::getSupportedServiceNames_Static() throw(staruno::RuntimeException)
+::comphelper::StringSequence OSQLMessageDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
     aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
@@ -143,7 +147,7 @@ staruno::Reference< staruno::XInterface > SAL_CALL OSQLMessageDialog::Create(con
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, sal_Int32 _nHandle, const staruno::Any& _rValue) throw(starlang::IllegalArgumentException)
+sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
 {
     switch (_nHandle)
     {
@@ -151,7 +155,7 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( staruno::Any& _rC
         {
             SQLExceptionInfo aInfo(_rValue);
             if (!aInfo.isValid())
-                throw starlang::IllegalArgumentException();
+                throw IllegalArgumentException();
 
             _rOldValue = m_aException;
             _rConvertedValue = aInfo.get();
@@ -165,9 +169,9 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( staruno::Any& _rC
 }
 
 //-------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -180,7 +184,7 @@ staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL OSQLMessageDialog::get
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OSQLMessageDialog::createArrayHelper( ) const
 {
-    staruno::Sequence< starbeans::Property > aProps;
+    Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -202,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/27 08:08:47  fs
+ *  don't include stringconstants.hrc directly anymore
+ *
  *  Revision 1.1  2000/10/25 12:56:32  fs
  *  moved herein from ..\dlg
  *

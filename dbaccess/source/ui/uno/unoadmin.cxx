@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:08:48 $
+ *  last change: $Author: fs $ $Date: 2000-11-01 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 //------------------------------------------------------------------------------
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 {
-    starbeans::PropertyValue aProperty;
+    PropertyValue aProperty;
     if (_rValue >>= aProperty)
     {
         if (aProperty.Name.equalsAsciiL("InitialSelection", sizeof("InitialSelection") - 1))
@@ -240,6 +240,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/31 08:08:48  fs
+ *  support an initial selection
+ *
  *  Revision 1.2  2000/10/27 08:08:47  fs
  *  don't include stringconstants.hrc directly anymore
  *
