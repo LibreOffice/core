@@ -1,88 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dialog:dialogs SYSTEM "../dtd/dialog.dtd">
 
-<dialogs xmlns="http://openoffice.org/2000/dialog">
+<window xmlns="http://openoffice.org/2000/dialog"
+    xmlns:dlg="http://openoffice.org/2000/dialog"
+    id="window1" title="Test-Dialog" left="50" top="50" height="660" width="400">
 
-    <window xmlns:dlg="http://openoffice.org/2000/dialog"
-        id="window1" title="Test-Dialog" left="50" top="50" height="660" width="400">
+    <dlg:styles xmlns:dlg="http://openoffice.org/2000/dialog">
+        <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
+        <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
+        <dlg:style style-id="no_border" border="none"/>
+    </dlg:styles>
 
-        <dlg:styles>
-            <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
-            <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
-            <dlg:style style-id="no_border" border="none"/>
-        </dlg:styles>
+    <dlg:bulletinboard xmlns:ns="http://www.fake" xmlns:dlg="http://openoffice.org/2000/dialog">
 
-        <dlg:bulletinboard xmlns:ns="http://www.fake">
+        <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50" width="50" height="50" style-id="bla3" xmlns:ns="http://openoffice.org/2000/dialog">
+            <event listener-type="type" event-method="clicked" script-type="basic" script-code="code" param="testi"/>
+        </button>
 
-            <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50" width="50" height="50" style-id="bla3" xmlns:ns="http://openoffice.org/2000/dialog">
-                <event listener-type="type" event-method="clicked" script-type="basic" script-code="code" param="testi"/>
-            </button>
-            <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50" width="50" height="50" style-id="bla" xmlns:ns="http://openoffice.org/2000/dialog"/>
-            <checkbox id="check1" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
-            <checkbox id="check2" value="dontknow" left="50" top="170" width="100" height="20" tristate="true"/>
-            <checkbox id="check3" value="tristate_checked" left="50" top="190" width="100" height="20" checked="true" tristate="true"/>
-            <menulist id="list1" multiselection="true" left="50" top="400" width="100" height="100">
-                <menupopup>
-                    <menuitem value="item1"/>
-                    <menuitem value="item2 sel" selected="true"/>
-                    <menuitem value="item3 sel" selected="true"/>
-                </menupopup>
-            </menulist>
-            <menulist id="list2" left="250" top="400" width="100" height="100">
-                <menupopup>
-                    <menuitem value="item4" selected="false"/>
-                    <menuitem value="item5 sel" selected="true"/>
-                    <menuitem value="item6"/>
-                </menupopup>
-            </menulist>
-            <combobox id="combo1" value="combotext1" left="250" top="150" width="50" height="50">
-                <menupopup>
-                    <menuitem value="Citem1"/>
-                    <menuitem value="Citem2"/>
-                </menupopup>
-            </combobox>
-            <combobox id="combo2" value="combotext2" left="310" top="150" width="50" height="50" spin="true">
-                <menupopup>
-                    <menuitem value="Citem3"/>
-                    <menuitem value="Citem4"/>
-                </menupopup>
-            </combobox>
-            <radiogroup>
-                <radio id="radio1" value="default radio" left="50" top="250" width="100" height="20"/>
-                <radio id="radio2" value="checked" left="50" top="270" width="100" height="20" checked="true"/>
-                <radio id="radio3" value="unchecked" left="50" top="290" width="100" height="20" checked="false"/>
-                <radio id="radio4" value="dont know" left="50" top="310" width="100" height="20" tristate="true"/>
-            </radiogroup>
-            <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
-                <title value="grouped"/>
-                <radio id="radio5" value="default radio" left="5" top="15" width="100" height="20"/>
-                <radio id="radio6" value="dont know" left="5" top="35" width="100" height="20" tristate="true"/>
-                <radio id="radio7" value="tristate checked" left="5" top="55" width="100" height="20" tristate="true" checked="true"/>
-                <radio id="radio8" value="checked" left="5" top="75" width="100" height="20" checked="true"/>
-            </titledbox>
-            <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center"/>
-            <textfield id="field1" left="250" top="520" width="50" height="40" value="edit no text here..." readonly="true" vscroll="true" multiline="true" align="right" style-id="no_border"/>
-            <textfield id="field2" left="320" top="520" width="50" height="40" value="hidden text" hscroll="true" echochar="*" align="left"/>
-            <img id="image1" left="50" top="600" width="80" height="50" src="../../test/w3c.jpg"/>
-            <filecontrol id="file1" left="150" top="600" width="100" height="20" value="../../test/w3c.jpg"/>
+        <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50" width="50" height="50" style-id="bla" xmlns:ns="http://openoffice.org/2000/dialog"/>
 
-        </dlg:bulletinboard>
+        <checkbox id="check1" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
+        <checkbox id="check2" value="dontknow" left="50" top="170" width="100" height="20" tristate="true"/>
+        <checkbox id="check3" value="tristate_checked" left="50" top="190" width="100" height="20" checked="true" tristate="true"/>
 
-    </window>
+        <menulist id="list1" multiselection="true" left="50" top="400" width="100" height="100">
+            <menupopup>
+                <menuitem value="item1"/>
+                <menuitem value="item2 sel" selected="true"/>
+                <menuitem value="item3 sel" selected="true"/>
+            </menupopup>
+        </menulist>
 
-    <window xmlns:dlg2="http://openoffice.org/2000/dialog"
-        id="window2" title="Test-Dialog2" left="100" top="100" height="200" width="200">
+        <dlg:menulist id="list2" left="250" top="400" width="100" height="100">
+            <menupopup>
+                <menuitem value="item4" selected="false"/>
+                <menuitem value="item5 sel" selected="true"/>
+                <menuitem value="item6"/>
+            </menupopup>
+        </dlg:menulist>
 
-        <dlg2:bulletinboard>
+        <combobox id="combo1" value="combotext1" left="250" top="150" width="50" height="50">
+            <menupopup>
+                <menuitem value="Citem1"/>
+                <menuitem value="Citem2"/>
+            </menupopup>
+        </combobox>
 
-            <dlg2:datefield id="datefield1" left="20" top="20" width="100" height="20" date-format="short_DDMMYY" spin="true" value="20010301"/>
-            <timefield id="time1" left="20" top="50" width="100" height="20" time-format="24h_long" value-min="0" value-max="24000000" strict-format="true" value="12000000" spin="true"/>
-            <patternfield id="pattern1" left="20" top="80" width="100" height="20" value="pattern" strict-format="true" readonly="true"/>
-            <currencyfield id="currency1" left="20" top="110" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" spin="true" thousands-separator="true" currency-symbol="$"/>
-                 <numericfield id="numeric1" left="20" top="140" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" thousands-separator="true"/>
+        <combobox id="combo2" value="combotext2" left="310" top="150" width="50" height="50" spin="true">
+            <menupopup>
+                <menuitem value="Citem3"/>
+                <menuitem value="Citem4"/>
+            </menupopup>
+        </combobox>
 
-        </dlg2:bulletinboard>
+        <radiogroup>
+            <radio id="radio1" value="default radio" left="50" top="250" width="100" height="20"/>
+            <radio id="radio2" value="checked" left="50" top="270" width="100" height="20" checked="true"/>
+            <radio id="radio3" value="unchecked" left="50" top="290" width="100" height="20" checked="false"/>
+            <radio id="radio4" value="dont know" left="50" top="310" width="100" height="20" tristate="true"/>
+        </radiogroup>
 
-    </window>
+        <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
+            <title value="grouped"/>
+            <radio id="radio5" value="default radio" left="5" top="15" width="100" height="20"/>
+            <radio id="radio6" value="dont know" left="5" top="35" width="100" height="20" tristate="true"/>
+            <radio id="radio7" value="tristate checked" left="5" top="55" width="100" height="20" tristate="true" checked="true"/>
+            <radio id="radio8" value="checked" left="5" top="75" width="100" height="20" checked="true"/>
+        </titledbox>
 
-</dialogs>
+        <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center"/>
+        <textfield id="field1" left="250" top="520" width="50" height="40" value="edit no text here..." readonly="true" vscroll="true" multiline="true" align="right" style-id="no_border"/>
+        <textfield id="field2" left="320" top="520" width="50" height="40" value="hidden text" hscroll="true" echochar="*" align="left"/>
+        <img id="image1" left="50" top="585" width="80" height="20" src="../../test/w3c.jpg"/>
+        <filecontrol id="file1" left="150" top="585" width="100" height="20" value="../../test/w3c.jpg"/>
+
+        <datefield id="datefield1" left="20" top="610" width="100" height="20" date-format="short_DDMMYY" spin="true" value="20010301"/>
+        <timefield id="time1" left="20" top="635" width="100" height="20" time-format="24h_long" value-min="0" value-max="24000000" strict-format="true" value="12000000" spin="true"/>
+        <patternfield id="pattern1" left="20" top="0" width="100" height="20" value="pattern" strict-format="true" readonly="true"/>
+        <currencyfield id="currency1" left="200" top="610" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" spin="true" thousands-separator="true" currency-symbol="$"/>
+             <numericfield id="numeric1" left="200" top="635" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" thousands-separator="true"/>
+    </dlg:bulletinboard>
+
+</window>

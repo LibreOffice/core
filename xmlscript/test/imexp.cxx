@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:08 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
 
 // -----------------------------------------------------------------------
 
-Sequence< Reference< container::XNameContainer > > importFile(
+Reference< container::XNameContainer > importFile(
     char const * fname )
 {
     // create the input stream
@@ -232,13 +232,16 @@ Sequence< Reference< container::XNameContainer > > importFile(
         int nLength = ::ftell( f );
         ::fseek( f, 0, SEEK_SET );
 
-        Sequence< sal_Int8 > bytes( nLength );
+        ByteSequence bytes( nLength );
         ::fread( bytes.getArray(), nLength, 1, f );
         ::fclose( f );
 
-        Sequence< Reference< container::XNameContainer > > models;
-        ::xmlscript::importDialogModelsFromByteSequence( &models, bytes );
-        return models;
+        Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
+        Reference< container::XNameContainer > xModel( xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+        ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel );
+
+        return xModel;
     }
     else
     {
@@ -249,10 +252,26 @@ Sequence< Reference< container::XNameContainer > > importFile(
 
 void exportToFile(
     char const * fname,
-    Sequence< Reference< container::XNameContainer > > const & models )
+    Reference< container::XNameContainer > const & xModel )
 {
+    Reference< io::XInputStreamProvider > xProvider( ::xmlscript::exportDialogModel( xModel ) );
+    Reference< io::XInputStream > xStream( xProvider->createInputStream() );
+
     Sequence< sal_Int8 > bytes;
-    ::xmlscript::exportDialogModelsToByteSequence( &bytes, models );
+    sal_Int32 nPos = xStream->readBytes( bytes, xStream->available() );
+    while (xStream->available() > 0)
+    {
+        Sequence< sal_Int8 > addBytes;
+        sal_Int32 nRead = xStream->readBytes( addBytes, xStream->available() );
+        sal_Int8 * pBytes = bytes.getArray();
+        sal_Int8 const * pAddBytes = addBytes.getConstArray();
+        sal_Int32 nPos = nRead;
+        while (nRead--)
+        {
+            pBytes[ nPos + nPos ] = pAddBytes[ nPos ];
+        }
+        nPos += nRead;
+    }
 
     FILE * f = ::fopen( fname, "w" );
     ::fwrite( bytes.getConstArray(), 1, bytes.getLength(), f );
@@ -265,7 +284,7 @@ void exportToFile(
 class MyApp : public Application
 {
 public:
-    void        Main();
+    void Main();
 };
 
 MyApp aMyApp;
@@ -293,25 +312,33 @@ void MyApp::Main()
 
         // import dialogs
         OString aParam1( OUStringToOString( OUString( GetCommandLineParam( 0 ) ), RTL_TEXTENCODING_ASCII_US ) );
-        Sequence< Reference< container::XNameContainer > > models( importFile( aParam1.getStr() ) );
+        Reference< container::XNameContainer > xModel( importFile( aParam1.getStr() ) );
+        OSL_ASSERT( xModel.is() );
 
-        Reference< container::XNameContainer > const * pModels = models.getConstArray();
-        for ( sal_Int32 nPos = 0; nPos < models.getLength(); ++nPos )
-        {
-            Reference< awt::XControl > xDlg( xMSF->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
-            xDlg->setModel( Reference< awt::XControlModel >::query( pModels[ nPos ] ) );
-            xDlg->createPeer( xToolkit, 0 );
-            Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
-            xD->execute();
-        }
+        Reference< awt::XControl > xDlg( xMSF->createInstance(
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
+        xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
+        xDlg->createPeer( xToolkit, 0 );
+        Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
+        xD->execute();
 
         if (GetCommandLineParamCount() == 2)
         {
             // write modified dialogs
             OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
-            exportToFile( aParam2.getStr(), models );
+            exportToFile( aParam2.getStr(), xModel );
         }
+    }
+    catch (xml::sax::SAXException & rExc)
+    {
+        OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        uno::Exception exc;
+        if (rExc.WrappedException >>= exc)
+        {
+            aStr += OString( " >>> " );
+            aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
+        }
+        OSL_ENSURE( 0, aStr.getStr() );
     }
     catch (uno::Exception & rExc)
     {
