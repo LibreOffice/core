@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:46:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,45 +194,6 @@ sal_Unicode& getSelectedChar()
     return cSelectedChar;
 }
 
-// -----------------------------------------------------------------------
-
-static int UnicodeToMapIndex( const FontCharMap& rMap, sal_UCS4 cChar )
-{
-    int nIndex = 0;
-    ULONG nRanges = rMap.GetRangeCount();
-    for( ULONG i = 0; i < nRanges; ++i )
-    {
-        sal_UCS4 cFirst, cLast;
-        rMap.GetRange( i, cFirst, cLast );
-        if( cChar < cLast )
-            if( cChar < cFirst )
-                break;
-            else
-                return nIndex + (cChar - cFirst);
-        nIndex += cLast - cFirst;
-    }
-
-    return -1;
-}
-
-// -----------------------------------------------------------------------
-
-static sal_UCS4 MapIndexToUnicode( const FontCharMap& rMap, unsigned nIndex )
-{
-    ULONG nRanges = rMap.GetRangeCount();
-    for( ULONG i = 0; i < nRanges; ++i )
-    {
-        sal_UCS4 cFirst, cLast;
-        rMap.GetRange( i, cFirst, cLast );
-        if( nIndex < cLast - cFirst )
-            return (cFirst + nIndex);
-        nIndex -= cLast - cFirst;
-    }
-
-    // we should never get here
-    return rMap.GetFirstChar();
-}
-
 // class SvxShowCharSet ==================================================
 
 #define SBWIDTH 16
@@ -390,7 +351,9 @@ int SvxShowCharSet::LastInView( void ) const
 {
     ULONG nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT;
-    return Min( nIndex, maFontCharMap.GetCharCount() ) - 1;
+    if( nIndex > maFontCharMap.GetCharCount() - 1 )
+        nIndex = maFontCharMap.GetCharCount() - 1;
+    return nIndex;
 }
 
 // -----------------------------------------------------------------------
@@ -463,7 +426,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             {
                 sal_Unicode cChar = rKEvt.GetCharCode();
                 sal_Unicode cNext = maFontCharMap.GetNextChar( cChar - 1 );
-                tmpSelected = UnicodeToMapIndex( maFontCharMap, cNext );
+                tmpSelected = maFontCharMap.GetIndexFromChar( cNext );
                 if( tmpSelected < 0 || (cChar != cNext) )
                 {
                     Control::KeyInput( rKEvt );
@@ -525,7 +488,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         int y = pix.Y();
 
         rtl::OUStringBuffer buf;
-        buf.appendUtf32(MapIndexToUnicode(maFontCharMap, i));
+        buf.appendUtf32( maFontCharMap.GetCharFromIndex( i ) );
         String aCharStr(buf.makeStringAndClear());
         int nTextWidth = GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
@@ -635,7 +598,7 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
-        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+        getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
     return getSelectedChar();
 }
 
@@ -645,7 +608,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 {
     // save last selected unicode
     if( nSelectedIndex >= 0 )
-        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+        getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
@@ -673,7 +636,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     }
 
     // restore last selected unicode
-    int nMapIndex = UnicodeToMapIndex( maFontCharMap, getSelectedChar() );
+    int nMapIndex = maFontCharMap.GetIndexFromChar( getSelectedChar() );
     SelectIndex( nMapIndex );
 
     // rearrange CharSet element in sync with nX- and nY-multiples
@@ -694,7 +657,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     {
         // need to scroll see closest unicode
         sal_Unicode cPrev = maFontCharMap.GetPrevChar( getSelectedChar() );
-        int nMapIndex = UnicodeToMapIndex( maFontCharMap, cPrev );
+        int nMapIndex = maFontCharMap.GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nNewPos );
         nSelectedIndex = bFocus ? nMapIndex+1 : -1;
@@ -751,7 +714,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 
     if( nSelectedIndex >= 0 )
     {
-        getSelectedChar() = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+        getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
         if( m_pAccessible )
         {
             ::svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
@@ -778,7 +741,7 @@ void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
     // get next available char of current font
     sal_Unicode cNext = maFontCharMap.GetNextChar( cNew - 1 );
 
-    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cNext );
+    int nMapIndex = maFontCharMap.GetIndexFromChar( cNext );
     SelectIndex( nMapIndex, bFocus );
     if( !bFocus )
     {
@@ -846,7 +809,7 @@ void SvxShowCharSet::ReleaseAccessible()
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
         aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),_nPos))).first;
         rtl::OUStringBuffer buf;
-        buf.appendUtf32(MapIndexToUnicode(maFontCharMap, _nPos));
+        buf.appendUtf32( maFontCharMap.GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
         aFind->second->maRect = Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
@@ -1484,32 +1447,18 @@ void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
     if( !pFontCharMap )
         return;
 
-    const int nRangeCount = pFontCharMap->GetRangeCount();
-    sal_UCS4 cFirst, cLast = 0;
-    int nRangeIndex = 0;
-
     // remove subsets that are not matched in any range
-    // assuming subsetlist and fontcharmap are sorted
-    SubsetList::iterator it = maSubsets.begin();
-    while( (nRangeIndex < nRangeCount) && (it != maSubsets.end()) )
+    SubsetList::iterator it_next = maSubsets.begin();
+    while( it_next != maSubsets.end() )
     {
+        SubsetList::iterator it = it_next++;
         const Subset& rSubset = *it;
+        sal_uInt32 cMin = rSubset.GetRangeMin();
+        sal_uInt32 cMax = rSubset.GetRangeMax();
 
-        if( cLast <= rSubset.GetRangeMin() )
-        {
-            // range too small for this subset => advance to next range
-            pFontCharMap->GetRange( nRangeIndex++, cFirst, cLast );
-        }
-        else
-        {
-            SubsetList::iterator it_tmp = it++;
-
-            // subset too big for this range => remove subset
-            if( cFirst > rSubset.GetRangeMax()  )
-                maSubsets.erase( it_tmp );
-        }
+        int nCount =  pFontCharMap->CountCharsInRange( cMin, cMax );
+        if( nCount <= 0 )
+            maSubsets.erase( it );
     }
-
-    // remove subsets after highest cLast
-    maSubsets.erase( it, maSubsets.end() );
 }
+
