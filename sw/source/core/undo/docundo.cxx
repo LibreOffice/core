@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:06:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,7 @@ USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
                 break;
         }
     } while( pUndoIds );
+
     return nId;
 }
 
