@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:29 $
+ *  last change: $Author: cd $ $Date: 2001-10-18 13:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -186,20 +190,8 @@ StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::
     try
     {
         // Create status indicator window to shared it for all created indictaor objects by this factory.
-        m_xSharedIndicator = css::uno::Reference< css::task::XStatusIndicator >( xFactory->createInstance( SERVICENAME_STATUSINDICATOR ), css::uno::UNO_QUERY );
-        if( m_xSharedIndicator.is() == sal_True )
-        {
-            // Take parent, set it on status window, add us as listener and calculate position and size of controls.
-            css::uno::Reference< css::awt::XControl >    xControl   ( m_xSharedIndicator, css::uno::UNO_QUERY );
-            css::uno::Reference< css::awt::XWindowPeer > xParentPeer( m_xParentWindow   , css::uno::UNO_QUERY );
-            css::uno::Reference< css::awt::XToolkit >    xToolkit   = xParentPeer->getToolkit()                ;
-
-            xControl->createPeer( xToolkit, xParentPeer );
-            m_xIndicatorWindow = css::uno::Reference< css::awt::XWindow >( m_xSharedIndicator, css::uno::UNO_QUERY );
-            m_xIndicatorWindow->setVisible( sal_False );
-
-            m_xParentWindow->addWindowListener( this );
-        }
+        m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
+        m_xParentWindow->addWindowListener( this );
 
         // We must be listener for disposing of our owner frame too.
         // We must die, if he die!
@@ -371,11 +363,10 @@ void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& a
         // Destroy shared status indicator.
         // Attention: Don't do it after destroying of parent or indicator window!
         // Otherwhise vcl say: "parent with living child destroyed ..."
-        css::uno::Reference< css::lang::XComponent >( m_xSharedIndicator, css::uno::UNO_QUERY )->dispose();
-        m_xSharedIndicator = css::uno::Reference< css::task::XStatusIndicator >();
+        delete m_pStatusBar;
+        m_pStatusBar = NULL;
 
         // Let owner, parent and all other references die ...
-        m_xIndicatorWindow  = css::uno::Reference< css::awt::XWindow >();
         m_xParentWindow     = css::uno::Reference< css::awt::XWindow >();
         m_xOwner            = css::uno::Reference< css::frame::XFrame >();
         m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
@@ -456,9 +447,8 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
     try
     {
         m_xParentWindow->setVisible   ( sal_True      );
-        m_xIndicatorWindow->setVisible( sal_True      );
-        m_xSharedIndicator->start     ( sText, nRange );
-
+        m_pStatusBar->Show();
+        m_pStatusBar->StartProgressMode( sText );
     }
     catch( css::uno::RuntimeException& )
     {
@@ -506,17 +496,17 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     {
         try
         {
-            m_xSharedIndicator->end();
+            m_pStatusBar->EndProgressMode();
 
             IndicatorStack::reverse_iterator pInfo = m_aStack.rbegin();
             if( pInfo != m_aStack.rend() )
             {
                 m_xActiveIndicator        = pInfo->m_xIndicator;
-                m_xSharedIndicator->start ( pInfo->m_sText, pInfo->m_nRange );
+                m_pStatusBar->StartProgressMode( pInfo->m_sText );
             }
             else
             {
-                m_xIndicatorWindow->setVisible( sal_False );
+                m_pStatusBar->Show( sal_False );
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
             }
         }
@@ -569,7 +559,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
     {
         try
         {
-            m_xSharedIndicator->reset();
+            m_pStatusBar->SetProgressValue( 0 );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -598,7 +588,7 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     {
         try
         {
-            m_xSharedIndicator->setText( sText );
+            m_pStatusBar->SetText( sText );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -627,7 +617,9 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     {
         try
         {
-            m_xSharedIndicator->setValue( nValue );
+            USHORT nPercentage = (USHORT)( ::std::min( (( nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
+
+            m_pStatusBar->SetProgressValue( nPercentage );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -665,13 +657,10 @@ void StatusIndicatorFactory::implts_recalcLayout()
     try
     {
         css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
-        css::awt::Size        aIndicatorSize  = (css::uno::Reference< css::awt::XLayoutConstrains >( m_xSharedIndicator, css::uno::UNO_QUERY ))->getPreferredSize();
+        Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
 
-        m_xIndicatorWindow->setPosSize( 0                                           ,
-                                        aParentSize.Height-aIndicatorSize.Height    ,
-                                        aParentSize.Width                           ,
-                                        aIndicatorSize.Height                       ,
-                                        css::awt::PosSize::POSSIZE                  );
+
+        m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
     }
     catch( css::uno::RuntimeException& )
     {

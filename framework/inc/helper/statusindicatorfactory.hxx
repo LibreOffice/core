@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:01 $
+ *  last change: $Author: cd $ $Date: 2001-10-18 13:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+#ifndef _SV_STATUS_HXX
+#include <vcl/status.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -315,12 +319,12 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     private:
 
         IndicatorStack                                          m_aStack                    ;   /// stack with all current indicator childs
+        StatusBar*                                              m_pStatusBar                ;   /// status bar as progress bar
         css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory                  ;   /// uno service manager to create new services
         css::uno::Reference< css::frame::XFrame >               m_xOwner                    ;   /// Reference to our owner frame. We are listener for disposing() to die if he die!
+
         css::uno::Reference< css::task::XStatusIndicator >      m_xActiveIndicator          ;   /// most active indicator child, which could work with our shared indicator window only
-        css::uno::Reference< css::task::XStatusIndicator >      m_xSharedIndicator          ;   /// one shared indicator window for all our indicator childs!
         css::uno::Reference< css::awt::XWindow >                m_xParentWindow             ;   /// we are listener on this window to resize shared statrus indicator
-        css::uno::Reference< css::awt::XWindow >                m_xIndicatorWindow          ;   /// we must resize this window, if m_xParentWindow is changed
 
 };      //  class StatusIndicatorFactory
 
