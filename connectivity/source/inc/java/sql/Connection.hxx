@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:27:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace connectivity
                 The new statement witgh unnamed parameters.
         */
         ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
-        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution_sal_Bool& _bIgnore);
+        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution,sal_Bool& _bIgnore);
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
