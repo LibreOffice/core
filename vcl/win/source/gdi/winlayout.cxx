@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-22 11:12:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             TEXTMETRICA aTextMetricA;
             if( !::GetTextMetricsA( mhDC, &aTextMetricA )
             ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
-            || (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
+            ||   (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
                 mbDisableGlyphs = true;
             DWORD nFLI = GetFontLanguageInfo( mhDC );
             if( !(nFLI & GCP_GLYPHSHAPE) )
@@ -257,6 +257,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( !bVertical )
     {
         // count chars to process as LTR
+        rArgs.ResetPos();
         for( bool bRTL; rArgs.GetNextRun( &i, &j, &bRTL ) && !bRTL; )
             mnGlyphCount += j - i;
     }
@@ -572,7 +573,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
     int nCount = 0;
     while( nCount < nLen )
     {
-        // update returned values
+        // update return values (nGlyphIndex,nCharPos,nGlyphAdvance)
         long nGlyphIndex = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
@@ -593,6 +594,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
                 nCharPos = mpGlyphs2Chars[nStart];
             *(pCharIndexes++) = nCharPos;
         }
+
         // stop at last glyph
         if( ++nStart >= mnGlyphCount )
             break;
@@ -789,16 +791,22 @@ void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         ApplyDXArray( rArgs );
     else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
+    else
+        return;
 
-    // recalculate virtual char widths
+    // recalculate virtual char widths if they were changed
     if( mpCharWidths != mpGlyphAdvances )
     {
         int i;
-        if( mpGlyphs2Chars )
+        if( !mpGlyphs2Chars )
+        {
+            // standard LTR case
             for( i = 0; i < mnGlyphCount; ++i )
                  mpCharWidths[ i ] = mpGlyphAdvances[ i ];
+        }
         else
         {
+            // BiDi or complex case
             for( i = 0; i < mnCharCount; ++i )
                 mpCharWidths[ i ] = 0;
             for( i = 0; i < mnGlyphCount; ++i )
@@ -996,19 +1004,18 @@ public:
 class UniscribeLayoutCache : public ImplTextLayoutCache
 {
 public:
-    inline UniscribeLayoutCache(): pScriptCache(0) {}
+    UniscribeLayoutCache();
+    virtual ~UniscribeLayoutCache() { flush( 0 ); }
 
-    virtual inline ~UniscribeLayoutCache() { flush(); }
+    virtual void flush( int nMinLevel );
 
-    virtual void flush();
-
-    SCRIPT_CACHE pScriptCache;
+    SCRIPT_CACHE maScriptCache[ MAX_FALLBACK ];
 };
 
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout( HDC hDC, UniscribeLayoutCache * pCache );
+                    UniscribeLayout( HDC hDC, SCRIPT_CACHE& rScriptCache );
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
@@ -1059,7 +1066,7 @@ private:
     mutable int*    mpGlyphs2Chars; // map abs glyph pos to abs char pos
 
     // platform specific info
-    UniscribeLayoutCache * mpCache;
+    SCRIPT_CACHE&   mrScriptCache;
 };
 
 // -----------------------------------------------------------------------
@@ -1086,12 +1093,6 @@ static HRESULT ((WINAPI *pScriptTextOut)( const HDC, SCRIPT_CACHE*,
     int, const WORD*, int, const int*, const int*, const GOFFSET* ));
 static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_CACHE*, SCRIPT_FONTPROPERTIES* ));
 static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
-
-void UniscribeLayoutCache::flush()
-{
-    if (pScriptCache != 0)
-        pScriptFreeCache(&pScriptCache);
-}
 
 // -----------------------------------------------------------------------
 
@@ -1160,7 +1161,27 @@ static bool InitUSP()
 
 // -----------------------------------------------------------------------
 
-UniscribeLayout::UniscribeLayout( HDC hDC, UniscribeLayoutCache * pCache )
+UniscribeLayoutCache::UniscribeLayoutCache()
+{
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+        maScriptCache[ i ] = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayoutCache::flush( int nMinLevel )
+{
+    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
+    {
+        if( maScriptCache[ i ] != NULL )
+            (*pScriptFreeCache)( &maScriptCache[ i ] );
+        maScriptCache[ i ] = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+UniscribeLayout::UniscribeLayout( HDC hDC, SCRIPT_CACHE& rScriptCache )
 :   WinLayout( hDC ),
     mnItemCount(0),
     mpScriptItems( NULL ),
@@ -1177,7 +1198,7 @@ UniscribeLayout::UniscribeLayout( HDC hDC, UniscribeLayoutCache * pCache )
     mpGlyphOffsets( NULL ),
     mpVisualAttrs( NULL ),
     mpGlyphs2Chars( NULL ),
-    mpCache( pCache )
+    mrScriptCache( rScriptCache )
 {}
 
 // -----------------------------------------------------------------------
@@ -1209,7 +1230,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         aDropChars.push_back( 0 );
         aDropChars.push_back( rArgs.mnLength );
         int nMin, nEnd;
-        for( bool bRTL; rArgs.GetNextRun( &nMin, &nEnd, &bRTL ); )
+        bool bRTL;
+        for( rArgs.ResetPos(); rArgs.GetNextRun( &nMin, &nEnd, &bRTL ); )
         {
             aDropChars.push_back( nMin );
             aDropChars.push_back( nEnd );
@@ -1379,7 +1401,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
-        HRESULT nRC = (*pScriptShape)( mhDC, &mpCache->pScriptCache,
+        HRESULT nRC = (*pScriptShape)( mhDC, &mrScriptCache,
             rArgs.mpStr + rVisualItem.mnMinCharPos,
             nCharCount,
             mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
@@ -1397,7 +1419,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
             // for now fall back to default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
-            nRC = (*pScriptShape)( mhDC, &mpCache->pScriptCache,
+            nRC = (*pScriptShape)( mhDC, &mrScriptCache,
                 rArgs.mpStr + rVisualItem.mnMinCharPos,
                 nCharCount,
                 mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
@@ -1450,7 +1472,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             }
         }
 
-        nRC = (*pScriptPlace)( mhDC, &mpCache->pScriptCache,
+        nRC = (*pScriptPlace)( mhDC, &mrScriptCache,
             mpOutGlyphs + rVisualItem.mnMinGlyphPos,
             nGlyphCount,
             mpVisualAttrs + rVisualItem.mnMinGlyphPos,
@@ -1911,7 +1933,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         // now draw the matching glyphs in this item
         Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
-        HRESULT nRC = (*pScriptTextOut)( mhDC, &mpCache->pScriptCache,
+        HRESULT nRC = (*pScriptTextOut)( mhDC, &mrScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
             &rVisualItem.mpScriptItem->a, NULL, 0,
             mpOutGlyphs + nMinGlyphPos,
@@ -2056,11 +2078,11 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     // increase char widths in string range to desired values
     bool bModified = false;
     int nOldWidth = 0;
+    DBG_ASSERT( mnUnitsPerPixel==1, "UniscribeLayout.mnUnitsPerPixel != 1" );
     for( int i = mnMinCharPos, j = 0; i < mnEndCharPos; ++i, ++j )
     {
         int nNewCharWidth = (pDXArray[j] - nOldWidth);
         // TODO: nNewCharWidth *= mnUnitsPerPixel;
-        DBG_ASSERT( mnUnitsPerPixel==1, "UniscribeLayout.mnUnitsPerPixel != 1" );
         if( mpCharWidths[i] != nNewCharWidth )
         {
             mpCharWidths[i] = nNewCharWidth;
@@ -2175,7 +2197,7 @@ void UniscribeLayout::Justify( long nNewWidth )
 
             SCRIPT_FONTPROPERTIES aFontProperties;
             int nMinKashida = 1;
-            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &mpCache->pScriptCache, &aFontProperties );
+            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &mrScriptCache, &aFontProperties );
             if( !nRC )
                 nMinKashida = aFontProperties.iKashidaWidth;
 
@@ -2209,13 +2231,13 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
             maGraphicsData.mxTextLayoutCache.reset(new UniscribeLayoutCache);
 
         // script complexity is determined in upper layers
-        pWinLayout = new UniscribeLayout(
-            maGraphicsData.mhDC,
-            static_cast< UniscribeLayoutCache * >(
-                maGraphicsData.mxTextLayoutCache.get()) );
-            // it must be guaranteed that the SalGraphics lives longer than the
-            // created UniscribeLayout, otherwise the data passed into the
-            // constructor might become invalid too early
+        SCRIPT_CACHE& rScriptCache =
+            static_cast<UniscribeLayoutCache*>( maGraphicsData.mxTextLayoutCache.get() )
+                ->maScriptCache[ nFallbackLevel ];
+        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rScriptCache );
+        // NOTE: it must be guaranteed that the SalGraphics lives longer than
+        // the created UniscribeLayout, otherwise the data passed into the
+        // constructor might become invalid too early
     }
     else
 #endif // USE_UNISCRIBE
