@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,23 +66,33 @@
 #include <sv.h>
 #endif
 
-class SalGraphics;
-class SalVirtualDevice;
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
+#endif
+
+class WinSalGraphics;
 
 // -----------------
 // - SalVirDevData -
 // -----------------
 
-class SalVirDevData
+class WinSalVirtualDevice : public SalVirtualDevice
 {
 public:
     HDC                     mhDC;                   // HDC or 0 for Cache Device
     HBITMAP                 mhBmp;                  // Memory Bitmap
     HBITMAP                 mhDefBmp;               // Default Bitmap
-    SalGraphics*            mpGraphics;             // current VirDev graphics
-    SalVirtualDevice*       mpNext;                 // next VirDev
+    WinSalGraphics*         mpGraphics;             // current VirDev graphics
+    WinSalVirtualDevice*    mpNext;                 // next VirDev
     USHORT                  mnBitCount;             // BitCount (0 or 1)
     BOOL                    mbGraphics;             // is Graphics used
+
+    WinSalVirtualDevice();
+    virtual ~WinSalVirtualDevice();
+
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    SetSize( long nNewDX, long nNewDY );
 };
 
 #endif // _SV_SALVD_H

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,9 @@
 #include <sv.h>
 #endif
 
-class SalGraphics;
-class SalInfoPrinter;
+#ifndef _SV_SALPRN_HXX
+#include <salprn.hxx>
+#endif
 
 // -----------------
 // - SalDriverData -
@@ -105,14 +106,16 @@ struct SalSysQueueData
     BOOL                    mbAnsi;                 // TRUE - use A functions
 };
 
-// ----------------------
-// - SalInfoPrinterData -
-// ----------------------
+// ---------------------
+// - WinSalInfoPrinter -
+// ---------------------
 
-class SalInfoPrinterData
+class WinSalGraphics;
+
+class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    SalGraphics*            mpGraphics;             // current Printer graphics
+    WinSalGraphics*         mpGraphics;             // current Printer graphics
     XubString               maDriverName;           // printer driver name
     XubString               maDeviceName;           // printer device name
     XubString               maPortName;             // printer port name
@@ -122,23 +125,57 @@ public:
     HDC                     mhDC;                   // printer hdc
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbAnsi;
+
+public:
+    WinSalInfoPrinter();
+    virtual ~WinSalInfoPrinter();
+
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual BOOL                    SetPrinterData( ImplJobSetup* pSetupData );
+    virtual BOOL                    SetData( ULONG nFlags, ImplJobSetup* pSetupData );
+    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
+                                                 long& rOutWidth, long& rOutHeight,
+                                                 long& rPageOffX, long& rPageOffY,
+                                                 long& rPageWidth, long& rPageHeight );
+    virtual ULONG                   GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType );
+    virtual ULONG                   GetPaperBinCount( const ImplJobSetup* pSetupData );
+    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
+    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-// ------------------
-// - SalPrinterData -
-// ------------------
+// -----------------
+// - WinSalPrinter -
+// -----------------
 
-class SalPrinterData
+class WinSalPrinter : public SalPrinter
 {
 public:
-    SalGraphics*            mpGraphics;             // current Printer graphics
-    SalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
-    SalPrinter*             mpNextPrinter;          // next printing printer
+    WinSalGraphics*         mpGraphics;             // current Printer graphics
+    WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
+    WinSalPrinter*          mpNextPrinter;          // next printing printer
     HDC                     mhDC;                   // printer hdc
     ULONG                   mnError;                // Error Code
     ULONG                   mnCopies;               // Kopien
     BOOL                    mbCollate;              // Sortierte Kopien
     BOOL                    mbAbort;                // Job Aborted
+
+public:
+    WinSalPrinter();
+    virtual ~WinSalPrinter();
+
+    virtual BOOL                    StartJob( const XubString* pFileName,
+                                              const XubString& rJobName,
+                                              const XubString& rAppName,
+                                              ULONG nCopies, BOOL bCollate,
+                                              ImplJobSetup* pSetupData );
+    virtual BOOL                    EndJob();
+    virtual BOOL                    AbortJob();
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );
+    virtual BOOL                    EndPage();
+    virtual ULONG                   GetErrorCode();
 };
 
 #endif // _SV_SALPRN_H
