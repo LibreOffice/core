@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-16 08:28:14 $
+ *  last change: $Author: jp $ $Date: 2000-10-19 10:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,11 +1066,12 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
             {
                 if(!bUsed || p->IsUsed())
                 {
-                    String* pName = new String( p->GetName() );
-                    ByteString* pConvName = new ByteString( *pName, eCharSet );
-
-                    pConvName->Insert( "  ", 0 );
                     USHORT nFamily = (USHORT)p->GetFamily();
+                    String* pName = new String( p->GetName() );
+                    pName->Insert( (sal_Unicode)nFamily, 0 );
+
+                    ByteString* pConvName = new ByteString( *pName, eCharSet );
+                    pConvName->Insert( "  ", 0 );
                     pConvName->SetChar( 0, (0xff & (nFamily >> 8)) );
                     pConvName->SetChar( 0, (0xff & nFamily) );
 
@@ -1111,23 +1112,28 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
                 // Globale Teile speichern
                 String aHelpFile;
                 ULONG nHelpId = p->GetHelpId( aHelpFile );
+                USHORT nFamily = p->GetFamily();
+                String sFamily( (sal_Unicode)nFamily );
 
-                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetName()), &nFndPos ))
+                (sNm = sFamily) += p->GetName();
+                if( aSortOrigNames.Seek_Entry( &sNm, &nFndPos ))
                     rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
                 else
                     rStream.WriteByteString( sEmpty );
 
-                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetParent()), &nFndPos ))
+                (sNm = sFamily) += p->GetParent();
+                if( aSortOrigNames.Seek_Entry( &sNm, &nFndPos ))
                     rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
                 else
                     rStream.WriteByteString( sEmpty );
 
-                if( aSortOrigNames.Seek_Entry( &(sNm = p->GetFollow()), &nFndPos ))
+                (sNm = sFamily) += p->GetFollow();
+                if( aSortOrigNames.Seek_Entry( &sNm, &nFndPos ))
                     rStream.WriteByteString( aConvNames.GetObject( nFndPos )->Copy( 2 ));
                 else
                     rStream.WriteByteString( sEmpty );
 
-                rStream << (USHORT)p->GetFamily() << p->GetMask();
+                rStream << nFamily << p->GetMask();
                 SfxPoolItem::writeByteString(rStream, aHelpFile);
                 rStream << nHelpId;
                 if(p->pSet)
