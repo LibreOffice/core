@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 07:39:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ void SvxTextAttrPage::Construct()
     bFitToSizeEnabled = bContourEnabled = TRUE;
     bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = FALSE;
 
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
