@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:48:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 
 #endif
 
+#define TABLEID_DOC     0xFFFF
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 class ScPatternAttr;
 class ScAutoFormatData;
 class SvxSearchItem;
@@ -99,7 +105,6 @@ class ScPostIt;
 class ScConditionalFormat;
 class ScValidationData;
 class SdrModel;
-class SvInPlaceObject;
 class Graphic;
 class Exchange;
 class ScRangeList;
@@ -189,7 +194,7 @@ public:
                                         BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
-    BOOL            PasteObject( const Point&, SvInPlaceObject*, const Size* = NULL );
+    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL );
     BOOL            PasteBitmap( const Point&, const Bitmap& );
     BOOL            PasteMetaFile( const Point&, const GDIMetaFile& );
     BOOL            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
