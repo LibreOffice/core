@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:02:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,11 @@ enum SdShapeTypes
     PRESENTATION_TABLE,
     PRESENTATION_NOTES,
     PRESENTATION_TITLE,
-    PRESENTATION_HANDOUT
+    PRESENTATION_HANDOUT,
+    PRESENTATION_HEADER,
+    PRESENTATION_FOOTER,
+    PRESENTATION_DATETIME,
+    PRESENTATION_PAGENUMBER
 };
 
 /** Factory method that creates accessibility objects corresponding to the
