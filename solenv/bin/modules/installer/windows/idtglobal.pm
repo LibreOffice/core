@@ -868,7 +868,17 @@ sub add_language_checkboxes_to_database
         my $count = $i + 1;
         my $nextcount = $i + 2;
         my $checkboxcount = "CheckBox" . $count;
-        my $yvalue = 60 + $i * 20;  # 20 instead of 30, 7*30=210 is too much
+
+        my $multiplier = 20;
+        my $offset = 60;
+        if ( $#{$languagesarrayref} > 7 )
+        {
+            $multiplier = 15;   # smaller differences for more than 7 languages
+            $offset = 50;       # smaller offset for more than 7 languages
+        }
+
+        my $yvalue = $offset + $i * $multiplier;
+
         my $property = "IS" . $windowslanguage; # capitol letter "IS" !
 
         my $controlnext = "";
