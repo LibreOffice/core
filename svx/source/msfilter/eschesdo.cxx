@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:53:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _SV_OUTDEV_HXX //autogen wg. OutputDevice
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _SV_POLY_HXX //autogen wg. PolyFlags
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_BITMAPEX_HXX //autogen wg. BitmapEx
 #include <vcl/bitmapex.hxx>
