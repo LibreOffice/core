@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:22 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sIterationCountAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
     const OUString sAlgorithmNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
     const OUString sKeyDerivationNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
+    const OUString sChecksumTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
+    const OUString sChecksumAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
 
     const OUString sFullPathProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
     const OUString sMediaTypeProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
@@ -107,10 +109,12 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sSaltProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
     const OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
     const OUString sSizeProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+    const OUString sDigestProperty      ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
 
     const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
     const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
     const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
+    const OUString sMD5                 ( RTL_CONSTASCII_USTRINGPARAM ( "MD5" ) );
 
     AttributeList * pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
@@ -136,7 +140,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         AttributeList *pAttrList = new AttributeList;
         const PropertyValue *pValue = pSequence->getConstArray();
         OUString aString;
-        const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL;
+        const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL;
         for (sal_uInt32 j = 0, nNum = pSequence->getLength(); j < nNum; j++, pValue++)
         {
             if (pValue->Name.equals (sMediaTypeProperty) )
@@ -163,15 +167,27 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                 pSalt = pValue;
             else if (pValue->Name.equals (sIterationCountProperty) )
                 pIterationCount = pValue;
+            else if (pValue->Name.equals ( sDigestProperty ) )
+                pDigest = pValue;
         }
-        Reference < XAttributeList > xAttrList = pAttrList;
         xHandler->ignorableWhitespace ( sWhiteSpace );
+        Reference < XAttributeList > xAttrList ( pAttrList );
         xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount )
         {
             AttributeList * pAttrList = new AttributeList;
             Reference < XAttributeList > xAttrList (pAttrList);
+            OUStringBuffer aBuffer;
+            Sequence < sal_uInt8 > aSequence;
+
             xHandler->ignorableWhitespace ( sWhiteSpace );
+            if ( pDigest )
+            {
+                pAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sMD5 );
+                pDigest->Value >>= aSequence;
+                Base64Codec::encodeBase64 ( aBuffer, aSequence );
+                pAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            }
             xHandler->startElement( sEncryptionDataElement , xAttrList);
 
             pAttrList = new AttributeList;
@@ -179,8 +195,6 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
             pAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
 
-            OUStringBuffer aBuffer;
-            Sequence < sal_uInt8 > aSequence;
             pVector->Value >>= aSequence;
             Base64Codec::encodeBase64 ( aBuffer, aSequence );
             pAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
