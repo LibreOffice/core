@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-31 08:47:53 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,18 +601,10 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
     if (!xCont.is())
         return nIndex;
 
-    Reference< XInterface> xToFind;
-    Type xRequestedElementClass( xCont->getElementType());
 
-    if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::form::XFormComponent>*)0))
-        xToFind = Reference< ::com::sun::star::form::XFormComponent>(xElement, UNO_QUERY);
-    else if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::form::XForm>*)0))
-        xToFind = Reference< ::com::sun::star::form::XForm>(xElement, UNO_QUERY);
-    else if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::beans::XPropertySet>*)0))
-        xToFind = Reference< ::com::sun::star::beans::XPropertySet>(xElement, UNO_QUERY);
-
-    DBG_ASSERT(xToFind.is(), "Unknown Element");
-    if (xToFind.is())
+    Reference< XInterface > xNormalized( xElement, UNO_QUERY );
+    DBG_ASSERT( xNormalized.is(), "getElementPos: invalid element!" );
+    if ( xNormalized.is() )
     {
         // Feststellen an welcher Position sich das Kind befindet
         nIndex = xCont->getCount();
@@ -620,13 +612,16 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
         {
             try
             {
-                Reference< XInterface> xCurrent;
-                ::cppu::extractInterface(xCurrent, xCont->getByIndex(nIndex));
-                if (xToFind == xCurrent)
+                Reference< XInterface > xCurrent;
+                xCont->getByIndex( nIndex ) >>= xCurrent;
+                DBG_ASSERT( xCurrent.get() == Reference< XInterface >( xCurrent, UNO_QUERY ).get(),
+                    "getElementPos: container element not normalized!" );
+                if ( xNormalized.get() == xCurrent.get() )
                     break;
             }
             catch(Exception&)
             {
+                DBG_ERROR( "getElementPos: caught an exception!" );
             }
 
         }
