@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:59:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ class ScDBCollection;
 class ScDPObject;
 class ScDPSaveData;
 class StrCollection;
+struct ScDPNumGroupInfo;
 
 // ---------------------------------------------------------------------------
 
@@ -116,6 +117,14 @@ public:
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
     void            RecalcPivotTable();
+
+    BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
+    BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
+    void            GroupDataPilot();
+    void            DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts );
+    void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
+    void            UngroupDataPilot();
+    void            DataPilotInput( const ScAddress& rPos, const String& rString );
 
     BOOL            HasSelectionForDrillDown( USHORT& rOrientation );
     void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
