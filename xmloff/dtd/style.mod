@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.7 2000-10-18 17:27:35 sab Exp $
+	$Id: style.mod,v 1.8 2000-10-19 10:13:55 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -151,7 +151,6 @@
 <!ATTLIST style:properties fo:score-spaces %boolean; #IMPLIED>
 <!ATTLIST style:properties style:letter-kerning %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-blinking %boolean; #IMPLIED>
-<!ENTITY % transparentOrColor "CDATA">
 <!ATTLIST style:properties style:text-background-color %transparentOrColor;
 						   #IMPLIED>
 
@@ -270,3 +269,49 @@
 <!ATTLIST style:column fo:margin-left %positiveLength; #IMPLIED>
 <!ATTLIST style:column fo:margin-right %positiveLength; #IMPLIED>
 
+<!-- page master properties -->
+<!ELEMENT style:page-master (style:properties?, style:header-style?, style:footer-style?, style:footnote-layout?)>
+<!ATTLIST style:page-master style:name %styleName; #REQUIRED>
+<!ATTLIST style:page-master style:page-usage (all|left|right|mirrored) "all">
+
+<!ELEMENT style:header-style (style:properties?)>
+<!ELEMENT style:footer-style (style:properties?)>
+
+<!ATTLIST style:properties fo:page-width %length; #IMPLIED>
+<!ATTLIST style:properties fo:page-height %length; #IMPLIED>
+<!ATTLIST style:properties style:paper-tray-number %positiveNumberOrDefault; #IMPLIED>
+<!ATTLIST style:properties style:print-orientation (portrait|landscape) #IMPLIED>
+<!ATTLIST style:properties style:register-truth-ref-style-name %styleName; #IMPLIED>
+<!ATTLIST style:properties style:print CDATA #IMPLIED>
+<!ATTLIST style:properties style:print-page-order (ttb|ltr) #IMPLIED>
+<!ATTLIST style:properties style:first-page-number %positiveInteger; #IMPLIED>
+<!ATTLIST style:properties style:scale-to %percentage; #IMPLIED>
+<!ATTLIST style:properties style:scale-to-pages %positiveInteger; #IMPLIED>
+
+<!ELEMENT style:footnote-layout (style:properties?,style:footnote-sep?)>
+<!ATTLIST style:properties style:max-height %lengthOrNoLimit; #IMPLIED>
+<!ATTLIST style:properties style:distance-before-sep %length; #IMPLIED>
+<!ATTLIST style:properties style:distance-after-sep %length; #IMPLIED>
+
+<!ELEMENT style:footnote-sep EMPTY>
+<!ATTLIST style:footnote-sep style:width %length; #REQUIRED>
+<!ATTLIST style:footnote-sep style:length %percentage; "100%">
+<!ATTLIST style:footnote-sep style:horizontal-align (left|center|right) "left">
+
+<!-- master page properties -->
+<!ELEMENT style:master-page ( (style:header, style:header-left?)?, (style:footer, style:footer-left?)?,
+								style:style*, (%shapes;)*, presentation:notes? )>
+<!ATTLIST style:master-page style:name %styleName; #REQUIRED>
+<!ATTLIST style:master-page style:page-master-name %styleName; #REQUIRED>
+<!ATTLIST style:master-page style:next-style-name %styleName; #IMPLIED>
+
+<!ENTITY % hd-ft-content "( text:p | (style:region-left?|style:region-center?| style:region-right?) )">
+<!ELEMENT style:header %hd-ft-content;>
+<!ELEMENT style:footer %hd-ft-content;>
+<!ELEMENT style:header-left %hd-ft-content;>
+<!ELEMENT style:footer-left %hd-ft-content;>
+
+<!ENTITY % region-content "(text:p*)">
+<!ELEMENT style:region-left %region-content;>
+<!ELEMENT style:region-center %region-content;>
+<!ELEMENT style:region-right %region-content;>
