@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
     ::rtl::OUString aShapeType( xDescr->getShapeType() );
 
     if (aShapeType  ==  ::rtl::OUString::createFromAscii("com.sun.star.drawing.ShapeControl"))
-        return new FmFormObj();
+        return new FmFormObj(OBJ_FM_CONTROL);
     else
         return SvxDrawPage::_CreateSdrObject( xDescr );
 

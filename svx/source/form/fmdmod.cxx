@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-19 15:11:17 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include "fmglob.hxx"
 
 using namespace ::svxform;
 
@@ -89,7 +90,7 @@ using namespace ::svxform;
     }
     else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ControlShape") ) )
     {
-        SdrObject* pObj = new FmFormObj();
+        SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
         xRet = *new SvxShapeControl(pObj);
     }
     if (!xRet.is())
