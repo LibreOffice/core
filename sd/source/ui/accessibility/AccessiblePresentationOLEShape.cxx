@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2002-03-08 14:09:55 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,10 @@ AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :   AccessibleOLEShape (rxShape, rxParent)
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    long nIndex)
+    :   AccessibleOLEShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
 {
 }
 
@@ -108,14 +110,14 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 
 
-/// Set this object's name if is different to the current name.
+/// Set this object's name if it is different to the current name.
 ::rtl::OUString
-    AccessiblePresentationOLEShape::createAccessibleBaseName (void)
+    AccessiblePresentationOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
@@ -128,7 +130,8 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressTable"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleImpressOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
+                                         "UnknownAccessibleImpressOLEShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
@@ -142,40 +145,40 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 
 ::rtl::OUString
-    AccessiblePresentationOLEShape::createAccessibleDescription (void)
+    AccessiblePresentationOLEShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     //    return createAccessibleName();
     DescriptionGenerator aDG (mxShape);
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationOLEShape"));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationOLEShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
                 DescriptionGenerator::STRING);
             break;
         case PRESENTATION_CHART:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationChartShape"));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationChartShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
                 DescriptionGenerator::STRING);
             break;
         case PRESENTATION_TABLE:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationTableShape"));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationTableShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
                 DescriptionGenerator::STRING);
             break;
         default:
-            aDG.initialize (::rtl::OUString::createFromAscii (
+            aDG.Initialize (::rtl::OUString::createFromAscii (
                 "Unknown accessible presentation OLE shape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.appendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
-                aDG.appendString (xDescriptor->getShapeType());
+                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
+                aDG.AppendString (xDescriptor->getShapeType());
             }
     }
 

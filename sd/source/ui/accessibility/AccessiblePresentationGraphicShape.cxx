@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationGraphicShape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2002-03-08 14:09:55 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,10 @@ AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape (
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :   AccessibleGraphicShape (rxShape, rxParent)
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    long nIndex)
+    :   AccessibleGraphicShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
 {
 }
 
@@ -110,19 +112,20 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
-    AccessiblePresentationGraphicShape::createAccessibleBaseName (void)
+    AccessiblePresentationGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressGraphicObject"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleImpressShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
+                                         "UnknownAccessibleImpressShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
@@ -136,25 +139,25 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 
 ::rtl::OUString
-    AccessiblePresentationGraphicShape::createAccessibleDescription (void)
+    AccessiblePresentationGraphicShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     //    return createAccessibleName ();
     DescriptionGenerator aDG (mxShape);
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationGraphicShape"));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationGraphicShape"));
             break;
         default:
-            aDG.initialize (::rtl::OUString::createFromAscii (
+            aDG.Initialize (::rtl::OUString::createFromAscii (
                 "Unknown accessible presentation graphic shape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
-                aDG.appendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
-                aDG.appendString (xDescriptor->getShapeType());
+                aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
+                aDG.AppendString (xDescriptor->getShapeType());
             }
     }
 
