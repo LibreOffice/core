@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:13:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,9 @@ namespace basprov
         ,m_bIsAppScriptCtx( true )
         ,m_bIsUserCtx(true)
     {
+        // TODO
+        if ( !m_pAppBasicManager )
+            m_pAppBasicManager = SFX_APP()->GetBasicManager();
     }
 
     // -----------------------------------------------------------------------------
@@ -283,10 +286,6 @@ namespace basprov
             */
         }
 
-        // TODO
-        if ( !m_pAppBasicManager )
-            m_pAppBasicManager = SFX_APP()->GetBasicManager();
-
         if ( !m_xLibContainerApp.is() )
             m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     }
@@ -380,7 +379,9 @@ namespace basprov
                         {
                             SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
                             if ( pMethod )
+                            {
                                 xScript = static_cast< provider::XScript* >( new BasicScriptImpl( pMethod ) );
+                            }
                         }
                     }
                 }
