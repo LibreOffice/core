@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:32:11 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,20 +182,30 @@ namespace utl
 // ---------------------------------------------------------------------------------------
     static OUString getExecutableDirectory();
 // ---------------------------------------------------------------------------------------
+
+    static Bootstrap::Impl* s_pData = NULL;
+
     Bootstrap::Impl const& Bootstrap::data()
     {
-        static Impl* s_pData = NULL;
 
         if (!s_pData)
         {
             using namespace osl;
             MutexGuard aGuard( Mutex::getGlobalMutex() );
 
-            static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
-
-            s_pData = &s_theData;
+            // static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
+            // s_pData = &s_theData;
+            s_pData = new Impl(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
         }
         return *s_pData;
+    }
+
+    void Bootstrap::reloadData()
+    {
+        if (s_pData != NULL) {
+            delete s_pData;
+            s_pData = NULL;
+        }
     }
 
 // ---------------------------------------------------------------------------------------
