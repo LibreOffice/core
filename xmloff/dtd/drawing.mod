@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.43 2001-04-20 13:21:26 mib Exp $
+	$Id: drawing.mod,v 1.44 2001-04-27 17:12:41 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -217,6 +217,7 @@
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
+<!ATTLIST draw:g %draw-style-name; >
 <!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
 <!ATTLIST draw:g %table-background; >
