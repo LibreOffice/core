@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:54:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -96,6 +97,7 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/anytostring.hxx>
 
 #ifndef _SVDPAGV_HXX
 #include <svdpagv.hxx>
@@ -516,8 +518,16 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                         if ( nCurState != embed::EmbedStates::LOADED )
                             xObjRef->changeState( nCurState );
                     }
-                    catch( uno::Exception& )
-                    {}
+                    catch( ::com::sun::star::uno::Exception& e )
+                    {
+                        (void)e;
+                        DBG_ERROR(
+                            (OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
+                                    "exception caught: ") +
+                            rtl::OUStringToOString(
+                                comphelper::anyToString( cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 )).getStr() );
+                    }
                 }
 
                 if ( !bResult )
@@ -550,8 +560,15 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 DisconnectFileLink_Impl();
                 mpImpl->maLinkURL = String();
             }
-            catch( uno::Exception& )
+            catch( ::com::sun::star::uno::Exception& e )
             {
+                (void)e;
+                DBG_ERROR(
+                    (OString("SdrOle2Obj::BreakFileLink_Impl(), "
+                            "exception caught: ") +
+                    rtl::OUStringToOString(
+                        comphelper::anyToString( cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 )).getStr() );
             }
         }
     }
@@ -595,8 +612,15 @@ void SdrOle2Obj::CheckFileLink_Impl()
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( ::com::sun::star::uno::Exception& e )
         {
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::CheckFileLink_Impl(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
         }
     }
 }
@@ -613,47 +637,60 @@ void SdrOle2Obj::Connect_Impl()
 {
     if( pModel && mpImpl->aPersistName.Len() )
     {
-        SfxObjectShell* pPers=pModel->GetPersist();
-        if ( pPers )
+        try
         {
-            comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
-            if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName ) )
+            SfxObjectShell* pPers=pModel->GetPersist();
+            if ( pPers )
             {
-                // object not known to container document
-                // No object -> disaster!
-                DBG_ASSERT( xObjRef.is(), "No object in connect!");
-                if ( xObjRef.is() )
+                comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
+                if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName ) )
                 {
-                    // object came from the outside, now add it to the container
-                    ::rtl::OUString aTmp;
-                    rContainer.InsertEmbeddedObject( xObjRef.GetObject(), aTmp );
-                    mpImpl->aPersistName = aTmp;
+                    // object not known to container document
+                    // No object -> disaster!
+                    DBG_ASSERT( xObjRef.is(), "No object in connect!");
+                    if ( xObjRef.is() )
+                    {
+                        // object came from the outside, now add it to the container
+                        ::rtl::OUString aTmp;
+                        rContainer.InsertEmbeddedObject( xObjRef.GetObject(), aTmp );
+                        mpImpl->aPersistName = aTmp;
+                    }
+                }
+                else if ( !xObjRef.is() )
+                    xObjRef.Assign( rContainer.GetEmbeddedObject( mpImpl->aPersistName ), xObjRef.GetViewAspect() );
+
+                if ( xObjRef.GetObject().is() )
+                {
+                    xObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
+                    mpImpl->mbConnected = true;
+                    xObjRef.Lock( TRUE );
                 }
             }
-            else if ( !xObjRef.is() )
-                xObjRef.Assign( rContainer.GetEmbeddedObject( mpImpl->aPersistName ), xObjRef.GetViewAspect() );
 
-            if ( xObjRef.GetObject().is() )
+            if ( xObjRef.is() )
             {
-                xObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
-                mpImpl->mbConnected = true;
-                xObjRef.Lock( TRUE );
+                if ( !mpImpl->pStateListener )
+                {
+                    mpImpl->pStateListener = new SdrEmbeddedObjectStateListener_Impl( this );
+                    mpImpl->pStateListener->acquire();
+                }
+
+                xObjRef->addStateChangeListener ( mpImpl->pStateListener );
+                if ( xObjRef->getCurrentState() != embed::EmbedStates::LOADED )
+                    GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
+
+                CheckFileLink_Impl();
             }
         }
-
-        if ( xObjRef.is() )
+        catch( ::com::sun::star::uno::Exception& e )
         {
-            if ( !mpImpl->pStateListener )
-            {
-                mpImpl->pStateListener = new SdrEmbeddedObjectStateListener_Impl( this );
-                mpImpl->pStateListener->acquire();
-            }
-
-            xObjRef->addStateChangeListener ( mpImpl->pStateListener );
-            if ( xObjRef->getCurrentState() != embed::EmbedStates::LOADED )
-                GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
-
-            CheckFileLink_Impl();
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::Connect_Impl(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
         }
     }
 
@@ -720,64 +757,90 @@ void SdrOle2Obj::RemoveListeners_Impl()
 {
     if( xObjRef.is() && mpImpl->aPersistName.Len() )
     {
-        sal_Int32 nState = xObjRef->getCurrentState();
-        if ( nState != embed::EmbedStates::LOADED )
+        try
         {
-            uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-            if( xBC.is() && pModifyListener )
+            sal_Int32 nState = xObjRef->getCurrentState();
+            if ( nState != embed::EmbedStates::LOADED )
             {
-                uno::Reference< util::XModifyListener > xListener( pModifyListener );
-                xBC->removeModifyListener( xListener );
+                uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
+                if( xBC.is() && pModifyListener )
+                {
+                    uno::Reference< util::XModifyListener > xListener( pModifyListener );
+                    xBC->removeModifyListener( xListener );
+                }
             }
+        }
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::RemoveListeners_Impl(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
         }
     }
 }
 
 void SdrOle2Obj::Disconnect_Impl()
 {
-    if ( pModel && mpImpl->aPersistName.Len() )
+    try
     {
-        if( pModel->IsInDestruction() )
+        if ( pModel && mpImpl->aPersistName.Len() )
         {
-            // TODO/LATER: here we must assume that the destruction of the model is enough to make clear that we will not
-            // remove the object from the container, even if the DrawingObject itself is not destroyed (unfortunately this
-            // happens later than the destruction of the model, so we can't assert that).
-            //DBG_ASSERT( bInDestruction, "Model is destroyed, but not me?!" );
-            //TODO/LATER: should be make sure that the ObjectShell also forgets the object, because we will close it soon?
-            /*
-            uno::Reference < util::XCloseable > xClose( xObjRef, uno::UNO_QUERY );
-            if ( xClose.is() )
+            if( pModel->IsInDestruction() )
             {
-                try
+                // TODO/LATER: here we must assume that the destruction of the model is enough to make clear that we will not
+                // remove the object from the container, even if the DrawingObject itself is not destroyed (unfortunately this
+                // happens later than the destruction of the model, so we can't assert that).
+                //DBG_ASSERT( bInDestruction, "Model is destroyed, but not me?!" );
+                //TODO/LATER: should be make sure that the ObjectShell also forgets the object, because we will close it soon?
+                /*
+                uno::Reference < util::XCloseable > xClose( xObjRef, uno::UNO_QUERY );
+                if ( xClose.is() )
                 {
-                    xClose->close( sal_True );
+                    try
+                    {
+                        xClose->close( sal_True );
+                    }
+                    catch ( util::CloseVetoException& )
+                    {
+                        // there's still someone who needs the object!
+                    }
                 }
-                catch ( util::CloseVetoException& )
-                {
-                    // there's still someone who needs the object!
-                }
-            }
 
-            xObjRef = NULL;*/
-        }
-        else if ( xObjRef.is() )
-        {
-            SfxObjectShell* pPers = pModel->GetPersist();
-            if ( pPers )
-            {
-                // remove object, but don't close it (that's up to someone else)
-                comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
-                xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
-                rContainer.RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
-                DisconnectFileLink_Impl();
+                xObjRef = NULL;*/
             }
+            else if ( xObjRef.is() )
+            {
+                SfxObjectShell* pPers = pModel->GetPersist();
+                if ( pPers )
+                {
+                    // remove object, but don't close it (that's up to someone else)
+                    comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
+                    xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
+                    rContainer.RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
+                    DisconnectFileLink_Impl();
+                }
+            }
+        }
+
+        if ( xObjRef.is() && mpImpl->pStateListener )
+        {
+            xObjRef->removeStateChangeListener ( mpImpl->pStateListener );
+            GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
         }
     }
-
-    if ( xObjRef.is() && mpImpl->pStateListener )
+    catch( ::com::sun::star::uno::Exception& e )
     {
-        xObjRef->removeStateChangeListener ( mpImpl->pStateListener );
-        GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
+        (void)e;
+        DBG_ERROR(
+            (OString("SdrOle2Obj::Disconnect_Impl(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
     mpImpl->mbConnected = false;
@@ -803,25 +866,37 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     if( pDestPers && pSrcPers && !IsEmptyPresObj() )
     {
-        // move the objects' storage; ObjectRef remains the same, but PersistName may change
-        ::rtl::OUString aTmp;
-        comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->GetEmbeddedObjectContainer();
-        uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
-        DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
-        if ( xObj.is() )
+        try
         {
-            pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
-
-            if ( xObjRef.is() )
+            // move the objects' storage; ObjectRef remains the same, but PersistName may change
+            ::rtl::OUString aTmp;
+            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->GetEmbeddedObjectContainer();
+            uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
+            DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
+            if ( xObj.is() )
             {
-                // if the object already assigned to the helper the new one must be assigned
-                xObjRef.Clear();
+                pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
+
+                if ( xObjRef.is() )
+                {
+                    // if the object already assigned to the helper the new one must be assigned
+                    xObjRef.Clear();
+                }
+
+                mpImpl->aPersistName = aTmp;
             }
-
-            mpImpl->aPersistName = aTmp;
+            DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
         }
-
-        DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::SetModel(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
+        }
     }
 
     SdrRectObj::SetModel( pNewModel );
@@ -1232,6 +1307,16 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 {
                     // setting of VisArea not necessary for objects that don't cache it in loaded state
                 }
+                catch( ::com::sun::star::uno::Exception& e )
+                {
+                    (void)e;
+                    DBG_ERROR(
+                        (OString("SdrOle2Obj::operator=(), "
+                                "exception caught: ") +
+                        rtl::OUStringToOString(
+                            comphelper::anyToString( cppu::getCaughtException() ),
+                            RTL_TEXTENCODING_UTF8 )).getStr() );
+                }
             }
         }
     }
@@ -1419,8 +1504,15 @@ BOOL SdrOle2Obj::Unload()
                     xObjRef->changeState( embed::EmbedStates::LOADED );
                     bUnloaded = TRUE;
                 }
-                catch ( uno::Exception& )
+                catch( ::com::sun::star::uno::Exception& e )
                 {
+                    (void)e;
+                    DBG_ERROR(
+                        (OString("SdrOle2Obj::Unload=(), "
+                                "exception caught: ") +
+                        rtl::OUStringToOString(
+                            comphelper::anyToString( cppu::getCaughtException() ),
+                            RTL_TEXTENCODING_UTF8 )).getStr() );
                 }
             }
         }
