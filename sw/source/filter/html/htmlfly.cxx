@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:41:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,8 +923,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     String aGrfNm( rGrfName );
     if( !HTMLOutFuncs::PrivateURLToInternalImg(aGrfNm) )
-        aGrfNm = INetURLObject::AbsToRel( aGrfNm, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
+        aGrfNm = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGrfNm);
 
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
@@ -1052,7 +1051,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         {
             ImageMap aScaledIMap( *pIMap );
             aScaledIMap.Scale( aScaleX, aScaleY );
-            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), aScaledIMap, aIMapName,
+            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         pLF, pIndArea, pIndMap,
@@ -1061,7 +1060,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         }
         else
         {
-            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), *pIMap, aIMapName,
+            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         pLF, pIndArea, pIndMap,
@@ -1313,7 +1312,9 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
                 if( !nErr )
                 {
-                    rGrfName = URIHelper::SmartRelToAbs( rGrfName );
+                    rGrfName = URIHelper::SmartRel2Abs(
+                        INetURLObject( rWrt.GetBaseURL() ), rGrfName,
+                        URIHelper::GetMaybeFileHdl() );
                     pLink = &rGrfName;
                 }
                 else
@@ -1346,8 +1347,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         sOut += ' ';
         String s( *pLink );
         if( !HTMLOutFuncs::PrivateURLToInternalImg(s) )
-            s = INetURLObject::AbsToRel( s, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
+            s = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), s);
         (sOut += sHTML_O_src) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( rWrt.Strm(), s, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1647,7 +1647,9 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
     }
 
-    aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
+    aGrfNm = URIHelper::SmartRel2Abs(
+        INetURLObject(rWrt.GetBaseURL()), aGrfNm,
+        URIHelper::GetMaybeFileHdl() );
     Size aSz( 0, 0 );
     ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                 : HTML_FRMOPTS_GENIMG;
@@ -1703,7 +1705,9 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             return rWrt;
         }
-        aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
+        aGrfNm = URIHelper::SmartRel2Abs(
+            INetURLObject(rWrt.GetBaseURL()), aGrfNm,
+            URIHelper::GetMaybeFileHdl() );
     }
     else
     {
