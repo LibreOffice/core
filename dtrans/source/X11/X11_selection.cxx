@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-31 10:51:37 $
+ *  last change: $Author: pl $ $Date: 2001-09-03 17:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,7 +988,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
 void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
-    ClearableMutexGuard aGuard( m_aMutex );
+    ResettableMutexGuard aGuard( m_aMutex );
 #ifdef DEBUG
     fprintf( stderr, "handleSelectionRequest for selection %s and target %s\n",
              OUStringToOString( getString( rRequest.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1012,13 +1012,15 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     if( pAdaptor &&
         XGetSelectionOwner( m_pDisplay, rRequest.selection ) == m_aWindow )
     {
+        Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
         if( rRequest.target == m_nTARGETSAtom )
         {
             // someone requests our types
-            Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
             if( xTrans.is() )
             {
+                aGuard.clear();
                 Sequence< DataFlavor > aFlavors = xTrans->getTransferDataFlavors();
+                aGuard.reset();
                 Atom* pTypes = new Atom[ aFlavors.getLength() ];
                 int nFormat;
                 for( int i = 0; i < aFlavors.getLength(); i++ )
@@ -1040,7 +1042,10 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 
             Sequence< sal_Int8 > aData;
             OUString aType( convertTypeFromNative( rRequest.target, rRequest.selection ) );
-            if( convertData( pAdaptor->getTransferable(), aType, aData ) )
+            aGuard.clear();
+            bool bConverted = convertData( pAdaptor->getTransferable(), aType, aData );
+            aGuard.reset();
+            if( bConverted )
             {
                 // conversion succeeded
                 int nFormat;
