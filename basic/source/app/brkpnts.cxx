@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:12:02 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _TEXTDATA_HXX //autogen
 #include <svtools/textdata.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
