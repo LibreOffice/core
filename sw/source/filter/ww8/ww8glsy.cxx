@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:43:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             // entry (== -1) otherwise the group indicates the group in the
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
-            INT16 group = rExtra[nGlosEntry].ToInt32() + 2;
-            if (group != -1)
+            if ((rExtra[nGlosEntry].ToInt32() + 2) != -1)
             {
                 rBlocks.ClearDoc();
                 const String &rLNm = rStrings[nGlosEntry];
