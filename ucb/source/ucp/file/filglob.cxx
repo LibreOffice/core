@@ -4,6 +4,9 @@
 #ifndef _FILERROR_HXX_
 #include "filerror.hxx"
 #endif
+#ifndef _SHELL_HXX_
+#include "shell.hxx"
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -44,15 +47,116 @@
 #ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include "com/sun/star/breans/PropertyState.hpp"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include "com/sun/star/breans/PropertyValue.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include "com/sun/star/uno/Any.hxx"
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include "com/sun/star/uno/Sequence.hxx"
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
+#endif
+#ifndef _RTL_USTRING_H_
+#include "rtl/ustring.h"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 using namespace ucbhelper;
 using namespace osl;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
+namespace {
 
+Sequence< Any > generateErrorArguments(fileaccess::shell * pShell,
+                                       rtl::OUString const & rPhysicalUrl)
+{
+    OSL_ENSURE(pShell, "specification violation");
+
+    rtl::OUString aUri;
+    rtl::OUString aResourceName;
+    rtl::OUString aResourceType;
+    bool bUri = false;
+    bool bResourceName = false;
+    bool bResourceType = false;
+
+    if (pShell->uncheckMountPoint(rPhysicalUrl, aUri))
+    {
+        bUri = true;
+        // For security reasons, exhibit the system path only if it is not
+        // subject to mount point mapping:
+        if (rPhysicalUrl == aUri
+            && osl::FileBase::getSystemPathFromFileURL(rPhysicalUrl,
+                                                       aResourceName)
+                   == osl::FileBase::E_None)
+            bResourceName = true;
+    }
+
+    // The resource types "folder" (i.e., directory) and "volume" seem to be
+    // the most interesting when producing meaningful error messages:
+    osl::DirectoryItem aItem;
+    if (osl::DirectoryItem::get(rPhysicalUrl, aItem) == osl::FileBase::E_None)
+    {
+        osl::FileStatus aStatus(FileStatusMask_Type);
+        if (aItem.getFileStatus(aStatus) == osl::FileBase::E_None)
+            switch (aStatus.getFileType())
+            {
+            case osl::FileStatus::Directory:
+                aResourceType
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("folder"));
+                bResourceType = true;
+                break;
+
+            case osl::FileStatus::Volume:
+                aResourceType
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("volume"));
+                bResourceType = true;
+                break;
+            }
+    }
+
+    Sequence< Any > aArguments((bUri ? 1 : 0)
+                                   + (bResourceName ? 1 : 0)
+                                   + (bResourceType ? 1 : 0));
+    sal_Int32 i = 0;
+    if (bUri)
+        aArguments[i++]
+            <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "Uri")),
+                              -1,
+                              makeAny(aUri),
+                              PropertyState_DIRECT_VALUE);
+    if (bResourceName)
+        aArguments[i++]
+            <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "ResourceName")),
+                              -1,
+                              makeAny(aResourceName),
+                              PropertyState_DIRECT_VALUE);
+    if (bResourceType)
+        aArguments[i++]
+            <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "ResourceType")),
+                              -1,
+                              makeAny(aResourceType),
+                              PropertyState_DIRECT_VALUE);
+    return aArguments;
+}
+
+}
 
 namespace fileaccess {
 
@@ -198,7 +302,8 @@ namespace fileaccess {
 
 
 
-    void throw_handler( sal_Int32 errorCode,
+    void throw_handler( shell * pShell,
+                        sal_Int32 errorCode,
                         sal_Int32 minorCode,
                         const Reference< XCommandEnvironment >& xEnv,
                         const rtl::OUString& aUncPath )
@@ -281,7 +386,9 @@ namespace fileaccess {
                 break;
             }
 
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
                  errorCode == TASKHANDLING_OPENDIRECTORY_FOR_REMOVE )
@@ -316,7 +423,9 @@ namespace fileaccess {
                 break;
             }
 
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
                  errorCode == TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE    ||
@@ -326,7 +435,9 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_IOEXCEPTION_FOR_PAGING         )
         {
             ioErrorCode = IOErrorCode_UNKNOWN;
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
                  errorCode == TASKHANDLING_READING_FILE_FOR_PAGING )
@@ -359,7 +470,9 @@ namespace fileaccess {
                 ioErrorCode = IOErrorCode_GENERAL;
                 break;
             }
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
                  errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
@@ -388,7 +501,9 @@ namespace fileaccess {
                 ioErrorCode = IOErrorCode_GENERAL;
                 break;
             }
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE )
         {
@@ -404,7 +519,11 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
         {
             ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
-            cancelCommandExecution( ioErrorCode,getParentName( aUncPath ),xEnv );
+            cancelCommandExecution(
+                ioErrorCode,
+                generateErrorArguments(pShell, getParentName(aUncPath)),
+                    //TODO! ok to supply physical URL to getParentName()?
+                xEnv );
         }
         else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
                  errorCode == TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE       ||
@@ -449,7 +568,9 @@ namespace fileaccess {
                 ioErrorCode = IOErrorCode_GENERAL;
                 break;
             }
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
                  errorCode == TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE )
@@ -491,12 +612,16 @@ namespace fileaccess {
                 ioErrorCode = IOErrorCode_GENERAL;
                 break;
             }
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_MOUNTPOINTS )
         {
             ioErrorCode = IOErrorCode_NOT_EXISTING;
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
                  errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT     ||
@@ -508,12 +633,16 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_TRANSFER_INVALIDURL )
         {
             ioErrorCode = IOErrorCode_GENERAL;
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_ACCESSINGROOT )
         {
             ioErrorCode = IOErrorCode_WRITE_PROTECTED;
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
         {
@@ -561,7 +690,9 @@ namespace fileaccess {
                 ioErrorCode = IOErrorCode_GENERAL;
                 break;
             }
-            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell, aUncPath),
+                                    xEnv );
         }
         else if( errorCode == TASKHANDLING_NAMECLASH_FOR_COPY   ||
                  errorCode == TASKHANDLING_NAMECLASH_FOR_MOVE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 
 namespace fileaccess
 {
+    class shell;
+
     /*
      * This implementation is inherited by class fileaccess::shell.
      * The relevant methods in this class all have as first argument the CommandId,
@@ -234,8 +236,10 @@ namespace fileaccess
          *  "endTask" throws in case an error code is set the corresponding exception.
          */
 
-        void SAL_CALL endTask( sal_Int32 CommandId,
-                               const rtl::OUString& aUnqPath );  // The URL of the object
+        void SAL_CALL endTask( shell * pShell, // must not be null
+                               sal_Int32 CommandId,
+                               const rtl::OUString& aUnqPath );
+                                   // the physical URL of the object
 
         com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
         getInteractionHandler( sal_Int32 CommandId );

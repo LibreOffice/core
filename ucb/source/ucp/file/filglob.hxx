@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 namespace fileaccess {
 
+    class shell;
 
     struct equalOUString
     {
@@ -156,11 +157,13 @@ namespace fileaccess {
     // This function implements the global exception handler of the file_ucp;
     // It never returns;
 
-    extern void throw_handler( sal_Int32 errorCode,
+    extern void throw_handler( shell * pShell, // must not be null
+                               sal_Int32 errorCode,
                                sal_Int32 minorCode,
                                const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& xEnv,
                                const rtl::OUString& aUncPath );
+                                   // the physical URL of the object
 
 } // end namespace fileaccess
 
