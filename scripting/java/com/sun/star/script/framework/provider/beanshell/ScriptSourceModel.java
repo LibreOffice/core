@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSourceModel.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:11:30 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:03:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -126,36 +126,58 @@ public class ScriptSourceModel {
         return false;
     }
 
-    public void execute(final XScriptContext context)
-        throws InvocationTargetException
+    public Object execute(final XScriptContext context, ClassLoader cl )
+        throws Exception
     {
+        Object result = null;
         // Thread execThread = new Thread() {
             // public void run() {
+                if ( cl != null )
+                {
+                    // sets this threads class loader
+                    // hopefully any threads spawned by this
+                    // will inherit this cl
+                    // this enables any class files imported
+                    // from the interpreter to be loaded
+                    // note: setting the classloader on the
+                    // interpreter has a slightly different
+                    // meaning in that the classloader for
+                    // the interpreter seems only to look for
+                    // source files ( bla.java ) in the classpath
+                    Thread.currentThread().setContextClassLoader(cl);
+                }
                 bsh.Interpreter interpreter = new bsh.Interpreter();
-                interpreter.getNameSpace().clear();
+                if ( cl != null )
+                {
+                    // additionally set class loader on the interpreter
+                    // to allow it to load java classes defined in source
+                    // files e.g. bla.java
+                    interpreter.getNameSpace().clear();
+                }
+
 
                 // reset position
                 currentPosition = -1;
                 view.update();
 
-                try {
-                    interpreter.set("context", context);
-                    interpreter.set("ARGUMENTS", new Object[0]);
+                interpreter.set("context", context);
+                interpreter.set("ARGUMENTS", new Object[0]);
 
-                    if (view.isModified()) {
-                        interpreter.eval(view.getText());
-                    }
-                    else {
-                        interpreter.eval(getText());
-                    }
+                if (view.isModified()) {
+                    result = interpreter.eval(view.getText());
                 }
-                catch (bsh.EvalError err) {
-                    currentPosition = err.getErrorLineNumber() - 1;
-                    view.update();
-                    throw new InvocationTargetException(err, err.getErrorText());
+                else {
+                    result = interpreter.eval(getText());
                 }
             // }
         // };
         // execThread.start();
+        return result;
+    }
+    public void indicateErrorLine( int lineNum )
+    {
+        System.out.println("Beanshell indicateErrorLine " + lineNum );
+        currentPosition = lineNum - 1;
+        view.update();
     }
 }
