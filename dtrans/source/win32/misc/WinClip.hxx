@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClip.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:25:50 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
