@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:42:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
-
+#include "swabstdlg.hxx" //CHINA001
 
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
@@ -312,9 +312,16 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
 
-            SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
-                                           GetView().GetWindow(),
-                                           aSet, FALSE, DLG_FRM_GRF );
+//CHINA001          SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
+//CHINA001          GetView().GetWindow(),
+//CHINA001          aSet, FALSE, DLG_FRM_GRF );
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( ResId(DLG_FRM_GRF),
+                                                    GetView().GetViewFrame(),
+                                                    GetView().GetWindow(),
+                                                    aSet, FALSE, DLG_FRM_GRF);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if( pDlg->Execute() )
             {
                 rSh.StartAllAction();
