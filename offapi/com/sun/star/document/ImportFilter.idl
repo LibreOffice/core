@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:18:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,32 +138,9 @@ service ImportFilter
                     of service <type>FilterFactory</type>.
                 </li>
             </ul>
-        See description of service <member>FilterFactory::XNameAccess</member> for a description of
-        possible configuration data too.
+        See description of service <member>FilterFactory::XNameContainer</member> for a description of
+        possible configuration data.
         </p>
-
-        @example
-            <listing>
-            <b>void</b> XInitialization::initialize( java.lang.Object[] lData )
-            {
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Config part exist every time - it's guaranted by FilterFactory!</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>int</b> i=0;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.sun.star.beans.NamedValue[] lConfig = lData[i];
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>( p=0; p&lt;lConfig.length; ++p )
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// ... work with this config data</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b> (lConfig[p].Name=="...")
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Arguments of call createInstanceWithArguments() are optional ones.</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// They mustn't exist.</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Note: i starts with 1. Because first element was already handled.</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>( i=1; i&lt;lData.length(); ++i )
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// ... work with this optional data</font></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
-            }
-            </listing>
      */
     [optional] interface com::sun::star::lang::XInitialization;
 
