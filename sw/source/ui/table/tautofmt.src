@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:53:41 $
+ *  last change: $Author: obo $ $Date: 2001-03-19 12:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "Formatar" ;
         Text [ finnish ] = "Mu~odot" ;
         Text [ danish ] = "Formatering" ;
-        Text [ french ] = "Mise en page" ;
+        Text [ french ] = "Formatage" ;
         Text [ swedish ] = "Formatering" ;
         Text [ dutch ] = "Opmaak" ;
         Text [ spanish ] = "Formato" ;
@@ -480,7 +480,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Add AutoFormat" ;
         Text[ chinese_simplified ] = "ĞÂÔö×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Âñòàâèòü àâòîôîğìàò";
-        Text[ polish ] = "Dodaj autoformatowanie";
+        Text[ polish ] = "Dodaj Autoformat";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì’Ç‰Á";
         Text[ chinese_traditional ] = "·s¼W¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÅÖÇİÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
@@ -532,7 +532,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Delete AutoFormat" ;
         Text[ chinese_simplified ] = "É¾³ı×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Óäàëèòü àâòîôîğìàò";
-        Text[ polish ] = "Usuñ autoformatowanie";
+        Text[ polish ] = "Usuñ Autoformat";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ìíœ";
         Text[ chinese_traditional ] = "§R°£¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
@@ -558,7 +558,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "The following AutoFormat entry will be deleted:" ;
         Text[ chinese_simplified ] = "É¾³ıÒÔÏÂµÄ×Ô¶¯¸ñÊ½£º";
         Text[ russian ] = "Ñëåäóşùèé àâòîôîğìàò áóäåò óäàëåí:";
-        Text[ polish ] = "Nastêpuj¹ce autoformatowanie bêdzie usuniête:";
+        Text[ polish ] = "Usuniêty zostanie nastêpuj¹cy Autoformat:";
         Text[ japanese ] = "ˆÈ‰º‚Ìµ°ÄÌ«°Ï¯Ä‚Ííœ‚³‚ê‚Ü‚·:";
         Text[ chinese_traditional ] = "§R°£¥H¤Uªº¦Û°Ê®æ¦¡¡G";
         Text[ arabic ] = "Óæİ íÊã ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí ÇáÊÇáí:";
@@ -582,7 +582,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "AutoOpmaak nieuwe naam geven" ;
         Text[ chinese_simplified ] = "ÖØÃüÃû×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Ïåğåèìåíîâàòü àâòîôîğìàò";
-        Text[ polish ] = "Zmieñ nazwê autoformatowania";
+        Text[ polish ] = "Zmieñ nazwê Autoformatu";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì–¼‘O‚Ì•ÏX";
         Text[ chinese_traditional ] = "­«·s©R¦W¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
@@ -818,7 +818,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ ENGLISH_US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
         Text[ chinese_simplified ] = "Äú¸ø¶¨ÁËÒ»¸öÎŞĞ§µÄÃû³Æ¡£\nÒò´ËÎŞ·¨½¨Á¢×Ô¶¯¸ñÊ½¡£\nÇëÄúÊäÈëÒ»¸öÓĞĞ§Ãû³Æ¡£";
         Text[ russian ] = "Âû ïğèñâîèëè íåïğàâèëüíîå èìÿ.\nÀâòîôîğìàò ñîçäàòü íåâîçìîæíî.\nÂûáåğèòå äğóãîå èìÿ.";
-        Text[ polish ] = "Podana zosta³a nieprawid³owa nazwa.\nNie mo¿na by³o utworzyæ autoformatowania.\nWybierz inn¹ nazwê.";
+        Text[ polish ] = "Podano nieprawid³ow¹ nazwê.\nUtworzenie Autoformatu nie by³o mo¿liwe.\nWybierz inn¹ nazwê.";
         Text[ japanese ] = "•s“KØ‚È–¼‘O‚ª“ü—Í‚³‚ê‚Ü‚µ‚½B\n‚±‚Ìµ°ÄÌ«°Ï¯Ä‚Å‚Íì¬‚Å‚«‚Ü‚¹‚ñB\n•Ê‚Ì–¼‘O‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B";
         Text[ chinese_traditional ] = "±z¿é¤J¤F¤@­ÓµL®Äªº¦WºÙ¡C\nµLªk«Ø¥ß¦Û°Ê®æ¦¡¡C\n½Ğ¿é¤J¤@­Ó¦³®Ä¦WºÙ¡C";
         Text[ arabic ] = "áŞÏ ŞãÊ ÈÅÏÎÇá ÇÓã ÛíÑ ÕÇáÍ.\náåĞÇ ÊÚĞÑ ÅäÔÇÁ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÃÎÑ.";
@@ -829,7 +829,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     Text[ russian ] = "Àâòîôîğìàò";
-    Text[ polish ] = "Autoformatowanie";
+    Text[ polish ] = "Autoformat";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
     Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
