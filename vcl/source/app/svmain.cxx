@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: pl $ $Date: 2000-09-22 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,49 +407,7 @@ BOOL SVMain()
         return sal_False;
     }
 
-    // add client printers
-    REF( NMSP_CLIENT::XRmPrinterEnvironment ) xClientPrinterEnvironment(
-        pSVData->mxClientFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OfficePrinterEnvironment.stardiv.de" ) ) ), NMSP_UNO::UNO_QUERY );
-    if( xClientPrinterEnvironment.is() )
-    {
-        ::rtl::OUString aDefPrinter = xClientPrinterEnvironment->GetDefaultPrinterName();
-        NMSP_UNO::Sequence< ::rtl::OUString > aPrinters;
-        xClientPrinterEnvironment->GetPrinterNames( aPrinters );
-        int nPrinters = aPrinters.getLength();
-        if( nPrinters )
-        {
-            while( nPrinters-- )
-            {
-                ImplAddRemotePrinter(
-                    aPrinters.getConstArray()[nPrinters],
-                    String::CreateFromAscii( RVP_CLIENT_SERVER_NAME ),
-                    aDefPrinter == aPrinters.getConstArray()[nPrinters] ? TRUE : FALSE,
-                    FALSE
-                    );
-            }
-        }
-    }
-
-    // add printers on print servers
-    ::rtl::OUString aValue;
-    if( aStartInfo.getEnvironment( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SOFFICE_PRINTER_URL" ) ), aValue ) ==
-        NAMESPACE_VOS( OStartupInfo ) :: E_None )
-    {
-        String aPrinterEnv = aValue;
-        if( aPrinterEnv.Len() > 0 )
-        {
-            USHORT nPrinters = aPrinterEnv.GetTokenCount( ';' );
-            for ( USHORT n = 0; n < nPrinters; n++ )
-            {
-                String aPrinterInfo = aPrinterEnv.GetToken( n, ';' );
-
-                String aServer  = aPrinterInfo.GetToken( 0, '@' );
-                String aPrinter = aPrinterInfo.GetToken( 1, '@' );
-                BOOL bSetDef = aPrinterInfo.GetToken( 2, '@' ).EqualsAscii( "1" );
-                ImplAddRemotePrinter( aPrinter, aServer, bSetDef, FALSE );
-            }
-        }
-    }
+    ImplInitRemotePrinterList();
 
     pSVData->maAppData.mpSolarMutex->acquire();
 
