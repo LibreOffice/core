@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-15 14:21:04 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 18:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,10 +1119,11 @@ FASTBOOL SwCursor::IsStartWord() const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->xBreak.is() )
     {
-        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        bRet = pBreakIt->xBreak->isBeginWord( pTxtNd->GetTxt(), nPtPos,
-                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
-                                WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/);
+        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        bRet = pBreakIt->xBreak->isBeginWord(
+                            pTxtNd->GetTxt(), nPtPos,
+                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
+                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/);
     }
     return bRet;
 }
@@ -1133,26 +1134,12 @@ FASTBOOL SwCursor::IsEndWord() const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->xBreak.is() )
     {
-#if 0
-        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex(),
-                  nEndPos = pBreakIt->xBreak->getWordBoundary(
+        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        bRet = pBreakIt->xBreak->isEndWord(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                            FALSE ).endPos;
+                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/ );
 
-        bRet = nPtPos == nEndPos;
-#else
-/* JP 9.5.2001:
-isEndWord doesn't work corret!
-In situation "ab  " and pos 2 it return false. Used for AutoText expansion
-*/
-        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
-        bRet = pBreakIt->xBreak->isEndWord( pTxtNd->GetTxt(), nPtPos,
-                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                                WordType::ANY_WORD );//ANYWORD_IGNOREWHITESPACES
-
-#endif
     }
     return bRet;
 }
@@ -1170,7 +1157,7 @@ FASTBOOL SwCursor::GoStartWord()
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = pBreakIt->xBreak->getWordBoundary(
+        nPtPos = (xub_StrLen)pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANYWORD_IGNOREWHITESPACES,
@@ -1194,7 +1181,7 @@ FASTBOOL SwCursor::GoEndWord()
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = pBreakIt->xBreak->getWordBoundary(
+        nPtPos = (xub_StrLen)pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANYWORD_IGNOREWHITESPACES,
@@ -1220,7 +1207,7 @@ FASTBOOL SwCursor::GoNextWord()
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
 
-        nPtPos = pBreakIt->xBreak->nextWord(
+        nPtPos = (xub_StrLen)pBreakIt->xBreak->nextWord(
                                 pTxtNd->GetTxt(), nPtPos,
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
@@ -1243,7 +1230,7 @@ FASTBOOL SwCursor::GoPrevWord()
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = pBreakIt->xBreak->previousWord(
+        nPtPos = (xub_StrLen)pBreakIt->xBreak->previousWord(
                                 pTxtNd->GetTxt(), nPtPos,
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
@@ -1285,11 +1272,11 @@ FASTBOOL SwCursor::SelectWord( const Point* pPt )
 
         if( aBndry.startPos != aBndry.endPos )
         {
-            GetPoint()->nContent = aBndry.endPos;
+            GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
             if( !IsSelOvr() )
             {
                 SetMark();
-                GetMark()->nContent = aBndry.startPos;
+                GetMark()->nContent = (xub_StrLen)aBndry.startPos;
                 if( !IsSelOvr() )
                     bRet = TRUE;
             }
@@ -1317,13 +1304,15 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
         {
         case END_SENT:
         case NEXT_SENT:
-            nPtPos = pBreakIt->xBreak->endOfSentence( pTxtNd->GetTxt(),
+            nPtPos = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
+                                    pTxtNd->GetTxt(),
                                     nPtPos, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
         case START_SENT:
         case PREV_SENT:
-            nPtPos = pBreakIt->xBreak->beginOfSentence( pTxtNd->GetTxt(),
+            nPtPos = (xub_StrLen)pBreakIt->xBreak->beginOfSentence(
+                                    pTxtNd->GetTxt(),
                                     nPtPos, pBreakIt->GetLocale(
                                             pTxtNd->GetLang( nPtPos ) ));
             break;
