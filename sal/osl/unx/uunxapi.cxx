@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uunxapi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,24 +75,23 @@
  #include <osl/thread.h>
  #endif
 
-
- /***********************************
-  access_u
-  **********************************/
-
- int access_u(const rtl_uString* pustrPath, int mode)
+ //###########################
+ inline rtl::OString OUStringToOString(const rtl_uString* s)
  {
-     rtl::OString p = rtl::OUStringToOString(
-        rtl::OUString(const_cast<rtl_uString*>(pustrPath)),
+    return rtl::OUStringToOString(
+        rtl::OUString(const_cast<rtl_uString*>(s)),
         osl_getThreadTextEncoding());
-
-    return access(p.getStr(), mode);
  }
 
- /***********************************
-  realpath_u
-  **********************************/
+ //###########################
+ //access_u
+ int access_u(const rtl_uString* pustrPath, int mode)
+ {
+    return access(OUStringToOString(pustrPath).getStr(), mode);
+ }
 
+ //#########################
+ //realpath_u
  sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
  {
      rtl::OString fn = rtl::OUStringToOString(
@@ -113,15 +112,17 @@
     return bRet;
  }
 
- /***********************************
-  lstat_u
-  **********************************/
-
- int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
+ //#########################
+ //lstat_u
+  int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
-     rtl::OString p = rtl::OUStringToOString(
-        rtl::OUString(const_cast<rtl_uString*>(pustrPath)),
-        osl_getThreadTextEncoding());
-
-    return lstat(p.getStr(), buf);
+    return lstat(OUStringToOString(pustrPath).getStr(), buf);
  }
+
+ //#########################
+ // @see mkdir
+ int mkdir_u(const rtl_uString* path, mode_t mode)
+ {
+    return mkdir(OUStringToOString(path).getStr(), mode);
+ }
+
