@@ -195,7 +195,10 @@ XStream_impl::getOutputStream(  )
 void SAL_CALL XStream_impl::truncate(void)
     throw( io::IOException, uno::RuntimeException )
 {
-    if( osl::FileBase::E_None != m_aFile.setSize(0) )
+    if (osl::FileBase::E_None != m_aFile.setSize(0))
+        throw io::IOException();
+
+    if (osl::FileBase::E_None != m_aFile.setPos(Pos_Absolut,sal_uInt64(0)))
         throw io::IOException();
 }
 
