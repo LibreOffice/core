@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MODULEDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+<MODULEDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ModuleName>dbu</ModuleName>
+    <COMPONENTDESCRIPTION>
+        <Author>Frank Schönheit</Author>
+        <Name>org.openoffice.comp.dbu.ODatasourceAdministrationDialog</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.sdb.DatasourceAdministrationDialog</SupportedService>
+        <ServiceDependency>com.sun.star.sdbc.DriverManager</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.DatabaseContext</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.DataSource</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author>Frank Schönheit</Author>
+        <Name>org.openoffice.comp.dbu.OSQLMessageDialog</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.sdb.ErrorMessageDialog</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author>Frank Schönheit</Author>
+        <Name>com.sun.star.comp.dbu.OInteractionHandler</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.sdb.InteractionHandler</SupportedService>
+        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author>Ocke Janssen</Author>
+        <Name>org.openoffice.comp.dbu.DBContentLoader</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.sdb.ContentLoader</SupportedService>
+        <SupportedService>com.sun.star.frame.FrameLoader</SupportedService>
+        <ServiceDependency>com.sun.star.sdb.DataSourceBrowser</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>org.openoffice.comp.dbu.ODatasourceBrowser</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.sdb.DataSourceBrowser</SupportedService>
+        <ServiceDependency>com.sun.star.util.URLTransformer</ServiceDependency>
+        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
+        <ServiceDependency>com.sun.star.form.component.Form</ServiceDependency>
+        <ServiceDependency>com.sun.star.form.component.GridControl</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.InteractionHandler</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.DatabaseContext</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.DatasourceAdministrationDialog</ServiceDependency>
+        <ServiceDependency>com.sun.star.sdb.ErrorMessageDialog</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.dbu.SbaXGridControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.GridControl</SupportedService>
+        <SupportedService>com.sun.star.form.control.DispatchGridControl</SupportedService>
+    </COMPONENTDESCRIPTION>
+</MODULEDESCRIPTION>
