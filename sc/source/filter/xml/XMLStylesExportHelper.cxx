@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:31:32 $
+ *  last change: $Author: sab $ $Date: 2000-12-20 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex)
 {
+    DBG_ASSERT(nTable < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
     ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
     while (aItr != pFormatRanges->end())
@@ -677,6 +678,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     const sal_Int16 nTable, ScRowFormatRanges& aFormatRanges)
 {
     sal_Int32 nTotalColumns = nEndColumn - nStartColumn + 1;
+    DBG_ASSERT(nTable < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
     ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
     sal_Int32 nColumns = 0;
@@ -741,6 +743,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellR
     aFormatRange.nStyleNameIndex = nStringIndex;
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
+    DBG_ASSERT(aCellRangeAddress.Sheet < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[aCellRangeAddress.Sheet];
     pFormatRanges->push_back(aFormatRange);
 }
@@ -847,6 +850,7 @@ sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, c
 
 sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
 {
+    DBG_ASSERT(nTable < aTables.size(), "wrong table");
     if (static_cast<sal_uInt32>(nField) < aTables[nTable].size())
         return aTables[nTable][nField];
     else
@@ -855,6 +859,7 @@ sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal
 
 void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
 {
+    DBG_ASSERT(nTable < aTables.size(), "wrong table");
     DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
     if (aTables[nTable].size() == static_cast<sal_uInt32>(nField))
         aTables[nTable].push_back(nStringIndex);
