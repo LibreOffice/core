@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:12:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2146,4 +2146,3 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
    }
    return pRet;
 }
-
