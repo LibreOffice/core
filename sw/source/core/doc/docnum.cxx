@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:20:33 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+#ifndef _SW_UNDO_TXT_FMT_COLL_HXX
+#include <SwUndoFmt.hxx>
+#endif
 #ifndef _ROLBCK_HXX
 #include <rolbck.hxx>
 #endif
@@ -148,8 +151,6 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
-
-#include <SwUndoFmt.hxx>
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -193,6 +194,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
         pOutlineRule = new SwNumRule( rRule );
 
         pNumRuleTbl->Insert(pOutlineRule, pNumRuleTbl->Count()); // #115901#
+        aNumRuleMap[pOutlineRule->GetName()] = pOutlineRule;
     }
 
     pOutlineRule->SetRuleType( OUTLINE_RULE );
@@ -800,8 +802,37 @@ void SwDoc::SetOutlineLSpace( BYTE nLevel, short nFirstLnOfst, USHORT nLSpace )
 
 // --- Nummerierung -----------------------------------------
 
+SwTxtNodeTable SwNumRuleInfo::aDummyList;
+
+const SwTxtNodeTable & SwNumRuleInfo::GetList() const
+{
+    if (pDoc)
+    {
+        SwNumRule * pRule = pDoc->FindNumRulePtr(rName);
+
+        if (pRule && pRule->GetList())
+            return *pRule->GetList();
+    }
+
+    return aDummyList;
+}
+
 void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
 {
+    SwNumRule * pRule = rDoc.FindNumRulePtr(rName);
+
+    pDoc = &rDoc;
+
+    if (pRule && pRule->GetList())
+    {
+        return;
+    }
+
+    if (pList)
+        delete pList;
+
+    pList = new SwTxtNodeTable();
+
     // -> #111955#
     if (bOutline)
     {
@@ -847,6 +878,10 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
             }
         }
     }
+
+    pRule->SetList(pList);
+
+    pList = 0;
 }
 
 
@@ -1234,6 +1269,8 @@ BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
                                     SFX_STYLESHEET_ERASED);
 
         pNumRuleTbl->DeleteAndDestroy( nPos );
+        aNumRuleMap.erase(rName);
+
         SetModified();
         return TRUE;
     }
@@ -1544,6 +1581,11 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
     return 0 != sNumRule.Len();
 }
 
+void SwDoc::InvalidateNumRules()
+{
+    for (int n = 0; n < pNumRuleTbl->Count(); n++)
+        (*pNumRuleTbl)[n]->SetInvalidRule(TRUE);
+}
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
 
@@ -2289,21 +2331,11 @@ USHORT SwDoc::FindNumRule( const String& rName ) const
 
 SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 {
-    for( USHORT n = pNumRuleTbl->Count(); n; )
-        if( (*pNumRuleTbl)[ --n ]->GetName() == rName )
-            return (*pNumRuleTbl)[ n ];
+    SwNumRule * pResult = 0;
 
-/*
-//JP 20.11.97: sollte man im Find neue Rule anlegen??
-                erstmal nicht
-    USHORT nPoolId = GetPoolId( rName, GET_POOLID_NUMRULE );
-    if( USHRT_MAX != nPoolId )
-    {
-        SwDoc* pThis = (SwDoc*)this;
-        return pThis->GetNumRuleFromPool( nPoolId );
-    }
-*/
-    return 0;
+    pResult = aNumRuleMap[rName];
+
+    return pResult;
 }
 
 USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
@@ -2327,6 +2359,8 @@ USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
     USHORT nRet = pNumRuleTbl->Count();
     pNumRuleTbl->Insert( pNew, nRet );
 
+    aNumRuleMap[pNew->GetName()] = pNew;
+
     if (DoesUndo())
     {
         SwUndo * pUndo = new SwUndoNumruleCreate(pNew, this);
@@ -2337,7 +2371,6 @@ USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
     if (bBroadcast)
         BroadcastStyleOperation(pNew->GetName(), SFX_STYLE_FAMILY_PSEUDO,
                                 SFX_STYLESHEET_CREATED);
-
 
     return nRet;
 }
@@ -2439,8 +2472,6 @@ void SwDoc::UpdateNumRule()
     for( USHORT n = 0; n < rNmTbl.Count(); ++n )
         if( rNmTbl[ n ]->IsInvalidRule() )
             UpdateNumRule( rNmTbl[ n ]->GetName(), ULONG_MAX );
-
-
 }
 
 // -> #111955#
@@ -2493,6 +2524,9 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdatePos )
  */
 void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
 {
+    if (IsInReading())
+        return;
+
     /* If old numbering is activated use the old algorithm. */
     if (IsOldNumbering())
     {
