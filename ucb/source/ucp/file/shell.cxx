@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-21 11:46:22 $
+ *  last change: $Author: hro $ $Date: 2001-05-22 09:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2643,11 +2643,6 @@ shell::remove( sal_Int32 CommandId,
 
             aStat.uStructSize=sizeof(aStat);
 #ifdef TF_FILEURL
-            rtl::OUString sFileURL;
-            rtl::OUString sLinkTargetURL;
-
-            aStat.pstrFileURL=&sFileURL.pData;
-            aStat.pstrLinkTargetURL=&sLinkTargetURL.pData;
 #else
             rtl::OUString sFilePath;
             rtl::OUString sNativePath;
@@ -2685,7 +2680,7 @@ shell::remove( sal_Int32 CommandId,
 
 //              name = aStatus.getFilePath();
 #ifdef TF_FILEURL
-            name = rtl::OUString(*aStat.pstrFileURL);
+            name = rtl::OUString(aStat.ustrFileURL);
 #else
             name = rtl::OUString(*aStat.pstrFilePath);
 #endif
