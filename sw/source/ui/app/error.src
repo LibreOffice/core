@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-12 07:36:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ String STR_COMCORE_READERROR
     TEXT[ korean ] = "ÀÐ±â ¿À·ù";
     TEXT[ turkish ] = "Okuma hatasý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Error de lectura";
 };
 String STR_COMCORE_CANT_SHOW
 {
@@ -123,6 +124,7 @@ String STR_COMCORE_CANT_SHOW
     TEXT[ korean ] = "±×·¡ÇÈÀ»¡¡³ªÅ¸³¾ ¼ö ¾ø½À´Ï´Ù.";
     TEXT[ turkish ] = "Grafik görüntülenemiyor.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No es posible presentar la imagen.";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Boxes
@@ -152,6 +154,7 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ korean ] = "Å¬¸³º¸µå¿¡ º¹»ç Áß ¿À·ù.";
     MESSAGE[ turkish ] = "Panoya kopyalama hatasý.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Error al copiar al portapapeles.";
 };
 InfoBox ERR_CLPBRD_READ
 {
@@ -178,6 +181,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç áðü ôï ðñü÷åéñï.";
     MESSAGE[ korean ] = "Å¬¸³º¸µå·ÎºÎÅÍ ÀÐ±â ¿À·ù.";
     MESSAGE[ turkish ] = "Panodan okuma hatasý.";
+    MESSAGE[ catalan ] = "Error al leer del portapapeles.";
 };
 
 
@@ -212,6 +216,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÆÄÀÏ¿¡¼­ ¼­½Ä ¿À·ù°¡ ¹ß°ßµÇ¾ú½À´Ï´Ù.";
         TEXT[ turkish ] = "Dosya format hatasý bulundu";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Se ha descubierto un error de formato en el archivo";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
     {
@@ -238,6 +243,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÆÄÀÏ ÀÐ±â ¿À·ù ";
         TEXT[ turkish ] = "Dosya okuma hatasý ";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al leer el archivo ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
     {
@@ -264,6 +270,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÔ·ÂÆÄÀÏ ¿À·ù";
         TEXT[ turkish ] = "Girdi dosyasýnda hata";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error en el archivo de entrada";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
     {
@@ -290,6 +297,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  %PRODUCTNAME Writer ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
         TEXT[ turkish ] = "Bu dosya %PRODUCTNAME Writer dosyasý deðil";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "El archivo no es uno de %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
     {
@@ -316,6 +324,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "±â´ëÇÏÁö¾ÊÀº¡¡ÆÄÀÏÀÇ ³¡";
         TEXT[ turkish ] = "Beklenmeyen dosya sonu";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Fin inesperado de archivo";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
     {
@@ -343,6 +352,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÆÐ½º¿öµå´Â Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
         TEXT[ turkish ] = "Þifre kullanýmý desteklenmiyor";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Las contraseñas no son soportadas";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
     {
@@ -369,6 +379,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "WinWord6 ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
         TEXT[ turkish ] = "Bu dosya WinWord6 dosyasý deðil";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "El archivo no es uno de WinWord6";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
     {
@@ -399,6 +410,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWord ÀÇ  'ºü¸¥ ÀúÀå' ¸ðµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù.  ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë' ¸¦ ÇØÁ¦ÇÏ°í, ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À .";
         TEXT[ turkish ] = "Bu dosya WinWord seçeneði 'Hýzlý kaydet' ile kaydedilmiþ. WinWord'de 'Hýzlý kaydetmeye olanak saðla' seçeneðini geçersiz kýlýp dosyayý yeniden WinWord ile kaydedin";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde el archivo de nuevo en WinWord.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
     {
@@ -425,6 +437,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÓ½ÃÆÄÀÏÀÇ ¾²±â¿¡¼­ ¿À·ù";
         TEXT[ turkish ] = "Geçici dosya yazma hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al escribir el archivo temporal";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
     {
@@ -451,6 +464,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ini ÆÄÀÏ¿¡ »ðÀÔµÈ ±¸¿ªÀÌ ³Ê¹« Å®´Ï´Ù.";
         TEXT[ turkish ] = "Ini dosyasý ekleme bölümü çok büyük";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "El área de inserción en el archivo Ini es demasiado grande";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
     {
@@ -475,6 +489,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "ÆÄÀÏ¼­½Ä¡¡¿À·ù°¡ $(ARG1)(Çà,¿­)¿¡¼­¡¡¹ß°ßµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Dosya format hatasý $(ARG1)(satýr, sütun) bulundu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
     {
@@ -499,6 +514,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "ÆÄÀÏÀº ÃÖ½Å ¹öÀü¿¡ ÀÇÇØ ¾²¿©Á³½À´Ï´Ù.";
         Text[ turkish ] = "Dosya daha yeni bir sürüm ile yazýlmýþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El archivo se escribió en una versión más nueva";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
     {
@@ -522,6 +538,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "³o¤£¬O WinWord97 ÀÉ®×";
         TEXT[ turkish ] = "This isn't a WinWord97 file";
         TEXT[ arabic ] = "åÐÇ ÇáãáÝ áíÓ ãáÝ WinWord97";
+        TEXT[ catalan ] = "El archivo no es de WinWord97";
     };
      // Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
@@ -549,6 +566,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÆÄÀÏ ¾²±â¿¡¼­ ¿À·ù ";
         TEXT[ turkish ] = "Dosya yazma hatasý ";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al escribir el archivo ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
     {
@@ -573,6 +591,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "Æ²¸° ÀÚµ¿ÅØ½ºÆ® ¹®¼­ ¹öÀü";
         Text[ turkish ] = "Otomatik metin belgesi sürümü yanlýþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Versión errónea del documento de AutoTexto";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
     {
@@ -597,6 +616,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¹®¼­¸¦ ¸¸µé¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Belge oluþturulamýyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede crear el documento";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
     {
@@ -623,6 +643,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÓ½ÃÆÄÀÏ ÀÐ±â¿¡¼­ ¿À·ù";
         TEXT[ turkish ] = "Geçici dosya okuma hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al leer el archivo temporal";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
     {
@@ -647,6 +668,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¹®¼­°¡ Çô¿ëµÈ 3.1/4.0 ÅØ½ºÆ® ¹®¼­ Å©±â¸¦ ÃÊ°ú Çß½À´Ï´Ù.";
         Text[ turkish ] = "Belge izin verilen 3.1/4.0 metin belgesi büyüklüðünü aþýyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El documento sobrepasa el tamaño posible 3.1/4.0 de documento";
     };
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
@@ -674,6 +696,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "%PRODUCTNAME WriterÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyasý format hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
     {
@@ -700,6 +723,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "%PRODUCTNAME Writer ÆÄÀÏ¼­½ÄÀÇ ³»ºÎ ¿À·ù";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyasý format hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
     {
@@ -726,6 +750,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
         TEXT[ turkish ] = "Yetersiz bellek";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Memoria insuficiente";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
     {
@@ -752,6 +777,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
         TEXT[ turkish ] = "Yetersiz bellek";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Memoria insuficiente";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
     {
@@ -778,6 +804,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "µð½ºÅ© °ø°£ÀÌ ºÎÁ·ÇÕ´Ï´Ù.";
         TEXT[ turkish ] = "Yeterli disk alaný yok";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No hay suficiente espacio en el disco";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
     {
@@ -804,6 +831,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "µð½ºÅ© °ø°£ÀÌ  ºÎÁ·ÇÕ´Ï´Ù.";
         TEXT[ turkish ] = "Yeterli disk alaný yok";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No hay suficiente espacio en el disco";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
     {
@@ -830,6 +858,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¿À·ù";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error desconocido en el filtro W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
     {
@@ -856,6 +885,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¿À·ù";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error desconocido en el filtro W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
     {
@@ -882,6 +912,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "º¯È¯ ·Îµå½Ã¿¡ ¿À·ù";
         TEXT[ turkish ] = "Dönüþtürücü yükleme hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al cargar el convertidor";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
     {
@@ -908,6 +939,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "º¯È¯ ·Îµå½Ã¿¡ ¿À·ù";
         TEXT[ turkish ] = "Dönüþtürücü yükleme hatasý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Error al cargar el convertidor";
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
     {
@@ -932,6 +964,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "$(ARG1) ÀÌ£¨°¡£© º¯°æµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "$(ARG1) deðiþti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ARG1) se ha modificado";
     };
     String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
     {
@@ -956,6 +989,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "$(ARG1)Àº£¨´Â£© Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "$(ARG1) mevcut deðil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ARG1) no existe";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
@@ -981,6 +1015,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¼¿Àº ´õÀÌ»ó ³ª´­¼ö¡¡¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Hücreler daha fazla bölünemiyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Las celdas no se pueden dividir más";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
@@ -1006,6 +1041,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "Ãß°¡ÀûÀÎ ¿­Àº »ðÀÔÇÒ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Daha fazla sütun eklenemiyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pueden insertar columnas adicionales";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
     {
@@ -1030,6 +1066,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¿¬°áµÈ Ç¥¿¡¼­´Â¡¡±¸Á¶¸¦¡¡º¯°æÇØ¼­´Â¡¡¾ÈµË´Ï´Ù";
         Text[ turkish ] = "Baðlantýlý bir tablonun yapýsý deðiþtirilmez";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede modificar la estructura de una tabla vinculada";
     };
      // -------------------- Warnings -----------------------------------
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
@@ -1055,6 +1092,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "±×¸²À»¡¡·ÎµåÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Çizim yüklenemedi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo cargar ningún dibujo";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
     {
@@ -1085,6 +1123,7 @@ Resource RID_SW_ERRHDL
         TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWordÀÇ  'ºü¸¥ ÀúÀå' ¸ðµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù. ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë'À» ÇØÁ¦ÇÏ½Ã°í ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À.";
         TEXT[ turkish ] = "Bu dosya WinWord seçeneði 'Hýzlý kaydet' ile kaydedilmiþ. WinWord'de 'Hýzlý kaydetmeye olanak saðla' seçeneðini geçersiz kýlýp dosyayý yeniden WinWord ile kaydedin";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde nuevamente el archivo con WinWord";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
     {
@@ -1109,6 +1148,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¼Ó¼ºÀ»¡¡¸ðµÎ¡¡ÀÐÁö´Â¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tüm öznitelikler okunamadý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudieron leer todos los atributos";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
     {
@@ -1133,6 +1173,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¼Ó¼ºÀ»¡¡¸ðµÎ¡¡¾²Áö´Â¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tüm öznitelikler yazýlamadý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudieron grabar todos los atributos";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
@@ -1158,6 +1199,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ ÀÎ¼öµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Bazý OLE nesneleri yalnýzca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Algunos objetos OLE se pudieron incluir solo como imágenes";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
@@ -1183,6 +1225,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ ÀÎ¼öµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Bazý OLE nesneleri yalnýzca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Algunos objetos OLE se pudieron incluir solo como imágenes";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
@@ -1208,6 +1251,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¹®¼­¸¦ ¿ÏÀüÈ÷ ·ÎµåÇÏÁö´Â¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Belge tümüyle yüklenemedi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo cargar completamente el documento";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
@@ -1233,6 +1277,7 @@ Resource RID_SW_ERRHDL
         Text[ korean ] = "¹®¼­¸¦ ¿ÏÀüÈ÷ ÀúÀåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Belge tümüyle kaydedilemedi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo guardar completamente el documento";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
     {
@@ -1257,6 +1302,7 @@ Resource RID_SW_ERRHDL
         Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ %PRODUCTNAME Basic.\náã íÊã ÍÝÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
         Text[ turkish ] = "HTML belgesinde StarBasic makrolarý var.\nBu makrolar, yürürlükteki verme ayarlarý ile kaydedilmemiþ.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuración actual de exportación.";
     };
 };
 
