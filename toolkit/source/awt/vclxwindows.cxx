@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:50:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2932,6 +2932,15 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             default:
             {
                 VCLXEdit::setProperty( PropertyName, Value );
+
+                // #109385# SetBorderStyle is not virtual
+                if ( nPropType == BASEPROPERTY_BORDER )
+                {
+                    sal_uInt16 nBorder;
+                    Value >>= nBorder;
+                    if ( nBorder )
+                        pComboBox->SetBorderStyle( nBorder );
+                }
             }
         }
     }
