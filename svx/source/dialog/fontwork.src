@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:45:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ÇØÁ¦";
                 Text[ turkish ] = "Kapalý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Desactivado";
             };
             ToolBoxItem
             {
@@ -173,6 +174,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "È¸Àü";
                 Text[ turkish ] = "Çevir";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rodar";
             };
             ToolBoxItem
             {
@@ -206,6 +208,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¶È¹Ù·Î";
                 Text[ turkish ] = "Dik";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Derecho";
             };
             ToolBoxItem
             {
@@ -239,6 +242,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¼öÆòÀ¸·Î ±â¿ï±â";
                 Text[ turkish ] = "Yatay eðim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Inclinar horizontalmente";
             };
             ToolBoxItem
             {
@@ -272,6 +276,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¼öÁ÷À¸·Î ±â¿ï±â";
                 Text[ turkish ] = "Dikey eðim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Inclinar verticalmente";
             };
         };
     };
@@ -313,6 +318,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¹æÇâ";
                 Text[ turkish ] = "Metin yönü";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Orientación";
             };
             ToolBoxItem
             {
@@ -352,6 +358,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¿ÞÂÊ ¹è¿­";
                 Text[ turkish ] = "Sola hizala";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineado a la izquierda";
             };
             ToolBoxItem
             {
@@ -385,6 +392,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "°¡¿îµ¥";
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Centrado";
             };
             ToolBoxItem
             {
@@ -420,6 +428,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¿À¸¥ÂÊ ¹è¿­";
                 Text[ turkish ] = "Saða hizala";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alinear a la derecha";
             };
             ToolBoxItem
             {
@@ -455,6 +464,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®¡¡Å©±â  ";
                 Text[ turkish ] = "Otomatik metin boyu";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tamaño automático de texto";
             };
         };
     };
@@ -506,6 +516,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "°£°Ý!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
+        QuickHelpText[ catalan ] = "Distancia";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -552,6 +563,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "µé¿©¾²±â!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
+        QuickHelpText[ catalan ] = "Sangría";
     };
     ToolBox TBX_SHADOW
     {
@@ -591,6 +603,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "À±°û";
                 Text[ turkish ] = "Kontur";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Contorno";
             };
             ToolBoxItem
             {
@@ -624,6 +637,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ÅØ½ºÆ®  Å×µÎ¸®£¡";
                 Text[ turkish ] = "Metin konturu";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Contorno de caracteres";
             };
             ToolBoxItem
             {
@@ -661,6 +675,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ÇØÁ¦";
                 Text[ turkish ] = "Kapalý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sin sombra";
             };
             ToolBoxItem
             {
@@ -694,6 +709,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "¼öÁ÷";
                 Text[ turkish ] = "Dikey";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Vertical";
             };
             ToolBoxItem
             {
@@ -727,6 +743,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "±â¿ïÀÌ±â";
                 Text[ turkish ] = "Eðim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Inclinar";
             };
         };
     };
@@ -794,6 +811,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand X";
+        CustomUnitText[ catalan ] = "Grados";
+        QuickHelpText[ catalan ] = "Distancia X";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -854,6 +873,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand Y";
+        CustomUnitText[ catalan ] = "%";
+        QuickHelpText[ catalan ] = "Distancia Y";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -936,6 +957,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         Text[ greek ] = "×ñþìá óêéÜò";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
+        QuickHelpText[ catalan ] = "Color sombra";
     };
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå";
     Text[ russian ] = "FontWork";
@@ -947,6 +969,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text[ korean ] = "FontWork";
     Text[ turkish ] = "FontWork";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "FontWork";
 };
  // Bitmaps ---------------------------------------------------------------
 Bitmap RID_SVXBMP_FONTWORK_FORM1
@@ -1039,6 +1062,7 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text[ korean ] = "À§ÂÊ ¹Ý¿ø";
     Text[ turkish ] = "Üst yarým daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Semicírculo superior";
 };
 String RID_SVXSTR_FONTWORK_FORM2
 {
@@ -1065,6 +1089,7 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text[ korean ] = "¾Æ·¡ÂÊ ¹Ý¿ø";
     Text[ turkish ] = "Alt yarým daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Semicírculo inferior";
 };
 String RID_SVXSTR_FONTWORK_FORM3
 {
@@ -1091,6 +1116,7 @@ String RID_SVXSTR_FONTWORK_FORM3
     Text[ korean ] = "¿ÞÂÊ ¹Ý¿ø";
     Text[ turkish ] = "Sol yarým daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Semicírculo izquierdo";
 };
 String RID_SVXSTR_FONTWORK_FORM4
 {
@@ -1117,6 +1143,7 @@ String RID_SVXSTR_FONTWORK_FORM4
     Text[ korean ] = "¿À¸¥ÂÊ ¹Ý¿ø";
     Text[ turkish ] = "Sað yarým daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Semicírculo derecho";
 };
 String RID_SVXSTR_FONTWORK_FORM5
 {
@@ -1143,6 +1170,7 @@ String RID_SVXSTR_FONTWORK_FORM5
     Text[ korean ] = "À§ÂÊ ¿øÈ£";
     Text[ turkish ] = "Üst yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco superior de círculo";
 };
 String RID_SVXSTR_FONTWORK_FORM6
 {
@@ -1169,6 +1197,7 @@ String RID_SVXSTR_FONTWORK_FORM6
     Text[ korean ] = "¾Æ·¡ÂÊ ¿øÈ£";
     Text[ turkish ] = "Alt yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco inferior de círculo";
 };
 String RID_SVXSTR_FONTWORK_FORM7
 {
@@ -1195,6 +1224,7 @@ String RID_SVXSTR_FONTWORK_FORM7
     Text[ korean ] = "¿ÞÂÊ ¿øÈ£";
     Text[ turkish ] = "Sol yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco izquierdo de círculo";
 };
 String RID_SVXSTR_FONTWORK_FORM8
 {
@@ -1221,6 +1251,7 @@ String RID_SVXSTR_FONTWORK_FORM8
     Text[ korean ] = "¿À¸¥ÂÊ ¿øÈ£";
     Text[ turkish ] = "Sað yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco derecho de círculo";
 };
 String RID_SVXSTR_FONTWORK_FORM9
 {
@@ -1247,6 +1278,7 @@ String RID_SVXSTR_FONTWORK_FORM9
     Text[ korean ] = "¿­¸° ¿ø";
     Text[ turkish ] = "Açýk daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Circulo abierto";
 };
 String RID_SVXSTR_FONTWORK_FORM10
 {
@@ -1273,6 +1305,7 @@ String RID_SVXSTR_FONTWORK_FORM10
     Text[ korean ] = "´ÝÈù ¿ø";
     Text[ turkish ] = "Kapalý daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo cerrado";
 };
 String RID_SVXSTR_FONTWORK_FORM11
 {
@@ -1299,6 +1332,7 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text[ korean ] = "´ÝÈù ¿ø II";
     Text[ turkish ] = "Kapalý daire II";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo cerrado II";
 };
 String RID_SVXSTR_FONTWORK_FORM12
 {
@@ -1325,6 +1359,7 @@ String RID_SVXSTR_FONTWORK_FORM12
     Text[ korean ] = "¼öÁ÷ ¿­¸° ¿ø";
     Text[ turkish ] = "Dikey açýk daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo abierto vertical";
 };
 String RID_SVXSTR_FONTWORK_UNDOCREATE
 {
@@ -1349,5 +1384,6 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ korean ] = "FontWork °³Ã¼ »ý¼º";
     Text[ turkish ] = "FontWork nesnesi oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear objeto FontWork";
 };
  // ********************************************************************** EOF
