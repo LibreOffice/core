@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:57:31 $
+ *  last change: $Author: mba $ $Date: 2001-12-04 11:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,13 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                 SvxMacro   *pMacro = ConvertToMacro( aValue, mpObjShell );
                 USHORT      nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
 
-                if ( nID && pMacro )
-                    SFX_APP()->GetEventConfig()->ConfigureEvent( nID, *pMacro, mpObjShell );
+                if ( nID )
+                {
+                    if ( pMacro )
+                        SFX_APP()->GetEventConfig()->ConfigureEvent( nID, *pMacro, mpObjShell );
+                    else
+                        SFX_APP()->GetEventConfig()->ConfigureEvent( nID, String(), mpObjShell );
+                }
 
                 if ( pMacro )
                     delete pMacro;
