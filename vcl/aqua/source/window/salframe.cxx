@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 22:36:40 $
+ *  last change: $Author: pluby $ $Date: 2001-03-07 04:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,11 @@ void SalFrame::Show( BOOL bVisible )
     else
     {
         if ( maFrameData.mhWnd )
+        {
             VCLWindow_Close( maFrameData.mhWnd );
+            if ( maFrameData.mpParent )
+                maFrameData.mpParent->Show( TRUE );
+        }
     } // else
 } // SalFrame::Show
 
