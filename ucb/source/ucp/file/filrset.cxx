@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:40:43 $
+ *  last change: $Author: kso $ $Date: 2001-01-18 09:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ XResultSet_impl::getCapabilities()
   throw( uno::RuntimeException )
 {
     // Never set ContentResultSetCapability::SORTED
-    //  - Underlying ChaosContent cannot provide sorted data...
+    //  - Underlying content cannot provide sorted data...
     return 0;
 }
 
@@ -812,9 +812,27 @@ XResultSet_impl::getMetaData(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
+    for ( sal_Int32 n = 0; n < m_sProperty.getLength(); ++n )
+    {
+        if ( m_sProperty.getConstArray()[ n ].Name.compareToAscii( "Title" ) == 0 )
+        {
+            // @@@ #82177# - Determine correct value!
+            sal_Bool bCaseSensitiveChildren = sal_False;
+
+            std::vector< ::ucb::ResultSetColumnData >
+                                    aColumnData( m_sProperty.getLength() );
+            aColumnData[ n ].isCaseSensitive = bCaseSensitiveChildren;
+
+            ::ucb::ResultSetMetaData* p =
+                new ::ucb::ResultSetMetaData(
+                    m_pMyShell->m_xMultiServiceFactory, m_sProperty, aColumnData );
+            return uno::Reference< sdbc::XResultSetMetaData >( p );
+        }
+    }
+
     ::ucb::ResultSetMetaData* p =
-        new ::ucb::ResultSetMetaData( m_pMyShell->m_xMultiServiceFactory,
-                                      m_sProperty );
+            new ::ucb::ResultSetMetaData(
+                m_pMyShell->m_xMultiServiceFactory, m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
 
