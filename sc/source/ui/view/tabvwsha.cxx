@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ void ScTabViewShell::ExecuteInputDirect()
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */ )
+void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEditing /* = TRUE */ )
 {
     ScInputHandler* pHdl = pInputHandler ? pInputHandler : SC_MOD()->GetInputHdl();
 
@@ -564,7 +564,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */ )
         //  as current view inside NotifyChange.
         ScTabViewShell* pSourceSh = pInputHandler ? this : NULL;
 
-        pHdl->NotifyChange( &aState, bForce, pSourceSh );
+        pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-16 16:28:03 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2509,10 +2509,10 @@ Point ScViewData::GetMousePosPixel()
     return pView->GetMousePosPixel();
 }
 
-void ScViewData::UpdateInputHandler( BOOL bForce )
+void ScViewData::UpdateInputHandler( BOOL bForce, BOOL bStopEditing )
 {
     if (pViewShell)
-        pViewShell->UpdateInputHandler( bForce );
+        pViewShell->UpdateInputHandler( bForce, bStopEditing );
 }
 
 BOOL ScViewData::IsOle()

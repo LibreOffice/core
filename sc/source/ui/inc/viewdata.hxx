@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:20:53 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ public:
     ScDrawView*     GetScDrawView();            // von View
     BOOL            IsMinimized();              // von View
 
-    void            UpdateInputHandler( BOOL bForce = FALSE );
+    void            UpdateInputHandler( BOOL bForce = FALSE, BOOL bStopEditing = TRUE );
 
     void            WriteUserData(String& rData);
     void            ReadUserData(const String& rData);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ public:
     void            ExecuteInputDirect();
 
     ScInputHandler* GetInputHandler() const;
-    void            UpdateInputHandler( BOOL bForce = FALSE );
+    void            UpdateInputHandler( BOOL bForce = FALSE, BOOL bStopEditing = TRUE );
     BOOL            TabKeyInput(const KeyEvent& rKEvt);
     BOOL            SfxKeyInput(const KeyEvent& rKEvt);
 
