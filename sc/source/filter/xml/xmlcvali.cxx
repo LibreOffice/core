@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:30:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             case XML_TOK_CONTENT_VALIDATION_CONDITION:
                 {
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                            GetKeyByAttrName( sValue, &sCondition );
+                            _GetKeyByAttrName( sValue, &sCondition, sal_False );
                     if (XML_NAMESPACE_OOOC != nPrefix)
                         sCondition = sValue;
                 }
