@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,6 +1291,9 @@ void SvxRTFItemStackType::Add( SvxRTFItemStackType* pIns )
     pChildList->Insert( pIns, pChildList->Count() );
 }
 
+#if 0
+//cmc: This is the original. nEndCnt is redundantly assigned to itself, and
+//pEndNd can leak if not equal to pSttNd.
 void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
 {
     delete pSttNd;
@@ -1299,7 +1302,45 @@ void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
     pEndNd = pSttNd;
     nEndCnt = nEndCnt;
 }
+#else
+void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
+{
+    if (pSttNd != pEndNd)
+        delete pEndNd;
+    delete pSttNd;
+    pSttNd = rPos.MakeNodeIdx();
+    pEndNd = pSttNd;
+    nSttCnt = rPos.GetCntIdx();
+}
+#endif
 
+void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
+    const SvxNodeIdx &rNewNode)
+{
+    bool bSameEndAsStart = (pSttNd == pEndNd) ? true : false;
+
+    if (GetSttNodeIdx() == rOldNode.GetIdx())
+    {
+        delete pSttNd;
+        pSttNd = rNewNode.Clone();
+        if (bSameEndAsStart)
+            pEndNd = pSttNd;
+    }
+
+    if (!bSameEndAsStart && GetEndNodeIdx() == rOldNode.GetIdx())
+    {
+        delete pEndNd;
+        pEndNd = rNewNode.Clone();
+    }
+
+    //And the same for all the children
+    USHORT nCount = pChildList ? pChildList->Count() : 0;
+    for (USHORT i = 0; i < nCount; ++i)
+    {
+        SvxRTFItemStackType* pStk = (*pChildList)[i];
+        pStk->MoveFullNode(rOldNode, rNewNode);
+    }
+}
 
 void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
