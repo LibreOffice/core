@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 09:03:59 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,8 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 
     ::rtl::OUString sComposedName;
     sCatalog = sSchema = sTable = ::rtl::OUString();
-    ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable);
-    ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+    ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+    ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
     // create the where clause
     OColumnNamePos::const_iterator aIter;
     for(aIter = (*m_pKeyColumnNames).begin();aIter != (*m_pKeyColumnNames).end();)
@@ -1261,7 +1261,7 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
 
     if(xMetaData->supportsTableCorrelationNames())
     {
-        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_False);
+        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_False,::dbtools::eInDataManipulation);
         // first we have to check if the composed tablename is in the select clause or if an alias is used
         Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
         Reference<XNameAccess> xSelectTables = xTabSup->getTables();
@@ -1271,15 +1271,15 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
             if(!xSelectTables->hasByName(aComposedName))
             { // the composed name isn't used in the select clause so we have to find out which name is used instead
                 ::rtl::OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable);
-                ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,aComposedName,sal_True);
+                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+                ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,aComposedName,sal_True,::dbtools::eInDataManipulation);
             }
             else
-                ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True);
+                ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True,::dbtools::eInDataManipulation);
         }
     }
     else
-        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True);
+        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True,::dbtools::eInDataManipulation);
 
     return aComposedName;
 }
@@ -1391,6 +1391,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.37  2002/10/01 09:03:59  oj
+    #97524# remember column type for reuse
+
     Revision 1.36  2002/08/30 08:59:39  oj
     #100839# clear variables before use them again
 
