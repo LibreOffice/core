@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuElement.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:32:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,11 +38,8 @@
  *
  *************************************************************************/
 
-import com.sun.star.ui.*;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.RuntimeException;
 
 // A helper class to determine the menu element type
 public class MenuElement
