@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-09 05:42:35 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 10:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3408,6 +3408,16 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
                 __AddRK( t, Read4( rIn ) );
+                PRINT();
+            }
+            break;
+            case 0x041E:
+            {
+                LINESTART();
+                ADDTEXT( "Index: " );           ADDHEX( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "Format: " );       AddUNICODEString( t, rIn );
                 PRINT();
             }
             break;
