@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:32 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,11 +660,6 @@ public:
         }
     }
 
-    bool areControlPointsUsed() const
-    {
-        return (mpControlVector && mpControlVector->isUsed());
-    }
-
     const ::basegfx::B2DVector& getControlVectorB(sal_uInt32 nIndex) const
     {
         if(mpControlVector)
@@ -697,6 +692,11 @@ public:
                 mpControlVector = 0L;
             }
         }
+    }
+
+    bool areControlVectorsUsed() const
+    {
+        return (mpControlVector && mpControlVector->isUsed());
     }
 
     void insert(sal_uInt32 nIndex, const ImplB2DPolygon& rSource)
@@ -1144,9 +1144,61 @@ namespace basegfx
         }
     }
 
-    bool B2DPolygon::areControlPointsUsed() const
+    bool B2DPolygon::areControlVectorsUsed() const
     {
-        return mpPolygon->areControlPointsUsed();
+        return mpPolygon->areControlVectorsUsed();
+    }
+
+    ::basegfx::B2DPoint B2DPolygon::getControlPointA(sal_uInt32 nIndex) const
+    {
+        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+
+        if(mpPolygon->areControlVectorsUsed())
+        {
+            return mpPolygon->getPoint(nIndex) + mpPolygon->getControlVectorA(nIndex);
+        }
+        else
+        {
+            return mpPolygon->getPoint(nIndex);
+        }
+    }
+
+    void B2DPolygon::setControlPointA(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue)
+    {
+        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+        ::basegfx::B2DVector aNewVector(rValue - mpPolygon->getPoint(nIndex));
+
+        if(mpPolygon->getControlVectorA(nIndex) != aNewVector)
+        {
+            implForceUniqueCopy();
+            mpPolygon->setControlVectorA(nIndex, aNewVector);
+        }
+    }
+
+    ::basegfx::B2DPoint B2DPolygon::getControlPointB(sal_uInt32 nIndex) const
+    {
+        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+
+        if(mpPolygon->areControlVectorsUsed())
+        {
+            return mpPolygon->getPoint(nIndex) + mpPolygon->getControlVectorB(nIndex);
+        }
+        else
+        {
+            return mpPolygon->getPoint(nIndex);
+        }
+    }
+
+    void B2DPolygon::setControlPointB(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue)
+    {
+        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+        ::basegfx::B2DVector aNewVector(rValue - mpPolygon->getPoint(nIndex));
+
+        if(mpPolygon->getControlVectorB(nIndex) != aNewVector)
+        {
+            implForceUniqueCopy();
+            mpPolygon->setControlVectorB(nIndex, aNewVector);
+        }
     }
 
     void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)

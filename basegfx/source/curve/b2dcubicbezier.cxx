@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:19 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -146,6 +150,20 @@ namespace basegfx
     void B2DCubicBezier::testAndSolveTrivialBezier()
     {
         // TODO
+    }
+
+    double B2DCubicBezier::getEdgeLength() const
+    {
+        ::basegfx::B2DVector aEdge(maEndPoint - maStartPoint);
+        return aEdge.getLength();
+    }
+
+    double B2DCubicBezier::getControlPolygonLength() const
+    {
+        ::basegfx::B2DVector aVectorA(maControlPointA - maStartPoint);
+        ::basegfx::B2DVector aVectorB(maEndPoint - maControlPointB);
+        ::basegfx::B2DVector aTop(maControlPointB - maControlPointA);
+        return (aVectorA.getLength() + aVectorB.getLength() + aTop.getLength());
     }
 } // end of namespace basegfx
 

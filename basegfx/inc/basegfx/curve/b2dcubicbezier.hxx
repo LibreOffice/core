@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:48 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,12 @@ namespace basegfx
 
         // test if contained bezier is trivial and reset vectors accordingly
         void testAndSolveTrivialBezier();
+
+        // get distance between start and end point
+        double getEdgeLength() const;
+
+        // get length of control polygon
+        double getControlPolygonLength() const;
 
         // data interface
         ::basegfx::B2DPoint getStartPoint() const { return maStartPoint; }

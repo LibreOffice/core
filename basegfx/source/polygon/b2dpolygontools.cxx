@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-03 18:18:22 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,9 +234,9 @@ namespace basegfx
 
             if(rCandidate.count() > 1L && rCandidate.areControlPointsUsed())
             {
-                sal_uInt32 nPrevInd(getIndexOfPredecessor(nIndex, rCandidate));
+                const sal_uInt32 nPrevInd(getIndexOfPredecessor(nIndex, rCandidate));
                 const B2DVector aForwardVector(rCandidate.getControlVectorA(nIndex));
-                const B2DVector aBackVector(rCandidate.getControlVectorB(nPrevInd));
+                const B2DVector aBackVector(rCandidate.getControlPointB(nPrevInd) - rCandidate.getB2DPoint(nIndex));
 
                 eRetval = getContinuity(aBackVector, aForwardVector);
             }
@@ -267,20 +267,16 @@ namespace basegfx
 
                         // build CubicBezier segment
                         B2DCubicBezier aBezier(
-                            aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointB + aVectorB), aPointB);
+                            aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointA + aVectorB), aPointB);
 
                         // generate DistanceBound
                         double fBound;
 
                         if(0.0 == fDistanceBound)
                         {
-                            // If not set, calculate rough length of bezier segment by taking
-                            // half of the sum of the edge and the control polygon
-                            B2DVector aSimpleDistance(aPointB - aPointA);
-                            B2DVector aTripleDistanceTop((aPointB + aVectorB) - (aPointA + aVectorA));
-                            const double fRoughLength(
-                                (aSimpleDistance.getLength()
-                                + (aVectorA.getLength() + aVectorB.getLength() + aTripleDistanceTop.getLength())) / 2.0);
+                            // If not set, use B2DCubicBezier functionality to guess a rough
+                            // value
+                            const double fRoughLength((aBezier.getEdgeLength() + aBezier.getControlPolygonLength()) / 2.0);
 
                             // take 1/100th of the rouch curve length
                             fBound = fRoughLength * 0.01;
@@ -341,7 +337,7 @@ namespace basegfx
 
                         // build CubicBezier segment
                         B2DCubicBezier aBezier(
-                            aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointB + aVectorB), aPointB);
+                            aPointA, B2DPoint(aPointA + aVectorA), B2DPoint(aPointA + aVectorB), aPointB);
 
                         // generate AngleBound
                         double fBound(fAngleBound);
@@ -463,9 +459,7 @@ namespace basegfx
 
                     if(!aVectorB.equalZero())
                     {
-                        const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                        const B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                        aRetval.expand(aNextPoint + aVectorB);
+                        aRetval.expand(aTestPoint + aVectorB);
                     }
                 }
             }

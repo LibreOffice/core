@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:58 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,14 @@ namespace basegfx
         void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
         ::basegfx::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
         void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
-        bool areControlPointsUsed() const;
+        bool areControlVectorsUsed() const;
+
+        // ControlPoint interface
+        ::basegfx::B2DPoint getControlPointA(sal_uInt32 nIndex) const;
+        void setControlPointA(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
+        ::basegfx::B2DPoint getControlPointB(sal_uInt32 nIndex) const;
+        void setControlPointB(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
+        bool areControlPointsUsed() const { return areControlVectorsUsed(); }
 
         // insert/append other 2D polygons
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
