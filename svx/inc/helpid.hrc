@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:47:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,19 @@
 #define HID_REDLINING_VIEW_DG_VIEW_TABLE        (HID_SVX_EXT0_START + 13)
 #define HID_REDLINING_VIEW_DG_VIEW_HEADER       (HID_SVX_EXT0_START + 14)
 #define HID_DIALOG_HANGULHANJA                  (HID_SVX_EXT0_START + 15)
+#define HID_SPLDLG_BUTTON_CLOSE                 (HID_SVX_EXT0_START + 16)
+#define HID_SPLDLG_BUTTON_IGNORE                (HID_SVX_EXT0_START + 17)
+#define HID_SPLDLG_BUTTON_IGNOREALL             (HID_SVX_EXT0_START + 18)
+#define HID_SPLDLG_BUTTON_CHANGE                (HID_SVX_EXT0_START + 19)
+#define HID_SPLDLG_BUTTON_CHANGEALL             (HID_SVX_EXT0_START + 20)
+#define HID_HANGULDLG_BUTTON_CLOSE              (HID_SVX_EXT0_START + 21)
+#define HID_HANGULDLG_BUTTON_IGNORE             (HID_SVX_EXT0_START + 22)
+#define HID_HANGULDLG_BUTTON_IGNOREALL          (HID_SVX_EXT0_START + 23)
+#define HID_HANGULDLG_BUTTON_CHANGE             (HID_SVX_EXT0_START + 24)
+#define HID_HANGULDLG_BUTTON_CHANGEALL          (HID_SVX_EXT0_START + 25)
+#define HID_SPLDLG_EDIT_NEWWORD                 (HID_SVX_EXT0_START + 26)
+#define HID_HANGULDLG_EDIT_NEWWORD              (HID_SVX_EXT0_START + 27)
+
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
