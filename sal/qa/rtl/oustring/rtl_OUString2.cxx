@@ -802,6 +802,15 @@ public:
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
+    void getToken_005() {
+        rtl::OUString ab(RTL_CONSTASCII_USTRINGPARAM("ab"));
+        sal_Int32 n = 0;
+        CPPUNIT_ASSERT_MESSAGE(
+            "token should be 'ab'", ab.getToken(0, '-', n) == ab);
+        CPPUNIT_ASSERT_MESSAGE("n should be -1", n == -1);
+        CPPUNIT_ASSERT_MESSAGE(
+            "token should be empty", ab.getToken(0, '-', n).getLength() == 0);
+    }
 
     CPPUNIT_TEST_SUITE(getToken);
     CPPUNIT_TEST(getToken_000);
@@ -809,6 +818,7 @@ public:
     CPPUNIT_TEST(getToken_002);
     CPPUNIT_TEST(getToken_003);
     CPPUNIT_TEST(getToken_004);
+    CPPUNIT_TEST(getToken_005);
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
