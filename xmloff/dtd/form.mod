@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.6 2001-02-28 11:29:41 fs Exp $
+	$Id: form.mod,v 1.7 2001-03-20 13:53:02 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -93,6 +93,8 @@
 <!ATTLIST form:form form:tab-cycle %cycles; "records" >
 
 <!ELEMENT office:forms (form:form*)>
+<!ATTLIST office:forms form:automatic-focus %boolean; "false">
+<!ATTLIST office:forms form:apply-design-mode %boolean; "true">
 
 <!ELEMENT form:text (form:properties?, office:events?)>
 <!ATTLIST form:text %current-value;
