@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:33:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2985,7 +2985,10 @@ void DbFilterField::Update()
                 }
 
                 aStatement.AppendAscii(" FROM ");
-                aStatement += quoteTableName(xMeta, aTableName).getStr();
+                sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+
+                aStatement += quoteTableName(xMeta, aTableName,bUseCatalogInSelect,bUseSchemaInSelect).getStr();
 
                 xStatement = xConnection->createStatement();
                 Reference< ::com::sun::star::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
