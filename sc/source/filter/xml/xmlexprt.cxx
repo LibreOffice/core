@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-10 10:12:19 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 12:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2160,13 +2160,16 @@ void ScXMLExport::_ExportContent()
                     if ( xName.is() )
                     {
                         nCurrentTable = nTable;
-                        OUString sOUTableName = xName->getName();
+                        rtl::OUString sOUTableName = xName->getName();
                         AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sOUTableName);
                         AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, aTableStyles[nTable]);
                         uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
                         if (xProtectable.is())
                             if (xProtectable->isProtected())
                                 AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_use_cell_protection, sXML_true);
+                        rtl::OUString sPrintRanges( GetPrintRanges() );
+                        if( sPrintRanges.getLength() )
+                            AddAttribute( XML_NAMESPACE_TABLE, sXML_print_ranges, sPrintRanges );
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
                         WriteScenario();
@@ -2794,6 +2797,23 @@ sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nS
     return sal_False;
 }
 
+rtl::OUString ScXMLExport::GetPrintRanges()
+{
+    rtl::OUString sPrintRanges;
+    uno::Reference< sheet::XPrintAreas > xPrintAreas( xCurrentTable, uno::UNO_QUERY );
+    if( xPrintAreas.is() )
+    {
+        uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
+        sal_Int32 nCount = aRangeList.getLength();
+        for( sal_Int32 i = 0; i < nCount; i++ )
+        {
+            const table::CellRangeAddress& rRange = aRangeList[ i ];
+            AddStringFromRange( rRange, sPrintRanges );
+        }
+    }
+    return sPrintRanges;
+}
+
 void ScXMLExport::WriteCell (const ScMyCell& aCell)
 {
     sal_Int32 nIndex;
@@ -3180,9 +3200,21 @@ void ScXMLExport::GetStringFromRange(const ScRange& aRange, rtl::OUString& rStri
     rString = sOUStartAddress;
 }
 
+void ScXMLExport::AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const
+{
+    rtl::OUString sRangeStr;
+    GetStringFromRange(aRange, sRangeStr);
+    if (sRangeStr.getLength())
+    {
+        if (rString.getLength())
+            rString += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        rString += sRangeStr;
+    }
+}
+
 void ScXMLExport::GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const
 {
-    rtl::OUStringBuffer aBuffer;
+    rtl::OUString sRangeListStr;
     if (pRangeList)
     {
         sal_Int32 nCount(pRangeList->Count());
@@ -3190,16 +3222,10 @@ void ScXMLExport::GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUS
         {
             const ScRange* pRange = pRangeList->GetObject(nIndex);
             if (pRange)
-            {
-                rtl::OUString sRangeStr;
-                GetStringFromRange(*pRange, sRangeStr);
-                if (aBuffer.getLength())
-                    aBuffer.append(sal_Unicode(' '));
-                aBuffer.append(sRangeStr);
-            }
+                AddStringFromRange(*pRange, sRangeListStr);
         }
     }
-    rString = aBuffer.makeStringAndClear();
+    rString = sRangeListStr;
 }
 
 void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
@@ -3215,6 +3241,18 @@ void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl:
     rtl::OUString sOUEndAddress(sEndAddress);
     sOUStartAddress += sOUEndAddress;
     rString = sOUStartAddress;
+}
+
+void ScXMLExport::AddStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
+{
+    rtl::OUString sRangeStr;
+    GetStringFromRange( aRange, sRangeStr);
+    if (sRangeStr.getLength())
+    {
+        if (rString.getLength())
+            rString += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        rString += sRangeStr;
+    }
 }
 
 void ScXMLExport::GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const

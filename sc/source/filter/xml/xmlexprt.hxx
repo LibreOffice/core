@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 12:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,8 @@ class ScXMLExport : public SvXMLExport
     sal_Int32 GetCellNumberFormat(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle);
 
+    rtl::OUString GetPrintRanges();
+
     void WriteCell (const ScMyCell& aCell);
     void WriteAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
     void WriteShapes(const ScMyCell& aCell);
@@ -427,9 +429,13 @@ class ScXMLExport : public SvXMLExport
     sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
+
     void GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
+    void AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
     void GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const;
     void GetStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
+    void AddStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
+
     void GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const;
     void WriteScenario();
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
