@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+
 // forward ---------------------------------------------------------------
 
 class SfxFrameSetDescriptor;
@@ -114,6 +118,7 @@ struct SfxViewShell_Impl
     SfxAcceleratorManager*      pAccel;
     USHORT                      nFamily;
     SfxBaseController*          pController;
+    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
 
                                 SfxViewShell_Impl()
                                   : aInterceptorContainer( aMutex )
