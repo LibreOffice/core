@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,13 @@
 #undef NO_LIST
 #endif
 
-using namespace psp ;
+using namespace psp;
+using namespace rtl;
 
 GlyphSet::GlyphSet ()
         : mnFontID   (-1),
-          mbVertical (0)
+          mbVertical (0),
+          mbUseFontEncoding (false)
 {}
 
 GlyphSet::GlyphSet (sal_Int32 nFontID, sal_Bool bVertical)
@@ -104,10 +106,11 @@ GlyphSet::GlyphSet (sal_Int32 nFontID, sal_Bool bVertical)
           mbVertical (bVertical)
 {
     PrintFontManager &rMgr = PrintFontManager::get();
-    meBaseType      = rMgr.getFontType (mnFontID);
-    maBaseName      = ::rtl::OUStringToOString (rMgr.getPSName(mnFontID),
+    meBaseType          = rMgr.getFontType (mnFontID);
+    maBaseName          = OUStringToOString (rMgr.getPSName(mnFontID),
                                            RTL_TEXTENCODING_ASCII_US);
-    mnBaseEncoding  = rMgr.getFontEncoding(mnFontID);
+    mnBaseEncoding      = rMgr.getFontEncoding(mnFontID);
+    mbUseFontEncoding   = rMgr.getUseOnlyFontEncoding(mnFontID);
 }
 
 GlyphSet::~GlyphSet ()
@@ -144,9 +147,10 @@ GlyphSet::SetFont (sal_Int32 nFontID, sal_Bool bVertical)
 
     PrintFontManager &rMgr = PrintFontManager::get();
     meBaseType      = rMgr.getFontType (mnFontID);
-    maBaseName      = ::rtl::OUStringToOString (rMgr.getPSName(mnFontID),
+    maBaseName      = OUStringToOString (rMgr.getPSName(mnFontID),
                                            RTL_TEXTENCODING_ASCII_US);
     mnBaseEncoding  = rMgr.getFontEncoding(mnFontID);
+    mbUseFontEncoding   = rMgr.getUseOnlyFontEncoding(mnFontID);
 
     return sal_True;
 }
@@ -398,14 +402,14 @@ GlyphSet::AddGlyphID (
     return sal_True;
 }
 
-rtl::OString
+OString
 GlyphSet::GetCharSetName (sal_Int32 nGlyphSetID)
 {
     if (meBaseType == fonttype::TrueType)
     {
         return maBaseName
-              + (mbVertical ? rtl::OString ("VSet") : rtl::OString ("HSet") )
-              + rtl::OString::valueOf (nGlyphSetID);
+              + (mbVertical ? OString ("VSet") : OString ("HSet") )
+              + OString::valueOf (nGlyphSetID);
     }
     else
     /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
@@ -414,14 +418,14 @@ GlyphSet::GetCharSetName (sal_Int32 nGlyphSetID)
     }
 }
 
-rtl::OString
+OString
 GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
 {
     if (meBaseType == fonttype::TrueType)
     {
         return maBaseName
-              + (mbVertical ? rtl::OString ("VGSet") : rtl::OString ("HGSet") )
-              + rtl::OString::valueOf (nGlyphSetID);
+              + (mbVertical ? OString ("VGSet") : OString ("HGSet") )
+              + OString::valueOf (nGlyphSetID);
     }
     else
     /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
@@ -446,28 +450,28 @@ GlyphSet::GetGlyphSetEncoding (sal_Int32 nGlyphSetID)
     }
 }
 
-rtl::OString
-GlyphSet::GetGlyphSetEncodingName (rtl_TextEncoding nEnc, const rtl::OString &rFontName)
+OString
+GlyphSet::GetGlyphSetEncodingName (rtl_TextEncoding nEnc, const OString &rFontName)
 {
     if (   nEnc == RTL_TEXTENCODING_MS_1252
         || nEnc == RTL_TEXTENCODING_ISO_8859_1)
     {
-        return rtl::OString("ISO1252Encoding");
+        return OString("ISO1252Encoding");
     }
     else
     if (nEnc >= RTL_TEXTENCODING_USER_START && nEnc <= RTL_TEXTENCODING_USER_END)
     {
         return  rFontName
-                + rtl::OString("Enc")
-                + rtl::OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
+                + OString("Enc")
+                + OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
     }
     else
     {
-        return rtl::OString();
+        return OString();
     }
 }
 
-rtl::OString
+OString
 GlyphSet::GetGlyphSetEncodingName (sal_Int32 nGlyphSetID)
 {
     return GetGlyphSetEncodingName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
@@ -498,29 +502,29 @@ GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
     psp::WritePS (pOutFile, pEncodingVector);
 }
 
-rtl::OString
-GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const rtl::OString &rFontName)
+OString
+GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
 {
     if (   nEnc == RTL_TEXTENCODING_MS_1252
         || nEnc == RTL_TEXTENCODING_ISO_8859_1)
     {
         return rFontName
-               + rtl::OString("-iso1252");
+               + OString("-iso1252");
     }
     else
     if (nEnc >= RTL_TEXTENCODING_USER_START && nEnc <= RTL_TEXTENCODING_USER_END)
     {
         return rFontName
-               + rtl::OString("-enc")
-               + rtl::OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
+               + OString("-enc")
+               + OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
     }
     else
     {
-        return rtl::OString();
+        return OString();
     }
 }
 
-rtl::OString
+OString
 GlyphSet::GetReencodedFontName (sal_Int32 nGlyphSetID)
 {
     return GetReencodedFontName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
@@ -589,7 +593,7 @@ void GlyphSet::DrawGlyphs(
         // show the text using the PrinterGfx text api
         aPoint.Move (nOffset, 0);
 
-        rtl::OString aGlyphSetName(GetGlyphSetName(*aSet));
+        OString aGlyphSetName(GetGlyphSetName(*aSet));
         rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
         rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
@@ -611,8 +615,18 @@ void
 GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                         const sal_Unicode* pStr, sal_Int16 nLen)
 {
-    int nChar;
+    rGfx.PSMoveTo (rPoint);
 
+    if( mbUseFontEncoding )
+    {
+        OString aPSName( OUStringToOString( rGfx.GetFontMgr().getPSName( mnFontID ), RTL_TEXTENCODING_ISO_8859_1 ) );
+        OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
+        rGfx.PSSetFont( aPSName, mnBaseEncoding );
+        rGfx.PSShowText( (const unsigned char*)aBytes.getStr(), nLen, aBytes.getLength() );
+        return;
+    }
+
+    int nChar;
     sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
 
@@ -620,10 +634,8 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     for (nChar = 0; nChar < nLen; nChar++)
         GetCharID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
 
-    rGfx.PSMoveTo (rPoint);
-
-    // loop over the string to draw subsequent pieces of chars with the same
-    // postscript font
+    // loop over the string to draw subsequent pieces of chars
+    // with the same postscript font
     for (nChar = 0; nChar < nLen; /* atend */)
     {
         sal_Int32 nGlyphSetID = pGlyphSetID [nChar];
@@ -637,7 +649,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         }
 
         // show the text using the PrinterGfx text api
-        rtl::OString aGlyphSetName(GetCharSetName(nGlyphSetID));
+        OString aGlyphSetName(GetCharSetName(nGlyphSetID));
         rGfx.PSSetFont (aGlyphSetName, GetGlyphSetEncoding(nGlyphSetID));
         rGfx.PSShowText (pGlyphID + nChar, nGlyphs, nGlyphs);
 
@@ -649,6 +661,16 @@ void
 GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                         const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
+    if( mbUseFontEncoding )
+    {
+        OString aPSName( OUStringToOString( rGfx.GetFontMgr().getPSName( mnFontID ), RTL_TEXTENCODING_ISO_8859_1 ) );
+        OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
+        rGfx.PSMoveTo( rPoint );
+        rGfx.PSSetFont( aPSName, mnBaseEncoding );
+        rGfx.PSShowText( (const unsigned char*)aBytes.getStr(), nLen, aBytes.getLength(), pDeltaArray );
+        return;
+    }
+
     sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
     std::set< sal_Int32 > aGlyphSet;
@@ -704,7 +726,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         // show the text using the PrinterGfx text api
         aPoint.Move (nOffset, 0);
 
-        rtl::OString aGlyphSetName(GetCharSetName(*aSet));
+        OString aGlyphSetName(GetCharSetName(*aSet));
         rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
         rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
@@ -773,18 +795,14 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         {
             nSize += psp::appendStr ("/",
                                      pEncodingVector + nSize);
-            ::std::pair<
-                  ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator,
-                  ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator
-                  > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
 
-            if( aName.first != aName.second )
-                nSize += psp::appendStr ((*aName.first).second,
-                                         pEncodingVector + nSize);
+            std::list< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
+
+            if( aName.begin() != aName.end() )
+                nSize += psp::appendStr ( aName.front(), pEncodingVector + nSize);
             else
                 nSize += psp::appendStr (".notdef", pEncodingVector + nSize );
-            nSize += psp::appendStr (" ",
-                                     pEncodingVector + nSize);
+            nSize += psp::appendStr (" ",  pEncodingVector + nSize);
             // flush line
             if (nSize >= 70)
             {
@@ -804,14 +822,14 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 }
 
 sal_Bool
-GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< rtl::OString >& rSuppliedFonts )
+GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)
         return sal_False;
 
     TrueTypeFont *pTTFont;
-    rtl::OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
+    OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
     sal_Int32 nSuccess = OpenTTFont(aTTFileName.getStr(), nFace < 0 ? 0 : nFace, &pTTFont);
     if (nSuccess != SF_OK)
@@ -852,7 +870,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
         MapString (pTTFont, pUChars, (*aCharSet).size(), pTTGlyphMapping, mbVertical);
 
         // create the current subset
-        rtl::OString aCharSetName = GetCharSetName(nCharSetID);
+        OString aCharSetName = GetCharSetName(nCharSetID);
         fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aCharSetName.getStr() );
         if( bAsType42 )
             CreateT42FromTTGlyphs (pTTFont, pTmpFile, aCharSetName.getStr(),
@@ -886,7 +904,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
         }
 
         // create the current subset
-        rtl::OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
+        OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
         fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aGlyphSetName.getStr() );
         if( bAsType42 )
             CreateT42FromTTGlyphs (pTTFont, pTmpFile, aGlyphSetName.getStr(),
