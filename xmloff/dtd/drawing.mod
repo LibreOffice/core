@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.71 2001-12-17 15:54:45 cl Exp $
+	$Id: drawing.mod,v 1.72 2002-01-11 11:31:41 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -583,6 +583,8 @@
 <!ATTLIST draw:image %zindex;>
 <!ATTLIST draw:image draw:id %draw-shape-id;>
 <!ATTLIST draw:image draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:image style:rel-width %percentage; #IMPLIED>
+<!ATTLIST draw:image style:rel-height %percentage; #IMPLIED>
 
 <!-- objects -->
 <!ELEMENT draw:thumbnail EMPTY>
@@ -610,6 +612,8 @@
 <!ATTLIST draw:object draw:id %draw-shape-id;>
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 <!ATTLIST draw:object draw:notify-on-update-of-ranges %string; #IMPLIED>
+<!ATTLIST draw:object style:rel-width %percentage; #IMPLIED>
+<!ATTLIST draw:object style:rel-height %percentage; #IMPLIED>
 
 <!ELEMENT draw:object-ole (office:binary-data?|office:events?|draw:image-map?|svg:desc?|draw:contour-polygon?|draw:contour-path?|draw:thumbnail?)>
 <!ATTLIST draw:object-ole draw:class-id CDATA #IMPLIED>
@@ -629,6 +633,8 @@
 <!ATTLIST draw:object-ole %zindex;>
 <!ATTLIST draw:object-ole draw:id %draw-shape-id;>
 <!ATTLIST draw:object-ole draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:object-ole style:rel-width %percentage; #IMPLIED>
+<!ATTLIST draw:object-ole style:rel-height %percentage; #IMPLIED>
 
 <!ELEMENT svg:desc (#PCDATA)>
 
