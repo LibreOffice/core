@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:03:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 17:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,26 +159,20 @@ public:
 
 //***************************************************************************
 
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(BOOL bInP) const
     {   return (const SwTblBoxNumFormat&)Get( RES_BOXATR_FORMAT,bInP); }
 inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(BOOL bInP) const
     {   return (const SwTblBoxFormula&)Get( RES_BOXATR_FORMULA,bInP); }
 inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(BOOL bInP) const
     {   return (const SwTblBoxValue&)Get( RES_BOXATR_VALUE, bInP); }
-#endif
 
 //***************************************************************************
 
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(BOOL bInP) const
     {   return aSet.GetTblBoxNumFmt(bInP); }
 inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(BOOL bInP) const
     {   return aSet.GetTblBoxFormula(bInP); }
 inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(BOOL bInP) const
     {   return aSet.GetTblBoxValue(bInP); }
-#endif
 
 #endif
