@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-06 07:54:34 $
+ *  last change: $Author: os $ $Date: 2002-08-13 07:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3957,7 +3957,7 @@ String RID_ATTR_PARA_HYPHENZONE
 };
 String RID_ATTR_PARA_SPLIT
 {
-    Text = "Absatz trennen" ;
+    Text = "Absatz nicht trennen" ;
     Text [ English ] = "Split paragraph" ;
     Text [ norwegian ] = "Del opp avsnitt" ;
     Text [ italian ] = "Dividi paragrafo" ;
