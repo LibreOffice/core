@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 12:26:54 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ LocaleData::isPhonetic( const Locale& rLocale, const OUString& algorithm ) throw
         return sal_False;
 }
 
-sal_Unicode* SAL_CALL
+OUString SAL_CALL
 LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
         sal_Int16 indexCount = 0;
@@ -629,10 +629,10 @@ LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algo
         if ( indexArray ) {
             for(sal_Int16 i = 0; i < indexCount; i++) {
               if (algorithm.equals(indexArray[i*3]))
-                  return indexArray[i*4 + 1];
+                  return OUString(indexArray[i*4 + 1]);
             }
         }
-        return NULL;
+        return OUString();
 }
 
 Sequence< UnicodeScript > SAL_CALL
@@ -663,7 +663,7 @@ LocaleData::getFollowPageWords( const Locale& rLocale ) throw(RuntimeException)
         sal_Int16 wordCount = 0;
         sal_Unicode **wordArray = NULL;
 
-        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getFollowPagWord" );
+        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getFollowPageWords" );
 
         if ( func ) {
             wordArray = func(wordCount);
