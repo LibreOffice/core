@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:03:35 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ chinese_simplified ] = "»ò(~O)";
         Text[ russian ] = "Èëè";
         Text[ polish ] = "Lu~b";
-        Text[ japanese ] = "Or(~O)";
+        Text[ japanese ] = "~Or";
         Text[ chinese_traditional ] = "©Î(~O)";
         Text[ arabic ] = "Ãæ";
         Text[ greek ] = "Ş";
@@ -1538,7 +1538,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ chinese_traditional ] = "Applets";
         Text[ arabic ] = "ÊØÈíŞÇÊ ÕÛíÑÉ";
         Text[ greek ] = "Ìéêñïåöáñìïãİò";
-        Text[ korean ] = "¾ÖÇÃ¸´";
+        Text[ korean ] = "¾ÖÇÃ·¿";
         Text[ turkish ] = "Applet'ler";
         Text[ language_user1 ] = " ";
     };
@@ -1696,23 +1696,23 @@ TabPage RID_SVXPAGE_INET_OTHER
         Size = MAP_APPFONT ( 248 , 24 ) ;
         Text = "Mail-Server" ;
         Text [ English ] = "Mail server" ;
-        Text [ english_us ] = "Mail server" ;
+        Text [ english_us ] = "Mail Server" ;
         Text[ language_user1 ] = " ";
         Text[ portuguese ] = "Mail server";
-        Text[ russian ] = "Mail server";
+        Text[ russian ] = "Ñåğâåğ ïî÷òû";
         Text[ greek ] = "ÄéáêïìéóôŞò Mail";
         Text[ dutch ] = "Mail server";
-        Text[ french ] = "Mail server";
-        Text[ spanish ] = "Mail server";
+        Text[ french ] = "Serveur de courrier";
+        Text[ spanish ] = "Servidor de correo";
         Text[ italian ] = "Mail server";
         Text[ danish ] = "Mail server";
         Text[ swedish ] = "E-postserver";
-        Text[ polish ] = "Mail server";
+        Text[ polish ] = "Serwer poczty";
         Text[ portuguese_brazilian ] = "Mail server";
-        Text[ japanese ] = "Mail server";
-        Text[ korean ] = "Mail server";
-        Text[ chinese_simplified ] = "Mail server";
-        Text[ chinese_traditional ] = "Mail server";
+        Text[ japanese ] = "Ò°Ù»°ÊŞ°";
+        Text[ korean ] = "¸ŞÀÏ-¼­¹ö";
+        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş·şÎñÆ÷";
+        Text[ chinese_traditional ] = "¹q¤l¶l¥ó¦øªA¾¹";
         Text[ turkish ] = "Mail server";
         Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
     };
@@ -1722,7 +1722,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Nachrichtenversand" ;
         Text [ English ] = "Message ~dispatch " ;
-        Text [ english_us ] = "~Outgoing mail" ;
+        Text [ english_us ] = "Outgoing Messages" ;
         Text [ italian ] = "~Invio messaggi" ;
         Text [ spanish ] = "Correo s~aliente" ;
         Text [ french ] = "Courrier ~sortant" ;
@@ -1731,14 +1731,14 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text [ danish ] = "Udgående meddelelser" ;
         Text [ portuguese ] = "~Envio de correio" ;
         Text [ portuguese_brazilian ] = "~Nachrichtenversand" ;
-        Text[ chinese_simplified ] = "¼Ä·¢µç×ÓÓÊ¼ş(~O)";
+        Text[ chinese_simplified ] = "¼Ä·¢µç×ÓÓÊ¼ş";
         Text[ russian ] = "Îòïğàâêà ñîîáùåíèé";
         Text[ polish ] = "Poczta wychodz¹ca";
         Text[ japanese ] = "‘—MÒ°Ù(~O)";
-        Text[ chinese_traditional ] = "µo°e¹q¤l¶l¥ó(~O)";
+        Text[ chinese_traditional ] = "µo°e¹q¤l¶l¥ó";
         Text[ arabic ] = "ÅÑÓÇá ÇáÈÑíÏ";
         Text[ greek ] = "ÁğïóôïëŞ ìç~íıìáôïò";
-        Text[ korean ] = "¸ŞÀÏ º¸³»±â(~O)";
+        Text[ korean ] = "¸ŞÀÏ º¸³»±â";
         Text[ turkish ] = "Giden posta sunucusu";
         Text[ language_user1 ] = " ";
     };
@@ -2616,7 +2616,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bemærk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
         Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
-        Text[ polish ] = "Proszê uwzglêdnij, ¿e wy³¹czaj¹c Java \nywy³¹czysz równie¿ Javascript. \n\nCzy chcesz mimo to wy³¹czyæ Java?";
+        Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e po wy³¹czeniu Javy \nywy³¹czony zostanie równie¿ JavaScript. \n\nCzy mimo to wy³¹czyæ Javê?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
         Text[ japanese ] = "Java‚¾‚¯‚Å‚È‚­\nJavaScript‚àì“®‚µ‚È‚­‚È‚é‚±‚Æ‚ğl‚¦‚Ä‰º‚³‚¢B\n\nJava‚ğ½²¯ÁµÌ‚É‚µ‚Ü‚·‚©?";
         Text[ chinese_simplified ] = "Çë×¢Òâ£ºÔÚÊ§»îJava\nÊ±»áÍ¬Ê±Ê§»îJavascript¡£\n\nÄú»¹ÊÇÒªÊ§»îJava £¿";
