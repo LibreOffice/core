@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-05 08:16:32 $
+ *  last change: $Author: pb $ $Date: 2001-06-06 09:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,17 +192,11 @@ TabPage TP_HELP_INDEX
         Text[ catalan ] = "~Término de búsqueda";
         Text[ finnish ] = "~Etsittävä termi";
     };
-    Edit ED_EXPRESSION
+    ComboBox CB_INDEX
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 108 , 12 ) ;
-    };
-    ListBox LB_RESULTS
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 108 , 80 ) ;
+        Size = MAP_APPFONT ( 108 , 97 ) ;
     };
     PushButton PB_OPEN_INDEX
     {

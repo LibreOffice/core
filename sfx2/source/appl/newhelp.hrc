@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
+ *  last change: $Author: pb $ $Date: 2001-06-06 09:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 
 // Index TabPage
 #define FT_EXPRESSION                           10
-#define ED_EXPRESSION                           11
-#define LB_RESULTS                              12
-#define PB_OPEN_INDEX                           13
+#define CB_INDEX                                11
+#define PB_OPEN_INDEX                           12
 
 // Search TabPage
 #define FT_SEARCH                               10
