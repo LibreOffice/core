@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ chinese_simplified ] = "ÏòÏÂ(~D)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
-        Text[ japanese ] = "~‡";
+        Text[ japanese ] = "~‡(~D)";
         Text[ chinese_traditional ] = "¦V¤U(~D)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
@@ -218,7 +218,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ chinese_simplified ] = "ÏòÉÏ(~E)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
-        Text[ japanese ] = "~‡";
+        Text[ japanese ] = "~‡(~E)";
         Text[ chinese_traditional ] = "¦V¤W(~E)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
@@ -313,7 +313,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ chinese_simplified ] = "ÏòÏÂ(~N)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
-        Text[ japanese ] = "~‡";
+        Text[ japanese ] = "~‡(~N)";
         Text[ chinese_traditional ] = "¦V¤U(~N)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
