@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:43:52 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,8 @@ void SfxApplication::Deinitialize()
     StarBASIC::Stop();
 
     // ggf. BASIC speichern
-    if ( pImp->pBasicMgr && pImp->pBasicMgr->IsModified() )
+    BasicManager* pBasMgr = GetAppBasicManager();
+    if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
     SaveBasicContainer();
@@ -260,7 +261,9 @@ void SfxApplication::Deinitialize()
     // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
     DELETEZ(pMenuMgr);
     DELETEZ(pAcceleratorMgr);
-    DELETEZ( pImp->pBasicMgr );
+    DELETEZ( pBasMgr );
+    SetAppBasicManager( NULL );
+
     if( pImp->pBasicLibContainer )
         pImp->pBasicLibContainer->release();
     if( pImp->pDialogLibContainer )
