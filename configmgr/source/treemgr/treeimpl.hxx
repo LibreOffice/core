@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
+ *  last change: $Author: jb $ $Date: 2000-12-13 12:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace configmgr
 
         inline
         TreeDepth childDepth(TreeDepth nDepth)
-        { return incDepth(nDepth); }
+        { return decDepth(nDepth); }
 
         inline
         TreeDepth& decDepth(TreeDepth& rDepth)
@@ -124,7 +124,7 @@ namespace configmgr
 
         inline
         TreeDepth parentDepth(TreeDepth nDepth)
-        { return decDepth(nDepth); }
+        { return incDepth(nDepth); }
 
         inline
         TreeDepth remainingDepth(TreeDepth nOuterDepth, TreeDepth nRelativeDepth)
