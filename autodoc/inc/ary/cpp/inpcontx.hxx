@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpcontx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,18 @@ class InputContext
                                 bool                i_bIsStaticMember );    /// True only for static class members.
         // INQUIRY
         Cid                 Id() const;
+
+        /** @attention Must only be used by ary::cpp::Gate!
+            Will work nerver else!
+        */
+        virtual bool        HasClass(
+                                const udmstri &     i_sLocalName ) = 0;
+        /** @attention Must only be used by ary::cpp::Gate!
+            Will work nerver else!
+        */
+        virtual bool        HasOperation(
+                                const udmstri &     i_sLocalName,
+                                OSid                i_nSignature ) = 0;
 
       private:
         virtual void        do_Add_Class(
