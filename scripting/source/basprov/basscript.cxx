@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:03:54 $
+ *  last change: $Author: tbe $ $Date: 2003-10-28 13:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace basprov
                         nSbxOptional = 0;
                 }
                 sal_Int32 nSbxCount = n - 1;
-                if ( ( nParamsCount < nSbxCount - nSbxOptional ) || ( nParamsCount > nSbxCount ) )
+                if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
                     throw IllegalArgumentException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicScriptImpl::invoke: wrong number of paramters!" ) ),
