@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:41:25 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ italian ] = "Indirizzo " ;
         Text [ portuguese_brazilian ] = "Endereηo " ;
         Text [ portuguese ] = "Endereηo" ;
-        Text [ finnish ] = " Anschrift " ;
+        Text [ finnish ] = " Osoite" ;
         Text [ danish ] = " Adresse " ;
         Text [ french ] = " Adresse " ;
         Text [ swedish ] = "Adress " ;
@@ -633,7 +633,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ chinese_traditional ] = "±z¤wΈgΕά§σ¨Ο¥ΞªΜΈκ®Ζ΅C\n³oΌΛ±zªΊµω¥U΄N·|µL®Δ΅C\n±z»έ­n¤@­Σ·sªΊ΅M¥B¥²¶·¦b30¤Ρ¤§¤ΊΏι¤JªΊµω¥U±KΑδ½X΅C\n±z―ΰ°χ¦b¥\\―ΰªν»΅©ϊ΅Aµω¥U¤§¤U§δ¨μµω¥Uªν®ζ΅C\n―u­n­Χ§ο¨Ο¥ΞªΜΈκ®Ζ΅H";
     Message[ arabic ] = "αήΟ ήγΚ ΘΚΪΟνα ΘνΗδΗΚ ΗαγΣΚΞΟγ.\nΗαΡΜΗΑ γαΗΝΩΙ Γδ εΠΗ ΗαΚΪΟνα Σζέ νΜΪα ΗαΚΣΜνα ΫνΡ ΥΗαΝ.\nΣζέ ΚΝΚΗΜ Εαμ γέΚΗΝ ΚΣΜνα ΜΟνΟ΅ νΜΘ ΕΟΞΗαε ΞαΗα ΗαΛαΗΛνδ νζγΗπ ΗαήΗΟγνδ.\nνγίδί ΗαΝΥζα Ϊαμ ΗΣΚγΗΡΙ ΗαΚΣΜνα έν ήΗΖγΙ \"γΣΗΪΟΙ\" ΚΝΚ \"ΚΣΜνα\"...\nεα ΚΡνΟ ΘΗαΚΓίνΟ ΚΫννΡ ΘνΗδΗΚ ΗαγΣΚΞΟγΏ";
     Message[ greek ] = "Αλλάξατε τα δεδομένα του χρήστη.\nΠροσέξτε ότι με αυτή την ενέργεια παύει να ισχύει η δήλωση.\nΣε αυτή τη περίπτωση θα χρειαστείτε ένα νέο κλειδί δήλωσης, το οποίο θα πρέπει να εισαχθεί μέσα στο χρονικό διάστημα των επομένων 30 ημερών.\nΤη φόρμα δήλωσης θα τη βρείτε στο μενού Βοήθεια - Δήλωση...\nΘέλετε πραγματικά να αλλάξετε τα δεδομένα του χρήστη;";
-    Message[ korean ] = "»ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟΌΜ½ΐ΄Ο΄Ω.\n±Χ·Ξ ΐΞΗΨ µξ·ΟΐΜ Ή«ΘΏΘ­µΘ΄Ω΄Β »η½ΗΏ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ. \n±Χ·―Έι ΎΥΐΈ·Ξ 30ΐΟ³»Ώ΅ ΐΤ·ΒΗΨΎί ΗÒ »υ µξ·Ο Ε°°΅ ΗΚΏδΗΥ΄Ο΄Ω.\nµξ·Ο Ύη½ΔΐΊ µµΏςΈ»-µξ·Ο... Έή΄ΊΏ΅Ό­ Γ£ΐ» Όφ ΐΦ½ΐ΄Ο΄Ω.\n»ηΏλΐΪ µ¥ΐΜΕΝΈ¦΅΅Α¤Έ» Ί―°ζΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "»ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟΌΜ½ΐ΄Ο΄Ω.\n±Χ·Ξ ΐΞΗΨ µξ·ΟΐΜ Ή«ΘΏΘ­µΘ΄Ω΄Β Α΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ. \n±Χ·―Έι ΎΥΐΈ·Ξ 30ΐΟ³»Ώ΅ ΐΤ·ΒΗΨΎί ΗÒ »υ µξ·Ο Ε°°΅ ΗΚΏδΗΥ΄Ο΄Ω.\nµξ·Ο Ύη½ΔΐΊ µµΏςΈ»-µξ·Ο... Έή΄ΊΏ΅Ό­ Γ£ΐ» Όφ ΐΦ½ΐ΄Ο΄Ω.\n»ηΏλΐΪ µ¥ΐΜΕΝΈ¦΅΅Α¤Έ» Ί―°ζΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Kullanύcύ verilerini deπiώtirdiniz.\nBu nedenle kayύt iώlemi de iptal edilecektir.\nEn geη 30 gόn iηerisinde yeni bir kayύt koduύ girmeniz gerekiyor.\nέlgili kayύt formunu mφnόde, \"Yardύm - Kayύt...\" altύnda bulabilirsiniz.\nKullanύcύ verilerini gerηekten deπiώtirmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirarα el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los prσximos 30 dνas.\nEl formulario de registro lo encuentra en el menϊ Ayuda - Registro...\nΏDesea realmente modificar los datos de usuario?";
@@ -854,7 +854,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Νω¦Μ" ; FUNIT_CM ; > ;
         < "¦Μ" ; FUNIT_M ; > ;
         < "¤½¨½" ; FUNIT_KM ; > ;
-        < "­^¤o" ; FUNIT_INCH ; > ;
+        < "­^¦T" ; FUNIT_INCH ; > ;
         < "­^¤Ψ" ; FUNIT_FOOT ; > ;
         < "­^¨½" ; FUNIT_MILE ; > ;
         < "¥Φ¥i«¬¦r¤Έ" ; FUNIT_PICA ; > ;
