@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:53:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 10:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -188,7 +187,7 @@
 #include <svx/rulritem.hxx>
 #endif
 
-#ifndef _TABLEDLG_HXX //autogen
+#ifndef _SWTABLEREP_HXX //autogen
 #include <tabledlg.hxx>
 #endif
 #ifndef _FMTCLDS_HXX //autogen
@@ -221,9 +220,9 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _TAUTOFMT_HXX
-#include <tautofmt.hxx>
-#endif
+//CHINA001 #ifndef _TAUTOFMT_HXX
+//CHINA001 #include <tautofmt.hxx>
+//CHINA001 #endif
 #ifndef _TBLAFMT_HXX
 #include <tblafmt.hxx>
 #endif
@@ -283,6 +282,9 @@
 #include <comphelper/uno3.hxx>
 #endif
 
+#include "swabstdlg.hxx" //CHINA001
+#include "table.hrc" //CHINA001
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -293,6 +295,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
+extern const USHORT __FAR_DATA aUITableAttrRange[];//CHINA001
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
 #define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
@@ -966,8 +969,13 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         pTblSet->Put( SwPtrItem( FN_TABLE_REP, pRep ));
     }
 
-    SwTableTabDlg* pDlg = new SwTableTabDlg( pButton, rSh.GetAttrPool(),
-                                            pTblSet, &rSh );
+//CHINA001  SwTableTabDlg* pDlg = new SwTableTabDlg( pButton, rSh.GetAttrPool(),
+//CHINA001  pTblSet, &rSh );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    SfxAbstractTabDialog* pDlg = pFact->CreateSwTableTabDlg(  pButton, rSh.GetAttrPool(),pTblSet, &rSh, ResId( DLG_FORMAT_TABLE ));
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( RET_OK == pDlg->Execute() )
         pTblSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
@@ -984,9 +992,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
 {
-    SwAutoFormatDlg aDlg( pButton, pView->GetWrtShellPtr(), FALSE, pTAutoFmt );
-    if( RET_OK == aDlg.Execute())
-        aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    //CHINA001 SwAutoFormatDlg aDlg( pButton, pView->GetWrtShellPtr(), FALSE, pTAutoFmt );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt);
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if( RET_OK == pDlg->Execute()) //CHINA001 if( RET_OK == aDlg.Execute())
+        pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001 aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    delete pDlg; //CHINA001
     return 0;
 }
 /* ---------------------------------------------------------------------------
@@ -1254,8 +1268,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         rSh.InsertTable(
             pModOpt->GetInsTblFlags(bHTML),
             nRows, nCols, HORI_FULL, (pSelection ? pTAutoFmt : 0) );
-
-        rSh.MoveTable( fnTablePrev, fnTableStart );
+        rSh.MoveTable( SwuiGetfnTablePrev(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTablePrev, fnTableStart );
 
         if( pSelection && pTblSet )
             SetTabSet();
@@ -1364,7 +1377,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
         }
 
-        rSh.MoveTable( fnTableCurr, fnTableStart );
+        rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
         if( !pSelection && ( pTblSet || pTAutoFmt ))
         {
             if( pTblSet )
@@ -1631,14 +1644,14 @@ void SwInsertDBColAutoPilot::SetTabSet()
                     rSh.GetTableFmt()->GetName() )
         pTblSet->ClearItem( FN_PARAM_TABLE_NAME );
 
-    rSh.MoveTable( fnTableCurr, fnTableStart );
+    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
     rSh.SetMark();
-    rSh.MoveTable( fnTableCurr, fnTableEnd );
+    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableEnd() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableEnd );
 
     ::lcl_ItemSetToTableParam( *pTblSet, rSh );
 
     rSh.ClearMark();
-    rSh.MoveTable( fnTableCurr, fnTableStart );
+    rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
 }
 
 /*  */
