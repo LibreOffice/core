@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-19 13:18:36 $
+ *  last change: $Author: tbe $ $Date: 2002-07-25 11:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,40 +1101,6 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-};
-
-//  ----------------------------------------------------
-//  class VCLXMenuWindow
-//  ----------------------------------------------------
-class VCLXMenuWindow :  public VCLXTopWindow
-{
-private:
-    Menu*               m_pMenu;
-    sal_Int32           m_nIndexInParent;
-
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >    m_xParent;
-
-protected:
-    DECL_LINK( MenuEventListener, VclSimpleEvent* );
-    virtual void    ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
-    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
-
-public:
-                        VCLXMenuWindow();
-                        VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent );
-                        ~VCLXMenuWindow();
-
-    Menu*               GetMenu() { return m_pMenu; }
-
-    void                SetMenu( Menu* pMenu );
-    void                SetIndexInParent( sal_Int32 nIndexInParent ) { m_nIndexInParent = nIndexInParent; }
-    void                SetAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent ) { m_xParent = rxParent; }
-
-    // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    static VCLXMenuWindow*                                      GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------
