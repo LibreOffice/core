@@ -21624,3 +21624,4 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?setStateChecked@SvxRectCtlChildAccessibleContext@@QAEXE@Z
 ?supportsService@SvxRectCtlAccessibleContext@@UAAEABVOUString@rtl@@@Z
 ?supportsService@SvxRectCtlChildAccessibleContext@@UAAEABVOUString@rtl@@@Z
+?initialize@DescriptionGenerator@accessibility@@QAEXVOUString@rtl@@@Z
