@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-14 07:25:12 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 07:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@ TabPage RID_SFX_TP_MACROASSIGN
      // HelpID = HID_MACROASSIGN ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    DialogControl = TRUE ;
+    Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
     Text = "Makro zuweisen" ;
     Text [ English ] = "Assign macro" ;
     Text [ english_us ] = "Assign Macro" ;
@@ -79,13 +80,10 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text [ danish ] = "Tildel makro" ;
     Text [ portuguese_brazilian ] = "Makro zuweisen" ;
     Text [ portuguese ] = "Atribuir macro" ;
-    FixedLine GB_EVENT
+    String STR_EVENT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "Ereignis" ;
         Text [ ENGLISH ] = "Event" ;
-        Group = TRUE ;
         Text [ english_us ] = "Event" ;
         Text [ italian ] = "Evento" ;
         Text [ spanish ] = "Acontecimiento" ;
@@ -108,44 +106,56 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ finnish ] = "Tapahtuma";
         Text[ thai ] = "เหตุการณ์";
     };
+    String STR_ASSMACRO
+    {
+        Text = "Zugewiesenes Makro";
+        Text[ english ] = "Assigned macro";
+        Text[ english_us ] = "Assigned macro";
+    };
     Control LB_EVENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 180 , 54 ) ;
+        Pos = MAP_APPFONT ( COL0 , ROW0 ) ;
+        Size = MAP_APPFONT ( WIDTH1_2 , HEIGHT0 ) ;
         TabStop = TRUE ;
+        DialogControl = TRUE ;
         ClipChildren = TRUE ;
         Disable = TRUE ;
+        Group = TRUE ;
         HelpID = HID_MACRO_LB_EVENT ;
     };
-    FixedLine GB_MACRO
+    FixedText FT_MACRO
     {
-        Pos = MAP_APPFONT ( 6 , 74  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( COL0 , ROW7  ) ;
+        Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Group = TRUE ;
     };
     Control LB_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 85  ) ;
-        Size = MAP_APPFONT ( 111 , 88 ) ;
+        Pos = MAP_APPFONT ( COL0 , ROW8  ) ;
+        Size = MAP_APPFONT ( WIDTH1 , HEIGHT8 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_MACRO_GROUP ;
     };
+    FixedText FT_LABEL4LB_MACROS
+    {
+        Pos = MAP_APPFONT ( COL2 , ROW7  ) ;
+        Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+    };
     Control LB_MACROS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 129 , 85  ) ;
-        Size = MAP_APPFONT ( 119 , 88 ) ;
+        Pos = MAP_APPFONT ( COL2 , ROW8  ) ;
+        Size = MAP_APPFONT ( WIDTH2 , HEIGHT8 ) ;
         TabStop = TRUE ;
-        Group = TRUE ;
         HelpId = HID_MACRO_MACROS ;
     };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 204 , 6  ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL4 , ROW0  ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
          // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
         Text = "Z~uweisen" ;
         Text [ English ] = "Assign" ;
@@ -175,8 +185,8 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 204 , 24  ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text = "~Aufheben" ;
         Text [ English ] = "~Dismiss" ;
         Disable = TRUE ;
@@ -205,8 +215,8 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     ListBox LB_SCRIPTTYPE
     {
-        Pos = MAP_APPFONT ( 204 , 42  ) ;
-        Size = MAP_APPFONT ( 50 , 30 ) ;
+        Pos = MAP_APPFONT ( COL4 , ROW4  ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , 60 ) ;
         Text = "~Scriptsprache" ;
         TabStop = TRUE ;
         Disable = FALSE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 07:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,53 @@
 #ifndef _MACROPG_HRC
 #define _MACROPG_HRC
 
-#define     GB_EVENT                1
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
 #define     LB_EVENT                2
 #define     PB_ASSIGN               3
 #define     PB_DELETE               4
-#define     GB_MACRO                5
+#define     FT_MACRO                5
 #define     LB_GROUP                6
 #define     LB_MACROS               7
 #define     LB_SCRIPTTYPE           8
-#define     STR_JAVASCRIPT         10
-#define     STR_MACROS             11
-#define     ED_JAVASCRIPT          12
+#define     FT_LABEL4LB_MACROS      9
+#define     STR_JAVASCRIPT          10
+#define     STR_MACROS              11
+#define     ED_JAVASCRIPT           12
+#define     STR_EVENT               13
+#define     STR_ASSMACRO            14
 
 
+// COL0<---------------WIDTH_1_2--------------->COL3<->COL4<----WIDTH4---->COL5
+//     <--WIDTH1-->COL1<-SPACE1->COL2<--WIDTH2->
+
+#define WIDTH_TP    260                                     // of whole tabpage
+#define COL5        (WIDTH_TP-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define COL4        (COL5-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL3        (COL4-RSC_SP_CTRL_X)
+#define COL0        (RSC_SP_TBPG_INNERBORDER_LEFT)
+#define WIDTH1_2    (COL3-COL0)                             // width of upper listbox
+#define SPACE1      4                                       // space between lower listboxes
+#define WIDTH1      ((WIDTH1_2-SPACE1)/2)                   // width of lower left listbox
+#define WIDTH2      (WIDTH1_2-WIDTH1-SPACE1)                // width of lower right listbox
+#define COL1        (COL0+WIDTH1)
+#define COL2        (COL1+SPACE1)
+
+#define HEIGHT_TP   185                                     // of whole tabpage
+#define HEIGHT0     62                                      // of upper listbox
+#define ROW0        6                                       // more than RSC_SP_FLGR_INNERBORDER_TOP cause of bad design
+#define ROW1        (ROW0+RSC_CD_PUSHBUTTON_HEIGHT)         // Assign button
+#define ROW2        (ROW1+RSC_SP_CTRL_GROUP_Y)
+#define ROW3        (ROW2+RSC_CD_PUSHBUTTON_HEIGHT)         // Remove button
+#define ROW4        (ROW3+RSC_SP_CTRL_GROUP_Y)
+#define ROW5        (ROW4+RSC_CD_DROPDOWN_HEIGHT)           // script type listbox (hidden)
+#define ROW6        (ROW0+HEIGHT0)
+#define ROW7        (ROW6+RSC_SP_CTRL_Y)
+#define ROW8        (ROW7+RSC_CD_FIXEDTEXT_HEIGHT)          // label for lower listboxes
+#define ROW9        (HEIGHT_TP-RSC_SP_TBPG_INNERBORDER_BOTTOM)
+#define HEIGHT8     (ROW9-ROW8)                             // of lower listboxes
 
 #endif
 

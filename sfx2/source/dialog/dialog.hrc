@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:06:08 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 07:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@
 #define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
 #define DLG_COMMENTS                    ( RC_DIALOG_BEGIN + 70 )
 
-#define RID_SFX_SMALLTP_MACROASSIGN     ( RC_DIALOG_BEGIN + 71 )
 #define DLG_RUN                         ( RC_DIALOG_BEGIN + 72 )
 #define RID_REGISTER_DLG                ( RC_DIALOG_BEGIN + 73 )
 #define DLG_PHONE_CONFIGURATION         ( RC_DIALOG_BEGIN + 74 )
