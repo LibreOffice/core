@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcanvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:59:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
-#include <drafts/com/sun/star/rendering/ViewState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
+#include <com/sun/star/rendering/ViewState.hpp>
 #endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
@@ -87,10 +87,10 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvas;
-} } } } }
+} } } }
 
 
 /* Definition of ImplCanvas */
@@ -105,7 +105,7 @@ namespace cppcanvas
         {
         public:
             ImplCanvas( const ::com::sun::star::uno::Reference<
-                            ::drafts::com::sun::star::rendering::XCanvas >& rCanvas );
+                            ::com::sun::star::rendering::XCanvas >& rCanvas );
             virtual ~ImplCanvas();
 
             virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
@@ -121,9 +121,9 @@ namespace cppcanvas
             virtual CanvasSharedPtr             clone() const;
 
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XCanvas >      getUNOCanvas() const;
+                ::com::sun::star::rendering::XCanvas >      getUNOCanvas() const;
 
-            virtual ::drafts::com::sun::star::rendering::ViewState  getViewState() const;
+            virtual ::com::sun::star::rendering::ViewState  getViewState() const;
 
             // take compiler-provided default copy constructor
             //ImplCanvas(const ImplCanvas&);
@@ -132,9 +132,9 @@ namespace cppcanvas
             // default: disabled assignment
             ImplCanvas& operator=( const ImplCanvas& );
 
-            ::drafts::com::sun::star::rendering::ViewState                                          maViewState;
+            ::com::sun::star::rendering::ViewState                                          maViewState;
             PolyPolygonSharedPtr                                                                    mpClipPolyPolygon;
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvas >  mxCanvas;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >  mxCanvas;
         };
 
     }

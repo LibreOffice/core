@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmapcanvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:59:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef _CPPCANVAS_IMPLBITMAPCANVAS_HXX
 #define _CPPCANVAS_IMPLBITMAPCANVAS_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XBitmapCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP__
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAP_HPP__
-#include <drafts/com/sun/star/rendering/XBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
+#include <com/sun/star/rendering/XBitmap.hpp>
 #endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
@@ -93,7 +93,7 @@ namespace cppcanvas
         {
         public:
             ImplBitmapCanvas( const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
+                                  ::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
             virtual ~ImplBitmapCanvas();
 
             virtual ::basegfx::B2ISize      getSize() const;
@@ -107,8 +107,8 @@ namespace cppcanvas
             // default: disabled assignment
             ImplBitmapCanvas& operator=( const ImplBitmapCanvas& );
 
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapCanvas >    mxBitmapCanvas;
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap >          mxBitmap;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >    mxBitmapCanvas;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >          mxBitmap;
         };
     }
 }
