@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:36:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ namespace svx
         m_aValueSet.SetLineCount( LINE_CNT );
         m_aValueSet.SetStyle( m_aValueSet.GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
         m_aValueSet.SetBorderStyle( WINDOW_BORDER_MONO );
-        String aOneCharacter(RTL_CONSTASCII_STRINGPARAM("ÀÚ"));
+        String aOneCharacter(RTL_CONSTASCII_STRINGPARAM("AU"));
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
