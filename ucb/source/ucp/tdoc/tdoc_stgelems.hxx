@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_stgelems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:16:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ public:
             com::sun::star::embed::XStorage > & xParentStorage,
         const rtl::OUString & rUri );
 
-    bool isRootParentStorage() const
-    { return m_bParentStorageIsRoot; }
+    bool isParentARootStorage() const
+    { return m_bParentIsRootStorage; }
     com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
     getParentStorage() const
     { return m_xParentStorage; }
@@ -108,7 +108,7 @@ public:
 private:
     com::sun::star::uno::Reference<
         com::sun::star::embed::XStorage > m_xParentStorage;
-    bool                                  m_bParentStorageIsRoot;
+    bool                                  m_bParentIsRootStorage;
 };
 
 //=======================================================================
@@ -131,6 +131,8 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::embed::XStorage > & xStorageToWrap );
     virtual ~Storage();
+
+    bool isDocumentStorage() const { return m_bIsDocumentStorage; }
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -347,6 +349,7 @@ private:
         com::sun::star::lang::XComponent >          m_xWrappedComponent;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XTypeProvider >       m_xWrappedTypeProv;
+    bool                                            m_bIsDocumentStorage;
 
     StorageElementFactory::StorageMap::iterator m_aContainerIt;
 
