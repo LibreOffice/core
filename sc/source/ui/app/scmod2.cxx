@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 #ifdef ONE_LINGU
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vos/xception.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -103,7 +103,7 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, BOOL& rAutoSpell, BOOL& rHide
 
     TRY
     {
-        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
         uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
                             rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
                         uno::UNO_QUERY );
@@ -133,7 +133,7 @@ void ScModule::SetAutoSpellProperty( BOOL bSet )
     //  config item must be loaded/stored from outside
     TRY
     {
-        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
         uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
                             rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
                         uno::UNO_QUERY );
@@ -157,7 +157,7 @@ void ScModule::SetHideAutoProperty( BOOL bSet )
     //  config item must be loaded/stored from outside
     TRY
     {
-        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
         uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
                             rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
                         uno::UNO_QUERY );
@@ -188,7 +188,7 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
     BOOL bHasLang = FALSE;
     TRY
     {
-        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
         uno::Reference< linguistic::XThesaurus > xThes( xManager->createInstance(
                             rtl::OUString::createFromAscii( SERVICE_THESAURUS ) ),
                         uno::UNO_QUERY );

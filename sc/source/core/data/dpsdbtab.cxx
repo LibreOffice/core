@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/zforlist.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -184,7 +184,7 @@ BOOL ScDatabaseDPData::OpenDatabase()
     try
     {
         pImpl->xRowSet = uno::Reference<sdbc::XRowSet>(
-                utl::getProcessServiceFactory()->createInstance(
+                comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
                 uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRowProp( pImpl->xRowSet, uno::UNO_QUERY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,10 +260,7 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <vcl/system.hxx>
-
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/processfactory.hxx>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -302,7 +299,7 @@
 
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
-        xServiceManager( ::utl::getProcessServiceFactory() ),
+        xServiceManager( ::comphelper::getProcessServiceFactory() ),
         pDrawLayer( NULL ),
         pColorTable( NULL ),
         bOwner( FALSE ),

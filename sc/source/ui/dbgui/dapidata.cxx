@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:39:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/data/XDatabaseFavorites.hpp>
 #include <com/sun/star/data/XDatabaseEngine.hpp>
@@ -122,7 +122,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
         //  get database names
 
         uno::Reference<data::XDatabaseFavorites> xFavorites(
-                utl::getProcessServiceFactory()->createInstance(
+                comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString::createFromAscii( DP_SERVICE_DBENGINE ) ),
                 uno::UNO_QUERY);
         if (xFavorites.is())
@@ -195,7 +195,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     try
     {
         uno::Reference<data::XDatabaseEngine> xEngine(
-                utl::getProcessServiceFactory()->createInstance(
+                comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString::createFromAscii( DP_SERVICE_DBENGINE ) ),
                 uno::UNO_QUERY);
         if ( !xEngine.is() ) return;

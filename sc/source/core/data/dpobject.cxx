@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:29:41 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svtools/zforlist.hxx>     // IsNumberFormat
 
@@ -1418,7 +1418,7 @@ BOOL ScDPObject::HasRegisteredSources()
 {
     BOOL bFound = FALSE;
 
-    uno::Reference<lang::XMultiServiceFactory> xManager = utl::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
     if ( xEnAc.is() )
     {
@@ -1439,7 +1439,7 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
 
     //  use implementation names...
 
-    uno::Reference<lang::XMultiServiceFactory> xManager = utl::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
     if ( xEnAc.is() )
     {
@@ -1480,7 +1480,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     rtl::OUString aImplName = rDesc.aServiceName;
     uno::Reference<sheet::XDimensionsSupplier> xRet = NULL;
 
-    uno::Reference<lang::XMultiServiceFactory> xManager = utl::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
     if ( xEnAc.is() )
     {

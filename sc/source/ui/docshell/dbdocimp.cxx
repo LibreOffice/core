@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <sdb/sdbstat.hxx>      // DBObject enum values
 #include <tools/debug.hxx>
@@ -314,7 +314,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         USHORT nInserted = 0;
 
         uno::Reference<sdbc::XRowSet> xRowSet(
-                utl::getProcessServiceFactory()->createInstance(
+                comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
                 uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );

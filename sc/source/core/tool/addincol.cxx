@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 17:35:22 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #pragma hdrstop
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/intn.hxx>
 #include <tools/isolang.hxx>
@@ -260,7 +260,7 @@ void ScUnoAddInCollection::Initialize()
 {
     DBG_ASSERT( !bInitialized, "Initialize twice?" )
 
-    uno::Reference<lang::XMultiServiceFactory> xManager = utl::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
     if ( xEnAc.is() )
     {
@@ -428,7 +428,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
         //! pass XIntrospection to ReadFromAddIn
 
-        uno::Reference<lang::XMultiServiceFactory> xManager = utl::getProcessServiceFactory();
+        uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
         if ( xManager.is() )
         {
             uno::Reference<beans::XIntrospection> xIntro(
