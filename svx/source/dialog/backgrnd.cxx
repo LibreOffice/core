@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:40:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,8 +903,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     SvxBrushItem aTmpBrush(nWhich);
                     if ( bIsLink )
                     {
-                        String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-                        aTmpBrush = SvxBrushItem( aAbs,
+                        aTmpBrush = SvxBrushItem( aBgdGraphicPath,
                                                 aBgdGraphicFilter,
                                                 eNewPos,
                                                 nWhich );
@@ -930,8 +929,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 SvxBrushItem* pTmpBrush = 0;
                 if ( aBtnLink.IsChecked() )
                 {
-                    String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-                    pTmpBrush = new SvxBrushItem( aAbs,
+                    pTmpBrush = new SvxBrushItem( aBgdGraphicPath,
                                                 aBgdGraphicFilter,
                                                 GetGraphicPosition_Impl(),
                                                 nWhich );
@@ -1095,8 +1093,7 @@ BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, U
                 WallpaperStyle eWallStyle = SvxBrushItem::GraphicPos2WallpaperStyle(eNewPos);
                 aItem.SetStyle( eWallStyle );
                 aItem.SetColor( aBgdColor );
-                String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-                aItem.SetBitmapURL( aAbs );
+                aItem.SetBitmapURL( aBgdGraphicPath );
                 rCoreSet.Put( aItem );
             }
             else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
@@ -1117,8 +1114,7 @@ BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, U
                 SvxBrushItem::GraphicPos2WallpaperStyle( GetGraphicPosition_Impl() );
             aItem.SetStyle( eWallStyle );
             aItem.SetColor( aBgdColor );
-            String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-            aItem.SetBitmapURL( aAbs );
+            aItem.SetBitmapURL( aBgdGraphicPath );
             rCoreSet.Put( aItem );
         }
 
@@ -1140,42 +1136,10 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* pSet )
     if ( pPageImpl->bIsImportDlgInExecute )
         return KEEP_PAGE;
 
-    int nRes = LEAVE_PAGE;
-
-/*!!! (pb) no exists question any longer
-
-    if ( ( 1 == aLbSelect.GetSelectEntryPos() ) && aBtnLink.IsChecked() )
-    {
-        // Seite nur verlassen, wenn Grafik-Link ok
-        INetURLObject aObj;
-        aObj.SetSmartURL( aBgdGraphicPath );
-        FASTBOOL bExists = ( aObj.GetProtocol() != INET_PROT_FILE ) ||
-                           DirEntry( aBgdGraphicPath ).Exists();
-
-        if ( !bExists && aBgdGraphicPath.Len() )
-        {
-            // wenn Datei nicht existiert, dann vieleicht eine URL?
-            String aURL;
-
-            if ( SfxMedium::HumanToUrl( aURL, aBgdGraphicPath ) == ERRCODE_NONE )
-            {
-                SfxMedium aTmp( aURL, STREAM_READ, TRUE );
-
-                if ( !aTmp.Exists() )
-                {
-                    RaiseLoadError_Impl();
-                    nRes = KEEP_PAGE;
-                }
-            }
-        }
-    }
-
-!!!*/
-
-    if ( pSet && LEAVE_PAGE == nRes )
+    if ( pSet )
         FillItemSet( *pSet );
 
-    return nRes;
+    return LEAVE_PAGE;
 }
 
 //-----------------------------------------------------------------------
@@ -1554,10 +1518,8 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
     {
         if ( aBtnLink.IsChecked() )
         {
-            INetURLObject aObj;
-            aObj.SetSmartURL( aBgdGraphicPath );
+            INetURLObject aObj( aBgdGraphicPath );
             String aFilePath;
-
             if ( aObj.GetProtocol() == INET_PROT_FILE )
                 aFilePath = aObj.getFSysPath( INetURLObject::FSYS_DETECT );
             else
@@ -1676,10 +1638,8 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 
         if ( pImportDlg )
         {
-            INetURLObject aOld;
-            aOld.SetSmartURL( aBgdGraphicPath );
+            INetURLObject aOld( aBgdGraphicPath );
             INetURLObject aNew( pImportDlg->GetPath() );
-
             if ( !aBgdGraphicPath.Len() || aNew != aOld )
             {
                 // neue Datei gew"ahlt
@@ -1963,6 +1923,10 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if ( pStrLink )
         {
+#ifdef DBG_UTIL
+            INetURLObject aObj( *pStrLink );
+            DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+#endif
             aBgdGraphicPath = *pStrLink;
             aBtnLink.Check( TRUE );
             aBtnLink.Enable();
