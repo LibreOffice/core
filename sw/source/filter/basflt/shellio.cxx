@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:39:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 14:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,7 +1016,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
     if( !pOutDoc->GetPrt() )
     {
-        const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0L );
+        const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );;
         const SwFmtFrmSize& rSz = rPgDsc.GetMaster().GetFrmSize();
         // Clipboard-Dokument wird immer ohne Drucker angelegt, so ist
