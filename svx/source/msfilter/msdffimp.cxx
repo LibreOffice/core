@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:00:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 11:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4990,9 +4990,12 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                                 xIPObj->SetVisArea( Rectangle( xIPObj->GetVisArea().TopLeft(), aSz ));
                                 xIPObj->EnableSetModified( TRUE );
                             }
-                            xObjShell->DoSaveAs( xObjStor );
-                            xObjShell->DoSaveCompleted( xObjStor );
-                            xObjShell->RemoveOwnerLock();
+                            else if ( sStarName.EqualsAscii( "smath" ) )
+                            {   // SJ: force the object to recalc its visarea
+                                xIPObj->OnDocumentPrinterChanged( NULL );
+                            }
+                            xDoc->DoSaveAs( xObjStor );
+                            xDoc->DoSaveCompleted( xObjStor );
                             pMed = 0;
                         }
                     }
