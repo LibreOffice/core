@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:31:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-17 12:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ public:
 
     // --> FME #108724#
     sal_Bool IsFormerTextWrapping() const;
-    void SetUseFormerTextWrapping( sal_Bool _bUseFormerTextWrapping );
+    void SetUseFormerTextWrapping( const sal_Bool _bUseFormerTextWrapping );
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
