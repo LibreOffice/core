@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 16:04:24 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,25 +388,6 @@ void SfxApplication::Main( )
 #endif
 
 //-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, LateInitNewMenu_Impl, void*, pvoid)
-{
-    DBG_PROFSTART(SfxAppMainNewMenu);
-    pAppData_Impl->GetPopupMenu( SID_NEWDOCDIRECT );
-    DBG_PROFSTOP(SfxAppMainNewMenu);
-    return 0;
-}
-
-IMPL_LINK( SfxApplication, LateInitWizMenu_Impl, void*, pvoid)
-{
-    DBG_PROFSTART(SfxAppMainWizMenu);
-    pAppData_Impl->GetPopupMenu( SID_AUTOPILOTMENU );
-    DBG_PROFSTOP(SfxAppMainWizMenu);
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
 void SfxApplication::InsertLateInitHdl(const Link& rLink)
 {
     if ( Application::IsInExecute() )

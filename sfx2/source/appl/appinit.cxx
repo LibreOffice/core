@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-17 09:14:31 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
 
-    InsertLateInitHdl( LINK(this, SfxApplication,LateInitNewMenu_Impl) );
-    InsertLateInitHdl( LINK(this, SfxApplication,LateInitWizMenu_Impl) );
     InsertLateInitHdl( LINK(pNewHdl, SfxNewHdl, InitMem_Impl) );
     InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
     InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDocumentTemplates ) );

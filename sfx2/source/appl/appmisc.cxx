@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:05:40 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,45 +803,6 @@ long Select_Impl( void* pHdl, void* pVoid )
     }
 
     return TRUE;
-}
-
-PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
-{
-    PopupMenu** ppMenu;
-    String sKey;
-    switch( nSID )
-    {
-        case SID_NEWDOCDIRECT:
-            ppMenu = &pNewMenu;
-            sKey = BOOKMARK_NEWMENU;
-            break;
-        case SID_AUTOPILOTMENU:
-            ppMenu = &pAutoPilotMenu;
-            sKey = BOOKMARK_WIZARDMENU;
-            break;
-        default:
-            ppMenu = 0;
-            DBG_ERROR( "Menu ID unknown!" );
-            break;
-    }
-
-    if( ppMenu && ( !*ppMenu || bNew ) )
-    {
-        if ( *ppMenu )
-            delete *ppMenu;
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        if ( !pViewFrame )
-            pViewFrame = pViewFrame->GetFirst();
-
-        Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-        ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
-        Reference<com::sun::star::frame::XFrame> aXFrame(pViewFrame->GetFrame()->GetFrameInterface());
-        *ppMenu = aConf.CreateBookmarkMenu( aXFrame, sKey );
-        if ( *ppMenu )
-            (*ppMenu)->SetSelectHdl( Link( this, Select_Impl ) );
-    }
-
-    return ppMenu ? *ppMenu : NULL;
 }
 
 SfxMenuBarManager* SfxApplication::GetMenuBarManager() const

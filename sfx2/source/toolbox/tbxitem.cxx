@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-14 10:08:39 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #include <string>           // prevent conflict with STL includes
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -75,6 +82,8 @@
 #endif
 
 #include <svtools/imagemgr.hxx>
+#include <comphelper/processfactory.hxx>
+#include <framework/menuconfiguration.hxx>
 
 #pragma hdrstop
 
@@ -103,6 +112,9 @@
 #include "app.hxx"
 #include "unoctitm.hxx"
 #include "helpid.hrc"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 //--------------------------------------------------------------------
 
@@ -616,12 +628,18 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
 )
     : SfxToolBoxControl( nId, rBox, rBindings )
     , bBigImages( FALSE )
+    , pMenu( 0 )
 {
     aTimer.SetTimeout( 250 );
     aTimer.SetTimeoutHdl( LINK( this, SfxAppToolBoxControl_Impl, Timeout ) );
     rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
     rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
     SetImage( String() );
+}
+
+SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
+{
+    delete pMenu;
 }
 
 void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
@@ -685,6 +703,7 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
 }
 
 //--------------------------------------------------------------------
+long Select_Impl( void* pHdl, void* pVoid );
 
 IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
 {
@@ -695,9 +714,17 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
     USHORT nId = GetId();
     BOOL bNew = FALSE;
 
-    PopupMenu* pMenu = pApp->Get_Impl()->GetPopupMenu( nId, bBigImages, bNew );
+    if ( !pMenu )
+    {
+        Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+        Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+        pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+    }
+
     if( pMenu )
     {
+        pMenu->SetSelectHdl( Link( this, Select_Impl ) );
         rBox.SetItemDown( GetId(), TRUE );
         USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );
         if ( nSelected )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-03 17:34:09 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#include <framework/menuconfiguration.hxx>
 #pragma hdrstop
 
 #include "appdata.hxx"
@@ -113,6 +114,7 @@
 #include "arrdecl.hxx"
 #include "module.hxx"
 #include "unoctitm.hxx"
+#include "viewfrm.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -477,6 +479,8 @@ PopupMenu* SfxMenuControl::GetPopup () const
         return 0;
 }
 
+long Select_Impl( void* pHdl, void* pVoid );
+
 SFX_IMPL_MENU_CONTROL( SfxAppMenuControl_Impl, SfxStringItem );
 
 SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
@@ -486,16 +490,21 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     String aText = rMenu.GetItemText( nPos );
     SfxApplication* pApp = SFX_APP();
     SfxAppData_Impl* pImpl = pApp->Get_Impl();
-    PopupMenu* pView =  pImpl->GetPopupMenu( nPos );
-    if ( pView )
+
+    Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+    ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+    pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU );
+    if( pMenu )
     {
-        rMenu.SetPopupMenu( nPos, pView );
-//        pView->SetSelectHdl( LINK( this, SfxAppMenuControl_Impl, Select) );
+        pMenu->SetSelectHdl( Link( this, Select_Impl ) );
+        rMenu.SetPopupMenu( nPos, pMenu );
     }
 }
 
 SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
 {
+    delete pMenu;
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,

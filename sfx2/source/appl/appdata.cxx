@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 14:19:22 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pSecureURLs(0),
         nAutoTabPageId(0),
         nExecutingSID( 0 ),
-        pNewMenu( 0 ),
-        pAutoPilotMenu( 0 ),
         pAppDispatch(NULL),
         pTriggerTopic(0),
         pDdeService2(0),

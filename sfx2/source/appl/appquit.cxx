@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,6 @@ void SfxApplication::Deinitialize()
     DELETEZ(pImp->pAutoSaveTimer);
     DELETEZ(pAppDispat);
     DELETEZ(pImp->pSfxResManager);
-
-    DELETEZ( pAppData_Impl->pNewMenu );
-    DELETEZ( pAppData_Impl->pAutoPilotMenu );
 
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEX(pAppData_Impl->pMatcher);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:11:07 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 class SfxApplication;
 class SvStrings;
 class Config;
-class PopupMenu;
 class SfxBmkMenu;
 class SvVerbList;
 class SfxProgress;
@@ -152,8 +151,6 @@ public:
     SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
-    PopupMenu*                          pNewMenu;
-    PopupMenu*                          pAutoPilotMenu;
     SfxMiscCfg*                         pMiscConfig;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;
@@ -187,7 +184,6 @@ public:
                                         SfxAppData_Impl( SfxApplication* );
                                         ~SfxAppData_Impl();
 
-    PopupMenu*                          GetPopupMenu( USHORT nSid, BOOL bBig=FALSE, BOOL bNew=FALSE );
     virtual void                        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
     void                                UpdateApplicationSettings( BOOL bDontHide );
     SfxDocumentTemplates*               GetDocumentTemplates();
