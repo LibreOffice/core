@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 13:19:24 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -169,6 +171,9 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 
 // .........................................................................
 namespace dbaui
@@ -187,6 +192,7 @@ namespace dbaui
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::i18n;
+    using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::datatransfer;
     using namespace ::dbtools;
     using namespace ::svx;
@@ -194,7 +200,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
     {
-        DBG_ASSERT(etQueryContainer == getEntryType(_pApplyTo), "SbaTableQueryBrowser::implPasteQuery: invalid target entry!");
+        DBG_ASSERT(etQueryContainer == getEntryType(_pApplyTo) || etQuery == getEntryType(_pApplyTo), "SbaTableQueryBrowser::implPasteQuery: invalid target entry!");
         try
         {
             sal_Bool bQueryDescriptor = _rPasteData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
@@ -292,7 +298,13 @@ namespace dbaui
                     // this is a heavy error ... the name container for the queries could not ne obtained
                     return;
 
-                DBTreeListModel::DBTreeListUserData* pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
+                // check if the entry is a container else get the parent
+                DBTreeListModel::DBTreeListUserData* pQueriesData = NULL;
+                if(!isContainer(_pApplyTo))
+                    pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pTreeView->getListBox()->GetParent(_pApplyTo)->GetUserData());
+                else
+                    pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
+
                 Reference< XNameContainer > xDestQueries(pQueriesData->xObject, UNO_QUERY);
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
@@ -450,9 +462,9 @@ namespace dbaui
                                     }
                                 case OCopyTableWizard::WIZARD_APPEND_DATA:
                                     {
-                                        Reference<XStatement> xStmt = xSrcConnection->createStatement();
-                                        if(!xStmt.is())
-                                            break;
+                                        Reference<XResultSet>   xSrcRs;
+                                        Reference<XStatement> xStmt; // needed to hold a reference to the statement
+                                        Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
                                         ::rtl::OUString sSql,sDestName;
                                         ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
                                         // create the sql stmt
@@ -462,11 +474,61 @@ namespace dbaui
                                             ::rtl::OUString sComposedName;
                                             ::dbaui::composeTableName(xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
                                             sSql += sComposedName;
+                                            xStmt = xSrcConnection->createStatement();
+                                            if(!xStmt.is())
+                                                break;
+                                            xSrcRs = xStmt->executeQuery(sSql);
                                         }
                                         else
+                                        {
                                             xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
+                                            xPrepStmt = xSrcConnection->prepareStatement(sSql);
+                                            if(!xPrepStmt.is())
+                                                break;
+                                            // look if we have to fill in some parameters
+                                            // create and fill a composer
+                                            Reference< XSQLQueryComposerFactory >  xFactory(xSrcConnection, UNO_QUERY);
+                                            Reference< XSQLQueryComposer> xComposer;
+                                            if (xFactory.is())
+                                            {
+                                                try
+                                                {
+                                                    xComposer = xFactory->createQueryComposer();
+                                                    if(xComposer.is())
+                                                    {
+                                                        xComposer->setQuery(sSql);
+                                                        Reference< XInteractionHandler > xHandler(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                                                        ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),xSrcConnection,xHandler);
+                                                        xSrcRs = xPrepStmt->executeQuery();
+                                                    }
+                                                }
+                                                catch(SQLContext&)
+                                                {
+                                                    if(bDispose)
+                                                        ::comphelper::disposeComponent(xSrcConnection);
+                                                    throw;
+                                                }
+                                                catch(SQLWarning&)
+                                                {
+                                                    if(bDispose)
+                                                        ::comphelper::disposeComponent(xSrcConnection);
+                                                    throw;
+                                                }
+                                                catch(SQLException&)
+                                                {
+                                                    if(bDispose)
+                                                        ::comphelper::disposeComponent(xSrcConnection);
+                                                    throw;
+                                                }
+                                                catch (Exception&)
+                                                {
+                                                    xComposer = NULL;
+                                                    break;
+                                                }
+                                            }
 
-                                        Reference<XResultSet> xSrcRs = xStmt->executeQuery(sSql);
+                                        }
+
                                         Reference<XRow> xRow(xSrcRs,UNO_QUERY);
                                         if(!xSrcRs.is() || !xRow.is())
                                             break;
@@ -847,7 +909,6 @@ namespace dbaui
             xPrep->executeUpdate();
         }
     }
-
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
@@ -855,6 +916,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/12 13:19:24  fs
+ *  #65293# linux ambiguity
+ *
  *  Revision 1.14  2001/06/07 12:53:46  fs
  *  #87905# don't DnD bookmarks
  *
