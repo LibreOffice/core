@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:41:33 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,6 +1074,12 @@ class FilterCache : public BaseLock
         /** TODO */
         OUStringList impl_tokenizeString(const ::rtl::OUString& sData     ,
                                                sal_Unicode      cSeperator);
+
+        //---------------------------------------
+
+        /** TODO */
+        ::rtl::OUString impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const;
+        ::rtl::OUString impl_searchContentHandlerForType(const ::rtl::OUString& sType) const;
 
         //---------------------------------------
 
