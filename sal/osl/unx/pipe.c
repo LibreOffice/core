@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-01-22 11:48:12 $
+ *  last change: $Author: mfe $ $Date: 2001-02-19 13:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void __osl_destroyPipeImpl(oslPipeImpl *pImpl)
 /*****************************************************************************/
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
-    oslPipe pPipe;
+    oslPipe pPipe=0;
     rtl_String* strPipeName=0;
     sal_Char* pszPipeName=0;
 
@@ -248,7 +248,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         return NULL;
     }
 
-    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipeImpl->m_Socket);
+/*    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipeImpl->m_Socket);*/
 
     /* set close-on-exec flag */
     if ((Flags = fcntl(pPipeImpl->m_Socket, F_GETFD, 0)) != -1)
@@ -392,6 +392,13 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
     pPipeImpl = (oslPipeImpl*) Pipe;
 
     ConnFD = pPipeImpl->m_Socket;
+
+    nRet = shutdown(ConnFD, 2);
+    if ( nRet < 0 )
+    {
+        OSL_TRACE("shutdown in destroyPipe failed : '%s'\n",strerror(errno));
+    }
+
 #if defined(LINUX)
     pPipeImpl->m_Socket = -1;
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -418,7 +425,6 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
     {
         OSL_TRACE("close in destroyPipe failed : '%s'\n",strerror(errno));
     }
-
     /* remove filesystem entry */
     if ( strlen(pPipeImpl->m_Name) > 0 )
     {
@@ -439,7 +445,6 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
     int          s;
     oslPipeImpl* pPipeImpl;
     oslPipeImpl* pParamPipeImpl;
-
     OSL_ASSERT(Pipe);
 
     if ( Pipe == 0 )
@@ -468,6 +473,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
         pPipeImpl->m_Socket = s;
     }
 
+
     return (oslPipe)pPipeImpl;
 }
 
@@ -480,7 +486,6 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
 {
     oslPipeImpl* pPipeImpl;
     int nRet = 0;
-    int i;
 
     OSL_ASSERT(Pipe);
 
@@ -525,7 +530,6 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
 {
     oslPipeImpl* pPipeImpl;
     int nRet=0;
-    int i;
 
     OSL_ASSERT(Pipe);
 
