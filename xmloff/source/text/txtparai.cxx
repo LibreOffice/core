@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:01:40 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,9 +1102,10 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     {
         // ouline level: set Level property
         sal_Int32 nTmp;
-        if (SvXMLUnitConverter::convertNumber(
-            nTmp, sValue, 0,
-            GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
+        if ( SvXMLUnitConverter::convertNumber( nTmp, sValue )
+             && nTmp >= 1
+             && nTmp < GetImport().GetTextImport()->
+                              GetChapterNumbering()->getCount() )
         {
             Any aAny;
             aAny <<= (sal_Int16)(nTmp - 1);
@@ -1496,9 +1497,11 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                 new XMLTextFrameContext( rImport, nPrefix,
                                          rLocalName, xAttrList,
                                          TextContentAnchorType_AS_CHARACTER );
+            // --> OD 2004-08-24 #i33242# - remove check for text content.
+            // Check for text content is done on the processing of the hint
             if( TextContentAnchorType_AT_CHARACTER ==
-                    pTextFrameContext->GetAnchorType() &&
-                pTextFrameContext->GetTextContent().is() )
+                                            pTextFrameContext->GetAnchorType() )
+            // <--
             {
                 rHints.Insert( new XMLTextFrameHint_Impl(
                     pTextFrameContext, xAnchorPos ),
@@ -1805,12 +1808,47 @@ XMLParaContext::~XMLParaContext()
                 {
                     const XMLTextFrameHint_Impl *pFHint =
                         (const XMLTextFrameHint_Impl *)pHint;
-                    // OD 2004-04-20 #i26791#
-                    Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                    if ( pFHint->IsBoundAtChar() )
+                    // --> OD 2004-08-24 #i33242# - check for text content
+                    Reference < XTextContent > xTextContent =
+                                                    pFHint->GetTextContent();
+                    if ( xTextContent.is() )
                     {
-                        pFHint->GetTextContent()->attach( xRange );
+                        // OD 2004-04-20 #i26791#
+                        Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                        if ( pFHint->IsBoundAtChar() )
+                        {
+                            xTextContent->attach( xRange );
+                        }
                     }
+                    // <--
+                    // --> OD 2004-08-24 #i33242# - consider, that hint can
+                    // also contain a shape - e.g. drawing object of type 'Text'.
+                    else
+                    {
+                        Reference < XShape > xShape = pFHint->GetShape();
+                        if ( xShape.is() )
+                        {
+                            // determine anchor type
+                            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
+                            TextContentAnchorType eAnchorType =
+                                            TextContentAnchorType_AT_PARAGRAPH;
+                            {
+                                OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+                                Any aAny = xPropSet->getPropertyValue( sAnchorType );
+                                aAny >>= eAnchorType;
+                            }
+                            if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
+                            {
+                                // set anchor position for at-character anchored objects
+                                Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                                Any aPos;
+                                aPos <<= xRange;
+                                OUString sTextRange( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) );
+                                xPropSet->setPropertyValue(sTextRange, aPos);
+                            }
+                        }
+                    }
+                    // <--
                 }
                 break;
             // --> DVO, OD 2004-07-14 #i26791#
@@ -1818,23 +1856,30 @@ XMLParaContext::~XMLParaContext()
                 {
                     const XMLDrawHint_Impl *pDHint =
                         static_cast<const XMLDrawHint_Impl*>(pHint);
-                    SvXMLShapeContext* pShapeContext = pDHint->GetShapeContext();
-                    // determine anchor type
-                    Reference < XPropertySet > xPropSet( pShapeContext->getShape(), UNO_QUERY );
-                    TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
+                    // --> OD 2004-08-24 #i33242# - improvement: hint directly
+                    // provides the shape.
+                    Reference < XShape > xShape = pDHint->GetShape();
+                    if ( xShape.is() )
                     {
-                        OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
-                        Any aAny = xPropSet->getPropertyValue( sAnchorType );
-                        aAny >>= eAnchorType;
+                        // determine anchor type
+                        Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
+                        TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
+                        {
+                            OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+                            Any aAny = xPropSet->getPropertyValue( sAnchorType );
+                            aAny >>= eAnchorType;
+                        }
+                        if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
+                        {
+                            // set anchor position for at-character anchored objects
+                            Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                            Any aPos;
+                            aPos <<= xRange;
+                            OUString sTextRange( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) );
+                            xPropSet->setPropertyValue(sTextRange, aPos);
+                        }
                     }
-                    if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
-                    {
-                        Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-                        Any aPos;
-                        aPos <<= xRange;
-                        OUString sTextRange( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) );
-                        xPropSet->setPropertyValue(sTextRange, aPos);
-                    }
+                    // <--
                 }
                 break;
             // <--
