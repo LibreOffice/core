@@ -1,10 +1,11 @@
-/*************************************************************************
+ /*************************************************************************
+
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:59:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +81,8 @@
 #ifndef SD_GRAPHIC_DOC_SHELL_HXX
 #include "GraphicDocShell.hxx"
 #endif
+
+#include <vcl/toolbox.hxx>
 
 #include "app.hxx"
 #include "app.hrc"
