@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
+ *  last change: $Author: as $ $Date: 2001-03-15 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,6 @@ using namespace ::rtl                                       ;
 #define PROPERTYNAME_HASOPTIONBAR               DECLARE_ASCII("HasOptionBar"    )
 #define PROPERTYNAME_HASSTATUSBAR               DECLARE_ASCII("HasStatusBar"    )
 #define PROPERTYNAME_HASTOOLBAR                 DECLARE_ASCII("HasToolBar"      )
-#define PROPERTYNAME_ISOLOCALE                  DECLARE_ASCII("ISOLocale"       )
 #define PROPERTYNAME_ISPLUGGED                  DECLARE_ASCII("IsPlugged"       )
 
 // handle of properties
@@ -214,11 +213,10 @@ using namespace ::rtl                                       ;
 #define PROPERTYHANDLE_HASOPTIONBAR             11
 #define PROPERTYHANDLE_HASSTATUSBAR             12
 #define PROPERTYHANDLE_HASTOOLBAR               13
-#define PROPERTYHANDLE_ISOLOCALE                14
-#define PROPERTYHANDLE_ISPLUGGED                15
+#define PROPERTYHANDLE_ISPLUGGED                14
 
 // count of ALL properties
-#define PROPERTYCOUNT                           15
+#define PROPERTYCOUNT                           14
 
 // Defines default name for desktop
 #define DEFAULT_NAME                            DECLARE_ASCII("Desktop")
@@ -265,7 +263,6 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
         ,   m_bHasOptionBar         ( sal_True                                                                              )
         ,   m_bHasStatusBar         ( sal_True                                                                              )
         ,   m_bHasToolbar           ( sal_True                                                                              )
-        ,   m_aISOLocale            (                                                                                       )
         ,   m_bAlreadyDisposed      ( sal_False                                                                             )
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False )   // see dispose() for further informations!
@@ -1286,8 +1283,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(            Any&        aCon
     {
         case PROPERTYHANDLE_ACTIVECOMPONENT     :
         case PROPERTYHANDLE_ACTIVEFRAME         :
-        case PROPERTYHANDLE_ISPLUGGED           :
-        case PROPERTYHANDLE_ISOLOCALE           :   bReturn = sal_False; // These variables are readonly(!) and can't be changed.
+        case PROPERTYHANDLE_ISPLUGGED           :   bReturn = sal_False; // These variables are readonly(!) and can't be changed.
                                                     break;
         case PROPERTYHANDLE_HASBEAMER           :   bReturn = impl_tryToChangeProperty( m_bHasBeamer        , aValue, aOldValue, aConvertedValue );
                                                     break;
@@ -1331,8 +1327,7 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(            sal_Int32   
     {
         case PROPERTYHANDLE_ACTIVECOMPONENT     :
         case PROPERTYHANDLE_ACTIVEFRAME         :
-        case PROPERTYHANDLE_ISPLUGGED           :
-        case PROPERTYHANDLE_ISOLOCALE           :   LOG_ASSERT( sal_False, "Desktop::setFastPropertyValue_NoBroadcast()\nSet of readonly property not allowed.\n" )
+        case PROPERTYHANDLE_ISPLUGGED           :   LOG_ASSERT( sal_False, "Desktop::setFastPropertyValue_NoBroadcast()\nSet of readonly property not allowed.\n" )
                                                     break;
         case PROPERTYHANDLE_HASBEAMER           :   aValue >>= m_bHasBeamer         ;
                                                     break;
@@ -1397,8 +1392,6 @@ void SAL_CALL Desktop::getFastPropertyValue(    Any&        aValue  ,
         case PROPERTYHANDLE_HASSTATUSBAR        :   aValue <<= m_bHasStatusBar      ;
                                                     break;
         case PROPERTYHANDLE_HASTOOLBAR          :   aValue <<= m_bHasToolbar        ;
-                                                    break;
-        case PROPERTYHANDLE_ISOLOCALE           :   aValue <<= m_aISOLocale         ;
                                                     break;
         case PROPERTYHANDLE_ISPLUGGED           :   {
 //TODO!                                                 sal_Bool bState = impl_checkPlugInState();
@@ -1559,7 +1552,6 @@ const Sequence< Property > Desktop::impl_getStaticPropertyDescriptor()
         Property( PROPERTYNAME_HASOPTIONBAR     , PROPERTYHANDLE_HASOPTIONBAR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
         Property( PROPERTYNAME_HASSTATUSBAR     , PROPERTYHANDLE_HASSTATUSBAR       , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
         Property( PROPERTYNAME_HASTOOLBAR       , PROPERTYHANDLE_HASTOOLBAR         , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT                              ),
-        Property( PROPERTYNAME_ISOLOCALE        , PROPERTYHANDLE_ISOLOCALE          , ::getCppuType((const Locale*)NULL)                    , PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY),
         Property( PROPERTYNAME_ISPLUGGED        , PROPERTYHANDLE_ISPLUGGED          , ::getBooleanCppuType()                                , PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY),
     };
     // Use it to initialize sequence!

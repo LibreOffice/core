@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-05 08:09:04 $
+ *  last change: $Author: as $ $Date: 2001-03-15 08:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,7 +1352,6 @@ class Desktop   :   public XTYPEPROVIDER            ,
         sal_Bool                                    m_bHasOptionBar             ;
         sal_Bool                                    m_bHasStatusBar             ;
         sal_Bool                                    m_bHasToolbar               ;
-        LOCALE                                      m_aISOLocale                ;
 
 };  //  class Desktop
 
