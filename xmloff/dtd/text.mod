@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.20 2001-01-16 22:06:53 cl Exp $
+	$Id: text.mod,v 1.21 2001-01-24 16:47:57 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -131,7 +131,6 @@
 				   office:annotation |
 				   text:script" >
 
-
 <!ENTITY % inline-text "(#PCDATA|
 						 text:span|text:tab-stop|text:s|text:line-break|
 						 text:footnote|text:endnote|text:a|
@@ -144,7 +143,7 @@
 						 text:alphabetical-index-mark-start |
 						 text:alphabetical-index-mark-end |
 						 text:alphabetical-index-mark |
-						 draw:a)*">
+						 %change-marks; | draw:a)*">
 
 <!ELEMENT text:p %inline-text;>
 <!ELEMENT text:h %inline-text;>
@@ -720,7 +719,7 @@
 						text:table-of-content|text:illustration-index|
 						text:table-index|text:object-index|text:user-index|
 						text:alphabetical-index|text:bibliography|
-						text:index-title)*">
+						text:index-title|%change-marks;)*">
 
 <!ELEMENT text:section ((text:section-source|office:dde-source)?,
 						%sectionText;) >
@@ -1051,3 +1050,27 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:script script:language CDATA #REQUIRED>
 <!ATTLIST text:script xlink:href CDATA #IMPLIED>
 <!ATTLIST text:script xlink:type (simple) #FIXED "simple">
+
+
+<!-- elements for change tracking -->
+
+<!ELEMENT text:change EMPTY>
+<!ATTLIST text:change text:change-id CDATA #REQUIRED>
+
+<!ELEMENT text:change-start EMPTY>
+<!ATTLIST text:change-start text:change-id CDATA #REQUIRED>
+
+<!ELEMENT text:change-end EMPTY>
+<!ATTLIST text:change-end text:change-id CDATA #REQUIRED>
+
+<!ELEMENT text:tracked-changes (text:changed-region)*>
+
+<!ELEMENT text:changed-region (text:insertion | 
+							   (text:deletion, text:insertion?) | 
+                               text:format-change) >
+<!ATTLIST text:changed-region text:id ID #REQUIRED>
+
+<!ELEMENT text:insertion (office:change-info, %sectionText;)>
+<!ELEMENT text:deletion (office:change-info, %sectionText;)>
+<!ELEMENT text:format-change (office:change-info)>
+

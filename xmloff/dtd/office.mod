@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.24 2001-01-15 17:17:24 dvo Exp $
+	$Id: office.mod,v 1.25 2001-01-24 16:47:57 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -137,12 +137,15 @@
 <!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
 					   text:user-field-decls?, text:dde-connection-decls?" >
 
-<!ENTITY % body "(%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
+<!ENTITY % change-marks "text:change | text:change-start | text:change-end">
+
+<!ENTITY % body "(text:tracked-changes?,%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
 		(text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|draw:page|
 		draw:a|%shape;|text:section|text:table-of-content|
 		text:illustration-index|text:table-index|text:object-index|
-		text:user-index|text:alphabetical-index|text:bibliography)*,
+		text:user-index|text:alphabetical-index|text:bibliography|
+		%change-marks;)*,
 		table:named-expressions?,
 		table:database-ranges?,table:data-pilot-tables?,
 		table:consolidation?,
@@ -166,3 +169,7 @@
 <!ATTLIST office:annotation office:create-date %date; #IMPLIED>
 <!ATTLIST office:annotation office:create-date-string %string; #IMPLIED>
 <!ATTLIST office:annotation office:display %boolean; "false">
+
+<!ELEMENT office:change-info (text:p)*>
+<!ATTLIST office:change-info office:chg-author %string; #REQUIRED>
+<!ATTLIST office:change-info office:chg-date-time %timeInstance; #REQUIRED>
