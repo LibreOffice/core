@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3137,3 +3137,21 @@ const bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
 
     return bRet;
 }
+/* -----------------20.03.2003 14:35-----------------
+
+ --------------------------------------------------*/
+Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
+{
+    Point aRet(-1, -1);
+    const SwFrm *pPage = GetLayout()->Lower();
+    while ( pPage && !pPage->Frm().IsInside( rDocPos ) )
+    {
+        pPage = pPage->GetNext();
+    }
+    if(pPage)
+    {
+        aRet = rDocPos - pPage->Frm().TopLeft();
+    }
+    return aRet;
+}
+
