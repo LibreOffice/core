@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:55:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2454,6 +2454,17 @@ void SvxRuler::ApplyTabs()
             DRAG_OBJECT_SIZE_PROPORTIONAL & nDragType)
     {
         SvxTabStopItem *pItem = new SvxTabStopItem(pTabStopItem->Which());
+        //remove default tab stops
+        for ( USHORT i = 0; i < pItem->Count(); )
+        {
+            if ( SVX_TAB_ADJUST_DEFAULT == (*pItem)[i].GetAdjustment() )
+            {
+                pItem->Remove(i);
+                continue;
+            }
+            ++i;
+        }
+
         USHORT i;
         for(i = 0; i < nCoreIdx; ++i)
         {
