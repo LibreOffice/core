@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProvider.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-11-05 10:18:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module ucb {
      @see      XContent
      @see      XContentIdentifier
 */
-interface XContentProvider: com::sun::star::uno::XInterface
+published interface XContentProvider: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a new <type>XContent</type> instance, if the given
