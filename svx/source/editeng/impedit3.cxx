@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 06:06:00 $
+ *  last change: $Author: mt $ $Date: 2001-08-16 11:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2953,7 +2953,7 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
 //          nCurTextHeight -= pPPortion->GetHeight();
         }
 
-        if ( bShow && pPPortion->IsInvalid() )
+        if ( bShow && ( pPPortion->IsInvalid() || !pPPortion->nHeight ) )
         {
             if ( GetUpdateMode() && !GetTextRanger() )
             {
