@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-14 09:25:48 $
+#   last change: $Author: kr $ $Date: 2001-05-14 13:00:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,8 +180,6 @@ SHL1OBJS= \
 .ENDIF
 .ENDIF
 
-$(SHL1TARGET): $(OUT)/inc/udkversion.h
-
 SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
@@ -263,6 +261,10 @@ SHL2DEPN=makefile.mk
 .ENDIF			# $(depend)!=""
 
 .INCLUDE :  target.mk
+
+
+$(SHL1TARGETN): $(OUT)/inc/udkversion.h
+
 
 $(OUT)/inc/udkversion.h: 
     echo '#ifndef _SAL_UDKVERSION_H_'           >  $@
