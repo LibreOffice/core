@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-13 15:32:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,12 +806,6 @@ Config::~Config()
 
 // -----------------------------------------------------------------------
 
-void Config::Modified()
-{
-}
-
-// -----------------------------------------------------------------------
-
 String Config::GetDefDirectory()
 {
     ::rtl::OUString aDefConfig;
@@ -890,7 +884,6 @@ void Config::DeleteGroup( const ByteString& rGroup )
         else
         {
             mpData->mbModified = TRUE;
-            Modified();
         }
 
         // Gruppen auf ungluetig setzen
@@ -1082,7 +1075,6 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
             else
             {
                 mpData->mbModified = TRUE;
-                Modified();
             }
         }
     }
@@ -1136,7 +1128,6 @@ void Config::DeleteKey( const ByteString& rKey )
             else
             {
                 mpData->mbModified = TRUE;
-                Modified();
             }
         }
     }
