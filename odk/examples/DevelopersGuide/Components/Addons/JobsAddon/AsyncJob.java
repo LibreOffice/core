@@ -1,0 +1,450 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AsyncJob.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-06-10 10:10:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+//_______________________________________________
+// imports
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.lib.uno.helper.Factory;
+import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.awt.*;
+import com.sun.star.beans.*;
+import com.sun.star.task.*;
+import com.sun.star.uno.*;
+import java.lang.*;
+import javax.swing.*;
+
+//_______________________________________________
+// implementation
+
+/** it implements a simple job component.
+ *
+ *  Such jobs are executable in different ways:
+ *  <ul>
+ *      <li>registered for a special URL schema "vnd.sun.star.jobs:*" and used from the generic dispatch framework</li>
+ *      <li>the global com.sun.star.task.JobExecutor service and registered for special events.</li>
+ *  </ul>
+ */
+public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
+{
+    //___________________________________________
+    // const
+    public final XComponentContext m_xCmpCtx;
+
+    /** the const list of supported uno service names. */
+    public static final java.lang.String[] SERVICENAMES = {"com.sun.star.task.AsyncJob"};
+
+    /** the const uno implementation name.
+     *  It must be an unique value! The best naming schema seams to use
+     *  a registered domain in reverse order ...
+     */
+    public static final java.lang.String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";
+
+    //___________________________________________
+    // interface
+
+    /** initialize a new instance of this class with default values. */
+    public AsyncJob( XComponentContext xCompContext )
+    {
+        m_xCmpCtx = xCompContext;
+    }
+
+    //___________________________________________
+
+    /** starts execution of this job.
+     *
+     *  @param  lArgs
+     *          list which contains:
+     *          <ul>
+     *              <li>generic job configuration data</li>
+     *              <li>job specific configuration data</li>
+     *              <li>some environment informations</li>
+     *              <li>may optional arguments of a corresponding dispatch request</li>
+     *          </ul>
+     *
+     *  @params xListener
+     *          callback to the executor of this job, which control our life time
+     *
+     *  @throws com.sun.star.lang.IllegalArgumentException
+     *          if given argument list seams to be wrong
+     */
+    public synchronized void executeAsync(com.sun.star.beans.NamedValue[] lArgs    ,
+                                          com.sun.star.task.XJobListener  xListener)
+        throws com.sun.star.lang.IllegalArgumentException
+    {
+        // For asynchronous jobs a valid listener reference is guranteed normaly ...
+        if (xListener == null)
+            throw new com.sun.star.lang.IllegalArgumentException("invalid listener");
+
+        // extract all possible sub list of given argument list
+        com.sun.star.beans.NamedValue[] lGenericConfig = null;
+        com.sun.star.beans.NamedValue[] lJobConfig     = null;
+        com.sun.star.beans.NamedValue[] lEnvironment   = null;
+        com.sun.star.beans.NamedValue[] lDynamicData   = null;
+
+        int c = lArgs.length;
+        for (int i=0; i<c; ++i)
+        {
+            if (lArgs[i].Name.equals("Config"))
+                lGenericConfig = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
+            else
+            if (lArgs[i].Name.equals("JobConfig"))
+                lJobConfig = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
+            else
+            if (lArgs[i].Name.equals("Environment"))
+                lEnvironment = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
+            else
+            if (lArgs[i].Name.equals("DynamicData"))
+                lDynamicData = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
+        }
+
+        // Analyze the environment info. This sub list is the only guarenteed one!
+        if (lEnvironment == null)
+            throw new com.sun.star.lang.IllegalArgumentException("no environment");
+
+        java.lang.String          sEnvType   = null;
+        java.lang.String          sEventName = null;
+        com.sun.star.frame.XFrame xFrame     = null;
+        c = lEnvironment.length;
+        for (int i=0; i<c; ++i)
+        {
+            if (lEnvironment[i].Name.equals("EnvType"))
+                sEnvType = com.sun.star.uno.AnyConverter.toString(lEnvironment[i].Value);
+            else
+            if (lEnvironment[i].Name.equals("EventName"))
+                sEventName = com.sun.star.uno.AnyConverter.toString(lEnvironment[i].Value);
+            else
+            if (lEnvironment[i].Name.equals("Frame"))
+                xFrame = (com.sun.star.frame.XFrame)com.sun.star.uno.AnyConverter.toObject(
+                            new com.sun.star.uno.Type(com.sun.star.frame.XFrame.class),
+                            lEnvironment[i].Value);
+        }
+
+        // Further the environment property "EnvType" is required as minimum.
+        if (
+            (sEnvType==null) ||
+            (
+             (!sEnvType.equals("EXECUTOR")) &&
+             (!sEnvType.equals("DISPATCH"))
+            )
+           )
+        {
+            java.lang.String sMessage = "\"" + sEnvType + "\" isn't a valid value for EnvType";
+            throw new com.sun.star.lang.IllegalArgumentException(sMessage);
+        }
+
+        System.out.println("environment analyzed ...");
+
+        // Analyze the set of shared config data.
+        java.lang.String sAlias = null;
+        if (lGenericConfig!=null)
+        {
+            c = lGenericConfig.length;
+            for (int i=0; i<c; ++i)
+            {
+                if (lGenericConfig[i].Name.equals("Alias"))
+                    sAlias = com.sun.star.uno.AnyConverter.toString(lGenericConfig[i].Value);
+            }
+        }
+
+        // do your job ...
+        // Here we print out all found arguments.
+        java.lang.String sOut = formatOutArgs(lGenericConfig, lJobConfig, lEnvironment, lDynamicData);
+        if (xFrame != null)
+            showInfoModal(xFrame.getContainerWindow(), "Arguments of AsyncJob initialization ...", sOut);
+        else
+            showInfoNonModal("Arguments of AsyncJob initialization ...", sOut);
+
+        // use return value to start different actions
+        // But look for the right environment. Some options make no sense inside the wrong env.
+        com.sun.star.beans.NamedValue aDeactivation   = null;
+        com.sun.star.beans.NamedValue aDispatchResult = null;
+        com.sun.star.beans.NamedValue aSaveRequest    = null;
+
+        // SaveArguments will be made everytimes!
+        c = 1;
+
+        if (lJobConfig==null)
+            lJobConfig = new com.sun.star.beans.NamedValue[1];
+        lJobConfig[0] = new com.sun.star.beans.NamedValue();
+        lJobConfig[0].Name  = "arg_1";
+        lJobConfig[0].Value = "val_1";
+
+        aSaveRequest = new com.sun.star.beans.NamedValue();
+        aSaveRequest.Name  = "SaveArguments";
+        aSaveRequest.Value = lJobConfig;
+
+        // Deactivation is usefull inside EXECUTOR environment only
+        if (sEnvType.equals("EXECUTOR"))
+        {
+            ++c;
+            aDeactivation       = new com.sun.star.beans.NamedValue();
+            aDeactivation.Name  = "Deactivate";
+            aDeactivation.Value = java.lang.Boolean.TRUE;
+        }
+
+        // Sending of result events is usefull inside DISPATCH environment only
+        if (sEnvType.equals("DISPATCH"))
+        {
+            ++c;
+            aDispatchResult       = new com.sun.star.beans.NamedValue();
+            aDispatchResult.Name  = "SendDispatchResult";
+            aDispatchResult.Value = new com.sun.star.frame.DispatchResultEvent(this, com.sun.star.frame.DispatchResultState.SUCCESS, null);
+        }
+
+        // pack it together for return
+        int i=0;
+        com.sun.star.beans.NamedValue[] lReturn = new com.sun.star.beans.NamedValue[c];
+        lReturn[i++] = aSaveRequest;
+        if (aDeactivation!=null)
+            lReturn[i++] = aDeactivation;
+        if (aDispatchResult!=null)
+            lReturn[i++] = aDispatchResult;
+
+        xListener.jobFinished(this, lReturn);
+    }
+
+    //___________________________________________
+
+    /** show an info box with the UNO based toolkit.
+     *
+     *  It tries to use the container window of a may well know
+     *  office frame as parent. If such parent window could be located,
+     *  the info box can be shown in modal mode. If a parent is missing
+     *  (because this job is called inside an EXECUTOR environment, which
+     *  does not set any frame context here) the info box can't be created!
+     *  Because the toolkit needs parents for non top level windows ...
+     *  In that case the only way is to implement this info box
+     *  native or make it non modal using java dialogs inside it's own thread ...
+     *  (see showInfoNonModal() too)
+     *
+     *  @param  xParent
+     *          used as parent window of the shown info box.
+     *
+     *  @param  sTitle
+     *          is shown as title of the info box.
+     *
+     *  @param  sMessage
+     *          inclused the message body, which is shown as info.
+     */
+
+    private void showInfoModal( com.sun.star.awt.XWindow xParent  ,
+                                java.lang.String         sTitle   ,
+                                java.lang.String         sMessage )
+    {
+        try
+        {
+            // get access to the office toolkit environment
+            com.sun.star.awt.XToolkit xKit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
+                 com.sun.star.awt.XToolkit.class,
+                 m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
+                                                                         m_xCmpCtx));
+
+            // describe the info box ini it's parameters
+            com.sun.star.awt.WindowDescriptor aDescriptor = new com.sun.star.awt.WindowDescriptor();
+            aDescriptor.WindowServiceName = "infobox";
+            aDescriptor.Bounds            = new com.sun.star.awt.Rectangle(0,0,300,200);
+            aDescriptor.WindowAttributes  = com.sun.star.awt.WindowAttribute.BORDER   |
+                                            com.sun.star.awt.WindowAttribute.MOVEABLE |
+                                            com.sun.star.awt.WindowAttribute.CLOSEABLE;
+            aDescriptor.Type              = com.sun.star.awt.WindowClass.MODALTOP;
+            aDescriptor.ParentIndex       = 1;
+            aDescriptor.Parent            = (com.sun.star.awt.XWindowPeer)UnoRuntime.queryInterface(
+                                                com.sun.star.awt.XWindowPeer.class,
+                                                xParent);
+
+            // create the info box window
+            com.sun.star.awt.XWindowPeer xPeer    = xKit.createWindow(aDescriptor);
+            com.sun.star.awt.XMessageBox xInfoBox = (com.sun.star.awt.XMessageBox)UnoRuntime.queryInterface(
+                                                        com.sun.star.awt.XMessageBox.class,
+                                                        xPeer);
+            if (xInfoBox == null)
+                return;
+
+            // fill it with all given informations and show it
+            xInfoBox.setCaptionText(sTitle);
+            xInfoBox.setMessageText(sMessage);
+            xInfoBox.execute();
+        }
+        catch(java.lang.Throwable exIgnore)
+        {
+            // ignore any problem, which can occure here.
+            // It's not realy a bug for this example job, if
+            // it's message could not be printed out!
+        }
+    }
+
+    //___________________________________________
+
+    private void showInfoNonModal( java.lang.String sTitle   ,
+                                   java.lang.String sMessage )
+    {
+    }
+
+    //___________________________________________
+
+    /** helper to print out the given argument list.
+     *
+     *  @param  lGenericConfig
+     *          contains all shared configuration items for a job
+     *
+     *  @param  lJobConfig
+     *          contains all job sepcific configuration items
+     *
+     *  @param  lEnvironment
+     *          contains some environment informations
+     *
+     *  @param  lDynamicData
+     *          contains optional data of a might corresponding dispatch() request
+     */
+
+    private java.lang.String formatOutArgs(com.sun.star.beans.NamedValue[] lGenericConfig,
+                                           com.sun.star.beans.NamedValue[] lJobConfig    ,
+                                           com.sun.star.beans.NamedValue[] lEnvironment  ,
+                                           com.sun.star.beans.NamedValue[] lDynamicData )
+    {
+        java.lang.StringBuffer sOut = new java.lang.StringBuffer(1024);
+
+        sOut.append("list \"Config\": ");
+        if (lGenericConfig==null)
+            sOut.append("0 items\n");
+        else
+        {
+            int c = lGenericConfig.length;
+            sOut.append(c+" items\n");
+            for (int i=0; i<c; ++i)
+                sOut.append("\t["+i+"] \""+lGenericConfig[i].Name+"\" = {"+lGenericConfig[i].Value+"}\n");
+        }
+        sOut.append("list \"JobConfig\": ");
+        if (lJobConfig==null)
+            sOut.append("0 items\n");
+        else
+        {
+            int c = lJobConfig.length;
+            sOut.append(c+" items\n");
+            for (int i=0; i<c; ++i)
+                sOut.append("\t["+i+"] \""+lJobConfig[i].Name+"\" = {"+lJobConfig[i].Value+"}\n");
+        }
+        sOut.append("list \"Environment\": ");
+        if (lEnvironment==null)
+            sOut.append("0 items\n");
+        else
+        {
+            int c = lEnvironment.length;
+            sOut.append(c+" items\n");
+            for (int i=0; i<c; ++i)
+                sOut.append("\t["+i+"] \""+lEnvironment[i].Name+"\" = {"+lEnvironment[i].Value+"}\n");
+        }
+        sOut.append("list \"DynamicData\": ");
+        if (lDynamicData==null)
+            sOut.append("0 items\n");
+        else
+        {
+            int c = lDynamicData.length;
+            sOut.append(c+" items\n");
+            for (int i=0; i<c; ++i)
+                sOut.append("\t["+i+"] \""+lDynamicData[i].Name+"\" = {"+lDynamicData[i].Value+"}\n");
+        }
+
+        return sOut.toString();
+    }
+
+    public String[] getSupportedServiceNames() {
+        return SERVICENAMES;
+    }
+
+    public boolean supportsService( String sService ) {
+        int len = SERVICENAMES.length;
+
+        for( int i=0; i < len; i++) {
+            if ( sService.equals( SERVICENAMES[i] ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    public String getImplementationName() {
+        return( AsyncJob.class.getName() );
+    }
+
+
+    //___________________________________________
+
+    public synchronized static com.sun.star.lang.XSingleComponentFactory __getComponentFactory(java.lang.String sImplName)
+    {
+        com.sun.star.lang.XSingleComponentFactory xFactory = null;
+        if (sImplName.equals(AsyncJob.IMPLEMENTATIONNAME))
+            xFactory = Factory.createComponentFactory(AsyncJob.class, SERVICENAMES);
+
+        return xFactory;
+    }
+
+    //___________________________________________
+
+    public synchronized static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xRegKey)
+    {
+        return Factory.writeRegistryServiceInfo(
+            AsyncJob.IMPLEMENTATIONNAME,
+            AsyncJob.SERVICENAMES,
+            xRegKey);
+    }
+}
