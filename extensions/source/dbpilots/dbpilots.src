@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:47:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ arabic ] = "ΪδΥΡ γΜγζΪΙ ΗαγΡΤΟ ΗαΒαν";
     Text [ dutch ] = "AutoPiloot groepselement";
     Text [ chinese_simplified ] = "θ‡ªε¨ζ–‡δ»¶ε©η† ε°η»„ε•ε…ƒ";
-    Text [ greek ] = "Στοιχείο ομάδας του AutoPilot";
+    Text [ greek ] = "Στοιχείο ομάδας του αυτόματου πιλότου";
     Text [ korean ] = "μλ™ νμΌλΏ κ·Έλ£Ή μ”μ†";
     Text [ turkish ] = "Otomatik Pilot Grup Elemanύ";
 
@@ -131,13 +131,13 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ swedish ] = "AutoPilot fφr tabellelement";
     Text [ polish ] = "AutoPilot: Element tabeli";
     Text [ portuguese_brazilian ] = "Assistente de elementos de tabela";
-    Text [ japanese ] = "γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ γƒ†γƒΌγƒ–γƒ«γ®ζ§‹ζθ¦η΄ ";
+    Text [ japanese ] = "γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ γƒ†γƒΌγƒ–γƒ«γ‚³γƒ³γƒγƒ­γƒΌγƒ«";
     Text [ chinese_simplified ] = "θ‡ªε¨ζ–‡δ»¶ε©η† θ΅¨ζ Όε•ε…ƒ";
     Text [ chinese_traditional ] = "θ‡ªε‹•ζª”ζ΅ε©η† θ΅¨ζ Όε–®ε…ƒ";
     Text [ arabic ] = "ΪδΥΡ ΜΟζα ΗαγΡΤΟ ΗαΒαν";
     Text [ dutch ] = "AutoPiloot Tabelelement";
     Text [ chinese_simplified ] = "θ‡ªε¨ζ–‡δ»¶ε©η† θ΅¨ζ Όε•ε…ƒ";
-    Text [ greek ] = "Στοιχείο πίνακα του ΑυτοΠιλότου";
+    Text [ greek ] = "Στοιχείο πίνακα του Αυτόματου Πιλότου";
     Text [ korean ] = "μλ™ νμΌλΏ ν…μ΄λΈ” μ”μ†";
     Text [ turkish ] = "AutoPilot Tablo Elementi";
     Text[ catalan ] = "Element de taula de l'AutoPilot";
@@ -170,7 +170,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ arabic ] = "γΡΘΪ ήΗΖγΙ ΗαγΡΤΟ ΗαΒαν";
     Text[ dutch ] = "AutoPiloot Keuzelijst";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ–‡ζ΅£ε©η† ε—ε•ζ ";
-    Text[ greek ] = "Πεδίο λίστας του ΑυτοΠιλότου";
+    Text[ greek ] = "Πεδίο λίστας του Αυτόματου Πιλότου";
     Text[ korean ] = "μλ™ νμΌλΏ λª©λ΅ ν•„λ“";
     Text[ turkish ] = "AutoPilot Liste Kutusu";
     Text[ catalan ] = "Quadre de llista de l'AutoPilot";
@@ -202,7 +202,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ arabic ] = "γΡΘΪ ΚΝΡνΡ ζΣΡΟ ΗαγΡΤΟ ΗαΒαν";
     Text [ dutch ] = "AutoPiloot Combinatieveld";
     Text [ chinese_simplified ] = "θ‡ªε¨ζ–‡δ»¶ε©η† η»„εζ ";
-    Text [ greek ] = "Πεδίο συνδυασμού του ΑυτοΠιλότου";
+    Text [ greek ] = "Πεδίο συνδυασμού του Αυτόματου Πιλότου";
     Text [ korean ] = "μλ™ νμΌλΏ μ½¤λ³΄ μƒμ";
     Text [ turkish ] = "AutoPilot Bileώen Kutusu";
     Text [ language_user1 ] = " ";
@@ -249,6 +249,13 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29.8.1  2003/07/03 14:40:42  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.29  2003/06/13 12:47:23  hr
+ *  INTEGRATION: CWS rcmerge (1.28.26); FILE MERGED
+ *  2003/06/12 11:09:54 gh 1.28.26.1: final Merge RC
+ *
  *  Revision 1.28.26.1  2003/06/12 11:09:54  gh
  *  final Merge RC
  *
@@ -368,6 +375,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
