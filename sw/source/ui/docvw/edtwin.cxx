@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 10:37:12 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3858,11 +3858,13 @@ void SwEditWin::SetChainMode( BOOL bOn )
     rView.GetViewFrame()->GetBindings().Invalidate(aInva);
 }
 
+#ifdef ACCESSIBLE_LAYOUT
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     return rSh.CreateAccessible();
 }
+#endif
 
 //-------------------------------------------------------------
 

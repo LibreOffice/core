@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 18:06:18 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,10 @@
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
+#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
+#endif
 #endif
 
 #ifndef _STATSTR_HRC
@@ -1109,8 +1111,10 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
 
+#ifdef ACCESSIBLE_LAYOUT
     if( Imp()->IsAccessible() )
         Imp()->UpdateAccessible();
+#endif
 
 }
 
@@ -2164,6 +2168,7 @@ BOOL ViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
+#ifdef ACCESSIBLE_LAYOUT
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
 {
@@ -2182,3 +2187,4 @@ BOOL ViewShell::IsNewLayout() const
 
     return xAcc;
 }
+#endif

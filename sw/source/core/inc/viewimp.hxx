@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:29:20 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@ class SwRegionRects;
 class ExtOutputDevice;
 class SdrPaintInfoRec;
 struct SdrPaintProcRec;
+#ifdef ACCESSIBLE_LAYOUT
 class SwAccessibleMap;
+#endif
 
 class SwViewImp
 {
@@ -113,7 +115,9 @@ class SwViewImp
                                  //ausgetragen.
     SwLayIdle     *pIdleAct;     //Analog zur SwLayAction fuer SwLayIdle.
 
+#ifdef ACCESSIBLE_LAYOUT
     SwAccessibleMap *pAccMap;       // Accessible Wrappers
+#endif
 
 
     AutoTimer     aScrollTimer;  //Fuer das Aufraeumen nach dem Scrollen.
@@ -158,7 +162,9 @@ class SwViewImp
 
     void PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
                          const SdrPaintInfoRec& rInfoRec );
+#ifdef ACCESSIBLE_LAYOUT
     SwAccessibleMap *CreateAccessibleMap();
+#endif
 
 public:
     SwViewImp( ViewShell * );
@@ -239,6 +245,7 @@ public:
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
+#ifdef ACCESSIBLE_LAYOUT
     // Is this view accessible?
     sal_Bool IsAccessible() const { return pAccMap != 0; }
 
@@ -252,6 +259,7 @@ public:
 
     // Move a frame's position in the accessible view
     void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+#endif
 };
 
 //Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder

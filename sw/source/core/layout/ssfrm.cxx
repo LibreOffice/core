@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:12:10 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,7 @@ void SwFrm::CheckDirChange()
 
 SwFrm::~SwFrm()
 {
+#ifdef ACCESSIBLE_LAYOUT
     if( IsAccessibleFrm() && GetRegisteredIn() )
     {
         ViewShell *pVSh = GetShell();
@@ -388,6 +389,7 @@ SwFrm::~SwFrm()
         if( pVSh )
             pVSh->Imp()->DisposeAccessibleFrm( this );
     }
+#endif
 
     if( pDrawObjs )
     {

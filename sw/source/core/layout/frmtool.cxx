@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:12:10 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,12 +304,14 @@ SwFrmNotify::~SwFrmNotify()
     if ( bAbsP || bPrtP || bFrmS || bPrtS )
 #endif
     {
+#ifdef ACCESSIBLE_LAYOUT
         if( pFrm->IsAccessibleFrm() )
         {
             ViewShell *pVSh  = pFrm->GetShell();
             if( pVSh )
                 pVSh->Imp()->MoveAccessibleFrm( pFrm, aFrm );
         }
+#endif
 
         //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
         //FlyInCnts brauchen hier nicht benachrichtigt werden.

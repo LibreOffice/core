@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:43:11 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,10 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
+#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
+#endif
 #endif
 
 /*************************************************************************
@@ -163,7 +165,9 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSdrPageView( 0 ),
     pDrawView( 0 ),
     nRestoreActions( 0 )
+#ifdef ACCESSIBLE_LAYOUT
     ,pAccMap( 0 )
+#endif
 {
     bResetXorVisibility = bShowHdlPaint =
     bResetHdlHiddenPaint = bScrolled =
@@ -186,7 +190,9 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 
 SwViewImp::~SwViewImp()
 {
+#ifdef ACCESSIBLE_LAYOUT
     delete pAccMap;
+#endif
 
     //JP 29.03.96: nach ShowPage muss auch HidePage gemacht werden!!!
     if( pDrawView )
@@ -373,6 +379,7 @@ Color SwViewImp::GetRetoucheColor() const
     return aRet;
 }
 
+#ifdef ACCESSIBLE_LAYOUT
 void SwViewImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
@@ -411,10 +418,10 @@ void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
     } while ( pTmp != pVSh );
 }
 
-
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()
 {
     ASSERT( !pAccMap, "accessible map exists" )
     pAccMap = new SwAccessibleMap( GetShell() );
     return pAccMap;
 }
+#endif
