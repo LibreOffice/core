@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
+ *  last change: $Author: gt $ $Date: 2001-02-26 10:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,7 +1270,7 @@ public:
     virtual ULONG               GetLen() const;
 
     inline BOOL                 operator ==( const String& rRef ) const
-                                    { return aName == r; }
+                                    { return aName == rRef; }
 };
 
 
