@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _SV_TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
@@ -152,7 +149,7 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) 
     aHighlightFillColor = rStyles.GetHighlightColor();
 
     nTextHeight = GetTextHeight()+1;
-    SetBackgroundBrush( Brush( BRUSH_NULL ) );
+    SetBackground();
     Font aFont = GetFont();
     aFont.SetColor( aLineColor );
     aFont.SetFillColor( aFillColor );
@@ -528,7 +525,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
     aHighlightFillColor = rStyles.GetHighlightColor();
 
     nTextHeight = GetTextHeight()+1;
-    SetBackgroundBrush( Brush( BRUSH_NULL ) );
+    SetBackground();
     Font aFont( GetFont() );
     aFont.SetColor( aLineColor );
     aFont.SetFillColor( aFillColor );
