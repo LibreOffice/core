@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:56:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@
 #include <unotools/charclass.hxx>
 #endif
 
+
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
@@ -188,6 +189,7 @@
 using namespace ::com::sun::star::i18n;
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
+bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
 
 #define MAX_TXTPORLEN 300
 
@@ -1243,6 +1245,14 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
     SwLinePortion *pPor = WhichFirstPortion( rInf );
 
+    // Check for Hidden Portion:
+    if ( !pPor )
+    {
+        xub_StrLen nEnd = rInf.GetIdx();
+        if ( lcl_BuildHiddenPortion( rInf, nEnd ) )
+            pPor = new SwHiddenTextPortion( nEnd - rInf.GetIdx() );
+    }
+
     if( !pPor )
     {
         if( !pMulti || pMulti->IsBidi() )
@@ -2128,4 +2138,21 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
     }
 }
 
+bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
+{
+    // Only if hidden text should not be shown:
+    if ( rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+        return false;
 
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+    xub_StrLen nHiddenStart;
+    xub_StrLen nHiddenEnd;
+    rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
+    if ( nHiddenEnd )
+    {
+        rPos = nHiddenEnd;
+        return true;
+    }
+
+    return false;
+}
