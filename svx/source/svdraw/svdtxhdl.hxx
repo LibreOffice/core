@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 14:54:21 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <vcl/virdev.hxx>
 #endif
 
-#ifndef _POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _LINK_HXX //autogen
