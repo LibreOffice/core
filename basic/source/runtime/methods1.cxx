@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 09:00:47 $
+ *  last change: $Author: ab $ $Date: 2002-10-08 09:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1335,3 +1335,128 @@ RTLFUNC(GetDefaultContext)
 {
     RTL_Impl_GetDefaultContext( pBasic, rPar, bWrite );
 }
+
+
+RTLFUNC(Join)
+{
+    USHORT nParCount = rPar.Count();
+    if ( nParCount != 3 && nParCount != 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    SbxBase* pParObj = rPar.Get(1)->GetObject();
+    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    if( pArr )
+    {
+        if( pArr->GetDims() != 1 )
+            StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
+
+        String aDelim;
+        if( nParCount == 3 )
+            aDelim = rPar.Get(2)->GetString();
+        else
+            aDelim = String::CreateFromAscii( " " );
+
+        String aRetStr;
+        short nLower, nUpper;
+        pArr->GetDim( 1, nLower, nUpper );
+        for( short i = nLower ; i <= nUpper ; ++i )
+        {
+            String aStr = pArr->Get( &i )->GetString();
+            aRetStr += aStr;
+            if( i != nUpper )
+                aRetStr += aDelim;
+        }
+        rPar.Get(0)->PutString( aRetStr );
+    }
+    else
+        StarBASIC::Error( SbERR_MUST_HAVE_DIMS );
+}
+
+
+typedef ::std::vector< String > StringVector;
+
+RTLFUNC(Split)
+{
+    USHORT nParCount = rPar.Count();
+    if ( nParCount < 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    String aExpression = rPar.Get(1)->GetString();
+    short nArraySize = 0;
+    StringVector vRet;
+    if( aExpression.Len() )
+    {
+        String aDelim;
+        if( nParCount >= 3 )
+            aDelim = rPar.Get(2)->GetString();
+        else
+            aDelim = String::CreateFromAscii( " " );
+
+        INT32 nCount = -1;
+        if( nParCount == 4 )
+            nCount = rPar.Get(3)->GetLong();
+
+        xub_StrLen nDelimLen = aDelim.Len();
+        if( nDelimLen )
+        {
+            xub_StrLen iSearch = STRING_NOTFOUND;
+            xub_StrLen iStart = 0;
+            do
+            {
+                bool bBreak = false;
+                if( nCount >= 0 && nArraySize == nCount - 1 )
+                    bBreak = true;
+
+                iSearch = aExpression.Search( aDelim, iStart );
+                String aSubStr;
+                if( iSearch != STRING_NOTFOUND && !bBreak )
+                {
+                    aSubStr = aExpression.Copy( iStart, iSearch - iStart );
+                    iStart = iSearch + nDelimLen;
+                }
+                else
+                {
+                    aSubStr = aExpression.Copy( iStart );
+                }
+                vRet.push_back( aSubStr );
+                nArraySize++;
+
+                if( bBreak )
+                    break;
+            }
+            while( iSearch != STRING_NOTFOUND );
+        }
+        else
+        {
+            vRet.push_back( aExpression );
+        }
+    }
+
+    SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+    if( nArraySize )
+    {
+        pArray->AddDim( 0, nArraySize-1 );
+
+        // Parameter ins Array uebernehmen
+        for( short i = 0 ; i < nArraySize ; i++ )
+        {
+            SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+            xVar->PutString( vRet[i] );
+            pArray->Put( (SbxVariable*)xVar, &i );
+        }
+    }
+
+    // Array zurueckliefern
+    SbxVariableRef refVar = rPar.Get(0);
+    USHORT nFlags = refVar->GetFlags();
+    refVar->ResetFlag( SBX_FIXED );
+    refVar->PutObject( pArray );
+    refVar->SetFlags( nFlags );
+    refVar->SetParameters( NULL );
+}
+
