@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 10:54:29 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 15:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #define UPN_IS_GERMAN_PRE_REFORM            "IsGermanPreReform"
 #define UPN_IS_USE_DICTIONARY_LIST          "IsUseDictionaryList"
 #define UPN_IS_IGNORE_CONTROL_CHARACTERS    "IsIgnoreControlCharacters"
+#define UPN_ACTIVE_DICTIONARIES             "ActiveDictionaries"
 
 // UNO property names for SpellChecker
 #define UPN_IS_SPELL_UPPER_CASE             "IsSpellUpperCase"
@@ -124,6 +125,7 @@
 #define UPH_DEFAULT_LANGUAGE                21
 #define UPH_DEFAULT_LOCALE_CJK              22
 #define UPH_DEFAULT_LOCALE_CTL              23
+#define UPH_ACTIVE_DICTIONARIES             24
 
 #endif
 
