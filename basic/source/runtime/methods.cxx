@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-15 13:28:55 $
+ *  last change: $Author: ab $ $Date: 2001-06-20 16:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 
 #pragma hdrstop
 #include "runtime.hxx"
+#include "sbunoobj.hxx"
 #ifdef _OLD_FILE_IMPL
 #ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
@@ -1862,7 +1863,22 @@ RTLFUNC(IsObject)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        rPar.Get( 0 )->PutBool( rPar.Get(1)->IsObject() );
+    {
+        SbxVariable* pVar = rPar.Get(1);
+        SbxBase* pObj = (SbxBase*)pVar->GetObject();
+
+        SbUnoClass* pUnoClass;
+        BOOL bObject;
+        if( pObj &&  NULL != ( pUnoClass=PTR_CAST(SbUnoClass,pObj) ) )
+        {
+            bObject = pUnoClass->getUnoClass().is();
+        }
+        else
+        {
+            bObject = pVar->IsObject();
+        }
+        rPar.Get( 0 )->PutBool( bObject );
+    }
 }
 
 RTLFUNC(IsDate)
