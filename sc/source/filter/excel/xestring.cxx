@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:25:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
 #endif
+
+#include <algorithm>
 
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
@@ -72,37 +72,17 @@
 #include "xestream.hxx"
 #endif
 
-
 using ::rtl::OUString;
 
-
 // ============================================================================
-
-/** All allowed flags for exporting a BIFF2-BIFF7 byte string. */
-const XclStrFlags nAllowedFlags27 = EXC_STR_8BITLENGTH;
-/** All allowed flags for export. */
-const XclStrFlags nAllowedFlags = nAllowedFlags27 | EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS;
-
-
-// ----------------------------------------------------------------------------
 
 namespace {
 
 // compare vectors
 
-/** Returns -1, if rLeft<rRight; or 1, if rLeft>rRight; or 0, if rLeft==rRight. */
-template< typename Type >
-inline int lclCompare( const Type& rLeft, const Type& rRight )
-{
-    int nResult = 0;
-    if( rLeft < rRight )
-        nResult = -1;
-    else if( rRight < rLeft )
-        nResult = 1;
-    return nResult;
-}
-
-/** Compares vectors. Returns -1, if rLeft<rRight; or 1, if rLeft>rRight; or 0, if rLeft==rRight. */
+/** Compares two vectors.
+    @return  A negative value, if rLeft<rRight; or a positive value, if rLeft>rRight;
+    or 0, if rLeft==rRight. */
 template< typename Type >
 int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< Type >& rRight )
 {
@@ -112,15 +92,14 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
     typedef typename ::std::vector< Type >::const_iterator CIT;
     CIT aEndL = rLeft.end(), aEndR = rRight.end();
     for( CIT aItL = rLeft.begin(), aItR = rRight.begin(); !nResult && (aItL != aEndL) && (aItR != aEndR); ++aItL, ++aItR )
-        nResult = lclCompare( *aItL, *aItR );
+        nResult = static_cast< int >( *aItL ) - static_cast< int >( *aItR );
 
     // 2nd: no differences found so far -> compare the vector sizes. Shorter vector is less
     if( !nResult )
-        nResult = lclCompare( rLeft.size(), rRight.size() );
+        nResult = static_cast< int >( rLeft.size() ) - static_cast< int >( rRight.size() );
 
     return nResult;
 }
-
 
 // hashing helpers
 
@@ -132,13 +111,13 @@ struct XclHasher : public ::std::unary_function< Type, sal_uInt32 > {};
 template< typename Type >
 struct XclDirectHasher : public XclHasher< Type >
 {
-    inline sal_uInt32           operator()( Type nVal ) const { return nVal; }
+    inline sal_uInt32   operator()( Type nVal ) const { return nVal; }
 };
 
 struct XclFormatRunHasher : public XclHasher< const XclFormatRun& >
 {
-    inline sal_uInt32           operator()( const XclFormatRun& rRun ) const
-                                    { return (rRun.mnChar << 8) ^ rRun.mnFontIx; }
+    inline sal_uInt32   operator()( const XclFormatRun& rRun ) const
+                            { return (rRun.mnChar << 8) ^ rRun.mnXclFont; }
 };
 
 /** Calculates a hash value from a vector.
@@ -148,7 +127,8 @@ template< typename Type, typename ValueHasher >
 sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& rHasher )
 {
     sal_uInt32 nHash = rVec.size();
-    for( typename ::std::vector< Type >::const_iterator aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
+    typedef typename ::std::vector< Type >::const_iterator CIT;
+    for( CIT aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
         (nHash *= 31) += rHasher( *aIt );
     return static_cast< sal_uInt16 >( nHash ^ (nHash >> 16) );
 }
@@ -161,7 +141,6 @@ inline sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
 }
 
 } // namespace
-
 
 // constructors ---------------------------------------------------------------
 
@@ -193,7 +172,6 @@ XclExpString::XclExpString(
 {
     Assign( rString, rFormats, nFlags, nMaxLen );
 }
-
 
 // assign ---------------------------------------------------------------------
 
@@ -249,7 +227,6 @@ void XclExpString::AssignByte( sal_Unicode cChar, CharSet eCharSet, XclStrFlags 
     }
 }
 
-
 // append ---------------------------------------------------------------------
 
 void XclExpString::Append( const String& rString )
@@ -287,7 +264,6 @@ void XclExpString::AppendByte( sal_Unicode cChar, CharSet eCharSet )
     }
 }
 
-
 // formatting runs ------------------------------------------------------------
 
 void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
@@ -304,14 +280,14 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
         DBG_ASSERT( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
     }
 #endif
-    LimitFormatCount( mbIsBiff8 ? 0xFFFF : 0xFF );
+    LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_BIFF2 );
 }
 
-void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx )
+void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 {
     DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
-    if( maFormats.size() < static_cast< sal_uInt32 >( mbIsBiff8 ? 0xFFFF : 0xFF ) )
-        maFormats.push_back( XclFormatRun( nChar, nFontIx ) );
+    if( maFormats.size() < static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_BIFF2 ) )
+        maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
 }
 
 void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
@@ -320,21 +296,15 @@ void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
         maFormats.erase( maFormats.begin() + nMaxCount, maFormats.end() );
 }
 
-sal_uInt16 XclExpString::RemoveFontOfChar(sal_uInt16 nCharIx)
+sal_uInt16 XclExpString::RemoveLeadingFont()
 {
-    XclFormatRunVec::iterator aStart = maFormats.begin();
-    XclFormatRunVec::const_iterator aEnd   = maFormats.end();
-    sal_uInt16 nFontIx = EXC_FONT_NOTFOUND;
-    for( aStart; aStart != aEnd; ++aStart)
+    sal_uInt16 nXclFont = EXC_FONT_NOTFOUND;
+    if( !maFormats.empty() && (maFormats.front().mnChar == 0) )
     {
-        if( aStart->mnChar == nCharIx )
-        {
-            nFontIx = aStart->mnFontIx ;
-            maFormats.erase(aStart);
-            break;
-        }
+        nXclFont = maFormats.front().mnXclFont;
+        maFormats.erase( maFormats.begin() );
     }
-    return nFontIx;
+    return nXclFont;
 }
 
 bool XclExpString::IsEqual( const XclExpString& rCmp ) const
@@ -356,15 +326,14 @@ bool XclExpString::IsLessThan( const XclExpString& rCmp ) const
     int nResult = mbIsBiff8 ?
         lclCompareVectors( maUniBuffer, rCmp.maUniBuffer ) :
         lclCompareVectors( maCharBuffer, rCmp.maCharBuffer );
-    return nResult ? (nResult < 0) : (maFormats < rCmp.maFormats);
+    return (nResult != 0) ? (nResult < 0) : (maFormats < rCmp.maFormats);
 }
-
 
 // get data -------------------------------------------------------------------
 
 sal_uInt16 XclExpString::GetFormatsCount() const
 {
-    return static_cast< sal_uInt16 >( mbIsBiff8 ? maFormats.size() : 0 );
+    return static_cast< sal_uInt16 >( maFormats.size() );
 }
 
 sal_uInt8 XclExpString::GetFlagField() const
@@ -392,7 +361,6 @@ sal_uInt16 XclExpString::GetHash() const
         (mbIsBiff8 ? lclHashVector( maUniBuffer ) : lclHashVector( maCharBuffer )) ^
         lclHashVector( maFormats, XclFormatRunHasher() );
 }
-
 
 // streaming ------------------------------------------------------------------
 
@@ -446,13 +414,13 @@ void XclExpString::WriteFormats( XclExpStream& rStrm ) const
         {
             rStrm.SetSliceSize( 4 );
             for( ; aIt != aEnd; ++aIt )
-                rStrm << aIt->mnChar << aIt->mnFontIx;
+                rStrm << aIt->mnChar << aIt->mnXclFont;
         }
         else
         {
             rStrm.SetSliceSize( 2 );
             for( ; aIt != aEnd; ++aIt )
-                rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnFontIx );
+                rStrm << static_cast< sal_uInt8 >( aIt->mnChar ) << static_cast< sal_uInt8 >( aIt->mnXclFont );
         }
         rStrm.SetSliceSize( 0 );
     }
@@ -473,9 +441,9 @@ void XclExpString::WriteBuffer( void* pDest ) const
         if( mbIsBiff8 )
         {
             sal_uInt8* pDest8 = reinterpret_cast< sal_uInt8* >( pDest );
-            for( ScfUInt16Vec::const_iterator aIter = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIter != aEnd; ++aIter )
+            for( ScfUInt16Vec::const_iterator aIt = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIt != aEnd; ++aIt )
             {
-                sal_uInt16 nChar = *aIter;
+                sal_uInt16 nChar = *aIt;
                 *pDest8 = static_cast< sal_uInt8 >( nChar );
                 ++pDest8;
                 if( mbIsUnicode )
@@ -489,7 +457,6 @@ void XclExpString::WriteBuffer( void* pDest ) const
             memcpy( pDest, &maCharBuffer[ 0 ], mnLen );
     }
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -505,42 +472,43 @@ bool XclExpString::IsWriteFormats() const
 
 void XclExpString::SetStrLen( sal_Int32 nNewLen )
 {
-    sal_Int32 nAllowedLen = (mb8BitLen && (mnMaxLen > 255)) ? 255 : mnMaxLen;
-    mnLen = static_cast< sal_uInt16 >( ::std::min( ::std::max( nNewLen, 0L ), nAllowedLen ) );
+    sal_uInt16 nAllowedLen = (mb8BitLen && (mnMaxLen > 255)) ? 255 : mnMaxLen;
+    mnLen = limit_cast< sal_uInt16 >( nNewLen, 0, nAllowedLen );
 }
 
 void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
     DBG_ASSERT( maUniBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
         "XclExpString::CharsToBuffer - char buffer invalid" );
-    ScfUInt16Vec::iterator aBegin = maUniBuffer.begin() + nBegin;
-    ScfUInt16Vec::iterator aEnd = aBegin + nLen;
+    ScfUInt16Vec::iterator aBeg = maUniBuffer.begin() + nBegin;
+    ScfUInt16Vec::iterator aEnd = aBeg + nLen;
     const sal_Unicode* pcSrcChar = pcSource;
-    for( ScfUInt16Vec::iterator aIter = aBegin; aIter != aEnd; ++aIter, ++pcSrcChar )
+    for( ScfUInt16Vec::iterator aIt = aBeg; aIt != aEnd; ++aIt, ++pcSrcChar )
     {
-        *aIter = static_cast< sal_uInt16 >( *pcSrcChar );
-        if( *aIter & 0xFF00 )
+        *aIt = static_cast< sal_uInt16 >( *pcSrcChar );
+        if( *aIt & 0xFF00 )
             mbIsUnicode = true;
     }
-    mbWrapped = ::std::find( aBegin, aEnd, EXC_LF ) != aEnd;
+    if( !mbWrapped )
+        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF ) != aEnd;
 }
 
 void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
     DBG_ASSERT( maCharBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
         "XclExpString::CharsToBuffer - char buffer invalid" );
-    ScfUInt8Vec::iterator aBegin = maCharBuffer.begin() + nBegin;
-    ScfUInt8Vec::iterator aEnd = aBegin + nLen;
+    ScfUInt8Vec::iterator aBeg = maCharBuffer.begin() + nBegin;
+    ScfUInt8Vec::iterator aEnd = aBeg + nLen;
     const sal_Char* pcSrcChar = pcSource;
-    for( ScfUInt8Vec::iterator aIter = aBegin; aIter != aEnd; ++aIter, ++pcSrcChar )
-        *aIter = static_cast< sal_uInt8 >( *pcSrcChar );
+    for( ScfUInt8Vec::iterator aIt = aBeg; aIt != aEnd; ++aIt, ++pcSrcChar )
+        *aIt = static_cast< sal_uInt8 >( *pcSrcChar );
     mbIsUnicode = false;
-    mbWrapped = ::std::find( aBegin, aEnd, EXC_LF_C ) != aEnd;
+    if( !mbWrapped )
+        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF_C ) != aEnd;
 }
 
 void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 )
 {
-    DBG_ASSERT( (nFlags & ~(bBiff8 ? nAllowedFlags : nAllowedFlags27)) == 0, "XclExpString::Init - unknown flag" );
     mbIsBiff8 = bBiff8;
     mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
     mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
@@ -609,7 +577,6 @@ void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const
 {
     rStrm.SetSliceSize( nBytes + (mbIsUnicode ? 2 : 1) );
 }
-
 
 // ============================================================================
 
