@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-20 16:15:10 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 13:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,8 +617,8 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             * Date-Field
             ******************************************************************/
             pInfo->SetRepresentation(
-                ((const SvxDateField*) pField)->GetFormatted(LANGUAGE_SYSTEM,
-                                                             LANGUAGE_SYSTEM) );
+                ((const SvxDateField*) pField)->GetFormatted(
+                        *GetNumberFormatter( TRUE ), LANGUAGE_SYSTEM) );
         }
         else if (pField && pField->ISA(SvxURLField))
         {
