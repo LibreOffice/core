@@ -249,397 +249,380 @@ namespace fileaccess {
     {
         Any aAny;
         IOErrorCode ioErrorCode;
-        aAny <<= CommandAbortedException();
 
-        switch( errorCode )
+        if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
         {
-            case TASKHANDLER_UNSUPPORTED_COMMAND:
-                aAny <<= UnsupportedCommandException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
+            aAny <<= UnsupportedCommandException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||
+                 errorCode == TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT ||
+                 errorCode == TASKHANDLING_WRONG_OPEN_ARGUMENT              ||
+                 errorCode == TASKHANDLING_WRONG_DELETE_ARGUMENT            ||
+                 errorCode == TASKHANDLING_WRONG_TRANSFER_ARGUMENT          ||
+                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT )
+        {
+            aAny <<= IllegalArgumentException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_UNSUPPORTED_OPEN_MODE )
+        {
+            aAny <<= UnsupportedOpenModeException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND  ||
+                 errorCode == TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND ||
+                 errorCode == TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND )
+        {
 
-            case TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT:
-            case TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT:
-            case TASKHANDLING_WRONG_OPEN_ARGUMENT:
-            case TASKHANDLING_WRONG_DELETE_ARGUMENT:
-            case TASKHANDLING_WRONG_TRANSFER_ARGUMENT:
-            case TASKHANDLING_WRONG_INSERT_ARGUMENT:
-                aAny <<= IllegalArgumentException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_UNSUPPORTED_OPEN_MODE:
-                aAny <<= UnsupportedOpenModeException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND:
-            case TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND:
-            case TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND:
-                // what to do here ?
-                break;
-
-            case TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE:  // error in opening file
-            case TASKHANDLING_NO_OPEN_FILE_FOR_WRITE:      // error in opening file
-            case TASKHANDLING_OPEN_FOR_STREAM:             // error in opening file
-            case TASKHANDLING_OPEN_FOR_INPUTSTREAM:        // error in opening file
-            case TASKHANDLING_OPEN_FILE_FOR_PAGING:        // error in opening file
+        }
+        else if( errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE ||  // error in opening file
+                 errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_WRITE     ||  // error in opening file
+                 errorCode == TASKHANDLING_OPEN_FOR_STREAM            ||  // error in opening file
+                 errorCode == TASKHANDLING_OPEN_FOR_INPUTSTREAM       ||  // error in opening file
+                 errorCode == TASKHANDLING_OPEN_FILE_FOR_PAGING )        // error in opening file
+        {
+            switch( minorCode )
             {
-                switch( minorCode )
-                {
-                    case FileBase::E_NAMETOOLONG:       // pathname was too long<br>
-                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
-                        break;
-                    case FileBase::E_NXIO:          // No such device or address<br>
-                    case FileBase::E_NODEV:         // No such device<br>
-                        ioErrorCode = IOErrorCode_INVALID_DEVICE;
-                        break;
-                    case FileBase::E_NOENT:         // No such file or directory<br>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    case FileBase::E_ACCES:         // permission denied<P>
-                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
-                        break;
-                    case FileBase::E_ISDIR:         // Is a directory<p>
-                        ioErrorCode = IOErrorCode_NO_FILE;
-                        break;
-                    case FileBase::E_MFILE:         // too many open files used by the process<br>
-                    case FileBase::E_NFILE:         // too many open files in the system<br>
-                        ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
-                        break;
-                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
-                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
-                        break;
-                    case FileBase::E_BUSY:          // Text file busy<br>
-                        ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
-                        break;
-                    case FileBase::E_FAULT:         // Bad address<br>
-                    case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
-                    case FileBase::E_NOSPC:         // No space left on device<br>
-                    case FileBase::E_INTR:          // function call was interrupted<br>
-                    case FileBase::E_IO:            // I/O error<br>
-                    case FileBase::E_MULTIHOP:      // Multihop attempted<br>
-                    case FileBase::E_NOLINK:        // Link has been severed<br>
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            case FileBase::E_NAMETOOLONG:       // pathname was too long<br>
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
                 break;
-            }
-
-            case TASKHANDLING_OPEN_FOR_DIRECTORYLISTING:
-            case TASKHANDLING_OPENDIRECTORY_FOR_REMOVE:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_INVAL:          // the format of the parameters was not valid<br>
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_NOENT:          // the specified path doesn't exist<br>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    case FileBase::E_NOTDIR:             // the specified path is not an directory <br>
-                        ioErrorCode = IOErrorCode_NO_DIRECTORY;
-                        break;
-                    case FileBase::E_NOMEM:          // not enough memory for allocating structures <br>
-                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
-                        break;
-                    case FileBase::E_ACCES:          // permission denied<br>
-                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
-                        break;
-                    case FileBase::E_MFILE:          // too many open files used by the process<br>
-                    case FileBase::E_NFILE:          // too many open files in the system<br>
-                        ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
-                        break;
-                    case FileBase::E_NAMETOOLONG:        // File name too long<br>
-                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
-                        break;
-                    case FileBase::E_LOOP:           // Too many symbolic links encountered<p>
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+            case FileBase::E_NXIO:          // No such device or address<br>
+            case FileBase::E_NODEV:         // No such device<br>
+                ioErrorCode = IOErrorCode_INVALID_DEVICE;
                 break;
-            }
-
-            case TASKHANDLING_NOTCONNECTED_FOR_WRITE:
-            case TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE:
-            case TASKHANDLING_IOEXCEPTION_FOR_WRITE:
-            case TASKHANDLING_NOTCONNECTED_FOR_PAGING:
-            case TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING:
-            case TASKHANDLING_IOEXCEPTION_FOR_PAGING:
-                ioErrorCode = IOErrorCode_UNKNOWN;
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-
-            case TASKHANDLING_FILEIOERROR_FOR_WRITE:
-            case TASKHANDLING_READING_FILE_FOR_PAGING:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_INVAL:             // the format of the parameters was not valid
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_FBIG:              // File too large<br>
-                        ioErrorCode = IOErrorCode_CANT_WRITE;
-                        break;
-                    case FileBase::E_NOSPC:             // No space left on device<br>
-                        ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
-                        break;
-                    case FileBase::E_NXIO:              // No such device or address<p>
-                        ioErrorCode = IOErrorCode_INVALID_DEVICE;
-                        break;
-                    case FileBase::E_NOLINK:            // Link has been severed<p>
-                    case FileBase::E_ISDIR:             // Is a directory<br>
-                        ioErrorCode = IOErrorCode_NO_FILE;
-                        break;
-                    case FileBase::E_NOLCK:             // No record locks available<br>
-                    case FileBase::E_IO:                // I/O error<br>
-                    case FileBase::E_BADF:              // Bad file<br>
-                    case FileBase::E_FAULT:             // Bad address<br>
-                    case FileBase::E_AGAIN:             // Operation would block<br>
-                    case FileBase::E_INTR:              // function call was interrupted<br>
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-            }
-
-            case TASKHANDLING_NONAMESET_INSERT_COMMAND:
-            case TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND:
-            {
-                Sequence< ::rtl::OUString > aSeq( 1 );
-                aSeq[0] =
-                    ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                    rtl::OUString::createFromAscii( "Title" )               :
-                    rtl::OUString::createFromAscii( "ContentType" );
-
-                aAny <<= MissingPropertiesException( rtl::OUString(),
-                                                     0,
-                                                     aSeq );
-                cancelCommandExecution( aAny,xEnv );
-                break;
-            }
-
-            case TASKHANDLING_FILESIZE_FOR_WRITE:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_INVAL:     // the format of the parameters was not valid<br>
-                    case FileBase::E_OVERFLOW:  // The resulting file offset would be a value which cannot
-                        //                      //  be represented correctly for regular files
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-            }
-            case TASKHANDLING_INPUTSTREAM_FOR_WRITE:
-                aAny <<= MissingInputStreamException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_NOREPLACE_FOR_WRITE:    // Overwrite = false and file exists
-                aAny <<= NameClashException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_ENSUREDIR_FOR_WRITE:
-            case TASKHANDLING_CREATEDIRECTORY_MKDIR:
-                ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
-                cancelCommandExecution( ioErrorCode,getParentName( aUncPath ),xEnv );
-                break;
-
-            case TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE:
-            case TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE:
-            case TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
-                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
-                        break;
-                    case FileBase::E_ACCES:         // permission denied<br>
-                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
-                        break;
-                    case FileBase::E_MFILE:         // too many open files used by the process<br>
-                    case FileBase::E_NFILE:         // too many open files in the system<br>
-                        ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
-                        break;
-                    case FileBase::E_NOLINK:        // Link has been severed<br>
-                    case FileBase::E_NOENT:         // No such file or directory<br>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
-                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
-                        break;
-                    case FileBase::E_NOTDIR:     // A component of the path prefix of path is not a directory
-                        ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
-                        break;
-                    case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
-                    case FileBase::E_IO:            // I/O error<br>
-                    case FileBase::E_MULTIHOP:      // Multihop attempted<br>
-                    case FileBase::E_FAULT:         // Bad address<br>
-                    case FileBase::E_INTR:          // function call was interrupted<p>
-                    case FileBase::E_NOSYS:         // Function not implemented<p>
-                    case FileBase::E_NOSPC:         // No space left on device<br>
-                    case FileBase::E_NXIO:          // No such device or address<br>
-                    case FileBase::E_OVERFLOW:      // Value too large for defined data type<br>
-                    case FileBase::E_BADF:          // Invalid oslDirectoryItem parameter<br>
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-            }
-
-            case TASKHANDLING_DELETEFILE_FOR_REMOVE:
-            case TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
-                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
-                        break;
-                    case FileBase::E_ACCES:         // Permission denied<br>
-                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
-                        break;
-                    case FileBase::E_PERM:          // Operation not permitted<br>
-                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
-                        break;
-                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
-                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
-                        break;
-                    case FileBase::E_NOLINK:        // Link has been severed<br>
-                    case FileBase::E_NOENT:         // No such file or directory<br>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    case FileBase::E_ISDIR:         // Is a directory<br>
-                    case FileBase::E_ROFS:          // Read-only file system<p>
-                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
-                        break;
-                    case FileBase::E_BUSY:          // Device or resource busy<br>
-                        ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
-                        break;
-                    case FileBase::E_FAULT:         // Bad address<br>
-                    case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
-                    case FileBase::E_IO:            // I/O error<br>
-                    case FileBase::E_INTR:          // function call was interrupted<br>
-                    case FileBase::E_MULTIHOP:      // Multihop attempted<br>
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-            }
-
-            case TASKHANDLING_TRANSFER_MOUNTPOINTS:
+            case FileBase::E_NOENT:         // No such file or directory<br>
                 ioErrorCode = IOErrorCode_NOT_EXISTING;
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
                 break;
-
-            case TASKHANDLING_TRANSFER_BY_COPY_SOURCE:
-            case TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT:
-            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCE:
-            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT:
-            case TASKHANDLING_TRANSFER_DESTFILETYPE:
-            case TASKHANDLING_FILETYPE_FOR_REMOVE:
-            case TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE:
-            case TASKHANDLING_TRANSFER_INVALIDURL:
+            case FileBase::E_ACCES:         // permission denied<P>
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_ISDIR:         // Is a directory<p>
+                ioErrorCode = IOErrorCode_NO_FILE;
+                break;
+            case FileBase::E_MFILE:         // too many open files used by the process<br>
+            case FileBase::E_NFILE:         // too many open files in the system<br>
+                ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
+                break;
+            case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                break;
+            case FileBase::E_BUSY:          // Text file busy<br>
+                ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                break;
+            case FileBase::E_FAULT:         // Bad address<br>
+            case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
+            case FileBase::E_NOSPC:         // No space left on device<br>
+            case FileBase::E_INTR:          // function call was interrupted<br>
+            case FileBase::E_IO:            // I/O error<br>
+            case FileBase::E_MULTIHOP:      // Multihop attempted<br>
+            case FileBase::E_NOLINK:        // Link has been severed<br>
+            default:
                 ioErrorCode = IOErrorCode_GENERAL;
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-
-            case TASKHANDLING_TRANSFER_ACCESSINGROOT:
-                ioErrorCode = IOErrorCode_WRITE_PROTECTED;
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
-                break;
-
-            case TASKHANDLING_TRANSFER_INVALIDSCHEME:
-                aAny <<= InteractiveBadTransferURLException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_OVERWRITE_FOR_MOVE:
-            case TASKHANDLING_OVERWRITE_FOR_COPY:
-            case TASKHANDLING_NAMECLASHMOVE_FOR_MOVE:
-            case TASKHANDLING_NAMECLASHMOVE_FOR_COPY:
-            case TASKHANDLING_KEEPERROR_FOR_MOVE:
-            case TASKHANDLING_KEEPERROR_FOR_COPY:
-            case TASKHANDLING_RENAME_FOR_MOVE:
-            case TASKHANDLING_RENAME_FOR_COPY:
-            case TASKHANDLING_RENAMEMOVE_FOR_MOVE:
-            case TASKHANDLING_RENAMEMOVE_FOR_COPY:
-            {
-                switch( minorCode )
-                {
-                    case FileBase::E_EXIST:
-                        ioErrorCode = IOErrorCode_ALREADY_EXISTING;
-                        break;
-                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
-                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
-                        break;
-                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
-                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
-                        break;
-                    case FileBase::E_ACCES:         // Permission denied<br>
-                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
-                        break;
-                    case FileBase::E_PERM:          // Operation not permitted<br>
-                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
-                        break;
-                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
-                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
-                        break;
-                    case FileBase::E_NOENT:         // No such file or directory<br>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    case FileBase::E_ROFS:          // Read-only file system<p>
-                        ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        break;
-                    default:
-                        ioErrorCode = IOErrorCode_GENERAL;
-                        break;
-                }
-                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
                 break;
             }
 
-            case TASKHANDLING_NAMECLASH_FOR_COPY:
-            case TASKHANDLING_NAMECLASH_FOR_MOVE:
-                aAny <<= NameClashException();
-                cancelCommandExecution( aAny,xEnv );
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
+                 errorCode == TASKHANDLING_OPENDIRECTORY_FOR_REMOVE )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_INVAL:          // the format of the parameters was not valid<br>
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
                 break;
-
-            case TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE:
-            case TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY:
-                aAny <<= UnsupportedNameClashException();
-                cancelCommandExecution( aAny,xEnv );
+            case FileBase::E_NOENT:          // the specified path doesn't exist<br>
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
                 break;
-
-            case TASKHANDLER_NO_ERROR:
+            case FileBase::E_NOTDIR:             // the specified path is not an directory <br>
+                ioErrorCode = IOErrorCode_NO_DIRECTORY;
+                break;
+            case FileBase::E_NOMEM:          // not enough memory for allocating structures <br>
+                ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                break;
+            case FileBase::E_ACCES:          // permission denied<br>
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_MFILE:          // too many open files used by the process<br>
+            case FileBase::E_NFILE:          // too many open files in the system<br>
+                ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
+                break;
+            case FileBase::E_NAMETOOLONG:        // File name too long<br>
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                break;
+            case FileBase::E_LOOP:           // Too many symbolic links encountered<p>
             default:
-                return;
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
+                 errorCode == TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE    ||
+                 errorCode == TASKHANDLING_IOEXCEPTION_FOR_WRITE           ||
+                 errorCode == TASKHANDLING_NOTCONNECTED_FOR_PAGING         ||
+                 errorCode == TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING   ||
+                 errorCode == TASKHANDLING_IOEXCEPTION_FOR_PAGING         )
+        {
+            ioErrorCode = IOErrorCode_UNKNOWN;
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
+                 errorCode == TASKHANDLING_READING_FILE_FOR_PAGING )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_INVAL:             // the format of the parameters was not valid
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            case FileBase::E_FBIG:              // File too large<br>
+                ioErrorCode = IOErrorCode_CANT_WRITE;
+                break;
+            case FileBase::E_NOSPC:             // No space left on device<br>
+                ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
+                break;
+            case FileBase::E_NXIO:              // No such device or address<p>
+                ioErrorCode = IOErrorCode_INVALID_DEVICE;
+                break;
+            case FileBase::E_NOLINK:            // Link has been severed<p>
+            case FileBase::E_ISDIR:             // Is a directory<br>
+                ioErrorCode = IOErrorCode_NO_FILE;
+                break;
+            case FileBase::E_NOLCK:             // No record locks available<br>
+            case FileBase::E_IO:                // I/O error<br>
+            case FileBase::E_BADF:              // Bad file<br>
+            case FileBase::E_FAULT:             // Bad address<br>
+            case FileBase::E_AGAIN:             // Operation would block<br>
+            case FileBase::E_INTR:              // function call was interrupted<br>
+            default:
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
+                 errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
+        {
+            Sequence< ::rtl::OUString > aSeq( 1 );
+            aSeq[0] =
+                ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
+                rtl::OUString::createFromAscii( "Title" )               :
+                rtl::OUString::createFromAscii( "ContentType" );
+
+            aAny <<= MissingPropertiesException( rtl::OUString(),
+                                                 0,
+                                                 aSeq );
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_FILESIZE_FOR_WRITE )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_INVAL:     // the format of the parameters was not valid<br>
+            case FileBase::E_OVERFLOW:  // The resulting file offset would be a value which cannot
+                //                      //  be represented correctly for regular files
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            default:
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE )
+        {
+            aAny <<= MissingInputStreamException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )    // Overwrite = false and file exists
+        {
+            aAny <<= NameClashException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
+                 errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
+        {
+            ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+            cancelCommandExecution( ioErrorCode,getParentName( aUncPath ),xEnv );
+        }
+        else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
+                 errorCode == TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE       ||
+                 errorCode == TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                break;
+            case FileBase::E_ACCES:         // permission denied<br>
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_MFILE:         // too many open files used by the process<br>
+            case FileBase::E_NFILE:         // too many open files in the system<br>
+                ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
+                break;
+            case FileBase::E_NOLINK:        // Link has been severed<br>
+            case FileBase::E_NOENT:         // No such file or directory<br>
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
+                break;
+            case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                break;
+            case FileBase::E_NOTDIR:     // A component of the path prefix of path is not a directory
+                ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+                break;
+            case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
+            case FileBase::E_IO:            // I/O error<br>
+            case FileBase::E_MULTIHOP:      // Multihop attempted<br>
+            case FileBase::E_FAULT:         // Bad address<br>
+            case FileBase::E_INTR:          // function call was interrupted<p>
+            case FileBase::E_NOSYS:         // Function not implemented<p>
+            case FileBase::E_NOSPC:         // No space left on device<br>
+            case FileBase::E_NXIO:          // No such device or address<br>
+            case FileBase::E_OVERFLOW:      // Value too large for defined data type<br>
+            case FileBase::E_BADF:          // Invalid oslDirectoryItem parameter<br>
+            default:
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
+                 errorCode == TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                break;
+            case FileBase::E_ACCES:         // Permission denied<br>
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_PERM:          // Operation not permitted<br>
+                ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                break;
+            case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                break;
+            case FileBase::E_NOLINK:        // Link has been severed<br>
+            case FileBase::E_NOENT:         // No such file or directory<br>
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
+                break;
+            case FileBase::E_ISDIR:         // Is a directory<br>
+            case FileBase::E_ROFS:          // Read-only file system<p>
+                ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                break;
+            case FileBase::E_BUSY:          // Device or resource busy<br>
+                ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                break;
+            case FileBase::E_FAULT:         // Bad address<br>
+            case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
+            case FileBase::E_IO:            // I/O error<br>
+            case FileBase::E_INTR:          // function call was interrupted<br>
+            case FileBase::E_MULTIHOP:      // Multihop attempted<br>
+            default:
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_TRANSFER_MOUNTPOINTS )
+        {
+            ioErrorCode = IOErrorCode_NOT_EXISTING;
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
+                 errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT     ||
+                 errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCE         ||
+                 errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT     ||
+                 errorCode == TASKHANDLING_TRANSFER_DESTFILETYPE           ||
+                 errorCode == TASKHANDLING_FILETYPE_FOR_REMOVE             ||
+                 errorCode == TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE   ||
+                 errorCode == TASKHANDLING_TRANSFER_INVALIDURL )
+        {
+            ioErrorCode = IOErrorCode_GENERAL;
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_TRANSFER_ACCESSINGROOT )
+        {
+            ioErrorCode = IOErrorCode_WRITE_PROTECTED;
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
+        {
+            aAny <<= InteractiveBadTransferURLException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_OVERWRITE_FOR_MOVE      ||
+                 errorCode == TASKHANDLING_OVERWRITE_FOR_COPY      ||
+                 errorCode == TASKHANDLING_NAMECLASHMOVE_FOR_MOVE  ||
+                 errorCode == TASKHANDLING_NAMECLASHMOVE_FOR_COPY  ||
+                 errorCode == TASKHANDLING_KEEPERROR_FOR_MOVE      ||
+                 errorCode == TASKHANDLING_KEEPERROR_FOR_COPY      ||
+                 errorCode == TASKHANDLING_RENAME_FOR_MOVE         ||
+                 errorCode == TASKHANDLING_RENAME_FOR_COPY         ||
+                 errorCode == TASKHANDLING_RENAMEMOVE_FOR_MOVE     ||
+                 errorCode == TASKHANDLING_RENAMEMOVE_FOR_COPY    )
+        {
+            switch( minorCode )
+            {
+            case FileBase::E_EXIST:
+                ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+                break;
+            case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                break;
+            case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                break;
+            case FileBase::E_ACCES:         // Permission denied<br>
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_PERM:          // Operation not permitted<br>
+                ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                break;
+            case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                break;
+            case FileBase::E_NOENT:         // No such file or directory<br>
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
+                break;
+            case FileBase::E_ROFS:          // Read-only file system<p>
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
+                break;
+            default:
+                ioErrorCode = IOErrorCode_GENERAL;
+                break;
+            }
+            cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_NAMECLASH_FOR_COPY   ||
+                 errorCode == TASKHANDLING_NAMECLASH_FOR_MOVE )
+        {
+            aAny <<= NameClashException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
+                 errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
+        {
+            aAny <<= UnsupportedNameClashException();
+            cancelCommandExecution( aAny,xEnv );
+        }
+        else
+        {
+            // case TASKHANDLER_NO_ERROR:
+            return;
         }
     }
 
