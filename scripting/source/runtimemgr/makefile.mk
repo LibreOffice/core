@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-22 10:06:47 $
+#   last change: $Author: dfoster $ $Date: 2003-01-23 15:58:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ RESLIB1SRSFILES=        $(SRS)$/runtimemgr.srs
 
 SLOFILES=\
         $(SLO)$/ScriptNameResolverImpl.obj\
-        $(SLO)$/ScriptSecurityManager.obj\
         $(SLO)$/ScriptRuntimeManager.obj
 
 SHL1TARGET=	$(TARGET)
