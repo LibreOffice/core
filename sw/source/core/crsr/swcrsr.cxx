@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:13:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
 {
 }
 
+// @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
     : SwPaM( rCpy ), pSavePos( 0 ), nCursorBidiLevel( rCpy.nCursorBidiLevel )
 {
