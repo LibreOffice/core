@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:31:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_TABLINK_HXX
 #define SC_TABLINK_HXX
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_REFRESHTIMER_HXX
 #include "refreshtimer.hxx"
@@ -127,7 +131,7 @@ public:
 class ScDocument;
 class SfxMedium;
 
-class ScDocumentLoader
+class SC_DLLPUBLIC ScDocumentLoader
 {
 private:
     ScDocShell*         pDocShell;
@@ -160,4 +164,3 @@ public:
 };
 
 #endif
-
