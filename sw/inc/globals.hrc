@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:36:06 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,13 +299,14 @@
 #define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
 #define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
 #define TP_SECTION_FTNENDNOTES      (RC_GLOBALS_BEGIN +  97)
-
 #define TP_CHAR_POS                 (RC_GLOBALS_BEGIN +  98)
 #define TP_CHAR_TWOLN               (RC_GLOBALS_BEGIN +  99)
 #define TP_PARA_ASIAN               (RC_GLOBALS_BEGIN +  100)
 #define TP_TEXTGRID_PAGE            (RC_GLOBALS_BEGIN +  101)
 #define TP_SECTION_INDENTS          (RC_GLOBALS_BEGIN +  102)
+#define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 //maximum: RC_GLOBALS_BEGIN +  119
+
 // Kontext-Menues (Format-Menue) --------------------------------------------
 
 #define MN_OBJECTMENU_TEXT          (RC_GLOBALS_BEGIN + 1)
