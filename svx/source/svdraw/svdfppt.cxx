@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-02 13:34:33 $
+ *  last change: $Author: sj $ $Date: 2002-04-03 10:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3233,7 +3233,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 else
                                                     pE = (*pPageList)[ nNextMaster ];
                                             }
-                                            if ( ! ( pE->aSlideAtom.nFlags & 2 ) )  // do not follow master colorscheme ?
+                                            if ( ! ( rSlidePersist.aSlideAtom.nFlags & 2 ) )  // do not follow master colorscheme ?
                                             {
                                                 if ( pE->nBackgroundOffset )
                                                 {
