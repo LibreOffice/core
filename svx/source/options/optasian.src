@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:37:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = "ÊŞäíä ÃÍÑİ";
         Text[ catalan ] = "Kerning";
+        Text[ finnish ] = "Unterschneidung";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -106,7 +107,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text = "~Nur westliche Zeichen" ;
         Text [ English ] = "Western characters only" ;
         Text[ english_us ] = "~Western characters only";
-        Text[ portuguese ] = "Western characters only";
+        Text[ portuguese ] = "~Só caracteres ocidentais";
         Text[ russian ] = "Òîëüêî çàïàäíûå çíàêè";
         Text[ greek ] = "Ìü~íï äõôéêïıò ÷áñáêôŞñåò";
         Text[ dutch ] = "~Alleen westerse tekens";
@@ -124,6 +125,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Western characters only";
         Text[ arabic ] = "ÃÍÑİ ÛÑÈíÉ İŞØ";
         Text[ catalan ] = "Solo caracteres del alfabeto occidental";
+        Text[ finnish ] = "~Nur westliche Zeichen";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -132,7 +134,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text = "~Westlicher Text und Interpunktion" ;
         Text [ English ] = "Western text and punctuation" ;
         Text[ english_us ] = "Western ~text and punctuation";
-        Text[ portuguese ] = "Western text and punctuation";
+        Text[ portuguese ] = "~Texto ocidental e pontuação";
         Text[ russian ] = "Çàïàäíûé òåêñò è ïóíêòóàöèÿ";
         Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
         Text[ dutch ] = "~Westerse tekst en interpunctie";
@@ -150,6 +152,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Western text and punctuation";
         Text[ arabic ] = "äÕ ÛÑÈí æÚáÇãÇÊ ÊäŞíØ";
         Text[ catalan ] = "Texto y puntuación occidentales";
+        Text[ finnish ] = "~Westlicher Text und Interpunktion";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -176,6 +179,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÍÑİ";
         Text[ catalan ] = "Character distance";
+        Text[ finnish ] = "Zeichenabstand";
     };
     RadioButton RB_NO_COMP
     {
@@ -202,6 +206,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "No compression";
         Text[ arabic ] = "ÈÏæä ÖÛØ";
         Text[ catalan ] = "Sin compresión";
+        Text[ finnish ] = "~Keine Kompression";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -228,6 +233,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation only";
         Text[ arabic ] = "ÖÛØ ÚáÇãÇÊ ÇáÊäŞíØ İŞØ";
         Text[ catalan ] = "Comprimir solo puntuación";
+        Text[ finnish ] = "Nur ~Interpunktion komprimieren";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -254,6 +260,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
         Text[ catalan ] = "Comprimir puntuación y Kana japonés";
+        Text[ finnish ] = "Interpunktion und ~japanische Kana komprimieren";
     };
     FixedLine GB_START_END
     {
@@ -280,6 +287,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Start and end characters";
         Text[ arabic ] = "ÃÍÑİ ÇáÈÏÇíÉ æÇáäåÇíÉ";
         Text[ catalan ] = "Start and end characters";
+        Text[ finnish ] = "Anfangs- und Endzeichen";
     };
     FixedText FT_LANGUAGE
     {
@@ -306,6 +314,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ catalan ] = "Idioma";
+        Text[ finnish ] = "~Sprache";
     };
     ListBox LB_LANGUAGE
     {
@@ -339,6 +348,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Standard";
         Text[ arabic ] = "ŞíÇÓí";
         Text[ catalan ] = "Predeterminado";
+        Text[ finnish ] = "S~tandard";
     };
     FixedText FT_START
     {
@@ -366,6 +376,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ arabic ] = "ÈÏæä ÈÏÇíÉ ÇáÓØÑ:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sin inicio de fila:";
+        Text[ finnish ] = "Kein Zeilen~beginn:";
     };
     Edit ED_START
     {
@@ -399,6 +410,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ arabic ] = "ÈÏæä äåÇíÉ ÓØÑ:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sin fin de línea:";
+        Text[ finnish ] = "Kein Zeil~enende:";
     };
     Edit ED_END
     {
@@ -413,7 +425,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text = "Ohne benutzerdefinierte Zeilenwechselzeichen" ;
         Text [ English ] = "Without user-defined line break symbols" ;
         Text[ english_us ] = "Without user-defined line break symbols";
-        Text[ portuguese ] = "Without user-defined line break symbols";
+        Text[ portuguese ] = "Sem caracteres de quebra de linha personalizados";
         Text[ russian ] = "Áåç çàäàííûõ ïîëüçîâàòåëåì çíàêîâ ğàçğûâà ñòğîêè";
         Text[ greek ] = "×ùñßò ğñïóùğéêïıò ÷áñáêôŞñåò áëëáãŞò óåéñÜò";
         Text[ dutch ] = "Zonder door gebruiker gedefinieerde afbreekstreepjes";
@@ -431,6 +443,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Without user-defined line break symbols";
         Text[ arabic ] = "ÈÏæä ÚáÇãÇÊ İÕá ÃÓØÑ ãÎÕÕÉ";
         Text[ catalan ] = "Sin carácter de cambio de fila definido por el usuario";
+        Text[ finnish ] = "Ohne benutzerdefinierte Zeilenwechselzeichen";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -451,5 +464,6 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ turkish ] = "Proxy";
     Text[ arabic ] = "Proxy";
     Text[ catalan ] = "Proxy";
+    Text[ finnish ] = "Proxy";
 };
 
