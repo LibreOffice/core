@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 11:30:08 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     {
         aDistFT.Enable();
         aDistEdit.Enable();
+        aDynSpacingCB.Enable();
         aHeightFT.Enable();
         aHeightEdit.Enable();
         aHeightDynBtn.Enable();
@@ -525,6 +526,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         {
             aDistFT.Disable();
             aDistEdit.Disable();
+            aDynSpacingCB.Enable(FALSE);
             aHeightFT.Disable();
             aHeightEdit.Disable();
             aHeightDynBtn.Disable();
