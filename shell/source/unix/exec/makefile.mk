@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:47:12 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:49:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,10 @@
 
 PRJ=..$/..$/..
 PRJNAME=shell
-TARGET=syssh
+TARGET=exec
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST=syssh
 COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
