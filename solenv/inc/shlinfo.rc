@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlinfo.rc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-12-07 11:25:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define VERSION			6
+#define VERSION			7
 #define SUBVERSION		0
 //#define VERVARIANT		0
 
@@ -72,9 +72,9 @@
 //#define VER_BETA		6
 #define VER_FINAL		0
 
-#define VER_DAY			12
-#define VER_MONTH		1
-#define VER_YEAR		2000
+#define VER_DAY			1
+#define VER_MONTH		6
+#define VER_YEAR		2003
 
 // -----------------------------------------------------------------------
 
@@ -115,8 +115,8 @@ RCD_LANGUAGE rcdata
 // -----------------------------------------------------------------------
 
 VS_VERSION_INFO versioninfo
-	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	fileversion    VERSION, VERVARIANT, VER_COUNT
+	productversion VERSION, VERVARIANT, VER_COUNT
 	fileflagsmask 0x3F
 	fileflags
 #if defined(DEBUG)
@@ -172,7 +172,7 @@ VS_VERSION_INFO versioninfo
 VS_VERSION_INFO rcdata
 {
 	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
-	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	VERSION, VERVARIANT, VER_COUNT
 };
 
 /*************************************************************************
@@ -180,6 +180,18 @@ VS_VERSION_INFO rcdata
 	  Source Code Control System - Update
 
 	  $Log: not supported by cvs2svn $
+	  Revision 1.3.142.3  2003/06/18 15:58:49  is
+	  #110294# shorter license text
+	
+	  Revision 1.3.142.2  2003/06/18 11:27:57  is
+	  #110294# no more subversion
+	
+	  Revision 1.3.142.1  2003/06/18 09:54:43  is
+	  #110294# new version info
+	
+	  Revision 1.3  2000/12/07 11:25:47  hjs
+	  year should be 2000
+	
 	  Revision 1.2  2000/10/30 16:25:56  hjs
 	  new header; new version/date
 	
