@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,6 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pFormConv = new ExcelToSc( pExcRoot, aIn, nTab );
 
     bTabTruncated = FALSE;
-
-    pAutoFilter = new AutoFilterBuffer;
 
     // options from configuration
     ScFilterOptions aFilterOpt;
@@ -2682,7 +2680,7 @@ void ImportExcel::GetAndSetMargin( IMPEXC_MARGINSIDE eSide )
 
 String ImportExcel::GetPageStyleName( UINT16 nTab )
 {
-    String          aRet( RTL_CONSTASCII_STRINGPARAM( "TAB_" ) );
+    String          aRet( RTL_CONSTASCII_USTRINGPARAM( "TAB_" ) );
     const String*   pTabName = pExcRoot->pTabNameBuff->Get( nTab );
 
     if( pTabName )
