@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:20:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#include <comphelper/documentconstants.hxx>
+
 using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 
-ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const Sequence < Sequence < PropertyValue > > &rManList)
+ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const Sequence < Sequence < PropertyValue > > &rManList )
 {
     const OUString sFileEntryElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
     const OUString sManifestElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
@@ -126,9 +128,72 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
 
     AttributeList * pRootAttrList = new AttributeList;
-    pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
-                                  sCdataAttribute,
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
+    const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
+    const sal_uInt32 nManLength = rManList.getLength();
+
+    // find the mediatype of the document if any
+    OUString aDocMediaType;
+    for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
+    {
+        OUString aMediaType;
+        OUString aPath;
+
+        const PropertyValue *pValue = pSequence[nInd].getConstArray();
+        for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
+        {
+
+            if (pValue->Name.equals (sMediaTypeProperty) )
+            {
+                pValue->Value >>= aMediaType;
+            }
+            else if (pValue->Name.equals (sFullPathProperty) )
+            {
+                pValue->Value >>= aPath;
+            }
+
+            if ( aPath.getLength() && aMediaType.getLength() )
+                break;
+        }
+
+        if ( aPath.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ) )
+        {
+            aDocMediaType = aMediaType;
+            break;
+        }
+    }
+
+    if ( aDocMediaType.getLength() )
+    {
+        if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) ) )
+        {
+            // oasis format
+            pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+                                        sCdataAttribute,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
+        }
+        else if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_DRAW_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_IMPRESS_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CALC_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CHART_ASCII ) ) )
+               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_MATH_ASCII ) ) ) )
+        {
+            // SO6 format
+            pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+                                        sCdataAttribute,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
+        }
+    }
 
     Reference < XAttributeList > xRootAttrList (pRootAttrList);
 
@@ -142,15 +207,13 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     xHandler->ignorableWhitespace ( sWhiteSpace );
     xHandler->startElement( sManifestElement, xRootAttrList );
 
-    const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
-
-    for (sal_uInt32 i = 0, nEnd = rManList.getLength() ; i < nEnd ; i++)
+    for (sal_uInt32 i = 0 ; i < nManLength ; i++)
     {
         AttributeList *pAttrList = new AttributeList;
-        const PropertyValue *pValue = pSequence->getConstArray();
+        const PropertyValue *pValue = pSequence[i].getConstArray();
         OUString aString;
         const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL;
-        for (sal_uInt32 j = 0, nNum = pSequence->getLength(); j < nNum; j++, pValue++)
+        for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
         {
             if (pValue->Name.equals (sMediaTypeProperty) )
             {
@@ -236,7 +299,6 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         }
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sFileEntryElement );
-        pSequence++;
     }
     xHandler->ignorableWhitespace ( sWhiteSpace );
     xHandler->endElement( sManifestElement );
