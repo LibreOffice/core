@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:00:01 $
+ *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,6 +1489,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TTYPE_HYPERLINK_END:
                 case TOK_TTYPE_BIBLIOGRAPHY:
                 case TOK_TTYPE_CHAPTER_INFO:
+                case TOK_TTYPE_TAB_STOP:
                     GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                              XML_STYLE_NAME, sCharStyle);
                     break;

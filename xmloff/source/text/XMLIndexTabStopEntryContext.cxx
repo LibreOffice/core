@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTabStopEntryContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 using namespace ::xmloff::token;
 
@@ -111,15 +115,15 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-TYPEINIT1( XMLIndexTabStopEntryContext, SvXMLImportContext );
+TYPEINIT1( XMLIndexTabStopEntryContext, XMLIndexSimpleEntryContext );
 
 XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        rTemplateContext(rTemplate),
+        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenTabStop,
+                                   rTemplate, nPrfx, rLocalName),
         sLeaderChar(),
         nTabPosition(0),
         bTabPositionOK(sal_False),
@@ -173,47 +177,47 @@ void XMLIndexTabStopEntryContext::StartElement(
         }
         // else: no style attribute -> ignore
     }
+
+    // how many entries?
+    nValues += 1 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
+
+    // now try parent class (for character style)
+    XMLIndexSimpleEntryContext::StartElement( xAttrList );
 }
 
-void XMLIndexTabStopEntryContext::EndElement()
+void XMLIndexTabStopEntryContext::FillPropertyValues(
+    Sequence<PropertyValue> & rValues)
 {
-    // how many entries?
-    sal_Int32 nValues = 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
+    // fill vlues from parent class (type + style name)
+    XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
-    Sequence<PropertyValue> aValues(nValues);
-    Any aAny;
-    sal_Int32 nCount = 0;
-
-    // type: tab stop
-    aValues[nCount].Name = rTemplateContext.sTokenType;
-    aAny <<= rTemplateContext.sTokenTabStop;
-    aValues[nCount].Value = aAny;
-    nCount++;
+    // get values array and next entry to be written;
+    sal_Int32 nNextEntry = bCharStyleNameOK ? 2 : 1;
+    PropertyValue* pValues = rValues.getArray();
 
     // right aligned?
-    aValues[nCount].Name = rTemplateContext.sTabStopRightAligned;
-    aAny.setValue(&bTabRightAligned, ::getBooleanCppuType());
-    aValues[nCount].Value = aAny;
-    nCount++;
+    pValues[nNextEntry].Name = rTemplateContext.sTabStopRightAligned;
+    pValues[nNextEntry].Value.setValue( &bTabRightAligned,
+                                        ::getBooleanCppuType());
+    nNextEntry++;
 
     // position
     if (bTabPositionOK)
     {
-        aValues[nCount].Name = rTemplateContext.sTabStopPosition;
-        aAny <<= nTabPosition;
-        aValues[nCount].Value = aAny;
-        nCount++;
+        pValues[nNextEntry].Name = rTemplateContext.sTabStopPosition;
+        pValues[nNextEntry].Value <<= nTabPosition;
+        nNextEntry++;
     }
 
     // leader char
     if (bLeaderCharOK)
     {
-        aValues[nCount].Name = rTemplateContext.sTabStopFillCharacter;
-        aAny <<= sLeaderChar;
-        aValues[nCount].Value = aAny;
-        nCount++;
+        pValues[nNextEntry].Name = rTemplateContext.sTabStopFillCharacter;
+        pValues[nNextEntry].Value <<= sLeaderChar;
+        nNextEntry++;
     }
 
-    // add this template entry
-    rTemplateContext.addTemplateEntry(aValues);
+    // check whether we really filled all elements of the sequence
+    DBG_ASSERT( nNextEntry == rValues.getLength(),
+                "length incorrectly precumputed!" );
 }

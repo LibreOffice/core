@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTabStopEntryContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XMLOFF_XMLINDEXTABSTOPENTRYCONTEXT_HXX_
 #define _XMLOFF_XMLINDEXTABSTOPENTRYCONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSIMPLEENTRYCONTEXT_HXX_
+#include "XMLIndexSimpleEntryContext.hxx"
 #endif
 
 #ifndef _RTL_USTRING_
@@ -91,10 +91,8 @@ class XMLIndexTemplateContext;
 /**
  * Import index entry templates
  */
-class XMLIndexTabStopEntryContext : public SvXMLImportContext
+class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
 {
-    XMLIndexTemplateContext& rTemplateContext;
-
     ::rtl::OUString sLeaderChar;    /// fill ("leader") character
     sal_Int32 nTabPosition;         /// tab position
     sal_Bool bTabPositionOK;        /// is tab right aligned?
@@ -119,7 +117,10 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
-    virtual void EndElement();
+    /** fill property values for this template entry */
+    virtual void FillPropertyValues(
+        ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue> & rValues);
 };
 
 #endif
