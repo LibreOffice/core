@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,11 +557,16 @@ public:
         throw (::com::sun::star::embed::ObjectSaveVetoException,
                ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL onShowWindow( sal_Bool bVisible )
+    virtual void SAL_CALL visibilityChanged( sal_Bool bVisible )
         throw (::com::sun::star::embed::WrongStateException,
                ::com::sun::star::uno::RuntimeException);
+
+    // ____ XComponentSupplier ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent()
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 }  // namespace chart
 
 #endif
+
