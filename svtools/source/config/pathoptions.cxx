@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-13 09:23:30 $
+ *  last change: $Author: pb $ $Date: 2000-10-26 12:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ Sequence< OUString > GetPathPropertyNames()
         "Favorite",         // PATH_FAVORITES
         "Filter",           // PATH_FILTER
         "Gallery",          // PATH_GALLERY
-        "Glossary",         // PATH_GLOSSARY
+        "AutoText",         // PATH_GLOSSARY
         "Graphic",          // PATH_GRAPHIC
         "Help",             // PATH_HELP
         "Linguistic",       // PATH_LINGUISTIC
@@ -766,54 +766,89 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if ( aValues.getLength() == aNames.getLength() )
     {
-        OUString aTempStr;
+        OUString aTempStr, aFullPath;
 
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
             DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
-                if ( pValues[nProp] >>= aTempStr )
+                switch ( pValues[nProp].getValueTypeClass() )
                 {
-                    aTempStr = SubstVar( aTempStr );
-                    switch ( nProp )
+                    case ::com::sun::star::uno::TypeClass_STRING :
                     {
-                        case PATH_ADDIN:            m_aAddinPath = String( aTempStr );          break;
-                        case PATH_AUTOCORRECT:      m_aAutoCorrectPath = String( aTempStr );    break;
-                        case PATH_AUTOPILOT:        m_aAutoPilotPath = String( aTempStr );      break;
-                        case PATH_BACKUP:           m_aBackupPath = String( aTempStr );         break;
-                        case PATH_BASIC:            m_aBasicPath = String( aTempStr );          break;
-                        case PATH_BITMAP:           m_aBitmapPath = String( aTempStr );         break;
-                        case PATH_CONFIG:           m_aConfigPath = String( aTempStr );         break;
-                        case PATH_DATABASE:         m_aDatabasePath = String( aTempStr );       break;
-                        case PATH_DICTIONARY:       m_aDictionaryPath = String( aTempStr );     break;
-                        case PATH_FAVORITES:        m_aFavoritesPath = String( aTempStr );      break;
-                        case PATH_FILTER:           m_aFilterPath = String( aTempStr );         break;
-                        case PATH_GALLERY:          m_aGalleryPath = String( aTempStr );        break;
-                        case PATH_GLOSSARY:         m_aGlossaryPath = String( aTempStr );       break;
-                        case PATH_GRAPHIC:          m_aGraphicPath = String( aTempStr );        break;
-                        case PATH_HELP:             m_aHelpPath = String( aTempStr );           break;
-                        case PATH_LINGUISTIC:       m_aLinguisticPath = String( aTempStr );     break;
-                        case PATH_MODULE:           m_aModulePath = String( aTempStr );         break;
-                        case PATH_NEWMENU:          m_aNewMenuPath = String( aTempStr );        break;
-                        case PATH_PALETTE:          m_aPalettePath = String( aTempStr );        break;
-                        case PATH_PLUGIN:           m_aPluginPath = String( aTempStr );         break;
-                        case PATH_STORAGE:          m_aStoragePath = String( aTempStr );        break;
-                        case PATH_SUBINI:           m_aSubIniPath = String( aTempStr );         break;
-                        case PATH_TEMP:             m_aTempPath = String( aTempStr );           break;
-                        case PATH_TEMPLATE:         m_aTemplatePath = String( aTempStr );       break;
-                        case PATH_TRASH:            m_aTrashPath = String( aTempStr );          break;
-                        case PATH_USERCONFIG:       m_aUserConfigPath = String( aTempStr );     break;
-                        case PATH_USERDICTIONARY:   m_aUserDictionaryPath = String( aTempStr ); break;
-                        case PATH_WORK:             m_aWorkPath = String( aTempStr );           break;
+                        // multi pathes
+                        if ( pValues[nProp] >>= aTempStr )
+                            aFullPath = SubstVar( aTempStr );
+                        else
+                        {
+                            DBG_ERRORFILE( "any operator >>= failed" );
+                        }
+                        break;
+                    }
 
-                        default:
-                            DBG_ERRORFILE( "invalid index to load a path" );
+                    case ::com::sun::star::uno::TypeClass_SEQUENCE :
+                    {
+                        // single pathes
+                        aFullPath = OUString();
+                        Sequence < OUString > aList;
+                        if ( pValues[nProp] >>= aList )
+                        {
+                            sal_Int32 nCount = aList.getLength();
+                            for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
+                            {
+                                aTempStr = SubstVar( aList[ nPosition ] );
+                                aFullPath += aTempStr;
+                                if ( nPosition < nCount-1 )
+                                    aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
+                            }
+                        }
+                        else
+                        {
+                            DBG_ERRORFILE( "any operator >>= failed" );
+                        }
+                        break;
+                    }
+
+                    default:
+                    {
+                        DBG_ERRORFILE( "Wrong any type" );
                     }
                 }
-                else
+
+                switch ( nProp )
                 {
-                    DBG_ERRORFILE( "Wrong any type" );
+                    case PATH_ADDIN:            m_aAddinPath = String( aFullPath );         break;
+                    case PATH_AUTOCORRECT:      m_aAutoCorrectPath = String( aFullPath );   break;
+                    case PATH_AUTOPILOT:        m_aAutoPilotPath = String( aFullPath );     break;
+                    case PATH_BACKUP:           m_aBackupPath = String( aFullPath );        break;
+                    case PATH_BASIC:            m_aBasicPath = String( aFullPath );         break;
+                    case PATH_BITMAP:           m_aBitmapPath = String( aFullPath );        break;
+                    case PATH_CONFIG:           m_aConfigPath = String( aFullPath );        break;
+                    case PATH_DATABASE:         m_aDatabasePath = String( aFullPath );      break;
+                    case PATH_DICTIONARY:       m_aDictionaryPath = String( aFullPath );    break;
+                    case PATH_FAVORITES:        m_aFavoritesPath = String( aFullPath );     break;
+                    case PATH_FILTER:           m_aFilterPath = String( aFullPath );        break;
+                    case PATH_GALLERY:          m_aGalleryPath = String( aFullPath );       break;
+                    case PATH_GLOSSARY:         m_aGlossaryPath = String( aFullPath );      break;
+                    case PATH_GRAPHIC:          m_aGraphicPath = String( aFullPath );       break;
+                    case PATH_HELP:             m_aHelpPath = String( aFullPath );          break;
+                    case PATH_LINGUISTIC:       m_aLinguisticPath = String( aFullPath );    break;
+                    case PATH_MODULE:           m_aModulePath = String( aFullPath );        break;
+                    case PATH_NEWMENU:          m_aNewMenuPath = String( aFullPath );       break;
+                    case PATH_PALETTE:          m_aPalettePath = String( aFullPath );       break;
+                    case PATH_PLUGIN:           m_aPluginPath = String( aFullPath );        break;
+                    case PATH_STORAGE:          m_aStoragePath = String( aFullPath );       break;
+                    case PATH_SUBINI:           m_aSubIniPath = String( aFullPath );        break;
+                    case PATH_TEMP:             m_aTempPath = String( aFullPath );          break;
+                    case PATH_TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
+                    case PATH_TRASH:            m_aTrashPath = String( aFullPath );         break;
+                    case PATH_USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
+                    case PATH_USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
+                    case PATH_WORK:             m_aWorkPath = String( aFullPath );          break;
+
+                    default:
+                        DBG_ERRORFILE( "invalid index to load a path" );
                 }
             }
         }
@@ -834,32 +869,36 @@ void SvtPathOptions_Impl::Commit()
     OUString aTempStr;
     for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
     {
+        sal_Bool bList = sal_False;
+
         switch ( nProp )
         {
+            // multi pathes
+            case PATH_AUTOCORRECT:      aTempStr = OUString( m_aAutoCorrectPath );  bList = sal_True; break;
+            case PATH_GLOSSARY:         aTempStr = OUString( m_aGlossaryPath );     bList = sal_True; break;
+            case PATH_BASIC:            aTempStr = OUString( m_aBasicPath );        bList = sal_True; break;
+            case PATH_GALLERY:          aTempStr = OUString( m_aGalleryPath );      bList = sal_True; break;
+            case PATH_PLUGIN:           aTempStr = OUString( m_aPluginPath );       bList = sal_True; break;
+            case PATH_TEMPLATE:         aTempStr = OUString( m_aTemplatePath );     bList = sal_True; break;
+            // single pathes
             case PATH_ADDIN:            aTempStr = OUString( m_aAddinPath );            break;
-            case PATH_AUTOCORRECT:      aTempStr = OUString( m_aAutoCorrectPath );      break;
             case PATH_AUTOPILOT:        aTempStr = OUString( m_aAutoPilotPath );        break;
             case PATH_BACKUP:           aTempStr = OUString( m_aBackupPath );           break;
-            case PATH_BASIC:            aTempStr = OUString( m_aBasicPath );            break;
             case PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
             case PATH_DATABASE:         aTempStr = OUString( m_aDatabasePath );         break;
             case PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
             case PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
             case PATH_FILTER:           aTempStr = OUString( m_aFilterPath );           break;
-            case PATH_GALLERY:          aTempStr = OUString( m_aGalleryPath );          break;
-            case PATH_GLOSSARY:         aTempStr = OUString( m_aGlossaryPath );         break;
             case PATH_GRAPHIC:          aTempStr = OUString( m_aGraphicPath );          break;
             case PATH_HELP:             aTempStr = OUString( m_aHelpPath );             break;
             case PATH_LINGUISTIC:       aTempStr = OUString( m_aLinguisticPath );       break;
             case PATH_MODULE:           aTempStr = OUString( m_aModulePath );           break;
             case PATH_NEWMENU:          aTempStr = OUString( m_aNewMenuPath );          break;
             case PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
-            case PATH_PLUGIN:           aTempStr = OUString( m_aPluginPath );           break;
             case PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case PATH_SUBINI:           aTempStr = OUString( m_aSubIniPath );           break;
             case PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
-            case PATH_TEMPLATE:         aTempStr = OUString( m_aTemplatePath );         break;
             case PATH_TRASH:            aTempStr = OUString( m_aTrashPath );            break;
             case PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
             case PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
@@ -868,7 +907,19 @@ void SvtPathOptions_Impl::Commit()
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
-        pValues[nProp] <<= aTempStr;
+
+        if ( bList )
+        {
+            String aFullPath( aTempStr );
+            USHORT nCount = aFullPath.GetTokenCount(), nIdx = 0;
+            sal_Int32 nPos = 0;
+            Sequence < OUString > aList( nCount );
+            while ( STRING_NOTFOUND != nIdx )
+                aList[nPos++] = OUString( aFullPath.GetToken( 0, ';', nIdx ) );
+            pValues[nProp] <<= aList;
+        }
+        else
+            pValues[nProp] <<= aTempStr;
     }
     PutProperties( aNames, aValues );
 }
@@ -899,7 +950,11 @@ SvtPathOptions::~SvtPathOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if ( !--nRefCount )
+    {
+        if ( pOptions->IsModified() )
+            pOptions->Commit();
         DELETEZ( pOptions );
+    }
 }
 
 // -----------------------------------------------------------------------
