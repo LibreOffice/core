@@ -29,7 +29,7 @@
   <dlg:text dlg:style-id="0" dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="15" dlg:left="15" dlg:top="95" dlg:width="235" dlg:height="12" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
   <dlg:text dlg:style-id="0" dlg:id="LabelCurProgress" dlg:tab-index="16" dlg:left="10" dlg:top="120" dlg:width="240" dlg:height="12" dlg:page="4" dlg:value="LabelCurProgress"/>
   <dlg:text dlg:style-id="0" dlg:id="LabelCurDocument" dlg:tab-index="17" dlg:left="15" dlg:top="135" dlg:width="235" dlg:height="12" dlg:page="4" dlg:value="LabelCurDocument"/>
-  <dlg:img dlg:id="ImportPreview" dlg:tab-index="18" dlg:left="6" dlg:top="5" dlg:width="258" dlg:height="30"/>
+  <dlg:img dlg:id="ImportPreview" dlg:tab-index="18" dlg:left="6" dlg:top="5" dlg:width="258" dlg:height="31"/>
   <dlg:button dlg:style-id="0" dlg:id="cbBack" dlg:tab-index="19" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="14" dlg:value="cbBack">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.PrevStep"/>
   </dlg:button>
