@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 /* in cpp1.c: file-pointer auf stdout oder file */
 extern FILE *pCppOut;                                   /* BP */
 #define PUTCHAR( d )   fprintf( pCppOut, "%c", (d) )    /* BP */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 extern FILE *pDefOut;                                   /* ER */
 #ifdef EVALDEFS
 #define NEVALBUF        2048
@@ -308,7 +308,7 @@ extern char     *magic[];               /* Magic predefined symbols     */
 extern FILEINFO *infile;                /* Current input file           */
 extern char     work[NWORK + 1];        /* #define scratch              */
 extern char     *workp;                 /* Free space in work           */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 extern int      debug;                  /* Debug level                  */
 /* ER dump & evaluate #define's */
 extern int      bDumpDefs;              /* TRUE if #define's dump req.  */
@@ -362,7 +362,7 @@ void InitCpp6();
 int output( int c );
 sharp();
 cppmain();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifdef EVALDEFS
 int outputEval( int c );
 #endif
@@ -401,7 +401,7 @@ stparmscan( int delim, DEFBUF *dp);
 #else
 stparmscan( int delim);
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 dumpparm( char *why );
 #endif
 
@@ -446,7 +446,7 @@ cwarn( char *format, char *sarg);
 cfatal( char *format, char *sarg);
 cierror( char *format, int n);
 ciwarn( char *format, int n);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 dumpdef( char *why );
 dumpadef( char *why, DEFBUF *dp );
 #endif
