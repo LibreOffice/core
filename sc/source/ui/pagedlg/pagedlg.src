@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:14:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "pagedlg.hrc"
 ModelessDialog RID_SCDLG_AREAS
 {
@@ -210,9 +209,10 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ chinese_simplified ] =
     {
             < "- 无 -" ; Default ; > ;
-        < "- 使用者自定 -" ; Default ; > ;
-        < "- 选中 -" ; Default ; > ;
-    };
+        < "- 整张工作表 -" ; Default ; > ;
+        < "- 用户定义 -" ; Default ; > ;
+        < "- 选择 -" ; Default ; > ;
+        };
     StringList [ russian ] =
     {
             < "- ��� -" ; Default ; > ;
