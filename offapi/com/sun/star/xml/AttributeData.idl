@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeData.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** store the type and value of an XML attribute
     inside a XNameContainer
  */
-struct AttributeData
+published struct AttributeData
 {
     /** the namespace of this XML attribute.
 
