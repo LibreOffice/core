@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:16:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,16 @@
 #include "docsh.hxx"
 #include "reffact.hxx"
 #include "uiitems.hxx"
-#include "scendlg.hxx"
-#include "mtrindlg.hxx"
+//CHINA001 #include "scendlg.hxx"
+//CHINA001 #include "mtrindlg.hxx"
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "cellsh.hxx"
 #include "attrdlg.hrc"      // TP_ALIGNMENT
 #include "inputhdl.hxx"
 #include "editable.hxx"
+
+#include "scabstdlg.hxx" //CHINA001
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
@@ -518,9 +520,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         else
                         {
                             BOOL bSheetProtected = pDoc->IsTabProtected(nTab);
-                            ScNewScenarioDlg* pNewDlg =
-                                new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, FALSE, bSheetProtected );
+                            //CHINA001 ScNewScenarioDlg* pNewDlg =
+                            //CHINA001  new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, FALSE, bSheetProtected );
+                            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+                            AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), FALSE,bSheetProtected);
+                            DBG_ASSERT(pNewDlg, "Dialog create fail!");//CHINA001
                             if ( pNewDlg->Execute() == RET_OK )
                             {
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
@@ -569,13 +575,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     USHORT      nCurHeight = pViewData->GetDocument()->
                                                 GetRowHeight( pViewData->GetCurY(),
                                                               pViewData->GetTabNo() );
-                    ScMetricInputDlg* pDlg =
-                        new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
-                                              nCurHeight,
-                                              ScGlobal::nStdRowHeight,
-                                              eMetric,
-                                              2,
-                                              MAX_COL_HEIGHT );
+//CHINA001                  ScMetricInputDlg* pDlg =
+//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
+//CHINA001                  nCurHeight,
+//CHINA001                  ScGlobal::nStdRowHeight,
+//CHINA001                  eMetric,
+//CHINA001                  2,
+//CHINA001                  MAX_COL_HEIGHT );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
+                                                                                    nCurHeight,
+                                                                                    ScGlobal::nStdRowHeight,
+                                                                                    ResId(RID_SCDLG_ROW_MAN),
+                                                                                    eMetric,
+                                                                                    2,
+                                                                                    MAX_COL_HEIGHT);
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -609,13 +626,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
-                    ScMetricInputDlg* pDlg =
-                        new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
-                                              ScGlobal::nLastRowHeightExtra,
-                                              0,
-                                              eMetric,
-                                              1,
-                                              MAX_EXTRA_HEIGHT );
+//CHINA001                  ScMetricInputDlg* pDlg =
+//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
+//CHINA001                  ScGlobal::nLastRowHeightExtra,
+//CHINA001                  0,
+//CHINA001                  eMetric,
+//CHINA001                  1,
+//CHINA001                  MAX_EXTRA_HEIGHT );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
+                                                                                    ScGlobal::nLastRowHeightExtra,
+                                                                                    0,
+                                                                                    ResId(RID_SCDLG_ROW_OPT),
+                                                                                    eMetric,
+                                                                                    1,
+                                                                                    MAX_EXTRA_HEIGHT);
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -651,13 +679,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     USHORT      nCurHeight = pViewData->GetDocument()->
                                                 GetColWidth( pViewData->GetCurX(),
                                                              pViewData->GetTabNo() );
-                    ScMetricInputDlg* pDlg =
-                        new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
-                                              nCurHeight,
-                                              STD_COL_WIDTH,
-                                              eMetric,
-                                              2,
-                                              MAX_COL_WIDTH );
+//CHINA001                  ScMetricInputDlg* pDlg =
+//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
+//CHINA001                  nCurHeight,
+//CHINA001                  STD_COL_WIDTH,
+//CHINA001                  eMetric,
+//CHINA001                  2,
+//CHINA001                  MAX_COL_WIDTH );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
+                                                                                    nCurHeight,
+                                                                                    STD_COL_WIDTH,
+                                                                                    ResId(RID_SCDLG_COL_MAN),
+                                                                                    eMetric,
+                                                                                    2,
+                                                                                    MAX_COL_WIDTH);
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -691,14 +730,25 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
-                    ScMetricInputDlg* pDlg =
-                        new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
-                                              ScGlobal::nLastColWidthExtra,
-                                              STD_EXTRA_WIDTH,
-                                              eMetric,
-                                              1,
-                                              MAX_EXTRA_WIDTH );
+//CHINA001                  ScMetricInputDlg* pDlg =
+//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
+//CHINA001                  ScGlobal::nLastColWidthExtra,
+//CHINA001                  STD_EXTRA_WIDTH,
+//CHINA001                  eMetric,
+//CHINA001                  1,
+//CHINA001                  MAX_EXTRA_WIDTH );
 
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
+                                                                                    ScGlobal::nLastColWidthExtra,
+                                                                                    STD_EXTRA_WIDTH,
+                                                                                    ResId(RID_SCDLG_COL_OPT),
+                                                                                    eMetric,
+                                                                                    1,
+                                                                                    MAX_EXTRA_WIDTH);
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -814,11 +864,16 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         ScGlobal::ClearAutoFormat();
                         ScAutoFormatData* pNewEntry = pTabViewShell->CreateAutoFormatData();
-                        ScAutoFormatDlg*  pDlg      = new ScAutoFormatDlg(
-                                                                pDlgParent,
-                                                                ScGlobal::GetAutoFormat(),
-                                                                pNewEntry,
-                                                                GetViewData()->GetDocument() );
+//CHINA001                      ScAutoFormatDlg*  pDlg      = new ScAutoFormatDlg(
+//CHINA001                      pDlgParent,
+//CHINA001                      ScGlobal::GetAutoFormat(),
+//CHINA001                      pNewEntry,
+//CHINA001                      GetViewData()->GetDocument() );
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry,GetViewData()->GetDocument(), ResId(RID_SCDLG_AUTOFORMAT) );
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                         if ( pDlg->Execute() == RET_OK )
                         {
