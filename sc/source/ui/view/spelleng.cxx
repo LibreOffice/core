@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:24:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,7 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
-
-#pragma hdrstop
+#include "spelleng.hxx"
 
 #include <memory>
 
@@ -80,7 +75,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "spelleng.hxx"
 #include "spelldialog.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -299,6 +293,12 @@ bool ScConversionEngineBase::FindNextConversionCell()
     return bFound;
 }
 
+void ScConversionEngineBase::RestoreCursorPos()
+{
+    const ScAddress& rPos = maSelState.GetCellCursor();
+    mrViewData.GetViewShell()->SetCursor( rPos.Col(), rPos.Row() );
+}
+
 bool ScConversionEngineBase::ShowTableWrapDialog()
 {
     // default: no dialog, always restart at top
@@ -413,27 +413,61 @@ Window* ScSpellingEngine::GetDialogParent()
 
 // ============================================================================
 
+ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
+    meConvType( eConvType ),
+    meSourceLang( LANGUAGE_NONE ),
+    meTargetLang( LANGUAGE_NONE ),
+    mnOptions( 0 ),
+    mbUseTargetFont( false ),
+    mbIsInteractive( false )
+{
+}
+
+ScConversionParam::ScConversionParam( ScConversionType eConvType,
+        LanguageType eLang, sal_Int32 nOptions, bool bIsInteractive ) :
+    meConvType( eConvType ),
+    meSourceLang( eLang ),
+    meTargetLang( eLang ),
+    mnOptions( nOptions ),
+    mbUseTargetFont( false ),
+    mbIsInteractive( bIsInteractive )
+{
+}
+
+ScConversionParam::ScConversionParam( ScConversionType eConvType,
+        LanguageType eSourceLang, LanguageType eTargetLang, const Font& rTargetFont,
+        sal_Int32 nOptions, bool bIsInteractive ) :
+    meConvType( eConvType ),
+    meSourceLang( eSourceLang ),
+    meTargetLang( eTargetLang ),
+    maTargetFont( rTargetFont ),
+    mnOptions( nOptions ),
+    mbUseTargetFont( true ),
+    mbIsInteractive( bIsInteractive )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
-        ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        LanguageType eSourceLanguage,
-        LanguageType eTargetLanguage,
-        const Font *pTargetFont,
-        sal_Int32 nOptions,
-        sal_Bool bIsInteractive ) :
+        const ScConversionParam& rConvParam,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
     ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc ),
-    meSourceLang( eSourceLanguage ),
-    meTargetLang( eTargetLanguage ),
-    mpTargetFont( pTargetFont ),
-    mnOptions( nOptions ),
-    mbIsInteractive( bIsInteractive )
+    maConvParam( rConvParam )
 {
 }
 
 void ScTextConversionEngine::ConvertAll( EditView& rEditView )
 {
     if( FindNextConversionCell() )
-        rEditView.StartTextConversion( meSourceLang, meTargetLang, mpTargetFont, mnOptions, mbIsInteractive, TRUE );
+    {
+        rEditView.StartTextConversion(
+            maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
+            maConvParam.GetOptions(), maConvParam.IsInteractive(), TRUE );
+        // #i34769# restore initial cursor position
+        RestoreCursorPos();
+    }
 }
 
 BOOL ScTextConversionEngine::ConvertNextDocument()
@@ -443,7 +477,7 @@ BOOL ScTextConversionEngine::ConvertNextDocument()
 
 bool ScTextConversionEngine::NeedsConversion()
 {
-    return HasConvertibleTextPortion( meSourceLang );
+    return HasConvertibleTextPortion( maConvParam.GetSourceLang() );
 }
 
 // ============================================================================
