@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PluginException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
     @see XPluginContext
     @see XPluginManager
 */
-exception PluginException: com::sun::star::uno::Exception
+published exception PluginException: com::sun::star::uno::Exception
 {
     /** original Netscape plugin error code */
     short ErrorCode;
