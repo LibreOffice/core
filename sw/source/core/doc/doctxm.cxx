@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:26:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,8 +1871,9 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
 
                 if(SVX_TAB_ADJUST_END > aToken.eTabAlign)
                 {
-                    const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pTOXNd->
-                                        SwCntntNode::GetAttr( RES_LR_SPACE );
+                    const SvxLRSpaceItem& rLR =
+                        (SvxLRSpaceItem&)pTOXNd->
+                        SwCntntNode::GetAttr( RES_LR_SPACE, TRUE );
 
                     long nTabPosition = aToken.nTabStopPosition;
                     if( !GetTOXForm().IsRelTabPos() && rLR.GetTxtLeft() )
@@ -1929,6 +1930,8 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     //left margin of paragraph style
                     const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
                     nRightMargin -= rLRSpace.GetLeft();
+                    nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
+
                     aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT,
                                                 cDfltDecimalChar,
                                                 aToken.cTabFillChar ));
