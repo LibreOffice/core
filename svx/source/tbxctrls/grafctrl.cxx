@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:50:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #include "svdundo.hxx"
 #include "svdtrans.hxx"
 #include "grafctrl.hxx"
+#include "tbxcolor.hxx"
 
 // namespaces
 using namespace ::rtl;
@@ -693,17 +694,9 @@ SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
-/*  CD!!
-    ImplGrafFilterPopup* pWin = new ImplGrafFilterPopup( GetId(), this, GetToolBox().GetAlign(),
-                                                         SVX_RES( RID_SVXTBX_GRFFILTER ),
-                                                         SVX_RES( TBX_GRFFILTER ),
-                                                         GetBindings() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    pWin->Show();
-
-    return pWin;
-*/
+    rtl::OUString aSubTbxResName(
+        RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/graffilterbar" ) );
+    createAndPositionSubToolBar( aSubTbxResName );
     return NULL;
 }
 
@@ -1136,6 +1129,14 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
         }
         break;
 
+        case SID_COLOR_SETTINGS:
+        {
+            svx::ColorToolboxAccess aToolboxAccess;
+            aToolboxAccess.toggleToolbox();
+            rReq.Done();
+            break;
+        }
+
         default:
             break;
     }
@@ -1289,6 +1290,13 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                     rSet.DisableItem( nSlotId );
             }
             break;
+
+            case SID_COLOR_SETTINGS :
+            {
+                svx::ColorToolboxAccess aToolboxAccess;
+                rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible() ) );
+                break;
+            }
 
             default:
             break;
