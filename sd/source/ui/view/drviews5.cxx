@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: af $ $Date: 2002-07-25 09:32:23 $
+ *  last change: $Author: af $ $Date: 2002-08-02 12:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,3 +863,36 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
         return SdViewShell::CreateAccessibleDocumentView (pWindow);
     }
 }
+
+
+
+
+int SdDrawViewShell::GetTabLayerCount (void) const
+{
+    return aLayerTab.GetPageCount();
+
+}
+
+
+
+
+int SdDrawViewShell::GetActiveTabLayerIndex (void) const
+{
+    return aLayerTab.GetPagePos (aLayerTab.GetCurPageId());
+}
+
+
+
+
+void SdDrawViewShell::SetActiveTabLayerIndex (int nIndex)
+{
+    // Ignore invalid indices silently.
+    if (nIndex>=0 && nIndex<aLayerTab.GetPageCount())
+    {
+        // Tell the draw view of the new active layer.
+        pDrView->SetActiveLayer (aLayerTab.GetPageText (aLayerTab.GetPageId (nIndex)));
+        // Update the layer tab bar and do everything else that has to be done.
+        ResetActualLayer ();
+    }
+}
+
