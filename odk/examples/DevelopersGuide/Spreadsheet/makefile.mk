@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:42:01 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:45:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,15 +85,19 @@ SPREADSHEET_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ViewSample.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/XExampleAddIn.idl
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(SPREADSHEET_FILES) \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_spreadsheet_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_spreadsheet.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
