@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2001-11-02 10:48:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.15 $ $ $Date: 2001-11-02 10:48:29 $
+ * @version     $Revision: 1.16 $ $ $Date: 2004-08-20 09:22:05 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -194,7 +194,7 @@ public class JobQueue {
      */
     JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId) {
         _javaThreadPoolFactory = javaThreadPoolFactory;
-          _threadId              = new ThreadId();
+        _threadId = ThreadId.createFresh();
 
         _sync_jobQueue    = javaThreadPoolFactory.getJobQueue(threadId);
         if(_sync_jobQueue == null) {
