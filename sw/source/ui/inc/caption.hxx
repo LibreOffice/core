@@ -2,9 +2,9 @@
  *
  *  $RCSfile: caption.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <tools/globname.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 enum SwCapObjType
 {
     FRAME_CAP, GRAPHIC_CAP, TABLE_CAP, OLE_CAP
@@ -80,7 +84,7 @@ enum SwCapObjType
     Beschreibung:
  --------------------------------------------------------------------*/
 
-class InsCaptionOpt
+class SW_DLLPUBLIC InsCaptionOpt
 {
 private:
     BOOL         bUseCaption;
