@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonBezierShape.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 // DocMerge from xml: service com::sun::star::drawing::PolyPolygonBezierShape
 /** This service specifies a polypolygon bezier shape.
  */
-service PolyPolygonBezierShape
+published service PolyPolygonBezierShape
 {
     service com::sun::star::drawing::Shape;
 
