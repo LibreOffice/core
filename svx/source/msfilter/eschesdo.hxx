@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:08:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _ESCHESDO_HXX
 #define _ESCHESDO_HXX
 #ifndef _SVX_ESCHEREX_HXX
@@ -199,8 +198,7 @@ protected:
                                     EscherSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType );  // returns ShapeID
 
-            void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                                    const Point& rRefPoint );
+            void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
             BOOL                ImplGetText( ImplEESdrObject& rObj );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
