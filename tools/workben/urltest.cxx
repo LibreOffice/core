@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 11:58:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,7 +1091,26 @@ main()
                 { "vnd.sun.star.tdoc:a/b/c", 0 },
                 { "vnd.sun.star.tdoc:/", "vnd.sun.star.tdoc:/" },
                 { "vnd.sun.star.tdoc:/a;b/", "vnd.sun.star.tdoc:/a%3Bb/" },
-                { "vnd.sun.star.tdoc:/a?b", "vnd.sun.star.tdoc:/a%3Fb" } };
+                { "vnd.sun.star.tdoc:/a?b", "vnd.sun.star.tdoc:/a%3Fb" },
+                { "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/x",
+                  "http://[fedc:ba98:7654:3210:fedc:ba98:7654:3210]:80/x" },
+                { "http://[1080:0:0:0:8:800:200C:417A]/index.html",
+                  "http://[1080:0:0:0:8:800:200c:417a]/index.html" },
+                { "http://[3ffe:2a00:100:7031::1]",
+                  "http://[3ffe:2a00:100:7031::1]/" },
+                { "http://[1080::8:800:200c:417a]/foo",
+                  "http://[1080::8:800:200c:417a]/foo" },
+                { "http://[::192.9.5.5]/ipng", "http://[::192.9.5.5]/ipng" },
+                { "http://[:::192.9.5.5]/ipng", "http://[:::192.9.5.5]/ipng" },
+                { "http://[::FFFF:129.144.52.38]:80/index.html",
+                  "http://[::ffff:129.144.52.38]:80/index.html" },
+                { "http://[2010:836B:4179::836B:4179]",
+                  "http://[2010:836b:4179::836b:4179]/" },
+                { "http://[::1]", "http://[::1]/" },
+                { "http://[0:0:0:0:0:0:13.1.68.3]/",
+                  "http://[0:0:0:0:0:0:13.1.68.3]/" },
+                { "http://[0:0:0:0:0:FFFF:129.144.52.38]/",
+                  "http://[0:0:0:0:0:ffff:129.144.52.38]/" } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
