@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:41:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
+
 #ifndef _SFX_FILEDLGIMPL_HXX
 #include "filedlgimpl.hxx"
 #endif
@@ -77,12 +81,29 @@ namespace sfx2
 {
 //........................................................................
 
+    class TSortedFilterList
+    {
+        private:
+
+            ::std::vector< ::rtl::OUString > m_lFilters;
+            sal_Int32 m_nIterator;
+
+        public:
+
+            TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList);
+            const SfxFilter* First();
+            const SfxFilter* Next();
+
+        private:
+            const SfxFilter* impl_getFilter(sal_Int32 nIndex);
+    };
+
     //--------------------------------------------------------------------
     /** adds the given filters to the filter manager.
         <p>To be used when saving generic files.</p>
     */
     void appendFiltersForSave(
-        SfxFilterMatcherIter& _rFilterMatcher,
+        TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl,
@@ -90,7 +111,7 @@ namespace sfx2
     );
 
     void appendExportFilters(
-        SfxFilterMatcherIter& _rFilterMatcher,
+        TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
@@ -101,7 +122,7 @@ namespace sfx2
         <p>To be used when opening generic files.</p>
     */
     void appendFiltersForOpen(
-        SfxFilterMatcherIter& _rFilterMatcher,
+        TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
