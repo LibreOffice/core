@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-10-24 10:04:32 $
+ *  last change: $Author: os $ $Date: 2002-10-29 12:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
             delete m_pHistory->Remove(i);
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
-    Reference<XController> xController = xFrame.is() ? xFrame->getController() : 0;
+    Reference<XController> xController;
+    if(xFrame.is())
+        xController = xFrame->getController();
     Any aViewData;
     if(xController.is() && m_pHistory->Count())
     {
