@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:13:23 $
+#   last change: $Author: obo $ $Date: 2004-08-12 12:18:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/tdmgr.obj \
+        $(SLO)$/tdmgr_check.obj \
         $(SLO)$/tdmgr_tdenumeration.obj
 
 SHL1TARGET=	$(TARGET)
