@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:37:07 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 15:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,10 +495,31 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
         aDialogParameter.init( m_aModel->getModel() );
         Window* pParent( NULL );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper, m_pNumberFormatterWrapper );
-        Graphic aSymbolGraphic;
 
         SchAttribTabDlg aDlg( pParent, &aItemSet, &aDialogParameter, &aViewElementListProvider );
-            //, pSymbolAttr, aSymbolGraphic );
+
+        if(aDialogParameter.HasSymbolProperties())
+        {
+            SfxItemSet* pSymbolShapeProperties=NULL;
+            uno::Reference< beans::XPropertySet > xObjectProperties =
+                ObjectIdentifier::getObjectPropertySet( aObjectCID, m_aModel->getModel() );
+            ::std::auto_ptr< ::comphelper::ItemConverter > apSymbolItemConverter(
+                new wrapper::DataPointItemConverter(
+                                        xObjectProperties
+                                        , m_pDrawModelWrapper->getSdrModel().GetItemPool()
+                                        , m_pDrawModelWrapper->getSdrModel(),
+                                        m_pNumberFormatterWrapper
+                                        , wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT )
+                                        );
+            if(apSymbolItemConverter.get())
+            {
+                pSymbolShapeProperties = new SfxItemSet( apSymbolItemConverter->CreateEmptyItemSet() );
+                apSymbolItemConverter->FillItemSet( *pSymbolShapeProperties );
+            }
+            sal_Int32   nStandardSymbol=1;//@todo get from somewhere
+            Graphic*    pAutoSymbolGraphic = new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties ) );
+            aDlg.setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
+        }
 
         //-------------------------------------------------------------
         //open the dialog
