@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:25:56 $
+ *  last change: $Author: kso $ $Date: 2002-11-12 15:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #define _CONNECTIVITY_ADO_AWRAPADO_HXX_
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 // Includes fuer ADO
 #include <oledb.h>
