@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,11 @@
 #include "MResultSet.hxx"
 #endif
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* _DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 
 using namespace ::comphelper;
@@ -251,12 +251,12 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     {
         const char* str = OUtoCStr(sql);
         OSL_TRACE("ParseSQL: %s\n", OUtoCStr( sql ) );
     }
-#endif // DEBUG
+#endif // OSL_DEBUG_LEVEL
 
     if(m_pParseTree)
     {
@@ -267,7 +267,7 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
             ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Driver requires a single table to be specified in query"),NULL);
 
         // at this moment we support only one table per select statement
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
             OSL_TRACE("SELECT Table : %s\n", OUtoCStr(citer->first) );
@@ -497,12 +497,12 @@ void OStatement_Base::createColumnMapping()
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
     // now check which columns are bound
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("BEFORE Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
     OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("AFTER  Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
