@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-20 15:37:22 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:23:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,11 +99,18 @@ $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
     +-chmod 755 $@
 .ENDIF
 
-$(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
+$(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_unix.in $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/setsdkenv_unix.%.in : $(PRJ)$/setsdkenv_unix.%.in
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    +-chmod 644 $@
 .ENDIF
 
 $(DESTDIR)$/configureWindows.bat : $(PRJ)$/configureWindows.bat
@@ -122,15 +129,19 @@ $(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.sxc : $(PRJ)$/examples$/%.sxc 
+$(DESTDIREXAMPLES)$/%.odt : $(PRJ)$/examples$/%.odt
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd 
+$(DESTDIREXAMPLES)$/%.ods : $(PRJ)$/examples$/%.ods
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.sxi : $(PRJ)$/examples$/%.sxi 
+$(DESTDIREXAMPLES)$/%.odg : $(PRJ)$/examples$/%.odg
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.odp : $(PRJ)$/examples$/%.odp 
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
@@ -284,10 +295,10 @@ $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
 
 $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
     +-rm -f $@ >& $(NULLDEV)
-.IF "$(COMEX)"=="8"
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-.ELSE
+.IF "$(COMEX)"=="7"
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< | $(SED) -e 's/stlport_vc7/stlport_vc6/' $(MY_TEXTCOPY_TARGETPRE) $@
+.ELSE
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .ENDIF
 
 $(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
@@ -374,3 +385,17 @@ $(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
     
 $(DIR_FILE_FLAG) : $(DIR_FILE_LIST)
     @echo "must be zipped" > $@
+
+
+$(DESTDIRSETTINGS)$/component.uno.def : $(PRJ)$/settings$/component.uno.def
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)$/src$/component.map
+    @+-$(RM) -f $@ >& $(NULLDEV)
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' > $@
+.ENDIF          # "$(COMID)"=="gcc3"
+    @+chmod a+w $@
