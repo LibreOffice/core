@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:11:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
         ResMgr* pResMgr;
 
         aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
         {
