@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.1 2001-02-27 12:19:03 dbo Exp $
+	$Id: dialog.dtd,v 1.2 2001-02-27 16:17:31 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,7 +55,6 @@
 -->
 
 <!ENTITY % boolean "(true|false)">
-<!ENTITY % decimal "(0|1|2|3|4|5|6|7|8|9)">
 <!ENTITY % numeric "CDATA">
 <!ENTITY % date-format "(system short|system short YY|system short YYYY|system long|short DDMMYY|short MMDDYY|short YYMMDD|short DDMMYYYY|short MMDDYYYY|short YYYYMMDD|short YYMMDD DIN5008|short YYYYMMDD DIN5008)">
 <!ENTITY % time-format "(24h short|24h long|12h short|12h long|Duration short|Duration long)">
@@ -92,8 +92,8 @@
 		       dialog:font-family (decorative|modern|roman|script|swiss|system) #IMPLIED
 		       dialog:font-charset (ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol) #IMPLIED
 		       dialog:font-pitch (fixed|variable) #IMPLIED
-		       dialog:font-charwidth CDATA #IMPLIED
-		       dialog:font-weight CDATA #IMPLIED
+		       dialog:font-charwidth %numeric; #IMPLIED
+		       dialog:font-weight %numeric; #IMPLIED
 		       dialog:font-slant (oblique|italic|reverse_oblique|reverse_italic) #IMPLIED
 		       dialog:font-underline (single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave) #IMPLIED
 		       dialog:font-strikeout (single|double|bold|slash|x) #IMPLIED
@@ -210,10 +210,10 @@
 			       dialog:strict-format %boolean; #IMPLIED
 			       dialog:decimal-accuracy %numeric; #IMPLIED
 			       dialog:thousands-separator %boolean; #IMPLIED
-			       dialog:value CDATA #IMPLIED
-			       dialog:value-min CDATA #IMPLIED
-			       dialog:value-max CDATA #IMPLIED
-			       dialog:value-step CDATA #IMPLIED
+			       dialog:value %numeric; #IMPLIED
+			       dialog:value-min %numeric; #IMPLIED
+			       dialog:value-max %numeric; #IMPLIED
+			       dialog:value-step %numeric; #IMPLIED
 			       dialog:spin %boolean; #IMPLIED
 			       >
 				
@@ -223,9 +223,9 @@
 			   dialog:readonly %boolean; #IMPLIED
 			   dialog:strict-format %boolean; #IMPLIED
 			   dialog:date-format %date-format; #IMPLIED
-			   dialog:value %numeric; #IMPLIED
-			   dialog:value-min %numeric; #IMPLIED
-			   dialog:value-max %numeric; #IMPLIED
+			   dialog:value CDATA #IMPLIED
+			   dialog:value-min CDATA #IMPLIED
+			   dialog:value-max CDATA #IMPLIED
 			   dialog:spin %boolean; #IMPLIED
 			   >
 
@@ -236,10 +236,10 @@
 			      dialog:strict-format %boolean; #IMPLIED
 			      dialog:decimal-accuracy %numeric; #IMPLIED
 			      dialog:thousands-separator %boolean; #IMPLIED
-			      dialog:value CDATA #IMPLIED
-			      dialog:value-min CDATA #IMPLIED
-			      dialog:value-max CDATA #IMPLIED
-			      dialog:value-step CDATA #IMPLIED
+			      dialog:value %numeric; #IMPLIED
+			      dialog:value-min %numeric; #IMPLIED
+			      dialog:value-max %numeric; #IMPLIED
+			      dialog:value-step %numeric; #IMPLIED
 			      dialog:spin %boolean; #IMPLIED
 			      >
 

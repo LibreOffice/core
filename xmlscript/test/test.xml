@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dialogs SYSTEM "../dtd/dialog.dtd">
+<!DOCTYPE dialog:dialogs SYSTEM "../dtd/dialog.dtd">
 
 <dialogs xmlns="http://openoffice.org/2000/dialog">
 
@@ -64,15 +64,9 @@
             <textfield id="field2" left="320" top="520" width="50" height="40" value="hidden text" hscroll="true" echochar="*" align="left"/>
             <img id="image1" left="50" top="600" width="80" height="50" src="../../test/w3c.jpg"/>
             <filecontrol id="file1" left="150" top="600" width="100" height="100" value="f:\script\xmlscript\test\w3c.jpg"/>
-<!--
-        <currencyfield id="currency1" left="250" top="600" width="100" height="20"
-             value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1"
-             spin="true" thousands-separator="true" currency-symbol="$"/>
+            <currencyfield id="currency1" left="250" top="600" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" spin="true" thousands-separator="true" currency-symbol="$"/>
+                 <numericfield id="numeric1" left="400" top="100" width="100" height="20" value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1" thousands-separator="true"/>
 
-        <numericfield id="numeric1" left="400" top="100" width="100" height="20"
-             value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1"
-             thousands-separator="true" />
--->
         </dlg:bulletinboard>
 
     </window>
