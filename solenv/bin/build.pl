@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2002-07-05 12:54:19 $
+#   last change: $Author: vg $ $Date: 2002-09-11 15:43:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.61 $ ';
+$id_str = ' $Revision: 1.62 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -290,7 +290,9 @@ sub dmake_dir {
     if (!$cmd_file && !$show) {
         chdir $BuildDir;
         cwd();
+        $! = 0;
         system ("$dmake");
+        &print_error("dmake - $!") if ($!);
         if ($? && ($? != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
