@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 16:41:17 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 07:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ FmFormShell::~FmFormShell()
 //------------------------------------------------------------------------
 void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 {
-    FmExplViewMarksChanged aChangeNotification(pWhichView);
+    FmNavViewMarksChanged aChangeNotification(pWhichView);
     Broadcast(aChangeNotification);
 }
 

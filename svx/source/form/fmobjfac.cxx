@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 06:07:33 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 07:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ FmFormObjFactory::FmFormObjFactory()
     // Registrieung von globalen fenstern
     FmFieldWinMgr::RegisterChildWindow();
     FmPropBrwMgr::RegisterChildWindow();
-    FmExplorerWinMgr::RegisterChildWindow();
+    NavigatorFrameManager::RegisterChildWindow();
     FmFilterNavigatorWinMgr::RegisterChildWindow();
 
     //////////////////////////////////////////////////////////////////////
