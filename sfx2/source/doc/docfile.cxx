@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:52:19 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1923,6 +1923,9 @@ void SfxMedium::GetMedium_Impl()
             TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
             comphelper::MediaDescriptor aMedium( xProps );
             aMedium.addInputStream();
+            sal_Bool bReadOnly = aMedium.isStreamReadOnly();
+            if (bReadOnly)
+                GetItemSet()->Put( SfxUsrAnyItem( SID_DOC_READONLY, makeAny( sal_True ) ) );
 
             //TODO/MBA: what happens if property is not there?!
             GetContent();
