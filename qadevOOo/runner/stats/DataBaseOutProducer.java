@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataBaseOutProducer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:40:36 $
+ *  last change:$Date: 2003-11-18 16:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,11 @@ public abstract class DataBaseOutProducer implements LogWriter {
     public DataBaseOutProducer(Hashtable param) {
         mSqlInput = new Hashtable();
         mSqlInput.putAll(param);
+
+        String debug = (String)param.get("DebugIsActive");
+        if (debug != null && (debug.equalsIgnoreCase("true") || debug.equalsIgnoreCase("yes"))) {
+            m_bDebug = true;
+        }
         // set default for writeable entries: method
         setWriteableEntryTypes(new String[]{"method"});
     }

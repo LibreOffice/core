@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLExecution.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:41:25 $
+ *  last change:$Date: 2003-11-18 16:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public class SQLExecution {
         mUser = user;
         mPassword = password;
         mDbURL = dbUrl;
-        m_bDebug = true;
+        m_bDebug = debug;
     }
 
     /**
