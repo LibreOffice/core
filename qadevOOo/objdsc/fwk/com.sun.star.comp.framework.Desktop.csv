@@ -1,5 +1,3 @@
-"Desktop";"com::sun::star::document::XEventBroadcaster";"addEventListener()"
-"Desktop";"com::sun::star::document::XEventBroadcaster";"removeEventListener()"
 "Desktop";"com::sun::star::task::XStatusIndicatorFactory#optional";"createStatusIndicator()"
 "Desktop";"com::sun::star::lang::XComponent";"dispose()"
 "Desktop";"com::sun::star::lang::XComponent";"addEventListener()"
