@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:56:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,26 +581,6 @@ BOOL SwScanner::NextWord()
         if ( nBegin >= rText.Len() || nBegin >= nEndPos )
             return FALSE;
 
-<<<<<<< txtedt.cxx
-    // get next language in order to find next or previous word
-    const USHORT nNextScript =
-            pBreakIt->xBreak->getScriptType( rText, nBegin );
-    aCurrLang = rNode.GetLang( nBegin, nNextScript );
-
-    // get the word boundaries
-    aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
-            pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
-
-    //no word boundaries could be found
-    if(aBound.endPos == aBound.startPos)
-        return FALSE;
-
-    if( nBegin == aBound.endPos )
-        ++nBegin;
-    else
-        break;
-
-=======
         // get next language in order to find next or previous word
         const USHORT nNextScript =
                 pBreakIt->xBreak->getScriptType( rText, nBegin );
@@ -620,7 +600,6 @@ BOOL SwScanner::NextWord()
         else
             break;
 
->>>>>>> 1.48.26.5
     } // end while( true )
 
 
@@ -681,6 +660,8 @@ BOOL SwScanner::NextWord()
     return TRUE;
 }
 
+
+>>>>>>> 1.48.26.5
 USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
@@ -849,11 +830,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         // the words in the wrong list have to be checked
         SwScanner aScanner( *this,
                             WordType::DICTIONARY_WORD,
-<<<<<<< txtedt.cxx
                             nBegin, nEnd, FALSE, TRUE, TRUE /*clip result*/ );
-=======
-                            nBegin, nEnd );
->>>>>>> 1.48.26.5
         while( !rArgs.bConvTextFound && aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
