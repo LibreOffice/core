@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:50:07 $
+#   last change: $Author: vg $ $Date: 2003-10-06 17:01:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,12 +117,12 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/propertysetcontainer.obj                \
                 $(SLO)$/rootactiontriggercontainer.obj          \
                 $(SLO)$/actiontriggerhelper.obj                 \
-                $(SLO)$/imagewrapper.obj                        \
-                $(SLO)$/interaction.obj							\
-                $(SLO)$/addonmenu.obj							\
-                $(SLO)$/addonsoptions.obj						\
-                $(SLO)$/fwkresid.obj							\
-                $(SLO)$/acceleratorinfo.obj
+                $(SLO)$/imagewrapper.obj        \
+        $(SLO)$/interaction.obj		\
+        $(SLO)$/addonmenu.obj		\
+        $(SLO)$/addonsoptions.obj	\
+        $(SLO)$/fwkresid.obj		\
+        $(SLO)$/acceleratorinfo.obj
 
 
 # --- import classes library ---------------------------------------------------
