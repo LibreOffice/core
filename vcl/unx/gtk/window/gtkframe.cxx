@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:53:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,9 @@ void GtkSalFrame::InitCommon()
     m_bWasPreedit       = false;
     m_bIgnoreCommit     = false;
     m_aPrevKeyPresses.clear();
-    m_nPrevKeyPresses = 0;
+    m_nPrevKeyPresses   = 0;
     m_hBackgroundPixmap = None;
+    m_nSavedScreenSaverTimeout = 0;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -576,6 +577,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_aForeignTopLevelWindow = findTopLevelSystemWindow( (GdkNativeWindow)pSysData->aWindow );
     m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
+
     m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
     m_nStyle = SAL_FRAME_STYLE_CHILD;
     InitCommon();
@@ -1039,7 +1041,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
 void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    if( m_pWindow && GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow) ) )
+    if( m_pWindow && !(m_nState & GDK_WINDOW_STATE_ICONIFIED) )
     {
         rWidth = maGeometry.nWidth;
         rHeight = maGeometry.nHeight;
@@ -1094,7 +1096,16 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
             gtk_window_maximize( m_pWindow );
         else
             gtk_window_unmaximize( m_pWindow );
-        if( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
+        /* #i42379# there is no rollup state in GDK; and rolled up windows are
+        *  (probably depending on the WM) reported as iconified. If we iconify a
+        *  window here that was e.g. a dialog, then it will be unmapped but still
+        *  not be displayed in the task list, so it's an iconified window that
+        *  the user cannot get out of this state. So do not set the iconified state
+        *  on windows with a parent (that is transient frames) since these tend
+        *  to not be represented in an icon task list.
+        */
+        if( (pState->mnState & SAL_FRAMESTATE_MINIMIZED)
+            && ! m_pParent )
             gtk_window_iconify( m_pWindow );
         else
             gtk_window_deiconify( m_pWindow );
@@ -1147,6 +1158,39 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen )
             if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
                 gtk_window_set_resizable( m_pWindow, TRUE );
             gtk_window_fullscreen( m_pWindow );
+
+            // #i42750# guess size before resize event shows up
+            GtkSalDisplay* pDisp = getDisplay();
+            if( pDisp->IsXinerama() )
+            {
+                GdkScreen* pScreen;
+                gint x, y;
+                GdkModifierType aMask;
+                gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
+                const std::vector< Rectangle >& rScreens = pDisp->GetXineramaScreens();
+                Point aMousePoint( x, y );
+                for( unsigned int i = 0; i < rScreens.size(); i++ )
+                {
+                    if( rScreens[i].IsInside( aMousePoint ) )
+                    {
+                        maGeometry.nX = rScreens[i].Left();
+                        maGeometry.nY = rScreens[i].Top();
+                        maGeometry.nWidth = rScreens[i].GetWidth();
+                        maGeometry.nHeight = rScreens[i].GetHeight();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Size aSize = pDisp->GetScreenSize();
+                maGeometry.nX       = 0;
+                maGeometry.nY       = 0;
+                maGeometry.nWidth   = aSize.Width();
+                maGeometry.nHeight  = aSize.Height();
+            }
+            m_bDefaultPos = m_bDefaultSize = false;
+            CallCallback( SALEVENT_MOVERESIZE, NULL );
         }
         else
         {
@@ -2179,6 +2223,9 @@ void GtkSalFrame::signalStyleSet( GtkWidget* pWidget, GtkStyle* pPrevious, gpoin
 gboolean GtkSalFrame::signalState( GtkWidget* pWidget, GdkEvent* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
+        pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
+
     pThis->m_nState = pEvent->window_state.new_window_state;
 
     return FALSE;
