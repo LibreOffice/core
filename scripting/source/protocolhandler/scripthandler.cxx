@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.16 $
+*  $Revision: 1.17 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:15:53 $
+*  last change: $Author: rt $ $Date: 2004-05-19 08:27:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
@@ -84,6 +85,7 @@
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -409,14 +411,24 @@ throw ( RuntimeException )
 
         if ( !m_xScriptProvider.is() )
         {
-            OSL_TRACE("GOT NO FRAME, create empty MSP");
-            // Create a MasterScriptProvider using m_xFactory
-            ::rtl::OUString serviceName =
-                ::rtl::OUString::createFromAscii(
-                "drafts.com.sun.star.script.provider.MasterScriptProvider" );
+            Reference< XPropertySet > xProps( m_xFactory, UNO_QUERY_THROW );
 
-            m_xScriptProvider = Reference< provider::XScriptProvider >
-                ( m_xFactory->createInstance( serviceName ), UNO_QUERY_THROW );
+            ::rtl::OUString dc(
+                RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) );
+
+            Reference< XComponentContext > xCtx(
+                xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
+
+            ::rtl::OUString tmspf = ::rtl::OUString::createFromAscii(
+                "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory");
+
+            Reference< provider::XScriptProviderFactory > xFac(
+                xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
+
+            Any aContext;
+
+            m_xScriptProvider = Reference< provider::XScriptProvider > (
+                xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
     }
     catch ( RuntimeException & e )
