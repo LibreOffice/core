@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-07 14:12:56 $
+ *  last change: $Author: gt $ $Date: 2001-11-21 15:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,22 +612,22 @@ namespace sfx2 {
     typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
-#define UNIFY_AND_INSERT_TOKEN( aToken )                                                        \
-    it =                                                                                        \
-    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                            \
-    if ( ( tmp = it->second++ ) != 0 )                                                          \
-       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                    \
-    else                                                                                        \
+#define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
+    it =                                                                                            \
+    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                               \
+    if ( ( tmp = it->second++ ) != 0 )                                                              \
+       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                        \
+    else                                                                                            \
        nPos = aIndexCB.InsertEntry( aToken )
 
-#define INSERT_DATA( j )                                                                        \
-    if ( aAnchorList[j].getLength() > 0 )                                                       \
-    {                                                                                           \
-        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );        \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );         \
-    }                                                                                           \
-    else                                                                                        \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) )
+#define INSERT_DATA( j )                                                                            \
+    if ( aAnchorList[j].getLength() > 0 )                                                           \
+    {                                                                                               \
+        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );            \
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
+    }                                                                                               \
+    else                                                                                            \
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
 
 // -----------------------------------------------------------------------
 
@@ -690,8 +690,7 @@ void IndexTabPage_Impl::InitializeIndex()
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAnchorList = aAnchorRefList[i];
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aTitleList = aTitleRefList[i];
 
-                    DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),
-                                "reference list and title list of different length" );
+                    DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
                     insert = ( ( ndx = aKeywordPair.indexOf( sal_Unicode( ';' ) ) ) == -1 ? sal_False : sal_True );
 
@@ -709,9 +708,18 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     // Assume the token is trimed
                     UNIFY_AND_INSERT_TOKEN( aKeywordPair );
-                    INSERT_DATA( 0 );
 
-                    for ( int j = 1; j < aRefList.getLength(); ++j )
+                    sal_uInt32 nRefListLen = aRefList.getLength();
+
+                    DBG_ASSERT( aAnchorList.getLength(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );           \
+                    DBG_ASSERT( nRefListLen, "*IndexTabPage_Impl::InitializeIndex(): RefList is empty!" );          \
+
+                    if ( aAnchorList.getLength() && nRefListLen )
+                    {
+                        INSERT_DATA( 0 );
+                    }
+
+                    for ( int j = 1; j < nRefListLen ; ++j )
                     {
                         aData
                             .append( aKeywordPair )
