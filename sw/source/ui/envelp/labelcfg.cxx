@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: os $ $Date: 2001-05-11 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #ifndef _LABIMP_HXX
 #include <labimp.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -117,21 +116,13 @@ void    SwLabelConfig::Commit()
  ---------------------------------------------------------------------------*/
 Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 {
-    Sequence<OUString> aProperties(10);
+    Sequence<OUString> aProperties(2);
     OUString* pProperties = aProperties.getArray();
-    for(sal_Int32 nProp = 0; nProp < 10; nProp++)
+    for(sal_Int32 nProp = 0; nProp < 2; nProp++)
         pProperties[nProp] = rPrefix;
 
     pProperties[ 0] += C2U("Name");
-    pProperties[ 1] += C2U("Continuous");
-    pProperties[ 2] += C2U("HorizontalDistance");
-    pProperties[ 3] += C2U("VerticalDistance");
-    pProperties[ 4] += C2U("Width");
-    pProperties[ 5] += C2U("Height");
-    pProperties[ 6] += C2U("LeftMargin");
-    pProperties[ 7] += C2U("UpperMargin");
-    pProperties[ 8] += C2U("Columns");
-    pProperties[ 9] += C2U("Rows");
+    pProperties[ 1] += C2U("Measure");
     return aProperties;
 }
 //-----------------------------------------------------------------------------
@@ -140,24 +131,40 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
     SwLabRec* pNewRec = new SwLabRec;
     const Any* pValues = rValues.getConstArray();
     OUString sTmp;
-    sal_Int32 nTmp;
     pNewRec->aMake = rManufacturer;
-    for(sal_Int32 nProp = 0; nProp < 10; nProp++)
+    for(sal_Int32 nProp = 0; nProp < rValues.getLength(); nProp++)
     {
         if(pValues[nProp].hasValue())
         {
             switch(nProp)
             {
                 case 0: pValues[nProp] >>= sTmp; pNewRec->aType = sTmp; break;
-                case 1: pNewRec->bCont = *(sal_Bool*)pValues[nProp].getValue();break;
-                case 2: pValues[nProp] >>= nTmp; pNewRec->lHDist = MM100_TO_TWIP(nTmp); break;
-                case 3: pValues[nProp] >>= nTmp; pNewRec->lVDist = MM100_TO_TWIP(nTmp);     break;
-                case 4: pValues[nProp] >>= nTmp; pNewRec->lWidth = MM100_TO_TWIP(nTmp);     break;
-                case 5: pValues[nProp] >>= nTmp; pNewRec->lHeight = MM100_TO_TWIP(nTmp);    break;
-                case 6: pValues[nProp] >>= nTmp; pNewRec->lLeft = MM100_TO_TWIP(nTmp);      break;
-                case 7: pValues[nProp] >>= nTmp; pNewRec->lUpper = MM100_TO_TWIP(nTmp);     break;
-                case 8: pValues[nProp] >>= pNewRec->nCols;      break;
-                case 9: pValues[nProp] >>= pNewRec->nRows;      break;
+                case 1:
+                {
+//all values are contained as colon-separated 1/100 mm values except for the
+//continuous flag (0/1)
+                    pValues[nProp] >>= sTmp;
+                    String sMeasure(sTmp);
+                    USHORT nTokenCount = sMeasure.GetTokenCount(';');
+                    xub_StrLen nIdx = 0;
+                    for(USHORT i = 0; i < nTokenCount; i++)
+                    {
+                        int nVal = sMeasure.GetToken(i, ';' ).ToInt32();
+                        switch(i)
+                        {
+                            case 0 : pNewRec->nRows     = nVal; break;
+                            case 1 : pNewRec->nCols     = nVal; break;
+                            case 2 : pNewRec->lWidth    = MM100_TO_TWIP(nVal);break;
+                            case 3 : pNewRec->lHeight   = MM100_TO_TWIP(nVal); break;
+                            case 4 : pNewRec->lHDist    = MM100_TO_TWIP(nVal);break;
+                            case 5 : pNewRec->lVDist    = MM100_TO_TWIP(nVal);break;
+                            case 6 : pNewRec->lLeft     = MM100_TO_TWIP(nVal);break;
+                            case 7 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);break;
+                            case 8 : pNewRec->bCont = nVal ? sal_True : sal_False; break;
+                        }
+                    }
+                }
+                break;
             }
         }
     }
@@ -170,6 +177,7 @@ Sequence<PropertyValue> lcl_CreateProperties(
     const OUString* pNames = rPropNames.getConstArray();
     Sequence<PropertyValue> aRet(rPropNames.getLength());
     PropertyValue* pValues = aRet.getArray();
+    OUString sColon(C2U(";"));
 
     for(sal_Int32 nProp = 0; nProp < 10; nProp++)
     {
@@ -177,15 +185,21 @@ Sequence<PropertyValue> lcl_CreateProperties(
         switch(nProp)
         {
             case 0: pValues[nProp].Value <<= OUString(rRec.aType); break;
-            case 1: pValues[nProp].Value.setValue(&rRec.bCont, ::getBooleanCppuType());break;
-            case 2: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lHDist);break;
-            case 3: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lVDist);     break;
-            case 4: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lWidth);     break;
-            case 5: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lHeight);    break;
-            case 6: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lLeft);      break;
-            case 7: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lUpper);     break;
-            case 8: pValues[nProp].Value <<= rRec.nCols;      break;
-            case 9: pValues[nProp].Value <<= rRec.nRows;      break;
+            case 1:
+            {
+                OUString sTmp;
+                sTmp += OUString::valueOf(rRec.nRows   );          sTmp += sColon;
+                sTmp += OUString::valueOf(rRec.nCols   );          sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );          sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHeight) );          sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHDist) );           sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lVDist));            sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lLeft)   );          sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lUpper)  );          sTmp += sColon;
+                sTmp += OUString::valueOf((sal_Int32)(rRec.bCont ? 1 : 0));
+                pValues[nProp].Value <<= sTmp;
+            }
+            break;
         }
     }
     return aRet;
