@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 15:07:42 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,20 @@ TARGET=helper
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"=="aqua"
+
 SLOFILES=\
     $(SLO)$/ppdparser.obj	\
     $(SLO)$/strhelper.obj	\
     $(SLO)$/helper.obj
+
+
+.ENDIF # GUIBASE = aqua
 
 # --- Targets ------------------------------------------------------
 
