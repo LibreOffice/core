@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
+ *  last change: $Author: os $ $Date: 2001-03-13 10:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             {
                 {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_CONDITION_TRUE) ,  FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
@@ -431,6 +432,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             {
                 {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
             pRet = aHiddenTxtFieldPropMap;
@@ -482,6 +484,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aHiddenParaFieldPropMap   [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CONDITION),FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
             pRet = aHiddenParaFieldPropMap;
@@ -1940,6 +1943,7 @@ void SwXTextField::attachToRange(
                         SW_SERVICE_FIELDTYPE_HIDDEN_TEXT == m_nServiceId ?
                              TYP_HIDDENTXTFLD :
                                 TYP_CONDTXTFLD);
+                ((SwHiddenTxtField*)pFld)->SetValue(m_pProps->bBool1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_HIDDEN_PARA:
@@ -1947,6 +1951,7 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_HIDDENPARAFLD);
                 pFld = new SwHiddenParaField((SwHiddenParaFieldType*)pFldType,
                                                 m_pProps->sPar1);
+                ((SwHiddenParaField*)pFld)->SetHidden(m_pProps->bBool1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_GET_REFERENCE:

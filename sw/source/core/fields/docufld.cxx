@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
+ *  last change: $Author: os $ $Date: 2001-03-13 10:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1588,6 +1588,12 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, const String& rProperty ) con
     {
         rAny <<= OUString(aFALSETxt);
     }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN)||
+        rProperty.EqualsAscii(UNO_NAME_IS_CONDITION_TRUE))
+    {
+        sal_Bool bHidden = bIsHidden;
+        rAny.setValue(&bHidden, ::getBooleanCppuType());
+    }
 #ifdef DBG_UTIL
     else
         DBG_ERROR("Welches Property?")
@@ -1609,6 +1615,11 @@ BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, const String& rProperty )
         aTRUETxt = sVal;
     else if(rProperty.EqualsAscii(UNO_NAME_FALSE_CONTENT))
         aFALSETxt = sVal;
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN)||
+        rProperty.EqualsAscii(UNO_NAME_IS_CONDITION_TRUE))
+    {
+        bIsHidden = *(sal_Bool*)rAny.getValue();
+    }
 #ifdef DBG_UTIL
     else
         DBG_ERROR("Welches Property?")
@@ -1698,6 +1709,11 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 {
     if(rProperty.EqualsAscii(UNO_NAME_CONDITION))
         rAny <<= OUString(aCond);
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN))
+    {
+        sal_Bool bHidden = bIsHidden;
+        rAny.setValue(&bHidden, ::getBooleanCppuType());
+    }
 #ifdef DBG_UTIL
     else
         DBG_ERROR("Welches Property?")
@@ -1715,6 +1731,8 @@ BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, const String& rProperty 
         rAny >>= uTmp;
         aCond = String(uTmp);
     }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_HIDDEN))
+        bIsHidden = *(sal_Bool*)rAny.getValue();
 #ifdef DBG_UTIL
     else
         DBG_ERROR("Welches Property?")
