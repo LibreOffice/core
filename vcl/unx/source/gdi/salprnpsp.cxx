@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-29 12:04:20 $
+ *  last change: $Author: pl $ $Date: 2001-12-11 11:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,16 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         width               = PtTo10Mu( width );
         height              = PtTo10Mu( height );
 
-        pJobSetup->mnPaperWidth = width;
-        pJobSetup->mnPaperHeight= height;
+        if( rData.m_eOrientation == psp::orientation::Portrait )
+        {
+            pJobSetup->mnPaperWidth = width;
+            pJobSetup->mnPaperHeight= height;
+        }
+        else
+        {
+            pJobSetup->mnPaperWidth = height;
+            pJobSetup->mnPaperHeight= width;
+        }
     }
 
 
@@ -616,6 +624,17 @@ BOOL SalInfoPrinter::SetData(
         // merge papersize if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
         {
+            int nWidth, nHeight;
+            if( pJobSetup->meOrientation == ORIENTATION_PORTRAIT )
+            {
+                nWidth  = pJobSetup->mnPaperWidth;
+                nHeight = pJobSetup->mnPaperHeight;
+            }
+            else
+            {
+                nWidth  = pJobSetup->mnPaperHeight;
+                nHeight = pJobSetup->mnPaperWidth;
+            }
             String aPaper;
             if( pJobSetup->mePaperFormat == PAPER_USER )
                 aPaper = aData.m_pParser->matchPaper(
@@ -687,13 +706,22 @@ void SalInfoPrinter::GetPageInfo(
 
         String aPaper;
         int width, height;
-
-        aData.m_aContext.getPageSize( aPaper, width, height );
-
         int left = 0, top = 0, right = 0, bottom = 0;
         int nDPIx, nDPIy;
-        aData.m_aContext.getResolution( nDPIx, nDPIy );
-        aData.m_pParser->getMargins( aPaper, left, right, top, bottom );
+
+
+        if( aData.m_eOrientation == psp::orientation::Portrait )
+        {
+            aData.m_aContext.getPageSize( aPaper, width, height );
+            aData.m_aContext.getResolution( nDPIx, nDPIy );
+            aData.m_pParser->getMargins( aPaper, left, right, top, bottom );
+        }
+        else
+        {
+            aData.m_aContext.getPageSize( aPaper, height, width );
+            aData.m_aContext.getResolution( nDPIy, nDPIx );
+            aData.m_pParser->getMargins( aPaper, bottom, top, left, right );
+        }
         rPageWidth  = width * nDPIx / 72;
         rPageHeight = height * nDPIy / 72;
         rPageOffX   = left * nDPIx / 72;
