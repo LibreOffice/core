@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_persmap.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 08:14:12 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class PersistentMap
 {
     ::rtl::OUString m_sysPath;
     mutable Db m_db;
-    void throw_rtexc( char const * msg ) const;
+    void throw_rtexc( int err, char const * msg = 0 ) const;
 
 public:
     ~PersistentMap();
