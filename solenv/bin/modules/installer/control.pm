@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-29 16:11:21 $
+#   last change: $Author: rt $ $Date: 2004-07-30 09:05:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -422,7 +422,7 @@ sub check_updatepack
                     # try to write into $shipdrive
 
                     $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test";
-                    $directory = $shipdrive . $installer::globals::separator . "install" . $installer::globals::separator . $directory;
+                    $directory = $shipdrive . $installer::globals::separator . $directory;
 
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
