@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-12-10 19:16:10 $
+#   last change: $Author: dbo $ $Date: 2001-12-11 10:59:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ PRJ=..$/..$/..$/..
 
 PRJNAME=udkapi
 
-TARGET=cssunosec
+TARGET=csssec
 PACKAGE=com$/sun$/star$/security
 
 # --- Settings -----------------------------------------------------
@@ -90,3 +90,4 @@ IDLFILES= \
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/target.pmk
+

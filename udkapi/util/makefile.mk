@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 16:06:12 $
+#   last change: $Author: dbo $ $Date: 2001-12-11 10:58:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssio.db \
     $(UCR)$/cssjava.db \
     $(UCR)$/csslang.db \
+    $(UCR)$/csssec.db \
     $(UCR)$/cssloader.db \
     $(UCR)$/cssreflection.db \
     $(UCR)$/cssregistry.db \
