@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyForward.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:15:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ OPropertyForward::OPropertyForward(const Reference< XPropertySet>& _xSource
     DBG_CTOR(OPropertyForward,NULL);
     OSL_ENSURE(_xDestContainer.is(),"Destanation should be valid!");
     osl_incrementInterlockedCount(&m_refCount);
+    try
     {
         if ( _aPropertyList.empty() )
             _xSource->addPropertyChangeListener(::rtl::OUString(), this);
@@ -113,6 +114,10 @@ OPropertyForward::OPropertyForward(const Reference< XPropertySet>& _xSource
             for (; aIter != aEnd ; ++aIter )
                 _xSource->addPropertyChangeListener(*aIter, this);
         }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OPropertyForward::OPropertyForward: caught an exception!");
     }
     osl_decrementInterlockedCount(&m_refCount);
 }
