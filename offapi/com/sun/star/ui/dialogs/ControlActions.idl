@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlActions.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ui { module dialogs {
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
  */
 
-constants ControlActions
+published constants ControlActions
 {
     //---------------------------------------------------------------------
     /** Adds an item to the content of the listbox. The given item has to
