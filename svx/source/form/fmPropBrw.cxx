@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,8 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
                         xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-                if ( xSupp.is() )
-                    xSupp->getFrames()->append( m_xMeAsFrame );
+//                if ( xSupp.is() )
+//                    xSupp->getFrames()->append( m_xMeAsFrame );
             }
         }
     }
