@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 09:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@ namespace xmloff
             m_aValues.push_back(aNewValue);
         }
         else
+#if SUPD<622
+        if (0 != _rLocalName.compareToAscii("style-name"))
+#endif
         {
             OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
         }
@@ -530,6 +533,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
