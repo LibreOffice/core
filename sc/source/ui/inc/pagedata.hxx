@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class ScDocShell;
 
 //============================================================================
@@ -74,10 +78,10 @@ class ScPrintRangeData
 {
 private:
     ScRange     aPrintRange;
-    USHORT      nPagesX;
-    USHORT*     pPageEndX;
-    USHORT      nPagesY;
-    USHORT*     pPageEndY;
+    size_t      nPagesX;
+    SCCOL*      pPageEndX;
+    size_t      nPagesY;
+    SCROW*      pPageEndY;
     long        nFirstPage;
     BOOL        bTopDown;
     BOOL        bAutomatic;
@@ -89,13 +93,13 @@ public:
     void            SetPrintRange( const ScRange& rNew )    { aPrintRange = rNew; }
     const ScRange&  GetPrintRange() const                   { return aPrintRange; }
 
-    void            SetPagesX( USHORT nCount, const USHORT* pEnd );
-    void            SetPagesY( USHORT nCount, const USHORT* pEnd );
+    void            SetPagesX( size_t nCount, const SCCOL* pEnd );
+    void            SetPagesY( size_t nCount, const SCROW* pEnd );
 
-    USHORT          GetPagesX() const       { return nPagesX;   }
-    const USHORT*   GetPageEndX() const     { return pPageEndX; }
-    USHORT          GetPagesY() const       { return nPagesY;   }
-    const USHORT*   GetPageEndY() const     { return pPageEndY; }
+    size_t          GetPagesX() const       { return nPagesX;   }
+    const SCCOL*    GetPageEndX() const     { return pPageEndX; }
+    size_t          GetPagesY() const       { return nPagesY;   }
+    const SCROW*    GetPageEndY() const     { return pPageEndY; }
 
     void            SetFirstPage( long nNew )   { nFirstPage = nNew; }
     long            GetFirstPage() const        { return nFirstPage; }
@@ -108,16 +112,16 @@ public:
 class ScPageBreakData
 {
 private:
-    USHORT              nAlloc;
-    USHORT              nUsed;
+    size_t              nAlloc;
+    size_t              nUsed;
     ScPrintRangeData*   pData;          // Array
 
 public:
-                ScPageBreakData(USHORT nMax);
+                ScPageBreakData(size_t nMax);
                 ~ScPageBreakData();
 
-    USHORT              GetCount() const            { return nUsed; }
-    ScPrintRangeData&   GetData(USHORT i);
+    size_t              GetCount() const            { return nUsed; }
+    ScPrintRangeData&   GetData(size_t i);
 
     BOOL                IsEqual( const ScPageBreakData& rOther ) const;
 
