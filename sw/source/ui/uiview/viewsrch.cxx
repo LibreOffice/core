@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 14:18:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 15:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 #ifndef _SVX_PAGEITEM_HXX //autogen
 #include <svx/pageitem.hxx>
 #endif
@@ -192,7 +195,7 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
 --------------------------------------------------*/
 
 
-void __EXPORT SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
+void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
@@ -415,19 +418,50 @@ void __EXPORT SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         case FID_SEARCH_SEARCHSET:
         case FID_SEARCH_REPLACESET:
         {
-            static USHORT __READONLY_DATA aSearchAttrRange[] =
+            static const USHORT aNormalAttr[] =
             {
-                    RES_CHRATR_CASEMAP,     RES_CHRATR_CASEMAP,
-                    RES_CHRATR_COLOR,       RES_CHRATR_POSTURE,
-                    RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
-                    RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
-                    RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-                    RES_LR_SPACE,           RES_UL_SPACE,
-                    SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-                    0
+/* 0 */         RES_CHRATR_CASEMAP,     RES_CHRATR_CASEMAP,
+/* 2 */         RES_CHRATR_COLOR,       RES_CHRATR_POSTURE,
+/* 4 */         RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
+/* 6 */         RES_CHRATR_BLINK,       RES_CHRATR_BLINK,
+/* 8 */         RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
+/*10 */         RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE,
+/*12 */         RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF,
+// insert position for CJK/CTL attributes!
+/*14 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
+/*16 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
+/*18 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
+/*20 */         RES_LR_SPACE,           RES_UL_SPACE,
+/*22 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
+/*24 */         0
             };
 
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), aSearchAttrRange );
+            static const USHORT aCJKAttr[] =
+            {
+                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_EMPHASIS_MARK, RES_CHRATR_TWO_LINES,
+                RES_PARATR_SCRIPTSPACE, RES_PARATR_FORBIDDEN_RULES
+            };
+            static const USHORT aCTLAttr[] =
+            {
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_WEIGHT
+            };
+
+            SvUShorts aArr( 0, 16 );
+            aArr.Insert(    aNormalAttr,
+                            sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
+                            0 );
+            if( /*CTL*/ FALSE )
+                aArr.Insert(    aCTLAttr,
+                                sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
+                                14 );
+            SvtCJKOptions aCJKOpt;
+            if( aCJKOpt.IsAnyEnabled() )
+                aArr.Insert(    aCJKAttr,
+                                sizeof( aCJKAttr ) / sizeof( aCJKAttr[0] ),
+                                14 );
+
+            SfxItemSet aSet( pWrtShell->GetAttrPool(), aArr.GetData() );
             USHORT nWhich = SID_SEARCH_SEARCHSET;
 
             if ( FID_SEARCH_REPLACESET == nSlot )
@@ -836,6 +870,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/10/08 14:18:33  jp
+    Bug #92730#: FUNC_Search - clear replace string if only a search is active
+
     Revision 1.7  2001/09/13 15:27:15  jp
     #92075# update for new compiler
 
