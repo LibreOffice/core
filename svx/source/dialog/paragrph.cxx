@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:39:21 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 14:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,6 @@
 #include "lrspitem.hxx"
 #include "brkitem.hxx"
 #include "keepitem.hxx"
-#include "paractrl.hxx"
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
 #include "htmlmode.hxx"
