@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:41:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,6 +1444,15 @@ XMLErrors* SvXMLImport::GetErrors()
 
 void SvXMLImport::DisposingModel()
 {
+    if( xFontDecls.Is() )
+        ((SvXMLStylesContext *)&xFontDecls)->Clear();
+    if( xStyles.Is() )
+        ((SvXMLStylesContext *)&xStyles)->Clear();
+    if( xAutoStyles.Is() )
+        ((SvXMLStylesContext *)&xAutoStyles)->Clear();
+    if( xMasterStyles.Is() )
+        ((SvXMLStylesContext *)&xMasterStyles)->Clear();
+
     xModel = 0;
     pEventListener = NULL;
 }
