@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 14:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,8 +727,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Medium zusammenbauen
             SfxItemSet* pSet = new SfxAllItemSet( *rReq.GetArgs() );
             pSet->Put( SfxStringItem( SID_DOCTEMPLATE, aTemplateName ) );
-            SfxMedium aMedium( aFileName, STREAM_STD_READWRITE | STREAM_TRUNC,
-                               FALSE, FALSE, pFilter, pSet);
+            SfxMedium aMedium( aFileName, STREAM_STD_READWRITE | STREAM_TRUNC, FALSE, pFilter, pSet);
 
             // als Vorlage speichern
             BOOL bModified = IsModified();
