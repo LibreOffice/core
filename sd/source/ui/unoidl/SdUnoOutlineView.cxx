@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 13:22:05 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 14:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,15 @@ void SAL_CALL SdUnoOutlineView::dispose()
     }
 }
 
+void SAL_CALL SdUnoOutlineView::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    SfxBaseController::addEventListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    SfxBaseController::removeEventListener( aListener );
+}
 
 //----------------------------------------------------------------------
 //------ XServiceInfo --------------------------------------------------

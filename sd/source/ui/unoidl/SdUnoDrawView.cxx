@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 13:22:05 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 14:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,10 +321,12 @@ OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw(RuntimeExceptio
 //----------------------------------------------------------------------
 
 static sal_Char pImplSdUnoDrawViewService[sizeof("com.sun.star.drawing.DrawingDocumentDrawView")] = "com.sun.star.drawing.DrawingDocumentDrawView";
-static sal_Char pImplSdUnoSlideViewService[sizeof("com.sun.star.presentation.PresentationView")] = "com.sun.star.presentation.PresentationView";
+static sal_Char pImplSdUnoPresentationViewService[sizeof("com.sun.star.presentation.PresentationView")] = "com.sun.star.presentation.PresentationView";
+static sal_Char pImplSdUnoSlideViewService[sizeof("com.sun.star.presentation.SlidesView")] = "com.sun.star.presentation.SlidesView";
 static sal_Char pImplSdUnoPreviewViewService[sizeof("com.sun.star.presentation.PreviewView")] = "com.sun.star.presentation.PreviewView";
 static sal_Char pImplSdUnoNotesViewService[sizeof("com.sun.star.presentation.NotesView")] = "com.sun.star.presentation.NotesView";
 static sal_Char pImplSdUnoHandoutViewService[sizeof("com.sun.star.presentation.HandoutView")] = "com.sun.star.presentation.HandoutView";
+
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
@@ -338,7 +340,9 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) 
         return ServiceName.equalsAscii( pImplSdUnoNotesViewService ) || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
     case handout:
         return ServiceName.equalsAscii( pImplSdUnoHandoutViewService ) || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
-//  case presentation:
+    case presentation:
+        if( ServiceName.equalsAscii( pImplSdUnoPresentationViewService ) )
+            return sal_True;
 //  case drawing:
     default:
         return ServiceName.equalsAscii( pImplSdUnoDrawViewService );
@@ -350,7 +354,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) 
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( ((meKind != notes) && (meKind != handout)) ? 1 : 2 );
+    Sequence< OUString > aSeq( ((meKind != notes) && (meKind != handout) && (meKind != presentation)) ? 1 : 2 );
     OUString* pServices = aSeq.getArray();
 
     switch( meKind )
@@ -373,7 +377,8 @@ Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw(
         pServices[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoDrawViewService ) );
         break;
 
-//  case presentation:
+    case presentation:
+        pServices[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoPresentationViewService ) );
 //  case drawing:
     default:
         pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoDrawViewService ) );
