@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mfe $ $Date: 2001-02-07 12:04:55 $
+#   last change: $Author: hr $ $Date: 2001-10-30 17:23:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ LIB1ARCHIV=$(LB)$/lib$(TARGET)$(VOS_MAJOR)$(DLLPOSTFIX).a
 LIB1FILES=$(LB)$/cpp$(TARGET).lib
 .ENDIF
 
-SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COM)
+SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COMID)
 SHL1IMPLIB=i$(TARGET)
 
 .IF "$(GUI)"=="WNT"
