@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-10 08:50:28 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@ TYPEINIT1(SwFmtHoriOrient, SfxPoolItem);
 TYPEINIT2(SwFmtHeader,  SfxPoolItem, SwClient );
 TYPEINIT2(SwFmtFooter,  SfxPoolItem, SwClient );
 TYPEINIT2(SwFmtPageDesc,  SfxPoolItem, SwClient );
+TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 
 /* -----------------19.05.98 09:26-------------------
  *  Umwandlung fuer QueryValue
