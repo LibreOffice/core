@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:58:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ String STR_NO_PAGEDESC
     Text[ dutch ] = "geen pagina-einde";
     Text[ chinese_simplified ] = "²»»»Ò³";
     Text[ greek ] = "να μην γίνει αλλαγή σελίδας";
-    Text[ korean ] = "ΖδΐΜΑφ ³ª΄©±β°΅ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΒΚ ³ª΄©±β Ύψΐ½.";
     Text[ turkish ] = "Sayfa sonu yok";
     Text[ language_user1 ] = " ";
 };
@@ -191,7 +191,7 @@ String STR_NO_MIRROR
     Text[ dutch ] = "niet spiegelen";
     Text[ chinese_simplified ] = "²»·­Χª";
     Text[ greek ] = "Να μην γίνει αντανάκλαση";
-    Text[ korean ] = "΄λΔª ΎΘΗΤ";
+    Text[ korean ] = "΄λΔª ΎΚΐ½";
     Text[ turkish ] = "Yansύtma";
     Text[ language_user1 ] = " ";
 };
@@ -295,7 +295,7 @@ String STR_MIRROR_TOGGLE
     Text[ dutch ] = "+ op even pagina's horizontaal spiegelen";
     Text[ chinese_simplified ] = "+ Λ®Ζ½·­Χªµ½ΕΌΚύÒ³Γζ";
     Text[ greek ] = "+ οριζόντια αντανάκλαση σε μονές σελίδες";
-    Text[ korean ] = "+ ΑχΈιΏ΅Ό­ ΌφΖςΐΈ·Ξ ΄λΔª";
+    Text[ korean ] = "+ Β¦Όφ΅΅ΒΚΏ΅Ό­ ΌφΖςΐΈ·Ξ ΄λΔª";
     Text[ turkish ] = "+ ηift numaralύ sayfalarda yatay yansύt";
     Text[ language_user1 ] = " ";
 };
@@ -401,7 +401,7 @@ String STR_NO_FOOTER
     Text[ dutch ] = "geen voettekst";
     Text[ chinese_simplified ] = "ΞήÒ³½Ε";
     Text[ greek ] = "χωρίς υποσέλιδο";
-    Text[ korean ] = "ΉΩ΄Ϊ±ΫΐΜ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΉΩ΄Ϊ±Ϋ Ύψΐ½.";
     Text[ turkish ] = "Altbilgi yok";
     Text[ language_user1 ] = " ";
 };
@@ -453,7 +453,7 @@ String STR_NO_HEADER
     Text[ dutch ] = "geen koptekst";
     Text[ chinese_simplified ] = "ΞήÒ³ΓΌ";
     Text[ greek ] = "χωρίς κεφαλίδα";
-    Text[ korean ] = "ΈΣΈ®±ΫΐΜ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈΣΈ®±Ϋ Ύψΐ½.";
     Text[ turkish ] = "άstbilgi yok";
     Text[ language_user1 ] = " ";
 };
@@ -479,7 +479,7 @@ String STR_SURROUND_IDEAL
     Text[ dutch ] = "ideale omloop";
     Text[ chinese_simplified ] = "ΧξΌΡΞΔΧΦ»·ΘΖ";
     Text[ greek ] = "βέλτιστη αναδίπλωση";
-    Text[ korean ] = "ΓΦΐϋ ΌψΘ―";
+    Text[ korean ] = "ΓΦΐϋ Ή®ΐΪΏ­΅΅ΉθΔ΅";
     Text[ turkish ] = "Optimum metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -505,7 +505,7 @@ String STR_SURROUND_NONE
     Text[ dutch ] = "geen omloop";
     Text[ chinese_simplified ] = "²»»·ΘΖ";
     Text[ greek ] = "Χωρίς αναδίπλωση";
-    Text[ korean ] = "ΌψΘ― Ύψΐ½";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅ Ύψΐ½";
     Text[ turkish ] = "Metin daπύlύmύ yok";
     Text[ language_user1 ] = " ";
 };
@@ -531,7 +531,7 @@ String STR_SURROUND_THROUGHT
     Text[ dutch ] = "doorloop";
     Text[ chinese_simplified ] = "Ήα΄©";
     Text[ greek ] = "Δια μέσου";
-    Text[ korean ] = "ΐόΓΌ µΉΈ²";
+    Text[ korean ] = "Ή®ΐεΘεΈ£±β";
     Text[ turkish ] = "Metin arkasύna gφnder";
     Text[ language_user1 ] = " ";
 };
@@ -557,7 +557,7 @@ String STR_SURROUND_PARALLEL
     Text[ dutch ] = "omloop parallel";
     Text[ chinese_simplified ] = "Ζ½ΠΠ»·ΘΖ";
     Text[ greek ] = "παράλληλη αναδίπλωση";
-    Text[ korean ] = "ΖςΗΰ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬ΖςΗΰ";
     Text[ turkish ] = "Paralel metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -583,7 +583,7 @@ String STR_SURROUND_COLUMN
     Text[ dutch ] = "omloop kolom";
     Text[ chinese_simplified ] = "ΑΠΔΪΞΔΧΦ»·ΘΖ";
     Text[ greek ] = "Αναδίπλωση στήλης";
-    Text[ korean ] = "Ώ­ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬΄άΏ΅Ό­";
     Text[ turkish ] = "-";
     Text[ language_user1 ] = " ";
 };
@@ -609,7 +609,7 @@ String STR_SURROUND_LEFT
     Text[ dutch ] = "omloop linkerkant";
     Text[ chinese_simplified ] = "Χσ»·ΘΖ";
     Text[ greek ] = "αναδίπλωση αριστερά";
-    Text[ korean ] = "ΏήΒΚΐΈ·Ξ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬ ΏήΒΚ";
     Text[ turkish ] = "Sol metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -635,7 +635,7 @@ String STR_SURROUND_RIGHT
     Text[ dutch ] = "omloop rechterkant";
     Text[ chinese_simplified ] = "ΣÒ»·ΘΖ";
     Text[ greek ] = "αναδίπλωση δεξιά";
-    Text[ korean ] = "ΏΐΈ¥ΒΚΐΈ·Ξ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬ΏΐΈ¥ΒΚ";
     Text[ turkish ] = "Saπ metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -661,7 +661,7 @@ String STR_SURROUND_INSIDE
     Text[ dutch ] = "omloop binnenkant";
     Text[ chinese_simplified ] = "ΔΪ²Ώ»·ΘΖ";
     Text[ greek ] = "Αναδίπλωση - εσωτερικά";
-    Text[ korean ] = "³»ΊΞ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬ΎΘΒΚ";
     Text[ turkish ] = "έη metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -688,7 +688,7 @@ String STR_SURROUND_OUTSIDE
     Text[ dutch ] = "omloop buitenkant";
     Text[ chinese_simplified ] = "Νβ»·ΘΖ";
     Text[ greek ] = "Αναδίπλωση - εξωτερικά";
-    Text[ korean ] = "ΏάΊΞ ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅£¬ΉΩ±ωΒΚ";
     Text[ turkish ] = "Dύώ metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
@@ -872,7 +872,7 @@ String STR_FLY_PAGE
     Text[ dutch ] = "pagina-gebonden";
     Text[ chinese_simplified ] = "ΊΝÒ³Α¬ΤΪÒ»Ζπ";
     Text[ greek ] = "προς σελίδα";
-    Text[ korean ] = "ΖδΐΜΑφΏ΅";
+    Text[ korean ] = "ΒΚΏ΅";
     Text[ turkish ] = "Sayfaya baπlύ";
     Text[ language_user1 ] = " ";
 };
@@ -1054,7 +1054,7 @@ String STR_LINE_CENTER
     Text[ dutch ] = "verticaal op de regel gecentreerd";
     Text[ chinese_simplified ] = "ΊΝΠΠ΄ΉΦ±ΎΣΦΠ";
     Text[ greek ] = "κατακόρυφα κεντραρισμένα ως προς τη γραμμή";
-    Text[ korean ] = "ΑΩ°ϊ ΌφΑχΉζΗβ °΅Ώξµ¥";
+    Text[ korean ] = "ΑΩΏ΅΅΅΄λΗΨ ΌφΑχΐΈ·Ξ °΅Ώξµ¥";
     Text[ turkish ] = "Satύra gφre dikey ortala";
     Text[ language_user1 ] = " ";
 };
@@ -1106,7 +1106,7 @@ String STR_REGISTER_ON
     Text[ dutch ] = "registeren";
     Text[ chinese_simplified ] = "Υύ·΄Ò³µΔΠΠΎΰΟΰµΘ";
     Text[ greek ] = "Επιβεβαίωση εγγραφής";
-    Text[ korean ] = "µξ·Ο ΐ―ΘΏΌΊ";
+    Text[ korean ] = "·ΉΑφ½ΊΕΝ΅΅ΊΈΐ―";
     Text[ turkish ] = "Eώit satύr yόksekliπi";
     Text[ language_user1 ] = " ";
 };
@@ -1132,7 +1132,7 @@ String STR_REGISTER_OFF
     Text[ dutch ] = "niet registeren";
     Text[ chinese_simplified ] = "Υύ·΄Ò³µΔΠΠΎΰ²»ΟΰµΘ";
     Text[ greek ] = "Χωρίς επιβεβαίωση εγγραφής";
-    Text[ korean ] = "µξ·ΟµΗΎξ ΐΦΑφ ΎΚΐ½";
+    Text[ korean ] = "·ΉΑφ½ΊΕΝ΅΅ΊΈΐ―΅΅Ύψΐ½";
     Text[ turkish ] = "Eώit satύr yόksekliπi mevcut deπil";
     Text[ language_user1 ] = " ";
 };
@@ -1158,7 +1158,7 @@ String STR_HORI_RIGHT
     Text[ dutch ] = "rechts";
     Text[ chinese_simplified ] = "ΣÒ";
     Text[ greek ] = "δεξιά";
-    Text[ korean ] = "ΏΐΈ¥ΒΚΏ΅";
+    Text[ korean ] = "ΏΐΈ¥ΒΚ";
     Text[ turkish ] = "saπ";
     Text[ language_user1 ] = " ";
 };
@@ -1210,7 +1210,7 @@ String STR_HORI_LEFT
     Text[ dutch ] = "links";
     Text[ chinese_simplified ] = "Χσ";
     Text[ greek ] = "αριστερά";
-    Text[ korean ] = "ΏήΒΚΏ΅";
+    Text[ korean ] = "ΏήΒΚ";
     Text[ turkish ] = "sol";
     Text[ language_user1 ] = " ";
 };
@@ -1289,7 +1289,7 @@ String STR_HORI_FULL
     Text[ dutch ] = "volle breedte";
     Text[ chinese_simplified ] = "ΥϋΈφΏν¶Θ";
     Text[ greek ] = "ολόκληρο πλάτος";
-    Text[ korean ] = "ΐόΐΪ";
+    Text[ korean ] = "ΐόΓΌ΅΅³ΚΊρ";
     Text[ turkish ] = "Tam geniώlik";
     Text[ language_user1 ] = " ";
 };
@@ -1452,7 +1452,7 @@ String STR_NUMRULE_ON
     Text[ dutch ] = "Nummering";
     Text[ chinese_simplified ] = "±ΰΊΕ";
     Text[ greek ] = "Αρίθμηση";
-    Text[ korean ] = "ΉψΘ£ ΈΕ±β±β";
+    Text[ korean ] = "ΉψΘ£ΈΕ±β±β";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
 };
@@ -1556,7 +1556,7 @@ String STR_LINECOUNT
     Text[ dutch ] = "regels tellen";
     Text[ chinese_simplified ] = "ΠΠΌΖΚύ";
     Text[ greek ] = "Καταμέτρηση γραμμών";
-    Text[ korean ] = "Ό± Δ«ΏξΖ®";
+    Text[ korean ] = "ΑΩ ΌΌ±β";
     Text[ turkish ] = "Satύr say";
     Text[ language_user1 ] = " ";
 };
@@ -1582,7 +1582,7 @@ String STR_DONTLINECOUNT
     Text[ dutch ] = "Regels niet tellen";
     Text[ chinese_simplified ] = "²»ΌΖΚύΠΠ";
     Text[ greek ] = "Όχι καταμέτρηση γραμμών";
-    Text[ korean ] = "Ό± Δ«ΏξΖ®Έ¦ ΗΟΑφ ΎΚΐ½";
+    Text[ korean ] = "Ό± ΌΌΑφ ΎΚΐ½";
     Text[ turkish ] = "Satύrlarύ sayma";
     Text[ language_user1 ] = " ";
 };
@@ -1608,7 +1608,7 @@ String STR_LINCOUNT_START
     Text[ dutch ] = "regels telllen starten bij:  ";
     Text[ chinese_simplified ] = "ΌΖΚύΠΠ΄Σ£Ί ";
     Text[ greek ] = "Εκκίνηση καταμέτρησης γραμμών από: ";
-    Text[ korean ] = "ΑΩΌΌ±β ½ΓΐΫ ΐ§Δ΅: ";
+    Text[ korean ] = "ΑΩ΅΅ΌΌ±β ½ΓΐΫ ΐ§Δ΅: ";
     Text[ turkish ] = "Satύr sayma baώlangύcύ: ";
     Text[ language_user1 ] = " ";
 };
@@ -1892,7 +1892,7 @@ String STR_DRAWMODE_GREY
     Text[ polish ] = "Odcienie szaroci";
     Text[ portuguese_brazilian ] = "Greys";
     Text[ japanese ] = "ΈήΪ°½Ή°Ω";
-    Text[ korean ] = "ΘΈ»φ µξ±ή";
+    Text[ korean ] = "ΘΈ»φµµ";
     Text[ chinese_simplified ] = "»Ò¶Θ";
     Text[ chinese_traditional ] = "¦Η¶¥";
     Text[ turkish ] = "Greys";
@@ -1938,7 +1938,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "ΊÒΊϋΏ΅ ΊρΓηΊΑΎί ΊΈΐΜ΄Β Ή«΄Μ (ΏΉ: ΑφΖσ)";
+    Text[ korean ] = "ΕυΈν΅΅Ή«΄Μ";
     Text[ chinese_simplified ] = "Λ®Σ΅";
     Text[ chinese_traditional ] = "¤τ¦L";
     Text[ turkish ] = "Watermark";
