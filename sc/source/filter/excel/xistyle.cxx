@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:17 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,37 +160,12 @@
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 
 #include "root.hxx"
-
-// helpers ====================================================================
-
-/** Puts the item into the item set.
-    @descr  The item will be put into the item set, if bSkipPoolDef is false,
-    or if the item differs from the default pool item.
-    @param rItemSet  The destination item set.
-    @param rItem  The item to put into the item set.
-    @param nWhichId  The Which-ID to set with the item.
-    @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
-void lcl_xistyle_PutItem(
-        SfxItemSet& rItemSet, const SfxPoolItem& rItem, sal_uInt16 nWhichId, bool bSkipPoolDef )
-{
-    if( !bSkipPoolDef || (rItem != rItemSet.GetPool()->GetDefaultItem( nWhichId )) )
-        rItemSet.Put( rItem, nWhichId );
-}
-
-/** Puts the item into the item set.
-    @descr  The item will be put into the item set, if bSkipPoolDef is false,
-    or if the item differs from the default pool item.
-    @param rItemSet  The destination item set.
-    @param rItem  The item to put into the item set.
-    @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
-inline void lcl_xistyle_PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef )
-{
-    lcl_xistyle_PutItem( rItemSet, rItem, rItem.Which(), bSkipPoolDef );
-}
-
 
 // PALETTE record - color information =========================================
 
@@ -346,7 +321,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
 // sc_which = the Calc Which-ID of the item
 // ee_which = the edit engine Which-ID of the item
 #define PUTITEM( item, sc_which, ee_which ) \
-    lcl_xistyle_PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
+    ScfTools::PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
 // Font item - #91658# set only for valid script types
     if( mbFontNameUsed )
@@ -730,7 +705,7 @@ void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nNumFmt
 
 void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nScNumFmt, bool bSkipPoolDefs ) const
 {
-    lcl_xistyle_PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
     if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, FALSE ) == SFX_ITEM_SET )
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
 }
@@ -788,7 +763,7 @@ void XclImpCellProt::FillFromXF3( sal_uInt16 nProt )
 
 void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
-    lcl_xistyle_PutItem( rItemSet, ScProtectionAttr( mbLocked, mbHidden ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScProtectionAttr( mbLocked, mbHidden ), bSkipPoolDefs );
 }
 
 
@@ -846,12 +821,12 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
         case xlHAlignDistrib:       eHorJust = SVX_HOR_JUSTIFY_BLOCK;       break;
         default:    DBG_ERRORFILE( "XclImpCellAlign::FillToItemSet - unknown horizontal alignment" );
     }
-    lcl_xistyle_PutItem( rItemSet, SvxHorJustifyItem( eHorJust ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxHorJustifyItem( eHorJust ), bSkipPoolDefs );
 
     // text wrap
     SfxBoolItem aWrapItem( ATTR_LINEBREAK );
     aWrapItem.SetValue( mbWrapped );
-    lcl_xistyle_PutItem( rItemSet, aWrapItem, bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, aWrapItem, bSkipPoolDefs );
 
     // vertical alignment
     SvxCellVerJustify eVertJust = SVX_VER_JUSTIFY_STANDARD;
@@ -864,11 +839,11 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
         case xlVAlignDistrib:   eVertJust = SVX_VER_JUSTIFY_TOP;        break;
         default:    DBG_ERRORFILE( "XclImpCellAlign::FillToItemSet - unknown vertical alignment" );
     }
-    lcl_xistyle_PutItem( rItemSet, SvxVerJustifyItem( eVertJust ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxVerJustifyItem( eVertJust ), bSkipPoolDefs );
 
     // indent
     sal_uInt16 nScIndent = mnIndent * 200; // 1 Excel unit == 10 pt == 200 twips
-    lcl_xistyle_PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, nScIndent ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, nScIndent ), bSkipPoolDefs );
 
     // text orientation/rotation
     XclTextOrient eTmpOrient = meOrient;
@@ -887,19 +862,19 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
         case xlTextOrient90cw:      eSvxOrient = SVX_ORIENTATION_TOPBOTTOM;  break;
         default:    DBG_ERRORFILE( "XclImpCellAlign::FillToItemSet - unknown text orientation" );
     };
-    lcl_xistyle_PutItem( rItemSet, SvxOrientationItem( eSvxOrient ), bSkipPoolDefs );
-    lcl_xistyle_PutItem( rItemSet, SvxRotateModeItem( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxOrientationItem( eSvxOrient ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxRotateModeItem( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     if( eTmpOrient == xlTextOrientNoRot )
     {
         // set an angle in the range from -90 to 90 degrees
         DBG_ASSERT( mnRotation <= 180, "XclImpCellAlign::FillToItemSet - illegal rotation angle" );
         sal_Int32 nAngle = XclTools::GetScRotation( mnRotation );
-        lcl_xistyle_PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
     }
     // #105933# set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
     SfxBoolItem aAsianVertItem( ATTR_VERTICAL_ASIAN );
     aAsianVertItem.SetValue( (eSvxOrient == SVX_ORIENTATION_STACKED) && pFont && pFont->HasCjk() );
-    lcl_xistyle_PutItem( rItemSet, aAsianVertItem, bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, aAsianVertItem, bSkipPoolDefs );
 
     // CTL text direction
     SvxFrameDirection eFrameDir = FRMDIR_ENVIRONMENT;
@@ -910,7 +885,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
         case xlTextDirRTL:      eFrameDir = FRMDIR_HORI_RIGHT_TOP;  break;
         default:    DBG_ERRORFILE( "XclImpCellAlign::FillToItemSet - unknown CTL text direction" );
     }
-    lcl_xistyle_PutItem( rItemSet, SvxFrameDirectionItem( eFrameDir ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( eFrameDir ), bSkipPoolDefs );
 }
 
 
@@ -1039,7 +1014,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
             aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
         if( mbBottomUsed && lcl_xistyle_ConvertBorderLine( aLine, rPalette, mnBottomLine, mnBottomColor ) )
             aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
-        lcl_xistyle_PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
     }
 }
 
@@ -1138,7 +1113,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
             aBrushItem.SetColor( aFore );
         }
 
-        lcl_xistyle_PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
     }
 }
 
@@ -1260,6 +1235,8 @@ void XclImpXF::ReadXF8( XclImpStream& rStrm )
     sal_uInt8 nUsedFlags;
     ::extract_value( nUsedFlags, nMiscAttrib, 10, 6 );
     SetUsedFlags( nUsedFlags );
+    GetTracer().TraceShrinkToFit(::get_flag( nMiscAttrib, EXC_XF_SHRINK ));
+    GetTracer().TraceDiagonalBorder(::get_flag( nBorder1, EXC_XF_DIAGONAL_BOTH ) );
 
     // attributes
     maProtection.FillFromXF3( nTypeProt );
@@ -1394,19 +1371,35 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // value format
     if( mbFmtUsed )
+    {
         GetNumFmtBuffer().FillToItemSet( rItemSet, mnNumFmt, bSkipPoolDefs );
+        // Trace occurrences of Windows date formats
+        GetTracer().TraceDates(mnNumFmt);
+    }
 
     // alignment
     if( mbAlignUsed )
+    {
         maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnFont ), bSkipPoolDefs );
+        GetTracer().TraceAlignmentFill(maAlignment.meHorAlign == xlHAlignFill);
+    }
 
     // border
     if( mbBorderUsed )
+    {
         maBorder.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        GetTracer().TraceBorderLineStyle(maBorder.mnLeftLine > EXC_LINE_HAIR ||
+            maBorder.mnRightLine > EXC_LINE_HAIR || maBorder.mnTopLine > EXC_LINE_HAIR ||
+            maBorder.mnBottomLine > EXC_LINE_HAIR );
+    }
 
     // area
     if( mbAreaUsed )
+    {
         maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        GetTracer().TraceFillPattern(maArea.mnPattern != EXC_PATT_NONE &&
+            maArea.mnPattern != EXC_PATT_SOLID);
+    }
 
     return *mpPattern;
 }
@@ -1545,6 +1538,17 @@ bool XclImpXFIndex::Expand( const XclImpXFIndex& rNextStyle )
     return false;
 }
 
+// ----------------------------------------------------------------------------
+
+void XclImpXFIndexColumn::SetDefaultXF( sal_uInt32 nEncXFIndex )
+{
+    // List should be empty when inserting the default column format.
+    // Later explicit SetXF() calls will break up this range.
+    DBG_ASSERT( maIndexList.Empty(), "Setting Default Column XF is not empty");
+
+    // insert a complete row range with one insert.
+    maIndexList.Append( new XclImpXFIndex( 0, MAXROW, nEncXFIndex ));
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1792,6 +1796,17 @@ void XclImpXFIndexBuffer::SetRowDefXF( sal_uInt16 nRow, sal_uInt16 nXFIndex )
 {
     for( sal_uInt16 nCol = 0; nCol <= MAXCOL; ++nCol )
         SetXF( nCol, nRow, nXFIndex, xlXFModeRow );
+}
+
+void XclImpXFIndexBuffer::SetColumnDefXF( sal_uInt16 nCol, sal_uInt16 nXFIndex )
+{
+    // our array should not have values when creating the default column format.
+    DBG_ASSERT( !mppColumns[ nCol ].get(), "Default Column of XFs already has values.");
+
+    mppColumns[ nCol ].reset( new XclImpXFIndexColumn );
+    if( nCol >= mnUsedCount )
+        mnUsedCount = nCol + 1;
+    mppColumns[ nCol ]->SetDefaultXF( nXFIndex );
 }
 
 void XclImpXFIndexBuffer::SetBorderLine( const ScRange& rRange, sal_uInt16 nTab, sal_uInt16 nLine )
