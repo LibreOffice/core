@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:10:31 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ czech ] = "Smazat sloupec nebo sloupce";
         Text[ hebrew ] = "Ganze ~Spalten löschen";
         Text[ hindi ] = "सम्पूर्ण ~स्तंभों को मिटाओ";
+        Text[ slovak ] = "Zmazať ~celý stĺpec(e)";
     };
     RadioButton BTN_DELROWS
     {
@@ -169,6 +170,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ czech ] = "Smazat řádek nebo řádky";
         Text[ hebrew ] = "Ganze ~Zeilen löschen";
         Text[ hindi ] = "सम्पूर्ण ~पंक्तियों को मिटाओ";
+        Text[ slovak ] = "Zmazať celý ~riadok(y)";
     };
     RadioButton BTN_CELLSLEFT
     {
@@ -203,6 +205,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ czech ] = "Posunout buňky doleva";
         Text[ hebrew ] = "Zellen nach ~links verschieben";
         Text[ hindi ] = "कोष्ठों को बायाँ ओर स्थान परिवर्तन करो";
+        Text[ slovak ] = "Posunúť bun~ky vľavo";
     };
     RadioButton BTN_CELLSUP
     {
@@ -237,6 +240,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ czech ] = "Posunout buňky nahoru";
         Text[ hebrew ] = "Zellen nach ~oben verschieben";
         Text[ hindi ] = "कोष्ठों को ~ऊपर की ओर स्थान परिवर्तन करो";
+        Text[ slovak ] = "Posunúť b~unky hore";
     };
     FixedLine FL_FRAME
     {
@@ -270,6 +274,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ chinese_simplified ] = "删除单元格";
     Text[ russian ] = "������� ������";
@@ -286,6 +291,7 @@ ModalDialog RID_SCDLG_DELCELL
     Text[ czech ] = "Odstranit buňky";
     Text[ hebrew ] = "Zellen löschen";
     Text[ hindi ] = "कोष्ठों को मिटाओ ";
+    Text[ slovak ] = "Odstrániť bunky";
 };
 ModalDialog RID_SCDLG_INSCELL
 {
@@ -360,6 +366,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ czech ] = "Celý sloupec";
         Text[ hebrew ] = "Ganze ~Spalten einfügen";
         Text[ hindi ] = "सम्पूर्ण ~स्तंभ";
+        Text[ slovak ] = "Celý stĺpe~c";
     };
     RadioButton BTN_INSROWS
     {
@@ -394,6 +401,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ czech ] = "Celý řádek";
         Text[ hebrew ] = "Ganze ~Zeilen einfügen";
         Text[ hindi ] = "सम्पूर्ण पं~क्ति";
+        Text[ slovak ] = "Celý ~riadok";
     };
     RadioButton BTN_CELLSRIGHT
     {
@@ -428,6 +436,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ czech ] = "Posunout buňky vpravo";
         Text[ hebrew ] = "Zellen nach ~rechts verschieben";
         Text[ hindi ] = "कोष्ठों को ~दाहिनी ओर स्थान परिवर्तन करो";
+        Text[ slovak ] = "Posunúť bunky vp~ravo";
     };
     RadioButton BTN_CELLSDOWN
     {
@@ -462,6 +471,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ czech ] = "Posunout buňky dolů";
         Text[ hebrew ] = "Zellen nach ~unten verschieben";
         Text[ hindi ] = "कोष्ठों को ~नीचे की ओर स्थान परिवर्तन करो";
+        Text[ slovak ] = "Posunúť bunky ~dole";
     };
     FixedLine FL_FRAME
     {
@@ -495,6 +505,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ chinese_simplified ] = "插入单元格";
     Text[ russian ] = "�������� ������";
@@ -511,6 +522,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text[ czech ] = "Vložit buňky";
     Text[ hebrew ] = "Zellen einfügen";
     Text[ hindi ] = "कोष्ठों को जोड़ो";
+    Text[ slovak ] = "Vložiť bunky";
 };
 
 Bitmap RID_SCTEAMDLGBMP1
@@ -591,6 +603,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Smazat vše";
         Text[ hebrew ] = "~Alles löschen";
         Text[ hindi ] = "सब ~मिटाओ";
+        Text[ slovak ] = "Zm~azať všetko";
     };
     CheckBox BTN_DELSTRINGS
     {
@@ -625,6 +638,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Řetězce";
         Text[ hebrew ] = "Zeichen~ketten";
         Text[ hindi ] = "~स्ट्रिंग्स";
+        Text[ slovak ] = "~Reťazce";
     };
     CheckBox BTN_DELNUMBERS
     {
@@ -659,6 +673,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Čísla";
         Text[ hebrew ] = "~Zahlen";
         Text[ hindi ] = "~संख्या";
+        Text[ slovak ] = "Čís~la";
     };
     CheckBox BTN_DELDATETIME
     {
@@ -693,6 +708,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Datum a čas";
         Text[ hebrew ] = "~Datum & Zeit";
         Text[ hindi ] = "~दिनांक और समय";
+        Text[ slovak ] = "~Dátum & Čas";
     };
     CheckBox BTN_DELFORMULAS
     {
@@ -727,6 +743,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~Formulas";
+        Text[ slovak ] = "Vzorc~e";
     };
     CheckBox BTN_DELATTRS
     {
@@ -761,6 +778,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Formáty";
         Text[ hebrew ] = "Forma~te";
         Text[ hindi ] = "रच~ना";
+        Text[ slovak ] = "For~máty";
     };
     CheckBox BTN_DELNOTES
     {
@@ -795,6 +813,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Poznámky";
         Text[ hebrew ] = "~Notizen";
         Text[ hindi ] = "टिप्प~णी";
+        Text[ slovak ] = "Poz~námky";
     };
     CheckBox BTN_DELOBJECTS
     {
@@ -828,6 +847,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Objekty";
         Text[ hebrew ] = "~Objekte";
         Text[ hindi ] = "~वस्तु";
+        Text[ slovak ] = "~Objekty";
     };
     FixedLine FL_FRAME
     {
@@ -861,6 +881,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ chinese_simplified ] = "删除内容";
     Text[ russian ] = "������� ����������";
@@ -877,6 +898,7 @@ ModalDialog RID_SCDLG_DELCONT
     Text[ czech ] = "Smazat obsah";
     Text[ hebrew ] = "Inhalte löschen";
     Text[ hindi ] = "विषयों को मिटाओ";
+    Text[ slovak ] = "Zmazať obsah";
 };
 
 
@@ -953,6 +975,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Vložit vše";
         Text[ hebrew ] = "~Alles einfügen";
         Text[ hindi ] = "सब ~छिपकाओ";
+        Text[ slovak ] = "~Vložiť všetko";
     };
     CheckBox BTN_INSSTRINGS
     {
@@ -987,6 +1010,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Řetězce";
         Text[ hebrew ] = "Zeichen~ketten";
         Text[ hindi ] = "~स्ट्रिंग्स";
+        Text[ slovak ] = "~Reťazce";
     };
     CheckBox BTN_INSNUMBERS
     {
@@ -1021,6 +1045,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Čísla";
         Text[ hebrew ] = "~Zahlen";
         Text[ hindi ] = "~संख्या";
+        Text[ slovak ] = "Čís~la";
     };
     CheckBox BTN_INSDATETIME
     {
@@ -1055,6 +1080,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Datum a čas";
         Text[ hebrew ] = "~Datum & Zeit";
         Text[ hindi ] = "~दिनांक और समय";
+        Text[ slovak ] = "~Dátum & čas";
     };
     CheckBox BTN_INSFORMULAS
     {
@@ -1089,6 +1115,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
+        Text[ slovak ] = "Vzorc~e";
     };
     CheckBox BTN_INSATTRS
     {
@@ -1123,6 +1150,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Formáty";
         Text[ hebrew ] = "Forma~te";
         Text[ hindi ] = "रच~ना";
+        Text[ slovak ] = "For~máty";
     };
     CheckBox BTN_INSOBJECTS
     {
@@ -1155,6 +1183,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ portuguese_brazilian ] = "O~bjects";
         Text[ thai ] = "O~bjects";
         Text[ hindi ] = "O~bjects";
+        Text[ slovak ] = "~Objekty";
     };
     CheckBox BTN_INSNOTES
     {
@@ -1189,6 +1218,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Poznámky";
         Text[ hebrew ] = "~Notizen";
         Text[ hindi ] = "टिप्प~णी";
+        Text[ slovak ] = "P~oznámky";
     };
     FixedLine FL_FRAME
     {
@@ -1222,6 +1252,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     RadioButton BTN_OP_NOOP
     {
@@ -1254,6 +1285,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Žádný";
         Text[ hebrew ] = "K~eine";
         Text[ hindi ] = "कोई ~नहीं";
+        Text[ slovak ] = "N~ič";
     };
     RadioButton BTN_OP_ADD
     {
@@ -1286,6 +1318,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Sečíst";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     RadioButton BTN_OP_SUB
     {
@@ -1318,6 +1351,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Odečíst";
         Text[ hebrew ] = "~Subtrahieren";
         Text[ hindi ] = "घ~टाओ";
+        Text[ slovak ] = "Odčí~tať";
     };
     RadioButton BTN_OP_MUL
     {
@@ -1350,6 +1384,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Násobit";
         Text[ hebrew ] = "~Multiplizieren";
         Text[ hindi ] = "गुण~न";
+        Text[ slovak ] = "Ná~sobiť";
     };
     RadioButton BTN_OP_DIV
     {
@@ -1382,6 +1417,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Dělit";
         Text[ hebrew ] = "D~ividieren";
         Text[ hindi ] = "भाग~गणित";
+        Text[ slovak ] = "~Deliť";
     };
     FixedLine FL_OPERATION
     {
@@ -1414,6 +1450,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Operace";
         Text[ hebrew ] = "Rechenoperationen";
         Text[ hindi ] = "कार्य";
+        Text[ slovak ] = "Operácie";
     };
     CheckBox BTN_SKIP_EMPTY
     {
@@ -1446,6 +1483,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Přeskočit prázdné buňky";
         Text[ hebrew ] = "~Leerzellen überspringen";
         Text[ hindi ] = "खाली कोष्ठों को ~त्यागना";
+        Text[ slovak ] = "Vynechať prázdne bun~ky";
     };
     CheckBox BTN_TRANSPOSE
     {
@@ -1478,6 +1516,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Transponovat";
         Text[ hebrew ] = "Transp~onieren";
         Text[ hindi ] = "~ट्रान्स्पोस";
+        Text[ slovak ] = "~Transponovať";
     };
     CheckBox BTN_LINK
     {
@@ -1510,6 +1549,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Odkaz";
         Text[ hebrew ] = "Verknü~pfen";
         Text[ hindi ] = "~लिंक";
+        Text[ slovak ] = "~Odkaz";
     };
     FixedLine FL_OPTIONS
     {
@@ -1542,6 +1582,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     RadioButton BTN_MV_NONE
     {
@@ -1574,6 +1615,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Nepřesouvat";
         Text[ hebrew ] = "Nicht ~verschieben";
         Text[ hindi ] = "स्थान~परिवर्तन मत करो";
+        Text[ slovak ] = "N~eposúvať";
     };
     RadioButton BTN_MV_DOWN
     {
@@ -1606,6 +1648,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Dolů";
         Text[ hebrew ] = "Nach ~unten";
         Text[ hindi ] = "नी~चे";
+        Text[ slovak ] = "Do~le";
     };
     RadioButton BTN_MV_RIGHT
     {
@@ -1638,6 +1681,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "Nach re~chts";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     FixedLine FL_MOVE
     {
@@ -1670,6 +1714,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ czech ] = "Posunout buňky";
         Text[ hebrew ] = "Zellen verschieben";
         Text[ hindi ] = "कोष्ठों का स्थान परिवर्तन करो";
+        Text[ slovak ] = "Posunúť bunky";
     };
     FixedLine FL_SEP1
     {
@@ -1696,6 +1741,7 @@ ModalDialog RID_SCDLG_INSCONT
     Text[ czech ] = "Vložit jako";
     Text[ hebrew ] = "‮הדבקה מיוחדת‬";
     Text[ hindi ] = "विशेष को छिपकाओ";
+    Text[ slovak ] = "Vložiť inak";
 };
 ModalDialog RID_SCDLG_MOVETAB
 {
@@ -1769,6 +1815,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ czech ] = "Do dokumentu";
         Text[ hebrew ] = "~Ins Dokument";
         Text[ hindi ] = "~लेखपत्र में";
+        Text[ slovak ] = "K ~dokumentu";
     };
     ListBox LB_DEST
     {
@@ -1810,6 +1857,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ czech ] = "Vložit před";
         Text[ hebrew ] = "Ei~nfügen vor";
         Text[ hindi ] = "से पहिले ~जोड़ो";
+        Text[ slovak ] = "Vlož~iť pred";
     };
     ListBox LB_INSERT
     {
@@ -1851,6 +1899,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ czech ] = "Kopírovat";
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "~प्रतिलिपि";
+        Text[ slovak ] = "~Kopírovať";
     };
     String STR_NEWDOC
     {
@@ -1882,6 +1931,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ czech ] = "- nový dokument -";
         Text[ hebrew ] = "- neues Dokument -";
         Text[ hindi ] = "- नया लेखपत्र -";
+        Text[ slovak ] = "- nový dokument -";
     };
     Text[ chinese_simplified ] = "移动或复制工作表";
     Text[ russian ] = "�����������/����������� ����";
@@ -1898,6 +1948,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text[ czech ] = "Přesunout/Kopírovat list";
     Text[ hebrew ] = "Tabelle verschieben/kopieren";
     Text[ hindi ] = "शीट् का स्थान परिवर्तन/प्रतिलिपि";
+    Text[ slovak ] = "Presunúť/Kopírovať list";
 };
 ModalDialog RID_SCDLG_STRINPUT
 {
@@ -2078,6 +2129,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField ED_VALUE
     {
@@ -2122,6 +2174,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ czech ] = "Výchozí hodnota";
         Text[ hebrew ] = "~Standardwert";
         Text[ hindi ] = "~अनुपस्थिति मूल्य";
+        Text[ slovak ] = "Východzia ho~dnota";
     };
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Szeroko�� kolumny";
@@ -2137,6 +2190,7 @@ ModalDialog RID_SCDLG_COL_MAN
     Text[ czech ] = "Šířka sloupce";
     Text[ hebrew ] = "Spaltenbreite";
     Text[ hindi ] = "स्तंभ चौड़ाई";
+    Text[ slovak ] = "Šírka stĺpca";
 };
 
 ModalDialog RID_SCDLG_COL_OPT
@@ -2213,6 +2267,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Pridať";
     };
     MetricField ED_VALUE
     {
@@ -2258,6 +2313,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ czech ] = "Výchozí hodnota";
         Text[ hebrew ] = "~Standardwert";
         Text[ hindi ] = "~अनुपस्थिति मूल्य";
+        Text[ slovak ] = "Východzia ho~dnota";
     };
     Text[ russian ] = "����������� ������ �������";
     Text[ polish ] = "Optymalna szeroko�� kolumn";
@@ -2273,6 +2329,7 @@ ModalDialog RID_SCDLG_COL_OPT
     Text[ czech ] = "Optimální šířka sloupce";
     Text[ hebrew ] = "‮רוחב טור מיטבי‬";
     Text[ hindi ] = "योग्य स्तंभ चौड़ाई";
+    Text[ slovak ] = "Optimálna šírka stĺpca";
 };
 
 ModalDialog RID_SCDLG_ROW_MAN
@@ -2349,6 +2406,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     MetricField ED_VALUE
     {
@@ -2394,6 +2452,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ czech ] = "Výchozí hodnota";
         Text[ hebrew ] = "~Standardwert";
         Text[ hindi ] = "~अनुपस्थिति मूल्य";
+        Text[ slovak ] = "Východzia ho~dnota";
     };
     Text[ russian ] = "������ ������";
     Text[ polish ] = "Wysoko�� wierszy";
@@ -2409,6 +2468,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     Text[ czech ] = "Výška řádku";
     Text[ hebrew ] = "‮גובה שורה‬";
     Text[ hindi ] = "पंक्ति की ऊँचाई";
+    Text[ slovak ] = "Výška riadku";
 };
 
 ModalDialog RID_SCDLG_ROW_OPT
@@ -2485,6 +2545,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Pridať";
     };
     MetricField ED_VALUE
     {
@@ -2529,6 +2590,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ czech ] = "Výchozí hodnota";
         Text[ hebrew ] = "~Standardwert";
         Text[ hindi ] = "~अनुपस्थिति मूल्य";
+        Text[ slovak ] = "Východzia ho~dnota";
     };
     Text[ russian ] = "����������� ������ ������";
     Text[ polish ] = "Optymalna wysoko�� wierszy";
@@ -2544,6 +2606,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     Text[ czech ] = "Optimální výška řádku";
     Text[ hebrew ] = "‮גובה שורה מיטבי‬";
     Text[ hindi ] = "योग्य पंक्ति की ऊँचाई";
+    Text[ slovak ] = "Optimálna výška riadku";
 };
 
 
@@ -2620,6 +2683,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text[ czech ] = "Vybrat";
     Text[ hebrew ] = "‮בחירה‬l";
     Text[ hindi ] = "चुनो";
+    Text[ slovak ] = "Vybrať";
 };
 
 ModalDialog RID_SCDLG_SHOW_TAB
@@ -2703,6 +2767,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ czech ] = "Skryté listy";
         Text[ hebrew ] = "Ausgeblendete Tabellen";
         Text[ hindi ] = "छिपा हुआ शीट्";
+        Text[ slovak ] = "Skryté listy";
     };
     Text[ chinese_simplified ] = "显示工作表";
     Text[ russian ] = "�������� ����";
@@ -2719,6 +2784,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     Text[ czech ] = "Zobrazit list";
     Text[ hebrew ] = "Tabelle einblenden";
     Text[ hindi ] = "शीट् दिखाओ";
+    Text[ slovak ] = "Zobraziť list";
 };
 
 
@@ -2776,6 +2842,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Den";
         Text[ hebrew ] = "~Tag";
         Text[ hindi ] = "दि~न";
+        Text[ slovak ] = "~Deň";
     };
     RadioButton BTN_DAY_OF_WEEK
     {
@@ -2810,6 +2877,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Den v týdnu";
         Text[ hebrew ] = "~Wochentag";
         Text[ hindi ] = "~सप्ताह का कोई दिन";
+        Text[ slovak ] = "Praco~vný deň";
     };
     RadioButton BTN_MONTH
     {
@@ -2844,6 +2912,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Měsíc";
         Text[ hebrew ] = "~Monat";
         Text[ hindi ] = "~मास";
+        Text[ slovak ] = "~Mesiac";
     };
     RadioButton BTN_YEAR
     {
@@ -2878,6 +2947,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Rok";
         Text[ hebrew ] = "~Jahr";
         Text[ hindi ] = "व~र्ष";
+        Text[ slovak ] = "~Rok";
     };
     FixedLine FL_TIME_UNIT
     {
@@ -2911,6 +2981,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Jednotka času";
         Text[ hebrew ] = "Zeiteinheit";
         Text[ hindi ] = "समय यूनिट्";
+        Text[ slovak ] = "Jednotka času";
     };
     RadioButton BTN_RIGHT
     {
@@ -2945,6 +3016,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "~Rechts";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     RadioButton BTN_LEFT
     {
@@ -2979,6 +3051,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     RadioButton BTN_TOP
     {
@@ -3013,6 +3086,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Nahoru";
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "H~ore";
     };
     RadioButton BTN_BOTTOM
     {
@@ -3047,6 +3121,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Dolů";
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~नीचे";
+        Text[ slovak ] = "~Dole";
     };
     FixedLine FL_DIRECTION
     {
@@ -3080,6 +3155,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Směr";
         Text[ hebrew ] = "Richtung";
         Text[ hindi ] = "दिशा";
+        Text[ slovak ] = "Smer";
     };
     RadioButton BTN_ARITHMETIC
     {
@@ -3114,6 +3190,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Lineární";
         Text[ hebrew ] = "~Arithmetisch";
         Text[ hindi ] = "संकु~चित";
+        Text[ slovak ] = "Li~neárny";
     };
     RadioButton BTN_GEOMETRIC
     {
@@ -3148,6 +3225,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Růst";
         Text[ hebrew ] = "~Geometrisch";
         Text[ hindi ] = "~विकास";
+        Text[ slovak ] = "R~ast";
     };
     RadioButton BTN_DATE
     {
@@ -3182,6 +3260,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "~Datum";
         Text[ hindi ] = "दिनां~क";
+        Text[ slovak ] = "Dá~tum";
     };
     RadioButton BTN_AUTOFILL
     {
@@ -3216,6 +3295,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Automatické vyplnění";
         Text[ hebrew ] = "Auto-Aus~füllen";
         Text[ hindi ] = "~स्वयं भरो";
+        Text[ slovak ] = "~Automatické vyplňovanie";
     };
     FixedLine FL_TYPE
     {
@@ -3249,6 +3329,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Typ posloupnosti";
         Text[ hebrew ] = "Reihentyp";
         Text[ hindi ] = "श्रृंखला वर्ग";
+        Text[ slovak ] = "Druh postupnosti";
     };
     FixedLine FL_SEP1
     {
@@ -3291,6 +3372,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Počáteční hodnota";
         Text[ hebrew ] = "~Startwert";
         Text[ hindi ] = "~प्रारंभ मूल्य";
+        Text[ slovak ] = "~Počiatočná hodnota";
     };
     Edit ED_START_VALUES
     {
@@ -3331,6 +3413,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Koncová hodnota";
         Text[ hebrew ] = "~Endwert";
         Text[ hindi ] = "अंतिम ~मूल्य";
+        Text[ slovak ] = "Konečná hodno~ta";
     };
     Edit ED_END_VALUES
     {
@@ -3371,6 +3454,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Přírůstek";
         Text[ hebrew ] = "~Inkrement";
         Text[ hindi ] = "ब~ढ़ती";
+        Text[ slovak ] = "Prír~astok";
     };
     Edit ED_INCREMENT
     {
@@ -3409,6 +3493,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ czech ] = "Neplatná hodnota";
         Text[ hebrew ] = "Ungültiger Wert";
         Text[ hindi ] = "अमान्य मूल्य";
+        Text[ slovak ] = "Neplatná hodnota";
     };
     OKButton BTN_OK
     {
@@ -3444,6 +3529,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ czech ] = "Vyplnit posloupnost";
     Text[ hebrew ] = "Reihe füllen";
     Text[ hindi ] = "श्रृंखला भरो";
+    Text[ slovak ] = "Vyplniť postupnosti";
 };
 
 #define TXT_COLS \
@@ -3474,7 +3560,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ thai ] = "~คอลัมน์";    \
     Text[ czech ] = "Sloupce";  \
     Text[ hebrew ] = "‮טורים‬";    \
-    Text[ hindi ] = "~स्तंभें";
+    Text[ hindi ] = "~स्तंभें";   \
+    Text[ slovak ] = "Stĺp~ce";
 
 
 #define TXT_ROWS \
@@ -3505,7 +3592,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ thai ] = "แ~ถว";    \
     Text[ czech ] = "Řádky";  \
     Text[ hebrew ] = "Z~eilen"; \
-    Text[ hindi ] = "~पंक्तियाँ";
+    Text[ hindi ] = "~पंक्तियाँ"; \
+    Text[ slovak ] = "~Riadky";
 
 
 ModalDialog RID_SCDLG_GROUP
@@ -3588,6 +3676,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ czech ] = "Zahrnout";
         Text[ hebrew ] = "Aktivieren für";
         Text[ hindi ] = "सम्मिलित करो";
+        Text[ slovak ] = "Zahrnúť";
     };
     String STR_UNGROUP
     {
@@ -3619,6 +3708,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ czech ] = "Deaktivovat pro";
         Text[ hebrew ] = "Aufheben für";
         Text[ hindi ] = "केलिए निष्क्रिय करो";
+        Text[ slovak ] = "Deaktivovať pre";
     };
     Text = "Gruppierung" ;
     Text [ ENGLISH ] = "Group" ;
@@ -3648,6 +3738,7 @@ ModalDialog RID_SCDLG_GROUP
     Text[ czech ] = "Seskupit";
     Text[ hebrew ] = "Gruppierung";
     Text[ hindi ] = "समूह";
+    Text[ slovak ] = "Zoskupiť";
 };
 
  // Ableitungen
@@ -3742,6 +3833,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "~Oberer Zeile";
         Text[ hindi ] = "पृष्ठ के ~ऊपर की टीका";
+        Text[ slovak ] = "Záhlavi~e";
     };
     CheckBox BTN_LEFT
     {
@@ -3775,6 +3867,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ czech ] = "Levý sloupec";
         Text[ hebrew ] = "~Linker Spalte";
         Text[ hindi ] = "~बायाँ स्तंभ";
+        Text[ slovak ] = "Ľavý stĺp~ec";
     };
     CheckBox BTN_BOTTOM
     {
@@ -3808,6 +3901,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ czech ] = "Zápatí";
         Text[ hebrew ] = "~Unterer Zeile";
         Text[ hindi ] = "~पृष्ठ के अधोभाग की टीका";
+        Text[ slovak ] = "Zá~pätie";
     };
     CheckBox BTN_RIGHT
     {
@@ -3841,6 +3935,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ czech ] = "Pravý sloupec";
         Text[ hebrew ] = "~Rechter Spalte";
         Text[ hindi ] = "~दाहिना स्तंभ";
+        Text[ slovak ] = "P~ravý stĺpec";
     };
     OKButton BTN_OK
     {
@@ -3892,6 +3987,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ czech ] = "Vytvořit jméno z";
         Text[ hebrew ] = "Namen erzeugen aus";
         Text[ hindi ] = "से नाम उत्पन्न करो";
+        Text[ slovak ] = "Vytvoriť názov z";
     };
     Text = "Namen erzeugen" ;
     Text [ ENGLISH ] = "Create Names" ;
@@ -3920,6 +4016,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     Text[ czech ] = "Vytvořit jména";
     Text[ hebrew ] = "Namen erzeugen";
     Text[ hindi ] = "नामों को उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť názvy";
 };
 
 ModalDialog RID_SCDLG_NAMES_PASTE
@@ -3960,6 +4057,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ czech ] = "Vložit název";
         Text[ hebrew ] = "Namen einfügen";
         Text[ hindi ] = "नाम छिपकाओ";
+        Text[ slovak ] = "Vložiť názov";
     };
     ListBox LB_ENTRYLIST
     {
@@ -4021,6 +4119,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ czech ] = "Vložit seznam";
         Text[ hebrew ] = "~Alle einfügen";
         Text[ hindi ] = "~सूची छिपकाओ";
+        Text[ slovak ] = "V~ložiť zoznam";
     };
     Text = "Namen einf�gen" ;
     Text [ ENGLISH ] = "Paste Name" ;
@@ -4049,6 +4148,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     Text[ czech ] = "Vložit jméno";
     Text[ hebrew ] = "Namen einfügen";
     Text[ hindi ] = "नाम छिपकाओ";
+    Text[ slovak ] = "Vložiť názov";
 };
 
 FloatingWindow RID_SCDLG_TEAM
@@ -4087,6 +4187,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ czech ] = "Tým %PRODUCTNAME Calc";
     Text[ hebrew ] = "Das %PRODUCTNAME Calc Team";
     Text[ hindi ] = "%PRODUCTNAME गणना टीम";
+    Text[ slovak ] = "%PRODUCTNAME Calc Team";
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW
@@ -4126,6 +4227,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ czech ] = "První sloupec obsahuje popisky";
         Text[ hebrew ] = "Erste ~Spalte als Beschriftung";
         Text[ hindi ] = "पहिला ~स्तंभ लेबिल जैसे";
+        Text[ slovak ] = "Prvý stĺpe~c ako popis";
     };
     CheckBox 2
     {
@@ -4158,6 +4260,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ czech ] = "První řádek obsahuje popisky";
         Text[ hebrew ] = "Erste ~Zeile als Beschriftung";
         Text[ hindi ] = "पहिला ~पंक्ति लेबिल जैसे";
+        Text[ slovak ] = "Prvý ~riadok ako popis";
     };
     FixedLine 6
     {
@@ -4190,6 +4293,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ czech ] = "Popisky";
         Text[ hebrew ] = "‮מדבקות‬";
         Text[ hindi ] = "लेबिलें";
+        Text[ slovak ] = "Popisky";
     };
     OKButton 3
     {
@@ -4234,7 +4338,10 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ czech ] = "Změnit zdrojovou oblast dat";
     Text[ hebrew ] = "Quelldatenbereich ändern";
     Text[ hindi ] = "मूल ड़ॉटा फैलाव को बदलो";
+    Text[ slovak ] = "Zmeniť zdrojovú dátovú oblasť";
 };
+
+
 
 
 
