@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:47:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #ifndef _SFXWORKWIN_HXX
 #define _SFXWORKWIN_HXX
 
+#include <vector>
+
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
@@ -105,75 +107,6 @@ class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
 class SfxWorkWindow;
 
-struct ThreadHelpBase
-{
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-        ThreadHelpBase( ::vos::IMutex& aMutex )
-                :   m_aLock( aMutex )
-                ,   m_pMutex( new osl::Mutex )
-        {
-        }
-
-        virtual ~ThreadHelpBase();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  public member
-    //  Make it mutable for using in const functions!
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-        ::vos::IMutex&  m_aLock;
-        ::osl::Mutex*   m_pMutex;
-};
-
-class UIElementWrapper : public ::drafts::com::sun::star::ui::XUIElement    ,
-                         private ThreadHelpBase                             ,
-                         public  ::cppu::OBroadcastHelper                   ,
-                         public ::cppu::OPropertySetHelper                  ,
-                         public ::cppu::OWeakObject
-{
-    public:
-        UIElementWrapper( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, SfxWorkWindow* pWorkWin, const rtl::OUString& aTbxId );
-        virtual ~UIElementWrapper();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
-
-        // XUIElement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getSettings(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xSettings ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-    protected:
-
-        //  OPropertySetHelper
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
-                                                                                                               com::sun::star::uno::Any&        aOldValue       ,
-                                                                                                               sal_Int32                        nHandle         ,
-                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException );
-        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
-                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception                 );
-        virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
-                                                                                                   sal_Int32                    nHandle         ) const;
-        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
-        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
-
-    private:
-        static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
-
-        rtl::OUString       m_aType;
-        rtl::OUString       m_aName;
-        SfxToolBoxManager*  m_pTbxMgr;
-};
-
-com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > SAL_CALL CreateToolBox( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, const ::rtl::OUString& aTbxId );
 
 //====================================================================
 // Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
@@ -182,17 +115,21 @@ struct SfxObjectBar_Impl
 {
     USHORT              nId;    // Resource - und ConfigId der Toolbox
     USHORT              nMode;  // spezielle Sichtbarkeitsflags
-    SfxToolBoxManager*  pTbx;
+    USHORT              nPos;
+    USHORT              nIndex;
+    sal_Bool            bDestroy;
+//  SfxToolBoxManager*  pTbx;
     String              aName;
-    ResMgr*             pResMgr;
+//  ResMgr*             pResMgr;
     SfxInterface*       pIFace;
 
     SfxObjectBar_Impl() :
         nId(0),
         nMode(0),
-        pTbx(0),
-        pResMgr(0),
-        pIFace(0)
+//      pTbx(0),
+//      pResMgr(0),
+        pIFace(0),
+        bDestroy(sal_False)
     {}
 };
 
@@ -335,13 +272,13 @@ struct SfxSplitWin_Impl
 class SfxWorkWindow
 {
     friend class UIElementWrapper;
-    friend com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > CreateToolBox( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aTbxId );
 
 protected:
     SvUShorts               aSortedList;
     SfxStatBar_Impl         aStatBar;
-    SfxObjectBar_Impl       aObjBars[SFX_OBJECTBAR_MAX];
-    SfxObjectBarList_Impl   aObjBarLists[SFX_OBJECTBAR_MAX];
+    std::vector< SfxObjectBar_Impl > aObjBarList;
+//  SfxObjectBar_Impl       aObjBars[SFX_OBJECTBAR_MAX];
+//  SfxObjectBarList_Impl   aObjBarLists[SFX_OBJECTBAR_MAX];
     Rectangle               aClientArea;
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
@@ -357,9 +294,11 @@ protected:
     USHORT                  nOrigMode;
     BOOL                    bSorted : 1;
     BOOL                    bDockingAllowed : 1;
+    BOOL                    bInternalDockingAllowed : 1;
     BOOL                    bAllChildsVisible : 1;
     BOOL                    bIsFullScreen : 1;
     BOOL                    bShowStatusBar : 1;
+    BOOL                    bLocked : 1;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,BOOL);
@@ -384,6 +323,8 @@ public:
     Rectangle               GetFreeArea( BOOL bAutoHide ) const;
     void                    SetDockingAllowed(BOOL bSet)
                             { bDockingAllowed = bSet; }
+    void                    SetInternalDockingAllowed(BOOL bSet)
+                            { bInternalDockingAllowed = bSet; }
     BOOL                    IsDockingAllowed() const
                             { return bDockingAllowed; }
     SfxWorkWindow*          GetParent_Impl() const
@@ -420,6 +361,7 @@ public:
     FASTBOOL                KnowsObjectBar_Impl( USHORT nPos ) const;
     void                    SetObjectBarVisibility_Impl( USHORT nVis );
     BOOL                    IsContainer_Impl() const;
+    void                    Lock_Impl( BOOL );
     void                    NextObjectBar_Impl( USHORT nPos );
     USHORT                  HasNextObjectBar_Impl( USHORT nPos, String* pStr=0 );
     void                    SetObjectBarCustomizeMode_Impl( BOOL );
