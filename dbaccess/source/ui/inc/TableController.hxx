@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
+ *  last change: $Author: oj $ $Date: 2002-07-02 08:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ namespace dbaui
 
         const OTypeInfo* getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfo* getTypeInfoByType(sal_Int32 _nDataType) const;
+
+        const OTypeInfo* getTypeInfoFallBack() const { return m_pTypeInfo; }
 
         virtual sal_Bool Construct(Window* pParent);
         // XEventListener

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:49:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-02 08:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,7 @@ sal_Bool OTableController::Construct(Window* pParent)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
+    sal_Bool bCheck = sal_True;
     if ( isModified() )
     {
         ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
@@ -748,10 +749,10 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC);
                     if ( isModified() )
-                        return sal_False; // when we save the table this must be false else some press cancel
+                        bCheck = sal_False; // when we save the table this must be false else some press cancel
                     break;
                 case RET_CANCEL:
-                    return sal_False;
+                    bCheck = sal_False;
                 default:
                     break;
             }
@@ -777,13 +778,15 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
                     }
                     break;
                 case RET_CANCEL:
-                    return sal_False;
+                    bCheck = sal_False;
                 default:
                     break;
             }
         }
     }
-    return sal_True;
+    if ( bCheck )
+        OSingleDocumentController::suspend(_bSuspend);
+    return bCheck;
 }
 // -----------------------------------------------------------------------------
 void OTableController::AddSupportedFeatures()
