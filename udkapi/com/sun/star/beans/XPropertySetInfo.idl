@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::beans::XPropertySetInfo
 /** specifies a set of properties.
 
     <p>There are three kinds of properties:
@@ -97,7 +96,6 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::beans::XPropertySetInfo::getProperties
     /** @returns
             a sequence with all property descriptors which are specified
             within this <type>XPropertySetInfo</type>.
@@ -106,7 +104,6 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::beans::XPropertySetInfo::getPropertyByName
     /** @returns
             the property with the specified name from the object.
 
@@ -121,7 +118,6 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::beans::XPropertySetInfo::hasPropertyByName
     /** @returns
             <TRUE/> if a property with the specified name exist;
             otherwise <FALSE/> is returned.
@@ -137,33 +133,4 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/12/15 16:22:48  mi
-    lost documentation from src536 inserted
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:12  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/23 12:43:24  mi
-    missing documentations
-
-    Revision 1.2  2000/02/07 11:24:19  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

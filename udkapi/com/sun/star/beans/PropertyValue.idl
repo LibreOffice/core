@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyValue.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::beans::PropertyValue
 /** specifies a property value.
  */
 struct PropertyValue
 {
-    // DocMerge from xml: field com::sun::star::beans::PropertyValue::Name
     /** specifies the name of the property.
 
-        <p>The name is unique within a sequence of <type>PropertyValue</type>s.</p>
+        <p>The name is unique within a sequence of <type>PropertyValue</type>s.
+        Upper and lower case are distinguished.</p>
      */
     string Name;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyValue::Handle
     /** contains an implementation-specific handle for the property.
 
         <p>It may be -1 if the implementation has no handle. If available
@@ -100,7 +98,6 @@ struct PropertyValue
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyValue::Value
     /** contains the value of the property or <void/>,
         if no value is available.
      */
@@ -108,7 +105,6 @@ struct PropertyValue
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyValue::State
     /** determines if the value comes from the object itself or from
         a default and if the value cannot be determined exactly.
      */
@@ -120,27 +116,4 @@ struct PropertyValue
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/17 09:30:05  mi
-    proofreading in layouted version
-
-    Revision 1.2  2000/01/28 09:26:43  mi
-    #72424# PropertyValue now independent from Property
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

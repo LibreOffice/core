@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyConcept.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::beans::PropertyConcept
 /** These constants are used to specify concepts of the introspection
     which apply to properties and to the methods which represent attributes.
 
@@ -79,14 +78,12 @@ constants PropertyConcept
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::beans::PropertyConcept::ALL
     /** This value is used to query for all methods and properties.
      */
     const long ALL = -1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::beans::PropertyConcept::DANGEROUS
     /** specifies that the change or retrieval of this
         property directly by the user can result in an unstable
         state (deadlock, application crash, security hole, etc.)
@@ -95,7 +92,6 @@ constants PropertyConcept
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::beans::PropertyConcept::PROPERTYSET
     /** specifies all properties which are reachable by
         <type>XPropertySet</type>, <type>XFastPropertySet</type> or
         <type>XMultiPropertySet</type>.
@@ -104,14 +100,12 @@ constants PropertyConcept
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::beans::PropertyConcept::ATTRIBUTES
     /** specifies all properties which are actually attributes of interfaces.
      */
     const long ATTRIBUTES = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::beans::PropertyConcept::METHODS
     /** specifies all properties which are represented by getter or setter methods.
 
         <p>These methods have the signature <code>type get...()</code>,
@@ -125,27 +119,4 @@ constants PropertyConcept
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:55  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/17 09:30:04  mi
-    proofreading in layouted version
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

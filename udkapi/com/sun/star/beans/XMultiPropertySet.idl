@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,12 @@ module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::beans::XMultiPropertySet
 /** provides access to multiple properties with a single call.
  */
 interface XMultiPropertySet: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::beans::XMultiPropertySet::getPropertySetInfo
     /** @returns
             the <type>XPropertySetInfo</type> interface, which describes
             all properties of the object to which this interface belongs.
@@ -112,7 +110,6 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::setPropertyValues
     /** sets the values to the properties with the specified names.
 
         <p>The values of the properties must change before the bound
@@ -144,7 +141,6 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::beans::XMultiPropertySet::getPropertyValues
     /** @returns
             a sequence of all values of the properties which are specified by their names.
 
@@ -159,7 +155,6 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::addPropertiesChangeListener
     /** adds an <type>XPropertiesChangeListener</type> to the
         specified property with the specified names.
 
@@ -179,7 +174,6 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::removePropertiesChangeListener
     /** removes an <type>XPropertiesChangeListener</type> from the listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>
@@ -193,7 +187,6 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::firePropertiesChangeEvent
     /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
         listener.
 
@@ -212,42 +205,4 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2001/03/16 15:10:32  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.7  2000/12/19 16:15:24  mi
-    documentation syntax fixed
-
-    Revision 1.6  2000/12/15 16:22:48  mi
-    lost documentation from src536 inserted
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/02/23 12:43:24  mi
-    missing documentations
-
-    Revision 1.3  2000/02/17 09:30:05  mi
-    proofreading in layouted version
-
-    Revision 1.2  2000/02/07 11:24:18  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

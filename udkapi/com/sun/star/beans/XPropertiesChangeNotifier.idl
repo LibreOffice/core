@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertiesChangeNotifier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,16 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::beans::XPropertiesChangeNotifier
 /** specifies a notifier for changed property values@see      XPropertiesChangeListener
  */
 interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XPropertiesChangeNotifier::addPropertiesChangeListener
     /** adds an <type>XPropertiesChangeListener</type> to the
         specified properties with the specified names.
      */
@@ -92,7 +90,6 @@ interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XPropertiesChangeNotifier::removePropertiesChangeListener
     /** removes an <type>XPropertiesChangeListener</type> from the
         listener list.
      */
@@ -105,20 +102,4 @@ interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/03/24 08:48:18  kso
-    Initial revision.
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyVetoException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,10 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::beans::PropertyVetoException
 /** This exception is thrown when a proposed change to a
     property represents an unacceptable value.
 
@@ -86,21 +85,4 @@ exception PropertyVetoException: com::sun::star::uno::Exception
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

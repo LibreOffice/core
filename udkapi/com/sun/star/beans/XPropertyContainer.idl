@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyContainer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,16 @@ module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::beans::XPropertyContainer
 /** makes it possible to add and remove properties to or from an object.
+
+    <p>Some scripting engines cannot access properties directly when the
+    property set is changed.  Please use <member>XPropertySet::getPropertyValue</type>
+    etc. in this case. </p>
  */
 interface XPropertyContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XPropertyContainer::addProperty
     /** adds a property to the object.
 
         @param aName
@@ -128,7 +130,6 @@ interface XPropertyContainer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::beans::XPropertyContainer::removeProperty
     /** removes a property from the object.
 
         @param aName
@@ -146,33 +147,4 @@ interface XPropertyContainer: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/12/15 16:22:48  mi
-    lost documentation from src536 inserted
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.3  1999/12/20 12:12:53  kso
-    #68274# - removeProperty(...) now raises NotRemoveableException.
-
-    Revision 1.2  1999/12/01 09:29:57  kso
-    #68274# - Interface cleanup.
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

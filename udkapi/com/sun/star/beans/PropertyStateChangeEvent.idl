@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyStateChangeEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,7 @@ module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::beans::PropertyStateChangeEvent
-/** gets delivered whenever the state of a "bound" property is changed.
+/** is delivered whenever the state of a "bound" property is changed.
 
     <p>It is sent as an argument to the method of
     <type>XPropertyStateChangeListener</type>.  </p>
@@ -92,17 +91,15 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::PropertyName
     /** specifies the name of the property which changes its value.
 
         <p>This name identifies the property uniquely within an
-        <type>XPropertySet</type>.</p>
+        <type>XPropertySet</type>. Upper and lower case are distinguished.</p>
      */
     string PropertyName;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::PropertyHandle
     /** contains the implementation handle for the property.
 
         <p>It may be -1 if the implementation has no handle. You can use this
@@ -113,14 +110,12 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::OldValue
     /** contains the old value of the property.
      */
     com::sun::star::beans::PropertyState OldValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::beans::PropertyStateChangeEvent::NewValue
     /** contains the new value of the property.
      */
     com::sun::star::beans::PropertyState NewValue;
@@ -131,33 +126,4 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/12/15 16:22:48  mi
-    lost documentation from src536 inserted
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:11  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/09 10:15:44  mi
-    #70728# missing documentation
-
-    Revision 1.2  2000/02/07 11:24:18  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

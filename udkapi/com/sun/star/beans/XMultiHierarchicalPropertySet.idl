@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiHierarchicalPropertySet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
@@ -192,24 +192,4 @@ interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/03/16 15:10:32  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.6  2000/12/19 16:15:24  mi
-    documentation syntax fixed
-
-    Revision 1.5  2000/12/11 16:09:35  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:20  mi
-    moved from api
-
-    Revision 1.1  2000/10/19 08:32:51  jb
-    Added HierarchicalPropertySet Interfaces
-
-
-=============================================================================*/
 #endif
