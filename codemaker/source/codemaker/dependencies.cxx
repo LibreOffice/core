@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependencies.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:10:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,13 @@ Dependencies::Dependencies(
         // Not everything is checked for consistency, just things that are cheap
         // to test:
         try {
-            {for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i) {
-                insert(reader.getSuperTypeName(i), true);
-            }}
-            if (reader.getTypeClass() != RT_TYPE_ENUM) {
+            RTTypeClass tc = reader.getTypeClass();
+            if (tc != RT_TYPE_SERVICE) {
+                for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+                    insert(reader.getSuperTypeName(i), true);
+                }
+            }
+            if (tc != RT_TYPE_ENUM) {
                 {for (sal_Int16 i = 0; i < reader.getFieldCount(); ++i) {
                     if ((reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE)
                         == 0)
@@ -112,9 +115,9 @@ Dependencies::Dependencies(
                     }
                 }}
             }
-            {for (sal_Int16 i = 0; i < reader.getMethodCount(); ++i) {
+            for (sal_Int16 i = 0; i < reader.getMethodCount(); ++i) {
                 insert(reader.getMethodReturnTypeName(i), false);
-                {for (sal_Int16 j = 0; j < reader.getMethodParameterCount(i);
+                for (sal_Int16 j = 0; j < reader.getMethodParameterCount(i);
                       ++j)
                 {
                     if ((reader.getMethodParameterFlags(i, j) & RT_PARAM_REST)
@@ -123,18 +126,18 @@ Dependencies::Dependencies(
                         m_sequenceDependency = true;
                     }
                     insert(reader.getMethodParameterTypeName(i, j), false);
-                }}
-                {for (sal_Int16 j = 0; j < reader.getMethodExceptionCount(i);
+                }
+                for (sal_Int16 j = 0; j < reader.getMethodExceptionCount(i);
                       ++j)
                 {
                     insert(reader.getMethodExceptionTypeName(i, j), false);
-                }}
-            }}
-            {for (sal_Int16 i = 0; i < reader.getReferenceCount(); ++i) {
+                }
+            }
+            for (sal_Int16 i = 0; i < reader.getReferenceCount(); ++i) {
                 if (reader.getReferenceSort(i) != RT_REF_TYPE_PARAMETER) {
                     insert(reader.getReferenceTypeName(i), false);
                 }
-            }}
+            }
         } catch (Bad &) {
             m_map.clear();
             m_valid = false;
