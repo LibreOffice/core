@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-17 16:16:14 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 10:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,12 +215,12 @@ Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw(RuntimeException)
 {
+    sal_Int64 nMe = 0;
     if (aIdentifier.getLength() == 16 &&
         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),
                                aIdentifier.getConstArray(), 16 ) )
-        return reinterpret_cast < sal_Int64 > ( this );
-
-    return 0;
+        nMe = reinterpret_cast < sal_Int64 > ( this );
+    return nMe;
 }
 void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
@@ -236,11 +236,19 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             else
                 bToBeCompressed = sal_False;
         }
+        // I said: Always compress encrypted documents!
+        if (!bToBeCompressed && bToBeEncrypted)
+            bToBeCompressed = sal_True;
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
         aValue >>= aEntry.nSize;
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
+    {
         aValue >>= bToBeEncrypted;
+        // Always compress encrypted documents
+        if ( bToBeEncrypted )
+            bToBeCompressed = sal_True;
+    }
 #if SUPD>617
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
 #else
