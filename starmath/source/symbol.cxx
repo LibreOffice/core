@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-08 14:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,15 +413,13 @@ void SmSymSetManager::FillHashTable()
 
 void SmSymSetManager::Init()
 {
-    SfxModule *p = SM_MOD1();
-    SmModule *pp = (SmModule *) p;
+    SmModule *pp = SM_MOD1();
     StartListening(*pp->GetConfig());
 }
 
 void SmSymSetManager::Exit()
 {
-    SfxModule *p = SM_MOD1();
-    SmModule *pp = (SmModule *) p;
+    SmModule *pp = SM_MOD1();
     EndListening(*pp->GetConfig());
 }
 
@@ -537,9 +535,9 @@ SmSym *SmSymSetManager::GetSymbol(const String& rSymbolName)
     return p;
 }
 
-void SmSymSetManager::Load(const String &rURL)
+void SmSymSetManager::Load( const String &rURL )
 {
-    if (aStreamName != rURL)
+    if( aStreamName != rURL )
     {
         for (int i = 0; i< NoSymbolSets; i++)
             delete SymbolSets.Get(i);
@@ -549,42 +547,32 @@ void SmSymSetManager::Load(const String &rURL)
 
         aStreamName = rURL;
 
-        BOOL bExist = FALSE;
-        try
+        // get stream to use
+        SfxMedium aMedium( aStreamName,
+                STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
+        aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
+        SvStream *pStream = aMedium.GetInStream();
+
+        if( pStream && !pStream->GetError() )
         {
-            bExist = ::ucb::Content( aStreamName, uno::Reference< XCommandEnvironment >()).isDocument();
-        }
-        catch(...){}
-        if (bExist)
-        {
-            // get stream to use
-            SfxMedium aMedium( aStreamName,
-                    STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-            aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
-            SvStream *pStream = aMedium.GetInStream();
-
-            if (pStream)
-            {
-                *pStream >> *this;
-                Modified = FALSE;
-                return;
-            }
-            aMedium.Commit();
-        }
-
-        SfxModule *p = SM_MOD1();
-        SmModule *pp = (SmModule *) p;
-
-        if ( pp->GetConfig()->IsWarnNoSymbols() )
-        {
-            ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
-            String aString( aErrorBox.GetMessText() );
-            aString.SearchAndReplaceAscii( "%FILE%", aStreamName );
-            aErrorBox.SetMessText( aString );
-            aErrorBox.Execute();
-
+            *pStream >> *this;
             Modified = FALSE;
-            pp->GetConfig()->SetWarnNoSymbols(FALSE);
+        }
+        else
+        {
+            SmModule *pp = SM_MOD1();
+
+            if ( pp->GetConfig()->IsWarnNoSymbols() )
+            {
+                ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
+                String aString( aErrorBox.GetMessText() );
+                aString.SearchAndReplaceAscii( "%FILE%", aStreamName );
+                aErrorBox.SetMessText( aString );
+                aErrorBox.Execute();
+
+                Modified = FALSE;
+                pp->GetConfig()->SetWarnNoSymbols(FALSE);
+            }
         }
     }
 }
@@ -595,10 +583,9 @@ void SmSymSetManager::Save()
     {
         SfxMedium   aMedium( aStreamName,
                 STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYALL, FALSE );
-        aMedium.CreateTempFile();   // use temp file to write to...
         SvStream *pStream = aMedium.GetOutStream();
 
-        if (pStream)
+        if( pStream && !pStream->GetError() )
         {
             *pStream << *this;
             Modified = FALSE;

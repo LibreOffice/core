@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+#   last change: $Author: jp $ $Date: 2000-11-08 14:49:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,10 +116,8 @@ SLOFILES =  \
         $(SLO)$/xchar.obj
 
 EXCEPTIONSFILES =   \
-                $(SLO)$/document.obj \
                 $(SLO)$/frmload.obj  \
-                $(SLO)$/symbol.obj \
-                $(SLO)$/unomodel.obj
+        $(SLO)$/unomodel.obj
 
 
 LIB2TARGET =    $(SLB)$/ysm.lib

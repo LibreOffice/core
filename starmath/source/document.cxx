@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-08 14:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -261,23 +264,11 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
 void SmDocShell::LoadSymbols()
 {
     SmModule *pp = SM_MOD1();
-    String sURL(pp->GetConfig()->GetSymbolFile());
-    BOOL bExist = FALSE;
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL(sURL);
-    try
-    {
-        if(aURLObj.GetProtocol() == INET_PROT_FILE)
-            bExist = ::ucb::Content( aURLObj.GetMainURL(),
-                            uno::Reference< XCommandEnvironment >()).isDocument();
-    }
-    catch(...){}
-    if(!bExist)
+    String sURL( pp->GetConfig()->GetSymbolFile() );
+    sURL = SFX_INIMANAGER()->SubstPathVars( sURL );
+    if( !FStatHelper::IsDocument( sURL ) )
         SFX_INIMANAGER()->SearchFile( sURL, SFX_KEY_USERCONFIG_PATH );
-
-    sURL = URIHelper::SmartRelToAbs(sURL);
-    pp->GetSymSetManager()->Load(sURL);
+    pp->GetSymSetManager()->Load( sURL );
 }
 
 const String &SmDocShell::GetTitle() const
