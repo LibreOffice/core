@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:51:45 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4760,12 +4760,6 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         rSh.Edit();
     }
 
-    if ( rSh.IsSelFrmMode())
-    {
-
-        if (rSh.IsInsideSelectedObj(aDocPos) )
-            rSh.EnterSelFrmMode( &aDocPos );
-    }
     UpdatePointer( aDocPos, 0 );
 
     if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
@@ -4866,18 +4860,13 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             bRet = TRUE;
         }
     }
-//    BOOL bLockView = bWasShdwCrsr;
+    else if ( rSh.IsSelFrmMode() &&
+                rSh.IsInsideSelectedObj( aDocPos ))
+    {
+        // ## object at the mouse cursor is already selected - do nothing
+        return FALSE;
+    }
 
-/*            if( !rSh.IsViewLocked() )
-            {
-                SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
-                                            SwContentAtPos::SW_INETATTR );
-                if( rSh.GetContentAtPos( aDocPos, aCntntAtPos, FALSE ) &&
-                    !rSh.IsReadOnlyAvailable() &&
-                    aCntntAtPos.IsInProtectSect() )
-                    bLockView = TRUE;
-            }
-*/
     if ( rSh.IsGCAttr() )
     {
         rSh.GCAttr();
@@ -4890,23 +4879,12 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
     if ( !bOverSelect )
     {
-//        if( !rSh.IsViewLocked() && bLockView )
-//            rSh.LockView( TRUE );
-//        else
-//            bLockView = FALSE;
-
         {   // nur temp. Move-Kontext aufspannen, da sonst die
             // Abfrage auf die Inhaltsform nicht funktioniert!!!
             MV_KONTEXT( &rSh );
-//            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText));
             (rSh.*rSh.fnSetCrsr)(&aDocPos, FALSE);
-//            bCallBase = FALSE;
             bRet = TRUE;
         }
-
-//        if( bLockView )
-//            rSh.LockView( FALSE );
-
     }
     if( !bOverURLGrf )
     {
