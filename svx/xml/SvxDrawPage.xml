@@ -1,35 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-<Author>Christian Lippka</Author>
-<Name>com.sun.star.comp.office.SvxDrawPage</Name>
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>svx</module-name>
+    <component-description>
+        <author>Christian Lippka</author>
+        <name>com.sun.star.comp.office.SvxDrawPage</name>
+        <description>
     This component implements the basic functionality for a drawing page
-</Description>
-
-<SupportedService>com::sun::star::drawing::DrawPage</SupportedService>
-
-<ModuleName>svx</ModuleName>
-<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-<Language>c++</Language>
-
-<Status StatusValue="final"/>
-
-<!--
-<ModuleName>...</ModuleName>
-
-<LoaderName>com.sun.star.loader...</LoaderName>
-
-<ServiceDependency>...</ServiceDependency>
-
-<ProjectBuildDependency>...</ProjectBuildDependency>
-...
-
-<RuntimeModuleDependency>...</RuntimeModuleDependency>
-...
-
-<Type>com.sun.star....</Type>
-...
--->
-</COMPONENTDESCRIPTION>
+</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com::sun::star::drawing::DrawPage</supported-service>
+    </component-description>
+</module-description>
