@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScenarios.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:24 $
+ *  last change:$Date: 2003-09-08 11:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.sheet;
 
-import com.sun.star.sheet.XScenarios;
-import com.sun.star.table.CellRangeAddress;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.sheet.XScenarios;
+import com.sun.star.table.CellRangeAddress;
 
 /**
 * Testing <code>com.sun.star.sheet.XScenarios</code>
