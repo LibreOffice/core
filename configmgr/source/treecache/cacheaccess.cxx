@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:39:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList
         // increment here, as we may later erase(current)
         ++it;
 
-#if defined _DEBUG || defined _DBG_UTIL || defined CFG_TRACE_ENABLE
+#if (OSL_DEBUG_LEVEL > 0) || defined _DBG_UTIL || defined CFG_TRACE_ENABLE
         OUString sCurrentName( current->first.toString() );
 #endif
         TimeStamp aExpireTime = current->second + _aDelay;
