@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mhu $ $Date: 2002-04-21 13:38:41 $
+#   last change: $Author: sz $ $Date: 2002-08-26 15:52:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ SLOFILES=   $(SLO)$/alloc.obj       \
             $(SLO)$/macro.obj		\
             $(SLO)$/unload.obj		\
             $(SLO)$/logfile.obj     \
-            $(SLO)$/tres.obj
+            $(SLO)$/tresimpl.obj    \
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/alloc.obj       \
@@ -123,7 +123,7 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/macro.obj		\
             $(OBJ)$/unload.obj		\
             $(OBJ)$/logfile.obj     \
-            $(OBJ)$/tres.obj
+            $(OBJ)$/tresimpl.obj
 
 #.ENDIF
 
