@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.39 $
-# Date:        $Date: 2005-01-25 16:55:07 $
+# Version:     $Revision: 1.40 $
+# Date:        $Date: 2005-02-11 14:37:00 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -977,7 +977,7 @@ if ($platform eq "$Winnt")
 
    $JAVAHOME          = '$JAVA_HOME';
 
-   $ILIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
+   $ILIB             = $cur_dir.$ps_STLPORT_LIB.
                         $ps.$SOLARVER.$ds.$UPD.$LIB.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
                         $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
@@ -1028,10 +1028,11 @@ if (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
 }
 
 elsif ($platform eq "$Winnt")
-{ 
+{  # The PATH variable is completely created from scratch. Everything that is not
+   # needed is appended to the end.
+
    my ( $noldPATH );
    $noldPATH = $oldPATH;
-
    # convert path to posix if using native NT perl
    $noldPATH = PosixFormat($noldPATH);
 
@@ -1055,65 +1056,75 @@ elsif ($platform eq "$Winnt")
 		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."client";
 	  }
    }
-   # Cygwin or MSVC++ Environement sets the PATH variable, dont add $COMPATH to $PATH !
-   # anyway, add if path to compiler isn't already set in PATH
-   if ( ! ( $noldPATH =~ /(?:[:]|\A)(?:$COMPATH)(?:[:]|\Z|$ds)/ ) )
-   {   # Mingw is different
-       if ( $COM eq "MSC" ) {
-          $PATH .= $ps.'$COMPATH'.$BIN;
-       } else {
-          $PATH .= $ps.'$COMPATH';
-       }
+
+   # Add path to compiler
+   if ( $COM eq "MSC" ) {
+      $PATH .= $ps.'$COMPATH'.$BIN;
+   } else { # Mingw is different
+      $PATH .= $ps.'$COMPATH';
    }
    if ( $COM eq "MSC" ) {
 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
-	   if ( $noldPATH !~ /(?:[:]|\A)(?:$MSPDB_PATH)(?:[:]|\Z)/ ) {
+	   if ( $PATH !~ /(?:[:]|\A)(?:$MSPDB_PATH)(?:[:]|\Z)/ ) {
 		   $PATH .= $ps.$MSPDB_PATH;
 	   }
 	   if ( ( $COMEX eq "8" ) || ( $COMEX eq "10" ) ) {
 		   # .NET needs midl.exe
-		   if ( $noldPATH !~ /(?:[:]|\A)(?:$MIDL_PATH)(?:[:]|\Z)/ ) {
+		   if ( $PATH !~ /(?:[:]|\A)(?:$MIDL_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$MIDL_PATH;
 		   }
 		   # .NET needs csc.exe
-		   if ( $noldPATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
+		   if ( $PATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$CSC_PATH;
 		   }
 		   # VC toolkit needs nmake.exe
-		   if ( "@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
+		   if ( "@ENABLE_VCTK@" and $PATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$NMAKE_PATH;
 		   }
 		   # Native installer needs some files if the Windows Installer SDK
-		   if ( $noldPATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
+		   if ( $PATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
 			   $PATH .= $ps.$PSDK_HOME.$BIN;
 		   }
 	   }
    }
 
+   if ( ($COM eq "MSC") && ($ASM_PATH ne "ASM_IN_PATH") )
+   {   $PATH          .= $ps.$ASM_PATH;
+   } 
+   # zip.exe / unzip.exe path for Windows users.
+   my $zip_home_path = PosixFormat('@ZIP_HOME@');
+   if ( ! $PATH =~ /(?:[:]|\A)(?:$zip_home_path)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$zip_home_path;
+   }
+
+   # Possible cygwin paths must follow behind the OOo and MS paths
+
    # Check if $PERL_PATH is already set in PATH
-   if ( ! ( $noldPATH =~ /(?:[:]|\A)(?:$PERL_PATH)(?:[:]|\Z)/ ) )
+   if ( ! ( $PATH =~ /(?:[:]|\A)(?:$PERL_PATH)(?:[:]|\Z)/ ) )
    {
-	$PATH          .= $ps.'${PERL_PATH}';
+      $PATH          .= $ps.$PERL_PATH;
    }
    # Check if $TCSH_PATH is already set in PATH
-   if ( ( "'@USE_SHELL@'" eq "tcsh" ) && ( ! $noldPATH =~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
+   if ( ( "'@USE_SHELL@'" eq "tcsh" ) && ( ! $PATH =~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
    {   $PATH          .= $ps.$TCSH_PATH;
    }
-   if ( ($COM eq "MSC") && ($ASM_PATH ne "ASM_IN_PATH") )
-   {   $PATH          .= $ps.'${ASM_PATH}';
-   } 
-   # unzip.exe path for Windows users.
-   if( "@ZIP_HOME@" ne "ZIP_IN_PATH")
-   {  
-       $PATH          .= $ps.PosixFormat('@ZIP_HOME@');
-   }
    # Check if $CYGWIN_PATH is already set in PATH
-   if ( ! $noldPATH =~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ )
-   {
-	   $PATH      .= $ps.'$CYGWIN_PATH';
+   if ( ! $PATH =~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ ) {
+      $PATH           .= $ps.$CYGWIN_PATH;
    }
-   $PATH              .= $ps.$noldPATH.
-                         $ps_STLPORT_LIB;
+   $PATH              .= $ps_STLPORT_LIB;
+
+   # Add the rest of the original path if it is still missing.
+   if ($^O eq "cygwin") { # Not for ActiveState perl
+       foreach my $pathentry (split($ps,$noldPATH)) {
+           print($pathentry."\n");
+           if ( ! ( $PATH =~ /(?:$ps|\A)(?:$pathentry)(?:$ps|\Z)/ ) ) {
+               $PATH .= $ps.$pathentry;
+           }
+       }
+   } else {
+       $PATH          .= $ps.$noldPATH;
+   }
 }
 
 elsif ($platform eq $Macosx)
