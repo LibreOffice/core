@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,9 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::rtl::OUString SAL_CALL getSubjectName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::com::sun::star::util::DateTime SAL_CALL getNotBefore(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidBefore(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::com::sun::star::util::DateTime SAL_CALL getNotAfter(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidAfter(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
@@ -126,7 +126,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL getExtensions(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL findCertExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
@@ -145,6 +145,8 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint()
             throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        virtual sal_Int32 SAL_CALL getCertificateUsage( ) throw ( ::com::sun::star::uno::RuntimeException) ;
         // MM : end
 
         //Methods from XUnoTunnel
