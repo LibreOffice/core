@@ -2,9 +2,6 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.12 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -290,11 +287,11 @@ sub resolving_all_languages_in_productlists
 # Simplifying the name for language dependent items from "Name (xy)" to "Name"
 ################################################################################
 
-sub changing_name_of_langugage_dependent_keys
+sub changing_name_of_language_dependent_keys
 {
     my ($itemsarrayref) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::changing_name_of_langugage_dependent_keys : $#{$itemsarrayref}"); }
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::changing_name_of_language_dependent_keys : $#{$itemsarrayref}"); }
 
     # Changing key for multilingual items from "Name ( )" to "Name" or "HostName ( )" to "HostName"
 
@@ -650,10 +647,17 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $onelanguage = $onefile->{'specificlanguage'};
 
         my $onefilename = $onefile->{'Name'};
-
         $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
 
-        my $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
+        my $styles = "";
+        my $file_can_miss = 0;
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if ( $styles =~ /\bSTARREGISTRY\b/ ) { $file_can_miss = 1; }
+
+        my $sourcepathref = "";
+
+        if ( $file_can_miss ) { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 0); }
+        else { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1); }
 
         $onefile->{'sourcepath'} = $$sourcepathref; # This $$sourcepathref is empty, if no source was found
 
@@ -666,7 +670,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                 my $oldname = $onefile->{'Name'};
                 my $oldlanguage = $onefile->{'specificlanguage'};
                 my $newlanguage = "en-US";
-                $onefile->{'Name'} =~ s/_$oldlanguage/_$newlanguage/;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
+                $onefile->{'Name'} =~ s/$oldlanguage\./$newlanguage\./; # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename = $onefile->{'Name'};
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
                 $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
@@ -694,7 +698,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 }
 
 #################################################################################
-# Removing files, that shall not be included into langugagepacks
+# Removing files, that shall not be included into languagepacks
 # (because of rpm conflicts)
 #################################################################################
 
@@ -828,14 +832,19 @@ sub remove_Files_Without_Sourcedirectory
 
         if ($sourcepath eq "")
         {
-            my $filename = $onefile->{'Name'};
-            $infoline = "ERROR: Removing file $filename from file list.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $styles = $onefile->{'Styles'};
 
-            push(@missingfiles, "ERROR: File not found: $filename\n");
-            $error_occured = 1;
+            if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
+            {
+                my $filename = $onefile->{'Name'};
+                $infoline = "ERROR: Removing file $filename from file list.\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-            next;   # removing this file from list, if sourcepath is empty
+                push(@missingfiles, "ERROR: File not found: $filename\n");
+                $error_occured = 1;
+
+                next;   # removing this file from list, if sourcepath is empty
+            }
         }
 
         push(@newfilesarray, $onefile);
@@ -1036,6 +1045,44 @@ sub remove_Setup_from_Installset
             ( $gid eq "gid_File_Images_Zip_Setup" ))
         {
             $infoline = "ATTENTION: Removing setup item $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
+}
+
+############################################################################
+# Removing all language pack files from installation set (files with
+# the style LANGUAGEPACK), except this is a language pack.
+############################################################################
+
+sub remove_Languagepacklibraries_from_Installset
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Languagepacklibraries_from_Installset : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bLANGUAGEPACK\b/ )
+        {
+            $infoline = "Removing language pack file $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::globallogfileinfo, $infoline);
 
             next;
