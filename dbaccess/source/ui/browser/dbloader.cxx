@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:41:30 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,8 @@ Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("stardiv.one.frame.FrameLoader");
-    aSNS.getArray()[1] = ::rtl::OUString::createFromAscii("stardiv.one.frame.DBContentLoader");
+    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
+    aSNS.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ContentLoader");
     return aSNS;
 }
 // -------------------------------------------------------------------------
