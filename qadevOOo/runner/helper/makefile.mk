@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2003-11-18 16:15:03 $
+#   last change: $Date: 2004-07-23 13:41:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET = runner_helper
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar ridl.jar jurt.jar juh.jar jut.jar \
+JARFILES = ridl.jar jurt.jar juh.jar jut.jar \
            unoil.jar
 
 JAVAFILES =	APIDescGetter.java      \
