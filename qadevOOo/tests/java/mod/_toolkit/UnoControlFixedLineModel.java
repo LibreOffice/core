@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedLineModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:06:58 $
+ *  last change:$Date: 2004-01-05 20:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,17 @@
  ************************************************************************/
 package mod._toolkit;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
 
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
+import util.utils;
 
 
 /**
@@ -113,8 +114,8 @@ public class UnoControlFixedLineModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
-                                     .createInstance("com.sun.star.awt.UnoControlFixedLineModel");
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.UnoControlFixedLineModel");
         } catch (Exception e) {
         }
 
