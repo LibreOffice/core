@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:33:01 $
+#   last change: $Author: obo $ $Date: 2004-03-17 10:46:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,6 +168,13 @@ RES2FILELIST=\
     $(SRS)$/tabledesign.srs			\
     $(SRS)$/relationdesign.srs		\
     $(SRS)$/uimisc.srs
+
+.IF "$(GUI)"=="WNT"
+#needed by 		$(SLO)$/adodatalinks.obj
+SHL2STDLIBS+=		ole32.lib \
+                    oleaut32.lib \
+                    uuid.lib
+.ENDIF
 
 RESLIB2NAME=$(TARGET2)
 RESLIB2SRSFILES=$(RES2FILELIST)
