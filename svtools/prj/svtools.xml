@@ -58,7 +58,7 @@
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
-        <name>com.sun.star.comp.svtools.AccessibleListBox</name>
+        <name>com.sun.star.comp.svtools.AccessibleTreeListBox</name>
         <description>specifies accessibility support for a treelistbox.</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
@@ -67,7 +67,7 @@
     </component-description>
     <component-description>
         <author>Hans-Peter Burow</author>
-        <name>com.sun.star.comp.svtools.AccessibleListBoxEntry</name>
+        <name>com.sun.star.comp.svtools.AccessibleTreeListBoxEntry</name>
         <description>specifies accessibility support for a treelistbox entry.</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
