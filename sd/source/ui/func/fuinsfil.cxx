@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-04 13:13:22 $
+ *  last change: $Author: pw $ $Date: 2000-10-17 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,8 +289,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
     SfxMedium* pMedium = new SfxMedium( aFile,
                                         STREAM_READ | STREAM_NOCREATE,
-                                        FALSE,                // direkt
-                                        TRUE);                // Download
+                                        FALSE);
 
     const SfxFilter* pFilter = NULL;
     ErrCode nErr = SFX_APP()->GetFilterMatcher().
