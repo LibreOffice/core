@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
+ *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,12 +692,11 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
         pCode->SetError( 0 );
         bCompile = TRUE;
     }
-    // Hat der Code Name-Referenzen mit Referenzen?
-    BOOL bCompileLater = FALSE; //! bei ColRowNames und URM_MOVE nach UpdateReference
-    BOOL bCutMode = (rScFormulaCell.pDocument->IsClipboard()
-        && rScFormulaCell.pDocument->IsCutMode());
+    //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
+    BOOL bCompileLater = FALSE;
+    BOOL bClipMode = rScFormulaCell.pDocument->IsClipboard();
     if( !bCompile )
-    {
+    {   // Name references with references and ColRowNames
         for( ScToken* t = pCode->GetNextReferenceOrName(); t && !bCompile;
                       t = pCode->GetNextReferenceOrName() )
         {
@@ -710,18 +709,18 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
                         bCompile = TRUE;
                 }
                 else
-                    bCompile = TRUE;    // ungueltige Referenz!
+                    bCompile = TRUE;    // invalid reference!
             }
             else if ( t->GetOpCode() == ocColRowName )
             {
-                bCompile = TRUE;        // neuer LookUp noetig
-                bCompileLater = bCutMode;
+                bCompile = TRUE;        // new lookup needed
+                bCompileLater = bClipMode;
             }
         }
     }
     if( bCompile )
     {
-        if ( !bCompileLater && bCutMode )
+        if ( !bCompileLater && bClipMode )
         {
             pCode->Reset();
             bCompileLater = (pCode->GetNextColRowName() != NULL);

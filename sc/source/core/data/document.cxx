@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-28 14:59:07 $
+ *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1375,35 +1375,47 @@ void ScDocument::CopyBlockFromClip( USHORT nCol1, USHORT nRow1,
     USHORT i;
     USHORT nClipTab = 0;
     for (i = pCBFCP->nTabStart; i <= nTabEnd; i++)
-        if (pTab[i])
-            if (rMark.GetTableSelect(i))
-            {
-                while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
-                pTab[i]->CopyFromClip(nCol1, nRow1, nCol2, nRow2, nDx, nDy,
-                                        pCBFCP->nInsFlag, pCBFCP->bAsLink, ppClipTab[nClipTab]);
-                nClipTab = (nClipTab+1) % (MAXTAB+1);
-            }
-    if ( pCBFCP->pClipDoc->bCutMode && (pCBFCP->nInsFlag & IDF_CONTENTS) )
+    {
+        if (pTab[i] && rMark.GetTableSelect(i) )
+        {
+            while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+            pTab[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
+                pCBFCP->nInsFlag, pCBFCP->bAsLink, ppClipTab[nClipTab] );
+            nClipTab = (nClipTab+1) % (MAXTAB+1);
+        }
+    }
+    if ( pCBFCP->nInsFlag & IDF_CONTENTS )
     {
         nClipTab = 0;
         for (i = pCBFCP->nTabStart; i <= nTabEnd; i++)
-            if (pTab[i])
-                if (rMark.GetTableSelect(i))
-                {
-                    while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
-                    short nDz = ((short)i) - nClipTab;
+        {
+            if (pTab[i] && rMark.GetTableSelect(i) )
+            {
+                while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+                short nDz = ((short)i) - nClipTab;
 
-                    //  #89081# ranges of consecutive selected tables (in clipboard and dest. doc)
-                    //  must be handled in one UpdateReference call
-                    USHORT nFollow = 0;
-                    while ( i + nFollow < nTabEnd && rMark.GetTableSelect( i + nFollow + 1 ) &&
-                            nClipTab + nFollow < MAXTAB && ppClipTab[nClipTab + nFollow + 1] )
-                        ++nFollow;
+                //  #89081# ranges of consecutive selected tables (in clipboard and dest. doc)
+                //  must be handled in one UpdateReference call
+                USHORT nFollow = 0;
+                while ( i + nFollow < nTabEnd
+                        && rMark.GetTableSelect( i + nFollow + 1 )
+                        && nClipTab + nFollow < MAXTAB
+                        && ppClipTab[nClipTab + nFollow + 1] )
+                    ++nFollow;
 
-                    UpdateReference(URM_MOVE, nCol1, nRow1, i, nCol2, nRow2, i+nFollow, nDx, nDy, nDz, pCBFCP->pRefUndoDoc);
-                    nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
-                    i += nFollow;
-                }
+                if ( pCBFCP->pClipDoc->bCutMode )
+                    UpdateReference( URM_MOVE,
+                        nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
+                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc );
+                else
+                    UpdateReference( URM_COPY,
+                        nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
+                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, FALSE );
+
+                nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
+                i += nFollow;
+            }
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,15 +726,17 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 
     BOOL bHasRefs = FALSE;
+    BOOL bHasColRowNames = FALSE;
     BOOL bOnRefMove = FALSE;
     if ( !pDocument->IsClipOrUndo() )
     {
         pCode->Reset();
         bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
-        if ( !bHasRefs )
+        if ( !bHasRefs || eUpdateRefMode == URM_COPY )
         {
             pCode->Reset();
-            bHasRefs = (pCode->GetNextColRowName() != NULL);
+            bHasColRowNames = (pCode->GetNextColRowName() != NULL);
+            bHasRefs = bHasRefs || bHasColRowNames;
         }
         bOnRefMove = pCode->IsRecalcModeOnRefMove();
     }
@@ -838,6 +840,10 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                         t = pCode->GetNextColRowName();
                     }
                 }
+            }
+            else if ( eUpdateRefMode == URM_COPY && bHasColRowNames && bValChanged )
+            {
+                bColRowNameCompile = TRUE;
             }
             ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
             if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
