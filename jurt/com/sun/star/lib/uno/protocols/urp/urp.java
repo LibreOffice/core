@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:54:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2004-03-25 14:54:26 $
+ * @version     $Revision: 1.14 $ $ $Date: 2004-03-30 16:20:55 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -521,16 +521,12 @@ public class urp extends Protocol {
         return bytes;
     }
 
-    private void writeBlock(DataOutput  dataOutput, byte bytes[], int message_count) throws IOException {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
-
-          if(message_count != 1)
-              System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
-
-        dataOutput.writeInt(bytes.length);
-        dataOutput.writeInt(message_count);
-
-        dataOutput.write(bytes);
+    private void writeBlock(DataOutput out, byte[] data, int messageCount)
+        throws IOException
+    {
+        out.writeInt(data.length);
+        out.writeInt(messageCount);
+        out.write(data);
     }
 
     static class Message implements IMessage {
