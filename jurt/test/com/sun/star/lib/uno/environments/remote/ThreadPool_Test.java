@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:15:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ public class ThreadPool_Test extends ComplexTestCase {
     public void testThreadAsync() throws InterruptedException {
         TestWorkAt workAt = new TestWorkAt();
 
-        ThreadId threadId = new ThreadId();
+        ThreadId threadId = ThreadId.createFresh();
 
         // queue asyncs
         for(int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
@@ -166,7 +166,7 @@ public class ThreadPool_Test extends ComplexTestCase {
     public void testDynamicThreadSync() throws InterruptedException {
         TestWorkAt workAt = new TestWorkAt();
 
-        ThreadId threadId = new ThreadId();
+        ThreadId threadId = ThreadId.createFresh();
 
         // queue asyncs
         for(int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
@@ -225,7 +225,7 @@ public class ThreadPool_Test extends ComplexTestCase {
     public void testDynamicThreadAsyncSyncOrder() throws InterruptedException {
         TestWorkAt workAt = new TestWorkAt();
 
-        ThreadId threadId = new ThreadId();
+        ThreadId threadId = ThreadId.createFresh();
 
         // queue asyncs
         for(int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
@@ -297,7 +297,7 @@ public class ThreadPool_Test extends ComplexTestCase {
         TestWorkAt workAt = new TestWorkAt();
         for (int i = 0; i < TestWorkAt.MESSAGES; ++i) {
             Thread.yield(); // force scheduling
-            ThreadId threadID = new ThreadId();
+            ThreadId threadID = ThreadId.createFresh();
             putJob(workAt, true, threadID, "increment");
             putJob(workAt, false, threadID, "increment");
         }
@@ -379,7 +379,7 @@ public class ThreadPool_Test extends ComplexTestCase {
 
     public void testAsyncSync() throws InterruptedException {
         TestWorkAt workAt = new TestWorkAt();
-        ThreadId threadId = new ThreadId();
+        ThreadId threadId = ThreadId.createFresh();
         MyWorkAt myWorkAt = new MyWorkAt( workAt );
 
         // queue asyncs
