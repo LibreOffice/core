@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:29:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,17 +838,16 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                     // and export the properties, we need to recreate the drawing object and
                     // pass this to XclObjComment() for processing.
                     SdrCaptionObj* pCaption = new SdrCaptionObj( pScNote->GetRectangle() );
-                    pCaption->SetMergedItemSet(rSet);
 
                     if(const EditTextObject* pEditText = pScNote->GetEditTextObject())
                     {
                         OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
                         pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                         pCaption->NbcSetOutlinerParaObject( pOPO );
-                        pOPO->SetVertical( FALSE );  // notes are always horizontal
                     }
 
                     pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab());
+                    pCaption->SetMergedItemSet(rSet);
 
                     uno::Reference<drawing::XShape> xShape(pCaption->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
@@ -2887,11 +2886,12 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 
         pCurrentCell = &rMyCell;
 
-        GetShapeExport()->exportShape(rMyCell.xNoteShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
+        if(rMyCell.xNoteShape.is())
+            GetShapeExport()->exportShape(rMyCell.xNoteShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
 
         pCurrentCell = NULL;
 
-        if (!rMyCell.xAnnotation->getIsVisible())
+        if (rMyCell.xNoteShape.is() && !rMyCell.xAnnotation->getIsVisible())
         {
             rtl::OUString sType(rMyCell.xNoteShape->getShapeType());
             if ( sType.equals(sCaptionShape) )
