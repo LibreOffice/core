@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:04:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,11 @@ interface BaseTextEditView : View
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_GALLERY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_AVMEDIA_PLAYER
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
