@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WindowState.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-24 11:05:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
             </prop>
             <prop oor:name="DockSize" oor:type="xs:string">
                 <info>
-                    <desc>Specifies the size of a docked user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
+                    <desc>Not used.</desc>
                 </info>
             </prop>
             <prop oor:name="Pos" oor:type="xs:string">
@@ -136,7 +136,7 @@
             </prop>
             <prop oor:name="Style" oor:type="xs:int">
                 <info>
-                    <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements.</desc>
+                    <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons</desc>
                 </info>
                 <value>0</value>
             </prop>
