@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,13 +293,16 @@ public:
 //-----------------------------------------
 class SwWW8FltControlStack : public SwFltControlStack
 {
+    SwWW8ImplReader& rReader;
     USHORT nToggleAttrFlags;
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
 
 public:
-    SwWW8FltControlStack( SwDoc* pDo, ULONG nFieldFl ) :
-        SwFltControlStack( pDo, nFieldFl ), nToggleAttrFlags( 0 )
+    SwWW8FltControlStack( SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ ) :
+        SwFltControlStack( pDo, nFieldFl ),
+        rReader( rReader_ ),
+        nToggleAttrFlags( 0 )
     {}
 
     BOOL IsFtnEdnBkmField(SwFmtFld& rFmtFld, USHORT& nBkmNo);
@@ -365,6 +368,7 @@ class WW8ReaderSave
     BOOL bTable         : 1;
     BOOL bTableInApo    : 1;
     BOOL bAnl           : 1;
+    BOOL bNeverCallProcessSpecial: 1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
@@ -494,6 +498,7 @@ friend struct WW8FlyPara;
 friend struct WW8SwFlyPara;
 friend class WW8FlySet;
 friend class SwMSDffManager;
+friend class SwWW8FltControlStack;
 friend class WW8FormulaControl;
 
     SvStorage* pStg;                // Input-Storage
@@ -513,6 +518,7 @@ friend class WW8FormulaControl;
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
+    SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
     WW8Fib* pWwFib;
     WW8Fonts* pFonts;
     WW8Dop* pWDop;
@@ -666,6 +672,8 @@ friend class WW8FormulaControl;
     BOOL bStyNormal;        // Style mit Id 0 wird gelesen
     BOOL bWWBugNormal;      // WW-Version nit Bug Dya in Style Normal
     BOOL bNoAttrImport;     // Attribute ignorieren zum Ignorieren v. Styles
+    BOOL bNeverCallProcessSpecial; // Sonderfall zum einlesen eines 0x01
+                                   // siehe: SwWW8ImplReader::Read_F_Hyperlink()
 
     // praktische Hilfsvariablen:
     BOOL bVer67;            // ( (6 == nVersion) || (7 == nVersion) );
@@ -1119,11 +1127,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.7 2000-12-01 11:22:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.8 2000-12-04 14:08:08 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.6  2000/11/23 13:37:53  khz
       #79474# Save/restore PLCF state before/after reading header or footer data
 

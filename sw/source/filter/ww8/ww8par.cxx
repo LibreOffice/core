@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
+ *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,8 +210,10 @@
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
 #endif
+#if SUPD>612
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
+#endif
 #endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
@@ -467,6 +469,31 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEnt
             pDoc->Insert(aPaM, *pEntry->pAttr);
         }
         break;
+/*
+        case RES_TXTATR_INETFMT:
+        {
+            if( rReader.pSBase )
+            {
+                if( rReader.pSBase->pFldPLCF )
+                {
+                    WW8PLCFx_FLD& rPLCF = *rReader.pSBase->pFldPLCF;
+                    if( rPLCF.SeekPos( pEntry->nCPStart ) )
+                    {
+                        const ULONG nIdxPoint = rPLCF.GetIdx();
+                        if( rPLCF.SeekPos( pEntry->nCPEnd ) )
+                        {
+                            const ULONG nIdxMark = rPLCF.GetIdx();
+                            if( nIdxPoint == nIdxMark )
+                            {
+                                ;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+*/
         default: SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
     }
 }
@@ -647,6 +674,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bTable          = pRdr->bTable ;
     bTableInApo     = pRdr->bTableInApo;
     bAnl            = pRdr->bAnl;
+    bNeverCallProcessSpecial = pRdr->bNeverCallProcessSpecial;
     nAktColl        = pRdr->nAktColl;
     nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
@@ -662,7 +690,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pEndStck->SetAttr( *pRdr->pPaM->GetPoint(), 0, FALSE );
 
     pOldStck = pRdr->pCtrlStck;
-    pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags);
+    pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags, *pRdr);
 
     // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
     // PLCFx Manager natuerlich auf die gleichen FKPs zugreift, wie der alte
@@ -692,6 +720,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bTable        = bTable ;
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
+    pRdr->bNeverCallProcessSpecial = bNeverCallProcessSpecial;
     pRdr->nAktColl      = nAktColl;
     pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
 
@@ -715,11 +744,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                                 long nLen, short nType )
 {
-#if 0
-    pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-    SwWW8FltControlStack* pOldStck = pCtrlStck;
-    pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags );
-#endif
     WW8ReaderSave aSave( this );        // rettet Flags u.ae. u. setzt sie zurueck
 
     pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;      //
@@ -728,16 +752,7 @@ void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartC
     // dann Text fuer Header, Footer o. Footnote einlesen
 
     ReadText( nStartCp, nLen, nType );              // Sepx dabei ignorieren
-#if 0
-    pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-                        // und zum Schluss Writer-Kram restoren
     aSave.Restore( this );
-    DeleteCtrlStk();
-    pCtrlStck = pOldStck;
-    pSBase->SetNoAttrScan( 0 );
-#else
-    aSave.Restore( this );
-#endif
 }
 
 long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
@@ -1255,6 +1270,9 @@ BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 
 BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync )    // Apo / Table / Anl
 {
+    if( bNeverCallProcessSpecial )
+        return FALSE;
+
     *pbReSync = FALSE;
     if( bAllEnd ){
         if( bAnl )
@@ -1577,16 +1595,16 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                 break;
 
     case 0x1:   if( bObj )
-                    ImportOle();
+                    pFmtOfJustInsertedGraphicOrOLE = ImportOle();
                 else if( bEmbeddObj )
                 {
                     // wenn der OLE-Import nicht klappt, dann versuche
                     // zumindest die Grafik zu importieren
                     if( !ImportOle() )
-                        ImportGraf();
+                        pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
                 }
                 else
-                    ImportGraf();
+                    pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
                 bObj = bEmbeddObj = FALSE;      // das Flag auf immer zurueck setzen
                 nObjLocFc = 0;
                 break;
@@ -1643,7 +1661,7 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
         nTxtFirstLineOfst = pCollA[nAktColl].nTxtFirstLineOfst;
     }
     BOOL bTabRowEnd = FALSE;
-    if( pStartAttr && bCallProcessSpecial )
+    if( pStartAttr && bCallProcessSpecial && !bNeverCallProcessSpecial )
     {
         BOOL bReSync;
         bTabRowEnd = ProcessSpecial( FALSE, &bReSync );// Apo / Table / Anl
@@ -1944,7 +1962,8 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
     pHdFt           = 0;
     pWFlyPara       = 0;
     pSFlyPara       = 0;
-    pFlyFmtOfJustInsertedGraphic = 0;
+    pFlyFmtOfJustInsertedGraphic   = 0;
+    pFmtOfJustInsertedGraphicOrOLE = 0;
     nColls = nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bApo = bTxbxFlySection
@@ -1957,6 +1976,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
     bAktAND_fNumberAcross = FALSE;
     bNoLnNumYet = TRUE;
     bRestartLnNumPerSection = FALSE;
+    bNeverCallProcessSpecial= FALSE;
     nProgress = 0;
     nHdTextHeight = nFtTextHeight = 0;
     nPgWidth = lA4Width;
@@ -2023,7 +2043,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
     pPaM = new SwPaM( *rPaM.GetPoint() );
 
-    pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags );
+    pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
     /*
         Endestack: haelt z.B. Bookmarks und Variablen solange vor,
@@ -2033,7 +2053,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     /*
         fieldstack holds Reference Fields until the very end of file import
     */
-    pRefFldStck = new SwWW8FltControlStack( &rDoc, nFieldFlags );
+    pRefFldStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
     nPageDescOffset = rDoc.GetPageDescCnt();
 
@@ -2594,7 +2614,11 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
             "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2"
         };
         sal_uInt32 aVal[ 12 ];
+#if SUPD>612
         SwFilterOptions aOpt( 12, aNames, aVal );
+#else
+        memset( &aVal, 0, sizeof( aVal ) );
+#endif
 
         nIniFlags = aVal[ 0 ];
         nIniFlags1= aVal[ 1 ];
@@ -2910,11 +2934,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.4 2000-11-23 13:37:53 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.5 2000-12-04 14:08:08 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/23 13:37:53  khz
+      #79474# Save/restore PLCF state before/after reading header or footer data
+
       Revision 1.3  2000/11/20 14:11:52  jp
       Read_FieldIniFlags removed
 

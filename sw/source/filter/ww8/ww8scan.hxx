@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:53 $
+ *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,6 +792,7 @@ friend static void DumpFtnShort( short nId, long nPos, long nFieldLen );
 #else
 friend WW8PLCFMan::WW8PLCFMan( WW8ScannerBase*, short, long );
 friend class SwWw8ImplReader;
+friend class SwWW8FltControlStack;
 #endif
 
     WW8Fib* pWw8Fib;
@@ -1541,12 +1542,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.4 2000-12-01 11:22:53 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.5 2000-12-04 14:08:08 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/12/01 11:22:53  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.3  2000/11/23 13:37:53  khz
       #79474# Save/restore PLCF state before/after reading header or footer data
 

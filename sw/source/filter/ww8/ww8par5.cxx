@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-24 11:04:38 $
+ *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@
 #endif
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
+#endif
+#ifndef _FMTURL_HXX
+#include <fmturl.hxx>
 #endif
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
@@ -2627,17 +2630,45 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
     {
         if( sMark.Len() )
             ( sURL += INET_MARK_TOKEN ) += sMark;
-        SwFmtINetFmt aURL( sURL, sTarget );
-//      aURL.SetVisitedFmt( "??" );
-//      aURL.SetINetFmt( "??" );
-        pEndStck->NewAttr( *pPaM->GetPoint(), aURL );
 
-        // das Ende als "relative" Pos auf den Stack setzen
-        pPaM->SetMark();
-        pPaM->GetMark()->nContent += sDef.Len();
-        pEndStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
-        pPaM->DeleteMark();
-        eRet = F_TEXT;
+        const xub_StrLen nLen = sDef.Len();
+        if(    4 < nLen
+            && 0x13 == sDef.GetChar( 0 )
+            && 0x14 == sDef.GetChar( nLen-3 )
+            && 0x01 == sDef.GetChar( nLen-2 )
+            && 0x15 == sDef.GetChar( nLen-1 ) )
+        {
+
+            WW8ReaderSave aSave( this );        // rettet Flags u.ae. u. setzt sie zurueck
+            bNeverCallProcessSpecial = TRUE;
+            ReadText( pF->nSRes+pF->nLRes-2, 1, pPlcxMan->GetManType() );
+            aSave.Restore( this );
+
+            if( pFmtOfJustInsertedGraphicOrOLE )
+            {
+                SwFmtURL aURL;
+                aURL.SetTargetFrameName( sTarget );
+                aURL.SetURL( sURL, FALSE );
+                pFmtOfJustInsertedGraphicOrOLE->SetAttr( aURL );
+                pFmtOfJustInsertedGraphicOrOLE = 0;
+            }
+            eRet = F_OK;
+        }
+        else
+        {
+            SwFmtINetFmt aURL( sURL, sTarget );
+//          aURL.SetVisitedFmt( "??" );
+//          aURL.SetINetFmt( "??" );
+            pRefFldStck->NewAttr( *pPaM->GetPoint(), aURL );
+
+            // das Ende als "relative" Pos auf den Stack setzen
+            pPaM->SetMark();
+            pPaM->GetMark()->nContent += sDef.Len();
+            pRefFldStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
+            pPaM->DeleteMark();
+
+            eRet = F_TEXT;
+        }
     }
     return eRet;
 }
@@ -2831,12 +2862,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.5 2000-11-24 11:04:38 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.6 2000-12-04 14:08:08 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/24 11:04:38  khz
+      WW field names use ANSI encoding - not plain 7-bit ASCII
+
       Revision 1.4  2000/11/20 14:11:17  jp
       Read_FieldIniFlags removed
 
