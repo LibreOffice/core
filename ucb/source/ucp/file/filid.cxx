@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-25 09:10:49 $
+ *  last change: $Author: hro $ $Date: 2001-06-01 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,15 @@ FileContentIdentifier::FileContentIdentifier(
         m_pMyShell->uncheckMountPoint( aUnqPath,aRedirectedPath );
         if( aRedirectedPath == rtl::OUString() && m_pMyShell->m_vecMountPoint.size() )
         {
-#ifdef TF_FILEURL
-            aRedirectedPath = rtl::OUString::createFromAscii( "file:///" );
-#else
-            aRedirectedPath = rtl::OUString::createFromAscii( "//./" );
-#endif
+            m_aProviderScheme = rtl::OUString::createFromAscii( "invalid:" );
+            m_aContentId = m_aProviderScheme;
         }
-        m_pMyShell->getUrlFromUnq( aRedirectedPath,m_aContentId );
-        m_aNormalizedId = aUnqPath;
+        else
+        {
+            m_pMyShell->getUrlFromUnq( aRedirectedPath,m_aContentId );
+            m_aNormalizedId = aUnqPath;
+            m_pMyShell->getScheme( m_aProviderScheme );
+        }
     }
     else
     {
@@ -100,8 +101,8 @@ FileContentIdentifier::FileContentIdentifier(
 
         m_aNormalizedId = aRedirectedPath;
         m_aContentId = aUnqPath;
+        m_pMyShell->getScheme( m_aProviderScheme );
     }
-    m_pMyShell->getScheme( m_aProviderScheme );
 }
 
 FileContentIdentifier::~FileContentIdentifier()
