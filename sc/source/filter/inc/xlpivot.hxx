@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:07:18 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,8 @@ const sal_uInt16 EXC_SXVS_SCENARIO          = 0x0010;
 
 const sal_uInt16 EXC_ID_SXEX                = 0x00F1;
 
-const sal_uInt16 EXC_SXEX_DEFAULTFLAGS1     = 0x0200;
-const sal_uInt16 EXC_SXEX_DEFAULTFLAGS2     = 0x004F;
+const sal_uInt32 EXC_SXEX_DRILLDOWN         = 0x00020000;
+const sal_uInt32 EXC_SXEX_DEFAULTFLAGS      = 0x004F0200;
 
 // (0x0100) SXVDEX ------------------------------------------------------------
 
@@ -546,6 +546,23 @@ struct XclPTInfo
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTInfo& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTInfo& rInfo );
+
+// Extended pivot table settings ==============================================
+
+/** Extended information about a pivot table (SXEX record). */
+struct XclPTExtInfo
+{
+    sal_uInt16          mnSxformulaRecs;    /// Number of SXFORMULA records.
+    sal_uInt16          mnSxselectRecs;     /// Number of SXSELECT records.
+    sal_uInt16          mnPagePerRow;       /// Number of page fields per row.
+    sal_uInt16          mnPagePerCol;       /// Number of page fields per column.
+    sal_uInt32          mnFlags;            /// Flags for the entire pivot table.
+
+    explicit            XclPTExtInfo();
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
 
 // ============================================================================
 

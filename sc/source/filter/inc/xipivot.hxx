@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:06:12 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ public:
     void                ReadSxpi( XclImpStream& rStrm );
     /** Reads an SXDI record containing data field data. */
     void                ReadSxdi( XclImpStream& rStrm );
+    /** Reads an SXEX record containing additional settings for the pivot table. */
+    void                ReadSxex( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 
@@ -299,7 +301,8 @@ private:
 
     const XclImpPivotCache* mpPCache;       /// Pivot cache containing field/item names.
 
-    XclPTInfo           maPTInfo;           /// Info about the pivot table.
+    XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
+    XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclImpPTFieldList   maFieldList;        /// List containing all fields.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.
@@ -352,6 +355,8 @@ public:
     void                ReadSxdi( XclImpStream& rStrm );
     /** Reads an SXVI record describing a new item of the current field. */
     void                ReadSxvi( XclImpStream& rStrm );
+    /** Reads an SXEX record containing additional settings for a pivot table. */
+    void                ReadSxex( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 
