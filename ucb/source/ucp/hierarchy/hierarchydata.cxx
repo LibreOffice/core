@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
+ *  last change: $Author: kso $ $Date: 2001-06-28 09:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,9 +1109,12 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
                     // Create Root object.
 
                     Sequence< Any > aArguments( 1 );
-                    aArguments[ 0 ]
-                        <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                HIERARCHY_ROOT_DB_KEY ) );
+                    PropertyValue   aProperty;
+                    aProperty.Name = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    CFGPROPERTY_NODEPATH ) );
+                    aProperty.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    HIERARCHY_ROOT_DB_KEY ) );
+                    aArguments[ 0 ] <<= aProperty;
 
                     m_bTriedToGetRootReadAccess = sal_True;
 
