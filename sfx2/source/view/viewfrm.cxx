@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-20 10:04:30 $
+ *  last change: $Author: as $ $Date: 2001-08-30 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3340,7 +3340,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < ::com::sun::star::frame::XDispatch > xDisp;
             if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_beamer"), 63 );
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_beamer"), 31 );
             if ( xDisp.is() )
             {
                 Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
