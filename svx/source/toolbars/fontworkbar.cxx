@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:19:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-24 17:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SVDUNDO_HXX
 #include <svdundo.hxx>
 #endif
@@ -88,10 +87,10 @@
 #include "svdview.hxx"
 #endif
 #ifndef _SDASITM_HXX
-#include <svx/sdasitm.hxx>
+#include <sdasitm.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svx/svdoashp.hxx>
+#include <svdoashp.hxx>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
