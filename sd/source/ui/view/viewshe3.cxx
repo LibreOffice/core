@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:26:46 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #pragma hdrstop
 
-#include <stl/utility>
-#include <stl/vector>
+#include <utility>
+#include <vector>
 
 #include "app.hrc"
 #include "strings.hrc"
