@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 16:52:29 $
+ *  last change: $Author: aw $ $Date: 2000-12-08 13:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #include <svx/svditer.hxx>
 #ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
+#endif
+
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 
 #include "anminfo.hxx"
@@ -730,7 +734,17 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                     xTextRange->setString( aEmptyStr );
                 }
             }
-            pObj->SetEmptyPresObj( bEmpty );
+
+            if(bEmpty != pObj->IsEmptyPresObj())
+            {
+                pObj->SetEmptyPresObj(bEmpty);
+
+                if(!bEmpty && pObj->ISA(SdrOle2Obj))
+                {
+                    // really delete SdrOutlinerObj at pObj
+                    pObj->NbcSetOutlinerParaObject(0L);
+                }
+            }
         }
     }
 }
