@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 14:43:16 $
+ *  last change: $Author: mt $ $Date: 2002-01-21 16:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,6 +1724,13 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
 void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    // #96637# it can happen that dragOver is called without a preceding dragEnter()
+    if ( !pDragAndDropInfo )
+    {
+        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+        pDragAndDropInfo->bHasValidData = sal_True; // !!!!!!!!
+    }
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
     aMousePos = GetWindow()->PixelToLogic( aMousePos );
