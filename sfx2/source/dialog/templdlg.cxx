@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:31:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 09:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,7 +2073,9 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const String aTemplName(GetSelectedEntry());
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
-        USHORT nFilter = pItem->GetFilterList().GetObject(nActFilter)->nFlags;
+        USHORT nFilter = 0;
+        if(pItem->GetFilterList().Count() > nActFilter)
+            nFilter = pItem->GetFilterList().GetObject(nActFilter)->nFlags;
         if(!nFilter)    // automatisch
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
