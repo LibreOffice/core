@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:45:17 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,13 +1035,12 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_COLORS_CHANGED == nHintId ||
-            SFX_HINT_ACCESSIBILITY_CHANGED == nHintId ||
-                SFX_HINT_CTL_SETTINGS_CHANGED == nHintId)
+           SFX_HINT_ACCESSIBILITY_CHANGED == nHintId )
         {
             sal_Bool bAccessibility = sal_False;
             if(SFX_HINT_COLORS_CHANGED == nHintId)
                 SwViewOption::ApplyColorConfigValues(*pColorConfig);
-            else if(SFX_HINT_ACCESSIBILITY_CHANGED == nHintId)
+            else
                 bAccessibility = sal_True;
 
             //invalidate all edit windows
@@ -1068,6 +1067,22 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
                 pViewShell = SfxViewShell::GetNext( *pViewShell );
+            }
+        }
+        else if( SFX_HINT_CTL_SETTINGS_CHANGED == nHintId )
+        {
+            const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+            while( pObjSh )
+            {
+                if( pObjSh->IsA(TYPE(SwDocShell)) )
+                {
+                    const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
+                    ViewShell* pVSh = 0;
+                    pDoc->GetEditShell( &pVSh );
+                    if ( pVSh )
+                        pVSh->ChgNumberDigits();
+                }
+                pObjSh = SfxObjectShell::GetNext(*pObjSh);
             }
         }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
