@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:13:14 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
-        sal_uInt16 nPos;
+        WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems, ++nIndex)
         {
@@ -258,7 +258,7 @@ namespace dbp
             _rList.Clear();
         const ::rtl::OUString* pItems = _rItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + _rItems.getLength();
-        sal_uInt16 nPos;
+        WizardState nPos;
         sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems)
         {
@@ -326,7 +326,7 @@ namespace dbp
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 
-            sal_uInt16 nCommandTypeResourceId = 0;
+            WizardState nCommandTypeResourceId = 0;
             switch (nCommandType)
             {
                 case CommandType::TABLE:
