@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCachedDynamicResultSetStubFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:29:14 $
+ *  last change:$Date: 2003-09-08 11:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.ucb.XCachedDynamicResultSetFactory;
 import com.sun.star.ucb.XCachedDynamicResultSetStubFactory;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.ucb.XCachedDynamicResultSetStubFactory</code>
