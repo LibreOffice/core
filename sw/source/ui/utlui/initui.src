@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:14:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1160,7 +1160,7 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_CREATE
     {
-        TEXT = "Erzeugung" ;
+        TEXT = "Erstellt am" ;
         TEXT [ English ] = "Created" ;
         TEXT [ norwegian ] = "Laget" ;
         TEXT [ italian ] = "Creato" ;
@@ -1194,8 +1194,7 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_CHANGE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Änderung : Žnderung */
-        TEXT = "Änderung" ;
+        TEXT = "Geändert am" ;
         TEXT [ English ] = "Changed" ;
         TEXT [ norwegian ] = "Endret" ;
         TEXT [ italian ] = "Modifica" ;
@@ -1263,10 +1262,9 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_DOCNO
     {
-        TEXT = "Dokumentnummer" ;
-        TEXT [ English ] = "Document number" ;
+        TEXT = "Version" ;
         Text [ dutch ] = "Documentnummer" ;
-        Text [ english_us ] = "Document number" ;
+        Text [ english_us ] = "Revision number" ;
         Text [ italian ] = "Numero di documento" ;
         Text [ spanish ] = "Número del documento" ;
         Text [ french ] = "Numéro du document" ;
@@ -1296,9 +1294,8 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_EDIT
     {
-        TEXT = "Bearbeitungszeit" ;
-        TEXT [ English ] = "Edit time" ;
-        Text [ english_us ] = "Editing time" ;
+        TEXT = "Gesamtbearbeitungszeit" ;
+        Text [ english_us ] = "Total editing time" ;
         Text [ italian ] = "Tempo di modifica" ;
         Text [ spanish ] = "Hora de la edición" ;
         Text [ french ] = "Durée d'édition" ;
