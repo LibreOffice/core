@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:35:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "~Aucun Proxy pour :" ;
         Text [ swedish ] = "~Ingen proxy för" ;
         Text [ danish ] = "Ingen proxy for" ;
-        Text [ portuguese_brazilian ] = "Kein Proxy f~ür:" ;
+        Text [ portuguese_brazilian ] = "Kein Proxy f~?:" ;
         Text [ portuguese ] = "N~enhum Proxy para:" ;
         Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷²»ÊÊÓÃÓÚ(~N)";
         Text[ russian ] = "Áåç ïğîêñè äëÿ ";
@@ -717,7 +717,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ English ] = " is not a valid entry for this field. Please specify a value between 0 and 255." ;
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
+        Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 0 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 0 og 255." ;
         Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 0 e 255." ;
@@ -727,7 +727,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 0 äî 255.";
-        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y podaæ wartoœæ miêdzy 0 a 255.";
+        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y podaæ warto?æ miêdzy 0 a 255.";
         Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B0 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 0 æ 255.";
@@ -743,7 +743,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ English ] = " is not a valid entry for this field. Please specify a value between 1 and 255." ;
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
+        Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 1 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 1 og 255." ;
         Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 1 e 255." ;
@@ -753,7 +753,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 1 äî 255.";
-        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y wpisaæ wartoœæ miêdzy 1 a 255 .";
+        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y wpisaæ warto?æ miêdzy 1 a 255 .";
         Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B1 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 1 æ 255.";
@@ -1008,7 +1008,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "~Préfixe" ;
         Text [ swedish ] = "~Prefix" ;
         Text [ danish ] = "Præfiks" ;
-        Text [ portuguese_brazilian ] = "~Präfix" ;
+        Text [ portuguese_brazilian ] = "~Pr?fix" ;
         Text [ portuguese ] = "~Prefixo" ;
         Text[ chinese_simplified ] = "Ç°×º(~P)";
         Text[ russian ] = "Ïğåôèêñ";
@@ -1176,7 +1176,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         stringlist [ portuguese_brazilian ] =
         {
             < "Keiner" ; > ;
-            < "Groß" ; > ;
+            < "Gro?" ; > ;
             < "Klein" ; > ;
         };
         stringlist [ swedish ] =
@@ -1311,7 +1311,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ portuguese_brazilian ] = "H~inzufügen" ;
+        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
         Text [ portuguese ] = "A~dicionar" ;
         Text[ chinese_simplified ] = "ĞÂÔö(~A)";
         Text[ russian ] = "Äîáàâèòü";
@@ -1339,7 +1339,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ dutch ] = "Wij~zigen" ;
         Text [ swedish ] = "~Ändra" ;
         Text [ danish ] = "Modificer" ;
-        Text [ portuguese_brazilian ] = "~Ändern" ;
+        Text [ portuguese_brazilian ] = "~?ndern" ;
         Text [ portuguese ] = "~Modificar" ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
         Text[ russian ] = "Èçìåíèòü";
@@ -1367,7 +1367,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "É¾³ı(~D)";
         Text[ russian ] = "Óäàëèòü";
@@ -1445,7 +1445,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "%PRODUCTNAME Basic-Scripte ausführen von" ;
         Text [ English ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
-        Text [ portuguese_brazilian ] = "Star Basic-Scripts ausführen von" ;
+        Text [ portuguese_brazilian ] = "Star Basic-Scripts ausf?ren von" ;
         Text [ swedish ] = "Utför %PRODUCTNAME Basic-skript från" ;
         Text [ danish ] = "Udfør %PRODUCTNAME Basic-scripter fra" ;
         Text [ italian ] = "Esegui script %PRODUCTNAME Basic da" ;
@@ -1486,7 +1486,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "H~inzufügen" ;
         Text [ English ] = "A~dd" ;
         Text [ english_us ] = "~Add" ;
-        Text [ portuguese_brazilian ] = "H~inzufügen" ;
+        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ danish ] = "Tilføj" ;
         Text [ italian ] = "~Aggiungi" ;
@@ -1514,7 +1514,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -1552,7 +1552,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼(~E)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€(~E)";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~E)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -1600,7 +1600,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "i~mmer ausführen" ;
         Text [ English ] = "execute ~always" ;
         Text [ english_us ] = "Always e~xecute" ;
-        Text [ portuguese_brazilian ] = "~immer  ausführen" ;
+        Text [ portuguese_brazilian ] = "~immer  ausf?ren" ;
         Text [ swedish ] = "utför ~alltid" ;
         Text [ danish ] = "udfør altid" ;
         Text [ italian ] = "Esegui ~sempre" ;
@@ -1628,7 +1628,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "~gemäß Liste" ;
         Text [ English ] = "like ~list" ;
         Text [ english_us ] = "~From list" ;
-        Text [ portuguese_brazilian ] = "~gemäß Liste" ;
+        Text [ portuguese_brazilian ] = "~gem?? Liste" ;
         Text [ swedish ] = "enli~gt lista" ;
         Text [ danish ] = "fra listen" ;
         Text [ italian ] = "Come da ~lista" ;
@@ -1656,7 +1656,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "~nie ausführen" ;
         Text [ English ] = "execute ~never" ;
         Text [ english_us ] = "Ne~ver execute" ;
-        Text [ portuguese_brazilian ] = "~nie  ausführen" ;
+        Text [ portuguese_brazilian ] = "~nie  ausf?ren" ;
         Text [ swedish ] = "utför al~drig" ;
         Text [ danish ] = "udfør aldrig" ;
         Text [ italian ] = "Esegui ~mai" ;
@@ -1686,7 +1686,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
         Text [ English ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
         Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without being checked." ;
-        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
+        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne ?berpr?ung ausgef?rt!" ;
         Text [ swedish ] = "OBS: %PRODUCTNAME Basic-skript från Internet utförs utan kontroll!" ;
         Text [ danish ] = "BEMÆRK: %PRODUCTNAME Basic-scripter fra Internettet bliver udført uden kontrol!" ;
         Text [ italian ] = "ATTENZIONE: gli script %PRODUCTNAME Basic di Internet vengono eseguiti senza un controllo!" ;
@@ -1716,7 +1716,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
         Text [ English ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts will only be executed from directories in the list." ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgef?rt." ;
         Text [ swedish ] = "%PRODUCTNAME Basic-skript utförs bara från kataloger i listan." ;
         Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver kun udført fra biblioteker i listen." ;
         Text [ italian ] = "Gli Script di %PRODUCTNAME Basic vengono eseguiti solo dalle cartelle dell'elenco." ;
@@ -1746,7 +1746,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "Es werden keine %PRODUCTNAME Basic-Scripte ausgeführt." ;
         Text [ English ] = "%PRODUCTNAME Basic scripts won't be executed." ;
         Text [ english_us ] = "No %PRODUCTNAME Basic scripts will be executed." ;
-        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgeführt." ;
+        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgef?rt." ;
         Text [ swedish ] = "Inga %PRODUCTNAME Basic-skript utförs." ;
         Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver ikke udført." ;
         Text [ italian ] = "Gli Script %PRODUCTNAME Basic non vengono eseguiti." ;
@@ -1774,7 +1774,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "PlugIns" ;
         Text [ English ] = "PlugIns" ;
         Text [ english_us ] = "Plug-ins" ;
-        Text [ portuguese_brazilian ] = "Ausführen" ;
+        Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "Plug-ins" ;
         Text [ danish ] = "PlugIns" ;
         Text [ italian ] = "PlugIns" ;
@@ -1851,8 +1851,8 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ italian ] = "Valore non valido!\n\nIl valore massimo di una porta è 65535.";
     Message[ danish ] = "Ugyldig værdi!\n\nEt portnummers højeste værdi er 65535.";
     Message[ swedish ] = "Ogiltigt värde!\n\nEtt portnummers högsta värde är 65535.";
-    Message[ polish ] = "Nieprawid³owa wartoœæ!\n\nMaksymalny numer portu wynosi 65535.";
-    Message[ portuguese_brazilian ] = "Ungültiger Wert!\n\nDer Höchstwert einer Portnummer ist 65535.";
+    Message[ polish ] = "Nieprawid³owa warto?æ!\n\nMaksymalny numer portu wynosi 65535.";
+    Message[ portuguese_brazilian ] = "Ung?tiger Wert!\n\nDer H?hstwert einer Portnummer ist 65535.";
     Message[ japanese ] = "”’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ!\n\nÎß°Ä”Ô†‚ÌÅ‚’l‚Í65535‚Å‚·B";
     Message[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ£¡\n\nÒ»¸ö²ººÅÂëµÄ×î´óÖµÊÇ 65535 ¡£";
     Message[ chinese_traditional ] = "µL®Äªº¼Æ­È¡I\n\n¤@­Ó°ğ¸¹½Xªº³Ì¤j­È¬O65535 ¡C";
