@@ -1,0 +1,219 @@
+/*************************************************************************
+ *
+ *  $RCSfile: abpresid.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-08-01 11:07:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef EXTENSIONS_ABPRESID_HRC
+#define EXTENSIONS_ABPRESID_HRC
+
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
+
+//========================================================================
+// basics
+
+#define RID_DIALOG_START                RID_ABP_START
+#define RID_PAGE_START                  RID_ABP_START
+#define RID_STRING_START                RID_ABP_START
+#define RID_ERRORBOX_START              RID_ABP_START
+#define RID_UNTYPED_START               RID_ABP_START
+#define RID_QUERYBOX_START              RID_ABP_START
+
+//========================================================================
+// dialogs
+
+#define RID_DLG_ADDRESSBOOKSOURCEPILOT  ( RID_DIALOG_START +  0 )
+// please adjust RID_DIALOG_END (below) when adding new dialogs
+
+#define RID_DIALOG_END                  RID_DLG_ADDRESSBOOKSOURCEPILOT
+
+//========================================================================
+// tab pages
+
+#define RID_PAGE_SELECTABTYPE           ( RID_PAGE_START +  0 )
+#define RID_PAGE_ADMININVOKATION        ( RID_PAGE_START +  1 )
+#define RID_PAGE_TABLESELECTION         ( RID_PAGE_START +  2 )
+#define RID_PAGE_FIELDMAPPING           ( RID_PAGE_START +  3 )
+#define RID_PAGE_FINAL                  ( RID_PAGE_START +  4 )
+// please adjust RID_PAGE_END (below) when adding new tab pages
+
+#define RID_PAGE_END                    RID_PAGE_FINAL
+
+//========================================================================
+// strings
+
+#define RID_STR_DEFAULT_NAME            ( RID_STRING_START +  0 )
+#define RID_STR_ADMINDIALOGTITLE        ( RID_STRING_START +  1 )
+#define RID_STR_NOCONNECTION            ( RID_STRING_START +  2 )
+#define RID_STR_PLEASECHECKSETTINGS     ( RID_STRING_START +  3 )
+#define RID_STR_FIELDDIALOGTITLE        ( RID_STRING_START +  4 )
+#define RID_STR_NOFIELDSASSIGNED        ( RID_STRING_START +  5 )
+// please adjust RID_STRING_END (below) when adding new strings
+
+#define RID_STRING_END                  RID_STR_NOFIELDSASSIGNED
+
+//========================================================================
+// error boxes
+
+#define RID_ERR_NEEDTYPESELECTION       ( RID_ERRORBOX_START +  0 )
+// please adjust RID_ERRORBOX_END (below) when adding new error boxes
+
+#define RID_ERRORBOX_END                RID_ERR_NEEDTYPESELECTION
+
+//========================================================================
+// query boxes
+
+#define RID_QRY_NOTABLES                ( RID_QUERYBOX_START +  0 )
+// please adjust RID_QUERYBOX_END (below) when adding new query boxes
+
+#define RID_QUERYBOX_END                RID_QRY_NOTABLES
+
+//========================================================================
+// untyped resources
+
+#define RID_RSC_NOTUSEDYET              ( RID_UNTYPED_START +  0 )
+// please adjust RID_UNTYPED_END (below) when adding new untyped resources
+
+#define RID_UNTYPED_END                 RID_RSC_NOTUSEDYET
+
+
+//========================================================================
+//========================================================================
+//= range checks
+
+#if RID_DIALOG_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_PAGE_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_STRING_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_ERRORBOX_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_QUERYBOX_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+#if RID_UNTYPED_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
+
+//========================================================================
+// local resource ids
+
+//........................................................................
+#define FL_SEPARATOR            1
+#define FL_TYPE                 2
+#define FL_NAME                 3
+
+//........................................................................
+#define FT_TYPE_HINTS            1
+#define FT_CHOOSE_TYPE           2
+#define FT_ADMINEXPLANATION      3
+#define FT_NAME_EXPL             4
+#define FT_ERROR                 5
+#define FL_TOOMUCHTABLES         6
+#define FT_FIELDASSIGMENTEXPL    7
+#define FT_ASSIGNEDFIELDS        8
+#define FT_FINISH_EXPL           9
+#define FT_DUPLICATENAME        10
+
+//........................................................................
+#define RB_MORK                 1
+#define RB_LDAP                 2
+#define RB_OUTLOOK              3
+#define RB_OUTLOOKEXPRESS       4
+#define RB_OTHER                5
+
+//........................................................................
+#define ET_DATASOURCENAME       1
+
+//........................................................................
+#define PB_INVOKE_ADMIN_DIALOG  1
+#define PB_INVOKE_FIELDS_DIALOG 2
+
+//........................................................................
+#define LB_TABLELIST            1
+
+//========================================================================
+// some defines
+
+//........................................................................
+#define WINDOW_SIZE_X   260
+#define WINDOW_SIZE_Y   185
+
+#define WINDOW_BORDER_X  12
+#define WINDOW_BORDER_Y  14
+
+#define BUTTON_SIZE_X    50
+#define BUTTON_SIZE_Y    14
+
+//........................................................................
+
+#endif // EXTENSIONS_ABPRESID_HRC
+
+/*************************************************************************
+ * history:
+ *
+ *  Revision 1.0 30.01.01 16:38:29  fs
+ ************************************************************************/
+
