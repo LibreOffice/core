@@ -74,13 +74,6 @@ Dim iDay
 	End If
 End Sub
 
-
-
-Function CalIsLeapYear(ByVal iYear as Integer) as Boolean
-	CalIsLeapYear = iYear Mod 4 = 0
-End Function
-
-
 Function CalMaxDayInMonth(ByVal iYear as Integer, ByVal iMonth as Integer) as Integer
 &apos; delivers the maximum Day of a month in a certain year
 	Dim TmpDate as Long
