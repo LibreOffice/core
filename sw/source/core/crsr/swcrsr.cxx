@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
+ *  last change: $Author: jp $ $Date: 2002-02-14 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,30 +406,34 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && 0 == (SwUnoCrsr*)*this )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->GetFrm();
-        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
-            0 != ( SELOVER_CHANGEPOS & eFlags ) )
+        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() )
         {
-            // skip to the next / prev valida paragraph with a layout
-            SwNodeIndex& rPtIdx = GetPoint()->nNode;
-            int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
-            while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
-                                          : pFrm->GetPrevCntntFrm() )) &&
-                    0 == pFrm->Frm().Height() )
-                ;
-
-            SwCntntNode* pCNd;
-            if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
+            if( 0 != ( SELOVER_CHANGEPOS & eFlags ) )
             {
-                // set this cntntNode as new position
-                rPtIdx = *pCNd;
+                // skip to the next / prev valida paragraph with a layout
+                SwNodeIndex& rPtIdx = GetPoint()->nNode;
+                int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
+                while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
+                                              : pFrm->GetPrevCntntFrm() )) &&
+                        0 == pFrm->Frm().Height() )
+                    ;
 
-                // ContentIndex noch anmelden:
-                xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
-                GetPoint()->nContent.Assign( pCNd, nTmpPos );
-                    // sollten wir in einer Tabelle gelandet sein?
-                if( IsInProtectTable( TRUE ) )
-                    pFrm = 0;
+                SwCntntNode* pCNd;
+                if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
+                {
+                    // set this cntntNode as new position
+                    rPtIdx = *pCNd;
+
+                    // ContentIndex noch anmelden:
+                    xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                    GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                        // sollten wir in einer Tabelle gelandet sein?
+                    if( IsInProtectTable( TRUE ) )
+                        pFrm = 0;
+                }
             }
+            else
+                pFrm = 0;
         }
 
         if( !pFrm )
