@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: cmc $ $Date: 2001-01-24 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1869,14 +1869,14 @@ BOOL WW8PLCFx_Fc_FKP::NewFkp()
                             pFkpSizeTab[ ePLCF ],
                             ePLCF, GetStartFc() );
     }
-    else // khz test1 //
+    else // #79464# //
     {
-//      pFkp->SetIdx( 0 );
-//      if( GetStartFc() >= 0 )
-//          pFkp->SeekPos( GetStartFc() );
+        pFkp->SetIdx( 0 );
+        if( GetStartFc() >= 0 )
+            pFkp->SeekPos( GetStartFc() );
     }
 
-//  SetStartFc( -1 );                                   // Nur das erste Mal
+    SetStartFc( -1 );                                   // Nur das erste Mal
     return TRUE;
 }
 
@@ -3325,8 +3325,9 @@ short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
     }
     for( i=(short)nPLCF-1; i>=0; i--)
     {
-        bIgnore = FALSE;
         pD = &aD[i];
+#ifdef USE_6AM_CHECKIN
+        bIgnore = FALSE;
         if( pD->nStartPos < next )
         {
             // StartPos of Attribute is inside a range of CPs to be ignored?
@@ -3358,10 +3359,18 @@ short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
                 bStart = TRUE;
             }
         }
+        nLastWhereIdxCp = next;
+#else
+        if( pD->nStartPos < next )
+        {
+            next = pD->nStartPos;
+            nextIdx = i;
+            bStart = TRUE;
+        }
+#endif
     }
     if( pPos )
         *pPos = next;
-    nLastWhereIdxCp = next;
     if( pbStart )
         *pbStart = bStart;
     return nextIdx;
@@ -6001,11 +6010,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.5 2000-12-01 11:22:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.6 2001-01-24 16:06:35 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.4  2000/11/23 13:37:53  khz
       #79474# Save/restore PLCF state before/after reading header or footer data
 
