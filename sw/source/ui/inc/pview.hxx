@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:06:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,30 @@
 #ifndef _SWPVIEW_HXX
 #define _SWPVIEW_HXX
 
-#ifndef _SFXVIEWFRM_HXX //autogen
-#include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _VIEWFAC_HXX //autogen
-#include <sfx2/viewfac.hxx>
-#endif
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _VIEWFAC_HXX //autogen
+#include <sfx2/viewfac.hxx>
+#endif
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
 #endif
-#include "shellid.hxx"
 #ifndef _SVX_ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _SHELLID_HXX
+#include "shellid.hxx"
 #endif
 
 class SwViewOption;
@@ -218,7 +224,7 @@ public:
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
 
-class SwPagePreView: public SfxViewShell
+class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
     // ViewWindow und Henkel zur Core
     // aktuelle Dispatcher-Shell
@@ -252,25 +258,25 @@ class SwPagePreView: public SfxViewShell
     sal_Bool                mbResetFormDesignMode:1;
     sal_Bool                mbFormDesignModeToReset:1;
 
-    void            Init(const SwViewOption* = 0);
-    Point           AlignToPixel(const Point& rPt) const;
+    SW_DLLPRIVATE void            Init(const SwViewOption* = 0);
+    SW_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
 
-    int             _CreateScrollbar( int bHori );
-    DECL_LINK( ScrollHdl, SwScrollbar * );
-    DECL_LINK( EndScrollHdl, SwScrollbar * );
-    DECL_LINK( BtnPage, Button * );
-    int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
+    SW_DLLPRIVATE int             _CreateScrollbar( int bHori );
+    SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
+    SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
+    SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
 
 
-    virtual USHORT          Print( SfxProgress &rProgress,
+    SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress,
                                    PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
-    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
+    SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+    SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
-    virtual PrintDialog*    CreatePrintDialog( Window *pParent );
+    SW_DLLPRIVATE virtual PrintDialog*    CreatePrintDialog( Window *pParent );
 
-    void CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
+    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
 
     /** help method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
@@ -285,7 +291,7 @@ class SwPagePreView: public SfxViewShell
 
         @author OD
     */
-    void _ExecPgUpAndPgDown( const bool  _bPgUp,
+    SW_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
                              SfxRequest* _pReq = 0 );
 
 protected:
