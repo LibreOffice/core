@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ japanese ] = "ιΈζγ•γ‚γθ΅¨γ®γ‚»γƒ«γ―γ€ηµεγ™γ‚‹γ«γ―θ¤‡ι›‘ιγγΎγ™γ€‚";
     MESSAGE[ chinese_traditional ] = "ζ‰€ιΈζ“‡η„θ΅¨ζ Όε„²ε­ζ Όε¤ªη¶εθ€η„΅ζ³•εδ½µγ€‚";
     MESSAGE[ arabic ] = "ΞαΗνΗ ΗαΜΟζα ΗαγΝΟΟΙ γΪήΟΙ αΟΡΜΙ νΣΚΝνα γΪεΗ ΗαΡΘΨ.";
-    MESSAGE[ greek ] = "Τα επιλεγμένα κελιά του πίνακα είναι  υπερβολικά περίπλοκα για να γίνει η σύνδεση.";
+    MESSAGE[ greek ] = "Τα επιλεγμένα κελιά του πίνακα είναι  υπερβολικά περίπλοκα για να γίνει η συγχώνευση.";
     MESSAGE[ korean ] = "ν‘μ μ„ νƒλ μ…€μ€ λ³‘ν•©ν•κΈ°μ— λ„λ¬΄ λ³µμ΅ν•©λ‹λ‹¤.";
     MESSAGE[ turkish ] = "Seηilen tablo hόcreleri birleώtirilmek iηin fazla karmaώύk.";
     MESSAGE[ catalan ] = "Les cel.les seleccionades de la taula sσn massa complexes per poder-les enllaηar.";
@@ -91,6 +91,7 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ hindi ] = "ΰ¤ΰ¥ΰ¤¨ΰ¥‡ ΰ¤Ήΰ¥ΰ¤ ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤•ΰ¥‹ΰ¤·ΰ¥ΰ¤ ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤®ΰ¤Ώΰ¤²ΰ¤Ύΰ¤¨ΰ¤Ύ ΰ¤…ΰ¤Έΰ¤‚ΰ¤­ΰ¤µ ΰ¤Ήΰ¥ ΰ¥¤";
     MESSAGE[ slovak ] = "VybranΓ© bunky tabuΔΎky sΓΊ prΓ­liΕ΅ komplexnΓ© na zlΓΊΔenie.";
 };
+
 
 
 
