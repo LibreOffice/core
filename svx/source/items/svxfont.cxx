@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-20 17:43:18 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KCHARACTERTYPE_HPP_
-#include <com/sun/star/lang/KCharacterType.hpp>
+#ifndef _COM_SUN_STAR_I18N_KCHARACTERTYPE_HPP_
+#include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
 #pragma hdrstop
 
@@ -317,9 +317,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         while( nPos < nTxtLen )
         {
             sal_Int32 nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( nCharacterType & ::com::sun::star::lang::KCharacterType::LOWER )
+            if ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER )
                 break;
-            if ( ! ( nCharacterType & ::com::sun::star::lang::KCharacterType::UPPER ) )
+            if ( ! ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
             aCharString = rTxt.GetChar( ++nPos + nIdx );
         }
@@ -332,7 +332,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( ! ( nCharacterType & ::com::sun::star::lang::KCharacterType::LOWER ) )
+            if ( ! ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER ) )
                 break;
             if ( CH_BLANK == aCharString )
                 break;

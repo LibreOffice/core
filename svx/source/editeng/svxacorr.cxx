@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-18 11:45:13 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,12 @@ inline int IsWordDelim( const sal_Unicode c )
 inline int IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( ::com::sun::star::lang::KCharacterType::UPPER & nCharType);
+            0 == ( ::com::sun::star::i18n::KCharacterType::UPPER & nCharType);
 }
 inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( ::com::sun::star::lang::KCharacterType::LOWER & nCharType);
+            0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
 }
 
 BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
@@ -189,9 +189,9 @@ BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
         sal_Int32 nCharType = rCC.getCharacterType( rTxt, nStt );
 #endif
         if( 0 == (
-            ( ::com::sun::star::lang::KCharacterType::DIGIT |
-              ::com::sun::star::lang::KCharacterType::ALPHA |
-              ::com::sun::star::lang::KCharacterType::LETTER )
+            ( ::com::sun::star::i18n::KCharacterType::DIGIT |
+              ::com::sun::star::i18n::KCharacterType::ALPHA |
+              ::com::sun::star::i18n::KCharacterType::LETTER )
                 & rCC.getCharacterType( rTxt, nStt )) )
             return TRUE;
     }
