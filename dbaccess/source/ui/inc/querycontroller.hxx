@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ namespace dbaui
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
-        OQueryParseContext*                     m_pParseContext;
+        OSystemParseContext*                    m_pParseContext;
         ::connectivity::OSQLParser*             m_pSqlParser;   // to parse sql statements
         ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator; // to iterate through them
         ::std::vector<sal_uInt32>               m_vColumnWidth;
