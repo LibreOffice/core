@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:05:04 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,4 +175,5 @@ ModalDialog DLG_INSERT_RULER
     Text[ catalan ] = "Insertar línea horizontal";
     Text[ finnish ] = "Lisää vaakakohdistin";
 };
+
 
