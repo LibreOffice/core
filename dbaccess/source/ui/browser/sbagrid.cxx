@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:25:52 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBA_REGHELPER_HXX_
+#include "dba_reghelper.hxx"
 #endif
 
 /********************************************************************************************/
@@ -124,7 +124,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     if (pRegistryKey)
     try
     {
-        return OModuleRegistration::writeComponentInfos(
+        return ::dbaccess::OModuleRegistration::writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),
             static_cast<XRegistryKey*>(pRegistryKey));
     }
@@ -145,7 +145,7 @@ extern "C" void* SAL_CALL component_getFactory(
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
-        xRet = OModuleRegistration::getComponentFactory(
+        xRet = ::dbaccess::OModuleRegistration::getComponentFactory(
             ::rtl::OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }

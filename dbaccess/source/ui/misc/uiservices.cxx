@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:41:31 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 
 /********************************************************************************************/
@@ -126,7 +126,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     try
     {
         writeDBLoaderInfo(pRegistryKey);
-        return OModuleRegistration::writeComponentInfos(
+        return ::dbaui::OModuleRegistration::writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),
             static_cast<XRegistryKey*>(pRegistryKey));
     }
@@ -147,7 +147,7 @@ extern "C" void* SAL_CALL component_getFactory(
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
-        xRet = OModuleRegistration::getComponentFactory(
+        xRet = ::dbaui::OModuleRegistration::getComponentFactory(
             ::rtl::OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }

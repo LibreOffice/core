@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-01 16:34:16 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 #ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"
@@ -240,6 +240,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/01 16:34:16  fs
+ *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
+ *
  *  Revision 1.3  2000/10/31 08:08:48  fs
  *  support an initial selection
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 11:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_INTERACTION_HXX_
 #include "dbinteraction.hxx"
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -109,7 +109,7 @@
 
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler()
 {
-    static OMultiInstanceAutoRegistration< ::dbaui::OInteractionHandler > aOInteractionHandler_AutoRegistration;
+    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OInteractionHandler > aOInteractionHandler_AutoRegistration;
 }
 
 //.........................................................................
@@ -425,6 +425,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/08 11:01:05  fs
+ *  set the account only the the requests states that there is an account ...
+ *
  *  Revision 1.3  2000/10/26 18:08:16  fs
  *  handling of parameter requests
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBA_REGHELPER_HXX_
+#include "dba_reghelper.hxx"
 #endif
 #ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 #include "documentcontainer.hxx"

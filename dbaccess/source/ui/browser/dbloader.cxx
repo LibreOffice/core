@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 09:54:22 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -161,7 +161,7 @@ DBContentLoader::~DBContentLoader()
 // -------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()
 {
-    static OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
+    static ::dbaui::OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )

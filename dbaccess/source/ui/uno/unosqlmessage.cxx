@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:47:01 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _DBAUI_UNOSQLMESSAGE_HXX_
 #include "unosqlmessage.hxx"
 #endif
-#ifndef _DBA_REGISTRATION_HELPER_HXX_
-#include "registrationhelper.hxx"
+#ifndef _DBU_REGHELPER_HXX_
+#include "dbu_reghelper.hxx"
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -206,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/06 17:47:01  fs
+ *  forgot a property attribute in ctor
+ *
  *  Revision 1.3  2000/11/01 16:34:16  fs
  *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
  *
