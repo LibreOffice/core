@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:42:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -118,11 +118,11 @@
 #ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
-#include <drafts/com/sun/star/ui/DockingArea.hpp>
+#ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
+#include <com/sun/star/ui/DockingArea.hpp>
 #endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -130,29 +130,29 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
-#include <drafts/com/sun/star/ui/XUIElementSettings.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
+#include <com/sun/star/ui/XUIElementSettings.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
+#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
-#include <drafts/com/sun/star/ui/ImageType.hpp>
+#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <com/sun/star/ui/ImageType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -198,8 +198,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
-using namespace ::drafts::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -257,9 +257,9 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
 {
     sal_Int16 n( 0 );
     if ( bBig )
-        n |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+        n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
     if ( bHighContrast )
-        n |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
+        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -273,7 +273,7 @@ DEFINE_XINTERFACE_6                     (   ToolBarManager                      
                                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                                                     ),
                                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                                                        ),
                                             DIRECT_INTERFACE( ::com::sun::star::frame::XFrameActionListener                                             ),
-                                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIConfigurationListener                                    ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener                                    ),
                                             DIRECT_INTERFACE( ::com::sun::star::frame::XStatusListener                                                  ),
                                             DERIVED_INTERFACE( ::com::sun::star::lang::XEventListener, ::com::sun::star::frame::XFrameActionListener    )
                                         )
@@ -281,7 +281,7 @@ DEFINE_XINTERFACE_6                     (   ToolBarManager                      
 DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                                          ,
                                             ::com::sun::star::lang::XTypeProvider                   ,
                                             ::com::sun::star::lang::XComponent                      ,
-                                            ::drafts::com::sun::star::ui::XUIConfigurationListener  ,
+                                            ::com::sun::star::ui::XUIConfigurationListener  ,
                                             ::com::sun::star::frame::XFrameActionListener           ,
                                             ::com::sun::star::frame::XStatusListener                ,
                                             ::com::sun::star::lang::XEventListener
@@ -685,7 +685,7 @@ void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListen
 }
 
 // XUIConfigurationListener
-void SAL_CALL ToolBarManager::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -735,7 +735,7 @@ void SAL_CALL ToolBarManager::elementInserted( const ::drafts::com::sun::star::u
     }
 }
 
-void SAL_CALL ToolBarManager::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -788,7 +788,7 @@ void SAL_CALL ToolBarManager::elementRemoved( const ::drafts::com::sun::star::ui
     }
 }
 
-void SAL_CALL ToolBarManager::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1193,7 +1193,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         rtl::OUString               aCommandURL;
         rtl::OUString               aLabel;
         rtl::OUString               aHelpURL;
-        sal_uInt16                  nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+        sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
 
@@ -1217,7 +1217,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nWidth;
                 }
 
-                if (( nType == drafts::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
+                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
                 {
                     OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
@@ -1269,15 +1269,15 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                     ++nId;
                 }
-                else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE )
+                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
                 {
                     m_pToolBar->InsertSeparator();
                 }
-                else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
+                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
                 {
                     m_pToolBar->InsertSpace();
                 }
-                else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
+                else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
                 {
                     m_pToolBar->InsertBreak();
                 }
