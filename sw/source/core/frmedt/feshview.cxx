@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:25:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include "hintids.hxx"
@@ -117,9 +118,6 @@
 #endif
 #ifndef _SVDPAGV_HXX //autogen wg. SdrPageView
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 
 #ifndef _POOLFMT_HRC
@@ -190,6 +188,8 @@
 #endif
 
 #define SCROLLVAL 75
+
+using namespace com::sun::star;
 
 //Tattergrenze fuer Drawing-SS
 #define MINMOVE ((USHORT)GetOut()->PixelToLogic(Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
@@ -2542,9 +2542,11 @@ BYTE SwFEShell::IsSelObjProtected( FlyProtectType eType ) const
                         SwOLENode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode();
                         if ( pNd )
                         {
-                            SvInPlaceObjectRef aRef = pNd->GetOLEObj().GetOleRef();
-                            if ( aRef.Is() &&
-                                 SVOBJ_MISCSTATUS_NOTRESIZEABLE & aRef->GetMiscStatus() )
+                            uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
+
+                            // TODO/LATER: use correct aspect
+                            if ( xObj.is() &&
+                                 embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) )
                             {
                                 nChk |= FLYPROTECT_SIZE;
                                 nChk |= FLYPROTECT_FIXED;
