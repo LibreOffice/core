@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:59:12 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ String RID_SVXSTR_HMSTATUS_WRONG
     Text[ chinese_traditional ] = "³o­Ó¦r¤£©ú¡C";
     Text[ arabic ] = "ÇáßáãÉ ÛíÑ ãÚÑæİÉ.";
     Text[ greek ] = "Ç ëİîç åßíáé Üãíùóôç.";
-    Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀº ´Ü¾îÀÔ´Ï´Ù.";
+    Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ´Ü¾îÀÔ´Ï´Ù.";
     Text[ turkish ] = "Sözcük bilinmiyor.";
     Text[ language_user1 ] = " ";
 };
@@ -479,7 +479,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT[ chinese_traditional ] = "±z³]©wªº»y¨¥ª©¥»¨S¦³ªş¥[µü¨å¥\\¯à¡C\n½Ğ±zÀË¬d¦w¸Ëªºµ{¦¡¡C\n­Y¦³¥²­n¡M½Ğ±z¦w¸Ë­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
     TEXT[ arabic ] = "áÇ íæÌÏ ŞÇãæÓ ãÑÇÏİÇÊ ááÛÉ ÇáÊí Êã ÊÍÏíÏåÇ. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡\nËã ÇáŞíÇã ÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
     TEXT[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß,\n åêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
-    TEXT[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ µ¿ÀÇ¾î»çÀüÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÏ°í \nÇÊ¿ä¿¡ µû¶ó ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+    TEXT[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ ´ëÇÑ µ¿ÀÇ¾î»çÀüÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÑ ´ÙÀ½ \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
     TEXT[ turkish ] = "Ayarlanan dil için eş anlamlılar sözlüğü mevcut değil. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yükleyin.";
     TEXT[ language_user1 ] = " ";
 };
@@ -500,7 +500,7 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ polish ] = "Z nieznanej przyczyny\nwyrazu nie mo¿na by³o przej¹æ do s³ownika.";
     Text[ portuguese_brazilian ] = "Failed to add word to dictionary\n for an unknown reason.";
     Text[ japanese ] = "’PŒê‚ÍŒ´ˆö‚ª•s–¾‚È‚Ü‚Ü\n«‘‚É’Ç‰Á‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·Á ÁöÁö ¾ÊÀº ÀÌÀ¯·Î \n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·Á ÁöÁö ¾ÊÀº ÀÌÀ¯·Î ÀÎÇØ\n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÓÉÓÚ²»Ã÷µÄÔ­ÒòÎŞ·¨½«\nÕâ¸ö´ÊÌí¼Óµ½´ÊµäÖĞÈ¥¡£";
     Text[ chinese_traditional ] = "¦r¨åµLªk¦¬¿ı³o­Ó¦r¡A­ì¦]¤£©ú¡C";
     Text[ arabic ] = "ÊÚĞÑ ÅÖÇİÉ ÇáßáãÉ Åáì ÇáŞÇãæÓ\náÓÈÈ ÛíÑ ãÚÑæİ.";
@@ -523,7 +523,7 @@ String RID_SVXSTR_DIC_ERR_FULL
     Text[ polish ] = "S³ownik jest przepe³niony.";
     Text[ portuguese_brazilian ] = "The dictionary is already full.";
     Text[ japanese ] = "«‘‚Í‚·‚Å‚É‚¢‚Á‚Ï‚¢‚Å‚·B";
-    Text[ korean ] = "»çÀüÀÌ ÀÌ¹Ì ²Ë Â÷ ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "»çÀüÀº ÀÌ¹Ì ²Ë Â÷ ÀÖ½À´Ï´Ù.";
     Text[ chinese_simplified ] = "´ÊµäÒÑ¾­×°Âú¡£";
     Text[ chinese_traditional ] = "¦r¨å¤wº¡¡C";
     Text[ arabic ] = "ÇáŞÇãæÓ ããÊáÆ ÈÇáİÚá.";
@@ -546,7 +546,7 @@ String RID_SVXSTR_DIC_ERR_READONLY
     Text[ polish ] = "S³ownik jest tylko do odczytu.";
     Text[ portuguese_brazilian ] = "The dictionary is readonly.";
     Text[ japanese ] = "«‘‚Í“Ç‚İæ‚èê—p‚Å‚·B";
-    Text[ korean ] = "»çÀüÀº ¾²±â º¸È£µÇ¾î ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "»çÀüÀº ÀĞ±âÀü¿ëÀÔ´Ï´Ù.";
     Text[ chinese_simplified ] = "Õâ¸ö´ÊµäÊÇ·À¸²Ğ´µÄ(Ö»¹©¶ÁÈ¡)¡£";
     Text[ chinese_traditional ] = "¦r¨å¬O°ßÅªªº¡C";
     Text[ arabic ] = "ÇáŞÇãæÓ ãÍãí ÖÏ ÇáßÊÇÈÉ.";
