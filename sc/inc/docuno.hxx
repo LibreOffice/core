@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 09:19:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@ public:
     double                  GetOutputFactor() const;
 
     BOOL                    AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab );
+
+    void                    BeforeXMLLoading();
+    void                    AfterXMLLoading(sal_Bool bRet);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
