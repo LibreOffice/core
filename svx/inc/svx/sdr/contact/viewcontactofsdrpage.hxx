@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:30:58 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,30 +93,14 @@ namespace sdr
                 return mrPage;
             }
 
-            // method to create a AnimationInfo. Needs to give a result if
-            // SupportsAnimation() is overloaded and returns sal_True.
-            virtual sdr::animation::AnimationInfo* CreateAnimationInfo();
-
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
-
             // method to recalculate the PaintRectangle if the validity flag shows that
             // it is invalid. The flag is set from GetPaintRectangle, thus the implementation
             // only needs to refresh maPaintRectangle itself.
             virtual void CalcPaintRectangle();
 
-        private:
-            // Because of old correction hacks there may be MasterPages (better:
-            // MasterPageDescriptors) set at the page, but actually no MasterPages
-            // exist at the model. To correctly handle that cases it is necessary to
-            // not only get the MasterPageCount() form the page, but also to correct
-            // that number if the model does not have any MasterPages.
-            sal_uInt32 ImpGetCorrectedMasterPageCount() const;
-
         protected:
             // local paint methods
-            void DrawPaper(DisplayInfo& rDisplayInfo);
+            void DrawPaper(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
             void DrawPaperBorder(DisplayInfo& rDisplayInfo);
             void DrawBorder(DisplayInfo& rDisplayInfo);
             void DrawHelplines(DisplayInfo& rDisplayInfo);
@@ -146,12 +130,6 @@ namespace sdr
             // Access to possible sub-hierarchy
             virtual sal_uInt32 GetObjectCount() const;
             virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-            // Since MasterPages are part of the hierarchy of a DrawPage, the
-            // link to ParentContacts may be 1:n
-            virtual sal_Bool GetParentContacts(ViewContactVector& rVContacts) const;
-
-            // Does this ViewContact support animation?
-            virtual sal_Bool SupportsAnimation() const;
 
             // overload for acessing the SdrPage
             virtual SdrPage* TryToGetSdrPage() const;
