@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:14:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,15 @@
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
+#endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
-
-#include "excupn.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -115,66 +116,28 @@ XclExpCtrlLinkHelper::~XclExpCtrlLinkHelper()
 
 void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
 {
-    mxCellLink = CreateTokenArray( rCellLink );
+    if( GetTabInfo().IsExportTab( rCellLink.Tab() ) )
+        mxCellLink = GetFormulaCompiler().CreateCellRefFormula( rCellLink, false );
+    else
+        mxCellLink.reset();
 }
 
 void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
 {
-    mxSrcRange = CreateTokenArray( rSrcRange );
+    if( (rSrcRange.aStart.Tab() == rSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( rSrcRange.aStart.Tab() ) )
+        mxSrcRange = GetFormulaCompiler().CreateRangeRefFormula( rSrcRange, false );
+    else
+        mxSrcRange.reset();
     mnEntryCount = static_cast< sal_uInt16 >( rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1 );
 }
 
-void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
+void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclExpTokenArray& rTokArr ) const
 {
-    sal_uInt16 nFmlaSize = rTokArr.GetLen();
+    sal_uInt16 nFmlaSize = rTokArr.GetSize();
     rStrm << nFmlaSize << sal_uInt32( 0 );
-    rStrm.Write( rTokArr.GetData(), nFmlaSize );
-    if( nFmlaSize & 1 )
+    rTokArr.WriteArray( rStrm );
+    if( nFmlaSize & 1 )             // pad to 16-bit
         rStrm << sal_uInt8( 0 );
-}
-
-::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScTokenArray& rScTokArr ) const
-{
-    EC_Codetype eDummy;
-    XclExpTokArrPtr pXclTokArr( new ExcUPN( mpRD, rScTokArr, eDummy ) );
-    if( !pXclTokArr->GetLen() || !pXclTokArr->GetData() )
-        pXclTokArr.reset();
-    return pXclTokArr;
-}
-
-::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScAddress& rPos ) const
-{
-    XclExpTokArrPtr pXclTokArr;
-    if( GetTabInfo().IsExportTab( rPos.Tab() ) )
-    {
-        ScTokenArray aScTokArr;
-        SingleRefData aRef;
-        aRef.InitAddress( rPos );
-        aScTokArr.AddSingleReference( aRef );
-        pXclTokArr = CreateTokenArray( aScTokArr );
-    }
-    return pXclTokArr;
-}
-
-::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScRange& rRange ) const
-{
-    XclExpTokArrPtr pXclTokArr;
-    if( rRange.aStart == rRange.aEnd )
-    {
-        pXclTokArr = CreateTokenArray( rRange.aStart );
-    }
-    else if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
-    {
-        if( GetTabInfo().IsExportTab( rRange.aStart.Tab() ) )
-        {
-            ScTokenArray aScTokArr;
-            ComplRefData aRef;
-            aRef.InitRange( rRange );
-            aScTokArr.AddDoubleReference( aRef );
-            pXclTokArr = CreateTokenArray( aScTokArr );
-        }
-    }
-    return pXclTokArr;
 }
 
 // ----------------------------------------------------------------------------
@@ -617,9 +580,9 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
             rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
 
-            if( const ExcUPN* pSrcRange = GetSourceRangeTokArr() )
+            if( const XclExpTokenArray* pSrcRange = GetSourceRangeTokArr() )
             {
-                rStrm << static_cast< sal_uInt16 >( (pSrcRange->GetLen() + 7) & 0xFFFE );
+                rStrm << static_cast< sal_uInt16 >( (pSrcRange->GetSize() + 7) & 0xFFFE );
                 WriteFormula( rStrm, *pSrcRange );
             }
             else
@@ -678,7 +641,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
 void XclExpObjTbxCtrl::WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
-    if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
+    if( const XclExpTokenArray* pCellLink = GetCellLinkTokArr() )
     {
         rStrm.StartRecord( nSubRecId, 0 );
         WriteFormula( rStrm, *pCellLink );
