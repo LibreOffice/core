@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:46:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,7 +936,7 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 }
 
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GraphCtrl::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
     if( mpAccContext == NULL )
     {
@@ -946,7 +946,7 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 
         if( pParent )
         {
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
             // #103856# Disable accessibility if no model/view data available
             if( pView &&
