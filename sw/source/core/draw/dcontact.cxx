@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2221,7 +2221,7 @@ void SwDrawVirtObj::RecalcBoundRect()
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
 
-sal_Bool SwDrawVirtObj::DoPaintObject( ExtOutputDevice& rOut,
+sal_Bool SwDrawVirtObj::DoPaintObject( XOutputDevice& rOut,
                                        const SdrPaintInfoRec& rInfoRec ) const
 
 {
