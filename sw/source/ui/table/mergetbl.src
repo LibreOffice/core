@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:55:24 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ ModalDialog DLG_MERGE_TABLE
     Text[ portuguese_brazilian ] = "Join tables";
     Text[ japanese ] = "•\\‚Μ‹‡";
     Text[ chinese_simplified ] = "Α¬½Σ±νΈρ";
-    Text[ chinese_traditional ] = "³sµ²ªν®ζ";
+    Text[ chinese_traditional ] = "³s±µªν®ζ";
     Text[ arabic ] = "ζΥα ΗαΜΟΗζα";
     Text[ greek ] = "Ένωση πινάκων";
     Text[ korean ] = "Η¥ Ώ¬°α";
