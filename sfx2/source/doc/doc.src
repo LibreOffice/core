@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:56:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message[ czech ] = "Uložení v externím formátu mohlo způsobit\nztrátu informací. Přejete si opravdu zavřít okno?";
     Message[ hebrew ] = "‮יתכן ששמירה בצורות קובץ זרות כבר גרם לאובדן מידע.\nהאם בכל זאת לסגור את המסמך?‬";
     Message[ hindi ] = "बाहरी रचना में संचित करने से\n सूचना नष्ट हुआ है । आप फिर भी बंद करना चाहते है ?";
+    Message[ slovak ] = "Uloženie v externom formáte mohlo spôsobiť\nstratu informácii. Prajete si naozaj zavrieť okno?";
 };
 QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
 {
@@ -134,6 +135,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message[ czech ] = "Jméno už bylo použito.\nPřejete si přepsat šablonu dokumentu?";
     Message[ hebrew ] = "‮השם שצוין כבר בשימוש.\nהאם הכוונה להחליף את התבנית הקיימת בשם זה?‬";
     Message[ hindi ] = "नाम पहिले से ही उपयोग में है ।\nआप लेखपत्र नमूने को ओवररइट करना चाहते है ?";
+    Message[ slovak ] = "Meno už bolo použité.\nPrejete si prepísať šablónu dokumentu?";
 };
 QueryBox MSG_QUERY_LOAD_TEMPLATE
 {
@@ -170,6 +172,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ czech ] = "Styly v tomto dokumentu neodpovídají vašim právě nastaveným stylům. Mají být nastavené styly použity pro tento dokument?";
     MESSAGE[ hebrew ] = "‮הסגנונות במסמך זה אינן חופפים לסגנונות הנוכחיים. האם ליישם את הסגנונות הנוכחיים על מסמך זה?‬";
     MESSAGE[ hindi ] = "इस लेखपत्र में रहनेवाला शैलियाँ, आपका वर्तमान शैलियों से भिन्न है । आपका वर्तमान शैलियों को इस लेखपत्र केलिए लागू करना चाहते है ?";
+    MESSAGE[ slovak ] = "Štýly v tomto dokumente nezodpovedajú vašim práve nastavených štýlom. Majú byť nastavené štýly použité pre tento dokument?";
 };
 String STR_DELETE_REGION
 {
@@ -202,6 +205,7 @@ String STR_DELETE_REGION
     Text[ czech ] = "Opravdu chcete smazat region \"$1\"?";
     Text[ hebrew ] = "‮האם באמת למחוק את איזור \"$1\"?‬";
     Text[ hindi ] = "आप सचमुच में \"$1\" प्रदेश को मिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete zmazať región \"$1\"?";
 };
 String STR_DELETE_TEMPLATE
 {
@@ -234,6 +238,7 @@ String STR_DELETE_TEMPLATE
     Text[ czech ] = "Opravdu chcete smazat položku \"$1\"?";
     Text[ hebrew ] = "‮האם אכן למחוק את הערך \"$1\"?‬";
     Text[ hindi ] = "आप सचमुच में \"$1\" प्रविष्टि को मिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete zmazať položku \"$1\"?";
 };
 QueryBox MSG_REGION_NOTEMPTY
 {
@@ -269,6 +274,7 @@ QueryBox MSG_REGION_NOTEMPTY
     Message[ czech ] = "Kategorie není prázdná.\nOpravdu smazat?";
     Message[ hebrew ] = "‮הסיווג אינו ריק.\nלמחוק אותו בכל זאת?‬";
     Message[ hindi ] = "वर्ग खाली नहीं है ।\nकिसी तरह मिटाना चाहते है?";
+    Message[ slovak ] = "Kategória nie je prázdna.\nNaozaj zmazať?";
 };
 String STR_QUERY_SAVE_DOCUMENT
 {
@@ -301,6 +307,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ czech ] = "Dokument \"$(DOC)\" byl změněn.\nChcete uložit vámi provedené změny?";
     Text[ hebrew ] = "‮המסמך\"$(DOC)\" השתנה. האם לשמור שינויים?‬";
     Text[ hindi ] = "$(DOC) लेखपत्र को सुधार किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
+    Text[ slovak ] = "Dokument \"$(DOC)\" bol zmenený.\nChcete uložiť vami vykonané zmeny?";
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
@@ -340,6 +347,7 @@ String STR_STYLES
     Text[ czech ] = "Styly";
     Text[ hebrew ] = "‮סגנונות‬";
     Text[ hindi ] = "शैलियाँ";
+    Text[ slovak ] = "Štýly";
 };
 String STR_MACROS
 {
@@ -373,6 +381,7 @@ String STR_MACROS
     Text[ czech ] = "Makra";
     Text[ hebrew ] = "‮מקרוא‬";
     Text[ hindi ] = "मॉक्रोस";
+    Text[ slovak ] = "Makrá";
 };
 String STR_CONFIG
 {
@@ -406,6 +415,7 @@ String STR_CONFIG
     Text[ czech ] = "Konfigurace";
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
+    Text[ slovak ] = "Konfigurácia";
 };
 String STR_PRINT_STYLES_HEADER
 {
@@ -439,6 +449,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ czech ] = "Styly v ";
     Text[ hebrew ] = "‮סגנונות ב ‬";
     Text[ hindi ] = "में शैलियाँ ";
+    Text[ slovak ] = "Štýly v ";
 };
 String STR_PRINT_STYLES
 {
@@ -472,6 +483,7 @@ String STR_PRINT_STYLES
     Text[ czech ] = "Styly tisku";
     Text[ hebrew ] = "‮סגנונות הדפסה‬";
     Text[ hindi ] = "छपाई करने का शैलियाँ";
+    Text[ slovak ] = "Štýly tlače";
 };
 Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
@@ -517,6 +529,7 @@ ErrorBox MSG_PRINT_ERROR
     Message[ czech ] = "Nelze spustit tiskovou úlohu.";
     Message[ hebrew ] = "‮לא ניתן להתחיל את משימת ההדפסה.‬";
     Message[ hindi ] = "छपाई कार्य प्रारंभ नहीं कर सकते है ।";
+    Message[ slovak ] = "Nie je možné spustiť tlačovú úlohu.";
 };
 String STR_BACKUP_COPY
 {
@@ -550,6 +563,7 @@ String STR_BACKUP_COPY
     Text[ czech ] = "Kopie";
     Text[ hebrew ] = "‮העתקה‬";
     Text[ hindi ] = "प्रतिलिपि";
+    Text[ slovak ] = "Kópia";
 };
 WarningBox MSG_WARNING_BACKUP
 {
@@ -585,6 +599,7 @@ WarningBox MSG_WARNING_BACKUP
     Message[ czech ] = "Nelze vytvořit záložní kopii.";
     Message[ hebrew ] = "‮לא ניתן ליצור עותק גיבוי.‬";
     Message[ hindi ] = "बैकप प्रतिलिपि को उत्पन्न नहीं कर सकते है ।";
+    Message[ slovak ] = "Nie je možné vytvoriť záložnú kópiu.";
 };
 InfoBox MSG_CANT_OPEN_TEMPLATE
 {
@@ -618,6 +633,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message[ czech ] = "Nelze otevřít šablonu.";
     Message[ hebrew ] = "‮לא ניתן לפתוח את התבנית.‬";
     Message[ hindi ] = "नमूने को खोल नहीं सकते है ।";
+    Message[ slovak ] = "Nie je možné otvoriť šablónu.";
 };
 InfoBox MSG_VIEW_OPEN_CANT_SAVE
 {
@@ -653,6 +669,7 @@ InfoBox MSG_VIEW_OPEN_CANT_SAVE
     MESSAGE[ czech ] = "Dokument je již otevřen pro úpravy.";
     MESSAGE[ hebrew ] = "‮המסמך כבר פתוח לעריכה.‬";
     MESSAGE[ hindi ] = "संपादन करने केलिए लेखपत्र पहिले से ही खुला है ।";
+    MESSAGE[ slovak ] = "Dokument je už otvorený pre úpravy.";
 };
 String STR_ERROR_SAVE
 {
@@ -686,6 +703,7 @@ String STR_ERROR_SAVE
     Text[ czech ] = "Chyba při zaznamenávání dokumentu";
     Text[ hebrew ] = "‮ארעה שגיאה בעת הקלטת המסמך ‬";
     Text[ hindi ] = "लेखपत्र रेकोर्डिन्ग करने का समय गलती";
+    Text[ slovak ] = "Chyba pri zaznamenávaní dokumentu";
 };
 String STR_TEMPLATE_FILTER
 {
@@ -719,6 +737,7 @@ String STR_TEMPLATE_FILTER
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Šablóny";
 };
 String STR_ERROR_COPY_TEMPLATE
 {
@@ -752,6 +771,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text[ czech ] = "Chyba při kopírování šablony \"$1\". \nŠablona s tímto jménem už možná existuje.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת העתקת תבנית \"$1\".\nתבנית בעלת שם זהה כבר קיימת.‬";
     Text[ hindi ] = "$1 नमूने कि प्रतिलिपि बनाने कि समय गलती । \nशायद इस नाम का नमूना पहिले से ही अस्तित्व में है ।";
+    Text[ slovak ] = "Chyba pri kopírovaní šablóny \"$1\". \nŠablóna s týmto menom už pravdepodobne existuje.";
 };
 String STR_ERROR_DELETE_TEMPLATE
 {
@@ -784,6 +804,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ czech ] = "Nelze smazat šablonu \"$1\".";
     Text[ hebrew ] = "‮לא ניתן למחוק את התבנית \"$1\".‬";
     Text[ hindi ] = "नमूना \"$1\" को नहीं मिटा सकते है ।";
+    Text[ slovak ] = "Nie je možné zmazať šablónu \"$1\".";
 };
 String STR_ERROR_MOVE_TEMPLATE
 {
@@ -817,6 +838,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ czech ] = "Chyba při přesunu šablony \"$1\".";
     Text[ hebrew ] = "‮ארעה שגיאה בעת הזזת התבנית \"$1.‬";
     Text[ hindi ] = "$1 नमूना को स्थान परिवर्तन करने का समय गलती ।";
+    Text[ slovak ] = "Chyba pri presune šablóny \"$1\".";
 };
 ErrorBox MSG_ERROR_RESCAN
 {
@@ -852,6 +874,7 @@ ErrorBox MSG_ERROR_RESCAN
     Message[ czech ] = "Nelze uložit aktualizace.";
     Message[ hebrew ] = "‮לא ניתן לשמור את העידכון.‬";
     Message[ hindi ] = "अपडेटों को संचित नहीं कर सकते है ।";
+    Message[ slovak ] = "Nie je možné uložiť aktualizácie";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -885,6 +908,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ czech ] = "Chyba při ukládání šablony ";
     Text[ hebrew ] = "‮ארעה שגיאה בעת שמירת התבנית‬";
     Text[ hindi ] = "नमूना संचित करने का समय गलती   ";
+    Text[ slovak ] = "Chyba pri ukladaní šablóny ";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE
 {
@@ -920,6 +944,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     Message[ czech ] = "Chyba při přejmenování šablony.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם התבנית.‬";
     Message[ hindi ] = "नमूने को पुनः नाम देने का समय गलती ।";
+    Message[ slovak ] = "Chyba pri premenovaní­ šablóny.";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
 {
@@ -955,6 +980,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message[ czech ] = "Chyba při přejmenování kategorie šablon.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם הסיווג של התבנית.‬";
     Message[ hindi ] = "नमूना वर्ग को पुनः नाम देने का समय गलती ।";
+    Message[ slovak ] = "Chyba pri premenovaní­ kategórie šablóny.";
 };
 ErrorBox MSG_ERROR_EMPTY_NAME
 {
@@ -990,6 +1016,7 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message[ czech ] = "Uveďte prosím název.";
     Message[ hebrew ] = "‮נא לציין שם.‬";
     Message[ hindi ] = "कृपया एक नाम निर्दिष्ट कीजिए ।";
+    Message[ slovak ] = "Uveďte meno.";
 };
 ErrorBox MSG_ERROR_UNIQ_NAME
 {
@@ -1025,6 +1052,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message[ czech ] = "Prosím zadejte jedinečné jméno.\nV položkách nesmí záležet na velikosti písmen.";
     Message[ hebrew ] = "‮נא לציין שם יחודי.\nיש חשיבות לאותיות גדולות וקטנות.‬";
     Message[ hindi ] = "कृपया एक अनोखा नाम निर्दिष्ट कीजिए ।\nप्रविष्टियाँ केस सचेतन नहीं होना चाहिए ।";
+    Message[ slovak ] = "Prosím zadajte jedinečné meno.\nV položkách nesmie záležať na veľkosti písmen.";
 };
 String STR_QUERY_DEFAULT_TEMPLATE
 {
@@ -1058,6 +1086,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ czech ] = "Má se šablona \"$(TEXT)\" stát výchozí šablonou?";
     TEXT[ hebrew ] = "‮האם לקבוע את \"$(TEXT)\" כתבנית ברירת המחדל?‬";
     TEXT[ hindi ] = "$(TEXT) नमूने को अनुपस्थिति नमूना बनाना चाहते है?";
+    TEXT[ slovak ] = "Má sa šablóna \"$(TEXT)\" stať východzou šablónou?";
 };
 QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
 {
@@ -1093,6 +1122,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message[ czech ] = "Přejete si přenastavit výchozí šablonu?";
     Message[ hebrew ] = "‮האם להחזור לקדמותו את תבנית ברירת החדל?‬";
     Message[ hindi ] = "अनुपस्थिति नमूने को रिसेट्ट करना चाहते है?";
+    Message[ slovak ] = "Prajete si prestaviť východziu šablónu?";
 };
 InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
 {
@@ -1126,6 +1156,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message[ czech ] = "Adresář se šablonami\n$(DIR)\nneexistuje.";
     Message[ hebrew ] = "‮ספרית התבניות \n$(DIR)\nאינה קיימת.‬";
     Message[ hindi ] = "नमूना डैरक्टरी\n$(DIR)\nअस्तित्व में नहीं है ।";
+    Message[ slovak ] = "Adresár so šablónami\n$(DIR)\nneexistuje.";
 };
 InfoBox MSG_DOCINFO_CANTREAD
 {
@@ -1158,6 +1189,7 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message[ czech ] = "Nelze přečíst informaci o dokumentu.";
     Message[ hebrew ] = "‮לא ניתן לקרוא את פרטי המסמך.‬";
     Message[ hindi ] = "लेखपत्र सूचना को नहीं पढ़ सकते है ।";
+    Message[ slovak ] = "Nie je možné prečítať informáciu o dokumente.";
 };
 String STR_ERROR_NOSTORAGE
 {
@@ -1193,6 +1225,7 @@ String STR_ERROR_NOSTORAGE
     Text[ czech ] = "Vybraný soubor má neplatný formát.";
     Text[ hebrew ] = "‮צורת הקובץ הנבחר אינה חוקית.‬";
     Text[ hindi ] = "चुने हुए फाइल का रचना गलत है ।";
+    Text[ slovak ] = "Vybraný súbor má neplatný formát.";
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
@@ -1225,6 +1258,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ czech ] = "Tento dokument obsahuje nastavení a informace, které nemohou být uloženy\nve formátu $(FORMAT). Přejete si uložit své změny za použití formátu \n$(OWNFORMAT) ?";
     Text[ hebrew ] = "‮יתכן שמסמך זה מכיל תכונות או מידע שלא ניתן לשמירה בצורת $(FORMAT).\nהאם לשמור את השינוים בצורת\n$(OWNFORMAT)\n?‬";
     Text[ hindi ] = "$(FORMAT)\nके नीचे संचित न किये जानेवाला ऐट्रिब्यूट्स और जानकारी शायद इस लेखपत्र में सम्मिलित है । $(OWNFORMAT) रचना\n को उपयोग करके आप परिवर्तनों को संचित करना चाहते है ?";
+    Text[ slovak ] = "Tento dokument obsahuje nastavenia a informácie,\nktoré nemôžu byť uložené vo formáte $(FORMAT).\nPrajete si uložiť svoje zmeny s použitím formátu $(OWNFORMAT) ?";
 };
 String STR_QUERY_MUSTOWNFORMAT
 {
@@ -1256,6 +1290,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text[ czech ] = "Dokumenty nemohou být uloženy ve formátu $(FORMAT).\nPřejete si uložit své změny za použití formátu $(OWNFORMAT)?";
     Text[ hebrew ] = "Documents cannot be saved in $(FORMAT) format. Do you\nwant to save your changes using the $(OWNFORMAT) format?";
     Text[ hindi ] = "लेखपत्रों को $(FORMAT) रचना में संचित नहीं कर सकते है ।\nआप $(OWNFORMAT) रचना उपयोग करके परिवर्तनों को संचित करना चाहते है ?";
+    Text[ slovak ] = "Dokumenty nemôžu byť uložené vo formáte $(FORMAT).\nPrajete si uložiť svoje zmeny s použitím formátu $(OWNFORMAT)?";
 };
 String STR_SAVEDOC
 {
@@ -1288,6 +1323,7 @@ String STR_SAVEDOC
     Text[ czech ] = "Uložit";
     Text[ hebrew ] = "‮שמירה‬!";
     Text[ hindi ] = "~सचित करो";
+    Text[ slovak ] = "~Uložiť";
 };
 String STR_UPDATEDOC
 {
@@ -1320,6 +1356,7 @@ String STR_UPDATEDOC
     Text[ czech ] = "Aktualizovat";
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "~अपडेट् करो";
+    Text[ slovak ] = "Akt~ualizovať";
 };
 String STR_SAVEASDOC
 {
@@ -1352,6 +1389,7 @@ String STR_SAVEASDOC
     Text[ czech ] = "Uložit jako...";
     Text[ hebrew ] = "‮שמירה בשם...‬";
     Text[ hindi ] = "संचित करो ~जैसे...";
+    Text[ slovak ] = "Uložiť ~ako...";
 };
 String STR_SAVECOPYDOC
 {
@@ -1384,6 +1422,7 @@ String STR_SAVECOPYDOC
     Text[ czech ] = "Uložit kopii jako...";
     Text[ hebrew ] = "‮שמירת עותק בשם...‬";
     Text[ hindi ] = "~प्रतिलिपि संचित करो जैसे...";
+    Text[ slovak ] = "Uložiť kópiu ~ako...";
 };
 String STR_CLOSEDOC
 {
@@ -1416,6 +1455,7 @@ String STR_CLOSEDOC
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "~बन्द करो";
+    Text[ slovak ] = "~Zavrieť";
 };
 String STR_CLOSEDOC_ANDRETURN
 {
@@ -1450,6 +1490,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ czech ] = "Konec a návrat do ";
     Text[ hebrew ] = "‮יציאה וחזרה אל ‬";
     Text[ hindi ] = "बन्द करो ~और केलिए वापस ";
+    Text[ slovak ] = "~Zavrieť a návrat do ";
 };
 String STR_WIZARD
 {
@@ -1482,6 +1523,7 @@ String STR_WIZARD
     Text[ czech ] = " Průvodce";
     Text[ hebrew ] = "‮ טייס אוטומטי‬";
     Text[ hindi ] = " ओटोपैलट्";
+    Text[ slovak ] = " Sprievodca";
 };
 String RID_STR_FILTCONFIG
 {
@@ -1514,6 +1556,7 @@ String RID_STR_FILTCONFIG
     Text[ czech ] = "Konfigurace";
     Text[ hebrew ] = "‮תצורות‬";
     Text[ hindi ] = "रूपरेखें";
+    Text[ slovak ] = "Konfigurácia";
 };
 String RID_STR_FILTBASIC
 {
@@ -1546,6 +1589,7 @@ String RID_STR_FILTBASIC
     Text[ czech ] = "Knihovny BASIC %PRODUCTNAME";
     Text[ hebrew ] = "‮ספריות בייסיק %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME Basic लैब्ररियाँ";
+    Text[ slovak ] = "Knižnice BASIC %PRODUCTNAME";
 };
 String RID_STR_WARNSTYLEOVERWRITE
 {
@@ -1578,6 +1622,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ czech ] = "Má být styl \"$(ARG1)\" nahrazen?";
     Text[ hebrew ] = "‮האם להחליף את הסגנון \"$(ARG1)\"?‬";
     Text[ hindi ] = "$(ARG1) शैली को प्रतिस्थापित करना है?";
+    Text[ slovak ] = "Má byť štýl \"$(ARG1)\" nahradený?";
 };
 String STR_DOC_LOADING
 {
@@ -1610,6 +1655,7 @@ String STR_DOC_LOADING
     Text[ czech ] = "Načítá se soubor";
     Text[ hebrew ] = "‮טעינת המסמך‬";
     Text[ hindi ] = "लेखपत्र को लोड़ कर रहा है";
+    Text[ slovak ] = "Načíta sa súbor";
 };
 Resource RID_DLSTATUS
 {
@@ -1644,6 +1690,7 @@ Resource RID_DLSTATUS
         Text[ czech ] = "Připojení k $(HOST): čeká se na spojení...";
         Text[ hebrew ] = "‮מתחברת ל: $(HOST). המתנה לתשובה...‬";
         Text[ hindi ] = "$(HOST) केलिए कनेक्शन्। जवाब केलिए ठहरा हुआ है...";
+        Text[ slovak ] = "Pripojenie k $(HOST): čaká sa na spojenie...";
     };
     String INET_CONNECT_START
     {
@@ -1676,6 +1723,7 @@ Resource RID_DLSTATUS
         Text[ czech ] = "Otevírá se $(TARGET) na $(HOST)";
         Text[ hebrew ] = "‮$(TARGET) נפתח על: $(HOST)‬";
         Text[ hindi ] = "$(HOST) में $(TARGET) को खोल रहा है ";
+        Text[ slovak ] = "Otvára sa $(TARGET) u $(HOST)";
     };
     String INET_READ_STATUS
     {
@@ -1708,6 +1756,7 @@ Resource RID_DLSTATUS
         Text[ czech ] = "Nahrává se: $(TARGET) z $(HOST). Staženo: $(BYTE)";
         Text[ hebrew ] = "‮טעינת: $(TARGET) מתבצעת, מ: $(HOST). נטענו: $(BYTE) בתים‬";
         Text[ hindi ] = "$(HOST) से $(TARGET) को लोड़ कर रहा है ।  $(BYTE) को लोड़ किया ।";
+        Text[ slovak ] = "Nahráva sa: $(TARGET) z $(HOST). Stiahnuté: $(BYTE)";
     };
     String INET_CONNECTION_CLOSED
     {
@@ -1740,6 +1789,7 @@ Resource RID_DLSTATUS
         Text[ czech ] = "Odpojeno";
         Text[ hebrew ] = "‮מנותק‬";
         Text[ hindi ] = "डिसकनेक्ट किया";
+        Text[ slovak ] = "Spojenie prerušené";
     };
 };
 QueryBox MSG_OPEN_READONLY
@@ -1776,6 +1826,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE[ czech ] = "Dokument nemůže být otevřen pro editaci.\nPřejete si jej otevřít pouze pro čtení?";
     MESSAGE[ hebrew ] = "‮לא ניתן לפתוח את המסמך לכתיבה.\nהאם לפתוח לקריאה בלבד?‬";
     MESSAGE[ hindi ] = "लेखपत्र को संपादन केलिए नहीं खोल सकते है।\nआप उसे केवल-पढ़ने केलिए खोलना चाहते है?";
+    MESSAGE[ slovak ] = "Dokument nemôže byť otvorený pre editáciu.\nPrajete si ho otvoriť iba na čítanie?";
 };
 String STR_EDIT
 {
@@ -1808,6 +1859,7 @@ String STR_EDIT
     Text[ czech ] = "Upravit";
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "संपादन";
+    Text[ slovak ] = "Upraviť";
 };
 String RID_OFFICEFILTER
 {
@@ -1840,6 +1892,7 @@ String RID_OFFICEFILTER
     Text[ czech ] = "Dokumenty %PRODUCTNAME";
     Text[ hebrew ] = "‮מסמכי %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME लेखपत्रें";
+    Text[ slovak ] = "Dokumenty %PRODUCTNAME";
 };
 String RID_OFFICEFILTER_WILDCARD
 {
@@ -1884,6 +1937,7 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text[ czech ] = "Vlastnosti...";
     Text[ hebrew ] = "‮מאפינים...‬";
     Text[ hindi ] = "वि~शेषतायें ...";
+    Text[ slovak ] = "Vlastnost~i...";
 };
 String STR_FSET_FILTERNAME0
 {
@@ -1916,6 +1970,7 @@ String STR_FSET_FILTERNAME0
     Text[ czech ] = "HTML (sada rámců)";
     Text[ hebrew ] = "HTML (FrameSet)";
     Text[ hindi ] = "HTML (फ्रेमसेट्ट)";
+    Text[ slovak ] = "HTML (sada rámcov)";
 };
 String STR_FSET_FILTERNAME1
 {
@@ -1949,6 +2004,7 @@ String STR_FSET_FILTERNAME1
     Text[ czech ] = "Dokument s rámci %PRODUCTNAME";
     Text[ hebrew ] = "‮מסמך  Frame %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME फ्रेम् लेखपत्र";
+    Text[ slovak ] = "Dokument s rámcami %PRODUCTNAME";
 };
 String STR_TEMPL_MOVED
 {
@@ -1981,6 +2037,7 @@ String STR_TEMPL_MOVED
     Text[ czech ] = "Šablona \"$(TEMPLATE)\" nebyla nalezena v původním umístnění. Šablona se stejným názvem se nalézá v \"$(FOUND)\". Má být tato šablona v budoucnosti použita pro porovnání?";
     Text[ hebrew ] = "‮לא ניתן לאתר את התבנית \"$(TEMPLATE)\" במקומה המקורי אבל תבנית בעלת שם זהה נמצאת ב \"$(FOUND)\". האם להשתמש בעתיד בתבנית זו להשוואות?‬";
     Text[ hindi ] = "$(TEMPLATE) नमूना यथार्थ स्थान में नहीं है । समान नाम का नमूना \"$(FOUND)\" में अस्तित्व में है । भविष्य में तुलना करने केलिए इस नमूने को उपयोग करना चाहते है ?";
+    Text[ slovak ] = "Šablóna \"$(TEMPLATE)\" nebola nájdená na pôvodnom mieste. Šablóna z rovnakým názvom sa nachádza v \"$(FOUND)\".Má byť táto šablóna v budúcnosti použitá na porovnanie?";
 };
 String STR_TEMPL_RESET
 {
@@ -2013,6 +2070,7 @@ String STR_TEMPL_RESET
     Text[ czech ] = "Šablona \"$(TEMPLATE)\" nebyla nalezena. Má se provádět hledání šablony i při dalším otevření dokumentu?";
     Text[ hebrew ] = "‮לא ניתן לאתר את התבנית \"$(TEMPLATE)\". האם לחפש את התבנית בפתיחה הבאה של המסמך?‬";
     Text[ hindi ] = "$(TEMPLATE) नमूना प्राप्त नहीं हुआ । अगले बार लेखपत्र को खोलने के समय नमूने को खोजना चाहते है ?";
+    Text[ slovak ] = "Šablóna \"$(TEMPLATE)\" nebola nájdená. Má sa vykonávať hľadanie šablóny i pri dalšom otvorení dokumentu?";
 };
 String STR_AUTOMATICVERSION
 {
@@ -2045,6 +2103,7 @@ String STR_AUTOMATICVERSION
     Text[ czech ] = "Automaticky uložená verze";
     Text[ hebrew ] = "‮עותק שנשמר באופן אוטומטי‬";
     Text[ hindi ] = "स्वचालित प्रकार से संचित किया हुआ आवृत्ति";
+    Text[ slovak ] = "Automaticky uložená verzia";
 };
 
 String STR_DOCTYPENAME_SW
@@ -2075,6 +2134,7 @@ String STR_DOCTYPENAME_SW
     Text[ czech ] = "Textový dokument";
     Text[ hebrew ] = "‮מסמך טקסט‬";
     Text[ hindi ] = "टेक्स्ट् लेखपत्र";
+    Text[ slovak ] = "Textový dokument";
 };
 
 String STR_DOCTYPENAME_SWWEB
@@ -2105,6 +2165,7 @@ String STR_DOCTYPENAME_SWWEB
     Text[ czech ] = "HTML dokument";
     Text[ hebrew ] = "‮מסמך LMTH‬";
     Text[ hindi ] = "HTML लेखपत्र";
+    Text[ slovak ] = "HTML dokument";
 };
 
 String STR_DOCTYPENAME_SWGLOB
@@ -2135,6 +2196,7 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ czech ] = "Hlavní dokument";
     Text[ hebrew ] = "‮מסמך אב‬";
     Text[ hindi ] = "मास्टर लेखपत्र";
+    Text[ slovak ] = "Hlavný dokument";
 };
 
 String STR_DOCTYPENAME_SC
@@ -2165,6 +2227,7 @@ String STR_DOCTYPENAME_SC
     Text[ czech ] = "Sešit";
     Text[ hebrew ] = "‮גליון אלקטרוני‬";
     Text[ hindi ] = "स्प्रेडशीट्";
+    Text[ slovak ] = "Zošit";
 };
 
 String STR_DOCTYPENAME_SI
@@ -2195,6 +2258,7 @@ String STR_DOCTYPENAME_SI
     Text[ czech ] = "Prezentace";
     Text[ hebrew ] = "‮מצגת‬";
     Text[ hindi ] = "प्रस्तुति";
+    Text[ slovak ] = "Prezentácia";
 };
 
 String STR_DOCTYPENAME_SD
@@ -2225,6 +2289,7 @@ String STR_DOCTYPENAME_SD
     Text[ czech ] = "Kresba";
     Text[ hebrew ] = "‮ציור‬";
     Text[ hindi ] = "रेखाचित्र";
+    Text[ slovak ] = "Kresba";
 };
 
 String STR_DOCTYPENAME_MESSAGE
@@ -2255,6 +2320,7 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ czech ] = "Zpráva";
     Text[ hebrew ] = "‮הודעה‬";
     Text[ hindi ] = "संदेश";
+    Text[ slovak ] = "Správa";
 };
 
 String STR_NOSAVEANDCLOSE
@@ -2267,7 +2333,7 @@ String STR_NOSAVEANDCLOSE
     Text[ dutch ] = "~Verwerpen";
     Text[ french ] = "~Ignorer";
     Text[ spanish ] = "~Rechazar";
-    Text[ italian ] = "~Non salvare";
+    Text[ italian ] = "Non salvare";
     Text[ danish ] = "Forkast";
     Text[ swedish ] = "I~gnorera";
     Text[ polish ] = "~Odrzu�";
@@ -2288,6 +2354,7 @@ String STR_NOSAVEANDCLOSE
     Text[ czech ] = "Zahodit";
     Text[ hebrew ] = "‮התעלמות‬";
     Text[ hindi ] = "~उपेक्षा";
+    Text[ slovak ] = "Zaho~diť";
 };
 
 String STR_PACKNGO_NOACCESS
@@ -2318,6 +2385,7 @@ String STR_PACKNGO_NOACCESS
     Text[ czech ] = "Přístup ke stávajícímu úložišti dat není možný.";
     Text[ hebrew ] = "‮אין גישה למדית הנתונים הנוכחית.‬";
     Text[ hindi ] = "वर्तमान ड़ॉटा मीडियम को प्रवेश करना संभव नहीं है ।";
+    Text[ slovak ] = "Prístup k terajšiemu dátovému médiu nie je možný.";
 };
 
 String STR_PACKNGO_NEWMEDIUM
@@ -2348,6 +2416,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ czech ] = "Vložte prosím další nosič dat a stiskněte OK.";
     Text[ hebrew ] = "‮יש להכניס את המדיה הבאה וללחוץ OK.‬";
     Text[ hindi ] = "अगला ड़ॉटा कैरियर को जोड़ो और ठीक को क्लिक् करो ।";
+    Text[ slovak ] = "Vložte prosím ďalší nosič dát a stisknite OK.";
 };
 
 String STR_OBJECT
@@ -2381,6 +2450,7 @@ String STR_OBJECT
     Text[ czech ] = "Objekt";
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
+    Text[ slovak ] = "Objekt";
 };
 
 String STR_EDITOBJECT
@@ -2414,6 +2484,7 @@ String STR_EDITOBJECT
     Text[ czech ] = "Upravit";
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "~संपादन";
+    Text[ slovak ] = "~Upraviť";
 };
 
 String STR_OPENOBJECT
@@ -2447,6 +2518,7 @@ String STR_OPENOBJECT
     Text[ czech ] = "Otevřít";
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "~खोलो";
+    Text[ slovak ] = "~Otvoriť";
 };
 
 QueryBox DLG_MACROQUERY
@@ -2508,6 +2580,8 @@ QueryBox DLG_MACROQUERY
     Title[ hebrew ] = "Makro ausführen";
     Message[ hindi ] = "This document contains macros. $(TEXT)";
     Title[ hindi ] = "Run Macro";
+    Message[ slovak ] = "Tento dokument obsahuje makrá. $(TEXT)";
+    Title[ slovak ] = "Spustiť makro";
 };
 
 String BTN_OK
@@ -2541,6 +2615,7 @@ String BTN_OK
     Text[ czech ] = "Spustit";
     Text[ hebrew ] = "‮הפעלה‬";
     Text[ hindi ] = "Run";
+    Text[ slovak ] = "Spustiť";
 };
 String BTN_CANCEL
 {
@@ -2573,6 +2648,7 @@ String BTN_CANCEL
     Text[ czech ] = "Nespouštět";
     Text[ hebrew ] = "‮אין להפעיל‬";
     Text[ hindi ] = "Do Not Run";
+    Text[ slovak ] = "Nespúšťať";
 };
 String FT_CANCEL
 {
@@ -2602,6 +2678,7 @@ String FT_CANCEL
     Text[ czech ] = "Podle nastavení zabezpečení by makra v tomto dokumentu neměla být spuštěna. Přejete si je přesto spustit?";
     Text[ hebrew ] = "‮לפי הגדרות האבטחה, אין להפעיל את המקרואים במסמך זה. האם להפעילם בכל זאת?‬";
     Text[ hindi ] = "According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
+    Text[ slovak ] = "Podľa nastavení zabezpečenia, maká v tomto dokumente by nemali byť spustené. Prajete si ich napriek tomu spustiť?";
 };
 String FT_OK
 {
@@ -2631,6 +2708,7 @@ String FT_OK
     Text[ czech ] = "Opravdu chcete povolit spuštění těchto maker?";
     Text[ hebrew ] = "‮האם לאפשר הפעלת המקרואים האלה?‬";
     Text[ hindi ] = "Do you want to allow these macros to be run?";
+    Text[ slovak ] = "Naozaj chcete povoliť spustenie týchto makier?";
 };
 
 String STR_EXPORTASPDF_TITLE
@@ -2661,6 +2739,7 @@ String STR_EXPORTASPDF_TITLE
     Text[ czech ] = "Exportovat do PDF";
     Text[ hebrew ] = "‮יצוא כ FDP‬";
     Text[ hindi ] = "Export as PDF";
+    Text[ slovak ] = "Export do PDF";
 };
 
 String STR_EXPORTWITHCFGBUTTON
@@ -2691,6 +2770,7 @@ String STR_EXPORTWITHCFGBUTTON
     Text[ czech ] = "Exportovat...";
     Text[ hebrew ] = "‮יצאו...‬";
     Text[ hindi ] = "Export...";
+    Text[ slovak ] = "Export...";
 };
 
 String STR_EXPORTBUTTON
@@ -2721,6 +2801,7 @@ String STR_EXPORTBUTTON
     Text[ czech ] = "Exportovat";
     Text[ hebrew ] = "‮יצוא‬";
     Text[ hindi ] = "निर्यात करो";
+    Text[ slovak ] = "Exportovať";
 };
 
 String RID_SVXSTR_SECURITY_ADDPATH
@@ -2751,6 +2832,7 @@ String RID_SVXSTR_SECURITY_ADDPATH
     Text[ czech ] = "Přidat tento adresář do seznamu bezpečných cest: ";
     Text[ hebrew ] = "‮הוספת ספריה זו לרשימת המסלולים המובטחים: ‬";
     Text[ hindi ] = "Add this directory to the list of secure paths: ";
+    Text[ slovak ] = "Pridať tento adresár do zoznamu bezpečných ciest: ";
 };
 
 String STR_LABEL_FILEFORMAT
@@ -2781,9 +2863,12 @@ String STR_LABEL_FILEFORMAT
     Text[ czech ] = "Formát souboru:";
     Text[ hebrew ] = "Dateiformat:";
     Text[ hindi ] = "File format:";
+    Text[ slovak ] = "Formát súboru:";
 };
 
 // ******************************************************************* EOF
+
+
 
 
 
