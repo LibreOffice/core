@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxurl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-12 07:43:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 SfxUrlDialog::SfxUrlDialog( Window *pParent )
     : ModalDialog( pParent, SfxResId( RID_URLOPEN ) ),
       aEdit( this, ResId(RID_URLOPEN_URL) ),
-      aCancel( this, ResId(RID_URLOPEN_CANCEL) ),
-      aOk( this, ResId(RID_URLOPEN_OK) )
+      aOk( this, ResId(RID_URLOPEN_OK) ),
+      aCancel( this, ResId(RID_URLOPEN_CANCEL) )
 {
     FreeResource();
 }
