@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:15:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,6 +1365,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             bZoomOnPage = FALSE;
             if ( pDrView->AreObjectsMarked() )
             {
+                aMarkRect = pDrView->GetAllMarkedRect();
                 long nW = (long) (aMarkRect.GetWidth()  * 1.03);
                 long nH = (long) (aMarkRect.GetHeight() * 1.03);
                 Point aPos = aMarkRect.Center();
