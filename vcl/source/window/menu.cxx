@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 17:23:05 $
+ *  last change: $Author: tbe $ $Date: 2002-08-23 10:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3369,7 +3369,16 @@ void MenuFloatingWindow::ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer )
         pMenu->nSelectedId = 0;
 
     if ( bStartPopupTimer )
-        aHighlightChangedTimer.Start();
+    {
+        // #102438# Menu items are not selectable
+        // If a menu item is selected by an AT-tool via the XAccessibleAction, XAccessibleValue
+        // or XAccessibleSelection interface, and the parent popup menus are not executed yet,
+        // the parent popup menus must be executed SYNCHRONOUSLY, before the menu item is selected.
+        if ( GetSettings().GetMouseSettings().GetMenuDelay() )
+            aHighlightChangedTimer.Start();
+        else
+            HighlightChanged( &aHighlightChangedTimer );
+    }
 }
 
 void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
