@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class LibBoxControl: public SfxToolBoxControl
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
-                        LibBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+                        LibBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                         ~LibBoxControl();
 
     virtual void        StateChanged( USHORT nSID, SfxItemState eState,
@@ -99,6 +99,7 @@ private:
     String          aCurText;
     BOOL            bIgnoreSelect;
     BOOL            bFillBox;
+    com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     void            ReleaseFocus();
 
@@ -111,7 +112,8 @@ protected:
 
 
 public:
-                    BasicLibBox( Window* pParent );
+                    BasicLibBox( Window* pParent,
+                                 const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                     ~BasicLibBox();
 
     void            FillBox( BOOL bSelect = TRUE );
