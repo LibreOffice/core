@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:07:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,6 +614,10 @@ void SlideSorterController::DeleteSelectedPages (void)
     ::std::vector<SdPage*>::iterator aI;
     for (aI=aSelectedPages.begin(); aI!=aSelectedPages.end(); aI++)
     {
+        // Do not delete the last slide in the document.
+        if (pDocument->GetSdPageCount(PK_STANDARD) == 1)
+            break;
+
         USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
 
         // Get pointers to the page and its notes page.
