@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:41:30 $
+ *  last change: $Author: os $ $Date: 2001-06-15 07:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,7 @@ void SwView::SelectShell()
         }
         else if ( nSelectionType & SwWrtShell::SEL_DRW_TXT )
         {
+            bSetExtInpCntxt = sal_True;
             eShellMode = SEL_DRAWTEXT;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             pShell = new SwDrawTextShell( *this );
