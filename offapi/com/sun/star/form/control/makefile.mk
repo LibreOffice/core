@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-14 09:19:39 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:11:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ IDLFILES=\
         PatternField.idl		\
         RadioButton.idl			\
         TextField.idl			\
-        TimeField.idl
+        TimeField.idl           \
+        NavigationToolBar.idl
 
 # ------------------------------------------------------------------
 
