@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _SD_MORPHDLG_HXX
-#define _SD_MORPHDLG_HXX
+#ifndef SD_MORPH_DLG_HXX
+#define SD_MORPH_DLG_HXX
 
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/imagebtn.hxx>
@@ -81,6 +80,7 @@
 
 class SdrObject;
 
+namespace sd {
 
 /******************************************************************************
 |*
@@ -88,8 +88,22 @@ class SdrObject;
 |*
 \******************************************************************************/
 
-class SdMorphDlg : public ModalDialog
+class MorphDlg
+    : public ModalDialog
 {
+public:
+    MorphDlg (
+        ::Window* pParent,
+        const SdrObject* pObj1,
+        const SdrObject* pObj2);
+    virtual ~MorphDlg (void);
+
+    void            SaveSettings() const;
+    USHORT          GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
+    BOOL            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
+    BOOL            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+
+private:
     FixedLine       aGrpPreset;
     FixedText       aFtSteps;
     MetricField     aMtfSteps;
@@ -102,20 +116,10 @@ class SdMorphDlg : public ModalDialog
     SdrObject*      pSdrObj2;
 
     void            LoadSettings();
-
-
-public:
-
-                    SdMorphDlg( Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 );
-                    ~SdMorphDlg();
-
-    void            SaveSettings() const;
-    USHORT          GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
-    BOOL            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    BOOL            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
 };
 
 
 #endif
 
 
+} // end of namespace sd
