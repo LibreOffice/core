@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-11 11:30:54 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 18:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,20 +64,14 @@
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #include <SwXMLTextBlocks.hxx>
 #endif
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
-#include <SwXMLBlockListContext.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -121,9 +115,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
                           OUString(rBlockList.GetLongName(i)));
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_UNFORMATTED_TEXT,
-                          rBlockList.IsOnlyTextBlock(i) ?
-                              GetXMLToken ( XML_TRUE ) :
-                            GetXMLToken ( XML_FALSE ) );
+                          rBlockList.IsOnlyTextBlock(i) ? XML_TRUE : XML_FALSE );
 
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, sal_True, sal_True);
         }

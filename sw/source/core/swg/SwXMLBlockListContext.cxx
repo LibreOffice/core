@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-19 13:28:41 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 18:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 #pragma hdrstop
 
+#ifndef _SW_XMLBLOCKLISTCONTEXT_HXX
+#include <SwXMLBlockListContext.hxx>
+#endif
+
+#ifndef _SW_XMLBLOCKIMPORT_HXX
+#include <SwXMLBlockImport.hxx>
+#endif
+
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
@@ -70,26 +82,12 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
-#ifndef _SW_XMLBLOCKIMPORT_HXX
-#include <SwXMLBlockImport.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
-#endif
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
-#include <SwXMLBlockListContext.hxx>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -112,7 +110,7 @@ SwXMLBlockListContext::SwXMLBlockListContext(
         OUString aLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nPrefix)
+        if ( XML_NAMESPACE_BLOCKLIST == nPrefix )
         {
             if ( IsXMLToken ( aLocalName, XML_LIST_NAME ) )
             {
