@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:41:30 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16422,6 +16422,7 @@ String STR_DESC_RENAMESLIDE
     Text[ hindi ] = "अंतिम नाम";
     Text[ slovak ] = "Názov";
 };
+
 
 
 
