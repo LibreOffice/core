@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_module.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class HF_IdlModule : public HtmlFactory_Idl
 {
   public:
                         HF_IdlModule(
-                            Environment &       io_rEnv,    // The CurDirecory() is the one of the here displayed Module.
+                            Environment &       io_rEnv,    // The CurDirectory() is the one of the here displayed Module.
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlModule();
 

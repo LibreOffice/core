@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_method.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ class HF_IdlMethod : public HtmlFactory_Idl
                             param_list &        i_rParams,
                             type_list &         i_rExceptions,
                             bool                i_bOneway,
+                            bool                i_bEllipse,
                             const client &      i_ce ) const;
   private:
     void                write_Declaration(
@@ -108,7 +109,8 @@ class HF_IdlMethod : public HtmlFactory_Idl
                             type_id             i_nReturnType,
                             param_list &        i_rParams,
                             type_list &         i_rExceptions,
-                            bool                i_bOneway ) const;
+                            bool                i_bOneway,
+                            bool                i_bEllipse ) const;
     void                write_Param(
                             HF_IdlTypeText &    o_type,
                             Xml::Element &      o_names,

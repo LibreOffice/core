@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_linklist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include "hi_factory.hxx"
     // COMPONENTS
     // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_comrela.hxx>
 #include <ary_i/ci_text2.hxx>
 #include <ary_i/codeinf2.hxx>
 
@@ -127,7 +127,7 @@ class HF_MemberTable : public HtmlFactory_Idl
 class HF_IdlLinkList : public HtmlFactory_Idl
 {
   public:
-    typedef ary::StdConstIterator<ary::idl::CommentedReference>
+    typedef ary::StdConstIterator<ary::idl::CommentedRelation>
                                             comref_list;
 
                         HF_IdlLinkList(
