@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _XMLOFF_XMLSECTIONEXPORT_HXX
 #include "XMLSectionExport.hxx"
 #endif
+#ifndef _XMLOFF_XMLLINENUMBERINGEXPORT_HXX_
+#include "XMLLineNumberingExport.hxx"
+#endif
 
 #ifndef _XMLOFF_STYLEEXP_HXX
 //#include "styleexp.hxx"
@@ -194,6 +197,9 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
     exportNumStyles( bUsed );
     exportTextFootnoteConfiguration();
     XMLSectionExport::ExportBibliographyConfiguration(GetExport());
+
+    XMLLineNumberingExport aLineNumberingExport(GetExport());
+    aLineNumberingExport.Export();
 }
 
 

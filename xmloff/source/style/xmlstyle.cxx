@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:18:43 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@
 #ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
 #include "XMLIndexBibliographyConfigurationContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLLINENUMBERINGIMPORTCONTEXT_HXX_
+#include "XMLLineNumberingImportContext.hxx"
+#endif
 #ifndef _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
 #include "PageMasterImportContext.hxx"
 #endif
@@ -203,6 +206,8 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
       XML_TOK_TEXT_ENDNOTE_CONFIG },
     { XML_NAMESPACE_TEXT,   sXML_bibliography_configuration,
       XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
+    { XML_NAMESPACE_TEXT,   sXML_linenumbering_configuration,
+      XML_TOK_TEXT_LINENUMBERING_CONFIG },
     XML_TOKEN_MAP_END
 };
 
@@ -578,6 +583,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                 break;
             case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
                 pStyle = new XMLIndexBibliographyConfigurationContext(
+                    GetImport(), nPrefix, rLocalName, xAttrList);
+                break;
+
+            case XML_TOK_TEXT_LINENUMBERING_CONFIG:
+                pStyle = new XMLLineNumberingImportContext(
                     GetImport(), nPrefix, rLocalName, xAttrList);
                 break;
 

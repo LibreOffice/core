@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 15:32:38 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,8 +321,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // not required
     // RES_CHAIN
     // not required
+
     // RES_LINENUMBER
-    // TODO
+    M_E( "ParaLineNumberCount", TEXT,   number_lines,           XML_TYPE_BOOL, 0 ),
+    M_E( "ParaLineNumberStartValue", TEXT, line_number,         XML_TYPE_NUMBER, 0 ),
+
     // RES_FTN_AT_TXTEND
     // not required
     // RES_END_AT_TXTEND

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:21:47 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,8 @@ XML_CONSTASCII_ACTION( sXML_cosh, "cosh" );
 XML_CONSTASCII_ACTION( sXML_cot, "cot" );
 XML_CONSTASCII_ACTION( sXML_coth, "coth" );
 XML_CONSTASCII_ACTION( sXML_count, "count" );
+XML_CONSTASCII_ACTION( sXML_count_empty_lines, "count-empty-lines" );
+XML_CONSTASCII_ACTION( sXML_count_in_floating_frames, "count-in-floating-frames" );
 XML_CONSTASCII_ACTION( sXML_counterclockwise, "counterclockwise" );
 XML_CONSTASCII_ACTION( sXML_countnums, "countnums" );
 XML_CONSTASCII_ACTION( sXML_country, "country" );
@@ -744,6 +746,7 @@ XML_CONSTASCII_ACTION( sXML_implies, "implies" );
 XML_CONSTASCII_ACTION( sXML_in, "in");
 XML_CONSTASCII_ACTION( sXML_inbook, "inbook" );
 XML_CONSTASCII_ACTION( sXML_incollection, "incollection" );
+XML_CONSTASCII_ACTION( sXML_increment, "increment" );
 XML_CONSTASCII_ACTION( sXML_index, "index");
 XML_CONSTASCII_ACTION( sXML_index_body, "index-body");
 XML_CONSTASCII_ACTION( sXML_index_entry_bibliography, "index-entry-bibliography" );
@@ -828,6 +831,8 @@ XML_CONSTASCII_ACTION( sXML_line_height, "line-height" );
 XML_CONSTASCII_ACTION( sXML_line_height_at_least, "line-height-at-least" );
 XML_CONSTASCII_ACTION( sXML_line_spacing, "line-spacing" );
 XML_CONSTASCII_ACTION( sXML_linear, "linear" );
+XML_CONSTASCII_ACTION( sXML_linenumbering_configuration, "linenumbering-configuration" );
+XML_CONSTASCII_ACTION( sXML_linenumbering_separator, "linenumbering-separator" );
 XML_CONSTASCII_ACTION( sXML_lines, "lines" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
 XML_CONSTASCII_ACTION( sXML_link_to_source_data, "link-to-source-data" );
@@ -982,8 +987,10 @@ XML_CONSTASCII_ACTION( sXML_number, "number" );
 XML_CONSTASCII_ACTION( sXML_number_and_name, "number-and-name" );
 XML_CONSTASCII_ACTION( sXML_number_columns_repeated, "number-columns-repeated" );
 XML_CONSTASCII_ACTION( sXML_number_columns_spanned, "number-columns-spanned" );
+XML_CONSTASCII_ACTION( sXML_number_lines, "number-lines" );
 XML_CONSTASCII_ACTION( sXML_number_matrix_columns_spanned, "number-matrix-columns-spanned" );
 XML_CONSTASCII_ACTION( sXML_number_matrix_rows_spanned, "number-matrix-rows-spanned" );
+XML_CONSTASCII_ACTION( sXML_number_position, "number-position" );
 XML_CONSTASCII_ACTION( sXML_number_rows_repeated, "number-rows-repeated" );
 XML_CONSTASCII_ACTION( sXML_number_rows_spanned, "number-rows-spanned" );
 XML_CONSTASCII_ACTION( sXML_number_style, "number-style" );
@@ -1164,7 +1171,7 @@ XML_CONSTASCII_ACTION( sXML_repeat_row, "repeat-row");
 XML_CONSTASCII_ACTION( sXML_repeated, "repeated" );
 XML_CONSTASCII_ACTION( sXML_replace, "replace" );
 XML_CONSTASCII_ACTION( sXML_report_type, "report-type" );
-XML_CONSTASCII_ACTION( sXML_restart_numbering, "restart-numbering" );
+XML_CONSTASCII_ACTION( sXML_restart_on_page, "restart-on-page" );
 XML_CONSTASCII_ACTION( sXML_revision, "revision" );
 XML_CONSTASCII_ACTION( sXML_ridge, "ridge" );
 XML_CONSTASCII_ACTION( sXML_right, "right" );
@@ -1556,6 +1563,7 @@ XML_CONSTASCII_ACTION( sXML_start_shape, "start-shape");
 XML_CONSTASCII_ACTION( sXML_start_glue_point, "start-glue-point");
 XML_CONSTASCII_ACTION( sXML_end_shape, "end-shape");
 XML_CONSTASCII_ACTION( sXML_end_glue_point, "end-glue-point");
+XML_CONSTASCII_ACTION( sXML_line_number, "line-number");
 XML_CONSTASCII_ACTION( sXML_line_skew, "line-skew");
 XML_CONSTASCII_ACTION( sXML_curve, "curve" );
 XML_CONSTASCII_ACTION( sXML_start_line_spacing_horizontal, "start-line-spacing-horizontal" );

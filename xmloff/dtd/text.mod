@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.13 2000-12-05 15:25:07 cl Exp $
+	$Id: text.mod,v 1.14 2000-12-11 19:14:23 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -1033,3 +1033,19 @@ indices, and there may be only one text:index-title element.
 	organizations | pages | publisher | report_type | school | series | 
 	title | url | volume | year ) #REQUIRED>
 <!ATTLIST text:sort-key text:sort-ascending %boolean; "true">
+
+<!ELEMENT text:linenumbering-configuration (text:linenumbering-separator?)>
+<!ATTLIST text:linenumbering-configuration text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:linenumbering-configuration text:number-lines %boolean; "true">
+<!ATTLIST text:linenumbering-configuration text:count-empty-lines %boolean; "true">
+<!ATTLIST text:linenumbering-configuration text:count-in-floating-frames %boolean; "false">
+<!ATTLIST text:linenumbering-configuration text:restart-numbering %boolean; "false">
+<!ATTLIST text:linenumbering-configuration text:offset %nonNegativeLength; #IMPLIED
+<!ATTLIST text:linenumbering-configuration style:num-format (1|a|A|i|I) "1">
+<!ATTLIST text:linenumbering-configuration style:num-letter-sync %boolean; "false">
+<!ATTLIST text:linenumbering-configuration text:number-position (left|rigth|inner|outer) "left">
+<!ATTLIST text:linenumbering-configuration text:increment %nonNegativeInteger; #IMPLIED>
+
+<!ELEMENT text:linenumbering-separator (#PCDATA)>
+<!ATTLIST text:linenumbering-separator text:increment %nonNegativeInteger; #IMPLIED>
+
