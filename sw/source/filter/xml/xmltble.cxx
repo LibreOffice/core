@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-28 17:06:40 $
+ *  last change: $Author: dvo $ $Date: 2000-12-01 18:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     {
                         // text format
                         AddAttributeASCII( XML_NAMESPACE_TABLE,
-                                           sXML_value_type, sXML_text );
+                                           sXML_value_type, sXML_string );
                     }
                     else if (-1 != nNumberFormat)
                     {
