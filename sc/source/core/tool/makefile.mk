@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nn $ $Date: 2000-11-02 19:09:23 $
+#   last change: $Author: svesik $ $Date: 2000-12-18 18:43:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,6 +191,12 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj
+
+# [kh] POWERPC compiler problem
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
+NOOPTFILES= \
+                $(SLO)$/subtotal.obj
+.ENDIF
 
 .IF "$(GUI)"=="OS2"
 NOOPTFILES= \
