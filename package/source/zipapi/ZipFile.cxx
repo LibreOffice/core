@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,21 @@
  *
  ************************************************************************/
 #ifndef _ZIP_FILE_HXX
-#include "ZipFile.hxx"
+#include <ZipFile.hxx>
 #endif
+#ifndef _ENTRY_INPUT_STREAM_HXX
+#include <EntryInputStream.hxx>
+#endif
+#ifndef _ZIP_ENUMERATION_HXX
+#include <ZipEnumeration.hxx>
+#endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
+#include <vector>
 
 
 using namespace rtl;
@@ -84,6 +97,7 @@ void ZipFile::setInputStream ( uno::Reference < io::XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
+/*
 void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
 {
     sal_Int32 i=0, nSize = rManList.size();
@@ -97,7 +111,7 @@ void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
         aEntries[pEntry->sName] = *pEntry;
     }
 }
-
+*/
 ZipFile::~ZipFile()
 {
     aEntries.clear();
@@ -169,13 +183,15 @@ sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
 uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const packages::ZipEntry& rEntry )
     throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
-    sal_Int64 nEnd = rEntry.nCompressedSize == 0 ? rEntry.nSize : rEntry.nCompressedSize;
+    sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
     if (rEntry.nOffset <= 0)
         readLOC(rEntry);
-    sal_Int64 nBegin = rEntry.nOffset;
-    nEnd +=nBegin;
-
-    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024, rEntry.nSize, rEntry.nMethod == DEFLATED );
+    uno::Reference< io::XInputStream > xStreamRef =
+        new EntryInputStream(xStream,
+                             rEntry.nOffset,
+                             rEntry.nOffset + nSize,
+                             rEntry.nSize,
+                             rEntry.nMethod == DEFLATED );
     return xStreamRef;
 }
 
@@ -225,15 +241,17 @@ sal_uInt32 SAL_CALL ZipFile::getHeader(const packages::ZipEntry& rEntry)
 }
 
 uno::Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( const packages::ZipEntry& rEntry )
-        throw(io::IOException, packages::ZipException, uno::RuntimeException)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
-
     if (rEntry.nOffset <= 0)
         readLOC(rEntry);
-    sal_Int64 nBegin = rEntry.nOffset;
-
-    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nSize+nBegin, 1024, nSize, sal_False);
+    uno::Reference< io::XInputStream > xStreamRef =
+        new EntryInputStream(xStream,
+                             rEntry.nOffset,
+                             rEntry.nOffset + nSize,
+                             nSize,
+                             sal_False );
     return xStreamRef;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,18 @@
  *
  ************************************************************************/
 #ifndef _DEFLATER_HXX_
-#include "Deflater.hxx"
+#include <Deflater.hxx>
 #endif
-
-#include <iostream.h>
-#include <string.h>
+#ifndef _ZLIB_H
+#include <external/zlib/zlib.h>
+#endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
+#include <string.h> // for memset
 
 using namespace com::sun::star::packages::ZipConstants;
 using namespace com::sun::star;

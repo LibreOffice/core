@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:15 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,19 @@
  *
  ************************************************************************/
 #ifndef _INFLATER_HXX_
-#include "Inflater.hxx"
+#include <Inflater.hxx>
 #endif
+#ifndef _ZLIB_H
+#include <external/zlib/zlib.h>
+#endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
+#include <string.h> // for memset
 
-#include <iostream.h>
-#include <string.h>
 
 /** Provides general purpose decompression using the ZLIB library */
 void Inflater::init (sal_Bool bNowrap)

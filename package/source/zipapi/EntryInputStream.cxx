@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 #ifndef _ENTRY_INPUT_STREAM_HXX
 #include "EntryInputStream.hxx"
 #endif
-
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/ZipConstants.hpp>
 #endif
+#include <memory.h> // for memcpy
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -79,111 +79,74 @@ using namespace com::sun::star;
  * seek to it before performing any reads.
  */
 
-EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput, sal_Int64 nNewBegin, sal_Int64 nNewEnd, sal_Int32 nNewBufferSize, sal_Int64 nUncompressedSize, sal_Bool bIsDeflated)
+EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput,
+                                    sal_Int64 nNewBegin,
+                                    sal_Int64 nNewEnd,
+                                    sal_Int64 nNewUncompressedSize,
+                                    sal_Bool bIsDeflated)
 : xStream( xNewInput )
 , xSeek( xNewInput, uno::UNO_QUERY )
-, nCompBegin( nNewBegin )
-, nCompCurrent( nNewBegin )
-, nCompEnd( nNewEnd )
-, nBegin( 0 )
+, nBegin( nNewBegin )
+, nEnd ( nNewEnd )
 , nCurrent( 0 )
-, nEnd(nUncompressedSize)
+, nUncompressedSize (nNewUncompressedSize)
 , aSequence ( 0 )
 , bReachEOF ( sal_False )
+, bHaveInMemory ( sal_False )
 , aInflater( sal_True )
-, aBuffer( static_cast < sal_Int32 > (nUncompressedSize) )
+, aBuffer( 0 )
 , bDeflated ( bIsDeflated )
 {
-    if (bDeflated)
+}
+void EntryInputStream::readIntoMemory()
+{
+    if (!bHaveInMemory)
     {
-        aSequence.realloc( static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
-        xSeek->seek(nNewBegin);
-        xStream->readBytes(aSequence, static_cast < sal_Int32 > (nNewEnd - nNewBegin));
-        aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
-        aInflater.doInflate(aBuffer);
-        aInflater.end();
-        aSequence.realloc( 0 );
-    }
-    else
-    {
-        xSeek->seek(nNewBegin);
-        xStream->readBytes(aBuffer, static_cast < sal_Int32 > (nUncompressedSize));
+        aBuffer.realloc ( static_cast < sal_Int32 > ( nUncompressedSize ) );
+        if (bDeflated)
+        {
+            sal_Int32 nSize = static_cast < sal_Int32 > (nEnd - nBegin );
+            aSequence.realloc( nSize );
+            xSeek->seek(nBegin);
+            xStream->readBytes(aSequence, nSize );
+            aInflater.setInputSegment(aSequence, 0, nSize );
+            aInflater.doInflate(aBuffer);
+            aInflater.end();
+            aSequence.realloc( 0 );
+        }
+        else
+        {
+            xSeek->seek(nBegin);
+            xStream->readBytes(aBuffer, static_cast < sal_Int32 > (nUncompressedSize));
+        }
+        bHaveInMemory = sal_True;
     }
 }
-
 EntryInputStream::~EntryInputStream( void )
 {
 }
-/*
-void EntryInputStream::fill(void)
-{
-    sal_Int64 nLength, nBytesToRead = aSequence.getLength();
-    if (nBytesToRead + nCompCurrent> nCompEnd)
-        nBytesToRead = nCompEnd - nCompCurrent;
-    if (xSeek.is())
-        xSeek->seek( nCompCurrent );
-    else
-        throw io::IOException();
-    nLength = xStream->readBytes(aSequence, static_cast < sal_Int32> (nBytesToRead));
-    aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32> (nLength));
-}
-*/
+
 sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData,
                                         sal_Int32 nBytesToRead )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     if (nBytesToRead <0)
         throw io::BufferSizeExceededException(::rtl::OUString(), *this);
-
-    if (nBytesToRead + nCurrent > nEnd)
-        nBytesToRead = static_cast < sal_Int32> (nEnd - nCurrent);
+    if (!bHaveInMemory)
+        readIntoMemory();
+    if (nBytesToRead + nCurrent > nUncompressedSize)
+        nBytesToRead = static_cast < sal_Int32> (nUncompressedSize - nCurrent);
 
     aData.realloc( nBytesToRead );
     memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
     nCurrent+=nBytesToRead;
 
     return nBytesToRead;
-    /*
-    if (!bDeflated)
-    {
-        if (xSeek.is())
-            xSeek->seek( nCompCurrent );
-        sal_Int32 nRead = xStream->readBytes(aData, nBytesToRead );
-        nCompCurrent+=nRead;
-        return nRead;
-    }
-
-    while ( (n = aInflater.doInflate(aData)) == 0)
-    {
-        if (aInflater.finished() || aInflater.needsDictionary())
-        {
-            bReachEOF = sal_True;
-            return -1;
-        }
-        if (aInflater.needsInput())
-            fill();
-    }
-    nCurrent+=n;
-    return n;
-    //return xStream->readBytes(aData, nBytesToRead );
-    */
 }
 sal_Int32 SAL_CALL EntryInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
                                                 sal_Int32 nMaxBytesToRead )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    /*
-    if (nMaxBytesToRead + nCompCurrent > nEnd)
-    {
-        if (nCurrent > nEnd)
-            return 0;
-        nMaxBytesToRead = nEnd - nCurrent;
-    }
-    if (xSeek.is())
-        xSeek->seek( nCurrent );
-    else
-        throw (io::IOException());
-    */
     return readBytes( aData, nMaxBytesToRead );
 }
 void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
@@ -191,52 +154,16 @@ void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if (nBytesToSkip < 0)
         throw io::BufferSizeExceededException(::rtl::OUString(), *this);
-    if (nBytesToSkip + nCurrent > nEnd )
-        nBytesToSkip = static_cast < sal_Int32 > (nEnd - nCurrent);
+
+    if (nBytesToSkip + nCurrent > nUncompressedSize )
+        nBytesToSkip = static_cast < sal_Int32 > (nUncompressedSize - nCurrent);
 
     nCurrent+=nBytesToSkip;
-/*
-    if (!bDeflated)
-    {
-        if (nBytesToSkip + nCompCurrent> nCompEnd)
-        {
-            if (nCurrent> nCompEnd)
-                return;
-            nBytesToSkip = nCompEnd - nCompCurrent;
-        }
-        nCompCurrent+=nBytesToSkip;
-    }
-    else
-    {
-        sal_Int32 nTotal = 0;
-        uno::Sequence < sal_Int8 > aTmpSequence ( 1024 );
-        while ( nTotal < nBytesToSkip )
-        {
-            sal_Int32 nNewLength, nLength = nBytesToSkip - nTotal;
-            if ( nLength > aTmpSequence.getLength())
-                nLength = aTmpSequence.getLength();
-            nNewLength = readSomeBytes(aTmpSequence, nLength);
-            if (nNewLength < nLength)
-            {
-                bReachEOF = sal_True;
-                break;
-            }
-            nTotal +=nNewLength;
-        }
-        nCurrent+=nBytesToSkip;
-    }
-*/
 }
 sal_Int32 SAL_CALL EntryInputStream::available(  )
     throw(io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
-    return aBuffer.getLength() - static_cast < sal_Int32> (nCurrent);
-    /*
-    if (!bDeflated)
-        return nCompEnd - nCompCurrent;
-    else
-        return nEnd - nCurrent;
-    */
+    return static_cast < sal_Int32 > (nUncompressedSize - nCurrent);
 }
 void SAL_CALL EntryInputStream::closeInput(  )
     throw(io::NotConnectedException, io::IOException, uno::RuntimeException)
@@ -246,54 +173,19 @@ void SAL_CALL EntryInputStream::closeInput(  )
 void SAL_CALL EntryInputStream::seek( sal_Int64 location )
     throw(lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
 {
-    if (location > aBuffer.getLength())
-        location = aBuffer.getLength();
+    if (location > nUncompressedSize)
+        location = nUncompressedSize;
     if (location <0)
         location = 0;
     nCurrent = location;
-    /*
-    if (!bDeflated)
-    {
-        if (location < nCompBegin)
-            location = nCompBegin;
-        if (location > nCompEnd)
-            location = nCompEnd;
-        nCompCurrent = location;
-        return;
-    }
-    else
-    {
-        if (location == 0)
-            nCurrent = nCompCurrent = 0;
-        else if (location > nCurrent)
-            skipBytes(location - nCurrent);
-        else
-        {
-            nCurrent = 0;
-            skipBytes(location);
-        }
-    }
-    */
 }
 sal_Int64 SAL_CALL EntryInputStream::getPosition(  )
         throw(io::IOException, uno::RuntimeException)
 {
     return nCurrent;
-    /*
-    if (!bDeflated)
-        return nCompCurrent;
-    else
-        return nCurrent;
-    */
 }
 sal_Int64 SAL_CALL EntryInputStream::getLength(  )
         throw(io::IOException, uno::RuntimeException)
 {
-    return aBuffer.getLength();
-    /*
-    if (!bDeflated)
-        return nCompEnd - nCompBegin;
-    else
-        return nEnd - nBegin;
-    */
+    return nUncompressedSize;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _BYTE_CHUCKER_HXX_
 #include "ByteChucker.hxx"
 #endif
+#include <memory.h> //for memcpy
 
 using namespace ::com::sun::star;
 

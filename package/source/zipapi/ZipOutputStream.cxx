@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,14 @@
  *
  ************************************************************************/
 #ifndef _ZIP_OUTPUT_STREAM_HXX
-#include "ZipOutputStream.hxx"
+#include <ZipOutputStream.hxx>
 #endif
-
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
 #include <time.h>
 #include <utime.h>
 
@@ -84,6 +89,8 @@ ZipOutputStream::ZipOutputStream( uno::Reference < io::XOutputStream > &xOStream
 
 ZipOutputStream::~ZipOutputStream( void )
 {
+    for (sal_Int32 i = 0, nEnd = aZipList.size(); i < nEnd; i++)
+        delete aZipList[i];
 }
 
 void SAL_CALL ZipOutputStream::setComment( const ::rtl::OUString& rComment )
@@ -123,7 +130,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const packages::ZipEntry& rEntry )
 
     pNonConstEntry->nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
     writeLOC(rEntry);
-    aZipList.push_back(pNonConstEntry);
+    aZipList.push_back( pNonConstEntry );
     pCurrentEntry=pNonConstEntry;
 }
 void SAL_CALL ZipOutputStream::close(  )
@@ -265,8 +272,8 @@ void SAL_CALL ZipOutputStream::finish(  )
         VOS_DEBUG_ONLY("Zip file must have at least one entry!\n");
     }
     sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.getPosition());
-    for (int i =0, nEnd = aZipList.size(); i < nEnd; i++)
-        writeCEN(*aZipList[i]);
+    for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
+        writeCEN( *aZipList[i] );
     writeEND( nOffset, static_cast < sal_Int32 > (aChucker.getPosition()) - nOffset);
     bFinished = sal_True;
 }
@@ -286,19 +293,12 @@ void ZipOutputStream::doDeflate()
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(io::IOException, uno::RuntimeException)
 {
-    sal_Int16 i=0, nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
+    sal_Int16 nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
     uno::Sequence < sal_Int8 > aSequence (nCommentLength);
     sal_Int8 *pArray = aSequence.getArray();
-    sal_Int16 nOldLength = nCommentLength;
 
-    if (nOldLength != nCommentLength)
-    {
-        nOldLength = nCommentLength;
-        aSequence.realloc (nOldLength);
-        pArray = aSequence.getArray();
-    }
     const sal_Unicode *pChar = sComment.getStr();
-    for ( ; i < nCommentLength; i++)
+    for ( sal_Int16 i = 0; i < nCommentLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipfile comment!");
         *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
@@ -320,10 +320,6 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
               nExtraLength      = static_cast < sal_Int16 > ( rEntry.extra.getLength() );
-    sal_Int16 i = 0;
-    uno::Sequence < sal_Int8 > aSequence (nNameLength);
-    sal_Int8 *pArray = aSequence.getArray();
-    sal_Int16 nOldLength=0;
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -350,13 +346,10 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
     aChucker.seek(nCurrent);
 */
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    if (nOldLength != nNameLength)
-    {
-        nOldLength = nNameLength;
-        aSequence.realloc(nOldLength);
-        pArray = aSequence.getArray();
-    }
-    for ( ; i < nNameLength; i++)
+    uno::Sequence < sal_Int8 > aSequence (nNameLength);
+    sal_Int8 *pArray = aSequence.getArray();
+
+    for ( sal_Int16 i = 0; i < nNameLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
         *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
@@ -367,10 +360,9 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
         aChucker.writeBytes( rEntry.extra);
     if (nCommentLength)
     {
-        if (nOldLength != nCommentLength)
+        if (nNameLength != nCommentLength)
         {
-            nOldLength = nCommentLength;
-            aSequence.realloc (nOldLength);
+            aSequence.realloc (nCommentLength);
             pArray = aSequence.getArray();
         }
         for (i=0, pChar = rEntry.sComment.getStr(); i < nCommentLength; i++)
@@ -394,17 +386,9 @@ void ZipOutputStream::writeLOC( const packages::ZipEntry &rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
-
-    sal_Int16 nOldLength=nNameLength;
     uno::Sequence < sal_Int8 > aSequence(nNameLength);
     sal_Int8 *pArray = aSequence.getArray();
-    if ( nNameLength != nOldLength)
-    {
-        nOldLength = nNameLength;
-        aSequence.realloc(nOldLength);
-        pArray = aSequence.getArray();
-    }
-    sal_Int16 i=0;
+
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
     aChucker << rEntry.nFlag;
@@ -426,7 +410,7 @@ void ZipOutputStream::writeLOC( const packages::ZipEntry &rEntry )
     aChucker << static_cast <sal_Int16 > ( rEntry.extra.getLength());
 
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    for ( ; i < nNameLength; i++)
+    for ( sal_Int16 i = 0; i < nNameLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
         *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);

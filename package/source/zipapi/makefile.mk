@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+#   last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,18 +105,7 @@ UNOTYPES=\
     com.sun.star.packages.XZipOutputStream \
     com.sun.star.packages.ZipConstants \
     com.sun.star.packages.ZipEntry \
-    com.sun.star.packages.ZipException \
-    com.sun.star.io.XSeekable \
-    com.sun.star.io.XOutputStream \
-    com.sun.star.lang.XInitialization \
-    com.sun.star.container.XHierarchicalNameAccess \
-    com.sun.star.lang.XSingleServiceFactory \
-    com.sun.star.util.XChangesBatch \
-    com.sun.star.container.XEnumeration \
-    com.sun.star.container.XNamed \
-    com.sun.star.container.XNameContainer \
-    com.sun.star.container.XEnumerationAccess \
-    com.sun.star.io.XActiveDataSink 
+    com.sun.star.packages.ZipException
 
 # --- Targets ------------------------------------------------------
 

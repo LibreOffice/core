@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,12 @@
  *
  ************************************************************************/
 #ifndef _ZIP_ENUMERATION_HXX
-#include "ZipEnumeration.hxx"
+#include <ZipEnumeration.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/ZipConstants.hpp>
 #endif
 
-#include <iostream.h>
 using namespace rtl;
 using namespace com::sun::star;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef _CRC32_HXX
 #include "CRC32.hxx"
+#endif
+#ifndef _ZLIB_H
+#include <external/zlib/zlib.h>
 #endif
 
 using namespace rtl;
