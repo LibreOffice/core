@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:12:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,16 @@ FASTBOOL SwWrtShell::SelectTableCol()
     return FALSE;
 }
 
+FASTBOOL SwWrtShell::SelectTableCell()
+{
+    if ( SelTblBox() )
+    {
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        fnKillSel = &SwWrtShell::ResetSelect;
+        return TRUE;
+    }
+    return FALSE;
+}
 /*------------------------------------------------------------------------
  Beschreibung:    Prueft, ob eine Wortselektion vorliegt.
                   Gemaess den Regeln fuer intelligentes Cut / Paste
