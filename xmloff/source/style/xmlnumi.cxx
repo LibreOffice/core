@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:34:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,9 +429,10 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext;
+    SvXMLImportContext *pContext = 0;
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+        ( IsXMLToken( rLocalName, XML_LIST_LEVEL_PROPERTIES ) ||
+             IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ) )
     {
         pContext = new SvxXMLListLevelStyleAttrContext_Impl( GetImport(),
                                                              nPrefix,
@@ -527,12 +528,14 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             OUString::createFromAscii(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE);
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
 
-        OUString sStyleName = sTextStyleName;
+        OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
+                                XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
+        OUString sStyleName = sDisplayTextStyleName;
         if( sStyleName.getLength() && pI18NMap )
             sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
         pProps[nPos].Name =
                 OUString::createFromAscii( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME );
-        pProps[nPos++].Value <<= sTextStyleName;
+        pProps[nPos++].Value <<= sDisplayTextStyleName;
 
         if( bBullet )
         {
@@ -1093,7 +1096,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
     else
     {
         Reference < XStyle > xStyle;
-        const OUString& rName = GetName();
+        const OUString& rName = GetDisplayName();
         if( 0 == rName.getLength() )
         {
             SetValid( sal_False );
@@ -1144,6 +1147,9 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
             Any aAny = xPropSet->getPropertyValue( sIsPhysical );
             bNew = !*(sal_Bool *)aAny.getValue();
         }
+        if( rName != GetName() )
+            GetImport().AddStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                             GetName(), rName );
 
         Any aAny = xPropSet->getPropertyValue( sNumberingRules );
         aAny >>= xNumRules;
