@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:59:20 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ polish ] = "Format";
         Text[ japanese ] = "Ì«°Ñ(~F)";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "ªí®æ(~F)";
+        Text[ chinese_traditional ] = "®æ¦¡(~F)";
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ greek ] = "Ìïñ~öÞ";
         Text[ korean ] = "¼­½Ä(~F)";
