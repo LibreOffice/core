@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-12-03 15:43:58 $
+ *  last change: $Author: ab $ $Date: 2002-01-18 11:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Reference< XNameContainer > xDialogModel( xMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
             UNO_QUERY );
+    if( !xDialogModel.is() )
+        return;
 
     Reference< XInputStreamProvider > xISP;
     aAnyISP >>= xISP;
@@ -631,11 +633,13 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     OSL_ASSERT( xProps.is() );
     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
 
-    // Create a DialogModel
+    // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
-    if( !xDialogModel.is() )
-        return;
+
+    // Add dialog model to dispose vector
+    Reference< XComponent > xDlgComponent( xDialogModel, UNO_QUERY );
+    pINST->getComponentVector().push_back( xDlgComponent );
 
     // Create a "living" Dialog
     Reference< XControl > xDlg( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
@@ -648,10 +652,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     xDlg->createPeer( xToolkit, NULL );
     StarBASIC* pStartedBasic = pINST->GetBasic();
     attachDialogEvents( pStartedBasic, xDlg );
-
-    // Add dialog to dispose vector
-    Reference< XComponent > xDlgComponent( xDlg, UNO_QUERY );
-    pINST->getComponentVector().push_back( xDlgComponent );
 
     // Return dialog
     Any aRetVal;
