@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:22:55 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 20:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ portuguese_brazilian ] = "Ort:" ;
         Text [ portuguese ] = "Local:" ;
         Text[ chinese_simplified ] = "Î»ÖÃ:";
-        Text[ russian ] = "Ìåñòîíàõîæäåíèå:";
+        Text[ russian ] = "Ìåñòî:";
         Text[ polish ] = "Lokalizacja:";
         Text[ japanese ] = "êŠ:";
         Text[ chinese_traditional ] = "¦ì¸m¡G";
@@ -390,7 +390,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ portuguese_brazilian ] = "Inhalt:" ;
         Text [ portuguese ] = "Conteúdo:" ;
         Text[ chinese_simplified ] = "ÄÚÈİ:";
-        Text[ russian ] = "Ñîäåğæàíèå:";
+        Text[ russian ] = "Ñîäåğæèìîå:";
         Text[ polish ] = "Zawartoœæ:";
         Text[ japanese ] = "“à—e:";
         Text[ chinese_traditional ] = "¤º®e¡G";
@@ -424,7 +424,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ spanish ] = "Creado el:" ;
         Text [ french ] = "Créé le :" ;
         Text [ dutch ] = "Gemaakt op:" ;
-        Text [ swedish ] = "Skapad den:" ;
+        Text [ swedish ] = "Skapat den:" ;
         Text [ danish ] = "Oprettet den:" ;
         Text [ portuguese_brazilian ] = "Erstellt am:" ;
         Text [ portuguese ] = "Criado em:" ;
@@ -460,7 +460,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ italian ] = "Modificato il:" ;
         Text [ spanish ] = "Modificado el:" ;
         Text [ french ] = "Modifié le :" ;
-        Text [ swedish ] = "Ändrad den:" ;
+        Text [ swedish ] = "Ändrat den:" ;
         Text [ danish ] = "Ændret den:" ;
         Text [ portuguese ] = "Alterado em:" ;
         Text [ portuguese_brazilian ] = "Geändert am:" ;
@@ -543,7 +543,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text = "Dateien su~chen..." ;
         Text [ ENGLISH ] = "~Search files..." ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Find files..." ;
+        Text [ english_us ] = "~Find Files..." ;
         Text [ italian ] = "~Cerca file..." ;
         Text [ spanish ] = "Bus~car archivos..." ;
         Text [ french ] = "~Recherche de fichiers..." ;
@@ -578,7 +578,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ english_us ] = "~Add" ;
         Text [ italian ] = "A~ggiungi" ;
         Text [ spanish ] = "~Añadir" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "A~jouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ danish ] = "Tilføj" ;
         Text [ portuguese_brazilian ] = "~Hinzufügen" ;
@@ -642,14 +642,14 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ ITALIAN ] = "Ant~eprima" ;
         Text [ DUTCH ] = "~Voorbeeld" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Ex~aminar" ;
-        Text [ SWEDISH ] = "~Förhandsvisning" ;
+        Text [ SWEDISH ] = "Fö~rhandsvisning" ;
         Text [ PORTUGUESE ] = "Previsualizar" ;
         Text[ chinese_simplified ] = "Ô¤ÀÀ(~E)";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°(~E)";
         Text[ chinese_traditional ] = "¹wÄı(~E)";
-        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ dutch ] = "~Voorbeeld";
         Text[ chinese_simplified ] = "Ô¤ÀÀ(~E)";
         Text[ greek ] = "Ğñ~ïåğéóêüğçóç";
@@ -734,7 +734,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Size = MAP_APPFONT ( 168 , 63 ) ;
     Text = "Titel eingeben" ;
     Text [ ENGLISH ] = "Edit title" ;
-    Text [ english_us ] = "Enter title" ;
+    Text [ english_us ] = "Enter Title" ;
     Moveable = TRUE ;
 
     OkButton BTN_OK
@@ -772,14 +772,14 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ spanish ] = "Título";
         Text[ italian ] = "Titolo";
         Text[ danish ] = "Titel";
-        Text[ swedish ] = "Titel";
+        Text[ swedish ] = "Namn";
         Text[ polish ] = "Tytu³";
         Text[ portuguese_brazilian ] = "Title";
         Text[ japanese ] = "À²ÄÙ";
         Text[ korean ] = "Á¦¸ñ";
         Text[ chinese_simplified ] = "±êÌâ";
         Text[ chinese_traditional ] = "¼ĞÃD";
-        Text[ arabic ] = "ÚäæÇä";
+        Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Başlık";
     };
     Edit EDT_TITLE
@@ -796,7 +796,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Text[ spanish ] = "Introducir título";
     Text[ italian ] = "Indicazione titolo";
     Text[ danish ] = "Indtast titel";
-    Text[ swedish ] = "Mata in titel";
+    Text[ swedish ] = "Ange namn";
     Text[ polish ] = "Wpisz tytu³";
     Text[ portuguese_brazilian ] = "Edit title";
     Text[ japanese ] = "À²ÄÙ‚Ì“ü—Í";
@@ -891,7 +891,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
-    Text [ english_us ] = "Search" ;
+    Text [ english_us ] = "Find" ;
     Text [ italian ] = "Cerca" ;
     Text [ spanish ] = "Buscar" ;
     Text [ french ] = "Rechercher" ;
@@ -1107,7 +1107,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ japanese ] = "ID";
         Text[ chinese_simplified ] = "ID";
         Text[ chinese_traditional ] = "ID";
-        Text[ arabic ] = "ÊÚÑíİ";
+        Text[ arabic ] = "ÇáÊÚÑíİ";
         Text[ dutch ] = "ID";
         Text[ chinese_simplified ] = "ID";
         Text[ greek ] = "Ôáõôüôçôá (ID)";
@@ -1128,7 +1128,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ portuguese ] = "ID Tema";
     Text[ russian ] = "ID Òåìû";
     Text[ dutch ] = "Onderwerp ID";
-    Text[ french ] = "Thème ID";
+    Text[ french ] = "ID du thème";
     Text[ spanish ] = "Temas ID";
     Text[ italian ] = "ID tema";
     Text[ danish ] = "Emne-ID";
@@ -1186,7 +1186,7 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
     Text [ english_us ] = "Update";
     Text [ italian ] = "Aggiorna";
     Text [ spanish ] = "Actualizar";
-    Text [ french ] = "Mise à jour";
+    Text [ french ] = "Actualiser";
     Text [ swedish ] = "Uppdatera";
     Text [ danish ] = "Opdater";
     Text [ portuguese ] = "Actualizar";
@@ -1237,7 +1237,7 @@ String RID_SVXSTR_GALLERY_NOFILES
     Text = "<Keine Dateien>" ;
     Text [ ENGLISH ] = "<No files>" ;
     Text [ dutch ] = "<Geen bestanden>" ;
-    Text [ english_us ] = "<No files>" ;
+    Text [ english_us ] = "<No Files>" ;
     Text [ italian ] = "<nessun file>" ;
     Text [ spanish ] = "<Ningún archivo>" ;
     Text [ french ] = "<Aucun fichier>" ;
@@ -1265,10 +1265,10 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text = "Der Themenname ist ungültig!" ;
     Text [ ENGLISH ] = "Not a valid themename!" ;
     Text [ dutch ] = "De naam van het onderwerp is ongeldig!" ;
-    Text [ english_us ] = "Theme name invalid!" ;
+    Text [ english_us ] = "Invalid Theme Name!" ;
     Text [ italian ] = "Il nome dell'argomento non è valido!" ;
     Text [ spanish ] = "¡El nombre del tema no es válido!" ;
-    Text [ french ] = "Aucun thème de ce nom !" ;
+    Text [ french ] = "Le nom du thème est incorrect !" ;
     Text [ swedish ] = "Temanamnet är ogiltigt!" ;
     Text [ danish ] = "Emnenavnet er ugyldigt!" ;
     Text [ portuguese ] = "O nome do tema não é válido!" ;
@@ -1293,7 +1293,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text = "Möchten Sie dieses Objekt\nwirklich löschen?" ;
     Text [ ENGLISH ] = "Do you really want to\n delete this object?" ;
     Text [ dutch ] = "Wilt u dit object\nwerkelijk wissen?" ;
-    Text [ english_us ] = "Do you really want to\n delete this object?" ;
+    Text [ english_us ] = "Do you really want to\ndelete this object?" ;
     Text [ italian ] = "Cancellare veramente\nl'oggetto?" ;
     Text [ spanish ] = "¿Desea realmente\neliminar este objeto?" ;
     Text [ french ] = "Voulez-vous vraiment\nsupprimer cet objet ?" ;
@@ -1306,7 +1306,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ polish ] = "Czy na pewno usun¹æ\n ten obiekt?";
     Text[ japanese ] = "‚±‚ÌµÌŞ¼Şª¸Ä‚ğ\n–{“–‚Éíœ‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Óª«¥ó¡H";
-    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ\nåĞÇ ÇáßÇÆä¿";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá\nÍĞİ åĞÇ ÇáßÇÆä¿";
     Text[ dutch ] = "Wilt u dit object\nwerkelijk wissen?";
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö¶ÔÏóÂğ£¿";
     Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá\näéáãñáöåß áõôü ôï áíôéêåßìåíï;";
@@ -1326,7 +1326,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text [ english_us ] = "Wave - Sound File" ;
     Text [ italian ] = "File wave o di suono" ;
     Text [ spanish ] = "Wave - archivo de sonido" ;
-    Text [ french ] = "Wave - Fichier des sons" ;
+    Text [ french ] = "Wave - Fichier son" ;
     Text [ swedish ] = "Wave - ljudfil" ;
     Text [ danish ] = "Wave - lydfil" ;
     Text [ portuguese ] = "Onda - Ficheiro de som" ;
@@ -1336,7 +1336,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ polish ] = "Plik dŸwiêkowy typu Wave";
     Text[ japanese ] = "Wave »³İÄŞÌ§²Ù";
     Text[ chinese_traditional ] = "Wave - Án­µÀÉ®×";
-    Text[ arabic ] = "Wave - Sound ãáİ";
+    Text[ arabic ] = "ãáİ ÕæÊí -  Wave";
     Text[ dutch ] = "Wave - geluidsbestand";
     Text[ chinese_simplified ] = "Wave ÒôÆµÎÄ¼ş";
     Text[ greek ] = "Wave - Áñ÷åßï Ş÷ïõ";
@@ -1354,8 +1354,8 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text [ ENGLISH ] = "Audio Interchange File Format" ;
     Text [ english_us ] = "Audio Interchange File Format" ;
     Text [ italian ] = "Audio Interchange File Format" ;
-    Text [ spanish ] = "Audio Interchange File Format" ;
-    Text [ french ] = "Format Fichier Audio Interchange" ;
+    Text [ spanish ] = "Formato de archivo Audio Interchange" ;
+    Text [ french ] = "Audio Interchange File Format" ;
     Text [ dutch ] = "Audio Interchange bestandsformaat" ;
     Text [ swedish ] = "Audio Interchange File Format" ;
     Text [ danish ] = "Audio Interchange filformat" ;
@@ -1384,10 +1384,10 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text [ ENGLISH ] = "AU - Soundfile" ;
     Text [ english_us ] = "AU - Sound File" ;
     Text[ portuguese ] = "AU - ficheiro áudio";
-    Text[ russian ] = "Ôàéë çâóêîâ AU";
+    Text[ russian ] = "AU - Ôàéë çâóêîâ";
     Text[ greek ] = "AU - Áñ÷åßï Ş÷ïõ";
     Text[ dutch ] = "AU - geluidsbestand";
-    Text[ french ] = "Fichier son - AU";
+    Text[ french ] = "AU - Fichier son";
     Text[ spanish ] = "Archivo audio AU";
     Text[ italian ] = "File sound - AU";
     Text[ danish ] = "AU - lydfil";
@@ -1398,7 +1398,7 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ korean ] = "AU - »ç¿îµå ÆÄÀÏ";
     Text[ chinese_simplified ] = "AU ÉùÒôÎÄ¼ş";
     Text[ chinese_traditional ] = "AU - Án­µÀÉ®×";
-    Text[ arabic ] = "ãáİ ÕæÊíAU ";
+    Text[ arabic ] = "ãáİ ÕæÊí -AU ";
     Text[ turkish ] = "AU - Ses dosyası";
 };
 String RID_SVXSTR_GALLERY_FILTER
@@ -1527,7 +1527,7 @@ String RID_SVXSTR_GALLERY_SEARCH
     Text [ portuguese ] = "Deseja actualizar a lista de ficheiros?" ;
     Text [ portuguese_brazilian ] = "Möchten Sie die Dateiliste aktualisieren?" ;
     Text[ chinese_simplified ] = "Òª¸üĞÂÕâ¸öÎÄ¼şÁĞµ¥£¿";
-    Text[ russian ] = "Âû õîòèòå îáíîâèòü ñïèñîê ôàéëà?";
+    Text[ russian ] = "Âû õîòèòå îáíîâèòü ñïèñîê ôàéëîâ?";
     Text[ polish ] = "Czy zaktualizowaæ listê plików?";
     Text[ japanese ] = "Ì§²ÙØ½Ä‚ğXV‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "±z­n§ó·s³o­ÓÀÉ®×²M³æ¡S";
@@ -1626,10 +1626,10 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text = "Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
     Text [ ENGLISH ] = "This themename already exists.\nPlease choose a different name." ;
     Text [ dutch ] = "Deze naam bestaat reeds.\nKies een andere." ;
-    Text [ english_us ] = "This theme name already exists.\nPlease choose a different name." ;
+    Text [ english_us ] = "This theme name already exists.\nPlease choose a different one." ;
     Text [ italian ] = "Il nome dell'argomento esiste già.\nScegliere un altro." ;
     Text [ spanish ] = "Este nombre de tema ya existe.\nPor favor elija otro nombre." ;
-    Text [ french ] = "Le nom de ce thème existe déjà.\nVeuillez choisir un autre nom." ;
+    Text [ french ] = "Le nom de ce thème existe déjà.\nVeuillez en choisir un autre." ;
     Text [ swedish ] = "Det här temanamnet finns redan.\nVälj ett annat namn." ;
     Text [ danish ] = "Dette emnenavn eksisterer allerede.\nVælg venligst et andet navn." ;
     Text [ portuguese ] = "Este nome do tema já existe.\nEscolha outro." ;
@@ -1707,7 +1707,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text [ dutch ] = "Gallery-onderwerp" ;
     Text [ italian ] = "Argomento Gallery" ;
     Text [ spanish ] = "Tema Gallery" ;
-    Text [ french ] = "Thème Gallery" ;
+    Text [ french ] = "Thème de la Gallery" ;
     Text [ swedish ] = "Gallery-tema" ;
     Text [ danish ] = "Gallery-emne" ;
     Text [ portuguese ] = "Tema da Gallery" ;
@@ -1783,7 +1783,7 @@ String RID_SVXSTR_GALLERY_READONLY
     Text = " (schreibgeschützt)" ;
     Text [ English ] = " (read only)" ;
     Text [ norwegian ] = " (skrivebeskyttet)" ;
-    Text [ italian ] = "(sola lettura)" ;
+    Text [ italian ] = " (sola lettura)" ;
     Text [ portuguese_brazilian ] = "(só leitura)" ;
     Text [ portuguese ] = "(só leitura)" ;
     Text [ finnish ] = " (vain luku)" ;
@@ -1791,14 +1791,14 @@ String RID_SVXSTR_GALLERY_READONLY
     Text [ french ] = "(en lecture seule)" ;
     Text [ swedish ] = "(skrivskyddad)" ;
     Text [ dutch ] = " (alleen lezen)" ;
-    Text [ spanish ] = "(solo lectura)" ;
-    Text [ english_us ] = "(read only)" ;
+    Text [ spanish ] = " (solo lectura)" ;
+    Text [ english_us ] = " (read-only)" ;
     Text[ chinese_simplified ] = " (·À¸²Ğ´)";
-    Text[ russian ] = "(òîëüêî äëÿ ÷òåíèÿ)";
+    Text[ russian ] = " (òîëüêî äëÿ ÷òåíèÿ)";
     Text[ polish ] = " (tylko do odczytu)";
     Text[ japanese ] = " (“Ç‚İæ‚èê—p)";
     Text[ chinese_traditional ] = " (°ßÅª)";
-    Text[ arabic ] = "(ãÍãí ÖÏ ÇáßÊÇÈÉ)";
+    Text[ arabic ] = "(ááŞÑÇÁÉ İŞØ)";
     Text[ dutch ] = " (alleen lezen)";
     Text[ chinese_simplified ] = " (·À¸²Ğ´)";
     Text[ greek ] = " (ìüíï ãéá áíÜãíùóç)";
@@ -1811,7 +1811,7 @@ String RID_SVXSTR_GALLERY_ALLFILES
 {
     Text = "<Alle Dateien>" ;
     Text [ English ] = "<All files>" ;
-    Text [ english_us ] = "<All files>" ;
+    Text [ english_us ] = "<All Files>" ;
     Text [ italian ] = "<Tutti i file>" ;
     Text [ spanish ] = "<Todos los archivos>" ;
     Text [ french ] = "<Tous les fichiers>" ;
@@ -1867,7 +1867,7 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text [ English ] = "This ID already exists..." ;
     Text [ english_us ] = "This ID already exists..." ;
     Text[ portuguese ] = "Este ID já existe...";
-    Text[ russian ] = "İòà ID óæå ñóùåñòâóåò...";
+    Text[ russian ] = "İòîò èäåíòèôèêàòîğ óæå ñóùåñòâóåò...";
     Text[ dutch ] = "ID bestaat reeds...";
     Text[ french ] = "Cet ID existe déjà...";
     Text[ spanish ] = "Esta ID ya existe...";
