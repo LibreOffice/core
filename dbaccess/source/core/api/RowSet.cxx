@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 11:11:14 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 09:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,19 +1970,17 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     else
                     {
                         // create the rowset columns
-//                      Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
-//                      const ::rtl::OUString* pBegin   = aSeq.getConstArray();
-//                      const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
                         Reference<XResultSetMetaData> xMeta = getMetaData();
                         sal_Int32 nCount = xMeta->getColumnCount();
                         for(sal_Int32 i=1; i<=nCount ;++i)
                         {
                             ::rtl::OUString sName = xMeta->getColumnName(i);
                             Reference<XPropertySet> xColumn;
-                            if(m_xColumns->hasByName(sName))
+                            if (m_xColumns->hasByName(sName))
                                 m_xColumns->getByName(sName) >>= xColumn;
-                            if(!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
+                            if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
                                 m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+                            DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
 
                             Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
                             if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
@@ -2007,7 +2005,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                 nFormatKey = 0;
                                 if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
                                     nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                                if(!nFormatKey)
+                                if (!nFormatKey && xColumn.is())
                                     nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
 
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
