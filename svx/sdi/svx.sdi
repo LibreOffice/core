@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:39:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13602,6 +13602,62 @@ SvxEmphasisMarkItem EmphasisMark SID_ATTR_CHAR_EMPHASISMARK
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+
+//--------------------------------------------------------------------------
+SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
+SfxObjectItem FmDataNavigatorController SID_FM_DATANAVIGATOR_CONTROL
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem CommonAlignLeft SID_ALIGN_ANY_LEFT
 ()
