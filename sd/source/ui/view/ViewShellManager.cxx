@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:53:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,21 +146,43 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
 
 ViewShellManager::~ViewShellManager (void)
 {
-    LockUpdate();
-    while ( ! mpActiveViewShells->empty())
+    // Shutdown() should have been called by now but since it is safe to be
+    // called twice we call it again just in case.  It is, however, unlikely
+    // that this does work without crashing.
+    DBG_ASSERT (mpCache.get()==NULL,
+        "ViewShellManager::Shutdown() has to be called prior to destructor");
+    Shutdown();
+}
+
+
+
+
+void ViewShellManager::Shutdown (void)
+{
+    // Take stacked shells from stack.
+    if ( ! mpActiveViewShells->empty())
     {
-        DeactivateViewShell(mpActiveViewShells->front().mpViewShell);
+        UpdateLocker aLock (*this);
+
+        while ( ! mpActiveViewShells->empty())
+        {
+            DeactivateViewShell(mpActiveViewShells->front().mpViewShell);
+        }
     }
-    UnlockUpdate();
+    mrBase.RemoveSubShell (NULL);
 
     // We have the ownership of the factories and because they can not be
-    // auto_ptrs in an stl list we have to delete them now.
+    // auto_ptrs in an stl list we have to delete them now by hand.
     for (SpecializedFactoryList::iterator aI (mpSpecializedFactories->begin());
          aI!=mpSpecializedFactories->end();
          aI++)
     {
         delete aI->second;
     }
+
+    // Destroy members.
+    mpCache.reset();
+    mpDefaultFactory.reset();
 }
 
 
@@ -191,6 +213,9 @@ ViewShell* ViewShellManager::ActivateViewShell (
     ::Window* pParentWindow,
     FrameView* pFrameView)
 {
+    PrepareStackModification();
+
+    // Create a new shell or recycle on in the cache.
     ViewShell* pViewShell = mpCache->GetViewShell (
         nShellId,
         pParentWindow,
@@ -239,6 +264,8 @@ ViewShell* ViewShellManager::ActivateViewShell (
 
 void ViewShellManager::DeactivateViewShell (const ViewShell* pShell)
 {
+    PrepareStackModification ();
+
     ActiveShellList::iterator aI (::std::find_if (
         mpActiveViewShells->begin(),
         mpActiveViewShells->end(),
@@ -258,6 +285,16 @@ void ViewShellManager::DeactivateViewShell (const ViewShell* pShell)
         mrBase.RemoveSubShell(pViewShell);
         mpCache->ReleaseViewShell (pViewShell);
     }
+}
+
+
+
+
+void ViewShellManager::InvalidateShellStack (void)
+{
+    // Call PrepareStackModification() to force a PushShellsOnStack() at the
+    // next UnlockUpdate() to lock level 0.
+    PrepareStackModification ();
 }
 
 
@@ -286,7 +323,8 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
 
     if (bMove)
     {
-        LockUpdate();
+        UpdateLocker aLock (*this);
+
         ViewShell* pNonConstViewShell = aI->mpViewShell;
         ShellId nId = aI->mnId;
         mpActiveViewShells->erase (aI);
@@ -303,7 +341,6 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
         mpActiveViewShells->insert (
             aInsertPosition,
             ActiveShellDescriptor(pNonConstViewShell,nId));
-        UnlockUpdate();
     }
 }
 
@@ -343,7 +380,7 @@ ShellId ViewShellManager::GetShellId (const ViewShell* pShell)
 void ViewShellManager::LockUpdate (void)
 {
     if (mnUpdateLockCount == 0)
-        TakeShellsFromStack();
+        mbTakeShellsFromStackPending = true;
     mnUpdateLockCount++;
 }
 
@@ -360,7 +397,8 @@ void ViewShellManager::UnlockUpdate (void)
         mnUpdateLockCount = 0;
     }
     if (mnUpdateLockCount == 0)
-        PushShellsOnStack();
+        if ( ! mbTakeShellsFromStackPending)
+            PushShellsOnStack();
 }
 
 
@@ -534,6 +572,20 @@ ViewShell* ViewShellManager::CreateViewShell (
     }
 
     return pViewShell;
+}
+
+
+
+
+void ViewShellManager::PrepareStackModification (void)
+{
+    if (mbTakeShellsFromStackPending)
+    {
+        TakeShellsFromStack();
+        // Now that the stack is empty we can reset the flag so that this is
+        // not attempted a second time.
+        mbTakeShellsFromStackPending = false;
+    }
 }
 
 
