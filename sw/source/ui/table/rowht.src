@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:15:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,8 @@ ModalDialog DLG_ROW_HEIGHT
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 157 , 60 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe : Zellenhöhe */
-    Text = "Zeilenhöhe" ;
-    Text [ ENGLISH ] = "Row height" ;
-    Text [ norwegian ] = "Cellehøyde" ;
-    Text [ italian ] = "Altezza riga" ;
-    Text [ portuguese_brazilian ] = "Altura da Linha" ;
-    Text [ portuguese ] = "Altura da linha" ;
-    Text [ finnish ] = "Rivin korkeus" ;
-    Text [ danish ] = "Rækkehøjde" ;
-    Text [ french ] = "Hauteur de ligne" ;
-    Text [ swedish ] = "Radhöjd" ;
-    Text [ dutch ] = "Rijhoogte" ;
-    Text [ spanish ] = "Altura de fila" ;
-    Text [ english_us ] = "Row Height" ;
+    Text [ de ] = "Zeilenhöhe" ;
+    Text [ en-US ] = "Row Height" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -125,89 +114,17 @@ ModalDialog DLG_ROW_HEIGHT
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~dynamisch anpassen : auto. H~öhe */
-        Text = "~dynamisch anpassen" ;
-        Text [ ENGLISH ] = "~dynamic adjustment" ;
+        Text [ de ] = "~dynamisch anpassen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Fit to size" ;
-        Text [ swedish ] = "anpassa ~dynamiskt" ;
-        Text [ danish ] = "~Tilpas dynamisk" ;
-        Text [ italian ] = "Altezza autom~atica" ;
-        Text [ spanish ] = "~Ajuste dinámico" ;
-        Text [ french ] = "Adaptation dynamique" ;
-        Text [ dutch ] = "~dynamisch aanpassen" ;
-        Text [ portuguese_brazilian ] = "A~justar ao tamanho" ;
-        Text [ portuguese ] = "Ajuste ~dinâmico" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´(~F)";
-        Text[ russian ] = "Ïîäáîğ ğàçìåğà";
-        Text[ polish ] = "~Dopasuj do rozmiaru";
-        Text[ japanese ] = "å¢—åŠ ã‚’èªã‚ã‚‹(~F)";
-        Text[ chinese_traditional ] = "è‡ªå‹•æœ€é©èª¿æ•´(~F)";
-        Text[ arabic ] = "ãáÇÁãÉ ÊáŞÇÆíÉ ááÍÌã";
-        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ";
-        Text[ korean ] = "í¬ê¸°ì— ë§ì¶¤(~F)";
-        Text[ turkish ] = "~Boyuna sığdır";
-        Text[ catalan ] = "~Ajusta a la mida";
-        Text[ finnish ] = "~Sovita kokoon";
-        Text[ thai ] = "~à¸ˆà¸±à¸”à¸à¸­à¸”à¸µà¸‚à¸™à¸²à¸”";
-        Text[ czech ] = "PÅ™izpÅ¯sobit velikosti";
-        Text[ hebrew ] = "~dynamisch anpassen";
-        Text[ hindi ] = "~à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤•à¥‡à¤²à¤¿à¤ à¤¯à¥‹à¤—à¥à¤¯";
-        Text[ slovak ] = "~PrispÃ´sobiÅ¥ veÄ¾kosti";
-        Text[ hungarian ] = "~MÃ©retre igazÃ­tÃ¡s";
-        Text[ slovenian ] = "~Prilagodi velikosti";
+        Text [ en-US ] = "~Fit to size" ;
     };
     FixedLine FL_HEIGHT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
-        Text = "Höhe" ;
-        Text [ ENGLISH ] = "Height" ;
-        Text [ norwegian ] = "Høyde " ;
-        Text [ italian ] = "Altezza" ;
-        Text [ portuguese_brazilian ] = "Altura" ;
-        Text [ portuguese ] = "Altura" ;
-        Text [ finnish ] = "Korkeus" ;
-        Text [ danish ] = "Højde" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ swedish ] = "Höjd" ;
-        Text [ dutch ] = "Hoogte" ;
-        Text [ spanish ] = "Altura" ;
-        Text [ english_us ] = "Height" ;
-        Text[ chinese_simplified ] = "é«˜åº¦";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wysokoœæ";
-        Text[ japanese ] = "é«˜ã•";
-        Text[ chinese_traditional ] = "é«˜åº¦";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
-        Text[ korean ] = "ë†’ì´";
-        Text[ turkish ] = "Yükseklik";
-        Text[ catalan ] = "Alçada";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
-        Text[ czech ] = "VÃ½Å¡ka";
-        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
-        Text[ hindi ] = "à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "VÃ½Å¡ka";
-        Text[ hungarian ] = "MagassÃ¡g";
-        Text[ slovenian ] = "ViÅ¡ina";
+        Text [ de ] = "Höhe" ;
+        Text [ en-US ] = "Height" ;
     };
-    Text[ chinese_simplified ] = "è¡Œé«˜";
-    Text[ russian ] = "Âûñîòà ñòğîêè";
-    Text[ polish ] = "Wysokoœæ wierszy";
-    Text[ japanese ] = "è¡Œã®é«˜ã•";
-    Text[ chinese_traditional ] = "è¡Œé«˜";
-    Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
-    Text[ greek ] = "¾øïò ãñáììŞò";
-    Text[ korean ] = "í–‰ ë†’ì´";
-    Text[ turkish ] = "Satır yüksekliği";
-    Text[ catalan ] = "Alçada de fila";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¹à¸–à¸§";
-    Text[ czech ] = "VÃ½Å¡ka Å™Ã¡dku";
-    Text[ hebrew ] = "â€®×’×•×‘×” ×©×•×¨×”â€¬";
-    Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤Šà¤à¤šà¤¾à¤ˆ";
-    Text[ slovak ] = "VÃ½Å¡ka riadku";
-    Text[ hungarian ] = "SormagassÃ¡g";
-    Text[ slovenian ] = "ViÅ¡ina vrstice";
 };
 
 
