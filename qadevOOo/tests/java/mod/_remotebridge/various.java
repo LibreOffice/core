@@ -2,9 +2,9 @@
  *
  *  $RCSfile: various.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:07 $
+ *  last change:$Date: 2003-02-04 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ public class various extends TestCase {
     /**
      * Stop the acceptor thread and dispose the bridge
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         xAcctr.stopAccepting();
         if (accThread.isAlive()) {
             accThread.interrupt();
@@ -315,5 +315,11 @@ public class various extends TestCase {
                 XComponent.class, bridge);
         if (xComp != null && !bridgeDisposed[0])
             xComp.dispose();
+        // wait for dispose
+        try {
+            Thread.sleep(5000);
+        }
+        catch(java.lang.InterruptedException e) {
+        }
     }
 }
