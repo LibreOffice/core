@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-20 11:17:41 $
+ *  last change: $Author: dl $ $Date: 2001-09-18 14:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,13 +1389,13 @@ interface DrawView : View
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
     ]
-/*
+
     SID_RULER_OBJECT // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
     ]
-*/
+
     SID_RULER_NULL_OFFSET // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-13 11:21:07 $
+ *  last change: $Author: dl $ $Date: 2001-09-18 14:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,39 +537,58 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
         {
             const SvxLongLRSpaceItem& rLRSpace = (const SvxLongLRSpaceItem&)
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
-            long nLeft = Max(0L, rLRSpace.GetLeft() - aPagePos.X());
-            long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
-                                  aPageSize.Width() - aViewSize.Width());
 
-            USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
-
-            for (USHORT i = 0; i < nPageCnt; i++)
+            if( pDrView->IsTextEdit() )
             {
-                SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
-                SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
-                                        pPage,
-                                        pPage->GetLftBorder(),
-                                        pPage->GetRgtBorder(),
-                                        nLeft, nRight);
-                pUndoGroup->AddAction(pUndo);
-                pPage->SetLftBorder(nLeft);
-                pPage->SetRgtBorder(nRight);
+                Point aPagePos = pWindow->GetViewOrigin();
+                Rectangle aRect = aMarkRect;
+                aRect.SetPos(aRect.TopLeft() + aPagePos);
+                aRect.Left()  = rLRSpace.GetLeft();
+                aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
+                aRect.SetPos(aRect.TopLeft() - aPagePos);
+                if ( aRect != aMarkRect)
+                {
+                    pDrView->SetAllMarkedRect(aRect);
+                    aMarkRect = pDrView->GetAllMarkedRect();
+                    Invalidate( SID_RULER_OBJECT );
+                }
             }
-            nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
-
-            for (i = 0; i < nPageCnt; i++)
+            else
             {
-                SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
-                SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
-                                        pPage,
-                                        pPage->GetLftBorder(),
-                                        pPage->GetRgtBorder(),
-                                        nLeft, nRight);
-                pUndoGroup->AddAction(pUndo);
-                pPage->SetLftBorder(nLeft);
-                pPage->SetRgtBorder(nRight);
+                long nLeft = Max(0L, rLRSpace.GetLeft() - aPagePos.X());
+                long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                                      aPageSize.Width() - aViewSize.Width());
+
+                USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+
+                for (USHORT i = 0; i < nPageCnt; i++)
+                {
+                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
+                                            pPage,
+                                            pPage->GetLftBorder(),
+                                            pPage->GetRgtBorder(),
+                                            nLeft, nRight);
+                    pUndoGroup->AddAction(pUndo);
+                    pPage->SetLftBorder(nLeft);
+                    pPage->SetRgtBorder(nRight);
+                }
+                nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+
+                for (i = 0; i < nPageCnt; i++)
+                {
+                    SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
+                                            pPage,
+                                            pPage->GetLftBorder(),
+                                            pPage->GetRgtBorder(),
+                                            nLeft, nRight);
+                    pUndoGroup->AddAction(pUndo);
+                    pPage->SetLftBorder(nLeft);
+                    pPage->SetRgtBorder(nRight);
+                }
+                InvalidateWindows();
             }
-            InvalidateWindows();
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
@@ -611,7 +630,8 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
             InvalidateWindows();
             break;
         }
-/*      case SID_RULER_OBJECT:
+
+        case SID_RULER_OBJECT:
         {
             Point aPagePos = pWindow->GetViewOrigin();
             Rectangle aRect = aMarkRect;
@@ -639,7 +659,6 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
             }
             break;
         }
-*/
 
         case SID_ATTR_TABSTOP:
         {
@@ -770,7 +789,7 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
                     aULSpace.SetUpper( aPagePos.Y() + aMarkRect.Top() );
                     aULSpace.SetLower( aRect.Bottom() + aPageSize.Height() - aMarkRect.Bottom() );
 
-//                  rSet.DisableItem( SID_RULER_OBJECT );
+                    rSet.DisableItem( SID_RULER_OBJECT );
 
                     // Seitenraender werden gelocked
                     aProtect.SetSizeProtect( TRUE );
@@ -790,13 +809,13 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
         }
         else
         {
-//          rSet.DisableItem( SID_RULER_OBJECT );
+            rSet.DisableItem( SID_RULER_OBJECT );
             rSet.DisableItem( ITEMID_TABSTOP );
         }
     }
     else
     {
-//      rSet.DisableItem( SID_RULER_OBJECT );
+        rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( ITEMID_TABSTOP );
     }
 

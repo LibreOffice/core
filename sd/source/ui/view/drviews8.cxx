@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
+ *  last change: $Author: dl $ $Date: 2001-09-18 14:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ATTR_TRANSFORM:
         {
             pFuActual = new FuTransform( this, pWindow, pDrView, pDoc, rReq );
-//          Invalidate(SID_RULER_OBJECT);
+            Invalidate(SID_RULER_OBJECT);
             Cancel();
         }
         break;

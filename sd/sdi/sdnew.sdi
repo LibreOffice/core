@@ -22,3 +22,35 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
     GroupId = GID_FORMAT;
 ]
 
+SvxObjectItem RulerObject SID_RULER_OBJECT
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Synchron;
+
+    /* plugin: */
+    Container = FALSE,
+    PlugComm = FALSE,
+
+    /* api: */
+    Export = TRUE,
+    IsCollection = FALSE,
+    Readonly = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
