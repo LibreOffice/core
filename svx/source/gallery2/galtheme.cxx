@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 15:26:12 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 12:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,6 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
 
     if( rObj.IsValid() )
     {
-        GalleryObject   aNewEntry;
         GalleryObject*  pEntry = aObjectList.First();
         GalleryObject*  pFoundEntry = NULL;
         ULONG           nUpdatePos = LIST_APPEND;
@@ -329,8 +328,25 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
             if( pEntry->aURL == rObj.GetURL() )
                 pFoundEntry = pEntry;
 
-        if( pFoundEntry && ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry ) )
+        if( pFoundEntry )
+        {
+            GalleryObject aNewEntry;
+
+            // update title of new object if neccessary
+            if( !rObj.GetTitle().Len() )
+            {
+                SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );
+
+                if( pOldObj )
+                {
+                    ( (SgaObject&) rObj ).SetTitle( pOldObj->GetTitle() );
+                    delete pOldObj;
+                }
+            }
+
+            ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry );
             pFoundEntry->nOffset = aNewEntry.nOffset;
+        }
         else
             ImplWriteSgaObject( rObj, nInsertPos, NULL );
 
