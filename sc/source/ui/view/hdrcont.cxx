@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:03:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
     // #107811# mirror the vertical window for correct border drawing
-    EnableRTL ( bVertical );
+    // #106948# table layout depends on sheet format, not UI setting, so the
+    // borders of the vertical window have to be handled manually, too.
+    EnableRTL( FALSE );
 
     aNormFont = GetFont();
     aNormFont.SetTransparent( TRUE );       //! WEIGHT_NORMAL hart setzen ???
@@ -159,16 +161,19 @@ __EXPORT ScHeaderControl::~ScHeaderControl()
 
 void ScHeaderControl::DoPaint( USHORT nStart, USHORT nEnd )
 {
+    BOOL bLayoutRTL = IsLayoutRTL();
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
     {
         aRect.Top() = GetScrPos( nStart );
-        aRect.Bottom() = GetScrPos( nEnd+1 )-1;
+        aRect.Bottom() = GetScrPos( nEnd+1 )-nLayoutSign;
     }
     else
     {
         aRect.Left() = GetScrPos( nStart );
-        aRect.Right() = GetScrPos( nEnd+1 )-1;
+        aRect.Right() = GetScrPos( nEnd+1 )-nLayoutSign;
     }
     Invalidate(aRect);
 }
@@ -245,6 +250,9 @@ long ScHeaderControl::GetScrPos( USHORT nEntryNo )
         }
     }
 
+    if ( IsLayoutRTL() )
+        nScrPos = nMax - nScrPos - 2;
+
     return nScrPos;
 }
 
@@ -266,13 +274,17 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     aNormFont.SetColor( aTextColor );
     aBoldFont.SetColor( aTextColor );
 
-    const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
+    BOOL bLayoutRTL = IsLayoutRTL();
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    BOOL bMirrored = IsMirrored();
+
+//  const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
     String              aString;
     USHORT              nBarSize;
     Point               aScrPos;
     Point               aEndPos;
     Size                aTextSize;
-    Size                aSize = GetOutputSizePixel();
+//  Size                aSize = GetOutputSizePixel();
 
     if (bVertical)
         nBarSize = (USHORT) GetSizePixel().Width();
@@ -284,30 +296,47 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     long nPStart = bVertical ? rRect.Top() : rRect.Left();
     long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
 
-    long nTransStart = nPEnd;
+    long nTransStart = nPEnd + 1;
     long nTransEnd = 0;
+
+    long nInitScrPos = 0;
+    if ( bLayoutRTL )
+    {
+        long nTemp = nPStart;       // swap nPStart / nPEnd
+        nPStart = nPEnd;
+        nPEnd = nTemp;
+        nTemp = nTransStart;        // swap nTransStart / nTransEnd
+        nTransStart = nTransEnd;
+        nTransEnd = nTemp;
+        if ( bVertical )            // start loops from the end
+            nInitScrPos = GetSizePixel().Height() - 1;
+        else
+            nInitScrPos = GetSizePixel().Width() - 1;
+    }
 
     //  aeussere Linien komplett durchzeichnen
     //  Zuerst Ende der letzten Zelle finden
 
-    long nLineEnd = -1;
+//  long nLineEnd = -1;
+    long nLineEnd = nInitScrPos - nLayoutSign;
+
     for (USHORT i=nPos; i<nSize; i++)
     {
         USHORT nSizePix = GetEntrySize( i );
         if (nSizePix)
         {
-            nLineEnd += nSizePix;
+            nLineEnd += nSizePix * nLayoutSign;
 
             if ( bMarkRange && i >= nMarkStart && i <= nMarkEnd )
             {
-                long nLineStart = nLineEnd - nSizePix + 1;
-                if ( nLineStart < nTransStart )
+                long nLineStart = nLineEnd - ( nSizePix - 1 ) * nLayoutSign;
+                if ( nLineStart * nLayoutSign < nTransStart * nLayoutSign )
                     nTransStart = nLineStart;
-                if ( nLineEnd > nTransEnd )
+                if ( nLineEnd * nLayoutSign > nTransEnd * nLayoutSign )
                     nTransEnd = nLineEnd;
             }
 
-            if ( nLineEnd > nPEnd )
+            if ( nLineEnd * nLayoutSign > nPEnd * nLayoutSign )
             {
                 nLineEnd = nPEnd;
                 break;
@@ -326,29 +355,29 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     Rectangle aFillRect;
     SetLineColor();
 
-    if ( nLineEnd >= 0 )
+    if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
         SetFillColor( rStyleSettings.GetFaceColor() );
         if ( bVertical )
-            aFillRect = Rectangle( 0, 0, nBarSize-1, nLineEnd );
+            aFillRect = Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
-            aFillRect = Rectangle( 0, 0, nLineEnd, nBarSize-1 );
+            aFillRect = Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
         DrawRect( aFillRect );
     }
 
-    if ( nLineEnd < nPEnd )
+    if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
     {
         SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
         if ( bVertical )
-            aFillRect = Rectangle( 0, nLineEnd+1, nBarSize-1, nPEnd );
+            aFillRect = Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-1, nPEnd );
         else
-            aFillRect = Rectangle( nLineEnd+1, 0, nPEnd, nBarSize-1 );
+            aFillRect = Rectangle( nLineEnd+nLayoutSign, 0, nPEnd, nBarSize-1 );
         DrawRect( aFillRect );
     }
 
-    if ( nLineEnd >= nPStart )
+    if ( nLineEnd * nLayoutSign >= nPStart * nLayoutSign )
     {
-        if ( nTransEnd >= nTransStart && bDark )
+        if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bDark )
         {
             //  solid grey background for dark face color is drawn before lines
 
@@ -371,7 +400,10 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
-            DrawLine( Point( nBarSize-1, nPStart ), Point( nBarSize-1, nLineEnd ) );
+        {
+            long nDarkPos = bMirrored ? 0 : nBarSize-1;
+            DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
+        }
         else
             DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) );
     }
@@ -391,28 +423,11 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
         //  set line color etc. before entry loop
         switch ( nPass )
         {
-#if 0
-            case SC_HDRPAINT_SEL_RIGHT:
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                break;
-            case SC_HDRPAINT_SEL_LEFT:
-                SetLineColor( rStyleSettings.GetLightColor() );
-                break;
-            case SC_HDRPAINT_TOP:
-                SetLineColor( rStyleSettings.GetLightColor() );
-                break;
-            case SC_HDRPAINT_SEL_TOP:
-                SetLineColor( rStyleSettings.GetLightColor() );
-                break;
-            case SC_HDRPAINT_SEL_BOTTOM:
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                break;
-#endif
             case SC_HDRPAINT_BOTTOM:
                 SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 break;
             case SC_HDRPAINT_TEXT:
-                if ( nTransEnd >= nTransStart && !bDark )
+                if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bDark )
                 {
                     //  Transparent selection background is drawn after lines, before text.
                     //  #109814# Use DrawSelectionBackground to make sure there is a visible
@@ -435,7 +450,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
         }
 
         USHORT  nCount=0;
-        long    nScrPos=0;
+        long    nScrPos=nInitScrPos;
         do
         {
             if (bVertical)
@@ -445,7 +460,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
             USHORT  nEntryNo = nCount + nPos;
             if ( nEntryNo >= nSize )                // MAXCOL/MAXROW
-                nScrPos = nPEnd + 1;                //  ausserhalb -> Ende
+                nScrPos = nPEnd + nLayoutSign;      //  beyond nPEnd -> stop
             else
             {
                 USHORT nSizePix = GetEntrySize( nEntryNo );
@@ -456,69 +471,18 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                     if (nHidden)
                         nCount += nHidden - 1;
                 }
-                else if (nScrPos+nSizePix >= nPStart)
+                else if ((nScrPos+nSizePix*nLayoutSign)*nLayoutSign >= nPStart*nLayoutSign)
                 {
                     Point aEndPos(aScrPos);
                     if (bVertical)
-                        aEndPos = Point( aScrPos.X()+nBarSize-1, aScrPos.Y()+nSizePix-1 );
+                        aEndPos = Point( aScrPos.X()+nBarSize-1, aScrPos.Y()+(nSizePix-1)*nLayoutSign );
                     else
-                        aEndPos = Point( aScrPos.X()+nSizePix-1, aScrPos.Y()+nBarSize-1 );
+                        aEndPos = Point( aScrPos.X()+(nSizePix-1)*nLayoutSign, aScrPos.Y()+nBarSize-1 );
 
                     BOOL bMark = bMarkRange && nEntryNo >= nMarkStart && nEntryNo <= nMarkEnd;
 
                     switch ( nPass )
                     {
-#if 0
-                        case SC_HDRPAINT_SEL_LEFT:
-                            if (bMark)
-                            {
-                                // continuous line - partly overwritten later
-                                if (bVertical)
-                                    aGrid.AddVerLine( aScrPos.X()+1, aScrPos.Y(), aEndPos.Y() );
-                                else
-                                    aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aScrPos.Y()+1 );
-                            }
-                            break;
-
-                        case SC_HDRPAINT_SEL_TOP:
-                            if (bMark)
-                            {
-                                if (bVertical)
-                                    aGrid.AddHorLine( aScrPos.X()+1, aEndPos.X()-2, aScrPos.Y()+1 );
-                                else
-                                    aGrid.AddVerLine( aScrPos.X()+1, aScrPos.Y()+1, aEndPos.Y()-2 );
-                            }
-                            break;
-
-                        case SC_HDRPAINT_SEL_RIGHT:
-                            if (bMark)
-                            {
-                                // continuous line - partly overwritten later
-                                if (bVertical)
-                                    aGrid.AddVerLine( aEndPos.X()-1, aScrPos.Y(), aEndPos.Y() );
-                                else
-                                    aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aEndPos.Y()-1 );
-                            }
-                            break;
-
-                        case SC_HDRPAINT_SEL_BOTTOM:
-                            if (bMark)
-                            {
-                                if (bVertical)
-                                    aGrid.AddHorLine( aScrPos.X()+1, aEndPos.X()-1, aEndPos.Y()-1 );
-                                else
-                                    aGrid.AddVerLine( aEndPos.X()-1, aScrPos.Y()+1, aEndPos.Y()-1 );
-                            }
-                            break;
-
-                        case SC_HDRPAINT_TOP:
-                            if (bVertical)
-                                aGrid.AddHorLine( aScrPos.X(), aEndPos.X()-1, aScrPos.Y() );
-                            else
-                                aGrid.AddVerLine( aScrPos.X(), aScrPos.Y(), aEndPos.Y()-1 );
-                            break;
-#endif
-
                         case SC_HDRPAINT_BOTTOM:
                             if (bVertical)
                                 aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aEndPos.Y() );
@@ -531,11 +495,11 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                                 if ( GetEntrySize(nEntryNo+1)==0 )
                                 {
                                     if (bVertical)
-                                        DrawLine( Point(aScrPos.X(),aEndPos.Y()-1),
-                                                  Point(aEndPos.X(),aEndPos.Y()-1) );
+                                        DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
+                                                  Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
                                     else
-                                        DrawLine( Point(aEndPos.X()-1,aScrPos.Y()),
-                                                  Point(aEndPos.X()-1,aEndPos.Y()) );
+                                        DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
+                                                  Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
                                 }
                             break;
 
@@ -558,11 +522,13 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                                 if (bVertical)
                                 {
                                     aTxtPos.X() += (nBarSize-aTextSize.Width())/2;
-                                    aTxtPos.Y() += (nSizePix-aTextSize.Height())/2;
+                                    aTxtPos.Y() += (nSizePix*nLayoutSign-aTextSize.Height())/2;
+                                    if ( bMirrored )
+                                        aTxtPos.X() += 1;   // dark border is left instead of right
                                 }
                                 else
                                 {
-                                    aTxtPos.X() += (nSizePix-aTextSize.Width()+1)/2;
+                                    aTxtPos.X() += (nSizePix*nLayoutSign-aTextSize.Width()+1)/2;
                                     aTxtPos.Y() += (nBarSize-aTextSize.Height()+1)/2;
                                 }
                                 DrawText( aTxtPos, aString );
@@ -573,11 +539,11 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                     //  bei Selektion der ganzen Zeile/Spalte:
                     //  InvertRect( Rectangle( aScrPos, aEndPos ) );
                 }
-                nScrPos += nSizePix;    // auch wenn noch oberhalb
+                nScrPos += nSizePix * nLayoutSign;      // also if before the visible area
             }
             ++nCount;
         }
-        while ( nScrPos <= nPEnd );
+        while ( nScrPos * nLayoutSign <= nPEnd * nLayoutSign );
 
         aGrid.Flush();
     }
@@ -597,8 +563,13 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
     long    nDif;
     Size    aSize = GetOutputSizePixel();
+    long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
-    nScrPos = GetScrPos( nPos ) - 1;
+    BOOL bLayoutRTL = IsLayoutRTL();
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    long nEndPos = bLayoutRTL ? -1 : nWinSize;
+
+    nScrPos = GetScrPos( nPos ) - nLayoutSign;
     do
     {
         USHORT nEntryNo = nCount + nPos;
@@ -606,9 +577,9 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
 //      nScrPos = GetScrPos( nEntryNo ) - 1;
 
         if (nEntryNo >= nSize)
-            nScrPos = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
+            nScrPos = nEndPos + nLayoutSign;
         else
-            nScrPos += GetEntrySize( nEntryNo - 1 );        //! GetHiddenCount() ??
+            nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
 
         nDif = nMousePos - nScrPos;
         if (nDif >= -2 && nDif <= 2 && nCount > 0)
@@ -616,11 +587,11 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
             bFound=TRUE;
             nHitNo=nEntryNo-1;
         }
-        else if (nDif >= 0)
+        else if (nDif * nLayoutSign >= 0)
             nHitNo = nEntryNo;
         ++nCount;
     }
-    while ( nScrPos < ( bVertical ? aSize.Height() : aSize.Width() ) && nDif > 0 );
+    while ( nScrPos * nLayoutSign < nEndPos * nLayoutSign && nDif * nLayoutSign > 0 );
 
     rBorder = bFound;
     return nHitNo;
@@ -709,7 +680,9 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 
         long nScrPos    = GetScrPos( nDragNo );
         long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
-        long nNewWidth  = nMousePos + 2 - nScrPos;
+        BOOL bLayoutRTL = IsLayoutRTL();
+        long nNewWidth  = bLayoutRTL ? ( nScrPos - nMousePos + 1 )
+                                     : ( nMousePos + 2 - nScrPos );
 
         if ( nNewWidth < 0 /* && !IsSelected(nDragNo) */ )
         {
@@ -836,7 +809,10 @@ void ScHeaderControl::ShowDragHelp()
 {
     if (Help::IsQuickHelpEnabled())
     {
-        long nVal = nDragPos + 2 - GetScrPos( nDragNo );
+        long nScrPos    = GetScrPos( nDragNo );
+        BOOL bLayoutRTL = IsLayoutRTL();
+        long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
+                               : ( nDragPos + 2 - nScrPos );
 
         String aHelpStr = GetDragHelp( nVal );
         Point aPos = OutputToScreenPixel( Point(0,0) );
@@ -891,6 +867,16 @@ USHORT ScHeaderControl::GetHiddenCount( USHORT nEntryNo )
         ++nHidden;
     }
     return nHidden;
+}
+
+BOOL ScHeaderControl::IsLayoutRTL()
+{
+    return FALSE;
+}
+
+BOOL ScHeaderControl::IsMirrored()
+{
+    return FALSE;
 }
 
 BOOL ScHeaderControl::IsDisabled()
