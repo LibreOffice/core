@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 12:24:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,8 @@ void SwTxtFormatter::Recycle( SwTxtFormatInfo &rInf )
         // A the paragraph contains kanas / asian punctuation
         // B Current font is CJK
         // C we disable kana compression in multi line portions
-        if ( rSI.CountCompChg() )
+        if ( rSI.CountCompChg() && ! pPos->IsMultiPortion() &&
+             ! pPos->InFldGrp() &&  ! pPos->IsDropPortion() )
         {
             // switch to current font
             SeekAndChg( rInf );
@@ -1024,9 +1025,12 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
             // 6441: uebel ist, wenn die Portion passt...
             const SwScriptInfo& rSI =
                 ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+
             USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
                                 rSI.CountCompChg() &&
-                                ! rInf.IsMulti() ?
+                                ! rInf.IsMulti() &&
+                                ! pPor->InFldGrp() &&
+                                ! pPor->IsDropPortion() ?
                                 10000 :
                                     0 ;
 
