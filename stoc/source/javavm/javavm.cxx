@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-23 15:29:34 $
+ *  last change: $Author: jsc $ $Date: 2000-11-13 16:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 
 
 #include <bridges/java/jvmcontext.hxx>
@@ -122,7 +121,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::java;
 using namespace com::sun::star::registry;
-using namespace com::sun::star::frame;
 
 using namespace vos;
 using namespace rtl;
@@ -423,7 +421,7 @@ namespace stoc_javavm {
             pjvm->pushProp(prop);
         }
     }
-
+/*
     static void getXfromConfiguration(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
         OSL_TRACE("trying configuration...");
 
@@ -474,7 +472,7 @@ namespace stoc_javavm {
         }
 
         if (bIniFound) {
-            FileStatus fileStatus(FileStatusMask_FilePath /*FileStatusMask_NativePath*/);
+            FileStatus fileStatus(FileStatusMask_FilePath /*FileStatusMask_NativePath/);
 
             if (FileBase::E_None == aJavaIni.getFileStatus(fileStatus ))
                 iniFileName = fileStatus.getFilePath();
@@ -523,7 +521,7 @@ namespace stoc_javavm {
         // don't close soffice
         //  xSofficeReg->close();
     }
-
+*/
 
 //  #include <windows.h>
 
@@ -632,7 +630,8 @@ namespace stoc_javavm {
         try {
             JVM jvm;
 
-            getXfromConfiguration(&jvm, xSMgr);
+//          getXfromConfiguration(&jvm, xSMgr);
+            throw Exception(OUString::createFromAscii("under construction"), Reference<XInterface>());
             *pjvm = jvm;
         }
         catch(Exception & exception) {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 14:20:40 $
+#   last change: $Author: jsc $ $Date: 2000-11-13 16:43:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ TARGET=jen
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
+COMP1TYPELIST=$(TARGET)
 
 # --- Settings -----------------------------------------------------
 
@@ -81,23 +82,6 @@ CDEFS += -D__SGI_STL_BOOL_H
 .ENDIF
 
 .INCLUDE :  ..$/cppumaker.mk
-
-UNOTYPES= \
-    com.sun.star.container.XNameAccess		                        \
-    com.sun.star.frame.XConfigManager								\
-    com.sun.star.java.XJavaThreadRegister_11						\
-    com.sun.star.java.XJavaVM 	                                    \
-    com.sun.star.lang.XMultiServiceFactory	                        \
-    com.sun.star.lang.XServiceInfo		                            \
-    com.sun.star.lang.XSingleServiceFactory	                        \
-    com.sun.star.lang.XTypeProvider                                 \
-    com.sun.star.registry.XSimpleRegistry                           \
-    com.sun.star.registry.XRegistryKey                              \
-    com.sun.star.uno.Exception	                                    \
-    com.sun.star.uno.TypeClass	                                    \
-    com.sun.star.uno.XAggregation	                                \
-    com.sun.star.uno.XInterface		                                \
-    com.sun.star.uno.XWeak
 
 SLOFILES= \
         $(SLO)$/javavm.obj		\

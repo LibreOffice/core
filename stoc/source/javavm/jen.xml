@@ -42,7 +42,6 @@ the existing vm given back.
 <Type>  com.sun.star.java.XJavaVM                       </Type>
 <Type>  com.sun.star.java.XJavaVM                       </Type>
 <Type>  com.sun.star.java.XJavaThreadRegister_11        </Type>
-<Type>  com.sun.star.frame.XConfigManager               </Type>
 <Type>  com.sun.star.container.XNameAccess              </Type>
 <Type>  com.sun.star.lang.XTypeProvider                 </Type>
 <Type>  com.sun.star.lang.XServiceInfo                  </Type>
