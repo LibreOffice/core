@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2002-02-11 09:56:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,46 @@ using namespace ::xmloff::token;
 
 // ==================================================
 
+class SchXMLBodyContext_Impl : public SvXMLImportContext
+{
+private:
+    SchXMLImportHelper& mrImportHelper;
+
+public:
+
+    SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
+                SvXMLImport& rImport, sal_uInt16 nPrfx,
+                const ::rtl::OUString& rLName );
+    virtual ~SchXMLBodyContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
+        SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrImportHelper( rImpHelper )
+{
+}
+
+SchXMLBodyContext_Impl::~SchXMLBodyContext_Impl()
+{
+}
+
+SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
+                                  rLocalName );
+}
+
+// ==================================================
+
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
                                     USHORT nPrefix,
@@ -148,7 +188,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             break;
         case XML_TOK_DOC_BODY:
             if( nFlags & IMPORT_CONTENT )
-                pContext = new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix, rLocalName );
+                pContext = new SchXMLBodyContext_Impl( mrImportHelper, GetImport(), nPrefix, rLocalName );
             break;
     }
 
@@ -169,8 +209,8 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper )
 {
     DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-                IsXMLToken( rLName, XML_BODY ),
-                "SchXMLBodyContext instanciated with no <office:body> element" );
+                IsXMLToken( rLName, XML_CHART ),
+                "SchXMLBodyContext instanciated with no <office:chart> element" );
 }
 
 SchXMLBodyContext::~SchXMLBodyContext()
