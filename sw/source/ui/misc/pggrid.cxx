@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:09:27 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,18 @@
 #ifndef _XTABLE_HXX //autogen
 #include <svx/xtable.hxx>
 #endif
-
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _SVX_SIZEITEM_HXX
+#include <svx/sizeitem.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_BOXITEM_HXX
+#include <svx/boxitem.hxx>
+#endif
 #ifndef _PGGRID_HXX
 #include <pggrid.hxx>
 #endif
@@ -122,9 +133,28 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aDisplayCB              (this, ResId(CB_DISPLAY         )),
     aPrintCB                (this, ResId(CB_PRINT           )),
     aColorFT                (this, ResId(FT_COLOR           )),
-    aColorLB                (this, ResId(LB_COLOR           ))
+    aColorLB                (this, ResId(LB_COLOR           )),
+    nPageWidth(MM50)
 {
     FreeResource();
+
+    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    SetMetric( aTextSizeMF,  aMetric );
+    SetMetric( aRubySizeMF,  aMetric );
+    Link aLink = LINK(this, SwTextGridPage, CharSizeChangedHdl);
+    aCharsPerLineNF.SetModifyHdl(aLink);
+    aTextSizeMF.SetModifyHdl(aLink);
+
+    Link aModifyLk = LINK(this, SwTextGridPage, GridModifyHdl);
+    aNoGridRB   .SetClickHdl(aModifyLk);
+    aLinesGridRB.SetClickHdl(aModifyLk);
+    aCharsGridRB.SetClickHdl(aModifyLk);
+    aColorLB.SetSelectHdl(aModifyLk);
+    aPrintCB.SetClickHdl(aModifyLk);
+    aLinesPerPageNF.SetModifyHdl(aModifyLk);
+    aRubySizeMF.SetModifyHdl(aModifyLk);
+    aRubyBelowCB.SetClickHdl(aModifyLk);
+
     XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
     aColorLB.InsertAutomaticEntry();
     for( USHORT i = 0; i < pColorTbl->Count(); ++i )
@@ -166,17 +196,7 @@ BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         aPrintCB.GetSavedValue() != aPrintCB.IsChecked()||
         aColorLB.GetSavedValue() != aColorLB.GetSelectEntryPos())
     {
-        SwTextGridItem aGridItem;
-        aGridItem.SetGridType(aNoGridRB.IsChecked() ? GRID_NONE :
-            aLinesGridRB.IsChecked() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
-        aGridItem.SetLines(aLinesPerPageNF.GetValue());
-        aGridItem.SetBaseHeight(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
-        aGridItem.SetRubyHeight(aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP)));
-        aGridItem.SetRubyTextBelow(aRubyBelowCB.IsChecked());
-        aGridItem.SetDisplayGrid(aDisplayCB.IsChecked());
-        aGridItem.SetPrintGrid(aPrintCB.IsChecked());
-        aGridItem.SetColor(aColorLB.GetSelectEntryColor());
-        rSet.Put(aGridItem);
+        PutGridItem(rSet);
         bRet = TRUE;
     }
 
@@ -198,13 +218,14 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         }
         aLinesPerPageNF.SetValue(rGridItem.GetLines());
         aTextSizeMF.SetValue(aTextSizeMF.Normalize(rGridItem.GetBaseHeight()), FUNIT_TWIP);
-        // has to be calculated       aCharsPerLineNF.SetValue();
         aRubySizeMF.SetValue(aRubySizeMF.Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
         aRubyBelowCB.Check(rGridItem.IsRubyTextBelow());
         aDisplayCB.Check(rGridItem.IsDisplayGrid());
         aPrintCB.Check(rGridItem.IsPrintGrid());
         aColorLB.SelectEntry(rGridItem.GetColor());
     }
+    UpdatePageWidth(rSet);
+
     aNoGridRB.SaveValue();
     aLinesGridRB.SaveValue();
     aLinesPerPageNF.SaveValue();
@@ -223,19 +244,10 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
 void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
 {
     aExampleWN.Hide();
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
-    {
-//            const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
-//                                                SID_ATTR_PAGE_SIZE);
-//            const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
-//                                                                RES_LR_SPACE );
-//            const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
-//            USHORT nActWidth = (USHORT)rSize.GetSize().Width()
-//                            - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
-
-    //update characters per line and lines per page control
-    }
+    aExampleWN.UpdateExample( rSet );
+    UpdatePageWidth(rSet);
     aExampleWN.Show();
+    aExampleWN.Invalidate();
 }
 /*-- 06.02.2002 15:25:41---------------------------------------------------
 
@@ -243,6 +255,41 @@ void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
 int SwTextGridPage::DeactivatePage( SfxItemSet* pSet )
 {
     return 0;
+}
+/* -----------------------------08.02.2002 11:57------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
+{
+        SwTextGridItem aGridItem;
+        aGridItem.SetGridType(aNoGridRB.IsChecked() ? GRID_NONE :
+            aLinesGridRB.IsChecked() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
+        aGridItem.SetLines(aLinesPerPageNF.GetValue());
+        aGridItem.SetBaseHeight(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
+        aGridItem.SetRubyHeight(aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP)));
+        aGridItem.SetRubyTextBelow(aRubyBelowCB.IsChecked());
+        aGridItem.SetDisplayGrid(aDisplayCB.IsChecked());
+        aGridItem.SetPrintGrid(aPrintCB.IsChecked());
+        aGridItem.SetColor(aColorLB.GetSelectEntryColor());
+        rSet.Put(aGridItem);
+}
+/* -----------------------------08.02.2002 10:54------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwTextGridPage::UpdatePageWidth(const SfxItemSet& rSet)
+{
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
+    {
+        const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
+                                            SID_ATTR_PAGE_SIZE);
+        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
+                                                            RES_LR_SPACE );
+        const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
+        nPageWidth = rSize.GetSize().Width()
+                        - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
+        sal_Int32 nTextSize = aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP));
+        aCharsPerLineNF.SetValue(nPageWidth / nTextSize);
+    }
 }
 /* -----------------------------06.02.2002 15:24------------------------------
 
@@ -253,5 +300,37 @@ USHORT* SwTextGridPage::GetRanges()
         RES_TEXTGRID, RES_TEXTGRID,
         0};
     return aPageRg;
+}
+/* -----------------------------08.02.2002 10:56------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwTextGridPage, CharSizeChangedHdl, SpinField*, pField)
+{
+    if(&aCharsPerLineNF == pField)
+    {
+        long nWidth = nPageWidth / aCharsPerLineNF.GetValue();
+        aTextSizeMF.SetValue(aTextSizeMF.Normalize(nWidth), FUNIT_TWIP);
+    }
+    else
+    {
+        sal_Int32 nTextSize = aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP));
+        aCharsPerLineNF.SetValue(nPageWidth / nTextSize);
+    }
+    GridModifyHdl(0);
+    return 0;
+}
+/* -----------------------------08.02.2002 11:54------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwTextGridPage, GridModifyHdl, void*, EMPTYARG)
+{
+    const SfxItemSet& rOldSet = GetItemSet();
+    SfxItemSet aSet(rOldSet);
+    const SfxItemSet* pExSet = GetTabDialog()->GetExampleSet();
+    if(pExSet)
+        aSet.Put(*pExSet);
+    PutGridItem(aSet);
+    aExampleWN.UpdateExample(aSet);
+    return 0;
 }
 

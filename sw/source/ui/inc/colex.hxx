@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 09:12:08 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,42 @@
 class SwColMgr;
 class SfxItemSet;
 
+/* -----------------------------08.02.2002 11:32------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwPageExample : public SvxPageWindow
+{
+public:
+    SwPageExample(Window* pPar, const ResId& rResId ) :
+                                SvxPageWindow(pPar, rResId )
+                                {SetSize(Size(11907, 16433));/*DIN A4*/}
+
+    void UpdateExample( const SfxItemSet& rSet );
+};
+/* -----------------------------08.02.2002 11:34------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwTextGridItem;
+class SwPageGridExample : public SwPageExample
+{
+    SwTextGridItem*     pGridItem;
+protected:
+    virtual void DrawPage( const Point& rPoint,
+                           const BOOL bSecond,
+                           const BOOL bEnabled );
+public:
+    SwPageGridExample(Window* pPar, const ResId& rResId ) :
+                                SwPageExample(pPar, rResId ),
+                                pGridItem(0){}
+    ~SwPageGridExample();
+    void UpdateExample( const SfxItemSet& rSet );
+};
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-class SwColExample : public SvxPageWindow
+class SwColExample : public SwPageExample
 {
-private:
     SwColMgr*   pColMgr;
 protected:
     virtual void DrawPage( const Point& rPoint,
@@ -87,10 +116,14 @@ protected:
                            const BOOL bEnabled );
 
 public:
-        SwColExample(Window* pPar, const ResId& rResId );
+        SwColExample(Window* pPar, const ResId& rResId ) :
+                                SwPageExample(pPar, rResId ),
+                                pColMgr(0){}
 
-    void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr = 0  );
-
+    void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
+        {   pColMgr = pMgr;
+            SwPageExample::UpdateExample(rSet);
+        }
 };
 
 /*-----------------25.10.96 08.23-------------------

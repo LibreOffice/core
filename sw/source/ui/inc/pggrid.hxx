@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:10:07 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SVX_PAGECTRL_HXX
-#include <svx/pagectrl.hxx>
+#ifndef _COLEX_HXX
+#include <colex.hxx>
 #endif
 #ifndef _FIELD_HXX
 #include <vcl/field.hxx>
@@ -87,7 +87,7 @@ class SwTextGridPage: public SfxTabPage
     RadioButton     aLinesGridRB;
     RadioButton     aCharsGridRB;
 
-    SvxPageWindow   aExampleWN;
+    SwPageGridExample   aExampleWN;
 
     FixedLine       aLayoutFL;
 
@@ -114,8 +114,16 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
+    sal_Int32       nPageWidth;
+
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
+
+    void UpdatePageWidth(const SfxItemSet& rSet);
+    void PutGridItem(SfxItemSet& rSet);
+
+    DECL_LINK(CharSizeChangedHdl, SpinField*);
+    DECL_LINK(GridModifyHdl, void*);
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:09:40 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ TabPage TP_TEXTGRID_PAGE
         Unit = FUNIT_CM ;
         First = 10 ;
         Last = 5600 ;
-        SpinSize = 10 ;
+        SpinSize = 5 ;
     };
     FixedText       FT_CHARSPERLINE
     {
@@ -213,7 +213,7 @@ TabPage TP_TEXTGRID_PAGE
         Unit = FUNIT_CM ;
         First = 10 ;
         Last = 5600 ;
-        SpinSize = 10 ;
+        SpinSize = 5 ;
     };
     CheckBox        CB_RUBYBELOW
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 09:11:35 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,18 +96,17 @@
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #include "colex.hxx"
 #include "colmgr.hxx"
-
 
 /*-----------------------------------------------------------------------
     Beschreibung: Uebernahme der aktualisierten Werte aus dem Set
  -----------------------------------------------------------------------*/
-
-
-void SwColExample::UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr )
+void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
-    pColMgr = pMgr;
     const SvxPageItem* pPage = 0;
     SfxItemPool* pPool = rSet.GetPool();
     USHORT nWhich = pPool->GetWhich( SID_ATTR_PAGE );
@@ -267,7 +266,7 @@ void SwColExample::DrawPage( const Point& rOrg,
                             const BOOL bSecond,
                             const BOOL bEnabled )
 {
-    SvxPageWindow::DrawPage( rOrg, bSecond, bEnabled );
+    SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
     if( pColMgr && pColMgr->GetCount() >1 )
     {
         long nL = GetLeft();
@@ -336,14 +335,6 @@ void SwColExample::DrawPage( const Point& rOrg,
             }
         }
     }
-}
-
-
-
-SwColExample::SwColExample(Window* pPar, const ResId& rResId ) :
-                                SvxPageWindow(pPar, rResId )
-{
-    SetSize(Size(11907, 16433));// DIN A4
 }
 
 /*-----------------25.10.96 09.15-------------------
@@ -482,5 +473,137 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         nRight /= nWishSum;
         pCol->SetRight((USHORT)nRight);
     }
+}
+/* -----------------------------08.02.2002 11:44------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwPageGridExample::~SwPageGridExample()
+{
+    delete pGridItem;
+}
+/* -----------------------------08.02.2002 11:48------------------------------
+
+ ---------------------------------------------------------------------------*/
+#define MAX_ROWS    10
+#define MAX_LINES   15
+void SwPageGridExample::DrawPage( const Point& rOrg,
+                           const BOOL bSecond,
+                           const BOOL bEnabled )
+{
+    SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
+    if(pGridItem && pGridItem->GetGridType())
+    {
+        //paint the grid now
+        Color aLineColor = pGridItem->GetColor();
+        if(aLineColor.GetColor() == COL_AUTO)
+        {
+            aLineColor = GetFillColor();
+            aLineColor.Invert();
+        }
+        SetLineColor(aLineColor);
+//        Size aWinSize(GetSizePixel());
+
+        long nL = GetLeft();
+        long nR = GetRight();
+
+        if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
+        {
+            // fuer gespiegelt drehen
+            nL = GetRight();
+            nR = GetLeft();
+        }
+
+        Rectangle aRect;
+        aRect.Right() = rOrg.X() + GetSize().Width() - nR;
+        aRect.Left()  = rOrg.X() + nL;
+        aRect.Top()   = rOrg.Y() + GetTop()
+                        + GetHdHeight() + GetHdDist();
+        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
+                        - GetFtHeight() - GetFtDist();
+
+
+        //detect height of rectangles
+        Rectangle aRubyRect(aRect.TopLeft(), Size(aRect.GetWidth(), pGridItem->GetRubyHeight()));
+        Rectangle aCharRect(aRect.TopLeft(), Size(aRect.GetWidth(), pGridItem->GetBaseHeight()));
+        sal_Int32 nLineHeight = pGridItem->GetBaseHeight() + pGridItem->GetRubyHeight();
+
+        //detect count of rectangles
+        sal_Int32 nLines = aRect.GetHeight() / nLineHeight;
+        if(nLines >pGridItem->GetLines())
+            nLines = pGridItem->GetLines();
+
+        // determine start position
+        sal_Int16 nYStart = aRect.GetHeight() / 2 - nLineHeight * nLines /2;
+        aRubyRect.Move(0, nYStart);
+        aCharRect.Move(0, nYStart);
+        if(pGridItem->IsRubyTextBelow())
+            aRubyRect.Move(0, pGridItem->GetBaseHeight());
+        else
+            aCharRect.Move(0, pGridItem->GetRubyHeight());
+
+        //vertical lines
+        sal_Bool bVertical = pGridItem->GetGridType() == GRID_LINES_CHARS;
+
+
+        SetFillColor( Color( COL_TRANSPARENT ) );
+        for(sal_Int32 nLine = 0; nLine < nLines; nLine++)
+        {
+            DrawRect(aRubyRect);
+            DrawRect(aCharRect);
+            if(bVertical)
+            {
+                Point aTop = aCharRect.TopLeft();
+                Point aBottom = aCharRect.BottomLeft();
+                while(aTop.X() < aRect.Right())
+                {
+                    DrawLine(aTop, aBottom);
+                    aTop.X() = aBottom.X() += pGridItem->GetBaseHeight();
+                }
+            }
+            aRubyRect.Move(0, nLineHeight);
+            aCharRect.Move(0, nLineHeight);
+        }
+
+
+
+        //pGridItem->GetGridType() == GRID_LINES_CHARS
+
+        /*long nHoriStep = aRect.GetHeight();
+        USHORT nLines = pGridItem->GetLines() > MAX_LINES ? MAX_LINES : pGridItem->GetLines();
+        nHoriStep /= nLines;
+        Point aLeft(aRect.TopLeft());
+        aLeft.Y() += nHoriStep/2;
+        Point aRight(aRect.Right(), aLeft.Y());
+        for(USHORT nLine = 0; nLine < nLines; nLine++)
+        {
+            DrawLine( aLeft, aRight );
+            aLeft.Y() = aRight.Y() += nHoriStep;
+        }
+        if(pGridItem->GetGridType() == GRID_LINES_CHARS)
+        {
+            long nVertStep = aRect.GetWidth();
+            USHORT nCols = MAX_ROWS;
+            nVertStep /= nCols;
+            Point aTop(aRect.Left() + nVertStep/2, aRect.Top());
+            Point aBottom(aTop.X(), aRect.Bottom() );
+            for(USHORT nCol = 0; nCol < nCols; nCol++)
+            {
+                DrawLine( aTop, aBottom );
+                aTop.X() = aBottom.X() += nVertStep;
+            }
+        }*/
+
+    }
+}
+/* -----------------------------08.02.2002 11:48------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
+{
+    DELETEZ(pGridItem);
+    //get the grid information
+    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
+        pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
+    SwPageExample::UpdateExample(rSet);
 }
 
