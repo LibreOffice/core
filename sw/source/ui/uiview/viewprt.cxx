@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 16:37:45 $
+ *  last change: $Author: os $ $Date: 2002-05-29 07:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,11 +586,14 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
 
 void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 {
-    SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
-    if( pSh && pSh->GetPrt() && pOpt)
+    SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(bWeb);
+    SwPrintData* pShellPrintData = pSh->GetPrintData();
+    if(pShellPrintData)
+        aPrtData = *pShellPrintData;
+    if( pSh && pSh->GetPrt())
     {
         // Applikationseigene Druckoptionen in SfxPrinter schiessen
-        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt);
+        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
                     FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,              SID_HTML_MODE,
