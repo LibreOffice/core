@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:27:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0) );
+    rInf.Width( (USHORT)(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( sal_False );
     if( pFly )
@@ -638,9 +638,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = nStartX - nGridOrigin;
             if ( nOfst )
             {
-                const USHORT i = ( nOfst > 0 ) ?
-                                 ( ( nOfst - 1 ) / nGridWidth + 1 ) :
-                                 0;
+                const ULONG i = ( nOfst > 0 ) ?
+                                ( ( nOfst - 1 ) / nGridWidth + 1 ) :
+                                0;
                 const SwTwips nKernWidth = i * nGridWidth - nOfst;
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
 
@@ -728,7 +728,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().Len() )
                 {
-                    USHORT nDist = rInf.GetFont()->GetHeight()/5;
+                    USHORT nDist = (USHORT)(rInf.GetFont()->GetHeight()/5);
 
                     if( nDist )
                     {
@@ -783,7 +783,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
-                const USHORT nKernWidth_1 = nKernWidth / 2;
+                const USHORT nKernWidth_1 = (USHORT)(nKernWidth / 2);
 
                 ASSERT( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" )
@@ -792,7 +792,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 rInf.X( rInf.X() + nKernWidth_1 );
 
                 if ( ! bFull )
-                    new SwKernPortion( *pPor, nKernWidth - nKernWidth_1,
+                    new SwKernPortion( *pPor, (short)(nKernWidth - nKernWidth_1),
                                        sal_False, sal_True );
 
                 pGridKernPortion = 0;
@@ -999,7 +999,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
                           KSHORT( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
+    nExpect = (USHORT)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
         nNextChg = Min( nExpect, rInf.GetTxt().Len() );
 
@@ -1889,15 +1889,36 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
 
 /*************************************************************************
  *                SwTxtFormatter::_CalcFitToContent()
+ *
+ * FME: This routine does a limited text formatting under the assumption,
+ * that the line length is USHORT twips. I'm not sure why we do not do
+ * a full text formatting using "FormatLine" or "BuildPortion" here,
+ * similar to SwTxtFormatter::Hyphenate(). If we compare this function
+ * to BuildPortions(), it looks like they used to be very similar
+ * (back in 1995), but BuildPortions() changed and _CalcFitToContent()
+ * did not. So _CalcFitToContent() does not give you exact results,
+ * although the results should be good enought for most situations.
  *************************************************************************/
+
+extern void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
 
 KSHORT SwTxtFormatter::_CalcFitToContent()
 {
-    GetInfo().SetRoot( pCurr );
+    // Save old line and build a new temporary line.
+    // Note: I this really necessary? Most likely the current SwParaPortion
+    // can be misused for the following operations, because it will be
+    // deleted in the calling function.
+    ASSERT( pCurr->IsParaPortion(), "_CalcFitToContent expected a ParaPortion" )
+    SwLineLayout* pOldCurr = pCurr;
+    SwParaPortion aTmpPara;
+    pCurr = &aTmpPara;
+    GetInfo().SetRoot( &aTmpPara );
+    SetParaPortion( &GetInfo(), &aTmpPara );
 
     GetInfo().First( KSHORT(FirstLeft()) );
     GetInfo().Left( KSHORT(Left()) );
 
+    CalcAscent( GetInfo(), pCurr );
     SeekAndChg( GetInfo() );
     GetInfo().SetLast( GetInfo().GetRoot() );
 
@@ -1914,14 +1935,14 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
         else
             bFull = pPor->Format( GetInfo() );
 
-        GetInfo().SetLast( pPor );
+        InsertPortion( GetInfo(), pPor );
+
         while( pPor )
         {
             nWidth += pPor->Width();
-            pPor->Move( GetInfo() );
-            GetInfo().SetLast( pPor );
             pPor = pPor->GetPortion();
         }
+
         if( bFull && 0 != ( pPor = GetInfo().GetLast() ) && pPor->IsBreakPortion() )
         {
             if ( nWidth && (nMaxWidth < nWidth+nMargin ) )
@@ -1935,6 +1956,9 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
     }
     if ( nWidth && ( nMaxWidth < nWidth + nMargin ) )
         nMaxWidth = nWidth + nMargin;
+
+    pCurr = pOldCurr;
+    SetParaPortion( &GetInfo(), (SwParaPortion*)pCurr );
     return KSHORT(nMaxWidth);
 }
 
