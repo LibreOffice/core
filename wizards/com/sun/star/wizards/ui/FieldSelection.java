@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:43:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): Berend Cornelius
  *
  */
-
 package com.sun.star.wizards.ui;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.XListBox;
@@ -96,7 +95,7 @@ public class FieldSelection {
     final int cmdButtonWidth = 16;
     final int cmdButtonHoriDist = 4;
     final int cmdButtonHeight = 14;
-    final int cmdButtonVertiDist = 4;
+    final int cmdButtonVertiDist = 2;
     final int lblHeight = 8;
     final int lblVertiDist = 2;
     int CompPosX;
@@ -275,19 +274,19 @@ public class FieldSelection {
                                     new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                     new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex++), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth });
 
-            PeerConfigHelper oselfieldspeerconfig = new PeerConfigHelper(CurUnoDialog.xUnoDialog);
-            oselfieldspeerconfig.setPeerProperties(btnmoveselected, new String[] { "AccessibilityName" },new String[] { AccessTextMoveSelected });
-            oselfieldspeerconfig.setPeerProperties(btnremoveselected, new String[] { "AccessibilityName" }, new String[] { AccessTextMoveSelected });
-            oselfieldspeerconfig.setPeerProperties(xFieldsListBox, new String[] { "AccessibilityName" }, new String[] { JavaTools.replaceSubString(slblFields, "", "~")});
-            oselfieldspeerconfig.setPeerProperties(xSelFieldsListBox, new String[] { "AccessibilityName" }, new String[] { JavaTools.replaceSubString(slblSelFields, "", "~")});
+            PeerConfig oselfieldspeerconfig = new PeerConfig(CurUnoDialog.xWindow);
+            oselfieldspeerconfig.setAccessiblityName(btnmoveselected, AccessTextMoveSelected);
+            oselfieldspeerconfig.setAccessiblityName(btnremoveselected, AccessTextMoveSelected);
+            oselfieldspeerconfig.setAccessiblityName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
+            oselfieldspeerconfig.setAccessiblityName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
             if (btnmoveall != null)
-                oselfieldspeerconfig.setPeerProperties(btnmoveall, new String[] { "AccessibilityName" }, new String[] { AccessTextMoveAll });
+                oselfieldspeerconfig.setAccessiblityName(btnmoveall, AccessTextMoveAll);
             if (btnremoveall != null)
-                oselfieldspeerconfig.setPeerProperties(btnremoveall, new String[] { "AccessibilityName" }, new String[] { AccessTextRemoveAll });
+                oselfieldspeerconfig.setAccessiblityName(btnremoveall, AccessTextRemoveAll);
             if (btnmoveup != null)
-                oselfieldspeerconfig.setPeerProperties(btnmoveup, new String[] { "AccessibilityName" }, new String[] { AccessMoveFieldUp });
+                oselfieldspeerconfig.setAccessiblityName(btnmoveup, AccessMoveFieldUp);
             if (btnmovedown != null)
-                oselfieldspeerconfig.setPeerProperties(btnmovedown, new String[] { "AccessibilityName" }, new String[] { AccessMoveFieldDown });
+                oselfieldspeerconfig.setAccessiblityName(btnmovedown, AccessMoveFieldDown );
 
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -402,8 +401,8 @@ public class FieldSelection {
     public void emptyFieldsListBoxes() {
         try {
             toggleListboxControls(Boolean.FALSE);
-            xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
-            xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
+            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", new String[]{});
+            CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", new String[]{});
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -477,7 +476,6 @@ public class FieldSelection {
                 iSelFieldSelected = xSelFieldsListBox.getSelectedItemPos();
                 short[] SourceSelList = new short[xFieldsListBox.getSelectedItemsPos().length];
                 SourceSelList = xFieldsListBox.getSelectedItemsPos();
-                int iOldSourceSelect = SourceSelList[0];
                 xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
                 CurUnoDialog.removeSelectedItems(xFieldsListBox);
                 xSelFieldsListBox.selectItemPos((short) 0, xSelFieldsListBox.getSelectedItems().length > 0);
@@ -518,7 +516,6 @@ public class FieldSelection {
                 xFieldsListBox.addItems(NewSourceList, (short) 0);
             }
             CurUnoDialog.removeSelectedItems(xSelFieldsListBox);
-            // Todo: Die Selektierungen hinzuf?gen
         }
         toggleListboxButtons(iOldFieldSelected, iOldSelFieldSelected);
         String[] NewSelFieldItems = xSelFieldsListBox.getItems();
@@ -527,11 +524,13 @@ public class FieldSelection {
     }
 
     public String[] getSelectedFieldNames() {
-        return xSelFieldsListBox.getItems();
+        return (String[]) CurUnoDialog.getControlProperty("lstSelFields" + sIncSuffix, "StringItemList");
     }
 
     public void setSelectedFieldNames(String[] _sfieldnames){
         CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+        String[] sleftboxfieldnames = JavaTools.removefromList(xFieldsListBox.getItems(), _sfieldnames);
+        CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", sleftboxfieldnames);
     }
 
     public void setModified(boolean _bModified){
