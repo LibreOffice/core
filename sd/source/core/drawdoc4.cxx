@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:46:25 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,16 +318,11 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     rISet.Put(XFillGradientItem(pPool,aNullGrad));
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
-#ifndef SVX_LIGHT
     Size    aNullSize( 32, 32 );
     Color   aNullColor( COL_WHITE );
     Bitmap  aNullBmp( aNullSize, 8 );
     aNullBmp.Erase( aNullColor );
     rISet.Put(XFillBitmapItem(pPool,aNullBmp));
-#else
-    // leave it empty to avoid resource usage
-    rISet.Put(XFillBitmapItem());
-#endif
 
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(FALSE));
@@ -352,9 +347,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( aSvxFontItemCJK );
     rISet.Put( aSvxFontItemCTL );
 
-    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT ) );     // 24 pt
-    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 24 pt
-    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 24 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
@@ -396,8 +391,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     else
         rISet.Put( SvxAdjustItem() );
 */
+    rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
+    rISet.Put( SdrTextRightDistItem( 250 ) );
+    rISet.Put( SdrTextUpperDistItem( 125 ) );
+    rISet.Put( SdrTextLowerDistItem( 125 ) );
 
-    rISet.Put(SvxLineSpacingItem());
+    rISet.Put( SvxLineSpacingItem() );
 
     // Bullet
     // BulletItem und BulletFont fuer Titel und Gliederung
@@ -408,7 +407,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetScale(45);           // in Prozent
 
     Font aBulletFont( pStyleSheetPool->GetBulletFont() );
-    aBulletFont.SetSize(Size(0,846));       // 24 pt
+
+    aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
+
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetSymbol( 0x25CF );                    // Punkt
     rISet.Put(aBulletItem);
