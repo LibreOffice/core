@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: od $ $Date: 2002-11-12 09:52:48 $
+ *  last change: $Author: od $ $Date: 2002-11-15 10:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,6 +1490,7 @@ void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
 |*  Letzte Aenderung    MA 18. May. 98
 |*
 |*************************************************************************/
+// OD 15.11.2002 #105155# - introduce support for vertical layout
 BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 {
     ASSERT( !IsAgain(), "Ungueltige Seite beachten." );
@@ -1512,17 +1513,21 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             bChanged = TRUE;
 
         FASTBOOL bNoPaint = FALSE;
-        if ( pLay->IsPageBodyFrm() && pLay->Frm().Pos() == aOldRect.Pos() &&
-             pLay->Lower() && pLay->GetFmt()->GetDoc()->IsBrowseMode() )
+        if ( pLay->IsPageBodyFrm() &&
+             pLay->Frm().Pos() == aOldRect.Pos() &&
+             pLay->Lower() &&
+             pLay->GetFmt()->GetDoc()->IsBrowseMode() )
         {
             //HotFix: Vobis Homepage, nicht so genau hinsehen, sonst
             //rpaints
 
             //Einschraenkungen wegen Kopf-/Fusszeilen
-            if ( !(pLay->IsCompletePaint() &&
-                   (pLay->GetFmt()->GetDoc()->IsHeadInBrowse() ||
-                    pLay->GetFmt()->GetDoc()->IsFootInBrowse() ||
-                    pLay->FindPageFrm()->FindFtnCont())))
+            if ( !( pLay->IsCompletePaint() &&
+                   ( pLay->GetFmt()->GetDoc()->IsHeadInBrowse() ||
+                     pLay->GetFmt()->GetDoc()->IsFootInBrowse() ||
+                     pLay->FindPageFrm()->FindFtnCont() )
+                  )
+               )
             {
                 bNoPaint = TRUE;
             }
@@ -1538,8 +1543,10 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             aPaint.SSize().Height() += 2;
             aPaint.SSize().Width()  += 2;
             */
-            if ( pLay->IsPageFrm() && pLay->GetFmt()->GetDoc()->IsBrowseMode() )
+            if ( pLay->IsPageFrm() &&
+                 pLay->GetFmt()->GetDoc()->IsBrowseMode() )
             {
+                // NOTE: no vertical layout in online layout
                 //Ist die Aenderung ueberhaupt sichtbar?
                 if ( pLay->IsCompletePaint() )
                 {
@@ -1591,9 +1598,10 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
     if ( IsPaint() && bAddRect &&
          !pLay->GetNext() && pLay->IsRetoucheFrm() && pLay->IsRetouche() )
     {
-        SwRect aRect( pLay->GetUpper()->Prt() );
-        aRect += pLay->GetUpper()->Frm().Pos();
-        aRect.Top( pLay->Frm().Top() + pLay->Prt().Bottom() + 1 );
+        // OD 15.11.2002 #105155# - vertical layout support
+        SWRECTFN( pLay );
+        SwRect aRect( pLay->GetUpper()->PaintArea() );
+        (aRect.*fnRect->fnSetTop)( (pLay->*fnRect->fnGetPrtBottom)() );
         if ( !pImp->GetShell()->AddPaintRect( aRect ) )
             pLay->ResetRetouche();
     }
