@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:00:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,8 +1370,9 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
-            ::uno::Reference < embed::XVisualObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )
+            // TODO/LEAN: it looks strange to force object loading here
+            ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef() );
+            svt::EmbeddedObjectRef::TryRunningState( xObj );
             {
                 awt::Size aSize = xObj->getVisualAreaSize( ( (SdrOle2Obj*) pObj )->GetAspect() );
                 aGraphSize = Size( aSize.Width, aSize.Height );
