@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:57:00 $
+ *  last change: $Author: mtg $ $Date: 2001-10-31 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ void XFileStream::fill( sal_Int64 nUntil)
                 }
 
                 sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
-                if ( nDiff >= 0 )
+                if ( nDiff > 0 )
                 {
                     mxZipSeek->seek ( mnZipCurrent );
                     nRead = mxZipStream->readBytes ( maCompBuffer, static_cast < sal_Int32 > ( nDiff < n_ConstBufferSize ? nDiff : n_ConstBufferSize ) );
