@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:05:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,11 +936,11 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text [ dutch ] = "Het bestand kon niet worden geladen!" ;
     Text [ spanish ] = "΅No se pudo cargar el archivo!" ;
     Text [ english_us ] = "The file could not be loaded!" ;
-    Text[ chinese_simplified ] = "Ξή·¨Χ°ΤΨΥβΈφΞΔΌώ£΅";
+    Text[ chinese_simplified ] = "Ξή·¨Χ°ΘλΥβΈφΞΔΌώ£΅";
     Text[ russian ] = "Ηΰγπσηθςό ύςξς τΰιλ νε σδΰεςρÿ!";
     Text[ polish ] = "Plik nie mσg³ zostaζ za³adowany!";
     Text[ japanese ] = "Μ§²Ω‚ª“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρ!";
-    Text[ chinese_traditional ] = "µLªkΈΛΈό³o­ΣΐΙ®Χ΅I";
+    Text[ chinese_traditional ] = "µLªkΈό¤J³o­ΣΐΙ®Χ΅I";
     Text[ arabic ] = "ΚΪΠΡ ΚΝγνα Ηαγαέ!";
     Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί το αρχείο!";
     Text[ korean ] = "ΖΔΐΟΐ» ·ΞµεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω!";
@@ -996,7 +996,7 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text[ japanese ] = "“ό—Ν‚µ‚½–Ό‘O‚Ν‚·‚Ε‚Ι‚ ‚θ‚ά‚·B\n•Κ‚Μ–Ό‘O‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     Text[ chinese_traditional ] = "±zΏι¤JªΊ¦WΊΩ¤wΈg¦s¦b΅C\n½Π±zΏι¤J¤@­Σ¨δ¥LªΊ¦WΊΩ΅C";
     Text[ arabic ] = "ΗαΗΣγ ΗαΠν ήγΚ ΘΕΟΞΗαε γζΜζΟ γΣΘήΗπ.\nΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΜΟνΟ.";
-    Text[ greek ] = "Το όνομα που εισάγατε υπάρχει ήδη. \nΠαρακαλώ επιλέξτε ένα άλλο.";
+    Text[ greek ] = "Το όνομα που εισάγατε υπάρχει ήδη. \nΠαρακαλώ επιλέξτε κάποιο άλλο όνομα.";
     Text[ korean ] = "ΐΤ·ΒΗΡ ΐΜΈ§ΐΜ ΐΜΉΜ ΐΦ½ΐ΄Ο΄Ω. \n΄ΩΈ¥ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girdiπiniz ad zaten mevcut. Yeni bir \nad girin.";
     Text[ language_user1 ] = " ";
