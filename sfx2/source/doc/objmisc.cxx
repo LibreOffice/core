@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:35:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #include <so3/inetbnd.hxx>
 #include <vos/mutex.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -212,7 +214,7 @@ private:
 
 public:
     SfxHeaderAttributes_Impl( SfxObjectShell* pSh ) :
-        pDoc( pSh ), SvKeyValueIterator(),
+        SvKeyValueIterator(), pDoc( pSh ),
         xIter( pSh->GetMedium()->GetHeaderAttributes_Impl() ),
         bAlert( sal_False ) {}
 
@@ -1039,7 +1041,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     {
         ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
         pImp->bImportDone = sal_True;
-        const SfxFilter* pFilter = GetMedium()->GetFilter();
+        //const SfxFilter* pFilter = GetMedium()->GetFilter();
         if( !IsAbortingImport() )
         {
 //            if( pFilter && !pFilter->UsesStorage() && !(GetMedium()->GetOpenMode() & STREAM_WRITE ) )
