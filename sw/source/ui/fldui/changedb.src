@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:29:26 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­, ±ÍÇÏ´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áý´Ï´Ù. ¿ÞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ °¡´ÉÇÕ´Ï´Ù.";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabaný alanlarý yoluyla eriþtiðiniz veritabanlarýný baþkalarý ile deðiþtirebilirsiniz. Her iþlemde yalnýzca tek bir deðiþiklik yapýlabilir. Soldaki listede birden fazla seçim yapýlabilir.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
     };
     FixedText FT_USEDDB
     {
@@ -142,6 +143,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ »ç¿ëÁß ÀÔ´Ï´Ù.";
         Text[ turkish ] = "Kullanýlan veritabanlarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Bases de datos utilizadas";
     };
     FixedText FT_AVAILDB
     {
@@ -172,6 +174,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º »ç¿ë°¡´É";
         Text[ turkish ] = "Mevcut veritabanlarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Bases de datos diponibles";
     };
     Control TLB_USEDDB
     {
@@ -230,6 +233,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "¹®¼­¿¡ µ¥ÀÌÅÍº£ÀÌ½º Àû¿ë:";
         Text[ turkish ] = "Belge ile kullanýlan veritabaný:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Base de datos aplicada al doc.:";
     };
     FixedText FT_DOCDBNAME
     {
@@ -259,6 +263,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "ÁÖ¼Ò.ÁÖ¼Ò";
         Text[ turkish ] = "Adresler.Adresler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Direcciones.Direcciones";
     };
 /*  PushButton BT_CHANGEDB
     {
@@ -314,6 +319,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
         Text[ turkish ] = "Veritabanýnýn deðiþtirilmesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiar Bases de Datos";
     };
     OKButton BT_OK
     {
@@ -344,6 +350,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ greek ] = "Êáèïñéóìüò";
         Text[ korean ] = "Á¤ÀÇ";
         Text[ turkish ] = "Tanýmla";
+        Text[ catalan ] = "Definir";
     };
     CancelButton BT_CANCEL
     {
@@ -372,6 +379,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ greek ] = "Êëåß~óéìï";
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "~Çýkýþ";
+        Text[ catalan ] = "~Cerrar";
     };
     HelpButton BT_HELP
     {
@@ -409,5 +417,6 @@ ModalDialog DLG_CHANGE_DB
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
     Text[ turkish ] = "Veritabanýnýn deðiþtirilmesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cambiar Bases de Datos";
 };
 
