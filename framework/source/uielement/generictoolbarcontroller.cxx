@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:53:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XMultiServi
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bEnumCommand( isEnumCommand( aCommand ))
+    ,   m_bMadeInvisible( sal_False )
     ,   m_aEnumCommand( getEnumCommand( aCommand ))
 {
 }
@@ -296,8 +297,11 @@ throw ( RuntimeException )
             m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if ( Event.State >>= aItemVisibility )
+        {
             m_pToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
-        else
+            m_bMadeInvisible = !aItemVisibility.bVisible;
+        }
+        else if ( m_bMadeInvisible )
             m_pToolbar->ShowItem( m_nID, TRUE );
 
         m_pToolbar->SetItemState( m_nID, eTri );
