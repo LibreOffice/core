@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
+ *  last change: $Author: os $ $Date: 2002-04-05 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,6 +892,12 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         if(pDocSh->IsPreview())
             aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
         pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, 0, &aUsrPref );
+        //#97610# creating an SwView from a SwPagePreView needs to
+        // add the ViewShell to the ring of the other ViewShell(s)
+        if(bOldShellWasPagePreView)
+        {
+            pWrtShell->MoveTo(&((SwPagePreView*)pOldSh)->GetViewShell());
+        }
     }
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
 
