@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:00:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3025,16 +3025,14 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             "arialunicodems", "cyberbit", "code2000", "",
             "andalesansui", "",
             "starsymbol", "opensymbol", "",
-            "msmincho", "fzmingti", "fzheigti",
-            "sunbatang", "sundotum", "baekmukdotum",
-            "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk",
-            "kochimincho", "sazanamimincho", "",
-            "tahoma", "timesnewroman", "lucidatypewriter", "lucidasans", "",
+            "msmincho", "fzmingti", "fzheiti", "sazanamimincho", "kochimincho", "",
+            "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
+            "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
+            "tahoma", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
             "shree", "mangal", "raavi", "shruti", "tunga", "latha", "",
             "shayyalmt", "naskmt", "",
             "david", "nachlieli", "lucidagrande", "",
             "norasi", "angsanaupc", "",
-            "gulim", "batang", "dotum", "",
             0
         };
 
@@ -3073,7 +3071,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         }
 
         // sort the fonts for glyph fallback by quality (highest first)
-        // an insertion sort is good enough for this list
+        // an insertion sort is good enough for this short list
         for( int i = 1, j; i < nMaxLevel; ++i )
         {
             ImplDevFontListData* pTestFont = pFallbackList[ i ];
@@ -3086,19 +3084,14 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             pFallbackList[ j+1 ] = pTestFont;
         }
 
-        // sort the fonts for glyph fallback by quality (highest first)
-        // an insertion sort is good enough for this list
-        for( int i = 1, j; i < nMaxLevel; ++i )
+#if defined(HDU_DEBUG)
+        for( int i = 0; i < nMaxLevel; ++i )
         {
-            ImplDevFontListData* pTestFont = pFallbackList[ i ];
-            int nTestQuality = pTestFont->GetMinQuality();
-            for( j = i; --j >= 0; )
-                if( nTestQuality > pFallbackList[j]->GetMinQuality() )
-                    pFallbackList[ j+1 ] = pFallbackList[ j ];
-                else
-                    break;
-            pFallbackList[ j+1 ] = pTestFont;
+            ImplDevFontListData* pFont = pFallbackList[ i ];
+            ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8);
+            fprintf(stderr,"GlyphFallbackFont[%d] = \"%s\"\n", i, aFontName.GetBuffer());
         }
+#endif
 
         pFontList->SetFallbacks( pFallbackList, nMaxLevel );
     }
