@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 14:03:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 12:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,17 +179,17 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
     { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
     { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
-    { "odb",   FALSE, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_DATABASE },
-    { "ood",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_DRAW },
-    { "oof",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_MATH },
-    { "oom",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_GLOBAL_DOC },
-    { "oop",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_IMPRESS },
-    { "oos",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_CALC },
-    { "oot",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_WRITER },
-    { "otd",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_DRAWTEMPLATE },
-    { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_IMPRESSTEMPLATE },
-    { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_CALCTEMPLATE },
-    { "ott",   FALSE, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_WRITERTEMPLATE },
+    { "odb",   FALSE, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
+    { "ood",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
+    { "oof",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
+    { "oom",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
+    { "oop",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
+    { "oos",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
+    { "oot",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
+    { "otd",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
+    { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
+    { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
+    { "ott",   FALSE, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
     { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
     { "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
