@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:50:00 $
+ *  last change: $Author: rt $ $Date: 2001-11-23 00:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "ÂÖàÈÅ∏ÊìáË¶ÅÂåØÂÖ•Â≠óÂûãÁöÑË≥áÊñôÂ§æ„ÄÇÁÑ∂ÂæåÊåâÁ¢∫ÂÆöÊåâÈàïÔºå‰æÜÊñ∞Â¢ûÂ∑≤Á∂ìÈÅ∏ÂèñÁöÑÂ≠óÂûã„ÄÇ";
         Text[ turkish ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
         Text[ arabic ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
-        Text[ catalan ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ catalan ] = "Escolliu el directori des d'on s'importaran els tipus de lletra. Afegeix els tipus de lletra seleccionats fent clic a D'acord.";
     };
     FixedLine RID_FIMP_FL_FROM
     {
@@ -132,7 +132,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "Source directory";
         Text[ arabic ] = "«·œ·Ì· «·„’œ—";
         Text[ finnish ] = "L‰hdehakemisto";
-        Text[ catalan ] = "Directorio fuente";
+        Text[ catalan ] = "Directori d'origen";
     };
     Edit RID_FIMP_EDT_FROM
     {
@@ -172,7 +172,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "Êñ∞Â¢ûÊôÇÂÉÖÊèíÂÖ•Êç∑Âæë(~S)";
         Text[ turkish ] = "Create ~Softlinks only";
         Text[ arabic ] = "Create ~Softlinks only";
-        Text[ catalan ] = "Create ~Softlinks only";
+        Text[ catalan ] = "Crea nomÈs ~EnllaÁos simbÚlics";
     };
     OKButton RID_FIMP_BTN_OK
     {
@@ -210,7 +210,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "ÂÖ®ÈÉ®ÈÅ∏Âèñ(~S)";
         Text[ turkish ] = "~Select all";
         Text[ arabic ] = "~Select all";
-        Text[ catalan ] = "~Select all";
+        Text[ catalan ] = "~Selecciona-ho tot";
     };
     String RID_FIMP_STR_IMPORTOP
     {
@@ -235,7 +235,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "Êñ∞Â¢ûÂ≠óÂûã";
         Text[ turkish ] = "Importing fonts";
         Text[ arabic ] = "«” Ì—«œ ŒÿÊÿ";
-        Text[ catalan ] = "Fuentes importadas";
+        Text[ catalan ] = "S'estan important els tipus de lletra";
     };
     String RID_FIMP_STR_QUERYOVERWRITE
     {
@@ -260,7 +260,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "Do you really want to replace this font file?\n   %s";
         Text[ arabic ] = "Â·  —Ìœ »«·›⁄·\n «·ﬂ «»… ›Êﬁ „·› «·Œÿ\n   %sø";
         Text[ finnish ] = "Haluatko korvata t‰m‰n fonttitiedoston?\n   %s";
-        Text[ catalan ] = "øDesea realmente sobrescribir los archivos de fuente\n   %s?";
+        Text[ catalan ] = "Vols sobrescriure el fitxer amb el tipus de lletra?\n   %s?";
     };
     String RID_FIMP_STR_OVERWRITEALL
     {
@@ -285,7 +285,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "All";
         Text[ arabic ] = "«·ﬂ·";
         Text[ finnish ] = "Kaikki";
-        Text[ catalan ] = "Todos";
+        Text[ catalan ] = "Tot";
     };
     String RID_FIMP_STR_OVERWRITENONE
     {
@@ -310,7 +310,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "None";
         Text[ arabic ] = "»œÊ‰";
         Text[ finnish ] = "Ei mit‰‰n";
-        Text[ catalan ] = "Ninguno";
+        Text[ catalan ] = "Cap";
     };
 
     String RID_FIMP_STR_NOAFM
@@ -336,7 +336,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
         Text[ arabic ] = "·„ Ì „ «·⁄ÀÊ— ⁄·Ï „·›  ‰”Ìﬁ (»«·«„ œ«œ .afm) ·„·› «·Œÿ \n%s\n·Â–« ·‰ Ì„ﬂ‰  À»Ì Â. Ì„ﬂ‰ ≈‰‘«¡ „·›«  «· ‰”Ìﬁ° ⁄·Ï ”»Ì· «·„À«·° »‹ ghostscript ° ÊÌÃ» √‰  ﬂ?";
         Text[ finnish ] = "Muotoilutiedostoa (tunniste .afm) ei lˆytynyt fontille\n%s,\njoten fonttia ei voi asentaa. Muotoilutiedostoja voi luoda esimerkiksi Ghostscriptin avulla, ja muotoilutiedoston on sijaittava samassa hakemistossa fonttitiedostojen kanssa tai fonttitiedostojen afm-alihakemistossa.";
-        Text[ catalan ] = "No se encontrÛ ning˙n archivo de formato (terminaciÛn .afm) para el archivo de fuente\n%s\n por lo que no se puede instalar la fuente. Los archivos de formato se pueden crear p.ej. con ghostscript y deben estar en el mismo directorio que los archivos de fuentes o en su subdirectorio afm.";
+        Text[ catalan ] = "No s'ha trobat cap fitxer de format (amb extensiÛ .afm) per al fitxer de tipus de lletra\n%s\n i no es pot instal∑lar. Els fitxers de format es poden crear amb el ghostscript, per exemple, i han de ser en el mateix directori que els fitxers de tipus de lletra o en el seu subdirectori afm.";
     };
     String RID_FIMP_STR_AFMCOPYFAILED
     {
@@ -361,7 +361,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "The metric file for font file\n   %s\ncould not be copied. The font wille not be installed.";
         Text[ arabic ] = " ⁄–— ‰”Œ „·› ÊÕœ«  «·ﬁÌ«” ·„·› «·Œÿ \n   %s\n·‰ Ì „  À»Ì  «·Œÿ.";
         Text[ finnish ] = "Fonttitiedoston\n   %s\nmittatiedoston kopiointi ei onnistunut. Fonttia ei asenneta.";
-        Text[ catalan ] = "No se pudo copiar el archivo de mÈtrica correspondiente al de fuente\n   %s\n, por lo que no se instalar· la fuente.";
+        Text[ catalan ] = "No s'ha pogut copiar el fitxer de mËtrica del tipus de lletra \n   %s\n. El tipus de lletra no s'instal∑lar‡.";
     };
     String RID_FIMP_STR_FONTCOPYFAILED
     {
@@ -386,7 +386,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "The font file\n   %s\ncould not be copied. The font wille not be installed.";
         Text[ arabic ] = " ⁄–— ‰”Œ „·› «·Œÿ\n   \n%s·‰ Ì „  À»Ì  «·Œÿ.";
         Text[ finnish ] = "Fonttitiedostoa\n   %s\nei voitu kopioida. Fonttia ei asenneta.";
-        Text[ catalan ] = "No se pudo copiar el archivo de fuente\n   %s\n, por lo que no se instalar· la fuente.";
+        Text[ catalan ] = "No s'ha pogut copiar el fitxer del tipus de lletra \n   %s\n. El tipus de lletra no s'instal∑lar‡.";
     };
     String RID_FIMP_STR_NOWRITEABLEFONTSDIR
     {
@@ -411,7 +411,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ turkish ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ arabic ] = "›Ì „”«— «·Œÿ° ·„ Ì „ «·⁄ÀÊ— ⁄·Ï œ·Ì· ÌÕ ÊÌ ⁄·Ï „·› fonts.dir ﬁ«»· ··ﬂ «»…. ·Â–« ·« Ì„ﬂ‰  À»Ì  «·ŒÿÊÿ.";
         Text[ finnish ] = "Kirjoitettavan tiedoston fonts.dir sis‰lt‰v‰‰ hakemistoa ei ole kohteessa Fontpath, joten fontteja ei voi asentaa.";
-        Text[ catalan ] = "No se encontrÛ ning˙n directorio con un archivo fonts.dir escribible. Por ello no se puede instalar ninguna fuente.";
+        Text[ catalan ] = "Al Fontpath no hi ha cap directori que contingui el fitxer modificable fonts.dir. Per tant, els tipus de lletra no es poden instal∑lar.";
     };
     String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
     {
@@ -436,7 +436,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "Â∑≤Á∂ìÂÆâË£ù %d Êñ∞ÁöÑÂ≠óÂûã„ÄÇ";
         Text[ turkish ] = "%d new fonts were installed.";
         Text[ arabic ] = " „  À»Ì  %d Œÿ«Û (ŒÿÊÿ) ÃœÌœ« (ÃœÌœ…).";
-        Text[ catalan ] = "Se instalaron %d nuevas fuentes.";
+        Text[ catalan ] = "S'han instal∑lat %d tipus de lletra nous.";
     };
     Text[ english_us ] = "Add Fonts";
     Text[ portuguese ] = "Adicionar tipos de letra";
@@ -457,7 +457,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Text[ chinese_traditional ] = "Êñ∞Â¢ûÂ≠óÂûã";
     Text[ turkish ] = "Import fonts";
     Text[ arabic ] = "«” Ì—«œ ŒÿÊÿ";
-    Text[ catalan ] = "Importar fuentes";
+    Text[ catalan ] = "Importa els tipus de lletra";
 };
 
 ModalDialog RID_PADIALOG
@@ -502,7 +502,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "~Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ finnish ] = "Sulje";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
     };
 
     FixedLine RID_PA_FL_PRINTERS
@@ -530,7 +530,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Configured printers";
         Text[ arabic ] = "«·ÿ«»⁄«  «·„À» …";
         Text[ finnish ] = "Asennetut tulostimet";
-        Text[ catalan ] = "Impresoras configuradas";
+        Text[ catalan ] = "Impressores configurades";
     };
     ListBox RID_PA_LB_DEV
     {
@@ -564,7 +564,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Command :";
         Text[ arabic ] = "«·√„— :";
         Text[ finnish ] = "Komento:";
-        Text[ catalan ] = "Command :";
+        Text[ catalan ] = "Ordre :";
     };
     FixedText RID_PA_TXT_COMMAND_STRING
     {
@@ -596,7 +596,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Driver :";
         Text[ arabic ] = "»—‰«„Ã «· ‘€Ì· :";
         Text[ finnish ] = "Ajuri:";
-        Text[ catalan ] = "Driver :";
+        Text[ catalan ] = "Programa de control :";
     };
     FixedText RID_PA_TXT_DRIVER_STRING
     {
@@ -628,7 +628,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Location :";
         Text[ arabic ] = "«·„Êﬁ⁄ :";
         Text[ finnish ] = "Sijainti:";
-        Text[ catalan ] = "Location :";
+        Text[ catalan ] = "UbicaciÛ :";
     };
     FixedText RID_PA_TXT_LOCATION_STRING
     {
@@ -660,7 +660,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Comment :";
         Text[ arabic ] = "«· ⁄·Ìﬁ :";
         Text[ finnish ] = "Kommentti:";
-        Text[ catalan ] = "Comment :";
+        Text[ catalan ] = "Comentari :";
     };
     FixedText RID_PA_TXT_COMMENT_STRING
     {
@@ -692,7 +692,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Co~nfigure...";
         Text[ arabic ] = "Œ’«∆’...";
         Text[ finnish ] = "Ominaisuudet";
-        Text[ catalan ] = "C~onfigurar...";
+        Text[ catalan ] = "Propietats...";
     };
     PushButton RID_PA_BTN_RENAME
     {
@@ -719,7 +719,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "R~ename...";
         Text[ arabic ] = "≈⁄«œ…  ”„Ì…...";
         Text[ finnish ] = "~Nime‰ uudelleen";
-        Text[ catalan ] = "Cambiar nomb~re...";
+        Text[ catalan ] = "R~eanomena...";
     };
     PushButton RID_PA_BTN_STD
     {
@@ -747,7 +747,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "~Set as default Printer";
         Text[ arabic ] = "«› —«÷Ì…";
         Text[ finnish ] = "~Oletusarvo";
-        Text[ catalan ] = "Definir como i~mpresora est·ndar";
+        Text[ catalan ] = "Per defecte";
     };
     PushButton RID_PA_BTN_DEL
     {
@@ -774,7 +774,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "~Remove...";
         Text[ arabic ] = "≈“«·…...";
         Text[ finnish ] = "Poista";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "Elimina...";
     };
     PushButton RID_PA_TESTPAGE
     {
@@ -801,7 +801,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "test ~page";
         Text[ arabic ] = "’›Õ… «Œ »«—";
         Text[ finnish ] = "~Koesivu";
-        Text[ catalan ] = "P·gina de prue~ba";
+        Text[ catalan ] = "~P‡gina de verificaciÛ";
     };
 
     PushButton RID_PA_BTN_FONTS
@@ -829,7 +829,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Add\nfon~ts..";
         Text[ arabic ] = "ŒÿÊÿ...";
         Text[ finnish ] = "F~ontit";
-        Text[ catalan ] = "AÒadir\nfue~ntes...";
+        Text[ catalan ] = "~Tipus de lletra...";
     };
     PushButton RID_PA_BTN_ADD
     {
@@ -856,7 +856,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "~Add new printer";
         Text[ arabic ] = "ÿ«»⁄… ÃœÌœ…...";
         Text[ finnish ] = "Uusi tulostin";
-        Text[ catalan ] = "~AÒadir como nueva impresora";
+        Text[ catalan ] = "Impressora nova...";
     };
 
     String RID_PA_STR_DEFPRT
@@ -882,7 +882,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "default printer";
         Text[ arabic ] = "«·ÿ«»⁄… «·«› —«÷Ì…";
         Text[ finnish ] = "Oletustulostin";
-        Text[ catalan ] = "default printer";
+        Text[ catalan ] = "Impressora per defecte";
     };
     String RID_PA_STR_RENAME
     {
@@ -907,7 +907,7 @@ ModalDialog RID_PADIALOG
         Text[ turkish ] = "Rename";
         Text[ arabic ] = "≈⁄«œ…  ”„Ì…";
         Text[ finnish ] = "Nime‰ uudelleen";
-        Text[ catalan ] = "Rename";
+        Text[ catalan ] = "Reanomena";
     };
     Text[ english_us ] = "Printer Administration";
     Text[ portuguese ] = "AdministraÁ„o da impressora";
@@ -928,7 +928,7 @@ ModalDialog RID_PADIALOG
     Text[ chinese_traditional ] = "Âç∞Ë°®Ê©üÁÆ°ÁêÜ";
     Text[ turkish ] = "Printer installation";
     Text[ arabic ] = " À»Ì  ÿ«»⁄…";
-    Text[ catalan ] = "InstalaciÛn de impresora";
+    Text[ catalan ] = "Instal∑laciÛ de la impressora";
 };
 
 ModalDialog RID_STRINGQUERYDLG
@@ -994,7 +994,7 @@ String RID_ERR_NOPRINTER
     Text[ turkish ] = "Could not open printer %s.";
     Text[ arabic ] = " ⁄–— › Õ «·ÿ«»⁄… %s.";
     Text[ finnish ] = "Tulostimen %s avaaminen ei onnistu.";
-    Text[ catalan ] = "No se pudo abrir la impresora %s.";
+    Text[ catalan ] = "No s'ha pogut obrir la impressora %s.";
 };
 
 String RID_PA_TXT_TESTPAGE_PRINTED
@@ -1020,7 +1020,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ turkish ] = "The test page was printed succesfully. Please check the resulting output.";
     Text[ arabic ] = " „ ÿ»«⁄… ’›Õ… «·«Œ »«— »‰Ã«Õ. „‰ ›÷·ﬂ «Œ »— «·‰ ÌÃ….";
     Text[ finnish ] = "Koesivu tulostettiin onnistuneesti. Tarkista tulos.";
-    Text[ catalan ] = "La p·gina de prueba se imprimiÛ satisfactoriamente. Compruebe por favor el resultado.";
+    Text[ catalan ] = "La p‡gina de verificaciÛ s'ha imprËs amb Ëxit. Si us plau, comproveu el resultat.";
 };
 
 String RID_QRY_PRTNAME
@@ -1046,7 +1046,7 @@ String RID_QRY_PRTNAME
     Text[ chinese_traditional ] = "Êñ∞ÁöÑÂç∞Ë°®Ê©üÂêçÁ®±(~N)";
     Text[ turkish ] = "Please enter the printer's new name.";
     Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «·«”„ «·ÃœÌœ\n··ÿ«»⁄….";
-    Text[ catalan ] = "Escriba por favor el nuevo nombre\nde la impresora.";
+    Text[ catalan ] = "Si us plau, introduÔu el nou nom\nde la impressora.";
 };
 
 String RID_TXT_TESTPAGE_MODEL
@@ -1072,7 +1072,7 @@ String RID_TXT_TESTPAGE_MODEL
     Text[ turkish ] = "Model";
     Text[ arabic ] = "«·ÿ—«“";
     Text[ finnish ] = "Malli";
-    Text[ catalan ] = "Modelo";
+    Text[ catalan ] = "Model";
 };
 
 String RID_TXT_TESTPAGE_NAME
@@ -1098,7 +1098,7 @@ String RID_TXT_TESTPAGE_NAME
     Text[ turkish ] = "Ad";
     Text[ arabic ] = "«·«”„";
     Text[ finnish ] = "Nimi";
-    Text[ catalan ] = "Nombre";
+    Text[ catalan ] = "Nom";
 };
 
 String RID_TXT_TESTPAGE_COMMENT
@@ -1124,7 +1124,7 @@ String RID_TXT_TESTPAGE_COMMENT
     Text[ turkish ] = "Comment";
     Text[ arabic ] = "«· ⁄·Ìﬁ";
     Text[ finnish ] = "Huomautus";
-    Text[ catalan ] = "Comentario";
+    Text[ catalan ] = "Comentari";
 };
 
 String RID_TXT_TESTPAGE_QUEUE
@@ -1150,7 +1150,7 @@ String RID_TXT_TESTPAGE_QUEUE
     Text[ turkish ] = "Queue";
     Text[ arabic ] = "«·„’œ—";
     Text[ finnish ] = "Jono";
-    Text[ catalan ] = "Cola";
+    Text[ catalan ] = "Cua";
 };
 
 String RID_TXT_TESTPAGE_DATE
@@ -1176,7 +1176,7 @@ String RID_TXT_TESTPAGE_DATE
     Text[ turkish ] = "Date";
     Text[ arabic ] = "«· «—ÌŒ";
     Text[ finnish ] = "P‰iv‰m‰‰r‰";
-    Text[ catalan ] = "Fecha";
+    Text[ catalan ] = "Data";
 };
 
 String RID_TXT_TESTPAGE_TIME
@@ -1241,7 +1241,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ turkish ] = "Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ finnish ] = "Sulje";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "Tanca";
     };
     PushButton RID_FNTNM_BTN_RENAME
     {
@@ -1268,7 +1268,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "ÈáçÊñ∞ÂëΩÂêç(~N)...";
         Text[ turkish ] = "Re~name";
         Text[ arabic ] = "Re~name";
-        Text[ catalan ] = "Re~name";
+        Text[ catalan ] = "Rea~nomena";
     };
     PushButton RID_FNTNM_BTN_REMOVE
     {
@@ -1295,7 +1295,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "≈“«·…";
         Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
     };
     PushButton RID_FNTNM_BTN_IMPORT
     {
@@ -1322,7 +1322,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "Êñ∞Â¢û(~A)...";
         Text[ turkish ] = "~Add...";
         Text[ arabic ] = "~Add...";
-        Text[ catalan ] = "~Add...";
+        Text[ catalan ] = "~Afegeix...";
     };
     ListBox RID_FNTNM_LB_FONTS
     {
@@ -1358,7 +1358,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "ÊèêÁ§∫ÔºöÈÄô‰∫õÂ≠óÂûãÂèØ‰ª•Êèê‰æõÁµ¶ÊáâÁî®Á®ãÂºè‰ΩøÁî®";
         Text[ turkish ] = "The Xwindow name of the font is constructed\nfrom the properties";
         Text[ arabic ] = "Ì —ﬂ» «”„ ŒÿXwindow   \n „‰ «·Œ’«∆’";
-        Text[ catalan ] = "De las propiedades se construir· el nombre\nXwindow de la fuente.";
+        Text[ catalan ] = "El nom d'Xwindow del tipus de lletra s'ha construÔt\na partir de les propietats";
     };
     String RID_FNTNM_STR_RENAME
     {
@@ -1383,7 +1383,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "Êñ∞ÂêçÁ®± %s(~N)";
         Text[ turkish ] = "~New font name";
         Text[ arabic ] = "~New font name";
-        Text[ catalan ] = "~New font name";
+        Text[ catalan ] = "~Nou nom de tipus de lletra";
     };
     String RID_FNTNM_STR_TTCRENAME
     {
@@ -1408,7 +1408,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "Êñ∞ÁöÑÂ≠óÂûãÂêçÁ®± %s (%d2 ÁöÑ %d1)(~N)";
         Text[ turkish ] = "~New font name (%d1 of %d2)";
         Text[ arabic ] = "~New font name (%d1 of %d2)";
-        Text[ catalan ] = "~New font name (%d1 of %d2)";
+        Text[ catalan ] = "~Nou nom de tipus de lletra (%d1 de %d2)";
     };
     String RID_FNTNM_STR_NOTRENAMABLE
     {
@@ -1433,7 +1433,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "Âõ†Áà≤Áº∫Â∞ëÂøÖË¶ÅÁöÑÊ¨äÂà©ËÄåÁÑ°Ê≥ïÈáçÂëΩÂêçÂ≠óÂûã %s „ÄÇ";
         Text[ turkish ] = "The font %s cannot be renamed due to missing write permission.";
         Text[ arabic ] = "The font %s cannot be renamed due to missing write permission.";
-        Text[ catalan ] = "The font %s cannot be renamed due to missing write permission.";
+        Text[ catalan ] = "No s'ha pogut canviar el nom al tipus de lletra %s perquË no teniu privilegis d'escriptura.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";
@@ -1454,7 +1454,7 @@ ModalDialog RID_FONTNAMEDIALOG
     Text[ turkish ] = "Fonts";
     Text[ arabic ] = "«·ŒÿÊÿ";
     Text[ finnish ] = "Fontit";
-    Text[ catalan ] = "Fuentes";
+    Text[ catalan ] = "Tipus de lletra";
 };
 String RID_BXT_TESTPAGE
 {
@@ -1479,7 +1479,7 @@ String RID_BXT_TESTPAGE
     Text[ turkish ] = "Testpage";
     Text[ arabic ] = "’›Õ… «Œ »«—";
     Text[ finnish ] = "Koesivu";
-    Text[ catalan ] = "P·gina de prueba";
+    Text[ catalan ] = "P‡gina de verificaciÛ";
 };
 String RID_BXT_ENVIRONMENT
 {
@@ -1504,7 +1504,7 @@ String RID_BXT_ENVIRONMENT
     Text[ turkish ] = "Wrong environment";
     Text[ arabic ] = "»Ì∆… €Ì— ’ÕÌÕ…";
     Text[ finnish ] = "V‰‰r‰ ymp‰ristˆ";
-    Text[ catalan ] = "Entorno errÛneo";
+    Text[ catalan ] = "Entorn incorrecte";
 };
 
 String RID_YOU_SURE
@@ -1530,7 +1530,7 @@ String RID_YOU_SURE
     Text[ turkish ] = "Are you sure ?";
     Text[ arabic ] = "Â· √‰  „ √ﬂœ ø";
     Text[ finnish ] = "Oletko varma?";
-    Text[ catalan ] = "øEst· realmente seguro?";
+    Text[ catalan ] = "Esteu segur?";
 };
 
 Bitmap RID_BUTTERFLY
@@ -1581,7 +1581,7 @@ String RID_AFMERROR_OK
     Text[ turkish ] = "No error";
     Text[ arabic ] = "»œÊ‰ Œÿ√";
     Text[ finnish ] = "Ei virhett‰";
-    Text[ catalan ] = "Ning˙n error";
+    Text[ catalan ] = "Cap error";
 };
 String RID_AFMERROR_NO_FONT_NAME
 {
@@ -1606,7 +1606,7 @@ String RID_AFMERROR_NO_FONT_NAME
     Text[ turkish ] = "The metric does not contain a 'FontName' entry.";
     Text[ arabic ] = "·«  ‘ „· ÊÕœ«  «·ﬁÌ«” ⁄·Ï ≈œŒ«·'FontName' .";
     Text[ finnish ] = "Mittatiedosto ei sis‰ll‰ merkint‰‰ 'FontName'.";
-    Text[ catalan ] = "La mÈtrica no contiene una entrada 'FontName'.";
+    Text[ catalan ] = "El mËtric no contÈ cap entrada 'FontName'.";
 };
 String RID_AFMERROR_NO_FULL_NAME
 {
@@ -1631,7 +1631,7 @@ String RID_AFMERROR_NO_FULL_NAME
     Text[ turkish ] = "The metric does not contain a 'FullName' entry.";
     Text[ arabic ] = "·«  ‘ „· ÊÕœ«  «·ﬁÌ«” ⁄·Ï ≈œŒ«· 'FullName'.";
     Text[ finnish ] = "Mittatiedosto ei sis‰ll‰ merkint‰‰ 'FullName'.";
-    Text[ catalan ] = "La mÈtrica no contiene ninguna entrada 'FullName'.";
+    Text[ catalan ] = "El mËtric no contÈ cap entrada 'FullName'.";
 };
 String RID_AFMERROR_NO_FAMILY_NAME
 {
@@ -1656,7 +1656,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text[ turkish ] = "The metric does not contain a 'FamilyName' entry.";
     Text[ arabic ] = "·«  ‘ „· ÊÕœ«  «·ﬁÌ«” ⁄·Ï ≈œŒ«· 'FamilyName'.";
     Text[ finnish ] = "Mittatiedosto ei sis‰ll‰ merkint‰‰ 'FamilyName'.";
-    Text[ catalan ] = "La mÈtrica no contiene una entrada 'FamilyName'.";
+    Text[ catalan ] = "El mËtric no contÈ cap entrada 'FamilyName'.";
 };
 String RID_AFMERROR_MOVETO_FAILED
 {
@@ -1681,7 +1681,7 @@ String RID_AFMERROR_MOVETO_FAILED
     Text[ turkish ] = "The converted metric could not be written.";
     Text[ arabic ] = " ⁄–— ﬂ «»… ÊÕœ«  «·ﬁÌ«” «·„ÕÊ·….";
     Text[ finnish ] = "Muunnettua mittatiedostoa ei voitu kirjoittaa.";
-    Text[ catalan ] = "No se puede escribir la mÈtrica convertida.";
+    Text[ catalan ] = "El mËtric convertit no s'ha pogut escriure.";
 };
 String RID_AFMERROR_STREAM_READ_FAILED
 {
@@ -1706,7 +1706,7 @@ String RID_AFMERROR_STREAM_READ_FAILED
     Text[ turkish ] = "The metric could not be read.";
     Text[ arabic ] = " ⁄–— ﬁ—«¡… ÊÕœ«  «·ﬁÌ«”.";
     Text[ finnish ] = "Mittatiedoston lukeminen ei onnistunut.";
-    Text[ catalan ] = "No se pudo leer la mÈtrica.";
+    Text[ catalan ] = "El mËtric no s'ha pogut llegir.";
 };
 String RID_AFMERROR_STREAM_WRITE_FAILED
 {
@@ -1731,7 +1731,7 @@ String RID_AFMERROR_STREAM_WRITE_FAILED
     Text[ turkish ] = "No temporary file could be created.";
     Text[ arabic ] = " ⁄–— ≈‰‘«¡ „·› „ƒﬁ .";
     Text[ finnish ] = "V‰liaikaistiedoston luominen ei onnistunut.";
-    Text[ catalan ] = "No se pudo crear ning˙n archivo temporal.";
+    Text[ catalan ] = "No s'ha pogut crear cap fitxer temporal.";
 };
 STRING RID_AFMERROR_NOT_A_METRIC
 {
@@ -1756,7 +1756,7 @@ STRING RID_AFMERROR_NOT_A_METRIC
     Text[ turkish ] = "The file does not contain a metric.";
     Text[ arabic ] = "·« ÌÕ ÊÌ «·„·› ⁄·Ï ÊÕœ«  ﬁÌ«”.";
     Text[ finnish ] = "Tiedosto ei sis‰ll‰ mittatietoja.";
-    Text[ catalan ] = "El archivo no contiene mÈtrica.";
+    Text[ catalan ] = "El fitxer no contÈ cap mËtric.";
 };
 String RID_AFMERROR_BOX_TXT
 {
@@ -1781,7 +1781,7 @@ String RID_AFMERROR_BOX_TXT
     Text[ turkish ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";
     Text[ arabic ] = " ⁄–—  ÕÊÌ· ÊÕœ«  «·ﬁÌ«” \n\n%s\n\n··”»» «·¬ Ì:\n\n";
     Text[ finnish ] = "Mittatiedostoa\n\n%s\n\nei voitu muuntaa seuraavasta syyst‰:\n\n";
-    Text[ catalan ] = "Por el siguiente motivo no se pudo convertir la mÈtrica\n\n%s\\:\n\n";
+    Text[ catalan ] = "No s'ha pogut convertir la mËtrica\n\n%s\n\npel motiu seg¸ent:\n\n";
 };
 
 ModelessDialog RID_PROGRESS_DLG
@@ -1816,9 +1816,9 @@ ModelessDialog RID_PROGRESS_DLG
         Text[ greek ] = "Processed";
         Text[ dutch ] = "Reeds bewerkt";
         Text[ french ] = "Progression";
-        Text[ spanish ] = "Ya modificado";
+        Text[ spanish ] = "Progreso";
         Text[ finnish ] = "Processed";
-        Text[ italian ] = "Processed";
+        Text[ italian ] = "Progresso";
         Text[ danish ] = "Processed";
         Text[ swedish ] = "Framsteg";
         Text[ polish ] = "Juø edytowany";
@@ -1863,7 +1863,7 @@ ModelessDialog RID_PROGRESS_DLG
     Text[ turkish ] = "Please wait";
     Text[ arabic ] = "«·—Ã«¡ «·«‰ Ÿ«—";
     Text[ finnish ] = "Odota hetki";
-    Text[ catalan ] = "Espere por favor";
+    Text[ catalan ] = "Si us plau, espereu";
 };
 
 String RID_OPERATION_CONVERTMETRIC
@@ -1889,7 +1889,7 @@ String RID_OPERATION_CONVERTMETRIC
     Text[ arabic ] = " ÕÊÌ· ÊÕœ«  ﬁÌ«” «·ŒÿÊÿ";
     Text[ turkish ] = "Yaz˝tipi metriklerini dˆn¸˛t¸r";
     Text[ finnish ] = "Fonttimittojen muunto";
-    Text[ catalan ] = "ConversiÛn de las mÈtricas de fuente";
+    Text[ catalan ] = "ConversiÛ del mËtric de tipus de lletra";
 };
 
 
@@ -1928,7 +1928,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ turkish ] = "Driver directory";
         Text[ arabic ] = "œ·Ì· »—‰«„Ã «· ‘€Ì·";
         Text[ finnish ] = "Driver directory";
-        Text[ catalan ] = "Directorio de controladores";
+        Text[ catalan ] = "Directori de controladors";
     };
     FixedText RID_PPDIMP_TXT_PATH
     {
@@ -1955,7 +1955,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ turkish ] = "Please select the driver directory.";
         Text[ arabic ] = "«·—Ã«¡ «Œ Ì«— «·œ·Ì· «·–Ì ÌÕ ÊÌ ⁄·Ï „·›«  »—‰«„Ã «· ‘€Ì·.";
         Text[ finnish ] = "Valitse ajurihakemisto.";
-        Text[ catalan ] = "Seleccione el directorio con los archivos de controlador.";
+        Text[ catalan ] = "Si us plau, seleccioneu el directori del programa de control.";
     };
     ComboBox RID_PPDIMP_LB_PATH
     {
@@ -1991,7 +1991,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ turkish ] = "~Search...";
         Text[ arabic ] = "«” ⁄—«÷...";
         Text[ finnish ] = "Selaa";
-        Text[ catalan ] = "~Examinar...";
+        Text[ catalan ] = "Navega...";
     };
 
     FixedLine RID_PPDIMP_GROUP_DRIVER
@@ -2056,7 +2056,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ turkish ] = "Please select the drivers to install and press \"%s\".";
         Text[ arabic ] = "«·—Ã«¡ «Œ Ì«— »—«„Ã «· ‘€Ì· «·–Ì  —€» ›ÌÂ« À„ «÷€ÿ ⁄·Ï \"%s\" ·· √ﬂÌœ.";
         Text[ finnish ] = "Valitse asennettavat ohjaimet ja paina \"%s\".";
-        Text[ catalan ] = "Elija los controladores deseados y confÌrmelo con el botÛn \"%s\".";
+        Text[ catalan ] = "Seleccioneu els programes de control desitjats i confirmeu-ho amb el botÛ \"%s\".";
     };
     String RID_PPDIMP_STR_LOADINGPPD
     {
@@ -2081,7 +2081,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ turkish ] = "Searching for drivers";
         Text[ arabic ] = "«·»ÕÀ ⁄‰ »—«„Ã  ‘€Ì·";
         Text[ finnish ] = "Etsit‰‰n ohjaimia";
-        Text[ catalan ] = "B˙squeda de controladores";
+        Text[ catalan ] = "S'estan cercant els programes de control";
     };
     OKButton RID_PPDIMP_BTN_OK
     {
@@ -2114,7 +2114,7 @@ ModalDialog RID_PPDIMPORT_DLG
     Text[ turkish ] = "Driver installation";
     Text[ arabic ] = " À»Ì  »—‰«„Ã «· ‘€Ì·";
     Text[ finnish ] = "Ohjaimien asennus";
-    Text[ catalan ] = "InstalaciÛn de controlador";
+    Text[ catalan ] = "Instal∑laciÛ del programa de control";
 };
 
 String RID_QUERY_REMOVEDRIVER
@@ -2140,7 +2140,7 @@ String RID_QUERY_REMOVEDRIVER
     Text[ turkish ] = "Do you really want to remove this driver ?";
     Text[ arabic ] = "Â·  —Ìœ »«·›⁄· Õ–› »—‰«„Ã «· ‘€Ì· \"%s\"ø";
     Text[ finnish ] = "Haluatko varmasti poistaa ajurin \"%s\"?";
-    Text[ catalan ] = "øDesea realmente eliminar este controlador?";
+    Text[ catalan ] = "Voleu eliminar aquest programa de control?";
 };
 
 String RID_QUERY_REMOVEPRINTER
@@ -2166,7 +2166,7 @@ String RID_QUERY_REMOVEPRINTER
     Text[ turkish ] = "Do you really want to remove this printer ?";
     Text[ arabic ] = "Â·  —Ìœ Õ–› Â–Â «·ÿ«»⁄… »«·›⁄·ø";
     Text[ finnish ] = "Haluatko varmasti poistaa t‰m‰n tulostimen ?";
-    Text[ catalan ] = "øDesea realmente eliminar esta impresora?";
+    Text[ catalan ] = "Segur que voleu suprimir aquesta impressora?";
 };
 
 String RID_QUERY_REMOVEFONTFROMLIST
@@ -2192,7 +2192,7 @@ String RID_QUERY_REMOVEFONTFROMLIST
     Text[ turkish ] = "Do you really want to remove the selected fonts ?";
     Text[ arabic ] = "Â·  —Ìœ »«·›⁄· Õ–› «·ŒÿÊÿ «·„Õœœ…ø";
     Text[ finnish ] = "Haluatko varmasti poistaa valitut fontit ?";
-    Text[ catalan ] = "øDesea realmente eliminar las fuentes seleccionadas?";
+    Text[ catalan ] = "Segur que voleu suprimir els tipus de lletra seleccionats?";
 };
 
 String RID_QUERY_DRIVERUSED
@@ -2218,7 +2218,7 @@ String RID_QUERY_DRIVERUSED
     Text[ turkish ] = "This driver is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ arabic ] = "„«“«·  Â‰«ﬂ ÿ«»⁄«   ” Œœ„ »—‰«„Ã «· ‘€Ì· \"%s\". Â·  —Ìœ Õ–›Â »«·›⁄·ø ”Ê› ÌƒœÌ –·ﬂ ·Õ–› «·ÿ«»⁄«  «·„⁄‰Ì… √Ì÷«.";
     Text[ finnish ] = "Jotkin tulostimet k‰ytt‰v‰t yh‰ ajuria \"%s\". Haluatko varmasti poistaa ajurin? Sit‰ k‰ytt‰v‰t tulostimet poistetaan myˆs.";
-    Text[ catalan ] = "Existen a˙n impresoras que usan este controlador. øDesea realmente eliminarlo? TambiÈn se eliminar·n las impresoras correspondientes.";
+    Text[ catalan ] = "Encara hi ha impressores que utilitzen aquest controlador. Vol eliminar-lo? TambÈ s'eliminaran les impressores corresponents.";
 };
 
 String RID_ERR_REMOVEDEFAULTDRIVER
@@ -2244,7 +2244,7 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text[ turkish ] = "This driver is used by your standard printer. Therefore it cannot be removed.";
     Text[ arabic ] = "Ì „ «” Œœ«„ ÃÂ«“ «· ‘€Ì· \"%s\" „‰ ﬁˆ»Û· ÿ«»⁄ ﬂ «·«› —«÷Ì…° ·Â–« ·« Ì„ﬂ‰ﬂ ≈“«· Â.";
     Text[ finnish ] = "Ajuri \"%s\" on oletustulostimen k‰ytˆss‰. Ajuria ei poisteta.";
-    Text[ catalan ] = "No se puede eliminar este controlador porque lo usa su impresora est·ndar.";
+    Text[ catalan ] = "No es pot eliminar aquest programa de control perquË l'utilitza la impressora est‡ndard.";
 };
 
 String RID_ERR_PRINTERNOTREMOVEABLE
@@ -2270,7 +2270,7 @@ String RID_ERR_PRINTERNOTREMOVEABLE
     Text[ turkish ] = "The printer %s cannot be removed.";
     Text[ arabic ] = "·« Ì„ﬂ‰ ≈“«·… «·ÿ«»⁄… %s.";
     Text[ finnish ] = "Tulostimen %s poistaminen ei onnistunut.";
-    Text[ catalan ] = "No se puede eliminar la impresora %s.";
+    Text[ catalan ] = "No es pot eliminar la impressora %s.";
 };
 
 String RID_TXT_PRINTERALREADYEXISTS
@@ -2296,7 +2296,7 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text[ turkish ] = "A printer with the name \"%s\" already exists. This printer will not be imported.";
     Text[ arabic ] = " ÊÃœ »«·›⁄· ÿ«»⁄… »«·«”„ \"%s\". ·‰ Ì „ «” Ì—«œ Â–Â «·ÿ«»⁄….";
     Text[ finnish ] = "Tulostin \"%s\" on jo olemassa. T‰t‰ tulostinta ei tuoda.";
-    Text[ catalan ] = "Ya existe una impresora con el nombre \"%s\". Esta impresora no se importa.";
+    Text[ catalan ] = "Ja existeix una impressora amb el nom \"%s\". Aquesta impressora no s'importa.";
 };
 
 String RID_TXT_PRINTERWITHOUTCOMMAND
@@ -2322,7 +2322,7 @@ String RID_TXT_PRINTERWITHOUTCOMMAND
     Text[ turkish ] = "The printer \"%s\" has no valid configuration and therefore cannot be imported.";
     Text[ arabic ] = "·„ Ì „  ﬂÊÌ‰ «·ÿ«»⁄… \"%s\"   »‘ﬂ· ﬂ«„·° ·Â–« ·‰ Ì „ «” Ì—«œÂ«.";
     Text[ finnish ] = "Tulostimella \"%s\" ei ole kelvollisia kokoonpanotietoja, joten sit‰ ei voi tuoda.";
-    Text[ catalan ] = "La impresora \"%s\" no est· correctamente configurada, por lo que no se puede importar.";
+    Text[ catalan ] = "La impressora \"%s\" no est‡ configurada correctament i, per tant, no es pot importar.";
 };
 
 String RID_TXT_DRIVERDOESNOTEXIST
@@ -2348,7 +2348,7 @@ String RID_TXT_DRIVERDOESNOTEXIST
     Text[ turkish ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
     Text[ arabic ] = "»—‰«„Ã  ‘€Ì· «·ÿ«»⁄… \"%s1\" (%s2) €Ì— „ıÀ ». ·Â–« ·« Ì„ﬂ‰ «” Ì—«œ «·ÿ«»⁄….";
     Text[ finnish ] = "Tulostimen \"%s1\" ajuria (%s2) ei ole asennettu, joten tulostinta ei voi tuoda.";
-    Text[ catalan ] = "No est· instalado el controlador para la impresora \"%s1\" (%s2), por lo que no se puede importar la impresora.";
+    Text[ catalan ] = "No est‡ instal∑lat el programa de control per a l'impressora \"%s1\" (%s2). La impressora no es pot importar.";
 };
 
 String RID_TXT_PRINTERADDFAILED
@@ -2402,7 +2402,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ turkish ] = "~Finish";
         Text[ arabic ] = " „";
         Text[ finnish ] = "~Valmis";
-        Text[ catalan ] = "~Finish";
+        Text[ catalan ] = "~Fi";
     };
     CancelButton RID_ADDP_BTN_CANCEL
     {
@@ -2434,7 +2434,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ turkish ] = "~Next >>";
         Text[ arabic ] = "«· «·Ì <<";
         Text[ finnish ] = "~Seuraava >>";
-        Text[ catalan ] = "~Next >>";
+        Text[ catalan ] = "~Seg¸ent>>";
     };
     PushButton RID_ADDP_BTN_PREV
     {
@@ -2461,7 +2461,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ turkish ] = "<< ~Back";
         Text[ arabic ] = ">> «·”«»ﬁ";
         Text[ finnish ] = "<< Edellinen";
-        Text[ catalan ] = "<< ~Back";
+        Text[ catalan ] = "<<~Enrere";
     };
     Text[ english_us ] = "Add Printer";
     Text[ portuguese ] = "Adicionar impressora";
@@ -2482,7 +2482,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     Text[ turkish ] = "Add printer";
     Text[ arabic ] = "≈÷«›… ÿ«»⁄…";
     Text[ finnish ] = "Lis‰‰ tulostin";
-    Text[ catalan ] = "Add printer";
+    Text[ catalan ] = "Afegeix una impressora";
 };
 
 TabPage RID_ADDP_PAGE_CHOOSEDRIVER
@@ -2513,7 +2513,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ chinese_traditional ] = "ÈÅ∏Êìá‰∏ÄÂÄãÈ©ÖÂãïÁ®ãÂºè";
         Text[ turkish ] = "Choose a driver";
         Text[ arabic ] = "Choose a driver";
-        Text[ catalan ] = "Choose a driver";
+        Text[ catalan ] = "Escull un programa de control";
     };
     FixedText RID_ADDP_CHDRV_TXT_DRIVER
     {
@@ -2540,7 +2540,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ turkish ] = "Please select an auspicous driver";
         Text[ arabic ] = "«·—Ã«¡ «Œ Ì«— »—‰«„Ã  ‘€Ì· „‰«”»";
         Text[ finnish ] = "Valitse soveltuva ajuri";
-        Text[ catalan ] = "Please select an auspicous driver";
+        Text[ catalan ] = "Si us plau, seleccioneu un programa de control adequat";
     };
     ListBox RID_ADDP_CHDRV_BOX_DRIVER
     {
@@ -2574,7 +2574,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ turkish ] = "~Import...";
         Text[ arabic ] = "...«” Ì—«œ";
         Text[ finnish ] = "~Tuo";
-        Text[ catalan ] = "~Import...";
+        Text[ catalan ] = "~Importa...";
     };
     PushButton RID_ADDP_CHDRV_BTN_REMOVE
     {
@@ -2601,7 +2601,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ turkish ] = "~Delete";
         Text[ arabic ] = "Õ–›";
         Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Delete";
+        Text[ catalan ] = "~Suprimeix";
     };
     String RID_ADDP_CHDRV_STR_REMOVE
     {
@@ -2626,7 +2626,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ turkish ] = "Delete driver";
         Text[ arabic ] = "Õ–› »—‰«„Ã «· ‘€Ì·";
         Text[ finnish ] = "Poista ajuri";
-        Text[ catalan ] = "Delete driver";
+        Text[ catalan ] = "Suprimeix el programa de control";
     };
 };
 
@@ -2658,7 +2658,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ chinese_traditional ] = "ÈÅ∏Êìá‰∏ÄÂÄãË®≠ÂÇôÈ°ûÂûã";
         Text[ turkish ] = "Choose a device type";
         Text[ arabic ] = "Choose a device type";
-        Text[ catalan ] = "Choose a device type";
+        Text[ catalan ] = "Escolliu el tipus de dispositiu";
     };
     FixedText RID_ADDP_CHDEV_TXT_OVER
     {
@@ -2685,7 +2685,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ turkish ] = "Do you want to";
         Text[ arabic ] = "Â·  —Ìœ";
         Text[ finnish ] = "Haluamasi toimenpide:";
-        Text[ catalan ] = "Do you want to";
+        Text[ catalan ] = "Voleu";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PRINTER
     {
@@ -2712,7 +2712,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ turkish ] = "add a ~printer";
         Text[ arabic ] = "≈÷«›… ÿ«»⁄…";
         Text[ finnish ] = "Lis‰‰ ~tulostin";
-        Text[ catalan ] = "add a ~printer";
+        Text[ catalan ] = "Afegeix una ~impressora";
     };
     RadioButton RID_ADDP_CHDEV_BTN_FAX
     {
@@ -2739,7 +2739,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ chinese_traditional ] = "Ë®≠ÁΩÆ‰∏ÄÂè∞ÂÇ≥ÁúüÊ©ü(~X)";
         Text[ turkish ] = "add a fa~x";
         Text[ arabic ] = "≈÷«›… ›«ﬂ”";
-        Text[ catalan ] = "add a fa~x";
+        Text[ catalan ] = "Afegeix un ~fax";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
@@ -2766,7 +2766,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ chinese_traditional ] = "Ë®≠ÁΩÆ‰∏ÄÂÄã P~DF ËΩâÊèõÂô®";
         Text[ turkish ] = "add a P~DF printer";
         Text[ arabic ] = "≈÷«›… „ÕÊ· PDF";
-        Text[ catalan ] = "add a P~DF printer";
+        Text[ catalan ] = "Afegeix un ~convertidor PDF";
     };
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
@@ -2793,7 +2793,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ turkish ] = "~import printers from a StarOffice installation";
         Text[ arabic ] = "«” Ì—«œ ÿ«»⁄«  „‰  À»Ì  StarOffice";
         Text[ finnish ] = "T~uo tulostimia StarOffice-asennuksesta";
-        Text[ catalan ] = "~import printers from a StarOffice installation";
+        Text[ catalan ] = "~Importa les impressores des d'una instal∑laciÛ StarOffice";
     };
 };
 
@@ -2825,7 +2825,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "ÈÅ∏Êìá‰∏ÄÂÄãÂêçÁ®±";
         Text[ turkish ] = "Choose a name";
         Text[ arabic ] = "Choose a name";
-        Text[ catalan ] = "Choose a name";
+        Text[ catalan ] = "Escolliu un nom";
     };
     FixedText RID_ADDP_NAME_TXT_NAME
     {
@@ -2852,7 +2852,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ turkish ] = "Please enter a name for the printer";
         Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «”„ «·ÿ«»⁄…";
         Text[ finnish ] = "Kirjoita tulostimen nimi:";
-        Text[ catalan ] = "Please enter a name for the printer";
+        Text[ catalan ] = "Si us plau, introduÔu un nom per a la impressora";
     };
     FixedText RID_ADDP_NAME_TXT_FAXNAME
     {
@@ -2879,7 +2879,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "Ë´ãÊÇ®Ëº∏ÂÖ•‰∏ÄÂÄãÂÇ≥ÁúüÊ©üÁöÑÂêçÁ®±„ÄÇ";
         Text[ turkish ] = "Please enter a name for the fax device";
         Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «”„ ·ÃÂ«“ «·›«ﬂ”";
-        Text[ catalan ] = "Please enter a name for the fax device";
+        Text[ catalan ] = "Si us plau, introduÔu un nom per al dispositiu de fax";
     };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
@@ -2906,7 +2906,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "Ë´ãÊÇ®Ëº∏ÂÖ•‰∏ÄÂÄã PDF ËΩâÊèõÂô®ÂêçÁ®±„ÄÇ";
         Text[ turkish ] = "Please enter a name for the PDF printer";
         Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «”„ „ÕÊ· PDF";
-        Text[ catalan ] = "Please enter a name for the PDF printer";
+        Text[ catalan ] = "Si us plau, introduÔu un nom per al convertidor PDF";
     };
     Edit RID_ADDP_NAME_EDT_NAME
     {
@@ -2940,7 +2940,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ turkish ] = "Fax printer";
         Text[ arabic ] = "ÿ«»⁄… ›«ﬂ”";
         Text[ finnish ] = "Faksitulostin";
-        Text[ catalan ] = "Fax printer";
+        Text[ catalan ] = "Impressora de fax";
     };
     Edit RID_ADDP_NAME_EDT_PDFNAME
     {
@@ -2968,7 +2968,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ turkish ] = "PDF printer";
         Text[ arabic ] = "PDF „ÕÊ·";
         Text[ finnish ] = "PDF-muunto-ohjelma";
-        Text[ catalan ] = "PDF printer";
+        Text[ catalan ] = "Convertidor PDF";
     };
     CheckBox RID_ADDP_NAME_BOX_DEFAULT
     {
@@ -2995,7 +2995,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ turkish ] = "~Set as default printer";
         Text[ arabic ] = "«” Œœ«„ ﬂÿ«»⁄… «› —«÷Ì…";
         Text[ finnish ] = "~K‰yt‰ oletustulostimena";
-        Text[ catalan ] = "~Set as default printer";
+        Text[ catalan ] = "~Utilitza com a impressora per defecte";
     };
     CheckBox RID_ADDP_NAME_BOX_FAXSWALLOW
     {
@@ -3022,7 +3022,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "‰∏çÂàóÂç∞ÂÇ≥ÁúüËôüÁ¢º(~V)";
         Text[ turkish ] = "~fax number will be removed from output";
         Text[ arabic ] = "~fax number will be removed from output";
-        Text[ catalan ] = "~fax number will be removed from output";
+        Text[ catalan ] = "~Suprimeix el n˙mero de fax des de la sortida";
     };
 };
 
@@ -3054,7 +3054,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ chinese_traditional ] = "ÈÅ∏Êìá‰∏ÄË°åÊåá‰ª§";
         Text[ turkish ] = "Choose a command line";
         Text[ arabic ] = "Choose a command line";
-        Text[ catalan ] = "Choose a command line";
+        Text[ catalan ] = "Escolliu una lÌnia d'ordres";
     };
     FixedText RID_ADDP_CMD_TXT_COMMAND
     {
@@ -3082,7 +3082,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ turkish ] = "Please enter a command line appropriate for this device";
         Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· ”ÿ— √„— „‰«”» ·Â–« «·ÃÂ«“";
         Text[ finnish ] = "Syˆt‰ t‰lle laitteelle soveltuva komentorivi.";
-        Text[ catalan ] = "Please enter a command line appropriate for this device";
+        Text[ catalan ] = "Si us plau, introduÔu una lÌnia d'ordres adequada per a aquest dispositiu.";
     };
     ComboBox RID_ADDP_CMD_BOX_COMMAND
     {
@@ -3121,7 +3121,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ turkish ] = "PDF target directory :";
         Text[ arabic ] = "«·œ·Ì· PDF «·Âœ›:";
         Text[ finnish ] = "PDF-kohdehakemisto :";
-        Text[ catalan ] = "PDF target directory :";
+        Text[ catalan ] = "Directori destÌ PDF :";
     };
     Edit RID_ADDP_CMD_EDT_PDFDIR
     {
@@ -3160,7 +3160,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ turkish ] = "~Help";
         Text[ arabic ] = "„”«⁄œ…";
         Text[ finnish ] = "~Ohje";
-        Text[ catalan ] = "~Help";
+        Text[ catalan ] = "~Ajuda";
     };
     String RID_ADDP_CMD_STR_PDFHELP
     {
@@ -3185,7 +3185,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "”Ì „  ‰›Ì– ”ÿ— «·√„— ›Ì „ÕÊ·«  PDF ﬂ«·¬ Ì: ›Ì ﬂ· „—… Ì „ ›ÌÂ« ÿ»«⁄… „” ‰œ° ”Ê› Ì „ «” »œ«· \"(TMP)\" »„·› „ƒﬁ  Ê \"(OUTFILE)\" »„·› PDF «·„—«œ ≈‰‘«ƒÂ. ≈–« Ê—œ  \"(TMP)\" ›Ì ”ÿ— «·√Ê«„—° Ì „  „—Ì— ‘Ì›—… PostScript  ›Ì „·›° ›Ì„« ⁄œ« –·ﬂ° Ì „  „—Ì—Â« ﬂ≈œŒ«· ﬁÌ«”Ì (Â–« Ì⁄‰Ì ﬂ‹ Pipe).";
         Text[ finnish ] = "PDF-muunto-ohjelmien komentorivi suoritetaan seuraavasti: kunkin tulostetun asiakirjan osalta komentorivill‰ oleva merkkijono \"(TMP)\" korvataan v‰liaikaistiedostolla ja komentorivill‰ oleva merkkijono \"(OUTFILE)\" korvataan kohde-PDF-tiedoston nimell‰. Jos \"(TMP)\" on komentorivill‰, PostScript-koodi toimitetaan tiedoston kautta, muussa tapauksessa normaalisyˆtteen‰ eli v‰litysyhteytt‰ k‰ytt‰en.";
-        Text[ catalan ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ catalan ] = "La lÌnia d'ordres per als convertidors PDF s'executa d'aquesta manera: per a cada document imprËs, \"(TMP)\" de la lÌnia d'ordres es reeemplaÁa amb un fitxer temporal i \"(OUTFILE)\" de la lÌnia d'ordres es reemplaÁa amb el fitxer PDF destÌ. Si \"(TMP)\" Ès a la lÌnia d'ordres, el codi PostScript se subministrar‡ mitjanÁant un fitxer i, si no hi Ès, mitjanÁant una entrada est‡ndard (com ara un conducte).";
     };
     String RID_ADDP_CMD_STR_FAXHELP
     {
@@ -3210,7 +3210,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ chinese_traditional ] = "ÂÇ≥ÁúüÊú∫ÂñÆÈ†ÖÊåá‰ª§ÁöÑËôïÁêÜÊñπÂºèÂ¶Ç‰∏ãÔºöÂØÑÁôºÂÇ≥ÁúüÊôÇÈÄöÈÅéÊåá‰ª§Ë°åÁî®‰∏ÄÂÄãÊö´ÊôÇÊ™îÊ°àÊõø‰ª£(TMP) ÔºåÁî®ÂÇ≥ÁúüËôüÁ¢ºÊõø‰ª£(PHONE)„ÄÇÂ¶ÇÊûúÊåá‰ª§Ë°åÂê´Êúâ(TMP)ÔºåPostScript Ê∫ê‰ª£Á¢ºÂ∞±ÊúÉËΩâÊèõÊàê‰∏ÄÂÄãÊ™îÊ°àÔºåÂê¶ÂâáÊúÉÁï∂‰ΩúÊ®ôÊ∫ñËº∏ÂÖ•(Áï∂‰Ωúpipe)„ÄÇ";
         Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "”Ì „  ‰›Ì– ”ÿ— «·√„— ›Ì √ÃÂ“… «·›«ﬂ” ﬂ«·¬ Ì: ›Ì ﬂ· „—… Ì „ ›ÌÂ« ≈—”«· —”«·… ›«ﬂ”° ”Ê› Ì „ «” »œ«· \"(TMP)\" ›Ì ”ÿ— «·√„— »„·› „ƒﬁ  Ê \"(PHONE)\" »—ﬁ„ «·›«ﬂ”. ≈–« Ê—œ  \"(TMP)\" ›Ì ”ÿ— «·√Ê«„—° ›”Ì „  „—Ì— ‘Ì›—…PostScript  ›Ì „·›° ›Ì„« ⁄œ« –·ﬂ° Ì „  „—Ì—Â« ﬂ≈œŒ«· ﬁÌ«”Ì (Â–« Ì⁄‰Ì ﬂ‹ Pipe).";
-        Text[ catalan ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ catalan ] = "La lÌnia d'ordres per als dispositius de fax s'executa d'aquesta manera: per a cada fax enviat, \"(TMP)\" de la lÌnia d'ordres es reemplaÁa amb un fitxer temporal i \"(PHONE)\" de la lÌnia d'ordres es reemplaÁa amb el n˙mero de fax. Si \"(TMP)\" apareix a la lÌnia d'ordres, el codi PostScript se subministrar‡ mitjanÁant un fitxer i, si no hi Ès, passa com una entrada est‡ndard (com ara un conducte).";
     };
 };
 
@@ -3242,7 +3242,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ chinese_traditional ] = "ÂåØÂÖ•ËºÉËàäÁöÑÂç∞Ë°®Ê©ü";
         Text[ turkish ] = "Import printers from old versions";
         Text[ arabic ] = "Import printers from old versions";
-        Text[ catalan ] = "Import printers from old versions";
+        Text[ catalan ] = "Importa impressores de versions anteriors";
     };
     FixedText RID_ADDP_OLD_TXT_PRINTERS
     {
@@ -3270,7 +3270,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ chinese_traditional ] = "ÊÇ®ËÉΩÂ§†ÂåØÂÖ•ÈÄô‰∫õÂç∞Ë°®Ê©ü„ÄÇË´ãÈÅ∏ÊìáÈúÄË¶Å‰ΩøÁî®ÁöÑÂç∞Ë°®Ê©ü(~T)„ÄÇ";
         Text[ turkish ] = "These printers can be imported. Please remove the ones you do not want to import.";
         Text[ arabic ] = "Ì„ﬂ‰ «” Ì—«œ «·ÿ«»⁄«  «· «·Ì…. «·—Ã«¡ ≈“«·… «·ÿ«»⁄«  «· Ì ·«  —Ìœ «” Ì—«œÂ«.";
-        Text[ catalan ] = "These printers can be imported. Please remove the ones you do not want to import.";
+        Text[ catalan ] = "Podeu importar aquestes impressores. Elimineu les que no voleu importar.";
     };
     MultiListBox RID_ADDP_OLD_BOX_PRINTERS
     {
@@ -3303,7 +3303,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ chinese_traditional ] = "ÂÖ®ÈÉ®ÈÅ∏Âèñ(~S)";
         Text[ turkish ] = "~Select all";
         Text[ arabic ] = "~Select all";
-        Text[ catalan ] = "~Select all";
+        Text[ catalan ] = "~Selecciona-ho tot";
     };
 };
 
@@ -3335,7 +3335,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ chinese_traditional ] = "Ë´ãÊÇ®ÈÅ∏Êìá‰∏ÄÂÄãÈ©ÖÂãïÁ®ãÂºè";
         Text[ turkish ] = "Choose a driver";
         Text[ arabic ] = "Choose a driver";
-        Text[ catalan ] = "Choose a driver";
+        Text[ catalan ] = "Escolliu un programa de control";
     };
     FixedText RID_ADDP_FAXDRV_TXT_DRIVER
     {
@@ -3363,7 +3363,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ chinese_traditional ] = "Ë´ãÈÅ∏Êìá‰ª•‰∏ãÈÅ©Áî®ÊñºÈÄôÂÄãÂÇ≥ÁúüÊ©üÁöÑÈ©ÖÂãïÁ®ãÂºè„ÄÇ";
         Text[ turkish ] = "Use the following driver for this fax device:";
         Text[ arabic ] = "«” Œœ„ »—‰«„Ã «· ‘€Ì· «· «·Ì ·ÃÂ«“ «·›«ﬂ” Â–«:";
-        Text[ catalan ] = "Use the following driver for this fax device:";
+        Text[ catalan ] = "Utilitza aquest programa de control per al dispositiu de fax:";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
     {
@@ -3390,7 +3390,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ turkish ] = "the default driver";
         Text[ arabic ] = "»—‰«„Ã «· ‘€Ì· «·«› —«÷Ì";
         Text[ finnish ] = "Oletusajuri";
-        Text[ catalan ] = "the default driver";
+        Text[ catalan ] = "el programa de control per defecte";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_SELECT
     {
@@ -3417,7 +3417,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ turkish ] = "a specific driver to format identical to a certain printer";
         Text[ arabic ] = "»—‰«„Ã  ‘€Ì· Œ«’ · ÂÌ∆… «· ‰”Ìﬁ ·ÿ«»⁄… √Œ—Ï.";
         Text[ finnish ] = "M‰‰ritetty ajuri, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
-        Text[ catalan ] = "a specific driver to format identical to a certain printer";
+        Text[ catalan ] = "un programa de control especÌfic per a formatar com una impressora determinada";
     };
 };
 
@@ -3449,7 +3449,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ chinese_traditional ] = "ÈÅ∏Êìá‰∏ÄÂÄãÈ©ÖÂãïÁ®ãÂºè";
         Text[ turkish ] = "Choose a driver";
         Text[ arabic ] = "Choose a driver";
-        Text[ catalan ] = "Choose a driver";
+        Text[ catalan ] = "Escolliu un programa de control";
     };
     FixedText RID_ADDP_PDFDRV_TXT_DRIVER
     {
@@ -3477,7 +3477,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ turkish ] = "Use the following driver for this PDF printer:";
         Text[ arabic ] = "«” Œœ„ »—‰«„Ã «· ‘€Ì· «· «·Ì ·„ÕÊ· PDF Â–«:";
         Text[ finnish ] = "K‰yt‰ t‰ss‰ PDF-muunto-ohjelmassa seuraavaa ajuria:";
-        Text[ catalan ] = "Use the following driver for this PDF printer:";
+        Text[ catalan ] = "Utilitza el seg¸ent programa de control per aquesta impressora PDF:";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DEFAULT
     {
@@ -3504,7 +3504,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ turkish ] = "the default driver";
         Text[ arabic ] = "»—‰«„Ã «· ‘€Ì· «·«› —«÷Ì";
         Text[ finnish ] = "Ohjaimen oletusarvo";
-        Text[ catalan ] = "the default driver";
+        Text[ catalan ] = "la impressora per defecte";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DIST
     {
@@ -3531,7 +3531,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ turkish ] = "the Adobe Distiller(tm) driver";
         Text[ arabic ] = "»—‰«„Ã  ‘€Ì· Adobe Distiller(tm)";
         Text[ finnish ] = "Adobe Distiller(tm) -ajuri";
-        Text[ catalan ] = "the Adobe Distiller(tm) driver";
+        Text[ catalan ] = "el programa de control de Adobe Distiller(tm)";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_SELECT
     {
@@ -3558,7 +3558,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ turkish ] = "a specific driver to format identical to a certain printer";
         Text[ arabic ] = "»—‰«„Ã  ‘€Ì· Œ«’ · ÂÌ∆… «· ‰”Ìﬁ ·ÿ«»⁄… √Œ—Ï";
         Text[ finnish ] = "M‰‰ritetty ajuri, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
-        Text[ catalan ] = "a specific driver to format identical to a certain printer";
+        Text[ catalan ] = "un programa de control especÌfic per a formatar igual que una impressora determinada";
     };
 };
 
@@ -3585,7 +3585,7 @@ String RID_TXT_FONT_ITALIC
     Text[ chinese_traditional ] = "ÊñúÈ´îÂ≠ó";
     Text[ turkish ] = "Italic";
     Text[ arabic ] = "Italic";
-    Text[ catalan ] = "Italic";
+    Text[ catalan ] = "Cursiva";
 };
 
 String RID_TXT_FONT_OBLIQUE
@@ -3611,7 +3611,7 @@ String RID_TXT_FONT_OBLIQUE
     Text[ chinese_traditional ] = "ÊñúÈ´î";
     Text[ turkish ] = "Oblique";
     Text[ arabic ] = "Oblique";
-    Text[ catalan ] = "Oblique";
+    Text[ catalan ] = "Oblicua";
 };
 
 String RID_TXT_FONT_THIN
@@ -3637,7 +3637,7 @@ String RID_TXT_FONT_THIN
     Text[ chinese_traditional ] = "Á¥∞È´îÂ≠ó";
     Text[ turkish ] = "Thin";
     Text[ arabic ] = "Thin";
-    Text[ catalan ] = "Thin";
+    Text[ catalan ] = "Prima";
 };
 
 String RID_TXT_FONT_ULTRALIGHT
@@ -3663,7 +3663,7 @@ String RID_TXT_FONT_ULTRALIGHT
     Text[ chinese_traditional ] = "Ë∂ÖÁ¥∞È´î";
     Text[ turkish ] = "Ultralight";
     Text[ arabic ] = "Ultralight";
-    Text[ catalan ] = "Ultralight";
+    Text[ catalan ] = "Molt clar";
 };
 
 String RID_TXT_FONT_SEMILIGHT
@@ -3689,7 +3689,7 @@ String RID_TXT_FONT_SEMILIGHT
     Text[ chinese_traditional ] = "ÂçäÁ¥∞È´îÂ≠ó";
     Text[ turkish ] = "Semilight";
     Text[ arabic ] = "Semilight";
-    Text[ catalan ] = "Semilight";
+    Text[ catalan ] = "Semi clar";
 };
 
 String RID_TXT_FONT_LIGHT
@@ -3715,7 +3715,7 @@ String RID_TXT_FONT_LIGHT
     Text[ chinese_traditional ] = "Á¥∞È´îÂ≠ó";
     Text[ turkish ] = "›nce";
     Text[ arabic ] = "›« Õ";
-    Text[ catalan ] = "Light";
+    Text[ catalan ] = "Clar";
 };
 
 String RID_TXT_FONT_SEMIBOLD
@@ -3741,7 +3741,7 @@ String RID_TXT_FONT_SEMIBOLD
     Text[ chinese_traditional ] = "ÂçäÁ≤óÈ´îÂ≠ó";
     Text[ turkish ] = "Semibold";
     Text[ arabic ] = "Semibold";
-    Text[ catalan ] = "Semibold";
+    Text[ catalan ] = "Semi negreta";
 };
 
 String RID_TXT_FONT_BOLD
@@ -3767,7 +3767,7 @@ String RID_TXT_FONT_BOLD
     Text[ chinese_traditional ] = "Á≤óÈ´îÂ≠ó";
     Text[ turkish ] = "Bold";
     Text[ arabic ] = "Bold";
-    Text[ catalan ] = "Bold";
+    Text[ catalan ] = "Negreta";
 };
 
 String RID_TXT_FONT_ULTRABOLD
@@ -3793,7 +3793,7 @@ String RID_TXT_FONT_ULTRABOLD
     Text[ chinese_traditional ] = "Ë∂ÖÁ≤óÈ´îÂ≠ó";
     Text[ turkish ] = "Ultrabold";
     Text[ arabic ] = "Ultrabold";
-    Text[ catalan ] = "Ultrabold";
+    Text[ catalan ] = "Negreta forta";
 };
 
 String RID_TXT_FONT_ULTRACONDENSED
@@ -3819,7 +3819,7 @@ String RID_TXT_FONT_ULTRACONDENSED
     Text[ chinese_traditional ] = "Ë∂ÖÂ£ìÁ∏ÆÂ≠óÈ´î";
     Text[ turkish ] = "Ultracondensed";
     Text[ arabic ] = "Ultracondensed";
-    Text[ catalan ] = "Ultracondensed";
+    Text[ catalan ] = "Ultra condensada";
 };
 
 String RID_TXT_FONT_EXTRACONDENSED
@@ -3845,7 +3845,7 @@ String RID_TXT_FONT_EXTRACONDENSED
     Text[ chinese_traditional ] = "Ë∂ÖÂ£ìÁ∏ÆÂ≠óÈ´î";
     Text[ turkish ] = "Extracondensed";
     Text[ arabic ] = "Extracondensed";
-    Text[ catalan ] = "Extracondensed";
+    Text[ catalan ] = "Condensada extra";
 };
 
 String RID_TXT_FONT_CONDENSED
@@ -3871,7 +3871,7 @@ String RID_TXT_FONT_CONDENSED
     Text[ chinese_traditional ] = "Â£ìÁ∏ÆÂ≠óÈ´î";
     Text[ turkish ] = "Condensed";
     Text[ arabic ] = "Condensed";
-    Text[ catalan ] = "Condensed";
+    Text[ catalan ] = "Condensada";
 };
 
 String RID_TXT_FONT_SEMICONDENSED
@@ -3897,7 +3897,7 @@ String RID_TXT_FONT_SEMICONDENSED
     Text[ chinese_traditional ] = "ÂçäÂ£ìÁ∏ÆÂ≠óÈ´î";
     Text[ turkish ] = "Semicondensed";
     Text[ arabic ] = "Semicondensed";
-    Text[ catalan ] = "Semicondensed";
+    Text[ catalan ] = "Semi condensada";
 };
 
 String RID_TXT_FONT_SEMIEXPANDED
@@ -3923,7 +3923,7 @@ String RID_TXT_FONT_SEMIEXPANDED
     Text[ chinese_traditional ] = "ÂçäÂØ¨ÂûãÂ≠ó";
     Text[ turkish ] = "Semiexpanded";
     Text[ arabic ] = "Semiexpanded";
-    Text[ catalan ] = "Semiexpanded";
+    Text[ catalan ] = "Semi extesa";
 };
 
 String RID_TXT_FONT_EXPANDED
@@ -3949,7 +3949,7 @@ String RID_TXT_FONT_EXPANDED
     Text[ chinese_traditional ] = "ÂØ¨ÂûãÂ≠ó";
     Text[ turkish ] = "Expanded";
     Text[ arabic ] = "Expanded";
-    Text[ catalan ] = "Expanded";
+    Text[ catalan ] = "Extesa";
 };
 
 String RID_TXT_FONT_EXTRAEXPANDED
@@ -3975,7 +3975,7 @@ String RID_TXT_FONT_EXTRAEXPANDED
     Text[ chinese_traditional ] = "Ë∂ÖÂØ¨ÂûãÂ≠ó";
     Text[ turkish ] = "Extraexpanded";
     Text[ arabic ] = "Extraexpanded";
-    Text[ catalan ] = "Extraexpanded";
+    Text[ catalan ] = "Extra extesa";
 };
 
 String RID_TXT_FONT_ULTRAEXPANDED
@@ -4001,7 +4001,7 @@ String RID_TXT_FONT_ULTRAEXPANDED
     Text[ chinese_traditional ] = "Ë∂ÖÂØ¨ÂûãÂ≠ó";
     Text[ turkish ] = "Ultraexpanded";
     Text[ arabic ] = "Ultraexpanded";
-    Text[ catalan ] = "Ultraexpanded";
+    Text[ catalan ] = "Ultra extesa";
 };
 
 String RID_TXT_FONT_REGULAR
@@ -4029,6 +4029,7 @@ String RID_TXT_FONT_REGULAR
     Text[ arabic ] = "Regular";
     Text[ catalan ] = "Regular";
 };
+
 
 
 
