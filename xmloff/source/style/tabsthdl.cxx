@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsthdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2001-07-02 09:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,21 +95,24 @@ sal_Bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) con
         {
             if( aSeq1.getLength() == aSeq2.getLength() )
             {
-                const style::TabStop* pTabs1 = aSeq1.getConstArray();
-                const style::TabStop* pTabs2 = aSeq2.getConstArray();
-
-                int i=0;
                 bEqual = sal_True;
-
-                do
+                if( aSeq1.getLength() > 0 )
                 {
-                    bEqual = ( pTabs1[i].Position == pTabs2[i].Position       &&
-                               pTabs1[i].Alignment == pTabs2[i].Alignment     &&
-                               pTabs1[i].DecimalChar == pTabs2[i].DecimalChar &&
-                               pTabs1[i].FillChar == pTabs2[i].FillChar );
-                    i++;
+                    const style::TabStop* pTabs1 = aSeq1.getConstArray();
+                    const style::TabStop* pTabs2 = aSeq2.getConstArray();
 
-                } while( bEqual && i < aSeq1.getLength() );
+                    int i=0;
+
+                    do
+                    {
+                        bEqual = ( pTabs1[i].Position == pTabs2[i].Position       &&
+                                   pTabs1[i].Alignment == pTabs2[i].Alignment     &&
+                                   pTabs1[i].DecimalChar == pTabs2[i].DecimalChar &&
+                                   pTabs1[i].FillChar == pTabs2[i].FillChar );
+                        i++;
+
+                    } while( bEqual && i < aSeq1.getLength() );
+                }
             }
         }
     }
