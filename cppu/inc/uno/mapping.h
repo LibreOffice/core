@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #include <rtl/ustring.h>
 #endif
 
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Mapping uno_Mapping;
 typedef struct _uno_Environment uno_Environment;
@@ -119,11 +125,6 @@ typedef struct _uno_Mapping
 #pragma pack()
 #endif
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /** Gets an interface mapping from one environment to another.
     <br>
     @param ppMapping    [inout] mapping; existing mapping will be released
@@ -137,7 +138,8 @@ SAL_DLLEXPORT void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo,
-    rtl_uString * pAddPurpose );
+    rtl_uString * pAddPurpose )
+    SAL_THROW ();
 
 /** Callback function pointer declaration to get a mapping.
     <br>
@@ -157,14 +159,16 @@ typedef void (SAL_CALL * uno_getMappingFunc)(
     @param pCallback    callback function
 */
 SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
-    uno_getMappingFunc pCallback );
+    uno_getMappingFunc pCallback )
+    SAL_THROW ();
 
 /** Revokes a mapping callback registration.
     <br>
     @param pCallback    callback function
 */
 SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
-    uno_getMappingFunc pCallback );
+    uno_getMappingFunc pCallback )
+    SAL_THROW ();
 
 /** Function pointer declaration to free a mapping.
     <br>
@@ -185,7 +189,8 @@ typedef void (SAL_CALL * uno_freeMappingFunc)( uno_Mapping * pMapping );
 */
 SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
-    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose );
+    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    SAL_THROW ();
 
 /** Revokes a mapping.<br>
     A mapping registers itself on first acquire and revokes itself on last release.
@@ -193,7 +198,8 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     @param pMapping     mapping to be revoked
 */
 SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
-    uno_Mapping * pMapping );
+    uno_Mapping * pMapping )
+    SAL_THROW ();
 
 /** Gets an interface mapping from one language environment to another by
     corresponding environment type names.
@@ -209,7 +215,8 @@ SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping,
     rtl_uString * pFrom,
     rtl_uString * pTo,
-    rtl_uString * pAddPurpose );
+    rtl_uString * pAddPurpose )
+    SAL_THROW ();
 
 /* symbol exported by each language binding library */
 #define UNO_EXT_GETMAPPING "uno_ext_getMapping"

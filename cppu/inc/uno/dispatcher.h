@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatcher.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 #include <uno/any2.h>
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
@@ -120,7 +125,7 @@ typedef struct _uno_Interface
         @param pInterface uno interface
     */
     void (SAL_CALL * release)( uno_Interface * pInterface );
-    /** dispatch function<br>
+    /** dispatch function
     */
     uno_DispatchMethod pDispatcher;
 } uno_Interface;
@@ -129,6 +134,10 @@ typedef struct _uno_Interface
 #pragma pack(pop)
 #elif defined(SAL_OS2)
 #pragma pack()
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

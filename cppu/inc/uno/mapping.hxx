@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public:
         @param rAddPurpose  additional purpose
     */
     inline Mapping( const ::rtl::OUString & rFrom, const ::rtl::OUString & rTo,
-                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() );
+                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() ) throw ();
 
     /** Holds a mapping from the specified source to the specified destination.
         <br>
@@ -119,57 +119,57 @@ public:
         @param rAddPurpose  additional purpose
     */
     inline Mapping( uno_Environment * pFrom, uno_Environment * pTo,
-                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() );
+                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() ) throw ();
 
     /** Constructor.
         <br>
         @param pMapping another mapping
     */
-    inline Mapping( uno_Mapping * pMapping = 0 );
+    inline Mapping( uno_Mapping * pMapping = 0 ) throw ();
 
     /** Copy constructor.
         <br>
         @param rMapping another mapping
     */
-    inline Mapping( const Mapping & rMapping );
+    inline Mapping( const Mapping & rMapping ) throw ();
 
     /** Destructor.
         <br>
     */
-    inline ~Mapping();
+    inline ~Mapping() throw ();
 
     /** Sets a given mapping.
         <br>
         @param pMapping another mapping
         @return this mapping
     */
-    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping );
+    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) throw ();
     /** Sets a given mapping.
         <br>
         @param rMapping another mapping
         @return this mapping
     */
-    inline Mapping & SAL_CALL operator = ( const Mapping & rMapping )
+    inline Mapping & SAL_CALL operator = ( const Mapping & rMapping ) throw ()
         { return operator = ( rMapping._pMapping ); }
 
     /** Provides a pointer to the C mapping. The returned mapping is <b>not</b> acquired!
         <br>
         @return <b>un</b>acquired C mapping
     */
-    inline uno_Mapping * SAL_CALL get() const
+    inline uno_Mapping * SAL_CALL get() const throw ()
         { return _pMapping; }
 
     /** Tests if a mapping is set.
         <br>
         @return true if a mapping is set
     */
-    inline sal_Bool SAL_CALL is() const
+    inline sal_Bool SAL_CALL is() const throw ()
         { return (_pMapping != 0); }
 
     /** Releases a set mapping.
         <br>
     */
-    inline void SAL_CALL clear();
+    inline void SAL_CALL clear() throw ();
 
     /** Maps an interface from one environment to another.
         <br>
@@ -177,14 +177,14 @@ public:
         @param pTypeDescr       type description of interface
         @return                 mapped interface
     */
-    inline void * SAL_CALL mapInterface( void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const;
+    inline void * SAL_CALL mapInterface( void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const throw ();
     /** Maps an interface from one environment to another.
         <br>
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
         @return                 mapped interface
     */
-    inline void * SAL_CALL mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const
+    inline void * SAL_CALL mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const throw ()
         { return mapInterface( pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
 
     /** Maps an interface from one environment to another.
@@ -193,7 +193,8 @@ public:
         @param rType            type of interface
         @return                 mapped interface
     */
-    inline void * SAL_CALL mapInterface( void * pInterface, const ::com::sun::star::uno::Type & rType ) const;
+    inline void * SAL_CALL mapInterface(
+        void * pInterface, const ::com::sun::star::uno::Type & rType ) const throw ();
 
     /** Maps an interface from one environment to another.
         <br>
@@ -201,7 +202,7 @@ public:
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
     */
-    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const
+    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const throw ()
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, pTypeDescr ); }
     /** Maps an interface from one environment to another.
         <br>
@@ -209,7 +210,7 @@ public:
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
     */
-    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const
+    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const throw ()
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
 
     /** Maps an interface from one environment to another.
@@ -218,44 +219,44 @@ public:
         @param pInterface       source interface
         @param rType            type of interface to be mapped
      */
-    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const;
+    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const throw ();
 };
 //__________________________________________________________________________________________________
 inline Mapping::Mapping( const ::rtl::OUString & rFrom, const ::rtl::OUString & rTo,
-                         const ::rtl::OUString & rAddPurpose )
+                         const ::rtl::OUString & rAddPurpose ) throw ()
     : _pMapping( 0 )
 {
     uno_getMappingByName( &_pMapping, rFrom.pData, rTo.pData, rAddPurpose.pData );
 }
 //__________________________________________________________________________________________________
 inline Mapping::Mapping( uno_Environment * pFrom, uno_Environment * pTo,
-                         const ::rtl::OUString & rAddPurpose )
+                         const ::rtl::OUString & rAddPurpose ) throw ()
     : _pMapping( 0 )
 {
     uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
 }
 //__________________________________________________________________________________________________
-inline Mapping::Mapping( uno_Mapping * pMapping )
+inline Mapping::Mapping( uno_Mapping * pMapping ) throw ()
     : _pMapping( pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline Mapping::Mapping( const Mapping & rMapping )
+inline Mapping::Mapping( const Mapping & rMapping ) throw ()
     : _pMapping( rMapping._pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline Mapping::~Mapping()
+inline Mapping::~Mapping() throw ()
 {
     if (_pMapping)
         (*_pMapping->release)( _pMapping );
 }
 //__________________________________________________________________________________________________
-inline void Mapping::clear()
+inline void Mapping::clear() throw ()
 {
     if (_pMapping)
     {
@@ -264,7 +265,7 @@ inline void Mapping::clear()
     }
 }
 //__________________________________________________________________________________________________
-inline Mapping & Mapping::operator = ( uno_Mapping * pMapping )
+inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) throw ()
 {
     if (pMapping)
         (*pMapping->acquire)( pMapping );
@@ -275,7 +276,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping )
 }
 //__________________________________________________________________________________________________
 inline void Mapping::mapInterface( void ** ppOut, void * pInterface,
-                                   const ::com::sun::star::uno::Type & rType ) const
+                                   const ::com::sun::star::uno::Type & rType ) const throw ()
 {
     typelib_TypeDescription * pTD = 0;
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
@@ -287,7 +288,7 @@ inline void Mapping::mapInterface( void ** ppOut, void * pInterface,
 }
 //__________________________________________________________________________________________________
 inline void * Mapping::mapInterface( void * pInterface,
-                                     typelib_InterfaceTypeDescription * pTypeDescr ) const
+                                     typelib_InterfaceTypeDescription * pTypeDescr ) const throw ()
 {
     void * pOut = 0;
     (*_pMapping->mapInterface)( _pMapping, &pOut, pInterface, pTypeDescr );
@@ -295,7 +296,7 @@ inline void * Mapping::mapInterface( void * pInterface,
 }
 //__________________________________________________________________________________________________
 inline void * Mapping::mapInterface( void * pInterface,
-                                     const ::com::sun::star::uno::Type & rType ) const
+                                     const ::com::sun::star::uno::Type & rType ) const throw ()
 {
     void * pOut = 0;
     mapInterface( &pOut, pInterface, rType );
@@ -304,7 +305,7 @@ inline void * Mapping::mapInterface( void * pInterface,
 
 //--------------------------------------------------------------------------------------------------
 template< class C >
-inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
+inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) throw ()
 {
     Mapping aMapping(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
@@ -315,7 +316,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
 }
 //--------------------------------------------------------------------------------------------------
 template< class C >
-inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x )
+inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) throw ()
 {
     Mapping aMapping(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),

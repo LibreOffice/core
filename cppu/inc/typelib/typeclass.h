@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeclass.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,8 @@
 
 /** This type class enum is binary compatible with the IDL enum
     com.sun.star.uno.TypeClass.
-    <br>
 */
-enum typelib_TypeClass
+typedef enum _typelib_TypeClass
 {
     /** type class of void<br> */
     typelib_TypeClass_VOID = 0,
@@ -128,6 +127,6 @@ enum typelib_TypeClass
     /** type class of unknown<br> */
     typelib_TypeClass_UNKNOWN = 27,
     typelib_TypeClass_MAKE_FIXED_SIZE = SAL_MAX_ENUM
-};
+} typelib_TypeClass;
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 extern "C"
 {
 #endif
+
 #ifdef SAL_W32
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
@@ -99,6 +100,35 @@ typedef struct _uno_Any
 #pragma pack()
 #endif
 
+/** Assign an any with a given value.
+    Interfaces are acquired or released by the given callback functions.
+    <br>
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param release          function called each time an interface needs to be released; defaults (0) to uno
+*/
+SAL_DLLEXPORT void SAL_CALL uno_any_assign(
+    uno_Any * pDest, void * pSource,
+    typelib_TypeDescription * pTypeDescr,
+    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    SAL_THROW ();
+/** Assign an any with a given value.
+    Interfaces are acquired or released by the given callback functions.
+    <br>
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
+    @param release          function called each time an interface needs to be released; defaults (0) to uno
+*/
+SAL_DLLEXPORT void SAL_CALL uno_type_any_assign(
+    uno_Any * pDest, void * pSource,
+    typelib_TypeDescriptionReference * pType,
+    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    SAL_THROW ();
+
 /** Constructs an any with a given value.
     Interfaces are acquired by the given callback function.
     <br>
@@ -110,7 +140,8 @@ typedef struct _uno_Any
 SAL_DLLEXPORT void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire );
+    uno_AcquireFunc acquire )
+    SAL_THROW ();
 /** Constructs an any with a given value.
     Interfaces are acquired by the given callback function.
     <br>
@@ -122,7 +153,8 @@ SAL_DLLEXPORT void SAL_CALL uno_any_construct(
 SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_AcquireFunc acquire );
+    uno_AcquireFunc acquire )
+    SAL_THROW ();
 
 /** Constructs an any with a given value and converts/ maps interfaces.
     <br>
@@ -134,7 +166,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
 SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_Mapping * mapping );
+    uno_Mapping * mapping )
+    SAL_THROW ();
 /** Constructs an any with a given value and converts/ maps interfaces.
     <br>
     @param pDest            pointer memory of destination any
@@ -145,7 +178,8 @@ SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
 SAL_DLLEXPORT void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_Mapping * mapping );
+    uno_Mapping * mapping )
+    SAL_THROW ();
 
 /** Destructs an any.
     <br>
@@ -153,7 +187,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_constructAndConvert(
     @param release          function called each time an interface needs to be released. defaults (0) to uno
 */
 SAL_DLLEXPORT void SAL_CALL uno_any_destruct(
-    uno_Any * pValue, uno_ReleaseFunc release );
+    uno_Any * pValue, uno_ReleaseFunc release )
+    SAL_THROW ();
 
 #ifdef __cplusplus
 }

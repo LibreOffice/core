@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,43 +84,43 @@ namespace uno
 {
 
 //__________________________________________________________________________________________________
-inline Type::Type()
+inline Type::Type() throw ()
 {
     _pType = reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) )->getTypeLibType();
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 //__________________________________________________________________________________________________
-inline Type::Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName )
+inline Type::Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName ) throw ()
     : _pType( 0 )
 {
     ::typelib_typedescriptionreference_new( &_pType, (typelib_TypeClass)eTypeClass, rTypeName.pData );
 }
 //__________________________________________________________________________________________________
-inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName )
+inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName ) throw ()
     : _pType( 0 )
 {
     ::typelib_typedescriptionreference_newByAsciiName( &_pType, (typelib_TypeClass)eTypeClass, pTypeName );
 }
 //__________________________________________________________________________________________________
-inline Type::Type( typelib_TypeDescriptionReference * pType )
+inline Type::Type( typelib_TypeDescriptionReference * pType ) throw ()
     : _pType( pType )
 {
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 //__________________________________________________________________________________________________
-inline Type::Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire )
+inline Type::Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire ) throw ()
     : _pType( pType )
 {
 }
 //__________________________________________________________________________________________________
-inline Type::Type( const Type & rType )
+inline Type::Type( const Type & rType ) throw ()
     : _pType( rType._pType )
 {
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 //__________________________________________________________________________________________________
-inline Type & Type::operator = ( const Type & rType )
+inline Type & Type::operator = ( const Type & rType ) throw ()
 {
     ::typelib_typedescriptionreference_assign( &_pType, rType._pType );
     return *this;
@@ -131,105 +131,105 @@ inline Type & Type::operator = ( const Type & rType )
 }
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_TYPE ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) );
 }
-inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
 }
-inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
 }
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_CHAR ) );
 }
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType()
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType() throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_CHAR ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BYTE ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_STRING ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_SHORT ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_SHORT ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_LONG ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_LONG ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_HYPER ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_UNSIGNED_HYPER ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_FLOAT ) );
 }
 
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * )
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * ) throw ()
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_DOUBLE ) );

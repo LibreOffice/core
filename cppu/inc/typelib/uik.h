@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uik.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,15 @@
 #endif
 
 /** Binary typelib uik struct.
-    <br>
 */
-struct typelib_Uik
+typedef struct _typelib_Uik
 {
     sal_uInt32  m_Data1;
     sal_uInt16  m_Data2;
     sal_uInt16  m_Data3;
     sal_uInt32  m_Data4;
     sal_uInt32  m_Data5;
-};
+} typelib_Uik;
 
 #ifdef SAL_W32
 #   pragma pack(pop)

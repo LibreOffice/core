@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,18 @@ namespace uno
 extern "C"
 {
 //==================================================================================================
-inline void SAL_CALL cpp_acquire( void * pCppI )
+inline void SAL_CALL cpp_acquire( void * pCppI ) throw ()
 {
     reinterpret_cast< XInterface * >( pCppI )->acquire();
 }
 //==================================================================================================
-inline void SAL_CALL cpp_release( void * pCppI )
+inline void SAL_CALL cpp_release( void * pCppI ) throw ()
 {
     reinterpret_cast< XInterface * >( pCppI )->release();
 }
 //==================================================================================================
-inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
+inline void * SAL_CALL cpp_queryInterface(
+    void * pCppI, typelib_TypeDescriptionReference * pType ) throw ()
 {
     if (pCppI)
     {

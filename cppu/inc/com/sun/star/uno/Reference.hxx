@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,37 +85,37 @@ namespace uno
 {
 
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference()
+inline BaseReference::BaseReference() throw ()
     : _pInterface( 0 )
 {
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface )
+inline BaseReference::BaseReference( XInterface * pInterface ) throw ()
     : _pInterface( pInterface )
 {
     if (_pInterface)
         _pInterface->acquire();
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface, __UnoReference_NoAcquire )
+inline BaseReference::BaseReference( XInterface * pInterface, __UnoReference_NoAcquire ) throw ()
     : _pInterface( pInterface )
 {
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( const BaseReference & rRef )
+inline BaseReference::BaseReference( const BaseReference & rRef ) throw ()
     : _pInterface( rRef._pInterface )
 {
     if (_pInterface)
         _pInterface->acquire();
 }
 //__________________________________________________________________________________________________
-inline BaseReference::~BaseReference()
+inline BaseReference::~BaseReference() throw ()
 {
     if (_pInterface)
         _pInterface->release();
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const
+inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const throw ()
 {
     if (_pInterface == rRef._pInterface)
         return sal_True;
@@ -125,7 +125,7 @@ inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const
     return (x1.get() == x2.get());
 }
 //__________________________________________________________________________________________________
-inline void BaseReference::set( XInterface * pInterface )
+inline void BaseReference::set( XInterface * pInterface ) throw ()
 {
     if (pInterface != _pInterface)
     {
@@ -137,7 +137,7 @@ inline void BaseReference::set( XInterface * pInterface )
     }
 }
 //__________________________________________________________________________________________________
-inline void BaseReference::clear()
+inline void BaseReference::clear() throw ()
 {
     if (_pInterface)
     {
@@ -148,14 +148,16 @@ inline void BaseReference::clear()
 
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline Reference< interface_type > & Reference< interface_type >::operator = ( interface_type * pInterface )
+inline Reference< interface_type > & Reference< interface_type >::operator = (
+    interface_type * pInterface ) throw ()
 {
     BaseReference::set( pInterface );
     return *this;
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline Reference< interface_type > Reference< interface_type >::query( XInterface * pInterface )
+inline Reference< interface_type > Reference< interface_type >::query(
+    XInterface * pInterface ) throw ()
 {
     const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
     return Reference< interface_type >( reinterpret_cast< XInterface * >(

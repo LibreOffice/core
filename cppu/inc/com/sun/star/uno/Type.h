@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,20 +119,20 @@ class Type
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) throw()
+    inline static void * SAL_CALL operator new( size_t nSize ) throw ()
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) throw()
+    inline static void SAL_CALL operator delete( void * pMem ) throw ()
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) throw()
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) throw ()
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) throw()
+    inline static void SAL_CALL operator delete( void *, void * ) throw ()
         {}
 
     /** Default Constructor:
         Type is set to void.
         <br>
     */
-    inline Type();
+    inline Type() throw ();
 
     /** Constructor:
         Type is constructed by given name and type class.
@@ -140,7 +140,7 @@ public:
         @param eTypeClass type class of type
         @param rTypeName name of type
     */
-    inline Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName );
+    inline Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName ) throw ();
 
     /** Constructor:
         Type is constructed by given name and type class.
@@ -148,14 +148,14 @@ public:
         @param eTypeClass type class of type
         @param pTypeName name of type
     */
-    inline Type( TypeClass eTypeClass, const sal_Char * pTypeName );
+    inline Type( TypeClass eTypeClass, const sal_Char * pTypeName ) throw ();
 
     /** Constructor:
         Type is (copy) constructed by given C type description reference.
         <br>
         @param pType C type description reference
     */
-    inline Type( typelib_TypeDescriptionReference * pType );
+    inline Type( typelib_TypeDescriptionReference * pType ) throw ();
 
     /** Constructor:
         Type is (copy) constructed by given C type description reference without acquiring it.
@@ -163,20 +163,20 @@ public:
         @param pType C type description reference
         @param dummy UNO_TYPE_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire );
+    inline Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire ) throw ();
 
     /** Copy constructor:
         Type is copy constructed by given type.
         <br>
         @param rType another type
     */
-    inline Type( const Type & rType );
+    inline Type( const Type & rType ) throw ();
 
     /** Destructor:
         Releases acquired C type description reference.
         <br>
     */
-    inline ~Type()
+    inline ~Type() throw ()
         { ::typelib_typedescriptionreference_release( _pType ); }
 
     /** Assignment operator:
@@ -185,27 +185,27 @@ public:
         @param rType another type (right side)
         @return this type
     */
-    inline Type & SAL_CALL operator = ( const Type & rType );
+    inline Type & SAL_CALL operator = ( const Type & rType ) throw ();
 
     /** Gets the type class of set type.
         <br>
         @return type class of set type
     */
-    inline TypeClass SAL_CALL getTypeClass() const
+    inline TypeClass SAL_CALL getTypeClass() const throw ()
         { return (TypeClass)_pType->eTypeClass; }
 
     /** Gets the name of the set type.
         <br>
         @return name of the set type
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const
+    inline ::rtl::OUString SAL_CALL getTypeName() const throw ()
         { return ::rtl::OUString( _pType->pTypeName ); }
 
     /** Obtains a full type description of set type.
         <br>
         @param ppDescr [inout] type description
     */
-    inline void SAL_CALL getDescription( typelib_TypeDescription ** ppDescr ) const
+    inline void SAL_CALL getDescription( typelib_TypeDescription ** ppDescr ) const throw ()
         { ::typelib_typedescriptionreference_getDescription( ppDescr, _pType ); }
 
     /** Gets the C typelib type description reference pointer.
@@ -213,7 +213,7 @@ public:
         <br>
         @return <b>un</b>acquired type description reference
     */
-    inline typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const
+    inline typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const throw ()
         { return _pType; }
 
     /** Compares two types.
@@ -221,7 +221,7 @@ public:
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline sal_Bool SAL_CALL equals( const Type & rType ) const
+    inline sal_Bool SAL_CALL equals( const Type & rType ) const throw ()
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Equality operator:
         Compares two types.
@@ -229,7 +229,7 @@ public:
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const Type & rType ) const
+    inline sal_Bool SAL_CALL operator == ( const Type & rType ) const throw ()
         { return equals( rType ); }
     /** Unequality operator:
         Compares two types.
@@ -237,7 +237,7 @@ public:
         @param rType another type
         @return false if both types refer the same type, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const Type & rType ) const
+    inline sal_Bool SAL_CALL operator != ( const Type & rType ) const throw ()
         { return (! equals( rType )); }
 };
 
@@ -251,114 +251,114 @@ public:
     @param dummy typed pointer for function signature
     @return type of IDL type <b>type</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * ) throw ();
 
 /** Gets the meta type of IDL type <b>void</b>.
     @return type of IDL type <b>void</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuVoidType() throw ();
 /** Gets the meta type of IDL type <b>void</b>.
     <br>
     @return type of IDL type <b>void</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getVoidCppuType() throw ();
 
 /** Gets the meta type of IDL type <b>boolean</b>.
     <br>
     @return type of IDL type <b>boolean</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuBooleanType() throw ();
 /** Gets the meta type of IDL type <b>boolean</b>.
     <br>
     @return type of IDL type <b>boolean</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() throw ();
 /** Gets the meta type of IDL type <b>boolean</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>boolean</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) throw ();
 
 /** Gets the meta type of IDL type <b>char</b>.
     <br>
     @return type of IDL type <b>char</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getCharCppuType() throw ();
 /** Gets the meta type of IDL type <b>char</b>.
     <br>
     @return type of IDL type <b>char</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType();
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType() throw ();
 
 /** Gets the meta type of IDL type <b>byte</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>byte</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * ) throw ();
 
 /** Gets the meta type of IDL type <b>string</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>string</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * ) throw ();
 
 /** Gets the meta type of IDL type <b>short</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>short</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * ) throw ();
 
 /** Gets the meta type of IDL type <b>unsigned short</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>unsigned short</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * ) throw ();
 
 /** Gets the meta type of IDL type <b>long</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>long</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * ) throw ();
 
 /** Gets the meta type of IDL type <b>unsigned long</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>unsigned long</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * ) throw ();
 
 /** Gets the meta type of IDL type <b>hyper</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>hyper</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * ) throw ();
 
 /** Gets the meta type of IDL type <b>unsigned hyper</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>unsigned hyper</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * ) throw ();
 
 /** Gets the meta type of IDL type <b>float</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>float</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * ) throw ();
 
 /** Gets the meta type of IDL type <b>double</b>.
     <br>
     @param dummy typed pointer for function signature
     @return type of IDL type <b>double</b>
 */
-inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * );
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * ) throw ();
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-10 17:39:11 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,13 +115,13 @@ class Sequence
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) throw()
+    inline static void * SAL_CALL operator new( size_t nSize ) throw ()
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) throw()
+    inline static void SAL_CALL operator delete( void * pMem ) throw ()
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) throw()
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) throw ()
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) throw()
+    inline static void SAL_CALL operator delete( void *, void * ) throw ()
         {}
 
     // static pointer to typelib type
@@ -136,31 +136,31 @@ public:
         Creates an empty sequence.
         <br>
     */
-    inline Sequence< E >();
+    inline Sequence< E >() throw ();
     /** Copy constructor:
         Creates a copy of given sequence.
         <br>
         @param rSeq another sequence of same type
     */
-    inline Sequence< E >( const Sequence< E > & rSeq );
+    inline Sequence< E >( const Sequence< E > & rSeq ) throw ();
     /** Constructor:
         Creates a copy of given elements.
         <br>
         @param pElement an array of elements
         @param len length of array
     */
-    inline Sequence< E >( const E * pElements, sal_Int32 len );
+    inline Sequence< E >( const E * pElements, sal_Int32 len ) throw ();
     /** Constructor:
         Creates a default constructed sequence of given length.
         <br>
         @param len initial sequence length
     */
-    inline Sequence< E >( sal_Int32 len );
+    inline Sequence< E >( sal_Int32 len ) throw ();
     /** Destructor:
         Releases sequence handle. Last handle will destruct elements and free memory.
         <br>
     */
-    inline ~Sequence< E >();
+    inline ~Sequence< E >() throw ();
 
     /** Assignment operator:
         Acquires given sequence handle and releases previously set handle.
@@ -168,19 +168,19 @@ public:
         @param rSeq another sequence of same type
         @return this sequence
     */
-    inline Sequence< E > & SAL_CALL operator = ( const Sequence< E > & rSeq );
+    inline Sequence< E > & SAL_CALL operator = ( const Sequence< E > & rSeq ) throw ();
 
     /** Gets type of elements.
         <br>
         @return type of element
     */
-    inline const Type & getElementType() const
+    inline const Type & getElementType() const throw ()
         { return ::getCppuType( (const ElementType *)0 ); }
     /** Gets length of sequence.
         <br>
         @return length of sequence
     */
-    inline sal_Int32 SAL_CALL getLength() const
+    inline sal_Int32 SAL_CALL getLength() const throw ()
         { return _pSequence->nElements; }
 
     /** Gets a pointer to elements array for <b>reading</b>.
@@ -188,7 +188,7 @@ public:
         <br>
         @return pointer to elements array
     */
-    inline const E * SAL_CALL getConstArray() const
+    inline const E * SAL_CALL getConstArray() const throw ()
         { return reinterpret_cast< const E * >( _pSequence->elements ); }
     /** Gets a pointer to elements array for <b>reading and writing</b>.<br>
         In general if the sequence has a handle acquired by other sequences
@@ -198,7 +198,7 @@ public:
         <br>
         @return pointer to elements array
     */
-    inline E * SAL_CALL getArray();
+    inline E * SAL_CALL getArray() throw ();
 
     /** Non-const index operator:
         Obtains a reference to element indexed at given position.<br>
@@ -210,7 +210,7 @@ public:
         @param nIndex index
         @return non-const C++ reference to element
     */
-    inline E & SAL_CALL operator [] ( sal_Int32 nIndex );
+    inline E & SAL_CALL operator [] ( sal_Int32 nIndex ) throw ();
     /** Const index operator:
         Obtains a reference to element indexed at given position.<br>
         The implementation does <b>not</b> check for array bounds!<br>
@@ -218,7 +218,7 @@ public:
         @param nIndex index
         @return const C++ reference to element
     */
-    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const;
+    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const throw ();
 
     /** Equality operator:
         Compares two sequences.
@@ -226,14 +226,14 @@ public:
         @param rSeq another sequence of same type (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const;
+    inline sal_Bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const throw ();
     /** Unequality operator:
         Compares two sequences.
         <br>
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const
+    inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const throw ()
         { return (! operator == ( rSeq )); }
 
     /** Reallocates sequence to new length.
@@ -247,7 +247,7 @@ public:
         <br>
         @param nSize new size of sequence
     */
-    inline void SAL_CALL realloc( sal_Int32 nSize );
+    inline void SAL_CALL realloc( sal_Int32 nSize ) throw ();
 };
 
 /** Creates an UNO byte sequence from a SAL byte sequence.
@@ -256,7 +256,7 @@ public:
     @return an UNO byte sequence
 */
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
-    const ::rtl::ByteSequence & rByteSequence );
+    const ::rtl::ByteSequence & rByteSequence ) throw ();
 
 }
 }
@@ -270,7 +270,7 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 */
 template< class S >
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * );
+SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * ) throw ();
 
 /** Gets the meta type of IDL <b>sequence< char ></b>.
     This function has been introduced due to ambiguities with unsigned short.
@@ -279,6 +279,6 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * );
     @return type of IDL <b>sequence< char ></b>
 */
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCharSequenceCppuType();
+SAL_CALL getCharSequenceCppuType() throw ();
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence2.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 /** Assign a sequence.
     <br>
     @param ppDest       destinstaion sequence
@@ -98,7 +99,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 
 /** Constructs a new sequence with given elements.
     <br>
@@ -112,7 +114,8 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
-    uno_AcquireFunc acquire );
+    uno_AcquireFunc acquire )
+    SAL_THROW ();
 /** Constructs a new sequence with given elements.
     <br>
     @param ppSequence         <b>out</b> parameter sequence
@@ -125,7 +128,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
-    uno_AcquireFunc acquire );
+    uno_AcquireFunc acquire )
+    SAL_THROW ();
 
 /** Assures that the reference count of the given sequence is one.
     Otherwise a new copy of the sequence is created with a reference count of one.
@@ -139,7 +143,8 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 /** Assures that the reference count of the given sequence is one.
     Otherwise a new copy of the sequence is created with a reference count of one.
     <br>
@@ -152,7 +157,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 
 /** Reallocates length of a sequence. This truncates a sequence or enlarges it
     default constructing appended elements.
@@ -168,7 +174,8 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
     typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize,
     uno_AcquireFunc acquire,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 /** Reallocates length of a sequence. This truncates a sequence or enlarges it
     default constructing appended elements.
     <br>
@@ -183,7 +190,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
     typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize,
     uno_AcquireFunc acquire,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    SAL_THROW ();
 
 #ifdef __cplusplus
 }
