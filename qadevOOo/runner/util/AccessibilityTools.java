@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-21 08:27:34 $
+ *  last change:$Date: 2003-04-25 13:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
 
 public class AccessibilityTools {
 
@@ -217,7 +217,7 @@ public class AccessibilityTools {
         }
 
         boolean isShowing = ac.getAccessibleStateSet().contains(
-                drafts.com.sun.star.accessibility.AccessibleStateType.SHOWING);
+                com.sun.star.accessibility.AccessibleStateType.SHOWING);
         log.println(indent+indent+"StateType contains SHOWING: "+isShowing);
 
         int k = ac.getAccessibleChildCount();
