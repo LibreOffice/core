@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:37:45 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,8 @@ TabDialog DLG_SVXTEST_NUM_BULLET
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Nummerierung/Aufzählung" ;
+    Text [ de ] = "Nummerierung und Aufzählungszeichen" ;
+    Text [ en-US ] = "Bullets and Numbering";
     Moveable = TRUE ;
     TabControl 1
     {
@@ -306,8 +307,6 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text [ en-US ] = "~Remove" ;
         Text [ x-comment ] = " ";
     };
-    Text [ en-US ] = "Numbering/Bullets" ;
-    Text [ x-comment ] = " ";
 };
 
 
