@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:15:02 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:10:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,11 +116,13 @@ ANT_OPT=on
 .ENDIF
 
 .IF "$(JDK)"=="gcj"
-ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) \
- -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" \
- -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) \
- -Dcommon.jar=$(SOLARCOMMONBINDIR) -Dcommon.doc=$(SOLARCOMMONDOCDIR) \
- -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs -Dbuild.compiler=gcj
+JAVA_HOME=
+.EXPORT : JAVA_HOME
+ANT_FLAGS!:=-Dbuild.compiler=gcj -Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) \
+ -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) \
+ -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) \
+ -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
+ -Dcommon.doc=$(SOLARCOMMONDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
 .ELSE
 ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) \
  -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" \
