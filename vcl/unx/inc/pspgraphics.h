@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:54:57 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ public:
     // helper methods for sharing with X11SalGraphics
     static bool DoCreateFontSubset( const rtl::OUString& rToFile,
                                     psp::fontID aFont,
-                                    long* pGlyphIDs,
+                                    sal_Int32* pGlyphIDs,
                                     sal_uInt8* pEncoding,
                                     sal_Int32* pWidths,
                                     int nGlyphs,
@@ -119,8 +119,8 @@ public:
     static FontFamily   ToFontFamily (psp::family::type eFamily);
 
     // overload all pure virtual methods
-    virtual void            GetResolution( long& rDPIX, long& rDPIY );
-    virtual void            GetScreenFontResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
+    virtual void            GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     virtual USHORT          GetBitCount();
     virtual long            GetGraphicsWidth();
 
@@ -150,7 +150,7 @@ public:
     virtual ImplFontData*   AddTempDevFont( const String& rFileURL, const String& rFontName );
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
                                               ImplFontData* pFont,
-                                              long* pGlyphIDs,
+                                              sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
