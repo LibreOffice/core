@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:32:21 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 16:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,7 @@ String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 
     if ( aKeyName.Len() )
     {
-        FilterConfigCache aFilterConfigCache;
+        FilterConfigCache aFilterConfigCache( sal_True );
         nKeyNumber = aFilterConfigCache.GetImportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( aKeyName ) ) );
     }
     return nKeyNumber;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 09:19:32 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 16:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -79,7 +78,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#endif  // SVX_LIGHT
 
 #include <vector>
 
@@ -114,10 +112,11 @@ class FilterConfigCache
 
         typedef std::vector< FilterConfigCacheEntry > CacheVector;
 
+
         CacheVector         aImport;
         CacheVector         aExport;
+        sal_Bool            bUseConfig;
 
-#ifndef SVX_LIGHT
 
         sal_Bool            ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties );
@@ -125,11 +124,11 @@ class FilterConfigCache
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties,
                                                     const ::com::sun::star::uno::Reference<
                                                         ::com::sun::star::container::XNameAccess >& xTypeAccess );
-#else
+
         static const char*  InternalFilterListForSvxLight[];
-#endif
 
         void                ImplInit();
+        void                ImplInitSmart();
 
     public :
 
@@ -163,7 +162,7 @@ class FilterConfigCache
         sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );
         sal_Bool    IsExportDialog( sal_uInt16 nFormat );
 
-                    FilterConfigCache();
+                    FilterConfigCache( sal_Bool bUseConfig );
                     ~FilterConfigCache();
 
 };

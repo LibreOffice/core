@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 09:17:00 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 16:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,8 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <pathoptions.hxx>
-#endif
 #endif
 
 #if defined WIN || (defined OS2 && !defined ICC)
@@ -1058,7 +1056,8 @@ static ImpFilterLibCache aCache;
 // - GraphicFilter -
 // -----------------
 
-GraphicFilter::GraphicFilter()
+GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
+    bUseConfig  ( bConfig )
 {
     ImplInit();
 }
@@ -1080,13 +1079,11 @@ GraphicFilter::~GraphicFilter()
 void GraphicFilter::ImplInit()
 {
 
-#ifndef SVX_LIGHT
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
-#endif
 
     pErrorEx = new FilterErrorEx;
-    pConfig = new FilterConfigCache();
+    pConfig = new FilterConfigCache( bUseConfig );
     nPercent = 0;
     bAbort = sal_False;
 

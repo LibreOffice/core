@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 09:19:03 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 16:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
@@ -93,7 +92,6 @@ using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
 using namespace ::utl                           ;   // getProcessServiceFactory();
-#endif SVX_LIGHT
 using namespace ::rtl                           ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
@@ -143,8 +141,6 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
     }
     return sFilterName.Len() != 0;
 }
-
-#ifndef SVX_LIGHT
 
 sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
 {
@@ -305,8 +301,6 @@ void FilterConfigCache::ImplInit()
     }
 };
 
-#else   // SVX_LIGHT
-
 const char* FilterConfigCache::InternalFilterListForSvxLight[] =
 {
     "bmp","1","SVBMP",
@@ -353,7 +347,7 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     NULL
 };
 
-void FilterConfigCache::ImplInit()
+void FilterConfigCache::ImplInitSmart()
 {
     const char** pPtr;
     for ( pPtr = InternalFilterListForSvxLight; *pPtr; pPtr++ )
@@ -379,13 +373,15 @@ void FilterConfigCache::ImplInit()
     }
 }
 
-#endif
-
 // ------------------------------------------------------------------------
 
-FilterConfigCache::FilterConfigCache()
+FilterConfigCache::FilterConfigCache( sal_Bool bConfig ) :
+    bUseConfig ( bConfig )
 {
-    ImplInit();
+    if ( bUseConfig )
+        ImplInit();
+    else
+        ImplInitSmart();
 }
 
 FilterConfigCache::~FilterConfigCache()
