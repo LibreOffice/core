@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:20:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ czech ] = "Close";
             Text[ hebrew ] = "‮סגירה‬";
             Text[ hindi ] = "बन्द करो";
+            Text[ slovak ] = "Zavrieť";
         };
     };
 };
@@ -376,6 +377,7 @@ String RID_STR_LOADING_DATASOURCE
     Text[ czech ] = "Načíst data";
     Text[ hebrew ] = "Daten laden";
     Text[ hindi ] = "ड़ॉटा लोड करो";
+    Text[ slovak ] = "Načítať dáta";
 };
 
 QueryBox QUERY_BRW_SAVEMODIFIED
@@ -412,6 +414,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ czech ] = "Aktuální záznam byl změněn.\nChcete uložit změny?";
     Message[ hebrew ] = "Der aktuelle Datensatz wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "वर्तमान अभिलेख को बदला है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Aktívny záznam bol zmenený.\nChcete uložiť zmeny?";
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
@@ -445,6 +448,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ czech ] = "Chcete vymazat vybraná data?";
     Message[ hebrew ] = "Sollen die selektierten Daten gelöscht werden?";
     Message[ hindi ] = "आप चुने हुए ड़ॉटा को मिटाना चाहते है?";
+    Message[ slovak ] = "Chcete zmazať vybrané dáta?";
 };
 
 String RID_STR_DATABROWSER_FILTERED
@@ -478,6 +482,7 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ czech ] = "(filtrováno)";
     Text[ hebrew ] = "(gefiltert)";
     Text[ hindi ] = "(फ़िल्टर की हुयी)";
+    Text[ slovak ] = "(filtrované)";
 };
 
 String SBA_BROWSER_SETTING_ORDER
@@ -508,6 +513,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ czech ] = "Chyba při nastavení kritérií pro řazení";
     Text[ hebrew ] = "Fehler beim Setzen der Sortier-Kriterien";
     Text[ hindi ] = "सोर्ट् क्रैटीरिया को सेट्ट करने के समय गलती";
+    Text[ slovak ] = "Chybné nastavenie kritérií­ pre zoradenie";
 };
 String SBA_BROWSER_SETTING_FILTER
 {
@@ -537,6 +543,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ czech ] = "Chyba při nastavení kritérií filtru";
     Text[ hebrew ] = "Fehler beim Setzen der Filter-Kriterien";
     Text[ hindi ] = "फिल्टर क्रैटीरिया को सेट्ट करने के समय गलती";
+    Text[ slovak ] = "Chybné nastavenie kritérií­ filtra";
 };
 
 String RID_STR_CONNECTION_LOST
@@ -567,6 +574,7 @@ String RID_STR_CONNECTION_LOST
     Text[ czech ] = "Spojení ztraceno";
     Text[ hebrew ] = "Vebindung verloren";
     Text[ hindi ] = "कनेक्शन नष्ट हुआ";
+    Text[ slovak ] = "Spojenie stratené";
 };
 
 Image QUERYFOLDER_TREE_ICON
@@ -645,6 +653,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ czech ] = "Dotazy";
     Text[ hebrew ] = "‮שאילתות‬";
     Text[ hindi ] = "जानकारी";
+    Text[ slovak ] = "Dotazy";
 };
 
 String RID_STR_TABLES_CONTAINER
@@ -675,6 +684,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ czech ] = "Tabulky";
     Text[ hebrew ] = "‮טבלאות‬";
     Text[ hindi ] = "सारणियाँ";
+    Text[ slovak ] = "Tabuľky";
 };
 
 String RID_STR_BOOKMARKS_CONTAINER
@@ -705,6 +715,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ czech ] = "Odkazy";
     Text[ hebrew ] = "‮קישורים‬";
     Text[ hindi ] = "लिंक्स";
+    Text[ slovak ] = "Odkazy";
 };
 
 #define MID_ADMINISTRATE    \
@@ -736,7 +747,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ thai ] = "จัดการแหล่ง~ข้อมูล...";   \
     Text[ czech ] = "Správa zdrojů dat...";   \
     Text[ hebrew ] = "~Datenquellen verwalten ..."; \
-    Text[ hindi ] = "~ड़ॉटा मूलों का प्रशासन...";
+    Text[ hindi ] = "~ड़ॉटा मूलों का प्रशासन..."; \
+    Text[ slovak ] = "Administrovať zdroje ~dát...";
 
 #define MID_DIRECT_SQL  \
     Identifier = ID_DIRECT_SQL ;    \
@@ -766,7 +778,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ thai ] = "SQL...";    \
     Text[ czech ] = "SQL...";   \
     Text[ hebrew ] = "SQL...";  \
-    Text[ hindi ] = "SQL...";
+    Text[ hindi ] = "SQL...";   \
+    Text[ slovak ] = "SQL...";
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -797,7 +810,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ thai ] = "ไม่เ~ชื่อมต่อ"; \
     Text[ czech ] = "Odpojit";  \
     Text[ hebrew ] = "Verbindung s~chließen";  \
-    Text[ hindi ] = "डिस~कनेक्ट";
+    Text[ hindi ] = "डिस~कनेक्ट"; \
+    Text[ slovak ] = "O~dpojiť";
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
@@ -828,7 +842,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ thai ] = "~ฟื้นฟูการเชื่อมต่อ";   \
     Text[ czech ] = "Obnovit spojení"; \
     Text[ hebrew ] = "Verbindung e~rneuern";    \
-    Text[ hindi ] = "कनेक्शन ~नवीकरण";
+    Text[ hindi ] = "कनेक्शन ~नवीकरण";    \
+    Text[ slovak ] = "Obnoviť ~spojenie";
 
 #define MITEMS_DEFAULT  \
     MenuItem    \
@@ -988,6 +1003,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ czech ] = "Návrh relací";
                 Text[ hebrew ] = "Relatio~nenentwurf";
                 Text[ hindi ] = "~संबन्ध डिसैन";
+                Text[ slovak ] = "Návrh r~elácií";
             };
         MenuItem
         {
@@ -1055,6 +1071,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ czech ] = "Návrh relací";
                 Text[ hebrew ] = "Relatio~nenentwurf";
                 Text[ hindi ] = "~संबन्ध डिसैन";
+                Text[ slovak ] = "Návrh r~elácií";
             };
         MenuItem
         {
@@ -1110,6 +1127,7 @@ String STR_TITLE_CONFIRM_DELETION
         Text[ czech ] = "Potvrdit smazání";
         Text[ hebrew ] = "Löschen bestätigen";
         Text[ hindi ] = "हटाना दृढ़ करो";
+        Text[ slovak ] = "Potvrdiť zmazanie";
     };
 
 String STR_QUERY_DELETE_QUERY
@@ -1140,6 +1158,7 @@ String STR_QUERY_DELETE_QUERY
         Text[ czech ] = "Chcete smazat dotaz '$name$'?";
         Text[ hebrew ] = "Soll die Abfrage '$name$' gelöscht werden?";
         Text[ hindi ] = "आप '$name$' जानकारी को मिटाना चाहते है?";
+        Text[ slovak ] = "Chcete zmazať dotaz '$name$'?";
     };
 
 String STR_QUERY_DELETE_TABLE
@@ -1170,6 +1189,7 @@ String STR_QUERY_DELETE_TABLE
         Text[ czech ] = "Chcete smazat tabulku '%1'?";
         Text[ hebrew ] = "Soll die Tabelle '%1' gelöscht werden?";
         Text[ hindi ] = "आप सारणी '%1' को मिटाना चाहते है?";
+        Text[ slovak ] = "Chcete zmazať tabuľku '%1'?";
     };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
@@ -1201,6 +1221,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
         Message[ czech ] = "Tento dotaz již existuje. Chcete jej smazat?";
         Message[ hebrew ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?";
         Message[ hindi ] = "जानकारी पहिले से ही अस्तित्व में है । आप इसको को मिटाना चाहते है ?";
+        Message[ slovak ] = "Dotaz už existuje. Chcete ho zmazať?";
     };
 
 QueryBox QUERY_CONNECTION_LOST
@@ -1232,6 +1253,7 @@ QueryBox QUERY_CONNECTION_LOST
         Message[ czech ] = "Připojení k databázi bylo ztraceno. Chcete se znovu připojit?";
         Message[ hebrew ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?";
         Message[ hindi ] = "लेखासंचय से कनेक्शन नष्ट हो गया । आप पुनः कनेक्ट करना चाहते है ।";
+        Message[ slovak ] = "Spojenie s databázou bolo stratené. Chcete ho obnoviť?";
     };
 
 String STR_OPENTABLES_WARNINGS
@@ -1262,6 +1284,7 @@ String STR_OPENTABLES_WARNINGS
         Text[ czech ] = "Obdržena varování";
         Text[ hebrew ] = "Warnungen aufgetreten.";
         Text[ hindi ] = "चेतावनी मिला";
+        Text[ slovak ] = "Objavili sa upozornenia";
     };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
@@ -1292,6 +1315,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
         Text[ czech ] = "Databázové připojení nahlásilo varování během načítání tabulek.";
         Text[ hebrew ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
         Text[ hindi ] = "सारणियों को प्राप्त करने के समय, लेखसंचय कनेक्शन से चेतावनी मिला । ";
+        Text[ slovak ] = "Počas získavania tabuliek, sa vyskytli varovania pri spojení s databázou.";
     };
 
 String STR_CONNECTING_DATASOURCE
@@ -1322,6 +1346,7 @@ String STR_CONNECTING_DATASOURCE
         Text[ czech ] = "Připojení k \"$name$\" ...";
         Text[ hebrew ] = "Verbindungsaufbau zu \"$name$\" ...";
         Text[ hindi ] = "$name$ केलिए कनेक्ट कर रहा है ...";
+        Text[ slovak ] = "Pripájam k \"$name$\" ...";
     };
 
 String STR_LOADING_QUERY
@@ -1352,6 +1377,7 @@ String STR_LOADING_QUERY
         Text[ czech ] = "Načítání dotazu $name$ ...";
         Text[ hebrew ] = "lade Abfrage $name$ ...";
         Text[ hindi ] = "$name$ जानकारी को लोड़ कर रहा है ...";
+        Text[ slovak ] = "Načítavam dotaz $name$ ...";
     };
 
 String STR_LOADING_TABLE
@@ -1382,6 +1408,7 @@ String STR_LOADING_TABLE
         Text[ czech ] = "Načítání tabulky $name$ ...";
         Text[ hebrew ] = "lade Tabelle $name$ ...";
         Text[ hindi ] = "$name$ सारणी को लोड़ कर रहा है  ...";
+        Text[ slovak ] = "Načítavam tabuľku $name$ ...";
     };
 
 String STR_DSBROWSER_TITLE
@@ -1412,6 +1439,7 @@ String STR_DSBROWSER_TITLE
         Text[ czech ] = "Pohled na datové zdroje";
         Text[ hebrew ] = "Datenquellen Ansicht";
         Text[ hindi ] = "ड़ॉटा मूल दृश्य";
+        Text[ slovak ] = "Pohľad na zdroje dát";
     };
 
 String STR_NO_TABLE_FORMAT_INSIDE
@@ -1442,6 +1470,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ czech ] = "Nebyl nalezen žádný formát tabulky.";
         Text[ hebrew ] = "Es konnte kein Tabellenformat gefunden werden.";
         Text[ hindi ] = "कोई सारणी रचना प्राप्त नहीं कर सकते है ।";
+        Text[ slovak ] = "Nebol nájdený formát tabuľky";
     };
 
 String STR_COULDNOTCONNECT_DATASOURCE
@@ -1472,6 +1501,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ czech ] = "Nepodařilo se připojení k datovému zdroji \"$name$\".";
         Text[ hebrew ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
         Text[ hindi ] = "$name$ ड़ॉटा मूल को कनेक्शन् स्थापित नहीं कर सकते है ।";
+        Text[ slovak ] = "Spojenie so zdrojom dát \"$name$\" nemohlo byť vytvorené.";
     };
 
 Menu RID_MENU_REFRESH_DATA
@@ -1513,9 +1543,12 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ czech ] = "Obnovit";
                 Text[ hebrew ] = "Neu aufbauen";
                 Text[ hindi ] = "पुनः निर्माण";
+                Text[ slovak ] = "Obnoviť";
             };
     };
 };
+
+
 
 
 
