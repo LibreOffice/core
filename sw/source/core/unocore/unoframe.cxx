@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:22:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,13 +1935,13 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         throw RuntimeException();
     uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
     }
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
@@ -2123,13 +2123,13 @@ void SwXFrame::attach(const uno::Reference< XTextRange > & xTextRange)
     {
         Reference<XUnoTunnel> xRangeTunnel( xTextRange, UNO_QUERY);
         SwXTextRange* pRange = 0;
-        SwXTextCursor* pCursor = 0;
+        OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
             pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                     SwXTextRange::getUnoTunnelId());
-            pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
