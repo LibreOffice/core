@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:30 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 09:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
+#endif
 #pragma hdrstop
 
 #include "basedlgs.hxx"
@@ -109,17 +112,12 @@ SfxModalDefParentHelper::~SfxModalDefParentHelper()
 void SetDialogData_Impl(SfxViewFrame *pFrame, Window *pDlg,
                         sal_uInt16 nId, const String &rExtraData = aEmptyString)
 {
-    // Konfiguration in Ini-Manager abspeichern
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr = SFX_APP()->GetAppIniManager();
-    String aDlgData( pIniMgr->GetString( pDlg->GetPosPixel(), Size() ) );
-    if( rExtraData.Len() )
-    {
-        aDlgData += pIniMgr->GetToken();
-        aDlgData += rExtraData;
-    }
-    pIniMgr->Set( aDlgData, SFX_KEY_DIALOG, nId );
-#endif
+    // save settings
+    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
+    Point aPos = pDlg->GetPosPixel();
+    aDlgOpt.SetPosition( aPos.X(), aPos.Y() );
+    if ( rExtraData.Len() )
+        aDlgOpt.SetUserData( rExtraData );
 }
 
 // -----------------------------------------------------------------------
@@ -134,29 +132,16 @@ String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
 
 {
     String aRetString;
-    // Konfiguration vorhanden?
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr = SFX_APP()->GetAppIniManager();
-    String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nId ) );
-    if ( aDlgData.Len() > 0 )
+    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
+    if ( aDlgOpt.Exists() )
     {
-        // Konfiguration verwenden
+        // load settings
         Point aPos;
-        Size aDummySize;
-        if ( pIniMgr->GetPosSize(
-                aDlgData.GetToken(
-                    0, pIniMgr->GetToken()), aPos, aDummySize ) )
-        {
-            pDlg->SetPosPixel(aPos);
-            sal_uInt16 nPos = aDlgData.Search( pIniMgr->GetToken() );
-            if( nPos != STRING_NOTFOUND )
-            {
-                aRetString = aDlgData.Copy( nPos + 1 );
-                aDlgData.Erase(nPos+1);
-            }
-        }
+        aDlgOpt.GetPosition( aPos.X(), aPos.Y() );
+        pDlg->SetPosPixel(aPos);
+        aRetString = aDlgOpt.GetUserData();
     }
-#endif
+
     return aRetString;
 }
 
@@ -752,16 +737,10 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
     if ( bModified )
     {
         // auch noch schnell User-Daten im IniManager abspeichern
-#if SUPD<613//MUSTINI
-        SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-#endif
         pPage->FillUserData();
         String sData( pPage->GetUserData() );
-
-#if SUPD<613//MUSTINI
-        if ( sData.Len() )
-            pIniMgr->Set( sData, SFX_KEY_PAGE, GetUniqId() );
-#endif
+        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        aPageOpt.SetUserData( sData );
         EndDialog( RET_OK );
     }
     else
@@ -951,12 +930,8 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( pPage )
     {
         // erstmal die User-Daten besorgen, dann erst Reset()
-#if SUPD<613//MUSTINI
-        SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-        pPage->SetUserData( pIniMgr->Get( SFX_KEY_PAGE, GetUniqId() ) );
-#else
-        pPage->SetUserData( String() );
-#endif
+        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
+        pPage->SetUserData( aPageOpt.GetUserData() );
         pPage->Reset( *pOptions );
         pPage->Show();
 
@@ -964,10 +939,8 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         pPage->SetPosPixel( Point() );
         Size aOutSz( pPage->GetSizePixel() );
         Size aBtnSiz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-        Point aPnt( aOutSz.Width(),
-                    LogicToPixel( Point( 0, 6 ), MAP_APPFONT ).Y() );
-        aOutSz.Width() += aBtnSiz.Width() +
-                          LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
+        Point aPnt( aOutSz.Width(), LogicToPixel( Point( 0, 6 ), MAP_APPFONT ).Y() );
+        aOutSz.Width() += aBtnSiz.Width() + LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
         SetOutputSizePixel( aOutSz );
         pOKBtn->SetPosSizePixel( aPnt, aBtnSiz );
         pOKBtn->Show();

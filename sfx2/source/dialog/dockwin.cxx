@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 09:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,8 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
-#endif
-#ifdef VCL
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
-#endif
 #endif
 #pragma hdrstop
 
@@ -85,6 +78,9 @@
 
 #define MAX_TOGGLEAREA_WIDTH        100  // max. 100 Pixel
 #define MAX_TOGGLEAREA_HEIGHT       100  // max. 100 Pixel
+
+// implemented in 'sfx2/source/appl/childwin.cxx'
+extern sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize );
 
 class SfxDockingWindow_Impl
 {
@@ -726,14 +722,11 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 if ( nPos != STRING_NOTFOUND )
                 {
                     aStr.Erase(0, nPos+1);
-#if SUPD<613//MUSTINI
-                    SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
-                    if ( pAppIniMgr->GetPosSize( aStr, aPos, pImp->aSplitSize ) )
+                    if ( GetPosSizeFromString( aStr, aPos, pImp->aSplitSize ) )
                     {
                         pImp->nLine = pImp->nDockLine = (USHORT) aPos.X();
                         pImp->nPos  = pImp->nDockPos  = (USHORT) aPos.Y();
                     }
-#endif
                 }
             }
         }
@@ -758,15 +751,11 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         if ( !aPos.X() && !aPos.Y() )
         {
             // Wenn nichts gesetzt, FloatingWindow zentrieren
-#ifndef VCL
-            aPos = GetParent()->GetPosPixel();
-#endif
             aPos.X() += (aSize.Width() - aFloatSize.Width()) / 2;
             aPos.Y() += (aSize.Height() - aFloatSize.Height()) / 2;
         }
     }
 
-#ifdef VCL
     Point aPoint;
     Rectangle aRect = GetDesktopRectPixel();
     Size aSize( GetFloatingSize() );
@@ -783,8 +772,6 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
     if ( aPos.X() < 0 ) aPos.X() = 0;
     if ( aPos.Y() < 0 ) aPos.Y() = 0;
-
-#endif
 
     SetFloatingPos( aPos );
 
@@ -890,12 +877,15 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aExtraString += String::CreateFromInt32 ((USHORT) pImp->GetLastAlignment());
     if ( pImp->bSplitable )
     {
-        rInfo.aExtraString += ',';
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIniMgr = SFX_INIMANAGER();
         Point aPos(pImp->nLine, pImp->nPos);
-        rInfo.aExtraString += pIniMgr->GetString( aPos, pImp->aSplitSize );
-#endif
+        rInfo.aExtraString += ',';
+        rInfo.aExtraString += String::CreateFromInt32( aPos.X() );
+        rInfo.aExtraString += '/';
+        rInfo.aExtraString += String::CreateFromInt32( aPos.Y() );
+        rInfo.aExtraString += '/';
+        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Width() );
+        rInfo.aExtraString += '/';
+        rInfo.aExtraString += String::CreateFromInt32( pImp->aSplitSize.Height() );
     }
 
     rInfo.aExtraString += ')';
