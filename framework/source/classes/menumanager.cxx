@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2001-11-02 07:55:10 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
             if ( !xMenuItemDispatch.is() )
             {
                 // attention: this code assume that "_blank" can only be consumed by desktop service
-                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
             }
 
             if ( xMenuItemDispatch.is() )

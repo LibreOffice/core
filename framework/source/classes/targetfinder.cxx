@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-08-02 13:32:40 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,22 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
                                     break;
         }
     }
+    else
+    if( aInfo.sTargetName == SPECIALTARGET_DEFAULT )
+    {
+        switch( aInfo.eFrameType )
+        {
+            case E_DESKTOP      :   eResult = E_DEFAULT;
+                                    break;
+            case E_PLUGINFRAME  :
+            case E_TASK         :
+            case E_FRAME        :   if( aInfo.bParentExist == sal_True )
+                                    {
+                                        eResult = E_FORWARD_UP;
+                                    }
+                                    break;
+        }
+    }
     //*************************************************************************************************************
     // IV)  handle "", "_self"
     //      These case is clear. It's queals to "_self". Search flags could be ignored - other special target names
@@ -461,6 +477,7 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
     // In these cases we dont can allow (or must!) creation of new frames/tasks...
     if  (
             (   eResult ==  E_CREATETASK    )   ||
+            (   eResult ==  E_DEFAULT       )   ||
             (   eResult ==  E_SELF          )   ||
             (   eResult ==  E_PARENT        )   ||
             (   eResult ==  E_BEAMER        )   ||

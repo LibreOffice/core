@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:38:11 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,12 +288,9 @@ void DropTargetListener::impl_OpenFile( const String& rFilePath )
         css::util::URL aURL;
         aURL.Complete = aFileURL;
         css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
-        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_BLANK, 0 );
-
+        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_DEFAULT, 0 );
         if ( xDispatcher.is() )
-        {
             xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
-        }
     }
 }
 

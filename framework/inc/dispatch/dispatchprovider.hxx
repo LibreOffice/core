@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:42:14 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ namespace framework{
 
 enum EDispatchHelper
 {
+    E_DEFAULTDISPATCHER     ,
     E_MENUDISPATCHER        ,
     E_MAILTODISPATCHER      ,
     E_HELPAGENTDISPATCHER   ,
@@ -253,6 +254,7 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
         css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
         css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
+        css::uno::Reference< css::frame::XDispatch >                m_xDefaultDispatcher        ;
 
 };      //  class DispatchProvider
 

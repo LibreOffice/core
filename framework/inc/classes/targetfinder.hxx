@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:38:24 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ enum ETargetClass
     //-------------------------------------------------------------------------------------------------------------
 
     E_UNKNOWN       ,   /// occure if you call us without valid flag combinations!
+    E_DEFAULT       ,   /// default handling for opening new documents
     E_CREATETASK    ,   /// create new task (supported by desktop only!)
     E_SELF          ,   /// you are the target himself
     E_PARENT        ,   /// your parent is the target

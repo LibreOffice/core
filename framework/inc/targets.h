@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targets.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 13:41:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ namespace framework{
 #define SPECIALTARGET_PARENT                                    DECLARE_ASCII("_parent"     )   // The direct parent frame is searched.
 #define SPECIALTARGET_TOP                                       DECLARE_ASCII("_top"        )   // Search at ouer parents for the first task (if any exist) or a frame without a parent.
 #define SPECIALTARGET_BLANK                                     DECLARE_ASCII("_blank"      )   // Create a new task.
+#define SPECIALTARGET_DEFAULT                                   DECLARE_ASCII("_default"    )   // Create a new task or recycle an existing one
 #define SPECIALTARGET_BEAMER                                    DECLARE_ASCII("_beamer"     )   // special frame in hierarchy
 #define SPECIALTARGET_MENUBAR                                   DECLARE_ASCII("_menubar"    )   // special target for menubars
 #define SPECIALTARGET_HELPAGENT                                 DECLARE_ASCII("_helpagent"  )   // special target for the help agent window

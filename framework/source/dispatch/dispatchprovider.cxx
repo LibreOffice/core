@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 11:16:19 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,16 +321,34 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         // He could do nothing then ... but it doesnt perform, if we try it!
                                         if( implts_isLoadableContent( aURL ) == sal_True )
                                         {
-                        css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
-                        css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
-                        css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
-                        if ( xPlug.is() )
-                        {
-                        css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
-                        xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
-                        }
-                        else
+                                            css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
+                                            css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
+                                            css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
+                                            if ( xPlug.is() )
+                                            {
+                                                css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
+                                                xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            }
+                                            else
                                                 xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
+                                        }
+                                    }
+                                    break;
+            case E_DEFAULT    :  {
+                                        // Check ucb support before you create dispatch helper.
+                                        // He could do nothing then ... but it doesnt perform, if we try it!
+                                        if( implts_isLoadableContent( aURL ) == sal_True )
+                                        {
+                                            css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
+                                            css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
+                                            css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
+                                            if ( xPlug.is() )
+                                            {
+                                                css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
+                                                xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            }
+                                            else
+                                                xReturn = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER );
                                         }
                                     }
                                     break;
@@ -558,6 +576,7 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         m_xMailToDispatcher     = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xHelpAgentDispatcher  = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
+        m_xDefaultDispatcher    = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
 
@@ -734,10 +753,21 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 if( m_xBlankDispatcher.is() == sal_False )
                                                 {
                                                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
-                                                    BlankDispatcher* pDispatcher = new BlankDispatcher( m_xFactory, xDesktop );
+                                                    BlankDispatcher* pDispatcher = new BlankDispatcher( m_xFactory, xDesktop, sal_False );
                                                     m_xBlankDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                                                 }
                                                 xDispatchHelper = m_xBlankDispatcher;
+                                            }
+                                            break;
+            //-----------------------------------------------------------------------------------------------------
+            case E_DEFAULTDISPATCHER      :   {
+                                                if( m_xDefaultDispatcher.is() == sal_False )
+                                                {
+                                                    css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
+                                                    BlankDispatcher* pDispatcher = new BlankDispatcher( m_xFactory, xDesktop, sal_True );
+                                                    m_xDefaultDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                                                }
+                                                xDispatchHelper = m_xDefaultDispatcher;
                                             }
                                             break;
             //-----------------------------------------------------------------------------------------------------

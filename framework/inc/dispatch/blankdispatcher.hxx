@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blankdispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
     public:
         //  ctor
                               BlankDispatcher     ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
-                                                    const css::uno::Reference< css::frame::XFrame >&              xDesktop    );
+                                                    const css::uno::Reference< css::frame::XFrame >&              xDesktop,
+                                                    sal_Bool bIsDefaultDispatcher    );
         //  XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                         aURL        ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&        lArguments  ) throw( css::uno::RuntimeException );
@@ -153,7 +154,7 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
-
+        sal_Bool        m_bIsDefaultDispatcher;
 };      //  class BlankDispatcher
 
 }       //  namespace framework
