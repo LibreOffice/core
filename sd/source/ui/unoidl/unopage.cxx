@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 14:50:35 $
+ *  last change: $Author: sj $ $Date: 2000-10-25 09:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
                         ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, NULL, sal_False );
-                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                        uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
                         delete pMetaFile;
                     }
