@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:06:50 $
+ *  last change: $Author: gt $ $Date: 2001-07-13 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,6 @@ class ExcCondForm : protected ExcRoot//, List
         UINT16                  nCondCnt;
         UINT16                  nCol;
         UINT16                  nRow;
-//      UINT16                  nRow2;
-//      UINT16                  nCol2;
         ScRangeList*            pRangeList;
 
         ScConditionalFormat*    pScCondForm;
@@ -209,7 +207,6 @@ class ImportExcel8 : public ImportExcel
 
         BOOL                    bFirstScl;          // only one Scl-Record has to be read per chart!
 
-        void                    Formula( void );                // 0x06
         void                    RecString( void );              // 0x07
         void                    Calccount( void );              // 0x0C
         void                    Delta( void );                  // 0x10
@@ -333,10 +330,11 @@ class ImportExcel8 : public ImportExcel
         void                    ChartGelframe( void );          // 0x1066
         void                    ChartBoppcustom( void );        // 0x1067
 
-        void                    Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
-                                    UINT16 nXF, UINT16 nFormLen, double &rCurVal,
-                                    BYTE nFlag, BOOL bShrFmla );
-                                                        //      -> excform8.cxx
+        // Subrecords fuer OBJ (nach Obj( void )
+        ExcEscherObj*           ObjFtCmo( void );               // 0x15
+        void                    ObjFtPioGrbit( ExcEscherObj* pObj );    // 0x08
+        void                    ObjFtPictFmla( ExcEscherObj* pObj, UINT16 nLen );   // 0x09
+
         virtual void            GetHFString( String& rStr );
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
@@ -487,10 +485,11 @@ public:
     UINT16                      GetScTabNum( UINT16 nExcTabNum ) const;
     UINT16                      GetScTabNum( const String& rTabName ) const;
 
-    inline void                 SetCurrExcTab( UINT16 nExcTabNum )
-                                    { nCurrExcTab = nExcTabNum; }
+    inline void                 SetCurrExcTab( UINT16 nExcTabNum )  { nCurrExcTab = nExcTabNum; }
     void                        AppendCrn( XclImpCrnBase*& rpCrn );
     void                        CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast ) const;
+
+    inline BOOL                 IsSelf( void ) const    { return bSelf; }
 };
 
 class XclImpSupbookBuffer : private List
@@ -508,8 +507,7 @@ public:
     void                        CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast );
 
                                 List::Count;
-    inline const XclImpSupbook* Get( ULONG nIndex ) const
-                                    { return (XclImpSupbook*) List::GetObject( nIndex ); }
+    inline const XclImpSupbook* Get( ULONG nIndex ) const   { return (XclImpSupbook*) List::GetObject( nIndex ); }
     const XclImpSupbook*        Get( const String& rDocName ) const;
     inline XclImpSupbook*       GetCurrSupbook() { return _Last(); }
 };
@@ -539,18 +537,16 @@ public:
     virtual                     ~XclImpExternsheetBuffer();
 
     void                        Read( XclImpStream& rIn );
-    inline void                 AppendSupbook( XclImpSupbook* pSupbook )
-                                    { aSupbookBuffer.Append( pSupbook ); }
+    inline void                 AppendSupbook( XclImpSupbook* pSupbook )    { aSupbookBuffer.Append( pSupbook ); }
     void                        CreateTables( RootData& rRootData );
 
-    inline const XclImpXti*     GetXti( ULONG nXtiIndex ) const
-                                    { return (const XclImpXti*) List::GetObject( nXtiIndex ); }
+    inline const XclImpXti*     GetXti( ULONG nXtiIndex ) const { return (const XclImpXti*) List::GetObject( nXtiIndex ); }
 
     const XclImpSupbook*        GetSupbook( ULONG nXtiIndex ) const;
-    inline const XclImpSupbook* GetSupbook( const String& rDocName ) const
-                                    { return aSupbookBuffer.Get( rDocName ); }
-    inline XclImpSupbook*       GetCurrSupbook()
-                                    { return aSupbookBuffer.GetCurrSupbook(); }
+    inline const XclImpSupbook* GetSupbook( const String& rDocName ) const  { return aSupbookBuffer.Get( rDocName ); }
+    inline XclImpSupbook*       GetCurrSupbook()    { return aSupbookBuffer.GetCurrSupbook(); }
+
+    BOOL                        IsSelf( ULONG nIndex ) const;
 };
 
 
