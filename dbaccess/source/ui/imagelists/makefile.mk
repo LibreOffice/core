@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.4 $
+ #  $Revision: 1.5 $
  #
- #  last change: $Author: bc $ $Date: 2005-02-09 14:34:35 $
+ #  last change: $Author: rt $ $Date: 2005-02-10 10:16:28 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -59,9 +59,9 @@
  #
  ########################################################################/
 
-PRJ=..$/..
-PRJNAME=wizards
-TARGET=imglst
+PRJ=..$/..$/..
+PRJNAME=dbaccess
+TARGET=uiimglst
 
 # --- Settings ----------------------------------
 
@@ -72,7 +72,7 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # ... resource files ............................
 
 SRS1NAME=$(TARGET)
-SRC1FILES=imagelists.src
+SRC1FILES=dbimagelists.src
 
 # ... object files ............................
 # --- Targets ----------------------------------
