@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:19:33 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 14:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #endif
 #ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
+#endif
+#ifndef _SWPVIEW_HXX
+#include <pview.hxx>
+#endif
+#ifndef _SRCVIEW_HXX
+#include <srcview.hxx>
 #endif
 #ifndef _VIEWSH_HXX //autogen
 #include <viewsh.hxx>
@@ -2435,11 +2441,25 @@ void SAL_CALL SwXTextDocument::render(
         throw IllegalArgumentException();
 
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if(pCurrentShell->GetObjectShell() != pDocShell)
+        pCurrentShell = 0;
+    SfxViewShell* pView = SfxViewShell::GetFirst();
+    const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
     while(pView && pView->GetObjectShell() != pDocShell)
     {
-        pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+        if((!pCurrentShell || pView == pCurrentShell) &&
+            !pView->IsA(aSwSrcViewTypeId))
+            break;
+        pView = SfxViewShell::GetNext(*pView );
     }
+    if(!pView)
+        return;
+    const TypeId aSwViewTypeId = TYPE(SwView);
+    const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
+    ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
+             ((SwView*)pView)->GetWrtShellPtr() :
+            &((SwPagePreView*)pView)->GetViewShell();
 
     uno::Reference< awt::XDevice >  xRenderDevice;
     const sal_Int32                 nPageNumber = nRenderer + 1;
@@ -2455,9 +2475,8 @@ void SAL_CALL SwXTextDocument::render(
         pOut = pDevice ? pDevice->GetOutputDevice() : 0;
     }
 
-    if(pView && pOut)
+    if(pVwSh && pOut)
     {
-        SwWrtShell &rWrtSh = pView->GetWrtShell();
 
         SfxProgress     aProgress( pView->GetObjectShell(), C2U("PDF export"), 10 );
         SwPrtOptions    aOptions( C2U("PDF export") );
@@ -2484,7 +2503,7 @@ void SAL_CALL SwXTextDocument::render(
         if (xModel != pDocShell->GetModel())    // 'export selection' ?
             aOptions.bPrintSelection = TRUE;
 
-        rWrtSh.Prt( aOptions, aProgress, pOut );
+        pVwSh->Prt( aOptions, aProgress, pOut );
     }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
