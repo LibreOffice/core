@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #define ERRCODE_UUI_IO_NOTREADY_REMOVABLE (ERRCODE_AREA_UUI + 45)
 #define ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE (ERRCODE_AREA_UUI + 46)
 #define ERRCODE_UUI_WRONGMEDIUM (ERRCODE_AREA_UUI + 47)
+#define ERRCODE_UUI_IO_CANTCREATE_NONAME (ERRCODE_AREA_UUI + 48)
 
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)

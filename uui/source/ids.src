@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 13:41:42 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,5 +1334,31 @@ Resource RID_UUI_ERRHDL
         Text[ turkish ] = "Please insert disk $(ARG1)";
         Text[ catalan ] = "Inserte por favor el medio $(ARG1)";
         Text[ finnish ] = "Syötä tallennusväline $(ARG1)";
+    };
+
+    String (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK)
+    {
+        Text = "Das Objekt kann im Verzeichnis $(ARG2) nicht angelegt werden";
+        Text[english] = "The object could not be created in directory $(ARG2)";
+        Text[ english_us ] = "The object cannot be created in directory $(ARG2)";
+        Text[ portuguese ] = "Impossível criar o objecto no directório $(ARG2).";
+        Text[ russian ] = "Ñîçäàòü îáúåêò â ïàïêå $(ARG2) íåâîçìîæíî";
+        Text[ greek ] = "The object could not be created in directory $(ARG2)";
+        Text[ dutch ] = "Het object kan niet worden geplaatst in directory $(ARG2)";
+        Text[ french ] = "Impossible de créer l'objet dans le répertoire $(ARG2) !";
+        Text[ spanish ] = "No se puede crear el objeto en el directorio $(ARG2).";
+        Text[ finnish ] = "The object could not be created in directory $(ARG2)";
+        Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG2)";
+        Text[ danish ] = "The object could not be created in directory $(ARG2)";
+        Text[ swedish ] = "Det går inte att skapa objektet i katalogen $(ARG2)";
+        Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG2) nie jest mo¿liwe";
+        Text[ portuguese_brazilian ] = "The object could not be created in directory $(ARG2)";
+        Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã¯ï¾Œï½«ï¾™ï¾€ï¾ $(ARG2) ã«æ ¼ç´ã§ãã¾ãã‚“ã€‚";
+        Text[ korean ] = "ë””ë ‰í† ë¦¬ $(ARG2)ì— ê°œì²´ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text[ chinese_simplified ] = "æ— æ³•åœ¨ç®å½• $(ARG2) å†…æ–°å»ºå¯¹è±¡ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ç®éŒ„ $(ARG2) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶";
+        Text[ turkish ] = "The object could not be created in directory $(ARG2)";
+        Text[ arabic ] = "The object could not be created in directory $(ARG2)";
+        Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };

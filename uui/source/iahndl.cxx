@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-27 08:42:23 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,21 +687,26 @@ UUIInteractionHandler::handle(
             switch (aIoException.Code)
             {
             case star::ucb::IOErrorCode_CANT_CREATE:
-                if ((bArgUri
-                     || getResourceNameRequestArgument(aRequestArguments,
-                                                       &aArgUri))
-                    && (bArgFolder
-                        || getStringRequestArgument(
-                               aRequestArguments,
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                 "Folder")),
-                               &aArgFolder)))
-                {
-                    nErrorCode = aErrorCode[aIoException.Code][1];
-                    aArguments.reserve(2);
-                    aArguments.push_back(aArgUri);
-                    aArguments.push_back(aArgFolder);
-                }
+                if (bArgFolder
+                    || getStringRequestArgument(
+                           aRequestArguments,
+                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                             "Folder")),
+                           &aArgFolder))
+                    if (bArgUri
+                        || getResourceNameRequestArgument(aRequestArguments,
+                                                          &aArgUri))
+                    {
+                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
+                        aArguments.reserve(2);
+                        aArguments.push_back(aArgUri);
+                        aArguments.push_back(aArgFolder);
+                    }
+                    else
+                    {
+                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
+                        aArguments.push_back(aArgFolder);
+                    }
                 else
                     nErrorCode = aErrorCode[aIoException.Code][0];
                 break;
