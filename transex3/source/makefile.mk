@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
-#   last change: $Author: obo $ $Date: 2005-03-15 08:57:48 $
+#   $Revision: 1.36 $
+#   last change: $Author: obo $ $Date: 2005-03-16 10:28:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,8 +110,13 @@ APP1VERSIONMAP=exports.map
 APP1TARGET=     $(TARGET)
 APP1OBJS=   $(OBJ)$/src_yy.obj
 
+.IF "$(GUI)"=="WNT"
+BOOTSTRP2 = bootstrp2.lib
+.ELSE
+BOOTSTRP2 = -lbootstrp2
+.ENDIF
 .IF "$(OS)"!="MACOSX"
-APP1STDLIBS+= $(BTSTRPLIB)
+APP1STDLIBS+= $(BTSTRPLIB) $(BOOTSTRP2)
 .ENDIF
 
 APP1STDLIBS+= \
