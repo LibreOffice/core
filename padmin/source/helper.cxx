@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 15:57:15 $
+ *  last change: $Author: rt $ $Date: 2002-12-02 17:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ bool padmin::chooseDirectory( Window* pParent, String& rInOutPath )
                 }
             }
             INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            xFolderPicker->setDisplayDirectory( aObj.GetMainURL() );
+            xFolderPicker->setDisplayDirectory( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
             if( xFolderPicker->execute() == ExecutableDialogResults::OK )
             {
                 aObj = INetURLObject( xFolderPicker->getDirectory() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
+ *  last change: $Author: rt $ $Date: 2002-12-02 17:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,14 +237,14 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
             INetURLObject aFile( *(String*)m_aDriverLB.GetEntryData(
                 m_aDriverLB.GetSelectEntryPos( i )
                 ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            OUString aFromUni( aFile.GetMainURL() );
+            OUString aFromUni( aFile.GetMainURL(INetURLObject::DECODE_TO_IURI) );
 
             do
             {
                 INetURLObject aToFile( *writeDir, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
                 aToFile.Append( aFile.GetName() );
                 aToFile.setExtension( String::CreateFromAscii( "PPD" ) );
-                OUString aToUni( aToFile.GetMainURL() );
+                OUString aToUni( aToFile.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 if( ! File::copy( aFromUni, aToUni ) )
                     break;
                 ++writeDir;
