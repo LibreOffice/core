@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-18 11:46:38 $
+ *  last change: $Author: dv $ $Date: 2001-07-18 13:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,43 @@ struct SortingData_Impl
     sal_Bool    mbIsFolder;
 };
 
+// class ViewTabListBox_Impl ---------------------------------------------
+
+class ViewTabListBox_Impl : public SvHeaderTabListBox
+{
+private:
+    HeaderBar*              mpHeaderBar;
+    SvtFileView_Impl*       mpParent;
+    sal_Bool                mbResizeDisabled        : 1;
+    sal_Bool                mbAutoResize            : 1;
+    sal_Bool                mbContextMenuEnabled    : 1;
+
+    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
+    DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
+
+    void            DeleteEntry( SvLBoxEntry* pEntry );
+
+public:
+                    ViewTabListBox_Impl( Window* pParentWin,
+                                         SvtFileView_Impl* pParent,
+                                         sal_Int16 nFlags );
+                   ~ViewTabListBox_Impl();
+
+    virtual void    Resize();
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry,
+                                 const XubString& rNewText );
+
+    void            ClearAll();
+    void            EnableAutoResize() { mbAutoResize = sal_True; }
+
+    HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
+    void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
+};
+
+// class SvtFileView_Impl ---------------------------------------------
+
 class SvtFileView_Impl
 {
 public:
@@ -218,6 +255,8 @@ public:
                                             const OUString& rTitle );
 
     ULONG                   GetEntryPos( const OUString& rURL );
+    void                    EnableContextMenu( sal_Bool bEnable )
+                                    { mpView->EnableContextMenu( bEnable ); }
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
 };
@@ -283,39 +322,8 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
     return aSizeStr;
 }
 
+// -----------------------------------------------------------------------
 // class ViewTabListBox_Impl ---------------------------------------------
-
-class ViewTabListBox_Impl : public SvHeaderTabListBox
-{
-private:
-    HeaderBar*              mpHeaderBar;
-    SvtFileView_Impl*       mpParent;
-    sal_Bool                mbResizeDisabled    : 1;
-    sal_Bool                mbAutoResize        : 1;
-
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
-
-    void            DeleteEntry( SvLBoxEntry* pEntry );
-
-public:
-                    ViewTabListBox_Impl( Window* pParentWin,
-                                         SvtFileView_Impl* pParent,
-                                         sal_Int16 nFlags );
-                   ~ViewTabListBox_Impl();
-
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry,
-                                 const XubString& rNewText );
-
-    void            ClearAll();
-    void            EnableAutoResize() { mbAutoResize = sal_True; }
-
-    HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
-};
-
 // -----------------------------------------------------------------------
 
 ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
@@ -326,7 +334,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mpHeaderBar     ( NULL ),
     mpParent        ( pParent ),
     mbResizeDisabled( sal_False ),
-    mbAutoResize    ( sal_False )
+    mbAutoResize    ( sal_False ),
+    mbContextMenuEnabled ( sal_True )
 
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -460,7 +469,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && mbContextMenuEnabled )
     {
         Point nPos = rCEvt.GetMousePosPixel();
         SvLBoxEntry* pEntry = GetEntry( nPos );
@@ -930,6 +939,12 @@ const String& SvtFileView::GetViewURL() const
 void SvtFileView::SetOpenDoneHdl( const Link& rHdl )
 {
     mpImp->maOpenDoneLink = rHdl;
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView::EnableContextMenu( sal_Bool bEnable )
+{
+    mpImp->EnableContextMenu( bEnable );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:41:38 $
+ *  last change: $Author: dv $ $Date: 2001-07-18 13:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,7 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent ) :
     aFileView.Show();
     aFileView.SetPosPixel( Point( 0, 0 ) );
     aFileView.EnableAutoResize();
+    aFileView.EnableContextMenu( sal_False );
 }
 
 SvtFileViewWindow_Impl::~SvtFileViewWindow_Impl()
@@ -399,7 +400,7 @@ SvtFileViewWindow_Impl::~SvtFileViewWindow_Impl()
 }
 
 void GetMenuEntry_Impl
-(
+.(
     Sequence< PropertyValue >& aDynamicMenuEntry,
     ::rtl::OUString& rTitle,
     ::rtl::OUString& rURL,
