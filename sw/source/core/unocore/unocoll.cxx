@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:52:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1824,7 +1824,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     uno::Reference< XTextContent >  xRef;
-    if( nIndex < USHRT_MAX)
+    if(0 <= nIndex && nIndex < USHRT_MAX)
     {
         const SwFmtRefMark* pMark = GetDoc()->GetRefMark( (sal_uInt16) nIndex );
         if(pMark)
