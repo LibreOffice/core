@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:38:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
     return rStream;
 }
 // -----------------------------------------------------------------------------
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //------------------------------------------------------------------
 void ONDXPage::PrintPage()
 {
