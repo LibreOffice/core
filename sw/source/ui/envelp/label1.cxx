@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2000-09-21 13:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,9 @@ using namespace ::com::sun::star;
 using namespace ::utl;
 using namespace ::rtl;
 
-#define CL2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+// dont use RTL_CONSTASCII_STRINGPARAM for UNO_NAME ...
+// #define CL2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define USER_FIELD_FIRSTNAME        "BC_PRIV_FIRSTNAME"
 #define USER_FIELD_NAME             "BC_PRIV_NAME"
@@ -1220,7 +1222,7 @@ void SwVisitingCardPage::InitFrameControl()
         if(!xIdxAcc.is() || xIdxAcc->getCount())
         {
             uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
-            uno::Any aTitle = xPrSet->getPropertyValue(CL2S(UNO_NAME_TITLE));
+            uno::Any aTitle = xPrSet->getPropertyValue(C2U(UNO_NAME_TITLE));
             OUString uTitle;
             aTitle >>= uTitle;
             String sGroup(pGroups[i]);
@@ -1268,18 +1270,18 @@ IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
 
  --------------------------------------------------*/
 void lcl_SetUserField(uno::Reference< container::XNameAccess > & xFldMasters,
-                const String& rFldName, const String& rContent )
+                const OUString& rFldName, const String& rContent )
 {
-    String sFldName( CL2S("com.sun.star.text.FieldMaster.User."));
-    sFldName += rFldName;
-    OUString uFldName(sFldName);
+    OUString uFldName( C2U("com.sun.star.text.FieldMaster.User."));
+    uFldName += rFldName;
+
     if(xFldMasters->hasByName(uFldName))
     {
         uno::Any aFirstName = xFldMasters->getByName(uFldName);
         uno::Reference< beans::XPropertySet >  xFld = *(uno::Reference< beans::XPropertySet > *)aFirstName.getValue();
         uno::Any aContent;
         aContent <<= rtl::OUString(rContent);
-        xFld->setPropertyValue(CL2S(UNO_NAME_CONTENT), aContent);
+        xFld->setPropertyValue(C2U(UNO_NAME_CONTENT), aContent);
     }
 }
 
@@ -1358,38 +1360,38 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     try
     {
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_FIRSTNAME     ), rItem.aPrivFirstName );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_NAME          ), rItem.aPrivName               );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVSHORTCUT  ), rItem.aPrivShortCut           );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_FIRSTNAME_2   ), rItem.aPrivFirstName2 );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_NAME_2        ), rItem.aPrivName2               );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVSHORTCUT_2 ), rItem.aPrivShortCut2           );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVSTREET        ), rItem.aPrivStreet             );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVZIP       ), rItem.aPrivZip                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVCITY      ), rItem.aPrivCity               );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVCOUNTRY   ), rItem.aPrivCountry            );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVSTATE     ), rItem.aPrivState              );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVTITLE     ), rItem.aPrivTitle              );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVPROFESSION    ), rItem.aPrivProfession         );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVPHONE     ), rItem.aPrivPhone              );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVMOBILE        ), rItem.aPrivMobile             );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVFAX       ), rItem.aPrivFax                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVWWW       ), rItem.aPrivWWW                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_PRIVMAIL      ), rItem.aPrivMail               );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPCOMPANY   ), rItem.aCompCompany            );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPCOMPANYEXT    ), rItem.aCompCompanyExt         );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPSLOGAN        ), rItem.aCompSlogan             );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPSTREET        ), rItem.aCompStreet             );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPZIP       ), rItem.aCompZip                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPCITY      ), rItem.aCompCity               );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPCOUNTRY   ), rItem.aCompCountry            );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPSTATE     ), rItem.aCompState              );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPPOSITION  ), rItem.aCompPosition           );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPPHONE     ), rItem.aCompPhone              );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPMOBILE        ), rItem.aCompMobile             );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPFAX       ), rItem.aCompFax                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPWWW       ), rItem.aCompWWW                );
-        lcl_SetUserField(xFldMasters, CL2S(USER_FIELD_COMPMAIL      ), rItem.aCompMail               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_FIRSTNAME      ), rItem.aPrivFirstName );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_NAME           ), rItem.aPrivName               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSHORTCUT   ), rItem.aPrivShortCut           );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_FIRSTNAME_2    ), rItem.aPrivFirstName2 );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_NAME_2         ), rItem.aPrivName2               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSHORTCUT_2 ), rItem.aPrivShortCut2           );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSTREET     ), rItem.aPrivStreet             );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVZIP        ), rItem.aPrivZip                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVCITY       ), rItem.aPrivCity               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVCOUNTRY    ), rItem.aPrivCountry            );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSTATE      ), rItem.aPrivState              );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVTITLE      ), rItem.aPrivTitle              );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVPROFESSION ), rItem.aPrivProfession         );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVPHONE      ), rItem.aPrivPhone              );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVMOBILE     ), rItem.aPrivMobile             );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVFAX        ), rItem.aPrivFax                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVWWW        ), rItem.aPrivWWW                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVMAIL       ), rItem.aPrivMail               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOMPANY    ), rItem.aCompCompany            );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOMPANYEXT ), rItem.aCompCompanyExt         );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSLOGAN     ), rItem.aCompSlogan             );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSTREET     ), rItem.aCompStreet             );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPZIP        ), rItem.aCompZip                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCITY       ), rItem.aCompCity               );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOUNTRY    ), rItem.aCompCountry            );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSTATE      ), rItem.aCompState              );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPPOSITION   ), rItem.aCompPosition           );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPPHONE      ), rItem.aCompPhone              );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPMOBILE     ), rItem.aCompMobile             );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPFAX        ), rItem.aCompFax                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPWWW        ), rItem.aCompWWW                );
+        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPMAIL       ), rItem.aCompMail               );
     }
     catch( uno::RuntimeException&)
     {
@@ -1631,216 +1633,6 @@ void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
     aHomePageED     .SetText(aItem.aCompWWW);
     aMailED         .SetText(aItem.aCompMail);
 }
-
-/*-----------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.136  2000/09/18 16:05:25  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.135  2000/07/18 12:50:08  os
-    replace ofadbmgr
-
-    Revision 1.134  2000/06/21 13:54:54  os
-    unicode error remvoed
-
-    Revision 1.133  2000/06/16 08:31:13  martin.hollmichel
-    add: header
-
-    Revision 1.132  2000/06/13 09:59:42  os
-    using UCB
-
-    Revision 1.131  2000/05/30 15:09:06  jp
-    Bugfix and optimation for unicode
-
-    Revision 1.130  2000/05/16 17:29:11  jp
-    Changes for Unicode
-
-    Revision 1.129  2000/05/16 09:15:12  os
-    project usr removed
-
-    Revision 1.128  2000/04/18 15:31:35  os
-    UNICODE
-
-    Revision 1.127  2000/03/23 08:20:15  os
-    UNO III
-
-    Revision 1.126  2000/03/06 15:45:05  os
-    #73802# preview improved
-
-    Revision 1.125  2000/02/24 17:37:08  hr
-    43447#: gcc
-
-    Revision 1.124  2000/02/14 14:47:58  os
-    #70473# Unicode
-
-    Revision 1.123  2000/02/10 11:31:39  os
-    #70359# titles added to AutoText groups
-
-    Revision 1.122  2000/02/09 14:08:55  os
-    #72787# HelpId added
-
-    Revision 1.121  2000/01/13 11:40:09  os
-    #71840# check selected entry
-
-    Revision 1.120  1999/12/27 09:52:27  os
-    #71262# Undo in SwOneExampleFrame; TreeListBox as AutoText - box
-
-    Revision 1.119  1999/12/07 16:34:13  os
-    #70355##70559# SHORTCUT->INITIALS; second private name
-
-    Revision 1.118  1999/11/26 11:27:36  os
-    #70154# check if the text block is available
-
-    Revision 1.117  1999/11/25 15:42:54  os
-    headers corrected
-
-    Revision 1.116  1999/11/23 08:14:51  os
-    header corrected
-
-    Revision 1.115  1999/11/19 16:40:22  os
-    modules renamed
-
-    Revision 1.114  1999/11/19 14:08:47  os
-    #69462# Names corrected
-
-    Revision 1.113  1999/11/10 15:39:22  os
-    SwOneExampleFrame: CTor changed
-
-    Revision 1.112  1999/11/10 10:53:07  tl
-    includes rearranged
-
-    Revision 1.111  1999/10/21 17:48:05  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.110  1999/10/08 10:00:05  jp
-    no cast from GetpApp to SfxApp
-
-    Revision 1.109  1999/10/01 13:41:17  os
-    apply AutoText to business cards
-
-    Revision 1.108  1999/10/01 12:03:55  os
-    all fields are available
-
-    Revision 1.107  1999/09/30 07:52:42  os
-    new pages for business cards
-
-    Revision 1.106  1999/09/28 13:36:41  os
-    #67382# separate dialog for business cards; survive without data base
-
-    Revision 1.105  1999/09/24 13:53:09  os
-    chg: ODbRow/ODbVariant - includes moved
-
-    Revision 1.104  1999/09/10 13:07:12  os
-    TRY/CATCH block in StarOne AutoText access
-
-    Revision 1.103  1999/08/26 17:36:00  JP
-    no cast from GetpApp to SfxApp
-
-
-      Rev 1.102   26 Aug 1999 19:36:00   JP
-   no cast from GetpApp to SfxApp
-
-      Rev 1.101   28 Jul 1999 13:05:08   OS
-   new: SwOneExampleFrame
-
-      Rev 1.100   23 Jul 1999 10:06:00   OS
-   visiting cards tabpage
-
-      Rev 1.99   19 Jul 1999 15:58:42   MA
-   pass a Parent to the wait object
-
-      Rev 1.98   13 Jul 1999 09:32:50   OS
-   visiting cards TabPage
-
-      Rev 1.97   09 Jun 1999 19:34:42   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.96   10 Feb 1999 14:33:10   MA
-   #61674# Direktdruck fuer Etiketten entfernt
-
-      Rev 1.95   07 Sep 1998 16:59:30   OM
-   #55930# Einzelnes Etikett an der korrekten Position drucken
-
-      Rev 1.94   09 Jul 1998 09:52:32   JP
-   EmptyStr benutzen
-
-      Rev 1.93   14 Mar 1998 15:12:50   OM
-   ExchangeSupport repariert/implementiert
-
-      Rev 1.92   14 Mar 1998 14:26:46   OM
-   ExchangeSupport repariert/implementiert
-
-      Rev 1.91   14 Mar 1998 14:10:22   OM
-   ExchangeSupport repariert/implementiert
-
-      Rev 1.90   24 Nov 1997 11:52:12   MA
-   includes
-
-      Rev 1.89   03 Nov 1997 13:17:12   MA
-   precomp entfernt
-
-      Rev 1.88   03 Sep 1997 13:59:14   OM
-   #36627# Sinnvolle Fehlermeldungen liefern
-
-      Rev 1.87   02 Sep 1997 09:58:24   OM
-   SDB-Headeranpassung
-
-      Rev 1.86   05 May 1997 11:16:30   OM
-   Hilfetext fuer OK loeschen
-
-      Rev 1.85   29 Apr 1997 17:09:50   OM
-   HelpID fuer UserButton
-
-      Rev 1.84   21 Apr 1997 15:54:50   OM
-   #39002# GPF Etiketten gefixt
-
-      Rev 1.83   14 Apr 1997 12:03:36   OM
-   #38747# GPF nach Etikettenauswahl behoben
-
-      Rev 1.82   08 Apr 1997 10:10:12   NF
-   includes...
-
-      Rev 1.81   04 Apr 1997 14:04:54   OM
-   HelpIDs fuer DruckButton
-
-      Rev 1.80   25 Feb 1997 22:47:40   OM
-   Unvollstaendige Datenbank am Dialog korrigiert
-
-      Rev 1.79   20 Feb 1997 18:50:12   MA
-   fix: letzte Datenbank merken
-
-      Rev 1.78   20 Feb 1997 17:51:40   MA
-   fix: Deactivate ueber Fill
-
-      Rev 1.77   04 Dec 1996 13:54:02   OM
-   Kein konstanter AdressDBName mehr
-
-      Rev 1.76   11 Nov 1996 09:44:18   MA
-   ResMgr
-
-      Rev 1.75   29 Oct 1996 17:59:28   HJS
-   includes
-
-      Rev 1.74   24 Oct 1996 13:36:10   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.73   25 Sep 1996 14:11:12   OM
-   Neue Datenbanktrenner
-
-      Rev 1.72   16 Aug 1996 13:46:18   TRI
-   C40_INSERT statt Insert
-
-      Rev 1.71   05 Aug 1996 15:17:36   OM
-   Datenbankumstellung
-
-      Rev 1.70   26 Jul 1996 20:36:36   MA
-   includes
-
-      Rev 1.69   17 Jul 1996 13:47:04   OM
-   Datenbankumstellung 327
-
-*/
 
 
 
