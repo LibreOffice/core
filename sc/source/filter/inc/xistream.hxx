@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:47:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-16 08:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef SC_XLSTREAM_HXX
 #include "xlstream.hxx"
+#endif
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
 #endif
 
 class XclImpRoot;
