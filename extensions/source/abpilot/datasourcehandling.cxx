@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:36:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -535,12 +538,13 @@ namespace abp
             return;
         try
         {
-            Reference<XStorable> xStorable(m_pImpl->xDataSource,UNO_QUERY);
+            Reference< XDocumentDataSource > xDocAccess( m_pImpl->xDataSource, UNO_QUERY );
+            Reference< XStorable > xStorable;
+            if ( xDocAccess.is() )
+                xStorable = xStorable.query( xDocAccess->getDatabaseDocument() );
             OSL_ENSURE( xStorable.is(),"DataSource is no XStorable!" );
             if ( xStorable.is() )
-            {
                 xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
-            }
         }
         catch(const Exception&)
         {
