@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 13:14:36 $
+ *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ void SAL_CALL DropTargetListener::dragExit( const DropTargetEvent& dte )
 void SAL_CALL DropTargetListener::dragOver( const DropTargetDragEvent& dtde )
      throw(RuntimeException)
 {
-    if( !(dtde.SourceActions & dtde.DropAction) )
-        dtde.Context->acceptDrag( ACTION_COPY);
+//      if( (dtde.SourceActions & dtde.DropAction) )
+//          dtde.Context->acceptDrag( ACTION_COPY);
 }
 
 void SAL_CALL DropTargetListener::dropActionChanged( const DropTargetDragEvent& dtde )

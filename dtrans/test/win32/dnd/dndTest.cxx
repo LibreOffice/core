@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-30 15:37:32 $
+ *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,13 @@ using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace rtl;
 
+// defined in atlwindow.hxx
+// #define WM_SOURCE_INIT WM_APP+100
+// #define WM_SOURCE_STARTDRAG WM_APP+101
+#define WM_CREATE_MTA_WND
+
 HRESULT doTest();
+DWORD WINAPI MTAFunc( void* threadData);
 
 Reference< XMultiServiceFactory > MultiServiceFactory;
 //int APIENTRY WinMain(HINSTANCE hInstance,
@@ -123,19 +129,34 @@ int main( int argc, char *argv[ ], char *envp[ ] )
     return 0;
 }
 
-
-
 HRESULT doTest()
 {
 
     MultiServiceFactory= createRegistryServiceFactory( OUString(L"applicat.rdb"));
 
+    // create the MTA thread that is used to realize MTA calls to the services
+    // We create the thread and wait until the thread has created its message queue
+    HANDLE evt= CreateEvent(NULL, FALSE, FALSE, NULL);
+    DWORD threadIdMTA=0;
+    HANDLE hMTAThread= CreateThread( NULL, 0, MTAFunc, &evt, 0, &threadIdMTA);
+    WaitForSingleObject( evt, INFINITE);
+    CloseHandle(evt);
+
+
     HRESULT hr= S_OK;
     RECT pos1={0,0,300,200};
-    AWindow win(_T("Drag and Drop, OLE STA"), pos1);
+    AWindow win(_T("DnD starting in Ole STA"), threadIdMTA, pos1);
 
     RECT pos2={ 0, 205, 300, 405};
-    AWindow win2( _T("Drag and Drop, MTA"), pos2, true);
+    AWindow win2( _T("DnD starting in MTA"), threadIdMTA, pos2, true);
+
+    // win3 and win4 call initialize from an MTA but they are created in an STA
+    RECT pos3={300,0,600,200};
+    AWindow win3(_T("DnD starting in OLE STA"), threadIdMTA, pos3, false, true);
+
+    RECT pos4={ 300, 205, 600, 405};
+    AWindow win24( _T("DnD starting in Ole MTA"), threadIdMTA, pos4, true, true);
+
 
     MSG msg;
     while( GetMessage(&msg, (HWND)NULL, 0, 0) )
@@ -144,26 +165,69 @@ HRESULT doTest()
         DispatchMessage( &msg);
     }
 
+    // Shut down the MTA thread
+    PostThreadMessage( threadIdMTA, WM_QUIT, 0, 0);
+    WaitForSingleObject(hMTAThread, INFINITE);
+    CloseHandle(hMTAThread);
+
     return S_OK;
 }
 
 extern Reference<XMultiServiceFactory> MultiServiceFactory;
-DWORD WINAPI MTAFunc(LPVOID pParams)
+DWORD WINAPI MTAFunc( void* threadData)
 {
     HRESULT hr= S_OK;
     hr= CoInitializeEx( NULL, COINIT_MULTITHREADED);
     ATLASSERT( FAILED(hr) );
+    MSG msg;
+    // force the creation of a message queue
+    PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
+    SetEvent( *(HANDLE*)threadData );
 
-    ThreadData data= *( ThreadData*)pParams;
-    SetEvent(data.evtThreadReady);
+    RECT pos={0, 406, 300, 605};
+    AWindow win(_T("DnD, full MTA"), GetCurrentThreadId(), pos, false, true);
+//  ThreadData data= *( ThreadData*)pParams;
+//  SetEvent(data.evtThreadReady);
+    while( GetMessage(&msg, (HWND)NULL, 0, 0) )
+    {
+        switch( msg.message)
+        {
+        case  WM_SOURCE_INIT:
+        {
+            InitializationData* pData= (InitializationData*)msg.wParam;
+            Any any;
+            any <<= (sal_uInt32) pData->hWnd;
+            pData->xInit->initialize( Sequence<Any>( &any, 1));
 
-    data.source->startDrag( DragGestureEvent(),
-            ACTION_LINK|ACTION_MOVE|ACTION_COPY,
-            0,
-            0,
-            data.transferable,
-            Reference<XDragSourceListener>( static_cast<XDragSourceListener*>
-                ( new DragSourceListener())));
+            CoTaskMemFree( pData);
+            break;
+        }
+        case WM_SOURCE_STARTDRAG:
+        {
+            // wParam contains necessary data
+            StartDragData* pData= (StartDragData*)msg.wParam;
+            Sequence<DataFlavor> seq= pData->transferable->getTransferDataFlavors();
+            // have a look what flavours are supported
+            for( int i=0; i<seq.getLength(); i++)
+            {
+                DataFlavor d= seq[i];
+            }
+            pData->source->startDrag( DragGestureEvent(),
+                                      ACTION_LINK|ACTION_MOVE|ACTION_COPY,
+                                      0,
+                                      0,
+                                      pData->transferable,
+                                      Reference<XDragSourceListener>( static_cast<XDragSourceListener*>
+                                                                      ( new DragSourceListener())));
+            CoTaskMemFree( pData);
+            break;
+        }
+
+        } // end switch
+
+        TranslateMessage(  &msg);
+        DispatchMessage( &msg);
+    }
 
 
     CoUninitialize();
