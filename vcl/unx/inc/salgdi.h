@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 07:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,6 @@
  *
  *
  ************************************************************************/
-// *=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.9 $  $Author: cp $  $Date: 2001-03-19 08:30:34 $   //
-//                                                                            //
-// $Workfile:   salgdi.h  $                                                   //
-//  $Modtime:   10 Sep 1997 11:55:36  $                                       //
-//                                                                            //
-// *=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
@@ -243,6 +233,7 @@ class SalGraphicsData
                                       const xub_Unicode* pStr,
                                       USHORT nLen );
 
+protected:
             void            DrawStringMB( int nX, int nY,
                                 const sal_Unicode* pStr, int nLength );
 
@@ -250,11 +241,16 @@ class SalGraphicsData
                                 const sal_Unicode* pStr, int nLength );
 
             void            DrawServerFontString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength );
+                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
+
+            void            DrawServerSimpleFontString( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
 
             void            DrawServerAAFontString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength );
+                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
 
+            bool            DrawServerAAForcedString( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
 #endif
 public:
                             SalGraphicsData();
