@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.36 $
- *  last change: $Author: rt $ $Date: 2005-01-27 11:14:33 $
+ *  $Revision: 1.37 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2917,7 +2917,7 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
 {
     uno::Reference < frame::XDispatch > xRet;
     SfxStateCache* pCache = GetStateCache( pSlot->nSlotId );
-    if ( pCache )
+    if ( pCache && !bMasterCommand )
         xRet = pCache->GetInternalDispatch();
     if ( !xRet.is() )
     {
@@ -2928,7 +2928,7 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
             pCache = GetStateCache( pSlot->nSlotId );
 
         DBG_ASSERT( pCache, "No cache for OfficeDispatch!" );
-        if ( pCache )
+        if ( pCache && !bMasterCommand )
             pCache->SetInternalDispatch( xRet );
     }
 
