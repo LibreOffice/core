@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CallFormWizard.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:32:58 $
+*  last change: $Author: hr $ $Date: 2005-04-06 11:38:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -61,7 +61,9 @@
 package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.uno.Type;
+import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.Properties;
 
 /** This class capsulates the class, that implements the minimal component, a
@@ -107,15 +109,20 @@ public class CallFormWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class FormWizardImplementation implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
+    public static class FormWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
 
         PropertyValue[] databaseproperties;
+        public XComponent DocumentDefinition = null;
+        public XComponent Document = null;
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
         public FormWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization) {
+            super();
             xmultiservicefactory = xmultiservicefactoryInitialization;
+            registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+            registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
         }
 
         public void trigger(String sEvent) {
@@ -123,7 +130,11 @@ public class CallFormWizard {
                 com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
                 if (sEvent.compareTo("start") == 0) {
                     FormWizard CurFormWizard = new FormWizard(xmultiservicefactory);
-                    CurFormWizard.startFormWizard(xmultiservicefactory, databaseproperties);
+                    XComponent[] obj = CurFormWizard.startFormWizard(xmultiservicefactory, databaseproperties);
+                    if ( obj != null ){
+                        DocumentDefinition = obj[0];
+                        Document = obj[1];
+                    }
                 }
             } catch (Exception exception) {
                 System.err.println(exception);
@@ -215,7 +226,13 @@ public class CallFormWizard {
             };
 
             try {
-                typeReturn = new Type[] { new Type(com.sun.star.task.XJobExecutor.class), new Type(com.sun.star.lang.XTypeProvider.class), new Type(com.sun.star.lang.XServiceInfo.class), new Type(com.sun.star.lang.XInitialization.class)};
+                typeReturn = new Type[] { new Type(com.sun.star.task.XJobExecutor.class)
+                                        , new Type(com.sun.star.lang.XTypeProvider.class)
+                                        , new Type(com.sun.star.lang.XServiceInfo.class)
+                                        , new Type(com.sun.star.beans.XPropertySet.class)
+                                        , new Type(com.sun.star.beans.XFastPropertySet.class)
+                                        , new Type(com.sun.star.beans.XMultiPropertySet.class)
+                                        , new Type(com.sun.star.lang.XInitialization.class)};
             } catch (Exception exception) {
                 System.err.println(exception);
             }
