@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:05:06 $
+#   last change: $Author: obo $ $Date: 2003-10-20 17:12:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,6 @@ TARGETTYPE=		CUI
 #.INCLUDE :		$(PRJ)$/util$/makefile.pmk
 
 .INCLUDE :  settings.mk
-
-.INCLUDE : ..$/..$/..$/cppumaker.mk
 
 CFLAGS+=-GR -GX
 
