@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-23 16:23:28 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 17:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,14 +691,19 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
 void SwEditWin::JustifyAreaTimer()
 {
     const Rectangle &rVisArea = GetView().GetVisArea();
+#ifdef UNX
+    const long coMinLen = 100;
+#else
+    const long coMinLen = 50;
+#endif
     long nTimeout = 800,
          nDiff = Max(
          Max( aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - aMovePos.Y() ),
          Max( aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - aMovePos.X()));
 #ifdef TEST_FOR_BUG91313
-    aTimer.SetTimeout( Max( 50L, nTimeout - nDiff) );
+    aTimer.SetTimeout( Max( coMinLen, nTimeout - nDiff) );
 #else
-    aTimer.SetTimeout( Max( 50L, nTimeout - nDiff*2L) );
+    aTimer.SetTimeout( Max( coMinLen, nTimeout - nDiff*2L) );
 #endif
 }
 
