@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 18:26:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -251,9 +254,6 @@
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -3940,7 +3940,7 @@ class EventsNameReplace_Impl:
                 return;
 
             // get a composer for the statement which the form is currently based on
-            Reference< XSQLQueryComposer > xComposer = getCurrentSettingsComposer( m_xIntrospecteeAsProperty, m_xORB );
+            Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( m_xIntrospecteeAsProperty, m_xORB );
             OSL_ENSURE( xComposer.is(), "OPropertyBrowserController::executeFilterOrSortDialog: could not obtain a composer!" );
             if ( !xComposer.is() )
                 return;
