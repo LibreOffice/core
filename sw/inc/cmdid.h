@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:40:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,8 +1033,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
  --------------------------------------------------------------------*/
 
 #define FN_ENVELOP                  (FN_ENVELP    )
-#define FN_LABEL                    (FN_ENVELP + 1)
-#define FN_BUSINESS_CARD            (FN_ENVELP + 2)
 
 /*--------------------------------------------------------------------
     Bereich: Parameter
