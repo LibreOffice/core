@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:30:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,14 +614,6 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
                 "too long!" );
     return nRet;
 }
-
-sal_Int32 SwAccessiblePortionData::GetLineNumber( sal_Int32 nPos )
-{
-    size_t nPortionNo = FindBreak( aLineBreaks, nPos );
-    return nPortionNo;
-}
-
-
 
 USHORT SwAccessiblePortionData::FillSpecialPos(
     sal_Int32 nPos,
