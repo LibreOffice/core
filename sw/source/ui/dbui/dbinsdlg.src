@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:54:39 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,14 +537,14 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ french ] = "Colonnes de table" ;
         Text [ dutch ] = "Tabe~l" ;
         Text [ portuguese ] = "Ta~bela" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼åˆ—(~L)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ russian ] = "Òàáëèöà";
         Text[ polish ] = "Tabe~la";
         Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆ—(~L)";
         Text[ chinese_traditional ] = "è¡¨æ ¼æ¬„(~L)";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ dutch ] = "Tabe~l";
-        Text[ chinese_simplified ] = "è¡¨æ ¼åˆ—(~L)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ greek ] = "Ğßíáêáò";
         Text[ korean ] = "í‘œì˜ ì—´(~L)";
         Text[ turkish ] = "~Tablo sütunu";
