@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-09 14:29:11 $
+ *  last change: $Author: hjs $ $Date: 2000-11-09 18:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ SvxPageWindow::~SvxPageWindow()
 
 void __EXPORT SvxPageWindow::Paint( const Rectangle& rRect )
 {
-    Fraction aXScale( aWinSize.Width(), std::max( aSize.Width() * 2 + aSize.Width() / 8, 1L ) );
+    Fraction aXScale( aWinSize.Width(), std::max( (long) (aSize.Width() * 2 + aSize.Width() / 8), 1L ) );
     Fraction aYScale( aWinSize.Height(), std::max( aSize.Height(), 1L ) );
     MapMode aMapMode( GetMapMode() );
 
