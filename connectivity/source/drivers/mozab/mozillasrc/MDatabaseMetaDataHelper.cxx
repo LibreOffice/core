@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 12:08:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@
 #include "nsILDAPOperation.h"
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 
 static NS_DEFINE_CID(kRDFServiceCID, NS_RDFSERVICE_CID);
