@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2000-09-26 13:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,29 +79,31 @@
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
-
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 #include "errhdl.hxx"
 #include "finder.hxx"
 #include "swtypes.hxx"
 #include "cmdid.h"
-#include "cfgid.h"
 #include "envimg.hxx"
-#include "cfgstr.hrc"
 #include "envelp.hrc"
-
-#define ENV_VERSION  1
 
 #ifdef WIN
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
 #else
 #define NEXTLINE  '\n'
 #endif
-//#define C2S(cChar) UniString::CreateFromAscii(cChar)
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
+
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 
-
+// --------------------------------------------------------------------------
 String MakeSender()
 {
     ASSERT( pPathFinder, "PathFinder not found" );
@@ -144,51 +146,10 @@ String MakeSender()
             sRet += sToken;
     }
     return sRet;
-
-
-    /*
-    SvxAddressItem aAdr( pPathFinder->GetAddress() );
-    String aSender, aTmp;
-    aSender += aAdr.GetFirstName();
-    aTmp = aAdr.GetName();
-    if ( aTmp.Len() )  ls
-
-    {
-        if ( aSender.Len() )
-            aSender += ' ';
-        aSender += aTmp;
-    }
-    if ( aSender.Len() )
-        aSender += NEXTLINE;
-    aTmp = aAdr.GetToken( ADDRESS_STREET );
-    if ( aTmp.Len() )
-    {
-        aSender += aTmp;
-        aSender += NEXTLINE;
-    }
-    aTmp = aAdr.GetToken( ADDRESS_COUNTRY );
-    if ( aTmp.Len() )
-    {
-        aSender += aTmp;
-        aSender += '-';
-    }
-    aTmp = aAdr.GetToken( ADDRESS_PLZ );
-    if ( aTmp.Len() )
-    {
-        aSender += aTmp;
-        aSender += ' ';
-    }
-    aSender += aAdr.GetToken( ADDRESS_CITY );
-    return aSender;
-     */
 }
-
-
-
+// --------------------------------------------------------------------------
 SwEnvItem::SwEnvItem() :
-
     SfxPoolItem(FN_ENVELOP)
-
 {
     aAddrText       = aEmptyStr;
     bSend           = TRUE;
@@ -205,15 +166,9 @@ SwEnvItem::SwEnvItem() :
     lAddrFromLeft   = Max(lWidth, lHeight) / 2;
     lAddrFromTop    = Min(lWidth, lHeight) / 2;
 }
-
 // --------------------------------------------------------------------------
-
-
-
 SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
-
     SfxPoolItem(FN_ENVELOP),
-
     aAddrText      (rItem.aAddrText),
     bSend          (rItem.bSend),
     aSendText      (rItem.aSendText),
@@ -226,16 +181,11 @@ SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
     eAlign         (rItem.eAlign),
     bPrintFromAbove(rItem.bPrintFromAbove),
     lShiftRight    (rItem.lShiftRight),
-    lShiftDown     (rItem.lShiftDown),
-    aSlot          (rItem.aSlot)
-
+    lShiftDown     (rItem.lShiftDown)
 {
 }
 
 // --------------------------------------------------------------------------
-
-
-
 SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 {
     aAddrText       = rItem.aAddrText;
@@ -251,15 +201,9 @@ SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
     bPrintFromAbove = rItem.bPrintFromAbove;
     lShiftRight     = rItem.lShiftRight;
     lShiftDown      = rItem.lShiftDown;
-    aSlot           = rItem.aSlot;
-
     return *this;
 }
-
 // --------------------------------------------------------------------------
-
-
-
 int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwEnvItem& rEnv = (const SwEnvItem&) rItem;
@@ -276,221 +220,143 @@ int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
            eAlign          == rEnv.eAlign          &&
            bPrintFromAbove == rEnv.bPrintFromAbove &&
            lShiftRight     == rEnv.lShiftRight     &&
-           lShiftDown      == rEnv.lShiftDown      &&
-           aSlot           == rEnv.aSlot;
+           lShiftDown      == rEnv.lShiftDown;
 }
 
 // --------------------------------------------------------------------------
-
-
-
 SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
 {
     return new SwEnvItem(*this);
 }
-
-
 // --------------------------------------------------------------------------
-
+// --------------------------------------------------------------------------
 SwEnvCfgItem::SwEnvCfgItem() :
-    SfxConfigItem(CFG_ENV_ITEM)
+    ConfigItem(C2U("Office.Writer/Envelope"))
 {
-}
-// ----------------------------------------------------------------------------
-
-int SwEnvCfgItem::Load(SvStream& rStrm)
-{
-    USHORT nVersion;
-    rStrm >> nVersion;
-
-    if (nVersion == ENV_VERSION)
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
     {
-        unsigned char b;
-        long          l;
-        USHORT        i;
-        rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-        rStrm.ReadByteString(aEnvItem.aAddrText, eEncoding);
-        rStrm >> b; aEnvItem.bSend           = (BOOL)       b;
-        rStrm.ReadByteString(aEnvItem.aSendText, eEncoding);
-        rStrm >> l; aEnvItem.lAddrFromLeft   =              l;
-        rStrm >> l; aEnvItem.lAddrFromTop    =              l;
-        rStrm >> l; aEnvItem.lSendFromLeft   =              l;
-        rStrm >> l; aEnvItem.lSendFromTop    =              l;
-        rStrm >> l; aEnvItem.lWidth          =              l;
-        rStrm >> l; aEnvItem.lHeight         =              l;
-        rStrm >> i; aEnvItem.eAlign          = (SwEnvAlign) i;
-        rStrm >> b; aEnvItem.bPrintFromAbove = (BOOL)       b;
-        rStrm >> l; aEnvItem.lShiftRight     =              l;
-        rStrm >> l; aEnvItem.lShiftDown      =              l;
-        rStrm.ReadByteString(aEnvItem.aSlot, eEncoding);
-
-        SetDefault(FALSE);
-
-        return SfxConfigItem::ERR_OK;
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case  0: pValues[nProp] >>= aEnvItem.aAddrText; break;// "Inscription/Addressee",
+                    case  1: pValues[nProp] >>= aEnvItem.aSendText; break;// "Inscription/Sender",
+                    case  2: aEnvItem.bSend = *(sal_Bool*)pValues[nProp].getValue(); break;// "Inscription/UseSender",
+                    case  3:
+                        pValues[nProp] >>= aEnvItem.lAddrFromLeft;// "Format/AddresseeFromLeft",
+                        aEnvItem.lAddrFromLeft = MM100_TO_TWIP(aEnvItem.lAddrFromLeft);
+                    break;
+                    case  4:
+                        pValues[nProp] >>= aEnvItem.lAddrFromTop;  // "Format/AddresseeFromTop",
+                        aEnvItem.lAddrFromTop = MM100_TO_TWIP(aEnvItem.lAddrFromTop);
+                    break;
+                    case  5:
+                        pValues[nProp] >>= aEnvItem.lSendFromLeft; // "Format/SenderFromLeft",
+                        aEnvItem.lSendFromLeft = MM100_TO_TWIP(aEnvItem.lSendFromLeft);
+                    break;
+                    case  6:
+                        pValues[nProp] >>= aEnvItem.lSendFromTop;// "Format/SenderFromTop",
+                        aEnvItem.lSendFromTop = MM100_TO_TWIP(aEnvItem.lSendFromTop);
+                    break;
+                    case  7:
+                        pValues[nProp] >>= aEnvItem.lWidth; // "Format/Width",
+                        aEnvItem.lWidth = MM100_TO_TWIP(aEnvItem.lWidth);
+                    break;
+                    case  8:
+                        pValues[nProp] >>= aEnvItem.lHeight; // "Format/Height",
+                        aEnvItem.lHeight = MM100_TO_TWIP(aEnvItem.lHeight);
+                    break;
+                    case  9:
+                    {
+                        sal_Int32 nTemp;
+                        pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
+                    }
+                    case 10: aEnvItem.bPrintFromAbove = *(sal_Bool*)pValues[nProp].getValue(); break;// "Print/FromAbove",
+                    case 11:
+                        pValues[nProp] >>= aEnvItem.lShiftRight;
+                        aEnvItem.lShiftRight = MM100_TO_TWIP(aEnvItem.lShiftRight);// "Print/Right",
+                    break;
+                    case 12:
+                        pValues[nProp] >>= aEnvItem.lShiftDown;
+                        aEnvItem.lShiftDown = MM100_TO_TWIP(aEnvItem.lShiftDown);
+                    break;// "Print/Down"
+                }
+            }
+        }
     }
-    else
-        return SfxConfigItem::WARNING_VERSION;
 }
+/* -----------------------------26.09.00 14:04--------------------------------
 
-// --------------------------------------------------------------------------
-
-
-
-BOOL SwEnvCfgItem::Store(SvStream& rStrm)
+ ---------------------------------------------------------------------------*/
+SwEnvCfgItem::~SwEnvCfgItem()
 {
-    rStrm << (USHORT)ENV_VERSION;
-
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rStrm.WriteByteString(aEnvItem.aAddrText, eEncoding);
-    rStrm << (unsigned char) aEnvItem.bSend;
-    rStrm.WriteByteString(aEnvItem.aSendText, eEncoding);
-    rStrm <<                 aEnvItem.lAddrFromLeft;
-    rStrm <<                 aEnvItem.lAddrFromTop;
-    rStrm <<                 aEnvItem.lSendFromLeft;
-    rStrm <<                 aEnvItem.lSendFromTop;
-    rStrm <<                 aEnvItem.lWidth;
-    rStrm <<                 aEnvItem.lHeight;
-    rStrm << (USHORT)        aEnvItem.eAlign;
-    rStrm << (unsigned char) aEnvItem.bPrintFromAbove;
-    rStrm <<                 aEnvItem.lShiftRight;
-    rStrm <<                 aEnvItem.lShiftDown;
-    rStrm.WriteByteString(aEnvItem.aSlot, eEncoding);
-
-    return SfxConfigItem::ERR_OK;
 }
+/* -----------------------------26.09.00 14:05--------------------------------
 
-// --------------------------------------------------------------------------
-
-
-
-void SwEnvCfgItem::UseDefault()
+ ---------------------------------------------------------------------------*/
+void    SwEnvCfgItem::Commit()
 {
-    aEnvItem = SwEnvItem();
-    SfxConfigItem::UseDefault();
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
 
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;// "Inscription/Addressee",
+            case  1: pValues[nProp] <<= aEnvItem.aSendText; break;// "Inscription/Sender",
+            case  2: pValues[nProp].setValue(&aEnvItem.bSend, rType);break;// "Inscription/UseSender",
+            case  3: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lAddrFromLeft) ; break;// "Format/AddresseeFromLeft",
+            case  4: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lAddrFromTop)  ; break;// "Format/AddresseeFromTop",
+            case  5: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lSendFromLeft) ; break;// "Format/SenderFromLeft",
+            case  6: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lSendFromTop)  ; break;// "Format/SenderFromTop",
+            case  7: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lWidth)  ; break;// "Format/Width",
+            case  8: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lHeight) ; break;// "Format/Height",
+            case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;// "Print/Alignment",
+            case 10: pValues[nProp].setValue(&aEnvItem.bPrintFromAbove, rType); break;// "Print/FromAbove",
+            case 11: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lShiftRight);break; // "Print/Right",
+            case 12: pValues[nProp] <<= TWIP_TO_MM100(aEnvItem.lShiftDown); break;// "Print/Down"
+        }
+    }
+    PutProperties(aNames, aValues);
 }
+/* -----------------------------26.09.00 14:04--------------------------------
 
-
-
-String SwEnvCfgItem::GetName() const
+ ---------------------------------------------------------------------------*/
+Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 {
-    return SW_RESSTR(STR_CFG_ENVIMG);
+    static const char* aPropNames[] =
+    {
+        "Inscription/Addressee",    //  0
+        "Inscription/Sender",       //  1
+        "Inscription/UseSender",    //  2
+        "Format/AddresseeFromLeft", //  3
+        "Format/AddresseeFromTop",  //  4
+        "Format/SenderFromLeft",    //  5
+        "Format/SenderFromTop",     //  6
+        "Format/Width",             //  7
+        "Format/Height",            //  8
+        "Print/Alignment",          //  9
+        "Print/FromAbove",          // 10
+        "Print/Right",              // 11
+        "Print/Down"                // 12
+    };
+    const int nCount = 13;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
 }
-
-
-
-/*
-$Log: not supported by cvs2svn $
-Revision 1.36  2000/09/18 16:05:25  willem.vandorp
-OpenOffice header added.
-
-Revision 1.35  2000/06/26 16:32:11  jp
-have to change: enums of AddressToken
-
-Revision 1.34  2000/05/26 07:21:29  os
-old SW Basic API Slots removed
-
-Revision 1.33  2000/04/19 13:58:58  os
-#74742# STATEPROV added
-
-Revision 1.32  2000/04/18 15:31:35  os
-UNICODE
-
-Revision 1.31  2000/04/11 13:37:29  os
-#74742# Sender field of envelopes and labels language specific
-
-Revision 1.30  1999/10/22 14:09:27  jp
-have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-Revision 1.29  1997/11/24 10:52:12  MA
-includes
-
-
-      Rev 1.28   24 Nov 1997 11:52:12   MA
-   includes
-
-      Rev 1.27   03 Nov 1997 13:17:16   MA
-   precomp entfernt
-
-      Rev 1.26   08 Apr 1997 10:30:14   OM
-   Fehlende Includes
-
-      Rev 1.25   08 Apr 1997 10:06:30   NF
-   includes...
-
-      Rev 1.24   11 Nov 1996 09:44:18   MA
-   ResMgr
-
-      Rev 1.23   26 Jul 1996 20:36:40   MA
-   includes
-
-      Rev 1.22   28 Jun 1996 10:10:52   OS
-   UseDefault: Basisklasse rufen
-
-      Rev 1.21   19 Mar 1996 16:33:48   MA
-   chg: Umstellungen, Finder und AdrItem
-
-      Rev 1.20   15 Mar 1996 13:29:24   MA
-   opt: Finder abgespeckt
-
-      Rev 1.19   27 Nov 1995 18:55:34   OS
-   Umstellung 303a
-
-      Rev 1.18   24 Nov 1995 16:59:40   OM
-   PCH->PRECOMPILED
-
-      Rev 1.17   16 Nov 1995 18:37:44   OS
-   neu: Get/SetVariable, nicht impl.
-
-      Rev 1.16   15 Sep 1995 21:14:22   OS
-   add: cfgstr.hrc
-
-      Rev 1.15   15 Sep 1995 12:41:00   OS
-   GetName() implementiert
-
-      Rev 1.14   11 Sep 1995 18:06:08   HJS
-   add: sbx.hxx
-
-      Rev 1.13   09 Aug 1995 18:59:36   AMA
-   kein GetPresentation
-
-      Rev 1.12   07 Aug 1995 18:19:58   AMA
-   Umbau: GetValueText -> GetPresentation
-
-      Rev 1.11   08 Jun 1995 19:02:06   OM
-   Absturz unter OS/2 gefixt
-
-      Rev 1.10   30 May 1995 17:01:32   ER
-   Umstellung SwPaper...  SvxPaper...
-
-      Rev 1.9   24 May 1995 18:14:22   ER
-   Segmentierung
-
-      Rev 1.8   23 Mar 1995 18:33:20   PK
-   geht immer weiter ...
-
-      Rev 1.7   17 Mar 1995 17:10:04   PK
-   geht immer weiter
-
-      Rev 1.6   06 Mar 1995 00:08:20   PK
-   linkbarer envelp-zustand
-
-      Rev 1.5   04 Mar 1995 22:55:14   PK
-   geht immer weiter
-
-      Rev 1.4   20 Feb 1995 19:39:44   PK
-   erstma eingecheckt
-
-      Rev 1.3   18 Nov 1994 15:55:28   MA
-   min -> Min, max -> Max
-
-      Rev 1.2   25 Oct 1994 17:33:38   ER
-   add: PCH
-
-      Rev 1.1   15 Apr 1994 17:28:30   PK
-   warnungen raus, strings optimiert
-
-      Rev 1.0   22 Mar 1994 17:48:14   PK
-   umschlaege vorerst fertig
-*/
 

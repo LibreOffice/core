@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2000-09-26 13:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,8 +477,8 @@ BOOL SwEnvPage::FillItemSet(SfxItemSet& rSet)
 void SwEnvPage::Reset(const SfxItemSet& rSet)
 {
     SwEnvItem aItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAddrEdit  .SetText(aItem.aAddrText.ConvertLineEnd());
-    aSenderEdit.SetText(aItem.aSendText.ConvertLineEnd());
+    aAddrEdit  .SetText(String(aItem.aAddrText).ConvertLineEnd());
+    aSenderEdit.SetText(String(aItem.aSendText).ConvertLineEnd());
     aSenderBox .Check  (aItem.bSend);
     aSenderBox.GetClickHdl().Call(&aSenderBox);
 }
@@ -489,6 +489,9 @@ void SwEnvPage::Reset(const SfxItemSet& rSet)
 
 /*
 $Log: not supported by cvs2svn $
+Revision 1.1.1.1  2000/09/18 17:14:35  hr
+initial import
+
 Revision 1.91  2000/09/18 16:05:25  willem.vandorp
 OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2000-09-26 13:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,9 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
-
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
-#endif
-
 
 // enum -----------------------------------------------------------------------
 
@@ -92,20 +86,19 @@ class SwEnvItem : public SfxPoolItem
 {
 public:
 
-    String     aAddrText;       // Text fuer Empfaenger
-    BOOL       bSend;           // Absender?
-    String     aSendText;       // Text fuer Absender
-    long       lAddrFromLeft;   // Linker Abstand fuer Empfaenger (twips)
-    long       lAddrFromTop;    // Oberer Abstand fuer Empfaenger (twips)
-    long       lSendFromLeft;   // Linker Abstand fuer Absender   (twips)
-    long       lSendFromTop;    // Oberer Abstand fuer Absender   (twips)
-    long       lWidth;          // Breite des Umschlags           (twips)
-    long       lHeight;         // Hoehe  des Umschlags           (twips)
-    SwEnvAlign eAlign;          // Ausrichtung beim Einzug
-    BOOL       bPrintFromAbove; // Von oben drucken?
-    long       lShiftRight;     // Verschiebung nach rechts       (twips)
-    long       lShiftDown;      // Verschiebung nach unten        (twips)
-    String     aSlot;           // Druckerschacht
+    rtl::OUString   aAddrText;       // Text fuer Empfaenger
+    sal_Bool        bSend;           // Absender?
+    rtl::OUString   aSendText;       // Text fuer Absender
+    sal_Int32       lAddrFromLeft;   // Linker Abstand fuer Empfaenger (twips)
+    sal_Int32       lAddrFromTop;    // Oberer Abstand fuer Empfaenger (twips)
+    sal_Int32       lSendFromLeft;   // Linker Abstand fuer Absender   (twips)
+    sal_Int32       lSendFromTop;    // Oberer Abstand fuer Absender   (twips)
+    sal_Int32       lWidth;          // Breite des Umschlags           (twips)
+    sal_Int32       lHeight;         // Hoehe  des Umschlags           (twips)
+    SwEnvAlign      eAlign;          // Ausrichtung beim Einzug
+    sal_Bool        bPrintFromAbove; // Von oben drucken?
+    sal_Int32       lShiftRight;     // Verschiebung nach rechts       (twips)
+    sal_Int32       lShiftDown;      // Verschiebung nach unten        (twips)
 
     SwEnvItem();
     SwEnvItem(const SwEnvItem& rItem);
@@ -118,21 +111,18 @@ public:
 };
 
 // class SwEnvCfgItem -------------------------------------------------------
-
-class SwEnvCfgItem : public SfxConfigItem
+class SwEnvCfgItem : public utl::ConfigItem
 {
-protected:
-
-    virtual int  Load (SvStream& rStrm);
-    virtual BOOL Store(SvStream& rStrm);
-    virtual void UseDefault();
-
-public:
     SwEnvItem aEnvItem;
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+public:
     SwEnvCfgItem();
+    ~SwEnvCfgItem();
 
-    virtual String  GetName() const;
+    SwEnvItem& GetItem() {return aEnvItem;}
+
+    virtual void            Commit();
 };
-
 #endif
 
