@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-08 10:50:09 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2382,6 +2382,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     ITEM_TOOLS_BASICCHOOSER
                 };
                 ITEM_MN_OPTIONS
+                ITEM_TOOLS_SYNCHRONIZE
             };
         };
             Text[ russian ] = "~Сервис";
