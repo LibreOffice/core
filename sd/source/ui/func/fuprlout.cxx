@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: cl $ $Date: 2000-10-18 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,16 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
             {
                 pSelectedPage->SetAutoLayout(pSelectedPage->GetAutoLayout(), TRUE);
             }
+        }
+
+        // fake a mode change to repaint the page tab bar
+        if( pViewShell && pViewShell->ISA( SdDrawViewShell ) )
+        {
+            SdDrawViewShell* pDrawViewSh = (SdDrawViewShell*)pViewShell;
+            EditMode eMode = pDrawViewSh->GetEditMode();
+            BOOL bLayer = pDrawViewSh->GetLayerMode();
+            pDrawViewSh->ChangeEditMode( eMode, !bLayer );
+            pDrawViewSh->ChangeEditMode( eMode, bLayer );
         }
 
         pDocSh->SetWaitCursor( FALSE );
