@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-15 14:53:38 $
+ *  last change: $Author: iha $ $Date: 2002-09-25 14:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ private:
     ULONG                       mnPlaySoundEvent;
     BOOL                        mbUsableSelection;
     BOOL                        mbLabelPlaying;
+    BOOL                        mbDuringPreparePlaying;
 
     void                        CheckSelectionState();
 
@@ -237,14 +238,17 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
         INetURLObject   aUrl( GetPath() );
         String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if( aSoundFile.Len() > 0 )
+        if( aSoundFile.Len() > 0 && Sound::IsSoundFile(aSoundFile) )
         {
             maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
+            mbDuringPreparePlaying=TRUE;
             maSound.SetSoundName( aSoundFile );
             maSound.Play();
 
+            ULONG nError = maSound.GetLastError();
+            mbDuringPreparePlaying=FALSE;
             // guard against early stopping
-            if( maSound.IsPlaying() )
+            if( maSound.IsPlaying() && !nError)
             {
                 try
                 {
@@ -260,6 +264,11 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 #endif
                 }
             }
+            else if(nError)
+            {
+                //reset error state of sound
+                maSound.SetSoundName( String() );
+            }
         }
     }
 
@@ -269,6 +278,9 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 // ------------------------------------------------------------------------
 IMPL_LINK( SdFileDialog_Imp, StopMusicHdl, void *, EMPTYARG )
 {
+    if(mbDuringPreparePlaying)
+        return( 0L ); //don't reset the error state of maSound during prepare playing
+
      ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // reset, so that sound file gets unlocked
@@ -322,7 +334,8 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
-    mbLabelPlaying(FALSE)
+    mbLabelPlaying(FALSE),
+    mbDuringPreparePlaying(FALSE)
 {
     css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
