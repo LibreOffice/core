@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2000-10-20 12:55:57 $
+#   last change: $Author: os $ $Date: 2000-11-13 11:38:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=			bibcont.cxx \
+CXXFILES=			bibconfig.cxx\
+                    bibcont.cxx \
                     bibload.cxx \
                     bibmod.cxx  \
                     general.cxx	 \
@@ -87,7 +88,8 @@ CXXFILES=			bibcont.cxx \
                     fieldwin.cxx
 
 
-SLOFILES=			$(SLO)$/bibcont.obj \
+SLOFILES=			$(SLO)$/bibconfig.obj \
+                    $(SLO)$/bibcont.obj \
                     $(SLO)$/bibload.obj \
                     $(SLO)$/bibmod.obj \
                     $(SLO)$/general.obj \
