@@ -37,19 +37,18 @@ CLASSFILES = $(patsubst %.java,$(OUT_COMPONENT)$(PS)%.class,$(JAVAFILES) )
 
 CLASSFILES += $(patsubst %.java,$(OUT_COMPONENT)$(PS)$(PACKAGE)$(PS)%.class,$(GENJAVAFILES) )
 
-DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),, \
-		$(CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)java_uno.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)jut.jar\
+SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),, \
+		$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)java_uno.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)jut.jar\
 		$(PATH_SEPARATOR)$(OUT_COMPONENT) \
 		)
 
 OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
-OFFICE_CLASSPATH = $(subst $(CLASSES_DIR),$(OFFICE_PROGRAM_PATH)$(PS)classes, $(DK_CLASSPATH))
 
 
 # Targets
@@ -69,7 +68,7 @@ $(TYPEFLAG) : $(IDLFILES)
 	@echo bla > $@
 
 $(JAVAFLAG) : $(OUT_COMPONENT) $(TYPEFLAG) $(JAVAFILES)
-	javac -classpath $(DK_CLASSPATH) -d $(OUT_COMPONENT) $(GENJAVAFILES) $(JAVAFILES)
+	javac -classpath $(SDK_CLASSPATH) -d $(OUT_COMPONENT) $(GENJAVAFILES) $(JAVAFILES)
 	@echo bla > $@
 
 $(COMPONENTJARFLAG) : $(JAVAFLAG)
@@ -80,8 +79,8 @@ $(COMPONENTJARFLAG) : $(JAVAFLAG)
 $(REGISTERFLAG) : $(COMPONENTJARFLAG)
 ifneq "$(OFFICE_PROGRAM_PATH)" ""
 	$(BIN_DIR)$(PS)regmerge $(OFFICE_PROGRAM_PATH)$(PS)applicat.rdb /UCR $(GENURDFILES) MinimalComponent.rdb
-	$(COPY) $(COMPONENT_JAR) $(OFFICE_PROGRAM_PATH)$(PS)classes
-	java -classpath $(OFFICE_CLASSPATH) com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/MinimalComponent.jar" com.sun.star.loader.Java2
+	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
+	java -classpath $(SDK_CLASSPATH) com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/MinimalComponent.jar" com.sun.star.loader.Java2
 	@echo bla > $@
 else
 	@echo --------------------------------------------------------------------------------
@@ -93,7 +92,7 @@ endif
 register: $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute
-	@echo java -classpath $(DK_CLASSPATH) TestMinimalComponent
+	@echo java -classpath $(SDK_CLASSPATH) TestMinimalComponent
 	@echo --------------------------------------------------------------------------------
 
 run:

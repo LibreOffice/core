@@ -24,19 +24,18 @@ JAVAFILES  =	PropTest.java
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMPONENT)$(PS)$(PACKAGE)$(PS)%.class,$(JAVAFILES))
 
-DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
-		$(CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)java_uno.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)jut.jar\
+SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
+		$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)java_uno.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)jut.jar\
 		$(PATH_SEPARATOR)$(OUT_COMPONENT)\
 		)
 
 OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
-OFFICE_CLASSPATH = $(subst \\,\,$(subst $(CLASSES_DIR),$(OFFICE_PROGRAM_PATH)$(PS)classes,$(DK_CLASSPATH)))
 
 
 # Targets
@@ -49,7 +48,7 @@ $(OUT_COMPONENT) : $(OUT)
 	$(MKDIR) $@
 
 $(CLASSFILES) : $(OUT_COMPONENT) $(JAVAFILES)
-	javac -classpath "$(DK_CLASSPATH)" -d $(OUT_COMPONENT) $(JAVAFILES) 
+	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMPONENT) $(JAVAFILES) 
 
 $(COMPONENTJARFLAG) : $(CLASSFILES)
 	jar cvfm $(COMPONENT_JAR) $(COMPONENT_MANIFESTFILE) -C $(OUT_COMPONENT) .
@@ -58,8 +57,8 @@ $(COMPONENTJARFLAG) : $(CLASSFILES)
 
 $(REGISTERFLAG) : $(COMPONENTJARFLAG)
 ifneq "$(OFFICE_PROGRAM_PATH)" ""
-	$(COPY) $(COMPONENT_JAR) "$(OFFICE_PROGRAM_PATH)/classes"
-	java -classpath "$(OFFICE_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/PropTest.jar" com.sun.star.loader.Java2
+	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
+	java -classpath "$(SDK_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/PropTest.jar" com.sun.star.loader.Java2
 	@echo bla > $@
 else
 	@echo ----------------------------------------------------------------------------------------

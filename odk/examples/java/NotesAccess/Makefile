@@ -12,16 +12,16 @@ include $(SETTINGS)/std.mk
 
 JAVAFILES  = \
 	NotesAccess.java
-		
+
 CLASSFILES = $(patsubst %.java,$(OUT_CLASS)$(PS)%.class,$(JAVAFILES))
 
-DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
-		$(CLASSES_DIR)$(PS)jurt.jar \
-  		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)unoil.jar \
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)ridl.jar \
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)sandbox.jar \
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)juh.jar \
-		$(PATH_SEPARATOR)$(CLASSES_DIR)$(PS)Notes.jar \
+SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
+		$(OFFICE_CLASSES_DIR)$(PS)jurt.jar \
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar \
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar \
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar \
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar \
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)Notes.jar \
 		$(PATH_SEPARATOR)$(OUT_CLASS)\
 		)
 
@@ -29,14 +29,14 @@ DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
 # Targets
 .PHONY: ALL
 ALL : notesaccess
-	
+
 include $(SETTINGS)/stdtarget.mk
 
 $(CLASSFILES) : $(OUT) $(OUT_CLASS) $(JAVAFILES)
-	javac -classpath $(DK_CLASSPATH) -d $(OUT_CLASS) $(JAVAFILES) 
+	javac -classpath $(SDK_CLASSPATH) -d $(OUT_CLASS) $(JAVAFILES) 
 
 notesaccess: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute
-	@echo java -classpath $(subst \\,\,$(DK_CLASSPATH)) NotesAccess $(OSEP)Connection$(CSEP) $(OSEP)Host$(CSEP) $(OSEP)User$(CSEP) $(OSEP)Password$(CSEP) $(OSEP)Database$(CSEP)
+	@echo java -classpath $(subst \\,\,$(SDK_CLASSPATH)) NotesAccess $(OSEP)Connection$(CSEP) $(OSEP)Host$(CSEP) $(OSEP)User$(CSEP) $(OSEP)Password$(CSEP) $(OSEP)Database$(CSEP)
 	@echo --------------------------------------------------------------------------------
