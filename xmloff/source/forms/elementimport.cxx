@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 09:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #include "eventimport.hxx"
 #endif
 
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
@@ -633,6 +636,43 @@ namespace xmloff
     }
 
     //=====================================================================
+    //= ORadioImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    ORadioImport::ORadioImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void ORadioImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        // need special handling for the State & CurrentState properties:
+        // they're stored as booleans, but expected to be int16 properties
+        static const ::rtl::OUString s_sCurrentSelected = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_SELECTED));
+        static const ::rtl::OUString s_sSelected = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_SELECTED));
+        if ((_rLocalName == s_sCurrentSelected) || (_rLocalName == s_sSelected))
+        {
+            const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
+            OSL_ENSURE(pProperty, "ORadioImport::handleAttribute: invalid property map!");
+            if (pProperty)
+            {
+                Any aBooleanValue = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
+
+                // create and store a new PropertyValue
+                PropertyValue aNewValue;
+                aNewValue.Name = pProperty->sPropertyName;
+                aNewValue.Value <<= (sal_Int16)::cppu::any2bool(aBooleanValue);
+
+                implPushBackPropertyValue(aNewValue);
+            }
+        }
+        else
+            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+    }
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
@@ -853,6 +893,8 @@ namespace xmloff
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 return new OListAndComboImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+            case OControlElement::RADIO:
+                return new ORadioImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
 
             case OControlElement::FRAME:
             case OControlElement::FIXED_TEXT:
@@ -1045,6 +1087,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.8  2001/01/24 09:37:58  fs
  *  OFormImport: call enter-/leaveEventContext when starting/ending the element
  *

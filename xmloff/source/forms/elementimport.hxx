@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:37:58 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 09:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,24 @@ namespace xmloff
     };
 
     //=====================================================================
+    //= ORadioImport
+    //=====================================================================
+    class ORadioImport : public OControlImport
+    {
+    public:
+        ORadioImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+        // OPropertyImport overridables
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue);
+    };
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
@@ -560,6 +578,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/01/24 09:37:58  fs
+ *  OFormImport: call enter-/leaveEventContext when starting/ending the element
+ *
  *  Revision 1.6  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *
