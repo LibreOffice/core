@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numbers.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:33:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -82,13 +85,13 @@ namespace comphelper
     namespace starutil  = ::com::sun::star::util;
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formats
-    sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formatter
-    sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey);
 
     /// returns the decimals of the given numeric number formatunder the given formats
-    staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
 
     /** returns the standard format for the given type and the given _rLocale
     */
@@ -99,7 +102,7 @@ namespace comphelper
 
     /** retrieves a the value of a given property for a given format key, relating to a given formatter
     */
-    ::com::sun::star::uno::Any getNumberFormatProperty(
+    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Any getNumberFormatProperty(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
         sal_Int32 _nKey,
         const rtl::OUString& _rPropertyName

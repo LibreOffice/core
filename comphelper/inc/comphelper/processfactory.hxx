@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 09:10:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
@@ -81,7 +84,7 @@ namespace comphelper
  *
  * @author Juergen Schmidt
  */
-void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
+COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
 
 /**
  * This function get the process service factory. If no service factory is set the function returns
@@ -89,13 +92,13 @@ void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun
  *
  * @author Juergen Schmidt
  */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
 
 /** creates a component, using the process factory if set
     @see getProcessServiceFactory
     @see setProcessServiceFactory
 */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     createProcessComponent(
         const ::rtl::OUString& _rServiceSpecifier
     ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
