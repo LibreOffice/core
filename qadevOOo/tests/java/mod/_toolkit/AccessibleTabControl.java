@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabControl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:39:36 $
+ *  last change:$Date: 2005-03-01 20:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,17 +96,17 @@ import util.SOfficeFactory;
  * Test for object that implements the following interfaces :
  * <ul>
  *  <li><code>
- *  drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
+ *  ::com::sun::star::accessibility::XAccessibleContext</code></li>
  *  <li><code>
- *  drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+ *  ::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
  *  <li><code>
- *  drafts::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ *  ::com::sun::star::accessibility::XAccessibleComponent</code></li>
  *  <li><code>
- *  drafts::com::sun::star::accessibility::XAccessibleExtendedComponent
+ *  ::com::sun::star::accessibility::XAccessibleExtendedComponent
  *  </code></li>
  *  <li><code>
- *  drafts::com::sun::star::accessibility::XAccessibleSelection
+ *  ::com::sun::star::accessibility::XAccessibleSelection
  *  </code></li>
  * </ul> <p>
  *
