@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
+#   last change: $Author: jl $ $Date: 2001-08-07 11:13:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,9 @@ LIBTARGET=NO
 .INCLUDE : ..$/..$/cppumaker.mk
 
 #CFLAGS+=/GR -DUNICODE -D_UNICODE
+UNOTYPES= \
+    com.sun.star.datatransfer.XSystemTransferable
+    
 
 SLOFILES=$(SLO)$/DtObjFactory.obj\
          $(SLO)$/APNDataObject.obj\
