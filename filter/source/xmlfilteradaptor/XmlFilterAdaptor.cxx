@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:03:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,14 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
+#include <com/sun/star/frame/XConfigManager.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_XML_XIMPORTFILTER_HPP_
 #include <com/sun/star/xml/XImportFilter.hpp>
 #endif
@@ -146,14 +154,14 @@ Reference< com::sun::star::frame::XModel > xModel;
 sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
-    OUString udConvertClass=msUserData[0];
-    OUString udImport =msUserData[2];
+      OUString udConvertClass=msUserData[0];
+      OUString udImport =msUserData[2];
     sal_Int32 nSteps= 4;
-    sal_Int32 nProgressRange(nSteps);
+      sal_Int32 nProgressRange(nSteps);
 
-    //
+
     Sequence < PropertyValue > aAnySeq;
-    Reference < XStatusIndicator >xStatusIndicator;
+      Reference < XStatusIndicator >xStatusIndicator;
     sal_Int32 nLength = aDescriptor.getLength();
     sal_Int32 newLength;
     if ( nLength  )
@@ -167,15 +175,17 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             {
                  pValue[i].Value >>= xStatusIndicator;
 
-            }
+                }
         }
-    }
-//
-    if (xStatusIndicator.is()){
+     }
+     if (xStatusIndicator.is()){
        xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "Loading :" )),nProgressRange);
-       nSteps= 0;
+         nSteps= 0;
        xStatusIndicator->setValue(nSteps);
-    }
+     }
+
+
+
 
     OUString sXMLImportService (  udImport  );
     const OUString sSaxParser ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser") );
@@ -190,9 +200,10 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument ( mxDoc );
+
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
-    }
+        }
 
     //*********************
     // Creating a ConverterBridge instance
@@ -205,48 +216,33 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
          //fprintf (stderr, "XMLReader::Read: %s service missing\n",udConvertClass );
         return sal_False;
       }
+      if (xStatusIndicator.is()){
+        xStatusIndicator->setValue(nSteps++);
+        }
     }
     catch( Exception& e){
         //fprintf (stderr, "XMLReader::Read: %s Unable to create service instance\n" );
          OSL_ENSURE( sal_False,"XMLReader::Read: Unable to create service instance\n" );
         return sal_False;
      }
-    if (xStatusIndicator.is()){
-        xStatusIndicator->setValue(nSteps++);
-    }
+
     Reference< com::sun::star::xml::XImportFilter > xConverter;
     try {
       xConverter = Reference< com::sun::star::xml::XImportFilter > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e)
-      {
-        fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(  e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
-        OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-        fprintf(stderr, "Casting failure!\n");
-      }
+    {
+      fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(  e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+      OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+      fprintf(stderr, "Casting failure!\n");
+    }
 
-        sal_Bool xconv_ret = sal_True;
-     if (xStatusIndicator.is()){
-        xStatusIndicator->setValue(nSteps++);
-     }
-    //*********************
-    // Calling Filtering Component
-    //*********************
-       xconv_ret =xConverter->importer(aDescriptor,xHandler,msUserData);
-
-     if (!xconv_ret) {
-       //return sal_False;
-        return sal_True;
-     }
-     if (xStatusIndicator.is()){
-        xStatusIndicator->setValue(nSteps++);
-     }
      //********************
      //Template Loading if Required
      //********************
      if (!msTemplateName.equalsAscii("")){
              com::sun::star::uno::Reference< XModel >xModel ( com::sun::star::uno::Reference< XModel >::query( mxDoc ) );
-         com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xstylefamiliessupplier ( com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier >::query( mxDoc ) );
+         com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xstylefamiliessupplier ( com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier >::query( mxDoc) );
 
          Reference< com::sun::star::container::XNameAccess >xName;
          if(xstylefamiliessupplier.is()){
@@ -265,8 +261,15 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
          Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
          //Load the Styles from the Template URL Supplied in the TypeDetection file
-         xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
-
+        if(msTemplateName.indexOf(OUString::createFromAscii("file:"))==-1)
+        {
+              com::sun::star::uno::Reference< com::sun::star::frame::XConfigManager >xCfgMgr ( mxMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
+             OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
+            PathString=PathString.concat(OUString::createFromAscii("/"));
+            msTemplateName=PathString.concat(msTemplateName);
+        }
+        //OSL_ENSURE( sal_False, ::rtl::OUStringToOString( msTemplateName, RTL_TEXTENCODING_ASCII_US).getStr());
+        xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
           //*********************
          // Debug Info
          //*********************
@@ -280,7 +283,6 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             fprintf(stderr,"UserData :  %s",OUStringToOString(  temp, RTL_TEXTENCODING_ASCII_US ).getStr());
 
          }
-
          nLength = elementNames.getLength();
          for ( sal_Int32 x = 0 ; x < nLength; x++)
          {
@@ -296,11 +298,32 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //*********************
     //End of template stuff
     //*********************
+
+      sal_Bool xconv_ret = sal_True;
+
+    if (xStatusIndicator.is()){
+        xStatusIndicator->setValue(nSteps++);
+    }
+    //*********************
+    // Calling Filtering Component
+    //*********************
+    try{
+       xconv_ret =xConverter->importer(aDescriptor,xHandler,msUserData);
+    }
+    catch( Exception& e){
+      OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        throw(e);
+
+    }
+    if (!xconv_ret) {
+       //return sal_False;
+        return sal_True;
+    }
       if (xStatusIndicator.is()){
          xStatusIndicator->setValue(nSteps++);
          xStatusIndicator->end();
-     }
-     return sal_True;
+      }
+    return sal_True;
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
@@ -309,7 +332,6 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
     OUString udConvertClass=msUserData[0];
     OUString udExport =msUserData[3];
-
 
     //*********************
         // Set up converter bridge.
@@ -349,17 +371,15 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     sal_Int32 nProgressRange(nSteps);
     if (xStatusIndicator.is()){
        xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "Saving :" )),nProgressRange);
-        nSteps= 0;
-        xStatusIndicator->setValue(nSteps);
     }
 
     //
-
+    nSteps= 1;
+     xStatusIndicator->setValue(nSteps);
     try {
-        xConverter = Reference< com::sun::star::xml::XExportFilter > ( xConvBridge, UNO_QUERY );
-          if (xStatusIndicator.is()){
-            xStatusIndicator->setValue(nSteps++);
-        }
+
+      xConverter = Reference< com::sun::star::xml::XExportFilter > ( xConvBridge, UNO_QUERY );
+      xStatusIndicator->setValue(nSteps);
     }
     catch( Exception& e){
       //fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
@@ -368,9 +388,8 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     }
 
     //fprintf(stderr, "created converterbridge\n");
-    if (xStatusIndicator.is()){
-        xStatusIndicator->setValue(nSteps++);
-    }
+     xStatusIndicator->setValue(nSteps++);
+
     //*********************
     //Calling Filtering Component
     //*********************
@@ -378,18 +397,23 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     if (!xconv_ret) {
       return sal_False;
     }
-    if (xStatusIndicator.is()){
-        xStatusIndicator->setValue(nSteps++);
-    }
+     xStatusIndicator->setValue(nSteps++);
     OUString sXMLExportService (  udExport  );
     Sequence < Any > aAnys ( 1 );
     aAnys[0] <<= xConverter;
-    Reference < XExporter > xExporter( mxMSF->createInstanceWithArguments (
+    try{
+        Reference < XExporter > xExporter( mxMSF->createInstanceWithArguments (
                        sXMLExportService, aAnys ), UNO_QUERY );
-    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
-    xExporter->setSourceDocument ( mxDoc );
-     xStatusIndicator->setValue(nSteps++);
-    xFilter->filter ( aDescriptor );
+        Reference < XFilter > xFilter( xExporter, UNO_QUERY );
+        xExporter->setSourceDocument ( mxDoc );
+        xStatusIndicator->setValue(nSteps++);
+        xFilter->filter ( aDescriptor );
+    }
+    catch( Exception& exE){
+      //fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+        OSL_ENSURE( sal_False, ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+      //fprintf(stderr, "Casting failure!\n");
+    }
     xStatusIndicator->end();
     return sal_True;
 }
@@ -437,7 +461,6 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-             //OSL_ENSURE( sal_False, ::rtl::OUStringToOString( pValue[i].Name, RTL_TEXTENCODING_ASCII_US).getStr());
 
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
             {
