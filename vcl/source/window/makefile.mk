@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.14 $
+#	$Revision: 1.15 $
 #
-#	last change: $Author: obo $ $Date: 2004-07-06 13:49:07 $
+#	last change: $Author: obo $ $Date: 2004-08-12 10:46:50 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES= \
             $(SLO)$/splitwin.obj	\
             $(SLO)$/status.obj		\
             $(SLO)$/syschild.obj	\
+            $(SLO)$/javachild.obj	\
             $(SLO)$/syswin.obj		\
             $(SLO)$/tabdlg.obj		\
             $(SLO)$/tabpage.obj 	\
@@ -118,8 +119,9 @@ EXCEPTIONSFILES=					\
             $(SLO)$/winproc.obj		\
             $(SLO)$/syswin.obj		\
             $(SLO)$/dndevdis.obj	\
-            $(SLO)$/dndlcon.obj
-
+            $(SLO)$/dndlcon.obj		\
+            $(SLO)$/javachild.obj	
+            
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
