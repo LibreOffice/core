@@ -5,6 +5,7 @@ mkdir: %_DEST%\inc%_EXT%\psprint
 
 ..\inc\psprint\*.hxx %_DEST%\inc%_EXT%\psprint\*.hxx
 ..\source\fontsubset\sft.h %_DEST%\inc%_EXT%\psprint\sft.h
+..\source\fontsubset\list.h %_DEST%\inc%_EXT%\psprint\list.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
