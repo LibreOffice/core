@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_TOPBORDERWIDTH                      18
 #define CTF_BOTTOMBORDERWIDTH                   19
 #define CTF_NUMBERFORMAT                        20
+#define CTF_MAP                                 21
 
 //PageStyles
 #define CTF_BACKGROUNDCOLOR                     50
@@ -167,6 +168,14 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
             const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap) const;
+
+    virtual void exportStyleContent(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+            sal_Int32 nFamily,
+            const ::std::vector< XMLPropertyState >& rProperties,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap) const;
+
 public:
             ScXMLAutoStylePoolP(ScXMLExport& rScXMLExport);
     virtual ~ScXMLAutoStylePoolP();
@@ -175,6 +184,9 @@ public:
 class ScXMLStyleExport : public XMLStyleExport
 {
     virtual void exportStyleAttributes(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::style::XStyle > & rStyle );
+    virtual void exportStyleContent(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
 public:
