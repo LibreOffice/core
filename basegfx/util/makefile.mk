@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: thb $ $Date: 2004-02-24 22:10:45 $
+#   last change: $Author: hr $ $Date: 2004-05-11 16:59:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,10 +88,8 @@ SHL1IMPLIB= ibasegfx
 
 SHL1STDLIBS=\
         $(SALLIB)		 \
-        $(VOSLIB)		 \
         $(CPPUHELPERLIB) \
-        $(CPPULIB)		 \
-        $(UNOTOOLSLIB)	
+        $(CPPULIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/basegfx.lib
