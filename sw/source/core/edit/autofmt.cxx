@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:48:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,8 +834,9 @@ BOOL SwAutoFormat::DoTable()
         DelEmptyLine();
         SwNodeIndex aIdx( aDelPam.GetPoint()->nNode );
         aDelPam.Move( fnMoveForward );
-        pDoc->InsertTable( *aDelPam.GetPoint(), 1, nColCnt, eHori, ALL_TBL_INS_ATTR,
-                            0, &aPosArr );
+        pDoc->InsertTable( SwInsertTableOptions( tabopts::ALL_TBL_INS_ATTR , 1 ),
+                           *aDelPam.GetPoint(), 1, nColCnt, eHori,
+                           0, &aPosArr );
         aDelPam.GetPoint()->nNode = aIdx;
     }
     return 1 < aPosArr.Count();
