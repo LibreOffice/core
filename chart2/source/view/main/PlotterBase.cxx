@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-05 15:31:51 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,26 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
         //create and added to target
         return m_pShapeFactory->createGroup3D( xTarget, rName );
     }
+}
+
+awt::Point PlotterBase::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D ) const
+{
+    //@todo would like to have a cheaper method to do this transformation
+    awt::Point aScreenPoint( rScenePosition3D.PositionX, rScenePosition3D.PositionY );
+
+    //transformation from scene to screen (only neccessary for 3D):
+    if(3==m_nDimension)
+    {
+        //create 3D anchor shape
+        tPropertyNameMap aDummyPropertyNameMap;
+        uno::Reference< drawing::XShape > xShape3DAnchor = m_pShapeFactory->createCube( m_xLogicTarget
+                , DataPointGeometry( rScenePosition3D,drawing::Direction3D(1,1,1) )
+                , 0, aDummyPropertyNameMap);
+        //get 2D position from xShape3DAnchor
+        aScreenPoint = xShape3DAnchor->getPosition();
+        m_xLogicTarget->remove(xShape3DAnchor);
+    }
+    return aScreenPoint;
 }
 
 /*

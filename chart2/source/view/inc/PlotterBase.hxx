@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:15:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@ protected: //methods
         createGroupShape( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , ::rtl::OUString rName=::rtl::OUString() );
+
+    ::com::sun::star::awt::Point transformSceneToScreenPosition(
+            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
+
 
 protected: //member
     ::com::sun::star::uno::Reference<
