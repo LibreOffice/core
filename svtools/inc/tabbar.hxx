@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:29:22 $
+ *  last change: $Author: tbe $ $Date: 2002-09-02 16:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,9 @@ private:
     USHORT          ImplGetLastFirstPos();
     void            ImplInitControls();
     void            ImplEnableControls();
+    void            ImplSelect();
+    void            ImplActivatePage();
+    long            ImplDeactivatePage();
                     DECL_LINK( ImplClickHdl, ImplTabButton* );
 #endif
 
@@ -561,6 +564,9 @@ public:
     const Link&     GetAllowRenamingHdl() const { return maAllowRenamingHdl; }
     void            SetEndRenamingHdl( const Link& rLink ) { maEndRenamingHdl = rLink; }
     const Link&     GetEndRenamingHdl() const { return maEndRenamingHdl; }
+
+    // accessibility
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _TABBAR_HXX
