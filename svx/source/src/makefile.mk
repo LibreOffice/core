@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:40:38 $
+#   last change: $Author: hr $ $Date: 2004-02-05 15:59:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,8 @@ IMGLST_SRS=$(SRS)$/app.srs
 
 RES1FILELIST=\
     $(SRS)$/app.srs \
+    $(SRS)$/svxslots.srs \
     $(SOLARRESDIR)$/sfxslots.srs \
-    $(SOLARRESDIR)$/svxslots.srs \
     $(SOLARRESDIR)$/svtools.srs \
     $(SOLARRESDIR)$/sfx.srs 	\
     $(SOLARRESDIR)$/so2.srs 	\
