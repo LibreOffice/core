@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:53:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ class SwTableAutoFmt;
 
 class SwInsTableDlg : public SfxModalDialog
 {
-    TableNameEdit   aNameEdit;
     FixedText       aNameFT;
+    TableNameEdit   aNameEdit;
     FixedText       aColLbl;
     NumericField    aColEdit;
     FixedText       aRowLbl;
