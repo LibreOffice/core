@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog RID_SVXDLG_BBDLG
     Text [ ENGLISH ] = "Border / Background" ;
     Text [ norwegian ] = "Border / Background" ;
     Text [ italian ] = "Bordo / Sfondo" ;
-    Text [ portuguese_brazilian ] = "Margem / Fundo" ;
+    Text [ portuguese_brazilian ] = "Borda / Plano de Fundo" ;
     Text [ portuguese ] = "Contorno/Plano de fundo" ;
     Text [ finnish ] = "Reuna / tausta" ;
     Text [ danish ] = "Ramme / Baggrund" ;
@@ -97,7 +97,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ ENGLISH ] = "Border" ;
                 Text [ norwegian ] = "Border" ;
                 Text [ italian ] = "Bordo" ;
-                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
@@ -108,7 +108,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ english_us ] = "Borders" ;
                 Text[ chinese_simplified ] = "边框";
                 Text[ russian ] = "����������";
-                Text[ polish ] = "Obramowanie";
+                Text[ polish ] = "Kraw�dzie";
                 Text[ japanese ] = "外枠";
                 Text[ chinese_traditional ] = "邊框";
                 Text[ arabic ] = "������";
@@ -118,6 +118,9 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vores";
                 Text[ thai ] = "เส้นขอบ";
+                Text[ czech ] = "Okraje";
+                Text[ hebrew ] = "‮מסגרות‬";
+                Text[ hindi ] = "किनारें";
             };
             PageItem
             {
@@ -126,7 +129,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -147,12 +150,15 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
         };
     };
     Text[ chinese_simplified ] = "边框和背景";
     Text[ russian ] = "���������� / ���";
-    Text[ polish ] = "Obramowanie / T�o";
+    Text[ polish ] = "Kraw�d�/t�o";
     Text[ japanese ] = "外枠/背景";
     Text[ chinese_traditional ] = "邊框和背景";
     Text[ arabic ] = "������ / �������";
@@ -162,8 +168,20 @@ TabDialog RID_SVXDLG_BBDLG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vora / Fons";
     Text[ thai ] = "เส้นขอบ / พื้นหลัง";
+    Text[ czech ] = "Okraje / Pozadí";
+    Text[ hebrew ] = "Umrandung / Hintergrund";
+    Text[ hindi ] = "किनारा / पृष्ठभाग";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
