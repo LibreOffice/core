@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,22 @@
 #include <basegfx/range/b2drange.hxx>
 #endif
 
+#ifndef _BGFX_RANGE_B2IRANGE_HXX
+#include <basegfx/range/b2irange.hxx>
+#endif
+
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
+
 namespace basegfx
 {
+    B2IRange fround(const B2DRange& rRange)
+    {
+        return B2IRange(
+            fround(rRange.getMinX()), fround(rRange.getMinY()),
+            fround(rRange.getMaxX()), fround(rRange.getMaxY()));
+    }
 } // end of namespace basegfx
 
 // eof
