@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 14:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ public:
     virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& rEvent);
 
 // XFormController
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl(void) {return m_xCurrentControl;}
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl(void);
     virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l);
     virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l);
 
@@ -581,7 +581,7 @@ protected:
     void insertControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
     void removeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
 
-    void onModify();
+    void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
     void onActivate();
 
     sal_Bool isLocked() const {return m_bLocked;}
