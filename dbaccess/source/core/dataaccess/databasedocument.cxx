@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:27:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include <com/sun/star/document/XImporter.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -150,9 +153,47 @@ void SAL_CALL ODatabaseSource::removeEventListener( const Reference< XEventListe
 }
 // -----------------------------------------------------------------------------
 // XModel
+// ATTENTION: The Application controller attaches the same resource to force a reload.
 sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL, const Sequence< PropertyValue >& _aArguments ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
+    TStorages::iterator aIter = m_aStorages.begin();
+    TStorages::iterator aEnd = m_aStorages.end();
+    try
+    {
+        clearConnections();
+        for (; aIter != aEnd ; ++aIter)
+        {
+            ::comphelper::disposeComponent(aIter->second);
+        }
+        ::comphelper::disposeComponent(m_xStorage);
+        Reference< XNameAccess > xContainer = m_xForms;
+        ::comphelper::disposeComponent(xContainer);
+        xContainer = m_xReports;
+        ::comphelper::disposeComponent(xContainer);
+        xContainer = m_xTableDefinitions;
+        ::comphelper::disposeComponent(xContainer);
+
+        xContainer = m_xCommandDefinitions;
+        ::comphelper::disposeComponent(xContainer);
+
+        if ( m_pChildCommitListen )
+        {
+            m_pChildCommitListen->release();
+            m_pChildCommitListen = NULL;
+        }
+        m_aContainer.clear();
+        lateInit();
+    }
+    catch(const Exception&)
+    {
+        m_xStorage = NULL;
+    }
+    m_aStorages.clear();
+
+
+    m_bDocumentReadOnly = sal_False;
+
     m_aArgs = _aArguments;
     m_sFileURL = _sURL;
     if ( !m_sName.getLength() )
@@ -160,6 +201,49 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
     if ( m_pDBContext )
         m_pDBContext->registerPrivate(_sURL,*this);
     getStorage();
+
+    try
+    {
+        const PropertyValue* pValue =::std::find_if(m_aArgs.getConstArray(),
+                                                    m_aArgs.getConstArray() + m_aArgs.getLength(),
+                                                    ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"))));
+
+        Sequence<Any> aFilterArgs;
+        if ( pValue && pValue != (m_aArgs.getConstArray() + m_aArgs.getLength()) )
+        {
+            Reference<XStatusIndicator> xStatusIndicator(pValue->Value,UNO_QUERY);
+
+            // set progress range and start status indicator
+            sal_Int32 nProgressRange(1000000);
+            if (xStatusIndicator.is())
+            {
+                xStatusIndicator->start(::rtl::OUString(), nProgressRange);
+                aFilterArgs.realloc( 1 );
+                Any *pArgs = aFilterArgs.getArray();
+                *pArgs++ <<= xStatusIndicator;
+            }
+        }
+        Reference<XImporter> xImporter(m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.DBFilter")),aFilterArgs),UNO_QUERY);
+
+        if ( xImporter.is() )
+        {
+            Reference<XComponent> xComponent(*this,UNO_QUERY);
+            xImporter->setTargetDocument(xComponent);
+            Reference<XFilter> xFilter(xImporter,UNO_QUERY);
+
+            xFilter->filter(m_aArgs);
+        }
+        else
+            return sal_False;
+    }
+    catch(const RuntimeException& e)
+    {
+        throw e;
+    }
+    catch(const Exception&)
+    {
+        return sal_False;
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
