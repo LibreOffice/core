@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2003-09-11 10:18:31 $
+#   last change: $Author: hr $ $Date: 2004-05-10 17:30:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SHL1STDLIBS=\
     $(CPPULIB)		\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
+    $(COMPHELPERLIB)		\
     $(SALLIB)		\
     $(ZLIB3RDLIB)
 
