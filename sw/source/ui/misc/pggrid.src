@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:00:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Grade";
         Text[ japanese ] = "è¡Œæ•°ã¨æ–‡å­—æ•°";
         Text[ korean ] = "ê·¸ë¦¬ë“œ";
-        Text[ chinese_simplified ] = "æ ¼å­çº¿";
-        Text[ chinese_traditional ] = "æ ¼å­ç·š";
+        Text[ chinese_simplified ] = "ç¨¿çº¸";
+        Text[ chinese_traditional ] = "ç¨¿ç´™";
         Text[ turkish ] = "Grid";
         Text[ arabic ] = "ÇáÔÈßÉ";
         Text[ catalan ] = "Captura/encaixa";
@@ -106,7 +106,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "No grid" ;
         Text[ portuguese ] = "No grid";
         Text[ russian ] = "Áåç ñåòêè";
-        Text[ greek ] = "No grid";
+        Text[ greek ] = "×ùñßò ğëİãìá";
         Text[ dutch ] = "~Geen raster";
         Text[ french ] = "Aucune grille";
         Text[ spanish ] = "Sin cuadrícula";
@@ -118,8 +118,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Sem grade";
         Text[ japanese ] = "æ¨™æº–ã®æ–‡å­—æ•°ã‚’ä½¿ã†";
         Text[ korean ] = "ê·¸ë¦¬ë“œ ì—†ìŒ";
-        Text[ chinese_simplified ] = "ä¸ä½¿ç”¨æ ¼å­çº¿";
-        Text[ chinese_traditional ] = "ä¸ä½¿ç”¨æ ¼å­ç·š";
+        Text[ chinese_simplified ] = "ä¸ä½¿ç”¨ç¨¿çº¸";
+        Text[ chinese_traditional ] = "ä¸ä½¿ç”¨ç¨¿ç´™";
         Text[ turkish ] = "Izgaya yok";
         Text[ arabic ] = "No grid";
         Text[ catalan ] = "No grid";
@@ -137,7 +137,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Grid (lines only)" ;
         Text[ portuguese ] = "Grid (lines only)";
         Text[ russian ] = "Ñåòêà (òîëüêî ëèíèè)";
-        Text[ greek ] = "Grid (lines only)";
+        Text[ greek ] = "Ğëİãìá (ãñáììİò ìüíï)";
         Text[ dutch ] = "Raster (a~lleen lijnen)";
         Text[ french ] = "Grille (uniquement les lignes)";
         Text[ spanish ] = "Cuadrícula (sólo líneas)";
@@ -149,8 +149,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Grade (somente linhas)";
         Text[ japanese ] = "è¡Œæ•°ã ã‘ã‚’æŒ‡å®šã™ã‚‹";
         Text[ korean ] = "ê·¸ë¦¬ë“œ (ì¤„ ë§Œ)";
-        Text[ chinese_simplified ] = "æ ¼å­çº¿(ä»…çº¿æ¡)";
-        Text[ chinese_traditional ] = "æ ¼å­ç·š(åƒ…ç·šæ¢)";
+        Text[ chinese_simplified ] = "ä¿¡çº¸";
+        Text[ chinese_traditional ] = "ä¿¡ç´™(åƒ…åº•ç·š)";
         Text[ turkish ] = "Izgara (sadece çizgiler)";
         Text[ arabic ] = "Grid (lines only)";
         Text[ catalan ] = "Grid (lines only)";
@@ -168,7 +168,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Grid (lines and characters)" ;
         Text[ portuguese ] = "Grid (lines and characters)";
         Text[ russian ] = "Ñåòêà (ëèíèè è ñèìâîëû)";
-        Text[ greek ] = "Grid (lines and characters)";
+        Text[ greek ] = "Ğëİãìá (ãñáììİò êáé ÷áñáêôŞñåò)";
         Text[ dutch ] = "Raster (li~jnen en tekens)";
         Text[ french ] = "Grille (lignes et caractères)";
         Text[ spanish ] = "Cuadrícula (líneas y caracteres)";
@@ -180,8 +180,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Grade (linhas e caracteres)";
         Text[ japanese ] = "è¡Œæ•°ã¨æ–‡å­—æ•°ã‚’æŒ‡å®šã™ã‚‹";
         Text[ korean ] = "ê·¸ë¦¬ë“œ (ì¤„ê³¼ ë¬¸ì)";
-        Text[ chinese_simplified ] = "æ ¼å­çº¿(çº¿æ¡å’Œå­—ç¬¦)";
-        Text[ chinese_traditional ] = "æ ¼å­ç·š(ç·šæ¢å’Œå­—å…ƒ)";
+        Text[ chinese_simplified ] = "æ ¼çº¿ç¨¿çº¸";
+        Text[ chinese_traditional ] = "æ ¼ç·šç¨¿ç´™";
         Text[ turkish ] = "Izgara (çizgiler ve karakterler)";
         Text[ arabic ] = "Grid (lines and characters)";
         Text[ catalan ] = "Grid (lines and characters)";
@@ -204,7 +204,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Grid layout" ;
         Text[ portuguese ] = "Grid layout";
         Text[ russian ] = "Ğàçìåòêà ñåòêè";
-        Text[ greek ] = "Grid layout";
+        Text[ greek ] = "ÄéÜôáîç ğëİãìáôïò";
         Text[ dutch ] = "Rasterlay-out";
         Text[ french ] = "Quadrillage";
         Text[ spanish ] = "Diseño de cuadrícula";
@@ -216,8 +216,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Layout da grade";
         Text[ japanese ] = "è¡Œæ•°ã¨æ–‡å­—æ•°ã®è¨­å®š";
         Text[ korean ] = "ê·¸ë¦¬ë“œ ë ˆì´ì•„ì›ƒ";
-        Text[ chinese_simplified ] = "æ ¼å­çº¿ç‰ˆå¼";
-        Text[ chinese_traditional ] = "æ ¼å­ç·šç‰ˆå¼";
+        Text[ chinese_simplified ] = "ç¨¿çº¸ç‰ˆå¼";
+        Text[ chinese_traditional ] = "ç¨¿ç´™ç‰ˆå¼";
         Text[ turkish ] = "Izgara yerleşimi";
         Text[ arabic ] = "Grid layout";
         Text[ catalan ] = "Grid layout";
@@ -226,6 +226,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Rasterlayout";
         Text[ hindi ] = "Grid layout";
         Text[ slovak ] = "RozloÅ¾enie mrieÅ¾ky";
+        Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
     };
     FixedText       FT_LINESPERPAGE
     {
@@ -235,7 +236,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Lines per page" ;
         Text[ portuguese ] = "Lines per page";
         Text[ russian ] = "Ëèíèé íà ñòğàíèöó";
-        Text[ greek ] = "Lines per page";
+        Text[ greek ] = "Ãñáììİò áíÜ óåëßäá";
         Text[ dutch ] = "Te~kens per pagina";
         Text[ french ] = "Lignes par page";
         Text[ spanish ] = "Líneas por página";
@@ -282,7 +283,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Max. base text size" ;
         Text[ portuguese ] = "Base text size";
         Text[ russian ] = "Ğàçìåğ îñíîâíîãî òåêñòà";
-        Text[ greek ] = "Base text size";
+        Text[ greek ] = "Ìİãåèïò êåéìİíïõ âÜóçò";
         Text[ dutch ] = "~Basistekstgrootte";
         Text[ french ] = "Taille max. du texte de base";
         Text[ spanish ] = "Tamaño máx. del texto de base";
@@ -330,7 +331,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Characters per line" ;
         Text[ portuguese ] = "Characters per line";
         Text[ russian ] = "Ñèìâîëîâ íà ñòğàíèöó";
-        Text[ greek ] = "Characters per line";
+        Text[ greek ] = "×áñáêôŞñåò áíÜ ãñáììŞ";
         Text[ dutch ] = "~Tekens per regel";
         Text[ french ] = "Caractères par ligne";
         Text[ spanish ] = "Caracteres por línea";
@@ -377,7 +378,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Max. Ruby text size" ;
         Text[ portuguese ] = "Ruby text size";
         Text[ russian ] = "Ğàçìåğ òåêñòà òğàíñêğèïöèè";
-        Text[ greek ] = "Ruby text size";
+        Text[ greek ] = "Ìİãåèïò êåéìİíïõ öùíçôéêŞò ãñáöŞò";
         Text[ dutch ] = "Rub~y-tekstgrootte";
         Text[ french ] = "Taille max. du texte Ruby";
         Text[ spanish ] = "Tamaño máx. texto Ruby";
@@ -425,7 +426,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Ruby text below/left from base text" ;
         Text[ portuguese ] = "Ruby text below/left from base text";
         Text[ russian ] = "Òåêñò òğàíñêğèïöèè íèæå/ëåâåå îñíîâíîãî òåêñòà";
-        Text[ greek ] = "Ruby text below/left from base text";
+        Text[ greek ] = "Êåßìåíï öùíçôéêŞò ãñáöŞò êÜôù/áñéóôåñÜ áğü ôï êåßìåíï âÜóçò";
         Text[ dutch ] = "R~uby-tekst onder/links van basistekst";
         Text[ french ] = "Texte Ruby en bas/à gauche du texte de base";
         Text[ spanish ] = "Texto Ruby debajo/a la izquierda del texto de base";
@@ -456,7 +457,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Grid display" ;
         Text[ portuguese ] = "Grid display";
         Text[ russian ] = "Îòîáğàæåíèå ñåòêè";
-        Text[ greek ] = "Grid display";
+        Text[ greek ] = "ÅìöÜíéóç ğëİãìáôïò";
         Text[ dutch ] = "Rasterweergave";
         Text[ french ] = "Affichage de la grille";
         Text[ spanish ] = "Representación de la cuadrícula";
@@ -468,8 +469,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Exibição da grade";
         Text[ japanese ] = "ç½«ç·šã®è¡¨ç¤º";
         Text[ korean ] = "ê·¸ë¦¬ë“œ í‘œì‹œ";
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ ¼å­çº¿";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºæ ¼å­ç·š";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºç¨¿çº¸æ ¼çº¿";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºç¨¿ç´™æ ¼ç·š";
         Text[ turkish ] = "Izgara göster";
         Text[ arabic ] = "Grid display";
         Text[ catalan ] = "Grid display";
@@ -499,8 +500,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Exibir grade";
         Text[ japanese ] = "ç½«ç·šã‚’è¡¨ç¤ºã™ã‚‹";
         Text[ korean ] = "ê·¸ë¦¬ë“œ í‘œì‹œ";
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ ¼å­çº¿";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºæ ¼å­ç·š";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºç¨¿çº¸æ ¼çº¿";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºç¨¿ç´™æ ¼ç·š";
         Text[ turkish ] = "Display grid";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÔÈßÉ";
         Text[ catalan ] = "Visualitza la graella";
@@ -509,6 +510,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "â€®×”×¦×’×ª ×§×•×™ ×¨×©×ªâ€¬";
         Text[ hindi ] = "Display grid";
         Text[ slovak ] = "ZobraziÅ¥ mrieÅ¾ku";
+        Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
     };
     CheckBox        CB_PRINT
     {
@@ -518,7 +520,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Print grid" ;
         Text[ portuguese ] = "Print grid";
         Text[ russian ] = "Ïå÷àòàòü ñåòêó";
-        Text[ greek ] = "Print grid";
+        Text[ greek ] = "Åêôığùóç ğëİãìáôïò";
         Text[ dutch ] = "R~aster afdrukken";
         Text[ french ] = "Imprimer la grille";
         Text[ spanish ] = "Imprimir cuadrícula";
@@ -530,8 +532,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Imprimir grade";
         Text[ japanese ] = "ç½«ç·šã‚’å°åˆ·ã™ã‚‹";
         Text[ korean ] = "ê·¸ë¦¬ë“œ ì¸ì‡„";
-        Text[ chinese_simplified ] = "æ‰“å°æ ¼å­çº¿";
-        Text[ chinese_traditional ] = "åˆ—å°æ ¼å­ç·š";
+        Text[ chinese_simplified ] = "æ‰“å°ç¨¿çº¸æ ¼çº¿";
+        Text[ chinese_traditional ] = "åˆ—å°ç¨¿ç´™æ ¼ç·š";
         Text[ turkish ] = "Izgarayı yazdır";
         Text[ arabic ] = "Print grid";
         Text[ catalan ] = "Print grid";
@@ -540,6 +542,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Raster ausdrucken";
         Text[ hindi ] = "Print grid";
         Text[ slovak ] = "TlaÄiÅ¥ mrieÅ¾ku";
+        Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
     };
     FixedText       FT_COLOR
     {
@@ -549,7 +552,7 @@ TabPage TP_TEXTGRID_PAGE
         Text [ english_us ] = "Grid color" ;
         Text[ portuguese ] = "Grid color";
         Text[ russian ] = "Öâåò ñåòêè";
-        Text[ greek ] = "Grid color";
+        Text[ greek ] = "×ñşìá ğëİãìáôïò";
         Text[ dutch ] = "Rast~erkleur";
         Text[ french ] = "Couleur de la grille";
         Text[ spanish ] = "Color de la cuadrícula";
@@ -561,8 +564,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Cor da grade";
         Text[ japanese ] = "ç½«ç·šã®è‰²";
         Text[ korean ] = "ê·¸ë¦¬ë“œ ìƒ‰ìƒ";
-        Text[ chinese_simplified ] = "æ ¼å­çº¿çš„é¢œè‰²";
-        Text[ chinese_traditional ] = "æ ¼å­ç·šçš„é¡”è‰²";
+        Text[ chinese_simplified ] = "ç¨¿çº¸æ ¼çº¿é¢œè‰²";
+        Text[ chinese_traditional ] = "ç¨¿ç´™æ ¼ç·šé¡”è‰²";
         Text[ turkish ] = "Izgara rengi";
         Text[ arabic ] = "Grid color";
         Text[ catalan ] = "Grid color";
@@ -581,6 +584,7 @@ TabPage TP_TEXTGRID_PAGE
         DropDown = TRUE;
     };
 };
+
 
 
 
