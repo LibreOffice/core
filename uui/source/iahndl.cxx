@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-11 07:48:09 $
+ *  last change: $Author: mav $ $Date: 2001-06-11 12:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,8 @@ UUIInteractionHandler::handle(
                         xSupplyAuthentication->setAccount(aInfo.GetAccount());
                     xSupplyAuthentication->select();
                 }
-                if (mPContainer.is())
+                // empty user name can not be valid
+                if ( mPContainer.is() && aInfo.GetUserName().Len() )
                 {
                     uno::Sequence< rtl::OUString > aPassList(1);
                     aPassList[0] = aInfo.GetPassword();
