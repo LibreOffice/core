@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:34:14 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
       mrLayoutRootFrm ( _rLayoutRootFrm )
 {
     _Clear();
+
+    // OD 2004-03-05 #i18143#
+    mbBookPreview = false;
+    mbBookPreviewModeToggled = false;
 }
 
 void SwPagePreviewLayout::_Clear()
@@ -132,8 +136,6 @@ void SwPagePreviewLayout::_Clear()
     maWinSize.Width() = 0;
     maWinSize.Height() = 0;
     mnCols = mnRows = 0;
-    // OD 19.02.2003 #107369#
-    mbLeaveLeftTopBlank = false;
 
     _ClearPrevwLayoutSizes();
 
@@ -421,8 +423,8 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         if ( _bStartWithPageAtFirstCol )
         {
             // OD 19.02.2003 #107369# - leaving left-top-corner blank is
-            // controlled by <mbLeaveLeftTopBlank>.
-            if ( mbLeaveLeftTopBlank &&
+            // controlled by <mbBookPreview>.
+            if ( mbBookPreview &&
                  ( nProposedStartPageNum == 1 || nRowOfProposed == 1 )
                )
                 mnPaintPhyStartPageNum = 1;
@@ -458,17 +460,17 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                 static_cast<sal_uInt16>(_aProposedStartPos.Y() / mnRowHeight) + 1;
         // determine start page == page at proposed start position
         // OD 19.02.2003 #107369# - leaving left-top-corner blank is
-        // controlled by <mbLeaveLeftTopBlank>.
-        if ( mbLeaveLeftTopBlank &&
+        // controlled by <mbBookPreview>.
+        if ( mbBookPreview &&
              ( nRowOfProposed == 1 && nColOfProposed == 1 )
            )
             mnPaintPhyStartPageNum = 1;
         else
         {
             // OD 19.02.2003 #107369# - leaving left-top-corner blank is
-            // controlled by <mbLeaveLeftTopBlank>.
+            // controlled by <mbBookPreview>.
             mnPaintPhyStartPageNum = (nRowOfProposed-1) * mnCols + nColOfProposed;
-            if ( mbLeaveLeftTopBlank )
+            if ( mbBookPreview )
                 --mnPaintPhyStartPageNum;
             if ( mnPaintPhyStartPageNum > mnPages )
             {
@@ -509,10 +511,10 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                  _orDocPreviewPaintRect, _bStartWithPageAtFirstCol );
     }
 
-    /* OD 23.01.2003 - deactivate code, but not delete, because probably useful in the future
     // OD 20.01.2003 #103492# - shift visible preview document area to the top,
     // if on the botton is an area left blank.
-    if ( maPaintedPrevwDocRect.Bottom() == maPreviewDocRect.Bottom() &&
+    if ( mbBookPreviewModeToggled &&
+         maPaintedPrevwDocRect.Bottom() == maPreviewDocRect.Bottom() &&
          maPaintedPrevwDocRect.GetHeight() < maWinSize.Height() )
     {
         if ( mbDoesLayoutRowsFitIntoWindow )
@@ -522,7 +524,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                 maPaintedPrevwDocRect.Move(
                         0, -(mnPrevwLayoutHeight - maPaintedPrevwDocRect.GetHeight()) );
                 Prepare( 0, maPaintedPrevwDocRect.TopLeft(),
-                         _rPxWinSize, _onStartPageNum, _onStartPageVirtNum,
+                         _rPxWinSize, _onStartPageNum,
                          _orDocPreviewPaintRect, _bStartWithPageAtFirstCol );
             }
         }
@@ -531,15 +533,15 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
             maPaintedPrevwDocRect.Move(
                     0, -(maWinSize.Height() - maPaintedPrevwDocRect.GetHeight()) );
             Prepare( 0, maPaintedPrevwDocRect.TopLeft(),
-                     _rPxWinSize, _onStartPageNum, _onStartPageVirtNum,
+                     _rPxWinSize, _onStartPageNum,
                      _orDocPreviewPaintRect, _bStartWithPageAtFirstCol );
         }
     }
-    */
 
     // determine preview pages - visible pages with needed data for paint and
     // accessible pages with needed data.
     _CalcPreviewPages();
+
     // OD 07.11.2003 #i22014# - indicate new layout, if print preview is in paint
     if ( mbInPaint )
     {
@@ -551,20 +553,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
 
     // return start page
     _onStartPageNum = mnPaintPhyStartPageNum;
-    /*
-    // return virtual page number of start page
-    _onStartPageVirtNum = 0;
-    if ( mnPaintPhyStartPageNum <= mnPages )
-    {
-        const SwPageFrm* pPage = static_cast<const SwPageFrm*>( mrLayoutRootFrm.Lower() );
-        while ( pPage && pPage->GetPhyPageNum() < mnPaintPhyStartPageNum )
-        {
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        }
-        if ( pPage )
-            _onStartPageVirtNum = pPage->GetVirtPageNum();
-    }
-    */
+
     return true;
 }
 
@@ -687,8 +676,8 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         if ( aCurrPaintOffset.X() < maWinSize.Width() )
         {
             // OD 19.02.2003 #107369# - leaving left-top-corner blank is
-            // controlled by <mbLeaveLeftTopBlank>.
-            if ( mbLeaveLeftTopBlank &&
+            // controlled by <mbBookPreview>.
+            if ( mbBookPreview &&
                  pPage->GetPhyPageNum() == 1 && mnCols != 1 && nCurrCol == 1
                )
             {
@@ -770,6 +759,45 @@ bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
     }
 
     return true;
+}
+
+/** enable/disable book preview
+
+    OD 2004-03-04 #i18143#
+
+    @author OD
+*/
+bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
+                                              sal_uInt16& _onStartPageNum,
+                                              Rectangle&  _orDocPreviewPaintRect )
+{
+    bool bRet = false;
+
+    if ( mbBookPreview != _bEnableBookPreview)
+    {
+        mbBookPreview = _bEnableBookPreview;
+        // re-initialize page preview layout
+        ReInit();
+        // re-prepare page preview layout
+        {
+            mbBookPreviewModeToggled = true;
+            Point aProposedStartPos( maPaintPreviewDocOffset );
+            // if proposed start position is below virtual preview document
+            // bottom, adjust it to the virtual preview document bottom
+            if ( aProposedStartPos.Y() > maPreviewDocRect.Bottom() )
+            {
+                aProposedStartPos.Y() = maPreviewDocRect.Bottom();
+            }
+            Prepare( 0, aProposedStartPos,
+                     mrParentViewShell.GetOut()->LogicToPixel( maWinSize ),
+                     _onStartPageNum, _orDocPreviewPaintRect );
+            mbBookPreviewModeToggled = false;
+        }
+
+        bRet = true;
+    }
+
+    return bRet;
 }
 
 // =============================================================================
@@ -867,8 +895,8 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     // determine position of current selected page
     sal_uInt16 nTmpSelPageNum = mnSelectedPageNum;
     // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-    // by <mbLeaveLeftTopBlank>.
-    if ( mbLeaveLeftTopBlank )
+    // by <mbBookPreview>.
+    if ( mbBookPreview )
     {
         // Note: consider that left-top-corner is left blank --> +1
         ++nTmpSelPageNum;
@@ -919,22 +947,25 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
         if ( (_nHoriMove > 0 || _nVertMove > 0) &&
              mbDoesLayoutRowsFitIntoWindow &&
              mbDoesLayoutColsFitIntoWindow && // OD 20.02.2003 #107369# - add condition
-             nCurrRow > nTotalRows - mnRows
-           )
+             nCurrRow > nTotalRows - mnRows )
+        {
             // new proposed start page = left-top-corner of last possible
             // preview page.
             nNewStartPage = (nTotalRows - mnRows) * mnCols + 1;
             // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-            // by <mbLeaveLeftTopBlank>.
-            if ( mbLeaveLeftTopBlank )
+            // by <mbBookPreview>.
+            if ( mbBookPreview )
             {
                 // Note: decrease new proposed start page number by one,
                 // because of blank left-top-corner
                 --nNewStartPage;
             }
+        }
         else
+        {
             // new proposed start page = new selected page.
             nNewStartPage = nNewSelectedPageNum;
+        }
     }
 
     _orNewSelectedPage = nNewSelectedPageNum;
@@ -1075,8 +1106,8 @@ sal_uInt16 SwPagePreviewLayout::GetWinPageNumOfPage( sal_uInt16 _nPageNum ) cons
     }
 
     // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-    // by <mbLeaveLeftTopBlank>.
-    if ( mbLeaveLeftTopBlank )
+    // by <mbBookPreview>.
+    if ( mbBookPreview )
     {
         // Note: increase given physical page number by one, because left-top-corner
         //       in the preview layout is left blank.
@@ -1461,8 +1492,8 @@ const PrevwPage* SwPagePreviewLayout::_GetPrevwPageByPageNum( const sal_uInt16 _
 sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 {
     // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-    // by <mbLeaveLeftTopBlank>.
-    if ( mbLeaveLeftTopBlank )
+    // by <mbBookPreview>.
+    if ( mbBookPreview )
     {
         // Note: increase given physical page number by one, because left-top-corner
         //       in the preview layout is left blank.
@@ -1485,8 +1516,8 @@ sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
 {
     // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-    // by <mbLeaveLeftTopBlank>.
-    if ( mbLeaveLeftTopBlank )
+    // by <mbBookPreview>.
+    if ( mbBookPreview )
     {
         // Note: increase given physical page number by one, because left-top-corner
         //       in the preview layout is left blank.
