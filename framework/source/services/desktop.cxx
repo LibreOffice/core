@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-02-01 09:16:13 $
+ *  last change: $Author: mba $ $Date: 2001-02-14 13:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ sal_Bool SAL_CALL Desktop::terminate() throw( RuntimeException )
         // Step over all child tasks and ask they "CAN I TERMINATE YOU AND ME?"
         Sequence< Reference< XFrame > > seqTasks = m_aChildTaskContainer.getAllElements();
         sal_Int32 nCount = seqTasks.getLength();
-        for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
+        for( sal_Int32 nPosition=0; bReturn && nPosition<nCount; ++nPosition )
         {
             // Get an element from container and cast it to task.
             // IT MUST BE A TASK! Childs of desktop everytime tasks. No pure frames accepted!
