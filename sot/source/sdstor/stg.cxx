@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mm $ $Date: 2000-10-12 16:18:50 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 14:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,12 @@ BOOL Storage::IsStorageFile( const String & rFileName )
     if( aIo.Open( rFileName, STREAM_STD_READ ) )
         return aIo.Load();
     return FALSE;
+}
+
+BOOL Storage::IsStorageFile( SvStream* pStream )
+{
+    StgHeader aHdr;
+    return ( pStream && aHdr.Load( *pStream ) && aHdr.Check() );
 }
 
 // Open the storage file. If writing is permitted and the file is not

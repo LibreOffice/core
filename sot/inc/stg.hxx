@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:50 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 14:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ public:
                                BOOL bDirect = TRUE );
     ~Storage();
     static BOOL       IsStorageFile( const String & rFileName );
+    static BOOL       IsStorageFile( SvStream* );
     const String&     GetName() const;
     BOOL              IsRoot() const { return bIsRoot; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 14:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@ void StgHeader::Init()
 BOOL StgHeader::Load( StgIo& rIo )
 {
     SvStream& r = *rIo.GetStrm();
+    Load( r );
+    return rIo.Good();
+}
+
+BOOL StgHeader::Load( SvStream& r )
+{
     r.Seek( 0L );
     r.Read( cSignature, 8 );
     r >> aClsId                     // 08 Class ID
@@ -151,7 +157,7 @@ BOOL StgHeader::Load( StgIo& rIo )
       >> nMaster;                   // 48 # of additional master blocks
     for( short i = 0; i < 109; i++ )
         r >> nMasterFAT[ i ];
-    return rIo.Good();
+    return r.GetErrorCode() == ERRCODE_NONE;
 }
 
 BOOL StgHeader::Store( StgIo& rIo )
