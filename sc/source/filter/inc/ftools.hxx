@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:09:51 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,6 @@ public:
     inline element_type& operator*() { return *mpObj; }
 
     inline bool         operator!() const { return mpObj == 0; }
-    typedef bool (this_type::*bool_type)() const;
-    inline              operator bool_type() const { return mpObj ? &this_type::is : 0; }
 
 private:
     inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
@@ -284,21 +282,25 @@ public:
 
 // *** streams and storages *** -----------------------------------------------
 
-    /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SotStorageRef         OpenStorageRead( SotStorage* pStrg, const String& rStrgName );
-    /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SotStorageRef         OpenStorageWrite( SotStorage* pStrg, const String& rStrgName );
+    /** Tries to open an existing storage with the specified name in the passed storage (read-only). */
+    static SotStorageRef OpenStorageRead( SotStorageRef xStrg, const String& rStrgName );
+    /** Creates and opens a storage with the specified name in the passed storage (read/write). */
+    static SotStorageRef OpenStorageWrite( SotStorageRef xStrg, const String& rStrgName );
 
     /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SotStorageStreamRef   OpenStorageStreamRead( SotStorage* pStrg, const String& rStrmName );
+    static SotStorageStreamRef OpenStorageStreamRead( SotStorageRef xStrg, const String& rStrmName );
     /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SotStorageStreamRef   OpenStorageStreamWrite( SotStorage* pStrg, const String& rStrmName );
+    static SotStorageStreamRef OpenStorageStreamWrite( SotStorageRef xStrg, const String& rStrmName );
 
 // *** item handling *** ------------------------------------------------------
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
     static bool         CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep );
+    /** Returns true, if the passed item set contains at least one of the items.
+        @param pnWhichIds  Zero-terminated array of Which-IDs.
+        @param bDeep  true = Searches in parent item sets too. */
+    static bool         CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
