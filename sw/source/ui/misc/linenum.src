@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:25:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "¹øÈ£¸Å±â±â¡¡Àû¿ë(~S)";
         Text[ turkish ] = "~Numaralamayý etkinleþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar ~numeración";
     };
     FixedText FT_CHAR_STYLE
     {
@@ -133,6 +134,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
         Text[ turkish ] = "~Karakter biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ catalan ] = "Est~ilo de caracteres";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -167,6 +169,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Formato";
     };
     ListBox LB_FORMAT
     {
@@ -200,6 +203,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Posición";
     };
     ListBox LB_POS
     {
@@ -354,6 +358,13 @@ TabPage TP_LINENUMBERING
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda" ; > ;
+        < "Derecha" ; > ;
+        < "Interior" ; > ;
+        < "Exterior" ; > ;
+    };
     };
     FixedText FT_OFFSET
     {
@@ -380,6 +391,7 @@ TabPage TP_LINENUMBERING
         Text[ greek ] = "~Áðüóôáóç";
         Text[ korean ] = "°£°Ý";
         Text[ turkish ] = "~Uzaklýk";
+        Text[ catalan ] = "E~spacio";
     };
     MetricField MF_OFFSET
     {
@@ -423,6 +435,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "±¸°£";
         Text[ turkish ] = "~Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Intervalo";
     };
     NumericField NF_NUM_INVERVAL
     {
@@ -464,6 +477,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Líneas";
     };
     GroupBox GB_DISPLAY
     {
@@ -490,6 +504,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "º¸±â";
         Text[ turkish ] = "Görünüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Visualización";
     };
     FixedText FT_DIVISOR
     {
@@ -516,6 +531,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "ÅØ½ºÆ®";
         Text[ turkish ] = "M~etin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Te~xto";
     };
     Edit ED_DIVISOR
     {
@@ -550,6 +566,7 @@ TabPage TP_LINENUMBERING
         Text[ greek ] = "ÊÜèå";
         Text[ korean ] = "¸ðµç";
         Text[ turkish ] = "~Tümü";
+        Text[ catalan ] = "Ca~da";
     };
     NumericField NF_DIV_INTERVAL
     {
@@ -592,6 +609,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Líneas";
     };
     GroupBox GB_DIVISOR
     {
@@ -618,6 +636,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "±¸ºÐÀÚ";
         Text[ turkish ] = "Ayýrma iþareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Separador";
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
@@ -645,6 +664,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "ºó ÁÙ";
         Text[ turkish ] = "B~oþ satýrlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Líneas en ~blanco";
     };
     CheckBox CB_COUNT_FRAMELINES
     {
@@ -672,6 +692,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓÀÇ Çà";
         Text[ turkish ] = "Metin kutusu içindeki sa~týrlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Líneas en ma~rco de texto";
     };
     CheckBox CB_RESTART_PAGE
     {
@@ -698,6 +719,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
         Text[ turkish ] = "~Restart each new page";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáÈÏÁ ÚäÏ ßá ÕÝÍÉ ÌÏíÏÉ";
+        Text[ catalan ] = "~Reiniciar al comienzo de página";
     };
     GroupBox GB_COUNT
     {
@@ -724,6 +746,7 @@ TabPage TP_LINENUMBERING
         Text[ korean ] = "¼ö¸¦ ¼¼±â";
         Text[ turkish ] = "Say";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contar";
     };
     Text [ english_us ] = "Line Numbering" ;
     Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
@@ -731,7 +754,7 @@ TabPage TP_LINENUMBERING
     Text [ danish ] = "Linjenummerering" ;
     Text [ italian ] = "Numerazione righe" ;
     Text [ spanish ] = "Numeración de líneas" ;
-    Text [ french ] = "Numérotation de lignes" ;
+    Text [ french ] = "Numérotation des lignes" ;
     Text [ dutch ] = "Regelnummering" ;
     Text [ portuguese ] = "Numeração de linhas" ;
     Text[ chinese_simplified ] = "ÐÐ±àºÅ";
@@ -744,4 +767,5 @@ TabPage TP_LINENUMBERING
     Text[ korean ] = "Çà ¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Satýr numaralamasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Numeración de líneas";
 };
