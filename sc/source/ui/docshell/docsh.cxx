@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:05 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,8 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
+        *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
+        *pFormat        = SOT_FORMATSTR_ID_STARCALC_60;
         *pFullTypeName  = String( ScResId( SCSTR_LONG_SCDOC_NAME ) );
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
