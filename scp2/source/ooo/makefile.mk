@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 17:54:07 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:38:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,12 +115,12 @@ PARFILES +=                        \
         registryitem_ooo.par
 .ENDIF
 
-LNGFILES=                          \
-        configurationitem_ooo.lng  \
-        directory_ooo.lng          \
-        helptext_ooo.lng           \
-        module_ooo.lng             \
-        registryitem_ooo.lng
+ULFFILES=                          \
+        configurationitem_ooo.ulf  \
+        directory_ooo.ulf          \
+        helptext_ooo.ulf           \
+        module_ooo.ulf             \
+        registryitem_ooo.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
