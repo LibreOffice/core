@@ -23427,3 +23427,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?QueryValue@SvxObjectItem@@MBEEAAVAny@uno@star@sun@com@@E@Z
 ?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx271882370@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx943029868@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABUBorderLine@table@123@@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABV?$Sequence@VAny@uno@star@sun@com@@@0123@@Z
