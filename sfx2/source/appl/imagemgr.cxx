@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:56:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "viewfrm.hxx"
 #include "module.hxx"
 #include "objsh.hxx"
+#include "docfac.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -122,15 +123,24 @@ static ModuleIdToImagegMgr                                    m_aModuleIdToImage
 
 Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
+    // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
         return Image();
 
     INetURLObject aObj( aURL );
     INetProtocol  nProtocol = aObj.GetProtocol();
 
+    Reference < XController > xController;
+    Reference < XModel > xModel;
+    if ( rFrame.is() )
+        xController = rFrame->getController();
+    if ( xController.is() )
+        xModel = xController->getModel();
+
     rtl::OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
+        /*
         // Support old way to retrieve image via slot URL
         Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
         if ( !xURLTransformer.is() )
@@ -145,34 +155,24 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         URL aTargetURL;
         aTargetURL.Complete = aURL;
         xURLTransformer->parseStrict( aTargetURL );
-
-        SfxViewFrame* pViewFrame = NULL;
-        Reference < XController > xController;
-        if ( rFrame.is() )
-            xController = rFrame->getController();
-
-        Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
-        if ( xProvider.is() )
+        USHORT nId = ( USHORT ) aTargetURL.Path.toInt32();*/
+        USHORT nId = ( USHORT ) String(aURL).Copy(5).ToInt32();
+        const SfxSlot* pSlot = 0;
+        if ( xModel.is() )
         {
-            Reference < XDispatch > xDisp = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-            if ( xDisp.is() )
+            Reference < XUnoTunnel > xObj( xModel, UNO_QUERY );
+            Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+            sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
+            if ( nHandle )
             {
-                Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-                SfxOfficeDispatch* pDisp = NULL;
-                if ( xTunnel.is() )
-                {
-                    sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                    pDisp = (SfxOfficeDispatch*)(nImplementation);
-                }
-
-                if ( pDisp )
-                    pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
+                SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+                SfxModule* pModule = pDoc->GetFactory().GetModule();
+                pSlot = pModule->GetSlotPool()->GetSlot( nId );
             }
         }
+        else
+            pSlot = SFX_APP()->GetSlotPool().GetSlot( nId );
 
-        USHORT nId = ( USHORT ) aTargetURL.Path.toInt32();
-        SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
-        const SfxSlot* pSlot = rPool.GetSlot( nId );
         if ( pSlot )
         {
             aCommandURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
@@ -183,19 +183,13 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
     }
 
     Reference< XImageManager > xDocImgMgr;
-    Reference< XController > xController = rFrame->getController();
-    Reference< XModel > xModel;
-    if ( xController.is() )
+    if ( xModel.is() )
     {
-        xModel = xController->getModel();
-        if ( xModel.is() )
+        Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
+        if ( xSupplier.is() )
         {
-            Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
-            if ( xSupplier.is() )
-            {
-                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                xDocImgMgr = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
-            }
+            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+            xDocImgMgr = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
         }
     }
 
