@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:29:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2955,6 +2955,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
