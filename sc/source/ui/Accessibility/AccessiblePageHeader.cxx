@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
+ *  last change: $Author: sab $ $Date: 2002-07-04 11:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,18 @@ struct Release
     {
         if (pArea)
             pArea->release();
+    }
+};
+
+struct Dispose
+{
+    void operator() (ScAccessiblePageHeaderArea*& pArea)
+    {
+        if (pArea)
+        {
+            pArea->dispose();
+            pArea->release();
+        }
         pArea = NULL;
     }
 };
@@ -157,7 +169,7 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = NULL;
     }
-    std::for_each(maAreas.begin(), maAreas.end(), Release());
+    std::for_each(maAreas.begin(), maAreas.end(), Dispose());
 
     ScAccessibleContextBase::disposing();
 }
@@ -182,7 +194,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ((aOldAreas[i] && maAreas[i] && !ScGlobal::EETextObjEqual(aOldAreas[i]->GetEditTextObject(), maAreas[i]->GetEditTextObject())) ||
                     (aOldAreas[i] && !maAreas[i]) || (!aOldAreas[i] && maAreas[i]))
                 {
-                    if (aOldAreas[i])
+                    if (aOldAreas[i] && aOldAreas[i]->GetEditTextObject())
                     {
                         AccessibleEventObject aEvent;
                         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
@@ -190,8 +202,9 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
 
                         CommitChange(aEvent); // child gone - event
+                        aOldAreas[i]->dispose();
                     }
-                    if (maAreas[i])
+                    if (maAreas[i] && maAreas[i]->GetEditTextObject())
                     {
                         AccessibleEventObject aEvent;
                         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
@@ -219,14 +232,19 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAt( 
 
     uno::Reference<XAccessible> xRet;
 
-    // return the first with content, because they have all the same Bounding Box
-    sal_uInt8 i(0);
-    while(!xRet.is() && i < MAX_AREAS)
+    sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
+
+    if (nCount)
     {
-        if (maAreas[i])
-            xRet = maAreas[i];
-        else
-            ++i;
+        // return the first with content, because they have all the same Bounding Box
+        sal_uInt8 i(0);
+        while(!xRet.is() && i < MAX_AREAS)
+        {
+            if (maAreas[i])
+                xRet = maAreas[i];
+            else
+                ++i;
+        }
     }
 
     return xRet;
@@ -414,17 +432,16 @@ void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nI
             if (!ScGlobal::EETextObjEqual(maAreas[nIndex]->GetEditTextObject(), pArea))
             {
                 maAreas[nIndex]->release();
-                ++mnChildCount;
                 maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
                 maAreas[nIndex]->acquire();
             }
         }
         else
         {
-            ++mnChildCount;
             maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
             maAreas[nIndex]->acquire();
         }
+        ++mnChildCount;
     }
     else
     {
