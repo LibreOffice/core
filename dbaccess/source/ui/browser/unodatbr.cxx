@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:54:12 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 // -------------------------------------------------------------------------
 ::rtl::OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.dbaccess.ODatabaseBrowser");
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser");
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)

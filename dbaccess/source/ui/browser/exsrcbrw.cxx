@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:45:03 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,13 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 // -------------------------------------------------------------------------
 ::rtl::OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.dbaccess.OFormGridView");
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView");
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.dialogs.FormGridView");
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.FormGridView");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -365,7 +365,8 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         ::com::sun::star::util::URL aNewUrl = aURL;
 
         // split the ::com::sun::star::util::URL
-        Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.URLTransformer")), UNO_QUERY);
+        Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+        OSL_ENSHURE(xTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !");
         if (xTransformer.is())
             xTransformer->parseStrict(aNewUrl);
 

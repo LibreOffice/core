@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:53:04 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,14 +451,16 @@ Reference< XInterface > SAL_CALL SbaXGridControl_CreateInstance(const Reference<
 //------------------------------------------------------------------------------
 ::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.form.SbaXGridControl");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dbu.SbaXGridControl");
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.ExtendedGridControl");
+    Sequence< ::rtl::OUString> aSupported(2);
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.DispatchGridControl");
+    aSupported.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.GridControl");
     return aSupported;
 }
 
@@ -949,7 +951,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     }
 
     // prepend some new items
-    sal_Bool bColAttrs = (nColId != (sal_uInt16)-1);
+    sal_Bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
     if (bColAttrs)
     {
         sal_uInt16 nPos = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:45:03 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("openoffice.org.DBContentLoader");
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.DBContentLoader");
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -237,9 +237,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     Reference< XController >    xController;
     sal_Bool bSuccess = sal_True;
     if(aParser.GetMainURL().EqualsAscii(".component:DB/FormGridView"))
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.dbaccess.OFormGridView")),UNO_QUERY);
+        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
     else if(aParser.GetMainURL().EqualsAscii(".component:DB/DataSourceBrowser"))// construct the control
-        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.dbaccess.ODatabaseBrowser")),UNO_QUERY);
+        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
     else
         OSL_ENSHURE(0,"wrong dispatch url!");
 
