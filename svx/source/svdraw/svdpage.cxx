@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-08 15:02:06 $
+ *  last change: $Author: aw $ $Date: 2001-08-08 15:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #include "fmdpage.hxx"
 #else
 #include "unopage.hxx"
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
 #endif
 
 using namespace ::com::sun::star;
@@ -617,11 +621,6 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     return bOk;
 }
-
-
-#ifndef _SV_SALBTYPE_HXX
-#include <vcl/salbtype.hxx>     // FRound
-#endif
 
 FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors, USHORT nImpMode) const
 {
