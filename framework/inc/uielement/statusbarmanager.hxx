@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:07:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         StatusBarControllerVector                                                                       m_aControllerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >  m_xStatusBarControllerRegistration;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >  m_xStatusbarControllerRegistration;
 };
 
 }
