@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2003-12-11 11:30:24 $
+#   last change: $Date: 2004-09-08 15:54:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,14 @@ R_SUBDIRS = util share stats lib complexlib helper basicrunner \
 MYJARCOMMANDS = $(foreach,i,$(R_SUBDIRS) -C $(CLASSDIR) $i)
 
 # --- Targets ------------------------------------------------------
-
+.IF "$(SOLAR_JAVA)"!=""
 OWNJAR: ALLTAR
 
 .INCLUDE :  target.mk
 
 OWNJAR:
     +jar cvfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(MYJARCOMMANDS)
-
+.ELSE
+all:
+        @echo "no java"
+.ENDIF
