@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:07:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,31 +138,36 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                     if (notZero || str[begin] != NUMBER_ZERO) {
                         dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                         if (useOffset)
-                            offset[count++] = begin + startPos;
+                            offset[count] = begin + startPos;
+                        count++;
                         notZero = sal_True;
                     }
                 }
                 if (notZero && multiChar > 0) {
                     dst[count] = multiChar;
                     if (useOffset)
-                        offset[count++] = begin + startPos;
+                        offset[count] = begin + startPos;
+                    count++;
                 }
                 return notZero;
             } else if (str[begin] != NUMBER_ZERO) {
                 if (!(number->numberFlag & (multiChar_index < 0 ? 0 : NUMBER_OMIT_ONE_CHECK(multiChar_index))) || str[begin] != NUMBER_ONE) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     if (useOffset)
-                        offset[count++] = begin + startPos;
+                        offset[count] = begin + startPos;
+                    count++;
                 }
                 if (multiChar > 0) {
                     dst[count] = multiChar;
                     if (useOffset)
-                        offset[count++] = begin + startPos;
+                        offset[count] = begin + startPos;
+                    count++;
                 }
             } else if (!(number->numberFlag & NUMBER_OMIT_ZERO) && count > 0 && dst[count-1] != numberChar[0]) {
                 dst[count] = numberChar[0];
                 if (useOffset)
-                    offset[count++] = begin + startPos;
+                    offset[count] = begin + startPos;
+                count++;
             }
             return str[begin] != NUMBER_ZERO;
         } else {
@@ -184,7 +189,8 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                 if (multiChar > 0) {
                     dst[count] = multiChar;
                     if (useOffset)
-                        offset[count++] = begin + startPos;
+                        offset[count] = begin + startPos;
+                    count++;
                 }
             }
             return printPower;
@@ -215,7 +221,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     if (doDecimal) {
                         newStr->buffer[count] = numberChar[str[i] - NUMBER_ZERO];
                         if (useOffset)
-                            offset[count++] = i + startPos;
+                            offset[count] = i + startPos;
+                        count++;
                     }
                     else
                         srcStr->buffer[len++] = str[i];
@@ -237,14 +244,16 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                                 if (end != len) {
                                     newStr->buffer[count] = number->multiplierChar[0];
                                     if (useOffset)
-                                        offset[count++] = i - len + startPos;
+                                        offset[count] = i - len + startPos;
+                                    count++;
                                 }
                             }
                         }
                         if (! notZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
                             newStr->buffer[count] = numberChar[0];
                             if (useOffset)
-                                offset[count++] = i - len + startPos;
+                                offset[count] = i - len + startPos;
+                            count++;
                         }
                         len = 0;
                     }
@@ -256,7 +265,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                         else
                             newStr->buffer[count] = str[i];
                         if (useOffset)
-                            offset[count++] = i + startPos;
+                            offset[count] = i + startPos;
+                        count++;
                     }
                 }
             }
@@ -290,7 +300,8 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
                 while (end++ < prev) {
                     dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
                     if (useOffset)
-                        offset[count++] = i;
+                        offset[count] = i;
+                    count++;
                 }
                 if (shift) {
                     count -= max;
@@ -310,7 +321,8 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
         while (end++ < prev) {
             dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
             if (useOffset)
-                offset[count++] = i - 1;
+                offset[count] = i - 1;
+            count++;
         }
 }
 
@@ -340,7 +352,8 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                     if (count == 0 || !isNumber(newStr->buffer[count-1])) { // add 1 in front of multiplier
                         newStr->buffer[count] = NUMBER_ONE;
                         if (useOffset)
-                            offset[count++] = i;
+                            offset[count] = i;
+                        count++;
                     }
                     index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
                     NativeToAscii_numberMaker(index, index, str, i, nCount, newStr->buffer, count, offset, useOffset,
@@ -367,7 +380,8 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                     else
                         newStr->buffer[count] = str[i];
                     if (useOffset)
-                        offset[count++] = i;
+                        offset[count] = i;
+                    count++;
                 }
             }
 
