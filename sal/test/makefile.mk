@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-17 09:14:17 $
+#   last change: $Author: kr $ $Date: 2001-06-15 13:53:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ APP2STDLIBS = $(SALLIB)
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : $(BIN)$/$(BOOTSTRAPSCRIPT) $(BIN)$/$(BOOTSTRAPINI) ALLTAR 
+ALL : $(BIN)$/$(BOOTSTRAPSCRIPT) $(BIN)$/$(BOOTSTRAPINI) $(BIN)$/bootstraptest.ini ALLTAR 
 .ELSE
 ALL: 	ALLDEP
 .ENDIF
@@ -124,6 +124,9 @@ $(BIN)$/$(BOOTSTRAPSCRIPT) : $(BOOTSTRAPSCRIPT)
 
 $(BIN)$/$(BOOTSTRAPINI) : testbootstrap.ini
     $(MY_SCRIPTCAT) testbootstrap.ini > $@	
+
+$(BIN)$/bootstraptest.ini : bootstraptest.ini
+    $(MY_SCRIPTCAT) bootstraptest.ini > $@	
 
 # --- SO2-Filter-Datei ---
 $(MISC)$/tsl$(UPD)$(DLLPOSTFIX).flt:

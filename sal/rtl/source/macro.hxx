@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: cmdargs.cxx,v $
+ *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
  *
@@ -58,88 +58,23 @@
  *
  *
  ************************************************************************/
-#include <osl/mutex.hxx>
-#include <rtl/process.h>
+
+#ifndef _RTL_MACRO_HXX
+#define _RTL_MACRO_HXX
+
 #include <rtl/ustring.hxx>
 
-#include "macro.hxx"
+/*
+  Expand macros via rtl_bootstrap_get.
+  see
+    http://udk.openoffice.org/common/man/spec/uno_default_bootstrapping.html
+  for details.
+*/
+::rtl::OUString SAL_CALL expandMacros(const ::rtl::OUString & argstr);
 
-using namespace ::rtl;
-
-OUString *g_pCommandArgs = 0;
-sal_Int32 g_nCommandArgCount = -1;
-
-struct rtl_CmdArgs_ArgHolder
-{
-    ~rtl_CmdArgs_ArgHolder();
-};
-
-rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
-{
-    delete [] g_pCommandArgs;
-}
-
-rtl_CmdArgs_ArgHolder MyHolder;
-
-void impl_rtl_initCommandArgs()
-{
-    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-    if( !g_pCommandArgs )
-    {
-        sal_Int32 nCount = osl_getCommandArgCount();
-        ::rtl::OUString * p = new ::rtl::OUString[nCount];
-        sal_Int32 i = 0, i2 = 0;
-        for( ; i < nCount ; i ++ )
-        {
-            ::rtl::OUString data;
-            osl_getCommandArg( i, &(data.pData) );
-            if( ('-' == data.pData->buffer[0] || '/' == data.pData->buffer[0] ) &&
-                 'e' == data.pData->buffer[1] &&
-                 'n' == data.pData->buffer[2] &&
-                 'v' == data.pData->buffer[3] &&
-                 ':' == data.pData->buffer[4] &&
-                rtl_ustr_indexOfChar( &(data.pData->buffer[5]), '=' ) >= 0 )
-            {
-                // ignore
-            }
-            else
-            {
-                p[i2] = data;
-                i2 ++;
-            }
-        }
-        g_nCommandArgCount = i2;
-        g_pCommandArgs = p;
-    }
-}
+#endif
 
 
 
-extern "C"
-{
-    oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg)
-    {
-        if( !g_pCommandArgs )
-            impl_rtl_initCommandArgs();
 
-        oslProcessError err = osl_Process_E_None;
-        if( nArg < g_nCommandArgCount )
-        {
-            OUString expandedArg = expandMacros(g_pCommandArgs[nArg]);
 
-            rtl_uString_assign( strCommandArg, expandedArg.pData );
-         }
-        else
-        {
-            err = osl_Process_E_NotFound;
-        }
-        return err;
-    }
-
-    sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()
-    {
-        if( !g_pCommandArgs )
-            impl_rtl_initCommandArgs();
-        return g_nCommandArgCount;
-    }
-}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-17 10:06:08 $
+ *  last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
+
+#include "macro.hxx"
 
 // I need C++ for static variables and for lists (stl) !
 // If we don't want C++, we need another solution for static vars !
@@ -309,6 +311,43 @@ static void getFromDefault( rtl_uString **ppValue, rtl_uString *pName, rtl_uStri
     }
 }
 
+static void getFlatArg(rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
+{
+    static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
+    static const OUString sysUserHome(RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
+
+    // we have build ins:
+    if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysUserConfig.pData->buffer, sysUserConfig.pData->length))
+    {
+        oslSecurity security = osl_getCurrentSecurity();
+        osl_getConfigDir(security, ppValue);
+        osl_freeSecurityHandle(security);
+    }
+    else if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysUserHome.pData->buffer, sysUserHome.pData->length))
+    {
+        oslSecurity security = osl_getCurrentSecurity();
+        osl_getHomeDir(security, ppValue);
+        osl_freeSecurityHandle(security);
+    }
+    else
+    {
+        getFromCommandLineArgs( ppValue, pName );
+        if( ! *ppValue )
+        {
+            getFromIniFile( ppValue, pName );
+            if( ! *ppValue )
+            {
+                getFromEnvironment( ppValue, pName );
+                if( ! *ppValue && pDefault )
+                {
+                    rtl_uString_assign( ppValue , pDefault );
+                }
+            }
+        }
+    }
+}
+
+
 extern "C"
 {
 void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
@@ -328,18 +367,12 @@ sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue ,
         *ppValue = 0;
     }
 
-    getFromCommandLineArgs( ppValue, pName );
-    if( ! *ppValue )
-    {
-        getFromIniFile( ppValue, pName );
-        if( ! *ppValue )
-        {
-            getFromEnvironment( ppValue, pName );
-            if( ! *ppValue && pDefault )
-            {
-                rtl_uString_assign( ppValue , pDefault );
-            }
-        }
+    getFlatArg(pName, ppValue, pDefault);
+
+    if(*ppValue) {
+         OUString result = expandMacros(OUString(*ppValue));
+
+        rtl_uString_assign(ppValue, result.pData );
     }
 
     if( ! *ppValue )
