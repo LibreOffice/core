@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:23:58 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2727,7 +2727,7 @@ Menu RID_WINDOW {
             TEXT[ russian ] = "~Tile";
             TEXT[ greek ] = "~Tile";
             TEXT[ dutch ] = "~Naast elkaar";
-            TEXT[ french ] = "Ca~rrelage";
+            TEXT[ french ] = "~Juxtaposer";
             TEXT[ spanish ] = "~Mosaico";
             TEXT[ italian ] = "~Tile";
             TEXT[ danish ] = "~Tile";
@@ -2775,7 +2775,7 @@ Menu RID_WINDOW {
             TEXT[ russian ] = "~Arrange Vertically";
             TEXT[ greek ] = "~Arrange Vertically";
             TEXT[ dutch ] = "~Verticaal schikken";
-            TEXT[ french ] = "~Verticalement";
+            TEXT[ french ] = "Agencement ~vertical";
             TEXT[ spanish ] = "~Vertical";
             TEXT[ italian ] = "~Arrange Vertically";
             TEXT[ danish ] = "~Arrange Vertically";
