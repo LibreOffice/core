@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 14:28:13 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:07:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ XCSFILES= \
     StartModuleWindowState.xcs \
     WriterWindowState.xcs \
     WriterGlobalWindowState.xcs \
-    WriterWebWindowState.xcs
+    WriterWebWindowState.xcs \
+    Effects.xcs
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/registry$/schema$/localtarget.mk
