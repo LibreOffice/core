@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.124 $
+#   $Revision: 1.125 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 16:18:50 $
+#   last change: $Author: hjs $ $Date: 2002-10-31 13:10:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1069,7 +1069,7 @@ MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/) $(INCPRE:^"-I":s/-I-I/-I/)
 MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
-MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc.$(UPDMINOR) -I$(SOLARVERSION)$/$(INPATH)$/inc
+MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) -I$(SOLARVERSION)$/$(INPATH)$/inc
 MKDEPLOCAL=-I$(INCCOM)
 
 BISON=bison
