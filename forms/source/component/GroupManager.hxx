@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 09:04:51 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 18:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,24 @@
 #ifndef _FRM_GROUPMANAGER_HXX_
 #define _FRM_GROUPMANAGER_HXX_
 
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
 #include <com/sun/star/awt/XControlModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -226,12 +239,15 @@ class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::X
     OUInt32Arr m_aActiveGroupMap;   // In dieser Map werden die Indizes aller Gruppen gehalten,
                                     // die mehr als 1 Element haben
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
+                    m_xContainer;
+
     // Helper functions
     void InsertElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
     void RemoveElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
 
 public:
-    OGroupManager();
+    OGroupManager(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _rxContainer);
     virtual ~OGroupManager();
 
 // ::com::sun::star::lang::XEventListener
