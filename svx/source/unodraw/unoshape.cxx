@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:14:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 15:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,7 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         {
             pModel = NULL;
         }
-        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEARED )
+        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEARED && pSdrHint->GetObjList() == pObj->GetObjList() )
         {
             pObj = NULL;
 
@@ -1548,14 +1548,26 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
             {
             case SFX_MAPUNIT_TWIP :
             {
-                if( aAny.getValueType() == ::getCppuType((const sal_Int32 *)0))
-                    aAny <<= (sal_Int32)(TWIPS_TO_MM(*(sal_Int32*)aAny.getValue()));
-                else if( aAny.getValueType() == ::getCppuType((const sal_uInt32*)0))
-                    aAny <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)aAny.getValue()));
-                else if( aAny.getValueType() == ::getCppuType((const sal_uInt16*)0))
+                switch( aAny.getValueTypeClass() )
+                {
+                case uno::TypeClass_BYTE:
+                    aAny <<= (sal_Int8)(TWIPS_TO_MM(*(sal_Int8*)aAny.getValue()));
+                    break;
+                case uno::TypeClass_SHORT:
+                    aAny <<= (sal_Int16)(TWIPS_TO_MM(*(sal_Int16*)aAny.getValue()));
+                    break;
+                case uno::TypeClass_UNSIGNED_SHORT:
                     aAny <<= (sal_uInt16)(TWIPS_TO_MM(*(sal_uInt16*)aAny.getValue()));
-                else
+                    break;
+                case uno::TypeClass_LONG:
+                    aAny <<= (sal_Int32)(TWIPS_TO_MM(*(sal_Int32*)aAny.getValue()));
+                    break;
+                case uno::TypeClass_UNSIGNED_LONG:
+                    aAny <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)aAny.getValue()));
+                    break;
+                default:
                     DBG_ERROR("AW: Missing unit translation to 100th mm!");
+                }
                 break;
             }
             default:
