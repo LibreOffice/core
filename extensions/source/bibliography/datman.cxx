@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
+ *  last change: $Author: os $ $Date: 2001-08-02 12:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,10 +377,6 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & xForm)
  --------------------------------------------------*/
 class MappingDialog_Impl : public ModalDialog
 {
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-
     FixedLine       aMapGB;
     FixedText       aIdentifierFT;
     ListBox         aIdentifierLB;
@@ -444,6 +440,10 @@ class MappingDialog_Impl : public ModalDialog
     ListBox         aCustom4LB;
     FixedText       aCustom5FT;
     ListBox         aCustom5LB;
+
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
 
     ListBox*        aListBoxes[COLUMN_COUNT];
     String          sNone;
@@ -720,13 +720,13 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
  --------------------------------------------------*/
 class DBChangeDialog_Impl : public ModalDialog
 {
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-
     FixedLine       aSelectionGB;
     SvTabListBox    aSelectionLB;
     HeaderBar       aSelectionHB;
+
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
 
     DBChangeDialogConfig_Impl   aConfig;
     String          aEntryST;
