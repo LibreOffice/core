@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
+#   last change: $Author: mi $ $Date: 2004-09-23 14:56:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,10 +93,6 @@ JAVACLASSFILES=\
     $(CLASSDIR)$/$(PACKAGE)$/NativeService.class \
     $(CLASSDIR)$/$(PACKAGE)$/LocalOfficeConnection.class \
     $(CLASSDIR)$/$(PACKAGE)$/LocalOfficeWindow.class \
-    $(CLASSDIR)$/$(PACKAGE)$/OutputStreamToXOutputStreamAdapter.class \
-    $(CLASSDIR)$/$(PACKAGE)$/InputStreamToXInputStreamAdapter.class \
-    $(CLASSDIR)$/$(PACKAGE)$/XOutputStreamToByteArrayAdapter.class \
-    $(CLASSDIR)$/$(PACKAGE)$/ByteArrayToXInputStreamAdapter.class \
     $(CLASSDIR)$/$(PACKAGE)$/InvalidArgumentException.class \
     $(CLASSDIR)$/$(PACKAGE)$/HasConnectionException.class \
     $(CLASSDIR)$/$(PACKAGE)$/NoConnectionException.class \

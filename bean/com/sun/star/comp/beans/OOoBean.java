@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
+ *  last change: $Author: mi $ $Date: 2004-09-23 14:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,11 +746,52 @@ public class OOoBean
     }
 
     //---------------------------------------------------------------------------
+    /** Stores a document to a stream.
+
+           See storeToURL() for further information.
+     */
+    public java.io.OutputStream storeToStream(
+            java.io.OutputStream aOutStream,
+            final com.sun.star.beans.PropertyValue aArguments[] )
+        throws
+            java.io.IOException,
+            java.lang.InterruptedException,
+            com.sun.star.lang.IllegalArgumentException,
+
+            // @requirement FUNC.CON.LOST/0.2
+            NoConnectionException
+
+    {
+        // wrap Java stream into UNO stream
+        com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter aStream =
+                new com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter(
+                    aOutStream );
+
+        // add stream to arguments
+        com.sun.star.beans.PropertyValue[] aExtendedArguments =
+            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
+                "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
+
+        // call normal store method
+        storeToURL( "private:stream/", aExtendedArguments );
+
+        // get byte array from document stream
+        try { aStream.closeOutput(); }
+        catch ( com.sun.star.io.NotConnectedException aExc )
+        { /* TDB */ }
+        catch ( com.sun.star.io.BufferSizeExceededException aExc )
+        { /* TDB */ }
+        catch ( com.sun.star.io.IOException aExc )
+        { throw new java.io.IOException(); }
+        return aOutStream;
+    }
+
+    //---------------------------------------------------------------------------
     /** Stores a document to a byte array.
 
            See storeToURL() for further information.
      */
-    public byte[] storeToBuffer(
+    public byte[] storeToByteArray(
             byte aOutBuffer[],
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
@@ -763,8 +804,8 @@ public class OOoBean
 
     {
         // wrap byte arrray into UNO stream
-        com.sun.star.comp.beans.XOutputStreamToByteArrayAdapter aStream =
-                new com.sun.star.comp.beans.XOutputStreamToByteArrayAdapter(
+        com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream =
+                new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
                     aOutBuffer );
 
         // add stream to arguments
@@ -788,9 +829,9 @@ public class OOoBean
 
     //-------------------------------------------------------------------------
 
-        // @requirement FUNC.BEAN.PROG/0.5
-        // @requirement API.SIM.SEAP/0.2
-        /** returns the <type scope="com::sun::star::frame">Frame</a>
+    // @requirement FUNC.BEAN.PROG/0.5
+    // @requirement API.SIM.SEAP/0.2
+    /** returns the <type scope="com::sun::star::frame">Frame</a>
         of the bean.
 
         @returns
