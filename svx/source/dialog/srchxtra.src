@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:12:41 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian Layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Layout azjatycki";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
@@ -280,7 +280,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
                 Text[ korean ] = "¾Æ½Ã¾Æ Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
