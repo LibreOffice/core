@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:05:12 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:32:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,8 @@ TARGETTYPE = CUI
 
 OBJFILES = \
     $(OBJ)$/solar.obj \
-    $(OBJ)$/urltest.obj
+    $(OBJ)$/urltest.obj \
+    $(OBJ)$/inetmimetest.obj
 #	$(OBJ)$/demostor.obj \
 #	$(OBJ)$/fstest.obj \
 #	$(OBJ)$/tldem.obj \
@@ -90,6 +91,10 @@ APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
 APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
 .ENDIF
+
+APP3TARGET = inetmimetest
+APP3OBJS = $(OBJ)$/inetmimetest.obj
+APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 
 # APP3TARGET = tldem
 # APP3OBJS = $(OBJ)$/tldem.obj
