@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:23:07 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 13:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,10 +333,10 @@ static int ReportCrash( int Signal )
                 int fdxml, fdstk;
 
                 strncpy( szXMLTempNameBuffer, P_tmpdir, sizeof(szXMLTempNameBuffer) );
-                strncat( szXMLTempNameBuffer, "crxmlXXXXXX", sizeof(szXMLTempNameBuffer) );
+                strncat( szXMLTempNameBuffer, "/crxmlXXXXXX", sizeof(szXMLTempNameBuffer) );
 
                 strncpy( szStackTempNameBuffer, P_tmpdir, sizeof(szStackTempNameBuffer) );
-                strncat( szStackTempNameBuffer, "crstkXXXXXX", sizeof(szStackTempNameBuffer) );
+                strncat( szStackTempNameBuffer, "/crstkXXXXXX", sizeof(szStackTempNameBuffer) );
 
                 fdxml = mkstemp(szXMLTempNameBuffer);
                 fdstk = mkstemp(szStackTempNameBuffer);
