@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 15:43:16 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 20:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,16 +395,22 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
         delete pDoc;
 }
 
+void SwXMLTextBlocks::ClearDoc()
+{
+    SwDocShell * pDocShell = pDoc->GetDocShell();
+    pDocShell->InvalidateModel();
+    pDocShell->ReactivateModel();
+    static_cast < SfxObjectShell * > (pDocShell)->Clear();
+}
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL bOnlyTxt )
 {
     USHORT nIdx = GetIndex( rShort );
     SwBlockName* pNew = NULL;
     if( nIdx != (USHORT) -1 )
         aNames.DeleteAndDestroy( nIdx );
-    if (aShort == rShort)
-        pNew = new SwBlockName( rShort, rLong, aPackageName );
-    else
-        pNew = new SwBlockName( rShort, rLong, 0L );
+
+    GeneratePackageName( rShort, aPackageName );
+    pNew = new SwBlockName( rShort, rLong, aPackageName );
 
     pNew->bIsOnlyTxtFlagInit = TRUE;
     pNew->bIsOnlyTxt = bOnlyTxt;
@@ -434,11 +440,15 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
     return 0;
 }
 
-ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& s, const String& l )
+ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& rNewLong )
 {
-    aNames [ nIdx ]->aShort = s;
-    aNames [ nIdx ]->aLong = l;
-    GeneratePackageName( s, aNames [ nIdx ]->aPackageName);
+    String aOldName (aNames[ nIdx ]->aPackageName);
+    aShort = rNewShort;
+    GeneratePackageName( aShort, aPackageName );
+    xBlkRoot->Rename ( aOldName, aPackageName );
+    xBlkRoot->Commit();
+    // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
+    // WriteInfo which does the commit
     return 0;
 }
 
