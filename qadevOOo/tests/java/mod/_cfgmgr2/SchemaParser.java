@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchemaParser.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:27:13 $
+ *  last change:$Date: 2004-07-23 10:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ public class SchemaParser extends TestCase {
         XInterface oObj = null;
         XSimpleFileAccess simpleAccess = null;
         XInputStream xStream = null;
+        String filename = null;
 
         try {
             oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
@@ -88,7 +89,8 @@ public class SchemaParser extends TestCase {
             Object fileacc = ((XMultiServiceFactory)tParam.getMSF()).createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
             simpleAccess = (XSimpleFileAccess)
                             UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            String filename = util.utils.getOfficeURL((XMultiServiceFactory)tParam.getMSF())+"/../share/registry/schema/org/openoffice/Setup.xcs";
+            filename = util.utils.getOfficeURL((XMultiServiceFactory)tParam.getMSF())+"/../share/registry/schema/org/openoffice/Setup.xcs";
+
             log.println("Going to parse: "+filename);
             xStream = simpleAccess.openFileRead(filename);
         } catch (com.sun.star.uno.Exception e) {
@@ -101,7 +103,7 @@ public class SchemaParser extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("InputStream", xStream);
-
+        tEnv.addObjRelation("ParsedFileName", filename);
         return tEnv;
     }
 
