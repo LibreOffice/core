@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:04:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 #define XMLERROR_UNKNOWN_ATTRIBUTE ( XMLERROR_CLASS_FORMAT | XMLERROR_FLAG_WARNING | 0x0000000a )
 #define XMLERROR_UNKNOWN_ELEMENT ( XMLERROR_CLASS_FORMAT | XMLERROR_FLAG_WARNING | 0x0000000b )
 #define XMLERROR_UNKNOWN_CHARACTERS ( XMLERROR_CLASS_FORMAT | XMLERROR_FLAG_WARNING | 0x0000000c )
-
+#define XMLERROR_UNKNWON_ROOT (XMLERROR_CLASS_FORMAT | 0x0000000d )
 
 // API errors:
 #define XMLERROR_STYLE_PROP_VALUE   ( XMLERROR_CLASS_API    | 0x00000001 )
