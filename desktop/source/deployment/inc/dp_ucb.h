@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:06:15 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #define INCLUDED_DP_UCB_H
 
 #include "rtl/byteseq.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 
 
@@ -79,75 +77,10 @@ namespace dp_misc
 {
 
 //==============================================================================
-class ProgressLevel
-{
-    css::uno::Reference< css::ucb::XProgressHandler > m_xProgressHandler;
-
-public:
-    inline ProgressLevel(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv );
-    inline ProgressLevel(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-        ::rtl::OUString const & status );
-    inline ~ProgressLevel();
-
-    inline void update( ::rtl::OUString const & status );
-};
-
-//______________________________________________________________________________
-inline ProgressLevel::ProgressLevel(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
-{
-    if (xCmdEnv.is())
-        m_xProgressHandler = xCmdEnv->getProgressHandler();
-    if (m_xProgressHandler.is())
-        m_xProgressHandler->push( css::uno::Any() );
-}
-
-//______________________________________________________________________________
-inline ProgressLevel::ProgressLevel(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-    ::rtl::OUString const & status )
-{
-    if (xCmdEnv.is())
-        m_xProgressHandler = xCmdEnv->getProgressHandler();
-    if (m_xProgressHandler.is())
-        m_xProgressHandler->push( css::uno::makeAny(status) );
-}
-
-//______________________________________________________________________________
-inline ProgressLevel::~ProgressLevel()
-{
-    if (m_xProgressHandler.is())
-        m_xProgressHandler->pop();
-}
-
-//______________________________________________________________________________
-inline void ProgressLevel::update( ::rtl::OUString const & status )
-{
-    if (m_xProgressHandler.is())
-        m_xProgressHandler->update( css::uno::makeAny(status) );
-}
-
-//==============================================================================
-void handle_error(
-    css::deployment::DeploymentException const & exc,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-    bool log = true );
-
-//==============================================================================
-void interact_error(
-    css::uno::Any const & exc,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-    bool log = true );
-
-
-//==============================================================================
 bool create_ucb_content(
     ::ucb::Content * ucb_content,
     ::rtl::OUString const & url,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv =
-    css::uno::Reference< css::ucb::XCommandEnvironment >(),
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 //==============================================================================
@@ -156,19 +89,14 @@ bool create_ucb_content(
 bool create_folder(
     ::ucb::Content * ucb_content,
     ::rtl::OUString const & url,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv =
-    css::uno::Reference< css::ucb::XCommandEnvironment >(),
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 //==============================================================================
-void erase_path(
+bool erase_path(
     ::rtl::OUString const & url,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv =
-    css::uno::Reference< css::ucb::XCommandEnvironment >() );
-
-//==============================================================================
-::rtl::OUString make_url(
-    ::rtl::OUString const & base_url, ::rtl::OUString const & url );
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    bool throw_exc = true );
 
 //==============================================================================
 ::rtl::ByteSequence readFile( ::ucb::Content & ucb_content );
