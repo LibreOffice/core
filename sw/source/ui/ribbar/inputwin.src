@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:00:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ToolBox RID_TBX_FORMULA
             Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
             Text[ dutch ] = "Annuleren";
             Text[ chinese_simplified ] = "å–æ¶ˆ";
-            Text[ greek ] = "Áêıñùóç";
+            Text[ greek ] = "¢êõñï";
             Text[ korean ] = "ì·¨ì†Œ";
             Text[ turkish ] = "İptal";
             Text[ catalan ] = "Cancel.la";
@@ -335,7 +335,7 @@ Menu MN_CALC_POPUP
             Text[ arabic ] = "ÌĞÑ";
             Text[ dutch ] = "~Vierkantswortel";
             Text[ chinese_simplified ] = "å¹³æ–¹æ ¹";
-            Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+            Text[ language_user1 ] = "; (ÄÄ) ; - - - - - -";
             Text[ greek ] = "Ôåôñáã~ùíéêŞ ñßæá";
             Text[ korean ] = "ê·¼";
             Text[ turkish ] = "Karekök";
@@ -673,7 +673,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "é€»è¾‘çš„ Or";
                         Text[ russian ] = "Ëîãè÷åñêîå ÈËÈ";
                         Text[ polish ] = "Operator logiczny LUB";
-                        Text[ japanese ] = "è«–ç†å¼";
+                        Text[ japanese ] = "è«–ç†å’Œ(OR)";
                         Text[ chinese_traditional ] = "é‚è¼¯çš„ Or";
                         Text[ arabic ] = "Ãæ ãäØŞíÉ";
                         Text[ dutch ] = "Logisch ~Of";
@@ -708,7 +708,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "é€»è¾‘çš„é™¤å¤–çš„ Or";
                         Text[ russian ] = "Ëîãè÷åñêîå èñêëş÷àşùåå ÈËÈ";
                         Text[ polish ] = "Operator logiczny ALBO";
-                        Text[ japanese ] = "æ’ä»–çš„è«–ç†å’Œ(EXOR)";
+                        Text[ japanese ] = "æ’ä»–çš„è«–ç†å’Œ(XOR)";
                         Text[ chinese_traditional ] = "é‚è¼¯çš„é™¤å¤–çš„ Or";
                         Text[ arabic ] = "Ãæ ãäØŞíÉ ÎÇÕÉ";
                         Text[ dutch ] = "Logisch e~xclusief Of";
@@ -743,7 +743,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "é€»è¾‘çš„ And";
                         Text[ russian ] = "Ëîãè÷åñêîå ~È";
                         Text[ polish ] = "Operator logiczny I";
-                        Text[ japanese ] = "è«–ç†å¼(And)";
+                        Text[ japanese ] = "è«–ç†ç©(AND)";
                         Text[ chinese_traditional ] = "é‚è¼¯çš„ And";
                         Text[ arabic ] = "æ ãäØŞíÉ";
                         Text[ dutch ] = "Logisch ~En";
@@ -778,7 +778,7 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "é€»è¾‘çš„ Not";
                         Text[ russian ] = "Ëîãè÷åñêîå ÍÅ";
                         Text[ polish ] = "Operator logiczny NIE";
-                        Text[ japanese ] = "è«–ç†å¼(Not)";
+                        Text[ japanese ] = "è«–ç†å¦å®š(NOT)";
                         Text[ chinese_traditional ] = "é‚è¼¯çš„ Not";
                         Text[ arabic ] = "áÇ ãäØŞíÉ";
                         Text[ dutch ] = "Log~isch Niet";
@@ -1021,7 +1021,7 @@ Menu MN_CALC_POPUP
                         Text = "~Cosinus" ;
                         Text [ english ] = "~Cosinus" ;
                         Text [ english_us ] = "Cosine" ;
-                        Text [ portuguese_brazilian ] = "Co-seno" ;
+                        Text [ portuguese_brazilian ] = "Cosseno" ;
                         Text [ swedish ] = "~cosinus" ;
                         Text [ danish ] = "Cosinus" ;
                         Text [ italian ] = "~Coseno" ;
@@ -1123,7 +1123,7 @@ Menu MN_CALC_POPUP
                         Text = "A~rcuscosinus" ;
                         Text [ english ] = "A~rcuscosinus" ;
                         Text [ english_us ] = "Arccosine" ;
-                        Text [ portuguese_brazilian ] = "Arco Co-seno" ;
+                        Text [ portuguese_brazilian ] = "Arco Cosseno" ;
                         Text [ swedish ] = "a~rcuscosinus" ;
                         Text [ danish ] = "Arcus cosinus" ;
                         Text [ italian ] = "A~rcocoseno" ;
@@ -1194,7 +1194,7 @@ Menu MN_CALC_POPUP
             Text[ arabic ] = "ÏÇáÇÊ";
             Text[ dutch ] = "~Functies";
             Text[ chinese_simplified ] = "å‡½æ•°";
-            Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+            Text[ language_user1 ] = "; (ÄÄ) ; - - - - - -";
             Text[ greek ] = "~ÓõíáñôŞóåéò";
             Text[ korean ] = "í•¨ìˆ˜";
             Text[ turkish ] = "İşlevler";
@@ -1230,7 +1230,7 @@ String STR_FORMULA
     Text[ arabic ] = "ÕíÛÉ ÇáäÕ";
     Text[ dutch ] = "Tekstformule";
     Text[ chinese_simplified ] = "æ–‡æœ¬è¡¨æ ¼";
-    Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+    Text[ language_user1 ] = "; (ÄÄ) ; - - - - - -";
     Text[ greek ] = "Ôığïò êåéìİíïõ";
     Text[ korean ] = "í…ìŠ¤íŠ¸ ìˆ˜ì‹";
     Text[ turkish ] = "Metin formulü";
@@ -1304,7 +1304,7 @@ String STR_FORMULA
         Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";\
         Text[ dutch ] = "Annuleren";\
         Text[ chinese_simplified ] = "å–æ¶ˆ";\
-        Text[ greek ] = "Áêıñùóç";\
+        Text[ greek ] = "¢êõñï";\
         Text[ korean ] = "ì·¨ì†Œ";\
         Text[ turkish ] = "İptal";\
         Text[ catalan ] = "Cancel.la";\
@@ -1351,6 +1351,7 @@ String STR_FORMULA
         Text[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";\
         Text[ slovak ] = "PouÅ¾iÅ¥";\
     };
+
 
 
 
