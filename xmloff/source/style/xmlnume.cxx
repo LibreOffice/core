@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:23:54 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 11:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     {
         const beans::PropertyValue& rProp = pPropArray[i];
 
-        if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE) ) )
+        if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
         {
             sal_Int16 nType;
             rProp.Value >>= nType;
@@ -226,15 +226,15 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 eType = nType;
             }
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_PREFIX, sizeof(XML_UNO_NAME_NRULE_PREFIX) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_PREFIX, sizeof(XML_UNO_NAME_NRULE_PREFIX)-1 ) )
         {
             rProp.Value >>= sPrefix;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_SUFFIX, sizeof(XML_UNO_NAME_NRULE_SUFFIX) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_SUFFIX, sizeof(XML_UNO_NAME_NRULE_SUFFIX)-1 ) )
         {
             rProp.Value >>= sSuffix;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
         {
             OUString sValue;
             rProp.Value >>= sValue;
@@ -246,17 +246,17 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                     cBullet = (sal_Unicode)sValue[0];
             }
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE)-1 ) )
         {
             rProp.Value >>= nBullRelSize;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_ADJUST, sizeof(XML_UNO_NAME_NRULE_ADJUST) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_ADJUST, sizeof(XML_UNO_NAME_NRULE_ADJUST)-1 ) )
         {
             sal_Int16 nValue;
             rProp.Value >>= nValue;
             eAdjust = nValue;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_FONT, sizeof(XML_UNO_NAME_NRULE_BULLET_FONT) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_FONT, sizeof(XML_UNO_NAME_NRULE_BULLET_FONT)-1 ) )
         {
             awt::FontDescriptor rFDesc;
             if( rProp.Value >>= rFDesc )
@@ -268,46 +268,46 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 eBulletFontEncoding = (rtl_TextEncoding)rFDesc.CharSet;
             }
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_GRAPHICURL, sizeof(XML_UNO_NAME_NRULE_GRAPHICURL) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHICURL, sizeof(XML_UNO_NAME_NRULE_GRAPHICURL)-1 ) )
         {
             rProp.Value >>= sImageURL;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_GRAPHIC_BITMAP, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_BITMAP) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHIC_BITMAP, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_BITMAP)-1 ) )
         {
             rProp.Value >>= xBitmap;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_COLOR, sizeof(XML_UNO_NAME_NRULE_BULLET_COLOR) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_COLOR, sizeof(XML_UNO_NAME_NRULE_BULLET_COLOR)-1 ) )
         {
             rProp.Value >>= nColor;
             bHasColor = sal_True;
         }
-        else  if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_START_WITH, sizeof(XML_UNO_NAME_NRULE_START_WITH) ) )
+        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_START_WITH, sizeof(XML_UNO_NAME_NRULE_START_WITH)-1 ) )
         {
             rProp.Value >>= nStartValue;
         }
-        else  if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_LEFT_MARGIN, sizeof(XML_UNO_NAME_NRULE_LEFT_MARGIN) ) )
+        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LEFT_MARGIN, sizeof(XML_UNO_NAME_NRULE_LEFT_MARGIN)-1 ) )
         {
             rProp.Value >>= nSpaceBefore;
         }
-        else  if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET, sizeof(XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET) ) )
+        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET, sizeof(XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET)-1 ) )
         {
             rProp.Value >>= nMinLabelWidth;
         }
-        else  if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE, sizeof(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE) ) )
+        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE, sizeof(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE)-1 ) )
         {
             rProp.Value >>= nMinLabelDist;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_PARENT_NUMBERING, sizeof(XML_UNO_NAME_NRULE_PARENT_NUMBERING) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_PARENT_NUMBERING, sizeof(XML_UNO_NAME_NRULE_PARENT_NUMBERING)-1 ) )
         {
             rProp.Value >>= nDisplayLevels;
             if( nDisplayLevels > nLevel+1 )
                 nDisplayLevels = nLevel+1;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME, sizeof(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME, sizeof(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME)-1 ) )
         {
             rProp.Value >>= sTextStyleName;
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_GRAPHIC_SIZE, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_SIZE) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHIC_SIZE, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_SIZE)-1 ) )
         {
             awt::Size aSize;
             if( rProp.Value >>= aSize )
@@ -316,7 +316,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 nImageHeight = aSize.Height;
             }
         }
-        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_VERT_ORIENT, sizeof(XML_UNO_NAME_NRULE_VERT_ORIENT) ) )
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_VERT_ORIENT, sizeof(XML_UNO_NAME_NRULE_VERT_ORIENT)-1 ) )
         {
             sal_Int16 nValue;
             rProp.Value >>= nValue;
@@ -752,9 +752,11 @@ void SvxXMLNumRuleExport::exportOutline()
 }
 
 void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
-                                         XMLTextListAutoStylePool *pPool )
+                                         XMLTextListAutoStylePool *pPool,
+                                         sal_Bool bExportChapterNumbering )
 {
-    exportOutline();
+    if( bExportChapterNumbering )
+        exportOutline();
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
     DBG_ASSERT( xFamiliesSupp.is(), "No XStyleFamiliesSupplier from XModel for export!" );

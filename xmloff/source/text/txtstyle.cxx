@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:02:58 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 11:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
 void XMLTextParagraphExport::exportNumStyles( sal_Bool bUsed )
 {
     SvxXMLNumRuleExport aNumRuleExport( GetExport() );
-    aNumRuleExport.exportStyles( bUsed, pListAutoPool );
+    aNumRuleExport.exportStyles( bUsed, pListAutoPool, !IsBlockMode() );
 }
 
 void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
@@ -195,11 +195,13 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
     exportStyleFamily( "FrameStyles", XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetFramePropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0, sal_True );
     exportNumStyles( bUsed );
-    exportTextFootnoteConfiguration();
-    XMLSectionExport::ExportBibliographyConfiguration(GetExport());
-
-    XMLLineNumberingExport aLineNumberingExport(GetExport());
-    aLineNumberingExport.Export();
+    if( !IsBlockMode() )
+    {
+        exportTextFootnoteConfiguration();
+        XMLSectionExport::ExportBibliographyConfiguration(GetExport());
+        XMLLineNumberingExport aLineNumberingExport(GetExport());
+        aLineNumberingExport.Export();
+    }
 }
 
 
