@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:53 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
-            return sal_True; //@todo replace true by false sal_False;
+            return sal_False;
 
         if( nDimensionIndex == 2 )
             return ChartTypeHelper::getDimensionCount( xChartType ) == 3;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: iha $ $Date: 2003-12-17 17:42:22 $
+#   last change: $Author: iha $ $Date: 2004-01-23 10:29:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SLOFILES=	\
     $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurveCalculator.obj \
     $(SLO)$/MeanValueRegressionCurveCalculator.obj \
-    $(SLO)$/OChartElementContainerHelper.obj \
     $(SLO)$/OEnumeration.obj \
     $(SLO)$/OIndexContainer.obj \
     $(SLO)$/OPropertySet.obj \
