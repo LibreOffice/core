@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.14 $
+#  $Revision: 1.15 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:55:50 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:41:11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -122,12 +122,12 @@ $(CLASSFILES) : $(JAVAFILES) $(GENJAVAFILES)
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_COMP_GEN)/%.rdb $(OUT_CLASS)/%.jar
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
+	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(^F)
 	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
