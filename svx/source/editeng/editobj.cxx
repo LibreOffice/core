@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 09:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,9 +1262,16 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
         for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
         {
             ContentInfo* pC = GetContents().GetObject( nPara );
-            ULONG nL = pC->GetText().Len();
+            USHORT nL = pC->GetText().Len();
             rOStream << nL;
             rOStream.Write( pC->GetText().GetBuffer(), nL*sizeof(sal_Unicode) );
+
+            // #91575# StyleSheetName must be Unicode too!
+            // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
+            // If needed, change nL back to ULONG and increase version...
+            nL = pC->GetStyle().Len();
+            rOStream << nL;
+            rOStream.Write( pC->GetStyle().GetBuffer(), nL*sizeof(sal_Unicode) );
         }
     }
 }
@@ -1498,13 +1505,24 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
             for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
             {
                 ContentInfo* pC = GetContents().GetObject( nPara );
-                ULONG nL;
+                USHORT nL;
+
+                // Text
                 rIStream >> nL;
                 if ( nL )
                 {
-                    pC->GetText().AllocBuffer( (USHORT)nL );
+                    pC->GetText().AllocBuffer( nL );
                     rIStream.Read( pC->GetText().GetBufferAccess(), nL*sizeof(sal_Unicode) );
                     pC->GetText().ReleaseBufferAccess( (USHORT)nL );
+                }
+
+                // StyleSheetName
+                rIStream >> nL;
+                if ( nL )
+                {
+                    pC->GetStyle().AllocBuffer( nL );
+                    rIStream.Read( pC->GetStyle().GetBufferAccess(), nL*sizeof(sal_Unicode) );
+                    pC->GetStyle().ReleaseBufferAccess( (USHORT)nL );
                 }
             }
         }
