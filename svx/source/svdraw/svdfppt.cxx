@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:02:13 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,7 +2288,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                             pPrinter->SetFont( aOldFont );
                         }
 
-                        if ( ( pPrinter == NULL ) || ( aMetric.GetLeading() == 0 ) )
+                        if ( ( pPrinter == NULL ) || ( aMetric.GetIntLeading() == 0 ) )
                         {
                             VirtualDevice aVirDev( 1 );
                             aVirDev.SetFont( aFont );
@@ -2298,7 +2298,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                         ByteString aHeight( ByteString::CreateFromInt32( aMetric.GetLineHeight() ) );
                         ByteString aAscent( ByteString::CreateFromInt32( aMetric.GetAscent() ) );
                         ByteString aDescent( ByteString::CreateFromInt32( aMetric.GetDescent() ) );
-                        ByteString aLeading( ByteString::CreateFromInt32( aMetric.GetLeading() ) );
+                        ByteString aLeading( ByteString::CreateFromInt32( aMetric.GetIntLeading() ) );
                         ByteString aPhysHeight( ByteString::CreateFromInt32( nTxtHeight ) );
 
                         *pDbgOut                                             << (sal_uInt8)0xa
