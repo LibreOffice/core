@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WriterTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:53 $
+ *  last change:$Date: 2003-10-06 12:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,86 +58,98 @@
  *
  *
  ************************************************************************/
-
 package util;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNamed;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPageSupplier;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
 
 // access the implementations via names
 import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XComponent;
-import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNamed;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextContent;
 
 import util.DesktopTools;
 
+
 public class WriterTools {
+    public static XTextDocument createTextDoc(XMultiServiceFactory xMSF) {
+        PropertyValue[] Args = new PropertyValue[0];
+        XComponent comp = DesktopTools.openNewDoc(xMSF, "swriter", Args);
+        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(
+                                          XTextDocument.class, comp);
 
-    public static XTextDocument createTextDoc( XMultiServiceFactory xMSF ) {
-        PropertyValue[] Args = new PropertyValue [0];
-        XComponent comp = DesktopTools.openNewDoc(  xMSF, "swriter", Args );
-        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,comp);
         return WriterDoc;
     } // finish createTextDoc
 
-    public static XTextDocument loadTextDoc( XMultiServiceFactory xMSF, String url ) {
-        PropertyValue[] Args = new PropertyValue [0];
-        XComponent comp = DesktopTools.loadDoc(  xMSF, url, Args );
-        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,comp);
+    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
+                                            String url) {
+        PropertyValue[] Args = new PropertyValue[0];
+        XTextDocument WriterDoc = loadTextDoc(xMSF, url, Args);
+
         return WriterDoc;
     } // finish createTextDoc
 
+    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
+                                            String url, PropertyValue[] Args) {
+        XComponent comp = DesktopTools.loadDoc(xMSF, url, Args);
+        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(
+                                          XTextDocument.class, comp);
 
-    public static XDrawPage getDrawPage ( XTextDocument aDoc ) {
+        return WriterDoc;
+    } // finish createTextDoc
+
+    public static XDrawPage getDrawPage(XTextDocument aDoc) {
         XDrawPage oDP = null;
+
         try {
-               XDrawPageSupplier oDPS = (XDrawPageSupplier)
-                        UnoRuntime.queryInterface(XDrawPageSupplier.class,aDoc);
+            XDrawPageSupplier oDPS = (XDrawPageSupplier) UnoRuntime.queryInterface(
+                                             XDrawPageSupplier.class, aDoc);
             oDP = (XDrawPage) oDPS.getDrawPage();
-        } catch ( Exception e ) {
-            throw new IllegalArgumentException( "Couldn't get drawpage" );
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Couldn't get drawpage");
         }
+
         return oDP;
     }
 
-    public static void insertTextGraphic ( XTextDocument aDoc,
-        XMultiServiceFactory xMSF, int hpos,  int vpos, int width, int height,
-                                                    String pic, String name) {
+    public static void insertTextGraphic(XTextDocument aDoc,
+                                         XMultiServiceFactory xMSF, int hpos,
+                                         int vpos, int width, int height,
+                                         String pic, String name) {
         try {
             Object oGObject = (XInterface) xMSF.createInstance(
-                                            "com.sun.star.text.GraphicObject");
+                                      "com.sun.star.text.GraphicObject");
 
             XText the_text = aDoc.getText();
             XTextCursor the_cursor = the_text.createTextCursor();
-            XTextContent the_content = (XTextContent)
-                            UnoRuntime.queryInterface(XTextContent.class,oGObject);
-            the_text.insertTextContent(the_cursor,the_content,true);
-            XPropertySet oProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oGObject);
+            XTextContent the_content = (XTextContent) UnoRuntime.queryInterface(
+                                               XTextContent.class, oGObject);
+            the_text.insertTextContent(the_cursor, the_content, true);
+
+            XPropertySet oProps = (XPropertySet) UnoRuntime.queryInterface(
+                                          XPropertySet.class, oGObject);
 
             String fullURL = util.utils.getFullTestURL(pic);
-            oProps.setPropertyValue("GraphicURL",fullURL);
-            oProps.setPropertyValue("HoriOrientPosition",new Integer(hpos));
-            oProps.setPropertyValue("VertOrientPosition",new Integer(vpos));
-            oProps.setPropertyValue("Width",new Integer(width));
-            oProps.setPropertyValue("Height",new Integer(height));
-            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,oGObject);
+            oProps.setPropertyValue("GraphicURL", fullURL);
+            oProps.setPropertyValue("HoriOrientPosition", new Integer(hpos));
+            oProps.setPropertyValue("VertOrientPosition", new Integer(vpos));
+            oProps.setPropertyValue("Width", new Integer(width));
+            oProps.setPropertyValue("Height", new Integer(height));
+
+            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+                                                                 oGObject);
             the_name.setName(name);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception while insertin TextGraphic");
             ex.printStackTrace();
         }
-
-
     }
-
 }
