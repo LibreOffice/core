@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:16:41 $
+ *  last change: $Author: mt $ $Date: 2002-11-01 12:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,17 +138,6 @@ String& EditUndoRemoveChars::GetStr() { return aText; }
 #endif
 
 using namespace ::com::sun::star;
-
-USHORT lcl_GetItemScriptType( short nI18NType )
-{
-    switch ( nI18NType )
-    {
-        case i18n::ScriptType::LATIN:   return SCRIPTTYPE_LATIN;
-        case i18n::ScriptType::ASIAN:   return SCRIPTTYPE_ASIAN;
-        case i18n::ScriptType::COMPLEX: return SCRIPTTYPE_COMPLEX;
-    }
-    return 0;
-}
 
 USHORT lcl_CalcExtraSpace( ParaPortion* pPortion, const SvxLineSpacingItem& rLSItem )
 {
@@ -1352,7 +1341,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         }
 
         if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
+            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
     }
 }
 
@@ -1383,7 +1372,7 @@ USHORT ImpEditEngine::GetScriptType( const EditPaM& rPaM, USHORT* pEndPos ) cons
             }
         }
     }
-    return nScriptType ? nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
+    return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
@@ -1412,7 +1401,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
                {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
                 {
-                    nScriptType |= lcl_GetItemScriptType ( rTypes[n].nScriptType );
+                    nScriptType |= GetItemScriptType ( rTypes[n].nScriptType );
                 }
                 else
                 {
@@ -1425,7 +1414,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
             }
         }
     }
-    return nScriptType ? nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
+    return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
