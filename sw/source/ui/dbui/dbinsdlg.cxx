@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-12-08 10:18:59 $
+ *  last change: $Author: os $ $Date: 2000-12-09 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,11 +1871,13 @@ void SwInsertDBColAutoPilot::Commit()
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(USHORT nCol = 0; nCol < aDBColumns.Count(); nCol++)
     {
+        OUString sColumnNode = sNewNode;
+        sColumnNode += C2U("/ColumnSet");
          SwInsDBColumn* pColumn = aDBColumns[nCol];
-        OUString sSubNodeName = sNewNode;
-        sSubNodeName += C2U("/_");
-        sSubNodeName += OUString::valueOf(sal_Int32(nCol));
-        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubNodeName);
+        OUString sColumnInsertNode(sColumnNode);
+        sColumnInsertNode += C2U("/__");
+        sColumnInsertNode += OUString::valueOf(sal_Int32(nCol));
+        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
         const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
@@ -1908,41 +1910,8 @@ void SwInsertDBColAutoPilot::Commit()
         sLang += C2U("-");
         sLang += aLocale.Language;
         pSubValues[5].Value <<=  sLang;
-        SetSetProperties(sNewNode, aSubValues);
+        SetSetProperties(sColumnNode, aSubValues);
     }
-#if 0
-
-    rtl::OUString sColumn, sUsrNumFmt;
-    sal_Int32 nDBNumFmt;
-    ULONG nUsrNumFmt;
-    LanguageType eUsrNumFmtLng;
-    USHORT nCol;
-    BOOL bHasFmt : 1;
-    BOOL bIsDBFmt : 1;
-    // jetzt noch die benutzerdefinierten Numberformatstrings erfragen,
-    // denn nur  diese lassen sich "unabhaengig" speichern!
-    SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-    GetDocPoolNm( RES_POOLCOLL_STANDARD, sTmp );
-    for( n = 0; n < pNewData->aDBColumns.Count(); ++n )
-    {
-        SwInsDBColumn& rSet = *pNewData->aDBColumns[ n ];
-        if( rSet.bHasFmt && !rSet.bIsDBFmt )
-        {
-            const SvNumberformat* pNF = rNFmtr.GetEntry( rSet.nUsrNumFmt );
-            if( pNF )
-            {
-                rSet.sUsrNumFmt = pNF->GetFormatstring();
-                rSet.eUsrNumFmtLng = pNF->GetLanguage();
-            }
-            else
-            {
-                rSet.sUsrNumFmt = sTmp;
-                rSet.eUsrNumFmtLng = LANGUAGE_SYSTEM;
-            }
-        }
-    }
-#endif
-
 }
 /* -----------------------------05.12.00 15:00--------------------------------
 
@@ -2068,11 +2037,12 @@ void SwInsertDBColAutoPilot::Load()
             aCbTableHeadon.Check( pNewData->bIsHeadlineOn );
             aRbHeadlColnms.Check( !pNewData->bIsEmptyHeadln );
             aRbHeadlEmpty.Check( pNewData->bIsEmptyHeadln );
+            HeaderHdl(&aCbTableHeadon);
 
             // jetzt noch die benutzerdefinierten Numberformat Strings in die
             // Shell kopieren. Nur diese sind dann als ID verfuegbar
             SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-            for( n = 0; n < aDBColumns.Count(); ++n )
+            for( n = 0; n < pNewData->aDBColumns.Count() && n < pNewData->aDBColumns.Count(); ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
                 const SwInsDBColumn& rGet = *pNewData->aDBColumns[ n ];
