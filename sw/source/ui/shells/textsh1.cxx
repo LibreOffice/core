@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:10:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,6 +1241,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
         }
         rReq.Ignore ();
+    }
+    break;
+    case FN_FORMAT_APPLY_HEAD1:
+    {
+    }
+    break;
+    case FN_FORMAT_APPLY_HEAD2:
+    {
+    }
+    break;
+    case FN_FORMAT_APPLY_HEAD3:
+    {
+    }
+    break;
+    case FN_FORMAT_APPLY_DEFAULT:
+    {
+    }
+    break;
+    case FN_FORMAT_APPLY_TEXTBODY:
+    {
     }
     break;
     case FN_WORDCOUNT_DIALOG:
