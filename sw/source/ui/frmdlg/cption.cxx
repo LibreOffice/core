@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:38:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             xNamed = uno::Reference< container::XNamed >(xTmp, uno::UNO_QUERY);
         }
         aObjectNameED.SetText(sObjectName);
-        aObjectNameED.SetForbiddenChars(' ');
+        aObjectNameED.SetForbiddenChars(String::CreateFromAscii(" .<>"));
         aObjectNameED.SetModifyHdl(LINK(this, SwCaptionDialog, ModifyHdl));
     }*/
 
