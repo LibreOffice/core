@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-19 18:21:29 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,72 +390,73 @@ void JRE_PropertyChanged( JNIEnv * env, const SvCommandList & rCmdList )
     env->DeleteLocalRef( pClass );
 }
 
-
+// Settings are detected by the JavaVM service
+// This function is not necessary anymore
 void SjApplet2::settingsChanged(void)
 {
-    Reference<XMultiServiceFactory> serviceManager(getProcessServiceFactory());
+//      Reference<XMultiServiceFactory> serviceManager(getProcessServiceFactory());
 
-    Reference<XJavaVM> xJavaVM(serviceManager->createInstance(OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
+//      Reference<XJavaVM> xJavaVM(serviceManager->createInstance(OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
 
-    if(xJavaVM->isVMStarted())
-    {
-        Reference<XJavaThreadRegister_11> xJavaThreadRegister_11(xJavaVM, UNO_QUERY);
+//      if(xJavaVM->isVMStarted())
+//      {
+//          Reference<XJavaThreadRegister_11> xJavaThreadRegister_11(xJavaVM, UNO_QUERY);
 
-        Sequence<sal_Int8> processID(16);
-        rtl_getGlobalProcessId((sal_uInt8 *)processID.getArray());
-        JavaVM * pJVM = *(JavaVM **)xJavaVM->getJavaVM(processID).getValue();
-        TKTThreadAttach jenv(pJVM, xJavaThreadRegister_11.get());
+//          Sequence<sal_Int8> processID(16);
+//          rtl_getGlobalProcessId((sal_uInt8 *)processID.getArray());
+//          JavaVM * pJVM = *(JavaVM **)xJavaVM->getJavaVM(processID).getValue();
+//          TKTThreadAttach jenv(pJVM, xJavaThreadRegister_11.get());
 
-        if( jenv.pEnv)
-        {
-//          DBG_ERROR( "SjApplet2::settingsChanged not implemented" );
-#ifdef _OLD_FEATURE
+//          if( jenv.pEnv)
+//          {
+//    //            DBG_ERROR( "SjApplet2::settingsChanged not implemented" );
+//  #ifdef _OLD_FEATURE
 
-            SjINetSettings aINetSettings;
-            GetpApp()->Property(aINetSettings);
-            SjJavaSettings aJSettings;
-            GetpApp()->Property(aJSettings);
+//              SjINetSettings aINetSettings;
+//              GetpApp()->Property(aINetSettings);
+//              SjJavaSettings aJSettings;
+//              GetpApp()->Property(aJSettings);
 
-            SvCommandList aCmdList;
-            // Security Settings
-            switch ( aJSettings.GetNetAccess() )
-            {
-                case NET_UNRESTRICTED:
-                    aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
-                                     String::CreateFromAscii("unrestricted") );
-                    break;
+//              SvCommandList aCmdList;
+//              // Security Settings
+//              switch ( aJSettings.GetNetAccess() )
+//              {
+//                  case NET_UNRESTRICTED:
+//                      aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
+//                                       String::CreateFromAscii("unrestricted") );
+//                      break;
 
-                case NET_NONE:
-                    aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
-                                     String::CreateFromAscii("none") );
-                    break;
+//                  case NET_NONE:
+//                      aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
+//                                       String::CreateFromAscii("none") );
+//                      break;
 
-                case NET_HOST:
-                    aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
-                                     String::CreateFromAscii("host") );
-                    break;
-            }
-            if ( aJSettings.IsSecurityEnabled() )
-                aCmdList.Append( String::CreateFromAscii("stardiv.security.disableSecurity"),
-                                 String::CreateFromAscii("false") );
-            else
-                aCmdList.Append( String::CreateFromAscii("stardiv.security.disableSecurity"),
-                                 String::CreateFromAscii("true") );
+//                  case NET_HOST:
+//                      aCmdList.Append( String::CreateFromAscii("appletviewer.security.mode"),
+//                                       String::CreateFromAscii("host") );
+//                      break;
+//              }
+//              if ( aJSettings.IsSecurityEnabled() )
+//                  aCmdList.Append( String::CreateFromAscii("stardiv.security.disableSecurity"),
+//                                   String::CreateFromAscii("false") );
+//              else
+//                  aCmdList.Append( String::CreateFromAscii("stardiv.security.disableSecurity"),
+//                                   String::CreateFromAscii("true") );
 
-            // HTTP settings
-            // http.proxyHost, http.proxyPort, ftp.proxyHost, ftp.proxyPort are changed within
-            // the JavaVM service.
+//              // HTTP settings
+//              // http.proxyHost, http.proxyPort, ftp.proxyHost, ftp.proxyPort are changed within
+//              // the JavaVM service.
 
-            // Ftp settings
-            if( aINetSettings.GetFtpProxy().Len() )
-                aCmdList.Append( String::CreateFromAscii("ftpProxySet"), String::CreateFromAscii("true") );
-            else
-                aCmdList.Append( String::CreateFromAscii("ftpProxySet"), String::CreateFromAscii("false") );
+//              // Ftp settings
+//              if( aINetSettings.GetFtpProxy().Len() )
+//                  aCmdList.Append( String::CreateFromAscii("ftpProxySet"), String::CreateFromAscii("true") );
+//              else
+//                  aCmdList.Append( String::CreateFromAscii("ftpProxySet"), String::CreateFromAscii("false") );
 
 
-            JRE_PropertyChanged(jenv.pEnv, aCmdList);
-#endif //_OLD_FEATURE
-        }
-    }
+//              JRE_PropertyChanged(jenv.pEnv, aCmdList);
+//  #endif //_OLD_FEATURE
+//          }
+//      }
 }
 
