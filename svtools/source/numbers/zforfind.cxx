@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-02-14 17:29:31 $
+ *  last change: $Author: er $ $Date: 2001-05-04 16:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
@@ -177,35 +180,33 @@ void ImpSvNumberInputScan::Reset()
 //---------------------------------------------------------------------------
 //      StringToDouble
 //
-// nur Vorzeichenlose Dezimalzahlen
+// Only simple unsigned floating point values without any error detection,
+// decimal separator has to be '.'
 
-double ImpSvNumberInputScan::StringToDouble( const String& rStr )
+double ImpSvNumberInputScan::StringToDouble( const String& rStr, BOOL bForceFraction )
 {
     double fNum = 0.0;
+    double fFrac = 0.0;
+    int nExp = 0;
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rStr.Len();
-    FASTBOOL bPreComma = TRUE;
-    double fBas;
+    BOOL bPreSep = !bForceFraction;
 
     while (nPos < nLen)
     {
         if (rStr.GetChar(nPos) == '.')
-        {
-            bPreComma = FALSE;
-            fBas = 1.0;
-        }
-        else if (bPreComma)
-        {
-            fNum *= 10.0;
-            fNum += (double) (rStr.GetChar(nPos)-'0');
-        }
+            bPreSep = FALSE;
+        else if (bPreSep)
+            fNum = fNum * 10.0 + (double) (rStr.GetChar(nPos) - '0');
         else
         {
-            fBas *= 10.0;
-            fNum += ((double)(rStr.GetChar(nPos)-'0'))/fBas;
+            fFrac = fFrac * 10.0 + (double) (rStr.GetChar(nPos) - '0');
+            --nExp;
         }
         nPos++;
     }
+    if ( fFrac )
+        return fNum + SolarMath::Pow10Exp( fFrac, nExp );
     return fNum;
 }
 
@@ -809,11 +810,7 @@ void ImpSvNumberInputScan::GetTimeRef(
     if (nIndex - nStartIndex < nAnz)
         nSecond = (USHORT) sStrArray[nNums[nIndex++]].ToInt32();
     if (nIndex - nStartIndex < nAnz)
-    {
-        String s100Sec( '.' );
-        s100Sec += sStrArray[nNums[nIndex]];
-        fSecond100 = StringToDouble( s100Sec );
-    }
+        fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], TRUE );
     if (nAmPm == -1 && nHour != 12)             // PM
         nHour += 12;
     else if (nAmPm == 1 && nHour == 12)         // 12 AM
@@ -2161,14 +2158,18 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     fOutNumber = StringToDouble(sResString);
                 else                                        // Nachbehandlung Exponent
                 {
-                    USHORT i;
                     double fExp;
 
                     if (nDecPos == 2)
                         fExp = StringToDouble(sStrArray[nNums[nThousand+2]]);
                     else
                         fExp = StringToDouble(sStrArray[nNums[nThousand+1]]);
+#ifdef S390
+                    // S390: DBL_MIN == 5.397605347e-79, DBL_MAX == ...e75
+                    if ((nESign == -1 && fExp > 79.0) || (nESign != -1 && fExp > 75.0))
+#else
                     if (fExp > 308.0)
+#endif
                     {
                         F_Type = NUMBERFORMAT_TEXT;         // Ueberlauf -> Text
                         if (nESign == -1)
@@ -2183,7 +2184,6 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                         if (nESign == -1)
                         {
 #ifdef S390
-                            // S390 DBL_MIN = 5.397605347e-79
                             if (fExp == 79.0  && fOutNumber < 5.397605348)
 #else
                             if (fExp == 308.0 && fOutNumber < DBL_MIN*1.0E308)
@@ -2193,8 +2193,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                                 fOutNumber = 0.0;
                             }
                             else
-                                for (i=0; i < (USHORT) fExp; i++)
-                                    fOutNumber /= 10.0;
+                                fOutNumber = SolarMath::Pow10Exp(
+                                    fOutNumber, -((int)fExp) );
                         }
                         else
                         {
@@ -2208,8 +2208,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                                 eScannedType = NUMBERFORMAT_TEXT;   // Ueberlauf -> Text
                             }
                             else
-                                for (i=0; i < (USHORT) fExp; i++)
-                                    fOutNumber *= 10.0;
+                                fOutNumber = SolarMath::Pow10Exp(
+                                    fOutNumber, (int)fExp );
                         }
                     }
                 }
