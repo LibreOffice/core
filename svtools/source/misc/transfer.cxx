@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 13:23:27 $
+ *  last change: $Author: ka $ $Date: 2001-11-05 13:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,8 +1309,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 
 Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 {
-    Any                 aRet;
-    const sal_uInt32    nRef = Application::ReleaseSolarMutex();
+    Any aRet;
 
     try
     {
@@ -1341,8 +1340,6 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
     catch( const ::com::sun::star::uno::Exception& )
     {
     }
-
-    Application::AcquireSolarMutex( nRef );
 
     return aRet;
 }
