@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,7 @@ ERRTYPE RscTypCont::WriteRc( FILE * fOutput )
             DirEntry aFullName( aUniFileName );
             aFullName.Find( UniString( GetSysSearchPath(), RTL_TEXTENCODING_ASCII_US ) );
             pSysEntry->aFileName = ByteString( aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "found sys dep file %s\n", pSysEntry->aFileName.GetBuffer() );
 #endif
             if( !::Append( fOutput, pSysEntry->aFileName.GetBuffer() ) )
