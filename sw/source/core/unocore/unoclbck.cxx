@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 12:47:46 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,106 +133,84 @@ void SwUnoCallBack::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
     {
         case  RES_FOOTNOTE_DELETED:
         {
+            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
             SwClientIter aIter( *this );
-            SwXFootnote* pxFootnote = (SwXFootnote*)aIter.First( TYPE( SwXFootnote ));
-            while(pxFootnote)
+            for( SwXFootnote* pxFootnote = (SwXFootnote*)
+                aIter.First( TYPE( SwXFootnote )); pxFootnote;
+                pxFootnote = (SwXFootnote*)aIter.Next() )
             {
                 const SwFmtFtn* pFmt = pxFootnote->FindFmt();
-                if(!pFmt)
-                    pxFootnote->Invalidate();
-                else
+                if( !pFmt || (void*)pFmt == pDelPtr )
                 {
-                    const SwTxtFtn *pTxtFtn = pFmt ? pFmt->GetTxtFtn() : 0;
-                    if(pTxtFtn && (void*)pTxtFtn == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
+                    pxFootnote->Invalidate();
+                    if( pFmt )
+                        break;
+                }
+            }
+        }
+        break;
+
+        case RES_REFMARK_DELETED:
+        {
+            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
+            SwClientIter aIter( *this );
+            for( SwXReferenceMark* pxRefMark = (SwXReferenceMark*)
+                    aIter.First( TYPE( SwXReferenceMark )); pxRefMark;
+                    pxRefMark = (SwXReferenceMark*)aIter.Next() )
+            {
+                SwDoc* pDoc = pxRefMark->GetDoc();
+                if( pDoc )
+                {
+                    const SwFmtRefMark* pFmt = pDoc->GetRefMark(
+                                                    pxRefMark->GetMarkName());
+                    if( !pFmt )
+                        pxRefMark->Invalidate();
+                    else if( pFmt == pxRefMark->GetMark() &&
+                                (void*)pFmt == pDelPtr )
                     {
-                        pxFootnote->Invalidate();
+                        pxRefMark->Invalidate();
                         break;
                     }
                 }
-                pxFootnote = (SwXFootnote*)aIter.Next( );
             }
         }
         break;
-        case  RES_REFMARK_DELETED:
-        {
-            SwClientIter aIter( *this );
-            SwXReferenceMark* pxRefMark = (SwXReferenceMark*)aIter.First( TYPE( SwXReferenceMark ));
-            while(pxRefMark)
-            {
-                SwDoc* pDoc = pxRefMark->GetDoc();
-                if(pDoc)
-                {
-                    const SwFmtRefMark* pFmt = pDoc->GetRefMark(pxRefMark->GetMarkName());
-                    if(!pFmt)
-                        pxRefMark->Invalidate();
-                    else if(pFmt == pxRefMark->GetMark())
-                    {
-                        const SwTxtRefMark *pTxtRef = pFmt ? pFmt->GetTxtRefMark() : 0;
-                        if(pTxtRef && (void*)pTxtRef == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
-                        {
-                            pxRefMark->Invalidate();
-                            break;
-                        }
-                    }
-                }
-                pxRefMark = (SwXReferenceMark*)aIter.Next( );
-            }
 
-        }
-        break;
         case  RES_TOXMARK_DELETED:
         {
+            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
             SwClientIter aIter( *this );
-            SwXDocumentIndexMark* pxIdxMark = (SwXDocumentIndexMark*)aIter.First( TYPE( SwXDocumentIndexMark ));
-            while(pxIdxMark)
+            for( SwXDocumentIndexMark* pxIdxMark = (SwXDocumentIndexMark*)
+                aIter.First( TYPE( SwXDocumentIndexMark )); pxIdxMark;
+                pxIdxMark = (SwXDocumentIndexMark*)aIter.Next( ) )
             {
-                SwTOXType* pToxType = pxIdxMark->GetTOXType();
-                if(pToxType)
-                {
-                    const SwTOXMark* pTOXMark = pxIdxMark->GetTOXMark();
-                    if(!pTOXMark)
-                        pxIdxMark->Invalidate();
-                    else
-                    {
-                        const SwTxtTOXMark* pTxtTOXMark = pTOXMark ? pTOXMark->GetTxtTOXMark() : 0;
-                        if(pTxtTOXMark && (void*)pTxtTOXMark == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
-                        {
-                            pxIdxMark->Invalidate();
-                            break;
-                        }
-                    }
-                }
-                else
+                if( !pxIdxMark->GetTOXType() || !pxIdxMark->GetTOXMark() )
                     pxIdxMark->Invalidate();
-                pxIdxMark = (SwXDocumentIndexMark*)aIter.Next( );
+                else if( (void*)pxIdxMark->GetTOXMark() == pDelPtr )
+                {
+                    pxIdxMark->Invalidate();
+                    break;
+                }
             }
-
         }
+        break;
+
         case RES_FIELD_DELETED:
         {
+            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
             SwClientIter aIter( *this );
-            SwXTextField* pxTextField = (SwXTextField*)aIter.First( TYPE( SwXTextField ));
-            while(pxTextField)
+            for( SwXTextField* pxTextField = (SwXTextField*)
+                aIter.First( TYPE( SwXTextField ));  pxTextField;
+                pxTextField = (SwXTextField*)aIter.Next() )
             {
-                const SwField* pField = pxTextField->GetField();
-                if(pField)
-                {
-                    const SwFmtFld* pFmtFld = pxTextField->GetFldFmt();
-                    if(!pFmtFld)
-                        pxTextField->Invalidate();
-                    else
-                    {
-                        const SwTxtFld* pTxtFld = pFmtFld ? pFmtFld->GetTxtFld() : 0;
-                        if(pTxtFld && (void*)pTxtFld == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
-                        {
-                            pxTextField->Invalidate();
-                            break;
-                        }
-                    }
-                }
-                else
+                const SwFmtFld* pFmtFld = pxTextField->GetFldFmt();
+                if( !pFmtFld || !pFmtFld->GetFld() )
                     pxTextField->Invalidate();
-                pxTextField = (SwXTextField*)aIter.Next( );
+                else if( (void*)pFmtFld == pDelPtr )
+                {
+                    pxTextField->Invalidate();
+                    break;
+                }
             }
         }
         break;
@@ -299,6 +277,9 @@ SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& rMark)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/04/03 12:47:46  mtg
+    #78699# Handle a RES_FIELD_DELETED callback
+
     Revision 1.3  2000/11/30 11:30:49  dvo
     #80616# remaining API issues needed for XML index im-/export fixed
     - added: now TOXMarks always return the same UNO wrapper object, making them comparable
