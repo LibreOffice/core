@@ -1,11 +1,10 @@
-
 #*************************************************************************
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2001-07-13 13:53:36 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 14:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +60,7 @@
 #
 #*************************************************************************
 
-# mk file for unxlngi3
+# mk file for unxlngi4
 ASM=
 AFLAGS=
 
@@ -91,14 +90,15 @@ CC=g++
 cc=gcc
 # flags for C and C++ Compiler
 # do not use standard header search paths
-# here the Compiler is installed in the solenv hierarchy, to be changed
 # if installed elsewhere
-CFLAGS=-w -nostdinc -c $(INCLUDE)
+.IF "$(BUILD_SOSL)"!=""
+CFLAGS=
+.ENDIF
+CFLAGS+=-w -fmessage-length=0 -c $(INCLUDE)
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mpentium
-
+CFLAGSCC= -pipe -mcpu=pentiumpro 
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
@@ -181,7 +181,7 @@ STDLIBGUIST=-lXaw -lXt -lX11 -ldl -lm
 STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
 
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
 
