@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:24 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,14 @@
 
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_OBJECTCONTACT_HXX
+#include <svx/sdr/contact/objectcontact.hxx>
+#endif
+
+#ifndef _SDR_ANIMATION_OBJECTANIMATOR_HXX
+#include <svx/sdr/animation/objectanimator.hxx>
 #endif
 
 using namespace ::rtl;
@@ -1625,6 +1633,45 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
 
 void SdrPaintView::DoConnect(SdrOle2Obj* pOleObj)
 {
+}
+
+void SdrPaintView::SetAnimationEnabled( BOOL bEnable )
+{
+    SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
+}
+
+void SdrPaintView::SetAnimationPause( BOOL bSet )
+{
+    if(bAnimationPause != bSet)
+    {
+        bAnimationPause = bSet;
+
+        for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
+        {
+            SdrPageView& rPageView = *GetPageViewPvNum(a);
+
+            for(sal_uInt32 b(0L); b < rPageView.WindowCount(); b++)
+            {
+                const SdrPageViewWindow& rPageViewWindow = *(rPageView.GetWindow(b));
+                sdr::contact::ObjectContact& rObjectContact = rPageViewWindow.GetObjectContact();
+
+                if(rObjectContact.HasObjectAnimator())
+                {
+                    sdr::animation::ObjectAnimator& rAnimator = rObjectContact.GetObjectAnimator();
+
+                    if(rAnimator.IsPaused() != bSet)
+                    {
+                        rAnimator.SetPaused(bSet);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode )
+{
+    eAnimationMode = eMode;
 }
 
 void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
