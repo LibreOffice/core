@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:21:11 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,7 @@
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "Pl~acering" ; \
         Text [ dutch ] = "~Positie" ; \
-        Text [ spanish ] = "~Posición" ; \
+        Text [ spanish ] = "Posición" ; \
         Text [ english_us ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
