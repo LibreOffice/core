@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: dl $ $Date: 2000-11-24 17:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,10 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
+#include <svx/scripttypeitem.hxx>
+#endif
+
 
 #pragma hdrstop
 
@@ -334,12 +338,12 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         default:
         {
-            if( !pArgs||
-                nSlot == SID_ATTR_CHAR_WEIGHT ) // Weight besitzt Argument !?
+            SfxItemSet aEditAttr( pView->GetDoc()->GetPool() );
+            pView->GetAttributes( aEditAttr );
+            SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
+
+            if( !pArgs )
             {
-                SfxItemSet aEditAttr( pView->GetDoc()->GetPool() );
-                pView->GetAttributes( aEditAttr );
-                SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                 //aNewAttr.InvalidateAllItems(); <- Macht Probleme (#35465#)
 
                 switch ( nSlot )
@@ -516,6 +520,19 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     break;
                 }
 
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if ( nSlot == SID_ATTR_CHAR_FONT       ||
+                      nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
+                      nSlot == SID_ATTR_CHAR_POSTURE    ||
+                      nSlot == SID_ATTR_CHAR_WEIGHT )
+            {
+                USHORT nScriptType = pView->GetScriptType();
+                SfxItemPool& rPool = pView->GetDoc()->GetPool();
+                SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
+                aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
+                aNewAttr.Put( aSvxScriptSetItem );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
             }

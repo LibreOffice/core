@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 10:56:37 $
+ *  last change: $Author: dl $ $Date: 2000-11-24 17:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,14 +317,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     aSvxFontItem.GetCharSet() = gsl_getSystemTextEncoding();
     rISet.Put(aSvxFontItem);
     SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
-    aSvxFontItemCJK.GetFamily() = FAMILY_ROMAN;
-    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) );
-    aSvxFontItemCJK.GetCharSet() = gsl_getSystemTextEncoding();
+    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "Arial Unicode MS;Andale WT UI;MS PGothic;HG Mincho;MS Mincho;SimSun;Song;PmingLiU;Ming;Batang;Myeomgjo;Gulim" ) );
     rISet.Put(aSvxFontItemCJK);
     SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
-    aSvxFontItemCTL.GetFamily() = FAMILY_ROMAN;
-    aSvxFontItemCTL.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
-    aSvxFontItemCTL.GetCharSet() = gsl_getSystemTextEncoding();
+    aSvxFontItemCTL.GetFamilyName() = UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "Simplified Arabic;David" ) );
     rISet.Put(aSvxFontItemCTL);
 
     rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT ) );     // 24 pt

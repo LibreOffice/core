@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: dl $ $Date: 2000-11-24 17:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
+#endif
+#ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
+#include <svx/scripttypeitem.hxx>
 #endif
 
 #pragma hdrstop
@@ -202,6 +205,8 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter    aIter( rSet );
     USHORT          nWhich = aIter.FirstWhich();
     BOOL            bTemplate = FALSE;
+    SfxItemSet      aAttrSet( pView->GetDoc()->GetPool() );
+    pView->GetAttributes( aAttrSet );
 
     while ( nWhich )
     {
@@ -211,6 +216,25 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
         switch ( nSlotId )
         {
+            case SID_ATTR_CHAR_FONT:
+            case SID_ATTR_CHAR_FONTHEIGHT:
+            case SID_ATTR_CHAR_WEIGHT:
+            case SID_ATTR_CHAR_POSTURE:
+            {
+                SfxItemPool& rPool = GetPool();
+                SvxScriptSetItem aSetItem( nSlotId, rPool );
+                aSetItem.GetItemSet().Put( aAttrSet, FALSE );
+
+                USHORT nScriptType = pView->GetScriptType();
+                const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
+                if( pI )
+                    rSet.Put( *pI, nWhich );
+                else
+                    rSet.InvalidateItem( nWhich );
+            }
+            break;
+
+
             case SID_STYLE_APPLY:
             case SID_STYLE_FAMILY2:
             {
@@ -312,9 +336,6 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
         nWhich = aIter.NextWhich();
     }
-
-    SfxItemSet aAttrSet( pView->GetDoc()->GetPool() );
-    pView->GetAttributes( aAttrSet );
 
     rSet.Put( aAttrSet, FALSE ); // <- FALSE, damit DontCare-Status uebernommen wird
 

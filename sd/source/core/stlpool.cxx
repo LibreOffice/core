@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-16 13:54:33 $
+ *  last change: $Author: dl $ $Date: 2000-11-24 17:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,13 +283,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
     aSvxFontItem.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
     aSvxFontItem.GetCharSet() = gsl_getSystemTextEncoding();
     SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
-    aSvxFontItemCJK.GetFamily() = FAMILY_ROMAN;
-    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) );
-    aSvxFontItemCJK.GetCharSet() = gsl_getSystemTextEncoding();
+    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii(
+                                      RTL_CONSTASCII_STRINGPARAM( "Arial Unicode MS;Andale WT UI;MS PGothic;HG Mincho;MS Mincho;SimSun;Song;PmingLiU;Ming;Batang;Myeomgjo;Gulim" ) );
     SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
-    aSvxFontItemCTL.GetFamily() = FAMILY_ROMAN;
-    aSvxFontItemCTL.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
-    aSvxFontItemCTL.GetCharSet() = gsl_getSystemTextEncoding();
+    aSvxFontItemCTL.GetFamilyName() = UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "Simplified Arabic;David" ) );
 
     Font aBulletFont( GetBulletFont() );
 
