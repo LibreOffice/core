@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:32:53 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ static int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 // ----------
 
 ZCodec::ZCodec( ULONG nInBufSize, ULONG nOutBufSize, ULONG nMemUsage )
+    : mnCRC(0)
 {
     mnMemUsage = nMemUsage;
     mnInBufSize = nInBufSize;
@@ -109,6 +110,7 @@ ZCodec::ZCodec( ULONG nInBufSize, ULONG nOutBufSize, ULONG nMemUsage )
 }
 
 ZCodec::ZCodec( void )
+    : mnCRC(0)
 {
     mnMemUsage = MAX_MEM_USAGE;
     mnInBufSize = DEFAULT_IN_BUFSIZE;
