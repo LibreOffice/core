@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 11:06:44 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,9 +258,10 @@
 
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
-    : SvxMSDffManager( *rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
-    rRdr.pDataStream, 0, 0, COL_WHITE, 12 , rRdr.pStrm ), rReader( rRdr ),
-    pFallbackStream(0), pOldEscherBlipCache(0)
+    : SvxMSDffManager(*rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
+        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm,
+        rRdr.maTracer.GetTrace()),
+    rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
 {
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
@@ -902,6 +903,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
 
 void SwWW8ImplReader::ImportDop()
 {
+    sw::log::Context aContext(maTracer, sw::log::eDocumentProperties);
     // correct the LastPrinted date in DocumentInfo
     if (rDoc.GetpInfo())
     {
@@ -926,11 +928,14 @@ void SwWW8ImplReader::ImportDop()
         }
     }
 
+
     // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
     // Abst. des ersten und oberem Abst. des zweiten
     rDoc.SetParaSpaceMax(!pWDop->fDontUseHTMLAutoSpacing, true);
+    maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
     rDoc.SetTabCompat(true);
+    maTracer.Log(sw::log::eTabStopDistance);
 
     // Import Default-Tabs
     long nDefTabSiz = pWDop->dxaTab;
@@ -948,6 +953,12 @@ void SwWW8ImplReader::ImportDop()
         SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
 
     rDoc._SetUseVirtualDevice(!pWDop->fUsePrinterMetrics);
+    if (!pWDop->fUsePrinterMetrics)
+        maTracer.Log(sw::log::ePrinterMetrics);
+
+    if (!pWDop->fNoLeading)
+        maTracer.Log(sw::log::eExtraLeading);
+
     rDoc.SetAddFlyOffsets( true );
 
     //import magic doptypography information, if its there
@@ -2152,9 +2163,14 @@ void SwWW8ImplReader::CloseAttrEnds()
 
 bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 {
+    sw::log::Environment eContext = sw::log::eMainText;
+    if (nType == MAN_MAINTEXT)
+        eContext = sw::log::eMainText;
+    else
+        eContext = sw::log::eSubDoc;
+    sw::log::Context aContext(maTracer, eContext);
+
     bool bJoined=false;
-    if( nIniFlags & WW8FL_NO_TEXT )
-        return bJoined;
 
     bool bStartLine = true;
     short nCrCount = 0;
@@ -2237,8 +2253,9 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 
 SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, bool bNewDoc)
-    : pStg(pStorage), pStrm(pSt),  pTableStream(0), pDataStream(0), rDoc(rD),
-    maSectionManager(*this), maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
+    : maTracer(*(rD.GetDocShell()->GetMedium())), pStg(pStorage), pStrm(pSt),
+    pTableStream(0), pDataStream(0), rDoc(rD), maSectionManager(*this),
+    maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')), pMSDffManager(0), mpAtnNames(0),
     pAuthorInfos(0), pOleMap(0), pTabNode(0), mbNewDoc(bNewDoc)
 {
