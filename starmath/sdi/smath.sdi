@@ -141,6 +141,7 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -167,6 +168,7 @@ SfxStringItem ConfigName SID_TEXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -243,6 +245,7 @@ SfxBoolItem ToolBox SID_TOOLBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -369,6 +372,7 @@ SfxBoolItem Textmode SID_TEXTMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -420,6 +424,7 @@ SfxStringItem TextStatus SID_TEXTSTATUS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -521,6 +526,7 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -622,6 +628,7 @@ SfxInt16Item Graphic SID_GRAPHIC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,

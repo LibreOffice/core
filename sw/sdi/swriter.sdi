@@ -41,6 +41,7 @@ SfxBoolItem Gallery SID_GALLERY
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -367,6 +368,7 @@ SfxBoolItem VRuler FN_VLINEAL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -621,6 +623,7 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -747,6 +750,7 @@ SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -773,6 +777,7 @@ SfxBoolItem ShadowCursor FN_SHADOWCURSOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -849,6 +854,7 @@ SfxBoolItem Ruler FN_RULER
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -950,6 +956,7 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1329,6 +1336,7 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1505,6 +1513,7 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1781,6 +1790,7 @@ SfxUInt16Item OptimizeTable FN_OPTIMIZE_TABLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2003,7 +2013,7 @@ SfxVoidItem TableNumberFormatDialog FN_NUM_FORMAT_TABLE_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -2310,6 +2320,7 @@ SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2745,6 +2756,7 @@ SfxBoolItem CellVertCenter FN_TABLE_VERT_CENTER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2771,6 +2783,7 @@ SfxBoolItem CellVertTop FN_TABLE_VERT_NONE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2797,6 +2810,7 @@ SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2848,6 +2862,7 @@ SfxBoolItem VScroll FN_VSCROLLBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2899,6 +2914,7 @@ SfxBoolItem Marks FN_VIEW_MARKS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2925,6 +2941,7 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2951,6 +2968,7 @@ SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2977,6 +2995,7 @@ SfxUInt16Item HtmlMode SID_HTML_MODE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3078,6 +3097,7 @@ SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3154,6 +3174,7 @@ SfxBoolItem UnderlineDouble FN_UNDERLINE_DOUBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3255,6 +3276,7 @@ SfxVoidItem UnhainFrames FN_FRAME_UNCHAIN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -3281,6 +3303,7 @@ SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3357,6 +3380,7 @@ SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3558,6 +3582,7 @@ SfxStringItem StatePageNumber FN_STAT_PAGE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3684,6 +3709,7 @@ SfxBoolItem InsertHeader FN_INSERT_HEADER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3935,6 +3961,7 @@ SfxBoolItem Fields FN_VIEW_FIELDS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4092,6 +4119,7 @@ SfxBoolItem Sourceview FN_SOURCEVIEW
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4296,6 +4324,7 @@ SfxUInt16Item SelectionMode FN_STAT_SELMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4322,6 +4351,7 @@ SfxStringItem PageStyleName FN_STAT_TEMPLATE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4694,7 +4724,7 @@ SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -5101,6 +5131,7 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5148,7 +5179,7 @@ SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -5277,6 +5308,7 @@ SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5303,6 +5335,7 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5454,6 +5487,7 @@ SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5580,6 +5614,7 @@ SfxBoolItem InsertField FN_INSERT_FIELD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6190,6 +6225,7 @@ SfxBoolItem CellVertBottom FN_TABLE_VERT_BOTTOM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6344,6 +6380,7 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6366,7 +6403,7 @@ SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -6420,6 +6457,7 @@ SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6699,6 +6737,7 @@ SfxBoolItem ExecHyperlinks FN_STAT_HYPERLINKS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7050,6 +7089,7 @@ SfxBoolItem InsertFooter FN_INSERT_FOOTER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7176,6 +7216,7 @@ SfxStringItem NumberFormat FN_NUMBER_FORMAT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7252,6 +7293,7 @@ SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7328,6 +7370,7 @@ SfxUInt16Item InsertCtrl FN_INSERT_CTRL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7500,7 +7543,7 @@ SfxVoidItem LineNumberingDialog FN_LINE_NUMBERING_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -7603,7 +7646,7 @@ SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -7708,6 +7751,7 @@ SfxUInt16Item PageOffset FN_CHANGE_PAGENUM
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7734,6 +7778,7 @@ SfxObjectItem InsertPageFooter FN_INSERT_PAGEFOOTER
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -7760,6 +7805,7 @@ SfxObjectItem InsertPageHeader FN_INSERT_PAGEHEADER
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -7811,6 +7857,7 @@ SfxUInt16Item InsertObjCtrl FN_INSERT_OBJ_CTRL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7837,6 +7884,7 @@ SfxBoolItem SubScript FN_SET_SUB_SCRIPT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8178,6 +8226,7 @@ SfxBoolItem ChainFrames FN_FRAME_CHAIN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -8275,7 +8324,7 @@ SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -8300,7 +8349,7 @@ SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Asynchron;
 
     /* config: */
@@ -8691,6 +8740,7 @@ SfxBoolItem HScroll FN_HSCROLLBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8867,6 +8917,7 @@ SfxBoolItem Graphic FN_VIEW_GRAPHIC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
