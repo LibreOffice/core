@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergeddataprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:02:23 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,14 +103,14 @@ namespace configmgr
                 identifies the component to be loaded
 
             @returns
-                A valid node instance for the given component.
+                A valid component instance for the given component.
 
             @throws com::sun::star::uno::Exception
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual NodeResult getComponentData(ComponentRequest const & _aRequest)
+        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
     };
 // ---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ namespace configmgr
         /** loads merged data for a (partial) tree and returns it as return value.
 
             @param _aRequest
-                identifies the node to be loaded
+                identifies the component to be loaded
 
             @param _pListener
                 a listener to observe subsequent changes to the data requested
@@ -141,13 +141,13 @@ namespace configmgr
                 </p>
 
             @returns
-                A valid node instance for the given request.
+                A valid component instance for the given request.
 
             @throws com::sun::star::uno::Exception
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual NodeResult getNodeData(NodeRequest const & _aRequest, INodeDataListener * _pListener = NULL)
+        virtual ComponentResult getNodeData(ComponentRequest const & _aRequest, INodeDataListener * _pListener = NULL)
             CFG_UNO_THROW_ALL() = 0;
 
         /** remove a listener registered for a previous request.

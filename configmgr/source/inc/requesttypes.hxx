@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:56:05 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace configmgr
         using configuration::AbsolutePath;
         using configuration::Name;
 // ---------------------------------------------------------------------------
+        typedef std::pair<std::auto_ptr<ISubtree>, Name> ComponentData;
         class NodePath
         {
             AbsolutePath m_path;
@@ -115,6 +116,7 @@ namespace configmgr
             Data        const & data() const { return m_node; }
             NodePath    const & root() const { return m_root; }
 
+            Data &  mutableData() { return m_node; }
             Data extractData() { return m_node; }
         private:
             Data        m_node;
@@ -142,6 +144,33 @@ namespace configmgr
             Data m_node;
             Name m_name; // if empty, this is a complete set of component templates
             Name m_component;
+        };
+// ---------------------------------------------------------------------------
+        struct ComponentInstance
+        {
+            typedef std::auto_ptr<ISubtree> Data;
+
+            explicit
+            ComponentInstance(Data _node, Data _template, Name const & _component)
+            : m_node(_node)
+            , m_template(_template)
+            , m_component(_component)
+            {
+            }
+
+            Data        const & data() const { return m_node; }
+            Data        const & templateData() const { return m_template; }
+            Name        const & component() const { return m_component; }
+
+            ComponentData  componentTemplateData () const { return std::make_pair(m_template,m_component);}
+            ComponentData  componentNodeData () const { return std::make_pair(m_node,m_component);}
+            Data &  mutableData() { return m_node; }
+            Data extractData() { return m_node; }
+            Data extractTemplateData() { return m_template; }
+        private:
+            Data        m_node;
+            Data        m_template;
+            Name        m_component;
         };
 // ---------------------------------------------------------------------------
         struct UpdateInstance
@@ -226,6 +255,7 @@ namespace configmgr
 
             Instance const & operator *() const { return  instance(); }
             Instance const * operator->() const { return &instance(); }
+            Instance & mutableInstance() { return m_xInstance->instance; }
 
             typename Instance::Data extractDataAndClear()
             {
@@ -245,6 +275,8 @@ namespace configmgr
 // ---------------------------------------------------------------------------
         typedef ResultHolder< NodeInstance >        NodeResult;
         typedef ResultHolder< TemplateInstance >    TemplateResult;
+        typedef ResultHolder< ComponentInstance >   ComponentResult;
+
 // ---------------------------------------------------------------------------
     }
 // ---------------------------------------------------------------------------
