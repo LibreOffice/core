@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-05 21:58:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "Standard" ;
         Text [ spanish ] = "Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
+        Text [ french ] = "Par ~défaut" ;
         Text [ dutch ] = "Standaard" ;
         Text [ portuguese ] = "Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼";
@@ -280,7 +280,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ greek ] = "Ğñïåğéëï~ãŞ";
         Text[ korean ] = "±âº»";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
@@ -300,7 +300,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Gråtoner" ;
         Text [ italian ] = "Toni di grigio" ;
         Text [ spanish ] = "Escala de grises" ;
-        Text [ french ] = "Niveaux de gris" ;
+        Text [ french ] = "Niveaux de ~gris" ;
         Text [ dutch ] = "Grijswaarden" ;
         Text [ portuguese ] = "Tons de cinzento" ;
         Text[ chinese_simplified ] = "»Ò¶È";
@@ -309,7 +309,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "¸ŞÚ°½¹°Ù";
         Text[ chinese_traditional ] = "¦Ç¶¥";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
-        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
+        Text[ greek ] = "ÄéáâÜ~èìéóç ôïõ ãêñé";
         Text[ korean ] = "È¸»öµµ";
         Text[ turkish ] = "Gri tonları";
         Text[ language_user1 ] = " ";
@@ -329,7 +329,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Sort-hvid" ;
         Text [ italian ] = "Bianco e nero" ;
         Text [ spanish ] = "Blanco y negro" ;
-        Text [ french ] = "Noir et blanc" ;
+        Text [ french ] = "Noir et ~blanc" ;
         Text [ dutch ] = "Zwart-wit" ;
         Text [ portuguese ] = "Preto e branco" ;
         Text[ chinese_simplified ] = "ºÚ°×";
@@ -338,7 +338,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "”’•";
         Text[ chinese_traditional ] = "¶Â¥Õ";
         Text[ arabic ] = "ÃÈíÖ æÃÓæÏ";
-        Text[ greek ] = "Áóğñüìáõñï";
+        Text[ greek ] = "Áóğñüìá~õñï";
         Text[ korean ] = "Èæ¹é";
         Text[ turkish ] = "Siyah-beyaz";
         Text[ language_user1 ] = " ";
@@ -684,7 +684,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ english_us ] = "Ba~ck side" ;
         Text [ italian ] = "Retro pagina" ;
         Text [ spanish ] = "Re~verso" ;
-        Text [ french ] = "~Page verso" ;
+        Text [ french ] = "Page ~verso" ;
         Text [ dutch ] = "A~chterkant" ;
         Text [ swedish ] = "~Baksida" ;
         Text [ danish ] = "Bagside" ;
@@ -692,11 +692,11 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese_brazilian ] = "~R?kseite" ;
         Text[ chinese_simplified ] = "·´Ãæ(~C)";
         Text[ russian ] = "Îáğàòíàÿ ñòîğîíà";
-        Text[ polish ] = "Tylna strona";
+        Text[ polish ] = "Odwrotna strona";
         Text[ japanese ] = "‚¤‚ç(~C)";
         Text[ chinese_traditional ] = "¤Ï­±(~C)";
         Text[ arabic ] = "ÇáÕİÍÉ ÇáÎáİíÉ";
-        Text[ greek ] = "Ğßóù ğëåõñÜ";
+        Text[ greek ] = "Ğßóù ğë~åõñÜ";
         Text[ korean ] = "µŞ ÂÊ(~C)";
         Text[ turkish ] = "Arka sayfa";
         Text[ language_user1 ] = " ";
@@ -743,4 +743,5 @@ TabPage TP_PRINT_OPTIONS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones";
 };
+
 
