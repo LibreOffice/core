@@ -47,7 +47,7 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
 				DocPath = oDocument.URL
 				mFileProperties(0).Name = &quot;AsTemplate&quot;
 				mFileProperties(0).Value = True
-				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_blank&quot;,0, mFileProperties())
+				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_default&quot;,0, mFileProperties())
 				PrepareForEditing() = oNewDocument
 &apos;        		If IsFatOffice() Then
           			&apos; If opened within a FatOffice Environment close doc.
