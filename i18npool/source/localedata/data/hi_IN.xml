@@ -184,19 +184,19 @@
 <DefaultName>5</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$रु.-41E]#,##0;-[$रु.-41E]#,##0</FormatCode>
+<FormatCode>[$रु.-439]#,##0;-[$रु.-439]#,##0</FormatCode>
 <DefaultName>12</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$रु.-41E]#,##0.00;-[$रु.-41E]#,##0.00</FormatCode>
+<FormatCode>[$रु.-439]#,##0.00;-[$रु.-439]#,##0.00</FormatCode>
 <DefaultName>13</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$रु.-41E]#,##0;[RED]-[$रु.-41E]#,##0</FormatCode>
+<FormatCode>[$रु.-439]#,##0;[RED]-[$रु.-439]#,##0</FormatCode>
 <DefaultName>14</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$रु.-41E]#,##0.00;[RED]-[$रु.-41E]#,##0.00</FormatCode>
+<FormatCode>[$रु.-439]#,##0.00;[RED]-[$रु.-439]#,##0.00</FormatCode>
 <DefaultName>15</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -204,7 +204,7 @@
 <DefaultName>16</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$रु.-41E]#,##0.--;[RED]-[$रु.-41E]#,##0.--</FormatCode>
+<FormatCode>[$रु.-439]#,##0.--;[RED]-[$रु.-439]#,##0.--</FormatCode>
 <DefaultName>17</DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
