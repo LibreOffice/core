@@ -27,10 +27,9 @@ Window WIN_HELP_INDEX
         Pos = MAP_APPFONT ( 0, 40 ) ;
         PageList =
         {
-            PageItem
+/*          PageItem
             {
-                Identifier = 1 ;
-                PageResID = 1 ;
+                Identifier = HELP_INDEX_PAGE_CONTENTS ;
                 Text = "Inhalte" ;
                 Text [ ENGLISH ] = "Contents" ;
                 Text[ english_us ] = "Contents";
@@ -51,11 +50,10 @@ Window WIN_HELP_INDEX
                 Text[ chinese_traditional ] = "§∫Æe";
                 Text[ turkish ] = "Contents";
                 Text[ arabic ] = "«·„Õ ÊÌ« ";
-            };
+            };*/
             PageItem
             {
-                Identifier = 2 ;
-                PageResID = 3 ;
+                Identifier = HELP_INDEX_PAGE_INDEX ;
                 Text = "Index" ;
                 Text [ ENGLISH ] = "Index" ;
                 Text[ english_us ] = "Index";
@@ -79,8 +77,7 @@ Window WIN_HELP_INDEX
             };
             PageItem
             {
-                Identifier = 3 ;
-                PageResID = 3 ;
+                Identifier = HELP_INDEX_PAGE_SEARCH ;
                 Text = "Suchen" ;
                 Text [ ENGLISH ] = "Search" ;
                 Text[ english_us ] = "Find";
@@ -220,3 +217,29 @@ String STR_HELP_WINDOW_TITLE
     Text = "%PRODUCTNAME Hilfe";
     Text [ english_us ] = "%PRODUCTNAME Help";
 };
+String STR_HELP_BUTTON_INDEX
+{
+    Text = "Index";
+    Text [ english_us ] = "Index";
+};
+String STR_HELP_BUTTON_START
+{
+    Text = "Startseite";
+    Text [ english_us ] = "Start page";
+};
+String STR_HELP_BUTTON_PREV
+{
+    Text = "Vorherige Seite";
+    Text [ english_us ] = "Backward";
+};
+String STR_HELP_BUTTON_NEXT
+{
+    Text = "N‰chste Seite";
+    Text [ english_us ] = "Forward";
+};
+String STR_HELP_BUTTON_PRINT
+{
+    Text = "Drucken";
+    Text [ english_us ] = "Print";
+};
+
