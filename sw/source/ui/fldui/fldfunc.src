@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:22 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,6 +688,7 @@ TabPage TP_FLD_FUNC
     Text[ hindi ] = "फंक्शन्स";
     Text[ slovak ] = "Funkcie";
 };
+
 
 
 
