@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:12:23 $
+ *  last change: $Author: thb $ $Date: 2001-11-07 09:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,7 +1045,9 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 Rectangle   aRect( pOLV->GetOutputArea() );
                    Point        aPos( pOLV->GetWindow()->PixelToLogic( aDropPos ) );
 
-                if( aRect.IsInside( aPos ) )
+                if( aRect.IsInside( aPos ) ||
+                    // #94382# Also insert into textedit if paste special is used
+                    (!bDrag && IsTextEdit()) )
                 {
                     pOLV->Read( *xStm, nFmt, FALSE, pDocSh->GetHeaderAttributes() );
                     bReturn = TRUE;
