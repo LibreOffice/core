@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 11:06:16 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 #include <swtypes.hxx>
 #endif
 
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
+#endif
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -139,11 +144,15 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 /*-----------------03.09.96 15.00-------------------
 
 --------------------------------------------------*/
+
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
     SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+    SwLinguConfig().GetOptions( aLinguOpt );
+
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
@@ -178,7 +187,10 @@ void    SwStdFontConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
     SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+    SwLinguConfig().GetOptions( aLinguOpt );
+
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
@@ -201,7 +213,10 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
     SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+    SwLinguConfig().GetOptions( aLinguOpt );
+
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
