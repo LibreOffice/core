@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:54:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-24 16:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
+DBG_NAMEEX(SvxVector3DItem);
 DBG_NAME(SvxVector3DItem);
 
 // -----------------------------------------------------------------------
@@ -85,6 +86,11 @@ TYPEINIT1_AUTOFACTORY(SvxVector3DItem, SfxPoolItem);
 SvxVector3DItem::SvxVector3DItem()
 {
     DBG_CTOR(SvxVector3DItem, 0);
+}
+
+SvxVector3DItem::~SvxVector3DItem()
+{
+    DBG_DTOR(SvxVector3DItem, 0);
 }
 
 // -----------------------------------------------------------------------
