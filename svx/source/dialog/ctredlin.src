@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-11 13:31:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1998 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   ctredlin.src  $
- //   $Author: dr $
- //     $Date: 2001-06-11 13:31:42 $
- // $Revision: 1.19 $
+ //   $Author: kz $
+ //     $Date: 2001-06-29 02:14:15 $
+ // $Revision: 1.20 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -414,22 +414,22 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
         QuickHelpText [ italian ] = "Imposta data/ora" ;
         QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Définir la date/l'heure!" ;
+        QuickHelpText [ french ] = "Définir la date/l'heure" ;
         QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
-        QuickHelpText[ polish ] = "Ustaw datê/godzinê!";
-        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è!";
+        QuickHelpText[ polish ] = "Ustaw datê/godzinê";
+        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è";
         QuickHelpText[ chinese_simplified ] = "Éè¶¨ÈÕÆÚ/Ê±¼ä";
         QuickHelpText[ chinese_traditional ] = "³]©w¤é´Á/®É¶¡";
         QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤!";
+        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ catalan ] = "Definir fecha/hora";
-        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika!";
+        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika";
     };
     FixedText FT_DATE2
     {
@@ -520,22 +520,22 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
         QuickHelpText [ italian ] = "Imposta data/ora" ;
         QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Définir la date/l'heure!" ;
+        QuickHelpText [ french ] = "Définir la date/l'heure" ;
         QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
-        QuickHelpText[ polish ] = "Ustaw datê/godzinê!";
-        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è!";
+        QuickHelpText[ polish ] = "Ustaw datê/godzinê";
+        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è";
         QuickHelpText[ chinese_simplified ] = "Éè¶¨ÈÕÆÚ/Ê±¼ä";
         QuickHelpText[ chinese_traditional ] = "³]©w¤é´Á/®É¶¡";
         QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤!";
+        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ catalan ] = "Definir fecha/hora";
-        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika!";
+        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika";
     };
     CheckBox CB_AUTOR
     {
@@ -675,7 +675,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ spanish ] = "..." ;
         QuickHelpText [ spanish ] = "Definir referencia a tabla" ;
         Text [ french ] = "..." ;
-        QuickHelpText [ french ] = "Définir une référence!" ;
+        QuickHelpText [ french ] = "Définir une référence" ;
         Text [ dutch ] = "..." ;
         QuickHelpText [ dutch ] = "Tabellenreferentie instellen" ;
         Text [ portuguese ] = "..." ;
@@ -688,22 +688,22 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ chinese_traditional ] = "...";
         Text[ arabic ] = "...";
         QuickHelpText[ russian ] = "Óñòàíîâèòü ññûëêó";
-        QuickHelpText[ polish ] = "Ustaw tabelê odwo³añ!";
-        QuickHelpText[ japanese ] = "•\\‚ÌQÆ‚ğİ’è!";
+        QuickHelpText[ polish ] = "Ustaw tabelê odwo³añ";
+        QuickHelpText[ japanese ] = "•\\‚ÌQÆ‚ğİ’è";
         QuickHelpText[ chinese_simplified ] = "Éè¶¨±í¸ñÒıÓÃ";
         QuickHelpText[ chinese_traditional ] = "³]©w¤u§@ªí°Ñ·Ó";
         QuickHelpText[ arabic ] = "ÊÚííä ãÑÌÚ ÇáÌÏæá";
         Text[ greek ] = "...";
         Text[ korean ] = "...";
         QuickHelpText[ greek ] = "Set Reference";
-        QuickHelpText[ korean ] = "ÂüÁ¶ ¼³Á¤!";
+        QuickHelpText[ korean ] = "ÂüÁ¶ ¼³Á¤";
         Text[ turkish ] = "...";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
         Text[ catalan ] = "...";
         QuickHelpText[ catalan ] = "Definir referencia a tabla";
         Text[ finnish ] = "...";
-        QuickHelpText[ finnish ] = "Määritä viite!";
+        QuickHelpText[ finnish ] = "Määritä viite";
     };
     CheckBox CB_COMMENT
     {
@@ -1063,4 +1063,5 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ finnish ] = "Kommentti";
     };
 };
+
 
