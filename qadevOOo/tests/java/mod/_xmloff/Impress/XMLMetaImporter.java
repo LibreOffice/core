@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLMetaImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:14:37 $
+ *  last change:$Date: 2003-09-08 13:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,20 @@
 
 package mod._xmloff.Impress;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.document.XDocumentInfoSupplier;
-import com.sun.star.document.XImporter;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -164,8 +165,7 @@ public class XMLMetaImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Impress.XMLMetaImporter") ;
-            XImporter imp = (XImporter)
-                UnoRuntime.queryInterface(XImporter.class, oInt) ;
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
