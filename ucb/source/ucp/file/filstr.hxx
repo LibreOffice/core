@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filstr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:56:37 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_ //HACK see #i38298#
+#include "com/sun/star/task/XJob.hpp"
+#endif
 
 namespace fileaccess {
 
@@ -120,7 +122,8 @@ namespace fileaccess {
           public com::sun::star::io::XSeekable,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XOutputStream,
-          public com::sun::star::io::XTruncate
+          public com::sun::star::io::XTruncate,
+          public com::sun::star::task::XJob //HACK see #i38298#
     {
         friend class XInputStreamForStream;
         friend class XOutputStreamForStream;
@@ -285,6 +288,14 @@ namespace fileaccess {
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException );
 
+        //HACK see #i38298#
+        virtual com::sun::star::uno::Any SAL_CALL execute(
+            com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >
+            const &)
+            throw (
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::uno::Exception,
+                com::sun::star::uno::RuntimeException);
 
     private:
 
