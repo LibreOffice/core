@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:16:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,12 +321,8 @@ DrawViewShell::~DrawViewShell()
 
     EndListening (*GetDocSh());
 
-    if (pFuSlideShow)
-    {
-        // SlideShow ggf. beenden
-        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION_END,
-                    SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
-    }
+    if (pFuSlideShow != NULL)
+        StopSlideShow(false);
 
     if (pFuActual)
     {
