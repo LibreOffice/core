@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.39 $
- *  last change: $Author: obo $ $Date: 2001-12-14 18:47:00 $
+ *  $Revision: 1.40 $
+ *  last change: $Author: pb $ $Date: 2001-12-17 14:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     FixedText FT_FONT
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Size = MAP_APPFONT ( 33 , 8 ) ;
         Text = "~Schrift" ;
         Text [ ENGLISH ] = "~Font" ;
         Text [ norwegian ] = "~Font" ;
@@ -131,16 +131,16 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_FONT
     {
-        Pos = MAP_APPFONT ( 35 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 58 ) ;
+        Pos = MAP_APPFONT ( 42 , 6 ) ;
+        Size = MAP_APPFONT ( 70 , 58 ) ;
         Sort = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_SUBSET
     {
-        Pos = MAP_APPFONT ( 120 , 7 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 118 , 7 ) ;
+        Size = MAP_APPFONT ( 33 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Subset" ;
         Text[ english_us ] = "~Subset";
@@ -166,8 +166,8 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_SUBSET
     {
-        Pos = MAP_APPFONT ( 149 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 68 ) ;
+        Pos = MAP_APPFONT ( 154 , 6 ) ;
+        Size = MAP_APPFONT ( 70 , 68 ) ;
         Sort = FALSE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
