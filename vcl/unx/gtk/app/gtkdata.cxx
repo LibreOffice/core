@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:09:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,9 @@ void GtkXLib::StartTimer( ULONG nMS )
     }
 
     m_pTimeout = g_timeout_source_new (m_nTimeoutMS);
+    // #i36226# timers should be executed with lower priority
+    // than XEvents like in generic plugin
+    g_source_set_priority( m_pTimeout, G_PRIORITY_LOW );
     g_source_set_can_recurse (m_pTimeout, TRUE);
     g_source_set_callback (m_pTimeout, timeoutFn,
                            (gpointer) this, NULL);
