@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XHyphenator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:07 $
+ *  last change:$Date: 2003-09-08 10:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.linguistic2;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.Locale;
 import com.sun.star.linguistic2.XHyphenatedWord;
 import com.sun.star.linguistic2.XHyphenator;
 import com.sun.star.linguistic2.XPossibleHyphens;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XHyphenator</code>
