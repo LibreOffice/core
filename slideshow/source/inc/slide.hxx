@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:20:32 $
+ *  last change: $Author: thb $ $Date: 2004-12-02 12:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,9 @@ namespace presentation
             /// Set all Shapes to their initial attributes for slideshow
             bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
                                                   ::com::sun::star::animations::XAnimationNode >& xRootAnimationNode );
+
+            /// Get size of the slide in device coordinates for given view
+            ::basegfx::B2ISize getSlideSize( const UnoViewSharedPtr& rView );
 
             /// Renders current slide content to bitmap
             SlideBitmapSharedPtr createCurrentSlideBitmap( const UnoViewSharedPtr& rView );
