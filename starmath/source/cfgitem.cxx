@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-10 11:39:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,7 @@ void SmMathConfig::StripFontFormatList( const SmSym *pUsedSymbols[], USHORT nCou
     }
     for (k = 0;  k < nCnt;  ++k)
     {
-        if (0 == aUsedList.GetFontFormatId( pFormat[k] ))
+        if (0 == aUsedList.GetFontFormatId( pFormat[k] ).Len())
         {
             rFntFmtList.RemoveFontFormat( pId[k] );
         }
