@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-06 13:15:07 $
+ *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F6 &&
-            rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() )
+            rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() &&
+           !rNEvt.GetKeyEvent()->GetKeyCode().IsShift() )
         {
             // Ctrl-F6 goes directly to the document
             GrabFocusToDocument();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-21 12:44:56 $
+ *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,11 @@
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
+#define private public
 #ifndef _SV_SPLIT_HXX
 #include <split.hxx>
 #endif
+#undef private
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
@@ -82,17 +84,26 @@
 #ifndef _SV_GRADIENT_HXX
 #include <gradient.hxx>
 #endif
+#ifndef _SV_POLY_HXX
+#include <poly.hxx>
+#endif
+#ifndef _SV_LINEINFO_HXX
+#include <lineinfo.hxx>
+#endif
 #pragma hdrstop
 
 // =======================================================================
 
 void Splitter::ImplInitData()
 {
+    mbSplitter        = TRUE;
     mpRefWin          = NULL;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
     mnStartSplitPos   = 0;
     mbDragFull        = FALSE;
+    mbKbdSplitting    = FALSE;
+    mbInKeyEvent      = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -125,8 +136,9 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     SetPointer( Pointer( ePointerStyle ) );
     SetBackground( Wallpaper( Color( COL_BLACK ) ) );
 
-    //TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    //pTList->AddWindow( this );
+
+    TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
+    pTList->AddWindow( this );
 }
 
 // -----------------------------------------------------------------------
@@ -197,8 +209,53 @@ Splitter::Splitter( Window* pParent, const ResId& rResId ) :
 
 Splitter::~Splitter()
 {
-    //TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    //pTList->RemoveWindow( this );
+    TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
+    pTList->RemoveWindow( this );
+}
+
+// -----------------------------------------------------------------------
+
+Splitter* Splitter::ImplFindSibling()
+{
+    // look for another splitter with the same parent but different orientation
+    Window *pWin = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+    Splitter *pSplitter = NULL;
+    while( pWin )
+    {
+        if( pWin->ImplIsSplitter() )
+        {
+            pSplitter = (Splitter*) pWin;
+            if( pSplitter != this && IsHorizontal() != pSplitter->IsHorizontal() )
+                return pSplitter;
+        }
+        pWin = pWin->GetWindow( WINDOW_NEXT );
+    }
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Splitter::ImplSplitterActive()
+{
+    // is splitter in document or at scrollbar handle ?
+
+    BOOL bActive = TRUE;
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    long nA = rSettings.GetScrollBarSize();
+    long nB = rSettings.GetSplitSize();
+
+    Size aSize = GetOutputSize();
+    if ( mbHorzSplit )
+    {
+        if( aSize.Width() == nB && aSize.Height() == nA )
+            bActive = FALSE;
+    }
+    else
+    {
+        if( aSize.Width() == nA && aSize.Height() == nB )
+            bActive = FALSE;
+    }
+    return bActive;
 }
 
 // -----------------------------------------------------------------------
@@ -307,6 +364,112 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
+void Splitter::ImplKbdTracking( KeyCode aKeyCode )
+{
+    USHORT nCode = aKeyCode.GetCode();
+    if ( nCode == KEY_ESCAPE || nCode == KEY_RETURN )
+    {
+        if( !mbKbdSplitting )
+            return;
+        else
+            mbKbdSplitting = FALSE;
+
+        if ( nCode != KEY_ESCAPE )
+        {
+            long nNewPos;
+            if ( mbHorzSplit )
+                nNewPos = maDragPos.X();
+            else
+                nNewPos = maDragPos.Y();
+            if ( nNewPos != mnStartSplitPos )
+            {
+                SetSplitPosPixel( nNewPos );
+                mnLastSplitPos = 0;
+                Split();
+            }
+        }
+        else
+        {
+            SetSplitPosPixel( mnStartSplitPos );
+            Split();
+        }
+        mnStartSplitPos = 0;
+    }
+    else
+    {
+        Point aNewPos;
+        Size aSize = mpRefWin->GetOutputSize();
+        Point aPos = GetPosPixel();
+        // depending on the position calc allows continous moves or snaps to row/columns
+        // continous mode is active when position is at the origin or end of the splitter
+        // otherwise snap mode is active
+        // default here is snap, holding shift sets continous mode
+        if( mbHorzSplit )
+            aNewPos = Point( ImplSplitterActive() ? aPos.X() : mnSplitPos, aKeyCode.IsShift() ? 0 : aSize.Height()/2);
+        else
+            aNewPos = Point( aKeyCode.IsShift() ? 0 : aSize.Width()/2, ImplSplitterActive() ? aPos.Y() : mnSplitPos );
+
+        Point aOldWindowPos = GetPosPixel();
+
+        int maxiter = 500;  // avoid endless loop
+        int delta=0;
+        while( maxiter-- && aOldWindowPos == GetPosPixel() )
+        {
+            // inc/dec position until application performs changes
+            // thus a single key press really moves the splitter
+            delta++;
+            switch( nCode )
+            {
+            case KEY_LEFT:
+                aNewPos.X()-=delta;
+                break;
+            case KEY_RIGHT:
+                aNewPos.X()+=delta;
+                break;
+            case KEY_UP:
+                aNewPos.Y()-=delta;
+                break;
+            case KEY_DOWN:
+                aNewPos.Y()+=delta;
+                break;
+            default:
+                maxiter = 0;    // leave loop
+                break;
+            }
+            ImplSplitMousePos( aNewPos );
+            Splitting( aNewPos );
+            ImplSplitMousePos( aNewPos );
+
+            if ( mbHorzSplit )
+            {
+                if ( aNewPos.X() == maDragPos.X() )
+                    continue;
+            }
+            else
+            {
+                if ( aNewPos.Y() == maDragPos.Y() )
+                    continue;
+            }
+
+            maDragPos = aNewPos;
+            long nNewPos;
+            if ( mbHorzSplit )
+                nNewPos = maDragPos.X();
+            else
+                nNewPos = maDragPos.Y();
+            if ( nNewPos != mnSplitPos )
+            {
+                SetSplitPosPixel( nNewPos );
+                mnLastSplitPos = 0;
+                Split();
+            }
+            GetParent()->Update();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Splitter::StartSplit()
 {
     maStartSplitHdl.Call( this );
@@ -380,27 +543,186 @@ void Splitter::StartDrag()
 
 // -----------------------------------------------------------------------
 
+void Splitter::ImplStartKbdSplitting()
+{
+    if( mbKbdSplitting )
+        return;
+
+    mbKbdSplitting = TRUE;
+
+    StartSplit();
+
+    // determine start position
+    // because we have no mouse position we take either the position
+    // of the splitter window or the last split position
+    // the other coordinate is just the center of the reference window
+    Size aSize = mpRefWin->GetOutputSize();
+    Point aPos = GetPosPixel();
+    if( mbHorzSplit )
+        maDragPos = Point( ImplSplitterActive() ? aPos.X() : mnSplitPos, aSize.Height()/2 );
+    else
+        maDragPos = Point( aSize.Width()/2, ImplSplitterActive() ? aPos.Y() : mnSplitPos );
+    ImplSplitMousePos( maDragPos );
+    Splitting( maDragPos );
+    ImplSplitMousePos( maDragPos );
+    if ( mbHorzSplit )
+        mnStartSplitPos = maDragPos.X();
+    else
+        mnStartSplitPos = maDragPos.Y();
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::ImplRestoreSplitter()
+{
+    // set splitter in the center of the ref window
+    StartSplit();
+    Size aSize = mpRefWin->GetOutputSize();
+    Point aPos = Point( aSize.Width()/2 , aSize.Height()/2);
+    if ( mnLastSplitPos != mnSplitPos && mnLastSplitPos > 5 )
+    {
+        // restore last pos if it was a useful position (>5)
+        if ( mbHorzSplit )
+            aPos.X() = mnLastSplitPos;
+        else
+            aPos.Y() = mnLastSplitPos;
+    }
+
+    ImplSplitMousePos( aPos );
+    Splitting( aPos );
+    ImplSplitMousePos( aPos );
+    long nTemp = mnSplitPos;
+    if ( mbHorzSplit )
+        SetSplitPosPixel( aPos.X() );
+    else
+        SetSplitPosPixel( aPos.Y() );
+    mnLastSplitPos = nTemp;
+    Split();
+}
+
+
+// -----------------------------------------------------------------------
+
 void Splitter::GetFocus()
 {
-    //SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-    //Gradient aGrad( GRADIENT_RECT, Color( COL_WHITE ), Color( COL_BLACK ) );
-    //aGrad.SetSteps(3);
-    //SetBackground( Wallpaper( aGrad ) );
-    //Invalidate();
+    if( !ImplSplitterActive() )
+        ImplRestoreSplitter();
+
+    Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
 void Splitter::LoseFocus()
 {
-    //SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-    //Invalidate();
+    if( mbKbdSplitting )
+    {
+        KeyCode aReturnKey( KEY_RETURN );
+        ImplKbdTracking( aReturnKey );
+        mbKbdSplitting = FALSE;
+    }
+    Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
 void Splitter::KeyInput( const KeyEvent& rKEvt )
 {
+    if( mbInKeyEvent )
+        return;
+
+    mbInKeyEvent = 1;
+
+    Splitter *pSibling = ImplFindSibling();
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    USHORT nCode = aKeyCode.GetCode();
+    BOOL bForwardKey = FALSE;
+    switch ( nCode )
+    {
+        case KEY_UP:
+        case KEY_DOWN:
+            if( !mbHorzSplit )
+            {
+                ImplStartKbdSplitting();
+                ImplKbdTracking( aKeyCode );
+            }
+            else
+            {
+                if( pSibling )
+                {
+                    pSibling->GrabFocus();
+                    pSibling->KeyInput( rKEvt );
+                }
+            }
+            break;
+        case KEY_RIGHT:
+        case KEY_LEFT:
+            if( mbHorzSplit )
+            {
+                ImplStartKbdSplitting();
+                ImplKbdTracking( aKeyCode );
+            }
+            else
+            {
+                if( pSibling )
+                {
+                    pSibling->GrabFocus();
+                    pSibling->KeyInput( rKEvt );
+                }
+            }
+            break;
+
+        case KEY_DELETE:
+            if( ImplSplitterActive() )
+            {
+                if( mbKbdSplitting )
+                {
+                    KeyCode aKey( KEY_ESCAPE );
+                    ImplKbdTracking( aKey );
+                }
+
+                StartSplit();
+                Point aPos;
+                if ( mbHorzSplit )
+                    aPos.X() = 0;
+                else
+                    aPos.Y() = 0;
+                ImplSplitMousePos( aPos );
+                Splitting( aPos );
+                ImplSplitMousePos( aPos );
+                long nTemp = mnSplitPos;
+                if ( mbHorzSplit )
+                    SetSplitPosPixel( aPos.X() );
+                else
+                    SetSplitPosPixel( aPos.Y() );
+                mnLastSplitPos = nTemp;
+                Split();
+
+                // Shift-Del deletes both splitters
+                if( aKeyCode.IsShift() && pSibling )
+                    pSibling->KeyInput( rKEvt );
+
+                GrabFocusToDocument();
+            }
+            break;
+
+        case KEY_ESCAPE:
+            if( mbKbdSplitting )
+                ImplKbdTracking( aKeyCode );
+            else
+                GrabFocusToDocument();
+            break;
+
+        case KEY_RETURN:
+            ImplKbdTracking( aKeyCode );
+            GrabFocusToDocument();
+            break;
+        default:    // let any key input fix the splitter
+            Window::KeyInput( rKEvt );
+            GrabFocusToDocument();
+            break;
+    }
+    mbInKeyEvent = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -414,5 +736,43 @@ long Splitter::Notify( NotifyEvent& rNEvt )
 
 void Splitter::Paint( const Rectangle& rPaintRect )
 {
-    Window::Paint( rPaintRect );
+    if( HasFocus() || mbKbdSplitting )
+    {
+        Color oldFillCol = GetFillColor();
+        Color oldLineCol = GetLineColor();
+
+        SetLineColor();
+        SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
+        DrawRect( rPaintRect );
+
+        Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetActiveColor() );
+        SetFillColor( aSelectionBorderCol );
+        SetLineColor();
+
+        Polygon aPoly( rPaintRect );
+        PolyPolygon aPolyPoly( aPoly );
+        DrawTransparent( aPolyPoly, 85 );
+
+        SetLineColor( aSelectionBorderCol );
+        SetFillColor();
+
+        if( mbKbdSplitting )
+        {
+            LineInfo aInfo( LINE_DASH );
+            //aInfo.SetDashLen( 2 );
+            //aInfo.SetDashCount( 1 );
+            aInfo.SetDistance( 1 );
+            aInfo.SetDotLen( 2 );
+            aInfo.SetDotCount( 1 );
+
+            DrawPolyLine( aPoly, aInfo );
+        }
+        else
+            DrawRect( rPaintRect );
+
+        SetFillColor( oldFillCol);
+        SetLineColor( oldLineCol);
+    }
+    else
+        Window::Paint( rPaintRect );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-25 11:02:11 $
+ *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     // Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
     // only active if one of those items has the focus
     BOOL bF6 = FALSE;
+    BOOL bSplitterOnly = FALSE;
     BOOL bFocusInList = FALSE;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     BOOL bForward = !aKeyCode.IsShift();
@@ -194,6 +195,8 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
         )
     {
+        bSplitterOnly = bF6 && aKeyCode.IsMod1() && aKeyCode.IsShift();
+
         // is the focus in the list ?
         BOOL bHasFocus = FALSE;
         ::std::vector< Window* >::iterator p = mTaskPanes.begin();
@@ -204,12 +207,17 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             {
                 bFocusInList = TRUE;
 
-                // Ctrl-TAB works not in Dialogs
+                // Ctrl-TAB does not work in Dialogs
                 if( !bF6 && (*p)->IsDialog() )
                     return FALSE;
 
                 // activate next task pane
-                Window *pNextWin = bF6 ?  FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
+                Window *pNextWin = NULL;
+
+                if( bSplitterOnly )
+                    pNextWin = FindNextSplitter( *p, TRUE );
+                else
+                    pNextWin = bF6 ?  FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
                 if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
@@ -218,6 +226,10 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 }
                 else
                 {
+                    // forward key if no splitter found
+                    if( bSplitterOnly )
+                        return FALSE;
+
                     // we did not find another taskpane, so
                     // put focus back into document: use frame win of topmost parent
                     while( pWin )
@@ -240,7 +252,11 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         // the focus is not in the list: activate first float if F6 was pressed
         if( !bFocusInList && bF6 )
         {
-            Window *pWin = FindNextFloat( NULL, bForward );
+            Window *pWin;
+            if( bSplitterOnly )
+                pWin = FindNextSplitter( NULL, TRUE );
+            else
+                pWin = FindNextFloat( NULL, bForward );
             if( pWin )
             {
                 ImplTaskPaneListGrabFocus( pWin );
@@ -272,11 +288,50 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
             {
                 if( ++p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
-                if( (*p)->IsReallyVisible() && !(*p)->IsDialog() )
+                if( (*p)->IsReallyVisible() && !(*p)->IsDialog() && !(*p)->ImplIsSplitter() )
                 {
                     pWindow = *p;
                     break;
                 }
+            }
+            break;
+        }
+        else
+            ++p;
+    }
+
+    return pWindow;
+}
+
+// --------------------------------------------------
+
+// returns next splitter
+Window* TaskPaneList::FindNextSplitter( Window *pWindow, BOOL bForward )
+{
+    if( bForward )
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
+    else
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
+
+    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+    while( p != mTaskPanes.end() )
+    {
+        if( !pWindow || *p == pWindow )
+        {
+            unsigned n = mTaskPanes.size();
+            while( --n )
+            {
+                if( pWindow )   // increment before test
+                    ++p;
+                if( p == mTaskPanes.end() )
+                    p = mTaskPanes.begin();
+                if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() )
+                {
+                    pWindow = *p;
+                    break;
+                }
+                if( !pWindow )  // increment after test, otherwise first element is skipped
+                    ++p;
             }
             break;
         }
@@ -308,7 +363,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     break; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsReallyVisible() /*&& ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() )*/ )
+                if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() )
                 {
                     pWindow = *p;
                     break;
