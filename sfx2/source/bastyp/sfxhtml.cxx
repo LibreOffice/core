@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:48:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ BOOL SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
     return aName.Len() > 0;
 }
 
-BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap,
+BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
                                      const HTMLOptions * pOptions,
                                      USHORT nEventMouseOver,
                                      USHORT nEventMouseOut )
@@ -243,7 +243,7 @@ BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap,
             pOption->GetNumbers( aCoords, TRUE );
             break;
         case HTML_O_HREF:
-            aHRef = INetURLObject::RelToAbs( pOption->GetString() );
+            aHRef = INetURLObject::GetAbsURL( rBaseURL, pOption->GetString() );
             break;
         case HTML_O_NOHREF:
             bNoHRef = TRUE;
