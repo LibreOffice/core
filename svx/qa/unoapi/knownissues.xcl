@@ -28,22 +28,11 @@ svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
 ### i23462 ###
 svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
 
-### i23466 ###
-svx.SvxShapeCircle::com::sun::star::drawing::TextProperties
-svx.SvxShapeConnector::com::sun::star::drawing::TextProperties
-svx.SvxShapeDimensioning::com::sun::star::drawing::TextProperties
-svx.SvxShapePolyPolygon::com::sun::star::drawing::TextProperties
-svx.SvxShapePolyPolygonBezier::com::sun::star::drawing::TextProperties
-svx.SvxShapeCircle::com::sun::star::beans::XPropertySet
-svx.SvxShapeConnector::com::sun::star::beans::XPropertySet
-svx.SvxShapeDimensioning::com::sun::star::beans::XPropertySet
-svx.SvxShapePolyPolygon::com::sun::star::beans::XPropertySet
-svx.SvxShapePolyPolygonBezier::com::sun::star::beans::XPropertySet
-
 ### i23469 ###
 svx.SvxUnoNumberingRules::com::sun::star::container::XIndexReplace
 
-### no bugid yet ###
-svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+### i26267 ###
+svx.SvxShapeDimensioning::com::sun::star::drawing::ShadowProperties
+
+### 114898 ###
 svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
-svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster

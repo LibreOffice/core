@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-05 17:24:46 $
+#   last change: $Date: 2004-03-17 11:23:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,4 +66,4 @@ PRJNAME=svx
 TARGET=qa_unoapi
 
 ALLTAR:
-    +$(SOLARENV)$/bin$/checkapi -sce svx.sce -xcl knownissues.xcl -KeepDocument true -tdoc $(PWD)$/testdocuments
+    +$(SOLARENV)$/bin$/checkapi -sce svx.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
