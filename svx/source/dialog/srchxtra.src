@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:48:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,3 +670,4 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ finnish ] = "Vastaavuushaku";
 };
  // ********************************************************************** EOF
+
