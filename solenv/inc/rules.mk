@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-21 17:43:29 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,35 +191,35 @@ $(OBJ)$/%.obj : %.c
 .ENDIF
 .ENDIF
 
-$(OBJ)$/%.obj : $(MISCX)$/%.c
+$(OBJ)$/%.obj : $(MISC)$/%.c
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.c
+    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+-$(RM) $@ >& nul
-    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
+    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
     @+$(ECHONL)
-    $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
+    $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
 .ENDIF
 
-$(SLO)$/%.obj : $(MISCX)$/%.c
+$(SLO)$/%.obj : $(MISC)$/%.c
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.c
+    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+-$(RM) $@ >& nul
-    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
+    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
-    $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c 
+    $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c 
 .ELSE
-    $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
+    $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c )
 .ENDIF
 .ENDIF
 
@@ -256,24 +256,24 @@ $(OBJ)$/%.obj : %.m
 .ENDIF		"$(OS)"=="MACOSX"
 
 # Objective-C files
-$(OBJ)$/%.obj : $(MISCX)$/%.m
+$(OBJ)$/%.obj : $(MISC)$/%.m
     @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
 .ENDIF		"$(OS)"=="MACOSX"
 
 # Objective-C files
-$(SLO)$/%.obj : $(MISCX)$/%.m
+$(SLO)$/%.obj : $(MISC)$/%.m
     @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
@@ -362,7 +362,7 @@ $(MISC)$/o_%.dpcc : %.cpp
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/s_%.dpcc : $(MISCX)$/%.c
+$(MISC)$/s_%.dpcc : $(MISC)$/%.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -377,7 +377,7 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.c
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/o_%.dpcc : $(MISCX)$/%.c
+$(MISC)$/o_%.dpcc : $(MISC)$/%.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -392,7 +392,7 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.c
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
+$(MISC)$/s_%.dpcc : $(MISC)$/%.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -407,7 +407,7 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/o_%.dpcc : $(MISCX)$/%.cxx
+$(MISC)$/o_%.dpcc : $(MISC)$/%.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -446,7 +446,7 @@ $(MISC)$/o_%.dpcc : %.m
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/s_%.dpcc : $(MISCX)$/%.m
+$(MISC)$/s_%.dpcc : $(MISC)$/%.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -461,7 +461,7 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.m
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
-$(MISC)$/o_%.dpcc : $(MISCX)$/%.m
+$(MISC)$/o_%.dpcc : $(MISC)$/%.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -524,10 +524,10 @@ $(MISC)$/%.dprc :
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
+    @$(MAKEDEPEND) -f - -p$(RES)$/ -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
+#	@+echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
+    @+echo $@ : $(RES)$/$(*:b).res  >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
@@ -558,7 +558,7 @@ $(MISC)$/%.dpz :
     +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs -n 20 dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
 .ENDIF			# "$(USE_SHELL)"!="4nt"
     +$(TYPE) $(ZIPDEPFILES) | grep -v "CVS" >> $@
-    +echo zipdep_langs=$(alllangext) >> $@
+    +echo zipdep_langs=$(alllangiso) >> $@
     @+-$(RM) $(ZIPDEPFILES) >& $(NULLDEV)
 .ENDIF			# "$(nodep)"==""
 
@@ -656,4 +656,30 @@ $(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
 $(MISC)$/%.sh : %.sh
     @+-$(RM) -f $@ >& $(NULLDEV)
     @+tr -d "\015" < $< > $@
+
+$(COMMONMISC)$/$(TARGET)$/%.ulf : %.ulf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+# dirty hack
+# if local *.sdf file is missing
+%.sdf:
+    +echo > $@
 
