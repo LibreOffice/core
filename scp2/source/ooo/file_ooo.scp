@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.29 $
+*  $Revision: 1.30 $
 *
-*  last change: $Author: rt $ $Date: 2004-08-06 11:06:32 $
+*  last change: $Author: rt $ $Date: 2004-08-20 10:11:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -194,6 +194,29 @@ File gid_File_Bin_MsiPkgchk
     Name = "msi-pkgchk.exe";
 End
 #endif
+
+File gid_File_Lib_Npsoplugin
+        BIN_FILE_BODY;
+        Styles          = (PACKED);
+        Dir             = gid_Dir_Program;
+ #ifdef UNX
+        Name            = "libnpsoplugin.so";
+ #else
+        Name            = "npsoplugin.dll";
+ #endif
+End
+
+File gid_File_Exe_Nsplugin
+        BIN_FILE_BODY;
+        Styles          = (PACKED);
+        Dir             = gid_Dir_Program;
+ #ifdef UNX
+        Name            = "nsplugin";
+ #else
+    Name = "nsplugin.exe";
+  #endif
+
+End
 
 File gid_File_Bin_Uno
     BIN_FILE_BODY;
