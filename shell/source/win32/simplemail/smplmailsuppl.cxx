@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailsuppl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-14 08:08:49 $
+ *  last change: $Author: tra $ $Date: 2001-10-15 10:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,12 @@ Reference< XSimpleMailClient > SAL_CALL CSmplMailSuppl::querySimpleMailClient(  
     // is available
     // if so create and return a new instance of a
     // simple mail client
-    FLAGS flFlag =MAPI_NEW_SESSION;// | MAPI_LOGON_UI;
+    // #93007# we have to set the flag MAPI_NEW_SESSION,
+    // because in the case Outlook xxx (not Outlook Express!)
+    // is installed as Exchange and Mail Client a Profile
+    // selection dialog must appear because we specify no
+    // profile name, so the user has to specify a profile
+    FLAGS flFlag = MAPI_NEW_SESSION | MAPI_LOGON_UI;
     LHANDLE hSession;
     ULONG ulRet = m_pSimpleMapi->MAPILogon(
         0, NULL, NULL, flFlag, 0L, &hSession );
@@ -150,10 +155,7 @@ Reference< XSimpleMailClient > SAL_CALL CSmplMailSuppl::querySimpleMailClient(  
     if ( SUCCESS_SUCCESS == ulRet )
     {
         xSmplMailClient =
-            Reference< XSimpleMailClient >( new CSmplMailClient( ) );
-
-        // logoff again
-        m_pSimpleMapi->MAPILogoff( hSession, 0, 0, 0 );
+            Reference< XSimpleMailClient >( new CSmplMailClient( hSession ) );
     }
 
     return xSmplMailClient;
