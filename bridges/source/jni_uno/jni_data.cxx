@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ void Bridge::map_to_uno(
             // create type out of class
             JLocalAutoRef jo_class( jni, jni->GetObjectClass( java_data.l ) );
             jo_type.reset( create_type( jni, (jclass)jo_class.get() ) );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
             JLocalAutoRef jo_toString(
                 jni, jni->CallObjectMethodA(
                     java_data.l, m_jni_info->m_method_Object_toString, 0 ) );
