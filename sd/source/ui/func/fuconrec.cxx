@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:20:02 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,11 +627,11 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         * Linienanfaenge und -enden attributieren
         **************************************************************/
         // Pfeilspitze
-        XPolygon aArrow(4);                         //      []
-        aArrow[0]=Point(125,0);                     // 0  __[]__250
-        aArrow[1]=Point(250,250);                   //    \    /
-        aArrow[2]=Point(0,250);                     //     \  /
-        aArrow[3]=Point(125,0);                     //      \/250
+        XPolygon aArrow(4);                            //      []
+        aArrow[0]=Point(100,0);                        // 0,4__[]__2,4
+        aArrow[1]=Point(200,400);                      //    \    /
+        aArrow[2]=Point(0,400);                        //     \  /
+        aArrow[3]=Point(100,0);                        //      \/1,0
 
         // Kreis
         XPolygon aCircle(Point(0,0), 250, 250);
