@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+#   last change: $Author: hr $ $Date: 2002-08-27 17:49:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,19 +76,19 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(GUIBASE)"!="unx"
 
 dummy:
-    @echo "Nothing to build for Mac OS X"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"=="MACOSX"
+.ELSE		# "$(GUIBASE)"!="unx"
 
 .IF "$(remote)"
 SLOFILES=	\
         $(SLO)/FWS.obj $(SLO)/salframe.obj $(SLO)/salobj.obj
 .ENDIF
 
-.ENDIF		# "$(OS)"=="MACOSX"
+.ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
 
