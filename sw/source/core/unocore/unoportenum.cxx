@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 15:02:41 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ struct SwXRedlinePortion_Impl
                     pRedline->Start() : pRedline->End();
             const SwPosition* pCmpPos = rCmp.bStart ?
                 rCmp.pRedline->Start() : rCmp.pRedline->End();
-            return *pOwnPos < *pCmpPos;
+            return *pOwnPos <= *pCmpPos;
         }
 
     BOOL operator ==(const SwXRedlinePortion_Impl &rCmp) const
