@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:17:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, Sdr
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
+        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( pObj )
             mpSet->Put(pObj->GetMergedItemSet());
@@ -134,7 +134,7 @@ SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
+        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( pSet )
             mpSet->Put(*pSet);
