@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
+ *  last change: $Author: er $ $Date: 2000-12-07 18:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "G" ) );
     sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GG" ) );
     sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "GGG" ) );
+    sKeyword[NF_KEY_R].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "R" ) );
+    sKeyword[NF_KEY_RR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "RR" ) );
 
     switch ( eLang )
     {
@@ -473,11 +475,10 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
         if ( i > NF_KEY_LASTOLDKEYWORD && sString != sKeyword[i] )
         {   // found something, but maybe it's something else?
             // e.g. new NNN is found in NNNN, for NNNN we must search on
-            xub_StrLen nMatch = sKeyword[i].Len();
             short j = i - 1;
             while ( j > 0 && sString.Search(sKeyword[j]) != 0 )
                 j--;
-            if ( j && sKeyword[j].Len() > nMatch )
+            if ( j && sKeyword[j].Len() > sKeyword[i].Len() )
                 return j;
         }
     }
@@ -1034,6 +1035,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 case NF_KEY_G :                 // G
                 case NF_KEY_GG :                // GG
                 case NF_KEY_GGG :               // GGG
+                case NF_KEY_R :                 // R
+                case NF_KEY_RR :                // RR
                     eNewType = NUMBERFORMAT_DATE;
                 break;
                 case NF_KEY_CCC:                // CCC
@@ -2021,6 +2024,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_G :                         // G
                     case NF_KEY_GG :                        // GG
                     case NF_KEY_GGG :                       // GGG
+                    case NF_KEY_R :                         // R
+                    case NF_KEY_RR :                        // RR
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                         nPos += sStrArray[i].Len();
                         i++;
@@ -2270,6 +2275,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_G :                         // G
                     case NF_KEY_GG :                        // GG
                     case NF_KEY_GGG :                       // GGG
+                    case NF_KEY_R :                         // R
+                    case NF_KEY_RR :                        // RR
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                         nPos += sStrArray[i].Len();
                         i++;

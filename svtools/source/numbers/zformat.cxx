@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
+ *  last change: $Author: er $ $Date: 2000-12-07 18:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2153,6 +2153,8 @@ BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
             break;
             case NF_KEY_EC :
             case NF_KEY_EEC :
+            case NF_KEY_R :
+            case NF_KEY_RR :
                 return TRUE;
             break;
         }
@@ -2370,6 +2372,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_EEC:                // EE
+            case NF_KEY_R:                  // R
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2423,7 +2426,17 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     nVal, 1 );
             }
             break;
-            default:
+            case NF_KEY_RR:                 // RR => GGGEE
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 1 );
+//! TODO: what about negative values? abs and append era?
+                nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
+            }
             break;
         }
     }
@@ -2724,6 +2737,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_EEC:                // EE
+            case NF_KEY_R:                  // R
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2775,7 +2789,17 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     nVal, 1 );
             }
             break;
-            default:
+            case NF_KEY_RR:                 // RR => GGGEE
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 1 );
+//! TODO: what about negative values? abs and append era?
+                nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
+            }
             break;
         }
     }
