@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:40:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,48 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
     aAny >>= aUserData;
 
     return String( aUserData );
+}
+/*-- 29.10.2004 13:57:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+class MailMergeCfg_Impl : public utl::ConfigItem
+{
+    friend class SvxEMailTabPage;
+    // variables
+    sal_Bool bIsEmailSupported;
+
+public:
+    MailMergeCfg_Impl();
+    virtual ~MailMergeCfg_Impl();
+
+    virtual void    Commit();
+
+    sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
+
+};
+/*-- 29.10.2004 13:57:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+MailMergeCfg_Impl::MailMergeCfg_Impl() :
+    utl::ConfigItem(C2U("Office.Writer/MailMergeWizard")),
+    bIsEmailSupported(sal_False)
+{
+    Sequence<OUString> aNames(1);
+    aNames.getArray()[0] = C2U("EMailSupported");
+    const Sequence< Any > aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    if(aValues.getLength() && pValues[0].hasValue())
+        pValues[0] >>= bIsEmailSupported;
+}
+/*-- 29.10.2004 13:57:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+MailMergeCfg_Impl::~MailMergeCfg_Impl()
+{
+}
+/* -------------------------------------------------------------------------*/
+void MailMergeCfg_Impl::Commit()
+{
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)( Window *pParent, const SfxItemSet &rAttrSet );
@@ -1504,7 +1546,8 @@ void OfaTreeOptionsDialog::Initialize()
             {
                 sal_uInt16 nValue = (sal_uInt16)rTextArray.GetValue(i);
                 if((RID_SW_TP_STD_FONT_CJK != nValue || aLanguageOptions.IsCJKFontEnabled())&&
-                    (RID_SW_TP_STD_FONT_CTL != nValue || aLanguageOptions.IsCTLFontEnabled()))
+                    (RID_SW_TP_STD_FONT_CTL != nValue || aLanguageOptions.IsCTLFontEnabled())&&
+                    (RID_SW_TP_MAILCONFIG != nValue || (MailMergeCfg_Impl().IsEmailSupported())))
                     AddTabPage( nValue, rTextArray.GetString(i), nGroup);
             }
 #ifndef PRODUCT
