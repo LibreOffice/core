@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageListDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:12:21 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,17 @@ package com.sun.star.wizards.web;
 
 
 
-import com.sun.star.awt.*;
+import com.sun.star.awt.FontDescriptor;
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XFixedText;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Renderer;
+import com.sun.star.wizards.ui.ImageList;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.ImageList.Counter;
 
 /**
@@ -163,7 +170,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
       int ilWidth = (il.getImageSize().Width + il.getGap().Width) * il.getCols()+ il.getGap().Width;
       int ilHeight = (il.getImageSize().Height + il.getGap().Height) * il.getRows()+ il.getGap().Height;
 
-      int dialogWidth = 6 + ilWidth + 6 + 40 + 6;
+      int dialogWidth = 6 + ilWidth + 6 + 50 + 6;
       int dialogHeight = 3 + 16 + 3 + ( ilHeight + 8 + 14 ) + 6;
 
     Helper.setUnoPropertyValues(xDialogModel,
@@ -179,15 +186,15 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
 
     btnOK = insertButton("btnOK", null,
       PROPNAMES,
-      new Object[] { Boolean.TRUE , INTEGER_14,"HID:" + (hid + 3), resources[RES_OK],"btnOK",iButtonsX,new Integer(22),new Short((short)com.sun.star.awt.PushButtonType.OK_value),new Short((short)7),INTEGER_40}
+      new Object[] { Boolean.TRUE , INTEGER_14,"HID:" + (hid + 3), resources[RES_OK],"btnOK",iButtonsX,new Integer(22),new Short((short)com.sun.star.awt.PushButtonType.OK_value),new Short((short)7),INTEGER_50}
     );
     btnCancel = insertButton("btnCancel", null,
       PROPNAMES,
-      new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 4),resources[RES_CANCEL],"btnCancel",iButtonsX,new Integer(41),new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value),new Short((short)8),INTEGER_40}
+      new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 4),resources[RES_CANCEL],"btnCancel",iButtonsX,new Integer(41),new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value),new Short((short)8),INTEGER_50}
     );
     btnHelp = insertButton("btnHelp", null,
       PROPNAMES,
-      new Object[] { Boolean.FALSE, INTEGER_14,"" ,resources[RES_HELP],"CommandButton3",iButtonsX,new Integer(71),new Short((short)com.sun.star.awt.PushButtonType.HELP_value),new Short((short)9),INTEGER_40}
+      new Object[] { Boolean.FALSE, INTEGER_14,"" ,resources[RES_HELP],"CommandButton3",iButtonsX,new Integer(71),new Short((short)com.sun.star.awt.PushButtonType.HELP_value),new Short((short)9),INTEGER_50}
     );
 
     if (showOtherButton) {
@@ -196,7 +203,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
 
       btnOther = insertButton("btnOther", "other",
         PROPNAMES,
-        new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 1), resources[RES_OTHER],"btnOther",iButtonsX, new Integer(otherY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)5),INTEGER_40}
+        new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 1), resources[RES_OTHER],"btnOther",iButtonsX, new Integer(otherY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)5),INTEGER_50}
       );
     }
 
@@ -206,7 +213,7 @@ public abstract class ImageListDialog  extends UnoDialog2 implements UIConsts  {
 
       btnDeselect = insertButton("btnNoImage", "deselect",
           PROPNAMES ,
-          new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 2),resources[RES_DESELECT],"btnNoImage", iButtonsX ,new Integer(deselectY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)4),INTEGER_40}
+          new Object[] { Boolean.FALSE, INTEGER_14,"HID:" + (hid + 2),resources[RES_DESELECT],"btnNoImage", iButtonsX ,new Integer(deselectY),new Short((short)com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short)4),INTEGER_50}
       );
     }
 
