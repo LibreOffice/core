@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:40:27 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 14:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,6 @@
 
 #include <iderid.hxx>
 
-#define LINE_SEP    0x0A
-
 class ModulWindow;
 class SfxRequest;
 class SvTreeListBox;
@@ -99,6 +97,14 @@ class SfxItemSet;
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+
+
+#define LINE_SEP_CR     0x0D
+#define LINE_SEP        0x0A
+
+// Implementation: baside2b.cxx
+sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
+
 
 // Bedeutung von bToBeKilled:
 // Wenn in Reschedule-Schleife, darf ich das Fenster nicht zerstoeren.
