@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:11:16 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  */
 package com.sun.star.wizards.web;
 
+import com.sun.star.awt.VclWindowPeerAttribute;
+
 /**
  * @author rpiterman
  *
@@ -66,6 +68,31 @@ package com.sun.star.wizards.web;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public interface ErrorHandler {
+
+
+
+  public static final String MESSAGE_INFO = "infobox";
+  public static final String MESSAGE_QUESTION = "querybox";
+  public static final String MESSAGE_ERROR = "errorbox";
+  public static final String MESSAGE_WARNING = "warningbox";
+
+
+  public static int BUTTONS_OK = VclWindowPeerAttribute.OK;
+  public static int BUTTONS_OK_CANCEL = VclWindowPeerAttribute.OK_CANCEL;
+  public static int BUTTONS_YES_NO = VclWindowPeerAttribute.YES_NO;
+
+  public static int RESULT_CANCEL = 0;
+  public static int RESULT_OK = 1;
+  public static int RESULT_YES = 2;
+
+
+  public static int DEF_OK = VclWindowPeerAttribute.DEF_OK;
+  public static int DEF_CANCEL = VclWindowPeerAttribute.DEF_CANCEL;
+  public static int DEF_YES = VclWindowPeerAttribute.DEF_YES;
+  public static int DEF_NO = VclWindowPeerAttribute.DEF_NO;
+
+
+
 
   /**
    * Error type for fatal errors which should abort application
