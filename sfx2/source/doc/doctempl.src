@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:17:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,9 +260,9 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Formulαrios e Contratos" ; > ;
         < "Finanηas" ; > ;
         < "Educaηγo" ; > ;
-        < "Fundo da apresentaηγo" ; > ;
+        < "Planos de fundo para apresentaηυes" ; > ;
         < "Apresentaηυes" ; > ;
-        < "MiscelΓΆnea" ; > ;
+        < "Miscelβnea" ; > ;
     };
     ItemList[ japanese ] =
     {
@@ -283,7 +283,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "μ—…λ¬΄μ μΈ ν†µμ‹ " ; > ;
         < "κΈ°νƒ€ μ‚¬λ¬΄μ© λ¬Έμ„" ; > ;
         < "κ°μΈμ  ν†µμ‹  λ° λ¬Έμ„" ; > ;
-        < "μ—…λ¬΄μ© μ–‘μ‹ λ° κ³„μ•½μ„" ; > ;
+        < "μ›κ³ μ§€ λ° μ—°μ† μ©μ§€" ; > ;
         < "μ¬μ • κ΄€λ¦¬" ; > ;
         < "κµμ΅" ; > ;
         < "ν”„λ μ  ν…μ΄μ… λ°°κ²½" ; > ;
@@ -345,16 +345,16 @@ StringArray TEMPLATE_LONG_NAMES_ARY
 
 ItemList [ language_user1 ] =
     {
-            < "Standard" ; > ;
-        < "Geschδftliche Korrespondenz" ; > ;
-        < "Sonstige geschδftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Vertr?ge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Prδsentationshintergrόnde" ; > ;
-        < "Prδsentationen" ; > ;
-        < "Diverses" ; > ;
+            < "; Standard" ; > ;
+        < "; Geschδftliche Korrespondenz" ; > ;
+        < "; Sonstige geschδftliche Dokumente" ; > ;
+        < "; Private Korrespondenz und Dokumente" ; > ;
+        < "; Formulare und Vertr?ge" ; > ;
+        < "; Finanzen" ; > ;
+        < "; Bildung" ; > ;
+        < "; Prδsentationshintergrόnde" ; > ;
+        < "; Prδsentationen" ; > ;
+        < "; Diverses" ; > ;
     };
     ItemList [ catalan ] =
     {
@@ -457,7 +457,7 @@ String RID_CNT_STR_WAITING
     Text[ language_user1 ] = " ";
     Text[ portuguese ] = "A inicializar modelos para a primeira utilizaηγo...";
     Text[ russian ] = "Οεπεδ οεπβϋμ θροξλόηξβΰνθεμ βϋοξλνÿεςρÿ θνθφθΰλθηΰφθÿ ψΰαλξνξβ.";
-    Text[ greek ] = "Αρχικοποίηση των στοιχείων του %PRODUCTNAME για πρώτη φορά μετά την εγκατάσταση.";
+    Text[ greek ] = "Τα πρότυπα αρχικοποιούνται για να χρησιμοποιηθούν για πρώτη φορά.";
     Text[ dutch ] = "De sjablonen worden nu geοnitialiseerd voor het eerste gebruik.";
     Text[ french ] = "Initialisation des modθles pour une premiθre utilisation ...";
     Text[ spanish ] = "Las plantillas se inicializarαn ahora para el primer uso.";
@@ -480,6 +480,7 @@ String RID_CNT_STR_WAITING
     Text[ hindi ] = "ΰ¤¨ΰ¤®ΰ¥‚ΰ¤¨ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤ªΰ¤Ήΰ¤Ώΰ¤²ΰ¥‡ ΰ¤¬ΰ¤Ύΰ¤° ΰ¤‰ΰ¤ªΰ¤―ΰ¥‹ΰ¤— ΰ¤•ΰ¤°ΰ¤¨ΰ¥‡ ΰ¤•ΰ¥‡ΰ¤²ΰ¤Ώΰ¤ ΰ¤‡ΰ¤¨ΰ¤Ώΰ¤¶ΰ¥ΰ¤―ΰ¤²ΰ¥ΰ¤ΰ¤Ό ΰ¤•ΰ¤Ώΰ¤―ΰ¤Ύ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "Ε ablΓ³ny sΓΊ inicializovanΓ© pre prvΓ© pouΕΎitie.";
 };
+
 
 
 
