@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-06 13:31:14 $
+ *  last change: $Author: kr $ $Date: 2001-02-19 15:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2001-02-06 13:31:14 $
+ * @version     $Revision: 1.9 $ $ $Date: 2001-02-19 15:42:37 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -135,8 +135,6 @@ public class JobQueue {
      */
     class JobDispatcher extends Thread implements IInvokable {
         JobDispatcher() {
-//              super("JobDispatcher - " + _threadId);
-
             if(DEBUG) System.err.println("JobQueue$JobDispatcher.<init>:" + _threadId);
 
             if(_sync_jobQueue == null)
@@ -154,8 +152,10 @@ public class JobQueue {
                 enter(1000, null);
             }
             catch(java.lang.Exception exception) {
-                System.err.println(getClass().getName() + " - exception occurred:" + exception);
-                if(DEBUG) ;exception.printStackTrace();
+                if(_head != null || _active) { // there was a job in progress, so give a stack
+                    System.err.println(getClass().getName() + " - exception occurred:" + exception);
+                    exception.printStackTrace(System.err);
+                }
             }
 
             return null;
