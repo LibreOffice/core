@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_emf_Export</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">EMF - Enhanced Meta File</value>
+            <value>EMF - Enhanced Meta File</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

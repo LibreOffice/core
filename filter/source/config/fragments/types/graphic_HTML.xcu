@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_html_Export</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">HTML</value>
+            <value>HTML</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

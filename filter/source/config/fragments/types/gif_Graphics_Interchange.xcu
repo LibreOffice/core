@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>GIF - Graphics Interchange</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">GIF - Graphics Interchange</value>
+            <value>GIF - Graphics Interchange</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
