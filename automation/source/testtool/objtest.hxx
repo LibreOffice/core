@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:52:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,19 +114,20 @@
 #define ID_GetIServer   33
 #define ID_RemoteCommandDelay 34
 #define ID_GetApplicationPath 35
-#define ID_MakeIniFileName 36
-#define ID_StringControl 37
-#define ID_Wait         38
-#define ID_GetErrorCount   39
-#define ID_GetWarningCount 40
-#define ID_GetUseFileWarningCount 41
-#define ID_GetErrorList    42
-#define ID_GetWarningList  43
-#define ID_GetUseFileWarningList 44
-#define ID_GetTestCaseName 45
-#define ID_GetTestCaseFileName 46
-#define ID_GetTestCaseLineNr 47
-#define ID_StopOnSyntaxError 48
+#define ID_GetCommonApplicationPath 36
+#define ID_MakeIniFileName 37
+#define ID_StringControl 38
+#define ID_Wait         39
+#define ID_GetErrorCount   40
+#define ID_GetWarningCount 41
+#define ID_GetUseFileWarningCount 42
+#define ID_GetErrorList    43
+#define ID_GetWarningList  44
+#define ID_GetUseFileWarningList 45
+#define ID_GetTestCaseName 46
+#define ID_GetTestCaseFileName 47
+#define ID_GetTestCaseLineNr 48
+#define ID_StopOnSyntaxError 49
 
 #define ID_DoNothing    99
 
