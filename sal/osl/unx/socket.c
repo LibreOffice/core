@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 17:25:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 14:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #define OSL_INVALID_SOCKET      -1
 #define OSL_SOCKET_ERROR        -1
 
+
+/* Buffer size for gethostbyname */
+#define MAX_HOSTBUFFER_SIZE 2048
 
 /*****************************************************************************/
 /* enum oslAddrFamily */
@@ -1033,8 +1036,8 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
 
         /* buffer for calls to reentrant version of gethostbyname */
         struct hostent  aHostByName, aQualifiedHostByName;
-        sal_Char        pHostBuffer[ 256 ];
-        sal_Char        pQualifiedHostBuffer[ 256 ];
+        sal_Char        pHostBuffer[ MAX_HOSTBUFFER_SIZE ];
+        sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
         int     nErrorNo;
 
         pHostBuffer[0] = '\0';
