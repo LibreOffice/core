@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:08:36 $
+ *  last change: $Author: mba $ $Date: 2002-09-03 10:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,9 @@ void SvMetaSlot::Load( SvPersistStream & rStm )
 
     TEST_READ
     if( nMask & 0x0001 ) rStm >> aUnoName;
+#if SUPD>=643
     if( nMask & 0x0002 ) rStm >> aImageReflection;
+#endif
 }
 
 void SvMetaSlot::Save( SvPersistStream & rStm )
@@ -337,13 +339,16 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
 
     nMask = 0;
     if( aUnoName.IsSet() )          nMask |= 0x0001;
+#if SUPD>=643
     if( aImageReflection.IsSet() )  nMask |= 0x0002;
-
+#endif
     rStm << nMask;
     TEST_WRITE
     if( nMask & 0x0001 ) rStm << aUnoName;
+#if SUPD>=643
     TEST_WRITE
     if( nMask & 0x0002 ) rStm << aImageReflection;
+#endif
 }
 
 /*************************************************************************
@@ -576,11 +581,13 @@ BOOL SvMetaSlot::GetImageRotation() const
     return ((SvMetaSlot *)GetRef())->GetImageRotation();
 }
 
+#if SUPD>=643
 BOOL SvMetaSlot::GetImageReflection() const
 {
     if( aImageReflection.IsSet() || !GetRef() ) return aImageReflection;
     return ((SvMetaSlot *)GetRef())->GetImageReflection();
 }
+#endif
 
 const ByteString& SvMetaSlot::GetUnoName() const
 {
@@ -696,7 +703,9 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
     bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );
+#if SUPD>=643
     bOk |= aImageReflection.ReadSvIdl( SvHash_ImageReflection(), rInStm );
+#endif
     bOk |= aUnoName.ReadSvIdl( SvHash_UnoName(), rInStm );
 
     if( !bOk )
@@ -923,11 +932,13 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         aDel = ", ";
     }
 
+#if SUPD>=643
     if( aImageReflection )
     {
         ( aOut += aDel ) += aImageReflection.GetSvIdlString( SvHash_ImageReflection() );
         aDel = ", ";
     }
+#endif
 
     if( aOut.Len() )
     {
@@ -1476,9 +1487,10 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, USHORT nCount,
         rOutStm << MakeSlotName( SvHash_ReadOnlyDoc() ).GetBuffer() << '|';
     if( GetImageRotation() )
         rOutStm << MakeSlotName( SvHash_ImageRotation() ).GetBuffer() << '|';
+#if SUPD>=643
     if( GetImageReflection() )
         rOutStm << MakeSlotName( SvHash_ImageReflection() ).GetBuffer() << '|';
-
+#endif
     rOutStm << '0';
 
     rOutStm << ',' << endl;
@@ -1911,10 +1923,10 @@ void SvMetaSlot::CompareSlotAttributes( SvMetaSlot* pSlot )
 
     if ( GetImageRotation() != pSlot->GetImageRotation() )
         aStr += "    ImageRotation\n";
-
+#if SUPD>=643
     if ( GetImageReflection() != pSlot->GetImageReflection() )
         aStr += "    ImageReflection\n";
-
+#endif
     if ( !GetPseudoPrefix().Equals( pSlot->GetPseudoPrefix() ) )
         aStr += "    PseudoPrefix\n";
 
@@ -1972,8 +1984,9 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetHasDialog(), rStrm );
     WriteBool( GetReadOnlyDoc(), rStrm );
     WriteBool( GetImageRotation(), rStrm );
+#if SUPD>=643
     WriteBool( GetImageReflection(), rStrm );
-
+#endif
     rStrm << GetDisableFlags().GetBuffer() << ',';
 
     if( GetSynchron() )
