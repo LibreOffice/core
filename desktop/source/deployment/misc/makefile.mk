@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:48:52 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:44:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,8 @@ SLOFILES = \
         $(SLO)$/dp_log.obj \
         $(SLO)$/dp_persmap.obj \
         $(SLO)$/dp_servicefactory.obj \
-        $(SLO)$/dp_services.obj
+        $(SLO)$/dp_services.obj       \
+        $(SLO)$/db.obj
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk
