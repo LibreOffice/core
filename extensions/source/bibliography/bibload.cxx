@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:02:59 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -128,6 +131,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
 #include <com/sun/star/form/XLoadListener.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
@@ -419,6 +425,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
 
+/*
     //create the menu
     ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
     INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
@@ -444,8 +451,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
                 aDisp->dispatch( aURL, Sequence<PropertyValue>() );
         }
     }
-
-
+*/
     m_pDatMan = (*m_pBibMod)->createDataManager();
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
@@ -499,6 +505,23 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         if ( rListener.is() )
             rListener->loadFinished( this );
 
+        // attach menu bar
+        Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        if ( xPropSet.is() )
+        {
+            try
+            {
+                Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                a >>= xLayoutManager;
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+
+        if ( xLayoutManager.is() )
+            xLayoutManager->createElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
     }
     else
     {
