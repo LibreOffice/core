@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:13:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,16 +796,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Rechter bereik" ;
         Text [ spanish ] = "Área ~derecha" ;
         Text [ english_us ] = "R~ight Area" ;
-        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
+        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~I)";
         Text[ russian ] = "Ïğàâàÿ îáëàñòü";
         Text[ polish ] = "Prawy obszar";
-        Text[ japanese ] = "‰E‚Ì”ÍˆÍ(~R)";
-        Text[ chinese_traditional ] = "¥k°Ï°ì(~R)";
+        Text[ japanese ] = "‰E‚Ì”ÍˆÍ(~I)";
+        Text[ chinese_traditional ] = "¥k°Ï°ì(~I)";
         Text[ arabic ] = "ãäØŞÉ íãäì";
         Text[ dutch ] = "~Rechter bereik";
-        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
+        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~I)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~R)";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~I)";
         Text[ turkish ] = "~Sağ bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área ~derecha";
@@ -1375,6 +1375,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
