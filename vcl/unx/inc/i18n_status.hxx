@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-26 15:35:08 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _SV_SALIMESTATUS_HXX
+#include <salimestatus.hxx>
+#endif
+
 #include <vector>
 
 class SalFrame;
@@ -91,6 +95,16 @@ namespace vcl
 {
 
 class StatusWindow;
+
+class X11ImeStatus : public SalI18NImeStatus
+{
+public:
+    X11ImeStatus() {}
+    virtual ~X11ImeStatus();
+
+    virtual bool canToggle();
+    virtual void toggle();
+};
 
 class I18NStatus
 {
@@ -127,7 +141,7 @@ public:
     SalFrame* getStatusFrame() const;
 
     void setStatusText( const String& rText );
-    const String& getStatusText() const;
+    String getStatusText() const;
 
     enum ShowReason { focus, presentation, contextmap };
     void show( bool bShow, ShowReason eReason );
