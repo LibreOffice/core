@@ -24028,3 +24028,11 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?sMechSimple@SvxSSOTabPage@@0VOUString@rtl@@B
 ?s_pType_drafts_com_sun_star_auth_XSSOPasswordCache@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSSOPasswordCache@auth@star@sun@com@drafts@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?toAsciiUpperCase@OUString@rtl@@QBE?AV12@XZ
+?calcFontInfo@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx309518893@@YA?AVFontInfo@@AAVSvxFont@@PAVSvxCharNamePage@@PBVFontNameBox@@PBVFontStyleBox@@PBVFontSizeBox@@PBVFontList@@GG@Z
+?enableRelativeMode@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx309518893@@YAXPAVSvxCharNamePage@@PAVFontSizeBox@@G@Z
+?setPrevFontEscapement@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx309518893@@YAXAAVSvxFont@@EEF@Z
+?calcFontHeightAnyAscent@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXPAVOutputDevice@@AAVFont@@AAJ2@Z
+?initFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXAAVFont@@@Z
+?scaleFontWidth@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
+?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXABVSvxFont@@AAV2@@Z
+?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx2870215315@@YAXAAVFont@@@Z
