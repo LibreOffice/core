@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #define STR_DATASOURCEDELETED               14
 #define STR_COULDNOTLOAD_ODBCLIB            15
 #define STR_NO_ADABASE_DATASOURCES          16
+#define STR_PAGETITLE_ADO                   17
 
 //========================================================================
 // menu item ids
@@ -158,6 +159,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/11/22 15:44:05  oj
+ *  #80269# remove property long names
+ *
  *  Revision 1.7  2000/11/10 17:42:46  fs
  *  +STR_NO_ADABASE_DATASOURCES
  *
