@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:12:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,9 +226,9 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     }
     else
     {
-        Reference<XUnoTunnel> xAggregateTunnel(m_xAggregate, UNO_QUERY);
-        if (xAggregateTunnel.is())
-            nReturn = xAggregateTunnel->getSomething(_rIdentifier);
+        Reference< XUnoTunnel > xAggTunnel;
+        if ( query_aggregation( m_xAggregate, xAggTunnel ) )
+            return xAggTunnel->getSomething( _rIdentifier );
     }
     return nReturn;
 }
