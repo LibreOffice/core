@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:53:25 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,8 +276,8 @@
 #ifndef _DOCHDL_HRC
 #include <dochdl.hrc>
 #endif
-#ifndef _GLOBALS_HRC
-#include <globals.hrc>
+#ifndef _COMCORE_HRC
+#include <comcore.hrc> // #111827#
 #endif
 #include <sot/stg.hxx>
 
@@ -304,6 +304,16 @@
 // #109590#
 #ifndef _SWCRSR_HXX
 #include <swcrsr.hxx>
+#endif
+
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
 #endif
 
 extern BOOL bFrmDrag;
@@ -385,10 +395,12 @@ class SwTrnsfrActionAndUndo
     SwWrtShell *pSh;
     USHORT nUndoId;
 public:
-    SwTrnsfrActionAndUndo( SwWrtShell *pS, USHORT nId, BOOL bDelSel = FALSE )
+    SwTrnsfrActionAndUndo( SwWrtShell *pS, USHORT nId,
+                           const SwRewriter * pRewriter = 0,
+                           BOOL bDelSel = FALSE)
         : pSh( pS ), nUndoId( nId )
     {
-        pSh->StartUndo( nUndoId );
+        pSh->StartUndo( nUndoId, pRewriter );
         if( bDelSel )
             pSh->DelRight();
         pSh->StartAllAction();
@@ -1339,7 +1351,10 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     else if( EXCHG_INOUT_ACTION_NONE != nAction )
     {
         if( !pAction )
-            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_INSERT );
+        {
+            // #111827#
+            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD);
+        }
 
         // im Drag&Drop duerfen keine MessageBoxen angezeigt werden
         BOOL bMsg = 0 == pPt;
@@ -3204,7 +3219,11 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     ASSERT( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
     const int nSelection = rShell.GetSelectionType();
 
-    SwTrnsfrActionAndUndo aAction( &rShell, (USHORT)UNDO_INSERT );
+    // #111827#
+    SwRewriter aRewriter;
+
+    aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_CLIPBOARD)));
+    SwTrnsfrActionAndUndo aAction( &rShell, (USHORT)UNDO_INSERT, &aRewriter );
 
     //Selektierten Inhalt loeschen, nicht bei Tabellen-Selektion und
     //Tabelle im Clipboard
@@ -3340,9 +3359,18 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     const int nSel = rSrcSh.GetSelectionType();
 
     USHORT nUndoId = bMove ? UIUNDO_DRAG_AND_MOVE : UIUNDO_DRAG_AND_COPY;
-    if( rSrcSh.GetDoc() != rSh.GetDoc() )
-        rSrcSh.StartUndo( nUndoId );
-    rSh.StartUndo( nUndoId );
+
+    // #111827#
+    SwRewriter aRewriter;
+
+    SwDoc * pDoc = rSrcSh.GetDoc();
+
+    if (0 != pDoc)
+        aRewriter.AddRule(UNDO_ARG1, rSrcSh.GetCrsrDescr());
+
+    if(rSrcSh.GetDoc() != rSh.GetDoc())
+        rSrcSh.StartUndo( nUndoId, &aRewriter );
+    rSh.StartUndo( nUndoId, &aRewriter );
 
     rSh.StartAction();
     rSrcSh.StartAction();
