@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 14:42:55 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
-#endif
-#ifndef _SVX_COLORCFG_HXX
-#include "colorcfg.hxx"
 #endif
 
 
