@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-19 16:24:57 $
+ *  last change: $Author: kr $ $Date: 2001-04-20 10:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2001-04-19 16:24:57 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-04-20 10:28:13 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -151,16 +151,6 @@ public class urp extends Protocol {
         _unmarshal = new Unmarshal(iBridge, __cache_size);
     }
 
-
-    /**
-     * Returns a string representation of this object.
-     * <p>
-     * @return   the string representation
-     * @see      java.lang.Object#toString
-     */
-//      public String toString() {
-//          return getName() + ": statistics - requests send:" + _requestsSend + " requests recieved:" + _requestsRecieved;
-//      }
 
     /**
      * Gets the name of the protocol.
