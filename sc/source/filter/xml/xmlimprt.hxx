@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ enum ScXMLAnnotationAttrTokens
 {
     XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR,
     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
+    XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING,
     XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY
 };
 

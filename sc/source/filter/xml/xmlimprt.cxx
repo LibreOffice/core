@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,10 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, sXML_author,        XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR        },
-    { XML_NAMESPACE_OFFICE, sXML_create_date,   XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE   },
-    { XML_NAMESPACE_OFFICE, sXML_display,       XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY       },
+    { XML_NAMESPACE_OFFICE, sXML_author,                XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR                },
+    { XML_NAMESPACE_OFFICE, sXML_create_date,           XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE           },
+    { XML_NAMESPACE_OFFICE, sXML_create_date_string,    XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING    },
+    { XML_NAMESPACE_OFFICE, sXML_display,               XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY               },
     XML_TOKEN_MAP_END
 };
 
