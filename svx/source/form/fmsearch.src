@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:47:07 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,7 +838,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "S~chlie?en";
         Text[ portuguese ] = "~Fechar";
         Text[ danish ] = "Luk";
-        Text[ french ] = "F~ermer";
+        Text[ french ] = "Fermer";
         Text[ swedish ] = "~Stäng";
         Text[ dutch ] = "S~luiten";
         Text[ spanish ] = "~Cerrar";
