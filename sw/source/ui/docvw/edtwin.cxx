@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 15:05:55 $
+ *  last change: $Author: os $ $Date: 2002-05-03 15:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,6 +1497,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 break;
                 case KEY_TAB | KEY_MOD1:
+                case KEY_TAB | KEY_MOD2:
                     if( !rSh.HasReadonlySel() )
                     {
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() )
