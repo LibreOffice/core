@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:15:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,9 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     USHORT nCount = (USHORT)pList->Count();
     if( nCount )
     {
-        for ( USHORT i = 0; i < nCount; i++ )
+        USHORT i;
+
+        for ( i = 0; i < nCount; i++ )
         {
             aTargetFrmLB.InsertEntry(*pList->GetObject(i));
         }
