@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 04:37:31 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:26:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,8 @@ SHL1STDLIBS= \
         $(DBTOOLSLIB) \
         $(COMPHELPERLIB) \
         $(CPPUHELPERLIB) \
+        $(UCBHELPERLIB) \
+        $(SVLLIB)	\
         $(CPPULIB) \
         $(VOSLIB) \
         $(SALLIB)
@@ -126,6 +128,7 @@ LIB2FILES=\
         $(SLB)$/dbushared.lib		\
         $(SLB)$/browser.lib			\
         $(SLB)$/uiuno.lib			\
+        $(SLB)$/app.lib				\
         $(SLB)$/uicontrols.lib
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
@@ -137,6 +140,7 @@ SHL2STDLIBS= \
         $(SVTOOLLIB)			\
         $(TKLIB)				\
         $(VCLLIB)				\
+        $(GOODIESLIB)			\
         $(SVLLIB)				\
         $(SOTLIB)				\
         $(UNOTOOLSLIB)			\
@@ -146,6 +150,7 @@ SHL2STDLIBS= \
         $(COMPHELPERLIB)		\
         $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
+        $(SO2LIB)				\
         $(VOSLIB)				\
         $(SALLIB)
 
@@ -162,12 +167,14 @@ ALL: \
 
 RES2FILELIST=\
     $(SRS)$/uidlg.srs				\
+    $(SRS)$/app.srs					\
     $(SRS)$/uicontrols.srs			\
     $(SRS)$/browser.srs				\
     $(SRS)$/uiuno.srs				\
     $(SRS)$/querydesign.srs			\
     $(SRS)$/tabledesign.srs			\
     $(SRS)$/relationdesign.srs		\
+    $(SRS)$/uiimglst.srs			\
     $(SRS)$/uimisc.srs
 
 .IF "$(GUI)"=="WNT"
