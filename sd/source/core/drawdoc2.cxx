@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-13 16:05:11 $
+ *  last change: $Author: dl $ $Date: 2001-02-12 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@
 #endif
 #endif
 
-extern USHORT SlotArray[];
 #endif // !SVX_LIGHT
 
 const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
@@ -1152,11 +1151,6 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
     }
 
     SetChanged(bChanged || FALSE);
-
-    // Um die Lupe und nicht die Seite als Bitmap des Zoom-Controllers
-    // zu erhalten wird hier in das ehemals static array der Slot fuer
-    // die Lupe gemapped. (SlotArray in drviewsc.cxx)
-    SlotArray[ 5 ] = SID_ZOOM_OUT; // SID_ZOOM_TOOLBOX;
 
     if( pDocSh )
         pDocSh->SetWaitCursor( FALSE );
