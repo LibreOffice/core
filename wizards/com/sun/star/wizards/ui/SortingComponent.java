@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortingComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:05:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,11 @@ public class SortingComponent {
             String CurFieldTitle;
             setMaxSortIndex();
             String[][] SortFieldNames = new String[MaxSortIndex + 1][2];
+            String[] SortDescriptions = new String[MaxSortIndex+1];
             for (int i = 0; i <= MaxSortIndex; i++) {
                 CurFieldName = xSortListBox[i].getSelectedItem();
                 SortFieldNames[i][0] = CurFieldName;
+                SortDescriptions[i] = CurFieldName;
                 iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + new Integer(i + 1).toString(), "State")).shortValue();
                 SortFieldNames[i][0] = CurFieldName;
                 if (iCurState == 1)
@@ -216,11 +218,14 @@ public class SortingComponent {
                 else
                     SortFieldNames[i][1] = "DESC";
             }
-            int iduplicate = JavaTools.getDuplicateFieldIndex(SortFieldNames);
+            // When searching for a duplicate entry we can neglect wether the entries are to be sorted ascending or descending
+            // TODO for the future we should deliver a messagebox when two different sorting modes have been applied to one field
+            int iduplicate = JavaTools.getDuplicateFieldIndex(SortDescriptions);
             if (iduplicate != -1) {
                 String sLocSortCriteriaisduplicate = JavaTools.replaceSubString(sSortCriteriaisduplicate, SortFieldNames[iduplicate][0], "<FIELDNAME>");
-                SystemDialog.showMessageBox(xMSF, "WarningBox", VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
+                CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
                 CurUnoDialog.vetoableChange(new PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
+                CurUnoDialog.setFocus("lstSort" + (iduplicate + 1));
                 return new String[][] {
                 };
             } else
