@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2002-08-08 07:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ namespace dbaccess
         ::com::sun::star::uno::Any  m_aOldValue;
 
         ::rtl::OUString             m_aDescription;     // description
+
+        virtual ~ORowSetDataColumn();
     public:
         ORowSetDataColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
@@ -101,7 +103,7 @@ namespace dbaccess
                           const ORowSetCacheIterator& _rColumnValue,
                           ORowSetMatrix::iterator& _rEnd);
 
-        ~ORowSetDataColumn();
+
         // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
         // comphelper::OPropertyArrayUsageHelper
