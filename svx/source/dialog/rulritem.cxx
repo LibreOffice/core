@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:26:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 
     const USHORT nCount = ((const SvxColumnItem&)rCmp).Count();
     for(USHORT i = 0; i < nCount;++i) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         SvxColumnDescription *p1 = (SvxColumnDescription *)aColumns[i],
                              *p2 = (SvxColumnDescription *)
                                     ((const SvxColumnItem&)rCmp).aColumns[i];
