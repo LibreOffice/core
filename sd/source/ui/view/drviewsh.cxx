@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-04-12 12:44:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -84,14 +86,23 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdpage.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "sdwindow.hxx"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
+
+namespace sd {
 
 #define TABCONTROL_INITIAL_SIZE     500
 
@@ -101,9 +112,9 @@
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::GotoBookmark(const String& rBookmark)
+BOOL DrawViewShell::GotoBookmark(const String& rBookmark)
 {
-    return (pDocSh->GotoBookmark(rBookmark));
+    return (GetDocSh()->GotoBookmark(rBookmark));
 }
 
 /*************************************************************************
@@ -112,7 +123,7 @@ BOOL SdDrawViewShell::GotoBookmark(const String& rBookmark)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
+void DrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
 {
     // #98568# In older versions, if in X or Y the size of the object was smaller than the
     // visible area, the user-defined zoom was changed. This was decided to be a bug for 6.x,
@@ -215,4 +226,4 @@ void SdDrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
     }
 }
 
-
+}
