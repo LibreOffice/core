@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,15 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
 {
         if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR);
 
-        sentenceBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
-        return sentenceBreak->preceding(nStartPos);
+        sal_Int32 len = Text.getLength();
+        sentenceBreak->setText(UnicodeString(Text.getStr(), len));
+        if (!sentenceBreak->isBoundary(nStartPos))
+            nStartPos = sentenceBreak->preceding(nStartPos);
+
+        // skip preceding space.
+        while (nStartPos < len && unicode::isWhiteSpace(Text[nStartPos])) nStartPos++;
+
+        return nStartPos;
 }
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
@@ -338,13 +345,14 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, s
 {
         if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR);
 
-        sentenceBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+        sal_Int32 len = Text.getLength();
+        sentenceBreak->setText(UnicodeString(Text.getStr(), len));
 
-        sal_Int32 nPos = sentenceBreak->following(nStartPos);
+        nStartPos = sentenceBreak->following(nStartPos);
 
-        while (--nPos >= 0 && unicode::isWhiteSpace(Text[nPos]));
+        while (--nStartPos >= 0 && unicode::isWhiteSpace(Text[nStartPos]));
 
-        return ++nPos;
+        return ++nStartPos;
 }
 
 LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
