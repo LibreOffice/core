@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-19 15:19:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 #include "document.hxx"
 
 using namespace ::com::sun::star::lang;
+
+//Math document
+extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+SmDocument_getSupportedServiceNames() throw();
+extern ::rtl::OUString SAL_CALL SmDocument_getImplementationName() throw();
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL SmDocument_createInstance(const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
+    ::com::sun::star::uno::Exception );
 
 //MathML import
 extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
@@ -198,6 +207,14 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     for(i = 0; i < rServices.getLength(); i++ )
         xNewKey->createKey( rServices.getConstArray()[i]);
 
+    xNewKey = xKey->createKey(::rtl::OUString(
+    RTL_CONSTASCII_USTRINGPARAM("/") ) + SmDocument_getImplementationName() +
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+    rServices = SmDocument_getSupportedServiceNames();
+    for(i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
+
 
     return sal_True;
 }
@@ -274,6 +291,15 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
             SmXMLExportContent_createInstance,
             SmXMLExportContent_getSupportedServiceNames() );
         }
+        else if( SmDocument_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmDocument_getImplementationName(),
+            SmDocument_createInstance,
+            SmDocument_getSupportedServiceNames() );
+        }
+
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
