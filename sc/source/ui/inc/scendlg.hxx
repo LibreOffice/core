@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-22 13:16:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-        ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit = FALSE );
+        ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit = FALSE, BOOL bSheetProtected = FALSE );
         ~ScNewScenarioDlg();
 
     void SetScenarioData( const String& rName, const String& rComment,
@@ -114,6 +114,7 @@ private:
     //CheckBox          aCbAttrib;
     //CheckBox          aCbValue;
     CheckBox            aCbCopyAll;
+    CheckBox            aCbProtect;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
