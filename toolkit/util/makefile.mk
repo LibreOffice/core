@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:45:04 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:58:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,12 +147,9 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo VCLXFontMetric>> $@
     @echo VCLXGraphics>> $@
     @echo VCLXListBox>> $@
-    @echo VCLXMenu>> $@
     @echo VCLXMessageBox>> $@
     @echo VCLXRadioButton>> $@
     @echo VCLXScrollBar>> $@
     @echo VCLXVirtualDevice>> $@
-    @echo VCLXPopupMenu>> $@
-    @echo VCLXMenuBar>> $@
     @echo VCLXToolkit>> $@
     @echo __CT>> $@
