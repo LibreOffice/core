@@ -278,7 +278,7 @@
                     <value xml:lang="th">เส้นตามแนวน~อน...</value>
                     <value xml:lang="tr">~Yatay Cetvel...</value>
                     <value xml:lang="hi">सम~तल रेखा...</value>
-                    <value xml:lang="zh-CN">水平线(~Z)...</value>
+                    <value xml:lang="zh-CN">水平标尺...</value>
                     <value xml:lang="pt">~Linha horizontal...</value>
                 </prop>
             </node>
@@ -2417,7 +2417,7 @@
                     <value xml:lang="th">เลข~หน้า</value>
                     <value xml:lang="tr">~Sayfa Numarası</value>
                     <value xml:lang="hi">पृष्ठ ~संख्या</value>
-                    <value xml:lang="zh-CN">页码(~P)</value>
+                    <value xml:lang="zh-CN">页码</value>
                     <value xml:lang="pt">Número de ~página</value>
                 </prop>
             </node>
@@ -6648,7 +6648,7 @@
                     <value xml:lang="cs">Na následující větu</value>
                     <value xml:lang="da">Til næste sætning</value>
                     <value xml:lang="el">Προς την επόμενη πρόταση</value>
-                    <value xml:lang="es">Ir  la oración siguiente</value>
+                    <value xml:lang="es">Ir la oración siguiente</value>
                     <value xml:lang="fi">Seuraavaan lauseeseen</value>
                     <value xml:lang="fr">Aller à la phrase suivante</value>
                     <value xml:lang="he">Zum nächsten Satz</value>
@@ -8803,7 +8803,7 @@
                     <value xml:lang="th">Edit Footnote/Endnote</value>
                     <value xml:lang="tr">Altbilgi/Dipnot Düzenle</value>
                     <value xml:lang="hi">Edit Footnote/Endnote</value>
-                    <value xml:lang="zh-CN">编辑注脚/尾注</value>
+                    <value xml:lang="zh-CN">编辑脚注/尾注</value>
                     <value xml:lang="pt">Edit Footnote/Endnote</value>
                 </prop>
             </node>
@@ -9175,7 +9175,7 @@
                     <value xml:lang="th">Am Seiten- und Spaltenende aufbrechen</value>
                     <value xml:lang="tr">Am Seiten- und Spaltenende aufbrechen</value>
                     <value xml:lang="hi">Am Seiten- und Spaltenende aufbrechen</value>
-                    <value xml:lang="zh-CN">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="zh-CN">跨页断行</value>
                     <value xml:lang="pt">Am Seiten- und Spaltenende aufbrechen</value>
                 </prop>
             </node>
@@ -9262,7 +9262,7 @@
                     <value xml:lang="nl">Gecentreerd (verticaal)</value>
                     <value xml:lang="pl">Do środka (poziomo)</value>
                     <value xml:lang="pt-BR">Centralizar ( Vertical ) </value>
-                    <value xml:lang="ru">Центрировать (по вертикали)  </value>
+                    <value xml:lang="ru">Центрировать (по вертикали) </value>
                     <value xml:lang="sk">Na stred (zvisle)</value>
                     <value xml:lang="sv">Centrerad (vertikal)</value>
                     <value xml:lang="th">ตรงกลาง ( แนวตั้ง )</value>
@@ -9359,7 +9359,7 @@
                     <value xml:lang="sk">Na predchádzajúci zástupný znak</value>
                     <value xml:lang="sv">Till föregående platshållare</value>
                     <value xml:lang="th">ไปยังตัวยึดตำแหน่งตัวก่อน</value>
-                    <value xml:lang="tr">Önceki  genel arama karakteri</value>
+                    <value xml:lang="tr">Önceki genel arama karakteri</value>
                     <value xml:lang="hi">पिछला स्थानधारक तक</value>
                     <value xml:lang="zh-CN">转到上一个通配符</value>
                     <value xml:lang="pt">Marcador de posição anterior</value>
