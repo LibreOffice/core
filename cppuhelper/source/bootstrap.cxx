@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+ *  last change: $Author: dbo $ $Date: 2002-07-08 10:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,11 @@ static Reference< XComponentContext > SAL_CALL __defaultBootstrap_InitialCompone
         sal_Bool fallenBackWriteRegistry;
         OUString write_rdb = findBoostrapArgument(
             bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBackWriteRegistry );
+        if (fallenBackWriteRegistry)
+        {
+            // no standard write rdb anymore
+            write_rdb = OUString();
+        }
 
         Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
             iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
