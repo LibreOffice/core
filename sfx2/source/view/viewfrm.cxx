@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:37:42 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -173,15 +176,12 @@ using namespace ::com::sun::star::frame;
 #include "stbmgr.hxx"
 #include "event.hxx"
 #include "fltfnc.hxx"
-#include "fsetvwsh.hxx"
-#include "fsetobsh.hxx"
 #include "docfile.hxx"
 #include "interno.hxx"
 #include "module.hxx"
 #include "msgpool.hxx"
 #include "topfrm.hxx"
 #include "urlframe.hxx"
-#include "fsetvwsh.hxx"
 #include "viewimp.hxx"
 #include "sfxbasecontroller.hxx"
 #include "sfx.hrc"
@@ -1138,10 +1138,7 @@ void SfxViewFrame::SetObjectShell_Impl
     if ( xObjSh.Is() && xObjSh->IsPreview() )
         SetQuietMode_Impl( sal_True );
 
-    if ( rObjSh.IsA( TYPE( SfxFrameSetObjectShell ) ) )
-        GetFrame()->SetFrameType_Impl( GetFrameType() | SFXFRAME_FRAMESET );
-    else
-        GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
+    GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
 
     // Modulshell einf"ugen
     SfxModule* pModule = xObjSh->GetModule();
@@ -1255,18 +1252,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
         SetRestoreView_Impl( bStoreView );
         if ( bStoreView )
             pDyingViewSh->WriteUserData( GetViewData_Impl(), sal_True );
-
-        // Falls es SubFrames gibt, m"ussen diese deleted werden, solange noch
-        // die FramesetViewShell da ist, sonst gibt es Probleme.
-        // Um Flackern bei den Objectbars zu vermeiden, werden die SubFrames
-        // zerst"ort, solange die FrameSetView noch da ist.
-        if ( pDyingViewSh->IsA( TYPE(SfxFrameSetViewShell) ) )
-        {
-            Window *pWindow = pDyingViewSh->GetWindow();
-            if ( pWindow )
-                pWindow->Hide();
-            GetFrame()->CloseChildFrames();
-        }
 
         // Jetzt alle SubShells wechhauen
         pDyingViewSh->PushSubShells_Impl( sal_False );
@@ -1736,11 +1721,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     if ( xObjSh.Is() && xObjSh->IsPreview() )
         SetQuietMode_Impl( sal_True );
 
-    if ( pObjSh && pObjSh->IsA( TYPE( SfxFrameSetObjectShell ) ) )
-        GetFrame()->SetFrameType_Impl( GetFrameType() | SFXFRAME_FRAMESET );
-    else
-        GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
-
+    GetFrame()->SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
     if ( pObjSh )
     {
         pDispatcher->Push( *SFX_APP() );
@@ -2403,15 +2384,8 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
 {
     if ( pViewFrame != pImp->pActiveChild )
     {
-        if ( !pViewFrame )
-        {
-    //!     if ( GetChildFrame(0) && GetViewShell() && GetViewShell()->IsA( TYPE(SfxFrameSetViewShell) ) )
-    //!         GetDispatcher()->LockUI_Impl();
-        }
-        else if ( !pImp->pActiveChild )
-        {
+        if ( !pImp->pActiveChild )
             GetDispatcher()->LockUI_Impl( sal_False );
-        }
 
         pImp->pActiveChild = pViewFrame;
 
@@ -2422,26 +2396,6 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
 
         if ( xFrame.is() )  // PB: #74432# xFrame cann be NULL
             xFrame->setActiveFrame( xActive );
-
-        if ( pViewFrame )
-        {
-            // Das n"achsth"ohere Frameset suchen, falls ich nicht selbst schon
-            // eines enthalte( der InternalFrame k"onnte auch zu einem FloatingFrame
-            // geh"oren ) und dort den Frame aktivieren, der letztlich pViewFrame
-            // enth"alt.
-            SfxFrame *pFrame = GetFrame();
-            do
-            {
-                SfxURLFrame *pURLFrame = PTR_CAST( SfxURLFrame, pFrame );
-                if ( pURLFrame && pURLFrame->GetFrameSet() )
-                {
-                    pURLFrame->GetFrameSet()->SetActiveFrame( pURLFrame );
-                    break;
-                }
-                pFrame = pFrame->GetParentFrame();
-            }
-            while ( pFrame );
-        }
     }
 }
 
@@ -2826,7 +2780,7 @@ void SfxViewFrame::ExecView_Impl
             GetViewShell()->WriteUserData( aUserData, sal_True );
             if ( !GetViewShell()->NewWindowAllowed() )
             {
-                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUsrAnyItem, SID_FILLFRAME, sal_False );
+                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
                 SfxFrame *pFrame = NULL;
                 Reference < XFrame > xFrame;
                 if ( pFrameItem )
@@ -2863,7 +2817,7 @@ void SfxViewFrame::ExecView_Impl
             {
                 pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
 
-                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUsrAnyItem, SID_FILLFRAME, sal_False );
+                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
                 if ( pFrameItem )
                 {
                     Reference < XFrame > xFrame;
