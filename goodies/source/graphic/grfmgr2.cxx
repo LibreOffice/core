@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:37:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,6 +1975,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
     // #107607# Use logical coordinates for metafile playing, too
     bool    bDrawInPixel( rOut.GetConnectMetaFile() == NULL && GRAPHIC_BITMAP == GetType() );
+    BOOL    bRet( FALSE );
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
@@ -1991,14 +1992,14 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
         {
             // #105229# work with pixel coordinates here, mapping is disabled!
             // #104004# don't disable mapping for metafile recordings
-            if( !Draw( &rOut,
-                       bDrawInPixel ? aCurrPos : rOut.PixelToLogic( aCurrPos ),
-                       bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
-                       pAttr, nFlags ) )
-            {
-                rOut.EnableMapMode( bOldMap );
-                return FALSE;
-            }
+            // #108412# don't quit the loop if one draw fails
+
+            // update return value. This method should return true, if
+            // at least one of the looped Draws succeeded.
+            bRet |= Draw( &rOut,
+                          bDrawInPixel ? aCurrPos : rOut.PixelToLogic( aCurrPos ),
+                          bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
+                          pAttr, nFlags );
 
             aCurrPos.X() += rTileSizePixel.Width();
         }
@@ -2009,5 +2010,86 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     if( bDrawInPixel )
         rOut.EnableMapMode( bOldMap );
 
-    return TRUE;
+    return bRet;
 }
+
+// -----------------------------------------------------------------------------
+
+void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
+                                         const GraphicAttr& rAttr,
+                                         const Size&        rCropLeftTop,
+                                         const Size&        rCropRightBottom,
+                                         const Rectangle&   rCropRect,
+                                         const Size&        rDstSize,
+                                         BOOL               bEnlarge ) const
+{
+    // #107947# Extracted from svdograf.cxx
+
+    // #104115# Crop the bitmap
+    if( rAttr.IsCropped() )
+    {
+        rBmpEx.Crop( rCropRect );
+
+        // #104115# Negative crop sizes mean: enlarge bitmap and pad
+        if( bEnlarge &&
+            rCropLeftTop.Width() < 0 ||
+            rCropLeftTop.Height() < 0 ||
+            rCropRightBottom.Width() < 0 ||
+            rCropRightBottom.Height() < 0 )
+        {
+            Size aBmpSize( rBmpEx.GetSizePixel() );
+            sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );
+            sal_Int32 nPadTop( rCropLeftTop.Height() < 0 ? -rCropLeftTop.Height() : 0 );
+            sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (rCropRightBottom.Width() < 0 ? -rCropRightBottom.Width() : 0) );
+            sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (rCropRightBottom.Height() < 0 ? -rCropRightBottom.Height() : 0) );
+
+            BitmapEx aBmpEx2;
+
+            if( rBmpEx.IsTransparent() )
+            {
+                if( rBmpEx.IsAlpha() )
+                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
+                else
+                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
+            }
+            else
+            {
+                // #104115# Generate mask bitmap and init to zero
+                Bitmap aMask( aBmpSize, 1 );
+                aMask.Erase( Color(0,0,0) );
+
+                // #104115# Always generate transparent bitmap, we need the border transparent
+                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), aMask );
+
+                // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
+                rBmpEx = aBmpEx2;
+            }
+
+            aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
+            aBmpEx2.Erase( Color(0xFF,0,0,0) );
+            aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
+            rBmpEx = aBmpEx2;
+        }
+    }
+
+    const Size  aSizePixel( rBmpEx.GetSizePixel() );
+
+    if( rAttr.GetRotation() != 0 && !IsAnimated() )
+    {
+        if( aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height() )
+        {
+            double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
+            double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
+            double fScaleX = 1.0, fScaleY = 1.0;
+
+            // always choose scaling to shrink bitmap
+            if( fSrcWH < fDstWH )
+                fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+            else
+                fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+            rBmpEx.Scale( fScaleX, fScaleY );
+        }
+    }
+}
+
