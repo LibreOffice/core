@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:06:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,6 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-
-
 
 SV_IMPL_VARARR_SORT( _SwPamRanges, SwPamRange )
 
@@ -280,8 +278,71 @@ BOOL SwEditShell::NumUpDown( BOOL bDown )
     EndAllAction();
     return bRet;
 }
+// -> #i23726#
+BOOL SwEditShell::IsFirstOfNumRule() const
+{
+    BOOL bResult = FALSE;
 
+    SwPaM * pCrsr = GetCrsr();
+    if (pCrsr->GetNext() == pCrsr)
+    {
+        bResult = IsFirstOfNumRule(*pCrsr->GetPoint());
+    }
 
+    return bResult;
+}
+
+BOOL SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
+{
+    BOOL bResult = FALSE;
+
+    SwPosition aPos(*rPaM.GetPoint());
+    bResult = GetDoc()->IsFirstOfNumRule(aPos);
+
+    return bResult;
+}
+// <- #i23726#
+
+// -> #i23725#
+void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
+{
+    StartAllAction();
+
+    SwNumRule aRule(*GetCurNumRule());
+
+    aRule.Indent(nIndent, nLevel, bRelative);
+
+    SetCurNumRule(aRule);
+
+    EndAllAction();
+}
+
+void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
+{
+    StartAllAction();
+
+    SwNumRule *pCurNumRule = GetDoc()->GetCurrNumRule(rPos);
+
+    if (pCurNumRule)
+    {
+        SwPaM aPaM(rPos);
+        SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
+
+        int nLevel = -1;
+        int nReferenceLevel = pTxtNode->GetNum()->GetLevel();
+
+        if (! IsFirstOfNumRule(aPaM) && pTxtNode->GetNum())
+            nLevel = nReferenceLevel;
+
+        SwNumRule aRule(*pCurNumRule);
+        aRule.Indent(nIndent, nLevel, nReferenceLevel, FALSE);
+
+        GetDoc()->SetNumRule(aPaM, aRule, sal_False, sal_True);
+    }
+
+    EndAllAction();
+}
+// <- #i23725#
 
 BOOL SwEditShell::MoveParagraph( long nOffset )
 {
@@ -540,18 +601,35 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
 BOOL SwEditShell::IsNoNum( BOOL bChkStart, BOOL bOutline ) const
 {
     // ein Backspace im Absatz ohne Nummer wird zum Delete
-    const SwTxtNode* pTxtNd;
-    const SwNodeNum* pNum;
+    BOOL bResult = FALSE;
     SwPaM* pCrsr = GetCrsr();
 
-    return pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-        (!bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) &&
-        0 != ( pTxtNd = pCrsr->GetNode()->GetTxtNode()) &&
-        ( bOutline ? (NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() &&
-                      0 != (pNum = pTxtNd->GetOutlineNum() ))
-                   : (pTxtNd->GetNumRule() &&
-                      0 != (pNum = pTxtNd->GetNum() ) )) &&
-        ! pNum->IsNum();
+    if (pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
+        (!bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()))
+    {
+        const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
+
+        if (pTxtNd)
+        {
+            const SwNodeNum* pNum = NULL;
+
+            if (bOutline)
+            {
+                if (NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel())
+                {
+                    pNum = pTxtNd->GetOutlineNum();
+                }
+            }
+            else if (pTxtNd->GetNumRule())
+            {
+                pNum = pTxtNd->GetNum();
+            }
+            if (pNum)
+                bResult =  pNum->GetLevel() & NO_NUMLEVEL;
+        }
+    }
+
+    return bResult;
 }
 
 
