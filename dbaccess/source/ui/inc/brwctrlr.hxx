@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:12:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,7 @@ namespace dbaui
 
         sal_uInt16  getCurrentColumnPosition();
         void        setCurrentColumnPosition(sal_uInt16 _nPos);
+        void        deleteView();
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, void* );
@@ -423,7 +424,6 @@ namespace dbaui
             // OnOpenFinishedMainThread-link (which will be called in the main thread, then) as user event.
             // (the alternative would be to lock the SolarMutex in OnOpenFinished to avoid problems with the needed updates,
             // but playing with this mutex seems very hazardous to me ....)
-        DECL_LINK(OnAsyncClose, void*);
         DECL_LINK(OnAsyncGetCellFocus, void*);
     };
 
