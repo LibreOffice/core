@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 07:50:20 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,49 +1365,3 @@ SfxViewFrame *SfxApplication::CreateView_Impl
     SfxFrame* pFrame = SfxTopFrame::Create( pDoc, 0, bHidden, pSet );
     return pFrame->GetCurrentViewFrame();
 }
-
-//--------------------------------------------------------------------
-
-void SfxApplication::CreateDocState_Impl(SfxItemSet &rSet)
-{
-    DBG_MEMTEST();
-    const USHORT *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set ohne Bereich");
-    while(*pRanges)
-    {
-        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
-        {
-            switch(nWhich)
-            {
-                case SID_CURRENT_URL:
-                {
-                    SfxViewFrame *pFrame = pViewFrame;
-                    if ( pFrame )
-                    {
-                        // Bei internem InPlace den ContainerFrame nehmen
-                        if ( pFrame->GetParentViewFrame_Impl() )
-                            pFrame = pFrame->GetParentViewFrame_Impl();
-
-                        // URL des aktiven Frames anzeigen; wenn es ein Frame
-                        // in einem als Frameset implementierten Dokument ist, dann
-                        // die URL des Framesets anzeigen ( Explorer, Mail ).
-                        if ( pFrame->GetParentViewFrame() )
-                        {
-                            if ( pFrame->GetParentViewFrame()->GetViewShell()->
-                                IsImplementedAsFrameset_Impl() )
-                            pFrame = pFrame->GetParentViewFrame();
-                        }
-
-                        rSet.Put( SfxStringItem( nWhich, pFrame->GetActualPresentationURL_Impl() ) );
-                    }
-                    else
-                        rSet.Put( SfxStringItem( nWhich, String() ) );
-                    break;
-                }
-            }
-        }
-        ++pRanges;
-    }
-}
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-08 08:47:29 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,18 +713,18 @@ void SfxChildWindow::Hide()
 
 
 
-void SfxChildWindow::Show()
+void SfxChildWindow::Show( USHORT nFlags )
 {
     switch ( pWindow->GetType() )
     {
         case RSC_DOCKINGWINDOW :
-            ((DockingWindow*)pWindow)->Show();
+            ((DockingWindow*)pWindow)->Show( TRUE, nFlags );
             break;
         case RSC_TOOLBOX :
-            ((ToolBox*)pWindow)->Show();
+            ((ToolBox*)pWindow)->Show( TRUE, nFlags );
             break;
         default:
-            pWindow->Show();
+            pWindow->Show( TRUE, nFlags );
             break;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-25 16:13:03 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,16 +881,16 @@ void SfxWorkWindow::ShowChilds_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        ((DockingWindow*)pCli->pWin)->Show();
+                        ((DockingWindow*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         break;
                     case RSC_TOOLBOX :
-                        ((ToolBox*)pCli->pWin)->Show();
+                        ((ToolBox*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         break;
                     case RSC_SPLITWINDOW :
-                        ((SplitWindow*)pCli->pWin)->Show();
+                        ((SplitWindow*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         break;
                     default:
-                        pCli->pWin->Show();
+                        pCli->pWin->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         break;
                 }
             }
@@ -1256,7 +1256,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
                     if ( IsDockingAllowed() && bAllChildsVisible )
                         rpCli->nVisible |= CHILD_ACTIVE;
                     if ( CHILD_VISIBLE == (rpCli->nVisible & CHILD_VISIBLE) )
-                        rTbx.Show();
+                        rTbx.Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
             }
         }
@@ -1708,7 +1708,7 @@ void SfxWorkWindow::HidePopups_Impl(BOOL bHide, BOOL bParent, USHORT nId )
                 {
                     pCli->nVisible |= CHILD_ACTIVE;
                     if ( bHasTbx && CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) )
-                        aObjBars[n].pTbx->GetToolBox().Show();
+                        aObjBars[n].pTbx->GetToolBox().Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
             }
         }
@@ -1730,7 +1730,7 @@ void SfxWorkWindow::HidePopups_Impl(BOOL bHide, BOOL bParent, USHORT nId )
             {
                 pChild->nVisible |= CHILD_ACTIVE;
                 if ( CHILD_VISIBLE == (pChild->nVisible & CHILD_VISIBLE) )
-                    pCW->Show();
+                    pCW->Show( SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
     }
@@ -1819,7 +1819,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                 pWin = pSplitWin->GetSplitWindow();
                 if ( pSplitWin->GetWindowCount() == 1 )
-                    ((SplitWindow*)pWin)->Show();
+                    ((SplitWindow*)pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
 
@@ -2113,7 +2113,7 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( ULONG lId, BOOL bEnabled, USHORT
 //--------------------------------------------------------------------
 // Der An/Aus-Status eines ChildWindows wird umgeschaltet.
 
-void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
+void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
 {
     USHORT nCount = pChildWins->Count();
     USHORT n;
@@ -2146,7 +2146,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
                 if ( pChild && pChild->IsHideAtToggle() )
                 {
                     pCW->bCreate = !pCW->bCreate;
-                    ShowChildWindow_Impl( nId, pCW->bCreate );
+                    ShowChildWindow_Impl( nId, pCW->bCreate, bSetFocus );
                 }
                 else
                 {
@@ -2167,7 +2167,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
 
             if ( pChild )
             {
-                ShowChildWindow_Impl( nId, pCW->bCreate );
+                ShowChildWindow_Impl( nId, pCW->bCreate, bSetFocus );
             }
             else
             {
@@ -2197,7 +2197,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
     }
     else if ( pParent )
     {
-        pParent->ToggleChildWindow_Impl( nId );
+        pParent->ToggleChildWindow_Impl( nId, bSetFocus );
         return;
     }
 
@@ -2325,7 +2325,7 @@ BOOL SfxWorkWindow::KnowsChildWindow_Impl(USHORT nId)
 
 //--------------------------------------------------------------------
 
-void SfxWorkWindow::SetChildWindow_Impl(USHORT nId, BOOL bOn)
+void SfxWorkWindow::SetChildWindow_Impl(USHORT nId, BOOL bOn, BOOL bSetFocus)
 {
     SfxChildWin_Impl *pCW=NULL;
     SfxWorkWindow *pWork = pParent;
@@ -2372,12 +2372,12 @@ void SfxWorkWindow::SetChildWindow_Impl(USHORT nId, BOOL bOn)
     }
 
     if ( pCW->bCreate != bOn )
-        pWork->ToggleChildWindow_Impl(nId);
+        pWork->ToggleChildWindow_Impl(nId,bSetFocus);
 }
 
 //--------------------------------------------------------------------
 
-void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible)
+void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFocus)
 {
     USHORT nCount = pChildWins->Count();
     SfxChildWin_Impl* pCW=0;
@@ -2400,7 +2400,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible)
                 if ( pCW->pCli )
                 {
                     pCW->pCli->nVisible = CHILD_VISIBLE;
-                    pChildWin->Show();
+                    pChildWin->Show( bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
                 else
                     ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
@@ -2423,7 +2423,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible)
         }
         else if ( bVisible )
         {
-            SetChildWindow_Impl( nId, TRUE );
+            SetChildWindow_Impl( nId, TRUE, bSetFocus );
             pChildWin = pCW->pWin;
         }
 
@@ -2443,7 +2443,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible)
 
     if ( pParent )
     {
-        pParent->ShowChildWindow_Impl( nId, bVisible );
+        pParent->ShowChildWindow_Impl( nId, bVisible, bSetFocus );
         return;
     }
 
