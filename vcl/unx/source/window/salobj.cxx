@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:46:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,8 @@ X11SalObject::X11SalObject()
 
     mpInst                          = NULL;
     mpProc                          = ImplSalObjCallbackDummy;
-    maPrimary                       = NULL;
-    maSecondary                 = NULL;
+    maPrimary                       = 0;
+    maSecondary                     = 0;
 
     X11SalObject::aAllObjects.Insert( this, LIST_APPEND );
 }
