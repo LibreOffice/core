@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:29:47 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,18 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
+#endif
+#ifndef SC_SCDOCPOL_HXX
+#include "docpool.hxx"
 #endif
 #ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
@@ -96,6 +106,9 @@
 #endif
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
+#endif
+#ifndef SC_SCPATATR_HXX
+#include "patattr.hxx"
 #endif
 
 #ifndef SC_XLSTYLE_HXX
@@ -122,6 +135,7 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     maDocUrl( rDocUrl ),
     maBasePath( rDocUrl, 0, rDocUrl.SearchBackward( '/' ) + 1 ),
     meCharSet( eCharSet ),
+    meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
@@ -277,7 +291,17 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetUpdateMode( FALSE );
         rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
-    }
+
+        // set Calc header/footer defaults
+        SfxItemSet* pEditSet = new SfxItemSet( rEE.GetEmptyItemSet() );
+        SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
+        ScPatternAttr::FillToEditItemSet( *pEditSet, aItemSet );
+        // FillToEditItemSet() adjusts font height to 1/100th mm, we need twips
+        pEditSet->Put( aItemSet.Get( ATTR_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT );
+        pEditSet->Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT_CJK );
+        pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT_CTL );
+        rEE.SetDefaults( pEditSet );    // takes ownership
+   }
     return *mrData.mpHFEditEngine;
 }
 
