@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:11:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,34 +551,6 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 }
 
 
-//__________________________________________________________________________________________________
-
-// FIXME: this is overkill, we should flush the data caches and invalidate
-// the instruction caches in loop and then do the sync, isync at the end
-
-void flush_icache(unsigned char *addr)
-{
-  __asm__ volatile (
-                "dcbf 0,%0;"
-                "sync;"
-                "icbi 0,%0;"
-                "sync;"
-                "isync;"
-                : : "r"(addr) : "memory");
-}
-
-
-void flush_range(unsigned char * addr1, int size)
-{
-#define MIN_LINE_SIZE 32
-  int i;
-  for (i = 0; i < size; i += MIN_LINE_SIZE)
-    flush_icache(addr1+i);
-  flush_icache(addr1+size-1);
-}
-
-
-
 int const codeSnippetSize = 136;
 
 unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
@@ -695,6 +667,18 @@ unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
 }
 
 
+#define MIN_LINE_SIZE 32
+
+void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * bptr, unsigned char const * eptr)
+{
+  unsigned char * eaddr = (unsigned char *) eptr + MIN_LINE_SIZE + 1;
+  for (  unsigned char * addr  = (unsigned char *) bptr; addr < eaddr; addr += MIN_LINE_SIZE) {
+      __asm__ volatile ( "dcbf 0,%0;" "icbi 0,%0;" : : "r"(addr) : "memory");
+  }
+  __asm__ volatile ( "sync;" "isync;" : : : "memory");
+}
+
+
 void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(char * block)
 {
     return reinterpret_cast< void ** >(block) + 2;
@@ -721,7 +705,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
   // fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
   // fflush(stderr);
 
-    unsigned char * ncode;
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
@@ -730,15 +713,12 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
             *slots++ = code;
-            ncode = codeSnippet(
+            code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
                     reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription * >(
                         member)->pAttributeTypeRef));
-            flush_range(code,codeSnippetSize);
-            code = ncode;
-
 
             // Setter:
             if (!reinterpret_cast<
@@ -746,22 +726,18 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     member)->bReadOnly)
             {
                 *slots++ = code;
-                ncode = codeSnippet(code, functionOffset++, vtableOffset, true);
-                flush_range(code,codeSnippetSize);
-                code = ncode;
+                code = codeSnippet(code, functionOffset++, vtableOffset, true);
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
             *slots++ = code;
-            ncode = codeSnippet(
+            code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
                     reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription * >(
                         member)->pReturnTypeRef));
-            flush_range(code,codeSnippetSize);
-            code = ncode;
             break;
 
         default:
