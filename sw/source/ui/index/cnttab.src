@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 18:16:41 $
+ *  last change: $Author: os $ $Date: 2001-01-25 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2183,7 +2183,7 @@ TabPage TP_TOX_ENTRY
     Window WIN_TOKEN
     {
         Pos = MAP_APPFONT (  37, 12 ) ;
-        Size = MAP_APPFONT ( 212, 12 ) ;
+        Size = MAP_APPFONT ( 159, 12 ) ;
         ImageButton WIN_LEFT_SCROLL
         {
             Pos = MAP_APPFONT (  0, 0 ) ;
@@ -2193,11 +2193,11 @@ TabPage TP_TOX_ENTRY
         Window WIN_CTRL_PARENT
         {
             Pos = MAP_APPFONT (  11, 0 ) ;
-            Size = MAP_APPFONT ( 190, 12 ) ;
+            Size = MAP_APPFONT ( 137, 12 ) ;
         };
         ImageButton WIN_RIGHT_SCROLL
         {
-            Pos = MAP_APPFONT (  202, 0 ) ;
+            Pos = MAP_APPFONT (  149, 0 ) ;
             Size = MAP_APPFONT ( 10, 12 ) ;
             Symbol = IMAGEBUTTON_ARROW_RIGHT;
         };

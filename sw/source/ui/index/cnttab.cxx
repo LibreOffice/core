@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 14:25:03 $
+ *  last change: $Author: os $ $Date: 2001-01-25 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2810,7 +2810,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
         aHyperLinkPB.SetPosPixel(aButtonPositions[4]);
 
         //show or hide controls
-        aAllLevelsPB.Show(      bToxIsContent );
         aEntryNoPB.Show(        bToxIsContent );
         aHyperLinkPB.Show(      bToxIsContent );
         aRelToStyleCB.Show(    !bToxIsAuthorities );
@@ -2848,23 +2847,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
         aAlphaDelimCB.Show(     bToxIsIndex );
         aCommaSeparatedCB.Show( bToxIsIndex );
 
-        //Resizing
-        if( TOX_CONTENT == aLastTOXType.eType|| bToxIsContent )
-        {
-         Point aTokenWinPos(aTokenWIN.GetPosPixel());
-         Size aTokenWinSz(aTokenWIN.GetSizePixel());
-
-            long nButtonWidth = aAllLevelsPB.GetSizePixel().Width();
-            long nButtonXPos = aAllLevelsPB.GetPosPixel().X();
-            long nTokenWinSize;
-            if( bToxIsContent )
-                nTokenWinSize = nButtonXPos - ( nButtonWidth / 13);
-            else
-                nTokenWinSize = nButtonXPos + nButtonWidth;
-            nTokenWinSize -= aTokenWinPos.X();
-            aTokenWinSz.Width() = nTokenWinSize;
-            aTokenWIN.SetSizePixel(aTokenWinSz);
-        }
     }
     aLastTOXType = aCurType;
 
