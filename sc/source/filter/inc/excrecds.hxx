@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:51:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ protected:
                             ExcBundlesheetBase();
 
 public:
-                            ExcBundlesheetBase( RootData& rRootData, UINT16 nTab );
+                            ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
     inline void             SetStreamPos( ULONG nNewStrPos ) { nStrPos = nNewStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
@@ -384,7 +384,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
-                            ExcBundlesheet( RootData& rRootData, UINT16 nTab );
+                            ExcBundlesheet( RootData& rRootData, SCTAB nTab );
     virtual ULONG           GetLen() const;
 };
 
@@ -812,7 +812,7 @@ protected:
 
 public:
                             ExcNameListEntry();
-                            ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey );
+                            ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKey );
     virtual                 ~ExcNameListEntry();
 
     inline UINT16           GetTabIndex() const     { return nTabNum; }
@@ -870,7 +870,7 @@ protected:
     void                    CreateFormula( RootData& rRootData );
 
 public:
-                            XclBuildInName( RootData& rRootData, UINT16 nScTab, UINT8 nKey );
+                            XclBuildInName( RootData& rRootData, SCTAB nScTab, UINT8 nKey );
 };
 
 
@@ -879,14 +879,14 @@ public:
 class XclPrintRange : public XclBuildInName
 {
 public:
-                            XclPrintRange( RootData& rRootData, UINT16 nScTab );
+                            XclPrintRange( RootData& rRootData, SCTAB nScTab );
 };
 
 
 class XclPrintTitles : public XclBuildInName
 {
 public:
-                            XclPrintTitles( RootData& rRootData, UINT16 nScTab );
+                            XclPrintTitles( RootData& rRootData, SCTAB nScTab );
 };
 
 
@@ -913,7 +913,7 @@ public:
     UINT16                  GetBuiltInIx( const ExcNameListEntry* pName );
 
     /** Inserts a named range in table name sort order. */
-    void                    InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab );
+    void                    InsertSorted( RootData& rRootData, ExcNameListEntry* pName, SCTAB nScTab );
 
 
     virtual void            Save( XclExpStream& rStrm );
@@ -935,11 +935,11 @@ private:
 
 public:
                             ExcDimensions( BiffTyp );
-                            ExcDimensions( UINT16 nFirstCol, UINT16 nFirstRow,
-                                UINT16 nLastCol, UINT16 nLastRow, BiffTyp );
+                            ExcDimensions( SCCOL nFirstCol, SCROW nFirstRow,
+                                SCCOL nLastCol, SCROW nLastRow, BiffTyp );
 
-    void                    SetLimits( UINT16 nFirstCol, UINT16 nFirstRow,
-                                UINT16 nLastCol, UINT16 nLastRow );
+    void                    SetLimits( SCCOL nFirstCol, SCROW nFirstRow,
+                                SCCOL nLastCol, SCROW nLastRow );
 
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;
@@ -961,7 +961,7 @@ protected:
 public:
                                 ExcEOutline( ScOutlineArray* pArray );
 
-    void                        Update( UINT16 nNum );
+    void                        Update( SCCOLROW nNum );
 
     inline BOOL                 IsCollapsed() const     { return bIsColl; }
     inline UINT16               GetLevel() const
@@ -1003,16 +1003,16 @@ private:
     sal_uInt32              mnXFId;
     BOOL                    bDefHeight;
 
-    void                    SetRange( UINT16 nFCol, UINT16 nLCol );
+    void                    SetRange( SCCOL nFCol, SCCOL nLCol );
     void                    SetHeight( UINT16 nNewHeight, BOOL bUser );
     BOOL                    ForceUserHeightFlag(const XclExpRoot& rRoot,ScDocument& rDoc,
-                                sal_uInt16 nRow, sal_uInt16 nTab);
+                                SCROW nRow, SCTAB nTab);
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
-                            ExcRow( const XclExpRoot& rRoot, UINT16 nNum, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
+                            ExcRow( const XclExpRoot& rRoot, SCROW nNum, SCTAB nTab, SCCOL nFCol, SCCOL nLCol,
                                 sal_uInt32 nXFId, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rExcTab );
 
     inline BOOL             IsDefault();
@@ -1064,21 +1064,21 @@ private:
 public:
     explicit                XclExpColinfo(
                                 const XclExpRoot& rRoot,
-                                sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId,
+                                SCCOL nScCol, SCTAB nScTab, sal_uInt32 nXFId,
                                 ExcEOutline& rOutline );
 
     /** Tries to expand this record with a new column.
         @descr  This can be done, if the new column has the same settings as all other columns.
         @return  true = Expansion was successful, no new COLINFO record is needed. */
     bool                    Expand(
-                                sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId,
+                                SCCOL nScCol, SCTAB nScTab, sal_uInt32 nXFId,
                                 ExcEOutline& rOutline );
 
 private:
     /** Returns the Excel width of the passed Calc column. */
-    sal_uInt16              GetWidth( sal_uInt16 nScCol, sal_uInt16 nScTab ) const;
+    sal_uInt16              GetWidth( SCCOL nScCol, SCTAB nScTab ) const;
     /** Returns the Excel option flags of the passed Calc column. */
-    sal_uInt16              GetFlags( sal_uInt16 nScCol, sal_uInt16 nScTab, ExcEOutline& rOutline ) const;
+    sal_uInt16              GetFlags( SCCOL nScCol, SCTAB nScTab, ExcEOutline& rOutline ) const;
 
     /** Writes the contents of this COLINFO record. */
     virtual void            WriteBody( XclExpStream& rStrm );
@@ -1110,7 +1110,7 @@ private:
 
     virtual void            SaveCont( XclExpStream& rStrm );
 public:
-                            ExcExternsheet( RootData* pRD, const UINT16 nTabNum );
+                            ExcExternsheet( RootData* pRD, const SCTAB nTabNum );
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;
 };
@@ -1220,7 +1220,7 @@ private:
 
 protected:
 public:
-    inline                  ExcAutoFilterInfo( UINT16 nC )  { nCount = nC; }
+    inline                  ExcAutoFilterInfo( SCCOL nC )   { nCount = static_cast<sal_uInt16>(nC); }
     virtual                 ~ExcAutoFilterInfo();
 
     virtual UINT16          GetNum() const;
@@ -1291,17 +1291,17 @@ private:
 
     inline ExcAutoFilter*   _First()    { return (ExcAutoFilter*) List::First(); }
     inline ExcAutoFilter*   _Next()     { return (ExcAutoFilter*) List::Next(); }
-    ExcAutoFilter*          GetByCol( UINT16 nCol );    // always 0-based
+    ExcAutoFilter*          GetByCol( SCCOL nCol ); // always 0-based
 
-    BOOL                    IsFiltered( UINT16 nCol );
+    BOOL                    IsFiltered( SCCOL nCol );
 
     void                    DeleteList();
     inline void             Append( ExcAutoFilter* pFilter )
                                 { List::Insert( pFilter, LIST_APPEND ); }
-    void                    AddObjRecs( RootData& rRoot, const ScAddress& rPos, UINT16 nCols );
+    void                    AddObjRecs( RootData& rRoot, const ScAddress& rPos, SCCOL nCols );
 protected:
 public:
-                            ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab );
+                            ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab );
     virtual                 ~ExcAutoFilterRecs();
 
     virtual void            Save( XclExpStream& rStrm );
