@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:42:50 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,9 +415,7 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
     const IntlWrapper*        pIntl
 )   const
 {
-    // no UI support available
-    return SfxBoolItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntl );
-/*    switch ( ePres )
+    switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText.Erase();
@@ -431,7 +429,6 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
         }
     }
     return SFX_ITEM_PRESENTATION_NONE;
- */
 }
 
 
