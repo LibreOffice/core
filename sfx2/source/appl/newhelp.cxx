@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:04:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     if ( !IsWait() )
         EnterWait();
     sal_Bool bSuccess = sal_False;
-    while(sal_True)
+// TODO implement locale fallback ... see below    while(sal_True)
     {
         try
         {
@@ -1651,13 +1651,13 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
             if (xContent.is())
             {
                 bSuccess = sal_True;
-                break;
+//                break;
             }
         }
         catch(const RuntimeException&)
             { throw; }
         catch(const Exception&)
-            { break; }
+            { /*break;*/ }
 
         /* TODO try next locale ...
                 no further locale available? => break loop and show error page
