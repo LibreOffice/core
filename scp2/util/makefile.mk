@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2004-02-05 18:10:37 $
+#   last change: $Author: is $ $Date: 2004-02-10 17:45:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,8 @@ SCP1FILES  = installation_ooo.par          \
              module_python.par             \
              file_python.par               \
              procedure_python.par          \
+             configurationitem_python.par  \
+             starregistryitem_python.par   \
              profileitem_python.par
 
 .IF "$(SOLAR_JAVA)"!=""
