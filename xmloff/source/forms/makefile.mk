@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: fs $ $Date: 2002-10-02 14:28:21 $
+#   last change: $Author: mh $ $Date: 2002-10-22 13:06:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..
 
 PRJNAME=xmloff
 TARGET=forms
-AUTOSEG=true
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -75,29 +74,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        officeforms.cxx \
-        formevents.cxx \
-        eventimport.cxx \
-        eventexport.cxx \
-        controlpropertyhdl.cxx \
-        controlpropertymap.cxx \
-        valueproperties.cxx \
-        attriblistmerge.cxx \
-        controlelement.cxx \
-        formlayerexport.cxx \
-        layerexport.cxx \
-        elementexport.cxx \
-        propertyexport.cxx \
-        elementimport.cxx \
-        layerimport.cxx \
-        propertyimport.cxx \
-        formlayerimport.cxx \
-        formattributes.cxx \
-        formenums.cxx \
-        formsimp.cxx \
-        strings.cxx
 
 SLOFILES =	\
         $(SLO)$/officeforms.obj \
@@ -121,19 +97,7 @@ SLOFILES =	\
         $(SLO)$/formenums.obj \
         $(SLO)$/formsimp.obj \
         $(SLO)$/strings.obj \
-        $(SLO)$/logging.obj \
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/controlpropertyhdl.obj \
-        $(OBJ)$/controlpropertymap.obj \
-        $(OBJ)$/attriblistmerge.obj \
-        $(OBJ)$/elementimport.obj \
-        $(OBJ)$/layerimport.obj \
-        $(OBJ)$/propertyimport.obj \
-        $(OBJ)$/formlayerimport.obj \
-        $(OBJ)$/formattributes.obj \
-        $(OBJ)$/formenums.obj \
-        $(OBJ)$/strings.obj
+        $(SLO)$/logging.obj
 
 # --- Tagets -------------------------------------------------------
 
