@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:34:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UserProfile" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<author>DG</author>
+		<author>PB / JB</author>
 		<desc >Contains user-related information, such as name and address.</desc>
 	</info>
 	<component>
