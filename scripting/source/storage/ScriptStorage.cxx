@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.17 $
-*  last change: $Author: npower $ $Date: 2003-02-19 16:07:55 $
+*  $Revision: 1.18 $
+*  last change: $Author: npower $ $Date: 2003-03-04 13:26:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -671,12 +671,12 @@ throw ( lang::IllegalArgumentException,
         if ( checkFuncNeeded && checkLangNeeded )
         {
             OSL_TRACE("checking funcname and lang (func)");
-            if ( queryLang.equals( scriptData.functionname ) == sal_True )
+            if ( queryFunc.equals( scriptData.functionname ) != sal_True )
             {
                 continue;
             }
             OSL_TRACE("checking funcname and lang (lang)");
-            if ( queryFunc.equals( scriptData.language ) == sal_True)
+            if ( queryLang.equals( scriptData.language )!= sal_True)
             {
                 continue;
             }
@@ -685,7 +685,7 @@ throw ( lang::IllegalArgumentException,
         else if ( checkFuncNeeded )
         {
             OSL_TRACE("checking funcname");
-            if ( queryFunc.equals( scriptData.functionname ) == sal_True )
+            if ( queryFunc.equals( scriptData.functionname ) != sal_True )
             {
                 continue;
             }
@@ -694,7 +694,7 @@ throw ( lang::IllegalArgumentException,
         else if ( checkLangNeeded )
         {
             OSL_TRACE("checking lang");
-            if ( queryLang.equals( scriptData.language ) == sal_True )
+            if ( queryLang.equals( scriptData.language ) != sal_True )
             {
                 continue;
             }
