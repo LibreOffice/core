@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:53:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,12 @@
 #include "swundo.hxx"                   // fuer Undo-Ids
 #include "textsh.hxx"
 #include "idxmrk.hxx"
-#include "multmrk.hxx"
+//CHINA001 #include "multmrk.hxx"
 #include "cnttab.hxx"
 #include "toxmgr.hxx"
-
+#include "swabstdlg.hxx" //CHINA001
+#include <index.hrc> //CHINA001
+#include <globals.hrc> //CHINA001
 // STATIC DATA -----------------------------------------------------------
 
 void SwTextShell::ExecIdx(SfxRequest &rReq)
@@ -122,7 +124,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
     {
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
-            SwAuthMarkModalDlg* pDlg = new SwAuthMarkModalDlg(pMDI, GetShell());
+            //CHINA001 SwAuthMarkModalDlg* pDlg = new SwAuthMarkModalDlg(pMDI, GetShell());
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( pMDI, GetShell(), ResId(DLG_EDIT_AUTHMARK) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
         }
@@ -151,13 +157,22 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             if(aMgr.GetTOXMarkCount() > 1)
             {   // Mehrere Marken, welche solls denn sein ?
                 //
-                SwMultiTOXMarkDlg* pMultDlg = new SwMultiTOXMarkDlg(pMDI, aMgr);
+                //CHINA001 SwMultiTOXMarkDlg* pMultDlg = new SwMultiTOXMarkDlg(pMDI, aMgr);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg( ResId(DLG_MULTMRK),
+                                                        pMDI, aMgr);
+                DBG_ASSERT(pMultDlg, "Dialogdiet fail!");//CHINA001
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;
             }
             if( nRet == RET_OK)
             {
-                SwIndexMarkModalDlg* pDlg = new SwIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark());
+                //CHINA001 SwIndexMarkModalDlg* pDlg = new SwIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark());
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                VclAbstractDialog* pDlg = pFact->CreateIndexMarkModalDlg( ResId(DLG_EDIT_IDXMARK), pMDI, GetShell(), aMgr.GetCurTOXMark() );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->Execute();
                 delete pDlg;
             }
@@ -202,8 +217,14 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                     aSet.Put(*pSet);
             }
 
-            SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
-                                                                            USHRT_MAX, bGlobal);
+//CHINA001          SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
+//CHINA001          USHRT_MAX, bGlobal);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( ResId(DLG_MULTI_TOX),
+                                                        pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
+                                                        USHRT_MAX, bGlobal);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
         }
