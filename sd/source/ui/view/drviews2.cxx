@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-28 12:04:24 $
+ *  last change: $Author: aw $ $Date: 2001-10-24 14:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
     maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
     maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
     maImage.SetImage(WarningBox::GetStandardImage());
+
+    // #93721# Set focus to YES-Button
+    maYesBtn.GrabFocus();
 }
 
 /*************************************************************************
