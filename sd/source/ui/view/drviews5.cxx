@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:12:31 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,8 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
 
     if (pDrView->IsFillDraft() != pView->IsFillDraft() )
     {
-        pDrView->ReleaseMasterPagePaintCache();
+// #110094#-7
+//      pDrView->ReleaseMasterPagePaintCache();
         pDrView->SetFillDraft( pView->IsFillDraft() );
     }
 
@@ -597,61 +598,67 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 
     if( pWin )
     {
-        if( !pFuSlideShow || pWin != (SdWindow*) pFuSlideShow->GetShowWindow() )
-        {
-            const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
-            const Color         aOldLineColor( pWin->GetLineColor() );
-            const Color         aOldFillColor( pWin->GetFillColor() );
-            const ULONG         nOldDrawMode( pWin->GetDrawMode() );
-            const BOOL          bOldMap = pWin->IsMapModeEnabled();
-            Point               aNullPoint;
-            const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
-            Rectangle           aOutputPaperRect, aPaperRect;
-
-            if( pPageView )
-                aPaperRect = pPageView->GetPageRect();
-            else
-                aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
-
-            ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
-
-            pWin->EnableMapMode( FALSE );
-            pWin->SetDrawMode( DRAWMODE_DEFAULT );
-            pWin->SetLineColor();
-            pWin->SetFillColor( aFillColor );
-
-            if( aOutputPaperRect.IsEmpty() )
-                pWin->DrawRect( aOutputRect );
-            else
-            {
-                const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-                PolyPolygon aPolyPoly( 2 );
-                Rectangle   aOutputRectExt( aOutputRect );
-
-                aOutputRectExt.Left()--;
-                aOutputRectExt.Top()--;
-                aOutputRectExt.Right()++;
-                aOutputRectExt.Bottom()++;
-
-                aPolyPoly.Insert( aOutputRectExt );
-                aPolyPoly.Insert( aOutputPaperRect );
-
-                // draw paper
-                pWin->DrawPolyPolygon( aPolyPoly );
-
-                 // draw shadow
-                pWin->SetFillColor( aShadowColor );
-                pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
-                                           Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
-                pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
-                                           Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
-            }
-
-            pWin->SetFillColor( aOldFillColor );
-            pWin->SetLineColor( aOldLineColor );
-            pWin->SetDrawMode( nOldDrawMode );
-            pWin->EnableMapMode( bOldMap );
-        }
+// #111096#
+// moved to ViewContactOfSdrPage::DrawPaper. There GetApplicationBackgroundColor
+// is used now to draw the background.
+//
+//      if( !pFuSlideShow || pWin != (SdWindow*) pFuSlideShow->GetShowWindow() )
+//      {
+//            const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
+//          const Color         aOldLineColor( pWin->GetLineColor() );
+//          const Color         aOldFillColor( pWin->GetFillColor() );
+//          const ULONG         nOldDrawMode( pWin->GetDrawMode() );
+//            const BOOL          bOldMap = pWin->IsMapModeEnabled();
+//            Point               aNullPoint;
+//            const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
+//          Rectangle           aOutputPaperRect, aPaperRect;
+//
+//            if( pPageView )
+//                aPaperRect = pPageView->GetPageRect();
+//            else
+//                aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
+//
+//            ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
+//
+//            pWin->EnableMapMode( FALSE );
+//          pWin->SetDrawMode( DRAWMODE_DEFAULT );
+//          pWin->SetLineColor();
+//          pWin->SetFillColor( aFillColor );
+//
+//            if( aOutputPaperRect.IsEmpty() )
+//                pWin->DrawRect( aOutputRect );
+//            else
+//            {
+//                const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+//                PolyPolygon aPolyPoly( 2 );
+//                Rectangle   aOutputRectExt( aOutputRect );
+//
+//                aOutputRectExt.Left()--;
+//                aOutputRectExt.Top()--;
+//                aOutputRectExt.Right()++;
+//                aOutputRectExt.Bottom()++;
+//
+//                aPolyPoly.Insert( aOutputRectExt );
+//                aPolyPoly.Insert( aOutputPaperRect );
+//
+//              // draw paper
+//                pWin->DrawPolyPolygon( aPolyPoly );
+//
+//              // #110094#
+//              // moved to ViewContactOfSdrPage::DrawPaper
+//                // // draw shadow
+//                //pWin->SetFillColor( aShadowColor );
+//                //pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
+//                //                           Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
+//                //pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
+//                //                           Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
+//            }
+//
+//          pWin->SetFillColor( aOldFillColor );
+//          pWin->SetLineColor( aOldLineColor );
+//          pWin->SetDrawMode( nOldDrawMode );
+//            pWin->EnableMapMode( bOldMap );
+//      }
     }
 
     /* #97517#  This is done before each text edit, so why not do it before every paint.
