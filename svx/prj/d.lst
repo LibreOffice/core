@@ -600,6 +600,7 @@ hedabu: ..\inc\AccessibleShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleShape.hxx
 hedabu: ..\inc\AccessibleGraphicShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleGraphicShape.hxx
 hedabu: ..\inc\AccessibleOLEShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleOLEShape.hxx
 hedabu: ..\inc\AccessibleShapeTreeInfo.hxx %_DEST%\inc%_EXT%\svx\AccessibleShapeTreeInfo.hxx
+hedabu: ..\inc\AccessibleControlShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleControlShape.hxx
 hedabu: ..\inc\IAccessibleViewForwarder.hxx %_DEST%\inc%_EXT%\svx\IAccessibleViewForwarder.hxx
 hedabu: ..\inc\IAccessibleViewForwarderListener.hxx %_DEST%\inc%_EXT%\svx\IAccessibleViewForwarderListener.hxx
 hedabu: ..\inc\ChildrenManager.hxx %_DEST%\inc%_EXT%\svx\ChildrenManager.hxx
