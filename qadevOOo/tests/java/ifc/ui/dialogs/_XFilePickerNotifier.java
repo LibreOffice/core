@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFilePickerNotifier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:45 $
+ *  last change:$Date: 2003-05-27 12:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFilePicker;
 import com.sun.star.ui.dialogs.XFilePickerListener;
 import com.sun.star.ui.dialogs.XFilePickerNotifier;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCancellable;
 import lib.MultiMethodTest;
@@ -157,7 +158,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
                 ("The object doesnt implement XFilePicker"));
         }
 
-        dir1 = util.utils.getOfficeTemp(tParam.getMSF());
+        dir1 = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         dir2 = util.utils.getFullTestURL("");
 
         XExecutableDialog exD = (XExecutableDialog) UnoRuntime.queryInterface(
