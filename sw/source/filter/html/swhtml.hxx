@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,8 @@ private:
     void InsertImage();     // htmlgrin.cxx
     void InsertEmbed();     // htmlplug.cxx
 
+    void NewObject();   // htmlplug.cxx
+    void EndObject();       // CommandLine mit Applet verkn. (htmlplug.cxx)
     void InsertApplet();    // htmlplug.cxx
     void EndApplet();       // CommandLine mit Applet verkn. (htmlplug.cxx)
     void InsertParam();     // htmlplug.cxx

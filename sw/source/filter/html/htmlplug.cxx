@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,14 +282,15 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
                              SvxCSS1PropertyInfo& rCSS1PropInfo,
                              SfxItemSet& rFlyItemSet )
 {
-    USHORT nLeftSpace = 0, nRightSpace = 0, nUpperSpace = 0, nLowerSpace = 0;
+    sal_Int32 nLeftSpace = 0, nRightSpace = 0;
+    sal_uInt16 nUpperSpace = 0, nLowerSpace = 0;
     if( (rPixSpace.Width() || rPixSpace.Height()) && Application::GetDefaultDevice() )
     {
         Size aTwipSpc( rPixSpace.Width(), rPixSpace.Height() );
         aTwipSpc =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MAP_TWIP) );
-        nLeftSpace = nRightSpace = (USHORT)aTwipSpc.Width();
+        nLeftSpace = nRightSpace = aTwipSpc.Width();
         nUpperSpace = nLowerSpace = (USHORT)aTwipSpc.Height();
     }
 
@@ -313,11 +314,11 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
     }
-    if( nLeftSpace || nRightSpace )
+    if( nLeftSpace > 0 || nRightSpace > 0 )
     {
         SvxLRSpaceItem aLRItem;
-        aLRItem.SetLeft( nLeftSpace );
-        aLRItem.SetRight( nRightSpace );
+        aLRItem.SetLeft( nLeftSpace > 0 ? nLeftSpace : 0 );
+        aLRItem.SetRight( nRightSpace > 0 ? nRightSpace : 0 );
         rFlyItemSet.Put( aLRItem );
         if( nLeftSpace )
         {
@@ -544,98 +545,172 @@ void SwHTMLParser::InsertEmbed()
 
 /*  */
 
-#if 0
-class SwHTMLApplet_Impl
+void SwHTMLParser::NewObject()
 {
-    SvAppletObjectRef xApplet;      // das aktuelle Applet
-    SvCommandList     aCommandList; // und die szugehorige Command-List
-    SfxItemSet        aItemSet;
-    String            sAlt;
+#ifdef SOLAR_JAVA
+    String aClassID, aName, aStandBy, aId, aStyle, aClass;
+    Size aSize( USHRT_MAX, USHRT_MAX );
+    Size aSpace( 0, 0 );
+    SwVertOrient eVertOri = VERT_TOP;
+    SwHoriOrient eHoriOri = HORI_NONE;
 
-public:
+    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False,
+             bDeclare = sal_False;
+    // Eine neue Command-List anlegen
+    if( pAppletImpl )
+        delete pAppletImpl;
+    pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
+                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
-    SwHTMLApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 ) :
-        aItemSet( rPool, nWhich1, nWhich2 )
+    const HTMLOptions *pOptions = GetOptions();
+    for( USHORT i = pOptions->Count(); i; )
     {
-    }
-
-    ~SwHTMLApplet_Impl()
-    {
-        xApplet.Clear();
-    }
-
-#ifndef DEBUG
-inline
-#endif
-    void CreateApplet( const String& rCode, const String& rName,
-                       BOOL bMayScript, const String& rCodeBase,
-                       const String& rAlt );
-
-    void FinishApplet()
-    {
-        xApplet->SetCommandList( aCommandList );
-        xApplet->EnableSetModified( TRUE );
-    }
-
-
-    void AppendParam( const String& rName, const String& rValue )
-    {
-        aCommandList.Append( rName, rValue );
-    }
-
-
-    SvAppletObject* GetApplet() { return &xApplet; }
-    SfxItemSet& GetItemSet() { return aItemSet; }
-    const String& GetAltText() { return sAlt; }
-};
-
-#ifndef DEBUG
-inline
-#endif
-void SwHTMLApplet_Impl::CreateApplet( const String& rCode, const String& rName,
-                                      BOOL bMayScript, const String& rCodeBase,
-                                      const String& rAlt )
-{
-    SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-    xApplet = new SvAppletObject();
-    xApplet->DoInitNew( pStor );
-
-    xApplet->EnableSetModified( FALSE );
-    xApplet->SetClass( rCode );
-    xApplet->SetName( rName );
-    xApplet->SetMayScript( bMayScript );
-    xApplet->SetDocBase( INetURLObject::GetBaseURL() );
-
-    String sCodeBase;
-    if( rCodeBase.Len() )
-    {
-        INetURLObject aTmpURL;
-
-        INetProtocol eProt = aTmpURL.CompareProtocolScheme( rCodeBase );
-        if( eProt==INET_PROT_NOT_VALID &&
-            rCodeBase.Search( ':' ) != STRING_NOTFOUND  )
+        const HTMLOption *pOption = (*pOptions)[--i];
+        switch( pOption->GetToken() )
         {
-            // The codebase contains an unknown protocol rather than
-            // a relative URL.
-            sCodeBase = rCodeBase;
+        case HTML_O_ID:
+            aId = pOption->GetString();
+            break;
+        case HTML_O_STYLE:
+            aStyle = pOption->GetString();
+            break;
+        case HTML_O_CLASS:
+            aClass = pOption->GetString();
+            break;
+        case HTML_O_DECLARE:
+            bDeclare = sal_True;
+            break;
+        case HTML_O_CLASSID:
+            aClassID = pOption->GetString();
+            break;
+        case HTML_O_CODEBASE:
+            break;
+        case HTML_O_DATA:
+            break;
+        case HTML_O_TYPE:
+            break;
+        case HTML_O_CODETYPE:
+            break;
+        case HTML_O_ARCHIVE:
+        case HTML_O_UNKNOWN:
+            break;
+        case HTML_O_STANDBY:
+            aStandBy = pOption->GetString();
+            break;
+        case HTML_O_WIDTH:
+            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Width() = (long)pOption->GetNumber();
+            break;
+        case HTML_O_HEIGHT:
+            bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Height() = (long)pOption->GetNumber();
+            break;
+        case HTML_O_ALIGN:
+            eVertOri = (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            break;
+        case HTML_O_USEMAP:
+            break;
+        case HTML_O_NAME:
+            aName = pOption->GetString();
+            break;
+        case HTML_O_HSPACE:
+            aSpace.Width() = (long)pOption->GetNumber();
+            break;
+        case HTML_O_VSPACE:
+            aSpace.Height() = (long)pOption->GetNumber();
+            break;
+        case HTML_O_BORDER:
+            break;
+
+        case HTML_O_SDONCLICK:
+        case HTML_O_ONCLICK:
+        case HTML_O_SDONMOUSEOVER:
+        case HTML_O_ONMOUSEOVER:
+        case HTML_O_SDONMOUSEOUT:
+        case HTML_O_ONMOUSEOUT:
+            break;
         }
-        else
-        {
-            sCodeBase = INetURLObject::RelToAbs( rCodeBase );
-        }
+        // Es werden alle Parameter auch an das Applet weitergereicht
+        pAppletImpl->AppendParam( pOption->GetTokenString(),
+                                  pOption->GetString() );
+
     }
-    else
+
+    // Objects that are declared only are not evaluated. Moreover, only
+    // Java applets are supported.
+    sal_Bool bIsApplet = sal_False;;
+
+    if( !bDeclare && aClassID.Len() == 42 &&
+        aClassID.EqualsAscii( "clsid:", 0, 6 ) )
     {
-        INetURLObject aTmpURL( INetURLObject::GetBaseURL() );
-        sCodeBase = aTmpURL.GetPartBeforeLastName();
+        aClassID.Erase( 0, 6 );
+        SvGlobalName aCID;
+        if( aCID.MakeId( aClassID ) )
+        {
+            SvGlobalName aJavaCID( 0x8AD9C840UL, 0x044EU, 0x11D1U, 0xB3U, 0xE9U,
+                                   0x00U, 0x80U, 0x5FU, 0x49U, 0x9DU, 0x93U );
+
+            bIsApplet = aJavaCID == aCID;
+        }
     }
 
-    xApplet->SetCodeBase( sCodeBase );
+    if( !bIsApplet )
+    {
+        delete pAppletImpl;
+        pAppletImpl = 0;
+        return;
+    }
 
-    sAlt = rAlt;
+    pAppletImpl->SetAltText( aStandBy );
+
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
+    SvxCSS1PropertyInfo aPropInfo;
+    if( HasStyleOptions( aStyle, aId, aClass ) )
+        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+
+    SfxItemSet& rFrmSet = pAppletImpl->GetItemSet();
+    if( !IsNewDoc() )
+        Reader::ResetFrmFmtAttrs( rFrmSet );
+
+    // den Anker und die Ausrichtung setzen
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrmSet );
+
+    // und noch die Groesse des Rahmens
+    Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
+    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
+                rFrmSet );
+    SetSpace( aSpace, aItemSet, aPropInfo, rFrmSet );
+#endif
 }
 
+void SwHTMLParser::EndObject()
+{
+#ifdef SOLAR_JAVA
+    if( !pAppletImpl )
+        return;
+    if( pAppletImpl->CreateApplet() )
+    {
+        pAppletImpl->FinishApplet();
+
+        // und in das Dok einfuegen
+        SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pAppletImpl->GetApplet(),
+                                          &pAppletImpl->GetItemSet() );
+
+        // den alternativen Namen setzen
+        SwNoTxtNode *pNoTxtNd =
+            pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
+                              ->GetIndex()+1 ]->GetNoTxtNode();
+        pNoTxtNd->SetAlternateText( pAppletImpl->GetAltText() );
+
+        // Ggf Frames anlegen und auto-geb. Rahmen registrieren
+        RegisterFlyFrm( pFlyFmt );
+
+        delete pAppletImpl;
+        pAppletImpl = 0;
+    }
 #endif
+}
 
 void SwHTMLParser::InsertApplet()
 {

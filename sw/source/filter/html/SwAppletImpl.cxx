@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-26 11:33:14 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_hidden, "HIDDEN" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_HIDDEN_false, "FALSE" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archive, "ARCHIVE" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archives, "ARCHIVES" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_object, "OBJECT" );
 
@@ -194,6 +193,35 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
 
     //sAlt = rAlt;
 }
+
+sal_Bool SwApplet_Impl::CreateApplet()
+{
+    String aCode, aName, aCodeBase;
+    sal_Bool bMayScript = sal_False;
+
+    sal_uInt32 nArgCount = aCommandList.Count();
+    for( sal_uInt32 i=0; i<nArgCount; i++ )
+    {
+        const SvCommand& rArg = aCommandList[i];
+        const String& rName = rArg.GetCommand();
+        if( rName.EqualsIgnoreCaseAscii( sHTML_O_code ) )
+            aCode = rArg.GetArgument();
+        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ) )
+            aCodeBase = rArg.GetArgument();
+        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
+            aName = rArg.GetArgument();
+        else if( rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
+            bMayScript = sal_True;
+    }
+
+    if( !aCode.Len() )
+        return sal_False;
+
+    CreateApplet( aCode, aName, bMayScript, aCodeBase );
+    return sal_True;
+}
+
+
 SwApplet_Impl::~SwApplet_Impl()
 {
     xApplet.Clear();

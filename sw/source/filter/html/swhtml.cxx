@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-01 12:18:05 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _SW_APPLET_IMPL_HXX
+#include <SwAppletImpl.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -806,7 +809,12 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
             }
 
             if( pAppletImpl )
-                EndApplet();
+            {
+                if( pAppletImpl->GetApplet() )
+                    EndApplet();
+                else
+                    EndObject();
+            }
 
             // ggf. ein noch vorhandes LF hinter dem letzen Absatz entfernen
             if( IsNewDoc() )
@@ -1240,6 +1248,10 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 bCallNextToken = FALSE;
                 EndApplet();
                 break;
+            case HTML_OBJECT_OFF:
+                bCallNextToken = FALSE;
+                EndObject();
+                break;
 
             case HTML_PARAM:
                 InsertParam();
@@ -1489,6 +1501,13 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 aStyleSource += aToken;
             }
         }
+        break;
+
+    case HTML_OBJECT_ON:
+#ifdef SOLAR_JAVA
+        NewObject();
+        bCallNextToken = pAppletImpl!=0 && pTable!=0;
+#endif
         break;
 
     case HTML_APPLET_ON:
