@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-18 14:34:49 $
+#   last change: $Author: tra $ $Date: 2001-10-24 10:56:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,12 +79,14 @@ MULTITHREAD_OBJ=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=	\
-            $(SLO)$/utility.obj
+            $(SLO)$/utility.obj\
+            $(SLO)$/readline.obj
 
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
-            $(OBJ)$/utility.obj
+            $(OBJ)$/utility.obj\
+            $(OBJ)$/readline.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
