@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 11:19:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 
 class ScXMLExport;
 class ScDocument;
+class ScDPSaveDimension;
+class ScDPSaveData;
+class ScDPDimensionSaveData;
+class ScDPSaveGroupDimension;
+class ScDPSaveNumGroupDimension;
+struct ScDPNumGroupInfo;
 
 class ScXMLExportDataPilot
 {
@@ -86,6 +92,22 @@ class ScXMLExportDataPilot
                                     const sal_Bool bIsString, const double dVal, const String& sVal) const;
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
+
+    void WriteFieldReference(ScDPSaveDimension* pDim);
+    void WriteSortInfo(ScDPSaveDimension* pDim);
+    void WriteAutoShowInfo(ScDPSaveDimension* pDim);
+    void WriteLayoutInfo(ScDPSaveDimension* pDim);
+    void WriteSubTotals(ScDPSaveDimension* pDim);
+    void WriteMembers(ScDPSaveDimension* pDim);
+    void WriteLevels(ScDPSaveDimension* pDim);
+    void WriteDatePart(sal_Int32 nPart);
+    void WriteNumGroupInfo(const ScDPNumGroupInfo& pGroupInfo);
+    void WriteGroupDimAttributes(const ScDPSaveGroupDimension* pGroupDim);
+    void WriteGroupDimElements(const ScDPSaveGroupDimension* pGroupDim);
+    void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
+    void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
+    void WriteDimensions(ScDPSaveData* pDPSave);
+
 public:
     ScXMLExportDataPilot(ScXMLExport& rExport);
     ~ScXMLExportDataPilot();
