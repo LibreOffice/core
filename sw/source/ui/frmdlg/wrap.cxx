@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:31:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+// OD 18.09.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 
@@ -506,6 +510,9 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.eArea = (RndStdIds)nAnchorId;
         aVal.bAuto = rFrmSize.GetSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
+        // OD 18.09.2003 #i18732#
+        aVal.bFollowTextFlow =
+            static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
 
         aVal.eHori = rHori.GetHoriOrient();
         aVal.eVert = (SvxFrameVertOrient)rVert.GetVertOrient();
