@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 16:38:27 $
+#   last change: $Author: rt $ $Date: 2004-04-02 10:46:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,9 +96,11 @@ UNOIDLDBFILES= \
     $(UCR)$/cssdocument.db \
     $(UCR)$/cssdrawing.db \
     $(UCR)$/cssembed.db \
-    $(UCR)$/cssfcomp.db \
     $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssform.db \
+    $(UCR)$/cssfcomp.db \
+    $(UCR)$/cssfbinding.db \
+    $(UCR)$/cssfvalidation.db \
     $(UCR)$/cssformula.db \
     $(UCR)$/cssinstallation.db \
     $(UCR)$/cssi18n.db \
@@ -146,13 +148,11 @@ UNOIDLDBFILES= \
     $(UCR)$/dcsssprovider.db \
     $(UCR)$/dcsssbrowse.db \
     $(UCR)$/dcssframe.db \
+    $(UCR)$/dcssform.db \
     $(UCR)$/dcssui.db \
     $(UCR)$/dcssfstatus.db \
     $(UCR)$/dcssgeometry.db \
     $(UCR)$/dcssrendering.db \
-    $(UCR)$/dcssform.db \
-    $(UCR)$/dcssformcomp.db \
-    $(UCR)$/dcsstable.db
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
 REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_11$/types_doc.rdb
