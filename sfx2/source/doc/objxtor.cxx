@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: mba $ $Date: 2000-10-20 17:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,16 +483,16 @@ sal_uInt16 SfxObjectShell::PrepareClose
                     SfxStringItem aItem( SID_VERSION, String( SfxResId( STR_AUTOMATICVERSION ) ) );
                     SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, TRUE );
                     const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
-                    pPoolItem = pFrame->GetDispatcher()->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, ppArgs, 0 );
+                    pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
                 }
                 else
                 {
                     SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, TRUE );
                     const SfxPoolItem* ppArgs[] = { &aWarnItem, 0 };
-                    pPoolItem = pFrame->GetDispatcher()->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, ppArgs, 0 );
+                    pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
                 }
 
-                if ( !pPoolItem || !pPoolItem->ISA(SfxBoolItem) || !( (const SfxBoolItem*) pPoolItem )->GetValue() )
+                if ( !pPoolItem || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                     return sal_False;
                 else
                     bClose = sal_True;
