@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 09:30:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-09 13:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,22 @@
 
 #include "../inc/helpid.hrc"         // HID_XXX
 
-hidspecial HID_TEMPLATEDLG_ICONCTRL             { HelpID = HID_TEMPLATEDLG_ICONCTRL; };
+hidspecial HID_TEMPLATEDLG_ICONCTRL             { HelpID = HID_TEMPLATEDLG_ICONCTRL; }
 hidspecial HID_TEMPLATEDLG_FILEVIEW             { HelpID = HID_TEMPLATEDLG_FILEVIEW; };
 
 hidspecial HID_ADDRTEMPL_FIELD_ASSIGNMENT       { HelpID = HID_ADDRTEMPL_FIELD_ASSIGNMENT; };
+
+hidspecial HID_FILESAVE_LOCALSYSTEM             { HelpID = HID_FILESAVE_LOCALSYSTEM; };
+hidspecial HID_FILESAVE_LEVELUP                 { HelpID = HID_FILESAVE_LEVELUP; };
+hidspecial HID_FILESAVE_CREATEDIRECTORY         { HelpID = HID_FILESAVE_CREATEDIRECTORY; };
+hidspecial HID_FILESAVE_DEFAULTDIRECTORY        { HelpID = HID_FILESAVE_DEFAULTDIRECTORY; };
+hidspecial HID_FILESAVE_FILEVIEW                { HelpID = HID_FILESAVE_FILEVIEW; };
+hidspecial HID_FILESAVE_TEMPLATE                { HelpID = HID_FILESAVE_TEMPLATE; };
+hidspecial HID_FILESAVE_FILEURL                 { HelpID = HID_FILESAVE_FILEURL; };
+hidspecial HID_FILESAVE_FILETYPE                { HelpID = HID_FILESAVE_FILETYPE; };
+hidspecial HID_FILESAVE_DOSAVE                  { HelpID = HID_FILESAVE_DOSAVE; };
+hidspecial HID_FILESAVE_AUTOEXTENSION           { HelpID = HID_FILESAVE_AUTOEXTENSION; };
+hidspecial HID_FILESAVE_SAVEWITHPASSWORD        { HelpID = HID_FILESAVE_SAVEWITHPASSWORD; };
+hidspecial HID_FILESAVE_CUSTOMIZEFILTER         { HelpID = HID_FILESAVE_CUSTOMIZEFILTER; };
+hidspecial HID_FILESAVE_SELECTION               { HelpID = HID_FILESAVE_SELECTION; };
+hidspecial HID_FILESAVE_DIALOG                  { HelpID = HID_FILESAVE_DIALOG; };
