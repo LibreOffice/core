@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-28 16:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+using com::sun::star::lang::IllegalArgumentException;
 
 ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
 : m_nBufferSize (nNewBufferSize)
@@ -178,8 +179,10 @@ void SAL_CALL ZipPackageBuffer::closeOutput(  )
 {
 }
 void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
-        throw(::com::sun::star::lang::IllegalArgumentException, IOException, RuntimeException)
+        throw( IllegalArgumentException, IOException, RuntimeException)
 {
+    if ( location > m_nEnd || location < 0 )
+        throw IllegalArgumentException();
     m_nCurrent = location;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )
