@@ -23,7 +23,7 @@
             </node>
             <node oor:name=".uno:PrintLayout" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Druck - Layout</value>
+                    <value xml:lang="de">~Drucklayout</value>
                     <value xml:lang="en-US">~Print Layout</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -70,6 +70,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Am Zeichen verankern</value>
                     <value xml:lang="en-US">Anchor to Character</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Als Zeichen</value>
+                    <value xml:lang="en-US">As C~haracter</value>
                 </prop>
             </node>
             <node oor:name=".uno:PageOffsetDialog" oor:op="replace">
@@ -446,11 +450,19 @@
                     <value xml:lang="de">An der Seite verankern</value>
                     <value xml:lang="en-US">Anchor To Page</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">An der Seite</value>
+                    <value xml:lang="en-US">To P~age</value>
+                </prop>
             </node>
             <node oor:name=".uno:SetAnchorToPara" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Am Absatz verankern</value>
                     <value xml:lang="en-US">Anchor To Paragraph</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Am Absatz</value>
+                    <value xml:lang="en-US">To ~Paragraph</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleObjectLayer" oor:op="replace">
@@ -473,6 +485,10 @@
                     <value xml:lang="de">Am Rahmen verankern</value>
                     <value xml:lang="en-US">Anchor To Frame</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Am Rahmen</value>
+                    <value xml:lang="en-US">To ~Frame</value>
+                </prop>
             </node>
             <node oor:name=".uno:InsertObjectStarMath" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -493,6 +509,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Als Zeichen verankern</value>
                     <value xml:lang="en-US">Anchor as Character</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Am Zeichen</value>
+                    <value xml:lang="en-US">To ~Character</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
@@ -608,14 +628,64 @@
             </node>
             <node oor:name=".uno:AutoFormatApply" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">AutoFormat-Optionen anwenden</value>
-                    <value xml:lang="en-US">Apply AutoFormat Options</value>
+                    <value xml:lang="de">Anwenden</value>
+                    <value xml:lang="en-US">~Apply</value>
+                    <value xml:lang="ar">استخدام خيارات AutoFormat</value>
+                    <value xml:lang="no">Apply AutoFormat Options</value>
+                    <value xml:lang="ca">Aplica les opcions de formatatge automàtic</value>
+                    <value xml:lang="zh-TW">使用自動格式選項</value>
+                    <value xml:lang="cs">Použít automatický formát</value>
+                    <value xml:lang="da">Anvend AutoFormat-indstillinger</value>
+                    <value xml:lang="el">Εφαρμογή επιλογών αυτόματης διόρθωσης</value>
+                    <value xml:lang="es">Aplicar opciones del Formateado automático</value>
+                    <value xml:lang="fi">Käytä automaattisen muotoilun asetuksia</value>
+                    <value xml:lang="fr">Utiliser les options de l&apos;AutoFormat</value>
+                    <value xml:lang="he">‮החלת אפשרויות עיצוב‬</value>
+                    <value xml:lang="it">Applica le opzioni di AutoFormat</value>
+                    <value xml:lang="ja">オートフォーマットのオプションを適用</value>
+                    <value xml:lang="ko">자동 서식 옵션을 적용</value>
+                    <value xml:lang="nl">AutoOpmaak-opties toepassen</value>
+                    <value xml:lang="pl">Zastosuj opcje Autoformatowania</value>
+                    <value xml:lang="pt-BR">Aplicar Opções de AutoFormatação</value>
+                    <value xml:lang="ru">Применить параметры автоформата</value>
+                    <value xml:lang="sk">Použiť automatický formát</value>
+                    <value xml:lang="sv">Använd autoformat</value>
+                    <value xml:lang="th">ใช้ตัวเลือกรูปแบบอัตโนมัติ</value>
+                    <value xml:lang="tr">Otomatik formatlama seçeneklerini uygula</value>
+                    <value xml:lang="hi">स्वचालित ढंग से रचना विकल्प को लागू करो</value>
+                    <value xml:lang="zh-CN">采用自动格式选项</value>
+                    <value xml:lang="pt">Aplicar opções de AutoFormato</value>
                 </prop>
             </node>
             <node oor:name=".uno:OnlineAutoFormat" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">AutoFormat bei Eingabe</value>
-                    <value xml:lang="en-US">AutoFormat While Typing</value>
+                    <value xml:lang="de">Während der Eingabe</value>
+                    <value xml:lang="en-US">~While Typing</value>
+                    <value xml:lang="ar">تنسيق تلقائي</value>
+                    <value xml:lang="no">AutoFormat While Typing</value>
+                    <value xml:lang="ca">Formatatge automàtic en escriure</value>
+                    <value xml:lang="zh-TW">輸入時使用自動格式</value>
+                    <value xml:lang="cs">Automatický formát během psaní</value>
+                    <value xml:lang="da">Anvend AutoFormat mens der indtastes</value>
+                    <value xml:lang="el">Αυτόματη μορφοποίηση κατά την πληκτρολόγηση</value>
+                    <value xml:lang="es">Formateado automático mientras se escribe</value>
+                    <value xml:lang="fi">Automaattinen muotoilu kirjoitettaessa</value>
+                    <value xml:lang="fr">AutoFormat pour la saisie</value>
+                    <value xml:lang="he">‮עיצוב אוטומטי תוך כדי הקלדה‬</value>
+                    <value xml:lang="it">Foramttazione automatica durante la digitazione</value>
+                    <value xml:lang="ja">入力時オートフォーマット</value>
+                    <value xml:lang="ko">입력 시 자동 서식</value>
+                    <value xml:lang="nl">AutoOpmaak bij invoer</value>
+                    <value xml:lang="pl">Autoformatowanie podczas pisania</value>
+                    <value xml:lang="pt-BR">AutoFormatação Durante a Digitação</value>
+                    <value xml:lang="ru">Автоформат во время ввода</value>
+                    <value xml:lang="sk">Automatický formát počas písania</value>
+                    <value xml:lang="sv">AutoFormat vid inmatning</value>
+                    <value xml:lang="th">รูปแบบอัตโนมัติ</value>
+                    <value xml:lang="tr">Yazarken otomatik formatla</value>
+                    <value xml:lang="hi">टइपिंग के समय स्वचालित ढंग से रचना</value>
+                    <value xml:lang="zh-CN">输入时使用自动格式</value>
+                    <value xml:lang="pt">AutoFormato ao digitar</value>
                 </prop>
             </node>
             <node oor:name=".uno:StatePageNumber" oor:op="replace">
@@ -659,8 +729,33 @@
             </node>
             <node oor:name=".uno:AutoFormatRedlineApply" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">AutoFormat-Optionen anwenden und Änderungen bestätigen</value>
-                    <value xml:lang="en-US">Apply AutoFormat Options and confirm Changes</value>
+                    <value xml:lang="de">Anwenden und Änderungen ~bearbeiten</value>
+                    <value xml:lang="en-US">Apply and Edit ~Changes</value>
+                    <value xml:lang="ar">استخدام خيارات AutoFormat وتأكيد التغييرات</value>
+                    <value xml:lang="no">Apply AutoFormat Options and confirm Changes</value>
+                    <value xml:lang="ca">Aplica les opcions de formatatge automàtic i confirma els canvis</value>
+                    <value xml:lang="zh-TW">使用自動格式選項並確定變更</value>
+                    <value xml:lang="cs">Použít automatický formát a potvrdit změny</value>
+                    <value xml:lang="da">Anvend AutoFormat-indstillinger og bekræft ændringer</value>
+                    <value xml:lang="el">Εφαρμογή επιλογών αυτόματης μορφοποίησης και επιβεβαίωση αλλαγών</value>
+                    <value xml:lang="es">Aplicar opciones del Formateado automático y confirmar modificaciones</value>
+                    <value xml:lang="fi">Käytä automaattisen muotoilun asetuksia ja vahvista muutokset</value>
+                    <value xml:lang="fr">Utiliser les options d&apos;AutoFormat et confirmer les modifications</value>
+                    <value xml:lang="he">‮החלת אפשרויות עיצוב אוטומטי ואישור‬</value>
+                    <value xml:lang="it">Applica le opzioni della Formattazione automatica e conferma le modifiche</value>
+                    <value xml:lang="ja">オートフォーマットのオプションを適用して変更を確認</value>
+                    <value xml:lang="ko">자동 서식 옵션 적용 및 변경 확인</value>
+                    <value xml:lang="nl">AutoOpmaak-opties toepassen en wijzigingen bevestigen</value>
+                    <value xml:lang="pl">Zastosuj opcje Autoformatowania i potwierdź zmiany</value>
+                    <value xml:lang="pt-BR">Aplicar Opções de AutoFormatação e confirmar Modificações</value>
+                    <value xml:lang="ru">Применить параметры автоформата и подтвердить изменения</value>
+                    <value xml:lang="sk">Použiť automatický formát a potvrdiť zmeny</value>
+                    <value xml:lang="sv">Använd autoformat-alternativ och bekräfta ändringar</value>
+                    <value xml:lang="th">ใช้ตัวเลือกรูปแบบอัตโนมัติและยืนยันการเปลี่ยนแปลง</value>
+                    <value xml:lang="tr">Otomatik formatlama seçeneklerini uygula ve değişiklikleri onayla</value>
+                    <value xml:lang="hi">स्वचालित ढंग से रचना विकल्पों को लागू करो और परिवर्तनों को दृढ़ करो</value>
+                    <value xml:lang="zh-CN">使用自动格式选项并确定更改</value>
+                    <value xml:lang="pt">Aplicar opções de AutoFormato e confirmar modificações</value>
                 </prop>
             </node>
             <node oor:name=".uno:SelectionMode" oor:op="replace">
@@ -875,14 +970,64 @@
             </node>
             <node oor:name=".uno:TableNumberFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zahlenformat bearbeiten</value>
-                    <value xml:lang="en-US">Edit Number Format</value>
+                    <value xml:lang="de">Zahlenformat...</value>
+                    <value xml:lang="en-US">Number Format...</value>
+                    <value xml:lang="ar">تحرير تنسيق الأرقام</value>
+                    <value xml:lang="no">Edit Number Format</value>
+                    <value xml:lang="ca">Edita el format del número</value>
+                    <value xml:lang="zh-TW">編輯數字格式</value>
+                    <value xml:lang="cs">Upravit formát čísla</value>
+                    <value xml:lang="da">Rediger talformat</value>
+                    <value xml:lang="el">Επεξεργασία μορφής αριθμών</value>
+                    <value xml:lang="es">Editar formato de números</value>
+                    <value xml:lang="fi">Muokkaa lukumuotoa</value>
+                    <value xml:lang="fr">Éditer le format numérique</value>
+                    <value xml:lang="he">‮עריכת תבנית מספר‬</value>
+                    <value xml:lang="it">Modifica formato numero</value>
+                    <value xml:lang="ja">数字の書式編集</value>
+                    <value xml:lang="ko">숫자 표기 형식 편집</value>
+                    <value xml:lang="nl">Getalnotatie bewerken</value>
+                    <value xml:lang="pl">Edytuj format liczb</value>
+                    <value xml:lang="pt-BR">Editar Formato Numérico</value>
+                    <value xml:lang="ru">Правка числового формата</value>
+                    <value xml:lang="sk">Upraviť formát čísla</value>
+                    <value xml:lang="sv">Redigera talformat</value>
+                    <value xml:lang="th">แก้ไขรูปแบบตัวเลข</value>
+                    <value xml:lang="tr">Sayı formatını düzenle</value>
+                    <value xml:lang="hi">संख्या रचना का संपादन</value>
+                    <value xml:lang="zh-CN">编辑数字格式</value>
+                    <value xml:lang="pt">Editar formato numérico</value>
                 </prop>
             </node>
             <node oor:name=".uno:LoadStyles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Vorlagen laden</value>
-                    <value xml:lang="en-US">Load Styles</value>
+                    <value xml:lang="de">Vorlagen laden...</value>
+                    <value xml:lang="en-US">Load Styles...</value>
+                    <value xml:lang="ar">تحميل أنماط</value>
+                    <value xml:lang="no">Load Styles</value>
+                    <value xml:lang="ca">Carrega els estils</value>
+                    <value xml:lang="zh-TW">載入樣式</value>
+                    <value xml:lang="cs">Načíst styly</value>
+                    <value xml:lang="da">Indlæs typografier</value>
+                    <value xml:lang="el">Φόρτωση προτύπων</value>
+                    <value xml:lang="es">Cargar estilos</value>
+                    <value xml:lang="fi">Lataa tyylit</value>
+                    <value xml:lang="fr">Charger les styles</value>
+                    <value xml:lang="he">‮טעינת סגנונות‬</value>
+                    <value xml:lang="it">Carica modelli</value>
+                    <value xml:lang="ja">スタイルの読み込み</value>
+                    <value xml:lang="ko">스타일 로드</value>
+                    <value xml:lang="nl">Opmaakprofielen laden</value>
+                    <value xml:lang="pl">Ładuj style</value>
+                    <value xml:lang="pt-BR">Carregar Estilos</value>
+                    <value xml:lang="ru">Загрузка шаблонов и стилей</value>
+                    <value xml:lang="sk">Načítať štýly</value>
+                    <value xml:lang="sv">Ladda mallar</value>
+                    <value xml:lang="th">โหลดแม่แบบ</value>
+                    <value xml:lang="tr">Şablonları yükle</value>
+                    <value xml:lang="hi">शैलियों को लोड़ करो</value>
+                    <value xml:lang="zh-CN">装入样式</value>
+                    <value xml:lang="pt">Carregar estilos</value>
                 </prop>
             </node>
             <node oor:name=".uno:CreateAbstract" oor:op="replace">
@@ -899,8 +1044,33 @@
             </node>
             <node oor:name=".uno:NameGroup" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Objekt benennen</value>
-                    <value xml:lang="en-US">Name Object</value>
+                    <value xml:lang="de">Gruppe benennen...</value>
+                    <value xml:lang="en-US">Name Group...</value>
+                    <value xml:lang="ar">تسمية الكائن</value>
+                    <value xml:lang="no">Name Object</value>
+                    <value xml:lang="ca">Anomena l&apos;objecte</value>
+                    <value xml:lang="zh-TW">命名物件</value>
+                    <value xml:lang="cs">Pojmenovat objekt</value>
+                    <value xml:lang="da">Navngiv objekt</value>
+                    <value xml:lang="el">Ονομασία αντικειμένου</value>
+                    <value xml:lang="es">Nombrar objeto</value>
+                    <value xml:lang="fi">Nimeä objekti</value>
+                    <value xml:lang="fr">Nommer l&apos;objet</value>
+                    <value xml:lang="he">Objekt benennen</value>
+                    <value xml:lang="it">Nome oggetto</value>
+                    <value xml:lang="ja">オブジェクトに名前を付ける</value>
+                    <value xml:lang="ko">개체 이름 지정</value>
+                    <value xml:lang="nl">Naam object</value>
+                    <value xml:lang="pl">Nazwa obiektu</value>
+                    <value xml:lang="pt-BR">Nomear objeto</value>
+                    <value xml:lang="ru">Присвоить имя объекту</value>
+                    <value xml:lang="sk">Názov objektu</value>
+                    <value xml:lang="sv">Namnge objekt</value>
+                    <value xml:lang="th">วัตถุชื่อ</value>
+                    <value xml:lang="tr">İsim Nesnesi</value>
+                    <value xml:lang="hi">Name Object</value>
+                    <value xml:lang="zh-CN">命名对象</value>
+                    <value xml:lang="pt">Nomear objecto</value>
                 </prop>
             </node>
             <node oor:name=".uno:BorderDialog" oor:op="replace">
@@ -926,11 +1096,40 @@
                     <value xml:lang="de">Seiteneinstellungen</value>
                     <value xml:lang="en-US">Page Settings</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Seiteneinstellungen...</value>
+                    <value xml:lang="en-US">~Page...</value>
+                </prop>
             </node>
             <node oor:name=".uno:FormatColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Spalten</value>
-                    <value xml:lang="en-US">Columns</value>
+                    <value xml:lang="en-US">Co~lumns</value>
+                    <value xml:lang="ar">أعمدة</value>
+                    <value xml:lang="no">Columns</value>
+                    <value xml:lang="ca">Columnes</value>
+                    <value xml:lang="zh-TW">欄</value>
+                    <value xml:lang="cs">Sloupce</value>
+                    <value xml:lang="da">Kolonner</value>
+                    <value xml:lang="el">Στήλες</value>
+                    <value xml:lang="es">Columnas</value>
+                    <value xml:lang="fi">Palstat</value>
+                    <value xml:lang="fr">Colonnes</value>
+                    <value xml:lang="he">‮טורים‬</value>
+                    <value xml:lang="it">Colonne</value>
+                    <value xml:lang="ja">段組み</value>
+                    <value xml:lang="ko">단</value>
+                    <value xml:lang="nl">Kolommen</value>
+                    <value xml:lang="pl">Kolumny</value>
+                    <value xml:lang="pt-BR">Colunas</value>
+                    <value xml:lang="ru">Столбцы</value>
+                    <value xml:lang="sk">Stĺpce</value>
+                    <value xml:lang="sv">Kolumner</value>
+                    <value xml:lang="th">คอลัมน์</value>
+                    <value xml:lang="tr">Sütunlar</value>
+                    <value xml:lang="hi">स्तंभ</value>
+                    <value xml:lang="zh-CN">列</value>
+                    <value xml:lang="pt">Colunas</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormatDropcap" oor:op="replace">
@@ -944,20 +1143,78 @@
                     <value xml:lang="de">Rahmen Eigenschaften</value>
                     <value xml:lang="en-US">Frame Properties</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="en-US">Rahmen...</value>
+                    <value xml:lang="en-US">Fram~e...</value>
+                </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GraphicDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Grafik bearbeiten</value>
-                    <value xml:lang="en-US">Edit Graphics</value>
+                    <value xml:lang="de">Bild...</value>
+                    <value xml:lang="en-US">Picture...</value>
+                    <value xml:lang="ar">تحرير صورة</value>
+                    <value xml:lang="no">Edit Graphics</value>
+                    <value xml:lang="ca">Edita el gràfic</value>
+                    <value xml:lang="zh-TW">編輯圖形</value>
+                    <value xml:lang="cs">Upravit obrázek</value>
+                    <value xml:lang="da">Rediger grafik</value>
+                    <value xml:lang="el">Επεξεργασία γραφικού</value>
+                    <value xml:lang="es">Editar imagen</value>
+                    <value xml:lang="fi">Muokkaa grafiikkaa</value>
+                    <value xml:lang="fr">Éditer une image</value>
+                    <value xml:lang="he">‮עריכת גרפיקה‬</value>
+                    <value xml:lang="it">Modifica immagine</value>
+                    <value xml:lang="ja">図の編集</value>
+                    <value xml:lang="ko">그림 편집</value>
+                    <value xml:lang="nl">Afbeelding bewerken</value>
+                    <value xml:lang="pl">Edytuj grafikę</value>
+                    <value xml:lang="pt-BR">Editar Figura</value>
+                    <value xml:lang="ru">Правка графического объекта</value>
+                    <value xml:lang="sk">Upraviť obrázok</value>
+                    <value xml:lang="sv">Redigera grafik</value>
+                    <value xml:lang="th">แก้ไขกราฟิค</value>
+                    <value xml:lang="tr">Grafik düzenle</value>
+                    <value xml:lang="hi">सुचित्र संपादन</value>
+                    <value xml:lang="zh-CN">编辑图形</value>
+                    <value xml:lang="pt">Editar imagem</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Bild...</value>
+                    <value xml:lang="en-US">Pict~ure...</value>
                 </prop>
             </node>
             <node oor:name=".uno:TableDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle bearbeiten</value>
-                    <value xml:lang="en-US">Edit Table</value>
+                    <value xml:lang="de">Tabelleneigenschaften...</value>
+                    <value xml:lang="en-US">Ta~ble Properties...</value>
+                    <value xml:lang="ar">تحرير جدول</value>
+                    <value xml:lang="no">Edit Table</value>
+                    <value xml:lang="ca">Edita la taula</value>
+                    <value xml:lang="zh-TW">編輯表格</value>
+                    <value xml:lang="cs">Upravit tabulku</value>
+                    <value xml:lang="da">Rediger tabel</value>
+                    <value xml:lang="el">Επεξεργασία πίνακα</value>
+                    <value xml:lang="es">Editar tabla</value>
+                    <value xml:lang="fi">Muokkaa taulukkoa</value>
+                    <value xml:lang="fr">Éditer le tableau</value>
+                    <value xml:lang="he">‮עכיכת טבלה‬</value>
+                    <value xml:lang="it">Modifica tabella</value>
+                    <value xml:lang="ja">表の編集</value>
+                    <value xml:lang="ko">표 편집</value>
+                    <value xml:lang="nl">Tabel bewerken</value>
+                    <value xml:lang="pl">Edytuj tabelę</value>
+                    <value xml:lang="pt-BR">Editar Tabela</value>
+                    <value xml:lang="ru">Правка таблицы</value>
+                    <value xml:lang="sk">Upraviť tabuľku</value>
+                    <value xml:lang="sv">Redigera tabell</value>
+                    <value xml:lang="th">แก้ไขตาราง</value>
+                    <value xml:lang="tr">Tablo düzenle</value>
+                    <value xml:lang="hi">सारणी संपादन</value>
+                    <value xml:lang="zh-CN">编辑表格</value>
+                    <value xml:lang="pt">Editar tabela</value>
                 </prop>
             </node>
             <node oor:name=".uno:FootnoteDialog" oor:op="replace">
@@ -968,8 +1225,33 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeichenattribute zurücksetzen</value>
-                    <value xml:lang="en-US">Reset Font Attributes</value>
+                    <value xml:lang="de">Standardformatierung</value>
+                    <value xml:lang="en-US">~Default Formatting</value>
+                    <value xml:lang="ar">إعادة تعيين سمات الخطوط</value>
+                    <value xml:lang="no">Reset Font Attributes</value>
+                    <value xml:lang="ca">Reinicia els atributs de lletra</value>
+                    <value xml:lang="zh-TW">重設字元屬性</value>
+                    <value xml:lang="cs">Obnovit atributy písma</value>
+                    <value xml:lang="da">Nulstil skrifttypeattributter</value>
+                    <value xml:lang="el">Επαναφορά ιδιοτήτων χαρακτήρων</value>
+                    <value xml:lang="es">Restablecer atributos de caracteres</value>
+                    <value xml:lang="fi">Palauta fonttimääritteet</value>
+                    <value xml:lang="fr">Restaurer les attributs de caractères</value>
+                    <value xml:lang="he">‮איתחול איפיוני גופנים‬</value>
+                    <value xml:lang="it">Ripristina attributi carattere</value>
+                    <value xml:lang="ja">文字属性のリセット</value>
+                    <value xml:lang="ko">글꼴 속성 원래대로</value>
+                    <value xml:lang="nl">Tekenattributen herstellen</value>
+                    <value xml:lang="pl">Resetuj atrybuty znaków</value>
+                    <value xml:lang="pt-BR">Redefinir Atributos da Fonte</value>
+                    <value xml:lang="ru">Восстановить атрибуты шрифта</value>
+                    <value xml:lang="sk">Obnoviť atribúty písma</value>
+                    <value xml:lang="sv">Återställ teckenattribut</value>
+                    <value xml:lang="th">กำหนดคุณลักษณะตัวอักษรใหม่</value>
+                    <value xml:lang="tr">Yazıtipi öznitelikleri</value>
+                    <value xml:lang="hi">अक्षर ऐट्रिब्यूट्स को रिसेट्ट करो </value>
+                    <value xml:lang="zh-CN">重设字符属性</value>
+                    <value xml:lang="pt">Repor atributos dos caracteres</value>
                 </prop>
             </node>
             <node oor:name=".uno:WrapOff" oor:op="replace">
@@ -983,8 +1265,33 @@
             </node>
             <node oor:name=".uno:WrapOn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Umlauf ein</value>
-                    <value xml:lang="en-US">Wrap On</value>
+                    <value xml:lang="de">Seitenumlauf</value>
+                    <value xml:lang="en-US">~Page Wrap</value>
+                    <value xml:lang="ar">تشغيل الالتفاف</value>
+                    <value xml:lang="no">Wrap On</value>
+                    <value xml:lang="ca">Activa l&apos;ajustament</value>
+                    <value xml:lang="zh-TW">使用換行</value>
+                    <value xml:lang="cs">Zapnout obtékání</value>
+                    <value xml:lang="da">Aktiver ombrydning</value>
+                    <value xml:lang="el">Ενεργοποίηση αναδίπλωσης</value>
+                    <value xml:lang="es">Activar Ajuste</value>
+                    <value xml:lang="fi">Rivitys käytössä</value>
+                    <value xml:lang="fr">Adaptation du texte</value>
+                    <value xml:lang="he">‮עיטוף‬</value>
+                    <value xml:lang="it">Scorrimento on</value>
+                    <value xml:lang="ja">両側折り返し</value>
+                    <value xml:lang="ko">문장 배치 적용</value>
+                    <value xml:lang="nl">Omloop in</value>
+                    <value xml:lang="pl">Włącz opływanie</value>
+                    <value xml:lang="pt-BR">Ativar Ajuste</value>
+                    <value xml:lang="ru">Обтекание страницы</value>
+                    <value xml:lang="sk">Zapnúť obtekanie</value>
+                    <value xml:lang="sv">Textanpassning på</value>
+                    <value xml:lang="th">ตัด</value>
+                    <value xml:lang="tr">Metin dağılımı açık</value>
+                    <value xml:lang="hi">लपेटना शुरु</value>
+                    <value xml:lang="zh-CN">使用环绕</value>
+                    <value xml:lang="pt">Activar ajuste</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1002,7 +1309,32 @@
             <node oor:name=".uno:WrapThrough" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Durchlauf</value>
-                    <value xml:lang="en-US">Wrap Through</value>
+                    <value xml:lang="en-US">~Wrap Through</value>
+                    <value xml:lang="ar">عبر</value>
+                    <value xml:lang="no">Wrap Through</value>
+                    <value xml:lang="ca">Ajustament a través de</value>
+                    <value xml:lang="zh-TW">不環繞</value>
+                    <value xml:lang="cs">Přes text</value>
+                    <value xml:lang="da">Gennemgående</value>
+                    <value xml:lang="el">Δια μέσου</value>
+                    <value xml:lang="es">Continuo</value>
+                    <value xml:lang="fi">Rivitä läpi</value>
+                    <value xml:lang="fr">Continu</value>
+                    <value xml:lang="he">‮עיטוף דרך‬</value>
+                    <value xml:lang="it">Attraverso</value>
+                    <value xml:lang="ja">折り返しなし</value>
+                    <value xml:lang="ko">배치 없음</value>
+                    <value xml:lang="nl">Doorloop</value>
+                    <value xml:lang="pl">Przepływanie</value>
+                    <value xml:lang="pt-BR">Ajuste Através</value>
+                    <value xml:lang="ru">Сквозное обтекание</value>
+                    <value xml:lang="sk">Obtekať cez</value>
+                    <value xml:lang="sv">Textgenomflöde</value>
+                    <value xml:lang="th">ตัดผ่าน</value>
+                    <value xml:lang="tr">Metin arkasına gönder</value>
+                    <value xml:lang="hi">से लपेटो</value>
+                    <value xml:lang="zh-CN">贯穿</value>
+                    <value xml:lang="pt">Através do objecto</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1110,6 +1442,36 @@
                     <value xml:lang="en-US">Te~xt &lt;-&gt; Table...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ConvertTableToText" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle in Text...</value>
+                    <value xml:lang="en-US">T~able to Text...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ConvertTextToTable" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Text in Tabelle...</value>
+                    <value xml:lang="en-US">~Text to Table...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:HeadingRowsRepeat" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de-DE">Überschrift wiederholen</value>
+                    <value xml:lang="en-US">Heading rows repeat</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableSort" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de-DE">Sortieren...</value>
+                    <value xml:lang="en-US">So~rt...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertRowDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zeilen...</value>
+                    <value xml:lang="en-US">~Rows...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertRows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Zeile einfügen</value>
@@ -1117,6 +1479,12 @@
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertColumnDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Spalten...</value>
+                    <value xml:lang="en-US">~Columns...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertColumns" oor:op="replace">
@@ -1139,6 +1507,10 @@
                     <value xml:lang="de">Zeile löschen</value>
                     <value xml:lang="en-US">Delete Row</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Zeilen</value>
+                    <value xml:lang="en-US">~Rows</value>
+                </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
                 </prop>
@@ -1148,8 +1520,18 @@
                     <value xml:lang="de">Spalte löschen</value>
                     <value xml:lang="en-US">Delete Column</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de-DE">Zeilen</value>
+                    <value xml:lang="en-US">~Columns</value>
+                </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteTable" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="en-US">~Table</value>
                 </prop>
             </node>
             <node oor:name=".uno:SplitCell" oor:op="replace">
@@ -1172,8 +1554,39 @@
             </node>
             <node oor:name=".uno:SetRowHeight" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeilenhöhe</value>
-                    <value xml:lang="en-US">Row Height</value>
+                    <value xml:lang="de">Zeilenhöhe...</value>
+                    <value xml:lang="en-US">Row Height...</value>
+                    <value xml:lang="ar">ارتفاع الصف</value>
+                    <value xml:lang="no">Row Height</value>
+                    <value xml:lang="ca">Alçada de la fila</value>
+                    <value xml:lang="zh-TW">行高</value>
+                    <value xml:lang="cs">Výška řádku</value>
+                    <value xml:lang="da">Rækkehøjde</value>
+                    <value xml:lang="el">Ύψος γραμμής</value>
+                    <value xml:lang="es">Altura de fila</value>
+                    <value xml:lang="fi">Rivin korkeus</value>
+                    <value xml:lang="fr">Hauteur de ligne</value>
+                    <value xml:lang="he">‮גובה שורה‬</value>
+                    <value xml:lang="it">Altezza riga</value>
+                    <value xml:lang="ja">行の高さ</value>
+                    <value xml:lang="ko">행 높이</value>
+                    <value xml:lang="nl">Rijhoogte</value>
+                    <value xml:lang="pl">Wysokość wierszy</value>
+                    <value xml:lang="pt-BR">Altura da Linha</value>
+                    <value xml:lang="ru">Высота строки</value>
+                    <value xml:lang="sk">Výška riadku</value>
+                    <value xml:lang="sv">Radhöjd</value>
+                    <value xml:lang="th">ความยาวแถว</value>
+                    <value xml:lang="tr">Satır yüksekliği</value>
+                    <value xml:lang="hi">पंक्ति ऊँचाई</value>
+                    <value xml:lang="zh-CN">行高</value>
+                    <value xml:lang="pt">Altura da linha</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetColumnWidth" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Spaltenbreite...</value>
+                    <value xml:lang="en-US">~Column Width...</value>
                 </prop>
             </node>
             <node oor:name=".uno:OptimizeTable" oor:op="replace">
@@ -1187,8 +1600,33 @@
             </node>
             <node oor:name=".uno:BulletsAndNumberingDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Nummerierung bearbeiten</value>
-                    <value xml:lang="en-US">Edit Numbering</value>
+                    <value xml:lang="de">Nummerierung und Aufzählungszeichen...</value>
+                    <value xml:lang="en-US">~Bullets and Numbering...</value>
+                    <value xml:lang="ar">تحرير الترقيم</value>
+                    <value xml:lang="no">Edit Numbering</value>
+                    <value xml:lang="ca">Edita la numeració</value>
+                    <value xml:lang="zh-TW">編輯編號</value>
+                    <value xml:lang="cs">Upravit číslování</value>
+                    <value xml:lang="da">Rediger nummerering</value>
+                    <value xml:lang="el">Επεξεργασία αρίθμησης</value>
+                    <value xml:lang="es">Editar numeración</value>
+                    <value xml:lang="fi">Muokkaa numerointia</value>
+                    <value xml:lang="fr">Éditer la numérotation</value>
+                    <value xml:lang="he">‮עריכת מיספור‬</value>
+                    <value xml:lang="it">Modifica numerazione</value>
+                    <value xml:lang="ja">番号付けの編集</value>
+                    <value xml:lang="ko">번호 매기기 편집</value>
+                    <value xml:lang="nl">Nummering bewerken</value>
+                    <value xml:lang="pl">Edytuj numerację</value>
+                    <value xml:lang="pt-BR">Editar Numeração</value>
+                    <value xml:lang="ru">Изменить стиль нумерации/маркировки</value>
+                    <value xml:lang="sk">Upraviť číslovanie</value>
+                    <value xml:lang="sv">Redigera numrering</value>
+                    <value xml:lang="th">แก้ไขลำดับตัวเลข</value>
+                    <value xml:lang="tr">Numaralamayı düzenle</value>
+                    <value xml:lang="hi">संख्या देने का संपादन</value>
+                    <value xml:lang="zh-CN">编辑编号</value>
+                    <value xml:lang="pt">Editar numeração</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1217,8 +1655,18 @@
                     <value xml:lang="de">Zeile selektieren</value>
                     <value xml:lang="en-US">Select Rows</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Zeilen</value>
+                    <value xml:lang="en-US">~Rows</value>
+                </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:EntireCell" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zelle selektieren</value>
+                    <value xml:lang="en-US">C~ells</value>
                 </prop>
             </node>
             <node oor:name=".uno:GoUp" oor:op="replace">
@@ -1231,6 +1679,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Spalte selektieren</value>
                     <value xml:lang="en-US">Select Column</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Spalten</value>
+                    <value xml:lang="en-US">~Columns</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1246,6 +1698,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Tabelle selektieren</value>
                     <value xml:lang="en-US">Select Table</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="en-US">~Table</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1283,8 +1739,33 @@
             </node>
             <node oor:name=".uno:InsertFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Rechenleiste</value>
-                    <value xml:lang="en-US">Fo~rmula Bar</value>
+                    <value xml:lang="de">~Formel</value>
+                    <value xml:lang="en-US">Fo~rmula</value>
+                    <value xml:lang="ar">Fo~rmularbar</value>
+                    <value xml:lang="no">Fo~rmula Bar</value>
+                    <value xml:lang="ca">Fo~rmula Bar</value>
+                    <value xml:lang="zh-TW">編輯列(~R)</value>
+                    <value xml:lang="cs">Panel vzorců</value>
+                    <value xml:lang="da">Form~ellinje</value>
+                    <value xml:lang="el">Γραμμ~ή συναρτήσεων</value>
+                    <value xml:lang="es">~Barra de fórmulas</value>
+                    <value xml:lang="fi">Fo~rmularbar</value>
+                    <value xml:lang="fr">Barre de ~calcul</value>
+                    <value xml:lang="he">~Rechenleiste</value>
+                    <value xml:lang="it">~Barra di calcolo</value>
+                    <value xml:lang="ja">数式バー(~R)</value>
+                    <value xml:lang="ko">수식 표시줄(~R)</value>
+                    <value xml:lang="nl">Fo~rmulebalk</value>
+                    <value xml:lang="pl">Fo~rmularbar</value>
+                    <value xml:lang="pt-BR">Barra de fórmulas</value>
+                    <value xml:lang="ru">Fo~rmularbar</value>
+                    <value xml:lang="sk">Pa~nel vzorcov</value>
+                    <value xml:lang="sv">For~mellist</value>
+                    <value xml:lang="th">Fo~rmula Bar</value>
+                    <value xml:lang="tr">~Formül Çubuğu</value>
+                    <value xml:lang="hi">Fo~rmula Bar</value>
+                    <value xml:lang="zh-CN">编辑栏(~R)</value>
+                    <value xml:lang="pt">Fo~rmularbar</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1698,7 +2179,32 @@
             <node oor:name=".uno:EditRegion" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Bereiche</value>
-                    <value xml:lang="en-US">Sections</value>
+                    <value xml:lang="en-US">~Sections</value>
+                    <value xml:lang="ar">نطاقات</value>
+                    <value xml:lang="no">Sections</value>
+                    <value xml:lang="ca">Seccions</value>
+                    <value xml:lang="zh-TW">區域</value>
+                    <value xml:lang="cs">Sekce</value>
+                    <value xml:lang="da">Sektioner</value>
+                    <value xml:lang="el">Ενότητες</value>
+                    <value xml:lang="es">Secciones</value>
+                    <value xml:lang="fi">Osat</value>
+                    <value xml:lang="fr">Sections</value>
+                    <value xml:lang="he">‮חלקי מסמך‬</value>
+                    <value xml:lang="it">Sezioni</value>
+                    <value xml:lang="ja">範囲</value>
+                    <value xml:lang="ko">구역</value>
+                    <value xml:lang="nl">Bereiken</value>
+                    <value xml:lang="pl">Sekcje</value>
+                    <value xml:lang="pt-BR">Seções</value>
+                    <value xml:lang="ru">Разделы</value>
+                    <value xml:lang="sk">Sekcie</value>
+                    <value xml:lang="sv">Områden</value>
+                    <value xml:lang="th">ส่วน</value>
+                    <value xml:lang="tr">Bölüm</value>
+                    <value xml:lang="hi">विभाग</value>
+                    <value xml:lang="zh-CN">区域</value>
+                    <value xml:lang="pt">Categorias</value>
                 </prop>
             </node>
             <node oor:name=".uno:JumpToReference" oor:op="replace">
@@ -1823,8 +2329,33 @@
             </node>
             <node oor:name=".uno:WrapIdeal" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Umlauf dynamisch</value>
-                    <value xml:lang="en-US">Wrap Optimal</value>
+                    <value xml:lang="de">Dynamischer Seitenumlauf</value>
+                    <value xml:lang="en-US">~Optimal Page Wrap</value>
+                    <value xml:lang="ar">التفاف ديناميكي</value>
+                    <value xml:lang="no">Wrap Optimal</value>
+                    <value xml:lang="ca">Ajustament òptim</value>
+                    <value xml:lang="zh-TW">自動環繞換行</value>
+                    <value xml:lang="cs">Optimální obtékání</value>
+                    <value xml:lang="da">Dynamisk ombrydning</value>
+                    <value xml:lang="el">Δυναμική αναδίπλωση</value>
+                    <value xml:lang="es">Ajuste dinámico</value>
+                    <value xml:lang="fi">Optimaalinen rivitys</value>
+                    <value xml:lang="fr">Adaptation dynamique</value>
+                    <value xml:lang="he">‮עיטוף מיטבי‬</value>
+                    <value xml:lang="it">Scorrimento dinamico</value>
+                    <value xml:lang="ja">左右動的折り返し</value>
+                    <value xml:lang="ko">최적으로 문장 배치</value>
+                    <value xml:lang="nl">Omloop dynamisch</value>
+                    <value xml:lang="pl">Opływanie optymalne</value>
+                    <value xml:lang="pt-BR">Ajuste Dinâmico</value>
+                    <value xml:lang="ru">Оптимальное обтекание</value>
+                    <value xml:lang="sk">Optimálne obtekanie</value>
+                    <value xml:lang="sv">Dynamisk textanpassning</value>
+                    <value xml:lang="th">ตัดเหมาะที่สุด</value>
+                    <value xml:lang="tr">Dinamik metin dağılımı</value>
+                    <value xml:lang="hi">योग्य लपेटना </value>
+                    <value xml:lang="zh-CN">最佳环绕</value>
+                    <value xml:lang="pt">Ajuste dinâmico</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1838,8 +2369,33 @@
             </node>
             <node oor:name=".uno:WrapThroughTransparent" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Durchlauf transparent</value>
-                    <value xml:lang="en-US">Wrap Transparent</value>
+                    <value xml:lang="de">Im ~Hintergrund</value>
+                    <value xml:lang="en-US">In ~Background</value>
+                    <value xml:lang="ar">التفاف شفاف</value>
+                    <value xml:lang="no">Wrap Transparent</value>
+                    <value xml:lang="ca">Ajustament transparent</value>
+                    <value xml:lang="zh-TW">不環繞透明</value>
+                    <value xml:lang="cs">Průhledné obtékání</value>
+                    <value xml:lang="da">Transparent gennemgående</value>
+                    <value xml:lang="el">Αναδίπλωση διαφανές</value>
+                    <value xml:lang="es">Continuo transparente</value>
+                    <value xml:lang="fi">Rivitä läpinäkyvästi</value>
+                    <value xml:lang="fr">Continu transparent</value>
+                    <value xml:lang="he">‮עיטוף כרקע‬</value>
+                    <value xml:lang="it">Attraversa trasparente</value>
+                    <value xml:lang="ja">背景として</value>
+                    <value xml:lang="ko">배경으로</value>
+                    <value xml:lang="nl">Doorloop transparant</value>
+                    <value xml:lang="pl">Przezroczysty przepływ tekstu</value>
+                    <value xml:lang="pt-BR">Ajuste Contínuo Transparente</value>
+                    <value xml:lang="ru">Прозрачное сквозное обтекание</value>
+                    <value xml:lang="sk">Priehľadné obtekanie</value>
+                    <value xml:lang="sv">Transparent textgenomflöde</value>
+                    <value xml:lang="th">ตัดความโปร่งแสง</value>
+                    <value xml:lang="tr">Metin arkasına gönder (saydam)</value>
+                    <value xml:lang="hi">पारदर्शक लपेटना</value>
+                    <value xml:lang="zh-CN">透明贯穿</value>
+                    <value xml:lang="pt">Ajuste contínuo transparente</value>
                 </prop>
             </node>
             <node oor:name=".uno:GoToStartOfPrevColumn" oor:op="replace">
@@ -2012,11 +2568,40 @@
                     <value xml:lang="de">Umlauf erster Absatz</value>
                     <value xml:lang="en-US">Wrap First Paragraph</value>
                 </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">~Erster Absatz</value>
+                    <value xml:lang="en-US">~First Paragraph</value>
+                </prop>
             </node>
             <node oor:name=".uno:DistributeColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Spalten gleichmäßig verteilen</value>
-                    <value xml:lang="en-US">Space Columns Equally</value>
+                    <value xml:lang="en-US">~Distribute Columns Evenly</value>
+                    <value xml:lang="ar">توزيع الأعمدة بالتساوي</value>
+                    <value xml:lang="no">Space Columns Equally</value>
+                    <value xml:lang="ca">Distribueix les columnes uniformement</value>
+                    <value xml:lang="zh-TW">對稱調整欄寬</value>
+                    <value xml:lang="cs">Rovnoměrně rozložit sloupce</value>
+                    <value xml:lang="da">Fordel kolonner jævnt</value>
+                    <value xml:lang="el">Ίση κατανομή στηλών</value>
+                    <value xml:lang="es">Ordenar columnas</value>
+                    <value xml:lang="fi">Tasaa sarakevälit</value>
+                    <value xml:lang="fr">Répartir les colonnes proportionnellement</value>
+                    <value xml:lang="he">‮פיזטר טורים באופן אחיד‬</value>
+                    <value xml:lang="it">Distribuisci le colonne uniformemente</value>
+                    <value xml:lang="ja">列の均等分割</value>
+                    <value xml:lang="ko">열 간격 균등하게</value>
+                    <value xml:lang="nl">Kolommen gelijkmatig verdelen</value>
+                    <value xml:lang="pl">Rozłóż kolumny równomiernie</value>
+                    <value xml:lang="pt-BR">Afastar as Colunas Igualmente</value>
+                    <value xml:lang="ru">Распределить столбцы равномерно</value>
+                    <value xml:lang="sk">Rovnomerne rozložiť stĺpce</value>
+                    <value xml:lang="sv">Fördela kolumner jämnt</value>
+                    <value xml:lang="th">ระยะห่างคอลัมน์ที่เท่ากัน</value>
+                    <value xml:lang="tr">Sütunları genişliklerini eşitle</value>
+                    <value xml:lang="hi">स्तंभों को समान अंतर दो</value>
+                    <value xml:lang="zh-CN">平均分配列宽</value>
+                    <value xml:lang="pt">Ordenar colunas</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2031,7 +2616,32 @@
             <node oor:name=".uno:DistributeRows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Zeilen gleichmäßig verteilen</value>
-                    <value xml:lang="en-US">Space Rows Equally </value>
+                    <value xml:lang="en-US">Distribute Rows Equally </value>
+                    <value xml:lang="ar">توزيع الصفوف بالتساوي</value>
+                    <value xml:lang="no">Space Rows Equally </value>
+                    <value xml:lang="ca">Distribueix les files uniformement</value>
+                    <value xml:lang="zh-TW">對稱地調整列高</value>
+                    <value xml:lang="cs">Rovnoměrně rozložit řádky</value>
+                    <value xml:lang="da">Fordel rækker jævnt</value>
+                    <value xml:lang="el">Ίση κατανομή γραμμών</value>
+                    <value xml:lang="es">Ordenar filas</value>
+                    <value xml:lang="fi">Tasaa rivivälit </value>
+                    <value xml:lang="fr">Espace équilibré entre les lignes</value>
+                    <value xml:lang="he">‮פיזור שורות באופן אחיד‬</value>
+                    <value xml:lang="it">Distribuisci le righe uniformemente</value>
+                    <value xml:lang="ja">行の均等分割</value>
+                    <value xml:lang="ko">행 간격 균등하게</value>
+                    <value xml:lang="nl">Rijen gelijkmatig verdelen</value>
+                    <value xml:lang="pl">Rozłóż wiersze równomiernie</value>
+                    <value xml:lang="pt-BR">Afastar as Linhas Igualmente</value>
+                    <value xml:lang="ru">Распределить строки равномерно</value>
+                    <value xml:lang="sk">Rovnomerne rozložiť riadky</value>
+                    <value xml:lang="sv">Fördela rader jämnt</value>
+                    <value xml:lang="th">ระยะห่างแถวที่เท่ากัน </value>
+                    <value xml:lang="tr">Satır yüksekliklerini eşitle</value>
+                    <value xml:lang="hi">पंक्तियों को समान अंतर दो </value>
+                    <value xml:lang="zh-CN">平均分配行高</value>
+                    <value xml:lang="pt">Ordenar linhas</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2041,6 +2651,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Konturumlauf ein</value>
                     <value xml:lang="en-US">Wrap Contour On</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Kontur</value>
+                    <value xml:lang="en-US">~Contour</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -2075,8 +2689,33 @@
             </node>
             <node oor:name=".uno:RowSplit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Am Seiten- und Spaltenende aufbrechen</value>
-                    <value xml:lang="en-US">Break across page and columns</value>
+                    <value xml:lang="de">Zeilenumbruch an Seiten- und Spaltenenden zulassen</value>
+                    <value xml:lang="en-US">Allow Row to Break Across Pages and Columns</value>
+                    <value xml:lang="ar">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="no">Break across page and columns</value>
+                    <value xml:lang="ca">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="zh-TW">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="cs">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="da">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="el">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="es">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="fi">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="fr">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="he">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="it">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="ja">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="ko">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="nl">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="pl">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="pt-BR">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="ru">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="sk">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="sv">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="th">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="tr">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="hi">Am Seiten- und Spaltenende aufbrechen</value>
+                    <value xml:lang="zh-CN">跨页断行</value>
+                    <value xml:lang="pt">Am Seiten- und Spaltenende aufbrechen</value>
                 </prop>
             </node>
             <node oor:name=".uno:SelectText" oor:op="replace">
@@ -2168,8 +2807,37 @@
             </node>
             <node oor:name=".uno:TextWrap" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Textumlauf</value>
-                    <value xml:lang="en-US">Text Wrap</value>
+                    <value xml:lang="de">Textumlauf...</value>
+                    <value xml:lang="en-US">Text Wrap...</value>
+                    <value xml:lang="ar">التفاف النص</value>
+                    <value xml:lang="no">Text Wrap</value>
+                    <value xml:lang="ca">Ajustament del text</value>
+                    <value xml:lang="zh-TW">換行</value>
+                    <value xml:lang="cs">Obtékání textu</value>
+                    <value xml:lang="da">Tekstombrydning</value>
+                    <value xml:lang="el">Αναδίπλωση κειμένου</value>
+                    <value xml:lang="es">Ajuste de texto</value>
+                    <value xml:lang="fi">Tekstin rivitys</value>
+                    <value xml:lang="fr">Habillage</value>
+                    <value xml:lang="he">Textumlauf</value>
+                    <value xml:lang="it">Scorrimento testo</value>
+                    <value xml:lang="ja">テキストの折り返し</value>
+                    <value xml:lang="ko">텍스트 배치</value>
+                    <value xml:lang="nl">Tekstomloop</value>
+                    <value xml:lang="pl">Zawijanie tekstu</value>
+                    <value xml:lang="pt-BR">Ajuste do Texto</value>
+                    <value xml:lang="ru">Обтекание текстом</value>
+                    <value xml:lang="sk">Obtekanie textu</value>
+                    <value xml:lang="sv">Textanpassning</value>
+                    <value xml:lang="th">ตัดข้อความ</value>
+                    <value xml:lang="tr">Metin dağılımı</value>
+                    <value xml:lang="hi">टेक्स्ट् लपेटो</value>
+                    <value xml:lang="zh-CN">文字环绕</value>
+                    <value xml:lang="pt">Ajustar texto</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="de">Bearbeiten...</value>
+                    <value xml:lang="en-US">~Edit...</value>
                 </prop>
             </node>
             <node oor:name=".uno:GotoNextIndexMark" oor:op="replace">
@@ -2360,8 +3028,33 @@
             </node>
             <node oor:name=".uno:Fieldnames" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Feldbefehle</value>
-                    <value xml:lang="en-US">~Fields</value>
+                    <value xml:lang="de">~Feldnamen</value>
+                    <value xml:lang="en-US">~Field Names</value>
+                    <value xml:lang="ar">حقول</value>
+                    <value xml:lang="no">~Fields</value>
+                    <value xml:lang="ca">~Camps</value>
+                    <value xml:lang="zh-TW">欄位指令(~F)</value>
+                    <value xml:lang="cs">Pole</value>
+                    <value xml:lang="da">~Felter</value>
+                    <value xml:lang="el">Εντολές πεδίου</value>
+                    <value xml:lang="es">~Campos</value>
+                    <value xml:lang="fi">~Kentät</value>
+                    <value xml:lang="fr">C~hamps</value>
+                    <value xml:lang="he">‮שדות‬</value>
+                    <value xml:lang="it">~Comandi di campo</value>
+                    <value xml:lang="ja">フィールド(~F)</value>
+                    <value xml:lang="ko">필드(~F)</value>
+                    <value xml:lang="nl">~Veldopdrachten</value>
+                    <value xml:lang="pl">~Pola</value>
+                    <value xml:lang="pt-BR">~Campos</value>
+                    <value xml:lang="ru">Поля</value>
+                    <value xml:lang="sk">~Pole</value>
+                    <value xml:lang="sv">~Fältkommandon</value>
+                    <value xml:lang="th">เ~ขตข้อมูล</value>
+                    <value xml:lang="tr">~Alan öğeleri</value>
+                    <value xml:lang="hi">~क्षेत्र</value>
+                    <value xml:lang="zh-CN">字段指令(~F)</value>
+                    <value xml:lang="pt">Ca~mpos</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2369,12 +3062,67 @@
             </node>
             <node oor:name=".uno:TableBoundaries" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabellenbegrenzungen</value>
-                    <value xml:lang="en-US">Table Limits</value>
+                    <value xml:lang="de">Gitternetzlinien ausblenden</value>
+                    <value xml:lang="en-US">~Hide Gridlines</value>
+                    <value xml:lang="ar">حدود الجدول</value>
+                    <value xml:lang="no">Table Limits</value>
+                    <value xml:lang="ca">Límits de la taula</value>
+                    <value xml:lang="zh-TW">表格邊界</value>
+                    <value xml:lang="cs">Hranice polí</value>
+                    <value xml:lang="da">Tabelgrænser</value>
+                    <value xml:lang="el">Όρια πίνακα</value>
+                    <value xml:lang="es">Límites de la tabla</value>
+                    <value xml:lang="fi">Taulukon rajat</value>
+                    <value xml:lang="fr">Délimitations de tableau</value>
+                    <value xml:lang="he">‮גבולות טבלה‬</value>
+                    <value xml:lang="it">Limiti tabella</value>
+                    <value xml:lang="ja">表の境界</value>
+                    <value xml:lang="ko">표 경계</value>
+                    <value xml:lang="nl">Tabelbegrenzingen</value>
+                    <value xml:lang="pl">Siatka tabeli</value>
+                    <value xml:lang="pt-BR">Limites da Tabela</value>
+                    <value xml:lang="ru">Границы таблицы</value>
+                    <value xml:lang="sk">Limity tabuľky</value>
+                    <value xml:lang="sv">Tabellbegränsningar</value>
+                    <value xml:lang="th">ขีดจำกัดตาราง</value>
+                    <value xml:lang="tr">Tablo sınırları</value>
+                    <value xml:lang="hi">सारणी सीमा</value>
+                    <value xml:lang="zh-CN">表格边界</value>
+                    <value xml:lang="pt">Margens da tabela</value>
                 </prop>
             </node>
         </node>
         <node oor:name="Popups">
+            <node oor:name=".uno:TableMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">T~able</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableInsertMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Insert</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableDeleteMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Delete</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableSelectMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Select</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableAutoFitMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">A~utofit</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TableConvertMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Convert</value>
+                </prop>
+            </node>
             <node oor:name=".uno:UpdateMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Akt~ualisieren</value>
@@ -2391,6 +3139,24 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Wortanzahl</value>
                     <value xml:lang="en-US">~Word Count</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:StylesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Vorlagen</value>
+                    <value xml:lang="en-US">Styl~es</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:WrapMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Umlauf</value>
+                    <value xml:lang="en-US">~Wrap</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">AutoFormat</value>
+                    <value xml:lang="en-US">Auto~Format</value>
                 </prop>
             </node>
         </node>
