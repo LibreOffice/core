@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-13 16:22:54 $
+ *  last change: $Author: sj $ $Date: 2001-09-19 15:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2405,7 +2405,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         pScene->SetCamera( rCamera );
 
         pScene->SetRectsDirty();
-        pScene->InitTransformationSet();
 
         // Merker fuer Kameraaenderungen
 
@@ -2596,6 +2595,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
 
         pScene->SetModel( pSdrModel );
         pScene->SetItemSet( aSet );
+        pScene->InitTransformationSet();
     }
     else
         delete pScene;  // Aufraeumen
