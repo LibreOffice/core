@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-20 07:29:09 $
+ *  last change: $Author: ab $ $Date: 2001-09-19 09:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,24 +218,11 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
     //Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     //{
 
-
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
-        StarBASICRef ThisBasic = maBasicRef;
-        StarBASICRef aAppBasicRef = maBasicRef;
-
-        SbxObject* p = maBasicRef;
-        while( (p = p->GetParent()) != NULL )
-        {
-            if( p->IsA( TYPE( StarBASIC ) ) )
-            {
-                aAppBasicRef = (StarBASIC*)p;
-                break;
-            }
-        }
-
         // Full qualified name?
         String aMacro( aScriptEvent.ScriptCode );
+        String aLibName;
         String aLocation;
         if( aMacro.GetTokenCount( '.' ) == 3 )
         {
@@ -244,28 +231,89 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
             sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
             if (nIndex >= 0)
+            {
                 aLocation = aFullLibName.copy( 0, nIndex );
+                aLibName = aFullLibName.copy( nIndex + 1 );
+            }
 
             String aModul = aMacro.GetToken( 0, '.', nLast );
             aMacro.Erase( 0, nLast );
         }
 
+        SbxObject* p = maBasicRef;
+        SbxObject* pParent = p->GetParent();
+        SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
+
+        StarBASICRef xAppStandardBasic;
+        StarBASICRef xDocStandardBasic;
+        if( pParentParent )
+        {
+            // Own basic must be document library
+            xAppStandardBasic = (StarBASIC*)pParentParent;
+            xDocStandardBasic = (StarBASIC*)pParent;
+        }
+        else if( pParent )
+        {
+            String aName = p->GetName();
+            if( aName.EqualsAscii("Standard") )
+            {
+                // Own basic is doc standard lib
+                xDocStandardBasic = (StarBASIC*)p;
+            }
+            xAppStandardBasic = (StarBASIC*)pParent;
+        }
+        else
+        {
+            xAppStandardBasic = (StarBASIC*)p;
+        }
+
+        sal_Bool bSearchLib = true;
+        StarBASICRef xLibSearchBasic;
         if( aLocation.EqualsAscii("application") )
-            ThisBasic = NULL;
+            xLibSearchBasic = xAppStandardBasic;
         else if( aLocation.EqualsAscii("document") )
-            aAppBasicRef = NULL;
+            xLibSearchBasic = xDocStandardBasic;
+        else
+            bSearchLib = false;
 
         SbxVariable* pMethVar = NULL;
-        if( ThisBasic.Is() )
+        // Be still tolerant and make default search if no search basic exists
+        if( bSearchLib && xLibSearchBasic.Is() )
         {
-            // Search only in own Basic, not automatically in application basic
-            USHORT nFlags = ThisBasic->GetFlags();
-            ThisBasic->ResetFlag( SBX_GBLSEARCH );
-            pMethVar = ThisBasic->Find( aMacro, SbxCLASS_DONTCARE );
-            ThisBasic->SetFlags( nFlags );
+            StarBASICRef xLibBasic;
+            sal_Int16 nCount = xLibSearchBasic->GetObjects()->Count();
+            for( sal_Int16 nObj = -1; nObj < nCount ; nObj++ )
+            {
+                StarBASIC* pBasic;
+                if( nObj == -1 )
+                {
+                    pBasic = (StarBASIC*)xLibSearchBasic;
+                }
+                else
+                {
+                    SbxVariable* pVar = xLibSearchBasic->GetObjects()->Get( nObj );
+                    pBasic = PTR_CAST(StarBASIC,pVar);
+                }
+                if( pBasic )
+                {
+                    String aName = pBasic->GetName();
+                    if( aName == aLibName )
+                    {
+                        // Search only in the lib, not automatically in application basic
+                        USHORT nFlags = pBasic->GetFlags();
+                        pBasic->ResetFlag( SBX_GBLSEARCH );
+                        pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
+                        pBasic->SetFlags( nFlags );
+                        break;
+                    }
+                }
+            }
         }
-        if( (!pMethVar || !pMethVar->ISA(SbMethod)) && aAppBasicRef.Is() )
-            pMethVar = aAppBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
+
+        // Default: Be tolerant and search everywhere
+        if( (!pMethVar || !pMethVar->ISA(SbMethod)) && maBasicRef.Is() )
+            pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
+
         SbMethod* pMeth = PTR_CAST(SbMethod,pMethVar);
         if( !pMeth )
             return;
