@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:59:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1901,7 +1901,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems,
     ::rtl::OUString* pNewData = aNewSeq.getArray();
     ::rtl::OUString* pOldData = aSeq.getArray();
 
-    if ( nPos > nOldLen )
+    if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = (sal_uInt16) nOldLen;
 
     sal_uInt16 n;
@@ -2290,7 +2290,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems
     ::rtl::OUString* pNewData = aNewSeq.getArray();
     const ::rtl::OUString* pOldData = aSeq.getConstArray();
 
-    if ( nPos > nOldLen )
+    if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = (sal_uInt16) nOldLen;
 
     sal_uInt16 n;
