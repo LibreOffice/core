@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-19 09:44:47 $
+ *  last change: $Author: tl $ $Date: 2000-12-08 18:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,19 @@ void SmEditWindow::ImplSetFont()
         Font aFont = GetFont();
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
+        long nFntHeight = aFont.GetSize().Height();
+
         DBG_ASSERT( pEditEngineItemPool, "NULL pointer");
         pEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                     aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
                     EE_CHAR_FONTINFO ) );
         pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( aFont.GetSize().Height(), 100,
-                    EE_CHAR_FONTHEIGHT ) );
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 //      pEditEngineItemPool->SetPoolDefaultItem(
 //              SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
 
