@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:15 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 10:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
@@ -320,11 +323,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     waste time rewriting it
                     */
                     if (!bDuplicate)
-                    {
-                        rWW8Wrt.GetOLEExp().ExportOLEObject( *pObj, *xOleStg );
-                        //We never need this stream: See #99809# and #i2179#
-                        xOleStg->Remove(CREATE_CONST_ASC("\2OlePres000"));
-                    }
+                        rWW8Wrt.GetOLEExp().ExportOLEObject(*pObj, *xOleStg);
 
                     // write as embedded field - the other things will be done
                     // in the escher export
