@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:40:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
     Text = "Speichern" ; \
     Text [ English ] = "Save options" ; \
     Text [ english_us ] = "Save" ; \
-    Text [ portuguese_brazilian ] = "Gravar opções" ; \
+    Text [ portuguese_brazilian ] = "Gravar op??s" ; \
     Text [ swedish ] = "Spara" ; \
     Text [ danish ] = "Gem" ; \
     Text [ italian ] = "Salva" ; \
@@ -133,7 +133,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ English ] = "~Edit document info before" ;
         Text [ norwegian ] = "~Lagre dem dokumentinformasjon" ;
         Text [ italian ] = "~Modifica prima le proprietà" ;
-        Text [ portuguese_brazilian ] = "~Gravar com Informações sobre o documento" ;
+        Text [ portuguese_brazilian ] = "~Gravar com Informa??s sobre o documento" ;
         Text [ portuguese ] = "~Editar propriedades do documento antes de guardar" ;
         Text [ finnish ] = "~Muokkaa asiakirjan ominaisuuksia ennen tallennusta" ;
         Text [ danish ] = "Rediger egenskaber forinden" ;
@@ -145,7 +145,7 @@ TabPage RID_SFXPAGE_SAVE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÏÈ±à¼­ÊôĞÔ(~E)";
         Text[ russian ] = "Ïğàâêà ñâîéñòâ äîêóìåíòà äî ñîõğàíåíèÿ";
-        Text[ polish ] = "Edytuj wczeœniej w³aœciwoœci";
+        Text[ polish ] = "Edytuj wcze?niej w³a?ciwo?ci";
         Text[ japanese ] = "•Û‘¶‚ÉÌßÛÊßÃ¨‚ÌŠm”F(~E)";
         Text[ chinese_traditional ] = "¥ı½s¿èÄİ©Ê(~E)";
         Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
@@ -399,11 +399,11 @@ TabPage RID_SFXPAGE_SAVE
         Text = "Dokumenttyp" ;
         Text [ English ] = "Document type" ;
         Text[ english_us ] = "Document type";
-        Text[ portuguese ] = "Documento";
+        Text[ portuguese ] = "Tipo de documento";
         Text[ russian ] = "Òèï äîêóìåíòà";
         Text[ greek ] = "Document";
         Text[ dutch ] = "Document";
-        Text[ french ] = "Document";
+        Text[ french ] = "Type de document";
         Text[ spanish ] = "Tipo de documento";
         Text[ finnish ] = "Dokument";
         Text[ italian ] = "Documento";
@@ -426,11 +426,11 @@ TabPage RID_SFXPAGE_SAVE
         Text = "Immer speichern als" ;
         Text [ English ] = "Always save as" ;
         Text[ english_us ] = "Always save as";
-        Text[ portuguese ] = "Formatos de ficheiro";
+        Text[ portuguese ] = "Guardar sempre como";
         Text[ russian ] = "Âñåãäà ñîõğàíÿòü êàê";
         Text[ greek ] = "File formats";
         Text[ dutch ] = "Bestandsformaten";
-        Text[ french ] = "Formats de fichier";
+        Text[ french ] = "Enregistrer systématiquement comme";
         Text[ spanish ] = "Guardar siempre como";
         Text[ finnish ] = "Dateiformate";
         Text[ italian ] = "Formati file";
@@ -591,7 +591,7 @@ TabPage RID_SFXPAGE_SAVE
             < "Textdokument" ;     APP_WRITER    ; > ;
         < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
         < "Tabellendokument" ; APP_CALC      ; > ;
-        < "Präsentation" ;     APP_IMPRESS   ; > ;
+        < "Pr?sentation" ;     APP_IMPRESS   ; > ;
         < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
