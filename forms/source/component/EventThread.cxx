@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-23 15:23:12 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 13:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType) throw (Ru
     return aReturn;
 }
 
-void OComponentEventThread::disposing( const EventObject& evt )
+void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( evt.Source == m_xComp )
     {

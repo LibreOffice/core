@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 13:38:59 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 13:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ OEditBaseModel::OEditBaseModel(
 
 // XPersist
 //------------------------------------------------------------------------------
-void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -176,7 +176,7 @@ sal_Int16 OEditBaseModel::getPersistenceFlags() const
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -332,7 +332,7 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
 }
 
 //------------------------------------------------------------------------------
-void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
     {
