@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-03 17:32:09 $
+ *  last change: $Author: jp $ $Date: 2001-08-01 11:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,46 +877,27 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     rWrt.Strm() << sRTF_FCHARSET;
     rWrt.OutULong( nChSet );
 
-#ifdef _WITH_ALTERNATIV_NAMES
-    String sFntNm( GetFontToken( rFont.GetFamilyName(), 0 )),
-           sAltNm( GetFontToken( rFont.GetFamilyName(), 1 ));
-
-//JP 27.6.2001: hack for WinWord - in other case they can't use alternative
-//              fontnames - don't ask me why.
+    String sFntNm( GetFontToken( rFont.GetFamilyName(), 0 ));
+    String sAltNm( GetSubsFontName( sFntNm, SUBSFONT_ONLYONE | SUBSFONT_MS ));
+    if( !sAltNm.Len() )                 // or contains the name itself a list?
+        sAltNm = GetFontToken( rFont.GetFamilyName(), 1 );
 
     rWrt.Strm() << ' ';
-    RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
-                                rWrt.bWriteHelpFmt );
-    if( sAltNm.Len() )
+    if( sAltNm.Len() && sAltNm != sFntNm )
     {
-        OutComment( rWrt, sRTF_FALT) << ' ';
+        //JP 30.7.2001: then save the MS font name as normal name and the own
+        //              as alternative name. Because WinWord can't match each
+        //              font to a UniCode font. So the CJK texts are shown as
+        //              empty rectangles ;-(.
         RTFOutFuncs::Out_String( rWrt.Strm(), sAltNm, DEF_ENCODING,
+                                 rWrt.bWriteHelpFmt );
+        OutComment( rWrt, sRTF_FALT) << ' ';
+        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
                                     rWrt.bWriteHelpFmt ) << '}';
     }
-#else
-    String sFamilyNm( ::GetFontToken( rFont.GetFamilyName(), 0 ));
-/*  if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
-    {
-        String sTmp( ::GetSubsFontName( sFamilyNm,
-                                        SUBSFONT_MS | SUBSFONT_ONLYONE ));
-        if( sTmp.Len() )
-            sFamilyNm = sTmp;
-    }
-*/
-    //JP 3.7.2001: hack - so that WW can show CJK documents correct, if no
-    //                      font exist.
-    if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
-    {
-        // mostly the MS fonts are the second one ;-)
-        String sTmp( ::GetFontToken( rFont.GetFamilyName(), 1 ));
-        if( sTmp.Len() )
-            ( sFamilyNm += ';' ) += sTmp;
-    }
-    rWrt.Strm() << ' ';
-    RTFOutFuncs::Out_String( rWrt.Strm(), sFamilyNm, DEF_ENCODING,
-                                rWrt.bWriteHelpFmt );
-#endif
-
+    else
+        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
+                                 rWrt.bWriteHelpFmt );
     rWrt.Strm() << ";}";
 }
 
