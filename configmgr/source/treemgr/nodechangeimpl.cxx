@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: lla $ $Date: 2000-11-09 14:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,18 +236,18 @@ void NodeChangeImpl::applyToOther(Node* pNode)
 /// apply this change to the given node - start state is nState (which is then updated)
 void NodeChangeImpl::implApply(Node* pTarget, unsigned& nState)
 {
-    OSL_ASSERT( !(m_nState & eAppliedChange)); // Caller must chack
+    OSL_ASSERT( !(m_nState & eAppliedChange)); // Caller must check
 
     OSL_ENSURE(pTarget, "ERROR: Configuration: No target - cannot apply change");
 
     if (pTarget)
     {
-        if (!(nState & eTestedChange))
-        {
+        if (!(nState & eTestedChange))  // Test checks the old value if there is realy a change
+        {                               // for eventlisteners to say "the old value is kept"
             doTest(*pTarget);
             nState |= eTestedChange;
         }
-        doTest(*pTarget);
+        doApply(*pTarget);
         nState |= eAppliedChange;
     }
 }
@@ -388,7 +388,7 @@ void ValueChangeImpl::doApply( Node& rTarget)
     ValueNodeImpl& rValueTarget = rTarget.valueImpl();
 
     doApplyChange(rValueTarget);
-    postCheckValue(rValueTarget, m_aNewValue);
+    postCheckValue(rValueTarget, m_aNewValue); // Sideeffect: m_aNewValue will be changed
 }
 //-----------------------------------------------------------------------------
 
