@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_pp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ Context_PP_MacroParams::Context_PP_MacroParams( Cx_Base & i_rFollowUpContext )
 void
 Context_PP_MacroParams::ReadCharChain( CharacterSource & io_rText )
 {
+    uintt nLen;
+
     jumpOverWhite( io_rText );
     // KORR_FUTURE Handling line breaks within macro parameters:
     char cSeparator = jumpTo( io_rText, ',', ')' );
@@ -183,7 +185,7 @@ Context_PP_MacroParams::ReadCharChain( CharacterSource & io_rText )
     static char cBuf[500];
     // KORR_FUTURE, make it still safer, here:
     strcpy( cBuf, io_rText.CutToken() );    // SAFE STRCPY (#100211# - checked)
-    for ( uintt nLen = strlen(cBuf);
+    for ( nLen = strlen(cBuf);
           nLen > 0 AND cBuf[nLen-1] < 33;
           --nLen )
     { }
