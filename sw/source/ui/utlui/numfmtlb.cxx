@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-13 14:27:53 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 17:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,31 +483,28 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
     String sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
-    if (pView && nPos == pBox->GetEntryCount() - 1 && pBox->GetEntry(nPos) == sDefine)
+    if( pView && nPos == pBox->GetEntryCount() - 1 &&
+        pBox->GetEntry( nPos ) == sDefine )
     {
-        SvNumberFormatter* pFormatter;
-
         SwWrtShell &rSh = pView->GetWrtShell();
-        pFormatter = rSh.GetNumberFormatter();
+        SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
 
         SfxItemSet aCoreSet( rSh.GetAttrPool(),
-                            SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
-                            SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
-                            SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-                            SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-                            0 );
+            SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
+            SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
+            SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
+            SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
+            0 );
 
+        double fValue = GetDefValue( pFormatter, nCurrFormatType);
 
-        double fValue = GetDefValue(pFormatter, nCurrFormatType);
+        ULONG nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
+        aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
 
-        ULONG nFormat = pFormatter->GetStandardFormat(nCurrFormatType, eCurLanguage);
-        SfxUInt32Item aVal(SID_ATTR_NUMBERFORMAT_VALUE, nFormat);
-        aCoreSet.Put(aVal);
+        aCoreSet.Put( SvxNumberInfoItem( pFormatter, fValue,
+                                            SID_ATTR_NUMBERFORMAT_INFO ) );
 
-        SvxNumberInfoItem aNumInf(pFormatter, fValue, SID_ATTR_NUMBERFORMAT_INFO);
-        aCoreSet.Put(aNumInf);
-
-        if ((nCurrFormatType & NUMBERFORMAT_DATE) || (nCurrFormatType & NUMBERFORMAT_TIME))
+        if( (NUMBERFORMAT_DATE | NUMBERFORMAT_TIME) & nCurrFormatType )
             aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
 
         // Keine Sprachauswahl im Dialog, da Sprache im Textattribut enthalten ist
@@ -608,6 +605,9 @@ void NumFormatListBox::Clear()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/13 14:27:53  jp
+      use new shell method for asking the current language
+
       Revision 1.4  2000/11/20 09:02:23  jp
       should change: use LocaleDataWrapper
 
