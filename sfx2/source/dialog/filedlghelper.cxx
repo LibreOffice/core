@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 09:19:09 $
+ *  last change: $Author: dv $ $Date: 2001-07-11 09:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,8 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     Reference < XFilePicker >   mxFileDlg;
 
     SfxFilterMatcher       *mpMatcher;
+    GraphicFilter          *mpGraphicFilter;
+
     OUString                maPath;
     OUString                maCurFilter;
     Timer                   maPreViewTimer;
@@ -243,6 +245,8 @@ private:
 
     void                    loadConfig();
     void                    saveConfig();
+
+    ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
 
@@ -273,7 +277,7 @@ public:
     OUString                getFilter() const;
     OUString                getRealFilter() const;
 
-    Graphic                 GetGraphic() const { return maGraphic; }
+    ErrCode                 getGraphic( Graphic& rGraphic ) const;
 };
 
 // ------------------------------------------------------------------------
@@ -475,74 +479,117 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
     if ( mbShowPreview && ( aPathSeq.getLength() == 1 ) )
     {
         OUString    aURL = aPathSeq[0];
-        SvStream*   pIStm = NULL;
 
-        if ( utl::UCBContentHelper::IsDocument( aURL ) )
-            pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
-
-        if( pIStm )
+        if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
-            if( GraphicConverter::Import( *pIStm, maGraphic ) == ERRCODE_NONE )
-            {
-                Bitmap aBmp = maGraphic.GetBitmap();
+            Bitmap aBmp = maGraphic.GetBitmap();
 
-                // scale the bitmap to the correct size
-                sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
-                sal_Int32 nOutHeight = xFilePicker->getAvailableHeight();
-                sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
-                sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
+            // scale the bitmap to the correct size
+            sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
+            sal_Int32 nOutHeight = xFilePicker->getAvailableHeight();
+            sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
+            sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
 
-                double nXRatio = (double) nOutWidth / nBmpWidth;
-                double nYRatio = (double) nOutHeight / nBmpHeight;
+            double nXRatio = (double) nOutWidth / nBmpWidth;
+            double nYRatio = (double) nOutHeight / nBmpHeight;
 
-                if ( nXRatio < nYRatio )
-                    aBmp.Scale( nXRatio, nXRatio );
-                else
-                    aBmp.Scale( nYRatio, nYRatio );
+            if ( nXRatio < nYRatio )
+                aBmp.Scale( nXRatio, nXRatio );
+            else
+                aBmp.Scale( nYRatio, nYRatio );
 
-                nBmpWidth  = aBmp.GetSizePixel().Width();
-                nBmpHeight = aBmp.GetSizePixel().Height();
+            nBmpWidth  = aBmp.GetSizePixel().Width();
+            nBmpHeight = aBmp.GetSizePixel().Height();
 
-                sal_Int32 nMidX = ( nOutWidth - nBmpWidth ) / 2;
-                sal_Int32 nMidY = ( nOutHeight - nBmpHeight ) / 2;
+            sal_Int32 nMidX = ( nOutWidth - nBmpWidth ) / 2;
+            sal_Int32 nMidY = ( nOutHeight - nBmpHeight ) / 2;
 
-                Rectangle aSrcRect( 0, 0, nBmpWidth, nBmpHeight );
-                Rectangle aDstRect( nMidX, nMidY, nMidX + nBmpWidth, nMidY + nBmpHeight );
+            Rectangle aSrcRect( 0, 0, nBmpWidth, nBmpHeight );
+            Rectangle aDstRect( nMidX, nMidY, nMidX + nBmpWidth, nMidY + nBmpHeight );
 
-                Bitmap aScaledBmp( Size( nOutWidth, nOutHeight ), aBmp.GetBitCount() );
-                aScaledBmp.Erase( Color( COL_WHITE ) );
-                aScaledBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
+            Bitmap aScaledBmp( Size( nOutWidth, nOutHeight ), aBmp.GetBitCount() );
+            aScaledBmp.Erase( Color( COL_WHITE ) );
+            aScaledBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
 
-                // and copy it into the Any
-                SvMemoryStream aData;
+            // and copy it into the Any
+            SvMemoryStream aData;
 
-                aData << aScaledBmp;
+            aData << aScaledBmp;
 
-                Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
+            Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
 
-                aAny <<= aBuffer;
-            }
-
-            try
-            {
-                xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
-            }
-            catch( IllegalArgumentException ){}
-
-            delete pIStm;
+            aAny <<= aBuffer;
         }
+    }
+
+    try
+    {
+        // clear the preview window
+        xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
+    }
+    catch( IllegalArgumentException ){}
+
+    return 0;
+}
+
+// ------------------------------------------------------------------------
+ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
+                                           Graphic& rGraphic ) const
+{
+    if ( utl::UCBContentHelper::IsFolder( rURL ) )
+        return ERRCODE_IO_NOTAFILE;
+
+    // select graphic filter from dialog filter selection
+    OUString aCurFilter( getFilter() );
+
+    sal_uInt16 nFilter = aCurFilter.getLength() && mpGraphicFilter->GetImportFormatCount()
+                    ? mpGraphicFilter->GetImportFormatNumber( aCurFilter )
+                    : GRFILTER_FORMAT_DONTKNOW;
+
+    INetURLObject aURLObj( rURL );
+
+    if ( aURLObj.HasError() || INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
+    {
+        aURLObj.SetSmartProtocol( INET_PROT_FILE );
+        aURLObj.SetSmartURL( rURL );
+    }
+
+    ErrCode nRet = ERRCODE_NONE;
+
+    // non-local?
+    if ( INET_PROT_FILE != aURLObj.GetProtocol() )
+    {
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
+
+        if( pStream )
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter );
+        else
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
+
+        delete pStream;
     }
     else
     {
-        try
-        {
-            // clear the preview window
-            xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
-        }
-        catch( IllegalArgumentException ){}
+        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
     }
 
-    return 0;
+    return nRet;
+}
+
+// ------------------------------------------------------------------------
+ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
+{
+    ErrCode nRet = ERRCODE_NONE;
+
+    if ( ! maGraphic )
+    {
+        OUString aPath;
+        nRet = getGraphic( aPath, rGraphic );
+    }
+    else
+        rGraphic = maGraphic;
+
+    return nRet;
 }
 
 // ------------------------------------------------------------------------
@@ -570,6 +617,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
 
     mpMatcher = NULL;
+    mpGraphicFilter = NULL;
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
 
@@ -660,6 +708,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
 // ------------------------------------------------------------------------
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
+    delete mpGraphicFilter;
+
     if ( mbDeleteMatcher )
         delete mpMatcher;
 
@@ -1006,15 +1056,15 @@ void FileDialogHelper_Impl::addGraphicFilter()
         return;
 
     // create the list of filters
-    GraphicFilter*  pGraphicFilter = new GraphicFilter;
-    USHORT          i, nCount = pGraphicFilter->GetImportFormatCount();
+    mpGraphicFilter = new GraphicFilter;
+    USHORT i, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
     String aExtensions;
 
     for ( i = 0; i < nCount; i++ )
     {
-        String aWildcard = pGraphicFilter->GetImportWildcard( i );
+        String aWildcard = mpGraphicFilter->GetImportWildcard( i );
 
         if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
         {
@@ -1042,8 +1092,8 @@ void FileDialogHelper_Impl::addGraphicFilter()
     // Now add the filter
     for ( i = 0; i < nCount; i++ )
     {
-        String aName = pGraphicFilter->GetImportFormatName( i );
-        String aWildcard = pGraphicFilter->GetImportWildcard( i );
+        String aName = mpGraphicFilter->GetImportFormatName( i );
+        String aWildcard = mpGraphicFilter->GetImportWildcard( i );
         try
         {
             xFltMgr->appendFilter( aName, aWildcard );
@@ -1053,8 +1103,6 @@ void FileDialogHelper_Impl::addGraphicFilter()
             DBG_ERRORFILE( "Could not append Filter" );
         }
     }
-
-    delete pGraphicFilter;
 }
 
 // ------------------------------------------------------------------------
@@ -1329,28 +1377,22 @@ String FileDialogHelper::GetCurrentFilter() const
     return mpImp->getFilter();
 }
 
+#if SUPD < 639
 // ------------------------------------------------------------------------
 Graphic FileDialogHelper::GetGraphic() const
 {
-    Graphic aGraphic = mpImp->GetGraphic();
+    Graphic aGraphic;
 
-    if ( !aGraphic )
-    {
-        String aURL = GetPath();
-
-        if ( aURL.Len() && utl::UCBContentHelper::IsDocument( aURL ) )
-        {
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
-
-            if( pIStm )
-            {
-                GraphicConverter::Import( *pIStm, aGraphic );
-                delete pIStm;
-            }
-        }
-    }
+    mpImp->getGraphic( aGraphic );
 
     return aGraphic;
+}
+#endif
+
+// ------------------------------------------------------------------------
+ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
+{
+    return mpImp->getGraphic( rGraphic );
 }
 
 // ------------------------------------------------------------------------
