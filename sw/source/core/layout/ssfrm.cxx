@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-14 14:09:58 $
+ *  last change: $Author: ama $ $Date: 2001-09-17 11:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,20 +340,37 @@ SwLayoutFrm::~SwLayoutFrm()
 const SwRect SwFrm::PaintArea() const
 {
     SwRect aRect( Frm() );
+#ifdef VERTICAL_LAYOUT
+    const FASTBOOL bVert = IsVertical();
+    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    long nRight = (aRect.*fnRect->fnGetRight)();
+    long nLeft  = (aRect.*fnRect->fnGetLeft)();
+#else
     long nRight = aRect.Right();
+#endif
     const SwFrm* pTmp = this;
     BOOL bLeft = TRUE;
     BOOL bRight = TRUE;
     while( pTmp )
     {
+#ifdef VERTICAL_LAYOUT
+        long nTmpRight = (pTmp->Frm().*fnRect->fnGetRight)();
+        long nTmpLeft = (pTmp->Frm().*fnRect->fnGetLeft)();
+#else
         long nTmpRight = pTmp->Frm().Right();
+#endif
         ASSERT( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() ||
             pTmp->IsCellFrm() || pTmp->IsRowFrm() || //nobody leaves a table!
             pTmp->IsRootFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            if( bLeft || nLeft < nTmpLeft )
+                nLeft = nTmpLeft;
+#else
             if( bLeft || aRect.Left() < pTmp->Frm().Left() )
                 aRect.Left( pTmp->Frm().Left() );
+#endif
             if( bRight || nTmpRight < nRight )
                 nRight = nTmpRight;
             if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() || pTmp->IsRootFrm() )
@@ -365,20 +382,53 @@ const SwRect SwFrm::PaintArea() const
         {
             if( pTmp->GetPrev() )   // the first column has _no_
             {                       // influence to the left range
+#ifdef VERTICAL_LAYOUT
+                if( bLeft || nLeft < nTmpLeft )
+                    nLeft = nTmpLeft;
+#else
                 if( bLeft || aRect.Left() < pTmp->Frm().Left() )
                     aRect.Left( pTmp->Frm().Left() );
+#endif
                 bLeft = FALSE;
             }
             if( pTmp->GetNext() )   // the last column has _no_
             {                       // influence to the right range
                 if( bRight || nTmpRight < nRight )
+                    nRight = nTmpRight;
+                bRight = FALSE;
+            }
+        }
+#ifdef VERTICAL_LAYOUT
+        else if( bVert && pTmp->IsBodyFrm() )
+        {
+            // Header and footer frames have always horizontal direction and
+            // limit the body frame.
+            // A previous frame of a body frame must be a header,
+            // the next frame of a body frame may be a footnotecontainer or
+            // a footer. The footnotecontainer has the same direction like
+            // the body frame.
+            if( pTmp->GetPrev() && ( bLeft || nLeft < nTmpLeft ) )
+            {
+                nLeft = nTmpLeft;
+                bLeft = FALSE;
+            }
+            if( pTmp->GetNext() &&
+                ( pTmp->GetNext()->IsFooterFrm() || pTmp->GetNext()->GetNext() )
+                && ( bRight || nTmpRight < nRight ) )
+            {
                 nRight = nTmpRight;
                 bRight = FALSE;
             }
         }
+#endif
         pTmp = pTmp->GetUpper();
     }
+#ifdef VERTICAL_LAYOUT
+    (aRect.*fnRect->fnSetLeft)( nLeft );
+    (aRect.*fnRect->fnSetRight)( nRight );
+#else
     aRect.Right( nRight );
+#endif
     return aRect;
 }
 
@@ -396,7 +446,53 @@ const SwRect SwFrm::PaintArea() const
 
 const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
 {
+#ifdef VERTICAL_LAYOUT
+    BOOL bVert = IsVertical();
+    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    long nLeft = (Frm().*fnRect->fnGetLeft)();
+    long nWidth = (Frm().*fnRect->fnGetWidth)();
+    long nPrtLeft = (Prt().*fnRect->fnGetLeft)();
+    long nPrtWidth = (Prt().*fnRect->fnGetWidth)();
+    if( nPrtLeft + nPrtWidth > nWidth )
+        nWidth = nPrtLeft + nPrtWidth;
+    if( nPrtLeft < 0 )
+    {
+        nLeft += nPrtLeft;
+        nWidth -= nPrtLeft;
+    }
+    SwTwips nRight = nLeft + nWidth;
+    long nAdd = 0;
+    if( bBorder )
+    {
+        SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
+        const SwBorderAttrs &rAttrs = *aAccess.Get();
+        const SvxBoxItem &rBox = rAttrs.GetBox();
+        if ( rBox.GetLeft() )
+            nLeft -= rBox.CalcLineSpace( BOX_LINE_LEFT );
+        else if ( rAttrs.IsBorderDist() )
+            nLeft -= rBox.GetDistance( BOX_LINE_LEFT ) + 1;
+        if ( rBox.GetRight() )
+            nAdd += rBox.CalcLineSpace( BOX_LINE_RIGHT );
+        else if ( rAttrs.IsBorderDist() )
+            nAdd += rBox.GetDistance( BOX_LINE_RIGHT ) + 1;
+        if( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
+        {
+            const SvxShadowItem &rShadow = rAttrs.GetShadow();
+            nLeft -= rShadow.CalcShadowSpace( SHADOW_LEFT );
+            nAdd += rShadow.CalcShadowSpace( SHADOW_RIGHT );
+        }
+    }
+    if( IsTxtFrm() && ((SwTxtFrm*)this)->HasPara() )
+    {
+        long nTmp = ((SwTxtFrm*)this)->HangingMargin();
+        if( nTmp > nAdd )
+            nAdd = nTmp;
+    }
+    nWidth = nRight + nAdd - nLeft;
     SwRect aRet( Frm() );
+    (aRet.*fnRect->fnSetPosX)( nLeft );
+    (aRet.*fnRect->fnSetWidth)( nWidth );
+#else
     if( Prt().Left() < 0 )
         aRet.Left( aRet.Left() + Prt().Left() );
     if( Prt().Left() + Prt().Width() > Frm().Width() )
@@ -427,6 +523,7 @@ const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
     }
     if( nRight > aRet.Left() + aRet.Width() )
         aRet.Width( nRight - aRet.Left() );
+#endif
     return aRet;
 }
 
