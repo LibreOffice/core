@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bc $ $Date: 2001-02-20 13:59:27 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,12 @@ String SAMPLES
     Text[ russian ] = "Äëÿ÷ òîãî, ÷òîáû ôóíêöèè ıòîãî ïğèìåğà ñòàëè äîñòóïíûìè, íåîáõîäèìî ñîçäàòü äîêóìåíò íà îñíîâå ıòîãî øàáëîíà.";
     Text[ italian ] = "Per poter sfruttare al meglio la funzionalità di questo esempio è necessario creare un documento in base a questo modello.";
     Text[ danish ] = "For at kunne udnytte dette eksempels fulde funktionsmuligheder skal der oprettes et nyt dokument på grundlag af denne skabelon.";
-    Text[ polish ] = "Aby dany przyk³ad mo¿na by³o w pe³ni wykorzystaæ, trzeba na podstawie danego szablonu utworzyæ nowy dokument.";
+    Text[ polish ] = "Aby dany przyk³ad mo¿na by³o w pe³ni wykorzystaæ, nale¿y na podstawie danego szablonu utworzyæ nowy dokument.";
     Text[ portuguese_brazilian ] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ japanese ] = "‚±‚Ì»İÌßÙ‚ª‚¤‚Ü‚­‹@”\\‚³‚¹‚é‚É‚ÍA‚±‚ÌÃİÌßÚ°Ä‚ğè–{‚ÉV‚µ‚¢ÄŞ·­ÒİÄ‚ğì¬‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÀÌ »ùÇÃÀÇ ¿ÏÀü ±â´ÉÀ» ÀÌ¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ·Á¸é ÀÌ ¼­½ÄÆÄÀÏÀ» ±âÃÊ·Î »õ ¹®¼­¸¦ ÀÛ¼ºÇØ¾ß ÇÕ´Ï´Ù.";
+    Text[ korean ] = "ÀÌ ¿¹ÀÇ ±â´É¼ºÀ» ¿Ïº®ÇÏ°Ô¡¡ÀÌ¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ±âÀ§ÇØ¼­´Â ÀÌ ¼­½ÄÆÄÀÏÀ» ±âÃÊ·Î »õ ¹®¼­¸¦ ÀÛ¼ºÇØ¾ß ÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "Ö»ÓĞÊ×ÏÈ½èÖúÕâ¸öÑùÊ½ĞÂ½¨Ò»¸öÎÄµµ£¬²ÅÄÜ³ä·ÖÊ¹ÓÃÊ¾Àı¹¦ÄÜ¡£";
-    Text[ chinese_traditional ] = "­n·Q¥R¤À§Q¥Î³o­Ó¼Ë¦¡ªº¦UÏúÉ¬¨q¥\\¯à¡A±z¥²¶·±Ä¥Î³o­Ó¼Ë¦¡¨Ó·s«Ø¤@­Ó¤å¥ó¡C";
+    Text[ chinese_traditional ] = "­n·Q¥R¤À§Q¥Î³o­Ó¼Ë¦¡ªº¦UºØÉ¬¨q¥\\¯à¡A±z¥²¶·±Ä¥Î³o­Ó¼Ë¦¡¨Ó·s«Ø¤@­Ó¤å¥ó¡C";
     Text[ arabic ] = "áßí ÊÓÊØíÚ ÇÓÊÎÏÇã åĞÇ ÇáãËÇá Úáì ÇáäÍæ ÇáÃãËá¡ Úáíß ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ ÈÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ.";
     Text[ turkish ] = "Bu örneğin tüm işlevlerini kullanabilmek için, bu şablon ile yeni bir belge oluşturun.";
 };
@@ -151,7 +151,7 @@ String STYLES + 1
     Text[ english_us ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
     Text[ portuguese ] = "Erro ao guardar o documento activo no porta-documentos! É impossível restaurar a seguinte acção.";
     Text[ russian ] = "Îøèáêà ïğè ïğîìåæóòî÷íîì ñîõğàíåíèè òåêóùåãî äîêóìåíòà. Îòìåíèòü ñëåäóşùåå äåéñòâèå íåâîçìîæíî.";
-    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñïóùñéíŞ áğïèŞêåõóç ôïõ ôñİ÷ïíôïò åããñÜöïõ! Äåí åßíáé äõíáôüí íá ãßíåé ç áíáßñåóç ôçò áêüëïõèçò åíİñãåéáò.";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñïóùñéíŞ áğïèŞêåõóç ôïõ ôñİ÷ïíôïò åããñÜöïõ! Äåí åßíáé äõíáôŞ ç áíáßñåóç ôçò áêüëïõèçò åíİñãåéáò.";
     Text[ dutch ] = "Fout bij opslaan van actueel document in cachegeheugen. De volgende activiteit kan niet ongedaan worden gemaakt.";
     Text[ french ] = "Une erreur est survenue lors de l'enregistrement du document actif dans le presse-papiers ! Impossible d'annuler l'action suivante.";
     Text[ spanish ] = "¡Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acción.";
@@ -175,7 +175,7 @@ String STYLES + 2
     Text[ english_us ] = "Cancel";
     Text[ portuguese ] = "Cancelar";
     Text[ russian ] = "Îòìåíà";
-    Text[ greek ] = "Áêıñùóç";
+    Text[ greek ] = "&Áêıñùóç";
     Text[ dutch ] = "Stoppen";
     Text[ french ] = "Annuler";
     Text[ spanish ] = "Cancelar";
@@ -200,7 +200,7 @@ String STYLES + 3
     Text[ english_us ] = "OK";
     Text[ portuguese ] = "OK";
     Text[ russian ] = "OK";
-    Text[ greek ] = "OK";
+    Text[ greek ] = "&OK";
     Text[ dutch ] = "OK";
     Text[ french ] = "OK";
     Text[ spanish ] = "Aceptar";
@@ -210,7 +210,7 @@ String STYLES + 3
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
     Text[ japanese ] = "OK";
-    Text[ korean ] = "È®ÀÎ";
+    Text[ korean ] = "£Ï£Ë";
     Text[ chinese_simplified ] = "È·¶¨";
     Text[ chinese_traditional ] = "½T©w";
     Text[ arabic ] = "ÍÓäÇğ";
@@ -238,7 +238,7 @@ String AgendaDlgName
     Text[ japanese ] = "‹c–˜^‚ÌÃİÌßÚ°Ä";
     Text[ korean ] = "ÇÁ·ÎÅäÄİ ¼­½ÄÆÄÀÏ";
     Text[ chinese_simplified ] = "¼ÇÂ¼ÑùÊ½";
-    Text[ chinese_traditional ] = "¨óÄ³¼Ë¦¡";
+    Text[ chinese_traditional ] = "¨ó©w¼Ë¦¡";
     Text[ arabic ] = "ŞÇáÈ ÈÑæÊæßæá";
     Text[ turkish ] = "Tutanak şablonu";
 };
@@ -364,15 +364,15 @@ String CorrespondenceNoTextmark+1
     Text[ spanish ] = "No se pueden insertar campos de cartas en serie.";
     Text[ italian ] = "Impossibile inserire i campi della stampa in serie.";
     Text[ swedish ] = "Omöjligt att infoga fält för standardbrev.";
-    Text[ russian ] = "Âñòàâèòü ïîëÿ ñëèÿíèÿ íåâîçìîæíî.";
+    Text[ russian ] = "Âñòàâèòü ïîëÿ öèğêóëÿğíîãî ïèñüìà íåâîçìîæíî.";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åéóáãùãŞ ôùí ğåäßùí ôùí åãêõêëßùí åğéóôïëşí.";
     Text[ danish ] = "Det er ikke muligt at indsætte brevfeltningsfelter.";
     Text[ polish ] = "Nie mo¿na by³o wstawiæ pól listu seryjnego.";
     Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
     Text[ japanese ] = "·‚µ‚İˆóü‚ÌÌ¨°ÙÄŞ‚ğ‘}“ü‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "Æû ·¹ÅÍ ÇÊµå¸¦ Æ÷ÇÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "Æû ·¹ÅÍ ÇÊµå¸¦ »ğÀÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨²åÈëÓÊ¼şºÏ²¢×Ö¶Î¡£";
-    Text[ chinese_traditional ] = "µLªk´¡¤J¶l¥ó¦X¦}ªºÄæ¦ì¡C";
+    Text[ chinese_traditional ] = "µLªk´¡¤J¶l¥ó¦X¨ÖªºÄæ¦ì¡C";
     Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
     Text[ turkish ] = "Standart mektup alanları eklenemiyor.";
 };
@@ -461,7 +461,7 @@ String CorrespondenceDialog+2
     Text[ spanish ] = "Carta en serie";
     Text[ italian ] = "Stampa in serie";
     Text[ swedish ] = "Standardbrev";
-    Text[ russian ] = "Ñëèÿíèå";
+    Text[ russian ] = "Öèğêóëÿğíîå ïèñüìî";
     Text[ greek ] = "Åãêıêëéïò åğéóôïëŞ";
     Text[ danish ] = "Brevfletningsbrev";
     Text[ polish ] = "List seryjny";
@@ -469,7 +469,7 @@ String CorrespondenceDialog+2
     Text[ japanese ] = "·‚µ‚İˆóü";
     Text[ korean ] = "Æû ·¹ÅÍ";
     Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢";
-    Text[ chinese_traditional ] = "¶l¥ó(«H¥ó)¦X¦}";
+    Text[ chinese_traditional ] = "¶l¥ó(«H¥ó)¦X¨Ö";
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
     Text[ turkish ] = "Standart mektup";
 };
@@ -481,4 +481,21 @@ String TextField
     Text[ english_us ] = "Textfield is not defined!";
     Text[ language_user1 ] = "Mitteilung in einer Messagebox";
 
+    Text[ portuguese ] = "Textfield is not defined!";
+    Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ íå çàäàíî.";
+    Text[ greek ] = "Äåí ïñßóôçêå ôï ğåäßï ôùí äåäïìİíùí ôïõ ÷ñŞóôç!";
+    Text[ dutch ] = "Textfield is not defined!";
+    Text[ french ] = "Ce champ de données d'identité n'est pas défini !";
+    Text[ spanish ] = "Textfield is not defined!";
+    Text[ italian ] = "Textfield is not defined!";
+    Text[ danish ] = "Textfield is not defined!";
+    Text[ swedish ] = "Användardatafält är inte definierat!";
+    Text[ polish ] = "Nie zdefiniowano pola danych u¿ytkownika!";
+    Text[ portuguese_brazilian ] = "Textfield is not defined!";
+    Text[ japanese ] = "Textfield is not defined!";
+    Text[ korean ] = "Textfield is not defined!";
+    Text[ chinese_simplified ] = "Textfield is not defined!";
+    Text[ chinese_traditional ] = "ÁÙ¨S¦³©w¸q¨Ï¥ÎªÌ¸ê®ÆÄæ¦ì!";
+    Text[ turkish ] = "Textfield is not defined!";
+    Text[ arabic ] = "Textfield is not defined!";
 };
