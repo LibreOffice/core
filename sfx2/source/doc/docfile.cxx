@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:59:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,10 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     bTriedStorage = sal_True;
 
     if ( aStorage->GetError() == SVSTREAM_OK )
+    {
+        SetStorageKey_Impl();
         GetVersionList();
+    }
 
     // ???? wird das noch gebraucht?
 //  GetMedium_Impl();
@@ -1172,6 +1175,19 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
     pImp->bIsStorage = aStorage.Is();
     return aStorage;
+}
+
+//------------------------------------------------------------------
+sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
+void SfxMedium::SetStorageKey_Impl()
+{
+    // in case media-descriptor contains password it should be used on opening
+    if ( aStorage.Is() && pSet )
+    {
+        String aPasswd;
+        if ( GetPasswd_Impl( pSet, aPasswd ) )
+            aStorage->SetKey( S2BS( aPasswd ) );
+    }
 }
 
 //------------------------------------------------------------------
