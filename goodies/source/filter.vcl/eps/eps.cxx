@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-28 15:42:36 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 14:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,7 +1896,19 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             if ( i > 0 )
                 aPos.X() += pDX[ i - 1 ];
             Size aSize( aVirDev.GetTextWidth( nChar ), aNormSize.Height() );
+            switch( maFont.GetAlign() )
+            {
+                case( ALIGN_TOP ):
+                    aPos.Y() += aMetric.GetAscent();
+                break;
 
+                case( ALIGN_BOTTOM ):
+                    aPos.Y() -= aMetric.GetDescent();
+                break;
+
+                default:
+                break;
+            }
             if ( aVirDev.GetGlyphOutline( nChar, aPolyPoly, sal_True ) )
             {
                 ImplWriteLine( "pum" );
@@ -1905,7 +1917,8 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
                     ImplWriteF( nRotation, 1 );
                     *mpPS << "r ";
                 }
-                ImplTranslate( aPos.X() * fXScaling + fXOrigin, ( aPos.Y() - aNormSize.Height() ) * fYScaling + fYOrigin );
+                // always adjust text position to match baseline alignment
+                ImplTranslate( aPos.X() * fXScaling + fXOrigin, aPos.Y() * fYScaling + fYOrigin );
                 ImplPolyPoly( aPolyPoly, sal_True );
                 ImplWriteLine( "pom" );
             }
