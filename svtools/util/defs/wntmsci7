@@ -9518,3 +9518,5 @@ lpfnDrawTextW
 ?WriteViewSettings@SvtTemplateWindow@@QAEXXZ
 _real@8@3ffcccccccccccccd000
 _real@8@3ffeccccccccccccd000
+?ImportGraphic@GraphicFilter@@QAEGAAVGraphic@@ABVINetURLObject@@GPAGK@Z
+?ImportGraphic@GraphicFilter@@QAEGAAVGraphic@@ABVString@@AAVSvStream@@GPAGK@Z
