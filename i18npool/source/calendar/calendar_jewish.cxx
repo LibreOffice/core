@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:56:56 $
+ *  last change: $Author: khong $ $Date: 2002-07-12 17:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,14 @@
  ************************************************************************/
 
 #include <math.h>
+#include <stdio.h>
 
 #include "calendar_jewish.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+using namespace drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 #define ERROR RuntimeException()
@@ -258,3 +260,17 @@ Calendar_jewish::convertValue( sal_Int16 fieldIndex ) throw(RuntimeException)
     return sal_False;
 }
 
+// Methods in XExtendedCalendar
+OUString SAL_CALL
+Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+    throw (RuntimeException)
+{
+    if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
+        sal_Int16 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
+        sal_Char aStr[4];
+        sprintf(aStr, "%03d", value);
+        return OUString::createFromAscii(aStr);
+    }
+    else
+        return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
+}

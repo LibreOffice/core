@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-07-12 17:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #define _I18N_CALENDAR_GREGORIAN_HXX_
 
 #include "calendarImpl.hxx"
+#include "nativenumbersupplier.hxx"
 #include "unicode/calendar.h"
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 //  ----------------------------------------------------
 //  class Calendar_gregorian
@@ -84,12 +84,16 @@ public:
     ~Calendar_gregorian();
 
     // Methods
+    virtual void SAL_CALL loadCalendar(const rtl::OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDateTime(double nTimeInDays) throw(com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getDateTime() throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) throw(com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addValue(sal_Int16 nFieldIndex, sal_Int32 nAmount) throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isValid() throw (com::sun::star::uno::RuntimeException);
+
+    // Methods in XExtendedCalendar
+    virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
@@ -98,6 +102,7 @@ public:
 
 protected:
     icu::Calendar *body;
+    NativeNumberSupplier aNatNum;
     struct Era {
     sal_Int32 year;
     sal_Int32 month;
@@ -105,11 +110,11 @@ protected:
     };
     Era *eraArray;
     sal_Char* cCalendar;
-    virtual sal_Bool SAL_CALL convertValue( sal_Int16 fieldIndex ) throw(com::sun::star::uno::RuntimeException);
     sal_uInt32 fieldGet;
     sal_Int16 fieldGetValue[CalendarFieldIndex::FIELD_COUNT];
     sal_uInt32 fieldSet;
     sal_Int16 fieldSetValue[CalendarFieldIndex::FIELD_COUNT];
+    virtual sal_Bool SAL_CALL convertValue( sal_Int16 fieldIndex ) throw(com::sun::star::uno::RuntimeException);
 
 private:
     friend sal_Bool operator < (const Era& era1, const Era& era2) {
@@ -156,6 +161,9 @@ class Calendar_buddhist : public Calendar_gregorian
 public:
     // Constructors
     Calendar_buddhist();
+
+    // Methods in XExtendedCalendar
+    virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 };
 
 } } } }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-07-12 17:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,10 @@
 #ifndef _I18N_CALENDARIMPL_HXX_
 #define _I18N_CALENDARIMPL_HXX_
 
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#include <com/sun/star/i18n/XCalendar.hpp>
+#include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <drafts/com/sun/star/i18n/CalendarDisplayCode.hpp>
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <tools/list.hxx>
@@ -75,7 +77,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class CalendarImpl : public cppu::WeakImplHelper2
 <
-    XCalendar,
+    drafts::com::sun::star::i18n::XExtendedCalendar,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -113,25 +115,29 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem > SAL_CALL getDays() throw(com::sun::star::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(com::sun::star::uno::RuntimeException);
 
+    // Methods in XExtendedCalendar
+    virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
 
+protected:
+    com::sun::star::lang::Locale aLocale;
+    Calendar aCalendar;
+
 private:
     struct lookupTableItem {
-    lookupTableItem(rtl::OUString& _uniqueID, com::sun::star::uno::Reference < XCalendar >& _xCalendar) :
+    lookupTableItem(rtl::OUString& _uniqueID, com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     rtl::OUString uniqueID;
-    com::sun::star::uno::Reference < XCalendar > xCalendar;
+    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
     };
     List lookupTable;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
-    com::sun::star::uno::Reference < XLocaleData > xLocaleData;
-    com::sun::star::uno::Reference < XCalendar > xCalendar;
-    Calendar aCalendar;
+    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
     sal_Int16 aStartOfWeek;
-    rtl::OUString timeAM, timePM;
     virtual void SAL_CALL loadCachedCalendar(rtl::OUString& uniqueID) throw (com::sun::star::uno::RuntimeException);
 };
 

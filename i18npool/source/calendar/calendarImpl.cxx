@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-04-10 12:05:30 $
+ *  last change: $Author: khong $ $Date: 2002-07-12 17:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,7 @@
  ************************************************************************/
 
 #include "calendarImpl.hxx"
-#include <com/sun/star/i18n/XCalendar.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "localedata.hxx"
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -75,12 +72,7 @@ using namespace ::rtl;
 
 CalendarImpl::CalendarImpl(const Reference< XMultiServiceFactory > &rxMSF) : xMSF(rxMSF)
 {
-    Reference < XInterface > xI = xMSF->createInstance(
-        OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
-    if ( xI.is() )
-        xI->queryInterface(getCppuType( (const Reference< XLocaleData >*)0)) >>= xLocaleData;
 }
-
 
 CalendarImpl::~CalendarImpl()
 {
@@ -112,25 +104,24 @@ CalendarImpl::loadCachedCalendar(OUString& uniqueID) throw (RuntimeException)
     Reference < XInterface > xI = xMSF->createInstance(
         OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
     if ( xI.is() )
-        xI->queryInterface(::getCppuType((const Reference< XCalendar>*)0)) >>= xCalendar;
+        xI->queryInterface(::getCppuType((const Reference< XExtendedCalendar>*)0)) >>= xCalendar;
     else
         throw ERROR;
 
     lookupTable.Insert( new lookupTableItem(uniqueID, xCalendar) );
 }
 
-
 void SAL_CALL
 CalendarImpl::loadCalendar( const OUString& uniqueID, const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar> xC = xLocaleData->getAllCalendars(rLocale);
-    LocaleDataItem li = xLocaleData->getLocaleItem(rLocale); // use keeping Locale
-    timeAM = li.timeAM;
-    timePM = li.timePM;
+    aLocale = rLocale;
+    Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
         if ( (uniqueID.getLength() != 0) ? (uniqueID == xC[i].Name) : (xC[i].Default == sal_True) ) {
         aCalendar = xC[i];
         loadCachedCalendar(aCalendar.Name);
+        if (xCalendar.is())
+            xCalendar->loadCalendar(uniqueID, aLocale);
         // setup first day of week
         for (aStartOfWeek = aCalendar.Days.getLength()-1; aStartOfWeek>=0; aStartOfWeek-- )
             if (aCalendar.StartOfWeek == aCalendar.Days[aStartOfWeek].ID)
@@ -150,7 +141,7 @@ CalendarImpl::getLoadedCalendar() throw(RuntimeException)
 Sequence< OUString > SAL_CALL
 CalendarImpl::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar> xC = xLocaleData->getAllCalendars(rLocale);
+    Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
     sal_Int32 nLen = xC.getLength();
     Sequence< OUString > xSeq( nLen );
     for (sal_Int32 i = 0; i < nLen; i++)
@@ -242,8 +233,8 @@ CalendarImpl::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 n
 
     switch( displayIndex ) {
         case CalendarDisplayIndex::AM_PM:/* ==0 */
-        if (idx == 0) aStr = timeAM;
-        else if (idx == 1) aStr = timePM;
+        if (idx == 0) aStr = LocaleData().getLocaleItem(aLocale).timeAM;
+        else if (idx == 1) aStr = LocaleData().getLocaleItem(aLocale).timePM;
         else throw ERROR;
         break;
         case CalendarDisplayIndex::DAY:
@@ -271,7 +262,6 @@ CalendarImpl::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 n
     }
     return aStr;
 }
-
 
 sal_Int16 SAL_CALL
 CalendarImpl::getNumberOfMonthsInYear() throw(RuntimeException)
@@ -305,6 +295,16 @@ CalendarImpl::isValid() throw(RuntimeException)
 {
     if (xCalendar.is())
         return xCalendar->isValid();
+    else
+        throw ERROR ;
+}
+
+OUString SAL_CALL
+CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+    throw (RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
     else
         throw ERROR ;
 }
