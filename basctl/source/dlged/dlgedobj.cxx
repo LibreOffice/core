@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:51:10 $
+ *  last change: $Author: tbe $ $Date: 2002-08-01 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ DlgEdObj::~DlgEdObj()
 {
     DBG_DTOR(DlgEdObj, NULL);
 
-    EndListening();
+    if ( isListening() )
+        EndListening();
 }
 
 //----------------------------------------------------------------------------
@@ -276,8 +277,6 @@ void DlgEdObj::SetRectFromProps()
 
 void DlgEdObj::SetPropsFromRect()
 {
-    //EndListening(sal_False);
-
     // get control property set
     Reference< beans::XPropertySet >  xPSet( GetUnoControlModel(), UNO_QUERY );
     if (xPSet.is())
@@ -340,8 +339,6 @@ void DlgEdObj::SetPropsFromRect()
         aValue <<= aSize.Height();
         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
     }
-
-    //StartListening();
 }
 
 //----------------------------------------------------------------------------
@@ -747,20 +744,54 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::clonedFrom(const DlgEdObj* _pSource) // not working yet
+void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 {
+    // set parent form
+    pDlgEdForm = _pSource->pDlgEdForm;
+
+    // add child to parent form
+    pDlgEdForm->AddChild( this );
+
+    Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
+    if ( xPSet.is() )
+    {
+        // set new name
+        ::rtl::OUString aOUniqueName( GetUniqueName() );
+        Any aUniqueName;
+        aUniqueName <<= aOUniqueName;
+        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+
+        Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+        if ( xCont.is() )
+        {
+            // set tabindex
+               Sequence< OUString > aNames = xCont->getElementNames();
+            Any aTabIndex;
+            aTabIndex <<= (sal_Int16) aNames.getLength();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+
+            // insert control model in dialog model
+            Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
+            Any aCtrl;
+            aCtrl <<= xCtrl;
+            xCont->insertByName( aOUniqueName , aCtrl );
+        }
+    }
+
+    // start listening
+    StartListening();
 }
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone() const  // not working yet
+SdrObject* DlgEdObj::Clone() const
 {
     SdrObject* pReturn = SdrUnoObj::Clone();
 
-    DlgEdObj* pFormObject = PTR_CAST(DlgEdObj, pReturn);
-    DBG_ASSERT(pFormObject != NULL, "DlgEdObj::Clone : invalid clone !");
-    if (pFormObject)
-        pFormObject->clonedFrom(this);
+    DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pReturn);
+    DBG_ASSERT( pDlgEdObj != NULL, "DlgEdObj::Clone: invalid clone!" );
+    if ( pDlgEdObj )
+        pDlgEdObj->clonedFrom( this );
 
     return pReturn;
 }
@@ -778,10 +809,9 @@ SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const // not work
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::operator= (const SdrObject& rObj)    // not working yet
+void DlgEdObj::operator= (const SdrObject& rObj)
 {
     SdrUnoObj::operator= (rObj);
-
 }
 
 //----------------------------------------------------------------------------
@@ -843,6 +873,7 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     SetDefaults();
+    StartListening();
 
     return bResult;
 }
@@ -851,9 +882,6 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 void DlgEdObj::SetDefaults()
 {
-    // stop listening
-    EndListening( sal_False );
-
     // set parent form
     pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
 
@@ -924,9 +952,6 @@ void DlgEdObj::SetDefaults()
 
     // dialog model changed
     GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged( TRUE );
-
-    // start listening
-    StartListening();
 }
 
 //----------------------------------------------------------------------------

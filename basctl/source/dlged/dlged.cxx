@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-16 16:09:53 $
+ *  last change: $Author: tbe $ $Date: 2002-08-01 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,9 @@ void DlgEditor::CreateDefaultObject()
         // insert object into drawing page
         SdrPageView* pPageView = pSdrView->GetPageViewPvNum(0);
         pSdrView->InsertObject( pDlgEdObj, *pPageView, 0 );
+
+        // start listening
+        pDlgEdObj->StartListening();
     }
 }
 
