@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-25 15:15:22 $
+ *  last change: $Author: pl $ $Date: 2002-10-28 16:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 
 #define ENABLE_COMPRESSION
+#ifndef DEBUG
+#define COMPRESS_PAGES
+#endif
 
 using namespace vcl;
 using namespace rtl;
@@ -214,7 +217,11 @@ void PDFWriterImpl::PDFPage::beginStream()
     aLine.append( m_nStreamObject );
     aLine.append( " 0 obj\r\n<< /Length " );
     aLine.append( m_nStreamLengthObject );
-    aLine.append( " 0 R >>\r\nstream\r\n" );
+    aLine.append( " 0 R\r\n" );
+#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+    aLine.append( "   /Filter /FlateDecode\r\n" );
+#endif
+    aLine.append( ">>\r\nstream\r\n" );
     if( ! m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() ) )
         return;
     if( osl_File_E_None != osl_getFilePos( m_pWriter->m_aFile, &m_nBeginStreamPos ) )
@@ -222,6 +229,9 @@ void PDFWriterImpl::PDFPage::beginStream()
         osl_closeFile( m_pWriter->m_aFile );
         m_pWriter->m_bOpen = false;
     }
+#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+    m_pWriter->beginCompression();
+#endif
 }
 
 void PDFWriterImpl::PDFPage::endStream()
@@ -1605,15 +1615,34 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
                       "CMapName currentdict /CMap defineresource pop\r\n"
                       "end\r\n"
                       "end\r\n" );
+#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+    ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
+    SvMemoryStream aStream;
+    pCodec->BeginCompression();
+    pCodec->Write( aStream, (const BYTE*)aContents.getStr(), aContents.getLength() );
+    pCodec->EndCompression();
+    delete pCodec;
+#endif
 
     OStringBuffer aLine( 40 );
 
     aLine.append( nStream );
     aLine.append( " 0 obj\r\n<< /Length " );
+#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+    sal_Int32 nLen = (sal_Int32)aStream.Tell();
+    aStream.Seek( 0 );
+    aLine.append( nLen );
+    aLine.append( "\r\n   /Filter /FlateDecode" );
+#else
     aLine.append( aContents.getLength() );
+#endif
     aLine.append( " >>\r\nstream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+    CHECK_RETURN( writeBuffer( aStream.GetData(), nLen ) );
+#else
     CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
+#endif
     aLine.setLength( 0 );
     aLine.append( "endstream\r\n"
                   "endobj\r\n\r\n" );
@@ -1744,7 +1773,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 sal_uInt8 nEnc = fit->second.m_nSubsetGlyphID;
 
                 DBG_ASSERT( pGlyphIDs[nEnc] == 0 && pEncoding[nEnc] == 0, "duplicate glyph" );
-                DBG_ASSERT( nEnc > lit->m_aMapping.size(), "invalid glyph encoding" );
+                DBG_ASSERT( nEnc <= lit->m_aMapping.size(), "invalid glyph encoding" );
 
                 pGlyphIDs[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
