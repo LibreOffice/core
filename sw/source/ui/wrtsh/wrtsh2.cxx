@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:37:52 $
+ *  last change: $Author: mtg $ $Date: 2001-10-23 12:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,19 +226,22 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
     if (bOnlyInSel)
         pTmp->RemoveUnselectedFlds();
 
-    pTmp->PushCrsr();
-
     const USHORT nCnt = pTmp->Count();
-    BOOL bCancel = FALSE;
-    for( USHORT i = 0; i < nCnt && !bCancel; ++i )
+    if(nCnt)
     {
-        pTmp->GotoFieldPos( i );
-        bCancel = StartInputFldDlg( pTmp->GetField( i ), TRUE );
+        pTmp->PushCrsr();
 
-        // Sonst Updatefehler bei Multiselektion:
-        pTmp->GetField( i )->GetTyp()->UpdateFlds();
+        BOOL bCancel = FALSE;
+        for( USHORT i = 0; i < nCnt && !bCancel; ++i )
+        {
+            pTmp->GotoFieldPos( i );
+            bCancel = StartInputFldDlg( pTmp->GetField( i ), TRUE );
+
+            // Sonst Updatefehler bei Multiselektion:
+            pTmp->GetField( i )->GetTyp()->UpdateFlds();
+        }
+        pTmp->PopCrsr();
     }
-    pTmp->PopCrsr();
 
     if( !pLst )
         delete pTmp;
