@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 10:42:10 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,6 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 // virtual
 Content::~Content()
 {
-    // flush pending data.
-    flushData();
 }
 
 //=========================================================================
@@ -2050,8 +2048,8 @@ sal_Bool Content::flushData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !m_bDirty )
-        return sal_True;
+//    if ( !m_bDirty )
+//        return sal_True;
 
     // Note: XChangesBatch is only implemented by the package itself, not
     //       by the single entries. Maybe this has to change...
