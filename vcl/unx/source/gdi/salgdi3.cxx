@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:58:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
                 if( pFontCache_->GetCurPos() )
                 {
                     pFontCache_->Remove( pItem );
-                    pFontCache_->Insert( pItem, 0UL );
+                    pFontCache_->Insert( pItem, (sal_uInt32)0 );
                 }
                 return pItem;
             }
@@ -514,7 +514,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
                                         rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
-    pFontCache_->Insert( pItem, 0UL );
+    pFontCache_->Insert( pItem, (sal_uInt32)0 );
     pItem->AddRef();
 
     return pItem;
@@ -770,7 +770,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     Point aPos;
     static const int MAXGLYPHS = 160;
-    long aGlyphAry[ MAXGLYPHS ];
+    sal_Int32 aGlyphAry[ MAXGLYPHS ];
     int nMaxGlyphs = rLayout.GetOrientation() ? 1 : MAXGLYPHS;
     for( int nStart = 0;;)
     {
@@ -799,7 +799,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     int nXmin, nXmax, nYmin, nYmax;
     int nStart = 0;
     Point aPos;
-    long nGlyph;
+    sal_Int32 nGlyph;
     for( bool bFirst=true; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
         const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( rFont, nGlyph );
@@ -987,7 +987,7 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
     XCopyGC( pDisplay, nGC, (1<<GCLastBit)-(1+GCFillStyle+GCLineWidth), tmpGC );
 
     Point aPos;
-    long nGlyph;
+    sal_Int32 nGlyph;
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
         Pixmap aStipple = aX11GlyphPeer.GetPixmap( rFont, nGlyph );
@@ -1394,7 +1394,7 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 BOOL X11SalGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    ImplFontData* pFont,
-                                   long* pGlyphIDs,
+                                   sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
                                    int nGlyphs,
