@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:03:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svdobj.hxx>
-#include <svdpagv.hxx>
+#include "svdobj.hxx"
+#include "svdpagv.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <avmedia/mediaitem.hxx>
@@ -144,25 +144,15 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
         }
         else
         {
-            Rectangle   aCurPaintRect( pOutDev->LogicToPixel( aPaintRect.TopLeft() ),
-                                       pOutDev->LogicToPixel( aPaintRect.GetSize() ) );
-            const bool  bNewPaintRect = ( maLastPaintRect.IsEmpty() || ( maLastPaintRect != aCurPaintRect ) );
+            const Rectangle aPaintRectPixel( pOutDev->LogicToPixel( aPaintRect.TopLeft() ),
+                                                pOutDev->LogicToPixel( aPaintRect.GetSize() ) );
 
-            if( bNewPaintRect )
-            {
-                mpMediaWindow->setPosSize( aCurPaintRect );
-                maLastPaintRect = aCurPaintRect;
-            }
-            else
-            {
-                Window* pWindow = mpMediaWindow->getWindow();
+            mpMediaWindow->setPosSize( aPaintRectPixel );
 
-                if( pWindow )
-                {
-                    pWindow->Invalidate();
-                    pWindow->Update();
-                }
-            }
+            Window* pWindow = mpMediaWindow->getWindow();
+
+            if( pWindow )
+                pWindow->Invalidate();
 
             bWasPainted = true;
         }
