@@ -19532,3 +19532,12 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ??0DbCellControl@@QAE@AAVDbGridColumn@@E@Z
 ??C?$Reference@VIDataAccessTypeConversion@simple@connectivity@@@rtl@@QBAPAVIDataAccessTypeConversion@simple@connectivity@@XZ
 ??0?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4__UnoReference_Query@1234@@Z
+??0SiImportFactory@@QAE@XZ
+??0SiImportRect@@QAE@XZ
+??1SiImportFactory@@QAE@XZ
+??1SiImportRect@@UAE@XZ
+??_7SiImportRect@@6B@
+??_GSiImportRect@@UAEPAXI@Z
+?LinkStubMakeObject@SiImportFactory@@SAJPAX0@Z
+?MakeObject@SiImportFactory@@QAEJPAVSdrObjFactory@@@Z
+?ReadData@SiImportRect@@UAEXABVSdrObjIOHeader@@AAVSvStream@@@Z
