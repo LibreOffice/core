@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 10:40:08 $
+ *  last change: $Author: os $ $Date: 2002-06-26 10:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,10 @@ using namespace com::sun::star;
 using namespace rtl;
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
+//impl in envimg.cxx
+extern String MakeSender();
+
 // --------------------------------------------------------------------------
-
-
 
 SwEnvPreview::SwEnvPreview(SfxTabPage* pParent, const ResId& rResID) :
 
@@ -358,7 +359,11 @@ IMPL_LINK( SwEnvPage, SenderHdl, Button *, EMPTYARG )
     GetParent()->aEnvItem.bSend = bEnable;
     aSenderEdit.Enable(bEnable);
     if ( bEnable )
+    {
         aSenderEdit.GrabFocus();
+        if(!aSenderEdit.GetText().Len())
+            aSenderEdit.SetText(MakeSender());
+    }
     aPreview.Invalidate();
     return 0;
 }
