@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:06:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@ using namespace store;
  * OFileLockBytes internals.
  *
  *======================================================================*/
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define inline static
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL > 1 */
 
 /*
  * __store_memcpy.
@@ -168,12 +168,12 @@ static storeError __store_errnoToErrCode (sal_uInt32 nErrno)
     return store_E_Unknown;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifdef inline
 #undef inline
 #endif
 #define inline
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL > 1 */
 
 /*========================================================================
  *
