@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-17 15:38:23 $
+ *  last change: $Author: jp $ $Date: 2002-01-31 13:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,9 +721,9 @@ sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
 sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 {
     if( ((const SwNode*)pPam->GetNode()) != GetNode() )
-        pPam->pPoint->nNode = *((SwTxtFrm*)this)->GetTxtNode();
+        pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
 
-    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *(pPam->pPoint),
+    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
                                      SwTxtCursor::IsRightMargin() );
     pFrm->GetFormatted();
     xub_StrLen nIndx;
@@ -734,7 +734,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
         SwTxtSizeInfo aInf( pFrm );
         SwTxtCursor  aLine( pFrm, &aInf );
 
-        aLine.CharCrsrToLine(pPam->pPoint->nContent.GetIndex());
+        aLine.CharCrsrToLine(pPam->GetPoint()->nContent.GetIndex());
         nIndx = aLine.GetStart();
         if( pFrm->GetOfst() && !pFrm->IsFollow() && !aLine.GetPrev() )
         {
@@ -742,7 +742,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
             nIndx = 0;
         }
     }
-    pPam->pPoint->nContent = SwIndex( pFrm->GetTxtNode(), nIndx );
+    pPam->GetPoint()->nContent = SwIndex( pFrm->GetTxtNode(), nIndx );
     SwTxtCursor::SetRightMargin( sal_False );
     return sal_True;
 }
@@ -762,9 +762,9 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
 {
     if( ((const SwNode*)pPam->GetNode()) != GetNode() )
-        pPam->pPoint->nNode = *((SwTxtFrm*)this)->GetTxtNode();
+        pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
 
-    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *(pPam->pPoint),
+    SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
                                      SwTxtCursor::IsRightMargin() );
     pFrm->GetFormatted();
     xub_StrLen nRightMargin;
@@ -775,7 +775,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
         SwTxtSizeInfo aInf( pFrm );
         SwTxtCursor  aLine( pFrm, &aInf );
 
-        aLine.CharCrsrToLine(pPam->pPoint->nContent.GetIndex());
+        aLine.CharCrsrToLine(pPam->GetPoint()->nContent.GetIndex());
         nRightMargin = aLine.GetStart() + aLine.GetCurr()->GetLen();
 
         // Harte Zeilenumbrueche lassen wir hinter uns.
@@ -789,7 +789,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
                 --nRightMargin;
         }
     }
-    pPam->pPoint->nContent = SwIndex( pFrm->GetTxtNode(), nRightMargin );
+    pPam->GetPoint()->nContent = SwIndex( pFrm->GetTxtNode(), nRightMargin );
     SwTxtCursor::SetRightMargin( !bAPI );
     return sal_True;
 }
@@ -829,7 +829,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     }
 
     ((SwTxtFrm*)this)->GetFormatted();
-    const xub_StrLen nPos = pPam->pPoint->nContent.GetIndex();
+    const xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
     SwRect aCharBox;
 
     if( !IsEmpty() && !IsHiddenNow() )
@@ -887,12 +887,12 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
 #ifndef PRODUCT
-                const ULONG nOldNode = pPam->pPoint->nNode.GetIndex();
+                const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
-                xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->pPoint,
+                xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                                     aCharBox.Pos(), sal_False );
-                ASSERT( nOldNode == pPam->pPoint->nNode.GetIndex(),
+                ASSERT( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                         "SwTxtFrm::UnitUp: illegal node change" )
 
                 // 7684: Wir stellen sicher, dass wir uns nach oben bewegen.
@@ -902,7 +902,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                     nOfst = nStart;
                     aSet.SetRight( sal_True );
                 }
-                pPam->pPoint->nContent =
+                pPam->GetPoint()->nContent =
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nOfst );
                 return sal_True;
             }
@@ -943,7 +943,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             if ( !pPrevPrev )
                 return pPrev->SwCntntFrm::UnitUp( pPam, nOffset, bSetInReadOnly );
             aCharBox.Pos().Y() = pPrevPrev->Frm().Bottom() - 1;
-            return pPrevPrev->GetKeyCrsrOfst( pPam->pPoint, aCharBox.Pos() );
+            return pPrevPrev->GetKeyCrsrOfst( pPam->GetPoint(), aCharBox.Pos() );
         }
     }
     return SwCntntFrm::UnitUp( pPam, nOffset, bSetInReadOnly );
@@ -966,7 +966,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
         return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
     }
     ((SwTxtFrm*)this)->GetFormatted();
-    const xub_StrLen nPos = pPam->pPoint->nContent.GetIndex();
+    const xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
     SwRect aCharBox;
     const SwCntntFrm *pFollow;
 
@@ -1002,20 +1002,20 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().Width() /= 2;
 #ifndef PRODUCT
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-                const ULONG nOldNode = pPam->pPoint->nNode.GetIndex();
+                const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
 
-                xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->pPoint,
+                xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                  aCharBox.Pos(), sal_False );
-                ASSERT( nOldNode == pPam->pPoint->nNode.GetIndex(),
+                ASSERT( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
                     "SwTxtFrm::UnitDown: illegal node change" )
 
                 // 7684: Wir stellen sicher, dass wir uns nach unten bewegen.
                 if( nOfst <= nStart && ! bFirstOfDouble )
                     nOfst = nStart + 1;
-                pPam->pPoint->nContent =
+                pPam->GetPoint()->nContent =
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nOfst );
 
 #ifdef VERTICAL_LAYOUT
@@ -1081,7 +1081,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     if( pFollow )
     {
         aCharBox.Pos().Y() = pFollow->Frm().Top() + 1;
-        return ((SwTxtFrm*)pFollow)->GetKeyCrsrOfst( pPam->pPoint,
+        return ((SwTxtFrm*)pFollow)->GetKeyCrsrOfst( pPam->GetPoint(),
                                                      aCharBox.Pos() );
     }
     return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
