@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-22 13:52:45 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 08:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow[2] = ORowSetValue(DataType::VARCHAR);
     aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length"));
     aRows.push_back(aRow);
 
 
