@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 11:26:24 $
+ *  last change: $Author: fme $ $Date: 2001-05-16 15:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,7 +1301,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     // old values must be saved and restored at the end
     xub_StrLen nOldLen = GetInfo().GetLen();
     KSHORT nOldX = KSHORT(GetInfo().X());
-    KSHORT nOldY = KSHORT(GetInfo().Y());
+    long nOldY = GetInfo().Y();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
