@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:41:18 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,18 +101,19 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ french ] = "~Formulaire" ;
                         Text [ dutch ] = "~Formulier" ;
                         Text [ portuguese ] = "~Formulário" ;
-                        Text[ chinese_simplified ] = "±íµ¥";
+                        Text[ chinese_simplified ] = "è¡¨å•";
                         Text[ russian ] = "~Ôîğìóëÿğ";
                         Text[ polish ] = "Formularz";
-                        Text[ japanese ] = "Ì«°Ñ";
-                        Text[ chinese_traditional ] = "ªí³æ";
+                        Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ";
+                        Text[ chinese_traditional ] = "è¡¨å–®";
                         Text[ arabic ] = "ÇÓÊãÇÑÉ";
                         Text[ greek ] = "~Öüñìá";
-                        Text[ korean ] = "¿ëÁö";
+                        Text[ korean ] = "ìš©ì§€";
                         Text[ turkish ] = "Form";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Formulario";
-                        Text[ finnish ] = "Lomake";
+                        Text[ finnish ] = "muoto";
+                        Text[ thai ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
                     };
                     MenuItem
                     {
@@ -129,33 +130,35 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ french ] = "C~ontrôle caché" ;
                         Text [ dutch ] = "~verborgen controle" ;
                         Text [ portuguese ] = "Controlo o~culto" ;
-                        Text[ chinese_simplified ] = "ÒşÈëµÄ¿ØÖÆ";
+                        Text[ chinese_simplified ] = "éšå…¥çš„æ§åˆ¶";
                         Text[ russian ] = "Ñêğûòûé ıëåìåíò óïğàâëåíèÿ";
                         Text[ polish ] = "Ukryty formant";
-                        Text[ japanese ] = "‰B‚µºİÄÛ°Ù";
-                        Text[ chinese_traditional ] = "Áô¤Jªº±±»s¶µ";
+                        Text[ japanese ] = "éš ã—ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«";
+                        Text[ chinese_traditional ] = "éš±å…¥çš„æ§åˆ¶é …";
                         Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÎİí";
                         Text[ greek ] = "Êñõ~öü óôïé÷åßï åëİã÷ïõ";
-                        Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ";
+                        Text[ korean ] = "ìˆ¨ê²¨ì§„ ì»¨íŠ¸ë¡¤";
                         Text[ turkish ] = "Gizli komut alanı";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Control oculto";
                         Text[ finnish ] = "Piilotettu ohjausobjekti";
+                        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡à¸—à¸µà¹ˆà¸‹à¹ˆà¸­à¸™";
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+            Text[ chinese_simplified ] = "æ–°å»º(~N)";
             Text[ russian ] = "Ñîçä~àòü";
             Text[ polish ] = "~Nowy";
-            Text[ japanese ] = "V‹Kì¬(~N)";
-            Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+            Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
+            Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
             Text[ arabic ] = "~ÌÏíÏ";
             Text[ greek ] = "~Äçìéïõñãßá";
-            Text[ korean ] = "»õ·Î(~N)";
+            Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
             Text[ turkish ] = "~Yeni";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "N~uevo";
             Text[ finnish ] = "~Uusi";
+            Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
         };
         MenuItem
         {
@@ -169,20 +172,21 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
             Text[ dutch ] = "Vervangen door";
             Text[ french ] = "Remplacer par";
-            Text[ spanish ] = "Reemplazar con";
+            Text[ spanish ] = "Reemplazar por";
             Text[ italian ] = "Sostituisci con";
             Text[ danish ] = "Erstat med";
             Text[ swedish ] = "Ersätt med";
             Text[ polish ] = "Zamieñ na";
             Text[ portuguese_brazilian ] = "Ersetzen durch";
-            Text[ japanese ] = "’u‚«Š·‚¦";
-            Text[ korean ] = "¹Ù²Ù±â";
-            Text[ chinese_simplified ] = "Ìæ»»³É";
-            Text[ chinese_traditional ] = "§ó´À¦¨";
+            Text[ japanese ] = "ç½®ãæ›ãˆ";
+            Text[ korean ] = "ë°”ê¾¸ê¸°";
+            Text[ chinese_simplified ] = "æ›¿æ¢æˆ";
+            Text[ chinese_traditional ] = "æ›´æ›¿æˆ";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Şununla değiştir...";
             Text[ catalan ] = "Reemplazar con";
-            Text[ finnish ] = "~Korvaa kohteella";
+            Text[ finnish ] = "Korvaa objektilla";
+            Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢";
         };
         MenuItem { ITEM_EDIT_CUT };
         MenuItem { ITEM_EDIT_COPY };
@@ -202,18 +206,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ french ] = "~Supprimer" ;
             Text [ dutch ] = "Wi~ssen" ;
             Text [ portuguese ] = "E~liminar" ;
-            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ chinese_simplified ] = "åˆ é™¤(~D)";
             Text[ russian ] = "Óäàëèòü";
             Text[ polish ] = "Usuñ";
-            Text[ japanese ] = "íœ(~D)";
-            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ japanese ] = "å‰Šé™¤(~D)";
+            Text[ chinese_traditional ] = "åˆªé™¤(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ korean ] = "ì‚­ì œ(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar";
             Text[ finnish ] = "~Poista";
+            Text[ thai ] = "~à¸¥à¸š";
         };
         MenuItem
         {
@@ -230,18 +235,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ spanish ] = "~Secuencia de activación..." ;
             Text [ french ] = "Séquence d'activation ..." ;
             Text [ dutch ] = "Volgorde van a~ctivering" ;
-            Text[ chinese_simplified ] = "ÂÖ»»Ë³Ğò...";
+            Text[ chinese_simplified ] = "è½®æ¢é¡ºåº...";
             Text[ russian ] = "Ïîğÿäîê àêòèâèğîâàíèÿ";
             Text[ polish ] = "Kolejnoœæ aktywacji";
-            Text[ japanese ] = "ÀÌŞµ°ÀŞ°...";
-            Text[ chinese_traditional ] = "±Ò°Ê¶¶§Ç...";
+            Text[ japanese ] = "ã‚¿ãƒ–ã‚ªãƒ¼ãƒ€ãƒ¼...";
+            Text[ chinese_traditional ] = "å•Ÿå‹•é †åº...";
             Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ...";
             Text[ greek ] = "Ó~åéñÜ åíåñãïğïßçóçò...";
-            Text[ korean ] = "È°¼ºÈ­ ¼ø¼­...";
+            Text[ korean ] = "í™œì„±í™” ìˆœì„œ...";
             Text[ turkish ] = "Etkinleştirme sırası...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Secuencia de activación...";
-            Text[ finnish ] = "Sarkainjärjestys";
+            Text[ finnish ] = "Sarkainjärjestys...";
+            Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™...";
         };
         MenuItem
         {
@@ -258,18 +264,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ spanish ] = "~Cambiar nombre" ;
             Text [ french ] = "~Renommer" ;
             Text [ dutch ] = "~Naam wijzigen" ;
-            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+            Text[ chinese_simplified ] = "é‡å‘½å(~R)";
             Text[ russian ] = "Ïåğåèìåíîâàòü";
             Text[ polish ] = "Zmieñ nazwê";
-            Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
-            Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
+            Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)";
+            Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
             Text[ greek ] = "Ìåôïíïìáóßá";
-            Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
+            Text[ korean ] = "ì´ë¦„ ë³€ê²½(~R)";
             Text[ turkish ] = "Yeniden adlandır";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Cambiar nombre";
             Text[ finnish ] = "~Nimeä uudelleen";
+            Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
         };
         MenuItem
         {
@@ -286,18 +293,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ spanish ] = "~Propiedades" ;
             Text [ french ] = "~Propriétés" ;
             Text [ dutch ] = "~Eigenschappen" ;
-            Text[ chinese_simplified ] = "ÊôĞÔ(~I)";
+            Text[ chinese_simplified ] = "å±æ€§(~I)";
             Text[ russian ] = "Ñâîéñòâà";
             Text[ polish ] = "W³aœciwoœci";
-            Text[ japanese ] = "ÌßÛÊßÃ¨(~I)";
-            Text[ chinese_traditional ] = "Äİ©Ê(~I)";
+            Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£(~I)";
+            Text[ chinese_traditional ] = "å±¬æ€§(~I)";
             Text[ arabic ] = "ÎÕÇÆÕ";
             Text[ greek ] = "Éäéüôçô~åò";
-            Text[ korean ] = "µî·ÏÁ¤º¸(~I)";
+            Text[ korean ] = "ë“±ë¡ì •ë³´(~I)";
             Text[ turkish ] = "Özellikler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Propiedades";
             Text[ finnish ] = "~Ominaisuudet";
+            Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡~à¸šà¸±à¸•à¸´";
         };
         MenuItem
         {
@@ -314,18 +322,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ spanish ] = "~Abrir en modo diseño" ;
             Text [ french ] = "Ouvrir en mode C~onception" ;
             Text [ dutch ] = "In ~ontwerpmodus openen" ;
-            Text[ chinese_simplified ] = "ÓÃÉè¼ÆÄ£Ê½´ò¿ª";
+            Text[ chinese_simplified ] = "ç”¨è®¾è®¡æ¨¡å¼æ‰“å¼€";
             Text[ russian ] = "Îòêğûòü â ğåæèìå ïğîåêòà";
             Text[ polish ] = "Otwórz w trybie projektu";
-            Text[ japanese ] = "ÃŞ»Ş²İÓ°ÄŞ‚ÅŠJ‚­";
-            Text[ chinese_traditional ] = "¶}±Ò³]­p¼Ò¦¡";
+            Text[ japanese ] = "ãƒ‡ã‚¶ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã§é–‹ã";
+            Text[ chinese_traditional ] = "é–‹å•Ÿè¨­è¨ˆæ¨¡å¼";
             Text[ arabic ] = "İÊÍ İí æÖÚ ÇáÊÕãíã";
             Text[ greek ] = "¢íïéãìá óå êáôÜóôáóç ó~÷åäéáóìïı";
-            Text[ korean ] = "¼³°è ¸ğµå¿¡¼­ ¿­±â";
+            Text[ korean ] = "ë””ìì¸ ëª¨ë“œì—ì„œ ì—´ê¸°";
             Text[ turkish ] = "Tasarım kipinde aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Abrir en modo diseño";
             Text[ finnish ] = "Avaa suunnittelunäkymässä";
+            Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸™à¹‚à¸«à¸¡à¸”à¸­à¸­à¸à¹à¸šà¸š";
         };
         MenuItem
         {
@@ -341,18 +350,19 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ french ] = "Focalisation automatique sur l'élément de contrôle";
             Text[ spanish ] = "Foco automático de control";
             Text[ italian ] = "Punto focale automatico di controllo";
-            Text[ danish ] = "Automatic control focus";
+            Text[ danish ] = "Automatisk kontrolelement-fokus";
             Text[ swedish ] = "Automatisk fokus för kontrollelement";
             Text[ polish ] = "Automatyczne ognisko elementu kontrolnego";
             Text[ portuguese_brazilian ] = "Automatic control focus";
-            Text[ japanese ] = "µ°ÄºİÄÛ°ÙÌ«°¶½";
-            Text[ korean ] = "ÀÚµ¿ Æ÷Ä¿½º ÄÁÆ®·Ñ";
-            Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆµ¥Ôª";
-            Text[ chinese_traditional ] = "¦Û°Ê¹ï·Ç±±»s¶µ";
+            Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ•ã‚©ãƒ¼ã‚«ã‚¹";
+            Text[ korean ] = "ìë™ í¬ì»¤ìŠ¤ ì»¨íŠ¸ë¡¤";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨å¯¹å‡†æ§åˆ¶å•å…ƒ";
+            Text[ chinese_traditional ] = "è‡ªå‹•å°æº–æ§åˆ¶é …";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáŞÇÆí áÚäÕÑ ÇáÊÍßã";
             Text[ catalan ] = "Foco automático de control";
             Text[ finnish ] = "Automaattinen kohdistuksen ohjaus";
+            Text[ thai ] = "à¹‚à¸Ÿà¸à¸±à¸ªà¸à¸²à¸£à¸„à¸§à¸šà¸„à¸¸à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
         };
     };
 };
@@ -379,15 +389,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Textfält";
             Text[ polish ] = "Pole tekstowe";
             Text[ portuguese_brazilian ] = "~TextField";
-            Text[ japanese ] = "Ã·½ÄÎŞ¯¸½(~T)";
-            Text[ korean ] = "ÅØ½ºÆ® »óÀÚ(~T)";
-            Text[ chinese_simplified ] = "ÎÄ±¾¿ò(~T)";
-            Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
+            Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹(~T)";
+            Text[ korean ] = "í…ìŠ¤íŠ¸ ìƒì(~T)";
+            Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†(~T)";
+            Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š(~T)";
             Text[ arabic ] = "ÍŞá äÕ";
             Text[ turkish ] = "Metin alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de texto";
             Text[ finnish ] = "~Tekstikehys";
+            Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
         };
         MenuItem
         {
@@ -407,14 +418,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Kommandoknapp";
             Text[ polish ] = "Przycisk";
             Text[ portuguese_brazilian ] = "~Button";
-            Text[ japanese ] = "ÎŞÀİ(~B)";
-            Text[ korean ] = "¹öÆ°(~B)";
-            Text[ chinese_simplified ] = "°´Å¥(~B)";
-            Text[ chinese_traditional ] = "«ö¶s(~B)";
+            Text[ japanese ] = "ãƒœã‚¿ãƒ³(~B)";
+            Text[ korean ] = "ë²„íŠ¼(~B)";
+            Text[ chinese_simplified ] = "æŒ‰é’®(~B)";
+            Text[ chinese_traditional ] = "æŒ‰éˆ•(~B)";
             Text[ arabic ] = "ÒÑ ÖÛØ";
             Text[ turkish ] = "Düğme";
             Text[ catalan ] = "~Botón";
             Text[ finnish ] = "~Painike";
+            Text[ thai ] = "~à¸›à¸¸à¹ˆà¸¡";
         };
         MenuItem
         {
@@ -434,15 +446,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Etikettfält";
             Text[ polish ] = "Pole etykiety";
             Text[ portuguese_brazilian ] = "~Label";
-            Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ(~B)";
-            Text[ korean ] = "¶óº§ ÇÊµå(~B)";
-            Text[ chinese_simplified ] = "±êÇ©×Ö¶Î(~B)";
-            Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì(~B)";
+            Text[ japanese ] = "ãƒ©ãƒ™ãƒ«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~B)";
+            Text[ korean ] = "ë¼ë²¨ í•„ë“œ(~B)";
+            Text[ chinese_simplified ] = "æ ‡ç­¾å­—æ®µ(~B)";
+            Text[ chinese_traditional ] = "æ¨™ç±¤æ¬„ä½(~B)";
             Text[ arabic ] = "ÍŞá ÚäæäÉ";
             Text[ turkish ] = "Etiket alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de etiqueta";
             Text[ finnish ] = "~Nimiökenttä";
+            Text[ thai ] = "à¸›à¹‰à¸²à¸¢~à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
         };
         MenuItem
         {
@@ -460,16 +473,17 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ italian ] = "Casella di ~gruppo";
             Text[ danish ] = "Gruppeboks";
             Text[ swedish ] = "~Grupperingsram";
-            Text[ polish ] = "~Ramka grupuj¹ca";
+            Text[ polish ] = "~Ramka grupy";
             Text[ portuguese_brazilian ] = "F~rameControl";
-            Text[ japanese ] = "¸ŞÙ°ÌßÎŞ¯¸½(~R)";
-            Text[ korean ] = "±×·ì ¹Ú½º(~R)";
-            Text[ chinese_simplified ] = "×éºÏ¿ò(~R)";
-            Text[ chinese_traditional ] = "²Õ¦X¤è¶ô(~R)";
+            Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—ãƒœãƒƒã‚¯ã‚¹(~R)";
+            Text[ korean ] = "ê·¸ë£¹ ìƒì(~R)";
+            Text[ chinese_simplified ] = "å°ç»„æ¡†(~R)";
+            Text[ chinese_traditional ] = "ç¾¤çµ„æ–¹å¡Š(~R)";
             Text[ arabic ] = "ßÇÏÑ ÊÌãíÚ";
             Text[ turkish ] = "Grup çerçevesi";
             Text[ catalan ] = "~Marco de grupo";
             Text[ finnish ] = "~Ryhmittele ruudut";
+            Text[ thai ] = "à¸ˆà¸±à¸”~à¸à¸¥à¸¸à¹ˆà¸¡à¸à¸¥à¹ˆà¸­à¸‡";
         };
         MenuItem
         {
@@ -489,15 +503,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "L~istruta";
             Text[ polish ] = "Pole listy";
             Text[ portuguese_brazilian ] = "L~ist Box";
-            Text[ japanese ] = "Ø½ÄÎŞ¯¸½(~I)";
-            Text[ korean ] = "¸ñ·Ï ÇÊµå(~I)";
-            Text[ chinese_simplified ] = "ÁĞ±í¿ò(~I)";
-            Text[ chinese_traditional ] = "²M³æ¤è¶ô(~I)";
+            Text[ japanese ] = "ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹(~I)";
+            Text[ korean ] = "ëª©ë¡ í•„ë“œ(~I)";
+            Text[ chinese_simplified ] = "åˆ—è¡¨æ¡†(~I)";
+            Text[ chinese_traditional ] = "æ¸…å–®æ–¹å¡Š(~I)";
             Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
             Text[ turkish ] = "Liste alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "L~istado";
             Text[ finnish ] = "~Luetteloruutu";
+            Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸£à¸²~à¸¢à¸à¸²à¸£";
         };
         MenuItem
         {
@@ -514,17 +529,18 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ spanish ] = "~Casilla de verificación";
             Text[ italian ] = "Casella di controllo";
             Text[ danish ] = "Afkrydsningsfelt";
-            Text[ swedish ] = "~Markeringsfält";
+            Text[ swedish ] = "Kr~yssruta";
             Text[ polish ] = "Pole wyboru";
             Text[ portuguese_brazilian ] = "~Check Box";
-            Text[ japanese ] = "Áª¯¸ÎŞ¯¸½(~C)";
-            Text[ korean ] = "È®ÀÎ¶õ(~C)";
-            Text[ chinese_simplified ] = "¸´Ñ¡¿ò(~C)";
-            Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô(~C)";
+            Text[ japanese ] = "ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹(~C)";
+            Text[ korean ] = "í™•ì¸ë€(~C)";
+            Text[ chinese_simplified ] = "å¤é€‰æ¡†(~C)";
+            Text[ chinese_traditional ] = "æ ¸å–æ–¹å¡Š(~C)";
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ turkish ] = "Seçme kutusu";
             Text[ catalan ] = "~Casilla de verificación";
             Text[ finnish ] = "~Valintaruutu";
+            Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡~à¸à¸²à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢";
         };
         MenuItem
         {
@@ -544,15 +560,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Alternativfält";
             Text[ polish ] = "Pole opcji";
             Text[ portuguese_brazilian ] = "~Option Button";
-            Text[ japanese ] = "×¼ŞµÎŞÀİ(~R)";
-            Text[ korean ] = "¿É¼Ç ÇÊµå(~R)";
-            Text[ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~R)";
-            Text[ chinese_traditional ] = "¿ï¶µÄæ¦ì(~R)";
+            Text[ japanese ] = "ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³(~R)";
+            Text[ korean ] = "ì˜µì…˜ í•„ë“œ(~R)";
+            Text[ chinese_simplified ] = "é€‰é¡¹å­—æ®µ(~R)";
+            Text[ chinese_traditional ] = "é¸é …æ¬„ä½(~R)";
             Text[ arabic ] = "ÒÑ ÎíÇÑ";
             Text[ turkish ] = "Seçenek düğmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de opción";
             Text[ finnish ] = "~Valintanappi";
+            Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡~à¸§à¸´à¸—à¸¢à¸¸";
         };
         MenuItem
         {
@@ -572,14 +589,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Kombinationsfält";
             Text[ polish ] = "Pole kombi";
             Text[ portuguese_brazilian ] = "Combo Bo~x";
-            Text[ japanese ] = "ºİÎŞÎŞ¯¸½(~X)";
-            Text[ korean ] = "ÄŞº¸ ¹Ú½º(~X)";
-            Text[ chinese_simplified ] = "×éºÏ¿ò(~X)";
-            Text[ chinese_traditional ] = "²Õ¦X¤è®Ø(~X)";
+            Text[ japanese ] = "ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹(~X)";
+            Text[ korean ] = "ì½¤ë³´ ìƒì(~X)";
+            Text[ chinese_simplified ] = "ç»„åˆæ¡†(~X)";
+            Text[ chinese_traditional ] = "çµ„åˆæ–¹æ¡†(~X)";
             Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
             Text[ turkish ] = "Kombinasyon alanı";
             Text[ catalan ] = "Ca~mpo combinado";
             Text[ finnish ] = "~Yhdistelmäruutu";
+            Text[ thai ] = "à¸à¸¥à¹ˆ~à¸­à¸‡à¸„à¸­à¸¡à¹‚à¸šà¹‰ ";
         };
         MenuItem
         {
@@ -599,14 +617,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Grafisk kommandoknapp";
             Text[ polish ] = "Przycisk graficzny";
             Text[ portuguese_brazilian ] = "I~mage Button";
-            Text[ japanese ] = "²Ò°¼ŞÎŞÀİ(~M)";
-            Text[ korean ] = "ÀÌ¹ÌÁö ¹öÆ°(~M)";
-            Text[ chinese_simplified ] = "Í¼ĞÎ°´Å¥(~M)";
-            Text[ chinese_traditional ] = "¹Ï§Î«ö¶s(~M)";
+            Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒœã‚¿ãƒ³(~M)";
+            Text[ korean ] = "ì´ë¯¸ì§€ ë²„íŠ¼(~M)";
+            Text[ chinese_simplified ] = "å›¾å½¢æŒ‰é’®(~M)";
+            Text[ chinese_traditional ] = "åœ–å½¢æŒ‰éˆ•(~M)";
             Text[ arabic ] = "ãİÊÇÍ ãÕæøÑ";
             Text[ turkish ] = "Grafiksel düğme";
             Text[ catalan ] = "Botón g~ráfico";
             Text[ finnish ] = "~Kuvapainike";
+            Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡à¸£à¸¹à¸›à¸ à¸²~à¸";
         };
         MenuItem
         {
@@ -626,15 +645,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Filurval";
             Text[ polish ] = "Wybór plików";
             Text[ portuguese_brazilian ] = "~File Selection";
-            Text[ japanese ] = "Ì§²Ù‘I‘ğ(~F)";
-            Text[ korean ] = "ÆÄÀÏ ¼±ÅÃ(~F)";
-            Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş(~F)";
-            Text[ chinese_traditional ] = "¿ï¾ÜÀÉ®×(~F)";
+            Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠ(~F)";
+            Text[ korean ] = "íŒŒì¼ ì„ íƒ(~F)";
+            Text[ chinese_simplified ] = "é€‰æ‹©æ–‡ä»¶(~F)";
+            Text[ chinese_traditional ] = "é¸æ“‡æª”æ¡ˆ(~F)";
             Text[ arabic ] = "ÇÎÊíÇÑ Çáãáİ";
             Text[ turkish ] = "Dosya seçimi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Selec~ción de archivo";
             Text[ finnish ] = "~Tiedoston valinta";
+            Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹~à¸Ÿà¹‰à¸¡";
         };
         MenuItem
         {
@@ -654,15 +674,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Datumfält";
             Text[ polish ] = "Pole daty";
             Text[ portuguese_brazilian ] = "~Date Field";
-            Text[ japanese ] = "“ú•tÌ¨°ÙÄŞ(~D)";
-            Text[ korean ] = "³¯Â¥ ÇÊµå(~D)";
-            Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î(~D)";
-            Text[ chinese_traditional ] = "¤é´ÁÄæ¦ì(~D)";
+            Text[ japanese ] = "æ—¥ä»˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~D)";
+            Text[ korean ] = "ë‚ ì§œ í•„ë“œ(~D)";
+            Text[ chinese_simplified ] = "æ—¥æœŸå­—æ®µ(~D)";
+            Text[ chinese_traditional ] = "æ—¥æœŸæ¬„ä½(~D)";
             Text[ arabic ] = "ÍŞá ÇáÊÇÑíÎ";
             Text[ turkish ] = "Tarih alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo de ~fecha";
             Text[ finnish ] = "~Päivämääräkenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥~à¸§à¸±à¸™à¸—à¸µà¹ˆ";
         };
         MenuItem
         {
@@ -680,17 +701,18 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ italian ] = "Campo ~orario";
             Text[ danish ] = "Klokkeslætsfelt";
             Text[ swedish ] = "~Tidsfält";
-            Text[ polish ] = "Pole czasu";
+            Text[ polish ] = "~Pole godziny";
             Text[ portuguese_brazilian ] = "Tim~e Field";
-            Text[ japanese ] = "Ì¨°ÙÄŞ(~E)";
-            Text[ korean ] = "½Ã°£ ÇÊµå(~E)";
-            Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î(~E)";
-            Text[ chinese_traditional ] = "®É¶¡Äæ¦ì(~E)";
+            Text[ japanese ] = "æ™‚åˆ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~E)";
+            Text[ korean ] = "ì‹œê°„ í•„ë“œ(~E)";
+            Text[ chinese_simplified ] = "æ—¶é—´å­—æ®µ(~E)";
+            Text[ chinese_traditional ] = "æ™‚é–“æ¬„ä½(~E)";
             Text[ arabic ] = "ÍŞá ÇáæŞÊ";
             Text[ turkish ] = "Zaman alanı";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo ~horario";
             Text[ finnish ] = "~Aikakenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸§~à¸¥à¸²";
         };
         MenuItem
         {
@@ -710,15 +732,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Numeriskt fält";
             Text[ polish ] = "Pole numeryczne";
             Text[ portuguese_brazilian ] = "~Numerical Field";
-            Text[ japanese ] = "”’lÌ¨°ÙÄŞ(~N)";
-            Text[ korean ] = "¼ıÀÚ ÇÊµå(~N)";
-            Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î(~N)";
-            Text[ chinese_traditional ] = "¼Æ¦rÄæ¦ì(~N)";
+            Text[ japanese ] = "æ•°å€¤ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~N)";
+            Text[ korean ] = "ìˆ«ì í•„ë“œ(~N)";
+            Text[ chinese_simplified ] = "æ•°å­—å­—æ®µ(~N)";
+            Text[ chinese_traditional ] = "æ•¸å­—æ¬„ä½(~N)";
             Text[ arabic ] = "ÍŞá ÑŞãí";
             Text[ turkish ] = "Sayısal alan";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "C~ampo numérico";
             Text[ finnish ] = "~Numeerinen kenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥~à¸•à¸±à¸§à¹€à¸¥à¸‚";
         };
         MenuItem
         {
@@ -738,14 +761,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "V~alutafält";
             Text[ polish ] = "Pole walutowe";
             Text[ portuguese_brazilian ] = "C~urrency Field";
-            Text[ japanese ] = "’Ê‰İÌ¨°ÙÄŞ(~U)";
-            Text[ korean ] = "ÅëÈ­ ÇÊµå(~U)";
-            Text[ chinese_simplified ] = "»õ±Ò×Ö¶Î(~U)";
-            Text[ chinese_traditional ] = "³f¹ôÄæ¦ì(~U)";
+            Text[ japanese ] = "é€šè²¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~U)";
+            Text[ korean ] = "í†µí™” í•„ë“œ(~U)";
+            Text[ chinese_simplified ] = "è´§å¸å­—æ®µ(~U)";
+            Text[ chinese_traditional ] = "è²¨å¹£æ¬„ä½(~U)";
             Text[ arabic ] = "ÍŞá ÇáÚãáÉ";
             Text[ turkish ] = "Para birimi alanı";
             Text[ catalan ] = "Cam~po de moneda";
             Text[ finnish ] = "~Valuuttakenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ª~à¸à¸¸à¸¥à¹€à¸‡à¸´à¸™";
         };
         MenuItem
         {
@@ -765,14 +789,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Maskerat fält";
             Text[ polish ] = "Pole wzorca";
             Text[ portuguese_brazilian ] = "~Pattern Field";
-            Text[ japanese ] = "ÊßÀ°İÌ¨°ÙÄŞ(~P)";
-            Text[ korean ] = "ÆĞÅÏ ÇÊµå(~P)";
-            Text[ chinese_simplified ] = "ÑÚÂë×Ö¶Î(~P)";
-            Text[ chinese_traditional ] = "¾B¸nÄæ¦ì(~P)";
+            Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~P)";
+            Text[ korean ] = "íŒ¨í„´ í•„ë“œ(~P)";
+            Text[ chinese_simplified ] = "æ©ç å­—æ®µ(~P)";
+            Text[ chinese_traditional ] = "é®ç½©æ¬„ä½(~P)";
             Text[ arabic ] = "ÍŞá ãõŞäøóÚ";
             Text[ turkish ] = "Maskelenmiş alan";
             Text[ catalan ] = "Campo s~eleccionado";
             Text[ finnish ] = "~Kuviokenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥~à¸¥à¸§à¸”à¸¥à¸²à¸¢";
         };
         MenuItem
         {
@@ -792,14 +817,15 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "Gra~fiskt kontrollfält";
             Text[ polish ] = "Pole graficzne kontrolne";
             Text[ portuguese_brazilian ] = "Ima~ge Control";
-            Text[ japanese ] = "²Ò°¼ŞºİÄÛ°ÙÌ¨°ÙÄŞ(~G)";
-            Text[ korean ] = "ÀÌ¹ÌÁö ÄÁÆ®·Ñ ÇÊµå(~G)";
-            Text[ chinese_simplified ] = "Í¼Ê½¿ØÖÆ(~G)";
-            Text[ chinese_traditional ] = "¹Ï¦¡±±»s¶µ(~G)";
+            Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~G)";
+            Text[ korean ] = "ì´ë¯¸ì§€ ì»¨íŠ¸ë¡¤ í•„ë“œ(~G)";
+            Text[ chinese_simplified ] = "å›¾å¼æ§åˆ¶(~G)";
+            Text[ chinese_traditional ] = "åœ–å¼æ§åˆ¶é …(~G)";
             Text[ arabic ] = "ÚäÕÑ ÊÍßã ÑÓæãí";
             Text[ turkish ] = "Grafiksel komut alanı";
             Text[ catalan ] = "Control de ima~gen";
             Text[ finnish ] = "~Kuvan ohjaus";
+            Text[ thai ] = "à¸„à¸§à¸šà¸„à¸¸à¸¡à¸ à¸²~à¸";
         };
         MenuItem
         {
@@ -819,15 +845,16 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "Fo~rmaterat fält";
             Text[ polish ] = "Pole formatowane";
             Text[ portuguese_brazilian ] = "Fo~rmatted Field";
-            Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ(~R)";
-            Text[ korean ] = "Æ÷¸ËµÈ ÇÊµå(~R)";
-            Text[ chinese_simplified ] = "¸ñÊ½»¯µÄ×Ö¶Î(~R)";
-            Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ¦ì(~R)";
+            Text[ japanese ] = "æ›¸å¼è¨­å®šã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~R)";
+            Text[ korean ] = "ì„œì‹ ì§€ì •ëœ í•„ë“œ(~R)";
+            Text[ chinese_simplified ] = "æ ¼å¼åŒ–çš„å­—æ®µ(~R)";
+            Text[ chinese_traditional ] = "æ ¼å¼åŒ–çš„æ¬„ä½(~R)";
             Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
             Text[ turkish ] = "Formatlı alan";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo for~mateado";
             Text[ finnish ] = "~Muotoiltu kenttä";
+            Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸²à¸£à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹~à¸šà¸š";
         };
     };
 };
@@ -904,18 +931,19 @@ ModalDialog RID_SVXDLG_SETFORM
         Text [ spanish ] = "Ruta" ;
         Text [ french ] = "Chemin" ;
         Text [ dutch ] = "Pad" ;
-        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ russian ] = "Ïóòü";
         Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "Êß½";
-        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ japanese ] = "ãƒ‘ã‚¹";
+        Text[ chinese_traditional ] = "è·¯å¾‘";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "°æ·Î";
+        Text[ korean ] = "ê²½ë¡œ";
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ruta";
         Text[ finnish ] = "Polku";
+        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
     };
     FixedText FT_PATH
     {
@@ -949,18 +977,19 @@ ModalDialog RID_SVXDLG_SETFORM
     Text [ spanish ] = "Selección de formulario" ;
     Text [ french ] = "Sélection de formulaire" ;
     Text [ dutch ] = "Formulier selecteren" ;
-    Text[ chinese_simplified ] = "Ñ¡Ôñ±íµ¥";
+    Text[ chinese_simplified ] = "é€‰æ‹©è¡¨å•";
     Text[ russian ] = "Âûáîğ ôîğìóëÿğà";
     Text[ polish ] = "Wybór formularza";
-    Text[ japanese ] = "Ì«°Ñ‚Ì‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Üªí³æ";
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡è¡¨å–®";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÇÓÊãÇÑÉ";
     Text[ greek ] = "ÅğéëïãŞ öüñìáò";
-    Text[ korean ] = "¿ëÁö ¼±ÅÃ";
+    Text[ korean ] = "ìš©ì§€ ì„ íƒ";
     Text[ turkish ] = "Form seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de formulario";
     Text[ finnish ] = "Valitse lomake";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸šà¸š";
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
@@ -980,18 +1009,19 @@ DockingWindow RID_SVX_FMEXPLORER
     Text [ french ] = "Navigateur de formulaires" ;
     Text [ dutch ] = "Formuliernavigator" ;
     Text [ portuguese ] = "Formulário Navegador" ;
-    Text[ chinese_simplified ] = "±íµ¥ÖúÊÖ";
+    Text[ chinese_simplified ] = "è¡¨å•åŠ©æ‰‹";
     Text[ russian ] = "Íàâèãàòîğ ôîğìóëÿğà";
     Text[ polish ] = "Nawigator formularzy";
-    Text[ japanese ] = "Ì«°ÑÅËŞ¹Ş°À";
-    Text[ chinese_traditional ] = "ªí³æ§U¤â";
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ãƒŠãƒ“ã‚²ãƒ¼ã‚¿";
+    Text[ chinese_traditional ] = "è¡¨å–®åŠ©æ‰‹";
     Text[ arabic ] = "äÇİíÌíÊæÑ ÇáÇÓÊãÇÑÉ";
     Text[ greek ] = "Navigator öüñìáò";
-    Text[ korean ] = "¿ëÁö ³×ºñ°ÔÀÌÅÍ";
+    Text[ korean ] = "ìš©ì§€ ë„¤ë¹„ê²Œì´í„°";
     Text[ turkish ] = "Form navigatörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtymävalikko";
+    Text[ thai ] = "à¸•à¸±à¸§à¸™à¸³à¹à¸šà¸š";
 };
 
 
