@@ -1,4 +1,5 @@
 #include "samplelibrtti.hxx"
+#include <stdio.h>
 
 // MyClassA =============================================================
 void MyClassA::funcA()

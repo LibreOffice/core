@@ -16,8 +16,8 @@ int main( int argc, char *argv[ ], char *envp[ ] )
     // test the virtual function
     pA->funcA();
 
-    const type_info& i1= typeid ( b);
-    const type_info& i2= typeid( pA);
+//  const type_info& i1= typeid ( b);
+//  const type_info& i2= typeid( pA);
 
     if( typeid( b) == typeid( pA))
         printf("\nsame types");
