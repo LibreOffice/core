@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:05:57 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_simplified ] = "ΔϊΈψ¶¨ΑΛÒ»ΈφΞήΠ§µΔΓϋ³Ζ΅£\nÒς΄ΛΞή·¨½¨ΑΆΧΤ¶―ΈρΚ½΅£\nΗλΔϊΚδΘλÒ»ΈφΣΠΠ§Γϋ³Ζ΅£";
         Text[ russian ] = "Βϋ οπθρβξθλθ νεοπΰβθλόνξε θμÿ.\nΐβςξτξπμΰς ρξηδΰςό νεβξημξζνξ.\nΒϋαεπθςε δπσγξε θμÿ.";
         Text[ polish ] = "Podano nieprawid³owΉ nazwκ.\nUtworzenie Autoformatu nie by³o moΏliwe.\nWybierz innΉ nazwκ.";
-        Text[ japanese ] = "•s“KΨ‚Θ–Ό‘O‚ª“ό—Ν‚³‚κ‚ά‚µ‚½B\n‚±‚Μµ°ΔΜ«°Ο―Δ‚Ε‚Νμ¬‚Ε‚«‚ά‚Ή‚ρB\n•Κ‚Μ–Ό‘O‚π‘I‘π‚µ‚Δ‰Ί‚³‚ΆB";
+        Text[ japanese ] = "“ό—Ν‚µ‚½–Ό‘O‚Ν–³ψ‚Ε‚·B\n‚±‚Μµ°ΔΜ«°Ο―Δ‚Ε‚Νμ¬‚Ε‚«‚ά‚Ή‚ρB\n•Κ‚Μ–Ό‘O‚πg‚Α‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "±zΏι¤J¤F¤@­ΣµL®ΔªΊ¦WΊΩ΅C\nµLªk«Ψ¥ί¦Ϋ°Κ®ζ¦΅΅C\n½ΠΏι¤J¤@­Σ¦³®Δ¦WΊΩ΅C";
         Text[ arabic ] = "αήΟ ήγΚ ΘΕΟΞΗα ΗΣγ ΫνΡ ΥΗαΝ.\nαεΠΗ ΚΪΠΡ ΕδΤΗΑ ΗαΚδΣνή ΗαΚαήΗΖν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΓΞΡ.";
         Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε κάποιο άλλο όνομα.";
