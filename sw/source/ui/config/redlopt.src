@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:26:23 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Metin gˆr¸n¸m¸";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ver texto";
-        Text[ finnish ] = "Textdarstellung";
+        Text[ finnish ] = "Tekstin n‰yttˆ";
     };
     FixedText FT_INS_ATTR
     {
@@ -126,13 +126,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "ëÆê´";
-        Text[ korean ] = "Attributes";
+        Text[ korean ] = "º”º∫";
         Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "ƒ›© ";
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "«·”„« ";
         Text[ catalan ] = "Attributes";
-        Text[ finnish ] = "A~ttribute";
+        Text[ finnish ] = "M‰‰ritteet";
     };
     ListBox LB_INS_ATTR
     {
@@ -450,17 +450,17 @@ TabPage TP_REDLINE_OPT
     };
     StringList [ finnish ] =
     {
-            < "[Keine]" ; > ;
-        < "Fett" ; > ;
-        < "Kursiv" ; > ;
-        < "Unterstrichen" ; > ;
-        < "Doppelt unterstrichen" ; > ;
-        < "Durchstreichen" ; > ;
-        < "Versalien" ; > ;
-        < "Gemeine" ; > ;
-        < "Kapit‰lchen" ; > ;
-        < "Titelschrift" ; > ;
-        < "Hintergrundfarbe" ; > ;
+            < "[Tuntematon]" ; > ;
+        < "Lihavointi" ; > ;
+        < "Kursivointi" ; > ;
+        < "Alleviivaa" ; > ;
+        < "Alleviivaus: kaksinkertainen" ; > ;
+        < "Yliviivaus" ; > ;
+        < "Kirjaimet" ; > ;
+        < "Pienet kirjaimet" ; > ;
+        < "Pienet alkukirjaimet" ; > ;
+        < "Otsikon fontti" ; > ;
+        < "Taustav‰ri" ; > ;
     };
     };
     FixedText FT_INS_COL
@@ -489,7 +489,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color";
-        Text[ finnish ] = "~Farbe";
+        Text[ finnish ] = "~S‰vy";
     };
     ListBox LB_INS_COL
     {
@@ -518,13 +518,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Wstaw";
         Text[ portuguese_brazilian ] = "Insert";
         Text[ japanese ] = "ë}ì¸";
-        Text[ korean ] = "Insert";
+        Text[ korean ] = "ª¿‘";
         Text[ chinese_simplified ] = "≤Â»Î";
         Text[ chinese_traditional ] = "¥°§J";
         Text[ turkish ] = "Insert";
         Text[ arabic ] = "≈œ—«Ã";
         Text[ catalan ] = "Insert";
-        Text[ finnish ] = "Einf¸gen";
+        Text[ finnish ] = "Lis‰‰";
     };
     FixedText FT_DEL_ATTR
     {
@@ -545,13 +545,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "ëÆê´";
-        Text[ korean ] = "Attributes";
+        Text[ korean ] = "º”º∫";
         Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "ƒ›© ";
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "«·”„« ";
         Text[ catalan ] = "Attributes";
-        Text[ finnish ] = "A~ttribute";
+        Text[ finnish ] = "M‰‰ritteet";
     };
     ListBox LB_DEL_ATTR
     {
@@ -579,13 +579,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
         Text[ japanese ] = "êF";
-        Text[ korean ] = "Color";
+        Text[ korean ] = "ªˆªÛ";
         Text[ chinese_simplified ] = "—’…´";
         Text[ chinese_traditional ] = "√C¶‚";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "«··Ê‰";
         Text[ catalan ] = "Color";
-        Text[ finnish ] = "~Farbe";
+        Text[ finnish ] = "V‰ri";
     };
     ListBox LB_DEL_COL
     {
@@ -614,13 +614,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "UsuÒ";
         Text[ portuguese_brazilian ] = "Delete";
         Text[ japanese ] = "çÌèú";
-        Text[ korean ] = "Delete";
+        Text[ korean ] = "ªË¡¶";
         Text[ chinese_simplified ] = "…æ≥˝";
         Text[ chinese_traditional ] = "ßR∞£";
         Text[ turkish ] = "Delete";
         Text[ arabic ] = "Õ–›";
         Text[ catalan ] = "Delete";
-        Text[ finnish ] = "Lˆschen";
+        Text[ finnish ] = "Poista";
     };
     FixedText FT_CHG_ATTR
     {
@@ -641,13 +641,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "ëÆê´";
-        Text[ korean ] = "Attributes";
+        Text[ korean ] = "º”º∫";
         Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "ƒ›© ";
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "«·”„« ";
         Text[ catalan ] = "Attributes";
-        Text[ finnish ] = "A~ttribute";
+        Text[ finnish ] = "M‰‰ritteet";
     };
     ListBox LB_CHG_ATTR
     {
@@ -675,13 +675,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
         Text[ japanese ] = "êF";
-        Text[ korean ] = "Color";
+        Text[ korean ] = "ªˆªÛ";
         Text[ chinese_simplified ] = "—’…´";
         Text[ chinese_traditional ] = "√C¶‚";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "«··Ê‰";
         Text[ catalan ] = "Color";
-        Text[ finnish ] = "~Farbe";
+        Text[ finnish ] = "~S‰vy";
     };
     ListBox LB_CHG_COL
     {
@@ -710,13 +710,13 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "ëÆê´";
-        Text[ korean ] = "Attributes";
+        Text[ korean ] = "º”º∫";
         Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "ƒ›© ";
         Text[ turkish ] = "Attributes";
         Text[ arabic ] = "«·”„« ";
         Text[ catalan ] = "Attributes";
-        Text[ finnish ] = "Attribute";
+        Text[ finnish ] = "M‰‰ritteet";
     };
     FixedLine GB_LC
     {
@@ -740,11 +740,11 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "§w∏g≈‹ßÛ™∫¶Ê";
         Text[ arabic ] = "√”ÿ— „⁄œ·…";
         Text[ greek ] = "‘ÒÔÔÔÈÁÏ›ÌÂÚ „Ò·ÏÏ›Ú";
-        Text[ korean ] = "∫Ø∞Êµ»°°º±.";
+        Text[ korean ] = "∫Ø∞Êµ»°°«‡.";
         Text[ turkish ] = "Dei˛tirilen sat˝rlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌneas modificadas";
-        Text[ finnish ] = "Ge‰nderte Zeilen";
+        Text[ finnish ] = "Muutetut viivat ";
     };
     FixedText FT_MARKPOS
     {
