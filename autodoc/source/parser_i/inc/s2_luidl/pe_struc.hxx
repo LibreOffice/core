@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_struc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:41:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,11 @@ class PE_Struct : public UnoIDL_PE
         void                Prepare_PE_Element();
         void                Data_Set_Name(
                                 const char *        i_sName );
+        void                Data_Set_TemplateParam(
+                                const char *        i_sTemplateParam );
 
         String              sData_Name;
+        String              sData_TemplateParam;
         bool                bIsPreDeclaration;
         ary::idl::Ce_id     nCurStruct;
 
@@ -182,9 +185,29 @@ class PE_Struct : public UnoIDL_PE
                                                     i_rToken );
     };
     class State_GotName : public PE_StructState
-    {   // -> : { ;
+    {   // -> : { ; <
       public:
                             State_GotName(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Punctuation(
+                                const TokPunctuation &
+                                                    i_rToken );
+    };
+    class State_WaitForTemplateParam : public PE_StructState
+    {   // -> Template parameter identifier
+      public:
+                            State_WaitForTemplateParam(
+                                PE_Struct &         i_rStruct )
+                                                    :   PE_StructState(i_rStruct) {}
+        virtual void        Process_Identifier(
+                                const TokIdentifier &
+                                                    i_rToken );
+    };
+    class State_WaitForTemplateEnd : public PE_StructState
+    {   // -> >
+      public:
+                            State_WaitForTemplateEnd(
                                 PE_Struct &         i_rStruct )
                                                     :   PE_StructState(i_rStruct) {}
         virtual void        Process_Punctuation(
@@ -251,6 +274,10 @@ class PE_Struct : public UnoIDL_PE
         State_None          aNone;
         State_WaitForName   aWaitForName;
         State_GotName       aGotName;
+        State_WaitForTemplateParam
+                            aWaitForTemplateParam;
+        State_WaitForTemplateEnd
+                            aWaitForTemplateEnd;
         State_WaitForBase   aWaitForBase;
         State_GotBase       aGotBase;
         State_WaitForElement
