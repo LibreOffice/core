@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-12 15:54:01 $
+ *  last change: $Author: bc $ $Date: 2002-08-14 15:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ public class ReportWizard {
      static String sMsgNoConnectionforDataimport;
      static String sMsgQueryCreationImpossible;
      static String sMsgHiddenControlMissing;
+     static String sMsgFilePathInvalid;
      boolean bCloseDocument;
 
     public ReportWizard() {
@@ -379,7 +380,7 @@ public class ReportWizard {
                if (CurCommandType == com.sun.star.sdb.CommandType.QUERY){
                     int QueryIndex = SelIndex - TableNames.length;
                     TableName = QueryNames[QueryIndex];
-                    oDBTable = xQueryNames.getByName(TableName);
+                    oDBTable = CurDBMetaData.xQueryNames.getByName(TableName);
             CurDBMetaData.Command = (String) tools.getUNOPropertyValue(oDBTable, "Command");
            }
         else{
@@ -615,7 +616,7 @@ public class ReportWizard {
 
     public void gotoNextStep(XMultiServiceFactory xMSF){
     try{
-    XWindow xWindow;
+    XWindow xWindow = null;
     boolean bSetTitle = true;
         int PageCount = 5;
         int iPage = ((Integer) tools.getUNOPropertyValue(CurUNODialog.DialogModel, "Step")).intValue();
@@ -632,7 +633,6 @@ public class ReportWizard {
                 CurDBMetaData.combineSelectStatement(TableName);
         CurReportDocument.setupRecordSection(CurReportPaths.ReportPath + "/cnt-default.stw", CurDBMetaData);
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xContentListBox);
-        xWindow.setFocus();
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
         case 4:
@@ -640,31 +640,43 @@ public class ReportWizard {
         CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Label", scmdReady);
         Object oFocusButton = CurUNODialog.xDlgContainer.getControl("optCreateReportTemplate");
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oFocusButton);
-        xWindow.setFocus();
         break;
         case 5:
         bcreateTemplate = ((Short)  CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
         boolean bDocisStored;
         StorePath = getStorePath();
-        if (bcreateTemplate == true){
+        if (tools.PathisValid(xGlobalMSF, StorePath)){
+            if (bcreateTemplate == true){
             CurReportDocument.createDBForm(xMSF, CurDBMetaData, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             buseTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optUseTemplate", "State")).shortValue() == (short) 1;
             bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template",
-                               buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
+                                   buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
             if (bDocisStored == true)
-            CurDBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+                CurDBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+            }
+            else{
+            bcreateLink = ((Short) CurUNODialog.getPropertyOfDialogControl("chkcreateLink", "State")).shortValue() == (short) 1;
+            }
+            bSetTitle = false;
+            bCloseDocument = false;
+            CurUNODialog.xDialog.endExecute();
         }
         else{
-            bcreateLink = ((Short) CurUNODialog.getPropertyOfDialogControl("chkcreateLink", "State")).shortValue() == (short) 1;
+            UNODialogs.showMessageBox(xMSF, CurUNODialog.xWindowPeer, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
+            if (bcreateTemplate){
+            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xSaveTextBox[0]);
+            }
+            else{
+            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xSaveTextBox[1]);
+            }
         }
-        bSetTitle = false;
-        bCloseDocument = false;
-        CurUNODialog.xDialog.endExecute();
         break;
         default:
                 break;
         }
+    if (xWindow != null)
+        xWindow.setFocus();
     if (bSetTitle == true){
         if (iPage < PageCount){
         tools.setUNOPropertyValues(CurUNODialog.DialogModel, new String[]{"Step", "Title"}, new Object[]{ new Integer(iPage + 1), WizardTitle[iPage]});
@@ -1293,7 +1305,7 @@ public class ReportWizard {
         CurReportDocument.loadStyleTemplates(CurReportPaths.ReportPath + "/stl-default.stw", "LoadPageStyles");
         WidthList = DBMetaData.InitializeWidthList();
         CurUNODialog = new UNODialogs(xMSF, new String[] {"Height", "HelpURL", "Step", "Title", "Width"},
-                                 new Object[] {new Integer(210), "HID:34320", new Integer(1), WizardTitle[0], new Integer(270)});
+                            new Object[] {new Integer(210), "HID:34320", new Integer(1), WizardTitle[0], new Integer(270)});
         CurReportDocument.ProgressBar.setValue(35);
         fillFirstStep(xMSF, CurReportDocument, DatabaseNames, CurPropertyValue);
         CurReportDocument.ProgressBar.setValue(50);
@@ -1308,7 +1320,6 @@ public class ReportWizard {
         bCloseDocument = true;
         CurReportDocument.ProgressBar.end();
         short RetValue = CurUNODialog.executeDialog(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize());
-
         switch (RetValue){
         case 0:     // via Cancelbutton or via sourceCode with "endExecute"
             if (bCloseDocument == true){
@@ -1323,6 +1334,10 @@ public class ReportWizard {
                 if (CurDBMetaData.executeCommand(xMSF, CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){;
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument, CurUNOProgressDialog);
                 CurUNOProgressDialog.xComponent.dispose();
+                }
+                else{
+                CurUNOProgressDialog.xComponent.dispose();
+                return;
                 }
             }
             if (bcreateTemplate == false){
@@ -1422,6 +1437,7 @@ public class ReportWizard {
     sMsgEndAutopilot = tools.getResText(xResInvoke, RID_COMMON + 33);
         sProgressDBConnection = tools.getResText(xResInvoke, RID_COMMON + 34);
     sMsgConnectionImpossible = tools.getResText(xResInvoke, RID_COMMON + 35);
+    sMsgFilePathInvalid = tools.getResText(xResInvoke, RID_COMMON + 36);
 
     sStop = tools.getResText(xResInvoke, RID_COMMON + 21);
     sMsgTableNotExisting = tools.getResText(xResInvoke, RID_REPORT + 61);
