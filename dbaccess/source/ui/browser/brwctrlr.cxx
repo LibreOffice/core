@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: as $ $Date: 2002-06-24 10:29:26 $
+ *  last change: $Author: obo $ $Date: 2002-06-26 08:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun
     // 22.05.2002 - 99030 - fs@openoffice.org
     if ( m_xCurrentFrame.is() && getView() && getView()->getToolBox() )
     {
-        sal_Bool bToplevelFrame = m_xCurrentFrame.isTop();
+        sal_Bool bToplevelFrame = m_xCurrentFrame->isTop();
 
         getView()->getToolBox()->ShowItem( SID_CUT, bToplevelFrame );
         getView()->getToolBox()->ShowItem( SID_COPY, bToplevelFrame );
