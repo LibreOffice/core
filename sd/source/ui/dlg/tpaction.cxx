@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:43:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,9 @@ void SdTPAction::Construct()
     BOOL        bDisableAll = FALSE;
     BOOL        bOLEAction = FALSE;
 
-    if ( pView->HasMarkedObj() )
+    if ( pView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         SdrObject* pObj;
 
         if (rMarkList.GetMarkCount() == 1)
