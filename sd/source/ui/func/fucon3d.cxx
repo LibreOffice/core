@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:16:25 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,12 +292,20 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
         // dem Erzeugen
         Matrix4D aScaleMat;
         aScaleMat.Scale(Vector3D(5.0, 5.0, 5.0));
-        p3DObj->ApplyTransform(aScaleMat);
+        const Matrix4D& rObjectMat = p3DObj->GetTransform();
+        aScaleMat = rObjectMat * aScaleMat;
+        p3DObj->SetTransform(aScaleMat);
 
         pView->SetCurrent3DObj(p3DObj);
         E3dScene *pScene   = (E3dScene*) pView->GetCurrentLibObj();
         Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
-        Volume3D aBoundVol (p3DObj->GetBoundVolume());
+
+        // get transformed BoundVolume of the new object
+        Volume3D aBoundVol;
+        const Volume3D& rObjVol = p3DObj->GetBoundVolume();
+        const Matrix4D& rObjTrans  = p3DObj->GetTransform();
+        aBoundVol.Union(rObjVol.GetTransformVolume(rObjTrans));
+
         Vector3D aMinVec (aBoundVol.MinVec ());
         Vector3D aMaxVec (aBoundVol.MaxVec ());
         double fDeepth = fabs (aMaxVec.Z () - aMinVec.Z ());
