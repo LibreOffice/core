@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:42:37 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ private:
 
     std::stack<USHORT> maIndexes;
 
-    sw::hack::SetLayer maSetLayer;
+    sw::util::SetLayer maSetLayer;
 
     ULONG mnNoInitialObjects;
     ULONG mnInlines;
@@ -108,7 +108,7 @@ private:
     ULONG GetDrawingObjectPos(short nWwHeight);
     bool InsertObject(SdrObject *pObject, ULONG nPos);
 public:
-    wwZOrderer(const sw::hack::SetLayer &rSetLayer, SdrPage* pDrawPg,
+    wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
         const SvxMSDffShapeOrders *pShapeOrders);
     void InsertTextLayerObject(SdrObject* pObject);
     /*
