@@ -23680,3 +23680,12 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?setCheckBoxState@?%O:\SRC662\src\svx\source\fmcomp\gridcell.cxx1457014267@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRC662\src\svx\source\fmcomp\fmgridcl.cxx1428016589@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
 ?_resize@WritingDirectionInfos@@IAEXI@Z
+??0?$_Vector_base@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@QAE@ABV?$allocator@PAVSdrMark@@@1@@Z
+??0?$_Vector_base@V?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@V?$allocator@V?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@@2@@_STL@@QAE@IABV?$allocator@V?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@@1@@Z
+??0?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@QAE@ABV?$allocator@PAVSdrMark@@@1@@Z
+??1?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@QAE@XZ
+?_Construct@_STL@@YAXPAPAVSdrMark@@ABQAV2@@Z
+?_M_insert_overflow@?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@_STL@@IAEXPAPAVSdrMark@@ABQAV3@I@Z
+?__destroy@_STL@@YAXPAPAVSdrMark@@00@Z
+?__uninitialized_fill_n_aux@_STL@@YAPAV?$vector@PAVSdrMark@@V?$allocator@PAVSdrMark@@@_STL@@@1@PAV21@IABV21@U__false_type@@@Z
+?value_type@_STL@@YAPAPAVSdrMark@@PBQAV2@@Z
