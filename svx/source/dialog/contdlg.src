@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 10:59:53 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ portuguese ] = "Selecзгo" ;
                 Text [ portuguese_brazilian ] = "Auswahl" ;
                 Text[ chinese_simplified ] = "йЂ‰ж‹©";
-                Text[ russian ] = "Выделение";
+                Text[ russian ] = "Выделить";
                 Text[ polish ] = "Zaznacz";
                 Text[ japanese ] = "йЃёжЉћ";
                 Text[ chinese_traditional ] = "йЃёж“‡";
@@ -181,7 +181,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Seзim";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Selecciona";
-                Text[ finnish ] = "Valitse";
+                Text[ finnish ] = "Valintatyцkalu";
                 Text[ thai ] = "а№ЂаёҐаё·аё­аёЃ";
             };
             ToolBoxItem
@@ -233,7 +233,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ portuguese ] = "Elipse" ;
                 Text [ portuguese_brazilian ] = "Ellipse" ;
                 Text[ chinese_simplified ] = "ж¤­ењ†";
-                Text[ russian ] = "Эллипсы";
+                Text[ russian ] = "Эллипс";
                 Text[ polish ] = "Elipsa";
                 Text[ japanese ] = "жҐ•е††";
                 Text[ chinese_traditional ] = "ж©ўењ“";
@@ -243,7 +243,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Elips";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Elipse";
-                Text[ finnish ] = "Ellipsi";
+                Text[ finnish ] = "Soikio";
                 Text[ thai ] = "аё§аё‡аёЈаёµ";
             };
             ToolBoxItem
@@ -274,7 +274,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Зokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polнgon";
-                Text[ finnish ] = "Polygoni";
+                Text[ finnish ] = "Monikulmio";
                 Text[ thai ] = "аё«аёҐаёІаёўа№Ђаё«аёҐаёµа№€аёўаёЎ";
             };
             /*
@@ -316,7 +316,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ english_us ] = "Edit Points" ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "зј–иѕ‘жЋҐз‚№";
-                Text[ russian ] = "Правка точек";
+                Text[ russian ] = "Изменение геометрии";
                 Text[ polish ] = "Edytuj punkty";
                 Text[ japanese ] = "е€¶еѕЎз‚№гЃ®з·Ёй›†";
                 Text[ chinese_traditional ] = "з·ЁијЇжЋҐй»ћ";
@@ -348,7 +348,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "з§»еЉЁжЋҐз‚№";
-                Text[ russian ] = "Переместить точки";
+                Text[ russian ] = "Переместить узлы";
                 Text[ polish ] = "Przesuс punkty";
                 Text[ japanese ] = "е€¶еѕЎз‚№гЃ®з§»е‹•";
                 Text[ chinese_traditional ] = "з§»е‹•жЋҐй»ћ";
@@ -380,7 +380,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "жЏ’е…ҐжЋҐз‚№";
-                Text[ russian ] = "Вставить точки";
+                Text[ russian ] = "Вставить узлы";
                 Text[ polish ] = "Wstaw punkty";
                 Text[ japanese ] = "е€¶еѕЎз‚№гЃ®жЊїе…Ґ";
                 Text[ chinese_traditional ] = "жЏ’е…ҐжЋҐй»ћ";
@@ -410,7 +410,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ spanish ] = "Eliminar puntos" ;
                 Text [ english_us ] = "Delete Points" ;
                 Text[ chinese_simplified ] = "е€ й™¤жЋҐз‚№";
-                Text[ russian ] = "Удалить точки";
+                Text[ russian ] = "Удалить узлы";
                 Text[ polish ] = "Usuс punkty";
                 Text[ japanese ] = "е€¶еѕЎз‚№гЃ®е‰Љй™¤";
                 Text[ chinese_traditional ] = "е€Єй™¤жЋҐй»ћ";
@@ -470,15 +470,15 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
-                Text [ finnish ] = "Peruuta" ;
+                Text [ finnish ] = "Kumoa " ;
                 Text [ danish ] = "Fortryd " ;
                 Text [ french ] = "Annuler " ;
                 Text [ swedish ] = "Еngra  " ;
-                Text [ dutch ] = "Ongedaan  " ;
+                Text [ dutch ] = "Ongedaan maken" ;
                 Text [ spanish ] = "Deshacer  " ;
                 Text [ english_us ] = "Undo " ;
                 Text[ chinese_simplified ] = "ж’¤ж¶€е‘Ѕд»¤ ";
-                Text[ russian ] = "Отменить ";
+                Text[ russian ] = "Отменить";
                 Text[ polish ] = "Cofnij ";
                 Text[ japanese ] = "е…ѓгЃ«ж€»гЃ™ ";
                 Text[ chinese_traditional ] = "еѕ©еЋџ ";
@@ -506,9 +506,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ italian ] = "Ripristina  " ;
                 Text [ spanish ] = "Restaurar  " ;
                 Text [ french ] = "Restaurer " ;
-                Text [ dutch ] = "Herstellen  " ;
+                Text [ dutch ] = "Herstellen" ;
                 Text[ chinese_simplified ] = "жЃўе¤Ќж’¤ж¶€е‘Ѕд»¤ ";
-                Text[ russian ] = "Вернуть ";
+                Text[ russian ] = "Вернуть";
                 Text[ polish ] = "Przywrуж ";
                 Text[ japanese ] = "г‚„г‚Љз›ґгЃ— ";
                 Text[ chinese_traditional ] = "жЃўеѕ©ж’¤ж¶€жЊ‡д»¤";
@@ -548,7 +548,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ turkish ] = "Renk цrneрi al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Comptagotes";
-                Text[ finnish ] = "Vдrivalitsin";
+                Text[ finnish ] = "Vдrinvalitsin";
                 Text[ thai ] = "аё•аё±аё§аё«аёўаё”аёЄаёµ";
             };
         };
@@ -623,7 +623,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text [ italian ] = "Editor contorno" ;
     Text [ spanish ] = "Editor de contornos" ;
     Text [ french ] = "Йditeur de contour" ;
-    Text [ dutch ] = "Contoureneditor" ;
+    Text [ dutch ] = "Contouren-editor" ;
     Text [ portuguese ] = "Editor de contornos" ;
     Text[ chinese_simplified ] = "е›ѕеЅўиЅ®е»“зј–иѕ‘е™Ё";
     Text[ russian ] = "Редактор контура";
@@ -684,10 +684,10 @@ String STR_CONTOURDLG_MODIFY
     Text [ italian ] = "Il contorno и stato modificato.\nAccettate le modifiche?" ;
     Text [ spanish ] = "Se ha modificado el contorno de la imagen.\nїDesea guardar las modificaciones?" ;
     Text [ french ] = "Le contour de l'image a йtй modifiй.\nAppliquer les modifications ?" ;
-    Text [ dutch ] = "De contour werd gewijzigd.\nWilt u de veranderingen overnemen?" ;
+    Text [ dutch ] = "De contour is gewijzigd.\nWilt u de wijzigingen overnemen?" ;
     Text [ portuguese ] = "O contorno foi modificado.\nDeseja aplicarr as modificaзхes?" ;
     Text[ chinese_simplified ] = "иї™дёЄиЅ®е»“е·Із»Џиў«ж›ґж”№гЂ‚\nж‚Ёи¦ЃжЋҐеЏ—иї™дёЄж›ґж”№еђ—пјџ";
-    Text[ russian ] = "Контур изменен.\nПринять изменения?";
+    Text[ russian ] = "Контур изменен.\nСохранить изменения?";
     Text[ polish ] = "Kontur zostaі zmieniony.\nCzy zapisaж zmiany?";
     Text[ japanese ] = "ијЄйѓ­з·љгЃЊе¤‰ж›ґгЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nе¤‰ж›ґг‚’йЃ©з”ЁгЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Text[ chinese_traditional ] = "йЂ™еЂ‹ењ–еЅўијЄе»“е·Із¶“и®Љж›ґгЂ‚\nж‚Ёи¦ЃжЋҐеЏ—йЂ™еЂ‹и®Љж›ґпјџ";
@@ -697,7 +697,7 @@ String STR_CONTOURDLG_MODIFY
     Text[ turkish ] = "Kontur deрiюtirildi.\nDeрiюiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha modificat el contorn.\nVoleu desar els canvis?";
-    Text[ finnish ] = "Ддriviivaa on muokattu.\nTallennetaanko muutokset?";
+    Text[ finnish ] = "Ддriviivaa on muutettu.\nTallennetaanko muutokset?";
     Text[ thai ] = "аё”аё±аё”а№Ѓаё›аёҐаё‡а№ЃаёЃа№‰а№„аё‚а№ЂаёЄа№‰аё™а№ЃаёЄаё”аё‡аёЈаё№аё›аёЈа№€аёІаё‡а№ЃаёҐа№‰аё§\nаё„аёёаё“аё•а№‰аё­аё‡аёЃаёІаёЈаёљаё±аё™аё—аё¶аёЃаёЃаёІаёЈа№Ђаё›аёҐаёµа№€аёўаё™а№Ѓаё›аёҐаё‡аё«аёЈаё·аё­а№„аёЎа№€?";
 };
 String STR_CONTOURDLG_NEWPIPETTE
@@ -714,7 +714,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text [ dutch ] = "Wilt u een nieuw contour maken?" ;
     Text [ portuguese ] = "Deseja criar um novo contorno?" ;
     Text[ chinese_simplified ] = "ж‚Ёи¦Ѓе»єз«‹дёЂдёЄж–°зљ„иЅ®е»“еђ—пјџ";
-    Text[ russian ] = "Вы хотите создать новый контур?";
+    Text[ russian ] = "Создать новый контур?";
     Text[ polish ] = "Czy chcesz utworzyж nowy kontur?";
     Text[ japanese ] = "ж–°гЃ—гЃЏијЄйѓ­з·љг‚’дЅњж€ђгЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Text[ chinese_traditional ] = "ж‚Ёи¦ЃиЈЅдЅњдёЂеЂ‹ж–°зљ„ијЄе»“пјџ";
@@ -741,7 +741,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text [ dutch ] = "Door het vastleggen van een nieuw werkbereik \nwordt de contour gewist.\nWilt u werkelijk doorgaan?" ;
     Text [ portuguese ] = "Ao definir uma nova бrea de\ntrabalho eliminarб o contorno.\nDeseja continuar?" ;
     Text[ chinese_simplified ] = "е®љд№‰дёЂдёЄж–°зљ„зј–иѕ‘еЊєеџџдјље€ й™¤жЋ‰иЅ®е»“гЂ‚\\ж‚Ёзњџи¦Ѓз»§з»­пјџ";
-    Text[ russian ] = "Установка новой рабочей области\nприведет к потере контура.\nВы действительно хотите продолжить?";
+    Text[ russian ] = "Установка новой рабочей области\nприведет к удалению контура.\nПродолжить, несмотря на это?";
     Text[ polish ] = "Ustawienie nowego obszaru roboczego \nprowadzi do usuniкcia konturu.\nCzy chcesz kontynuowaж?";
     Text[ japanese ] = "ж–°гЃ—гЃ„з·Ёй›†зЇ„е›Іг‚’иЁ­е®љгЃ™г‚‹гЃЁ\nијЄйѓ­з·љгЃЊе‰Љй™¤гЃ•г‚ЊгЃѕгЃ™гЂ‚\nз¶љиЎЊгЃ—гЃѕгЃ™гЃ‹пјџ";
     Text[ chinese_traditional ] = "е®љзѕ©дёЂеЂ‹ж–°зљ„з·ЁијЇеЌЂеџџжњѓжё…й™¤ијЄе»“гЂ‚\nж‚Ёзњџи¦Ѓз№јзєЊпјџ";
@@ -770,7 +770,7 @@ String STR_CONTOURDLG_LINKED
     Text [ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?" ;
     Text [ spanish ] = "Esta imagen estб vinculada al documento. їDesea deshacer el vнnculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "иї™дёЄе›ѕеЅўжЇе’Њж–‡жЎЈй“ѕжЋҐзљ„гЂ‚ж‚Ёи¦ЃеЏ–ж¶€иї™дёЄй“ѕжЋҐпјЊзј–иѕ‘иї™дёЄе›ѕеЅўеђ—пјџ";
-    Text[ russian ] = "Этот рисунок ссылается на документ. Вы хотите снять ссылку, чтобы отредактировать рисунок?";
+    Text[ russian ] = "Этот графический объект связан с документом. Убрать связь, чтобы отредактировать графический объект?";
     Text[ polish ] = "Grafika jest poі№czona z dokumentem. Czy chcesz usun№ж і№cze, aby edytowaж grafikк?";
     Text[ japanese ] = "гЃ“гЃ®е›ігЃЇгѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ«гѓЄгѓіг‚ЇгЃ—гЃ¦гЃ„гЃѕгЃ™гЂ‚е›іг‚’з·Ёй›†гЃ™г‚‹гЃџг‚ЃгЃ«гѓЄгѓіг‚Їг‚’и§Јй™¤гЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Text[ chinese_traditional ] = "йЂ™еЂ‹ењ–еЅўжЇе’Њж–‡д»¶йЂЈзµђзљ„гЂ‚ж‚Ёи¦ЃеЏ–ж¶€йЂ™еЂ‹йЂЈзµђп№ђз·ЁијЇйЂ™еЂ‹ењ–еЅўпјџ";
