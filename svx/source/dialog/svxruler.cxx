@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 11:08:40 $
+ *  last change: $Author: os $ $Date: 2001-07-16 09:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,66 @@ void DebugParaMargin_Impl(const SvxLRSpaceItem& rLRSpace)
 }
 
 #endif // DEBUGLIN
+#ifdef DEBUG
+#include <vcl/svapp.hxx>
+#include <vcl/lstbox.hxx>
+class RulerDebugWindow : public Window
+{
+    ListBox aBox;
+public:
+        RulerDebugWindow(Window* pParent) :
+            Window(pParent, WB_BORDER|WB_SIZEMOVE|WB_DIALOGCONTROL|WB_CLIPCHILDREN|WB_SYSTEMWINDOW),
+            aBox(this, WB_BORDER)
+            {
+                Size aOutput(200, 400);
+                SetOutputSizePixel(aOutput);
+                aBox.SetSizePixel(aOutput);
+                aBox.Show();
+                Show();
+                Size aParentSize(pParent->GetOutputSizePixel());
+                Size aOwnSize(GetSizePixel());
+                aParentSize.Width() -= aOwnSize.Width();
+                aParentSize.Height() -= aOwnSize.Height();
+                SetPosPixel(Point(aParentSize.Width(), aParentSize.Height()));
+            }
+        ~RulerDebugWindow();
+
+        ListBox& GetLBox() {return aBox;}
+        static void     AddDebugText(const sal_Char* pDescription, const String& rText );
+};
+static RulerDebugWindow* pDebugWindow = 0;
+
+RulerDebugWindow::~RulerDebugWindow()
+{
+    pDebugWindow = 0;
+}
+void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const String& rText )
+{
+    if(!pDebugWindow)
+    {
+        Window* pParent = Application::GetFocusWindow();
+        while(pParent->GetParent())
+            pParent = pParent->GetParent();
+        pDebugWindow = new RulerDebugWindow(pParent);
+    }
+    String sContent(String::CreateFromAscii(pDescription));
+    sContent += rText;
+    USHORT nPos = pDebugWindow->GetLBox().InsertEntry(sContent);
+    pDebugWindow->GetLBox().SelectEntryPos(nPos);
+    pDebugWindow->GrabFocus();
+}
+
+#define ADD_DEBUG_TEXT(cDescription, sValue) \
+    RulerDebugWindow::AddDebugText(cDescription, sValue);
+
+#define REMOVE_DEBUG_WINDOW \
+    delete pDebugWindow;    \
+    pDebugWindow = 0;
+
+#else
+#define ADD_DEBUG_TEXT(cDescription, sValue)
+#define REMOVE_DEBUG_WINDOW
+#endif
 
 struct SvxRuler_Impl  {
     USHORT *pPercBuf;
@@ -388,6 +448,7 @@ __EXPORT SvxRuler::~SvxRuler()
 
 */
 {
+    REMOVE_DEBUG_WINDOW
     if(bListening)
         EndListening(*pBindings);
 
@@ -1380,6 +1441,7 @@ long SvxRuler::GetCorrectedDragPos( BOOL bLeft, BOOL bRight )
 {
     const long lNullPix = Ruler::GetNullOffset();
     long lDragPos = GetDragPos() + lNullPix;
+ADD_DEBUG_TEXT("lDragPos: ", String::CreateFromInt32(lDragPos))
      if(bLeft && lDragPos < nMaxLeft)
         lDragPos = nMaxLeft;
     else if(bRight && lDragPos > nMaxRight)
@@ -1809,7 +1871,7 @@ void SvxRuler::DragBorders()
 */
 {
     BOOL bLeftIndentsCorrected = FALSE, bRightIndentsCorrected = FALSE;
-    const long lPos = GetCorrectedDragPos();
+    const long lPos = NEG_FLAG ? GetDragPos() : GetCorrectedDragPos();
     int nIdx;
 
     if(GetDragType()==RULER_TYPE_BORDER)
@@ -1830,6 +1892,7 @@ void SvxRuler::DragBorders()
     {
       case RULER_DRAGSIZE_MOVE:
         {
+ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargin))
             lDiff=GetDragType()==RULER_TYPE_BORDER ?
                 lPos-nDragOffset - pBorders[nIdx].nPos
                 : lPos - pRuler_Imp->lLastLMargin;
@@ -1874,8 +1937,9 @@ void SvxRuler::DragBorders()
                     lLeft=pRuler_Imp->lLastLMargin+lDiff;
                 }
 
+ADD_DEBUG_TEXT("lDiff: ", String::CreateFromInt32(lDiff))
                 pRuler_Imp->nTotalDist-=lDiff;
-
+ADD_DEBUG_TEXT("nTotalDist: ", String::CreateFromInt32(pRuler_Imp->nTotalDist))
                 for(int i  = nBorderCount-2; i >= nLimit; --i)
                 {
 
