@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:50:49 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ private:
     ::sd::ViewShell& mrViewShell;
     /** This cache holds the already created object bars.
     */
-    typedef ::std::hash_map< ::sd::ShellId,SfxShell*> ShellCache;
+    typedef ::std::map< ::sd::ShellId,SfxShell*> ShellCache;
     ShellCache maShellCache;
 };
 }
@@ -327,12 +327,11 @@ ViewShell::~ViewShell()
     // the object bars would access invalid data when switched.
     GetObjectBarManager().DisableObjectBarSwitching();
 
-    // Dispose the controller of this sub-shell.  The disposing event sent
-    // to the main controller will result in it asking the sub shell manager
-    // for the controller of the new main sub-shell.
-    Reference<lang::XComponent> xComponent (mpController.getRef(), UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    // Tell the controller that it must not access the dying view shell
+    // anymore.  This puts it into a semi-disposed state.  We can not
+    // dispose the controller because we do not own it.  The frame does.
+    if (IsMainViewShell() && mpController.is())
+        mpController->DetachFromViewShell();
 
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
@@ -1724,7 +1723,7 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
     SfxShell* pShell = NULL;
 
     ShellCache::iterator aI (maShellCache.find(nId));
-    if (aI == maShellCache.end() || aI->second!=NULL)
+    if (aI == maShellCache.end() || aI->second==NULL)
     {
         ::sd::View* pView = mrViewShell.GetView();
         switch (nId)
@@ -1789,21 +1788,8 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
 void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 {
-    // The cache is not yet working properly (we had to set a new view at an
-    // object bar that where re-used for that view) so the shell of released
-    // object bars are destroyed.
-    for (ShellCache::iterator aI(maShellCache.begin());
-         aI!=maShellCache.end();
-         aI++)
-    {
-        if (aI->second == pShell)
-        {
-            delete pShell;
-            aI->second = NULL;
-            maShellCache.erase (aI);
-            break;
-        }
-    }
+    // The shell remains in the shell cache until the ViewShell that owns
+    // this factory is destroyed.
 }
 
 } // end of anonymous namespace
