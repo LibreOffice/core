@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 12:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 //.........................................................................
@@ -86,28 +91,44 @@ namespace comphelper
     namespace starlang          = ::com::sun::star::lang;
 
 //==================================================================
+//= OEnumerationLock
+//==================================================================
+struct OEnumerationLock
+{
+    public:
+        ::osl::Mutex m_aLock;
+};
+
+//==================================================================
 //= OEnumerationByName
 //==================================================================
 /** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
     on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
 */
-class OEnumerationByName : public ::cppu::WeakImplHelper1<starcontainer::XEnumeration>
+class OEnumerationByName : private OEnumerationLock
+                         , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
+                                                           starlang::XEventListener    >
 {
-    staruno::Sequence< ::rtl::OUString>                 m_aNames;
+    staruno::Sequence< ::rtl::OUString >                m_aNames;
     sal_Int32                                           m_nPos;
-    staruno::Reference<starcontainer::XNameAccess>      m_xAccess;
+    staruno::Reference< starcontainer::XNameAccess >    m_xAccess;
+    sal_Bool                                            m_bListening;
 
 public:
-    OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess)
-        :m_aNames(_rxAccess->getElementNames())
-        ,m_nPos(0)
-        ,m_xAccess(_rxAccess)
-    {
-    }
+    OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess);
+    OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess,
+                       const staruno::Sequence< ::rtl::OUString >&             _aNames  );
+    virtual ~OEnumerationByName();
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException);
     virtual staruno::Any SAL_CALL nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
+
+    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException);
+
+private:
+    void impl_startDisposeListening();
+    void impl_stopDisposeListening();
 };
 
 //==================================================================
@@ -116,21 +137,27 @@ public:
 /** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
     on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
 */
-class OEnumerationByIndex : public ::cppu::WeakImplHelper1<starcontainer::XEnumeration>
+class OEnumerationByIndex : private OEnumerationLock
+                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
+                                                            starlang::XEventListener    >
 {
-    sal_Int32                                       m_nPos;
-    staruno::Reference<starcontainer::XIndexAccess> m_xAccess;
+    sal_Int32                                         m_nPos;
+    staruno::Reference< starcontainer::XIndexAccess > m_xAccess;
+    sal_Bool                                          m_bListening;
 
 public:
-    OEnumerationByIndex(const staruno::Reference<starcontainer::XIndexAccess>& _rxAccess)
-        :m_xAccess(_rxAccess)
-        ,m_nPos(0)
-    {
-    }
+    OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess);
+    virtual ~OEnumerationByIndex();
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException);
     virtual staruno::Any SAL_CALL nextElement(  )
         throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
+
+    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException);
+
+private:
+    void impl_startDisposeListening();
+    void impl_stopDisposeListening();
 };
 
 //.........................................................................
