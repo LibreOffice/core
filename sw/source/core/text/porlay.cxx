@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:07:00 $
+ *  last change: $Author: fme $ $Date: 2002-05-02 08:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,11 +553,9 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
  *
  * searches for script changes in rTxt and stores them
  *************************************************************************/
-
 void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                                    const OutputDevice& rOut )
 {
-
     if( !pBreakIt->xBreak.is() )
         return;
 
@@ -776,30 +774,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         nLastKashida = 0;
 
     aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
-
-    //
-    // Bidi functions from icu 2.0
-    //
-    UErrorCode nError = U_ZERO_ERROR;
-    UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
-    nError = U_ZERO_ERROR;
-    ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
-                   nDir ? UBIDI_RTL : UBIDI_LTR, NULL, &nError );
-    nError = U_ZERO_ERROR;
-    long nCount = ubidi_countRuns( pBidi, &nError );
-    UTextOffset nStart = 0;
-    UTextOffset nEnd;
-    UBiDiLevel nCurrDir;
-
-    for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
-    {
-        ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirChg.Insert( (USHORT)nEnd, nCntDir );
-        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
-        nStart = nEnd;
-    }
-
-    ubidi_close( pBidi );
 #endif
 
     if ( WEAK == nScript )
@@ -1027,6 +1001,64 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 #endif
 
     } while ( TRUE );
+
+#ifdef BIDI
+    // Perform Unicode Bidi Algorithm for text direction information
+    nCnt = 0;
+    sal_Bool bLatin = sal_False;
+    sal_Bool bAsian = sal_False;
+    sal_Bool bComplex = sal_False;
+
+    while( nCnt < CountScriptChg() )
+    {
+        nScript = GetScriptType( nCnt++ );
+        switch ( nScript )
+        {
+        case LATIN:
+            bLatin = sal_True;
+            break;
+        case ASIAN:
+            bAsian = sal_True;
+            break;
+        case COMPLEX:
+            bComplex = sal_True;
+            break;
+        default:
+            ASSERT( ! rTxt.Len(), "Wrong script found" )
+        }
+    }
+
+    // do not call the unicode bidi algorithm if not required
+    if ( ( ! nDir && ! bComplex ) ||
+         (  nDir && ! bLatin && ! bAsian ) )
+        return;
+
+    //
+    // Bidi functions from icu 2.0
+    //
+    UErrorCode nError = U_ZERO_ERROR;
+    UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
+    nError = U_ZERO_ERROR;
+
+    ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
+                   nDir ? UBIDI_RTL : UBIDI_LTR, NULL, &nError );
+    nError = U_ZERO_ERROR;
+    long nCount = ubidi_countRuns( pBidi, &nError );
+    UTextOffset nStart = 0;
+    UTextOffset nEnd;
+    UBiDiLevel nCurrDir;
+
+    for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
+    {
+        ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
+        aDirChg.Insert( (USHORT)nEnd, nCntDir );
+        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        nStart = nEnd;
+    }
+
+    ubidi_close( pBidi );
+#endif
+
 }
 
 /*************************************************************************
@@ -1073,14 +1105,14 @@ BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
 #ifdef BIDI
 
 xub_StrLen SwScriptInfo::NextDirChg( const xub_StrLen nPos,
-                                     sal_Bool bLevel )  const
+                                     const BYTE* pLevel )  const
 {
-    BYTE nDir = bLevel ? DirType( nPos ) : 62;
+    BYTE nCurrDir = pLevel ? *pLevel : 62;
     USHORT nEnd = CountDirChg();
     for( USHORT nX = 0; nX < nEnd; ++nX )
     {
         if( nPos < GetDirChg( nX ) &&
-            ( nX + 1 == nEnd || GetDirType( nX + 1 ) < nDir ) )
+            ( nX + 1 == nEnd || GetDirType( nX + 1 ) <= nCurrDir ) )
             return GetDirChg( nX );
     }
 
@@ -1335,6 +1367,36 @@ USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
 }
 
 #endif
+
+/*************************************************************************
+ *                      SwScriptInfo::ThaiJustify()
+ *************************************************************************/
+
+USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
+                                  long* pScrArray, xub_StrLen nStt,
+                                  xub_StrLen nLen, const USHORT nSpace )
+{
+    long nSpaceSum = 0;
+    USHORT nCnt = 0;
+
+    for ( USHORT nI = 0; nI < nLen; ++nI )
+    {
+        const xub_Unicode cCh = rTxt.GetChar( nStt + nI );
+
+        // check if character is not above or below base
+        if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
+                ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
+        {
+            nSpaceSum += nSpace;
+            ++nCnt;
+        }
+
+        if ( pKernArray ) pKernArray[ nI ] += nSpaceSum;
+        if ( pScrArray ) pScrArray[ nI ] += nSpaceSum;
+    }
+
+    return nCnt;
+}
 
 /*************************************************************************
  *                      class SwParaPortion
