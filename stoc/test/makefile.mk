@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: jbu $ $Date: 2001-12-07 16:24:51 $
+#   last change: $Author: dbo $ $Date: 2002-01-25 12:47:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -250,6 +250,7 @@ TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept
 TESTCONV:=com.sun.star.script.XTypeConverter
 TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
+TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
 $(BIN)$/test1.rdb:
     +cd $(BIN) && regcomp -register -r test1.rdb -c $(MY_DLLPREFIX)at$(MY_DLLPOSTFIX)
@@ -270,4 +271,5 @@ $(MISC)$/test_types_generated.flag : $(BIN)$/stoctest.rdb  makefile.mk
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTINTROSP)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTCONV)" $(BIN)$/stoctest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTPROXYFAC)" $(BIN)$/stoctest.rdb
+    +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TESTSECURITY)" $(BIN)$/stoctest.rdb
     touch $(MISC)$/test_types_generated.flag

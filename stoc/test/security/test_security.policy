@@ -1,0 +1,15 @@
+grant user "dbo"{
+      permission com.sun.star.io.FilePermission "file:///home/dbo/-", "read,write";
+      permission com.sun.star.io.FilePermission "-", "read,write";
+      permission com.sun.star.io.FilePermission "file:///usr/local/dbo/*" , "read";};
+grant user "jbu" {
+permission com.sun.star.io.FilePermission  "file:///home/jbu/-" ,"read,write";
+ permission com.sun.star.io.FilePermission "*","read,write";};
+  grant user "root"{permission com.sun.star.security.AllPermission;};
+
+ grant
+{
+      permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
+      permission com.sun.star.io.FilePermission "file:///tmp/-", "read,write";
+      permission com.sun.star.io.FilePermission "file:///etc/profile", "read";
+ } ;
