@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:16:48 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,12 +2001,29 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             DBG_WARNING("not implemented")
         }
         else
-            pField->PutValue( rValue, pMap->nWID );
-        //#114571# changes of the expanded string have to be notified to the SwTxtFld
+        {
+            // -> #111840#
+            SwDoc * pDoc = GetDoc();
+
+            if (NULL != pDoc)
+            {
+                SwPosition * pPos = GetPosition();
+
+                ASSERT(pPos, "no position");
+                pDoc->PutValueToField( *pPos, rValue, pMap->nWID);
+
+                delete pPos;
+            }
+            // <- #111840#
+        }
+        pField->PutValue( rValue, pMap->nWID );
+        //#114571# changes of the expanded string have to be notified
+        //#to the SwTxtFld
         if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
         {
             pFmtFld->GetTxtFld()->Expand();
         }
+>>>>>>> 1.79
     }
     else if(m_pProps)
     {
@@ -2368,6 +2385,24 @@ const SwField*  SwXTextField::GetField() const
         return  pFmtFld->GetFld();
     return 0;
 }
+
+// #111840#
+SwPosition * SwXTextField::GetPosition()
+{
+    SwPosition * pResult = NULL;
+    SwFmtFld * pFmtFld = GetFldFmt();
+
+    if (pFmtFld)
+    {
+        SwTxtFld * pTxtFld = pFmtFld->GetTxtFld();
+
+        if (pTxtFld)
+            pResult = pTxtFld->GetPosition();
+    }
+
+    return pResult;
+}
+
 /******************************************************************
  *
  ******************************************************************/
@@ -2878,4 +2913,3 @@ String& GetString( const com::sun::star::uno::Any& rAny, String& rStr )
     rStr = String( aStr );
     return rStr;
 }
-
