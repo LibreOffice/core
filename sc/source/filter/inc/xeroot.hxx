@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:19:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include "xlroot.hxx"
 #endif
 
+// Forwards ===================================================================
+
+class XclExpTokenArray;
+typedef ScfRef< XclExpTokenArray > XclExpTokenArrayRef;
+
 // Global data ================================================================
 
 class XclExpProgressBar;
@@ -74,6 +79,7 @@ class XclExpPalette;
 class XclExpFontBuffer;
 class XclExpNumFmtBuffer;
 class XclExpXFBuffer;
+class XclExpFormulaCompiler;
 class XclExpTabInfo;
 class XclExpLinkManager;
 class XclExpPivotTableManager;
@@ -89,6 +95,7 @@ struct XclExpRootData : public XclRootData
     typedef ::std::auto_ptr< XclExpXFBuffer >           XclExpXFBfrPtr;
     typedef ::std::auto_ptr< XclExpTabInfo >            XclExpTabInfoPtr;
     typedef ::std::auto_ptr< XclExpLinkManager >        XclExpLinkMgrPtr;
+    typedef ::std::auto_ptr< XclExpFormulaCompiler >    XclExpFmlaCompPtr;
     typedef ::std::auto_ptr< XclExpPivotTableManager >  XclExpPTableMgrPtr;
 
     XclExpProgressPtr   mxProgress;         /// The export progress bar.
@@ -102,6 +109,8 @@ struct XclExpRootData : public XclRootData
 
     XclExpTabInfoPtr    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpLinkMgrPtr    mxLinkMgr;          /// Manager for internal/external links.
+    XclExpFmlaCompPtr   mxFmlaComp;         /// The formula compiler.
+
     XclExpPTableMgrPtr  mxPTableMgr;        /// All pivot tables and pivot caches.
 
     bool                mbRelUrl;           /// true = Store URLs relative.
@@ -144,11 +153,11 @@ public:
     XclExpTabInfo&      GetTabInfo() const;
     /** Returns the link manager. */
     XclExpLinkManager&  GetLinkManager() const;
+    /** Returns the formula compiler to produce formula token arrays. */
+    XclExpFormulaCompiler& GetFormulaCompiler() const;
+
     /** Returns the pivot table manager. */
     XclExpPivotTableManager& GetPivotTableManager() const;
-
-    /** Returns the Excel add-in function name for a Calc function name. */
-    String              GetXclAddInName( const String& rScName ) const;
 
     /** Checks if the passed cell address is a valid Excel cell position.
         @descr  See XclRoot::CheckCellAddress for details. */
