@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:41:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Änderungen" ;    RID_SW_TP_REDLINE_OPT    ; > ;
             < "Kompatibilität" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoBeschriftung" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
+            < "Serienbrief-E-Mail" ; RID_SW_TP_MAILCONFIG ; >;
         };
         ItemList [ en-US ] =
         {
@@ -356,6 +357,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;
             < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoCaption" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
+            < "Mail Merge E-mail" ; RID_SW_TP_MAILCONFIG ; >;
         };
     };
     StringArray SID_SW_ONLINEOPTIONS
