@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 14:05:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ using namespace ::xmloff::token;
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_IMAGE_NAME,
+    XML_TOK_IMAGE_DISPLAY_NAME,
     XML_TOK_IMAGE_URL,
     XML_TOK_IMAGE_TYPE,
     XML_TOK_IMAGE_SHOW,
@@ -130,6 +131,7 @@ enum SvXMLTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
     { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
     { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
@@ -168,7 +170,13 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             OUStringBuffer aOut;
 
             // Name
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+            sal_Bool bEncoded = sal_False;
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                  rExport.EncodeStyleName( rStrName,
+                                                           &bEncoded ) );
+            if( bEncoded )
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                      rStrName );
 
             // uri
             const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
@@ -220,6 +228,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     sal_Bool bHasHRef = sal_False;
     sal_Bool bHasName = sal_False;
     OUString aStrURL;
+    OUString aDisplayName;
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
 
@@ -237,6 +246,11 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
                 {
                     rStrName = rStrValue;
                     bHasName = sal_True;
+                }
+                break;
+            case XML_TOK_IMAGE_DISPLAY_NAME:
+                {
+                    aDisplayName = rStrValue;
                 }
                 break;
             case XML_TOK_IMAGE_URL:
@@ -261,6 +275,13 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     }
 
     rValue <<= aStrURL;
+
+    if( aDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID,
+                                     rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
 
     bRet = bHasName && bHasHRef;
 
