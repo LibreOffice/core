@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,14 +336,18 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(bool bOnFirstWindow)
+bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 {
+    rCancelled = FALSE;
+
+    // no error messages during installation (i.e., when there is no configuration)
     bool bErrorMessage = (FALSE != vcl::SettingsConfigItem::get()->IsValidConfigMgr());
 
-    // Always return true on shutdown to avoid that these messages appear more than once
-    if (ImplGetSVData()->maAppData.mbAppQuit == TRUE) {
-        return true;
-    }
+    // Note:
+    // if bAllowCancel is TRUE we were called from application startup
+    //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
+    // if bAllowCancel is FALSE we were called from Tools->Options
+    //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
 
     try
     {
@@ -387,7 +391,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
                 // Disable default java error messages on startup, because they were probably unreadable
                 // for a disabled user. Use native message boxes which are accessible without java support.
                 // No need to do this when activated by Tools-Options dialog ..
-                if( bOnFirstWindow )
+                if( bAllowCancel )
                 {
                     // customize the java-not-available-interaction-handler entry within the
                     // current context when called at startup.
@@ -419,7 +423,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
     catch(::com::sun::star::java::JavaNotConfiguredException e)
     {
-        if( bErrorMessage )
+        if( bErrorMessage && bAllowCancel )
         {
             ResMgr *pResMgr = ImplGetResMgr();
 
@@ -437,12 +441,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-            {
-                // Application::Quit results in an endlesss loop
-                ImplGetSVData()->maAppData.mbAppQuit = TRUE;
-                return true;
-
-            }
+                rCancelled = TRUE;
         }
 
         return false;
@@ -450,7 +449,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
     catch(::com::sun::star::java::JavaVMCreationFailureException e)
     {
-        if( bErrorMessage )
+        if( bErrorMessage && bAllowCancel )
         {
             ResMgr *pResMgr = ImplGetResMgr();
 
@@ -468,12 +467,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-            {
-                // Application::Quit results in an endlesss loop
-                ImplGetSVData()->maAppData.mbAppQuit = TRUE;
-                return true;
-
-            }
+                rCancelled = TRUE;
         }
 
         return false;
@@ -481,7 +475,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
     catch(::com::sun::star::java::MissingJavaRuntimeException e)
     {
-        if( bErrorMessage )
+        if( bErrorMessage && bAllowCancel )
         {
             ResMgr *pResMgr = ImplGetResMgr();
 
@@ -499,12 +493,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-            {
-                // Application::Quit results in an endlesss loop
-                ImplGetSVData()->maAppData.mbAppQuit = TRUE;
-                return true;
-
-            }
+                rCancelled = TRUE;
         }
 
         return false;
@@ -512,7 +501,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
     catch(::com::sun::star::java::JavaDisabledException e)
     {
-        if( bErrorMessage )
+        if( bErrorMessage && bAllowCancel )
         {
             ResMgr *pResMgr = ImplGetResMgr();
 
@@ -530,12 +519,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-            {
-                // Application::Quit results in an endlesss loop
-                ImplGetSVData()->maAppData.mbAppQuit = TRUE;
-                return true;
-
-            }
+                rCancelled = TRUE;
         }
 
         return false;
@@ -562,7 +546,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
             if( aTitle.Len() != 0 )
             {
-                if( bOnFirstWindow )
+                if( bAllowCancel )
                 {
                     // Something went wrong initializing the Java AccessBridge (on Windows) during the
                     // startup. Since the office will be probably unusable for a disabled user, we offer
@@ -578,12 +562,7 @@ bool ImplInitAccessBridge(bool bOnFirstWindow)
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                    {
-                        // Application::Quit results in an endlesss loop
-                        ImplGetSVData()->maAppData.mbAppQuit = TRUE;
-                        return true;
-
-                    }
+                        rCancelled = TRUE;
                 }
                 else
                 {
