@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-22 07:36:12 $
+ *  last change: $Author: jb $ $Date: 2001-05-23 06:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,12 +199,6 @@ namespace configmgr
         Iterator end()      const { return m_aImpl.end(); }
 
         void swap(Settings& _rOther) { m_aImpl.swap(_rOther.m_aImpl); }
-    private:
-
-        // transfer runtime overwrites into m_aImpl. Existent settings will be overwritten.
-        void implTranslate(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin)
-            throw (lang::IllegalArgumentException);
-
     };
 
     class ConnectionSettings
