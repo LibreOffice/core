@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 10:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,9 @@ FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
         ,DropTargetHelper(this)
         ,m_pImpl(new FmGridHeaderData)
 {
+#ifndef TF_SVDATA
     EnableDrop(sal_True);
+#endif // TF_SVDATA
 }
 
 //------------------------------------------------------------------------------
