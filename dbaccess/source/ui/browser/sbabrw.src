@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:07:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,8 +934,8 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text [ english_us ] = "~Insert Table..." ;
             Text[ portuguese ] = "~Inserir tabela...";
                 Text[ russian ] = "~Βρςΰβθςό ςΰαλθφσ...";
-                Text[ greek ] = "Ε~ισαγωγή πίνακα";
-                Text[ dutch ] = "tabel ~invoegen";
+                Text[ greek ] = "Ε~ισαγωγή πίνακα...";
+                Text[ dutch ] = "Tabel ~invoegen...";
                 Text[ french ] = "~Insιrer une table...";
                 Text[ spanish ] = "~Insertar tabla";
                 Text[ finnish ] = "Tabelle e~infόgen";
@@ -965,7 +965,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text [ english_us ] = "Rel~ation Design" ;
             Text[ portuguese ] = "Es~boηar relaηγo";
             Text[ russian ] = "Οπξεκς ρβÿηει";
-            Text[ greek ] = "Σχεδιασμός εξάρτησης";
+            Text[ greek ] = "Σχεδιασ~μός σχέσης";
             Text[ dutch ] = "~ontwerp voor verbinding";
             Text[ french ] = "Ιbauche de relatio~n";
             Text[ spanish ] = "Diseρo de rela~ciones";
@@ -1034,7 +1034,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text [ english_us ] = "~Insert View" ;
             Text[ portuguese ] = "~Inserir vista";
                 Text[ russian ] = "Βρςΰβθςό βθδ";
-                Text[ greek ] = "~Insert View";
+                Text[ greek ] = "Ε~ισαγωγή προβολής";
                 Text[ dutch ] = "~Beeld invoegen";
                 Text[ french ] = "~Insιrer une vue";
                 Text[ spanish ] = "~Insertar visualizaciσn";
@@ -1065,7 +1065,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text [ english_us ] = "Rel~ation Design" ;
             Text[ portuguese ] = "Es~boηar relaηγo";
             Text[ russian ] = "Οπξεκς ρβÿηει";
-            Text[ greek ] = "Σχεδιασμός εξάρτησης";
+            Text[ greek ] = "Σχεδιασ~μός σχέσης";
             Text[ dutch ] = "~Relatie-ontwerp";
             Text[ french ] = "Ιbauche de relatio~n";
             Text[ spanish ] = "Diseρo de rela~ciones";
@@ -1252,7 +1252,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text [ english_us ] = "While retrieving the tables, warnings were reported by the database connection.";
     Text[ portuguese ] = "Durante a localizaηγo das tabelas, a ligaηγo da base de dados registou algumas advertκncias.";
     Text[ russian ] = "Βξ βπεμÿ ξοπεδελενθÿ ςΰαλθφ θη ρξεδθνενθÿ αΰηϋ δΰννϋυ βϋδΰβΰλθρό οπεδσοπεζδενθÿ.";
-    Text[ greek ] = "Κατά την διαδικασία ανεύρεσης των πινάκων δεχτήκαμε προειδοποιήσεις από την σύνδεση της βάσης δεδομένων.";
+    Text[ greek ] = "Κατά την διαδικασία ανεύρεσης των πινάκων υπήρξαν προειδοποιήσεις από την σύνδεση της βάσης δεδομένων.";
     Text[ dutch ] = "Bij het openen van de tabellen werden waarschuwingen opgeroepen door de databaseverbinding.";
     Text[ french ] = "Avertissements en provenance de la connexion (BD) durant le processus de rιcupιration des tables.";
     Text[ spanish ] = "La conexiσn a la base de datos ha enviado advertencias durante la determinaciσn de las tablas.";
@@ -1278,7 +1278,7 @@ String STR_CONNECTING_DATASOURCE
     Text [ english_us ] = "Connecting to \"$name$\" ...";
     Text[ portuguese ] = "A estabelecer ligaηγo com \"$name$\" ...";
     Text[ russian ] = "Οξδκλώχενθε κ \"$name$\" ...";
-    Text[ greek ] = "connecting to \"$name$\" ...";
+    Text[ greek ] = "Σύνδεση με το \"$name$\" ...";
     Text[ dutch ] = "Bezig met verbinden met \"$name$\" ...";
     Text[ french ] = "Connexion ΰ \"$name$\" ...";
     Text[ spanish ] = "Conectando a \"$name$\" ...";
@@ -1304,7 +1304,7 @@ String STR_LOADING_QUERY
     Text [ english_us ] = "Loading query $name$ ...";
     Text[ portuguese ] = "A carregar consulta $name$ ...";
     Text[ russian ] = "Ηΰγπσηκΰ ηΰοπξρΰ $name$ ...";
-    Text[ greek ] = "loading query $name$ ...";
+    Text[ greek ] = "Φόρτωση ερωτήματος $name$ ...";
     Text[ dutch ] = "Bezig met laden van query $name$ ...";
     Text[ french ] = "Chargement de la requκte $name$ ...";
     Text[ spanish ] = "cargando consulta $name$ ...";
@@ -1330,7 +1330,7 @@ String STR_LOADING_TABLE
     Text [ english_us ] = "Loading table $name$ ...";
     Text[ portuguese ] = "A carregar tabela $name$ ...";
     Text[ russian ] = "Ηΰγπσηκΰ ςΰαλθφϋ $name$ ...";
-    Text[ greek ] = "loading table $name$ ...";
+    Text[ greek ] = "Φόρτωση πίνακα $name$ ...";
     Text[ dutch ] = "Bezig met laden van tabel $name$ ...";
     Text[ french ] = "Chargement de la table $name$ ...";
     Text[ spanish ] = "cargando tabla $name$ ...";
@@ -1348,5 +1348,6 @@ String STR_LOADING_TABLE
     Text[ finnish ] = "lade Tabelle $name$ ...";
     Text[ catalan ] = "loading table $name$ ...";
 };
+
 
 
