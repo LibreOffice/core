@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:34:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ public:
     short         nBase;            // OPTION BASE-Wert
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
+    BOOL          bClassModule;     // TRUE: OPTION ClassModule
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );
