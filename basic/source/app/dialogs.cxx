@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:04:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,7 +908,7 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
     aTbConf.CopyItem( aOrig, 7 );             */
     aTbConf.SetOutStyle( TOOLBOX_STYLE_FLAT );
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
     aTbConf.Hide();
 #endif
 
