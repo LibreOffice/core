@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:27:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,69 +76,15 @@ TabPage RID_SVXPAGE_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Farbschema" ;
-        Text [ ENGLISH ] = "Color scheme" ;
-        Text[ english_us ] = "Color scheme";
-        Text[ portuguese ] = "Color scheme";
-        Text[ russian ] = "Color scheme";
-        Text[ greek ] = "Color scheme";
-        Text[ dutch ] = "Kleurenschema";
-        Text[ french ] = "Sch�ma de couleurs";
-        Text[ spanish ] = "Esquema de colores";
-        Text[ finnish ] = "Color scheme";
-        Text[ italian ] = "Schema colori";
-        Text[ danish ] = "Farveskema";
-        Text[ swedish ] = "F�rgschema";
-        Text[ polish ] = "Color scheme";
-        Text[ portuguese_brazilian ] = "Esquema de cores";
-        Text[ japanese ] = "カラーパターン";
-        Text[ korean ] = "색 구성표";
-        Text[ chinese_simplified ] = "颜色图案";
-        Text[ chinese_traditional ] = "顔色圖案";
-        Text[ turkish ] = "Renk �emas�";
-        Text[ arabic ] = "Color scheme";
-        Text[ catalan ] = "Color scheme";
-        Text[ thai ] = "Color scheme";
-        Text[ czech ] = "Barevné schéma";
-        Text[ hebrew ] = "‮תיכנון צבעים‬";
-        Text[ hindi ] = "Color scheme";
-        Text[ slovak ] = "Farebná schéma";
-        Text[ hungarian ] = "Színséma";
-        Text[ slovenian ] = "Barvna shema";
+        Text [ de ] = "Farbschema" ;
+        Text [ en-US ] = "Color scheme";
     };
     FixedText FT_COLORSCHEME
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "Schema" ;
-        Text [ ENGLISH ] = "Scheme" ;
-        Text[ english_us ] = "Scheme";
-        Text[ portuguese ] = "Scheme";
-        Text[ russian ] = "Scheme";
-        Text[ greek ] = "Scheme";
-        Text[ dutch ] = "Schema";
-        Text[ french ] = "Sch�ma";
-        Text[ spanish ] = "Esquema";
-        Text[ finnish ] = "Scheme";
-        Text[ italian ] = "Schema";
-        Text[ danish ] = "Skema";
-        Text[ swedish ] = "Schema";
-        Text[ polish ] = "Scheme";
-        Text[ portuguese_brazilian ] = "Esquema";
-        Text[ japanese ] = "パターン";
-        Text[ korean ] = "구성표";
-        Text[ chinese_simplified ] = "颜色图案";
-        Text[ chinese_traditional ] = "顏色圖案";
-        Text[ turkish ] = "�ema";
-        Text[ arabic ] = "Scheme";
-        Text[ catalan ] = "Scheme";
-        Text[ thai ] = "Scheme";
-        Text[ czech ] = "Schéma";
-        Text[ hebrew ] = "‮תכנון‬";
-        Text[ hindi ] = "Scheme";
-        Text[ slovak ] = "Schéma";
-        Text[ hungarian ] = "Séma";
-        Text[ slovenian ] = "Shema";
+        Text [ de ] = "Schema" ;
+        Text [ en-US ] = "Scheme";
     };
     ListBox LB_COLORSCHEME
     {
@@ -152,104 +98,23 @@ TabPage RID_SVXPAGE_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 145, 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Speichern..." ;
-        Text [ ENGLISH ] = "Save..." ;
-        Text[ english_us ] = "Save...";
-        Text[ portuguese ] = "Guardar...";
-        Text[ russian ] = "���������...";
-        Text[ greek ] = "����������...";
-        Text[ dutch ] = "Opslaan...";
-        Text[ french ] = "Enregistrer...";
-        Text[ spanish ] = "Guardar...";
-        Text[ finnish ] = "Tallenna...";
-        Text[ italian ] = "Salva...";
-        Text[ danish ] = "Gem...";
-        Text[ swedish ] = "Spara...";
-        Text[ polish ] = "Zapisz...";
-        Text[ portuguese_brazilian ] = "Salvar...";
-        Text[ japanese ] = "保存...";
-        Text[ korean ] = "저장...";
-        Text[ chinese_simplified ] = "存盘...";
-        Text[ chinese_traditional ] = "儲存...";
-        Text[ turkish ] = "Kaydet...";
-        Text[ arabic ] = "���...";
-        Text[ catalan ] = "Save...";
-        Text[ thai ] = "บันทึก...";
-        Text[ czech ] = "Uložit...";
-        Text[ hebrew ] = "‮שמירה...‬";
-        Text[ hindi ] = "Save...";
-        Text[ slovak ] = "Uložiť...";
-        Text[ hungarian ] = "Mentés...";
-        Text[ slovenian ] = "Shrani...";
+        Text [ de ] = "Speichern..." ;
+        Text [ en-US ] = "Save...";
     };
     PushButton PB_DELETESCHEME
     {
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "L�schen" ;
-        Text [ ENGLISH ] = "Delete" ;
-        Text[ english_us ] = "Delete";
-        Text[ portuguese ] = "Eliminar";
-        Text[ russian ] = "�������";
-        Text[ greek ] = "��������";
-        Text[ dutch ] = "Wissen";
-        Text[ french ] = "Supprimer";
-        Text[ spanish ] = "Borrar";
-        Text[ finnish ] = "Poista";
-        Text[ italian ] = "Elimina";
-        Text[ danish ] = "Slet";
-        Text[ swedish ] = "Radera";
-        Text[ polish ] = "Usu�";
-        Text[ portuguese_brazilian ] = "Excluir";
-        Text[ japanese ] = "削除";
-        Text[ korean ] = "삭제";
-        Text[ chinese_simplified ] = "删除";
-        Text[ chinese_traditional ] = "刪除";
-        Text[ turkish ] = "Sil";
-        Text[ arabic ] = "���";
-        Text[ catalan ] = "Suprimeix";
-        Text[ thai ] = "ลบ";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "‮מחיקה‬";
-        Text[ hindi ] = "Delete";
-        Text[ slovak ] = "Zmazať";
-        Text[ hungarian ] = "Törlés";
-        Text[ slovenian ] = "Izbriši";
+        Text [ de ] = "L�schen" ;
+        Text [ en-US ] = "Delete";
     };
     FixedLine FL_CUSTOMCOLORS
     {
         Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
 
-        Text = "Benutzerdefinierte Farben" ;
-        Text [ ENGLISH ] = "Scheme" ;
-        Text[ english_us ] = "Custom colors";
-        Text[ portuguese ] = "Scheme";
-        Text[ russian ] = "Scheme";
-        Text[ greek ] = "Scheme";
-        Text[ dutch ] = "Gebruikerskleuren";
-        Text[ french ] = "Couleurs personnalis�es";
-        Text[ spanish ] = "Colores personalizados";
-        Text[ finnish ] = "Scheme";
-        Text[ italian ] = "Colori personalizzati";
-        Text[ danish ] = "Brugerdefinerede farver";
-        Text[ swedish ] = "Anv�ndardefinierade f�rger";
-        Text[ polish ] = "Scheme";
-        Text[ portuguese_brazilian ] = "Cores personalizadas";
-        Text[ japanese ] = "ユーザー定義の色";
-        Text[ korean ] = "사용자 정의 색상";
-        Text[ chinese_simplified ] = "自定的颜色";
-        Text[ chinese_traditional ] = "自訂的顏色";
-        Text[ turkish ] = "�zel renkler";
-        Text[ arabic ] = "Scheme";
-        Text[ catalan ] = "Custom colors";
-        Text[ thai ] = "Custom colors";
-        Text[ czech ] = "Schéma";
-        Text[ hebrew ] = "‮תכנון‬";
-        Text[ hindi ] = "Custom colors";
-        Text[ slovak ] = "Vlastné farby";
-        Text[ hungarian ] = "Egyéni színek";
-        Text[ slovenian ] = "Barve po meri";
+        Text [ de ] = "Benutzerdefinierte Farben" ;
+        Text [ en-US ] = "Custom colors";
     };
     Control CT_COLORCONFIG
     {
@@ -266,131 +131,23 @@ TabPage RID_SVXPAGE_COLORCONFIG
         };
         String ST_ON
         {
-            Text = "Ein" ;
-            Text [ ENGLISH ] = "On" ;
-            Text[ english_us ] = "On";
-            Text[ portuguese ] = "Ligado";
-            Text[ russian ] = "���.";
-            Text[ greek ] = "���";
-            Text[ dutch ] = "In";
-            Text[ french ] = "Activ�";
-            Text[ spanish ] = "Activado";
-            Text[ finnish ] = "K�yt�ss�";
-            Text[ italian ] = "on";
-            Text[ danish ] = "aktiveret";
-            Text[ swedish ] = "P�";
-            Text[ polish ] = "w��cz";
-            Text[ portuguese_brazilian ] = "Ativado";
-            Text[ japanese ] = "オン";
-            Text[ korean ] = "사용";
-            Text[ chinese_simplified ] = "启动";
-            Text[ chinese_traditional ] = "啟動";
-            Text[ turkish ] = "A��k";
-            Text[ arabic ] = "�����";
-            Text[ catalan ] = "Activat";
-            Text[ thai ] = "เปิด";
-            Text[ czech ] = "Zapnuto";
-            Text[ hebrew ] = "‮מופעל‬";
-            Text[ hindi ] = "On";
-            Text[ slovak ] = "Zapnúť";
-            Text[ hungarian ] = "Be";
-            Text[ slovenian ] = "Vključeno";
+            Text [ de ] = "Ein" ;
+            Text [ en-US ] = "On";
         };
         String ST_UIELEM
         {
-            Text = "Elemente der Benutzeroberfl�che" ;
-            Text [ ENGLISH ] = "User interface elements" ;
-            Text[ english_us ] = "User interface elements";
-            Text[ portuguese ] = "User interface elements";
-            Text[ russian ] = "User interface elements";
-            Text[ greek ] = "User interface elements";
-            Text[ dutch ] = "Elementen van gebruikersinterface";
-            Text[ french ] = "�l�ment de l'interface utilisateur";
-            Text[ spanish ] = "Elementos de la interfaz del usuario";
-            Text[ finnish ] = "User interface elements";
-            Text[ italian ] = "Elementi dell'interfaccia utente";
-            Text[ danish ] = "Brugergr�nsefladeelementer";
-            Text[ swedish ] = "Element p� anv�ndargr�nssnittet";
-            Text[ polish ] = "User interface elements";
-            Text[ portuguese_brazilian ] = "Elementos da interface do usu�rio";
-            Text[ japanese ] = "ユーザーインターフェースの要素";
-            Text[ korean ] = "사용자 인터페이스 요소";
-            Text[ chinese_simplified ] = "使用者界面的元件";
-            Text[ chinese_traditional ] = "使用者介面的元件";
-            Text[ turkish ] = "Kullan�c� aray�z� elementi";
-            Text[ arabic ] = "User interface elements";
-            Text[ catalan ] = "User interface elements";
-            Text[ thai ] = "User interface elements";
-            Text[ czech ] = "Prvky uživatelského rozhraní";
-            Text[ hebrew ] = "‮מרכיבי ממשק המשתמש‬";
-            Text[ hindi ] = "User interface elements";
-            Text[ slovak ] = "Použiť prvky rozhrania";
-            Text[ hungarian ] = "Felhasználói felület elemei";
-            Text[ slovenian ] = "Elementi upor. vmesnika";
+            Text [ de ] = "Elemente der Benutzeroberfl�che" ;
+            Text [ en-US ] = "User interface elements";
         };
         String ST_COLSET
         {
-            Text = "Farbeinstellung" ;
-            Text [ ENGLISH ] = "Color setting" ;
-            Text[ english_us ] = "Color setting";
-            Text[ portuguese ] = "Color setting";
-            Text[ russian ] = "Color setting";
-            Text[ greek ] = "Color setting";
-            Text[ dutch ] = "Kleureninstelling";
-            Text[ french ] = "Param�tre de couleur";
-            Text[ spanish ] = "Configuraci�n del color";
-            Text[ finnish ] = "Color setting";
-            Text[ italian ] = "Impostazione colori";
-            Text[ danish ] = "Farve";
-            Text[ swedish ] = "F�rginst�llning";
-            Text[ polish ] = "Color setting";
-            Text[ portuguese_brazilian ] = "Configura��es de cores";
-            Text[ japanese ] = "色の設定";
-            Text[ korean ] = "색상 설정";
-            Text[ chinese_simplified ] = "颜色的设定";
-            Text[ chinese_traditional ] = "顔色的設定";
-            Text[ turkish ] = "Renk ayar�";
-            Text[ arabic ] = "Color setting";
-            Text[ catalan ] = "Color setting";
-            Text[ thai ] = "Color setting";
-            Text[ czech ] = "Nastavení barev";
-            Text[ hebrew ] = "‮קביעת צבע‬";
-            Text[ hindi ] = "Color setting";
-            Text[ slovak ] = "Nastavenia farieb";
-            Text[ hungarian ] = "Színbeállítás";
-            Text[ slovenian ] = "Nastavitve barv";
+            Text [ de ] = "Farbeinstellung" ;
+            Text [ en-US ] = "Color setting";
         };
         String ST_PREVIEW
         {
-            Text = "Vorschau" ;
-            Text [ ENGLISH ] = "Preview" ;
-            Text[ english_us ] = "Preview";
-            Text[ portuguese ] = "Previsualizar";
-            Text[ russian ] = "��������";
-            Text[ greek ] = "�������������";
-            Text[ dutch ] = "Voorbeeld";
-            Text[ french ] = "Aper�u";
-            Text[ spanish ] = "Previsualizaci�n";
-            Text[ finnish ] = "Esikatselu";
-            Text[ italian ] = "Anteprima";
-            Text[ danish ] = "Eksempel";
-            Text[ swedish ] = "F�rhandsvisning";
-            Text[ polish ] = "Podgl�d";
-            Text[ portuguese_brazilian ] = "Visualizar";
-            Text[ japanese ] = "プレビュー";
-            Text[ korean ] = "미리 보기";
-            Text[ chinese_simplified ] = "预览";
-            Text[ chinese_traditional ] = "預覽";
-            Text[ turkish ] = "�nizleme";
-            Text[ arabic ] = "��������";
-            Text[ catalan ] = "Previsualitzaci�";
-            Text[ thai ] = "แสดงตัวอย่าง";
-            Text[ czech ] = "Náhled";
-            Text[ hebrew ] = "‮תצוגה מקדימה‬";
-            Text[ hindi ] = "Preview";
-            Text[ slovak ] = "Náhľad";
-            Text[ hungarian ] = "Előnézet";
-            Text[ slovenian ] = "Predogled";
+            Text [ de ] = "Vorschau" ;
+            Text [ en-US ] = "Preview";
         };
         Window WN_SCROLL
         {
@@ -434,1499 +191,339 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_GENERAL
             {
                 FT_SEP_POS_SIZE( 0 );
-                Text = "Allgemein" ;
-                Text [ ENGLISH ] = "General" ;
-                Text[ english_us ] = "General";
-                Text[ portuguese ] = "Geral";
-                Text[ russian ] = "�����";
-                Text[ greek ] = "������";
-                Text[ dutch ] = "Algemeen";
-                Text[ french ] = "G�n�ral";
-                Text[ spanish ] = "General";
-                Text[ finnish ] = "Yleist�";
-                Text[ italian ] = "Generale";
-                Text[ danish ] = "Generelt";
-                Text[ swedish ] = "Allm�nt";
-                Text[ polish ] = "Og�lne";
-                Text[ portuguese_brazilian ] = "Geral";
-                Text[ japanese ] = "全般";
-                Text[ korean ] = "일반";
-                Text[ chinese_simplified ] = "一般";
-                Text[ chinese_traditional ] = "一般";
-                Text[ turkish ] = "Genel";
-                Text[ arabic ] = "���";
-                Text[ catalan ] = "Continguts";
-                Text[ thai ] = "ทั่วไป";
-                Text[ czech ] = "Obecné";
-                Text[ hebrew ] = "‮כללי‬";
-                Text[ hindi ] = "सामान्य";
-                Text[ slovak ] = "Všeobecné";
-                Text[ hungarian ] = "Általános";
-                Text[ slovenian ] = "Splošno";
+                Text [ de ] = "Allgemein" ;
+                Text [ en-US ] = "General";
             };
 
             FixedText FT_DOCCOLOR
             {
                 FT_POS_SIZE( 1 );
-                Text = "Dokumenthintergrund" ;
-                Text [ ENGLISH ] = "Document color" ;
-                Text[ english_us ] = "Document background";
-                Text[ portuguese ] = "Document color";
-                Text[ russian ] = "Document color";
-                Text[ greek ] = "����� ��������";
-                Text[ dutch ] = "Documentachtergrond";
-                Text[ french ] = "Arri�re-plan des documents";
-                Text[ spanish ] = "Fondo del documento";
-                Text[ finnish ] = "Document color";
-                Text[ italian ] = "Colore di sfondo documento";
-                Text[ danish ] = "Dokumentbaggrund";
-                Text[ swedish ] = "Dokumentbakgrund";
-                Text[ polish ] = "Document color";
-                Text[ portuguese_brazilian ] = "Plano de fundo do documento";
-                Text[ japanese ] = "ドキュメント背景";
-                Text[ korean ] = "문서 배경";
-                Text[ chinese_simplified ] = "文档的背景";
-                Text[ chinese_traditional ] = "文件的背景";
-                Text[ turkish ] = "Belge arkaplan�";
-                Text[ arabic ] = "Document color";
-                Text[ catalan ] = "Document color";
-                Text[ thai ] = "Document color";
-                Text[ czech ] = "Pozadí dokumentu";
-                Text[ hebrew ] = "‮רקע מסמך‬";
-                Text[ hindi ] = "Document background";
-                Text[ slovak ] = "Pozadie dokumentu";
-                Text[ hungarian ] = "Dokumentum háttere";
-                Text[ slovenian ] = "Ozadje dokumenta";
+                Text [ de ] = "Dokumenthintergrund" ;
+                Text [ en-US ] = "Document background";
             };
             LB_WN( DOCCOLOR, 1 )
 
             CheckBox CB_DOCBOUND
             {
                 CB_POS_SIZE( 2 );
-                Text = "Textbegrenzungen" ;
-                Text [ ENGLISH ] = "Document boundaries" ;
-                Text[ english_us ] = "Text boundaries";
-                Text[ portuguese ] = "Document boundaries";
-                Text[ russian ] = "Document boundaries";
-                Text[ greek ] = "���� ��������";
-                Text[ dutch ] = "Tekstbegrenzingen";
-                Text[ french ] = "D�limitations du texte";
-                Text[ spanish ] = "L�mites del texto";
-                Text[ finnish ] = "Document boundaries";
-                Text[ italian ] = "Margini del testo";
-                Text[ danish ] = "Tekstgr�nser";
-                Text[ swedish ] = "Textinramningar";
-                Text[ polish ] = "Document boundaries";
-                Text[ portuguese_brazilian ] = "Limites do documento";
-                Text[ japanese ] = "テキストの境界";
-                Text[ korean ] = "텍스트 경계";
-                Text[ chinese_simplified ] = "正文边界";
-                Text[ chinese_traditional ] = "內文邊界";
-                Text[ turkish ] = "Metin s�n�rlamas�";
-                Text[ arabic ] = "Document boundaries";
-                Text[ catalan ] = "Document boundaries";
-                Text[ thai ] = "Document boundaries";
-                Text[ czech ] = "Hranice dokumentu";
-                Text[ hebrew ] = "‮גבולות מסמך‬";
-                Text[ hindi ] = "टेक्स्ट् सीमा";
-                Text[ slovak ] = "Hranice textu";
-                Text[ hungarian ] = "Szövegszegélyek";
-                Text[ slovenian ] = "Meje besedila";
+                Text [ de ] = "Textbegrenzungen" ;
+                Text [ en-US ] = "Text boundaries";
             };
             LB_WN( DOCBOUND, 2 )
 
             FixedText FT_APPBACKGROUND
             {
                 FT_POS_SIZE( 3 );
-                Text = "Hintergrund der Anwendung" ;
-                Text [ ENGLISH ] = "Application background" ;
-                Text[ english_us ] = "Application background";
-                Text[ portuguese ] = "Application background";
-                Text[ russian ] = "Application background";
-                Text[ greek ] = "����� ���������";
-                Text[ dutch ] = "Applicatie-achtergrond";
-                Text[ french ] = "Arri�re-plan de l'application";
-                Text[ spanish ] = "Fondo de la aplicaci�n";
-                Text[ finnish ] = "Application background";
-                Text[ italian ] = "Sfondo delle applicazioni";
-                Text[ danish ] = "Programbaggrund";
-                Text[ swedish ] = "Bakgrund f�r till�mpning";
-                Text[ polish ] = "Application background";
-                Text[ portuguese_brazilian ] = "Plano de fundo da aplica��o";
-                Text[ japanese ] = "アプリケーションの背景";
-                Text[ korean ] = "응용 프로그램 배경";
-                Text[ chinese_simplified ] = "应用程序的背景";
-                Text[ chinese_traditional ] = "應用程式的背景";
-                Text[ turkish ] = "Uygulama arkaplan�";
-                Text[ arabic ] = "Application background";
-                Text[ catalan ] = "Application background";
-                Text[ thai ] = "Application background";
-                Text[ czech ] = "Pozadí aplikace";
-                Text[ hebrew ] = "‮רקע יישום‬";
-                Text[ hindi ] = "Application background";
-                Text[ slovak ] = "Pozadie aplikácie";
-                Text[ hungarian ] = "Alkalmazás háttere";
-                Text[ slovenian ] = "Ozadje aplikacije";
+                Text [ de ] = "Hintergrund der Anwendung" ;
+                Text [ en-US ] = "Application background";
             };
             LB_WN( APPBACKGROUND, 3 )
 
             CheckBox CB_OBJECTBOUNDARIES
             {
                 CB_POS_SIZE( 4 );
-                Text = "Objektumrandungen" ;
-                Text [ ENGLISH ] = "Object boundaries" ;
-                Text[ english_us ] = "Object boundaries";
-                Text[ portuguese ] = "Object boundaries";
-                Text[ russian ] = "Object boundaries";
-                Text[ greek ] = "���� ������������";
-                Text[ dutch ] = "Objectranden";
-                Text[ french ] = "Bordures des objets";
-                Text[ spanish ] = "Bordes del objeto";
-                Text[ finnish ] = "Object boundaries";
-                Text[ italian ] = "Contorno oggetto";
-                Text[ danish ] = "Objektgr�nser";
-                Text[ swedish ] = "Objektinramningar";
-                Text[ polish ] = "Object boundaries";
-                Text[ portuguese_brazilian ] = "Limites do objeto";
-                Text[ japanese ] = "オブジェクトの境界";
-                Text[ korean ] = "개체 테두리";
-                Text[ chinese_simplified ] = "对象的边框";
-                Text[ chinese_traditional ] = "物件的邊框";
-                Text[ turkish ] = "Nesne s�n�rlar�";
-                Text[ arabic ] = "Object boundaries";
-                Text[ catalan ] = "Object boundaries";
-                Text[ thai ] = "Object boundaries";
-                Text[ czech ] = "Hranice objektu";
-                Text[ hebrew ] = "‮גבולות עצם‬";
-                Text[ hindi ] = "Object boundaries";
-                Text[ slovak ] = "Hranice objektu";
-                Text[ hungarian ] = "Objektumszegélyek";
-                Text[ slovenian ] = "Meje predmetov";
+                Text [ de ] = "Objektumrandungen" ;
+                Text [ en-US ] = "Object boundaries";
             };
             LB_WN( OBJECTBOUNDARIES, 4 )
 
             CheckBox CB_TABLEBOUNDARIES
             {
                 CB_POS_SIZE( 5 );
-                Text = "Tabellenumrandungen" ;
-                Text [ ENGLISH ] = "Table boundaries" ;
-                Text[ english_us ] = "Table boundaries";
-                Text[ portuguese ] = "Table boundaries";
-                Text[ russian ] = "Table boundaries";
-                Text[ greek ] = "���� ������";
-                Text[ dutch ] = "Tabelranden";
-                Text[ french ] = "Bordures des tableaux";
-                Text[ spanish ] = "Bordes de las tablas";
-                Text[ finnish ] = "Table boundaries";
-                Text[ italian ] = "Contorno tabella";
-                Text[ danish ] = "Tabelgr�nser";
-                Text[ swedish ] = "Tabellinramningar";
-                Text[ polish ] = "Table boundaries";
-                Text[ portuguese_brazilian ] = "Limites da tabela";
-                Text[ japanese ] = "テーブルの境界";
-                Text[ korean ] = "테이블 테두리";
-                Text[ chinese_simplified ] = "表格的边框";
-                Text[ chinese_traditional ] = "表格的邊框";
-                Text[ turkish ] = "Tablo s�n�rlar�";
-                Text[ arabic ] = "Table boundaries";
-                Text[ catalan ] = "Table boundaries";
-                Text[ thai ] = "Table boundaries";
-                Text[ czech ] = "Hranice tabulky";
-                Text[ hebrew ] = "‮גבולות טבלה‬";
-                Text[ hindi ] = "Table boundaries";
-                Text[ slovak ] = "Hranice tabuľky";
-                Text[ hungarian ] = "Táblázatszegélyek";
-                Text[ slovenian ] = "Meje tabel";
+                Text [ de ] = "Tabellenumrandungen" ;
+                Text [ en-US ] = "Table boundaries";
             };
             LB_WN( TABLEBOUNDARIES, 5 )
 
             FixedText FT_FONTCOLOR
             {
                 FT_POS_SIZE( 6 );
-                Text = "Schriftfarbe" ;
-                Text [ ENGLISH ] = "Font color" ;
-                Text[ english_us ] = "Font color";
-                Text[ portuguese ] = "Cor da letra";
-                Text[ russian ] = "���� ������";
-                Text[ spanish ] = "Color de la fuente";
-                Text[ italian ] = "Colore carattere";
-                Text[ swedish ] = "Teckenf�rg";
-                Text[ polish ] = "Kolor";
-                Text[ portuguese_brazilian ] = "Cor da Fonte";
-                Text[ japanese ] = "フォントの色";
-                Text[ korean ] = "글꼴 색상";
-                Text[ turkish ] = "Yaz�tipi rengi";
-                Text[ thai ] = "สีตัวอักษร";
-                Text[ greek ] = "����� ��������������";
-                Text[ dutch ] = "Tekstkleur";
-                Text[ french ] = "Couleur de police";
-                Text[ finnish ] = "Fontin v�ri";
-                Text[ danish ] = "Skriftfarve";
-                Text[ chinese_simplified ] = "文字颜色";
-                Text[ chinese_traditional ] = "字型顏色";
-                Text[ arabic ] = "��� ����";
-                Text[ catalan ] = "Color de la lletra";
-                Text[ czech ] = "Barva písma";
-                Text[ hebrew ] = "‮צבע גופן‬";
-                Text[ hindi ] = "टेक्स्ट् का रंग";
-                Text[ slovak ] = "Farba písma";
-                Text[ hungarian ] = "Betűszín";
-                Text[ slovenian ] = "Barva pisave";
+                Text [ de ] = "Schriftfarbe" ;
+                Text [ en-US ] = "Font color";
             };
             LB_WN( FONTCOLOR, 6 )
 
             CheckBox CB_LINKS
             {
                 CB_POS_SIZE( 7 );
-                Text = "Unbesuchte Verkn�pfungen" ;
-                Text [ ENGLISH ] = "Unvisited Links" ;
-                Text[ english_us ] = "Unvisited links";
-                Text[ portuguese ] = "Unvisited Links (new documents only)";
-                Text[ russian ] = "Unvisited Links (new documents only)";
-                Text[ greek ] = "Unvisited Links (new documents only)";
-                Text[ dutch ] = "Niet bezochte hyperlinks";
-                Text[ french ] = "Liens non visit�s";
-                Text[ spanish ] = "Enlaces no visitados ";
-                Text[ finnish ] = "Unvisited Links (new documents only)";
-                Text[ italian ] = "Collegamenti non attivati";
-                Text[ danish ] = "Ubes�gte hyperlinks";
-                Text[ swedish ] = "Oanv�nda l�nkar";
-                Text[ polish ] = "Unvisited Links (new documents only)";
-                Text[ portuguese_brazilian ] = "Links n�o visitados (somente novos documentos)";
-                Text[ japanese ] = "訪問していないリンク";
-                Text[ korean ] = "방문하지 않은 링크";
-                Text[ chinese_simplified ] = "尚未访问过的链接";
-                Text[ chinese_traditional ] = "尚未訪問過的捷徑";
-                Text[ turkish ] = "Ziyaret edilmemi� ba�lant�";
-                Text[ arabic ] = "Unvisited Links (new documents only)";
-                Text[ catalan ] = "Unvisited Links (new documents only)";
-                Text[ thai ] = "Unvisited Links (new documents only)";
-                Text[ czech ] = "Nenavštívené odkazy";
-                Text[ hebrew ] = "‮קישורים שלא הופעלו‬";
-                Text[ hindi ] = "Unvisited links";
-                Text[ slovak ] = "Nenavštívené odkazy";
-                Text[ hungarian ] = "Nem látogatott hivatkozások";
-                Text[ slovenian ] = "Neobiskane povezave";
+                Text [ de ] = "Unbesuchte Verkn�pfungen" ;
+                Text [ en-US ] = "Unvisited links";
             };
             LB_WN( LINKS, 7 )
 
             CheckBox CB_LINKSVISITED
             {
                 CB_POS_SIZE( 8 );
-                Text = "Besuchte Verkn�pfungen" ;
-                Text [ ENGLISH ] = "Visited Links" ;
-                Text[ english_us ] = "Visited links";
-                Text[ portuguese ] = "Visited Links (new documents only)";
-                Text[ russian ] = "Visited Links (new documents only)";
-                Text[ greek ] = "Visited Links (new documents only)";
-                Text[ dutch ] = "Bezochte hyperlinks";
-                Text[ french ] = "Liens visit�s";
-                Text[ spanish ] = "Enlaces visitados";
-                Text[ finnish ] = "Visited Links (new documents only)";
-                Text[ italian ] = "Collegamenti attivati";
-                Text[ danish ] = "Bes�gte hyperlinks";
-                Text[ swedish ] = "Anv�nda l�nkar";
-                Text[ polish ] = "Visited Links (new documents only)";
-                Text[ portuguese_brazilian ] = "Links visitados (somente novos documentos)";
-                Text[ japanese ] = "訪問したリンク";
-                Text[ korean ] = "방문한 링크";
-                Text[ chinese_simplified ] = "访问过的链接";
-                Text[ chinese_traditional ] = "訪問過的捷徑";
-                Text[ turkish ] = "Ziyaret edilmi� ba�lant�lar";
-                Text[ arabic ] = "Visited Links (new documents only)";
-                Text[ catalan ] = "Visited Links (new documents only)";
-                Text[ thai ] = "Visited Links (new documents only)";
-                Text[ czech ] = "Navštívené odkazy";
-                Text[ hebrew ] = "‮קישורים שהופעלו‬";
-                Text[ hindi ] = "Visited links";
-                Text[ slovak ] = "Navštívené odkazy";
-                Text[ hungarian ] = "Látogatott hivatkozások";
-                Text[ slovenian ] = "Obiskane povezave";
+                Text [ de ] = "Besuchte Verkn�pfungen" ;
+                Text [ en-US ] = "Visited links";
             };
             LB_WN( LINKSVISITED, 8 )
 
             FixedText FT_SPELL
             {
                 FT_POS_SIZE( 9 );
-                Text = "AutoRechtschreibpr�fung" ;
-                Text [ ENGLISH ] = "AutoSpellcheck" ;
-                Text[ english_us ] = "AutoSpellcheck";
-                Text[ portuguese ] = "Verifica��o autom�tica da ortografia";
-                Text[ russian ] = "������������ ����������";
-                Text[ greek ] = "��������� ������� �����������";
-                Text[ dutch ] = "Auto-Spellingcontrole";
-                Text[ french ] = "V�rification orthographique automatique";
-                Text[ spanish ] = "Revisi�n ortogr�fica autom�tica";
-                Text[ finnish ] = "AutoSpellcheck";
-                Text[ italian ] = "Controllo ortografico automatico";
-                Text[ danish ] = "Automatisk stavekontrol";
-                Text[ swedish ] = "AutoR�ttstavning";
-                Text[ polish ] = "AutoSpellcheck";
-                Text[ portuguese_brazilian ] = "Verifica��o ortogr�fica autom�tica";
-                Text[ japanese ] = "自動スペルチェック";
-                Text[ korean ] = "자동 맞춤법 검사";
-                Text[ chinese_simplified ] = "自动检查拼写";
-                Text[ chinese_traditional ] = "自動檢查拼寫";
-                Text[ turkish ] = "Otomatik Hece Kontrol�";
-                Text[ arabic ] = "����� ������ ������";
-                Text[ catalan ] = "AutoSpellcheck";
-                Text[ thai ] = "AutoSpellcheck";
-                Text[ czech ] = "Automatická kontrola pravopisu";
-                Text[ hebrew ] = "‮איות אוטומטי‬";
-                Text[ hindi ] = "AutoSpellcheck";
-                Text[ slovak ] = "Automatická kontrola pravopisu";
-                Text[ hungarian ] = "Automatikus helyesírás-ellenőrzés";
-                Text[ slovenian ] = "Samodejno preverjanje črkovanja";
+                Text [ de ] = "AutoRechtschreibpr�fung" ;
+                Text [ en-US ] = "AutoSpellcheck";
             };
             LB_WN( SPELL, 9 )
 
             FixedText FT_WRITER
             {
                 FT_SEP_POS_SIZE( 10 );
-                Text = "Textdokument" ;
-                Text [ ENGLISH ] = "Text Document" ;
-                Text[ english_us ] = "Text Document";
-                Text[ portuguese ] = "Documento de texto";
-                Text[ russian ] = "��������� ��������";
-                Text[ greek ] = "������� ��������";
-                Text[ dutch ] = "Tekstdocument";
-                Text[ french ] = "Document texte";
-                Text[ spanish ] = "Documento de texto";
-                Text[ finnish ] = "Tekstiasiakirja";
-                Text[ italian ] = "Documento di testo";
-                Text[ danish ] = "Tekstdokument";
-                Text[ swedish ] = "Textdokument";
-                Text[ polish ] = "Dokument tekstowy";
-                Text[ portuguese_brazilian ] = "Documento de texto";
-                Text[ japanese ] = "文書ドキュメント";
-                Text[ korean ] = "텍스트 문서";
-                Text[ chinese_simplified ] = "文本文档";
-                Text[ chinese_traditional ] = "文字文件";
-                Text[ turkish ] = "Metin belgesi";
-                Text[ arabic ] = "����� ��";
-                Text[ catalan ] = "Document de text";
-                Text[ thai ] = "เอกสารข้อความ";
-                Text[ czech ] = "Textový dokument";
-                Text[ hebrew ] = "‮מסמך טקסט‬";
-                Text[ hindi ] = "टेक्स्ट् लेखपत्र";
-                Text[ slovak ] = "Textový dokument";
-                Text[ hungarian ] = "Szöveges dokumentum";
-                Text[ slovenian ] = "Dokument z besedilom";
+                Text [ de ] = "Textdokument" ;
+                Text [ en-US ] = "Text Document";
             };
 
             FixedText FT_WRITERTEXTGRID
             {
                 FT_POS_SIZE( 11 );
-                Text = "Raster" ;
-                Text [ ENGLISH ] = "Grid" ;
-                Text[ english_us ] = "Grid";
-                Text[ portuguese ] = "Grelha";
-                Text[ russian ] = "�����";
-                Text[ greek ] = "������";
-                Text[ dutch ] = "Raster";
-                Text[ french ] = "Grille";
-                Text[ spanish ] = "Cuadr�cula";
-                Text[ finnish ] = "Ruudukko";
-                Text[ italian ] = "Griglia";
-                Text[ danish ] = "Gitter";
-                Text[ swedish ] = "Raster";
-                Text[ polish ] = "Raster";
-                Text[ portuguese_brazilian ] = "Grade";
-                Text[ japanese ] = "罫線";
-                Text[ korean ] = "그리드";
-                Text[ chinese_simplified ] = "格线";
-                Text[ chinese_traditional ] = "格線";
-                Text[ turkish ] = "Izgara";
-                Text[ arabic ] = "������";
-                Text[ catalan ] = "Graella";
-                Text[ thai ] = "เส้นตาราง";
-                Text[ czech ] = "Mřížka";
-                Text[ hebrew ] = "‮רשת‬";
-                Text[ hindi ] = "छपाई";
-                Text[ slovak ] = "Mriežka";
-                Text[ hungarian ] = "Rács";
-                Text[ slovenian ] = "Mreža";
+                Text [ de ] = "Raster" ;
+                Text [ en-US ] = "Grid";
             };
             LB_WN( WRITERTEXTGRID, 11 )
 
             CheckBox CB_WRITERFIELDSHADINGS
             {
                 CB_POS_SIZE( 12 );
-                Text = "Feldhinterlegung" ;
-                Text [ ENGLISH ] = "Field shadings" ;
-                Text[ english_us ] = "Field shadings";
-                Text[ portuguese ] = "Field shadings";
-                Text[ russian ] = "Field shadings";
-                Text[ greek ] = "Field shadings";
-                Text[ dutch ] = "Veldmarkeringen";
-                Text[ french ] = "Trame de fond pour les champs";
-                Text[ spanish ] = "Fondo del campo";
-                Text[ finnish ] = "Field shadings";
-                Text[ italian ] = "Sfondo del campo";
-                Text[ danish ] = "Feltskygger";
-                Text[ swedish ] = "F�ltbakgrund";
-                Text[ polish ] = "Field shadings";
-                Text[ portuguese_brazilian ] = "Sombreamento de campo";
-                Text[ japanese ] = "フィールドのシェーディング";
-                Text[ korean ] = "필드 음영";
-                Text[ chinese_simplified ] = "字段背景颜色";
-                Text[ chinese_traditional ] = "欄位背景顔色";
-                Text[ turkish ] = "Alan g�lgesi";
-                Text[ arabic ] = "Field shadings";
-                Text[ catalan ] = "Field shadings";
-                Text[ thai ] = "Field shadings";
-                Text[ czech ] = "Stínování polí";
-                Text[ hebrew ] = "‮הצללות שדה‬";
-                Text[ hindi ] = "Field shadings";
-                Text[ slovak ] = "Tieňovanie poľa";
-                Text[ hungarian ] = "Mezőárnyékolás";
-                Text[ slovenian ] = "Senčenja polja";
+                Text [ de ] = "Feldhinterlegung" ;
+                Text [ en-US ] = "Field shadings";
             };
             LB_WN( WRITERFIELDSHADINGS, 12 )
 
             CheckBox CB_WRITERIDXSHADINGS
             {
                 CB_POS_SIZE( 13 );
-                Text = "Verzeichnishinterlegung" ;
-                Text [ ENGLISH ] = "Index and table shadings" ;
-                Text[ english_us ] = "Index and table shadings";
-                Text[ portuguese ] = "Index and table shadings";
-                Text[ russian ] = "Index and table shadings";
-                Text[ greek ] = "Index and table shadings";
-                Text[ dutch ] = "Inhoudsopgave- en registermarkeringen";
-                Text[ french ] = "Trame de fond pour les index";
-                Text[ spanish ] = "Fondo del �ndice";
-                Text[ finnish ] = "Index and table shadings";
-                Text[ italian ] = "Sfondo indici";
-                Text[ danish ] = "Indeks- og tabelskygger";
-                Text[ swedish ] = "F�rteckningsbakgrund";
-                Text[ polish ] = "Index and table shadings";
-                Text[ portuguese_brazilian ] = "Sombreamento de �ndice e tabela";
-                Text[ japanese ] = "目次と索引のシェーディング";
-                Text[ korean ] = "색인과 목차 음영";
-                Text[ chinese_simplified ] = "目录背景颜色";
-                Text[ chinese_traditional ] = "目錄背景顔色";
-                Text[ turkish ] = "�ndeks ve tablo �ekilleri";
-                Text[ arabic ] = "Index and table shadings";
-                Text[ catalan ] = "Index and table shadings";
-                Text[ thai ] = "Index and table shadings";
-                Text[ czech ] = "Stínování rejstříku a tabulky";
-                Text[ hebrew ] = "‮הצללות אינדקס וטבלה‬";
-                Text[ hindi ] = "Index and table shadings";
-                Text[ slovak ] = "Tieňovanie tabuliek a indexov";
-                Text[ hungarian ] = "Jegyzékek árnyalása";
-                Text[ slovenian ] = "Senčenje kazala in tabel";
+                Text [ de ] = "Verzeichnishinterlegung" ;
+                Text [ en-US ] = "Index and table shadings";
             };
             LB_WN( WRITERIDXSHADINGS, 13 )
 
             FixedText FT_WRITERNOTESINDICATOR
             {
                 FT_POS_SIZE( 14 );
-                Text = "Notizanzeiger" ;
-                Text [ ENGLISH ] = "Note indicator" ;
-                Text[ english_us ] = "Note indicator";
-                Text[ portuguese ] = "Note indicator";
-                Text[ russian ] = "Note indicator";
-                Text[ greek ] = "Note indicator";
-                Text[ dutch ] = "Aantekeningenaanwijzer";
-                Text[ french ] = "Indicateur de note";
-                Text[ spanish ] = "Indicador de notas";
-                Text[ finnish ] = "Note indicator";
-                Text[ italian ] = "Indicatore note";
-                Text[ danish ] = "Noteindikator";
-                Text[ swedish ] = "Anteckningsmark�r";
-                Text[ polish ] = "Note indicator";
-                Text[ portuguese_brazilian ] = "Indicador de anota��o";
-                Text[ japanese ] = "コメント";
-                Text[ korean ] = "메모 표시기";
-                Text[ chinese_simplified ] = "备注标记";
-                Text[ chinese_traditional ] = "備註標記";
-                Text[ turkish ] = "Not g�sterici";
-                Text[ arabic ] = "Note indicator";
-                Text[ catalan ] = "Note indicator";
-                Text[ thai ] = "Note indicator";
-                Text[ czech ] = "Indikátor poznámky";
-                Text[ hebrew ] = "‮סמן הערה‬";
-                Text[ hindi ] = "Note indicator";
-                Text[ slovak ] = "Indikátor poznámky";
-                Text[ hungarian ] = "Megjegyzésjelző";
-                Text[ slovenian ] = "Indikator opombe";
+                Text [ de ] = "Notizanzeiger" ;
+                Text [ en-US ] = "Note indicator";
             };
             LB_WN( WRITERNOTESINDICATOR, 14 )
 
             FixedText FT_WRITERSCRIPTINDICATOR
             {
                 FT_POS_SIZE( 15 );
-                Text = "Skriptanzeiger" ;
-                Text [ ENGLISH ] = "Script indicator" ;
-                Text[ english_us ] = "Script indicator";
-                Text[ portuguese ] = "Script indicator";
-                Text[ russian ] = "Script indicator";
-                Text[ greek ] = "Script indicator";
-                Text[ dutch ] = "Script aanwijzer";
-                Text[ french ] = "Indicateur de script";
-                Text[ spanish ] = "Indicador de scripts";
-                Text[ finnish ] = "Script indicator";
-                Text[ italian ] = "Indicatore script";
-                Text[ danish ] = "Scriptindikator";
-                Text[ swedish ] = "Skriptindikator";
-                Text[ polish ] = "Script indicator";
-                Text[ portuguese_brazilian ] = "Indicador de script";
-                Text[ japanese ] = "スクリプト";
-                Text[ korean ] = "스크립트 표시기";
-                Text[ chinese_simplified ] = "脚本标记";
-                Text[ chinese_traditional ] = "程式檔標記";
-                Text[ turkish ] = "Script G�stergeci";
-                Text[ arabic ] = "Script indicator";
-                Text[ catalan ] = "Script indicator";
-                Text[ thai ] = "Script indicator";
-                Text[ czech ] = "Indikátor skriptu";
-                Text[ hebrew ] = "‮סימן סקריפט‬";
-                Text[ hindi ] = "Script indicator";
-                Text[ slovak ] = "Indikátor skriptu";
-                Text[ hungarian ] = "Parancsfájljelző";
-                Text[ slovenian ] = "Indikator skripta";
+                Text [ de ] = "Skriptanzeiger" ;
+                Text [ en-US ] = "Script indicator";
             };
             LB_WN( WRITERSCRIPTINDICATOR, 15 )
 
             CheckBox CB_WRITERSECTIONBOUNDARIES
             {
                 CB_POS_SIZE( 16 );
-                Text = "Bereichsumrandungen" ;
-                Text [ ENGLISH ] = "Section boundaries" ;
-                Text[ english_us ] = "Section boundaries";
-                Text[ portuguese ] = "Section boundaries";
-                Text[ russian ] = "Section boundaries";
-                Text[ greek ] = "Section boundaries";
-                Text[ dutch ] = "Sectiebegrenzingen";
-                Text[ french ] = "Bordures des sections";
-                Text[ spanish ] = "Bordes de la secci�n";
-                Text[ finnish ] = "Section boundaries";
-                Text[ italian ] = "Margini sezione";
-                Text[ danish ] = "Sektionsgr�nser";
-                Text[ swedish ] = "Inramningar av omr�den";
-                Text[ polish ] = "Section boundaries";
-                Text[ portuguese_brazilian ] = "Limites de se��o";
-                Text[ japanese ] = "範囲の境界";
-                Text[ korean ] = "구역 테두리";
-                Text[ chinese_simplified ] = "区域的边框";
-                Text[ chinese_traditional ] = "區域的邊框";
-                Text[ turkish ] = "B�l�m s�n�rlar�";
-                Text[ arabic ] = "Section boundaries";
-                Text[ catalan ] = "Section boundaries";
-                Text[ thai ] = "Section boundaries";
-                Text[ czech ] = "Hranice sekcí";
-                Text[ hebrew ] = "‮גבולות קטעים‬";
-                Text[ hindi ] = "Section boundaries";
-                Text[ slovak ] = "Hranice sekcie";
-                Text[ hungarian ] = "Szakaszszegélyek";
-                Text[ slovenian ] = "Meje odseka";
+                Text [ de ] = "Bereichsumrandungen" ;
+                Text [ en-US ] = "Section boundaries";
             };
             LB_WN( WRITERSECTIONBOUNDARIES, 16 )
 
             FixedText FT_WRITERPAGEBREAKS
             {
                 FT_POS_SIZE( 17 );
-                Text = "Seiten- und Spaltenumbr�che" ;
-                Text[ english_us ] = "Page and column breaks";
-                Text[ portuguese ] = "Page breaks";
-                Text[ russian ] = "Page breaks";
-                Text[ greek ] = "Page breaks";
-                Text[ dutch ] = "Pagina-einden";
-                Text[ french ] = "Sauts de page et de colonne";
-                Text[ spanish ] = "Saltos de p�gina y de columna";
-                Text[ finnish ] = "Page breaks";
-                Text[ italian ] = "Interruzioni di pagina e di colonna";
-                Text[ danish ] = "Side- og kolonneskift";
-                Text[ swedish ] = "Sid- och kolumnbrytningar";
-                Text[ polish ] = "Page breaks";
-                Text[ japanese ] = "改ページ";
-                Text[ korean ] = "페이지 및 열 나누기";
-                Text[ chinese_simplified ] = "换页";
-                Text[ chinese_traditional ] = "換頁和換欄";
-                Text[ turkish ] = "Sayfa ve s�tun kesmeleri";
-                Text[ arabic ] = "Page breaks";
-                Text[ catalan ] = "Page breaks";
-                Text[ thai ] = "Page breaks";
-                Text[ czech ] = "Zalomení stránek";
-                Text[ hebrew ] = "‮מעברי דף‬";
-                Text[ portuguese_brazilian ] = "Quebras de colunas e p�ginas";
-                Text[ hindi ] = "Page and column breaks";
-                Text[ slovak ] = "Zalomenia stránok a stĺpcov";
-                Text[ hungarian ] = "Oldal- és hasábtörések";
-                Text[ slovenian ] = "Prelomi strani in stolpcev";
+                Text [ de ] = "Seiten- und Spaltenumbr�che" ;
+                Text [ en-US ] = "Page and column breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
 
             FixedText FT_WRITERDIRECTCURSOR
             {
                 FT_POS_SIZE( 18 );
-                Text = "Direkt-Cursor" ;
-                Text [ ENGLISH ] = "Direct Cursor" ;
-                Text[ english_us ] = "Direct cursor";
-                Text[ portuguese ] = "Cursor directo";
-                Text[ russian ] = "��������� ������";
-                Text[ greek ] = "������ �������";
-                Text[ dutch ] = "Directcursor";
-                Text[ french ] = "Curseur direct";
-                Text[ spanish ] = "Cursor directo";
-                Text[ finnish ] = "Suora kohdistin";
-                Text[ italian ] = "Cursore diretto";
-                Text[ danish ] = "Direkte mark�r";
-                Text[ swedish ] = "Direktmark�r";
-                Text[ polish ] = "Kursor bezpo�redni";
-                Text[ portuguese_brazilian ] = "Cursor direto";
-                Text[ japanese ] = "ダイレクトカーソル";
-                Text[ korean ] = "커서 위치 직접 조정";
-                Text[ chinese_simplified ] = "直接定位光标";
-                Text[ chinese_traditional ] = "直接定位游標";
-                Text[ turkish ] = "Do�rudan imle�";
-                Text[ arabic ] = "���� �����";
-                Text[ catalan ] = "Cursor directe";
-                Text[ thai ] = "เคอร์เซอร์โดยตรง";
-                Text[ czech ] = "Přímý kurzor";
-                Text[ hebrew ] = "‮סמן ישיר‬";
-                Text[ hindi ] = "सीधा कर्सर";
-                Text[ slovak ] = "Priamy kurzor";
-                Text[ hungarian ] = "Közvetlen kurzor";
-                Text[ slovenian ] = "Neposredna kazalka";
+                Text [ de ] = "Direkt-Cursor" ;
+                Text [ en-US ] = "Direct cursor";
             };
             LB_WN( WRITERDIRECTCURSOR, 18 )
 
             FixedText FT_HTML
             {
                 FT_SEP_POS_SIZE( 19 );
-                Text = "HTML-Dokument" ;
-                Text [ ENGLISH ] = "HTML document" ;
-                Text[ english_us ] = "HTML Document";
-                Text[ portuguese ] = "Documento HTML";
-                Text[ russian ] = "�������� HTML";
-                Text[ greek ] = "������� HTML";
-                Text[ dutch ] = "HTML-document";
-                Text[ french ] = "Document HTML";
-                Text[ spanish ] = "Documento HTML";
-                Text[ finnish ] = "HTML-asiakirja";
-                Text[ italian ] = "Documento HTML";
-                Text[ danish ] = "HTML-Dokument";
-                Text[ swedish ] = "HTML-dokument";
-                Text[ polish ] = "Dokument HTML";
-                Text[ portuguese_brazilian ] = "Documento HTML";
-                Text[ japanese ] = "HTML 形式ドキュメント";
-                Text[ korean ] = "HTML 문서";
-                Text[ chinese_simplified ] = "HTML 文档";
-                Text[ chinese_traditional ] = "HTML 文件";
-                Text[ turkish ] = "HTML belgesi";
-                Text[ arabic ] = "����� HTML";
-                Text[ catalan ] = "Document HTML";
-                Text[ thai ] = "เอกสาร HTML ";
-                Text[ czech ] = "HTML dokument";
-                Text[ hebrew ] = "‮מסמך LMTH‬";
-                Text[ hindi ] = "HTML Document";
-                Text[ slovak ] = "HTML dokument";
-                Text[ hungarian ] = "HTML-dokumentum";
-                Text[ slovenian ] = "HTML dokument";
+                Text [ de ] = "HTML-Dokument" ;
+                Text [ en-US ] = "HTML Document";
             };
 
             FixedText FT_HTMLSGML
             {
                 FT_POS_SIZE( 20 );
-                Text = "SGML Syntax-Hervorhebung" ;
-                Text [ ENGLISH ] = "SGML syntax highlighting" ;
-                Text[ english_us ] = "SGML syntax highlighting";
-                Text[ portuguese ] = "SGML syntax highlighting";
-                Text[ russian ] = "SGML syntax highlighting";
-                Text[ greek ] = "SGML syntax highlighting";
-                Text[ dutch ] = "SGML syntax highlighting";
-                Text[ french ] = "Mise en �vidence de la syntaxe SGML";
-                Text[ spanish ] = "Resaltar sintaxis SGML";
-                Text[ finnish ] = "SGML syntax highlighting";
-                Text[ italian ] = "Evidenziazione sintassi SGML";
-                Text[ danish ] = "Fremh�velse af SGML-syntaks";
-                Text[ swedish ] = "Markering av SGML-syntax";
-                Text[ polish ] = "SGML syntax highlighting";
-                Text[ portuguese_brazilian ] = "Destaque da sintaxe SGML";
-                Text[ japanese ] = "SGML シンタックスの強調表示";
-                Text[ korean ] = "SGML 구문 강조 표시";
-                Text[ chinese_simplified ] = "突出显示 SGML 语法";
-                Text[ chinese_traditional ] = "反白顯示 SGML 語法";
-                Text[ turkish ] = "SGML s�zdizimi vurgusu";
-                Text[ arabic ] = "SGML syntax highlighting";
-                Text[ catalan ] = "SGML syntax highlighting";
-                Text[ thai ] = "SGML syntax highlighting";
-                Text[ czech ] = "Zvýrazňování SGML syntaxe";
-                Text[ hebrew ] = "‮הבלטת תחביר SGML‬";
-                Text[ hindi ] = "SGML syntax highlighting";
-                Text[ slovak ] = "Zvýraznenie SGML syntaxu";
-                Text[ hungarian ] = "SGML-szintaxiskiemelés";
-                Text[ slovenian ] = "Označevanje SGML sintakse";
+                Text [ de ] = "SGML Syntax-Hervorhebung" ;
+                Text [ en-US ] = "SGML syntax highlighting";
             };
             LB_WN( HTMLSGML, 20 )
 
             FixedText FT_HTMLCOMMENT
             {
                 FT_POS_SIZE( 21 );
-                Text = "Kommentar-Hervorhebung" ;
-                Text [ ENGLISH ] = "Comment highlighting" ;
-                Text[ english_us ] = "Comment highlighting";
-                Text[ portuguese ] = "Comment highlighting";
-                Text[ russian ] = "Comment highlighting";
-                Text[ greek ] = "Comment highlighting";
-                Text[ dutch ] = "Comment highlighting";
-                Text[ french ] = "Mise en �vidence des commentaires";
-                Text[ spanish ] = "Resaltar comentario";
-                Text[ finnish ] = "Comment highlighting";
-                Text[ italian ] = "Evidenziazione commento";
-                Text[ danish ] = "Fremh�velse af kommentar";
-                Text[ swedish ] = "Kommentarmarkering";
-                Text[ polish ] = "Comment highlighting";
-                Text[ portuguese_brazilian ] = "Destaque de coment�rio";
-                Text[ japanese ] = "コメントの強調表示";
-                Text[ korean ] = "설명 강조 표시";
-                Text[ chinese_simplified ] = "突出显示备注";
-                Text[ chinese_traditional ] = "反白顯示備註";
-                Text[ turkish ] = "Yorum vurgulamas�";
-                Text[ arabic ] = "Comment highlighting";
-                Text[ catalan ] = "Comment highlighting";
-                Text[ thai ] = "Comment highlighting";
-                Text[ czech ] = "Zvýrazňování komentářů";
-                Text[ hebrew ] = "‮הבלטת הערות‬";
-                Text[ hindi ] = "Comment highlighting";
-                Text[ slovak ] = "Zvýraznenie poznámky";
-                Text[ hungarian ] = "Megjegyzés kiemelése";
-                Text[ slovenian ] = "Označevanje komentarjev";
+                Text [ de ] = "Kommentar-Hervorhebung" ;
+                Text [ en-US ] = "Comment highlighting";
             };
             LB_WN( HTMLCOMMENT, 21 )
 
             FixedText FT_HTMLKEYWORD
             {
                 FT_POS_SIZE( 22 );
-                Text = "Schl�sselwort-Hervorhebung" ;
-                Text [ ENGLISH ] = "Keyword highlighting" ;
-                Text[ english_us ] = "Keyword highlighting";
-                Text[ portuguese ] = "Keyword highlighting";
-                Text[ russian ] = "Keyword highlighting";
-                Text[ greek ] = "Keyword highlighting";
-                Text[ dutch ] = "Keyword highlighting";
-                Text[ french ] = "Mise en �vidence des mots-cl�s";
-                Text[ spanish ] = "Resaltar palabra clave";
-                Text[ finnish ] = "Keyword highlighting";
-                Text[ italian ] = "Evidenziazione parola ricercata";
-                Text[ danish ] = "Fremh�velse af n�gleord";
-                Text[ swedish ] = "Nyckelordsmarkering";
-                Text[ polish ] = "Keyword highlighting";
-                Text[ portuguese_brazilian ] = "Destaque de palavra-chave";
-                Text[ japanese ] = "キーワードの強調表示";
-                Text[ korean ] = "키워드 강조 표시";
-                Text[ chinese_simplified ] = "突出显示关键字";
-                Text[ chinese_traditional ] = "反白顯示關鍵字";
-                Text[ turkish ] = "Anahtar kelime g�sterimi";
-                Text[ arabic ] = "Keyword highlighting";
-                Text[ catalan ] = "Keyword highlighting";
-                Text[ thai ] = "Keyword highlighting";
-                Text[ czech ] = "Zvýrazňování klíčových slov";
-                Text[ hebrew ] = "‮הבלטת מילות מפתח‬";
-                Text[ hindi ] = "Keyword highlighting";
-                Text[ slovak ] = "Zvýraznenie kľúčového slova";
-                Text[ hungarian ] = "Kulcsszó kiemelése";
-                Text[ slovenian ] = "Označevanje ključnih besed";
+                Text [ de ] = "Schl�sselwort-Hervorhebung" ;
+                Text [ en-US ] = "Keyword highlighting";
             };
             LB_WN( HTMLKEYWORD, 22 )
 
             FixedText FT_HTMLUNKNOWN
             {
                 FT_POS_SIZE( 23 );
-                Text = "Text" ;
-                Text [ ENGLISH ] = "Text" ;
-                Text[ english_us ] = "Text";
-                Text[ portuguese ] = "Texto";
-                Text[ russian ] = "�����";
-                Text[ greek ] = "�������";
-                Text[ dutch ] = "Tekst";
-                Text[ french ] = "Texte";
-                Text[ spanish ] = "Texto";
-                Text[ finnish ] = "Teksti";
-                Text[ italian ] = "Testo";
-                Text[ danish ] = "Tekst";
-                Text[ swedish ] = "Text";
-                Text[ polish ] = "Tekst";
-                Text[ portuguese_brazilian ] = "Texto";
-                Text[ japanese ] = "テキスト";
-                Text[ korean ] = "텍스트";
-                Text[ chinese_simplified ] = "文字";
-                Text[ chinese_traditional ] = "文字";
-                Text[ turkish ] = "Metin";
-                Text[ arabic ] = "��";
-                Text[ catalan ] = "Text";
-                Text[ thai ] = "ข้อความ";
-                Text[ czech ] = "Text";
-                Text[ hebrew ] = "‮טקסט‬";
-                Text[ hindi ] = "टेक्स्ट्";
-                Text[ slovak ] = "Text";
-                Text[ hungarian ] = "Szöveg";
-                Text[ slovenian ] = "Besedilo";
+                Text [ de ] = "Text" ;
+                Text [ en-US ] = "Text";
             };
             LB_WN( HTMLUNKNOWN, 23 )
 
             FixedText FT_CALC
             {
                 FT_SEP_POS_SIZE( 24 );
-                Text = "Tabellendokument" ;
-                Text [ ENGLISH ] = "Spreadsheet" ;
-                Text[ english_us ] = "Spreadsheet";
-                Text[ portuguese ] = "Folha de c�lculo";
-                Text[ russian ] = "�������� ����������� �������";
-                Text[ greek ] = "������� ������";
-                Text[ dutch ] = "Werkbladdocument";
-                Text[ french ] = "Classeur";
-                Text[ spanish ] = "Hoja de c�lculo";
-                Text[ finnish ] = "Laskentataulukko";
-                Text[ italian ] = "Foglio elettronico";
-                Text[ danish ] = "Regneark";
-                Text[ swedish ] = "Tabelldokument";
-                Text[ polish ] = "Arkusz kalkulacyjny";
-                Text[ portuguese_brazilian ] = "Planilha";
-                Text[ japanese ] = "表計算ドキュメント";
-                Text[ korean ] = "스프레드시트";
-                Text[ chinese_simplified ] = "工作表文档";
-                Text[ chinese_traditional ] = "工作表文件";
-                Text[ turkish ] = "Hesap �izelgesi";
-                Text[ arabic ] = "����� ����";
-                Text[ catalan ] = "Fulla de c�lcul";
-                Text[ thai ] = "กระดาษคำนวณ";
-                Text[ czech ] = "Tabulka";
-                Text[ hebrew ] = "‮גליון עבודה‬";
-                Text[ hindi ] = "स्प्रेडशीट्";
-                Text[ slovak ] = "Zošit";
-                Text[ hungarian ] = "Munkafüzet";
-                Text[ slovenian ] = "Preglednica";
+                Text [ de ] = "Tabellendokument" ;
+                Text [ en-US ] = "Spreadsheet";
             };
 
             FixedText FT_CALCGRID
             {
                 FT_POS_SIZE( 25 );
-                Text = "Gitterlinien" ;
-                Text [ ENGLISH ] = "Grid lines" ;
-                Text[ english_us ] = "Grid lines";
-                Text[ portuguese ] = "Grid lines";
-                Text[ russian ] = "Grid lines";
-                Text[ greek ] = "Grid lines";
-                Text[ dutch ] = "Rasterlijnen";
-                Text[ french ] = "Lignes de la grille";
-                Text[ spanish ] = "L�neas de la cuadr�cula";
-                Text[ finnish ] = "Grid lines";
-                Text[ italian ] = "Linee della griglia";
-                Text[ danish ] = "Gitterlinjer";
-                Text[ swedish ] = "Gitterlinjer";
-                Text[ polish ] = "Grid lines";
-                Text[ portuguese_brazilian ] = "Linhas da grade";
-                Text[ japanese ] = "グリッド線";
-                Text[ korean ] = "눈금선";
-                Text[ chinese_simplified ] = "格线";
-                Text[ chinese_traditional ] = "格線";
-                Text[ turkish ] = "Izgara �izgileri";
-                Text[ arabic ] = "Grid lines";
-                Text[ catalan ] = "Grid lines";
-                Text[ thai ] = "Grid lines";
-                Text[ czech ] = "Čáry mřížky";
-                Text[ hebrew ] = "‮קווי רשת‬";
-                Text[ hindi ] = "Grid lines";
-                Text[ slovak ] = "Čiary mriežky";
-                Text[ hungarian ] = "Rácsvonalak";
-                Text[ slovenian ] = "Mrežne črte";
+                Text [ de ] = "Gitterlinien" ;
+                Text [ en-US ] = "Grid lines";
             };
             LB_WN( CALCGRID, 25 )
 
             FixedText FT_CALCPAGEBREAK
             {
                 FT_POS_SIZE( 26 );
-                Text = "Seitenumbr�che" ;
-                Text [ ENGLISH ] = "Page breaks" ;
-                Text[ english_us ] = "Page breaks";
-                Text[ portuguese ] = "Page breaks";
-                Text[ russian ] = "Page breaks";
-                Text[ greek ] = "Page breaks";
-                Text[ dutch ] = "Pagina-einden";
-                Text[ french ] = "Sauts de page";
-                Text[ spanish ] = "Saltos de p�gina";
-                Text[ finnish ] = "Page breaks";
-                Text[ italian ] = "Interruzioni pagina";
-                Text[ danish ] = "Sideskift";
-                Text[ swedish ] = "Sidbrytningar";
-                Text[ polish ] = "Page breaks";
-                Text[ portuguese_brazilian ] = "Quebras de p�ginas";
-                Text[ japanese ] = "改ページ";
-                Text[ korean ] = "페이지 나누기";
-                Text[ chinese_simplified ] = "换页";
-                Text[ chinese_traditional ] = "換頁";
-                Text[ turkish ] = "Sayfa sonlar�";
-                Text[ arabic ] = "Page breaks";
-                Text[ catalan ] = "Page breaks";
-                Text[ thai ] = "Page breaks";
-                Text[ czech ] = "Zalomení stránek";
-                Text[ hebrew ] = "‮מעברי דף‬";
-                Text[ hindi ] = "Page breaks";
-                Text[ slovak ] = "Zalomenie stránky";
-                Text[ hungarian ] = "Oldaltörés";
-                Text[ slovenian ] = "Prelomi strani";
+                Text [ de ] = "Seitenumbr�che" ;
+                Text [ en-US ] = "Page breaks";
             };
             LB_WN( CALCPAGEBREAK, 26 )
 
             FixedText FT_CALCPAGEBREAKMANUAL
             {
                 FT_POS_SIZE( 27 );
-                Text = "Manuelle Seitenumbr�che" ;
-                Text [ ENGLISH ] = "Manual page breaks" ;
-                Text[ english_us ] = "Manual page breaks";
-                Text[ portuguese ] = "Manual page breaks";
-                Text[ russian ] = "Manual page breaks";
-                Text[ greek ] = "Manual page breaks";
-                Text[ dutch ] = "Handmatige pagina-einden";
-                Text[ french ] = "Sauts de page manuels";
-                Text[ spanish ] = "Saltos de p�gina manuales";
-                Text[ finnish ] = "Manual page breaks";
-                Text[ italian ] = "Interruzioni pagina manuali";
-                Text[ danish ] = "Manuelle sideskift";
-                Text[ swedish ] = "Manuella sidbrytningar";
-                Text[ polish ] = "Manual page breaks";
-                Text[ portuguese_brazilian ] = "Quebras de p�ginas manuais";
-                Text[ japanese ] = "手動改ページ";
-                Text[ korean ] = "수동 페이지 나누기";
-                Text[ chinese_simplified ] = "手工换页";
-                Text[ chinese_traditional ] = "手動換頁";
-                Text[ turkish ] = "Otomatik olmayan sayfa kesimi";
-                Text[ arabic ] = "Manual page breaks";
-                Text[ catalan ] = "Manual page breaks";
-                Text[ thai ] = "Manual page breaks";
-                Text[ czech ] = "Ruční zalomení stránek";
-                Text[ hebrew ] = "‮מעברי דף ידניים‬";
-                Text[ hindi ] = "Manual page breaks";
-                Text[ slovak ] = "Ručné zalomenia stránky";
-                Text[ hungarian ] = "Kézi oldaltörés";
-                Text[ slovenian ] = "Ročni prelomi strani";
+                Text [ de ] = "Manuelle Seitenumbr�che" ;
+                Text [ en-US ] = "Manual page breaks";
             };
             LB_WN( CALCPAGEBREAKMANUAL, 27 )
 
             FixedText FT_CALCPAGEBREAKAUTO
             {
                 FT_POS_SIZE( 28 );
-                Text = "Automatische Seitenumbr�che" ;
-                Text [ ENGLISH ] = "Automatic page breaks" ;
-                Text[ english_us ] = "Automatic page breaks";
-                Text[ portuguese ] = "Automatic page breaks";
-                Text[ russian ] = "Automatic page breaks";
-                Text[ greek ] = "Automatic page breaks";
-                Text[ dutch ] = "Automatishe pagina-einden";
-                Text[ french ] = "Sauts de page automatiques";
-                Text[ spanish ] = "Saltos de p�gina autom�ticos";
-                Text[ finnish ] = "Automatic page breaks";
-                Text[ italian ] = "Interruzioni pagina automatiche";
-                Text[ danish ] = "Automatiske sideskift";
-                Text[ swedish ] = "Automatiska sidbrytningar";
-                Text[ polish ] = "Automatic page breaks";
-                Text[ portuguese_brazilian ] = "Quebras de p�gina autom�ticas";
-                Text[ japanese ] = "自動改ページ";
-                Text[ korean ] = "자동 페이지 나누기";
-                Text[ chinese_simplified ] = "自动换页";
-                Text[ chinese_traditional ] = "自動換頁";
-                Text[ turkish ] = "Otomatik sayfa kesimleri";
-                Text[ arabic ] = "Automatic page breaks";
-                Text[ catalan ] = "Automatic page breaks";
-                Text[ thai ] = "Automatic page breaks";
-                Text[ czech ] = "Automatická zalomení stránek";
-                Text[ hebrew ] = "‮מעברי דף אוטומטיים‬";
-                Text[ hindi ] = "Automatic page breaks";
-                Text[ slovak ] = "Automatické zalomenia stránky";
-                Text[ hungarian ] = "Automatikus oldaltörés";
-                Text[ slovenian ] = "Samodejni prelomi strani";
+                Text [ de ] = "Automatische Seitenumbr�che" ;
+                Text [ en-US ] = "Automatic page breaks";
             };
             LB_WN( CALCPAGEBREAKAUTO, 28 )
 
             FixedText FT_CALCDETECTIVE
             {
                 FT_POS_SIZE( 29 );
-                Text = "Detektiv" ;
-                Text [ ENGLISH ] = "Detective" ;
-                Text[ english_us ] = "Detective";
-                Text[ portuguese ] = "Detective";
-                Text[ russian ] = "Detective";
-                Text[ greek ] = "Detective";
-                Text[ dutch ] = "Detective";
-                Text[ french ] = "Audit";
-                Text[ spanish ] = "Detective";
-                Text[ finnish ] = "Detective";
-                Text[ italian ] = "Detective";
-                Text[ danish ] = "Detektiv";
-                Text[ swedish ] = "Detektiv";
-                Text[ polish ] = "Detective";
-                Text[ portuguese_brazilian ] = "Auditor";
-                Text[ japanese ] = "トレース";
-                Text[ korean ] = "추적";
-                Text[ chinese_simplified ] = "侦探";
-                Text[ chinese_traditional ] = "偵探";
-                Text[ turkish ] = "Detective";
-                Text[ arabic ] = "Detective";
-                Text[ catalan ] = "Detective";
-                Text[ thai ] = "Detective";
-                Text[ czech ] = "Detektiv";
-                Text[ hebrew ] = "‮הבלש‬";
-                Text[ hindi ] = "Detective";
-                Text[ slovak ] = "Detektív";
-                Text[ hungarian ] = "Detektív";
-                Text[ slovenian ] = "Detektiv";
+                Text [ de ] = "Detektiv" ;
+                Text [ en-US ] = "Detective";
             };
             LB_WN( CALCDETECTIVE, 29 )
 
             FixedText FT_CALCDETECTIVEERROR
             {
                 FT_POS_SIZE( 30 );
-                Text = "Detektiv-Fehler" ;
-                Text [ ENGLISH ] = "Detective error"  ;
-                Text[ english_us ] = "Detective error";
-                Text[ portuguese ] = "Detective error";
-                Text[ russian ] = "Detective error";
-                Text[ greek ] = "Detective error";
-                Text[ dutch ] = "Detective fout";
-                Text[ french ] = "Erreur d'audit";
-                Text[ spanish ] = "Error de detective";
-                Text[ finnish ] = "Detective error";
-                Text[ italian ] = "Errore detective";
-                Text[ danish ] = "Detektivfejl";
-                Text[ swedish ] = "Detektivfel";
-                Text[ polish ] = "Detective error";
-                Text[ portuguese_brazilian ] = "Erro de auditor";
-                Text[ japanese ] = "トレースのエラー";
-                Text[ korean ] = "추적 오류";
-                Text[ chinese_simplified ] = "侦探错误";
-                Text[ chinese_traditional ] = "偵探錯誤";
-                Text[ turkish ] = "Dedektif hatas�";
-                Text[ arabic ] = "Detective error";
-                Text[ catalan ] = "Detective error";
-                Text[ thai ] = "Detective error";
-                Text[ czech ] = "Chyba detektiva";
-                Text[ hebrew ] = "‮שגיאת בלש‬";
-                Text[ hindi ] = "Detective error";
-                Text[ slovak ] = "Chyba detektíva";
-                Text[ hungarian ] = "Detektív hiba";
-                Text[ slovenian ] = "Napaka v detektivu";
+                Text [ de ] = "Detektiv-Fehler" ;
+                Text [ en-US ] = "Detective error";
             };
             LB_WN( CALCDETECTIVEERROR, 30 )
 
             FixedText FT_CALCREFERENCE
             {
                 FT_POS_SIZE( 31 );
-                Text = "Referenzen" ;
-                Text [ ENGLISH ] = "References" ;
-                Text[ english_us ] = "References";
-                Text[ portuguese ] = "Refer�ncias";
-                Text[ russian ] = "������";
-                Text[ greek ] = "��������";
-                Text[ dutch ] = "Verwijzingen";
-                Text[ french ] = "R�f�rences";
-                Text[ spanish ] = "Referencias";
-                Text[ finnish ] = "Viitteet";
-                Text[ italian ] = "Riferimenti";
-                Text[ danish ] = "Henvisninger";
-                Text[ swedish ] = "Referenser";
-                Text[ polish ] = "Odwo�ania";
-                Text[ portuguese_brazilian ] = "Refer�ncias";
-                Text[ japanese ] = "参照";
-                Text[ korean ] = "참조";
-                Text[ chinese_simplified ] = "引用";
-                Text[ chinese_traditional ] = "參照";
-                Text[ turkish ] = "Referanslar";
-                Text[ arabic ] = "�������";
-                Text[ catalan ] = "Refer�ncies";
-                Text[ thai ] = "การอ้างอิง";
-                Text[ czech ] = "Odkazy";
-                Text[ hebrew ] = "‮הפניות‬";
-                Text[ hindi ] = "रेफरेन्स ";
-                Text[ slovak ] = "Odkazy";
-                Text[ hungarian ] = "Hivatkozások";
-                Text[ slovenian ] = "Sklici";
+                Text [ de ] = "Referenzen" ;
+                Text [ en-US ] = "References";
             };
             LB_WN( CALCREFERENCE, 31 )
 
             FixedText FT_CALCNOTESBACKGROUND
             {
                 FT_POS_SIZE( 32 );
-                Text = "Notizhintergrund" ;
-                Text [ ENGLISH ] = "Notes background" ;
-                Text[ english_us ] = "Notes background";
-                Text[ portuguese ] = "Notes background";
-                Text[ russian ] = "Notes background";
-                Text[ greek ] = "Notes background";
-                Text[ dutch ] = "Aantekeningen achtergrond";
-                Text[ french ] = "Arri�re-plan des notes";
-                Text[ spanish ] = "Fondo de las notas";
-                Text[ finnish ] = "Notes background";
-                Text[ italian ] = "Sfondo note";
-                Text[ danish ] = "Notebaggrund";
-                Text[ swedish ] = "Anteckningsbakgrund";
-                Text[ polish ] = "Notes background";
-                Text[ portuguese_brazilian ] = "Plano de fundo de anota��es";
-                Text[ japanese ] = "コメントの背景";
-                Text[ korean ] = "메모 배경";
-                Text[ chinese_simplified ] = "备注的背景";
-                Text[ chinese_traditional ] = "備註的背景";
-                Text[ turkish ] = "Not arkaplan�";
-                Text[ arabic ] = "Notes background";
-                Text[ catalan ] = "Notes background";
-                Text[ thai ] = "Notes background";
-                Text[ czech ] = "Pozadí poznámek";
-                Text[ hebrew ] = "‮רקע הערות‬";
-                Text[ hindi ] = "Notes background";
-                Text[ slovak ] = "Pozadie pre poznámky";
-                Text[ hungarian ] = "Megjegyzések háttere";
-                Text[ slovenian ] = "Ozadje opomb";
+                Text [ de ] = "Notizhintergrund" ;
+                Text [ en-US ] = "Notes background";
             };
             LB_WN( CALCNOTESBACKGROUND, 32 )
 
             FixedText FT_DRAW
             {
                 FT_SEP_POS_SIZE( 33 );
-                Text = "Zeichnung / Pr�sentation" ;
-                Text [ ENGLISH ] = "Drawing / Presentation" ;
-                Text[ english_us ] = "Drawing / Presentation";
-                Text[ portuguese ] = "Drawing / Presentation";
-                Text[ russian ] = "Drawing / Presentation";
-                Text[ greek ] = "Drawing / Presentation";
-                Text[ dutch ] = "Tekening / Presentatie";
-                Text[ french ] = "Dessin / Pr�sentation";
-                Text[ spanish ] = "Dibujo / Presentaci�n";
-                Text[ finnish ] = "Drawing / Presentation";
-                Text[ italian ] = "Disegno / presentazione";
-                Text[ danish ] = "Tegning / Pr�sentation";
-                Text[ swedish ] = "Teckning/presentation";
-                Text[ polish ] = "Drawing / Presentation";
-                Text[ portuguese_brazilian ] = "Desenho / Apresenta��o";
-                Text[ japanese ] = "図形描画およびプレゼンテーション";
-                Text[ korean ] = "그리기 / 프레젠테이션";
-                Text[ chinese_simplified ] = "绘图/演示文稿";
-                Text[ chinese_traditional ] = "繪圖/簡報";
-                Text[ turkish ] = "�izim / Sunu";
-                Text[ arabic ] = "Drawing / Presentation";
-                Text[ catalan ] = "Drawing / Presentation";
-                Text[ thai ] = "Drawing / Presentation";
-                Text[ czech ] = "Kreslení / prezentace";
-                Text[ hebrew ] = "‮סרטוט \\ מצגת‬";
-                Text[ hindi ] = "Drawing / Presentation";
-                Text[ slovak ] = "Kresba / Prezentácia";
-                Text[ hungarian ] = "Rajz / Bemutató";
-                Text[ slovenian ] = "Risba / predstavitev";
+                Text [ de ] = "Zeichnung / Pr�sentation" ;
+                Text [ en-US ] = "Drawing / Presentation";
             };
 
             FixedText FT_DRAWGRID
             {
                 FT_POS_SIZE( 34 );
-                Text = "Raster" ;
-                Text [ ENGLISH ] = "Grid" ;
-                Text[ english_us ] = "Grid";
-                Text[ portuguese ] = "Grelha";
-                Text[ russian ] = "�����";
-                Text[ greek ] = "������";
-                Text[ dutch ] = "Raster";
-                Text[ french ] = "Grille";
-                Text[ spanish ] = "Cuadr�cula";
-                Text[ finnish ] = "Ruudukko";
-                Text[ italian ] = "Griglia";
-                Text[ danish ] = "Gitter";
-                Text[ swedish ] = "Raster";
-                Text[ polish ] = "Raster";
-                Text[ portuguese_brazilian ] = "Grade";
-                Text[ japanese ] = "グリッド線";
-                Text[ korean ] = "그리드";
-                Text[ chinese_simplified ] = "网格";
-                Text[ chinese_traditional ] = "網格";
-                Text[ turkish ] = "Izgara";
-                Text[ arabic ] = "������";
-                Text[ catalan ] = "Graella";
-                Text[ thai ] = "เส้นตาราง";
-                Text[ czech ] = "Mřížka";
-                Text[ hebrew ] = "‮רשת‬";
-                Text[ hindi ] = "छपाई";
-                Text[ slovak ] = "Mriežka";
-                Text[ hungarian ] = "Rács";
-                Text[ slovenian ] = "Mreža";
+                Text [ de ] = "Raster" ;
+                Text [ en-US ] = "Grid";
             };
             LB_WN( DRAWGRID, 34 )
 
             FixedText FT_BASIC
             {
                 FT_SEP_POS_SIZE( 35 );
-                Text = "Basic Syntaxhervorhebung" ;
-                Text [ ENGLISH ] = "Basic Syntax Highlighting" ;
-                Text[ language_user1 ] = "; EM July 31, 2002: Title of a section";
-                Text[ english_us ] = "Basic Syntax Highlighting";
-                Text[ portuguese ] = "Basic Syntax Highlighting";
-                Text[ russian ] = "Basic Syntax Highlighting";
-                Text[ greek ] = "Basic Syntax Highlighting";
-                Text[ dutch ] = "Basic Syntax Highlighting";
-                Text[ french ] = "Mise en �vidence de la syntaxe de base";
-                Text[ spanish ] = "Resaltar la sintaxis de base";
-                Text[ finnish ] = "Basic Syntax Highlighting";
-                Text[ italian ] = "Evidenziazione sintassi base";
-                Text[ danish ] = "Fremh�vning af Basic-syntaks";
-                Text[ swedish ] = "Markering av Basic-syntax";
-                Text[ polish ] = "Basic Syntax Highlighting";
-                Text[ portuguese_brazilian ] = "Destaque da sintaxe BASIC";
-                Text[ japanese ] = "Basic シンタックスのハイライト";
-                Text[ korean ] = "Basic 구문 강조 표시";
-                Text[ chinese_simplified ] = "突出显示 Basic 语法";
-                Text[ chinese_traditional ] = "反白顯示 Basic 語法";
-                Text[ turkish ] = "Temel Yaz�m G�sterimi";
-                Text[ arabic ] = "Basic Syntax Highlighting";
-                Text[ catalan ] = "Basic Syntax Highlighting";
-                Text[ thai ] = "Basic Syntax Highlighting";
-                Text[ czech ] = "Zvýrazňování Basic syntaxe";
-                Text[ hebrew ] = "‮הבלטת תחביר בייסיק‬";
-                Text[ hindi ] = "Basic Syntax Highlighting";
-                Text[ slovak ] = "Zvýraznenie základného syntaxu";
-                Text[ hungarian ] = "Egyszerű szintaxiskiemelés";
-                Text[ slovenian ] = "Označevanje Basic sintakse";
+                Text [ de ] = "Basic Syntaxhervorhebung" ;
+                Text [ x-comment ] = "; EM July 31, 2002: Title of a section";
+                Text [ en-US ] = "Basic Syntax Highlighting";
             };
 
             FixedText FT_BASICIDENTIFIER
             {
                 FT_POS_SIZE( 36 );
-                Text = "Bezeichner" ;
-                Text [ ENGLISH ] = "Identifier" ;
-                Text[ english_us ] = "Identifier";
-                Text[ portuguese ] = "Identifier";
-                Text[ russian ] = "Identifier";
-                Text[ greek ] = "Identifier";
-                Text[ dutch ] = "Identifier";
-                Text[ french ] = "Identificateur";
-                Text[ spanish ] = "Identificador";
-                Text[ finnish ] = "Identifier";
-                Text[ italian ] = "Identificatore";
-                Text[ danish ] = "Identifikator";
-                Text[ swedish ] = "Identifierare";
-                Text[ polish ] = "Identifier";
-                Text[ portuguese_brazilian ] = "Identificador";
-                Text[ japanese ] = "識別子";
-                Text[ korean ] = "확인자";
-                Text[ chinese_simplified ] = "标志";
-                Text[ chinese_traditional ] = "標誌";
-                Text[ turkish ] = "Belirte�";
-                Text[ arabic ] = "Identifier";
-                Text[ catalan ] = "Identifier";
-                Text[ thai ] = "Identifier";
-                Text[ czech ] = "Identifikátor";
-                Text[ hebrew ] = "‮מזהה‬";
-                Text[ hindi ] = "Identifier";
-                Text[ slovak ] = "Identifikátor";
-                Text[ hungarian ] = "Azonosító";
-                Text[ slovenian ] = "Identifikator";
+                Text [ de ] = "Bezeichner" ;
+                Text [ en-US ] = "Identifier";
             };
             LB_WN( BASICIDENTIFIER, 36 )
 
             FixedText FT_BASICCOMMENT
             {
                 FT_POS_SIZE( 37 );
-                Text = "Kommentar" ;
-                Text [ ENGLISH ] = "Comment" ;
-                Text[ english_us ] = "Comment";
-                Text[ portuguese ] = "Coment�rio";
-                Text[ russian ] = "�����������";
-                Text[ greek ] = "������";
-                Text[ dutch ] = "Commentaar";
-                Text[ french ] = "Commentaire";
-                Text[ spanish ] = "Comentario";
-                Text[ finnish ] = "Huomautukset";
-                Text[ italian ] = "Commento";
-                Text[ danish ] = "Kommentar";
-                Text[ swedish ] = "Kommentar";
-                Text[ polish ] = "Komentarz";
-                Text[ portuguese_brazilian ] = "Coment�rio";
-                Text[ japanese ] = "コメント";
-                Text[ korean ] = "설명";
-                Text[ chinese_simplified ] = "注解";
-                Text[ chinese_traditional ] = "備註";
-                Text[ turkish ] = "Yorum";
-                Text[ arabic ] = "�����";
-                Text[ catalan ] = "Comentari";
-                Text[ thai ] = "ข้อคิดเห็น";
-                Text[ czech ] = "Komentář";
-                Text[ hebrew ] = "‮הערה‬";
-                Text[ hindi ] = "अपवाद";
-                Text[ slovak ] = "Komentár";
-                Text[ hungarian ] = "Megjegyzés";
-                Text[ slovenian ] = "Komentar";
+                Text [ de ] = "Kommentar" ;
+                Text [ en-US ] = "Comment";
             };
             LB_WN( BASICCOMMENT, 37 )
 
             FixedText FT_BASICNUMBER
             {
                 FT_POS_SIZE( 38 );
-                Text = "Zahl" ;
-                Text [ ENGLISH ] = "Number" ;
-                Text[ english_us ] = "Number";
-                Text[ portuguese ] = "N�mero";
-                Text[ russian ] = "�����";
-                Text[ greek ] = "�������";
-                Text[ dutch ] = "Getal";
-                Text[ french ] = "Nombre";
-                Text[ spanish ] = "N�mero";
-                Text[ finnish ] = "Luku";
-                Text[ italian ] = "Numero";
-                Text[ danish ] = "Tal";
-                Text[ swedish ] = "Tal";
-                Text[ polish ] = "Liczba";
-                Text[ portuguese_brazilian ] = "N�mero";
-                Text[ japanese ] = "数値";
-                Text[ korean ] = "수";
-                Text[ chinese_simplified ] = "数字";
-                Text[ chinese_traditional ] = "數字";
-                Text[ turkish ] = "Say�";
-                Text[ arabic ] = "Angle";
-                Text[ catalan ] = "Nombre";
-                Text[ thai ] = "จำนวนที่เป็นเศษส่วน";
-                Text[ czech ] = "Číslo";
-                Text[ hebrew ] = "‮מספר‬";
-                Text[ hindi ] = "दशांश डॉलर";
-                Text[ slovak ] = "Číslo";
-                Text[ hungarian ] = "Szám";
-                Text[ slovenian ] = "Število";
+                Text [ de ] = "Zahl" ;
+                Text [ en-US ] = "Number";
             };
             LB_WN( BASICNUMBER, 38 )
 
             FixedText FT_BASICSTRING
             {
                 FT_POS_SIZE( 39 );
-                Text = "Zeichenkette" ;
-                Text [ ENGLISH ] = "String" ;
-                Text[ english_us ] = "String";
-                Text[ portuguese ] = "String";
-                Text[ russian ] = "String";
-                Text[ greek ] = "String";
-                Text[ dutch ] = "String";
-                Text[ french ] = "Cha�ne de caract�res";
-                Text[ spanish ] = "Cadena de caracteres";
-                Text[ finnish ] = "String";
-                Text[ italian ] = "String";
-                Text[ danish ] = "Streng";
-                Text[ swedish ] = "Str�ng";
-                Text[ polish ] = "String";
-                Text[ portuguese_brazilian ] = "String";
-                Text[ japanese ] = "文字列";
-                Text[ korean ] = "문자열";
-                Text[ chinese_simplified ] = "字串";
-                Text[ chinese_traditional ] = "字串";
-                Text[ turkish ] = "Dizi";
-                Text[ arabic ] = "String";
-                Text[ catalan ] = "String";
-                Text[ thai ] = "String";
-                Text[ czech ] = "Řetězec";
-                Text[ hebrew ] = "‮מחרוזת‬";
-                Text[ hindi ] = "String";
-                Text[ slovak ] = "Reťazec";
-                Text[ hungarian ] = "Karakterlánc";
-                Text[ slovenian ] = "Niz";
+                Text [ de ] = "Zeichenkette" ;
+                Text [ en-US ] = "String";
             };
             LB_WN( BASICSTRING, 39 )
 
             FixedText FT_BASICOPERATOR
             {
                 FT_POS_SIZE( 40 );
-                Text = "Operator" ;
-                Text [ ENGLISH ] = "Operator" ;
-                Text[ english_us ] = "Operator";
-                Text[ portuguese ] = "Operator";
-                Text[ russian ] = "Operator";
-                Text[ greek ] = "Operator";
-                Text[ dutch ] = "Operator";
-                Text[ french ] = "Op�rateur";
-                Text[ spanish ] = "Operador";
-                Text[ finnish ] = "Operator";
-                Text[ italian ] = "Operatore";
-                Text[ danish ] = "Operator";
-                Text[ swedish ] = "Operator";
-                Text[ polish ] = "Operator";
-                Text[ portuguese_brazilian ] = "Operador";
-                Text[ japanese ] = "演算子";
-                Text[ korean ] = "연산자";
-                Text[ chinese_simplified ] = "运算符";
-                Text[ chinese_traditional ] = "運算符";
-                Text[ turkish ] = "Operat�r";
-                Text[ arabic ] = "Operator";
-                Text[ catalan ] = "Operator";
-                Text[ thai ] = "Operator";
-                Text[ czech ] = "Operátor";
-                Text[ hebrew ] = "‮אופרטור‬";
-                Text[ hindi ] = "Operator";
-                Text[ slovak ] = "Operátor";
-                Text[ hungarian ] = "Operátor";
-                Text[ slovenian ] = "Operator";
+                Text [ de ] = "Operator" ;
+                Text [ en-US ] = "Operator";
             };
             LB_WN( BASICOPERATOR, 40 )
 
             FixedText FT_BASICKEYWORD
             {
                 FT_POS_SIZE( 41 );
-                Text = "Reservierter Ausdruck" ;
-                Text [ ENGLISH ] = "Reserved expression" ;
-                Text[ english_us ] = "Reserved expression";
-                Text[ portuguese ] = "Reserved expression";
-                Text[ russian ] = "Reserved expression";
-                Text[ greek ] = "Reserved expression";
-                Text[ dutch ] = "Reserved expression";
-                Text[ french ] = "Expression r�serv�e";
-                Text[ spanish ] = "Expresi�n reservada";
-                Text[ finnish ] = "Reserved expression";
-                Text[ italian ] = "Espressione riservata";
-                Text[ danish ] = "Reserveret udtryk";
-                Text[ swedish ] = "Reserverat uttryck";
-                Text[ polish ] = "Reserved expression";
-                Text[ portuguese_brazilian ] = "Express�o reservada";
-                Text[ japanese ] = "予約語";
-                Text[ korean ] = "예약식";
-                Text[ chinese_simplified ] = "保留的表达式";
-                Text[ chinese_traditional ] = "保留的表達式";
-                Text[ turkish ] = "�zel ama�l� deyim";
-                Text[ arabic ] = "Reserved expression";
-                Text[ catalan ] = "Reserved expression";
-                Text[ thai ] = "Reserved expression";
-                Text[ czech ] = "Rezervovaný výraz";
-                Text[ hebrew ] = "‮ביטוי שמור‬";
-                Text[ hindi ] = "Reserved expression";
-                Text[ slovak ] = "Rezervovaný výraz";
-                Text[ hungarian ] = "Fenntartott kifejezés";
-                Text[ slovenian ] = "Rezervirani izraz";
+                Text [ de ] = "Reservierter Ausdruck" ;
+                Text [ en-US ] = "Reserved expression";
             };
             LB_WN( BASICKEYWORD, 41 )
 
             FixedText FT_BASICERROR
             {
                 FT_POS_SIZE( 42 );
-                Text = "Fehler" ;
-                Text [ ENGLISH ] = "Error" ;
-                Text[ english_us ] = "Error";
-                Text[ portuguese ] = "Erro";
-                Text[ russian ] = "������";
-                Text[ greek ] = "������";
-                Text[ dutch ] = "Fout";
-                Text[ french ] = "Erreur";
-                Text[ spanish ] = "Error";
-                Text[ finnish ] = "Virhe";
-                Text[ italian ] = "Errore";
-                Text[ danish ] = "Fejl";
-                Text[ swedish ] = "Fel";
-                Text[ polish ] = "B��d";
-                Text[ portuguese_brazilian ] = "Erro";
-                Text[ japanese ] = "エラー";
-                Text[ korean ] = "오류";
-                Text[ chinese_simplified ] = "错误";
-                Text[ chinese_traditional ] = "錯誤";
-                Text[ turkish ] = "Hata";
-                Text[ arabic ] = "���";
-                Text[ catalan ] = "S'ha produ�t un error";
-                Text[ thai ] = "ผิดพลาด";
-                Text[ czech ] = "Chyba";
-                Text[ hebrew ] = "‮שגיאה‬";
-                Text[ hindi ] = "गलती";
-                Text[ slovak ] = "Chyba";
-                Text[ hungarian ] = "Hiba";
-                Text[ slovenian ] = "Napaka";
+                Text [ de ] = "Fehler" ;
+                Text [ en-US ] = "Error";
             };
             LB_WN( BASICERROR, 42 )
 
@@ -1937,127 +534,23 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message = "Soll das Farbschema wirklich gel�scht werden?" ;
-    Message [ english_us ] = "Do you really want to delete the color scheme?" ;
-    Message[ portuguese ] = "Do you really want to delete the color scheme?";
-    Message[ russian ] = "Do you really want to delete the color scheme?";
-    Message[ greek ] = "Do you really want to delete the color scheme?";
-    Message[ dutch ] = "Wilt u werkelijk het kleurenschema verwijderen?";
-    Message[ french ] = "Voulez-vous vraiment supprimer le sch�ma de couleur ?";
-    Message[ spanish ] = "�Desea borrar el esquema de colores?";
-    Message[ finnish ] = "Do you really want to delete the color scheme?";
-    Message[ italian ] = "Volete eliminare lo schema colori?";
-    Message[ danish ] = "Er du sikker p�, at du vil slette farveskemaet?";
-    Message[ swedish ] = "Vill du verkligen radera f�rgschemat?";
-    Message[ polish ] = "Do you really want to delete the color scheme?";
-    Message[ portuguese_brazilian ] = "Deseja realmente excluir o esquema de cores?";
-    Message[ japanese ] = "このカラーパターンを削除しますか。";
-    Message[ korean ] = "색 구성표를 정말로 삭제하시겠습니까?";
-    Message[ chinese_simplified ] = "您真的要删除这个颜色图案？";
-    Message[ chinese_traditional ] = "真的要刪除這個顏色圖案？";
-    Message[ turkish ] = "Ger�ekten renk �emas�n� silmek istiyor musunuz?";
-    Message[ arabic ] = "Do you really want to delete the color scheme?";
-    Message[ catalan ] = "Do you really want to delete the color scheme?";
-    Message[ thai ] = "Do you really want to delete the color scheme?";
-    Message[ czech ] = "Opravdu chcete odstranit barevné schéma?";
-    Message[ hebrew ] = "‮האם אכן למחוק את תכנון הצבעים?‬";
-    Message[ hindi ] = "Do you really want to delete the color scheme?";
-    Message[ slovak ] = "Určite chcete zmazať farebnú schému?";
-    Message[ hungarian ] = "Tényleg törli a színsémát?";
-    Message[ slovenian ] = "Ali ste prepričani, da želite izbrisati barvno shemo?";
+    Message [ de ] = "Soll das Farbschema wirklich gel�scht werden?" ;
+    Message [ en-US ] = "Do you really want to delete the color scheme?" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
-    Text = "L�schen des Schemas best�tigen" ;
-    Text [ english_us ] = "Color Scheme Deletion" ;
-    Text[ portuguese ] = "Color Scheme Deletion";
-    Text[ russian ] = "Color Scheme Deletion";
-    Text[ greek ] = "Color Scheme Deletion";
-    Text[ dutch ] = "Kleurenschema Verwijderen";
-    Text[ french ] = "Confirmer la suppression du sch�ma";
-    Text[ spanish ] = "Confirmar la supresi�n del esquema";
-    Text[ finnish ] = "Color Scheme Deletion";
-    Text[ italian ] = "Conferma eliminazione dello schema";
-    Text[ danish ] = "Sletning af farveskema";
-    Text[ swedish ] = "Bekr�fta att schemat ska raderas";
-    Text[ polish ] = "Color Scheme Deletion";
-    Text[ portuguese_brazilian ] = "Exclus�o de esquema de cores";
-    Text[ japanese ] = "カラーパターンを削除する";
-    Text[ korean ] = "색 구성표 삭제";
-    Text[ chinese_simplified ] = "确认删除颜色图案";
-    Text[ chinese_traditional ] = "確認刪除顔色圖案";
-    Text[ turkish ] = "Renk �emas� Silme ��lem";
-    Text[ arabic ] = "Color Scheme Deletion";
-    Text[ catalan ] = "Color Scheme Deletion";
-    Text[ thai ] = "Color Scheme Deletion";
-    Text[ czech ] = "Smazání barevného schématu";
-    Text[ hebrew ] = "‮מחיקת תכנון הצבעים‬";
-    Text[ hindi ] = "Color Scheme Deletion";
-    Text[ slovak ] = "Zistenie farebnej schémy";
-    Text[ hungarian ] = "Színséma törlése";
-    Text[ slovenian ] = "Brisanje barvne sheme";
+    Text [ de ] = "L�schen des Schemas best�tigen" ;
+    Text [ en-US ] = "Color Scheme Deletion" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
 {
-    Text = "Schema speichern" ;
-    Text [ english_us ] = "Save scheme" ;
-    Text[ portuguese ] = "Save scheme";
-    Text[ russian ] = "Save scheme";
-    Text[ greek ] = "Save scheme";
-    Text[ dutch ] = "Schema opslaan";
-    Text[ french ] = "Enregistrer le sch�ma";
-    Text[ spanish ] = "Guardar esquema";
-    Text[ finnish ] = "Save scheme";
-    Text[ italian ] = "Salva lo schema";
-    Text[ danish ] = "Gem farveskema";
-    Text[ swedish ] = "Spara schema";
-    Text[ polish ] = "Save scheme";
-    Text[ portuguese_brazilian ] = "Salvar esquema";
-    Text[ japanese ] = "カラーパターンを保存する";
-    Text[ korean ] = "구성표 저장";
-    Text[ chinese_simplified ] = "存盘颜色图案";
-    Text[ chinese_traditional ] = "儲存顔色圖案";
-    Text[ turkish ] = "�emay� kaydet";
-    Text[ arabic ] = "Save scheme";
-    Text[ catalan ] = "Save scheme";
-    Text[ thai ] = "Save scheme";
-    Text[ czech ] = "Uložit schéma";
-    Text[ hebrew ] = "‮שמירת התכנון‬";
-    Text[ hindi ] = "Save scheme";
-    Text[ slovak ] = "Uložiť schému";
-    Text[ hungarian ] = "Séma mentése";
-    Text[ slovenian ] = "Shrani shemo";
+    Text [ de ] = "Schema speichern" ;
+    Text [ en-US ] = "Save scheme" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE2
 {
-    Text = "Name des Farbschemas" ;
-    Text [ english_us ] = "Name of color scheme" ;
-    Text[ portuguese ] = "Name of color scheme";
-    Text[ russian ] = "Name of color scheme";
-    Text[ greek ] = "Name of color scheme";
-    Text[ dutch ] = "Naam van kleurenschema";
-    Text[ french ] = "Nom du sch�ma de couleurs";
-    Text[ spanish ] = "Nombre del esquema de colores";
-    Text[ finnish ] = "Name of color scheme";
-    Text[ italian ] = "Nome dello schema colori";
-    Text[ danish ] = "Navn p� farveskema";
-    Text[ swedish ] = "Namn p� f�rgschema";
-    Text[ polish ] = "Name of color scheme";
-    Text[ portuguese_brazilian ] = "Nome do esquema de cores";
-    Text[ japanese ] = "カラーパターンの名前";
-    Text[ korean ] = "색 구성표 이름";
-    Text[ chinese_simplified ] = "颜色图案的名称";
-    Text[ chinese_traditional ] = "顏色圖案的名稱";
-    Text[ turkish ] = "Renk �emas�n�n ismi";
-    Text[ arabic ] = "Name of color scheme";
-    Text[ catalan ] = "Name of color scheme";
-    Text[ thai ] = "Name of color scheme";
-    Text[ czech ] = "Název barevného schématu";
-    Text[ hebrew ] = "‮שם תכנון הצבעים‬";
-    Text[ hindi ] = "Name of color scheme";
-    Text[ slovak ] = "Názov farebnej schémy";
-    Text[ hungarian ] = "Színséma neve";
-    Text[ slovenian ] = "Ime barvne sheme";
+    Text [ de ] = "Name des Farbschemas" ;
+    Text [ en-US ] = "Name of color scheme" ;
 };
 
 
