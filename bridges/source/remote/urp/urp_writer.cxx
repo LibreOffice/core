@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-18 08:20:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#include <assert.h>
 #include <stdio.h>
 
 #ifndef _OSL_TIME_H_
@@ -82,7 +81,7 @@
 #include "urp_marshal.hxx"
 #include "urp_dispatch.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 static MyCounter thisCounter( "DEBUG : WriterThread" );
 #endif
 
@@ -104,7 +103,7 @@ OWriterThread::OWriterThread( remote_Connection *pConnection, urp_BridgeImpl *pB
     osl_resetCondition( m_oslCondition );
     m_pConnection->acquire( m_pConnection );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
@@ -113,7 +112,7 @@ OWriterThread::~OWriterThread()
 {
     osl_destroyCondition( m_oslCondition );
     m_pConnection->release( m_pConnection );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.release();
 #endif
 }
