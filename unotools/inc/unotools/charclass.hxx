@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:52 $
+ *  last change: $Author: er $ $Date: 2000-10-20 07:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ public:
     static  inline  sal_Bool    isAlphaType( sal_Int32 nType )
         {
             return ((nType & nCharClassAlphaType) != 0) &&
-                (nType & ~(nCharClassAlphaTypeMask) == 0);
+                ((nType & ~(nCharClassAlphaTypeMask)) == 0);
         }
 
     /// whether type is pure numeric or not, e.g. return of getStringType
@@ -197,7 +197,7 @@ public:
     static  inline  sal_Bool    isLetterType( sal_Int32 nType )
         {
             return ((nType & nCharClassLetterType) != 0) &&
-                (nType & ~(nCharClassLetterTypeMask) == 0);
+                ((nType & ~(nCharClassLetterTypeMask)) == 0);
         }
 
     /// whether type is pure letternumeric or not, e.g. return of getStringType
