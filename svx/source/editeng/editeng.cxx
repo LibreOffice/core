@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 11:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,7 +1333,7 @@ sal_Bool EditEngine::HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 const SfxPoolItem& EditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-return pImpEditEngine->GetParaAttrib( nPara, nWhich );
+    return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }
 
 void EditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
