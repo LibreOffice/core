@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-22 11:50:47 $
+#   last change: $Author: dfoster $ $Date: 2003-01-06 10:22:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,23 @@
     <pathelement location="${solar.jar}/sandbox.jar"/>
   </path>
 
+  <!-- ===================== Set up build conditionals ========================= -->
+  <target name="build.conditions">
+      <condition property="win9.build">
+            <available file="${prj}/wntmsci9${env.PROEXT}"/>
+      </condition>
+      <condition property="win7.build">
+            <available file="${prj}/wntmsci9${env.PROEXT}"/>
+      </condition>
+      <condition property="linx86.build">
+            <available file="${prj}/unxlngi4${env.PROEXT}"/>
+      </condition>
+      <condition property="solsparc.build">
+            <available file="${prj}/unxsols3${env.PROEXT}"/>
+      </condition>
+      <!-- <condition property="openoffice.build">
+      </condition> -->
+  </target>
   <!-- ===================== Build the examples ========================= -->
   <target name="buildexamples">
     <mkdir dir="${out}/class/examples/Highlight"/>
@@ -120,7 +137,58 @@
   </target>
 
   <!-- ===================== Build UNO package ========================= -->
-  <target name="buildunopackage">
+  <target name="buildunopackage_win9" depends="build.conditions" if="win9.build">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/sframework"/>
+    <copy file="${prj}/../offapi/unxsols3${proext}/ucr/offapi.db"
+        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <mkdir dir="${out}/class/sframework/windows.plt"/>
+    <copy todir="${out}/class/sframework/windows.plt">
+        <fileset dir="${prj}/wntmsci9${proext}/bin/">
+            <include name="**/*.dll"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+  </target>
+  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/sframework"/>
+    <copy file="${prj}/../offapi/wntmsci7${proext}/ucr/offapi.db"
+        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <mkdir dir="${out}/class/sframework/windows.plt"/>
+    <copy todir="${out}/class/sframework/windows.plt">
+        <fileset dir="${prj}/wntmsci7${proext}/bin/">
+            <include name="**/*.dll"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${prj}/../unoil/wntmsci7${proext}/class/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+  </target>
+  <target name="buildunopackage_linux" depends="build.conditions" if="linx86.build">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/sframework"/>
+    <copy file="${prj}/../offapi/unxlngi4${proext}/ucr/offapi.db"
+        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
+    <copy todir="${out}/class/sframework/linux_x86.plt">
+        <fileset dir="${prj}/unxlngi4${proext}/lib/">
+            <include name="**/lib*.so"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${prj}/../unoil/unxlngi4${proext}/class/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+  </target>
+  <target name="buildunopackage_solaris" depends="build.conditions" if="solsparc.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${prj}/../offapi/unxsols3${proext}/ucr/offapi.db"
@@ -133,38 +201,35 @@
             <include name="**/lib*.so"/>
         </fileset>
     </copy>
-    <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
-    <copy todir="${out}/class/sframework/linux_x86.plt">
-        <fileset dir="${prj}/unxlngi4${proext}/lib/">
-            <include name="**/lib*.so"/>
-        </fileset>
-    </copy>
-    <mkdir dir="${out}/class/sframework/windows.plt"/>
-    <copy todir="${out}/class/sframework/windows.plt">
-        <fileset dir="${prj}/wntmsci7${proext}/bin/">
-            <include name="**/*.dll"/>
-        </fileset>
-    </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/unxsols3${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
+  </target>
+  <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris">
     <zip destfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
-    <copy todir="${out}/class/sframeworkinstall/sframework">
-        <fileset dir="${out}/bin/">
-            <include name="**/scripting64?01.res"/>
-        </fileset>
-    </copy>
+    <copy file="${prj}/common/bin/scripting${env.UPD}01.res"
+        todir="${out}/class/sframeworkinstall/sframework/"/>
   </target>
   <!-- ===================== Package regsingletons ========================= -->
-  <target name="packagesingletons">
+  <target name="packagesingletons_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/windows"/>
-    <copy file="rs_windows/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
+    <copy file="${env.SOLARVER}/wntmsci7${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
+  </target>
+  <target name="packagesingletons_win9" depends="build.conditions" if="win9.build">
+    <mkdir dir="${out}/class/sframeworkinstall/windows"/>
+    <copy file="${env.SOLARVER}/wntmsci9${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
+  </target>
+  <target name="packagesingletons_linux" depends="build.conditions" if="linx86.build">
     <mkdir dir="${out}/class/sframeworkinstall/linux_x86"/>
-    <copy file="rs_linux/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
+    <copy file="${env.SOLARVER}/unxlngi4${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
+  </target>
+  <target name="packagesingletons_solaris" depends="build.conditions" if="solsparc.build">
     <mkdir dir="${out}/class/sframeworkinstall/solaris_sparc"/>
     <copy file="rs_solaris/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
+  </target>
+  <target name="packagesingletons" depends="packagesingletons_win7,packagesingletons_win9,packagesingletons_linux,packagesingletons_solaris">
   </target>
   <!-- ===================== Package scripts, dialogs & examples =========== -->
   <target name="packagedialogsandexamples" depends="buildexamples">
