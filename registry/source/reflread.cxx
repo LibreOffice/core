@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
+ *  last change: $Author: hr $ $Date: 2001-05-30 15:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef MAC
-#include <memory.h>
+#include <string.h>
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
