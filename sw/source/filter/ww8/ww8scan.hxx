@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:34 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 #define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( \
     RTL_CONSTASCII_STRINGPARAM(s))
+
+#ifndef C2U
+#define C2U(s) rtl::OUString::createFromAscii(s)
+#endif
 
 //--Line below which the code has meaningful comments
 
@@ -709,7 +713,7 @@ public:
 
     //liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
     bool Get(long& rStart, void*& rpValue) const;
-    virtual long GetNoSprms( long& rStart, long&, long& rLen );
+    virtual void GetSprms(WW8PLCFxDesc* p);
     virtual WW8PLCFx& operator ++( int );
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
