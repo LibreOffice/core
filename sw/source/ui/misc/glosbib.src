@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:59:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@ ModalDialog DLG_BIB_BASE
     Moveable = TRUE ;
     Text = "Bereiche bearbeiten" ;
     Text [ ENGLISH ] = "Edit groups" ;
-    Text [ dutch ] = "Bereiken bewerken" ;
+    Text [ dutch ] = "Categorie�n bewerken" ;
     Text [ english_us ] = "Edit Categories" ;
     Text [ italian ] = "Modifica categorie" ;
     Text [ spanish ] = "Editar categor�as" ;
     Text [ french ] = "�dition des cat�gories" ;
     Text [ swedish ] = "Redigera omr�den" ;
-    Text [ danish ] = "Rediger omr�der" ;
+    Text [ danish ] = "Rediger kategorier" ;
     Text [ portuguese ] = "Editar categorias" ;
     Text [ portuguese_brazilian ] = "Editar Categorias" ;
     PushButton PB_NEW
@@ -92,7 +92,7 @@ ModalDialog DLG_BIB_BASE
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo" ;
         Text [ finnish ] = "~Uusi" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "~Ny(t)" ;
         Text [ french ] = "~Nouvelle" ;
         Text [ swedish ] = "~Nytt" ;
         Text [ dutch ] = "~Nieuw" ;
@@ -115,6 +115,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
         Text[ slovak ] = "~Nový";
+        Text[ hungarian ] = "Ú~j";
+        Text[ slovenian ] = "~Nov";
     };
     PushButton PB_DELETE
     {
@@ -128,7 +130,7 @@ ModalDialog DLG_BIB_BASE
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -152,6 +154,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "Z~mazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     PushButton PB_RENAME
     {
@@ -166,7 +170,7 @@ ModalDialog DLG_BIB_BASE
         Text [ spanish ] = "~Cambiar nombre" ;
         Text [ french ] = "~Renommer" ;
         Text [ swedish ] = "~Byt namn" ;
-        Text [ danish ] = "Omd�b" ;
+        Text [ danish ] = "~Omd�b" ;
         Text [ portuguese ] = "~Mudar nome" ;
         TabStop = TRUE ;
         Text[ portuguese_brazilian ] = "~Renomear";
@@ -187,6 +191,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "~Umbenennen";
         Text[ hindi ] = "~पुनः नाम दो";
         Text[ slovak ] = "P~remenovať";
+        Text[ hungarian ] = "Át~nevezés";
+        Text[ slovenian ] = "P~reimenuj";
     };
     FixedText FT_BIB
     {
@@ -199,7 +205,7 @@ ModalDialog DLG_BIB_BASE
         Text [ portuguese_brazilian ] = "Categoria" ;
         Text [ portuguese ] = "Categoria" ;
         Text [ finnish ] = "Luokka" ;
-        Text [ danish ] = "Omr�detitel" ;
+        Text [ danish ] = "Kategori" ;
         Text [ french ] = "Cat�gorie" ;
         Text [ swedish ] = "Omr�de" ;
         Text [ dutch ] = "Bereik" ;
@@ -221,6 +227,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "Bereichstitel";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Kategórie";
+        Text[ hungarian ] = "Kategória";
+        Text[ slovenian ] = "Kategorija";
     };
     OKButton BT_OK
     {
@@ -280,6 +288,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "Pfad";
         Text[ hindi ] = "मार्ग";
         Text[ slovak ] = "Cesta";
+        Text[ hungarian ] = "Útvonal";
+        Text[ slovenian ] = "Pot";
     };
     ListBox LB_PATH
     {
@@ -321,6 +331,8 @@ ModalDialog DLG_BIB_BASE
         Text[ hebrew ] = "Auswahlliste";
         Text[ hindi ] = "चुनाव सूची";
         Text[ slovak ] = "Zoznam pre výber";
+        Text[ hungarian ] = "Létező kategóriák";
+        Text[ slovenian ] = "Izbirni seznam";
     };
     Control TLB_GROUPS
     {
@@ -358,6 +370,8 @@ ModalDialog DLG_BIB_BASE
     Text[ hebrew ] = "Bereiche bearbeiten";
     Text[ hindi ] = "वर्गों का संपादन";
     Text[ slovak ] = "Upraviť kategórie";
+    Text[ hungarian ] = "Kategóriák szerkesztése";
+    Text[ slovenian ] = "Uredi kategorije";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
