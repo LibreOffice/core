@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:26:21 $
+ *  last change: $Author: rt $ $Date: 2001-12-04 22:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "$(ARG1) にﾜｲﾙﾄﾞｶｰﾄﾞが含まれているため、操作実行はできません。";
         Text[ korean ] = "$(ARG1)에 와일드카드가 포함되어 있어 작업을 실행할 수 없습니다.";
         Text[ chinese_simplified ] = "无法执行这个命令，因为 $(ARG1) 含有通配符。";
-        Text[ chinese_traditional ] = "無法執行這個操作，因爲 $(ARG1) 含有通配符。";
+        Text[ chinese_traditional ] = "無法執行這個操作，因爲 $(ARG1) 含有萬用字元。";
         Text[ turkish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ arabic ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ catalan ] = "The operation cannot be run, because $(ARG1) contains wildcards";
@@ -1396,6 +1396,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
 
 
 
