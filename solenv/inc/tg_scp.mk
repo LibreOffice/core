@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_scp.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-04-06 11:40:46 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: obo $ $Date: 2001-04-06 14:27:08 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_scp.mkv  $
 #*
@@ -30,12 +30,6 @@ $(SCP7TARGETN) .NULL : SCP7
 $(SCP8TARGETN) .NULL : SCP8
 
 $(SCP9TARGETN) .NULL : SCP9
-.ENDIF
-
-.IF "$(GUI)"=="UNX"
-SCP_CHECK_TOOL = check_ins
-.ELSE
-SCP_CHECK_TOOL = check_inf.exe
 .ENDIF
 
 .IF "$(MULTI_SCP_FLAG)"==""

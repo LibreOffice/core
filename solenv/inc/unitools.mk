@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-14 13:29:32 $
+#   last change: $Author: obo $ $Date: 2001-04-06 14:27:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,8 @@ GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
 PERL*=$(ENV_TOOLS)$/perl5.btm
+SCP_CHECK_TOOL=checkscp.exe
+
 #signing for win32 only
 SIGNCODE=$(BUILD_TOOLS)$/PackSign$/signcode
 CABARC=$(BUILD_TOOLS)$/PackSign$/cabarc
@@ -136,6 +138,7 @@ ECHON=echo -n
 RM+=$(RMFLAGS)
 
 .IF "$(GUI)"=="UNX"
+SCP_CHECK_TOOL=checkscp
 NULLDEV=/dev/null
 .ELIF "$(GUI)"=="MAC"
 NULLDEV=/dev/null
