@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 11:37:57 $
+ *  last change: $Author: tl $ $Date: 2001-06-29 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,7 @@ class LngSvcMgr :
     SvcInfoArray *                                      pAvailHyphSvcs;
     SvcInfoArray *                                      pAvailThesSvcs;
 
-    Timer aSaveTimer;
-
     BOOL bDisposing;
-    BOOL bIsModified;
     BOOL bHasAvailSpellLocales;
     BOOL bHasAvailHyphLocales;
     BOOL bHasAvailThesLocales;
@@ -171,8 +168,6 @@ class LngSvcMgr :
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
     BOOL    SaveCfgSvcs( const String &rServiceName );
-
-    DECL_LINK( TimeOut, Timer* );
 
 public:
     LngSvcMgr();

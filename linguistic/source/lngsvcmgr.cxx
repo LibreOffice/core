@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-06 10:47:12 $
+ *  last change: $Author: tl $ $Date: 2001-06-29 13:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ LngSvcMgr::LngSvcMgr() :
     bHasAvailSpellLocales   =
     bHasAvailHyphLocales    =
     bHasAvailThesLocales    =
-    bIsModified = bDisposing = FALSE;
+    bDisposing = FALSE;
 
     pSpellDsp   = 0;
     pHyphDsp    = 0;
@@ -655,9 +655,6 @@ LngSvcMgr::LngSvcMgr() :
     pAvailHyphSvcs  = 0;
     pAvailThesSvcs  = 0;
     pListenerHelper = 0;
-
-    aSaveTimer.SetTimeout( 2000 );
-    aSaveTimer.SetTimeoutHdl( LINK( this, LngSvcMgr, TimeOut ));
 }
 
 
@@ -1187,24 +1184,22 @@ void SAL_CALL
             if (!xSpellDsp.is())
                 GetSpellCheckerDsp_Impl();
             pSpellDsp->SetServiceList( rLocale, rServiceImplNames );
-            bIsModified = TRUE;
+            SaveCfgSvcs( A2OU( SN_SPELLCHECKER ) );
         }
         else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
         {
             if (!xHyphDsp.is())
                 GetHyphenatorDsp_Impl();
             pHyphDsp->SetServiceList( rLocale, rServiceImplNames );
-            bIsModified = TRUE;
+            SaveCfgSvcs( A2OU( SN_HYPHENATOR ) );
         }
         else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
         {
             if (!xThesDsp.is())
                 GetThesaurusDsp_Impl();
             pThesDsp->SetServiceList( rLocale, rServiceImplNames );
-            bIsModified = TRUE;
+            SaveCfgSvcs( A2OU( SN_THESAURUS ) );
         }
-        if( bIsModified )
-            aSaveTimer.Start(); // in order to write changes to the configuration
     }
 }
 
@@ -1221,21 +1216,24 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         if (!pSpellDsp)
             GetSpellCheckerDsp_Impl();
         pDsp = pSpellDsp;
-        aLocales = xSpellDsp->getLocales();
+//        aLocales = xSpellDsp->getLocales();
+        aLocales = getAvailableLocales( A2OU( SN_SPELLCHECKER ) );
     }
     else if (0 == rServiceName.CompareToAscii( SN_HYPHENATOR ))
     {
         if (!pHyphDsp)
             GetHyphenatorDsp_Impl();
         pDsp = pHyphDsp;
-        aLocales = xHyphDsp->getLocales();
+//        aLocales = xHyphDsp->getLocales();
+        aLocales = getAvailableLocales( A2OU( SN_HYPHENATOR ) );
     }
     else if (0 == rServiceName.CompareToAscii( SN_THESAURUS ))
     {
         if (!pThesDsp)
             GetThesaurusDsp_Impl();
         pDsp = pThesDsp;
-        aLocales = xThesDsp->getLocales();
+//        aLocales = xThesDsp->getLocales();
+        aLocales = getAvailableLocales( A2OU( SN_THESAURUS ) );
     }
 
     if (pDsp  &&  aLocales.getLength())
@@ -1278,8 +1276,10 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             Any aCfgAny;
             if (pDsp == pHyphDsp)
             {
+                OUString aTmp;
                 if (aSvcImplNames.getLength())
-                    aCfgAny <<= aSvcImplNames.getConstArray()[0];
+                    aTmp = aSvcImplNames.getConstArray()[0];
+                aCfgAny <<= aTmp;
             }
             else
                 aCfgAny <<= aSvcImplNames;
@@ -1295,23 +1295,9 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         bRes |= aCfg.ReplaceSetProperties( aNodeName, aValues );
     }
 
-    if( bRes )
-        bIsModified = FALSE;
-
     return bRes;
 }
 
-
-IMPL_LINK( LngSvcMgr, TimeOut, Timer*, p )
-{
-    if( bIsModified )
-    {
-        SaveCfgSvcs( A2OU( SN_SPELLCHECKER ) );
-        SaveCfgSvcs( A2OU( SN_HYPHENATOR ) );
-        SaveCfgSvcs( A2OU( SN_THESAURUS ) );
-    }
-    return 0;
-}
 
 static Sequence< OUString > GetLangSvcList( const Any &rVal )
 {
@@ -1357,6 +1343,21 @@ static Sequence< OUString > GetLangSvc( const Any &rVal )
 
 ///////////////////////////////////////////////////////////////////////////
 
+static BOOL lcl_HasProperty( SvtLinguConfigItem &rItem,
+        const OUString &rNode, const OUString &rPropName )
+{
+    BOOL bRes = FALSE;
+    const Sequence< OUString > aChilds( rItem.GetNodeNames( rNode ) );
+    INT32 nChilds = aChilds.getLength();
+    const OUString *pChilds = aChilds.getConstArray();
+    for (INT32 i = 0;  i < nChilds  &&  !bRes;  ++i)
+    {
+        if (rPropName == pChilds[i])
+            bRes = TRUE;
+    }
+    return bRes;
+}
+
 
 Sequence< OUString > SAL_CALL
     LngSvcMgr::getConfiguredServices(
@@ -1369,7 +1370,7 @@ Sequence< OUString > SAL_CALL
     Sequence< OUString > aSvcImplNames;
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    String aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
+    OUString aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
 
     SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
 
@@ -1378,30 +1379,45 @@ Sequence< OUString > SAL_CALL
     OUString *pNames = aName.getArray();
     if ( 0 == rServiceName.compareToAscii( SN_SPELLCHECKER ) )
     {
-        String aPropName( String::CreateFromAscii( "SpellCheckerList/" ) );
-        aPropName += aCfgLocale;
-        pNames[0] = aPropName;
-        aValues = aCfg.GetProperties( aName );
-        if (aValues.getLength())
-            aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
-    }
-    else if ( 0 == rServiceName.compareToAscii( SN_THESAURUS ) )
-    {
-        String aPropName( String::CreateFromAscii( "ThesaurusList/" ) );
-        aPropName += aCfgLocale;
-        pNames[0] = aPropName;
-        aValues = aCfg.GetProperties( aName );
-        if (aValues.getLength())
-            aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+        OUString aNode( OUString::createFromAscii( "SpellCheckerList" ));
+        if (lcl_HasProperty( aCfg, aNode, aCfgLocale ))
+        {
+            OUString aPropName( aNode );
+            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += aCfgLocale;
+            pNames[0] = aPropName;
+            aValues = aCfg.GetProperties( aName );
+            if (aValues.getLength())
+                aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+        }
     }
     else if ( 0 == rServiceName.compareToAscii( SN_HYPHENATOR ) )
     {
-        String aPropName( String::CreateFromAscii( "HyphenatorList/" ) );
-        aPropName += aCfgLocale;
-        pNames[0] = aPropName;
-        aValues = aCfg.GetProperties( aName );
-        if (aValues.getLength())
-            aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+        OUString aNode( OUString::createFromAscii( "HyphenatorList" ));
+        if (lcl_HasProperty( aCfg, aNode, aCfgLocale ))
+        {
+            OUString aPropName( aNode );
+            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += aCfgLocale;
+            pNames[0] = aPropName;
+            aValues = aCfg.GetProperties( aName );
+            if (aValues.getLength())
+                aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
+        }
+    }
+    else if ( 0 == rServiceName.compareToAscii( SN_THESAURUS ) )
+    {
+        OUString aNode( OUString::createFromAscii( "ThesaurusList" ));
+        if (lcl_HasProperty( aCfg, aNode, aCfgLocale ))
+        {
+            OUString aPropName( aNode );
+            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += aCfgLocale;
+            pNames[0] = aPropName;
+            aValues = aCfg.GetProperties( aName );
+            if (aValues.getLength())
+                aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
+        }
     }
 
 #ifdef DEBUG
