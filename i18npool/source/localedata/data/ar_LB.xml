@@ -15,6 +15,7 @@
 <LC_FORMAT ref="ar_EG" replaceTo="[$ل.ل.‏-3001]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="ar_EG"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="ar_EG_gregorian"/>
