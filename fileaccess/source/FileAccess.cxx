@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-06 16:09:56 $
+ *  last change: $Author: ab $ $Date: 2001-03-09 09:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
     Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
-    Any aRetAny = aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "isreadonly" ) ) );
+    Any aRetAny = aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
     return bRet;
@@ -355,14 +355,14 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
     Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
     Any aAny;
     aAny <<= bReadOnly;
-    aCnt.setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "isreadonly" ) ), aAny );
+    aCnt.setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ), aAny );
 }
 
 void OFileAccess::createFolder( const OUString& NewFolderURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     // Does the folder already exist?
-    if( isFolder( NewFolderURL ) )
+    if( !NewFolderURL.getLength() || isFolder( NewFolderURL ) )
         return;
 
     // SfxContentHelper::MakeFolder
@@ -559,7 +559,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >& Handler )
     throw(RuntimeException)
 {
-    if( mpEnvironment )
+    if( !mpEnvironment )
     {
         mpEnvironment = new OCommandEnvironment();
         mxEnvironment = (XCommandEnvironment*)mpEnvironment;
