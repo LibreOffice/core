@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:50:57 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2703,7 +2703,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ËÑÑ°ÄÚÈİ¡£";
         Text[ russian ] = "Äàííûå, óäîâëåòâîğÿşùèå óñëîâèş, íå îáíàğóæåíû.";
         Text[ polish ] = "Szukanego has³a nie znaleziono.";
-        Text[ japanese ] = "ŒŸõ€–Ú‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì´M§ä¤º®e¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
         Text[ greek ] = "Äåí âñİèçêå ï üñïò áíáæŞôçóçò.";
@@ -2961,7 +2961,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Stavekontrol" ;
         Text [ portuguese ] = "Ortografia" ;
         Text [ portuguese_brazilian ] = "Rechtschreibung" ;
-        Text[ chinese_simplified ] = "Õı×Ö·¨";
+        Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
         Text[ russian ] = "Ïğàâîïèñàíèå";
         Text[ polish ] = "Pisownia";
         Text[ japanese ] = "½ÍßÙÁª¯¸";
