@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:00:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,15 +335,16 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetTitle(const XubString& rString )
+    void OBrowserLine::SetTitle(const XubString& _rNewTtile )
     {
-        String aText(rString);
+        if ( GetTitle() == _rNewTtile )
+            return;
         // #99102# --------------
-        m_aFtTitle.SetText(aText);
+        m_aFtTitle.SetText( _rNewTtile );
         if ( m_pBrowserControl )
-            m_pBrowserControl->GetMe()->SetAccessibleName( rString );
+            m_pBrowserControl->GetMe()->SetAccessibleName( _rNewTtile );
         if ( m_pBrowseButton )
-            m_pBrowseButton->SetAccessibleName( rString );
+            m_pBrowseButton->SetAccessibleName( _rNewTtile );
         FullFillTitleString();
     }
 
@@ -362,7 +363,9 @@ namespace pcr
     //------------------------------------------------------------------
     XubString OBrowserLine::GetTitle() const
     {
-        return m_aFtTitle.GetText();
+        String sTitle = m_aFtTitle.GetText();
+        sTitle.EraseTrailingChars( '.' );
+        return sTitle;
     }
 
     //------------------------------------------------------------------
