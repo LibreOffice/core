@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,7 @@ namespace accessibility
                     if( mbThisHasFocus )
                         DBG_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
 
-                    USHORT nParas( static_cast< USHORT >( GetTextForwarder().GetParagraphCount() ) );
+                    USHORT nMaxValidParaIndex( static_cast< USHORT >( GetTextForwarder().GetParagraphCount() ) - 1 );
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
@@ -672,8 +672,8 @@ namespace accessibility
                         {
                             if( maLastSelection.nEndPara < maParaManager.GetNum() )
                             {
-                                maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nParas ),
-                                                         ::std::min( maLastSelection.nEndPara, nParas )+1,
+                                maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
+                                                         ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
                                                          AccessibleEventId::ACCESSIBLE_CARET_EVENT,
                                                          uno::makeAny(static_cast<sal_Int32>(-1)),
                                                          uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
@@ -728,8 +728,8 @@ namespace accessibility
                              aSelection.nStartPara == aSelection.nEndPara) )
                         {
                             // selection was on, now is empty
-                            maParaManager.FireEvent( ::std::min( maLastSelection.nStartPara, nParas ),
-                                                     ::std::min( maLastSelection.nEndPara, nParas )+1,
+                            maParaManager.FireEvent( ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
+                                                     ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
                                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
                         }
                         else if( (maLastSelection.nStartPos == maLastSelection.nEndPos &&
@@ -746,9 +746,9 @@ namespace accessibility
                         {
                             // selection was on, now is different
                             maParaManager.FireEvent( ::std::min(aSelection.nStartPara,
-                                                                ::std::min( maLastSelection.nStartPara, nParas )),
+                                                                ::std::min( maLastSelection.nStartPara, nMaxValidParaIndex )),
                                                      ::std::max( aSelection.nEndPara,
-                                                                 static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nParas )+1 ) ),
+                                                                 static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1 ) ),
                                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
                         }
                     }
