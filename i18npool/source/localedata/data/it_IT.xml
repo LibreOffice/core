@@ -222,6 +222,13 @@
 </LC_FORMAT>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+<UnicodeScript>0</UnicodeScript>
+<UnicodeScript>1</UnicodeScript>
+<FollowPageWord> e seg.</FollowPageWord>
+<FollowPageWord> e segg.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
