@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-18 11:52:12 $
+ *  last change: $Author: mtg $ $Date: 2001-02-16 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,11 @@
 #ifndef _SWBLOCKS_HXX
 #include <swblocks.hxx>
 #endif
+
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
+
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
@@ -85,7 +90,9 @@
 #include <editsh.hxx>
 #endif
 
-
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
 
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
@@ -93,14 +100,25 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
+sal_Char __FAR_DATA XML_BLOCKLIST[] = "BlockList.xml";
+
 BOOL SwAutoCorrect::GetLongText( SvStorage& rStg,
                             const String& rShort, String& rLong )
 {
-    Sw3TextBlocks aBlk( rStg );
-    ULONG nRet = aBlk.GetText( rShort, rLong );
+    ULONG nRet;
+    const ::rtl::OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XML_BLOCKLIST ) );
+    if (rStg.IsContained ( sDocName ) )
+    {
+        Sw3TextBlocks aBlk( rStg );
+        nRet = aBlk.GetText( rShort, rLong );
+    }
+    else
+    {
+        SwXMLTextBlocks aBlk( rStg );
+        nRet = aBlk.GetText( rShort, rLong );
+    }
     return !IsError( nRet ) && rLong.Len();
 }
-
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
@@ -111,25 +129,44 @@ BOOL SwAutoCorrect::PutText( SvStorage& rStg, const String& rShort,
         return FALSE;
 
     SwDocShell& rDShell = (SwDocShell&)rObjSh;
-    Sw3TextBlocks aBlk( rStg );
-
-    SwDoc* pDoc = aBlk.GetDoc();
-
+    const ::rtl::OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XML_BLOCKLIST ) );
     // Bis es eine Option dafuer gibt, base URL loeschen
     const String aOldURL( INetURLObject::GetBaseURL() );
     INetURLObject::SetBaseURL( aEmptyStr );
+    ULONG nRet = 0;
 
-    ULONG nRet = aBlk.BeginPutDoc( rShort, rShort );
-    if( !IsError( nRet ) )
+    if (rStg.IsContained ( sDocName ) )
     {
-        ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
-        nRet = aBlk.PutDoc();
+        SwXMLTextBlocks aBlk( rStg );
+        SwDoc* pDoc = aBlk.GetDoc();
+
+        nRet = aBlk.BeginPutDoc( rShort, rShort );
         if( !IsError( nRet ) )
-            nRet = aBlk.GetText( rShort, rLong );
+        {
+            ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
+            nRet = aBlk.PutDoc();
+            if( !IsError( nRet ) )
+                nRet = aBlk.GetText( rShort, rLong );
+        }
+
+    }
+    else
+    {
+        Sw3TextBlocks aBlk( rStg );
+        SwDoc* pDoc = aBlk.GetDoc();
+
+        nRet = aBlk.BeginPutDoc( rShort, rShort );
+        if( !IsError( nRet ) )
+        {
+            ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
+            nRet = aBlk.PutDoc();
+            if( !IsError( nRet ) )
+                nRet = aBlk.GetText( rShort, rLong );
+        }
+
     }
 
     INetURLObject::SetBaseURL( aOldURL );
-
     return !IsError( nRet );
 }
 
