@@ -8577,3 +8577,5 @@ _TI1?AVException@uno@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRC657\src\sfx2\source\doc\objmisc.cxx1836325591@@YAXABVSbxVariableRef@@PAX@Z
 ?HandleTaskPaneList@sfx2@@YAXPAVWindow@@E@Z
 ?CreateContextMenu@SfxActionListBox@@UAEPAVPopupMenu@@XZ
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2302126@@YAXABVSbxVariableRef@@PAX@Z
+?GetRecorder@SfxBindings@@QBE?AV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@XZ
