@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:22:36 $
+ *  last change: $Author: rt $ $Date: 2001-08-30 20:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,7 @@ String STR_DDEFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vínculo DDE";
 };
+
 
 
 
