@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1992,9 +1992,11 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         pPage->GetImpl()->setCurForm( m_xCurrentForm );
 
     // ensure some slots are updated
-    InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
+    for ( sal_Int16 i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
+        InvalidateSlot( DlgSlotMap[i], sal_False );
+
     for ( sal_Int16 i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
-        InvalidateSlot( SelObjectSlotMap[i] ,sal_False);
+        InvalidateSlot( SelObjectSlotMap[i], sal_False);
 
     return true;
 }
