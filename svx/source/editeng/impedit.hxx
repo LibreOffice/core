@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-27 18:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ public:
     long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
     long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
     long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
-    Rectangle       GetVisDocArea() const { return Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() ); }
+    Rectangle       GetVisDocArea() const;
 
     EditSelection&  GetEditSelection()          { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection )

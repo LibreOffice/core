@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-27 18:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,11 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 BOOL ImpEditView::IsVertical() const
 {
     return pEditEngine->pImpEditEngine->IsVertical();
+}
+
+Rectangle ImpEditView::GetVisDocArea() const
+{
+    return Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() );
 }
 
 Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
