@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:00:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,11 @@ protected:
     // fill in font substitutions
     // the resulting hash_map maps from source to target font ids
     void fillFontSubstitutions( PrinterInfo& rInfo ) const;
+
+    // fill default paper if not configured in config file
+    // default paper is e.g. locale dependent
+    // if a paper is already set it will not be overwritten
+    void setDefaultPaper( PrinterInfo& rInfo ) const;
 public:
 
     // there can only be one
@@ -266,6 +271,9 @@ public:
     // close the FILE* returned by startSpool and does the actual spooling
     // returns a numerical job id
     virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile );
+
+    // for spadmin: whether adding or removing a printer is possible
+    virtual bool addOrRemovePossible() const;
 };
 
 } // namespace
