@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-20 16:52:58 $
+ *  last change: $Author: ab $ $Date: 2001-06-28 13:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,6 +1975,35 @@ RTLFUNC(IsMissing)
 // ToDo: Library-globaler Datenbereich fuer Dir-Objekt und Flags
 
 
+String getDirectoryPath( String aPathStr )
+{
+    String aRetStr;
+
+    DirectoryItem aItem;
+    FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
+    if( nRet == FileBase::E_None )
+    {
+        FileStatus aFileStatus( FileStatusMask_Type );
+        nRet = aItem.getFileStatus( aFileStatus );
+        if( nRet == FileBase::E_None )
+        {
+            FileStatus::Type aType = aFileStatus.getFileType();
+            if( aType == FileStatus::Directory )
+            {
+                aRetStr = aPathStr;
+            }
+            else if( aType == FileStatus::Link )
+            {
+                FileStatus aFileStatus( FileStatusMask_LinkTargetURL );
+                nRet = aItem.getFileStatus( aFileStatus );
+                if( nRet == FileBase::E_None )
+                    aRetStr = getDirectoryPath( aFileStatus.getLinkTargetURL() );
+            }
+        }
+    }
+    return aRetStr;
+}
+
 // #80200 HACK to provide minimum wildcard functionality (finally solution in UCB)
 // Function looks for wildcards, removes them and always returns the pure path
 String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bool bHasUno )
@@ -2008,20 +2037,9 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
         {
             if( aPathStr.Len() )
             {
-                DirectoryItem aItem;
-                FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
-                if( nRet == FileBase::E_None )
-                {
-                    FileStatus aFileStatus( FileStatusMask_Type );
-                    nRet = aItem.getFileStatus( aFileStatus );
-                    if( nRet == FileBase::E_None )
-                    {
-                        FileStatus::Type aType = aFileStatus.getFileType();
-                        sal_Bool bFolder = (aType == FileStatus::Directory);
-                        if( bFolder )
-                            return aPathStr;
-                    }
-                }
+                String aDirStr = getDirectoryPath( aPathStr );
+                if( aDirStr.Len() )
+                    return aDirStr;
             }
         }
     }
