@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 09:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& r
     EnableDrop();
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, DoubleClickHdl) );
+
+    SetHighlightRange( );
 }
 
 //------------------------------------------------------------------------------
