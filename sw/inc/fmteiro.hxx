@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmteiro.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,14 @@ public:
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 };
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(BOOL bInP) const
     { return (const SwFmtEditInReadonly&)Get( RES_EDIT_IN_READONLY,bInP); }
 
 inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(BOOL bInP) const
     { return aSet.GetEditInReadonly(bInP); }
+#endif
 
 #endif
 
