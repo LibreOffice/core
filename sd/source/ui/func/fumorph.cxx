@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:45:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+//#define _FUMORPH_PRIVATE
+#include "fumorph.hxx"
+
 #ifndef _SVX_FILLITEM_HXX //autogen
 #include <svx/xfillit.hxx>
 #endif
@@ -84,14 +87,23 @@
 
 #pragma hdrstop
 
-#include "sdview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_MORPH_DLG_HXX
 #include "morphdlg.hxx"
+#endif
 #include "strings.hrc"
 #include "sdresid.hxx"
 
-#define _FUMORPH_PRIVATE
-#include "fumorph.hxx"
+
+namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
 TYPEINIT1( FuMorph, FuPoor );
@@ -99,9 +111,13 @@ TYPEINIT1( FuMorph, FuPoor );
 //////////////////////////////////////////////////////////////////////////////
 // constructor
 //
-FuMorph::FuMorph(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-    SdDrawDocument* pDoc, SfxRequest& rReq )
-:   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuMorph::FuMorph (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    :   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     const SdrMarkList&  rMarkList = pView->GetMarkList();
 
@@ -120,7 +136,7 @@ FuMorph::FuMorph(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         // Path-Objekte erzeugen
         SdrPathObj* pPolyObj1 = (SdrPathObj*)pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
         SdrPathObj* pPolyObj2 = (SdrPathObj*)pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
-        SdMorphDlg aDlg((Window*)pWindow, pObj1, pObj2);
+        MorphDlg aDlg (static_cast< ::Window*>(pWindow), pObj1, pObj2);
 
         if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
         {
@@ -446,3 +462,4 @@ BOOL FuMorph::ImpMorphPolygons(
 }
 
 
+} // end of namespace sd
