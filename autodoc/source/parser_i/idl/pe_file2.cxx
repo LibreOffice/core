@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:07:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,8 @@ PE_File::Process_Stereotype( const TokStereotype & i_rToken )
 {
     if (i_rToken.Id() == TokStereotype::ste_published)
     {
+        pTokenAdmin->Set_PublishedOn();
+
         SetResult(done, stay);
     }
     else
