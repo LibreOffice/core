@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediacontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:21:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,16 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     else
     {
         maTimeSlider.SetBackground();
-        maPlayToolBox.SetBackground();
-        maMuteToolBox.SetBackground();
         maVolumeSlider.SetBackground();
-        maZoomToolBox.SetBackground();
         mpZoomListBox->SetBackground();
+
+        maZoomToolBox.SetBackground();
+        maZoomToolBox.SetPaintTransparent( TRUE );
+        maPlayToolBox.SetBackground();
+        maPlayToolBox.SetPaintTransparent( TRUE );
+        maMuteToolBox.SetBackground();
+        maMuteToolBox.SetPaintTransparent( TRUE );
+
     }
 
     maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, implGetImage( AVMEDIA_IMG_PLAY ), String( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), TIB_CHECKABLE );
