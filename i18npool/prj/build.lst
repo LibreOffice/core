@@ -1,23 +1,21 @@
-inp  i18npool    :   bridges sax stoc comphelper tools icu svtools NULL
-inp  i18npool                                    usr1    -   all inp_mkout NULL
-inp  i18npool\source\unotypes                    nmake   -   all inp_utypes NULL
-inp  i18npool\source\registerservices            nmake   -   all inp_rserv inp_utypes NULL
-inp  i18npool\source\breakiterator		 nmake	 -   all inp_brkit inp_utypes NULL
-inp  i18npool\source\characterclassification	 nmake	 -   all inp_chclass inp_utypes NULL
-inp  i18npool\source\breakiterator\data	         nmake	 -   all inp_dict inp_brkit NULL
-inp  i18npool\source\transliteration             nmake   -   all inp_translit inp_utypes NULL
-inp  i18npool\source\localedata                  nmake   -   all inp_localedata inp_utypes NULL
-inp  i18npool\source\localedata\data             nmake   -   all inp_locdata_data inp_localedata NULL
-inp  i18npool\source\calendar		 	 nmake	 -   all inp_cal inp_utypes NULL
-inp  i18npool\source\numberformatcode            nmake   -   all inp_numformat inp_utypes NULL
-inp  i18npool\source\defaultnumberingprovider    nmake   -   all inp_dnum inp_utypes NULL
-inp  i18npool\source\nativenumber    		 nmake   -   all inp_natnum inp_utypes NULL
-inp  i18npool\source\indexentry    		 nmake   -   all inp_index inp_utypes NULL
-inp  i18npool\source\collator    		 nmake   -   all inp_collator inp_utypes NULL
-inp  i18npool\source\inputchecker    		 nmake   -   all inp_inputchecker inp_utypes NULL
-inp  i18npool\source\textconversion    		 nmake   -   all inp_textconversion inp_utypes NULL
-inp  i18npool\source\utility                    nmake   -   all inp_utility NULL
-inp  i18npool\source\regexp                     nmake   -   all inp_regexp inp_utypes NULL
+inp  i18npool    :   bridges sax stoc comphelper tools icu i18nutil regexp NULL
+inp  i18npool                                   usr1    -   all inp_mkout NULL
+inp  i18npool\source\unotypes                   nmake   -   all inp_utypes NULL
+inp  i18npool\source\registerservices           nmake   -   all inp_rserv inp_utypes NULL
+inp  i18npool\source\breakiterator              nmake   -   all inp_brkit inp_utypes NULL
+inp  i18npool\source\characterclassification    nmake   -   all inp_chclass inp_utypes NULL
+inp  i18npool\source\breakiterator\data         nmake   -   all inp_dict inp_brkit NULL
+inp  i18npool\source\transliteration            nmake   -   all inp_translit inp_utypes NULL
+inp  i18npool\source\localedata                 nmake   -   all inp_localedata inp_utypes NULL
+inp  i18npool\source\localedata\data            nmake   -   all inp_locdata_data inp_localedata NULL
+inp  i18npool\source\calendar                   nmake   -   all inp_cal inp_utypes NULL
+inp  i18npool\source\numberformatcode           nmake   -   all inp_numformat inp_utypes NULL
+inp  i18npool\source\defaultnumberingprovider   nmake   -   all inp_dnum inp_utypes NULL
+inp  i18npool\source\nativenumber               nmake   -   all inp_natnum inp_utypes NULL
+inp  i18npool\source\indexentry                 nmake   -   all inp_index inp_utypes NULL
+inp  i18npool\source\collator                   nmake   -   all inp_collator inp_utypes NULL
+inp  i18npool\source\inputchecker               nmake   -   all inp_inputchecker inp_utypes NULL
+inp  i18npool\source\textconversion             nmake   -   all inp_textconversion inp_utypes NULL
 inp  i18npool\source\search                     nmake   -   all inp_search inp_utypes NULL
-inp  i18npool\util                               nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker inp_textconversion inp_utility inp_regexp inp_search NULL
+inp  i18npool\util                              nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_collator inp_inputchecker inp_textconversion inp_search NULL
 
