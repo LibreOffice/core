@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2004-07-23 13:41:31 $
+#   last change: $Date: 2004-12-10 17:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ JAVAFILES =	APIDescGetter.java      \
             AppProvider.java        \
             URLHelper.java			\
             CfgParser.java          \
+            SimpleMailSender.java          \
             WindowListener.java		\
             ClParser.java           \
             OfficeWatcher.java      \
