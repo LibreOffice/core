@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:12:52 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r veckoantal i intervallet, typ=1 f�r kalenderveckor.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczb� tygodni, Typ=1 - tygodnie kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
-            Text[ japanese ] = "戻り値の単位と種類: 単位=0 は期間内の週の数、単位=1 はｶﾚﾝﾀﾞｰの週。";
+            Text[ japanese ] = "戻り値の単位と種類: 単位=0 は期間内の週数、単位=1 はｶﾚﾝﾀﾞｰの週。";
             Text[ korean ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
             Text[ chinese_simplified ] = "计算类型：Type=0 表示该周期内包含的星期数，Type=1 表示星期序列数。";
             Text[ chinese_traditional ] = "計算的類型：type=0 表示時期的週數目，type=1 表示週的序列數。";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
