@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 17:28:07 $
+ *  last change: $Author: nn $ $Date: 2000-12-02 16:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,7 @@ XML_CONSTASCII_ACTION( sXML_buttons, "buttons");
 XML_CONSTASCII_ACTION( sXML_bvar, "bvar");
 XML_CONSTASCII_ACTION( sXML_c, "c" );
 XML_CONSTASCII_ACTION( sXML_calculation_settings, "calculation-settings" );
+XML_CONSTASCII_ACTION( sXML_calendar, "calendar" );
 XML_CONSTASCII_ACTION( sXML_capitalize_entries, "capitalize-entries" );
 XML_CONSTASCII_ACTION( sXML_caption, "caption" );
 XML_CONSTASCII_ACTION( sXML_caption_sequence_format, "caption-sequence-format" );
@@ -518,6 +519,7 @@ XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_eq, "eq");
+XML_CONSTASCII_ACTION( sXML_era, "era" );
 XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
 XML_CONSTASCII_ACTION( sXML_error_category, "error-category" );
 XML_CONSTASCII_ACTION( sXML_error_lower_indicator, "error-lower-indicator" );
