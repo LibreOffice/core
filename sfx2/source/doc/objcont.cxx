@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-25 11:19:35 $
+ *  last change: $Author: obo $ $Date: 2001-07-06 14:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1783,14 +1783,14 @@ SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
         pStor = GetStorage();
 
     if ( pStor->IsOLEStorage() )
-        return SotStorageRef();
+                return (SvStorageRef) SotStorageRef();
 
     // storage is always opened in transacted mode, so changes must be commited
     SotStorageRef xStorage = pStor->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
                 IsReadOnly() ? STREAM_STD_READ : STREAM_STD_READWRITE );
     if ( xStorage.Is() && xStorage->GetError() )
         xStorage.Clear();
-    return xStorage;
+        return (SvStorageRef) xStorage;
 }
 
 SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
