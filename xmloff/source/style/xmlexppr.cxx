@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-05 12:02:19 $
+ *  last change: $Author: mib $ $Date: 2001-03-29 14:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,18 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
 #ifndef __SGI_STL_LIST
 #include <list>
+#endif
+#ifndef _CNTRSRT_HXX
+#include <svtools/cntnrsrt.hxx>
 #endif
 
 #include "xmlexppr.hxx"
@@ -117,52 +123,7 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// ctor/dtor , class SvXMLExportPropertyMapper
-//
-
-SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper )
-: maPropMapper( rMapper )
-{
-}
-
-SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
-{
-    mxNextMapper = 0;
-}
-
-void SvXMLExportPropertyMapper::ChainExportMapper(
-        const UniReference< SvXMLExportPropertyMapper>& rMapper )
-{
-    // add map entries from rMapper to current map
-    maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
-    // rMapper uses the same map as 'this'
-    rMapper->maPropMapper = maPropMapper;
-
-    // set rMapper as last mapper in current chain
-    UniReference< SvXMLExportPropertyMapper > xNext = mxNextMapper;
-    if( xNext.is())
-    {
-        while( xNext->mxNextMapper.is())
-            xNext = xNext->mxNextMapper;
-        xNext->mxNextMapper = rMapper;
-    }
-    else
-        mxNextMapper = rMapper;
-
-    // if rMapper was already chained, correct
-    // map pointer of successors
-    xNext = rMapper;
-
-    while( xNext->mxNextMapper.is())
-    {
-        xNext = xNext->mxNextMapper;
-        xNext->maPropMapper = maPropMapper;
-    }
-}
+using namespace ::com::sun::star::lang;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -241,16 +202,16 @@ void MyPropertyStates::FillPropertyStateVector(std::vector<XMLPropertyState>& aV
     }
 }
 
-struct MyToFilterProperty
+struct FilterPropertyInfo
 {
     rtl::OUString           sApiName;
     std::list<sal_uInt32>   aIndexes;
     sal_uInt32              nCount;
 
-    MyToFilterProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex);
+    FilterPropertyInfo(const rtl::OUString& sApiName, const sal_uInt32 nIndex);
 };
 
-MyToFilterProperty::MyToFilterProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
+FilterPropertyInfo::FilterPropertyInfo(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
     : aIndexes(),
     nCount(0)
 {
@@ -259,16 +220,27 @@ MyToFilterProperty::MyToFilterProperty(const rtl::OUString& sApiName, const sal_
     nCount++;
 }
 
-typedef std::list<MyToFilterProperty> MyToFilterPropertyList;
+typedef std::list<FilterPropertyInfo> FilterPropertyInfoList;
 
-class MyToFilterProperties
+class FilterPropertiesInfo
 {
+    Sequence < sal_Int8 >               aImplementationId;
     sal_uInt32                          nCount;
-    MyToFilterPropertyList              aProps;
-    MyToFilterPropertyList::iterator    aLastItr;
+    FilterPropertyInfoList              aProps;
+    FilterPropertyInfoList::iterator    aLastItr;
 public:
-    MyToFilterProperties();
-    ~MyToFilterProperties();
+    FilterPropertiesInfo();
+    FilterPropertiesInfo( const Sequence < sal_Int8 >& rImplId );
+    ~FilterPropertiesInfo();
+    void setImplementationId( const Sequence < sal_Int8 >& rImplId )
+    {
+        aImplementationId = rImplId;
+        OSL_ENSURE( aImplementationId.getLength()==16, "invalid implementation id" );
+    }
+    const Sequence < sal_Int8 >& getImplementationId() const
+    {
+        return aImplementationId;
+    }
 
     void AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex);
     void GetApiNames(uno::Sequence<OUString>& aApiNames);
@@ -277,20 +249,42 @@ public:
                             UniReference< XMLPropertySetMapper > maPropMapper, const sal_Bool bDefault = sal_False);
 };
 
-MyToFilterProperties::MyToFilterProperties()
+int FilterPropertiesInfoCmp_Impl( const FilterPropertiesInfo& r1,
+                                  const FilterPropertiesInfo& r2 )
+{
+    return memcmp( r1.getImplementationId().getConstArray(),
+                   r2.getImplementationId().getConstArray(), 16 );
+}
+
+DECLARE_CONTAINER_SORT_DEL( FilterPropertiesInfos_Impl,
+                         FilterPropertiesInfo );
+IMPL_CONTAINER_SORT( FilterPropertiesInfos_Impl,
+                          FilterPropertiesInfo,
+                          FilterPropertiesInfoCmp_Impl )
+
+FilterPropertiesInfo::FilterPropertiesInfo()
     : aProps(),
     nCount(0)
 {
     aLastItr = aProps.begin();
 }
 
-MyToFilterProperties::~MyToFilterProperties()
+FilterPropertiesInfo::FilterPropertiesInfo( const Sequence < sal_Int8 >& rImplId )
+    : aProps(),
+    aImplementationId( rImplId ),
+    nCount(0)
+{
+    aLastItr = aProps.begin();
+    OSL_ENSURE( aImplementationId.getLength()==16, "invalid implementation id" );
+}
+
+FilterPropertiesInfo::~FilterPropertiesInfo()
 {
 }
 
-void MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
+void FilterPropertiesInfo::AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
 {
-    MyToFilterPropertyList::iterator aItr = aProps.begin();
+    FilterPropertyInfoList::iterator aItr = aProps.begin();
     sal_Bool bInserted(sal_False);
     if (nCount)
     {
@@ -304,13 +298,13 @@ void MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_
     {
         if (aItr == aProps.end())
         {
-            aLastItr = aProps.insert(aProps.end(), MyToFilterProperty(sApiName, nIndex));
+            aLastItr = aProps.insert(aProps.end(), FilterPropertyInfo(sApiName, nIndex));
             bInserted = sal_True;
             nCount++;
         }
         else if (aItr->sApiName > sApiName)
         {
-            aLastItr = aProps.insert(aItr, MyToFilterProperty(sApiName, nIndex));
+            aLastItr = aProps.insert(aItr, FilterPropertyInfo(sApiName, nIndex));
             bInserted = sal_True;
             nCount++;
         }
@@ -325,20 +319,20 @@ void MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_
     while(!bInserted && (aItr++ != aProps.end()));
 }
 
-void MyToFilterProperties::GetApiNames(uno::Sequence<OUString>& aApiNames)
+void FilterPropertiesInfo::GetApiNames(uno::Sequence<OUString>& aApiNames)
 {
     DBG_ASSERT(nCount == aProps.size(), "wrong property count");
     aApiNames.realloc(nCount);
-    MyToFilterPropertyList::iterator aItr = aProps.begin();
+    FilterPropertyInfoList::iterator aItr = aProps.begin();
     for (sal_uInt32 i = 0; i < nCount; i++, aItr++)
         aApiNames[i] = aItr->sApiName;
 }
 
-void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
+void FilterPropertiesInfo::FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
                                             const Reference< XPropertySet >& xPropSet,
                                             UniReference< XMLPropertySetMapper > maPropMapper, const sal_Bool bDefault)
 {
-    MyToFilterPropertyList::iterator aItr = aProps.begin();
+    FilterPropertyInfoList::iterator aItr = aProps.begin();
     MyPropertyStates aPropsList;
     for(sal_uInt32 i = 0; i < nCount; i++, aItr++ )
     {
@@ -361,6 +355,55 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
     aPropsList.FillPropertyStateVector(aPropStates);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// ctor/dtor , class SvXMLExportPropertyMapper
+//
+
+SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
+        const UniReference< XMLPropertySetMapper >& rMapper ) :
+    maPropMapper( rMapper ),
+    pCache( 0 )
+{
+}
+
+SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
+{
+    delete pCache;
+    mxNextMapper = 0;
+}
+
+void SvXMLExportPropertyMapper::ChainExportMapper(
+        const UniReference< SvXMLExportPropertyMapper>& rMapper )
+{
+    // add map entries from rMapper to current map
+    maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    // rMapper uses the same map as 'this'
+    rMapper->maPropMapper = maPropMapper;
+
+    // set rMapper as last mapper in current chain
+    UniReference< SvXMLExportPropertyMapper > xNext = mxNextMapper;
+    if( xNext.is())
+    {
+        while( xNext->mxNextMapper.is())
+            xNext = xNext->mxNextMapper;
+        xNext->mxNextMapper = rMapper;
+    }
+    else
+        mxNextMapper = rMapper;
+
+    // if rMapper was already chained, correct
+    // map pointer of successors
+    xNext = rMapper;
+
+    while( xNext->mxNextMapper.is())
+    {
+        xNext = xNext->mxNextMapper;
+        xNext->maPropMapper = maPropMapper;
+    }
+}
+
+
 vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         const Reference< XPropertySet > xPropSet,
         const sal_Bool bDefault ) const
@@ -377,27 +420,61 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
         if( xPropState.is() )
         {
-            MyToFilterProperties aProps;
+            FilterPropertiesInfo aFilterInfo;
+            sal_Bool bInfoValid = sal_False;
 
-            for( sal_Int32 i=0; i < nProps; i++ )
+            Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
+            FilterPropertiesInfo *pFilterInfo = 0;
+            if( xTypeProv.is() )
             {
-                // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
-                // Does the PropertySet contain name of mpEntries-array ?
-                const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-                const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
-                if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
-                    xInfo->hasPropertyByName( rAPIName ) )
-                    aProps.AddProperty(rAPIName, i);
+                Sequence< sal_Int8  > aImplId( xTypeProv->getImplementationId() );
+                if( aImplId.getLength() == 16 )
+                {
+                    if( pCache )
+                    {
+                        aFilterInfo.setImplementationId( aImplId );
+                        sal_uInt32 nPos = 0;
+                        if( pCache->Seek_Entry( &aFilterInfo, &nPos ) )
+                        {
+                            pFilterInfo = pCache->GetObject( nPos );
+                            bInfoValid = sal_True;
+                        }
+                    }
+                    if( !pFilterInfo )
+                    {
+                        pFilterInfo = new FilterPropertiesInfo( aImplId );
+                        if( !pCache )
+                            ((SvXMLExportPropertyMapper *)this)->pCache =
+                                new FilterPropertiesInfos_Impl( 10, 5 );
+                        pCache->Insert( pFilterInfo );
+                    }
+                }
+            }
+            if( !pFilterInfo )
+                pFilterInfo = &aFilterInfo;
+
+            if( !bInfoValid )
+            {
+                for( sal_Int32 i=0; i < nProps; i++ )
+                {
+                    // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
+                    // Does the PropertySet contain name of mpEntries-array ?
+                    const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
+                    const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
+                    if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
+                        xInfo->hasPropertyByName( rAPIName ) )
+                        pFilterInfo->AddProperty(rAPIName, i);
+                }
             }
 
             uno::Sequence<OUString> aApiNames;
-            aProps.GetApiNames(aApiNames);
+            pFilterInfo->GetApiNames(aApiNames);
 
             Sequence < PropertyState > aStates =
                 xPropState->getPropertyStates( aApiNames );
 
             const PropertyState *pStates = aStates.getArray();
-            aProps.FillPropertyStateArray(aPropStateArray, pStates, xPropSet, maPropMapper, bDefault);
+            pFilterInfo->FillPropertyStateArray(aPropStateArray, pStates, xPropSet, maPropMapper, bDefault);
         }
         else
         {
@@ -464,11 +541,11 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties2 ) const
 {
     sal_Bool bRet = sal_True;
-    sal_Int32 nCount = aProperties1.size();
+    sal_uInt32 nCount = aProperties1.size();
 
     if( nCount == aProperties2.size() )
     {
-        sal_Int32 nIndex = 0;
+        sal_uInt32 nIndex = 0;
         while( bRet && nIndex < nCount )
         {
             const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
