@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:47:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
+#endif
 
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
@@ -92,6 +95,11 @@
 #ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
+// --> OD 2004-11-03 #114798#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+// <--
 
 #ifndef _LAYACT_HXX
 #include <layact.hxx>
@@ -170,7 +178,16 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
 
         // check, if layout process has to be restarted.
         // if yes, perform needed invalidations.
-        if ( _rAnchoredObj.RestartLayoutProcess() )
+        // --> OD 2004-11-03 #114798# - no restart of layout process,
+        // if anchored object is anchored inside a Writer fly frame,
+        // its position is already locked, and it follows the text flow.
+        const bool bRestart =
+                _rAnchoredObj.RestartLayoutProcess() &&
+                !( _rAnchoredObj.PositionLocked() &&
+                   _rAnchoredObj.GetAnchorFrm()->IsInFly() &&
+                   _rAnchoredObj.GetFrmFmt().GetFollowTextFlow().GetValue() );
+        if ( bRestart )
+        // <--
         {
             bSuccess = false;
             _InvalidatePrevObjs( _rAnchoredObj );
@@ -189,7 +206,66 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
              _rAnchoredObj.IsTmpConsiderWrapInfluence() ) )
         // <--
         {
+            // --> OD 2004-10-11 #i26945# - check conditions for move forward of
+            // anchor text frame
+            // determine, if anchor text frame has previous frame
+            const bool bDoesAnchorHadPrev = ( mrAnchorTxtFrm.GetIndPrev() != 0 );
+
             mrAnchorTxtFrm.Calc();
+
+            // --> OD 2004-10-22 #i35911#
+            if ( _rAnchoredObj.HasClearedEnvironment() )
+            {
+                _rAnchoredObj.SetClearedEnvironment( true );
+                sal_uInt32 nDummy( 0L );
+                if ( mrAnchorTxtFrm.FindPageFrm() != _rAnchoredObj.GetPageFrm() &&
+                     !SwLayouter::FrmMovedFwdByObjPos(
+                                            *(GetPageFrm().GetFmt()->GetDoc()),
+                                            mrAnchorTxtFrm, nDummy ) )
+                {
+                    SwLayouter::InsertMovedFwdFrm(
+                                *(GetPageFrm().GetFmt()->GetDoc()),
+                                mrAnchorTxtFrm,
+                                mrAnchorTxtFrm.FindPageFrm()->GetPhyPageNum() );
+                    mrAnchorTxtFrm.InvalidatePos();
+                    bSuccess = false;
+                    _InvalidatePrevObjs( _rAnchoredObj );
+                    _InvalidateFollowObjs( _rAnchoredObj, true );
+                }
+            }
+            else if ( !mrAnchorTxtFrm.IsFollow() && bDoesAnchorHadPrev )
+            // <--
+            {
+                // index of anchored object in collection of page numbers and
+                // anchor types
+                sal_uInt32 nIdx( CountOfCollected() );
+                ASSERT( nIdx > 0,
+                        "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchored object not collected!?" );
+                --nIdx;
+
+                sal_uInt32 nToPageNum( 0L );
+                if ( _CheckMovedFwdCondition( nIdx, nToPageNum ) )
+                {
+                    // Indicate that anchor text frame has to move forward and
+                    // invalidate its position to force a re-format.
+                    SwLayouter::InsertMovedFwdFrm( *(GetPageFrm().GetFmt()->GetDoc()),
+                                                   mrAnchorTxtFrm,
+                                                   nToPageNum );
+                    mrAnchorTxtFrm.InvalidatePos();
+
+                    // Indicate restart of the layout process
+                    bSuccess = false;
+
+                    // If needed, invalidate previous objects anchored at same anchor
+                    // text frame.
+                    _InvalidatePrevObjs( _rAnchoredObj );
+
+                    // Invalidate object and following objects for the restart of the
+                    // layout process
+                    _InvalidateFollowObjs( _rAnchoredObj, true );
+                }
+            }
+            // <--
         }
     }
 
@@ -228,11 +304,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         // anchor text frame
         ASSERT( mpMasterAnchorTxtFrm,
                 "SwObjectFormatterTxtFrm::DoFormatObjs() - missing 'master' anchor text frame" );
-        SwObjectFormatterTxtFrm aObjFormatterMasterTxtFrm( *(mpMasterAnchorTxtFrm),
-                                                           GetPageFrm(),
-                                                           0L,
-                                                           GetLayAction() );
-        bSuccess = aObjFormatterMasterTxtFrm.DoFormatObjs();
+        bSuccess = _FormatObjsAtFrm( mpMasterAnchorTxtFrm );
 
         if ( bSuccess )
         {
@@ -265,9 +337,28 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                     text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED,
                     nToPageNum );
         }
-        // --> OD 2004-09-24 #i34569# - if anchor frame didn't have a previous,
-        // no action can be performed.
-        if ( pObj && bDoesAnchorHadPrev )
+        // --> OD 2004-10-25 #i35911#
+        if ( pObj && pObj->HasClearedEnvironment() )
+        {
+            pObj->SetClearedEnvironment( true );
+            sal_uInt32 nDummy( 0L );
+            if ( mrAnchorTxtFrm.FindPageFrm() != pObj->GetPageFrm() &&
+                 !SwLayouter::FrmMovedFwdByObjPos(
+                                        *(GetPageFrm().GetFmt()->GetDoc()),
+                                        mrAnchorTxtFrm, nDummy ) )
+            {
+                SwLayouter::InsertMovedFwdFrm(
+                            *(GetPageFrm().GetFmt()->GetDoc()),
+                            mrAnchorTxtFrm,
+                            mrAnchorTxtFrm.FindPageFrm()->GetPhyPageNum() );
+                mrAnchorTxtFrm.InvalidatePos();
+                bSuccess = false;
+                _InvalidatePrevObjs( *pObj );
+                _InvalidateFollowObjs( *pObj, true );
+            }
+        }
+        else if ( pObj && bDoesAnchorHadPrev )
+        // <--
         {
             // Object found, whose anchor is moved forward
 
@@ -362,24 +453,83 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
              pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
                    GetWrapInfluenceOnObjPos() == _nWrapInfluenceOnPosition )
         {
-            const sal_uInt32 nFromPageNum = GetPgNumOfCollected(i);
-            // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-            // is replaced by method <FindPageFrmOfAnchor()>. It's return value
-            // have to be checked.
-            SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-            if ( pPageFrmOfAnchor )
+            // --> OD 2004-10-11 #i26945# - use new method <_CheckMovedFwdCondition(..)>
+            if ( _CheckMovedFwdCondition( i, _noToPageNum ) )
             {
-                const sal_uInt32 nPageNum = pPageFrmOfAnchor->GetPhyPageNum();
-                if ( nPageNum > nFromPageNum )
-                {
-                    _noToPageNum = nPageNum;
-                    pRetAnchoredObj = pAnchoredObj;
-                    break;
-                }
+                pRetAnchoredObj = pAnchoredObj;
+                break;
             }
             // <--
         }
     }
 
     return pRetAnchoredObj;
+}
+
+bool SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(
+                                            const sal_uInt32 _nIdxOfCollected,
+                                            sal_uInt32& _noToPageNum )
+{
+    bool bAnchorIsMovedForward( false );
+
+    const sal_uInt32 nFromPageNum = GetPgNumOfCollected( _nIdxOfCollected );
+    SwAnchoredObject* pAnchoredObj = GetCollectedObj( _nIdxOfCollected );
+    SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
+    if ( pPageFrmOfAnchor )
+    {
+        const sal_uInt32 nPageNum = pPageFrmOfAnchor->GetPhyPageNum();
+        if ( nPageNum > nFromPageNum )
+        {
+            _noToPageNum = nPageNum;
+            bAnchorIsMovedForward = true;
+        }
+    }
+    // <--
+    // --> OD 2004-11-05 #i26945# - check, if an at-paragraph|at-character
+    // anchored object is now anchored at a follow text frame, which will be
+    // on the next page. Also check, if an at-character anchored object
+    // is now anchored at a text frame,  which is in a follow flow row,
+    // which will be on the next page.
+    if ( !bAnchorIsMovedForward &&
+         ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT ||
+           pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CNTNT ) &&
+         IsCollectedAnchoredAtMaster( _nIdxOfCollected ) )
+    {
+        SwFrm* pAnchorFrm = pAnchoredObj->GetAnchorFrmContainingAnchPos();
+        ASSERT( pAnchorFrm->IsTxtFrm(),
+                "<SwObjectFormatterTxtFrm::_CheckMovedFwdCondition(..) - wrong type of anchor frame>" );
+        SwTxtFrm* pAnchorTxtFrm = static_cast<SwTxtFrm*>(pAnchorFrm);
+        bool bCheck( false );
+        if ( pAnchorTxtFrm->IsFollow() )
+        {
+            bCheck = true;
+        }
+        else if( pAnchorTxtFrm->IsInTab() )
+        {
+            const SwRowFrm* pMasterRow = pAnchorTxtFrm->IsInFollowFlowRow();
+            if ( pMasterRow &&
+                 pMasterRow->FindPageFrm() == pPageFrmOfAnchor )
+            {
+                bCheck = true;
+            }
+        }
+        if ( bCheck )
+        {
+            // check, if found text frame will be on the next page
+            // by checking, if it's in a column, which has no next.
+            SwFrm* pColFrm = pAnchorTxtFrm->FindColFrm();
+            while ( pColFrm && !pColFrm->GetNext() )
+            {
+                pColFrm = pColFrm->FindColFrm();
+            }
+            if ( !pColFrm || !pColFrm->GetNext() )
+            {
+                _noToPageNum = nFromPageNum + 1;
+                bAnchorIsMovedForward = true;
+            }
+        }
+    }
+    // <--
+
+    return bAnchorIsMovedForward;
 }
