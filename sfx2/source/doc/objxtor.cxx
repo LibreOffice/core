@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:02:02 $
+ *  last change: $Author: tbe $ $Date: 2001-06-12 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,11 +697,17 @@ void SfxObjectShell::InitBasicManager_Impl
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
         ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager, pStor );
     pBasicCont->acquire();  // Hold via UNO
+    Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
+    if ( xBasicCont.is() )
+        xBasicCont->createLibrary( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Standard" ) ) );   // create Standard library
     pImp->pBasicLibContainer = pBasicCont;
 
     // Dialog container
     SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
     pDialogCont->acquire(); // Hold via UNO
+    Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
+    if ( xDialogCont.is() )
+        xDialogCont->createLibrary( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Standard" ) ) );  // create Standard library
     pImp->pDialogLibContainer = pDialogCont;
 
     BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
@@ -728,14 +734,12 @@ void SfxObjectShell::InitBasicManager_Impl
     pBas->Insert( xUnoObj );
 
     // Basic container
-    Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
     Any aBasicCont;
     aBasicCont <<= xBasicCont;
     xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
     pBas->Insert( xUnoObj );
 
     // Dialog container
-    Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
     Any aDialogCont;
     aDialogCont <<= xDialogCont;
     xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
