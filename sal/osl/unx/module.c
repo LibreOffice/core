@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:20:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         OSL_TRACE( "module.c::osl_getModuleURLFromAddress - %s\n", imageName );
     #endif
         rtl_string2UString( ppLibraryUrl, imageName, strlen(imageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        OSL_ASSERT(*ppLibraryUrl != NULL);
         osl_getFileURLFromSystemPath( *ppLibraryUrl, ppLibraryUrl ); // convert it to be a file url
         osl_getAbsoluteFileURL( workDir, *ppLibraryUrl, ppLibraryUrl ); // ensure it is an abosolute file url
     }
@@ -531,6 +532,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 #endif
 
         rtl_string2UString(ppLibraryUrl, dl_info.dli_fname, strlen(dl_info.dli_fname), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(*ppLibraryUrl != NULL);
         osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl); // convert it to be a file url
         osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl); // ensure it is an abosolute file url
 
