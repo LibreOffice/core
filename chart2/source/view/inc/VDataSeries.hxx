@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ public:
                         getPropertiesOfSeries() const;
 
     ShapeAppearance     getAppearanceOfPoint( sal_Int32 index ) const;
+    SymbolType          getSymbolTypeOfPoint( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xLabelsShape;

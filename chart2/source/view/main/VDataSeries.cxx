@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:56:41 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,11 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
 ShapeAppearance VDataSeries::getAppearanceOfPoint( sal_Int32 index ) const
 {
     return m_aAppearanceOfSeries;
+}
+
+SymbolType VDataSeries::getSymbolTypeOfPoint( sal_Int32 index ) const
+{
+    return m_aAppearanceOfSeries.m_eSymbolType;
 }
 
 bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
