@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:31:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,9 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
-            else if ( !pImp->aFactoryName.Len() )
+            else if ( pImp->aFactoryName.Len() )
+                aFactName = pImp->aFactoryName;
+            else
             {
                 DBG_ERROR("Missing argument!");
                 break;
@@ -1265,7 +1267,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
             String aFact = String::CreateFromAscii("private:factory/");
-            aFact += pImp->aFactoryName;
+            aFact += aFactName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
@@ -1277,7 +1279,6 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
         }
 
         case SID_CLOSEWIN:
-        case SID_BACKTOWEBTOP:
         {
             // disable CloseWin, if frame is not a task
             Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
@@ -1305,15 +1306,6 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     if ( !bOther )
                         pDocSh->SetModified( FALSE );
                     rReq.Done(); // unbedingt vor Close() rufen!
-                    if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
-                    {
-                        String aName = String::CreateFromAscii("private:factory/desktop");
-                        SfxStringItem aNameItem( SID_FILE_NAME, aName );
-                        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
-                        SfxFrameItem aFrame( SID_DOCFRAME, GetFrame() );
-                        SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
-                        return;
-                    }
                     bClosed = sal_False;
 /*
                     com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
@@ -1381,7 +1373,6 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_CLOSEWIN:
-            case SID_BACKTOWEBTOP:
             {
                 // disable CloseWin, if frame is not a task
                 Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
