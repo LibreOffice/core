@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:37:58 $
+ *  last change: $Author: gh $ $Date: 2002-09-25 09:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,9 @@ ImageList IMG_TABLESUBCRIPTION_SC
         File = "sc_tblscr.bmp";
     };
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     IL_TABLESUBCRIPTION ;
 };
@@ -128,9 +128,9 @@ ImageList IMG_TABLESUBCRIPTION_LC
         File = "lc_tblscr.bmp";
     };
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     IL_TABLESUBCRIPTION ;
 };
@@ -167,9 +167,9 @@ ImageList IMG_TABLESUBCRIPTION_LCH
 ImageList IMG_QUERYADMINISTRATION_SC
 {
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     ImageBitmap = Bitmap
     {
@@ -193,9 +193,9 @@ ImageList IMG_QUERYADMINISTRATION_SCH
 ImageList IMG_QUERYADMINISTRATION_LC
 {
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     ImageBitmap = Bitmap
     {
@@ -234,9 +234,9 @@ ImageList IMG_QUERYADMINISTRATION_LCH
 ImageList IMG_DOCUMENTLINKS_SC
 {
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     ImageBitmap = Bitmap
     {
@@ -260,9 +260,9 @@ ImageList IMG_DOCUMENTLINKS_SCH
 ImageList IMG_DOCUMENTLINKS_LC
 {
     MaskColor   = Color {
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
+    Red   = 0xFFFF;
+    Green = 0x0000;
+    Blue  = 0xFFFF;
     };
     ImageBitmap = Bitmap
     {
@@ -3951,6 +3951,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.110  2002/09/13 14:37:58  kz
+ *  Merge SRX643: 13.09.02 - 16:34:30
+ *
  *  Revision 1.109  2002/09/05 13:48:59  kz
  *  Merge SRX643: 05.09.02 - 15:45:41
  *
