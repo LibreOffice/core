@@ -84,19 +84,18 @@ class OfficeZip {
 
     private final static String STYLEXML = "styles.xml";
     private final static String METAXML = "meta.xml";
-
-     private final static String SETTINGSXML = "settings.xml";
+    private final static String SETTINGSXML = "settings.xml";
+    private final static String MANIFESTXML = "META-INF/manifest.xml";
 
     private final static int BUFFERSIZE = 1024;
 
     private List entryList = null;
 
     private int contentIndex = -1;
-
     private int styleIndex = -1;
     private int metaIndex = -1;
-
     private int settingsIndex = -1;
+    private int manifestIndex = -1;
 
     /** Default constructor. */
     OfficeZip() {
@@ -147,14 +146,20 @@ class OfficeZip {
 
             i++;
 
-            if (isSameName(name, CONTENTXML)) {
+            if (name.equalsIgnoreCase(CONTENTXML)) {
                 contentIndex = i;
-            } else if (isSameName(name, STYLEXML)) {
+            }
+            else if (name.equalsIgnoreCase(STYLEXML)) {
                 styleIndex = i;
-            }else if (isSameName(name, METAXML)) {
+            }
+            else if (name.equalsIgnoreCase(METAXML)) {
                 metaIndex = i;
-            }else if (isSameName(name, SETTINGSXML)) {
+            }
+            else if (name.equalsIgnoreCase(SETTINGSXML)) {
                 settingsIndex = i;
+            }
+            else if (name.equalsIgnoreCase(MANIFESTXML)) {
+                manifestIndex = i;
             }
 
         }
@@ -210,6 +215,68 @@ class OfficeZip {
         return getEntryBytes(settingsIndex);
     }
 
+    /**
+     * This method returns the MANIFESTXML file in a <code>byte</code> array.
+     * It returns null if there is no MANIFESTXML in this zip file.
+     *
+     * @return  MANIFESTXML in a <code>byte</code> array.
+     */
+    byte[] getManifestXMLBytes() {
+        return getEntryBytes(manifestIndex);
+    }
+
+    /**
+     * This method returns the bytes corresponding to the entry named in the
+     * parameter.
+     *
+     * @param   name    The name of the entry in the Zip file to retrieve.
+     *
+     * @return  The data for the named entry in a <code>byte</code> array or
+     *          <code>null</code> if no entry is found.
+     */
+    byte[] getNamedBytes(String name) {
+
+        // The list is not sorted, and sorting it for a binary search would
+        // invalidate the indices stored for the main files.
+
+        // Could improve performance by caching the name and index when
+        // iterating through the ZipFile in read().
+        for (int i = 0; i < entryList.size(); i++) {
+            Entry e = (Entry)entryList.get(i);
+
+            if (e.zipEntry.getName().equals(name)) {
+                return getEntryBytes(i);
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * This method sets the bytes for the named entry.  It searches for a
+     * matching entry in the LinkedList.  If no entry is found, a new one is
+     * created.
+     *
+     * Writing of data is defferred to setEntryBytes().
+     *
+     * @param   name    The name of the entry to search for.
+     * @param   bytes   The new data to write.
+     */
+    void setNamedBytes(String name, byte[] bytes) {
+        for (int i = 0; i < entryList.size(); i++) {
+            Entry e = (Entry)entryList.get(i);
+
+            if (e.zipEntry.getName().equals(name)) {
+                setEntryBytes(i, bytes, name);
+                return;
+            }
+        }
+
+        // If we're here, no entry was found.  Call setEntryBytes with an index
+        // of -1 to insert a new entry.
+        setEntryBytes(-1, bytes, name);
+    }
 
     /**
      *  Used by the <code>getContentXMLBytes</code> method and the
@@ -287,6 +354,15 @@ class OfficeZip {
         settingsIndex = setEntryBytes(settingsIndex, bytes, SETTINGSXML);
     }
 
+
+    /**
+     * Set or replace the <code>byte</code> array for the MANIFESTXML file.
+     *
+     * @param   bytes   <code>byte</code> array for the MANIFESTXML file.
+     */
+    void setManifestXMLBytes(byte bytes[]) {
+        manifestIndex = setEntryBytes(manifestIndex, bytes, MANIFESTXML);
+    }
 
     /**
      *  <p>Used by the <code>setContentXMLBytes</code> method and
@@ -390,23 +466,6 @@ class OfficeZip {
 
         return ze;
     }
-
-
-    /**
-     *  Checks if name is the same as rName if case insensitive.
-     *  Note that we assume here that rName is always in all lowercase.
-     *
-     *  @param  name   First name to compare.
-     *  @param  rName  Second name to compare.
-     *
-     *  @return  true if identical, false otherwise.
-     */
-    private boolean isSameName(String name, String rName) {
-
-        String lname = name.toLowerCase();
-        return lname.equals(rName);
-    }
-
 
     /**
      *  This inner class is used as a data structure for holding
