@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:24:54 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 10:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3161,8 +3161,8 @@ String RID_STR_EVT_BEFOREUPDATE
 String RID_STR_EVT_APPROVEROWCHANGE
 {
     Text = "Vor der Datensatzδnderung" ;
-    Text [ English ] = "Before row change" ;
-    Text [ english_us ] = "Before record change" ;
+    Text [ English ] = "Before record action" ;
+    Text [ english_us ] = "Before record action" ;
     Text[ portuguese ] = "Antes de modificar registo de dados";
     Text[ russian ] = "Οεπεδ θημενενθεμ ηΰοθρθ";
     Text[ greek ] = "Πριν την αλλαγή της εγγραφής";
@@ -3589,8 +3589,8 @@ String RID_STR_EVT_MOUSERELEASED
 String RID_STR_EVT_POSITIONING
 {
     Text = "Vor dem Datensatzwechsel" ;
-    Text [ English ] = "Prior positioning" ;
-    Text [ english_us ] = "Before record change" ;
+    Text [ English ] = "Before positioning" ;
+    Text [ english_us ] = "Before positioning" ;
     Text[ portuguese ] = "Antes da alteraηγo do registo";
     Text[ russian ] = "Οεπεδ ξαμενξμ ηΰοθρÿμθ";
     Text[ greek ] = "Πριν την αλλαγή εγγραφής";
@@ -3661,8 +3661,8 @@ String RID_STR_EVT_APPROVERESETTED
 {
     Text = "Vor dem Zurόcksetzen" ;
     Text [ English ] = "Approve resetted" ;
-    Text [ portuguese ] = "Antes de restaurar" ;
     Text [ english_us ] = "Prior to reset" ;
+    Text [ portuguese ] = "Antes de restaurar" ;
     Text [ portuguese_brazilian ] = "Zurόckgesetzt" ;
     Text [ swedish ] = "Innan εterstδllande" ;
     Text [ danish ] = "Inden nulstilning" ;
@@ -4060,6 +4060,9 @@ TabDialog RID_TABDLG_FONTDIALOG
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/04/12 07:24:54  kz
+ *  Merge SRC627: 12.04.01 - 10:24:48
+ *
  *  Revision 1.12  2001/04/06 07:39:29  kz
  *  Merge SRC627: 06.04.01 - 09:38:59
  *
