@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:39:40 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,10 @@ TabPage RID_SVXPAGE_INET_PROXY
     Text [ portuguese_brazilian ] = "Proxy Server" ;
                                     #define GB_TYPES_TOP 3
                                     #define GB_TYPES_LEFT 6
-    GroupBox GB_SETTINGS
+    FixedLine GB_SETTINGS
     {
         Pos = MAP_APPFONT ( GB_TYPES_LEFT , GB_TYPES_TOP ) ;
-        Size = MAP_APPFONT ( 251 , 90 ) ;
+        Size = MAP_APPFONT ( 251 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ English ] = "Settings" ;
         Text [ english_us ] = "Settings" ;
@@ -525,6 +525,199 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Ayırma işareti ;";
         Text[ language_user1 ] = " ";
     };
+    FixedLine GB_DNS
+    {
+        Pos = MAP_APPFONT( 6, 94 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text = "DNS Server" ;
+        Text [ English ] = "DNS Server" ;
+        Text [ english_us ] = "DNS server" ;
+        Text [ italian ] = "Server DNS" ;
+        Text [ spanish ] = "Servidor DNS" ;
+        Text [ french ] = "Serveur DNS" ;
+        Text [ dutch ] = "DNS server" ;
+        Text [ swedish ] = "DNS-server" ;
+        Text [ danish ] = "DNS server" ;
+        Text [ portuguese_brazilian ] = "DNS Server" ;
+        Text [ portuguese ] = "Servidor DNS" ;
+        Text[ chinese_simplified ] = "DNS ·şÎñÆ÷";
+        Text[ russian ] = "Ñåğâåğ DNS";
+        Text[ polish ] = "Serwer DNS";
+        Text[ japanese ] = "DNS »°ÊŞ°";
+        Text[ chinese_traditional ] = "DNS ¦øªA¾¹";
+        Text[ arabic ] = "ãÒæøÏ DNS";
+        Text[ greek ] = "ÄéáêïìéóôŞò DNS";
+        Text[ korean ] = "DNS ¼­¹ö";
+        Text[ turkish ] = "DNS sunucusu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_DNS_AUTO
+    {
+        Pos = MAP_APPFONT( 12, 105 );
+        Size = MAP_APPFONT( 236, 10 );
+        Text = "~Automatisch" ;
+        Text [ English ] = "~Auto" ;
+        Text [ english_us ] = "Aut~omatic" ;
+        Text [ italian ] = "~Automatico" ;
+        Text [ spanish ] = "~Automático" ;
+        Text [ french ] = "~Automatique" ;
+        Text [ dutch ] = "~Automatisch" ;
+        Text [ swedish ] = "~Automatisk" ;
+        Text [ danish ] = "Automatisk" ;
+        Text [ portuguese_brazilian ] = "~Auto" ;
+        Text [ portuguese ] = "~Automático" ;
+        Text[ chinese_simplified ] = "×Ô¶¯(~O)";
+        Text[ russian ] = "Àâòîìàòè÷åñêè";
+        Text[ polish ] = "Automatycznie";
+        Text[ japanese ] = "©“®(~O)";
+        Text[ chinese_traditional ] = "¦Û°Ê(~O)";
+        Text[ arabic ] = "ÊáŞÇÆí";
+        Text[ greek ] = "Áõôüìáôá";
+        Text[ korean ] = "ÀÚµ¿(~O)";
+        Text[ turkish ] = "Otomatik";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_DNS_MANUAL
+    {
+        Pos = MAP_APPFONT( 12, 118 );
+        Size = MAP_APPFONT( 75, 10 );
+        Text = "~Manuell" ;
+        Text [ English ] = "~Manual" ;
+        Text [ english_us ] = "~Manual" ;
+        Text [ italian ] = "Manuale" ;
+        Text [ spanish ] = "~Manual" ;
+        Text [ french ] = "~Manuel" ;
+        Text [ dutch ] = "~Handmatig" ;
+        Text [ swedish ] = "~Manuell" ;
+        Text [ danish ] = "Manuel" ;
+        Text [ portuguese_brazilian ] = "~Manuell" ;
+        Text [ portuguese ] = "~Manual" ;
+        Text[ chinese_simplified ] = "ÊÖ¹¤(~M)";
+        Text[ russian ] = "Âğó÷íóş";
+        Text[ polish ] = "Rêcznie";
+        Text[ japanese ] = "è“®(~M)";
+        Text[ chinese_traditional ] = "¤â°Ê(~M)";
+        Text[ arabic ] = "íÏæí";
+        Text[ greek ] = "×åéñïêßíçôá";
+        Text[ korean ] = "¼öµ¿(~M)";
+        Text[ turkish ] = "Manüel";
+        Text[ language_user1 ] = " ";
+    };
+    PatternField ED_DNS
+    {
+        Pos = MAP_APPFONT( 90, 116 );
+        Size = MAP_APPFONT( 66, 12 );
+        Border = TRUE ;
+        LiteralMask = "   .   .   .   " ;
+        EditMask = "nnnLnnnLnnnLnnn" ;
+        StrictFormat = TRUE ;
+    };
+    FixedLine GB_SERVER
+    {
+        Pos = MAP_APPFONT ( 6 , 134 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Mail-Server" ;
+        Text [ English ] = "Mail server" ;
+        Text [ english_us ] = "Mail Server" ;
+        Text[ language_user1 ] = " ";
+        Text[ portuguese ] = "Servidor de correio";
+        Text[ russian ] = "Ñåğâåğ ïî÷òû";
+        Text[ greek ] = "ÄéáêïìéóôŞò Mail";
+        Text[ dutch ] = "Mail server";
+        Text[ french ] = "Serveur de courrier";
+        Text[ spanish ] = "Servidor de correo";
+        Text[ italian ] = "Mail server";
+        Text[ danish ] = "Mail server";
+        Text[ swedish ] = "E-postserver";
+        Text[ polish ] = "Serwer poczty";
+        Text[ portuguese_brazilian ] = "Mail server";
+        Text[ japanese ] = "Ò°Ù»°ÊŞ°";
+        Text[ korean ] = "¸ŞÀÏ-¼­¹ö";
+        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş·şÎñÆ÷";
+        Text[ chinese_traditional ] = "¹q¤l¶l¥ó¦øªA¾¹";
+        Text[ turkish ] = "Mail server";
+        Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
+    };
+    FixedText FT_SEND
+    {
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Nachrichtenversand" ;
+        Text [ English ] = "Message ~dispatch " ;
+        Text [ english_us ] = "Outgoing Messages" ;
+        Text [ italian ] = "~Invio messaggi" ;
+        Text [ spanish ] = "Correo s~aliente" ;
+        Text [ french ] = "Courrier ~sortant" ;
+        Text [ dutch ] = "~Berichten versturen" ;
+        Text [ swedish ] = "Meddela~ndesändning" ;
+        Text [ danish ] = "Udgående meddelelser" ;
+        Text [ portuguese ] = "~Envio de correio" ;
+        Text [ portuguese_brazilian ] = "~Nachrichtenversand" ;
+        Text[ chinese_simplified ] = "¼Ä·¢µç×ÓÓÊ¼ş";
+        Text[ russian ] = "Îòïğàâêà ñîîáùåíèé";
+        Text[ polish ] = "Poczta wychodz¹ca";
+        Text[ japanese ] = "‘—MÒ°Ù(~O)";
+        Text[ chinese_traditional ] = "µo°e¹q¤l¶l¥ó";
+        Text[ arabic ] = "ÅÑÓÇá ÇáÈÑíÏ";
+        Text[ greek ] = "ÁğïóôïëŞ ìç~íıìáôïò";
+        Text[ korean ] = "¸Ş½ÃÁö º¸³»±â";
+        Text[ turkish ] = "Giden posta sunucusu";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_SEND
+    {
+        Pos = MAP_APPFONT ( 90 , 145) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Border = TRUE ;
+    };
+    String ST_MSG_255_0
+    {
+        Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
+        Text [ English ] = " is not a valid entry for this field. Please specify a value between 0 and 255." ;
+        Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
+        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
+        Text [ swedish ] = "är ingen giltig inmatning för detta fält. Var vänlig och mata in ett värde mellan 0 och 255." ;
+        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 0 og 255." ;
+        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
+        Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255." ;
+        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
+        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
+        Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
+        Text[ chinese_simplified ] = "ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÄúÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
+        Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå. ïîæàëóéñòà, çíà÷åíèå ìåæäó 0 è 255.";
+        Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszê podaæ wartoœæ miêdzy 0 a 255.";
+        Text[ japanese ] = " ‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B0 ` 255 ‚Ü‚Å‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ±z¦b¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
+        Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ Èíä 0 æ 255.";
+        Text[ greek ] = " äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı 0 êáé 255.";
+        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 0°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "bu alan için geçerli bir değer değil. 0 ile 255 arasında bir değer girin.";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_MSG_255_1
+    {
+        Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
+        Text [ English ] = " is not a valid entry for this field. Please specify a value between 1 and 255." ;
+        Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
+        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
+        Text [ swedish ] = "är ingen giltig inmatning för detta fält. Var vänlig och mata in ett värde mellan 1 och 255." ;
+        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 1 og 255." ;
+        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
+        Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255." ;
+        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
+        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
+        Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
+        Text[ chinese_simplified ] = "ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÄúÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
+        Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå ìåæäó 1 è 255.";
+        Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszê wpisaæ wartoœæ miêdzy 1 a 255 .";
+        Text[ japanese ] = " ‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B1 ` 255 ‚Ü‚Å‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ±z¦b¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
+        Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ Èíä 1 æ 255.";
+        Text[ greek ] = " äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı 1 êáé 255.";
+        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 1°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "bu alan için geçerli bir değer değil. 1 ile 255 arasında bir değer girin";
+        Text[ language_user1 ] = " ";
+    };
     Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷";
     Text[ russian ] = "Ïğîêñè";
     Text[ polish ] = "Proxy";
@@ -570,10 +763,10 @@ TabPage RID_SVXPAGE_INET_SEARCH
 
     #define GB_SEARCH_LEFT 6
     #define GB_SEARCH_TOP 3
-    GroupBox GB_SEARCH
+    FixedLine GB_SEARCH
     {
         Pos = MAP_APPFONT ( GB_SEARCH_LEFT , GB_SEARCH_TOP ) ;
-        Size = MAP_APPFONT ( 248 , 124 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Suchen in" ;
         Text [ English ] = "Search in" ;
         Text [ dutch ] = "Zoeken in" ;
@@ -1166,641 +1359,6 @@ TabPage RID_SVXPAGE_INET_SEARCH
     Text[ language_user1 ] = " ";
 };
 
-/************************************************************************/
-/*                                                                      */
-/*  Other                                                               */
-/*                                                                      */
-/************************************************************************/
-TabPage RID_SVXPAGE_BROWSER_OTHER
-{
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text = "Sonstiges" ;
-    Text [ English ] = "Other" ;
-    Text [ dutch ] = "Overige" ;
-    Text [ english_us ] = "Other" ;
-    Text [ italian ] = "Altro" ;
-    Text [ spanish ] = "Otros" ;
-    Text [ french ] = "Autres" ;
-    Text [ swedish ] = "Annat" ;
-    Text [ danish ] = "Andet" ;
-    Text [ portuguese ] = "Outros" ;
-    Text [ portuguese_brazilian ] = "Sonstiges" ;
-    Text[ chinese_simplified ] = "ÆäËû";
-    Text[ russian ] = "Ïğî÷åå";
-    Text[ polish ] = "Inne";
-    Text[ japanese ] = "‚»‚Ì‘¼";
-    Text[ chinese_traditional ] = "¨ä¥L";
-    Text[ arabic ] = "ÛíÑ Ğáß";
-    Text[ greek ] = "¢ëëá";
-    Text[ korean ] = "±âÅ¸";
-
-    #define GB_JAVA_X 6
-    #define GB_JAVA_Y 3
-
-    GroupBox GB_JAVA
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 248 , 70 ) ;
-        Text = "Java" ;
-    };
-    CheckBox CB_ENABLEJAVA
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 159 , 10 ) ;
-        Text = "~Freischalten" ;
-        Text [ English ] = "~Enable" ;
-        Text [ english_us ] = "~Enable" ;
-        Text [ italian ] = "A~bilita" ;
-        Text [ spanish ] = "Vali~dar" ;
-        Text [ french ] = "~Valider" ;
-        Text [ dutch ] = "~Vrijgeven" ;
-        Text [ swedish ] = "~frige" ;
-        Text [ danish ] = "aktiver" ;
-        Text [ portuguese_brazilian ] = "~Java freischalten" ;
-        Text [ portuguese ] = "~Activar" ;
-        Text[ chinese_simplified ] = "¿ª·Å(~E)";
-        Text[ russian ] = "~ğàçáëîêèğîâàòü";
-        Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "g—p‚·‚é(~E)";
-        Text[ chinese_traditional ] = "¶}©ñ(~E)";
-        Text[ arabic ] = "ÇáÊÔÛíá";
-        Text[ greek ] = "åíåñãïğïßçóç";
-        Text[ korean ] = "»ç¿ë °¡´É(~E)";
-        Text[ turkish ] = "Etkinleştir";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CB_JAVASECURITY
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 159 , 10 ) ;
-        Text = "S~icherheitsüberprüfungen";
-        Text [ English ] = "Enable ~security checks";
-        Text [ english_us ] = "Enable ~security checks";
-            Text[ italian ] = "Controlli di s~icurezza";
-        Text[ portuguese_brazilian ] = "S~icherheitsüberprüfungen";
-        Text[ portuguese ] = "~Controlos de segurança";
-        Text[ danish ] = "Sikkerhedskontroller";
-        Text[ french ] = "C~ontrôles de sécurité";
-        Text[ swedish ] = "s~äkerhetskontroller";
-        Text[ dutch ] = "V~eiligheidscontroles";
-        Text[ spanish ] = "Co~ntroles de seguridad";
-        Text[ chinese_simplified ] = "°²È«¼ì²é(~S)";
-        Text[ russian ] = "Ïğîâåğêà áåçîïàñíîñòè";
-        Text[ polish ] = "Kontrola zabezpieczeñ";
-        Text[ japanese ] = "¾·­ØÃ¨ Áª¯¸(~S)";
-        Text[ chinese_traditional ] = "¦w¥şÀË¬d(~S)";
-        Text[ arabic ] = "İÍæÕ ÃãäíÉ";
-        Text[ greek ] = "¸ëåã÷ï~é áóöáëåßáò";
-        Text[ korean ] = "º¸¾È Á¡°Ë(~S)";
-        Text[ turkish ] = "Güvenlik kontrolleri";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_NETACCESS
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 39 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Netzzugriff" ;
-        Text [ English ] = "~Netaccess" ;
-        Text [ english_us ] = "Net ~access" ;
-        Text [ italian ] = "Accesso rete" ;
-        Text [ spanish ] = "Acce~so a la red" ;
-        Text [ french ] = "Accès ~réseau" ;
-        Text [ dutch ] = "~Nettoegang" ;
-        Text [ swedish ] = "~Nätåtkomst" ;
-        Text [ danish ] = "Netadgang" ;
-        Text [ portuguese_brazilian ] = "~Netzzugriff" ;
-        Text [ portuguese ] = "~Acesso à rede" ;
-        Text[ chinese_simplified ] = "·ÃÎÊÍøÂç(~A)";
-        Text[ russian ] = "Äîñòóï ê ñåòè";
-        Text[ polish ] = "Dostêp do sieci";
-        Text[ japanese ] = "È¯ÄÜ°¸‚Ö‚Ì±¸¾½(~A)";
-        Text[ chinese_traditional ] = "¦s¨úºô¸ô(~A)";
-        Text[ arabic ] = "ÇáæÕæá Åáì ÇáÔÈßÉ";
-        Text[ greek ] = "Ğñüóâáóç óôï äßêôõï";
-        Text[ korean ] = "³×Æ®¿¡ Á¢±Ù(~A)";
-        Text[ turkish ] = "Ağ erişimi";
-        Text[ language_user1 ] = " ";
-    };
-    ListBox LB_NETACCESS
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 128 , GB_JAVA_Y + 36 ) ;
-        Size = MAP_APPFONT ( 100 , 48 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            < "Uneingeschränkt" ; > ;
-            < "Keinen" ; > ;
-            < "Rechner" ; > ;
-        };
-        StringList [ English ] =
-        {
-            < "Uneingeschränkt" ; > ;
-            < "Keinen" ; > ;
-            < "Rechner" ; > ;
-        };
-        stringlist [ english_us ] =
-        {
-            < "Unrestricted" ; > ;
-            < "None" ; > ;
-            < "Host" ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Unrestricted" ; > ;
-            < "None" ; > ;
-            < "Host" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Obegränsad" ; > ;
-            < "Inga" ; > ;
-            < "Host" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Uindskrænket" ; > ;
-            < "Ingen" ; > ;
-            < "Host computer" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Illimitato" ; > ;
-            < "Senza" ; > ;
-            < "Host" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Sin restricción" ; > ;
-            < "Ninguno" ; > ;
-            < "Ordenador" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Illimité" ; > ;
-            < "Aucun(e)" ; > ;
-            < "Ordinateur" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Onbeperkt" ; > ;
-            < "Geen" ; > ;
-            < "Host" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Sem restrições" ; > ;
-            < "Nenhum" ; > ;
-            < "Host" ; > ;
-        };
-        StringList [ chinese_simplified ] =
-        {
-            < "Ã»ÓĞÏŞÖÆµÄ" ; > ;
-            < "ÎŞ" ; > ;
-            < "¼ÆËã»ú" ; > ;
-        };
-        StringList [ russian ] =
-        {
-            < "Íåîãğàíè÷åííûé" ; > ;
-            < "Áåç" ; > ;
-            < "Êîìïüşòåğ" ; > ;
-        };
-        StringList [ polish ] =
-        {
-            < "Nieograniczony" ; > ;
-            < "Brak" ; > ;
-            < "Host" ; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "§ŒÀ‚È‚µ" ; > ;
-            < "‚È‚µ" ; > ;
-            < "Î½Ä" ; > ;
-        };
-        StringList [ chinese_traditional ] =
-        {
-            < "¨S¦³­­¨îªº" ; > ;
-            < "µL" ; > ;
-            < "¥D¾÷" ; > ;
-        };
-        StringList [ arabic ] =
-        {
-            < "ÈÏæä ŞíÏ" ; > ;
-            < "ÈÏæä" ; > ;
-            < "ÇáãÖíİ" ; > ;
-        };
-        StringList [ greek ] =
-        {
-            < "Áğåñéüñéóôá" ; > ;
-            < "Êáíİíá" ; > ;
-            < "ÕğïëïãéóôŞò" ; > ;
-        };
-        StringList [ korean ] =
-        {
-            < "¹«Á¦ÇÑ" ; > ;
-            < "¾øÀ½" ; > ;
-            < "È£½ºÆ®" ; > ;
-        };
-    StringList [ turkish ] =
-    {
-            < "Sınırlamasız" ; > ;
-        < "Hiçbiri" ; > ;
-        < "Ana bilgisayar" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
-    };
-    FixedText FT_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 6 , GB_JAVA_Y + 54 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~ClassPath" ;
-        Text [ English ] = "~ClassPath" ;
-        Text [ english_us ] = "~Class path" ;
-        Text [ italian ] = "~ClassPath" ;
-        Text [ spanish ] = "~Class path" ;
-        Text [ french ] = "~ClassPath" ;
-        Text [ dutch ] = "~ClassPath" ;
-        Text [ swedish ] = "~ClassPath" ;
-        Text [ danish ] = "ClassPath" ;
-        Text [ portuguese_brazilian ] = "~ClassPath" ;
-        Text [ portuguese ] = "~ClassPath" ;
-        Text[ chinese_simplified ] = "~ClassPath";
-        Text[ russian ] = "~Class Path";
-        Text[ polish ] = "ClassPath";
-        Text[ japanese ] = "~ClassPath";
-        Text[ chinese_traditional ] = "~ClassPath";
-        Text[ arabic ] = "Class path~";
-        Text[ greek ] = "~Class path";
-        Text[ korean ] = "Class path(~C)";
-        Text[ turkish ] = "~ClassPath";
-        Text[ language_user1 ] = " ";
-    };
-    Edit ED_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 58 , GB_JAVA_Y + 52 ) ;
-        Size = MAP_APPFONT ( 170 , 12 ) ;
-        Border = TRUE ;
-    };
-    PushButton PB_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( GB_JAVA_X + 231 , GB_JAVA_Y + 51 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "~...";
-    };
-
-    #define GB_EXECUTE_X 6
-    #define GB_EXECUTE_Y 76
-
-    GroupBox GB_EXECUTE
-    {
-        Pos = MAP_APPFONT ( GB_EXECUTE_X , GB_EXECUTE_Y ) ;
-        Size = MAP_APPFONT ( 121 , 24 ) ;
-        Text = "PlugIns" ;
-        Text [ English ] = "PlugIns" ;
-        Text [ english_us ] = "Plug-Ins" ;
-        Text [ portuguese_brazilian ] = "Ausführen" ;
-        Text [ swedish ] = "Plug-ins" ;
-        Text [ danish ] = "PlugIns" ;
-        Text [ italian ] = "PlugIns" ;
-        Text [ spanish ] = "Plug-ins" ;
-        Text [ french ] = "Plug-ins" ;
-        Text [ dutch ] = "PlugIns" ;
-        Text [ portuguese ] = "PlugIns" ;
-        Text[ chinese_simplified ] = "Plug-Ins";
-        Text[ russian ] = "Plug-Ins";
-        Text[ polish ] = "Wtyczki Plug-In";
-        Text[ japanese ] = "Ìß×¸Ş²İ";
-        Text[ chinese_traditional ] = "Plug-Ins";
-        Text[ arabic ] = "Plug-Ins";
-        Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
-        Text[ korean ] = "ÇÃ·¯±×ÀÎ";
-        Text[ turkish ] = "Plug-In";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CB_EXECUTE_PLUGINS
-    {
-        Pos = MAP_APPFONT ( GB_EXECUTE_X + 6 , GB_EXECUTE_Y + 11 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "F~reischalten" ;
-        Text [ English ] = "~enable" ;
-        Text [ english_us ] = "E~nable" ;
-        Text [ portuguese_brazilian ] = "~Plugins" ;
-        Text [ swedish ] = "f~rige" ;
-        Text [ danish ] = "aktiver" ;
-        Text [ italian ] = "Abilita" ;
-        Text [ spanish ] = "Va~lidar" ;
-        Text [ french ] = "~Valider" ;
-        Text [ dutch ] = "V~rijgeven" ;
-        Text [ portuguese ] = "~Activar" ;
-        Text[ chinese_simplified ] = "¿ª·Å(~E)";
-        Text[ russian ] = "ğàçáëîêèğîâàòü";
-        Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "g—p‚·‚é(~E)";
-        Text[ chinese_traditional ] = "¶}©ñ(~E)";
-        Text[ arabic ] = "ÇáÊÔÛíá";
-        Text[ greek ] = "åíåñãïğïßçóç";
-        Text[ korean ] = "»ç¿ë °¡´É(~N)";
-        Text[ turkish ] = "Etkinleştir";
-        Text[ language_user1 ] = " ";
-    };
-
-    #define GB_EXECUTE_APPLETS_X 133
-    #define GB_EXECUTE_APPLETS_Y 76
-
-    GroupBox GB_EXECUTE_APPLETS
-    {
-        Pos = MAP_APPFONT ( GB_EXECUTE_APPLETS_X , GB_EXECUTE_APPLETS_Y ) ;
-        Size = MAP_APPFONT ( 121 , 24 ) ;
-        Text = "Applets" ;
-        Text [ English ] = "Applets" ;
-        Text [ english_us ] = "Applets" ;
-        Text[ portuguese ] = "Applets";
-        Text[ russian ] = "Àïïëåòû";
-        Text[ dutch ] = "Applets";
-        Text[ french ] = "Applets";
-        Text[ spanish ] = "Applets";
-        Text[ italian ] = "Applets";
-        Text[ danish ] = "Applets";
-        Text[ swedish ] = "Applets";
-        Text[ polish ] = "Aplety";
-        Text[ portuguese_brazilian ] = "Applets";
-        Text[ japanese ] = "±ÌßÚ¯Ä";
-        Text[ chinese_simplified ] = "Applets";
-        Text[ chinese_traditional ] = "Applets";
-        Text[ arabic ] = "ÊØÈíŞÇÊ ÕÛíÑÉ";
-        Text[ greek ] = "Ìéêñïåöáñìïãİò";
-        Text[ korean ] = "Applet";
-        Text[ turkish ] = "Applet'ler";
-        Text[ language_user1 ] = " ";
-    };
-
-    CheckBox CB_EXECUTE_APPLETS
-    {
-        Pos = MAP_APPFONT ( GB_EXECUTE_APPLETS_X + 6 , GB_EXECUTE_APPLETS_Y + 11 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "freisch~alten" ;
-        Text [ English ] = "~enable" ;
-        Text [ english_us ] = "Enab~le" ;
-        Text[ portuguese ] = "~validar";
-        Text[ russian ] = "~Ñíÿòü áëîêèğîâêó";
-        Text[ dutch ] = "~vrijgeven";
-        Text[ french ] = "Valider";
-        Text[ spanish ] = "V~alidar";
-        Text[ italian ] = "Abilita";
-        Text[ danish ] = "aktiver";
-        Text[ swedish ] = "fr~ige";
-        Text[ polish ] = "Akty~wacja";
-        Text[ portuguese_brazilian ] = "~Enable";
-        Text[ japanese ] = "g—p‚·‚é";
-        Text[ chinese_simplified ] = "¿ª·Å";
-        Text[ chinese_traditional ] = "¨Ï¥Î";
-        Text[ arabic ] = "ÇáÊÔÛíá";
-        Text[ greek ] = "åíåñãïğïßçóç";
-        Text[ korean ] = "»ç¿ë °¡´É(~L)";
-        Text[ turkish ] = "Etkinleştir";
-        Text[ language_user1 ] = " ";
-    };
-
-    #define GB_HOMEPAGE_X 6
-    #define GB_HOMEPAGE_Y 76
-
-    Text[ turkish ] = "Diğer";
-    Text[ language_user1 ] = " ";
-};
-/************************************************************************/
-/*                                                                      */
-/*  Protokolle                                                          */
-/*                                                                      */
-/************************************************************************/
-TabPage RID_SVXPAGE_INET_OTHER
-{
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text = "Protokolle" ;
-    Text [ English ] = "Protocols" ;
-    Text [ portuguese ] = "Protocolos" ;
-    Text [ english_us ] = "Protocol" ;
-    Text [ portuguese_brazilian ] = "Sonstiges" ;
-    Text [ swedish ] = "Protokoll" ;
-    Text [ danish ] = "Protokoller" ;
-    Text [ italian ] = "Protocolli" ;
-    Text [ spanish ] = "Protocolos" ;
-    Text [ french ] = "Protocoles" ;
-    Text [ dutch ] = "Protocollen" ;
-    Text[ chinese_simplified ] = "Ğ­Òé";
-    Text[ russian ] = "Ïğîòîêîëû";
-    Text[ polish ] = "Protoko³y";
-    Text[ japanese ] = "ÌßÛÄºÙ";
-    Text[ chinese_traditional ] = "¨ó©w";
-    GroupBox GB_DNS
-    {
-        Pos = MAP_APPFONT( 6, 3 );
-        Size = MAP_APPFONT( 248, 39 );
-        Text = "DNS Server" ;
-        Text [ English ] = "DNS Server" ;
-        Text [ english_us ] = "DNS server" ;
-        Text [ italian ] = "Server DNS" ;
-        Text [ spanish ] = "Servidor DNS" ;
-        Text [ french ] = "Serveur DNS" ;
-        Text [ dutch ] = "DNS server" ;
-        Text [ swedish ] = "DNS-server" ;
-        Text [ danish ] = "DNS server" ;
-        Text [ portuguese_brazilian ] = "DNS Server" ;
-        Text [ portuguese ] = "Servidor DNS" ;
-        Text[ chinese_simplified ] = "DNS ·şÎñÆ÷";
-        Text[ russian ] = "Ñåğâåğ DNS";
-        Text[ polish ] = "Serwer DNS";
-        Text[ japanese ] = "DNS »°ÊŞ°";
-        Text[ chinese_traditional ] = "DNS ¦øªA¾¹";
-        Text[ arabic ] = "ãÒæøÏ DNS";
-        Text[ greek ] = "ÄéáêïìéóôŞò DNS";
-        Text[ korean ] = "DNS ¼­¹ö";
-        Text[ turkish ] = "DNS sunucusu";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_DNS_AUTO
-    {
-        Pos = MAP_APPFONT( 12, 14 );
-        Size = MAP_APPFONT( 236, 10 );
-        Text = "~Automatisch" ;
-        Text [ English ] = "~Auto" ;
-        Text [ english_us ] = "Aut~omatic" ;
-        Text [ italian ] = "~Automatico" ;
-        Text [ spanish ] = "~Automático" ;
-        Text [ french ] = "~Automatique" ;
-        Text [ dutch ] = "~Automatisch" ;
-        Text [ swedish ] = "~Automatisk" ;
-        Text [ danish ] = "Automatisk" ;
-        Text [ portuguese_brazilian ] = "~Auto" ;
-        Text [ portuguese ] = "~Automático" ;
-        Text[ chinese_simplified ] = "×Ô¶¯(~O)";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®(~O)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~O)";
-        Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~O)";
-        Text[ turkish ] = "Otomatik";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_DNS_MANUAL
-    {
-        Pos = MAP_APPFONT( 12, 29 );
-        Size = MAP_APPFONT( 75, 10 );
-        Text = "~Manuell" ;
-        Text [ English ] = "~Manual" ;
-        Text [ english_us ] = "~Manual" ;
-        Text [ italian ] = "Manuale" ;
-        Text [ spanish ] = "~Manual" ;
-        Text [ french ] = "~Manuel" ;
-        Text [ dutch ] = "~Handmatig" ;
-        Text [ swedish ] = "~Manuell" ;
-        Text [ danish ] = "Manuel" ;
-        Text [ portuguese_brazilian ] = "~Manuell" ;
-        Text [ portuguese ] = "~Manual" ;
-        Text[ chinese_simplified ] = "ÊÖ¹¤(~M)";
-        Text[ russian ] = "Âğó÷íóş";
-        Text[ polish ] = "Rêcznie";
-        Text[ japanese ] = "è“®(~M)";
-        Text[ chinese_traditional ] = "¤â°Ê(~M)";
-        Text[ arabic ] = "íÏæí";
-        Text[ greek ] = "×åéñïêßíçôá";
-        Text[ korean ] = "¼öµ¿(~M)";
-        Text[ turkish ] = "Manüel";
-        Text[ language_user1 ] = " ";
-    };
-    PatternField ED_DNS
-    {
-        Pos = MAP_APPFONT( 90, 27 );
-        Size = MAP_APPFONT( 66, 12 );
-        Border = TRUE ;
-        LiteralMask = "   .   .   .   " ;
-        EditMask = "nnnLnnnLnnnLnnn" ;
-        StrictFormat = TRUE ;
-    };
-    GroupBox GB_SERVER
-    {
-        Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 248 , 26 ) ;
-        Text = "Mail-Server" ;
-        Text [ English ] = "Mail server" ;
-        Text [ english_us ] = "Mail Server" ;
-        Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "Servidor de correio";
-        Text[ russian ] = "Ñåğâåğ ïî÷òû";
-        Text[ greek ] = "ÄéáêïìéóôŞò Mail";
-        Text[ dutch ] = "Mail server";
-        Text[ french ] = "Serveur de courrier";
-        Text[ spanish ] = "Servidor de correo";
-        Text[ italian ] = "Mail server";
-        Text[ danish ] = "Mail server";
-        Text[ swedish ] = "E-postserver";
-        Text[ polish ] = "Serwer poczty";
-        Text[ portuguese_brazilian ] = "Mail server";
-        Text[ japanese ] = "Ò°Ù»°ÊŞ°";
-        Text[ korean ] = "¸ŞÀÏ-¼­¹ö";
-        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş·şÎñÆ÷";
-        Text[ chinese_traditional ] = "¹q¤l¶l¥ó¦øªA¾¹";
-        Text[ turkish ] = "Mail server";
-        Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
-    };
-    FixedText FT_SEND
-    {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text = "~Nachrichtenversand" ;
-        Text [ English ] = "Message ~dispatch " ;
-        Text [ english_us ] = "Outgoing Messages" ;
-        Text [ italian ] = "~Invio messaggi" ;
-        Text [ spanish ] = "Correo s~aliente" ;
-        Text [ french ] = "Courrier ~sortant" ;
-        Text [ dutch ] = "~Berichten versturen" ;
-        Text [ swedish ] = "Meddela~ndesändning" ;
-        Text [ danish ] = "Udgående meddelelser" ;
-        Text [ portuguese ] = "~Envio de correio" ;
-        Text [ portuguese_brazilian ] = "~Nachrichtenversand" ;
-        Text[ chinese_simplified ] = "¼Ä·¢µç×ÓÓÊ¼ş";
-        Text[ russian ] = "Îòïğàâêà ñîîáùåíèé";
-        Text[ polish ] = "Poczta wychodz¹ca";
-        Text[ japanese ] = "‘—MÒ°Ù(~O)";
-        Text[ chinese_traditional ] = "µo°e¹q¤l¶l¥ó";
-        Text[ arabic ] = "ÅÑÓÇá ÇáÈÑíÏ";
-        Text[ greek ] = "ÁğïóôïëŞ ìç~íıìáôïò";
-        Text[ korean ] = "¸Ş½ÃÁö º¸³»±â";
-        Text[ turkish ] = "Giden posta sunucusu";
-        Text[ language_user1 ] = " ";
-    };
-    Edit ED_SEND
-    {
-        Pos = MAP_APPFONT ( 90 , 56 ) ;
-        Size = MAP_APPFONT ( 96 , 12 ) ;
-        Border = TRUE ;
-    };
-    String ST_MSG_255_0
-    {
-        Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
-        Text [ English ] = " is not a valid entry for this field. Please specify a value between 0 and 255." ;
-        Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
-        Text [ swedish ] = "är ingen giltig inmatning för detta fält. Var vänlig och mata in ett värde mellan 0 och 255." ;
-        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 0 og 255." ;
-        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
-        Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255." ;
-        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
-        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
-        Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
-        Text[ chinese_simplified ] = "ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÄúÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
-        Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå. ïîæàëóéñòà, çíà÷åíèå ìåæäó 0 è 255.";
-        Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszê podaæ wartoœæ miêdzy 0 a 255.";
-        Text[ japanese ] = " ‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B0 ` 255 ‚Ü‚Å‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = "¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ±z¦b¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
-        Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ Èíä 0 æ 255.";
-        Text[ greek ] = " äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı 0 êáé 255.";
-        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 0°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
-        Text[ turkish ] = "bu alan için geçerli bir değer değil. 0 ile 255 arasında bir değer girin.";
-        Text[ language_user1 ] = " ";
-    };
-    String ST_MSG_255_1
-    {
-        Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
-        Text [ English ] = " is not a valid entry for this field. Please specify a value between 1 and 255." ;
-        Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
-        Text [ swedish ] = "är ingen giltig inmatning för detta fält. Var vänlig och mata in ett värde mellan 1 och 255." ;
-        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 1 og 255." ;
-        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
-        Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255." ;
-        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
-        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
-        Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
-        Text[ chinese_simplified ] = "ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÄúÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
-        Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå ìåæäó 1 è 255.";
-        Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszê wpisaæ wartoœæ miêdzy 1 a 255 .";
-        Text[ japanese ] = " ‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B1 ` 255 ‚Ü‚Å‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = "¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ±z¦b¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
-        Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ Èíä 1 æ 255.";
-        Text[ greek ] = " äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı 1 êáé 255.";
-        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 1°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
-        Text[ turkish ] = "bu alan için geçerli bir değer değil. 1 ile 255 arasında bir değer girin";
-        Text[ language_user1 ] = " ";
-    };
-    Text[ arabic ] = "ÈÑæÊæßæáÇÊ";
-    Text[ greek ] = "Ğñùôüêïëëï";
-    Text[ korean ] = "ÇÁ·ÎÅäÄİ";
-    Text[ turkish ] = "Protokoller";
-    Text[ language_user1 ] = " ";
-};
 
 /************************************************************************/
 /*                                                                      */
@@ -1826,10 +1384,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text [ dutch ] = "Scripting" ;
                                     #define GB_SCRIPT_EXEC_X 6
                                     #define GB_SCRIPT_EXEC_Y 3
-    GroupBox GB_SCRIPT_EXEC
+    FixedLine GB_SCRIPT_EXEC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
-        Size = MAP_APPFONT ( 248 , 107 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "%PRODUCTNAME Basic-Scripte ausführen von" ;
         Text [ English ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
@@ -1861,7 +1419,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     ListBox LB_SCRIPT_EXEC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 25 ) ;
-        Size = MAP_APPFONT ( 183 , 63 ) ;
+        Size = MAP_APPFONT ( 183 , 58 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
@@ -1944,11 +1502,11 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ language_user1 ] = " ";
     };
                                     #define GB_SCRIPTING_X 6
-                                    #define GB_SCRIPTING_Y 113
-    GroupBox GB_STARBASIC
+                                    #define GB_SCRIPTING_Y 90
+    FixedLine GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPTING_X , GB_SCRIPTING_Y ) ;
-        Size = MAP_APPFONT ( 248 , 69 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "%PRODUCTNAME Basic-Script" ;
         Text [ English ] = "%PRODUCTNAME Basic Script" ;
         Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
@@ -2131,6 +1689,58 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "Äåí èá åêôåëïıíôáé %PRODUCTNAME Basic Scripts";
         Text[ korean ] = "StarBasic-½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri yürütülmeyecek.";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine GB_EXECUTE
+    {
+        Pos = MAP_APPFONT ( 6 , GB_SCRIPTING_Y + 72 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "PlugIns" ;
+        Text [ English ] = "PlugIns" ;
+        Text [ english_us ] = "Plug-Ins" ;
+        Text [ portuguese_brazilian ] = "Ausführen" ;
+        Text [ swedish ] = "Plug-ins" ;
+        Text [ danish ] = "PlugIns" ;
+        Text [ italian ] = "PlugIns" ;
+        Text [ spanish ] = "Plug-ins" ;
+        Text [ french ] = "Plug-ins" ;
+        Text [ dutch ] = "PlugIns" ;
+        Text [ portuguese ] = "PlugIns" ;
+        Text[ chinese_simplified ] = "Plug-Ins";
+        Text[ russian ] = "Plug-Ins";
+        Text[ polish ] = "Wtyczki Plug-In";
+        Text[ japanese ] = "Ìß×¸Ş²İ";
+        Text[ chinese_traditional ] = "Plug-Ins";
+        Text[ arabic ] = "Plug-Ins";
+        Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
+        Text[ korean ] = "ÇÃ·¯±×ÀÎ";
+        Text[ turkish ] = "Plug-In";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_EXECUTE_PLUGINS
+    {
+        Pos = MAP_APPFONT ( 12 , GB_SCRIPTING_Y + 83 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "F~reischalten" ;
+        Text [ English ] = "~enable" ;
+        Text [ english_us ] = "E~nable" ;
+        Text [ portuguese_brazilian ] = "~Plugins" ;
+        Text [ swedish ] = "f~rige" ;
+        Text [ danish ] = "aktiver" ;
+        Text [ italian ] = "Abilita" ;
+        Text [ spanish ] = "Va~lidar" ;
+        Text [ french ] = "~Valider" ;
+        Text [ dutch ] = "V~rijgeven" ;
+        Text [ portuguese ] = "~Activar" ;
+        Text[ chinese_simplified ] = "¿ª·Å(~E)";
+        Text[ russian ] = "ğàçáëîêèğîâàòü";
+        Text[ polish ] = "Aktywacja";
+        Text[ japanese ] = "g—p‚·‚é(~E)";
+        Text[ chinese_traditional ] = "¶}©ñ(~E)";
+        Text[ arabic ] = "ÇáÊÔÛíá";
+        Text[ greek ] = "åíåñãïğïßçóç";
+        Text[ korean ] = "»ç¿ë °¡´É(~N)";
+        Text[ turkish ] = "Etkinleştir";
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "½Å±¾";

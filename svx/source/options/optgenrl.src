@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:37:26 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,10 +476,10 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 7 ) ) ;
         Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
     };
-    GroupBox GB_ADDRESS
+    FixedLine GB_ADDRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 131 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = " Anschrift " ;
         Text [ ENGLISH ] = " Address " ;
         Text [ norwegian ] = " Adresse " ;

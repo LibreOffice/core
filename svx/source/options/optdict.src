@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:17:13 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ turkish ] = "Ýstisna (-)";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_NEWDICT
+    FixedLine GB_NEWDICT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 145 , 57 ) ;
@@ -340,7 +340,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         DropDown = TRUE ;
     };
 
-    GroupBox GB_EDITDICTS
+    FixedLine GB_EDITDICTS
     {
         Pos = MAP_APPFONT( 1, 1 );
         Size = MAP_APPFONT( 268, 138 );

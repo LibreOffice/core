@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:42:13 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
-    GroupBox GB_EDIT_MODULES_OPTIONS
+    FixedLine GB_EDIT_MODULES_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 237 , 95 ) ;
+        Size = MAP_APPFONT ( 237 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";
@@ -253,10 +253,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ arabic ] = "ÇáÓÇÈÞ";
     };
 
-    GroupBox GB_EDIT_MODULES_DICS
+    FixedLine GB_EDIT_MODULES_DICS
     {
         Pos = MAP_APPFONT ( 6 , 100 ) ;
-        Size = MAP_APPFONT ( 237 , 70 ) ;
+        Size = MAP_APPFONT ( 237 , 8 ) ;
         Text = "Benutzerwörterbücher" ;
         Text [ ENGLISH ] = "Personal dictionaries" ;
         Text[ english_us ] = "User-defined dictionaries";
@@ -489,10 +489,10 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     Text[ chinese_traditional ] = "³s¦r²Å";
     Text[ turkish ] = "Hyphenation";
     Text[ arabic ] = "ÝÕá ÇáãÞÇØÚ";
-    GroupBox GB_NUMVAL_PREBREAK
+    FixedLine GB_NUMVAL_PREBREAK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 87 , 34 ) ;
+        Size = MAP_APPFONT ( 87 , 8 ) ;
     };
     OKButton BT_OK_PREBREAK
     {
@@ -599,10 +599,10 @@ TabPage RID_SFXPAGE_LINGU
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_LINGUISTIC
+    FixedLine GB_LINGUISTIC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Linguistik" ;
         Text [ ENGLISH ] = "Linguistic" ;
         Text[ english_us ] = "Writing Aids";

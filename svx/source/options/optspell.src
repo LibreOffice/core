@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage RID_SFXPAGE_SPELL
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
-    GroupBox GB_BOOK
+    FixedLine GB_BOOK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 115 , 66 ) ;
@@ -243,7 +243,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ turkish ] = "Büyük/küçük yazým ";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_AUDIT
+    FixedLine GB_AUDIT
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
         Size = MAP_APPFONT ( 115 , 53 ) ;

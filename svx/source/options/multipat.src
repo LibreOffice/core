@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:51:01 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,10 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_MULTIPATH
+    FixedLine GB_MULTIPATH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 188 , 81 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
         Text = "Pfade" ;
         Text [ English ] = "Paths" ;
         Text [ english_us ] = "Paths" ;

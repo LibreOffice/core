@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 10:15:04 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Hide = TRUE ;
     Text = "Proxy" ;
     Text [ English ] = "Proxy" ;
-    GroupBox GB_KERNING
+    FixedLine GB_KERNING
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
-        Size = MAP_APPFONT ( 251 , 24 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Unterschneidung" ;
         Text [ English ] = "Kerning" ;
         Text[ english_us ] = "Kerning";
@@ -125,7 +125,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_CHAR_PUNCT
     {
-        Pos = MAP_APPFONT ( 135, 14 ) ;
+        Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Westlicher Text und Interpunktion" ;
         Text [ English ] = "Western text and punctuation" ;
@@ -148,10 +148,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Western text and punctuation";
         Text[ arabic ] = "Western text and punctuation";
     };
-    GroupBox GB_CHAR_DIST
+    FixedLine GB_CHAR_DIST
     {
-        Pos = MAP_APPFONT ( 6, 30 ) ;
-        Size = MAP_APPFONT ( 251 , 50 ) ;
+        Pos = MAP_APPFONT ( 6, 43 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zeichenabstand" ;
         Text [ English ] = "Character distance" ;
         Text[ english_us ] = "Character distance";
@@ -175,7 +175,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_NO_COMP
     {
-        Pos = MAP_APPFONT ( 12, 41 ) ;
+        Pos = MAP_APPFONT ( 12, 54 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "~Keine Kompression" ;
         Text [ English ] = "No compression" ;
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_PUNCT_COMP
     {
-        Pos = MAP_APPFONT ( 12, 54) ;
+        Pos = MAP_APPFONT ( 12, 67) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Nur ~Interpunktion komprimieren" ;
         Text [ English ] = "Compress punctuation only" ;
@@ -225,7 +225,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
-        Pos = MAP_APPFONT ( 12, 67 ) ;
+        Pos = MAP_APPFONT ( 12, 80 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Interpunktion und ~japanische Kana komprimieren" ;
         Text [ English ] = "Compress punctuation and japanese Kana" ;
@@ -248,10 +248,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
     };
-    GroupBox GB_START_END
+    FixedLine GB_START_END
     {
-        Pos = MAP_APPFONT ( 6, 83 ) ;
-        Size = MAP_APPFONT ( 251 , 70 ) ;
+        Pos = MAP_APPFONT ( 6, 96 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Anfangs- und Endzeichen" ;
         Text [ English ] = "Start and end characters" ;
         Text[ english_us ] = "Start and end characters";
@@ -275,7 +275,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Sprache" ;
         Text [ English ] = "Language" ;
@@ -300,14 +300,14 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     ListBox LB_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 65 , 94 ) ;
+        Pos = MAP_APPFONT ( 65 , 107 ) ;
         Size = MAP_APPFONT ( 80 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox CB_STANDARD
     {
-        Pos = MAP_APPFONT ( 150, 96 ) ;
+        Pos = MAP_APPFONT ( 150, 109 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "S~tandard" ;
         Text [ English ] = "Standard" ;
@@ -332,7 +332,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     FixedText FT_START
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 125 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Kein Zeilen~beginn:" ;
         Text [ English ] = "No start of line:" ;
@@ -357,13 +357,13 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     Edit ED_START
     {
-        Pos = MAP_APPFONT ( 65 , 110 ) ;
+        Pos = MAP_APPFONT ( 65 , 123 ) ;
         Size = MAP_APPFONT ( 189 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_END
     {
-        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Kein Zeil~enende:" ;
         Text [ English ] = "No end of line:" ;
@@ -388,13 +388,13 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     Edit ED_END
     {
-        Pos = MAP_APPFONT ( 65 , 126 ) ;
+        Pos = MAP_APPFONT ( 65 , 139 ) ;
         Size = MAP_APPFONT ( 189 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_HINT
     {
-        Pos = MAP_APPFONT ( 12 , 142 ) ;
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
         Text = "Ohne benutzerdefinierte Zeilenwechselzeichen" ;
         Text [ English ] = "Without user-defined line break symbols" ;
