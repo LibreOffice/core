@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,12 +339,15 @@ XML_CONSTASCII_ACTION( sXML_date_style, "date-style" );
 XML_CONSTASCII_ACTION( sXML_date_value, "date-value");
 XML_CONSTASCII_ACTION( sXML_day, "day" );
 XML_CONSTASCII_ACTION( sXML_day_of_week, "day-of-week" );
+XML_CONSTASCII_ACTION( sXML_dde_application, "dde-application" );
 XML_CONSTASCII_ACTION( sXML_dde_command, "dde-command" );
 XML_CONSTASCII_ACTION( sXML_dde_connection, "dde-connection" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decl, "dde-connection-decl" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decls, "dde-connection-decls" );
 XML_CONSTASCII_ACTION( sXML_dde_file_name, "dde-file-name" );
+XML_CONSTASCII_ACTION( sXML_dde_item, "dde-item" );
 XML_CONSTASCII_ACTION( sXML_dde_target_name, "dde-target-name" );
+XML_CONSTASCII_ACTION( sXML_dde_topic, "dde-topic" );
 XML_CONSTASCII_ACTION( sXML_decimal_places, "decimal-places" );
 XML_CONSTASCII_ACTION( sXML_decimal_replacement, "decimal-replacement" );
 XML_CONSTASCII_ACTION( sXML_decorate_words_only, "decorate-words-only" );
@@ -829,6 +832,8 @@ XML_CONSTASCII_ACTION( sXML_score_spaces, "score-spaces" );
 XML_CONSTASCII_ACTION( sXML_script, "script" );
 XML_CONSTASCII_ACTION( sXML_seconds, "seconds" );
 XML_CONSTASCII_ACTION( sXML_section, "section" );
+XML_CONSTASCII_ACTION( sXML_section_source, "section-source" );
+XML_CONSTASCII_ACTION( sXML_section_source_dde, "section-source-dde" );
 XML_CONSTASCII_ACTION( sXML_section_desc, "section-desc" );
 XML_CONSTASCII_ACTION( sXML_section_name, "section-name" );
 XML_CONSTASCII_ACTION( sXML_select_page, "select-page" );

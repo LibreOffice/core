@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.2 2000-10-04 18:47:05 dvo Exp $
+	$Id: text.mod,v 1.3 2000-10-16 13:01:46 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -618,3 +618,25 @@
 
 <!ELEMENT text:endnote-body (text:h|text:p|
 							 text:ordered-list|text:unordered-list)*>
+
+<!ELEMENT text:section ((text:section-source|text:section-source-dde)?,
+						(text:h|text:p|text:ordered-list|
+						text:unordered-list|table:table|chart:chart|draw:page|
+						draw:a|draw:text-box|draw:image|text:section)*)>
+<!ATTLIST text:section text:name CDATA #REQUIRED>
+<!ATTLIST text:section text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:section text:protected %boolean; "false">
+<!ATTLIST text:section text:display (true|none|condition) "true">
+<!ATTLIST text:section text:condition %formula; #IMPLIED>
+
+<!ELEMENT text:section-source EMPTY>
+<!ATTLIST text:section-source xlink:href %string; #IMPLIED>
+<!ATTLIST text:section-source xlink:type (simple) #FIXED "simple">
+<!ATTLIST text:section-source xlink:show (embed) #FIXED "embed">
+<!ATTLIST text:section-source text:section-name %string; #IMPLIED>
+<!ATTLIST text:section-source text:filter-name %string; #IMPLIED>
+
+<!ELEMENT text:section-source-dde EMPTY>
+<!ATTLIST text:section-source-dde text:dde-application CDATA #IMPLIED>
+<!ATTLIST text:section-source-dde text:dde-topic CDATA #IMPLIED>
+<!ATTLIST text:section-source-dde text:dde-item CDATA #IMPLIED>

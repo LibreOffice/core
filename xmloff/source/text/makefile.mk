@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
+#   last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,9 @@ CXXFILES = \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
         XMLPropertyBackpatcher.cxx \
+        XMLSectionImportContext.cxx \
+        XMLSectionSourceImportContext.cxx \
+        XMLSectionSourceDDEImportContext.cxx \
         XMLTextColumnsContext.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
@@ -115,8 +118,8 @@ SLOFILES =	\
         $(SLO)$/txtdrope.obj \
         $(SLO)$/txtdropi.obj \
         $(SLO)$/txtexppr.obj \
-        $(SLO)$/txtfldi.obj \
         $(SLO)$/txtflde.obj \
+        $(SLO)$/txtfldi.obj \
         $(SLO)$/txtftne.obj \
         $(SLO)$/txtimp.obj \
         $(SLO)$/txtimppr.obj \
@@ -131,6 +134,9 @@ SLOFILES =	\
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
         $(SLO)$/XMLPropertyBackpatcher.obj \
+        $(SLO)$/XMLSectionImportContext.obj \
+        $(SLO)$/XMLSectionSourceImportContext.obj \
+        $(SLO)$/XMLSectionSourceDDEImportContext.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \

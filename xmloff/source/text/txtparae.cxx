@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 15:33:33 $
+ *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
+
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -143,6 +148,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
+#include <com/sun/star/text/XTextSection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SECTIONFILELINK_HPP_
+#include <com/sun/star/text/SectionFileLink.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -224,6 +235,9 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         xPropMapper = GetAutoFramePropMapper()->getPropertySetMapper();
         break;
+    case XML_STYLE_FAMILY_TEXT_SECTION:
+        xPropMapper = GetSectionPropMapper()->getPropertySetMapper();
+        break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
@@ -288,6 +302,9 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 aAny >>= sParent;
             }
             break;
+        case XML_STYLE_FAMILY_TEXT_SECTION:
+            ; // section styles have no parents
+            break;
         }
 
         GetAutoStylePool().Add( nFamily, sParent, xPropStates );
@@ -313,6 +330,9 @@ OUString XMLTextParagraphExport::Find(
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         xPropMapper = GetAutoFramePropMapper()->getPropertySetMapper();
+        break;
+    case XML_STYLE_FAMILY_TEXT_SECTION:
+        xPropMapper = GetSectionPropMapper()->getPropertySetMapper();
         break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
@@ -490,6 +510,236 @@ void XMLTextParagraphExport::exportListChange(
     }
 }
 
+
+void XMLTextParagraphExport::exportListAndSectionChange(
+    Reference<XTextSection> & rPrevSection,
+    const Reference<XTextContent> & rNextSectionContent,
+    const XMLTextNumRuleInfo& rPrevRule,
+    const XMLTextNumRuleInfo& rNextRule,
+    sal_Bool bAutoStyles)
+{
+    Reference<XTextSection> xNextSection;
+
+    // first: get current XTextSection
+    Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
+    if (xPropSet.is())
+    {
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
+        {
+            Any aAny = xPropSet->getPropertyValue(sTextSection);
+            aAny >>= xNextSection;
+        }
+        // else: no current section
+    }
+    // else: no current section
+
+    // careful: exportListChange may only be called for (!bAutoStyles)
+    // I'd like a cleaner solution! Maybe export all section styles upfront.
+    if ( bAutoStyles )
+    {
+        if ( xNextSection.is() )
+        {
+            Reference<XPropertySet> xPropSet( xNextSection, UNO_QUERY);
+            Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropSet );
+        }
+    }
+    else
+    {
+        // old != new? -> start/equal?
+        if (rPrevSection != xNextSection)
+        {
+            // a new section started, or an old one gets closed!
+
+            // close old list
+            XMLTextNumRuleInfo aEmptyNumRule;
+            exportListChange(rPrevRule, aEmptyNumRule);
+
+            // build stacks of old and new sections
+            vector<Reference<XTextSection> > aOldStack;
+            Reference<XTextSection> aCurrent = rPrevSection;
+            while(aCurrent.is())
+            {
+                aOldStack.push_back(aCurrent);
+                aCurrent = aCurrent->getParentSection();
+            }
+
+            vector<Reference<XTextSection> > aNewStack;
+            aCurrent = xNextSection;
+            while(aCurrent.is())
+            {
+                aNewStack.push_back(aCurrent);
+                aCurrent = aCurrent->getParentSection();
+            }
+
+            // compare the two stacks
+            vector<Reference<XTextSection> > ::reverse_iterator aOld =
+                aOldStack.rbegin();
+            vector<Reference<XTextSection> > ::reverse_iterator aNew =
+                aNewStack.rbegin();
+            while ( (aOld != aOldStack.rend()) &&
+                    (aNew != aNewStack.rend()) &&
+                    (*aOld) == (*aNew) )
+            {
+                aOld++;
+                aNew++;
+            }
+
+            // close all elements of aOld, open all of aNew
+            while (aOld != aOldStack.rend())
+            {
+                Reference<XNamed> xName(*aOld, UNO_QUERY);
+                GetExport().GetDocHandler()->endElement(sText_Section);
+                GetExport().GetDocHandler()->ignorableWhitespace(
+                    GetExport().sWS );
+                aOld++;
+            }
+
+            while (aNew != aNewStack.rend())
+            {
+                exportSectionStart(*aNew);
+                aNew++;
+            }
+
+            // start new list
+            exportListChange(aEmptyNumRule, rNextRule);
+        }
+        else
+        {
+            // list change, if sections have not changed
+            exportListChange(rPrevRule, rNextRule);
+        }
+    }
+
+    // save old section (old numRule gets saved in calling method
+    rPrevSection = xNextSection;
+}
+
+void XMLTextParagraphExport::exportSectionStart(
+    const ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextSection > & rSection)
+{
+    // any old attributes?
+    GetExport().CheckAttrList();
+
+    Reference<XNamed> xName(rSection, UNO_QUERY);
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name,
+                             xName->getName());
+
+    // get XPropertySet for other values
+    Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
+    Any aAny;
+
+    // style name
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
+                             Find( XML_STYLE_FAMILY_TEXT_SECTION,
+                                   xPropSet, sEmpty ));
+
+    // protected
+    aAny = xPropSet->getPropertyValue(sIsProtected);
+    if (*(sal_Bool*)aAny.getValue())
+    {
+        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
+                                      sXML_protected, sXML_true);
+    }
+
+    // condition and display
+    aAny = xPropSet->getPropertyValue(sCondition);
+    OUString sCond;
+    aAny >>= sCond;
+    sal_Char* pDisplay;
+    if (sCond.getLength() > 0)
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_condition,
+                                 sCond);
+        pDisplay = sXML_condition;
+    }
+    else
+    {
+        pDisplay = sXML_none;
+    }
+    aAny = xPropSet->getPropertyValue(sIsVisible);
+    if (! *(sal_Bool*)aAny.getValue())
+    {
+        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_display,
+                                      pDisplay);
+    }
+
+    // export element
+    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
+    GetExport().GetDocHandler()->startElement( sText_Section,
+                                               GetExport().GetXAttrList() );
+    GetExport().ClearAttrList();
+
+    // data source
+    // unfortunately, we have to test all relevant strings for non-zero length
+    aAny = xPropSet->getPropertyValue(sFileLink);
+    SectionFileLink aFileLink;
+    aAny >>= aFileLink;
+
+    aAny = xPropSet->getPropertyValue(sLinkRegion);
+    OUString sRegionName;
+    aAny >>= sRegionName;
+
+    if ( (aFileLink.FileURL.getLength() > 0) ||
+         (aFileLink.FilterName.getLength() > 0) ||
+         (sRegionName.getLength() > 0) )
+    {
+        if (aFileLink.FileURL.getLength() > 0)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href,
+                                     aFileLink.FileURL);
+        }
+
+        if (aFileLink.FilterName.getLength() > 0)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_filter_name,
+                                     aFileLink.FilterName);
+        }
+
+        if (sRegionName.getLength() > 0)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_section_name,
+                                     sRegionName);
+        }
+
+        SvXMLElementExport(GetExport(),
+                           XML_NAMESPACE_TEXT, sXML_section_source,
+                           sal_True, sal_True);
+    }
+    else
+    {
+        // data source DDE
+        // unfortunately, we have to test all relevant strings for
+        // non-zero length
+        aAny = xPropSet->getPropertyValue(sDdeCommandFile);
+        OUString sApplication;
+        aAny >>= sApplication;
+        aAny = xPropSet->getPropertyValue(sDdeCommandType);
+        OUString sTopic;
+        aAny >>= sTopic;
+        aAny = xPropSet->getPropertyValue(sDdeCommandElement);
+        OUString sItem;
+        aAny >>= sItem;
+
+        if ( (sApplication.getLength() > 0) ||
+             (sTopic.getLength() > 0) ||
+             (sItem.getLength() > 0 )   )
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_application,
+                                     sApplication);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_topic,
+                                     sTopic);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_dde_item,
+                                     sItem);
+
+            SvXMLElementExport(GetExport(),
+                               XML_NAMESPACE_TEXT, sXML_section_source_dde,
+                               sal_True, sal_True);
+        }
+        // else: no data source
+    }
+}
+
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP ) :
@@ -563,8 +813,22 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
     sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
     sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
-    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName"))
+    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
+    sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
+    sSection(RTL_CONSTASCII_USTRINGPARAM(sXML_section)),
+    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
+    sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
+    sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
+    sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink")),
+    sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion")),
+    sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
+    sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
+    sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
+    sEmpty()
 {
+    sText_Section = GetExport().GetNamespaceMap().GetQNameByKey(
+        XML_NAMESPACE_TEXT, sSection);
+
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
     xParaPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -589,6 +853,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME) );
     sPrefix = OUString( 'G' );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_SD_GRAPHICS_ID, sFamily,
+                              xPropMapper, sPrefix );
+
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
+    xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
+                                                             GetExport() );
+    sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_section ) );
+    sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Sect" ) );
+    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
                               xPropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
@@ -722,6 +994,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
 
+    Reference<XTextSection> xCurrentTextSection;
+
     while( rContEnum->hasMoreElements() )
     {
         Any aAny = rContEnum->nextElement();
@@ -734,8 +1008,12 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
             if( !bAutoStyles )
             {
                 aNextNumInfo.Set( xTxtCntnt );
-                exportListChange( aPrevNumInfo, aNextNumInfo );
             }
+
+            exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
+                                        aPrevNumInfo, aNextNumInfo,
+                                        bAutoStyles );
+
             exportParagraph( xTxtCntnt, bAutoStyles );
         }
         else if( xServiceInfo->supportsService( sTableService ) )
@@ -765,13 +1043,20 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         }
 
         if( !bAutoStyles )
+        {
             aPrevNumInfo = aNextNumInfo;
+        }
     }
 
     if( !bAutoStyles )
     {
         aNextNumInfo.Reset();
-        exportListChange( aPrevNumInfo, aNextNumInfo );
+
+        // close open lists and sections; no new styles
+        Reference<XTextContent> xEmpty;
+        exportListAndSectionChange( xCurrentTextSection, xEmpty,
+                                    aPrevNumInfo, aNextNumInfo,
+                                    bAutoStyles );
     }
 }
 
@@ -970,39 +1255,38 @@ void XMLTextParagraphExport::exportTextField(
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     // non-Writer apps need not support Property TextField, so test first
-    // TODO: fix indentation with next rev.
     if (xPropSet->getPropertySetInfo()->hasPropertyByName( sTextField ))
     {
-    Any aAny = xPropSet->getPropertyValue( sTextField );
+        Any aAny = xPropSet->getPropertyValue( sTextField );
 
-    Reference < XTextField > xTxtFld;
-    aAny >>= xTxtFld;
-    DBG_ASSERT( xTxtFld.is(), "text field missing" );
-    if( xTxtFld.is() )
-    {
-        if( bAutoStyles )
+        Reference < XTextField > xTxtFld;
+        aAny >>= xTxtFld;
+        DBG_ASSERT( xTxtFld.is(), "text field missing" );
+        if( xTxtFld.is() )
         {
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, xPropSet );
-            pFieldExport->ExportFieldAutoStyle( xTxtFld );
-        }
-        else
-        {
-            OUString sStyle = FindTextStyle( xPropSet );
-            OUString sText = rTextRange->getString();
-            if( sStyle.getLength() )
+            if( bAutoStyles )
             {
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name,
-                                          sStyle );
-                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                          sXML_span, sal_False, sal_False );
-                pFieldExport->ExportField( xTxtFld );
+                Add( XML_STYLE_FAMILY_TEXT_TEXT, xPropSet );
+                pFieldExport->ExportFieldAutoStyle( xTxtFld );
             }
             else
             {
-                pFieldExport->ExportField( xTxtFld );
+                OUString sStyle = FindTextStyle( xPropSet );
+                OUString sText = rTextRange->getString();
+                if( sStyle.getLength() )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              sXML_style_name, sStyle );
+                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                              sXML_span, sal_False, sal_False);
+                    pFieldExport->ExportField( xTxtFld );
+                }
+                else
+                {
+                    pFieldExport->ExportField( xTxtFld );
+                }
             }
         }
-    }
     }
 }
 
@@ -1620,6 +1904,12 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
 */
+
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION,
+                                  *GetSectionPropMapper().get(),
+                                  GetExport().GetDocHandler(),
+                                  GetExport().GetMM100UnitConverter(),
+                                  GetExport().GetNamespaceMap() );
     pListAutoPool->exportXML();
 }
 

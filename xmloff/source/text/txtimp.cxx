@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
+ *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLSECTIONIMPORTCONTEXT_HXX_
+#include "XMLSectionImportContext.hxx"
+#endif
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -185,6 +189,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_user_field_decls,XML_TOK_TEXT_USERFIELD_DECLS },
     { XML_NAMESPACE_TEXT, sXML_sequence_decls,  XML_TOK_TEXT_SEQUENCE_DECLS },
     { XML_NAMESPACE_TEXT, sXML_dde_connection_decls, XML_TOK_TEXT_DDE_DECLS },
+    { XML_NAMESPACE_TEXT, sXML_section,         XML_TOK_TEXT_SECTION },
 
     XML_TOKEN_MAP_END
 };
@@ -502,6 +507,9 @@ XMLTextImportHelper::XMLTextImportHelper(
 
     pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     xFrameImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
+
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
+    xSectionImpPrMap = new XMLTextImportPropertyMapper( pPropMapper );
 }
 
 XMLTextImportHelper::~XMLTextImportHelper()
@@ -933,7 +941,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-
+    case XML_TOK_TEXT_SECTION:
+        pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
+        break;
 
     }
 
@@ -992,6 +1002,23 @@ XMLPropStyleContext *XMLTextImportHelper::FindAutoFrameStyle( const OUString& rN
 
     return pStyle;
 }
+
+XMLPropStyleContext* XMLTextImportHelper::FindSectionStyle(
+    const OUString& rName ) const
+{
+    XMLPropStyleContext* pStyle = NULL;
+    if (xAutoStyles.Is() )
+    {
+        pStyle = PTR_CAST( XMLPropStyleContext,
+                           ((SvXMLStylesContext *)&xAutoStyles)->
+                           FindStyleChildContext(
+                               XML_STYLE_FAMILY_TEXT_SECTION,
+                               rName, sal_True ) );
+    }
+
+    return pStyle;
+}
+
 XMLTextListItemContext *XMLTextImportHelper::GetListItem()
 {
     return (XMLTextListItemContext *)&xListItem;

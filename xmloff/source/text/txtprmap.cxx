@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:11:42 $
+ *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,12 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "VertMirrored",        STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_CROPGRF
     M_E( "GraphicCrop",         FO,     clip,       XML_TYPE_TEXT_CLIP, 0 ),
+    { 0, 0, 0, 0 }
+};
+
+XMLPropertyMapEntry aXMLSectionPropMap[] =
+{
+    M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
     { 0, 0, 0, 0 }
 };
 
@@ -978,6 +984,9 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
     case TEXT_PROP_MAP_AUTO_FRAME:
         pMap = &(aXMLFramePropMap[12]);
         DBG_ASSERT( pMap->msXMLName == sXML_margin_left, "frame map changed" );
+        break;
+    case TEXT_PROP_MAP_SECTION:
+        pMap = aXMLSectionPropMap;
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );

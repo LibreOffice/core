@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,6 +598,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
     {
         case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         case XML_STYLE_FAMILY_TEXT_TEXT:
+        case XML_STYLE_FAMILY_TEXT_SECTION:
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this );
             break;
@@ -637,6 +638,10 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_data_style)))
     {
         nFamily = XML_STYLE_FAMILY_DATA_STYLE;
+    }
+    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_section) ) )
+    {
+        nFamily = XML_STYLE_FAMILY_TEXT_SECTION;
     }
     else if( 0 == rValue.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_table )))
     {
@@ -701,6 +706,14 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
                      ->GetTextImportPropertySetMapper();
         }
         xMapper = xTextImpPropMapper;
+        break;
+
+    case XML_STYLE_FAMILY_TEXT_SECTION:
+        // don't cache section mapper, as it's rarely used
+        // *sigh*, cast to non-const, because this is a const method,
+        // but SvXMLImport::GetTextImport() isn't.
+        xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
+            GetSectionImportPropertySetMapper();
         break;
 
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:

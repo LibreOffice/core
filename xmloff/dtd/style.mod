@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.4 2000-10-10 10:44:37 cl Exp $
+	$Id: style.mod,v 1.5 2000-10-16 13:01:46 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -58,7 +58,7 @@
 
 <!ATTLIST style:style style:name %styleName; #REQUIRED>
 
-<!ENTITY % styleFamily "(paragraph|text|
+<!ENTITY % styleFamily "(paragraph|text|section|
 						 table|table-column|table-row|table-cell|table-page|chart|graphics|default|drawing-page|presentation)">
 <!ATTLIST style:style style:family %styleFamily; #REQUIRED>
 
