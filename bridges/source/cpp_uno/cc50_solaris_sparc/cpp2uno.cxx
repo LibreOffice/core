@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ using namespace rtl;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+//==================================================================================================
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 //==================================================================================================
 static typelib_TypeClass cpp2uno_call(
@@ -625,17 +628,21 @@ extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
 }
 
 //##################################################################################################
+extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
+    SAL_THROW_EXTERN_C()
+{
+    return CPPU_CURRENT_NAMESPACE::g_moduleCount.canUnload( &CPPU_CURRENT_NAMESPACE::g_moduleCount, pTime );
+}
+//##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv )
-    throw ()
-//      SAL_THROW( () )
+    SAL_THROW_EXTERN_C()
 {
     CPPU_CURRENT_NAMESPACE::cppu_cppenv_initEnvironment( pCppEnv );
 }
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
-    throw ()
-//      SAL_THROW( () )
+    SAL_THROW_EXTERN_C()
 {
     CPPU_CURRENT_NAMESPACE::cppu_ext_getMapping( ppMapping, pFrom, pTo );
 }

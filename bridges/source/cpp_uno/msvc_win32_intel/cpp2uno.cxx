@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 12:06:53 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ using namespace com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+//==================================================================================================
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 //==================================================================================================
 static inline typelib_TypeClass cpp2uno_call(
@@ -551,6 +554,11 @@ extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
 
 }
 
+//##################################################################################################
+extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime ) throw ()
+{
+    return CPPU_CURRENT_NAMESPACE::g_moduleCount.canUnload( &CPPU_CURRENT_NAMESPACE::g_moduleCount, pTime );
+}
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv ) throw ()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:43:26 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,7 @@ inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) throw ()
     (*((uno_Environment *)pThis->pUnoEnv)->release)( (uno_Environment *)pThis->pUnoEnv );
     (*((uno_Environment *)pThis->pCppEnv)->release)( (uno_Environment *)pThis->pCppEnv );
     delete pThis;
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 inline void cppu_Bridge::acquire() throw ()
@@ -369,14 +370,16 @@ inline void cppu_Bridge::acquire() throw ()
         if (bExportCpp2Uno)
         {
             uno_Mapping * pMapping = &aCpp2Uno;
-            uno_registerMapping( &pMapping, cppu_Bridge_free,
-                                 (uno_Environment *)pCppEnv, (uno_Environment *)pUnoEnv, 0 );
+            ::uno_registerMapping(
+                &pMapping, cppu_Bridge_free,
+                (uno_Environment *)pCppEnv, (uno_Environment *)pUnoEnv, 0 );
         }
         else
         {
             uno_Mapping * pMapping = &aUno2Cpp;
-            uno_registerMapping( &pMapping, cppu_Bridge_free,
-                                 (uno_Environment *)pUnoEnv, (uno_Environment *)pCppEnv, 0 );
+            ::uno_registerMapping(
+                &pMapping, cppu_Bridge_free,
+                (uno_Environment *)pUnoEnv, (uno_Environment *)pCppEnv, 0 );
         }
     }
 }
@@ -385,7 +388,7 @@ inline void cppu_Bridge::release() throw ()
 {
     if (! osl_decrementInterlockedCount( &nRef ))
     {
-        uno_revokeMapping( bExportCpp2Uno ? &aCpp2Uno : &aUno2Cpp );
+        ::uno_revokeMapping( bExportCpp2Uno ? &aCpp2Uno : &aUno2Cpp );
     }
 }
 
@@ -401,24 +404,31 @@ inline void SAL_CALL cppu_ext_getMapping(
         if (0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
             0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, UNO_LB_UNO ))
         {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
             // ref count initially 1
             pMapping = &(new cppu_Bridge( pFrom->pExtEnv, pTo->pExtEnv, sal_True ))->aCpp2Uno;
-            ::uno_registerMapping( &pMapping, cppu_Bridge_free,
-                                   (uno_Environment *)pFrom->pExtEnv,
-                                   (uno_Environment *)pTo->pExtEnv, 0 );
+            ::uno_registerMapping(
+                &pMapping, cppu_Bridge_free,
+                (uno_Environment *)pFrom->pExtEnv,
+                (uno_Environment *)pTo->pExtEnv, 0 );
         }
-        if (0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
-            0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, UNO_LB_UNO ))
+        else if (0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
+                 0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, UNO_LB_UNO ))
         {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
             // ref count initially 1
             pMapping = &(new cppu_Bridge( pTo->pExtEnv, pFrom->pExtEnv, sal_False ))->aUno2Cpp;
-            ::uno_registerMapping( &pMapping, cppu_Bridge_free,
-                                   (uno_Environment *)pFrom->pExtEnv,
-                                   (uno_Environment *)pTo->pExtEnv, 0 );
+            ::uno_registerMapping(
+                &pMapping, cppu_Bridge_free,
+                (uno_Environment *)pFrom->pExtEnv,
+                (uno_Environment *)pTo->pExtEnv, 0 );
         }
 
         if (*ppMapping)
+        {
             (*(*ppMapping)->release)( *ppMapping );
+        }
+        if (pMapping)
         *ppMapping = pMapping;
     }
 }
@@ -527,14 +537,20 @@ inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * 
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 //--------------------------------------------------------------------------------------------------
+inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) throw ()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
+//--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) throw ()
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
-    OSL_ENSURE( rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0,
-                 "### wrong environment type!" );
+    OSL_ENSURE( ::rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0, "### wrong environment type!" );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier = CPPU_CURRENT_NAMESPACE::cppu_cppenv_computeObjectIdentifier;
     ((uno_ExtEnvironment *)pCppEnv)->acquireInterface        = CPPU_CURRENT_NAMESPACE::cppu_cppenv_acquireInterface;
     ((uno_ExtEnvironment *)pCppEnv)->releaseInterface        = CPPU_CURRENT_NAMESPACE::cppu_cppenv_releaseInterface;
+    pCppEnv->environmentDisposing                            = CPPU_CURRENT_NAMESPACE::cppu_cppenv_environmentDisposing;
 }
 
 }

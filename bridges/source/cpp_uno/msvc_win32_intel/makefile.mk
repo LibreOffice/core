@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-04-12 13:41:03 $
+#   last change: $Author: dbo $ $Date: 2001-07-02 11:53:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo EXPORTS                                                   >>$@
     @echo uno_initEnvironment @3                                    >>$@
     @echo uno_ext_getMapping @4					    >>$@
+    @echo component_canUnload @5				    >>$@
 
 .ENDIF
 
