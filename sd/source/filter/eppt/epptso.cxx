@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:59:15 $
+ *  last change: $Author: sj $ $Date: 2001-05-31 16:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_FONTRELIEF_HPP_
+#include <com/sun/star/text/FontRelief.hpp>
 #endif
 
 #include <svtools/fltcall.hxx>
@@ -1663,7 +1666,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             sal_uInt32 nCharAttr = pPortion->mnCharAttr;
 
             if ( nInstance == 4 )                       // special handling for normal textobjects:
-                nPropertyFlags |= nCharAttr & 0x17;     // not all attributes ar inherited
+                nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
             else
             {
                 if ( ( pPortion->mnCharAttrHard & 1 ) ||
@@ -1678,6 +1681,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 if ( ( pPortion->mnCharAttrHard & 0x10 ) ||
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Shadow, nCharAttr ) ) )
                     nPropertyFlags |= 0x10;
+                if ( ( pPortion->mnCharAttrHard & 0x200 ) ||
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Embossed, nCharAttr ) ) )
+                    nPropertyFlags |= 512;
             }
             if ( rTextObj.HasExtendedBullets() )
             {
@@ -2041,6 +2047,16 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
+
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
+    {
+        sal_Int16 nVal;
+        mAny >>= nVal;
+        if ( nVal != ::com::sun::star::text::FontRelief::NONE )
+            mnCharAttr |= 512;
+    }
+    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+        mnCharAttrHard |= 512;
 
     mnCharHeight = 24;
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) ), bGetPropStateValue ) )
