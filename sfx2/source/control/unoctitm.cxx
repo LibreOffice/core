@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:36:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,22 +416,20 @@ Reflection* ::getCppuType((const SfxOfficeDispatch*)0)
 }
 */
 
-SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
-    : bIntercept( bInter )
+SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
 //    nOfficeDispatchCount++;
 
     // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, nSlotId, rURL, bInter );
+    pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL );
 }
 
-SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
-    : bIntercept( bInter )
+SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
 //    nOfficeDispatchCount++;
 
     // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, nSlotId, rURL, bInter );
+    pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, pSlot, rURL );
 }
 
 SfxOfficeDispatch::~SfxOfficeDispatch()
@@ -442,7 +440,6 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     {
         // when dispatch object is released, destroy its connection to this object and destroy it
         pControllerItem->UnBindController();
-        delete pControllerItem;
     }
 }
 
@@ -526,19 +523,36 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     SfxOfficeDispatch*                 pDisp,
     SfxBindings*                       pBind,
     SfxDispatcher*                     pDispat,
-    sal_uInt16                         nSlotId,
-    const ::com::sun::star::util::URL& rURL,
-    sal_Bool                           bInter )
+    const SfxSlot*                     pSlot,
+    const ::com::sun::star::util::URL& rURL )
     : pDispatch( pDisp )
     , aDispatchURL( rURL )
     , pDispatcher( pDispat )
     , pBindings( pBind )
+    , pUnoName( pSlot->pUnoName )
     , pLastState( 0 )
-    , nSlot( nSlotId )
+    , nSlot( pSlot->GetSlotId() )
     , bVisible( sal_True )
     , bMasterSlave( sal_False )
 {
+    if ( aDispatchURL.Protocol.equalsAscii("slot:") && pUnoName )
+    {
+        ByteString aTmp(".uno:");
+        aTmp += pUnoName;
+        aDispatchURL.Complete = ::rtl::OUString::createFromAscii( aTmp.GetBuffer() );
+        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        xTrans->parseStrict( aDispatchURL );
+    }
+
     SetId( nSlot );
+    if ( pBindings )
+    {
+        // Bind immediately to enable the cache to recycle dispatches when asked for the same command
+        // a command in "slot" or in ".uno" notation must be treated as identical commands!
+        pBindings->ENTERREGISTRATIONS();
+        BindInternal_Impl( nSlot, pBindings );
+        pBindings->LEAVEREGISTRATIONS();
+    }
 }
 
 SfxDispatchController_Impl::~SfxDispatchController_Impl()
@@ -679,15 +693,16 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pDispatch &&
-        (( aURL.Protocol.equalsAscii( ".uno:" ) && ( aURL.Path == aDispatchURL.Path )) ||
-         ( aURL == aDispatchURL )))
+        ( aURL.Protocol.equalsAscii( ".uno:" ) && aURL.Path.equalsAscii( pUnoName ) ||
+          aURL.Protocol.equalsAscii( "slot:" ) && aURL.Path.toInt32() == GetId() ) )
     {
+        /*
         if ( !IsBound() && pBindings )
         {
             pBindings->ENTERREGISTRATIONS();
-            Bind( nSlot, pBindings );
+            BindInternal_Impl( nSlot, pBindings );
             pBindings->LEAVEREGISTRATIONS();
-        }
+        } */
 
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
@@ -701,7 +716,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             addParametersToArgs( aURL, lNewArgs );
 
         // Try to find call mode and frame name inside given arguments...
-        SfxCallMode nCall = SFX_CALLMODE_SYNCHRON;
+        SfxCallMode nCall = SFX_CALLMODE_SLOT;
         sal_Int32   nMarkArg = -1;
 
         sal_Bool    bTemp;
@@ -720,7 +735,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 rProp.Value >>= nModifier;
         }
 
-        // Overwrite possible detected sychron argument, if real listener exist!
+        // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
         if ( rListener.is() )
             nCall = SFX_CALLMODE_SYNCHRON;
 
@@ -852,12 +867,12 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     if ( !pDispatch )
         return;
 
-    if ( !IsBound() && pBindings )
+    /*if ( !IsBound() && pBindings )
     {
         pBindings->ENTERREGISTRATIONS();
-        Bind( nSlot, pBindings );
+        BindInternal_Impl( nSlot, pBindings );
         pBindings->LEAVEREGISTRATIONS();
-    }
+    } */
 
     // Use alternative QueryState call to have a valid UNO representation of the state.
     ::com::sun::star::uno::Any aState;
@@ -897,15 +912,6 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 {
     if ( !pDispatch )
         return;
-
-    if ( pDispatch->IsInterceptDispatch() )
-    {
-        // If this Controller is made for an interception, the state can't be set from outside
-        // because this would be the state of the interceptor itself!
-        if ( !pDispatcher && pBindings )
-            pDispatcher = GetBindings().GetDispatcher_Impl();
-        eState = pDispatcher->QueryState( GetId(), pState );
-    }
 
     // Bindings instance notifies controller about a state change, listeners must be notified also
     // Don't cache visibility state changes as they are volatile. We need our real state to send it
