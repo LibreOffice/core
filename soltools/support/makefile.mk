@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2001-06-11 16:05:18 $
+#   last change: $Author: hr $ $Date: 2001-06-13 14:45:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,12 +79,13 @@ TARGETTYPE=CUI
 OBJFILES= \
     $(OBJ)$/simstr.obj
 
+SLOFILES= \
+    $(SLO)$/simstr.obj
 
 
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
 
 
