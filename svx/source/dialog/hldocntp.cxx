@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:05:39 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
                                                                   SFX_CALLMODE_SYNCHRON,
                                                                   &aNewName, 0L );
+
                         }
                     }
                 }
@@ -518,8 +519,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
         if ( pViewFrame && maRbtEditLater.IsChecked() )
         {
             SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
-            BOOL bResult = pObjShell->DoClose();
-            pObjShell->OwnerLock(FALSE);
+            pObjShell->DoClose();
         }
     }
 
