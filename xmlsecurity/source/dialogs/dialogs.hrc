@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dialogs.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DIALOGS_HRC
+#define _DIALOGS_HRC
+
+#include <svtools/controldims.hrc>
+
+
+#define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
+
+// --------- general dialog ids ---------
+
+#define RID_XMLSECDLG_DIGSIG            1000
+#define RID_XMLSECDLG_CERTCHOOSER       1001
+#define RID_XMLSECDLG_CERTVIEWER        1002
+#define RID_XMLSECTP_GENERAL            1003
+#define RID_XMLSECTP_DETAILS            1004
+#define RID_XMLSECTP_CERTPATH           1005
+
+#define FL_BOTTOM_SEP                   50
+#define BTN_OK                          51
+#define BTN_CANCEL                      52
+#define BTN_HELP                        53
+#define LB_SIGNATURES                   54
+#define BTN_VIEWCERT                    55
+#define STR_HEADERBAR                   56
+
+// --------- general metrics ---------
+#define DLGS_WIDTH                      287
+#define DLGS_HEIGHT                     195
+// --------- ... for tab dialogs -----
+#define TP_WIDTH                        260
+#define TP_HEIGHT                       185
+#define RIDDER_HEIGHT                   (RSC_CD_PUSHBUTTON_HEIGHT)
+#define TD_SP_INNERBORDER_LEFT          3
+#define TD_SP_INNERBORDER_RIGHT         3
+#define TD_SP_INNERBORDER_TOP           3
+#define TD_SP_INNERBORDER_BOTTOM        3
+#define TD_WIDTH                        (TP_WIDTH+TD_SP_INNERBORDER_LEFT+TD_SP_INNERBORDER_RIGHT)
+#define TD_HEIGHT                       (TP_HEIGHT+TD_SP_INNERBORDER_TOP+2*TD_SP_INNERBORDER_BOTTOM+RSC_CD_PUSHBUTTON_HEIGHT+RIDDER_HEIGHT)
+
+#define SEP_FL_SPACE_Y                  6
+#define SEP_FL_ADJ_Y(val)               (val-3)
+#define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
+#define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
+#define DLGS_BOTTOM_LAST_CTRL_L(dlgh)   (DLGS_BOTTOM_BTN_Y(dlgh)-2*SEP_FL_SPACE_Y-3)
+#define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
+#define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+
+
+// --------- dialog Digital Signatures ---------
+#define BTN_ADDCERT                     2
+#define BTN_REMOVECERT                  3
+#define FT_HINT_DOC                     4
+#define FT_HINT_BASIC                   5
+#define FT_HINT_PACK                    6
+
+//#define DS_WIDTH                      DLGS_WIDTH
+//#define DS_HEIGHT                     DLGS_HEIGHT
+#define DS_BTNWIDTH_1                   70
+#define DS_BTNSPACE_X                   RSC_SP_CTRL_X
+#define DS_WIDTH                        (RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_DLG_INNERBORDER_RIGHT+2*DS_BTNSPACE_X+3*DS_BTNWIDTH_1)
+#define DS_HEIGHT                       (DLGS_WIDTH*2/3)
+
+#define DS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT
+//#define DS_COL_MID                        (DS_WIDTH/2)
+//#define DS_COL_3                      (DS_COL_MID-(DS_BTNWIDTH_1/2))
+//#define DS_COL_4                      (DS_COL_2+DS_BTNWIDTH_1)
+//#define DS_COL_2                      (DS_COL_3-DS_BTNSPACE_X)
+//#define DS_COL_1                      (DS_COL_2-DS_BTNWIDTH_1)
+#define DS_COL_1                        DS_COL_0
+#define DS_COL_2                        (DS_COL_1+DS_BTNWIDTH_1)
+#define DS_COL_3                        (DS_COL_2+DS_BTNSPACE_X)
+#define DS_COL_4                        (DS_COL_3+DS_BTNWIDTH_1)
+#define DS_COL_5                        (DS_COL_4+DS_BTNSPACE_X)
+//#define   DS_COL_6                        (DS_COL_5+DS_BTNWIDTH_1)
+#define DS_COL_7                        (DS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define DS_COL_6                        DS_COL_7
+
+#define DS_ROW_0                        RSC_SP_DLG_INNERBORDER_TOP
+#define DS_ROW_1                        (DS_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_X)
+#define DS_ROW_7                        DLGS_BOTTOM_BTN_L(DS_HEIGHT)
+#define DS_ROW_6                        DLGS_BOTTOM_BTN_Y(DS_HEIGHT)
+#define DS_ROW_5                        DLGS_BOTTOM_FL_Y(DS_HEIGHT)
+#define DS_ROW_4                        DLGS_BOTTOM_LAST_CTRL_L(DS_HEIGHT)
+#define DS_ROW_3                        (DS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
+#define DS_ROW_2                        (DS_ROW_3-RSC_SP_CTRL_Y)
+
+#define DS_LB_WIDTH                     (DS_COL_7-DS_COL_0)
+
+// --------- dialog Ceritficate chooser ---------
+#define FT_HINT_SELECT                  1
+
+#define CS_WIDTH                        DLGS_WIDTH
+#define CS_HEIGHT                       DLGS_HEIGHT
+#define CS_BTNWIDTH_1                   DS_BTNWIDTH_1
+
+#define CS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT
+#define CS_COL_2                        (CS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define CS_COL_1                        (CS_COL_2-CS_BTNWIDTH_1)
+
+#define CS_ROW_0                        RSC_SP_DLG_INNERBORDER_TOP
+#define CS_ROW_1                        (CS_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_X)
+#define CS_ROW_4                        DLGS_BOTTOM_LAST_CTRL_L(CS_HEIGHT)
+#define CS_ROW_3                        (CS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
+#define CS_ROW_2                        (CS_ROW_3-RSC_SP_CTRL_Y)
+
+#define CS_LB_WIDTH                     (CS_COL_2-CS_COL_0)
+
+// --------- tab dialog Certificate viewer ---------
+
+#define CV_COL_0                        TD_SP_INNERBORDER_LEFT
+#define CV_COL_1                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define CV_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
+#define CV_ROW_3                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
+#define CV_CONT_WIDTH                   (CV_COL_1-CV_COL_0)
+#define CV_CONT_HEIGHT                  (CV_ROW_3-CV_ROW_0)
+#define CV_ROW_1                        (CV_ROW_0+2*CV_CONT_HEIGHT/3)
+#define CV_ROW_2                        (CV_ROW_1+RSC_SP_CTRL_GROUP_Y)
+
+#define CV_COL_D                        (TD_WIDTH-TD_SP_INNERBORDER_RIGHT)
+#define CV_COL_C                        (CV_COL_D-RSC_CD_PUSHBUTTON_WIDTH)
+#define CV_COL_B                        (CV_COL_C-RSC_SP_CTRL_X)
+#define CV_COL_A                        (CV_COL_B-RSC_CD_PUSHBUTTON_WIDTH)
+
+#define CV_ROW_B                        (TD_HEIGHT-TD_SP_INNERBORDER_BOTTOM)
+#define CV_ROW_A                        (CV_ROW_B-RSC_CD_PUSHBUTTON_HEIGHT)
+
+// --------- tab page Certificate viewer - General ---------
+#define WIN_FRAME                       2
+#define IMG_CERT                        3
+#define FI_CERTINFO                     4
+#define FL_SEP1                         5
+#define FI_HINTNOTTRUST                 6
+#define FL_SEP2                         7
+#define FI_ISSTOLABEL                   8
+#define FI_ISSTO                        9
+#define FI_ISSBYLABEL                   10
+#define FI_ISSBY                        11
+#define FI_VALFROMLABEL                 12
+#define FI_VALFROM                      13
+#define FI_VALTOLABEL                   14
+#define FI_VALTO                        15
+#define IMG_KEY                         16
+#define FI_CORRPRIVKEY                  17
+
+#define IMG1_WIDTH                      33
+#define IMG1_HEIGHT                     22
+#define IMG2_WIDTH                      20
+#define IMG2_HEIGHT                     20
+#define DATE_WIDTH                      30
+#define CW_COL_0                        (CV_COL_0+RSC_SP_GRP_INNERBORDER_LEFT)
+#define CW_COL_1                        (CW_COL_0+RSC_SP_FLGR_SPACE_X)
+#define CW_COL_1a                       (CW_COL_0+IMG2_WIDTH+1)
+#define CW_COL_2                        (CW_COL_0+IMG1_WIDTH)
+#define CW_COL_3                        (CW_COL_2+RSC_SP_CTRL_GROUP_X)
+#define CW_COL_4                        (CW_COL_1+40)
+#define CW_COL_5                        (CV_CONT_WIDTH-RSC_SP_GRP_INNERBORDER_RIGHT)
+#define CW_COL_5a                       (CW_COL_5-RSC_SP_GRP_INNERBORDER_RIGHT)
+#define CW_COL_4a                       (CW_COL_1+38)
+#define CW_COL_4b                       (CW_COL_4a+DATE_WIDTH)
+#define CW_COL_4c                       (CW_COL_4b+3)
+#define CW_COL_4d                       (CW_COL_4c+8)
+#define CW_COL_4e                       (CW_COL_4d+3)
+#define CW_ROW_0                        (CV_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
+#define CW_ROW_1                        (CW_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
+#define CW_ROW_2                        (CW_ROW_0+IMG1_HEIGHT)
+#define CW_ROW_3                        (CW_ROW_2+3)
+#define CW_ROW_4                        (CW_ROW_3+RSC_SP_CTRL_Y+RSC_CD_FIXEDLINE_HEIGHT)
+#define CW_ROW_4a                       (CW_ROW_4+35)
+#define CW_ROW_5                        (CW_ROW_4a+3)
+#define CW_ROW_6                        (CW_ROW_5+RSC_SP_CTRL_Y+RSC_CD_FIXEDLINE_HEIGHT)
+#define CW_ROW_7                        (CW_ROW_6+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+#define CW_ROW_8                        (CW_ROW_7+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+#define CW_ROW_9                        (CW_ROW_8+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+#define CW_ROW_10                       (CW_ROW_9+2)
+#define CW_ROW_11                       (CW_ROW_9+IMG2_HEIGHT)
+
+// --------- tab page Certificate viewer - Details ---------
+
+#define LB_ELEMENTS                     1
+#define ML_ELEMENT                      2
+
+#define STR_VERSION                     1
+#define STR_SERIALNUM                   2
+#define STR_SIGALGORITHM                3
+#define STR_ISSUER                      4
+#define STR_VALIDFROM                   5
+#define STR_VALIDTO                     6
+#define STR_SUBJECT                     7
+#define STR_PUBKEY                      8
+
+// --------- tab page Certificate viewer - Certification Path ---------
+
+#define FT_CERTPATH                     1
+#define FT_CERTSTATUS                   2
+#define ML_CERTSTATUS                   3
+
+#define CV_ROW_0A                       (CV_ROW_0+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+#define CV_ROW_2A                       (CV_ROW_2+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+
+#endif

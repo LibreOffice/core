@@ -1,0 +1,334 @@
+/*************************************************************************
+ *
+ *  $RCSfile: certificateviewer.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+
+TabDialog RID_XMLSECDLG_CERTVIEWER
+{
+    // HelpID = HID_XMLSECDLG_CERTVIEWER;
+    Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text = "View Certificate";
+    Text [ en-US ] = "View Certificate";
+    TabControl 1
+    {
+        Pos = MAP_APPFONT( TD_SP_INNERBORDER_LEFT, TD_SP_INNERBORDER_TOP );
+        Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT+RIDDER_HEIGHT );
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_GENERAL;
+                Text = "General";
+                Text [ en-US ] = "General";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_DETAILS;
+                Text = "Details";
+                Text [ en-US ] = "Details";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_CERTPATH;
+                Text = "Certification Path";
+                Text [ en-US ] = "Certification Path";
+            };
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( CV_COL_A, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( CV_COL_C, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+TabPage RID_XMLSECTP_GENERAL
+{
+//  HelpId = HID_XMLSECTP_GENERAL;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    Window WIN_FRAME
+    {
+        SVLook = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_CONT_HEIGHT );
+    };
+    FixedImage IMG_CERT
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_0 );
+        Size = MAP_APPFONT( CW_COL_2-CW_COL_0, CW_ROW_2-CW_ROW_0 );
+//      Fixed = Image
+//      {
+//          ImageBitmap = Bitmap { File = "xmlsec_cert_l.bmp"; };
+//          MaskColor = STD_MASKCOLOR;
+//      };
+    };
+    FixedText FI_CERTINFO
+    {
+        Pos = MAP_APPFONT( CW_COL_3, CW_ROW_1 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_3, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = " Certificate Information";
+        Text [ en-US ] = " Certificate Information";
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_3 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    FixedText FI_HINTNOTTRUST
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_4 );
+        Size = MAP_APPFONT( CW_COL_5a-CW_COL_1, CW_ROW_4a-CW_ROW_4 );
+        WordBreak = TRUE;
+        Text = "This CA Root certificate is not trusted. To enable trust, install this certificate in the Trusted Root Certification Authorities store";
+        Text [ en-US ] = "This CA Root certificate is not trusted. To enable trust, install this certificate in the Trusted Root Certification Authorities store";
+    };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_5 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    FixedText FI_ISSTOLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_6 );
+        Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Issued to:";
+        Text [ en-US ] = "Issued to:";
+    };
+    FixedText FI_ISSTO
+    {
+        Pos = MAP_APPFONT( CW_COL_4, CW_ROW_6 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_4, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedText FI_ISSBYLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_7 );
+        Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Issued by:";
+        Text [ en-US ] = "Issued by:";
+    };
+    FixedText FI_ISSBY
+    {
+        Pos = MAP_APPFONT( CW_COL_4, CW_ROW_7 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_4, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedText FI_VALFROMLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_8 );
+        Size = MAP_APPFONT( CW_COL_4a-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Valid from ";
+        Text [ en-US ] = "Valid from ";
+    };
+    FixedText FI_VALFROM
+    {
+        Pos = MAP_APPFONT( CW_COL_4a, CW_ROW_8 );
+        Size = MAP_APPFONT( CW_COL_4b-CW_COL_4a, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedText FI_VALTOLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_4c, CW_ROW_8 );
+        Size = MAP_APPFONT( CW_COL_4d-CW_COL_4c, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = " to ";
+        Text [ en-US ] = " to ";
+    };
+    FixedText FI_VALTO
+    {
+        Pos = MAP_APPFONT( CW_COL_4e, CW_ROW_8 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_4e, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedImage IMG_KEY
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_9 );
+        Size = MAP_APPFONT( CW_COL_2-CW_COL_0, CW_ROW_11-CW_ROW_9 );
+//      Fixed = Image
+//      {
+//          ImageBitmap = Bitmap { File = "xmlsec_key.bmp"; };
+//          MaskColor = STD_MASKCOLOR;
+//      };
+    };
+    FixedText FI_CORRPRIVKEY
+    {
+        Pos = MAP_APPFONT( CW_COL_1a, CW_ROW_10 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_1a, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "You have a private key that corresponds to this certificate.";
+        Text [ en-US ] = "You have a private key that corresponds to this certificate.";
+    };
+};
+
+TabPage RID_XMLSECTP_DETAILS
+{
+//  HelpId = HID_XMLSECTP_DETAILS;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    Control LB_ELEMENTS
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0 );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    String STR_HEADERBAR
+    {
+        Text = "Field\tValue";
+        Text [ en-US ] = "Field\tValue";
+    };
+    MultiLineEdit ML_ELEMENT
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2 );
+        ReadOnly = TRUE;
+        Border = TRUE;
+    };
+    String STR_VERSION
+    {
+        Text = "Version";
+        Text [ en-US ] = "Version";
+    };
+    String STR_SERIALNUM
+    {
+        Text = "Serial Number";
+        Text [ en-US ] = "Serial Number";
+    };
+    String STR_SIGALGORITHM
+    {
+        Text = "Signature Algorithm";
+        Text [ en-US ] = "Signature Algorithm";
+    };
+    String STR_ISSUER
+    {
+        Text = "Issuer";
+        Text [ en-US ] = "Issuer";
+    };
+    String STR_VALIDFROM
+    {
+        Text = "Valid From";
+        Text [ en-US ] = "Valid From";
+    };
+    String STR_VALIDTO
+    {
+        Text = "Valid to";
+        Text [ en-US ] = "Valid to";
+    };
+    String STR_SUBJECT
+    {
+        Text = "Subject";
+        Text [ en-US ] = "Subject";
+    };
+    String STR_PUBKEY
+    {
+        Text = "Public Key";
+        Text [ en-US ] = "Public Key";
+    };
+};
+
+TabPage RID_XMLSECTP_CERTPATH
+{
+//  HelpId = HID_XMLSECTP_CERTPATH;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedText FT_CERTPATH
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Certification path";
+        Text [ en-US ] = "Certification path";
+    };
+    Control LB_SIGNATURES
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0A );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0A );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    FixedText FT_CERTSTATUS
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Certification status";
+        Text [ en-US ] = "Certification status";
+    };
+    MultiLineEdit ML_CERTSTATUS
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2A );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2A );
+        ReadOnly = TRUE;
+        Border = TRUE;
+    };
+};

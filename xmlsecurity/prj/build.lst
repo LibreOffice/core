@@ -1,0 +1,10 @@
+xs	xmlsecurity	:	xmloff offapi unoil svx moz NULL
+xs	xmlsecurity                                                        usr1	 -	all	xs_mkout	NULL
+xs	xmlsecurity\source\framework                                       nmake -	all	xs_fw NULL
+xs	xmlsecurity\source\xmlsec\nss                                      nmake -	all	xs_nss NULL
+xs	xmlsecurity\source\xmlsec\mscrypt                                  nmake -	all	xs_mscrypt NULL
+xs	xmlsecurity\source\xmlsec                                          nmake -	all	xs_xmlsec xs_nss xs_mscrypt NULL
+xs	xmlsecurity\source\helper                                          nmake -	all	xs_helper NULL
+xs	xmlsecurity\source\dialogs                                         nmake -	all	xs_dialogs NULL
+xs	xmlsecurity\source\component                                       nmake -	all	xs_component NULL
+xs	xmlsecurity\util                                                   nmake -	all	xs_util xs_fw xs_xmlsec xs_nss xs_mscrypt xs_helper xs_dialogs xs_component NULL

@@ -1,0 +1,7 @@
+C:\temp-folder\examples\warmup.xml
+C:\temp-folder\examples\sign-0.xml
+C:\temp-folder\examples\sign-1.xml
+C:\temp-folder\examples\sign-2.xml
+C:\temp-folder\examples\sign-3.xml
+C:\temp-folder\examples\sign-4.xml
+C:\temp-folder\examples\sign-5.xml

@@ -1,0 +1,14 @@
+C:\temp-folder\examples\warmup-ex.xml
+C:\temp-folder\examples\sign-0-ex.xml
+C:\temp-folder\examples\sign-1-ex.xml
+C:\temp-folder\examples\sign-2-ex.xml
+C:\temp-folder\examples\sign-3-ex.xml
+C:\temp-folder\examples\sign-4-ex.xml
+C:\temp-folder\examples\sign-5-ex.xml
+C:\temp-folder\examples\warmup-ex2.xml
+C:\temp-folder\examples\sign-0-ex2.xml
+C:\temp-folder\examples\sign-1-ex2.xml
+C:\temp-folder\examples\sign-2-ex2.xml
+C:\temp-folder\examples\sign-3-ex2.xml
+C:\temp-folder\examples\sign-4-ex2.xml
+C:\temp-folder\examples\sign-5-ex2.xml
