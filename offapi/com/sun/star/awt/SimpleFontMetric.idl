@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleFontMetric.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,49 +68,37 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::SimpleFontMetric
 /** describes the general metrics of a certain font.
  */
 struct SimpleFontMetric
 {
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::Ascent
     /** specifies the portion of a lower case character that
         rises above the height of the character "x" of the font.
 
-
-
         <p>For example, the letters 'b', 'd', 'h', 'k' and 'l'
-        have an ascent unequal to 0.
+        have an ascent unequal to 0.</p>
 
-        </p>
-        <p>ascent is measured in pixels, thus the font metric is
+        <p>The ascent is measured in pixels, thus the font metric is
         device dependent.</p>
      */
     short Ascent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::Descent
     /** specifies the portion of a letter falling below the baseline.
 
-
-
         <p>For example, the letters 'g', 'p', and 'y'
-        have a descent unequal to 0.
+        have a descent unequal to 0.</p>
 
-        </p>
-        <p>descent is measured in pixels, thus the font metric is
+        <p>The descent is measured in pixels, thus the font metric is
         device dependent.</p>
      */
     short Descent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::Leading
     /** specifies the vertical space between lines of this font;
         it is also called internal linespacing.
-
-
 
         <p>The leading is measured in pixels, thus the font metric is
         device dependent.</p>
@@ -119,10 +107,7 @@ struct SimpleFontMetric
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::Slant
     /** specifies the slant of the characters (italic).
-
-
 
         <p>The slant is measured in degrees from 0 to 359.</p>
      */
@@ -130,14 +115,12 @@ struct SimpleFontMetric
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::FirstChar
     /** specifies the code of the first printable character in the font.
      */
     char FirstChar;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::SimpleFontMetric::LastChar
     /** specifies the code of the last printable character in the font.
      */
     char LastChar;

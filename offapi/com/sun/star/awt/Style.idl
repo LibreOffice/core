@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Style.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,21 +67,21 @@
  module com {  module sun {  module star {  module awt {
 
 //=============================================================================
-// DOCUMENTATION MISSING FOR Style
 
-// DocMerge: empty anyway
+/** specifies the style of a window.
+ */
 constants Style
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Style::FRAME
 
-    // DocMerge: empty anyway
+    /** specifies a frame.
+     */
     const short FRAME = 0;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Style::DIALOG
 
-    // DocMerge: empty anyway
+    /** specifies a dialog.
+     */
     const short DIALOG = 1;
 
 };

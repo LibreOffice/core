@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Size.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,18 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::Size
 /** specifies the 2-dimensional size of an area using width and height.
  */
 struct Size
 {
-    // DocMerge from xml: field com::sun::star::awt::Size::Width
+    //-------------------------------------------------------------------------
+
     /** specifies the width.
      */
     long Width;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Size::Height
     /** specifies the height.
      */
     long Height;
