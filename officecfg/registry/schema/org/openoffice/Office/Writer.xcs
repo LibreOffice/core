@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 07:57:12 $
+ *  last change: $Author: os $ $Date: 2002-09-04 10:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@
         </info>
       </prop>
       <prop oor:name="Content" oor:type="xs:string" oor:localized="true">
+        <value xsi:nil="true"/>
         <info>
           <desc xml:lang="en-US"></desc>
         </info>
@@ -5004,6 +5005,7 @@
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 1 -->
             <!-- Notice: Constraints: Any -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Title for the agenda</desc>
               <label xml:lang="en-US">Title of meeting</label>
@@ -5033,6 +5035,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page 2 -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Location of the meeting</desc>
               <label xml:lang="en-US">Location</label>
@@ -5826,6 +5829,7 @@
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
+              <value xsi:nil="true"/>
               <info>
                 <desc xml:lang="en-US">Text before the page number</desc>
               </info>
@@ -5857,6 +5861,7 @@
                 <!-- OldLocation: wizard.ini -->
                 <!-- Responsible: OS -->
                 <!-- UIHints: File / AutoPilot / Letter / Page 5 -->
+                <value xsi:nil="true"/>
                 <info>
                   <desc xml:lang="en-US">Specifies the text before the total page number</desc>
                 </info>
@@ -5984,6 +5989,7 @@
               <info>
                 <desc xml:lang="en-US">Text of the footer</desc>
               </info>
+              <value xsi:nil="true"/>
             </prop>
             <prop oor:name="FromBottom" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
@@ -6420,6 +6426,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 1 -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Fax title</desc>
               <label xml:lang="en-US">Please enter the fax title</label>
@@ -6877,6 +6884,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 6 -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Text of the footer</desc>
             </info>
@@ -7007,6 +7015,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Info -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Subject for the properties</desc>
               <label xml:lang="en-US">Subject</label>
@@ -7108,6 +7117,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax / Page 7 / Template -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Text for the description field in the properties dialog</desc>
               <label xml:lang="en-US">Info</label>
@@ -7169,6 +7179,7 @@
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
               <!-- UIHints: File / AutoPilot / Memo / Page 1 -->
+              <value xsi:nil="true"/>
               <info>
                 <desc xml:lang="en-US">Title of the memo</desc>
               </info>
@@ -7518,6 +7529,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Info -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Subject for the properties</desc>
               <label xml:lang="en-US">Subject</label>
@@ -7619,6 +7631,7 @@
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page 7 / Template -->
+            <value xsi:nil="true"/>
             <info>
               <desc xml:lang="en-US">Text for the description field in the properties dialog</desc>
               <label xml:lang="en-US">Info</label>
