@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 11:55:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,7 +1157,7 @@ String RID_SVXSTR_CLOSE
     Text[ chinese_simplified ] = "¹Ø±Õ";
     Text[ russian ] = "Çàêğûòü";
     Text[ polish ] = "Zamknij";
-    Text[ japanese ] = "I—¹";
+    Text[ japanese ] = "•Â‚¶‚é";
     Text[ chinese_traditional ] = "Ãö³¬";
     Text[ arabic ] = "ÅÛáÇŞ";
     Text[ greek ] = "Êëåßóéìï";
@@ -2298,7 +2298,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ japanese ] = "3D";
     Text[ korean ] = "3£Ä";
     Text[ chinese_simplified ] = "3 Î¬";
-    Text[ chinese_traditional ] = "3 ·L";
+    Text[ chinese_traditional ] = "3D";
     Text[ arabic ] = "ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
@@ -2439,7 +2439,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ japanese ] = "’Ê‰İ 3D";
     Text[ korean ] = "ÅëÈ­ 3£Ä";
     Text[ chinese_simplified ] = "»õ±Ò 3 Î¬";
-    Text[ chinese_traditional ] = "³f¹ô 3 ºû";
+    Text[ chinese_traditional ] = "³f¹ô 3D";
     Text[ arabic ] = "ÚãáÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "Para birimi 3B";
 };
@@ -4092,6 +4092,23 @@ String RID_SVXSTR_BMP21
     Text = "Bitmap";
     Text [ ENGLISH ] = "Bitmap";
     Text [ english_us ] = "Bitmap";
+    Text[ portuguese ] = "Bitmap";
+    Text[ russian ] = "Bitmap";
+    Text[ greek ] = "Bitmap";
+    Text[ dutch ] = "Bitmap";
+    Text[ french ] = "Bitmap";
+    Text[ spanish ] = "Bitmap";
+    Text[ italian ] = "Bitmap";
+    Text[ danish ] = "Bitmap";
+    Text[ swedish ] = "Bitmap";
+    Text[ polish ] = "Mapa bitowa";
+    Text[ portuguese_brazilian ] = "Bitmap";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß";
+    Text[ korean ] = "Bitmap";
+    Text[ chinese_simplified ] = "Î»Í¼";
+    Text[ chinese_traditional ] = "ÂI°}¹Ï";
+    Text[ turkish ] = "Bitmap";
+    Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -4178,7 +4195,7 @@ String RID_SVXSTR_DASH0
     Text[ japanese ] = "‹É×‚Ì”jü";
     Text[ korean ] = "¾ÆÁÖ °¡´Â ´ë½Ã";
     Text[ chinese_simplified ] = "³¬Ï¸»®Ïß";
-    Text[ chinese_traditional ] = "¶W²ÓÂI¦E½u";
+    Text[ chinese_traditional ] = "¶W²ÓÂI¹º½u";
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ ÌÏÇğ";
     Text[ turkish ] = "Çok ince kesik çizgili";
 };
@@ -4201,7 +4218,7 @@ String RID_SVXSTR_DASH1
     Text[ japanese ] = "×‚©‚¢”jü";
     Text[ korean ] = "°¡´Â ´ë½Ã";
     Text[ chinese_simplified ] = "Ï¸»®Ïß";
-    Text[ chinese_traditional ] = "²ÓÂI¦E½u";
+    Text[ chinese_traditional ] = "²ÓÂI¹º½u";
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ";
     Text[ turkish ] = "İnce kesik çizgili";
 };
@@ -4293,7 +4310,7 @@ String RID_SVXSTR_DASH5
     Text[ japanese ] = "×‚©‚¢”jü(‰Â•Ï)";
     Text[ korean ] = "°¡´Â ´ë½Ã(°¡º¯Àû)";
     Text[ chinese_simplified ] = "Ï¸»®Ïß (¿É±ä)";
-    Text[ chinese_traditional ] = "²ÓÂI¦E½u(¥iÅÜ)";
+    Text[ chinese_traditional ] = "²ÓÂI¹º½u(¥iÅÜ)";
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ (ãÊÛíÑÉ)";
     Text[ turkish ] = "İnce kesik çizgili (değişken)";
 };
@@ -4408,7 +4425,7 @@ String RID_SVXSTR_DASH10
     Text[ japanese ] = "”jü(‰Â•Ï)";
     Text[ korean ] = "´ë½Ã (À¯µ¿Àû)";
     Text[ chinese_simplified ] = "»®Ïß (¿É±ä)";
-    Text[ chinese_traditional ] = "ÂI¦E½u(¥iÅÜ)";
+    Text[ chinese_traditional ] = "ÂI¹º½u(¥iÅÜ)";
     Text[ arabic ] = "ÔõÑØ (ãÊÛíÑÉ)";
     Text[ turkish ] = "Kesik çizgili (değişken)";
 };
@@ -4417,6 +4434,23 @@ String RID_SVXSTR_DASH11
     Text = "Gestrichelt";
     Text [ ENGLISH ] = "Dashed";
     Text [ english_us ] = "Dashed";
+    Text[ portuguese ] = "Dashed";
+    Text[ russian ] = "Ïóíêòèğíûé";
+    Text[ greek ] = "Äéáêåêïììİíï";
+    Text[ dutch ] = "Dashed";
+    Text[ french ] = "Dashed";
+    Text[ spanish ] = "Dashed";
+    Text[ italian ] = "Dashed";
+    Text[ danish ] = "Dashed";
+    Text[ swedish ] = "Streckat";
+    Text[ polish ] = "Kreski";
+    Text[ portuguese_brazilian ] = "Dashed";
+    Text[ japanese ] = "”jüó";
+    Text[ korean ] = "Dashed";
+    Text[ chinese_simplified ] = "ÆÆÕÛºÅ";
+    Text[ chinese_traditional ] = "¯}§é¸¹";
+    Text[ turkish ] = "Dashed";
+    Text[ arabic ] = "ÔõÑØ";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
