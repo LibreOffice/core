@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-09 10:54:33 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 11:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include <svtools/fltcall.hxx>
 #endif
 #ifndef _SVX_IMPGRF_HXX
-#include <svx/impgrf.hxx>
+#include "impgrf.hxx"
 #endif
 
 #include <rtl/uuid.h>
