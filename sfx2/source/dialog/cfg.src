@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:42:54 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 18:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,11 +260,11 @@
     Text [ dutch ] = "~Functie" ; \
     Text [ spanish ] = "~Funciσn" ; \
     Text [ english_us ] = "Function" ; \
-    Text[ chinese_simplified ] = "εθƒ½(~F)";  \
+    Text[ chinese_simplified ] = "εθƒ½";  \
     Text[ russian ] = "Τσνκφθÿ";    \
     Text[ polish ] = "Funkcja"; \
     Text[ japanese ] = "ζ©θƒ½";    \
-    Text[ chinese_traditional ] = "εθƒ½(~F)"; \
+    Text[ chinese_traditional ] = "εθƒ½"; \
     Text[ arabic ] = "γεγΙ";    \
     Text[ greek ] = "~Συνάρτηση";   \
     Text[ korean ] = "κΈ°λ¥";  \
@@ -323,7 +323,7 @@ TabPage TP_CONFIG_MENU
         Text[ swedish ] = "Menyposter";
         Text[ polish ] = "Wpisy menu";
         Text[ portuguese_brazilian ] = "Menu entries";
-        Text[ japanese ] = "οΎ’οΎ†ο½­ο½°ι …η›®";
+        Text[ japanese ] = "γƒ΅γƒ‹γƒ¥γƒΌι …η›®";
         Text[ korean ] = "λ©”λ‰΄ ν•­λª©";
         Text[ chinese_simplified ] = "θε•ζ΅η›®";
         Text[ chinese_traditional ] = "εθƒ½θ΅¨ι …η›®";
@@ -356,7 +356,7 @@ TabPage TP_CONFIG_MENU
         Text[ chinese_simplified ] = "ζ–°θε•(~U)";
         Text[ russian ] = "Νξβξε μενώ";
         Text[ polish ] = "Nowe menu";
-        Text[ japanese ] = "ζ–°γ—γ„οΎ’οΎ†ο½­ο½°(~U)";
+        Text[ japanese ] = "ζ–°γ—γ„γƒ΅γƒ‹γƒ¥γƒΌ(~U)";
         Text[ chinese_traditional ] = "ζ–°εθƒ½θ΅¨(~U)";
         Text[ arabic ] = "ήΗΖγΙ ΜΟνΟΙ";
         Text[ greek ] = "Νέο ~μενού";
@@ -563,7 +563,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ swedish ] = "Tangentkombinationer";
         Text[ polish ] = "Skrσty klawiaturowe";
         Text[ portuguese_brazilian ] = "Keyboard shortcuts";
-        Text[ japanese ] = "ο½Όο½®ο½°οΎ„ο½¶ο½―οΎ„ο½·ο½°";
+        Text[ japanese ] = "γ‚·γƒ§γƒΌγƒγ‚«γƒƒγƒγ‚­γƒΌ";
         Text[ korean ] = "ν‚¤λ³΄λ“ λ°”λ΅κ°€κΈ° ν‚¤";
         Text[ chinese_simplified ] = "η»„ει”®";
         Text[ chinese_traditional ] = "ηµ„ειµ";
@@ -639,7 +639,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ chinese_simplified ] = "ι”®(~K)";
         Text[ russian ] = "Κλΰβθψθ";
         Text[ polish ] = "Klawisze";
-        Text[ japanese ] = "ο½·ο½°(~K)";
+        Text[ japanese ] = "γ‚­γƒΌ(~K)";
         Text[ chinese_traditional ] = "ιµ(~K)";
         Text[ arabic ] = "γέΗΚνΝ";
         Text[ greek ] = "Πλήκ~τρα";
@@ -707,7 +707,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ chinese_simplified ] = "η¶ζ€ζ  ";
         Text[ russian ] = "Ρςπξκΰ ρξρςξÿνθÿ ";
         Text[ polish ] = "Pasek stanu ";
-        Text[ japanese ] = "ο½½οΎƒο½°οΎ€ο½½οΎοΎο½°";
+        Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚ΉγƒγƒΌ";
         Text[ chinese_traditional ] = "η‹€ζ…‹ε— ";
         Text[ arabic ] = "ΤΡνΨ ΗαγΪαζγΗΚ ";
         Text[ greek ] = "Γραμμή κατάστασης ";
@@ -800,7 +800,7 @@ TabDialog DLG_CONFIG
                 Text[ chinese_simplified ] = "θε•";
                 Text[ russian ] = "Μενώ";
                 Text[ polish ] = "Menu";
-                Text[ japanese ] = "οΎ’οΎ†ο½­ο½°";
+                Text[ japanese ] = "γƒ΅γƒ‹γƒ¥γƒΌ";
                 Text[ chinese_traditional ] = "εθƒ½θ΅¨";
                 Text[ arabic ] = "ΗαήΗΖγΙ";
                 Text[ greek ] = "Μενού";
@@ -830,7 +830,7 @@ TabDialog DLG_CONFIG
                 Text[ chinese_simplified ] = "ι”®η›";
                 Text[ russian ] = "Κλΰβθΰςσπΰ";
                 Text[ polish ] = "Klawiatura";
-                Text[ japanese ] = "ο½·ο½°οΎοΎο½°οΎ„οΎ";
+                Text[ japanese ] = "γ‚­γƒΌγƒγƒΌγƒ‰";
                 Text[ chinese_traditional ] = "ιµη›¤";
                 Text[ arabic ] = "αζΝΙ ΗαγέΗΚνΝ";
                 Text[ greek ] = "Πληκτρολόγιο";
@@ -859,7 +859,7 @@ TabDialog DLG_CONFIG
                 Text[ chinese_simplified ] = "η¶ζ€ζ ";
                 Text[ russian ] = "Ρςπξκΰ ρξρςξÿνθÿ";
                 Text[ polish ] = "Pasek stanu";
-                Text[ japanese ] = "ο½½οΎƒο½°οΎ€ο½½οΎοΎο½°";
+                Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚ΉγƒγƒΌ";
                 Text[ chinese_traditional ] = "η‹€ζ…‹ε—";
                 Text[ arabic ] = "ΤΡνΨ ΗαγΪαζγΗΚ";
                 Text[ greek ] = "Γραμμή κατάστασης";
@@ -888,7 +888,7 @@ TabDialog DLG_CONFIG
                 Text[ chinese_simplified ] = "ε›Ύζ ‡ζ ";
                 Text[ russian ] = "Οΰνελθ ρθμβξλξβ";
                 Text[ polish ] = "Paski symboli";
-                Text[ japanese ] = "οΎ‚ο½°οΎ™οΎοΎο½°";
+                Text[ japanese ] = "γƒ„γƒΌγƒ«γƒγƒΌ";
                 Text[ chinese_traditional ] = "ε–η¤Ίε—";
                 Text[ arabic ] = "ΓΤΡΨΙ ΗαΡγζÒ";
                 Text[ greek ] = "Γραμμές συμβόλων";
@@ -917,7 +917,7 @@ TabDialog DLG_CONFIG
                 Text[ chinese_simplified ] = "δΊ‹δ»¶";
                 Text[ russian ] = "Ρξαϋςθÿ";
                 Text[ polish ] = "Wydarzenia";
-                Text[ japanese ] = "ο½²οΎοΎοΎοΎ„";
+                Text[ japanese ] = "γ‚¤γƒ™γƒ³γƒ";
                 Text[ chinese_traditional ] = "ε‹•δ½";
                 Text[ arabic ] = "ΗαΓΝΟΗΛ";
                 Text[ greek ] = "Γεγονότα";
@@ -1150,7 +1150,7 @@ String STR_COPY
     Text[ chinese_simplified ] = "ε¤ε¶";
     Text[ russian ] = "Κξοθπξβΰςό";
     Text[ polish ] = "Kopiuj";
-    Text[ japanese ] = "ο½ΊοΎ‹οΎο½°";
+    Text[ japanese ] = "γ‚³γƒ”γƒΌ";
     Text[ chinese_traditional ] = "θ¤‡θ£½";
     Text[ arabic ] = "δΣΞ";
     Text[ greek ] = "Αντιγραφή";
@@ -1291,7 +1291,7 @@ String STR_PROPERTIES
     Text[ chinese_simplified ] = "ε±ζ€§";
     Text[ russian ] = "Ρβξιρςβΰ";
     Text[ polish ] = "W³aciwoci";
-    Text[ japanese ] = "οΎοΎοΎ›οΎοΎοΎƒο½¨";
+    Text[ japanese ] = "γƒ—γƒ­γƒ‘γƒ†γ‚£";
     Text[ chinese_traditional ] = "ε±¬ζ€§";
     Text[ arabic ] = "ΞΥΗΖΥ";
     Text[ greek ] = "Ιδιότητες";
@@ -1381,7 +1381,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ chinese_simplified ] = "θΏε­ε¨δΈ€δΊ›εªθƒ½θ®©η»™εΌΉε‡ΊεΌθε•ζ‰§θ΅η„ζ΅η›®γ€‚\nζ‚¨θΏζ―θ¦ζ¥ε—θΏ™δΈªι…η½®ε—οΌ";
     Message[ russian ] = "Ρσωερςβσώς ηΰοθρθ ρ τσνκφθÿμθ, κξςξπϋε μξγσς αϋςό οπθρβξενϋ ςξλόκξ βρολϋβΰώωθμ μενώ.\n\nΒϋ βρε πΰβνξ υξςθςε οπθνÿςό ύςθ κξντθγσπΰφθθ?";
     Message[ polish ] = "IstniejΉ jeszcze wpisy, ktσre mogΉ zostaζ przypisane tylko oknom typu popup. n\nCzy chcesz mimo to zastosowaζ tκ konfiguracjκ?";
-    Message[ japanese ] = "γΎγ οΎοΎο½―οΎοΎο½±ο½―οΎοΎγ®γΏγ«ε‰²γ‚ε½“γ¦γ‚‰γ‚γ‚‹ζ©θƒ½γ®ι …η›®γγ‚γ‚γΎγ™γ€‚\n\nγ“γ®θ¨­ε®γ‚’ι©η”¨γ—γ¦γ‚‚γ„γ„γ§γ™γ‹?";
+    Message[ japanese ] = "γΎγ γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γ®γΏγ«ε‰²γ‚ε½“γ¦γ‚‰γ‚γ‚‹ζ©θƒ½γ®ι …η›®γγ‚γ‚γΎγ™γ€‚\n\nγ“γ®θ¨­ε®γ‚’ι©η”¨γ—γ¦γ‚‚γ„γ„γ§γ™γ‹?";
     Message[ chinese_traditional ] = "ι‚„ε­ε¨δΈ€δΊ›εªθƒ½θ®“ηµ¦εΏ«ι΅―εθƒ½θ΅¨ε·θ΅η„ι …η›®γ€‚\nζ‚¨ι‚„ζ―θ¦ζ¥ε—ι€™ε€‹ι…η½®οΌ";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια ";
@@ -1408,7 +1408,7 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message[ chinese_simplified ] = "θΏ™δΈªεΌΉε‡ΊεΌθε•ε·²η»ε…ε«δΊ†θΏ™δΈªεθƒ½γ€‚";
     Message[ russian ] = "έςΰ τσνκφθÿ σζε ρξδεπζθςρÿ β βρολϋβΰώωεμ μενώ.";
     Message[ polish ] = "Ta funkcja jest juΏ zawarta w menu podrκcznym.";
-    Message[ japanese ] = "ζ©θƒ½γ―γ™γ§γ«γ“γ®οΎοΎο½―οΎοΎο½±ο½―οΎοΎγ«ε«γΎγ‚γ¦γ„γΎγ™γ€‚";
+    Message[ japanese ] = "ζ©θƒ½γ―γ™γ§γ«γ“γ®γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γ«ε«γΎγ‚γ¦γ„γΎγ™γ€‚";
     Message[ chinese_traditional ] = "ι€™ε€‹εΏ«ι€εθƒ½θ΅¨ε·²η¶“ε…ε«δΊ†ι€™ε€‹εθƒ½γ€‚";
     Message[ arabic ] = "ΗαγεγΙ γζΜζΟΙ γΣΘήΗπ έν εΠε ΗαήΗΖγΙ ΗαγδΘΛήΙ.";
     Message[ greek ] = "Η συνάρτηση περιέχεται ήδη σε αυτό το αναδυόμενο κείμενο.";
@@ -1435,7 +1435,7 @@ String STR_LOADMENUCONFIG
     Text[ chinese_simplified ] = "θ£…ε…¥θε•ι…η½®";
     Text[ russian ] = "Ηΰγπσηθςό κξντθγσπΰφθώ μενώ";
     Text[ polish ] = "£aduj konfiguracjκ menu";
-    Text[ japanese ] = "οΎ’οΎ†ο½­ο½°θ¨­ε®γ®θª­γΏθΎΌγΏ";
+    Text[ japanese ] = "γƒ΅γƒ‹γƒ¥γƒΌθ¨­ε®γ®θª­γΏθΎΌγΏ";
     Text[ chinese_traditional ] = "θΌ‰ε…¥εθƒ½θ΅¨ι…η½®";
     Text[ arabic ] = "ΚΝγνα Κίζνδ ΗαήΗΖγΙ";
     Text[ greek ] = "Φόρτωση διαμόρφωσης μενού";
@@ -1461,7 +1461,7 @@ String STR_SAVEMENUCONFIG
     Text[ chinese_simplified ] = "ε­η›θε•ι…η½®";
     Text[ russian ] = "Ρξυπΰνθςό κξντθγσπΰφθώ μενώ";
     Text[ polish ] = "Zapisz konfiguracjκ menu";
-    Text[ japanese ] = "οΎ’οΎ†ο½­ο½°θ¨­ε®γ®δΈζ›ΈγδΏε­";
+    Text[ japanese ] = "γƒ΅γƒ‹γƒ¥γƒΌθ¨­ε®γ®δΈζ›ΈγδΏε­";
     Text[ chinese_traditional ] = "ε„²ε­θε–®ι…η½®";
     Text[ arabic ] = "ΝέΩ Κίζνδ ΗαήΗΖγΙ";
     Text[ greek ] = "Αποθήκευση διαμόρφωσης μενού";
@@ -1486,7 +1486,7 @@ String STR_LOADACCELCONFIG
     Text[ chinese_simplified ] = "θ£…ε…¥ι”®η›ι…η½®";
     Text[ russian ] = "Ηΰγπσηθςό κξντθγσπΰφθώ κλΰβθΰςσπϋ";
     Text[ polish ] = "£aduj konfiguracjκ klawiatury";
-    Text[ japanese ] = "ο½·ο½°οΎοΎο½°οΎ„οΎθ¨­ε®γ®θª­γΏθΎΌγΏ";
+    Text[ japanese ] = "γ‚­γƒΌγƒγƒΌγƒ‰θ¨­ε®γ®θª­γΏθΎΌγΏ";
     Text[ chinese_traditional ] = "θΌ‰ε…¥ιµη›¤ι…η½®";
     Text[ arabic ] = "ΚΝγνα Κίζνδ αζΝΙ ΗαγέΗΚνΝ";
     Text[ greek ] = "Φόρτωση διαμόρφωσης πληκτρολογίου";
@@ -1512,7 +1512,7 @@ String STR_SAVEACCELCONFIG
     Text[ chinese_simplified ] = "ε­η›ι”®η›ι…η½®";
     Text[ russian ] = "Ρξυπΰνθςό κξντθγσπΰφθώ κλΰβθΰςσπϋ";
     Text[ polish ] = "Zapisz konfiguracjκ klawiatury";
-    Text[ japanese ] = "ο½·ο½°οΎοΎο½°οΎ„οΎθ¨­ε®γ®δΈζ›ΈγδΏε­";
+    Text[ japanese ] = "γ‚­γƒΌγƒγƒΌγƒ‰θ¨­ε®γ®δΈζ›ΈγδΏε­";
     Text[ chinese_traditional ] = "ε„²ε­ιµη›¤ι…η½®";
     Text[ arabic ] = "ΝέΩ Κίζνδ αζΝΙ ΗαγέΗΚνΝ";
     Text[ greek ] = "Αποθήκευση διαμόρφωσης πληκτρολογίου";
@@ -1537,7 +1537,7 @@ String STR_LOADSTATBARCONFIG
     Text[ chinese_simplified ] = "θ£…ε…¥η¶ζ€ζ ι…η½®";
     Text[ russian ] = "Ηΰγπσηθςό κξντθγσπΰφθώ ρςπξκθ ρξρςξÿνθÿ";
     Text[ polish ] = "£aduj konfiguracjκ paska stanu";
-    Text[ japanese ] = "ο½½οΎƒο½°οΎ€ο½½ οΎοΎο½°θ¨­ε®γ®θª­γΏθΎΌγΏ";
+    Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚Ή γƒγƒΌθ¨­ε®γ®θª­γΏθΎΌγΏ";
     Text[ chinese_traditional ] = "θΌ‰ε…¥η‹€ζ…‹ε—ι…η½®";
     Text[ arabic ] = "ΚΝγνα Κίζνδ ΤΡνΨ ΗαγΪαζγΗΚ";
     Text[ greek ] = "Φόρτωση διαμόρφωσης γραμμής κατάστασης";
@@ -1563,7 +1563,7 @@ String STR_SAVESTATBARCONFIG
     Text[ chinese_simplified ] = "ε­η›η¶ζ€ζ ι…η½®";
     Text[ russian ] = "Ρξυπΰνθςό κξντθγσπΰφθώ ρςπξκθ ρξρςξÿνθÿ";
     Text[ polish ] = "Zapisz konfiguracjκ paska stanu";
-    Text[ japanese ] = "ο½½οΎƒο½°οΎ€ο½½ οΎοΎο½°θ¨­ε®γ®δΈζ›ΈγδΏε­";
+    Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚Ή γƒγƒΌθ¨­ε®γ®δΈζ›ΈγδΏε­";
     Text[ chinese_traditional ] = "ε„²ε­η‹€ζ…‹ζ¬„ι…η½®";
     Text[ arabic ] = "ΝέΩ Κίζνδ ΤΡνΨ ΗαγΪαζγΗΚ";
     Text[ greek ] = "Αποθήκευση διαμόρφωσης γραμμής κατάστασης";
@@ -1588,7 +1588,7 @@ String STR_MENU
     Text[ chinese_simplified ] = "θε•";
     Text[ russian ] = "Μενώ";
     Text[ polish ] = "Menu";
-    Text[ japanese ] = "οΎ’οΎ†ο½­ο½°";
+    Text[ japanese ] = "γƒ΅γƒ‹γƒ¥γƒΌ";
     Text[ chinese_traditional ] = "εθƒ½θ΅¨";
     Text[ arabic ] = "ΗαήΗΖγΙ";
     Text[ greek ] = "Μενού";
@@ -1599,6 +1599,7 @@ String STR_MENU
     Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
 
 
 
