@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 16:53:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     maMenubuttonItem.meState = STATE_NOCHECK;
 
     mbIsLocked = FALSE;
+    mbIsPaintLocked = FALSE;
     mbAssumeDocked = FALSE;
     mbAssumeFloating = FALSE;
     mbKeyInputDisabled = FALSE;
