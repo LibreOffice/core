@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:52:43 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include "services.h"
 #endif
 
+#include "properties.h"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -119,6 +121,18 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef _VCL_MNEMONIC_HXX_
+#include <vcl/mnemonic.hxx>
+#endif
+
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
@@ -153,6 +167,14 @@ static const char CONFIGURATION_PROPERTY_LABEL[]        = "Label";
 static const char PROPSET_LABEL[]                       = "Label";
 static const char PROPSET_NAME[]                        = "Name";
 static const char PROPSET_POPUP[]                       = "Popup";
+static const char PROPSET_PROPERTIES[]                  = "Properties";
+
+// Special resource URLs to retrieve additional information
+static const char PRIVATE_RESOURCE_URL[]                = "private:";
+
+const sal_Int32   COMMAND_PROPERTY_IMAGE                = 1;
+const sal_Int32   COMMAND_PROPERTY_ROTATE               = 2;
+const sal_Int32   COMMAND_PROPERTY_MIRROR               = 4;
 
 namespace framework
 {
@@ -206,17 +228,24 @@ class ConfigurationAccess_UICommand : // interfaces
     protected:
         struct CmdToInfoMap
         {
+            CmdToInfoMap() : bPopup( sal_False ),
+                             bCommandNameCreated( sal_False ),
+                             nProperties( 0 ) {}
+
             rtl::OUString       aLabel;
             rtl::OUString       aCommandName;
-            sal_Bool            bPopup;
+            sal_Bool            bPopup : 1,
+                                bCommandNameCreated : 1;
+            sal_Int32           nProperties;
         };
 
-        Any                       insertCacheAndReturn( const rtl::OUString rCommandURL, const OUString& rLabel, sal_Bool bIsPopup );
-        Any                       getInfoFromCommands( const rtl::OUString& rCommandURL );
-        Any                       getInfoFromPopups( const rtl::OUString& rCommandURL );
+        Any                       getSequenceFromCache( const rtl::OUString& aCommandURL );
+        Any                       getInfoFromCommand( const rtl::OUString& rCommandURL );
         void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const rtl::OUString& aLabel );
         Any                       getUILabelFromCommand( const rtl::OUString& rCommandURL );
         Sequence< rtl::OUString > getAllCommands();
+        void                      resetCache();
+        sal_Bool                  fillCache();
 
     private:
         typedef ::std::hash_map< ::rtl::OUString,
@@ -232,18 +261,24 @@ class ConfigurationAccess_UICommand : // interfaces
         rtl::OUString                     m_aPropLabel;
         rtl::OUString                     m_aPropName;
         rtl::OUString                     m_aPropPopup;
+        rtl::OUString                     m_aPropProperties;
         rtl::OUString                     m_aBrandName;
         rtl::OUString                     m_aXMLFileFormatVersion;
         rtl::OUString                     m_aVersion;
         rtl::OUString                     m_aExtension;
+        rtl::OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XMultiServiceFactory > m_xConfigProviderPopups;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XNameAccess >          m_xConfigAccessPopups;
+        Sequence< rtl::OUString >         m_aCommandImageList;
+        Sequence< rtl::OUString >         m_aCommandRotateImageList;
+        Sequence< rtl::OUString >         m_aCommandMirrorImageList;
         CommandToInfoCache                m_aCmdInfoCache;
         sal_Bool                          m_bConfigAccessInitialized;
+        sal_Bool                          m_bCacheFilled;
 };
 
 //*****************************************************************************************************************
@@ -271,11 +306,14 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
     m_xServiceManager( rServiceManager ),
     m_aPropUILabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_LABEL )),
     m_bConfigAccessInitialized( sal_False ),
+    m_bCacheFilled( sal_False ),
     m_aConfigCmdAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_aConfigPopupAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
     m_aPropLabel( RTL_CONSTASCII_USTRINGPARAM( PROPSET_LABEL )),
     m_aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPSET_NAME )),
     m_aPropPopup( RTL_CONSTASCII_USTRINGPARAM( PROPSET_POPUP )),
+    m_aPropProperties( RTL_CONSTASCII_USTRINGPARAM( PROPSET_PROPERTIES )),
+    m_aPrivateResourceURL( RTL_CONSTASCII_USTRINGPARAM( PRIVATE_RESOURCE_URL )),
     m_xGenericUICommands( rGenericUICommands )
 {
     // Create configuration hierachical access name
@@ -316,30 +354,34 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 Any SAL_CALL ConfigurationAccess_UICommand::getByName( const ::rtl::OUString& rCommandURL )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    // SAFE
-    ResetableGuard aLock( m_aLock );
     static sal_Int32 nRequests  = 0;
-    static sal_Int32 nCacheHit  = 0;
-    static sal_Int32 nCacheMiss = 0;
 
-    ++nRequests;
-    CommandToInfoCache::const_iterator pIter = m_aCmdInfoCache.find( rCommandURL );
-    if ( pIter != m_aCmdInfoCache.end() )
+    ResetableGuard aLock( m_aLock );
+    if ( !m_bConfigAccessInitialized )
     {
-        ++nCacheHit;
-        Sequence< PropertyValue > aPropSeq( 3 );
-        aPropSeq[0].Name  = m_aPropLabel;
-        aPropSeq[0].Value = makeAny( pIter->second.aLabel );
-        aPropSeq[1].Name  = m_aPropName;
-        aPropSeq[1].Value = makeAny( pIter->second.aCommandName );
-        aPropSeq[2].Name  = m_aPropPopup;
-        aPropSeq[2].Value = makeAny( pIter->second.bPopup );
-        return makeAny( aPropSeq );
+        initializeConfigAccess();
+        m_bConfigAccessInitialized = sal_True;
+        fillCache();
+    }
+
+    if ( rCommandURL.indexOf( m_aPrivateResourceURL ) == 0 )
+    {
+        // special keys to retrieve information about a set of commands
+        // SAFE
+        if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ))
+            return makeAny( m_aCommandImageList );
+        else if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))
+            return makeAny( m_aCommandRotateImageList );
+        else if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))
+            return makeAny( m_aCommandMirrorImageList );
+        else
+            return Any();
     }
     else
     {
-        ++nCacheMiss;
-        return getUILabelFromCommand( rCommandURL );
+        // SAFE
+        ++nRequests;
+        return getInfoFromCommand( rCommandURL );
     }
 }
 
@@ -369,7 +411,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
 throw ( RuntimeException )
 {
-    // There must be global commands!
+    // There must are global commands!
     return sal_True;
 }
 
@@ -380,112 +422,184 @@ void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, 
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", m_aBrandName );
     rCmdInfo.aLabel       = OUString( rStr );
     rStr.EraseTrailingChars( '.' ); // Remove "..." from string
-    rCmdInfo.aCommandName = OUString( rStr ); // TODO: After resync use SSA function to remove (~) or (..) from label
+    rCmdInfo.aCommandName = OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
+    rCmdInfo.bCommandNameCreated = sal_True;
 }
 
-Any ConfigurationAccess_UICommand::insertCacheAndReturn( const rtl::OUString rCommandURL, const OUString& rLabel, sal_Bool bIsPopup )
+Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aCommandURL )
 {
-    CmdToInfoMap aCmdToInfo;
-    aCmdToInfo.bPopup = bIsPopup;
-
-    fillInfoFromResult( aCmdToInfo, rLabel );
-    m_aCmdInfoCache.insert( CommandToInfoCache::value_type( rCommandURL, aCmdToInfo ));
-
-    Sequence< PropertyValue > aPropSeq( 3 );
-    aPropSeq[0].Name  = m_aPropLabel;
-    aPropSeq[0].Value = makeAny( aCmdToInfo.aLabel );
-    aPropSeq[1].Name  = m_aPropName;
-    aPropSeq[1].Value = makeAny( aCmdToInfo.aCommandName );
-    aPropSeq[2].Name  = m_aPropPopup;
-    aPropSeq[2].Value = makeAny( aCmdToInfo.bPopup );
-    return makeAny( aPropSeq );
-}
-
-Any ConfigurationAccess_UICommand::getInfoFromCommands( const rtl::OUString& rCommandURL )
-{
-    Any a;
-
-    try
+    CommandToInfoCache::iterator pIter = m_aCmdInfoCache.find( aCommandURL );
+    if ( pIter != m_aCmdInfoCache.end() )
     {
-        // First try to ask our global commands configuration access. It also caches maybe
-        // we find the entry in its cache first.
-        if ( m_xGenericUICommands.is() )
+        if ( !pIter->second.bCommandNameCreated )
+            fillInfoFromResult( pIter->second, pIter->second.aLabel );
+
+        Sequence< PropertyValue > aPropSeq( 3 );
+        aPropSeq[0].Name  = m_aPropLabel;
+        aPropSeq[0].Value = makeAny( pIter->second.aLabel );
+        aPropSeq[1].Name  = m_aPropName;
+        aPropSeq[1].Value = makeAny( pIter->second.aCommandName );
+        aPropSeq[2].Name  = m_aPropPopup;
+        aPropSeq[2].Value = makeAny( pIter->second.bPopup );
+        return makeAny( aPropSeq );
+    }
+
+    return Any();
+}
+
+void ConfigurationAccess_UICommand::resetCache()
+{
+    m_aCmdInfoCache.clear();
+    m_bCacheFilled = sal_False;
+}
+
+sal_Bool ConfigurationAccess_UICommand::fillCache()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ConfigurationAccess_UICommand::fillCache" );
+
+    if ( m_bCacheFilled )
+        return sal_True;
+
+    sal_Int32 i( 0 );
+    Any       a;
+    Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+    std::vector< OUString > aImageCommandVector;
+    std::vector< OUString > aImageRotateVector;
+    std::vector< OUString > aImageMirrorVector;
+
+    for ( i = 0; i < aNameSeq.getLength(); i++ )
+    {
+        try
         {
-            try
+            Reference< XNameAccess > xNameAccess;
+            a = m_xConfigAccess->getByName( aNameSeq[i] );
+            if ( a >>= xNameAccess )
             {
-                return m_xGenericUICommands->getByName( rCommandURL );
-            }
-            catch ( com::sun::star::lang::WrappedTargetException& )
-            {
-            }
-            catch ( com::sun::star::container::NoSuchElementException& )
-            {
+                CmdToInfoMap aCmdToInfo;
+
+                a = xNameAccess->getByName( m_aPropUILabel );
+                a >>= aCmdToInfo.aLabel;
+                a = xNameAccess->getByName( m_aPropProperties );
+                a >>= aCmdToInfo.nProperties;
+
+                m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
+
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
+                    aImageCommandVector.push_back( aNameSeq[i] );
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
+                    aImageRotateVector.push_back( aNameSeq[i] );
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
+                    aImageMirrorVector.push_back( aNameSeq[i] );
             }
         }
-
-        // Try to ask our configuration access
-        OUString                 aStr;
-        Reference< XNameAccess > xNameAccess;
-        a = m_xConfigAccess->getByName( rCommandURL );
-        if ( a >>= xNameAccess )
-            a = xNameAccess->getByName( m_aPropUILabel );
-        a >>= aStr;
-
-        return insertCacheAndReturn( rCommandURL, aStr, sal_False );
+        catch ( com::sun::star::lang::WrappedTargetException& )
+        {
+        }
+        catch ( com::sun::star::container::NoSuchElementException& )
+        {
+        }
     }
-    catch( com::sun::star::container::NoSuchElementException& )
+
+    aNameSeq = m_xConfigAccessPopups->getElementNames();
+    for ( i = 0; i < aNameSeq.getLength(); i++ )
     {
-    }
-    catch ( com::sun::star::lang::WrappedTargetException& )
-    {
+        try
+        {
+            Reference< XNameAccess > xNameAccess;
+            a = m_xConfigAccessPopups->getByName( aNameSeq[i] );
+            if ( a >>= xNameAccess )
+            {
+                CmdToInfoMap aCmdToInfo;
+
+                aCmdToInfo.bPopup = sal_True;
+                a = xNameAccess->getByName( m_aPropUILabel );
+                a >>= aCmdToInfo.aLabel;
+                a = xNameAccess->getByName( m_aPropProperties );
+                a >>= aCmdToInfo.nProperties;
+
+                m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
+
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
+                    aImageCommandVector.push_back( aNameSeq[i] );
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
+                    aImageRotateVector.push_back( aNameSeq[i] );
+                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
+                    aImageMirrorVector.push_back( aNameSeq[i] );
+            }
+        }
+        catch ( com::sun::star::lang::WrappedTargetException& )
+        {
+        }
+        catch ( com::sun::star::container::NoSuchElementException& )
+        {
+        }
     }
 
-    return a;
+    // Create cached sequences for fast retrieving
+    m_aCommandImageList       = comphelper::containerToSequence< std::vector< rtl::OUString >, rtl::OUString >( aImageCommandVector );
+    m_aCommandRotateImageList = comphelper::containerToSequence< std::vector< rtl::OUString >, rtl::OUString >( aImageRotateVector );
+    m_aCommandMirrorImageList = comphelper::containerToSequence< std::vector< rtl::OUString >, rtl::OUString >( aImageMirrorVector );
+
+    if ( m_xGenericUICommands.is() )
+    {
+        Sequence< rtl::OUString > aCommandNameSeq;
+        try
+        {
+            if ( m_xGenericUICommands->getByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))) >>= aCommandNameSeq )
+                m_aCommandRotateImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandRotateImageList, aCommandNameSeq );
+        }
+        catch ( Exception& )
+        {
+        }
+
+        try
+        {
+            if ( m_xGenericUICommands->getByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))) >>= aCommandNameSeq )
+                m_aCommandMirrorImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    m_bCacheFilled = sal_True;
+
+    return sal_True;
 }
 
-Any ConfigurationAccess_UICommand::getInfoFromPopups( const rtl::OUString& rCommandURL )
+Any ConfigurationAccess_UICommand::getInfoFromCommand( const rtl::OUString& rCommandURL )
 {
     Any a;
 
     try
     {
-        // Try to ask our configuration access
-        a = m_xConfigAccessPopups->getByName( rCommandURL );
-
-        OUString                 aStr;
-        Reference< XNameAccess > xNameAccess;
-        if ( a >>= xNameAccess )
-            a = xNameAccess->getByName( m_aPropUILabel );
-        a >>= aStr;
-        return insertCacheAndReturn( rCommandURL, aStr, sal_True );
+        a = getSequenceFromCache( rCommandURL );
+        if ( !a.hasValue() )
+        {
+            // First try to ask our global commands configuration access. It also caches maybe
+            // we find the entry in its cache first.
+            if ( m_xGenericUICommands.is() )
+            {
+                try
+                {
+                    return m_xGenericUICommands->getByName( rCommandURL );
+                }
+                catch ( com::sun::star::lang::WrappedTargetException& )
+                {
+                }
+                catch ( com::sun::star::container::NoSuchElementException& )
+                {
+                }
+            }
+        }
     }
     catch( com::sun::star::container::NoSuchElementException& )
     {
     }
     catch ( com::sun::star::lang::WrappedTargetException& )
     {
-    }
-
-    return a;
-}
-
-Any ConfigurationAccess_UICommand::getUILabelFromCommand( const rtl::OUString& rCommandURL )
-{
-    Any a;
-
-    if ( !m_bConfigAccessInitialized )
-    {
-        initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
-    }
-
-    if ( m_xConfigAccess.is() && m_xConfigAccessPopups.is() )
-    {
-        a = getInfoFromCommands( rCommandURL );
-        if ( a == Any() )
-            a = getInfoFromPopups( rCommandURL );
-        if ( a == Any() )
-            throw NoSuchElementException();
     }
 
     return a;
@@ -500,6 +614,7 @@ Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
     {
         initializeConfigAccess();
         m_bConfigAccessInitialized = sal_True;
+        fillCache();
     }
 
     if ( m_xConfigAccess.is() )
@@ -579,10 +694,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
         return sal_True;
     }
-    catch ( WrappedTargetException& e )
+    catch ( WrappedTargetException& )
     {
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
     }
 
@@ -649,6 +764,7 @@ DEFINE_INIT_SERVICE                     (   UICommandDescription, {} )
 
 UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
+    m_aPrivateResourceURL( RTL_CONSTASCII_USTRINGPARAM( PRIVATE_RESOURCE_URL )),
     m_xServiceManager( xServiceManager )
 {
     Reference< XNameAccess > xEmpty;
@@ -729,6 +845,11 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 a <<= xUICommands;
             }
         }
+    }
+    else if ( aName.indexOf( m_aPrivateResourceURL ) == 0 )
+    {
+        // special keys to retrieve information about a set of commands
+        return m_xGenericUICommands->getByName( aName );
     }
     else
     {
