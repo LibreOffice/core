@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:42:51 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 16:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,18 +174,13 @@ LibElementBase::~LibElementBase()
 
 //______________________________________________________________________________
 void LibraryImport::startDocument(
-    Reference< container::XNameAccess > const & xUidMapping )
+    Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (!(xUidMapping->getByName( OUSTR(XMLNS_LIBRARY_URI) ) >>=
-          XMLNS_LIBRARY_UID) ||
-        !(xUidMapping->getByName( OUSTR(XMLNS_XLINK_URI) ) >>=
-          XMLNS_XLINK_UID))
-    {
-        throw xml::sax::SAXException(
-            OUSTR("cannot get uids!"),
-            Reference< XInterface >(), Any() );
-    }
+    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_LIBRARY_URI) );
+    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_XLINK_URI) );
 }
 //__________________________________________________________________________________________________
 void LibraryImport::endDocument()
