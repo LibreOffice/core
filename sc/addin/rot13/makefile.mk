@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:46 $
+#   last change: $Author: hjs $ $Date: 2001-07-13 16:01:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,9 +99,7 @@ SHL1STDLIBS=    $(SHL1STDLIBS) comctl32.lib
 
 # --- Targets -------------------------------------------------------
 
-ALL: \
-    $(MISC)$/rot.lst \
-    ALLTAR
+ALLTAR:	$(MISC)$/rot.lst 
 
 .INCLUDE: target.mk
 

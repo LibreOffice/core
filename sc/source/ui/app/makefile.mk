@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nn $ $Date: 2001-06-22 20:03:09 $
+#   last change: $Author: hjs $ $Date: 2001-07-13 15:59:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,12 +107,10 @@ LIB3OBJFILES=$(SLO)$/sclib.obj
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(depend)" == ""
+.INCLUDE :  target.mk
 
-
-ALL:    \
-        $(INCCOM)$/scdll0.hxx\
-        ALLTAR
+$(SLO)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
+$(OBJ)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
 
 $(INCCOM)$/scdll0.hxx: makefile.mk
 .IF "$(GUI)"=="OS2"
@@ -128,9 +126,6 @@ $(INCCOM)$/scdll0.hxx: makefile.mk
 .ENDIF
 .ENDIF
 .ENDIF
-.ENDIF
-
-.INCLUDE :  target.mk
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 
