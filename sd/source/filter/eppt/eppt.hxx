@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
+ *  last change: $Author: sj $ $Date: 2002-08-29 15:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,8 @@ struct FontCollectionEntry
                             };
 
         FontCollectionEntry( const String& rName ) :
-                            Original( rName )
+                            Original( rName ),
+                            Scaling ( 1.0 )
                             {
                                 ImplInit( rName );
                             };
