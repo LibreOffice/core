@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:15:12 $
+ *  last change: $Author: cd $ $Date: 2000-10-23 08:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 #include <offmgr/app.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #if SUPD>592
 #include <setup2/installer.hxx>
@@ -98,7 +98,7 @@ void Desktop::Main()
 #endif
 
     RegisterServices();
-    OfficeWrapper* pWrapper = new OfficeWrapper( ::utl::getProcessServiceFactory() );
+    OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
 //    Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
     SfxApplicationClass::Main();
 //    xWrapper->dispose();
@@ -107,13 +107,13 @@ void Desktop::Main()
         delete pWrapper;
         pWrapper=NULL;
     }
-    Reference< XComponent > xSMGRComponent( ::utl::getProcessServiceFactory(), UNO_QUERY );
-    if( xSMGRComponent.is()==sal_True )
-        xSMGRComponent->dispose();
 }
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
     OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
+
+
+
 
