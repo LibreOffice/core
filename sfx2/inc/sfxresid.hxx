@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxresid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:18:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ class SfxResId: public ResId
 {
 public:
     SfxResId( USHORT nId );
+    static ResMgr* GetResMgr();
+    static void DeleteResMgr();
 };
 
 //============================================================================
