@@ -458,7 +458,7 @@ sub check_updatepack
                         }
                         push(@installer::globals::globallogfileinfo, $infoline);
 
-                        if ( defined $sol_tmp && ( $solarenv =~ /^\s*$sol_tmp/ ))
+                        if ( defined $sol_tmp && ( $solarenv =~ /^\s*\Q$sol_tmp\E/ ))
                         {
                             $infoline = "Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n";
                             push(@installer::globals::globallogfileinfo, $infoline);
