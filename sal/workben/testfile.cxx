@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-11 12:46:40 $
+ *  last change: $Author: obr $ $Date: 2001-09-04 06:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
@@ -114,7 +115,7 @@ void printFileName(::rtl::OUString& str)
 {
     rtl::OString        aString;
 
-    aString = rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
+    aString = rtl::OUStringToOString( str, osl_getThreadTextEncoding() );
 
     printf( "%s", aString.getStr() );
 
@@ -247,7 +248,7 @@ sal_Bool Initialize( void )
         while ( (pCount-pBuffer < uBytesRead) && !testLineBreak(pCount,uBytesRead-(pCount-pBuffer), &cLineBrake))
             pCount++;
 
-        dir[i]=rtl::OUString(pBegin, pCount-pBegin, RTL_TEXTENCODING_ASCII_US);
+        dir[i]=rtl::OUString(pBegin, pCount-pBegin, osl_getThreadTextEncoding() );
 
         pCount+=cLineBrake;
         pBegin=pCount;
@@ -1674,55 +1675,6 @@ void DirectoryItemTest( void )
 
     rc=DirectoryItem::get( dir_wrong_semantic, aItem );
     print_error( rtl::OString( "Get DirectoryItem" ),rc );
-
-    printf( "\n" );
-
-    //---------------------------------------------------
-    // get DirectoryItem from a file-handle
-    //--------------------------------------------------
-
-    pFile=new File( file1 );
-
-    rc=pFile->open( OpenFlag_Read );
-    if ( rc==FileBase::E_None )
-    {
-        printf( "Get DirectoryItem from a File-Handle: ");
-        printFileName( file1 );
-        printf( "\n" );
-
-        rc=DirectoryItem::get( *pFile , aItem );
-        print_error( rtl::OString( "GetDirectoryItem" ), rc );
-
-        pStatus=new FileStatus( FileStatusMask_All );
-        rc=aItem.getFileStatus( *pStatus );
-
-        if ( rc==FileBase::E_None )
-        {
-            printf( "GetFileStatus: FileURL:  ");
-            printFileName( pStatus->getFileURL() );
-            printf( "\n");
-        }
-
-        delete pStatus;
-
-        pFile->close();
-    }
-
-    delete pFile;
-
-    printf( "\n" );
-
-    //---------------------------------------------------
-    // get DirectoryItem from an empty file-handle
-    //--------------------------------------------------
-
-    pFile=new File( file1 );
-
-    printf( "Get DirectoryItem from an empty File-Handle\n" );
-    rc=DirectoryItem::get( *pFile , aItem );
-    print_error( rtl::OString( "GetDirectoryItem" ), rc );
-
-    delete pFile;
 
     printf( "\n" );
 
