@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:27:41 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@
 #include <rtl/ustring.hxx>
 #include <vos/process.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #ifndef _L2TXTENC_HXX
 #include <tools/l2txtenc.hxx>
@@ -348,19 +349,57 @@ const String SfxFilterContainer::GetName() const
 
 const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName )
 {
-    if ( bFirstRead )
-        ReadFilters_Impl();
+    // Try to find out the type of factory.
+    // Interpret given name as Service- and ShortName!
+    SvtModuleOptions aOpt;
+    SvtModuleOptions::EFactory eFactory = aOpt.ClassifyFactoryByServiceName(rName);
+    if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
+        eFactory = aOpt.ClassifyFactoryByShortName(rName);
 
-    sal_uInt16 nCount = ( sal_uInt16 ) pFilterArr->Count();
-    for( sal_uInt16 n = 0; n < nCount; n++ )
+    // could not classify factory by its service nor by its short name.
+    // Must be an unknown factory! => return NULL
+    if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
+        return NULL;
+
+    // For the following code we need some additional informations.
+    String sServiceName   = aOpt.GetFactoryName(eFactory);
+    String sShortName     = aOpt.GetFactoryShortName(eFactory);
+    String sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
+
+    // Try to get the default filter. Dont fiorget to verify it.
+    // May the set default filter does not exists any longer or
+    // does not fit the given factory.
+    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+    const SfxFilter* pFilter = rMatcher.GetFilter4FilterName(sDefaultFilter);
+
+    if (
+        (pFilter                                                                            ) &&
+        (pFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) != COMPARE_EQUAL)
+       )
     {
-        const SfxFilter* pFilter = pFilterArr->GetObject( n );
-        if ( pFilter->GetServiceName().CompareIgnoreCaseToAscii( rName ) == COMPARE_EQUAL )
-            // default filters are inserted into the cache first
-            return pFilter;
+        pFilter = 0;
     }
 
-    return NULL;
+    // If at least no default filter could be located - use any filter of this
+    // factory.
+    if (!pFilter)
+    {
+        if ( bFirstRead )
+            ReadFilters_Impl();
+
+        sal_uInt16 nCount = ( sal_uInt16 ) pFilterArr->Count();
+        for( sal_uInt16 n = 0; n < nCount; n++ )
+        {
+            const SfxFilter* pCheckFilter = pFilterArr->GetObject( n );
+            if ( pCheckFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) == COMPARE_EQUAL )
+            {
+                pFilter = pCheckFilter;
+                break;
+            }
+        }
+    }
+
+    return pFilter;
 }
 
 
@@ -1169,10 +1208,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             sFilterName = sFilterName.copy( nStartRealName+2 );
         }
 
-        USHORT nCachePos = USHRT_MAX;
-        if ( (nFlags & SFX_FILTER_DEFAULT) == SFX_FILTER_DEFAULT )
-            nCachePos = 0;
-
         SfxFilter* pFilter = bUpdate ? (SfxFilter*) SfxFilter::GetFilterByName( sFilterName ) : 0;
         BOOL bNew = FALSE;
         if (!pFilter)
@@ -1214,7 +1249,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         pFilter->SetURLPattern(sPattern);
 
         if (bNew)
-            rList.Insert( pFilter, nCachePos );
+            rList.Insert( pFilter, USHRT_MAX );
     }
 }
 
@@ -1274,42 +1309,6 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // May be filter was deleted by another thread ...
                     ::rtl::OUString sFilterName = lFilterNames[nFilter];
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
-                }
-
-                // In case we updated an already filled cache, it was to complicated to
-                // look for right place of the default filter!
-                // It seams to be easiear to step over the whole container twice and
-                // correct it now ...
-                if (bUpdate)
-                {
-                    SfxFilter*          pOldDefault = rList.First();
-                    SfxFilter*          pNewDefault = NULL         ;
-                    sal_Int32           nNewPos     = 0            ;
-
-                    if ((pOldDefault->nFormatType & SFX_FILTER_DEFAULT) != SFX_FILTER_DEFAULT)
-                    {
-                        USHORT nCount = (USHORT)rList.Count();
-                        SfxFilter* pFilter;
-                        for (USHORT f=0; f<nCount; ++f)
-                        {
-                            pFilter = NULL;
-                            pFilter = rList.GetObject(f);
-                            if ((pFilter->nFormatType & SFX_FILTER_DEFAULT) == SFX_FILTER_DEFAULT)
-                            {
-                                pNewDefault = pFilter;
-                                nNewPos     = f;
-                                break;
-                            }
-                        }
-
-                        if (nNewPos>0 && pNewDefault)
-                        {
-                            rList.Remove( pNewDefault                 );
-                            rList.Remove( pOldDefault                 );
-                            rList.Insert( pNewDefault, (ULONG)0       );
-                            rList.Insert( pOldDefault, (ULONG)nNewPos );
-                        }
-                    }
                 }
             }
         }
