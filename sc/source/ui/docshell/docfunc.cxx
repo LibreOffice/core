@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:44:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,18 +816,15 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
         }
     }
 
-    BOOL bEditCell(FALSE);
-    BOOL bEditDeleted(FALSE);
-    BOOL bHeight;
+    BOOL bEditCell = ( pNewCell->GetCellType() == CELLTYPE_EDIT );
+    ScBaseCell* pDocCell = pDoc->GetCell( rPos );
+    BOOL bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
+    BOOL bHeight = ( bEditDeleted || bEditCell ||
+                    pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) );
     ScBaseCell* pUndoCell = NULL;
     ScBaseCell* pRedoCell = NULL;
     if (bUndo)
     {
-        bEditCell = ( pNewCell->GetCellType() == CELLTYPE_EDIT );
-        ScBaseCell* pDocCell = pDoc->GetCell( rPos );
-        bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
-        bHeight = ( bEditDeleted || bEditCell ||
-                    pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) );
         pUndoCell = pDocCell ? pDocCell->Clone(pDoc) : NULL;
         pRedoCell = pNewCell ? pNewCell->Clone(pDoc) : NULL;
     }
