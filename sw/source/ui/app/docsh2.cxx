@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:10:25 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,8 +1285,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         FN_PRINT_LAYOUT, /*20237*/
                                         FN_QRY_MERGE,   /*20364*/
                                         FN_STAT_HYPERLINKS, /*21186*/
-                                        FN_INSERT_HEADER, /*21405*/
-                                        FN_INSERT_FOOTER, /*21406*/
                                         0
                                     };
                 // the view must not exist!
