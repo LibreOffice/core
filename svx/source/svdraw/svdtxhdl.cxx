@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-31 16:02:22 $
+ *  last change: $Author: aw $ $Date: 2002-08-01 14:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ using namespace ::com::sun::star::i18n;
 ImpTextPortionHandler::ImpTextPortionHandler(SdrOutliner& rOutln, const SdrTextObj& rTxtObj):
     rOutliner(rOutln),
     rTextObj(rTxtObj),
-    aPoly(0)
+    // #101498# aPoly(0)
+    mpRecordPortions(0L)
 {
     pModel=rTextObj.GetModel();
     MapMode aMap=aVDev.GetMapMode();
@@ -203,25 +204,261 @@ void ImpTextPortionHandler::DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDra
         if ( nCnt == 1 )    bToLastPoint = TRUE;
         else                bToLastPoint = FALSE;
 
-        for (nParagraph = 0; nParagraph < nCnt; nParagraph++)
+        // #101498# completely different methodology needed here for making this BIDI-able
+        // iterate over paragraphs and Polygons, thus each paragraph will be put to
+        // one Polygon
+        const sal_uInt32 nSavedLayoutMode(rXOut.GetOutDev()->GetLayoutMode());
+        sal_uInt32 nLayoutMode(nSavedLayoutMode);
+
+        if(TRUE)
         {
-            aPoly = XOutCreatePolygon(aXPP[USHORT(nParagraph)], rXOut.GetOutDev());
-            nTextWidth = 0;
+            nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
+        }
+        else
+        {
+            nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
+            nLayoutMode |= ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
+        }
 
-            rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextWidthHdl));
-            rOutliner.StripPortions();
-            rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextDrawHdl));
-            rOutliner.StripPortions();
-            rOutliner.SetDrawPortionHdl(Link());
+        rXOut.GetOutDev()->SetLayoutMode(nLayoutMode);
 
-            const Rectangle& rFTBR=rXOut.GetFormTextBoundRect();
+        for(nParagraph = 0; nParagraph < nCnt; nParagraph++)
+        {
+            Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)], rXOut.GetOutDev());
+
+            rOutliner.SetDrawPortionHdl(LINK(this, ImpTextPortionHandler, FormTextRecordPortionHdl));
+            rOutliner.StripPortions();
+
+            DrawFormTextRecordPortions(aPoly);
+            ClearFormTextRecordPortions();
+
+            const Rectangle& rFTBR = rXOut.GetFormTextBoundRect();
             aFormTextBoundRect.Union(rFTBR);
         }
+
+        rXOut.GetOutDev()->SetLayoutMode(nSavedLayoutMode);
+
+        //for (nParagraph = 0; nParagraph < nCnt; nParagraph++)
+        //{
+        //  aPoly = XOutCreatePolygon(aXPP[USHORT(nParagraph)], rXOut.GetOutDev());
+        //  nTextWidth = 0;
+        //
+        //  rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextWidthHdl));
+        //  rOutliner.StripPortions();
+        //  rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextDrawHdl));
+        //  rOutliner.StripPortions();
+        //  rOutliner.SetDrawPortionHdl(Link());
+        //
+        //  const Rectangle& rFTBR=rXOut.GetFormTextBoundRect();
+        //  aFormTextBoundRect.Union(rFTBR);
+        //}
+
         rXOut.GetOutDev()->SetFont(aFont);
         rOutliner.Clear();
     }
     if (rTextObj.IsTextEditActive()) {
         delete pPara;
+    }
+}
+
+// #101498# Record and sort all portions
+IMPL_LINK(ImpTextPortionHandler, FormTextRecordPortionHdl, DrawPortionInfo*, pInfo)
+{
+    if(pInfo->nPara == nParagraph)
+    {
+        SortedAddFormTextRecordPortion(pInfo);
+    }
+
+    return 0;
+}
+
+// #101498# Helper class to remember text portions in sorted manner
+class ImpRecordPortion
+{
+public:
+    Point                       maPosition;
+    String                      maText;
+    xub_StrLen                  mnTextStart;
+    xub_StrLen                  mnTextLength;
+    sal_uInt16                  mnPara;
+    xub_StrLen                  mnIndex;
+    Font                        maFont;
+    sal_Int32*                  mpDXArray;
+    sal_uInt8                   mnBiDiLevel;
+
+    ImpRecordPortion(DrawPortionInfo* pInfo);
+    ~ImpRecordPortion();
+
+    sal_uInt8 GetBiDiLevel() const { return mnBiDiLevel; }
+};
+
+ImpRecordPortion::ImpRecordPortion(DrawPortionInfo* pInfo)
+:   maPosition(pInfo->rStartPos),
+    maText(pInfo->rText),
+    mnTextStart((xub_StrLen)pInfo->nTextStart),
+    mnTextLength((xub_StrLen)pInfo->nTextLen),
+    mnPara(pInfo->nPara),
+    mnIndex(pInfo->nIndex),
+    maFont(pInfo->rFont),
+    mpDXArray(NULL),
+    mnBiDiLevel(pInfo->GetBiDiLevel())
+{
+    if(pInfo->pDXArray)
+    {
+        mpDXArray = new sal_Int32[pInfo->nTextLen];
+
+        for(sal_uInt32 a(0L); a < pInfo->nTextLen; a++)
+        {
+            mpDXArray[a] = pInfo->pDXArray[a];
+        }
+    }
+}
+
+ImpRecordPortion::~ImpRecordPortion()
+{
+    if(mpDXArray)
+    {
+        delete[] mpDXArray;
+    }
+}
+
+// #101498# List classes for recording portions
+DECLARE_LIST(ImpRecordPortionList, ImpRecordPortion*);
+DECLARE_LIST(ImpRecordPortionListList, ImpRecordPortionList*);
+
+// #101498# Draw recorded formtext along Poly
+void ImpTextPortionHandler::DrawFormTextRecordPortions(Polygon aPoly)
+{
+    sal_Int32 nTextWidth = -((sal_Int32)GetFormTextPortionsLength(pXOut->GetOutDev()));
+
+    ImpRecordPortionListList* pListList = (ImpRecordPortionListList*)mpRecordPortions;
+    if(pListList)
+    {
+        for(sal_uInt32 a(0L); a < pListList->Count(); a++)
+        {
+            ImpRecordPortionList* pList = pListList->GetObject(a);
+
+            for(sal_uInt32 b(0L); b < pList->Count(); b++)
+            {
+                ImpRecordPortion* pPortion = pList->GetObject(b);
+
+                DrawPortionInfo aNewInfo(
+                    pPortion->maPosition,
+                    pPortion->maText,
+                    pPortion->mnTextStart,
+                    pPortion->mnTextLength,
+                    pPortion->maFont,
+                    pPortion->mnPara,
+                    pPortion->mnIndex,
+                    pPortion->mpDXArray,
+                    pPortion->mnBiDiLevel);
+
+                nTextWidth = pXOut->DrawFormText(&aNewInfo, aPoly, nTextWidth, bToLastPoint, bDraw);
+            }
+        }
+    }
+}
+
+// #101498# Insert new portion sorted
+void ImpTextPortionHandler::SortedAddFormTextRecordPortion(DrawPortionInfo* pInfo)
+{
+    // get ListList and create on demand
+    ImpRecordPortionListList* pListList = (ImpRecordPortionListList*)mpRecordPortions;
+    if(!pListList)
+    {
+        mpRecordPortions = (void*)(new ImpRecordPortionListList(2, 2));
+        pListList = (ImpRecordPortionListList*)mpRecordPortions;
+    }
+
+    // create new portion
+    ImpRecordPortion* pNewPortion = new ImpRecordPortion(pInfo);
+
+    // look for the list where to insert new portion
+    ImpRecordPortionList* pList = 0L;
+
+    for(sal_uInt32 nListListIndex(0L); !pList && nListListIndex < pListList->Count(); nListListIndex++)
+    {
+        ImpRecordPortionList* pTmpList = pListList->GetObject(nListListIndex);
+
+        if(pTmpList->GetObject(0)->maPosition.Y() == pNewPortion->maPosition.Y())
+            pList = pTmpList;
+    }
+
+    if(!pList)
+    {
+        // no list for that Y-Coordinate yet, create a new one.
+        pList = new ImpRecordPortionList(8, 8);
+        pList->Insert(pNewPortion, LIST_APPEND);
+        pListList->Insert(pList, LIST_APPEND);
+    }
+    else
+    {
+        // found a list for that for that Y-Coordinate, sort in
+        sal_uInt32 nInsertInd(0L);
+
+        while(nInsertInd < pList->Count()
+            && pList->GetObject(nInsertInd)->maPosition.X() < pNewPortion->maPosition.X())
+        {
+            nInsertInd++;
+        }
+
+        if(nInsertInd == pList->Count())
+            nInsertInd = LIST_APPEND;
+
+        pList->Insert(pNewPortion, nInsertInd);
+    }
+}
+
+// #101498# Calculate complete length of FormTextPortions
+sal_uInt32 ImpTextPortionHandler::GetFormTextPortionsLength(OutputDevice* pOut)
+{
+    sal_uInt32 nRetval(0L);
+
+    ImpRecordPortionListList* pListList = (ImpRecordPortionListList*)mpRecordPortions;
+    if(pListList)
+    {
+        for(sal_uInt32 a(0L); a < pListList->Count(); a++)
+        {
+            ImpRecordPortionList* pList = pListList->GetObject(a);
+
+            for(sal_uInt32 b(0L); b < pList->Count(); b++)
+            {
+                ImpRecordPortion* pPortion = pList->GetObject(b);
+
+                if(pPortion->mpDXArray)
+                {
+                    if(pPortion->maFont.IsVertical() && pOut)
+                        nRetval += pOut->GetTextHeight() * pPortion->mnTextLength;
+                    else
+                        nRetval += pPortion->mpDXArray[pPortion->mnTextLength - 1];
+                }
+            }
+        }
+    }
+
+    return nRetval;
+}
+
+// #101498# Cleanup recorded portions
+void ImpTextPortionHandler::ClearFormTextRecordPortions()
+{
+    ImpRecordPortionListList* pListList = (ImpRecordPortionListList*)mpRecordPortions;
+    if(pListList)
+    {
+        for(sal_uInt32 a(0L); a < pListList->Count(); a++)
+        {
+            ImpRecordPortionList* pList = pListList->GetObject(a);
+
+            for(sal_uInt32 b(0L); b < pList->Count(); b++)
+            {
+                delete pList->GetObject(b);
+            }
+
+            delete pList;
+        }
+
+        delete pListList;
+        mpRecordPortions = (void*)0L;
     }
 }
 
@@ -301,7 +538,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     //if(aVDev.GetTextOutline(aPolyPoly, pInfo->rText, pInfo->nTextStart, pInfo->nTextStart, pInfo->nTextLen)
     //  && aPolyPoly.Count())
     //{
-    //  XPolyPolygon aXPP(aPolyPoly);
+    //XPolyPolygon aXPP(aPolyPoly);
     //
     //  // rotate 270 degree if vertical since result is unrotated
     //  if(bIsVertical)
@@ -509,21 +746,29 @@ IMPL_LINK(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,pInfo)
     return 0;
 }
 
-IMPL_LINK(ImpTextPortionHandler,FormTextWidthHdl,DrawPortionInfo*,pInfo)
-{
-    if(pInfo->nPara == nParagraph && pInfo->rText.Len())
-    {
-        // negative Gesamtlaenge fuer ersten Aufruf von DrawFormText
-        nTextWidth -= pInfo->pDXArray[pInfo->rText.Len() - 1];
-    }
-    return 0;
-}
+//IMPL_LINK(ImpTextPortionHandler, FormTextWidthHdl, DrawPortionInfo*, pInfo)
+//{
+//  // #101498# change calculation of nTextWidth
+//  if(pInfo->nPara == nParagraph && pInfo->nTextLen)
+//  {
+//      // negative value is used because of the interface of
+//      // XOutputDevice::ImpDrawFormText(...), please look there
+//      // for more info.
+//      nTextWidth -= pInfo->pDXArray[pInfo->nTextLen - 1];
+//  }
+//
+//  return 0;
+//}
 
-IMPL_LINK(ImpTextPortionHandler,FormTextDrawHdl,DrawPortionInfo*,pInfo)
-{
-    if (pInfo->nPara==nParagraph) {
-        nTextWidth=pXOut->DrawFormText(pInfo->rText,aPoly,pInfo->rFont,
-                                       nTextWidth,bToLastPoint,bDraw,pInfo->pDXArray);
-    }
-    return 0;
-}
+//IMPL_LINK(ImpTextPortionHandler, FormTextDrawHdl, DrawPortionInfo*, pInfo)
+//{
+//  // #101498# Implementation of DrawFormText needs to be updated, too.
+//  if(pInfo->nPara == nParagraph)
+//  {
+//      nTextWidth = pXOut->DrawFormText(pInfo, aPoly, nTextWidth, bToLastPoint, bDraw);
+//          //pInfo->rText, aPoly, pInfo->rFont, nTextWidth,
+//          //bToLastPoint, bDraw, pInfo->pDXArray);
+//  }
+//
+//  return 0;
+//}
