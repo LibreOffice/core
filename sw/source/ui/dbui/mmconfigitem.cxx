@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:15:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,16 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
 
 #include <dbui.hrc>
 #include <vector>
+
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star;
@@ -231,12 +238,19 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     sal_Bool                                bIsAuthentication;
 
     sal_Bool                                bIsEMailSupported;
-    sal_Bool                                bIsEmailConfigured;
 
     ResStringArray                          m_AddressHeaderSA;
 
     //these addresses are not stored in the configuration
     ::std::vector< SwDocMergeInfo >         aMergeInfos;
+
+    //we do overwrite the usersettings in a special case
+    //than we do remind the usersettings here
+    sal_Bool                                bUserSettingWereOverwritten;
+    sal_Bool                                bIsAddressBlock_LastUserSetting;
+    sal_Bool                                bIsGreetingLineInMail_LastUserSetting;
+    sal_Bool                                bIsGreetingLine_LastUserSetting;
+
 
     const Sequence< ::rtl::OUString>&       GetPropertyNames();
 
@@ -283,10 +297,13 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         bIsMailReplyTo(sal_False),
         bIsAuthentication(sal_False),
         bIsEMailSupported(sal_False),
-        bIsEmailConfigured(sal_False),
         nCurrentFemaleGreeting(0),
         nCurrentMaleGreeting(0),
-        nCurrentNeutralGreeting(0)
+        nCurrentNeutralGreeting(0),
+        bUserSettingWereOverwritten(sal_False),
+        bIsAddressBlock_LastUserSetting(sal_False),
+        bIsGreetingLineInMail_LastUserSetting(sal_False),
+        bIsGreetingLine_LastUserSetting(sal_False)
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
@@ -353,7 +370,6 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 28: pValues[nProp] >>= aSavedDocuments; break;
                 case 29:
                     pValues[nProp] >>= bIsEMailSupported;
-                    bIsEmailConfigured = pValues[nProp].hasValue();
                 break;
                 case 30: pValues[nProp] >>= bIsGreetingLineInMail; break;
                 case 31: pValues[nProp] >>= bIsIndividualGreetingLineInMail; break;
@@ -589,8 +605,22 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 1: pValues[nProp] <<= bIncludeCountry; break;
             case 2: pValues[nProp] <<= sExcludeCountry; break;
             case 3: pValues[nProp] <<= GetAddressBlocks(sal_True); break;
-            case 4: pValues[nProp] <<= bIsAddressBlock; break;
-            case 5: pValues[nProp] <<= bIsGreetingLine;   break;
+            case 4:
+                {
+                    if( bUserSettingWereOverwritten == sal_True )
+                        pValues[nProp] <<= bIsAddressBlock_LastUserSetting;
+                    else
+                        pValues[nProp] <<= bIsAddressBlock;
+                    break;
+                }
+            case 5:
+                {
+                    if( bUserSettingWereOverwritten == sal_True )
+                        pValues[nProp] <<= bIsGreetingLine_LastUserSetting;
+                    else
+                        pValues[nProp] <<= bIsGreetingLine;
+                    break;
+                }
             case 6: pValues[nProp] <<= bIsIndividualGreetingLine;  break;
             case 7:
             case 8:
@@ -620,11 +650,15 @@ void  SwMailMergeConfigItem_Impl::Commit()
             case 26 :pValues[nProp] <<= (short)aDBData.nCommandType;   break;
             case 27 :pValues[nProp] <<= sFilter; break;
             case 28 :pValues[nProp] <<= aSavedDocuments; break;
-            case 29:
-                if(bIsEmailConfigured)
-                    pValues[nProp] <<= bIsEMailSupported;
-            break;
-            case 30: pValues[nProp] <<= bIsGreetingLineInMail; break;
+            case 29: pValues[nProp] <<= bIsEMailSupported; break;
+            case 30:
+                {
+                    if( bUserSettingWereOverwritten == sal_True )
+                        pValues[nProp] <<= bIsGreetingLineInMail_LastUserSetting;
+                    else
+                        pValues[nProp] <<= bIsGreetingLineInMail;
+                    break;
+                }
             case 31: pValues[nProp] <<= bIsIndividualGreetingLineInMail; break;
             case 32: pValues[nProp] <<= bIsSMPTAfterPOP; break;
             case 33: pValues[nProp] <<= sInServerName;    break;
@@ -674,6 +708,8 @@ void  SwMailMergeConfigItem_Impl::Commit()
             SetSetProperties(C2U(cAddressDataAssignments), aValues);
         }
     }
+
+    bUserSettingWereOverwritten = sal_False;
 }
 /*-- 06.05.2004 13:04:36---------------------------------------------------
 
@@ -869,6 +905,7 @@ sal_Bool SwMailMergeConfigItem::IsAddressBlock()const
   -----------------------------------------------------------------------*/
 void     SwMailMergeConfigItem::SetAddressBlock(sal_Bool bSet)
 {
+    m_pImpl->bUserSettingWereOverwritten = sal_False;
     if(m_pImpl->bIsAddressBlock != bSet)
     {
         m_pImpl->bIsAddressBlock = bSet;
@@ -1294,6 +1331,7 @@ sal_Bool SwMailMergeConfigItem::IsGreetingLine(sal_Bool bInEMail) const
   -----------------------------------------------------------------------*/
 void     SwMailMergeConfigItem::SetGreetingLine(sal_Bool bSet, sal_Bool bInEMail)
 {
+    m_pImpl->bUserSettingWereOverwritten = sal_False;
     if(bInEMail)
     {
         if(m_pImpl->bIsGreetingLineInMail != bSet)
@@ -1752,24 +1790,6 @@ void SwMailMergeConfigItem::DocumentReloaded()
   -----------------------------------------------------------------------*/
 bool SwMailMergeConfigItem::IsMailAvailable() const
 {
-    if(!m_pImpl->bIsEmailConfigured)
-    {
-        try
-        {
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider =
-                    mail::MailServiceProvider::create(getCurrentCmpCtx(xMgr));
-            uno::Reference< mail::XMailService > xMailService =
-                    xMailServiceProvider->create(
-                    mail::MailServiceType_SMTP );
-            m_pImpl->bIsEMailSupported = xMailService.is();
-            m_pImpl->bIsEmailConfigured = sal_True;
-        }
-        catch(const uno::Exception& rEx)
-        {
-            rEx; //make compiler happy
-        }
-    }
     return m_pImpl->bIsEMailSupported;
 }
 /*-- 21.05.2004 12:20:05---------------------------------------------------
@@ -1841,4 +1861,52 @@ SwView* SwMailMergeConfigItem::GetSourceView()
 {
     m_pSourceView = lcl_ExistsView(m_pSourceView);
     return m_pSourceView;
+}
+
+/*-- 04.11.2004 19:53 ---------------------------------------------------
+  -----------------------------------------------------------------------*/
+
+void SwMailMergeConfigItem::SetSourceView(SwView* pView)
+{
+    m_pSourceView = pView;
+
+    if(pView)
+    {
+        SvStringsDtor aDBNameList(5, 1);
+        SvStringsDtor aAllDBNames(5, 5);
+        pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
+        if(aDBNameList.Count())
+        {
+            // if fields are available there is usually no need of an addressblock and greeting
+            if(!m_pImpl->bUserSettingWereOverwritten)
+            {
+                if( m_pImpl->bIsAddressBlock == sal_True
+                    || m_pImpl->bIsGreetingLineInMail == sal_True
+                    || m_pImpl->bIsGreetingLine == sal_True )
+                {
+                    //store user settings
+                    m_pImpl->bUserSettingWereOverwritten = sal_True;
+                    m_pImpl->bIsAddressBlock_LastUserSetting = m_pImpl->bIsAddressBlock;
+                    m_pImpl->bIsGreetingLineInMail_LastUserSetting = m_pImpl->bIsGreetingLineInMail;
+                    m_pImpl->bIsGreetingLine_LastUserSetting = m_pImpl->bIsGreetingLine;
+
+                    //set all to false
+                    m_pImpl->bIsAddressBlock = sal_False;
+                    m_pImpl->bIsGreetingLineInMail = sal_False;
+                    m_pImpl->bIsGreetingLine = sal_False;
+
+                    m_pImpl->SetModified();
+                }
+            }
+        }
+        else if( m_pImpl->bUserSettingWereOverwritten )
+        {
+            //restore last user settings:
+            m_pImpl->bIsAddressBlock = m_pImpl->bIsAddressBlock_LastUserSetting;
+            m_pImpl->bIsGreetingLineInMail = m_pImpl->bIsGreetingLineInMail_LastUserSetting;
+            m_pImpl->bIsGreetingLine = m_pImpl->bIsGreetingLine_LastUserSetting;
+
+            m_pImpl->bUserSettingWereOverwritten = sal_False;
+        }
+    }
 }
