@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:56:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,12 @@ public class FileHelper
                                                  java.lang.StringBuffer sBuffer  )
         throws java.io.IOException
     {
+        if (sEncoding.equals("UTF-8Special"))
+        {
+            FileHelper.readAndCheckUTF8File(aFile,sBuffer);
+            return;
+        }
+
         java.io.FileInputStream   aByteStream    = new java.io.FileInputStream(aFile.getAbsolutePath());
         java.io.InputStreamReader aEncodedReader = new java.io.InputStreamReader(aByteStream, sEncoding);
         char[]                    aEncodedBuffer = new char[4096];
@@ -441,6 +447,189 @@ public class FileHelper
             sBuffer.append(aEncodedBuffer, 0, nReadCount);
 
         aEncodedReader.close();
+    }
+
+    //___________________________________________
+    private static void logEncodingData(java.lang.StringBuffer sLog         ,
+                                        int                    nUTF8        ,
+                                        int                    nByte1       ,
+                                        int                    nByte2       ,
+                                        int                    nByte3       ,
+                                        int                    nByte4       ,
+                                        int                    nEncodingType)
+    {
+        sLog.append("'"+nUTF8+"'\t:"+(int)nUTF8+"\t=\t"+nByte1+"\t"+nByte2+"\t"+nByte3+"\t"+nByte4+"\t");
+        switch(nEncodingType)
+        {
+            case 1:
+                sLog.append("7-bit ASCII");
+                break;
+            case 2:
+                sLog.append("2 Byte Encoding");
+                break;
+            case 3:
+                sLog.append("3 Byte Encoding");
+                break;
+            case 4:
+                sLog.append("4 Byte Encoding");
+                break;
+        }
+        sLog.append("\n");
+    }
+
+    //___________________________________________
+    public static void readAndCheckUTF8File(java.io.File           aFile  ,
+                                            java.lang.StringBuffer sBuffer)
+        throws java.io.IOException
+    {
+        java.io.FileInputStream aByteStream     = new java.io.FileInputStream(aFile.getAbsolutePath());
+        byte[]                  aBuffer         = new byte[4096];
+        int                     nReadCount      = 0;
+        int                     nByte_1         = 0;
+        int                     nByte_2         = 0;
+        int                     nByte_3         = 0;
+        int                     nByte_4         = 0;
+        int                     nByte_5         = 0;
+        int                     nByte_6         = 0;
+        char                    nUTF8           = 0;
+        int                     i               = 0;
+        boolean                 bError          = false;
+        int                     nEncodingType   = 0;
+        java.lang.StringBuffer  sLog            = new java.lang.StringBuffer();
+
+        while((nReadCount=aByteStream.read(aBuffer))>0)
+        {
+            i=0;
+            while (i<nReadCount)
+            {
+                nByte_1       = 0;
+                nByte_2       = 0;
+                nByte_3       = 0;
+                nByte_4       = 0;
+                nByte_5       = 0;
+                nByte_6       = 0;
+                nUTF8         = 0;
+                nEncodingType = 0;
+                bError        = false;
+
+                nByte_1 = aBuffer[i++] & 0xFF;
+
+                // range: U0000 - U007F / 0xxxxxxx = 1 Byte Encoding = 7-Bit ASCII !
+                if (nByte_1 < 0x80)
+                {
+                    nEncodingType = 1;
+                    nUTF8         = (char)nByte_1;
+                }
+
+                // range: U10000 - U10FFFF / 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx = 4 Byte Encoding
+                else
+                if ((nByte_1 & 0xF0) == 0xF0)
+                {
+                    nEncodingType = 4;
+                    if (i+2>=nReadCount)
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_2  = aBuffer[i++] & 0xFF;
+                    nByte_3  = aBuffer[i++] & 0xFF;
+                    nByte_4  = aBuffer[i++] & 0xFF;
+                    if (
+                        ((nByte_2 & 0x80) != 0x80) ||
+                        ((nByte_3 & 0x80) != 0x80) ||
+                        ((nByte_4 & 0x80) != 0x80)
+                       )
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_1 &= 0xF;
+                    nByte_2 &= 0x3F;
+                    nByte_3 &= 0x3F;
+                    nByte_4 &= 0x3F;
+                    nUTF8    = (char)((nByte_1*0x40000)+(nByte_2*0x1000)+(nByte_3*0x40)+nByte_4);
+                }
+
+                // range: U0800 - UFFFF / 1110xxxx 10xxxxxx 10xxxxxx = 3 Byte Encoding
+                else
+                if ((nByte_1 & 0xE0) == 0xE0)
+                {
+                    nEncodingType = 3;
+                    if (i+1>=nReadCount)
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_2 = aBuffer[i++] & 0xFF;
+                    nByte_3 = aBuffer[i++] & 0xFF;
+                    if (
+                        ((nByte_2 & 0x80) != 0x80) ||
+                        ((nByte_3 & 0x80) != 0x80)
+                       )
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_1 &= 0xF;
+                    nByte_2 &= 0x3F;
+                    nByte_3 &= 0x3F;
+                    nUTF8    = (char)((nByte_1*0x1000)+(nByte_2*0x40)+nByte_3);
+                }
+
+                // range: U0080 - U07FF / 110xxxxx 10xxxxxx = 2 Byte Encoding
+                else
+                if ((nByte_1 & 0xC0) == 0xC0)
+                {
+                    nEncodingType = 2;
+                    if (i>=nReadCount)
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_2 = aBuffer[i++] & 0xFF;
+                    if ((nByte_2 & 0x80) != 0x80)
+                    {
+                        bError = true;
+                        break;
+                    }
+                    nByte_1 &= 0xF;
+                    nByte_2 &= 0x3F;
+                    nUTF8    = (char)((nByte_1*0x40)+nByte_2);
+                }
+
+                // wrong encoding ?
+                else
+                {
+                    bError = true;
+                    break;
+                }
+
+                sBuffer.append(nUTF8);
+                // -> DEBUG !
+                FileHelper.logEncodingData(sLog, nUTF8, nByte_1, nByte_2, nByte_3, nByte_4, nEncodingType);
+                // <- DEBUG !
+            }
+
+            if (bError)
+            {
+                // -> DEBUG !
+                FileHelper.logEncodingData(sLog, nUTF8, nByte_1, nByte_2, nByte_3, nByte_4, nEncodingType);
+
+                java.io.File     aDir  = new java.io.File(aFile.getParent());
+                java.lang.String sDump = aFile.getName();
+                java.io.File     aDump = FileHelper.createUniqueFile(aDir, sDump, "dump");
+                FileHelper.writeEncodedBufferToFile(aDump, "UTF-8", false, sLog);
+                // <- DEBUG !
+
+                java.lang.String sMsg = "";
+                sMsg += "\n================================================================================================================\n";
+                sMsg += "Wrong encoding detected in file '"+aFile.getPath()+"'!\n";
+                sMsg += "It's not UTF8 ... Please analyse dump file \""+aDump.getPath()+"\".\n";
+
+                throw new java.io.IOException(sMsg);
+            }
+        }
+        aByteStream.close();
     }
 
     //___________________________________________
