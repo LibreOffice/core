@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:49:21 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 09:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,14 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aVScroll.SetScrollHdl( LINK( this, ScImportAsciiDlg, ScrollHdl ) );
     aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, VarFixHdl ) );
     aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, VarFixHdl ) );
+
+    long nBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    Size aSize = aVScroll.GetSizePixel();
+    aSize.Width() = nBarSize;
+    aVScroll.SetSizePixel( aSize );
+    aSize = aScrollbar.GetSizePixel();
+    aSize.Height() = nBarSize;
+    aScrollbar.SetSizePixel( aSize );
 
     CheckScrollPos();
     CheckColTypes(FALSE);

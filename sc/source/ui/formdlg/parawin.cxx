@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 09:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@ ScParaWin::ScParaWin(ScAnyRefDlg* pParent,Point aPos):
     SetPosPixel(aPos);
     nEdFocus=NOT_FOUND;
     nActiveLine=0;
+    Size aSize = aSlider.GetSizePixel();
+    aSize.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+    aSlider.SetSizePixel( aSize );
     aSlider.SetEndScrollHdl( LINK( this, ScParaWin, ScrollHdl ) );
     aSlider.SetScrollHdl( LINK( this, ScParaWin, ScrollHdl ) );
 

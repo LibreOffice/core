@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 09:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,11 +267,10 @@ void __EXPORT ScPivotLayoutDlg::Init()
 
     if ( thePivotData.nLabels > PAGE_SIZE )
     {
-        Size    aSize( aSlider.GetSizePixel() );
-        Point   aPos( aSlider.GetPosPixel() );
-
-        aPos.X()      = aWndSelect.GetPosPixel().X();
-        aSize.Width() = aWndSelect.GetSizePixel().Width();
+        Point aPos( aSlider.GetPosPixel() );
+        aPos.X() = aWndSelect.GetPosPixel().X();
+        Size aSize( aWndSelect.GetSizePixel().Width(),
+            GetSettings().GetStyleSettings().GetScrollBarSize() );
         aSlider.SetPosSizePixel( aPos, aSize );
         aSlider.SetEndScrollHdl( LINK( this, ScPivotLayoutDlg, ScrollHdl ) );
         aSlider.SetPageSize( PAGE_SIZE );
