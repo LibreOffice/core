@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:40:22 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ TabDialog TAB_PAGE
     Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
     Text[ polish ] = "Uk³ad strony";
     Text[ japanese ] = "Íß°¼Şİ’è";
-    Text[ chinese_traditional ] = "³]¸m­¶­±";
+    Text[ chinese_traditional ] = "­¶­±³]©w";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáÕİÍÉ";
     Text[ greek ] = "Äéáìüñöùóç óåëßäáò";
     Text[ korean ] = "ÂÊ ¼³Á¤";
@@ -209,6 +209,7 @@ TabDialog TAB_PAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Preparar página";
 };
+
 
 
 
