@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:49:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,9 @@ BOOL IsUseDicList( const PropertyValues &rProperties,
 
     INT32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    INT32 i;
+
+    for ( i = 0;  i < nLen;  ++i)
     {
         if (UPH_IS_USE_DICTIONARY_LIST == pVal[i].Handle)
         {
@@ -258,7 +260,9 @@ BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
 
     INT32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    INT32 i;
+
+    for ( i = 0;  i < nLen;  ++i)
     {
         if (UPH_IS_IGNORE_CONTROL_CHARACTERS == pVal[i].Handle)
         {
