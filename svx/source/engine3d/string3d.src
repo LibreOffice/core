@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:25:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text [ french ] = "Cr�er un corps de r�volution 3D" ;
     Text [ dutch ] = "3D-rotatieobjecten maken" ;
     Text [ swedish ] = "Skapa 3D-rotationsobjekt" ;
-    Text [ danish ] = "Opret 3D-rotationslegeme" ;
+    Text [ danish ] = "Opret 3D-rotationsobjekt" ;
     Text [ portuguese_brazilian ] = "Criar objeto de rota��o 3D" ;
     Text [ portuguese ] = "Criar objectos de rota��o 3D" ;
     Text[ chinese_simplified ] = "建立3维旋转体";
@@ -93,6 +93,8 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ hebrew ] = "‮יצירת עצם סיבובי תלת מימדי‬";
     Text[ hindi ] = "3D घुमाव वस्तु को उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť 3D rotačný objekt";
+    Text[ hungarian ] = "Térbeli forgástest létrehozása";
+    Text[ slovenian ] = "Ustvari 3D sukajoči se predmet";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
@@ -127,6 +129,8 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text[ hebrew ] = "‮הכנסת עצמים‬";
     Text[ hindi ] = "वस्तु जोड़ो";
     Text[ slovak ] = "Vložiť objekt(y)";
+    Text[ hungarian ] = "Objektum(ok) beszúrása";
+    Text[ slovenian ] = "Vstavi predmet(e)";
 };
 String RID_SVX_3D_UNDO_SEGMENTS
 {
@@ -158,6 +162,8 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text[ hebrew ] = "‮מספר הקטעים‬";
     Text[ hindi ] = "खण्डों की संख्या";
     Text[ slovak ] = "Počet častí";
+    Text[ hungarian ] = "Szegmensek száma";
+    Text[ slovenian ] = "Število odsekov";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
@@ -189,6 +195,8 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text[ hebrew ] = "‮עומק העצם‬";
     Text[ hindi ] = "वस्तु की गहराई";
     Text[ slovak ] = "Hĺbka objektu";
+    Text[ hungarian ] = "Objektum mélysége";
+    Text[ slovenian ] = "Globina predmeta";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
@@ -198,7 +206,7 @@ String RID_SVX_3D_UNDO_FOCAL
     Text [ italian ] = "Ampiezza focale" ;
     Text [ spanish ] = "Distancia focal" ;
     Text [ french ] = "Focale de la cam�ra" ;
-    Text [ dutch ] = "Focus" ;
+    Text [ dutch ] = "Brandpuntsafstand" ;
     Text [ swedish ] = "Kamerabr�nnvidd" ;
     Text [ danish ] = "Kamerabr�ndvidde" ;
     Text [ portuguese ] = "Dist�ncia focal" ;
@@ -220,6 +228,8 @@ String RID_SVX_3D_UNDO_FOCAL
     Text[ hebrew ] = "‮מרחק מיקוד‬";
     Text[ hindi ] = "ताल के मध्य से उसके केन्द्र तक की दूरी";
     Text[ slovak ] = "Ohnisková vzdialenosť";
+    Text[ hungarian ] = "Fókusztávolság";
+    Text[ slovenian ] = "Dolžina fokusa";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
@@ -251,6 +261,8 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text[ hebrew ] = "‮מיקום מצלמה‬";
     Text[ hindi ] = "केमरा का स्थान";
     Text[ slovak ] = "Umiestnenie kamery";
+    Text[ hungarian ] = "Kameraállás";
+    Text[ slovenian ] = "Položaj kamere";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
@@ -282,6 +294,8 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ hebrew ] = "‮סיבוב עצם תלת מימדי‬";
     Text[ hindi ] = "3D वस्तु को घुमाओ";
     Text[ slovak ] = "Otočiť 3D objekt";
+    Text[ hungarian ] = "Térbeli objektum forgatása";
+    Text[ slovenian ] = "Sukaj 3D predmet";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
@@ -313,6 +327,8 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text[ hebrew ] = "‮יצירת עצם שיחול‬";
     Text[ hindi ] = "निष्कासन वस्तु उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť predĺžený objekt";
+    Text[ hungarian ] = "Kihúzott objektum létrehozása";
+    Text[ slovenian ] = "Ustvari izrivajoči predmet";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
@@ -326,7 +342,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text [ spanish ] = "Crear cuerpo de rotaci�n" ;
     Text [ french ] = "Cr�er un corps de r�volution" ;
     Text [ swedish ] = "Skapa rotationsobjekt" ;
-    Text [ danish ] = "Opret rotationslegeme" ;
+    Text [ danish ] = "Opret rotationsobjekt" ;
     Text [ portuguese ] = "Criar objecto de rota��o" ;
     Text [ portuguese_brazilian ] = "Criar um objeto de rota��o" ;
     Text[ chinese_simplified ] = "制作旋转体";
@@ -346,6 +362,8 @@ String RID_SVX_3D_UNDO_LATHE
     Text[ hebrew ] = "‮יצירת עצם סיבובי‬";
     Text[ hindi ] = "घुमाव वस्तु उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť rotačný objekt";
+    Text[ hungarian ] = "Forgástest létrehozása";
+    Text[ slovenian ] = "Ustvari sukajoči se predmet";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
@@ -357,7 +375,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ portuguese ] = "Subdividir objecto 3-D" ;
     Text [ portuguese_brazilian ] = "Subdividir objeto 3D" ;
     Text [ swedish ] = "Dela upp 3D-objekt" ;
-    Text [ danish ] = "Opdel 3D-rotationslegeme" ;
+    Text [ danish ] = "Opdel 3D-rotationsobjekt" ;
     Text [ italian ] = "Separa oggetto 3D" ;
     Text [ spanish ] = "Quebrar objeto 3D" ;
     Text [ french ] = "Fractionner l'objet 3D" ;
@@ -379,6 +397,8 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ hebrew ] = "‮בקיעת עצם תלת מימדי‬";
     Text[ hindi ] = "3D वस्तु को अलगाना";
     Text[ slovak ] = "Rozdeliť 3D objekt";
+    Text[ hungarian ] = "Térbeli objektum felosztása";
+    Text[ slovenian ] = "Razdeli 3D predmet";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
@@ -410,8 +430,11 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ hebrew ] = "‮תכונות תלת מימדיות‬";
     Text[ hindi ] = "3D ऐट्रिब्यूट्स";
     Text[ slovak ] = "3D atribúty";
+    Text[ hungarian ] = "Térbeli jellemzők";
+    Text[ slovenian ] = "3D atributi";
 };
  // ********************************************************************** EOF
+
 
 
 
