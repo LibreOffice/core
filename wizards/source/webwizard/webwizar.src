@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 00:08:58 $
+ *  last change: $Author: rt $ $Date: 2001-07-14 02:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@ String WEBDIALOG
     Text[ swedish ] = "~Hjälp";
     Text[ polish ] = "Po~moc";
     Text[ portuguese_brazilian ] = "~Help";
-    Text[ japanese ] = "ÍÙÌß";
-    Text[ korean ] = "~Help";
+    Text[ japanese ] = "ÍÙÌß(~H)";
+    Text[ korean ] = "µµ¿ò¸»(~H)";
     Text[ chinese_simplified ] = "°ïÖú(~H)";
-    Text[ chinese_traditional ] = "»¡©ú";
+    Text[ chinese_traditional ] = "»¡©ú(~H)";
     Text[ turkish ] = "~Help";
     Text[ arabic ] = "~Help";
     Text[ catalan ] = "~Help";
@@ -106,7 +106,7 @@ String WEBDIALOG + 1
     Text[ polish ] = "AutoPilot - Strona WWW";
     Text[ portuguese_brazilian ] = "Web Page AutoPilot";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä WebÍß°¼Ş";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ À¥ÆäÀÌÁö";
+    Text[ korean ] = "¿ÀÅäÆÄÀÏ·µ À¥ÆäÀÌÁö";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ÍòÎ¬ÍøÒ³";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ºô­¶";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí áÕİÍÉ æíÈ";
@@ -134,10 +134,10 @@ String WEBDIALOG + 2
     Text[ danish ] = "~Annuller";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "~Cancel";
-    Text[ japanese ] = "·¬İ¾Ù";
-    Text[ korean ] = "~Ãë¼Ò";
-    Text[ chinese_simplified ] = "È¡Ïû";
-    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ japanese ] = "·¬İ¾Ù(~C)";
+    Text[ korean ] = "Áß´Ü(~C)";
+    Text[ chinese_simplified ] = "È¡Ïû(~C)";
+    Text[ chinese_traditional ] = "¨ú®ø(~C)";
     Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "~İptal";
     Text[ language_user1 ] = " ";
@@ -161,10 +161,10 @@ String WEBDIALOG + 3
     Text[ danish ] = "~Udfør";
     Text[ polish ] = "Utwórz";
     Text[ portuguese_brazilian ] = "~Complete";
-    Text[ japanese ] = "Š®—¹";
-    Text[ korean ] = "¸¸µé±â";
-    Text[ chinese_simplified ] = "Íê³É";
-    Text[ chinese_traditional ] = "§¹¦¨";
+    Text[ japanese ] = "Š®—¹(~R)";
+    Text[ korean ] = "¿Ï·á(~R)";
+    Text[ chinese_simplified ] = "Íê³É(~R)";
+    Text[ chinese_traditional ] = "§¹¦¨(~R)";
     Text[ arabic ] = "ÅäÔÇÁ";
     Text[ turkish ] = "~Oluştur";
     Text[ catalan ] = "C~reate";
@@ -191,7 +191,7 @@ String WEBDIALOG + 4
     Text[ polish ] = "Którego szablonu u¿yæ?";
     Text[ portuguese_brazilian ] = "Which template should be used?";
     Text[ japanese ] = "‚Ç‚ÌÃİÌßÚ°Ä‚ğg—p‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "¾î´À ¼­½ÄÆÄÀÏÀ» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "¾î´À ÅÛÇÃ¸´À» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÒªÊ¹ÓÃÄÄÒ»ÖÖÑùÊ½£¿";
     Text[ chinese_traditional ] = "­n±Ä¥Î­ş¤@­Ó¼Ë¦¡¡H";
     Text[ arabic ] = "Ãí ŞÇáÈ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
@@ -217,7 +217,7 @@ String WEBDIALOG + 5
     Text[ polish ] = "Którego stylu u¿yæ?";
     Text[ portuguese_brazilian ] = "Which style should be used?";
     Text[ japanese ] = "‚Ç‚ÌÚ²±³Ä‚ğg—p‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "¾î´À ½ºÅ¸ÀÏÀ» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "¾î´À À¯ÇüÀ» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÒªÊ¹ÓÃÄÄÒ»ÖÖ·ç¸ñ£¿";
     Text[ chinese_traditional ] = "­n±Ä¥Î­ş¤@Ïú­·®æ¡H";
     Text[ arabic ] = "Ãí äãØ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
@@ -236,7 +236,7 @@ String WEBDIALOG + 6
     Text[ portuguese ] = "Imagem de fundo";
     Text[ russian ] = "Êàğòèíêà íà ôîíå";
     Text[ greek ] = "Åéêüíá öüíôïõ";
-    Text[ dutch ] = "Background Picture";
+    Text[ dutch ] = "Achtergrondbeeld";
     Text[ french ] = "Image d'arrière-plan";
     Text[ spanish ] = "Imagen de fondo";
     Text[ italian ] = "Immagine di sfondo";
@@ -245,7 +245,7 @@ String WEBDIALOG + 6
     Text[ polish ] = "Ilustracja t³a";
     Text[ portuguese_brazilian ] = "Background Picture";
     Text[ japanese ] = "”wŒiÃŞ»Ş²İ";
-    Text[ korean ] = "Background Picture";
+    Text[ korean ] = "¹è°æ ÀÌ¹ÌÁö";
     Text[ chinese_simplified ] = "±³¾°ÑÕÉ«";
     Text[ chinese_traditional ] = "­I´º¹Ï¤ù";
     Text[ turkish ] = "Background Picture";
@@ -264,7 +264,7 @@ String WEBDIALOG + 7
     Text[ portuguese ] = "Em a~zulejo";
     Text[ russian ] = "Ïëèòêè";
     Text[ greek ] = "Óå ğáñÜèåóç";
-    Text[ dutch ] = "Tiling";
+    Text[ dutch ] = "~Getegeld";
     Text[ french ] = "Carrela~ge";
     Text[ spanish ] = "A~zulejado";
     Text[ italian ] = "Affianca";
@@ -273,7 +273,7 @@ String WEBDIALOG + 7
     Text[ polish ] = "P³ytki";
     Text[ portuguese_brazilian ] = "Tiling";
     Text[ japanese ] = "•À‚×‚Ä•\\¦(~T)";
-    Text[ korean ] = "~Tiling";
+    Text[ korean ] = "¹ÙµÏÆÇ½Ä(~T)";
     Text[ chinese_simplified ] = "Æ½ÆÌ(~T)";
     Text[ chinese_traditional ] = "¥­¾Q(~T)";
     Text[ turkish ] = "Tiling";
@@ -291,7 +291,7 @@ String WEBDIALOG + 8
     Text[ portuguese ] = "~Escalonado";
     Text[ russian ] = "~Ìàñøòàáèğîâàíèå";
     Text[ greek ] = "ÊëéìÜêù~óç";
-    Text[ dutch ] = "~Scaled";
+    Text[ dutch ] = "~Gescaleerd";
     Text[ french ] = "~Gradué";
     Text[ spanish ] = "~Graduado";
     Text[ italian ] = "~In scala";
@@ -300,7 +300,7 @@ String WEBDIALOG + 8
     Text[ polish ] = "Skalowany";
     Text[ portuguese_brazilian ] = "~Scaled";
     Text[ japanese ] = "Šg‘å‚µ‚Ä•\\¦(~S)";
-    Text[ korean ] = "~Scaled";
+    Text[ korean ] = "¹èÀ²(~S)";
     Text[ chinese_simplified ] = "²ÉÓÃÏÔÊ¾±ÈÀı(~S)";
     Text[ chinese_traditional ] = "±Ä¥ÎÅã¥Ü¤ñ¨Ò(~S)";
     Text[ turkish ] = "~Scaled";
@@ -318,7 +318,7 @@ String WEBDIALOG + 9
     Text[ portuguese ] = "Editar documento";
     Text[ russian ] = "Ïğàâêà äîêóìåíòà";
     Text[ greek ] = "Åğåîåñãáóßá åããñÜöïõ";
-    Text[ dutch ] = "Edit Document";
+    Text[ dutch ] = "Document bewerken";
     Text[ french ] = "Éditer le document";
     Text[ spanish ] = "Editar documento";
     Text[ italian ] = "Modifica documento";
@@ -327,7 +327,7 @@ String WEBDIALOG + 9
     Text[ polish ] = "Edytuj dokument";
     Text[ portuguese_brazilian ] = "Edit Document";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ•ÒW‚·‚é";
-    Text[ korean ] = "Edit Document";
+    Text[ korean ] = "¹®¼­ ÀÛ¾÷";
     Text[ chinese_simplified ] = "±à¼­ÎÄµµ";
     Text[ chinese_traditional ] = "½s¿è¤å¥ó";
     Text[ turkish ] = "Edit Document";
@@ -355,7 +355,7 @@ String WEBDIALOG + 10
     Text[ polish ] = "Utwórz szablon";
     Text[ portuguese_brazilian ] = "Create template";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚ğì¬‚·‚é";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÛ¼º";
+    Text[ korean ] = "ÅÛÇÃ¸´ ÀÛ¼º";
     Text[ chinese_simplified ] = "Éú³ÉÑùÊ½";
     Text[ chinese_traditional ] = "»s§@¼Ë¦¡";
     Text[ arabic ] = "ÅäÔÇÁ ŞÇáÈ";
@@ -383,7 +383,7 @@ String WEBERROR + 1
     Text[ polish ] = "Nie znaleziono ¿adnego stylu struktury strony.";
     Text[ portuguese_brazilian ] = "No template for the page content could be found.";
     Text[ japanese ] = "Íß°¼Ş\\¬—p‚ÌÃİÌßÚ°Ä‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÂÊ ±¸¼ºÀ» À§ÇÑ ¼­½ÄÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
+    Text[ korean ] = "ÂÊ ±¸¼ºÀ» À§ÇÑ ÅÛÇÃ¸´À» Ã£Áö ¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³Ãæ°æÊ½µÄÑùÊ½¡£";
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞÇáÈ áÅÚÏÇÏ ÇáÕİÍÉ.";
@@ -410,7 +410,7 @@ String WEBERROR + 2
     Text[ polish ] = "Nie znaleziono ¿adnego stylu strony.";
     Text[ portuguese_brazilian ] = "No template for the page style could be found.";
     Text[ japanese ] = "Íß°¼Ş½À²Ù—p‚ÌÃİÌßÚ°Ä‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÂÊ À¯ÇüÀ» À§ÇÑ ¼­½ÄÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
+    Text[ korean ] = "ÂÊ À¯ÇüÀ» À§ÇÑ ÅÛÇÃ¸´À» Ã£Áö ¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³Ãæ·ç¸ñÉè¶¨µÄÑùÊ½¡£";
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì äãØ áäãØ ÇáÕİÍÉ.";
@@ -436,7 +436,7 @@ String WEBERROR + 3
     Text[ polish ] = "Wyst¹pi³ b³¹d podczas oceny szablonu.";
     Text[ portuguese_brazilian ] = "An error occurred during the interpretation of the template.";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚ÌŠm”F’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ Æò°¡½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "ÅÛÇÃ¸´ Æò°¡½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ´¦ÀíÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b³B²z¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáŞæÇáÈ.";
@@ -462,7 +462,7 @@ String WEBERROR + 4
     Text[ polish ] = "Wyst¹pi³ b³¹d podczas aktualizacji szablonu.";
     Text[ portuguese_brazilian ] = "An error occurred while reloading the template.";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚ÌXV’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "¼­½ÄÆÄÀÏÀ» °»½Å½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "ÅÛÇÃ¸´À» »õ·Î °íÄ¡±âÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "¸üĞÂÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b§ó·s¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÏíË ÇáŞÇáÈ.";
@@ -488,7 +488,7 @@ String WEBERROR + 5
     Text[ polish ] = "Wyst¹pi³ b³¹d podczas przypisywania stylów.";
     Text[ portuguese_brazilian ] = "An error occurred while applying the styles.";
     Text[ japanese ] = "‘®½À²Ù‚Ì“K—p’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "¼­½Ä À¯Çü Àû¿ë½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "À¯Çü ÁöÁ¤½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Ö¸¶¨Ê¹ÓÃ¸ñÊ½ÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b³]©w³o­Ó®æ¦¡¼Ë¦¡®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ÃäãÇØ ÇáÊäÓíŞ.";
@@ -541,7 +541,7 @@ String WEBERROR + 7
     Text[ polish ] = "Wyst¹pi³ b³¹d podczas pracy AutoPilota.";
     Text[ portuguese_brazilian ] = "An error occurred during the AutoPilot processing.";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚ÌÀs’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¼öÇà½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ½ÇÇà½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Ö´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíÊ±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b°õ¦æ¦Û°ÊÀÉ®×§U²z®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊäİíĞ ÇáãÑÔÏ ÇáÂáí.";
@@ -549,6 +549,7 @@ String WEBERROR + 7
     Text[ catalan ] = "An error occurred while running the AutoPilot.";
     Text[ finnish ] = "Automaattisen ohjauksen suorituksessa on ilmennyt virhe.";
 };
+
 
 
 
