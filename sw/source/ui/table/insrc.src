@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:36:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "€§«e(~B)";
         Text[ arabic ] = "ήΘα";
         Text[ greek ] = "Πριν από";
-        Text[ korean ] = "ΐΜΐό";
+        Text[ korean ] = "ΐΜΐό(~B)";
         Text[ turkish ] = "φn~όne";
         Text[ language_user1 ] = " ";
     };
@@ -157,7 +157,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "€§«α(~F)";
         Text[ arabic ] = "ΘΪΟ";
         Text[ greek ] = "μετά από";
-        Text[ korean ] = "ΐΜΘΔ";
+        Text[ korean ] = "ΐΜΘΔ(~F)";
         Text[ turkish ] = "ar~kasύna";
         Text[ language_user1 ] = " ";
     };
@@ -236,7 +236,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_traditional ] = "ΌΖ₯Ψ(~A)";
         Text[ arabic ] = "ΗαΪΟΟ";
         Text[ greek ] = "~Αριθμός";
-        Text[ korean ] = "°³Όφ";
+        Text[ korean ] = "°³Όφ(~A)";
         Text[ turkish ] = "~Adet";
         Text[ language_user1 ] = " ";
     };
