@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-16 12:08:19 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ AccessibleControlShape::AccessibleControlShape (const ::com::sun::star::uno::Ref
         ::com::sun::star::drawing::XShape>& rxShape,
     const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
     :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
 {
