@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 12:23:12 $
+ *  last change: $Author: os $ $Date: 2002-01-15 16:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     else
                         aName = *SwStyleNameMapper::GetTextUINameArray()[
                             RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
+                    rSet.Put(SfxTemplateItem(nWhich, aName));
                 }
-                rSet.Put(SfxTemplateItem(nWhich, aName));
                 break;
 
             case SID_STYLE_FAMILY2:
@@ -241,8 +241,6 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     aItem.SetValue(nMask);
                     rSet.Put(aItem);
                 }
-                else
-                    rSet.Put(SfxTemplateItem(nWhich, aEmptyStr));
 
                 break;
 
@@ -254,8 +252,10 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 {
                     SwFrmFmt* pFmt = pShell->GetCurFrmFmt();
                     if(pFmt && pShell->IsFrmSelected())
+                    {
                         aName = pFmt->GetName();
-                    rSet.Put(SfxTemplateItem(nWhich, aName));
+                        rSet.Put(SfxTemplateItem(nWhich, aName));
+                    }
                 }
                 break;
 
@@ -1198,270 +1198,5 @@ Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
     return SfxObjectShell::GetStyleFamilyBitmap( eFamily );
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/07/19 16:49:35  mtg
-    #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
-
-    Revision 1.3  2000/11/14 11:12:26  os
-    #79626# set metric attribute
-
-    Revision 1.2  2000/10/06 13:31:28  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-    Revision 1.149  2000/09/18 16:05:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.148  2000/09/07 15:59:20  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.147  2000/07/07 13:26:09  jp
-    must changes VCL
-
-    Revision 1.146  2000/05/26 07:21:28  os
-    old SW Basic API Slots removed
-
-    Revision 1.145  2000/04/20 12:53:37  os
-    GetName() returns String&
-
-    Revision 1.144  2000/02/11 14:42:41  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.143  1999/11/29 17:25:33  jp
-    some changes for the compat. attribut
-
-    Revision 1.142  1999/06/09 17:34:54  JP
-    have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-
-      Rev 1.141   09 Jun 1999 19:34:54   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.140   28 May 1999 10:24:20   JP
-   zu Bug #66327#: LoadStyles - FixFelder aktualisieren
-
-      Rev 1.139   22 Feb 1999 11:28:06   OS
-   #61359# freie Positionierung von Rahmen auch fuer Vorlagen wieder erlaubt
-
-      Rev 1.138   27 Nov 1998 14:49:04   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.137   23 Oct 1998 13:17:20   OS
-   #44617# Parentvorlage fuer SID_NEW_STYLE aus dem Gestalter
-
-      Rev 1.136   24 Sep 1998 11:55:30   JP
-   Bug #57028#: ggfs. das Undo veranlassen, kein Modified zurueck zu setzen
-
-      Rev 1.135   08 Sep 1998 18:00:36   OS
-   #56134# Metric fuer Text und HTML getrennt - auch im ::Edit
-
-      Rev 1.134   08 Sep 1998 16:48:20   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.133   17 Aug 1998 16:06:36   OS
-   GPF nach Shellwechsel waehrend Recording #55041#
-
-      Rev 1.132   27 Jul 1998 16:55:20   JP
-   Bug #45529#: LoadStyles muss ggfs. das Zuruecksetzen des ModifiedFlags verhindern
-
-      Rev 1.131   26 Jun 1998 17:36:46   OS
-   SwBGDestItem mit Which #51751#
-
-      Rev 1.130   17 Jun 1998 18:19:46   OS
-   SwBackgroundDestinationItem
-
-      Rev 1.129   17 Jun 1998 08:34:34   OS
-   im UpdateByExample sel. Eintrag mit eigener Id mitschicken #51141#
-
-      Rev 1.128   10 Jun 1998 14:51:40   JP
-   SetFrmFmt: zusaetzlicher Parameter - Orientierung beibehalten
-
-      Rev 1.127   16 Apr 1998 16:00:42   OS
-   Printing extensions fuer HTML
-
-      Rev 1.126   31 Mar 1998 10:20:36   OM
-   #45776 Per default kein Size-Item in Rahmenvorlagen
-
-      Rev 1.125   14 Mar 1998 13:06:44   OS
-   Chg: GetCurrentTemplateCommen mit SfxBindings&
-
-      Rev 1.124   20 Jan 1998 15:31:52   OS
-   RES_CHRATR:BACKGROUND hat jetzt SlotId
-
-      Rev 1.123   08 Jan 1998 12:55:08   OS
-   Zeichenhintergrund auch im Absatzformatdialog editierbar #46180#
-
-      Rev 1.122   06 Jan 1998 07:27:08   OS
-   New/UpdateByExample fuer Numererierung nur wenn sie gesetzt ist erlauben #46348#
-
-      Rev 1.121   09 Dec 1997 16:50:20   JP
-   neu: ReplaceNumRule fuer MakeByExample fuer NumerierungsVorlagen
-
-      Rev 1.120   04 Dec 1997 12:27:58   OS
-   Edit/FormatPage: WrtShell nicht mehr const
-
-      Rev 1.119   24 Nov 1997 16:57:24   JP
-   GetState: String in der Schleife anlegen
-
-      Rev 1.118   24 Nov 1997 14:22:38   MA
-   includes
-
-      Rev 1.117   17 Nov 1997 10:20:10   JP
-   Umstellung Numerierung
-
-      Rev 1.116   11 Nov 1997 13:22:14   JP
-   neu: NumRule-Vorlage
-
-      Rev 1.115   05 Nov 1997 09:33:30   JP
-   Bug #45341#: SetItemSet nie mit dem eigenen ItemSet aufrufen
-
-      Rev 1.114   19 Sep 1997 14:31:24   JP
-   GPF beim Abschalten der Kopf-/Fusszeilen behoben
-
-      Rev 1.113   04 Sep 1997 17:13:36   MA
-   includes
-
-      Rev 1.112   03 Sep 1997 15:53:52   OS
-   DLL-Umbau
-
-      Rev 1.111   21 Aug 1997 16:09:10   OS
-   Return fuer Basic nur noch Null und Eins #43004#
-
-      Rev 1.110   15 Aug 1997 11:45:06   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.109   12 Aug 1997 15:58:36   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.108   08 Aug 1997 17:26:42   OM
-   Headerfile-Umstellung
-
-      Rev 1.107   07 Aug 1997 14:59:24   OM
-   Headerfile-Umstellung
-
-      Rev 1.106   01 Aug 1997 17:03:30   OM
-   Basic: NewStyle ohne Dialog ausfuehren
-
-      Rev 1.105   31 Jul 1997 10:13:54   OM
-   #42247# Template-GPF behoben
-
-      Rev 1.104   15 Jul 1997 11:34:20   OS
-   MacroName auch als sub(lib.module)
-
-      Rev 1.103   05 Jul 1997 09:57:26   OS
-   Macro und Script an Rahmenvorlagen setzen/lesen
-
-      Rev 1.102   18 Jun 1997 10:47:58   JP
-   GetStateStyleSheet: der Stylist gibt die Family vor, NIE selbst bestimmen
-
-      Rev 1.101   16 Jun 1997 15:50:26   MA
-   #40739# kein Anchor bei UpdateByExample
-
-      Rev 1.100   28 May 1997 08:15:36   OS
-   Metric fuer Dialog nicht in der Statusmethode setzen, sondern im Execute
-
-      Rev 1.99   21 Feb 1997 15:31:20   OS
-   Watercan ueber den Pointer am EditWin erkennen
-
-      Rev 1.98   19 Feb 1997 15:47:00   JP
-   Execute: UpdateByExample/NewByExample - akt. Family wie beim Gestalter festlegen
-
-      Rev 1.97   11 Feb 1997 14:31:46   JP
-   GetState: Family umschalten wenn das ApplyFlag erfragt wird
-
-      Rev 1.96   10 Feb 1997 14:21:52   JP
-   Im HTML-Mode nur die HTML-Vorlagen anzeigen
-
-      Rev 1.95   04 Feb 1997 13:53:58   JP
-   StateStyle: kein Disable bei den Familien
-
-      Rev 1.94   28 Jan 1997 16:30:42   OS
-   vor dem StyleDialog den HtmlMode in die DocShell putten
-
-      Rev 1.93   16 Jan 1997 16:37:22   OS
-   Metric vor Dialogaufruf an der App setzen
-
-      Rev 1.92   13 Jan 1997 14:57:50   JP
-   virtuelle StandardZeichenvorlage im Gestalter
-
-      Rev 1.91   13 Jan 1997 13:46:06   JP
-   Umstellungen fuers Update
-
-      Rev 1.90   12 Dec 1996 13:24:38   JP
-   GetState: Numerierung schaltet den Gestalter bei Automatisch auf Text (nicht mehr Num.)
-
-      Rev 1.89   04 Dec 1996 17:44:10   JP
-   StateStyleSheet: im HTML-Mode den HTML-Bereich defaulten
-
-      Rev 1.88   04 Dec 1996 15:05:26   JP
-   PoolVorlagen: neuer Bereich - HTML
-
-      Rev 1.87   14 Nov 1996 19:14:32   OS
-   Umstellung SlotIds
-
-      Rev 1.86   06 Nov 1996 10:20:14   JP
-   NewByExample: PageDesc - PoolIds beibehalten
-
-      Rev 1.85   04 Nov 1996 15:02:58   JP
-   neu: NewByExample fuer PageDescs
-
-      Rev 1.84   29 Oct 1996 12:12:06   AMA
-   New: Zeichenvorlagen duerfen jetzt denselben Bereich umfassen (DONTREPLACE)
-
-      Rev 1.83   28 Oct 1996 16:59:10   AMA
-   New: Modifier durchreichen
-
-      Rev 1.82   01 Oct 1996 13:40:12   AMA
-   Fix: RES_CHRATR_BACKGROUND nur bei Aenderung setzen.
-
-      Rev 1.81   18 Sep 1996 14:30:44   AMA
-   Chg: Zeichenhintergrund
-
-      Rev 1.80   17 Sep 1996 16:20:06   OS
-   UI-Anpassung bedingte Vorlagen
-
-      Rev 1.79   09 Sep 1996 15:10:40   OS
-   StyleSheet-Slots koennen auch WrtShell mitbekommen - API-Aufruf von Hintergrund-Views
-
-      Rev 1.78   23 Aug 1996 12:26:40   JP
-   Bug #30613#: GetStyleState - auf die richtige Shelle zugreifen
-
-      Rev 1.77   29 Jul 1996 19:37:30   MA
-   includes
-
-      Rev 1.76   29 Jul 1996 15:14:46   OS
-   FormatPage und Edit mit akt. View
-
-      Rev 1.75   12 Jun 1996 14:55:40   JP
-   Bug #28625#: Edit - neue Vorlage -> Pool benachrictigen
-
-      Rev 1.74   07 May 1996 23:01:44   JP
-   Bug #27306#: LoadStyles - Start/End-AllAction nur wenn Shell vorhanden ist
-
-      Rev 1.73   22 Apr 1996 16:48:16   JP
-   Bug #26860#: Doc als nicht modifiziert kennzeichnen
-
-      Rev 1.72   28 Mar 1996 19:03:38   OS
-   nach PageStyleDialog Lineal invalidieren
-
-      Rev 1.71   22 Mar 1996 13:55:04   HJS
-   umstellung 311
-
-      Rev 1.70   11 Mar 1996 09:58:46   OS
-   StateStyleSheet hat jetzt opt. WrtShell* als 2. Param. wg. Basic
-
-      Rev 1.69   20 Feb 1996 16:27:26   OS
-   neu: FormatPage - ruft Seitenformatdialog ggf. mit Spaltenseite auf
-
-      Rev 1.68   13 Feb 1996 14:30:12   OS
-   ExecStyleSheet: ReturnValue immer am Request setzen
-
-      Rev 1.67   12 Jan 1996 19:39:24   JP
-   ExecStyleSheet: Mask wird vom SFX mit gegeben, Edit und NewByExample wollen es haben
-
-------------------------------------------------------------------------*/
 
 
