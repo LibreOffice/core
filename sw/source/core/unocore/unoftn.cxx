@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 15:55:57 $
+ *  last change: $Author: os $ $Date: 2000-10-23 08:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
             pDoc->GetUnoCallBack()->Add(this);
             //force creation of sequence id - is used for references
             if(pDoc->IsInReading())
-                ((SwTxtFtn*)pTxtAttr)->SetSeqNo((pDoc->GetFtnIdxs().Count());
+                ((SwTxtFtn*)pTxtAttr)->SetSeqNo(pDoc->GetFtnIdxs().Count());
             else
                 ((SwTxtFtn*)pTxtAttr)->SetSeqRefNo();
         }
@@ -619,6 +619,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/20 15:55:57  os
+    #78714# set reference number directly if document is in reading
+
     Revision 1.2  2000/09/27 14:22:03  os
     #78714# force creation of seqence id
 
