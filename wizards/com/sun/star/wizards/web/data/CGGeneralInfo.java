@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGGeneralInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:17:20 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,16 @@ import org.w3c.dom.Node;
 public class CGGeneralInfo     extends ConfigGroup implements XMLProvider {
     public String           cp_Title;
     public String           cp_Description;
-    public String           cp_Icon;
     public String           cp_Author;
-    public String           cp_Keywords;
     public int              cp_CreationDate;
     public int              cp_UpdateDate;
-    public int              cp_RevisitAfter;
     public String           cp_Email;
     public String           cp_Copyright;
 
     public Node createDOM(Node parent) {
         return XMLHelper.addElement(parent,"general-info",
-          new String[] {"title","author","description","keywords","creation-date","update-date","revisit-after","email","copyright"},
-          new String[] {cp_Title, cp_Author, cp_Description, cp_Keywords, String.valueOf(cp_CreationDate), String.valueOf(cp_UpdateDate),String.valueOf(cp_RevisitAfter),cp_Email, cp_Copyright}
+          new String[] {"title","author","description","creation-date","update-date","email","copyright"},
+          new String[] {cp_Title, cp_Author, cp_Description, String.valueOf(cp_CreationDate), String.valueOf(cp_UpdateDate),cp_Email, cp_Copyright}
         );
     }
 
@@ -89,9 +86,6 @@ public class CGGeneralInfo     extends ConfigGroup implements XMLProvider {
         return new Integer(cp_CreationDate);
     }
 
-    public String getIcon() {
-        return cp_Icon;
-    }
 
     public Integer getUpdateDate() {
         if (cp_UpdateDate== 0)
@@ -103,11 +97,6 @@ public class CGGeneralInfo     extends ConfigGroup implements XMLProvider {
         //System.out.println(i);
         cp_CreationDate = i.intValue();
     }
-
-    public void setIcon(String string) {
-        cp_Icon = string;
-    }
-
 
     public void setUpdateDate(Integer i) {
         cp_UpdateDate = i.intValue();
