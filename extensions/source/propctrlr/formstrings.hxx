@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:24:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TRISTATE,               "TriState");
     PCR_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,           "HiddenValue");
     PCR_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,             "ButtonType");
+    PCR_CONSTASCII_STRING( PROPERTY_XFORMS_BUTTONTYPE,      "XFormsButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,         "StringItemList");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,           "DefaultText");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCHECKED,         "DefaultState");
@@ -119,6 +120,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,          "DefaultValue");
     PCR_CONSTASCII_STRING( PROPERTY_DECIMAL_ACCURACY,       "DecimalAccuracy");
     PCR_CONSTASCII_STRING( PROPERTY_REFVALUE,               "RefValue");
+    PCR_CONSTASCII_STRING( PROPERTY_UNCHECKEDREFVALUE,      "SecondaryRefValue");
     PCR_CONSTASCII_STRING( PROPERTY_VALUEMIN,               "ValueMin");
     PCR_CONSTASCII_STRING( PROPERTY_VALUEMAX,               "ValueMax");
     PCR_CONSTASCII_STRING( PROPERTY_STRICTFORMAT,           "StrictFormat");
@@ -236,7 +238,32 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_REFERENCE_SHEET,        "ReferenceSheet");
     PCR_CONSTASCII_STRING( PROPERTY_UI_REPRESENTATION,      "UserInterfaceRepresentation");
 
-    // "virtual" properties (not to be used with real property sets)
+    PCR_CONSTASCII_STRING( PROPERTY_XML_DATA_MODEL,         "XMLDataModel" );
+    PCR_CONSTASCII_STRING( PROPERTY_BIND_EXPRESSION,        "BindingExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_LIST_BINDING,           "ListBinding" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_REQUIRED,           "RequiredExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_RELEVANT,           "RelevantExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_READONLY,           "ReadonlyExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_CONSTRAINT,         "ConstraintExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_CALCULATION,        "CalculateExpression" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_DATA_TYPE,          "Type" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_WHITESPACES,        "WhiteSpace" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_PATTERN,            "Pattern" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_LENGTH,             "Length" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_LENGTH,         "MinLength" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_LENGTH,         "MaxLength" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_TOTAL_DIGITS,       "TotalDigits" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_FRACTION_DIGITS,    "FractionDigits" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE,      "MaxInclusive" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE,      "MaxExclusive" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE,      "MinInclusive" );
+    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE,      "MinExclusive" );
+    PCR_CONSTASCII_STRING( PROPERTY_SUBMISSION_ID,          "SubmissionID" );
+    PCR_CONSTASCII_STRING( PROPERTY_BINDING_ID,             "BindingID" );
+    PCR_CONSTASCII_STRING( PROPERTY_ID,                     "ID" );
+
+    PCR_CONSTASCII_STRING( PROPERTY_MODEL,                  "Model" );
+
     PCR_CONSTASCII_STRING( PROPERTY_CELL_EXCHANGE_TYPE,     "ExchangeSelectionIndex");
     PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
     PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
