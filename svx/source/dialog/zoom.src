@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-09 10:41:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,10 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ russian ] = "Íà âñş ñòğàíèöó";
         Text[ polish ] = "Ca³a strona";
         Text[ japanese ] = "Íß°¼Ş‘S‘Ì(~E)";
-        Text[ chinese_traditional ] = "¥ş­¶(~E)";
+        Text[ chinese_traditional ] = "¾ã­¶(~E)";
         Text[ arabic ] = "ÕİÍÉ ßÇãáÉ";
         Text[ greek ] = "Ïëüêëçñç óåëßäá";
-        Text[ korean ] = "ÀüÃ¼ ÂÊ(~E)";
+        Text[ korean ] = "ÀüÃ¼ ÆäÀÌÁö(~E)";
         Text[ turkish ] = "~Tam sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Toda la página";
@@ -238,7 +238,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text = "Zoomfaktor" ;
         Text [ ENGLISH ] = "Zoom" ;
         Text[ english_us ] = "Zoom factor";
-        Text[ portuguese ] = "Zoom";
+        Text[ portuguese ] = "Factor de zoom";
         Text[ russian ] = "Êîıôôèöèåíò ìàñøòàáà";
         Text[ greek ] = "Zoom";
         Text[ dutch ] = "Zoom";
@@ -251,7 +251,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ polish ] = "Faktor powiêkszenia";
         Text[ portuguese_brazilian ] = "Zoom";
         Text[ japanese ] = "½Ş°Ñ—vˆö";
-        Text[ korean ] = "Zoom";
+        Text[ korean ] = "È®´ë/Ãà¼Ò";
         Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÀı";
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
         Text[ turkish ] = "Zoom";
@@ -275,7 +275,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ greek ] = "Êëßìáêá";
-    Text[ korean ] = "È®´ë/Ãà¼Ò";
+    Text[ korean ] = "ÁÜ";
     Text[ turkish ] = "Ölçek";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala";
@@ -288,8 +288,8 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ finnish ] = "Zoomaa";
     Text[ italian ] = "Zoom";
     Text[ danish ] = "Målestok";
-    Text[ swedish ] = "Zoom";
-    Text[ polish ] = "Powiêkszenie";
+    Text[ swedish ] = "Skala";
+    Text[ polish ] = "Skala";
     Text[ portuguese_brazilian ] = "Zoom";
     Text[ japanese ] = "½Ş°Ñ";
     Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÀı";
@@ -297,6 +297,7 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";
 };
  // ********************************************************************** EOF
+
 
 
 
