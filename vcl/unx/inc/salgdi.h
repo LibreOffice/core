@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
+ *  last change: $Author: hdu $ $Date: 2002-04-22 16:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,20 +92,23 @@ class   SalPolyLine;
 class   SalPrinter;
 class   SalInfoPrinter;
 class   ServerFont;
+class   SalLayout;
+class   ImplLayoutArgs;
+class   X11FontLayout;
+class   ServerFontLayout;
 
 #ifndef _USE_PRINT_EXTENSION_
 namespace psp { struct JobData; class PrinterGfx; }
 #endif
 
 #ifndef _SV_SALDISP_HXX
-typedef SalColormap        *SalColormapRef;
+typedef SalColormap         *SalColormapRef;
 #endif
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 class SalGraphicsData
 {
-
     friend  class           SalGraphics;
     friend  class           SalPrinter;
     friend  class           SalInfoPrinter;
@@ -120,20 +123,20 @@ class SalGraphicsData
 #endif
 
     SalColormapRef  xColormap_;
-    Drawable        hDrawable_;         // use
+    Drawable        hDrawable_;     // use
 
     XLIB_Region     pPaintRegion_;
     XLIB_Region     pClipRegion_;
 
-    GC              pPenGC_;            // Pen attributes
+    GC              pPenGC_;        // Pen attributes
     SalColor        nPenColor_;
     Pixel           nPenPixel_;
 
-    GC              pFontGC_;           // Font attributes
-    ExtendedFontStructRef       xFont_;
-    ExtendedFontStructRef       mxFallbackFont;
-    ServerFont                  *mpServerSideFont;
-    ServerFont                  *mpSrvFallbackFont;
+    GC              pFontGC_;       // Font attributes
+    ExtendedFontStructRef   xFont_;
+    ExtendedFontStructRef   mxFallbackFont;
+    ServerFont              *mpServerSideFont;
+    ServerFont              *mpSrvFallbackFont;
 
     Fraction        aScale_;
     SalColor        nTextColor_;
@@ -141,10 +144,10 @@ class SalGraphicsData
     short           nFontOrientation_;
     BOOL            bFontVertical_;
 
-    GC              pBrushGC_;          // Brush attributes
+    GC              pBrushGC_;      // Brush attributes
     SalColor        nBrushColor_;
     Pixel           nBrushPixel_;
-    Pixmap          hBrush_;            // Dither
+    Pixmap          hBrush_;        // Dither
 
     GC              pMonoGC_;
     GC              pCopyGC_;
@@ -171,7 +174,6 @@ class SalGraphicsData
 
     void            SetClipRegion( GC          pGC,
                                    XLIB_Region pXReg = NULL ) const;
-
 
 #if defined(_SV_SALGDI_CXX) || defined (_SV_SALGDI2_CXX)
     GC              GetTrackingGC();
@@ -225,8 +227,30 @@ class SalGraphicsData
 
 #if defined _SV_SALGDI3_CXX
     GC              SelectFont();
-
     void            SetFont( const ImplFontSelectData* pEntry );
+
+protected:
+    void            DrawStringMB( int nX, int nY,
+                        const sal_Unicode* pStr, int nLength );
+
+    void            DrawStringUCS2( int nX, int nY,
+                        const sal_Unicode* pStr, int nLength );
+
+    ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+
+#ifdef ENABLE_CTL
+    void            DrawPrinterString( const SalLayout& );
+
+    void            DrawX11FontString( const X11FontLayout& );
+
+    void            DrawServerFontString( const ServerFontLayout& );
+    void            DispatchServerFontString( const ServerFontLayout& );
+    void            DrawServerSimpleFontString( const ServerFontLayout& );
+    void            DrawServerAAFontString( const ServerFontLayout& );
+    bool            DrawServerAAForcedString( const ServerFontLayout& );
+
+    SalLayout*      LayoutText( const ImplLayoutArgs& );
+#else // ENABLE_CTL
     void            DrawText( long          nX,
                               long          nY,
                               const xub_Unicode* pStr,
@@ -237,51 +261,43 @@ class SalGraphicsData
                               const xub_Unicode* pStr,
                               USHORT nLen );
 
-protected:
-    void            DrawStringMB( int nX, int nY,
-                                  const sal_Unicode* pStr, int nLength );
-
-    void            DrawStringUCS2( int nX, int nY,
-                                    const sal_Unicode* pStr, int nLength );
-
     void            DispatchServerFontString( int nX, int nY,
                                               ServerFont *pFont, const sal_uInt32* pGlyph,
                                               int nLength, const long* pDXAry );
 
     void            DrawServerSimpleFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt32* pGlyph,
-                                                int nLength, const long* pDXAry );
+                        ServerFont *pFont, const sal_uInt32* pGlyph,
+                        int nLength, const long* pDXAry );
 
     void            DrawServerAAFontString( int nX, int nY,
-                                            ServerFont *pFont, const sal_uInt32* pGlyph,
-                                            int nLength, const long* pDXAry );
+                        ServerFont *pFont, const sal_uInt32* pGlyph,
+                        int nLength, const long* pDXAry );
 
     bool            DrawServerAAForcedString( int nX, int nY,
-                                              ServerFont *pFont,    const sal_uInt32* pGlyph,
-                                              int nLength, const long* pDXAry );
+                        ServerFont *pFont, const sal_uInt32* pGlyph,
+                        int nLength, const long* pDXAry );
 
     void            DrawServerFontString( int nX, int nY,
-                                          const sal_Unicode* pStr,
-                                          int nLength, const long* pDXAry );
-
-    ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
-#endif
+                        const sal_Unicode* pStr,
+                        int nLength, const long* pDXAry );
+#endif // ENABLE_CTL
+#endif // _SV_SALGDI3_CXX
 public:
-    SalGraphicsData();
-    ~SalGraphicsData();
+                            SalGraphicsData();
+                            ~SalGraphicsData();
 
-    void            Init( SalFrame         *pFrame );
-    void            Init( SalVirtualDevice *pVirtualDevice,
-                          SalGraphics      *pSalGraphics );
-    void            Init( class ImplSalPrinterData  *pPrinter );
-    void            DeInit();
+            void            Init( SalFrame *pFrame );
+            void            Init( SalVirtualDevice *pVirtualDevice,
+                                SalGraphics *pSalGraphics );
+            void            Init( class ImplSalPrinterData *pPrinter );
+            void            DeInit();
 
     inline  SalDisplay     *GetDisplay() const;
     inline  Display        *GetXDisplay() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
     inline  SalColormap    &GetColormap() const { return *xColormap_; }
-    inline  BOOL            IsCompatible( USHORT       nDepth,
+    inline  BOOL            IsCompatible( USHORT nDepth,
                                           SalColormap *pMap ) const;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
@@ -300,7 +316,7 @@ inline BOOL SalGraphicsData::IsCompatible( USHORT       nDepth,
                                            SalColormap *pMap ) const
 {
     return (GetDisplay()->GetImageDepths() & (1 << (nDepth-1))) != 0
-           && &xColormap_ == pMap;
+            && &xColormap_ == pMap;
 }
 
 inline Pixel SalGraphicsData::GetPixel( SalColor nSalColor ) const
