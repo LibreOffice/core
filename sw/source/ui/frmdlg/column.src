@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:59:59 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,22 +91,22 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "~Num." ;
         Left = TRUE ;
         Text[ language_user1 ] = " ";
-        Text[ english_us ] = "~Amount";
+        Text[ english_us ] = "Columns";
         Text[ portuguese ] = "~Quantidade";
-        Text[ russian ] = "×èñëî";
-        Text[ greek ] = "~Áñéèìüò";
+        Text[ russian ] = "Êîëîíêè";
+        Text[ greek ] = "~ÓôŞëåò";
         Text[ dutch ] = "~Aantal";
-        Text[ french ] = "~Nombre";
-        Text[ spanish ] = "~Cantidad";
+        Text[ french ] = "Colonnes";
+        Text[ spanish ] = "~Columnas";
         Text[ finnish ] = "~Määrä";
         Text[ italian ] = "~Num.";
         Text[ danish ] = "Antal";
         Text[ swedish ] = "~Kolumner";
-        Text[ polish ] = "Liczba";
+        Text[ polish ] = "Kolumny";
         Text[ portuguese_brazilian ] = "~N?m.";
         Text[ japanese ] = "’i”(~A)";
         Text[ korean ] = "°³¼ö(~A)";
-        Text[ chinese_simplified ] = "ÊıÄ¿(~A)";
+        Text[ chinese_simplified ] = "ÁĞ";
         Text[ chinese_traditional ] = "¼Æ¥Ø(~A)";
         Text[ turkish ] = "S~ayı";
         Text[ arabic ] = "ÇáÚÏÏ";
@@ -171,20 +171,20 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ english_us ] = "Columns";
         Text[ portuguese ] = "Colunas";
-        Text[ russian ] = "Êîëîíêè";
-        Text[ greek ] = "ÓôŞëåò";
+        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ dutch ] = "Kolommen";
         Text[ french ] = "Colonnes";
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Sarakkeet";
         Text[ italian ] = "Colonne";
         Text[ danish ] = "Kolonner";
-        Text[ swedish ] = "Kolumner";
-        Text[ polish ] = "Kolumny";
+        Text[ swedish ] = "Förinställningar";
+        Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Colunas";
         Text[ japanese ] = "’i‘g‚İ";
         Text[ korean ] = "¿­";
-        Text[ chinese_simplified ] = "À¸";
+        Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ chinese_traditional ] = "Äæ";
         Text[ turkish ] = "Sütun";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
@@ -199,20 +199,20 @@ TabPage TP_COLUMN
         Left = TRUE ;
         Text[ english_us ] = "Column";
         Text[ portuguese ] = "Column";
-        Text[ russian ] = "Column";
-        Text[ greek ] = "Column";
+        Text[ russian ] = "Êîëîíêà";
+        Text[ greek ] = "ÓôŞëç";
         Text[ dutch ] = "Column";
-        Text[ french ] = "Column";
-        Text[ spanish ] = "Column";
+        Text[ french ] = "Colonne";
+        Text[ spanish ] = "Columna";
         Text[ finnish ] = "Column";
         Text[ italian ] = "Column";
         Text[ danish ] = "Column";
         Text[ swedish ] = "Kolumn";
-        Text[ polish ] = "Column";
+        Text[ polish ] = "Kolumna";
         Text[ portuguese_brazilian ] = "Column";
-        Text[ japanese ] = "Column";
+        Text[ japanese ] = "’i";
         Text[ korean ] = "Column";
-        Text[ chinese_simplified ] = "Column";
+        Text[ chinese_simplified ] = "ÁĞ";
         Text[ chinese_traditional ] = "Column";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
@@ -451,22 +451,22 @@ TabPage TP_COLUMN
         Text = "Breite und Abstand" ;
         Text [ ENGLISH ] = "Column width" ;
         Text[ language_user1 ] = " ";
-        Text[ english_us ] = "Column width";
+        Text[ english_us ] = "Width and spacing";
         Text[ portuguese ] = "Largura da coluna";
-        Text[ russian ] = "Øèğèíà êîëîíîê";
-        Text[ greek ] = "ĞëÜôïò óôŞëçò";
+        Text[ russian ] = "Øèğèíà è ğàññòîÿíèå";
+        Text[ greek ] = "ĞëÜôïò êáé áğüóôáóç";
         Text[ dutch ] = "Kolombreedte";
-        Text[ french ] = "Largeur de colonne";
-        Text[ spanish ] = "Ancho de columna";
+        Text[ french ] = "Largeur et écart";
+        Text[ spanish ] = "Ancho y espacio";
         Text[ finnish ] = "Sarakkeen leveys";
         Text[ italian ] = "Larghezza colonna";
         Text[ danish ] = "Kolonnebredde";
         Text[ swedish ] = "Bredd och avstånd";
-        Text[ polish ] = "Szer. kolumny";
+        Text[ polish ] = "Szerokoœæ i odstêp";
         Text[ portuguese_brazilian ] = "Largura da coluna";
-        Text[ japanese ] = "’i‚Ì•";
+        Text[ japanese ] = "’i‚Ì•‚ÆŠÔŠu";
         Text[ korean ] = "¿­ ³Êºñ";
-        Text[ chinese_simplified ] = "À¸¿í";
+        Text[ chinese_simplified ] = "À¸¿íºÍ¼ä¸ô";
         Text[ chinese_traditional ] = "Äæ¼e";
         Text[ turkish ] = "Sütun genişliği";
         Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
@@ -1174,3 +1174,4 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
