@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-26 17:27:48 $
+ *  last change: $Author: jp $ $Date: 2001-06-07 12:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,7 +975,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
                 for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
                     if( *pTxt == cCh )
-                        aPosArr.Insert( aFInfo.GetCharPos( nChPos, FALSE ),
+                        aPosArr.Insert( aFInfo.GetCharPos( nChPos+1, FALSE ),
                                         aPosArr.Count() );
 
                 aPosArr.Insert( /*aFInfo.GetFrm()->Frm().Left() +*/
@@ -1043,6 +1043,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     pTxtNd->Erase( aCntPos.nContent, 1 );
                     pTxt = pTxtNd->GetTxt().GetBuffer();
                     nChPos = 0;
+                    --nChPos, --pTxt;           // for the ++ in the for loop !!!
 
                     // setze bei allen TextNodes in der Tabelle den TableNode
                     // als StartNode
