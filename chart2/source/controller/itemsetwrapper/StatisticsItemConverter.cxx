@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 13:52:28 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 14:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,30 +366,7 @@ StatisticsItemConverter::StatisticsItemConverter(
 }
 
 StatisticsItemConverter::~StatisticsItemConverter()
-{
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
-}
-
-void StatisticsItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
-{
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
-
-    // own items
-    ItemConverter::FillItemSet( rOutItemSet );
-}
-
-bool StatisticsItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
-{
-    bool bResult = false;
-
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
-
-    // own items
-    return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
-}
+{}
 
 const USHORT * StatisticsItemConverter::GetWhichPairs() const
 {
@@ -401,7 +378,6 @@ bool StatisticsItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUStr
 {
     return false;
 }
-
 
 bool StatisticsItemConverter::ApplySpecialItem(
     USHORT nWhichId, const SfxItemSet & rItemSet )
@@ -432,6 +408,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
         }
         break;
 
+        // Attention !!! This case must be passed before SCHATTR_STAT_PERCENT,
+        // SCHATTR_STAT_BIGERROR, SCHATTR_STAT_CONSTPLUS,
+        // SCHATTR_STAT_CONSTMINUS and SCHATTR_STAT_INDICATE
         case SCHATTR_STAT_KIND_ERROR:
         {
             chart2::ErrorBar aOldErrorBar;
@@ -468,8 +447,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
                         break;
                 }
 
-                if( ! bOldHasErrorBar ||
-                    aOldErrorBar.aStyle != eStyle )
+                if( eErrorKind != CHERROR_NONE &&
+                    ( ! bOldHasErrorBar ||
+                      aOldErrorBar.aStyle != eStyle ))
                 {
                     if( ! bOldHasErrorBar )
                         aOldErrorBar = lcl_GetDefaultErrorBar();
@@ -492,12 +472,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            if( ! bOldHasErrorBar ||
+            if( bOldHasErrorBar &&
                 ! ( ::rtl::math::approxEqual( aOldErrorBar.fPositiveError, fValue ) &&
                     ::rtl::math::approxEqual( aOldErrorBar.fNegativeError, fValue )))
             {
-                if( ! bOldHasErrorBar )
-                    aOldErrorBar = lcl_GetDefaultErrorBar();
                 aOldErrorBar.fPositiveError = fValue;
                 aOldErrorBar.fNegativeError = fValue;
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
@@ -516,11 +494,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            if( ! bOldHasErrorBar ||
+            if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( aOldErrorBar.fPositiveError, fValue ))
             {
-                if( ! bOldHasErrorBar )
-                    aOldErrorBar = lcl_GetDefaultErrorBar();
                 aOldErrorBar.fPositiveError = fValue;
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
                                                     uno::makeAny( aOldErrorBar ));
@@ -538,11 +514,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            if( ! bOldHasErrorBar ||
+            if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( aOldErrorBar.fNegativeError, fValue ))
             {
-                if( ! bOldHasErrorBar )
-                    aOldErrorBar = lcl_GetDefaultErrorBar();
                 aOldErrorBar.fNegativeError = fValue;
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
                                                     uno::makeAny( aOldErrorBar ));
@@ -591,13 +565,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
             bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
 
-            if( ! bOldHasErrorBar ||
-                aOldErrorBar.bShowPositiveError != bNewIndPos ||
-                aOldErrorBar.bShowNegativeError != bNewIndNeg )
+            if( bOldHasErrorBar &&
+                ( aOldErrorBar.bShowPositiveError != bNewIndPos ||
+                  aOldErrorBar.bShowNegativeError != bNewIndNeg ))
             {
-                if( ! bOldHasErrorBar )
-                    aOldErrorBar = lcl_GetDefaultErrorBar();
-
                 aOldErrorBar.bShowPositiveError = bNewIndPos;
                 aOldErrorBar.bShowNegativeError = bNewIndNeg;
 
@@ -646,6 +617,7 @@ void StatisticsItemConverter::FillSpecialItem(
                         eErrorKind = CHERROR_BIGERROR; break;
 
                     case chart2::ErrorBarStyle_FROM_DATA:
+                        // suppress warning
                     case chart2::ErrorBarStyle_MAKE_FIXED_SIZE:
                         break;
                 }
