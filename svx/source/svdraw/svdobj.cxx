@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,16 +351,18 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 static double SMALLEST_DASH_WIDTH(26.95);
 
 ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
-    BOOL bForceHair, OutputDevice* pOut)
+    BOOL _bForceHair, OutputDevice* pOut)
 :   mpOut(pOut),
     rStartPolygon(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue()),
     rEndPolygon(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue()),
     bForceNoArrowsLeft(FALSE),
-    bForceNoArrowsRight(FALSE)
+    bForceNoArrowsRight(FALSE),
+    bForceHair(_bForceHair)
 {
+    // #i12227# now storing the real line width, not corrected by
+    // bForceHair. This is done within the GetDisplay*Width accessors,
+    // and preserves the true value for the Get*Width accessors.
     nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-    if(bForceHair)
-        nLineWidth = 0L;
     eLineStyle = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
 
     nStartWidth = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
@@ -387,11 +389,11 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
     double fDashDotDistance = (double)GetDashDistance();
     double fSingleDashLen = (double)GetDashLen();
     double fSingleDotLen = (double)GetDotLen();
-    double fLineWidth = (double)GetLineWidth();
+    double fLineWidth = (double)GetDisplayLineWidth();
 
     if(GetDashStyle() == XDASH_RECTRELATIVE || GetDashStyle() == XDASH_ROUNDRELATIVE)
     {
-        if(GetLineWidth())
+        if(GetDisplayLineWidth())
         {
             double fFactor = fLineWidth / 100.0;
 
@@ -479,7 +481,7 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
     else
     {
         // smallest dot size compare value
-        double fDotCompVal(GetLineWidth() ? fLineWidth : SMALLEST_DASH_WIDTH);
+        double fDotCompVal(GetDisplayLineWidth() ? fLineWidth : SMALLEST_DASH_WIDTH);
 
         // absolute values
         if(GetDashes())
@@ -597,9 +599,9 @@ double ImpLineGeometryCreator::ImpSimpleFindCutPoint(
 
 void ImpLineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vector3D* pLeft, const Vector3D* pRight, const Vector3D* pNext)
 {
-    if(mrLineAttr.GetLineWidth())
+    if(mrLineAttr.GetDisplayLineWidth())
     {
-        double fHalfLineWidth((double)mrLineAttr.GetLineWidth() / 2.0);
+        double fHalfLineWidth((double)mrLineAttr.GetDisplayLineWidth() / 2.0);
         Vector3D aEdge = *pRight - *pLeft;
 
         // #78972#
@@ -1123,7 +1125,7 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
 
         if(nCount)
         {
-            if(!mrLineAttr.GetLineWidth()
+            if(!mrLineAttr.GetDisplayLineWidth()
                 && (mbLineDraft || mrLineAttr.GetLineStyle() == XLINE_SOLID))
             {
                 // LineWidth zero, solid line -> add directly to linePoly
@@ -2161,7 +2163,7 @@ void SdrObject::ImpDrawLineGeometry(   ExtOutputDevice&     rXOut,
                 if( aBounds.GetWidth() )
                 {
                     // #104527# Avoid division by zero. If rLineParameters.GetLineWidth
-                    // is zero this is a hairline which we can be handled as 1.0.
+                    // is zero this is a hairline which can be handled as 1.0.
                     double fLineWidth(rLineParameters.GetLineWidth() ? (double)rLineParameters.GetLineWidth() : 1.0);
 
                     double fScale( (double)rLineParameters.GetStartWidth() / fLineWidth *
