@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:19:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef SD_EFFECT_CHILD_WINDOW_HXX
 #include "EffectChildWindow.hxx"
 #endif
+#ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
+#include "LayerDialogChildWindow.hxx"
+#endif
 #ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
 #include "SlideChangeChildWindow.hxx"
 #endif
@@ -122,7 +125,7 @@ using namespace sd;
 
 namespace sd {
 
-#define TABCONTROL_INITIAL_SIZE     500
+//AF:unused #define TABCONTROL_INITIAL_SIZE     500
 
 /*************************************************************************
 |*
@@ -161,6 +164,8 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    //AF    SFX_CHILDWINDOW_REGISTRATION(
+    //        ::sd::LayerDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
