@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,10 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
+
 #include <tools/ref.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/FilterConfigItem.hxx>
