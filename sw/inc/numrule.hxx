@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:10:26 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ public:
     virtual void                SetVertOrient(SvxFrameVertOrient eSet);
     virtual SvxFrameVertOrient  GetVertOrient() const;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
+
+    BOOL IsEnumeration() const; // #i22362#
+    BOOL IsItemize() const; // #i29560#
 };
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
