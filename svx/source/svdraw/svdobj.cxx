@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:03:58 $
+ *  last change: $Author: dl $ $Date: 2001-04-02 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3308,7 +3308,7 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
     const SfxPoolItem *pPoolItem;
     std::vector< sal_uInt16 > aPostItemChangeList;
     BOOL bDidChange(FALSE);
-    SfxItemSet aSet( *GetItemPool(), SDRATTR_START, SDRATTR_END );
+    SfxItemSet aSet( *GetItemPool() );
 
     while(nWhich)
     {
