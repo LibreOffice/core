@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:59:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,35 +68,9 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES= \
-                base3d.cxx      \
-                b3dtrans.cxx    \
-                b3ddeflt.cxx    \
-                b3dopngl.cxx    \
-                b3dprint.cxx    \
-                b3dcommn.cxx	\
-                vector3d.cxx	\
-                point4d.cxx		\
-                matril3d.cxx	\
-                b3dlight.cxx	\
-                b3dcolor.cxx	\
-                b3dentty.cxx	\
-                b3dcompo.cxx	\
-                hmatrix.cxx		\
-                b3dtex.cxx		\
-                b3dgeom.cxx		\
-                b3dvolum.cxx
-
-#SRS1NAME=
-#SRC1FILES=
 
 SLOFILES= \
                 $(SLO)$/base3d.obj       \
@@ -117,8 +91,6 @@ SLOFILES= \
                 $(SLO)$/b3dgeom.obj		\
                 $(SLO)$/b3dvolum.obj
 
-
-.ENDIF			# "$(header)" == ""
 
 .INCLUDE :  target.mk
 
