@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String STR_FLD_EDIT_DLG
     Text [ portuguese ] = "Editar campos" ;
     Text [ finnish ] = "Muokkaa kenttää" ;
     Text [ danish ] = "Rediger felt" ;
-    Text [ french ] = "Édition d'une instruction de champ" ;
+    Text [ french ] = "Édition de champ" ;
     Text [ swedish ] = "Redigera fältkommando" ;
     Text [ dutch ] = "Veldopdracht bewerken" ;
     Text [ spanish ] = "Editar campos" ;
@@ -794,7 +794,7 @@ String STR_DBFLD
     TEXT[ japanese ] = "·‚µ‚İˆóüÌ¨°ÙÄŞ";
     TEXT[ chinese_traditional ] = "¦X¨Ö¦C¦LÄæ¦ì";
     TEXT[ arabic ] = "ÍŞá ÎØÇÈ ãÓáÓá";
-    TEXT[ greek ] = "Ğåäßï ïìáäéêŞò åğéóôïëŞò";
+    TEXT[ greek ] = "Ğåäßï åãêõêëßïõ åğéóôïëŞò";
     TEXT[ korean ] = "ÆíÁö ÇÊµå·Î ºÎÅÍ";
     TEXT[ turkish ] = "Standart mektup";
     TEXT[ language_user1 ] = " ";
@@ -832,7 +832,7 @@ String STR_DBNUMSETFLD
     TEXT [ norwegian ] = "Random Set" ;
     TEXT [ italian ] = "Qualsiasi record di dati" ;
     TEXT [ portuguese_brazilian ] = "Definir aleatoriamente" ;
-    TEXT [ portuguese ] = "Registo aleatório" ;
+    TEXT [ portuguese ] = "Qualquer registo" ;
     TEXT [ finnish ] = "Satunnainen joukko" ;
     TEXT [ danish ] = "Vilkårlig datapost" ;
     TEXT [ french ] = "Enregistrement aléatoire" ;
@@ -1334,7 +1334,7 @@ String FLD_STAT_GRF
     TEXT [ finnish ] = "Kuvat" ;
     TEXT [ danish ] = "Grafik" ;
     TEXT [ french ] = "Images" ;
-    TEXT [ swedish ] = "Grafiker" ;
+    TEXT [ swedish ] = "Grafik" ;
     TEXT [ dutch ] = "Afbeeldingen" ;
     TEXT [ spanish ] = "Imágenes" ;
     TEXT [ english_us ] = "Graphics" ;
@@ -1835,7 +1835,7 @@ String FLD_PAGEREF_OFF
     Text [ dutch ] = "uit" ;
     Text [ swedish ] = "av" ;
     Text [ danish ] = "deaktiveret" ;
-    Text [ portuguese ] = "desligado" ;
+    Text [ portuguese ] = "desactivo" ;
     Text [ portuguese_brazilian ] = "aus" ;
     Text[ chinese_simplified ] = "Ê§»î";
     Text[ russian ] = "âûêë.";
@@ -1859,7 +1859,7 @@ String FLD_PAGEREF_ON
     Text [ dutch ] = "aan" ;
     Text [ swedish ] = "på" ;
     Text [ danish ] = "aktiveret" ;
-    Text [ portuguese ] = "ligado" ;
+    Text [ portuguese ] = "activo" ;
     Text [ portuguese_brazilian ] = "an" ;
     Text[ chinese_simplified ] = "ÖÁ";
     Text[ russian ] = "âêë.";
@@ -3278,7 +3278,7 @@ String STR_LEVEL
     TEXT [ spanish ] = "Nivel " ;
     TEXT [ english_us ] = "Layer " ;
     TEXT[ chinese_simplified ] = "¼¶";
-    TEXT[ russian ] = "Ñëîé";
+    TEXT[ russian ] = "Óğîâåíü";
     TEXT[ polish ] = "Poziom  ";
     TEXT[ japanese ] = "ÚÍŞÙ";
     TEXT[ chinese_traditional ] = "¯Å";
