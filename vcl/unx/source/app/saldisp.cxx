@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-02 15:51:15 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,19 @@ static int sal_Shift( Pixel nMask )
     if( nMask < 0x40000000 ) { nMask <<=  2; i -=  2; }
     if( nMask < 0x80000000 ) { nMask <<=  1; i -=  1; }
     return i;
+}
+
+static int sal_significantBits( Pixel nMask )
+{
+    int nRotate = sizeof(Pixel)*4;
+    int nBits = 0;
+    while( nRotate-- )
+    {
+        if( nMask & 1 )
+            nBits++;
+        nMask >>= 1;
+    }
+    return nBits;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2933,6 +2946,10 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
         nGreenShift_    = sal_Shift( green_mask );
         nBlueShift_     = sal_Shift( blue_mask );
 
+        nRedBits_       = sal_significantBits( red_mask );
+        nGreenBits_     = sal_significantBits( green_mask );
+        nBlueBits_      = sal_significantBits( blue_mask );
+
         if( GetDepth() == 24 )
             if( red_mask == 0xFF0000 )
                 if( green_mask == 0xFF00 )
@@ -3101,6 +3118,13 @@ SalColor SalVisual::GetTCColor( Pixel nPixel ) const
     if( nRedShift_ > 0 )   r >>= nRedShift_;   else r <<= -nRedShift_;
     if( nGreenShift_ > 0 ) g >>= nGreenShift_; else g <<= -nGreenShift_;
     if( nBlueShift_ > 0 )  b >>= nBlueShift_;  else b <<= -nBlueShift_;
+
+    if( nRedBits_ != 8 )
+        r |= (r & 0xff) >> (8-nRedBits_);
+    if( nGreenBits_ != 8 )
+        g |= (g & 0xff) >> (8-nGreenBits_);
+    if( nBlueBits_ != 8 )
+        b |= (b & 0xff) >> (8-nBlueBits_);
 
     return MAKE_SALCOLOR( r, g, b );
 }

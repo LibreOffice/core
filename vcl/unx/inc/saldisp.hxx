@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-31 07:42:42 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 14:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@ class SalVisual : public XVisualInfo
     int             nRedShift_;
     int             nGreenShift_;
     int             nBlueShift_;
+    int             nRedBits_;
+    int             nGreenBits_;
+    int             nBlueBits_;
 public:
                             ~SalVisual();
                             SalVisual( const XVisualInfo* pXVI );
