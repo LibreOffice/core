@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:12:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,6 @@
 #endif
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
-#endif
-#ifndef SD_PREVIEW_VIEW_SHELL_HXX
-#include "PreviewViewShell.hxx"
 #endif
 #include <cppuhelper/proptypehlp.hxx>
 
