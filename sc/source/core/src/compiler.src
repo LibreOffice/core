@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:52:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,7 +1579,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ danish ] = "ER.LIGE" ;
         Text [ french ] = "EST.PAIR" ;
         Text [ swedish ] = "ÄRJÄMN" ;
-        Text [ dutch ] = "ISEVEN" ;
+        Text [ dutch ] = "IS.EVEN" ;
         Text [ spanish ] = "ESPAR" ;
         Text [ english_us ] = "ISEVEN" ;
         Text[ chinese_simplified ] = "ISEVEN";
@@ -1588,7 +1588,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ japanese ] = "ISEVEN";
         Text[ chinese_traditional ] = "ISEVEN";
         Text[ arabic ] = "ISEVEN";
-        Text[ dutch ] = "ISEVEN";
+        Text[ dutch ] = "IS.EVEN";
         Text[ chinese_simplified ] = "ISEVEN";
         Text[ greek ] = "ISEVEN";
         Text[ korean ] = "ISEVEN";
@@ -1959,7 +1959,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "CHAR" ;
         Text [ danish ] = "TEGN" ;
         Text [ french ] = "CAR" ;
-        Text [ swedish ] = "TECKEN" ;
+        Text [ swedish ] = "TECKENKOD" ;
         Text [ dutch ] = "TEKEN" ;
         Text [ spanish ] = "CARÁCTER" ;
         Text [ english_us ] = "CHAR" ;
@@ -3177,7 +3177,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ spanish ] = "MIRR";
         Text[ italian ] = "TIR.VAR";
         Text[ danish ] = "MIRR";
-        Text[ swedish ] = "MIRR";
+        Text[ swedish ] = "MODIR";
         Text[ polish ] = "MIRR";
         Text[ portuguese_brazilian ] = "MIRR";
         Text[ japanese ] = "MIRR";
@@ -7796,5 +7796,6 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
 
 
