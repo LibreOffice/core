@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-16 16:06:46 $
+ *  last change: $Author: hdu $ $Date: 2001-07-18 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,7 @@ static RecodeTable aRecodeTable[] =
 
     {"monotypesorts",   {aMonotypeSortsTab,"StarSymbol", NULL}},
     {"zapfdingbats",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
+    {"itczapfdingbats", {aMonotypeSortsTab,"StarSymbol", NULL}},
     {"dingbats",        {aMonotypeSortsTab,"StarSymbol", NULL}},
 //  {"zapfchancery",    {aMonotypeSortsTab,"StarSymbol", NULL}},
 //  {"monotypesorts2",  {aMonotypeSorts2Tab,"StarSymbol", NULL}}
