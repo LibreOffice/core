@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:32:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
                                             CTF_SC_TOPBORDER, CTF_SC_BOTTOMBORDER };
 
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
-    XMLPropertyState* pAllPaddingProperty = NULL;
+    XMLPropertyState* pAllPaddingProperty(NULL);
     XMLPropertyState* pPadding[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pNewPadding[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pAllBorderProperty = NULL;
@@ -169,13 +169,12 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pNewBorders[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
-
     XMLPropertyState* pDiagBorders[2] = { 0 };
     XMLPropertyState* pDiagBorderWidths[2] = { 0 };
 
-    sal_uInt16 i;
+    ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
     for (::std::vector< XMLPropertyState >::iterator aIter =  rProperties.begin();
-        aIter != rProperties.end(); ++aIter)
+        aIter != endproperty; ++aIter)
     {
         XMLPropertyState*property = &(*aIter);
         if (property->mnIndex != -1)
@@ -205,12 +204,13 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             }
         }
     }
+    sal_uInt16 i;
 
     // #i27594#; copy Value, but don't insert
     if (pAllBorderWidthProperty)
         pAllBorderWidthProperty->mnIndex = -1;
 
-    for ( i = 0; i < 4; i++)
+    for (i = 0; i < 4; ++i)
     {
         if (pAllPaddingProperty && !pPadding[i])
             pNewPadding[i] = new XMLPropertyState(maPropMapper->FindEntryIndex(aPaddingCTF[i]), pAllPaddingProperty->maValue);
@@ -238,7 +238,6 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             }
         }
     }
-
     for( i = 0; i < 2; ++i )
     {
         if( pDiagBorders[i] && pDiagBorderWidths[i] )
@@ -255,7 +254,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
         }
     }
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4; ++i)
     {
         if (pNewPadding[i])
         {
@@ -284,11 +283,12 @@ ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper()
 void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
-    XMLPropertyState* pHeight = NULL;
-    XMLPropertyState* pOptimalHeight = NULL;
-    XMLPropertyState* pPageBreak = NULL;
+    XMLPropertyState* pHeight(NULL);
+    XMLPropertyState* pOptimalHeight(NULL);
+    XMLPropertyState* pPageBreak(NULL);
+    ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
     for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
-        aIter != rProperties.end(); ++aIter)
+        aIter != endproperty; ++aIter)
     {
         XMLPropertyState* property = &(*aIter);
         if (property->mnIndex != -1)
@@ -309,8 +309,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     if (pOptimalHeight)
     {
-        sal_Bool bOptimalHeight = ::cppu::any2bool(pOptimalHeight->maValue);
-        if (bOptimalHeight)
+        if (::cppu::any2bool(pOptimalHeight->maValue))
         {
             if (pHeight)
                 pHeight->mnIndex = -1;
@@ -319,9 +318,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        pOptimalHeight = new XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False ));
-        rProperties.push_back(*pOptimalHeight);
-        delete pOptimalHeight;
+        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False )));
     }
     // don't access pointers to rProperties elements after push_back!
 }
@@ -351,15 +348,13 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
     sApplyStyle(),
     sBaseCell()
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rAttrName(xAttrList->getNameByIndex( i ));
         OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        sal_uInt16 nPrefix(GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
+        const OUString& rValue(xAttrList->getValueByIndex( i ));
 
         // TODO: use a map here
         if( XML_NAMESPACE_STYLE == nPrefix )
@@ -381,89 +376,76 @@ ScXMLMapContext::~ScXMLMapContext()
 void XMLTableStyleContext::SetOperator(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
         const com::sun::star::sheet::ConditionOperator aOp) const
 {
-    aProps.realloc(aProps.getLength() + 1);
-    beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OPERATOR));
-    uno::Any aAnyOp;
-    aAnyOp <<= aOp;
-    aProp.Value = aAnyOp;
-    aProps[aProps.getLength() - 1] = aProp;
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OPERATOR));
+    aProps[nLength].Value <<= aOp;
 }
 
 void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
     const rtl::OUString& sBaseCell) const
 {
-    aProps.realloc(aProps.getLength() + 1);
-    beans::PropertyValue aProp;
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
 
     // #b4974740# source position must be set as string, because it may
     // refer to a sheet that hasn't been loaded yet.
 
-    aProp.Value <<= sBaseCell;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR));
-    aProps[aProps.getLength() - 1] = aProp;
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR));
+    aProps[nLength].Value <<= sBaseCell;
 }
 
 void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
     const rtl::OUString& sApplyStyle) const
 {
-    aProps.realloc(aProps.getLength() + 1);
-    beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STYLENAME));
-    uno::Any aAnyApplyStyle;
-    aAnyApplyStyle <<= sApplyStyle;
-    aProp.Value = aAnyApplyStyle;
-    aProps[aProps.getLength() - 1] = aProp;
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STYLENAME));
+    aProps[nLength].Value <<= sApplyStyle;
 }
 
 void XMLTableStyleContext::SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
     const rtl::OUString& sFormula) const
 {
-    aProps.realloc(aProps.getLength() + 1);
-    beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
     rtl::OUString sRealFormula(sFormula);
     ScXMLConverter::ParseFormula(sRealFormula);
-    uno::Any aAnyFormula;
-    aAnyFormula <<= sRealFormula;
-    aProp.Value = aAnyFormula;
-    aProps[aProps.getLength() - 1] = aProp;
+    aProps[nLength].Value <<= sRealFormula;
 }
 
 void XMLTableStyleContext::SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
     const rtl::OUString& sFormula) const
 {
-    aProps.realloc(aProps.getLength() + 1);
-    beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA2));
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA2));
     rtl::OUString sRealFormula(sFormula);
     ScXMLConverter::ParseFormula(sRealFormula);
-    uno::Any aAnyFormula;
-    aAnyFormula <<= sRealFormula;
-    aProp.Value = aAnyFormula;
-    aProps[aProps.getLength() - 1] = aProp;
+    aProps[nLength].Value <<= sRealFormula;
 }
 
 void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
     const rtl::OUString& sFormulas) const
 {
-    sal_Int32 i = 0;
-    sal_Bool bString = sal_False;
-    sal_Int32 nBrakes = 0;
+    sal_Int32 i(0);
+    sal_Bool bString(sal_False);
+    sal_Int32 nBrakes(0);
     while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
     {
         if (sFormulas[i] == '(')
-            nBrakes++;
+            ++nBrakes;
         if (sFormulas[i] == ')')
-            nBrakes--;
+            --nBrakes;
         if (sFormulas[i] == '"')
             bString = !bString;
-        i++;
+        ++i;
     }
     if (sFormulas[i] == ',')
     {
-        rtl::OUString sFormula1 = sFormulas.copy(0, i);
-        rtl::OUString sFormula2 = sFormulas.copy(i + 1);
+        rtl::OUString sFormula1(sFormulas.copy(0, i));
+        rtl::OUString sFormula2(sFormulas.copy(i + 1));
         SetFormula1(aProps, sFormula1);
         SetFormula2(aProps, sFormula2);
     }
@@ -473,11 +455,11 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
 {
-    rtl::OUString sCondition = sTempCondition;
+    rtl::OUString sCondition(sTempCondition);
     if (sCondition.getLength() && sApplyStyle.getLength())
     {
-        uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries;
-        if (aAny >>= xConditionalEntries)
+        uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
+        if (xConditionalEntries.is())
         {
             // ToDo: erase all blanks in the condition, but not in formulas or strings
             rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
@@ -490,7 +472,7 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
             SetStyle(aProps, sApplyStyle);
             sal_Int32 i = 0;
             while (sCondition[i] != '(' && i < sCondition.getLength())
-                i++;
+                ++i;
             if (sCondition[i] == '(')
             {
                 sCondition = sCondition.copy(i + 1);
@@ -612,7 +594,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext(NULL);
 
     if( (XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_MAP ) )
@@ -640,19 +622,16 @@ void XMLTableStyleContext::FillPropertySet(
         {
             if (!bParentSet)
             {
-                rtl::OUString sParentName = GetParentName();
-                uno::Any aStyleName;
-                aStyleName <<= GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sParentName );
-                AddProperty(CTF_SC_CELLSTYLE, aStyleName);
+                AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, GetParentName() )));
                 bParentSet = sal_True;
             }
             if ((nNumberFormat == -1) && sDataStyleName.getLength())
             {
-                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                SvXMLNumFormatContext* pStyle((SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
                 if (!pStyle)
                 {
-                    XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
+                    XMLTableStylesContext* pMyStyles((XMLTableStylesContext *)GetScImport().GetStyles());
                     if (pMyStyles)
                         pStyle = (SvXMLNumFormatContext *)pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
@@ -661,23 +640,21 @@ void XMLTableStyleContext::FillPropertySet(
                 }
                 if (pStyle)
                 {
-                    uno::Any aNumberFormat;
-                    nNumberFormat = pStyle->GetKey();
-                    aNumberFormat <<= nNumberFormat;
                     //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                    AddProperty(CTF_SC_NUMBERFORMAT, aNumberFormat);
+                    AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(pStyle->GetKey()));
                 }
             }
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
-                std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
-                while(aItr != aMaps.end())
+                std::vector<ScXMLMapContent>::iterator aItr(aMaps.begin());
+                std::vector<ScXMLMapContent>::iterator aEndItr(aMaps.end());
+                while(aItr != aEndItr)
                 {
                     //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
                     GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell);
 
-                    aItr++;
+                    ++aItr;
                 }
                 AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
                 bConditionalFormatCreated = sal_True;
@@ -686,11 +663,7 @@ void XMLTableStyleContext::FillPropertySet(
         else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
         {
             if (sPageStyle.getLength())
-            {
-                uno::Any aAny;
-                aAny <<= GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle );
-                AddProperty(CTF_SC_MASTERPAGENAME, aAny);
-            }
+                AddProperty(CTF_SC_MASTERPAGENAME, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle )));
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -703,8 +676,7 @@ void XMLTableStyleContext::SetDefaults()
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetImport().GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.Defaults")));
-            uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.Defaults"))), uno::UNO_QUERY);
             if (xProperties.is())
                 FillPropertySet(xProperties);
         }
@@ -725,9 +697,9 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
+    SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
                                                             rLocalName,
-                                                            xAttrList );
+                                                            xAttrList ));
     if (!pStyle)
     {
         switch( nFamily )
@@ -749,9 +721,9 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily, nPrefix,
+    SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily, nPrefix,
                                                             rLocalName,
-                                                            xAttrList );
+                                                            xAttrList ));
     if (!pStyle)
     {
         switch( nFamily )
@@ -805,8 +777,7 @@ UniReference < SvXMLImportPropertyMapper >
     XMLTableStylesContext::GetImportPropertyMapper(
                     sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper =
-        SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    UniReference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
 
     if (!xMapper.is())
     {
@@ -856,7 +827,7 @@ UniReference < SvXMLImportPropertyMapper >
 Reference < XNameContainer >
         XMLTableStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
 {
-    Reference < XNameContainer > xStyles = SvXMLStylesContext::GetStylesContainer(nFamily);
+    Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
         OUString sName;
@@ -865,7 +836,7 @@ Reference < XNameContainer >
             case XML_STYLE_FAMILY_TABLE_TABLE:
             {
                 if( xTableStyles.is() )
-                    xStyles = xTableStyles;
+                    xStyles.set(xTableStyles);
                 else
                     sName =
                         OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TableStyles" ) ));
@@ -874,7 +845,7 @@ Reference < XNameContainer >
             case XML_STYLE_FAMILY_TABLE_CELL:
             {
                 if( xCellStyles.is() )
-                    xStyles = xCellStyles;
+                    xStyles.set(xCellStyles);
                 else
                     sName =
                         OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
@@ -883,7 +854,7 @@ Reference < XNameContainer >
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( xColumnStyles.is() )
-                    xStyles = xColumnStyles;
+                    xStyles.set(xColumnStyles);
                 else
                     sName =
                         OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnStyles" ) ));
@@ -892,7 +863,7 @@ Reference < XNameContainer >
             case XML_STYLE_FAMILY_TABLE_ROW:
             {
                 if( xRowStyles.is() )
-                    xStyles = xRowStyles;
+                    xStyles.set(xRowStyles);
                 else
                     sName =
                         OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowStyles" ) ));
@@ -905,23 +876,22 @@ Reference < XNameContainer >
                                             GetScImport().GetModel(), UNO_QUERY );
             if (xFamiliesSupp.is())
             {
-                Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
-                Any aAny = xFamilies->getByName( sName );
+                Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-                xStyles = *(Reference<XNameContainer>*)aAny.getValue();
+                xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
                 switch( nFamily )
                 {
                 case XML_STYLE_FAMILY_TABLE_TABLE:
-                    ((XMLTableStylesContext *)this)->xTableStyles = xStyles;
+                    ((XMLTableStylesContext *)this)->xTableStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_CELL:
-                    ((XMLTableStylesContext *)this)->xCellStyles = xStyles;
+                    ((XMLTableStylesContext *)this)->xCellStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_COLUMN:
-                    ((XMLTableStylesContext *)this)->xColumnStyles = xStyles;
+                    ((XMLTableStylesContext *)this)->xColumnStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_ROW:
-                    ((XMLTableStylesContext *)this)->xRowStyles = xStyles;
+                    ((XMLTableStylesContext *)this)->xRowStyles.set(xStyles);
                     break;
                 }
             }
@@ -933,7 +903,7 @@ Reference < XNameContainer >
 
 OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
-    rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
+    rtl::OUString sServiceName(SvXMLStylesContext::GetServiceName(nFamily));
     if (!sServiceName.getLength())
     {
         switch( nFamily )
@@ -1014,7 +984,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pContext = 0;
+    SvXMLStyleContext *pContext(0);
 
     if( (XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_MASTER_PAGE) &&
@@ -1063,9 +1033,7 @@ SvXMLImportContext *ScMasterPageContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-    return pContext;
+    return XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
@@ -1081,7 +1049,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
         else
             bContainsRightHeader = sal_True;
     if (!xPropSet.is())
-        xPropSet = Reference < XPropertySet > ( GetStyle(), UNO_QUERY );
+        xPropSet.set(GetStyle(), UNO_QUERY );
     return new XMLTableHeaderFooterContext( GetImport(),
                                                 nPrefix, rLocalName,
                                                 xAttrList,
@@ -1092,20 +1060,17 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
 void ScMasterPageContext::ClearContent(const rtl::OUString& rContent)
 {
     if (!xPropSet.is())
-        xPropSet = Reference < XPropertySet > ( GetStyle(), UNO_QUERY );
+        xPropSet.set(GetStyle(), UNO_QUERY );
 
     if (xPropSet.is())
     {
-        Any aAny;
-        aAny = xPropSet->getPropertyValue( rContent );
-        Reference < sheet::XHeaderFooterContent > xHeaderFooterContent;
-        if (aAny >>= xHeaderFooterContent)
+        Reference < sheet::XHeaderFooterContent > xHeaderFooterContent(xPropSet->getPropertyValue( rContent ), uno::UNO_QUERY);
+        if (xHeaderFooterContent.is())
         {
             xHeaderFooterContent->getLeftText()->setString(sEmpty);
             xHeaderFooterContent->getCenterText()->setString(sEmpty);
             xHeaderFooterContent->getRightText()->setString(sEmpty);
-            aAny <<= xHeaderFooterContent;
-            xPropSet->setPropertyValue( rContent, aAny );
+            xPropSet->setPropertyValue( rContent, uno::makeAny(xHeaderFooterContent) );
         }
     }
 }
