@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-16 16:45:35 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-06 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,11 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         pClpDocFac = new SwDocFac;
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+
+        const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
+        if (pInfo)
+            pTmpDoc->SetInfo(*pInfo);
+
         pTmpDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
@@ -564,7 +569,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         }
         if( pWrtShell->IsFrmSelected() )
         {
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
+             SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
             pWrtShell->GetFlyFrmAttr( aSet );
             const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
             if( rURL.GetMap() )
@@ -876,7 +881,13 @@ int SwTransferable::Copy( BOOL bIsCut )
         // beim Bewegen des Cursors nach Selektionsende erzeugt.
         if( pWrtShell->IsAddMode() && pWrtShell->SwCrsrShell::HasSelection() )
             pWrtShell->CreateCrsr();
+
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+
+        const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
+        if (pInfo)
+            pTmpDoc->SetInfo(*pInfo);
+
         pTmpDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
