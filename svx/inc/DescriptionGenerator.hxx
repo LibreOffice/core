@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-08 12:32:53 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,16 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    void initialize (::rtl::OUString sPrefix);
+    void Initialize (::rtl::OUString sPrefix);
+
+    /** Initialize the description with the specified string from the
+        resource followed by the shape's style in parantheses and a colon.
+        @param nResourceId
+            A resource id the specifies the introductory description of the
+            shape that is made more specific by later calls to
+            <member>addProperty</member>.
+    */
+    void Initialize (sal_Int32 nResourceId);
 
     /**  Returns the description string and then resets it.  Usually called
          as last method before destroying the object.
@@ -136,9 +145,31 @@ public:
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
     */
-    void addProperty (const ::rtl::OUString& sPropertyName,
+    void AddProperty (const ::rtl::OUString& sPropertyName,
         PropertyType aType,
         const ::rtl::OUString& sLocalizedName=::rtl::OUString(),
+        long nWhichId=-1);
+
+    /** Add the given property name and its associated value to the
+        description string.  If the property value does not differ from the
+        default value of the shape's style then the description string is
+        not modified.  This method forwards the request to its cousing but
+        first replaces the id of the localized name by the associated string
+        from the resource.
+        @param sPropertyName
+            The Name of the property to append.
+        @param aType
+            Type of the property's value.  It controls the transformation
+            into the value's string representation.
+        @param nResourceId
+            Id of the kocalized name of the property int the resource.
+        @param nWhichId
+            This which id is used to localize the property value.  If it is
+            not known a value of -1 signals to use a default representation.
+    */
+    void AddProperty (const ::rtl::OUString& sPropertyName,
+        PropertyType aType,
+        sal_Int32 nResourceId,
         long nWhichId=-1);
 
     /** Append the given string as is to the current description.
@@ -146,28 +177,28 @@ public:
             String to append to the current description.  It is not modified
             in any way.
     */
-    void appendString (const ::rtl::OUString& sString);
+    void AppendString (const ::rtl::OUString& sString);
 
     /** This method adds for debuging and development the list of all known
         properties to the description.   Don't use in production code.
     */
-    void addPropertyNames (void);
+    void AddPropertyNames (void);
 
     /** Add properties that describe line and border attributes.
     */
-    void addLineProperties (void);
+    void AddLineProperties (void);
 
     /** Add properties that describe how areas are filled.
     */
-    void addFillProperties (void);
+    void AddFillProperties (void);
 
     /** Add properties that describesattributes of 3D objects.
     */
-    void add3DProperties (void);
+    void Add3DProperties (void);
 
     /** Add properties that describe text attributes.
     */
-    void addTextProperties (void);
+    void AddTextProperties (void);
 
 private:
     /// Reference to the shape from which the properties are extracted.
@@ -186,24 +217,24 @@ private:
 
     /** Add a property value formated as color to the description string.
     */
-    void addColor (const ::rtl::OUString& sPropertyName,
+    void AddColor (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value of unknown type to the description string.
     */
-    void addUnknown (const ::rtl::OUString& sPropertyName,
+    void AddUnknown (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value formated as integer to the description string.
     */
-    void addInteger (const ::rtl::OUString& sPropertyName,
+    void AddInteger (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value formated as string to the description string.
         @param sPropertyName
             Name of the property.
     */
-    void addString (const ::rtl::OUString& sPropertyName,
+    void AddString (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName, long nWhichId = -1);
 
     /** Add a property value formated as fill style to the description
@@ -213,7 +244,7 @@ private:
         @param sPropertyName
             Name of the property.  Usually this will be "FillStyle".
     */
-    void addFillStyle (const ::rtl::OUString& sPropertyName,
+    void AddFillStyle (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 };
 
