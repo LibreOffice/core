@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:19:13 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "字型";
                 Text[ turkish ] = "Font";
                 Text[ arabic ] = "�����";
-                Text[ catalan ] = "Fuente";
+                Text[ catalan ] = "Tipus de lletra";
                 Text[ finnish ] = "Fontti";
                 Text[ thai ] = "ตัวอักษร";
             };
@@ -135,7 +135,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "字型效果";
                 Text[ turkish ] = "Font Effects";
                 Text[ arabic ] = "������� ������";
-                Text[ catalan ] = "Efectos de fuente";
+                Text[ catalan ] = "Efectes de lletra";
                 Text[ finnish ] = "Fonttitehosteet";
                 Text[ thai ] = "ลักษณะตัวอักษร";
             };
@@ -161,7 +161,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "位置";
                 Text[ turkish ] = "Pozisyon";
                 Text[ arabic ] = "������";
-                Text[ catalan ] = "Posici�n";
+                Text[ catalan ] = "Posici�";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "ตำแหน่ง";
             };
@@ -187,7 +187,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "中日韓版式";
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "����� �����";
-                Text[ catalan ] = "Dise�o asi�tico";
+                Text[ catalan ] = "Disseny asi�tic";
                 Text[ finnish ] = "Aasialainen asettelu";
                 Text[ thai ] = "เค้าโครงแบบเอเชีย";
             };
@@ -217,7 +217,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "들여 쓰기와 간격";
                 Text[ turkish ] = "Girinti ve Aral�klar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sangr�as y espacios";
+                Text[ catalan ] = "Sagnats i espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
             };
             PageItem
@@ -244,7 +244,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "맞춤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineaci�n";
+                Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
                 Text[ thai ] = "จัดตำแหน่ง";
             };
@@ -274,7 +274,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "텍스트 흐름";
                 Text[ turkish ] = "Metin ak���";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Flujo del texto";
+                Text[ catalan ] = "Flux del text";
                 Text[ thai ] = "การไหลของข้อความ";
             };
             PageItem
@@ -300,7 +300,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "中日韓文字";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "����� ������� ��������";
-                Text[ catalan ] = "Tipograf�a asi�tica";
+                Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "การพิมพ์แบบเอเชีย";
             };
@@ -330,7 +330,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "배경";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fondo";
+                Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
             };
         };
@@ -345,7 +345,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ korean ] = "텍스트 속성";
     Text[ turkish ] = "Metin �znitelikleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Atributos de texto ";
+    Text[ catalan ] = "Format del text";
     Text[ thai ] = "รูปแบบข้อความ";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
@@ -434,7 +434,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text[ korean ] = "속성";
     Text[ turkish ] = "�znitelikler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Atributos";
+    Text[ catalan ] = "Atributs";
     Text[ thai ] = "คุณลักษณะ";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
@@ -477,7 +477,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "문자 바꾸기(~E)";
         Text[ turkish ] = "Ka~rakter de�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cambiar caracteres";
+        Text[ catalan ] = "~Canvia car�cters";
         Text[ finnish ] = "~Vaihda merkit";
         Text[ thai ] = "แ~ลกเปลี่ยนตัวอักขระ";
     };
@@ -521,7 +521,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "문자 추가(~A)";
         Text[ turkish ] = "~Karakter ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir caracteres";
+        Text[ catalan ] = "~Afegeix car�cters";
         Text[ finnish ] = "~Lis�� merkkej�";
         Text[ thai ] = "เ~พิ่มตัวอักขระ";
     };
@@ -565,7 +565,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "문자 제거(~R)";
         Text[ turkish ] = "Kar~akter kald�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar caracteres";
+        Text[ catalan ] = "~Suprimeix car�cters";
         Text[ finnish ] = "~Poista merkit";
         Text[ thai ] = "เ~อาตัวอักขระออก";
     };
@@ -610,7 +610,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "조합(~C)";
         Text[ turkish ] = "~Birle�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~mbinar";
+        Text[ catalan ] = "~Combina";
         Text[ finnish ] = "~Yhdist�";
         Text[ thai ] = "เ~ชื่อม";
     };
@@ -639,7 +639,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ korean ] = "설정";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuraci�n";
+        Text[ catalan ] = "Configuraci�";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "กำหนด";
     };
@@ -675,7 +675,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ korean ] = "유사성 찾기";
     Text[ turkish ] = "Benzerleri ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "B�squeda por semejanza";
+    Text[ catalan ] = "Cerca de similitud";
     Text[ finnish ] = "Vastaavuushaku";
     Text[ thai ] = "ค้นหาสิ่งที่คล้ายกัน";
 };
