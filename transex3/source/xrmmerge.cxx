@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-23 14:13:41 $
+ *  last change: $Author: nf $ $Date: 2001-10-17 13:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,7 @@ void XRMResExport::EndOfText(
                     }
 
                     Export::UnquotHTML( sAct );
+                    sAct.EraseAllChars( 0x0A );
 
                     ByteString sOutput( sPrj ); sOutput += "\t";
                     sOutput += sPath;
