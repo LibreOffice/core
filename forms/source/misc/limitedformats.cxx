@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:48:05 $
+ *  last change: $Author: rt $ $Date: 2001-05-23 08:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,10 @@ namespace frm
     //---------------------------------------------------------------------
     static const Locale& getLocale(LocaleType _eType)
     {
-        static Locale s_aEnglishUS( ::rtl::OUString::createFromAscii("en"), ::rtl::OUString::createFromAscii("us"), ::rtl::OUString() );
-        static Locale s_aGerman( ::rtl::OUString::createFromAscii("de"), ::rtl::OUString::createFromAscii("DE"), ::rtl::OUString() );
-        static Locale s_aSystem( ::rtl::OUString(), ::rtl::OUString(), ::rtl::OUString() );
+        static const Locale s_aEnglishUS( ::rtl::OUString::createFromAscii("en"), ::rtl::OUString::createFromAscii("us"), ::rtl::OUString() );
+        static const Locale s_aGerman( ::rtl::OUString::createFromAscii("de"), ::rtl::OUString::createFromAscii("DE"), ::rtl::OUString() );
+        static const ::rtl::OUString s_sEmptyString;
+        static const Locale s_aSystem( s_sEmptyString, s_sEmptyString, s_sEmptyString );
 
         switch (_eType)
         {
@@ -418,6 +419,9 @@ namespace frm
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/18 14:48:05  fs
+ *  initial checkin - helper for control models with limited formatting capabilities
+ *
  *
  *  Revision 1.0 18.05.01 10:39:57  fs
  ************************************************************************/
