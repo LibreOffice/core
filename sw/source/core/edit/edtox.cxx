@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:24:18 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -477,7 +480,7 @@ void SwEditShell::ApplyAutoMark()
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
                             sEmpty, sEmpty,
-                            CreateLocale( LANGUAGE_SYSTEM ),
+                            SvxCreateLocale( LANGUAGE_SYSTEM ),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
                             nTransliterationFlags );
 
