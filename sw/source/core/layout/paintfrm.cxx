@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:23:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,7 +1504,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             ///     a fly frame inherites a transparent background from its
             ///     parent fly frame.
             if ( pFrm->IsFlyFrm() &&
-                 (pFly->GetAnchor()->FindFlyFrm() == pFrm) &&
+                 (pFly->GetAnchorFrm()->FindFlyFrm() == pFrm) &&
                  static_cast<const SwFlyFrmFmt*>(pFly->GetFmt())->IsBackgroundBrushInherited()
                )
             {
@@ -1525,7 +1525,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
         }
 
-        if ( bHell && pFly->GetAnchor()->IsInFly() )
+        if ( bHell && pFly->GetAnchorFrm()->IsInFly() )
         {
             //Damit die Umrandung nicht vom Hintergrund des anderen Flys
             //zerlegt wird.
@@ -2627,13 +2627,13 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
             if ( pPage )
             {
                 if ( pPage->Frm().IsOver( pFly->Frm() ) )
-                    pAnch = pFly->GetAnchor();
+                    pAnch = pFly->AnchorFrm();
                 else if ( bTableHack &&
-                          pFly->Frm().Top() >= pFly->GetAnchor()->Frm().Top() &&
-                            pFly->Frm().Top() < pFly->GetAnchor()->Frm().Bottom() &&
+                          pFly->Frm().Top() >= pFly->GetAnchorFrm()->Frm().Top() &&
+                          pFly->Frm().Top() < pFly->GetAnchorFrm()->Frm().Bottom() &&
                           long(pSh->GetOut()) == long(pSh->GetPrt()) )
                 {
-                    pAnch = pFly->GetAnchor();
+                    pAnch = pFly->AnchorFrm();
                 }
             }
 
@@ -2641,14 +2641,8 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         else
         {
             // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
-            if ( pObj->ISA(SwDrawVirtObj) )
-            {
-                pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
-            }
-            else
-            {
-                pAnch = ((SwDrawContact*)pUserCall)->GetAnchor();
-            }
+            // OD 2004-03-29 #i26791#
+            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
             if ( pAnch )
             {
                 if ( !pAnch->GetValidPosFlag() )
@@ -2661,7 +2655,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                     //gerade greift. In der Folge duerfen sie nicht gedruckt werden
                     //wenn sie mit der Seite dran sind, ueber der sie von der
                     //Position her gerade schweben.
-                    SwPageFrm *pPage = pAnch->FindPageFrm();
+                    const SwPageFrm *pPage = pAnch->FindPageFrm();
                     if ( !bTableHack &&
                          !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
                         pAnch = 0;
@@ -2728,10 +2722,10 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
 
     if ( bIsGraphicTransparent &&
          GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId() &&
-         GetAnchor()->FindFlyFrm() )
+         GetAnchorFrm()->FindFlyFrm() )
     {
         SwFlyFrm *pOldRet = pRetoucheFly2; pRetoucheFly2 = (SwFlyFrm*)this;
-        const SwFrm *pFrm = GetAnchor()->FindFlyFrm();
+        const SwFrm *pFrm = GetAnchorFrm()->FindFlyFrm();
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         pFrm->PaintBackground( aRect, pPage, rAttrs, FALSE, FALSE );
@@ -4971,7 +4965,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
         if ( pMyFly )
         {
             aIter.Current( pMyFly->GetVirtDrawObj() );
-            while ( 0 != (pMyFly = pMyFly->GetAnchor()->FindFlyFrm()) )
+            while ( 0 != (pMyFly = pMyFly->GetAnchorFrm()->FindFlyFrm()) )
             {
                 if ( aIter()->GetOrdNum() > pMyFly->GetVirtDrawObj()->GetOrdNum() )
                     aIter.Current( pMyFly->GetVirtDrawObj() );
@@ -5469,7 +5463,7 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         /// get parent frame - anchor or upper - for next loop
         if ( pFrm->IsFlyFrm() )
             /// OD 20.08.2002 - use "static_cast" instead of "old C-cast"
-            pFrm = (static_cast<const SwFlyFrm*>(pFrm))->GetAnchor();
+            pFrm = (static_cast<const SwFlyFrm*>(pFrm))->GetAnchorFrm();
             ///pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
         else
             pFrm = pFrm->GetUpper();
