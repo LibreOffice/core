@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:32:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ TabDialog DLG_PARA
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
                 Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
@@ -442,7 +442,7 @@ TabDialog DLG_DRAWPARA
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
                 Text[ korean ] = "¾Æ½Ã¾Æ¡¡Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
