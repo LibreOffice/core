@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: vg $ $Date: 2002-04-04 12:40:00 $
+#   last change: $Author: vg $ $Date: 2002-04-05 09:39:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use Config;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.49 $ ';
+$id_str = ' $Revision: 1.50 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -121,13 +121,9 @@ $child = 0;
 $children = 0;
 %processes_hash = ();
 $SIG{CHLD} = '';
-# $may_be_built = 0;
 
 &get_options;
-if ($QuantityToBuild) {
-    $SIG{CHLD} = \&handle_dead_child;
-#  $may_be_built = $QuantityToBuild;
-}
+$SIG{CHLD} = \&handle_dead_child if ($QuantityToBuild);
 
 $deliver_commando = $ENV{DELIVER};
 $deliver_commando .= ' '. $dlv_switch;
@@ -260,6 +256,7 @@ sub BuildAll {
             };
             print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
+            $no_projects = 0;
         };
     } else {
         &BuildPrj('.');
@@ -579,8 +576,9 @@ sub BuildDependent {
                     #print "*******************************\n";
                     #print "***** Parent is sleeping! *****\n";
                     #print "*******************************\n";
-#                   alarm(1);
+                    #alarm(1);
                     sleep;
+                    #POSIX::pause();
                     #print "*****************************\n";
                     #print "***** Parent is awaken! *****\n";
                     #print "*****************************\n";
@@ -711,7 +709,6 @@ sub FindIndepPrj {
         &print_error ("\nhave dead or circular dependencies\n");
     } else {
         $no_projects = 1;
-        #print "\$no_projects ist gesetzt\n";
         return '';
     };
 };
@@ -818,6 +815,7 @@ sub get_options {
     my $arg;
     while ($arg = shift @ARGV) {
         $arg =~ /^-PP$/         and $QuantityToBuild = shift @ARGV  and next;
+        $arg =~ /^-PP(\d+)$/            and $QuantityToBuild = $1 and next;
         $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
         $arg =~ /^-show$/       and $show = 1                       and next;
         $arg =~ /^-deliver$/    and $deliver = 1                    and next;
