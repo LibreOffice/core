@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2002-11-08 10:57:45 $
+#   last change: $Author: hro $ $Date: 2002-12-10 16:27:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -397,12 +397,12 @@ CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="7" || "$(COMEX)"=="9"
 #CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
-CDEFS+=-DSTLPORT_VERSION=400
+CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="8"
 #CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=450 -D__STL_USE_ABBREVS
-CDEFS+=-DSTLPORT_VERSION=400
+CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 .ENDIF
 
@@ -473,15 +473,18 @@ LINKFLAGSOPT=
 LIBCMT=msvcrt.lib
 LIBCIMT=msvcirt.lib
 OLDNAMES=oldnames.lib
+UWINAPILIB=uwinapi.lib
 .ELSE
 .IF "$(PRODUCT)"==""
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
 OLDNAMES=oldnames.lib
+UWINAPILIB=uwinapi.lib
 .ELSE
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
 OLDNAMES=oldnames.lib
+UWINAPILIB=uwinapi.lib
 .ENDIF
 .ENDIF
 
@@ -491,23 +494,23 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 .IF "$(DYNAMIC_CRT)"!=""
-STDLIBGUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
-STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 .ELSE
-STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=libc.lib kernel32.lib user32.lib oldnames.lib
-STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBGUIST=libc.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=libc.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
 .IF "$(COMEX)"!="8"

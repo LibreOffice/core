@@ -272,7 +272,7 @@ $(SHL1TARGETN) : \
         $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -282,7 +282,7 @@ $(SHL1TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL1STDLIBS) $(STDSHL) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL1STDLIBS) $(STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -297,7 +297,7 @@ $(SHL1TARGETN) : \
         $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -311,7 +311,7 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)   \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -330,7 +330,7 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)    \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -349,7 +349,7 @@ $(SHL1TARGETN) : \
         $(STDOBJ) \
         $(SHL1OBJS) \
         $(SHL1STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
@@ -387,7 +387,7 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -413,7 +413,7 @@ $(SHL1TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -437,7 +437,7 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -734,7 +734,7 @@ $(SHL2TARGETN) : \
         $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -744,7 +744,7 @@ $(SHL2TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL2STDLIBS) $(STDSHL) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL2STDLIBS) $(STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -759,7 +759,7 @@ $(SHL2TARGETN) : \
         $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -773,7 +773,7 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)   \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -792,7 +792,7 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)    \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -811,7 +811,7 @@ $(SHL2TARGETN) : \
         $(STDOBJ) \
         $(SHL2OBJS) \
         $(SHL2STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
@@ -849,7 +849,7 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -875,7 +875,7 @@ $(SHL2TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -899,7 +899,7 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -1196,7 +1196,7 @@ $(SHL3TARGETN) : \
         $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1206,7 +1206,7 @@ $(SHL3TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL3STDLIBS) $(STDSHL) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL3STDLIBS) $(STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -1221,7 +1221,7 @@ $(SHL3TARGETN) : \
         $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -1235,7 +1235,7 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)   \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -1254,7 +1254,7 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)    \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1273,7 +1273,7 @@ $(SHL3TARGETN) : \
         $(STDOBJ) \
         $(SHL3OBJS) \
         $(SHL3STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
@@ -1311,7 +1311,7 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -1337,7 +1337,7 @@ $(SHL3TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1361,7 +1361,7 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -1658,7 +1658,7 @@ $(SHL4TARGETN) : \
         $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1668,7 +1668,7 @@ $(SHL4TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL4STDLIBS) $(STDSHL) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL4STDLIBS) $(STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -1683,7 +1683,7 @@ $(SHL4TARGETN) : \
         $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -1697,7 +1697,7 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)   \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -1716,7 +1716,7 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)    \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1735,7 +1735,7 @@ $(SHL4TARGETN) : \
         $(STDOBJ) \
         $(SHL4OBJS) \
         $(SHL4STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
@@ -1773,7 +1773,7 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -1799,7 +1799,7 @@ $(SHL4TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1823,7 +1823,7 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -2120,7 +2120,7 @@ $(SHL5TARGETN) : \
         $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2130,7 +2130,7 @@ $(SHL5TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL5STDLIBS) $(STDSHL) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL5STDLIBS) $(STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -2145,7 +2145,7 @@ $(SHL5TARGETN) : \
         $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -2159,7 +2159,7 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)   \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -2178,7 +2178,7 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)    \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2197,7 +2197,7 @@ $(SHL5TARGETN) : \
         $(STDOBJ) \
         $(SHL5OBJS) \
         $(SHL5STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
@@ -2235,7 +2235,7 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -2261,7 +2261,7 @@ $(SHL5TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2285,7 +2285,7 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -2582,7 +2582,7 @@ $(SHL6TARGETN) : \
         $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2592,7 +2592,7 @@ $(SHL6TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL6STDLIBS) $(STDSHL) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL6STDLIBS) $(STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -2607,7 +2607,7 @@ $(SHL6TARGETN) : \
         $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -2621,7 +2621,7 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)   \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -2640,7 +2640,7 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)    \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2659,7 +2659,7 @@ $(SHL6TARGETN) : \
         $(STDOBJ) \
         $(SHL6OBJS) \
         $(SHL6STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
@@ -2697,7 +2697,7 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -2723,7 +2723,7 @@ $(SHL6TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2747,7 +2747,7 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -3044,7 +3044,7 @@ $(SHL7TARGETN) : \
         $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3054,7 +3054,7 @@ $(SHL7TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL7STDLIBS) $(STDSHL) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL7STDLIBS) $(STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -3069,7 +3069,7 @@ $(SHL7TARGETN) : \
         $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -3083,7 +3083,7 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)   \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -3102,7 +3102,7 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)    \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3121,7 +3121,7 @@ $(SHL7TARGETN) : \
         $(STDOBJ) \
         $(SHL7OBJS) \
         $(SHL7STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
@@ -3159,7 +3159,7 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -3185,7 +3185,7 @@ $(SHL7TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -3209,7 +3209,7 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -3506,7 +3506,7 @@ $(SHL8TARGETN) : \
         $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3516,7 +3516,7 @@ $(SHL8TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL8STDLIBS) $(STDSHL) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL8STDLIBS) $(STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -3531,7 +3531,7 @@ $(SHL8TARGETN) : \
         $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -3545,7 +3545,7 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)   \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -3564,7 +3564,7 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)    \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3583,7 +3583,7 @@ $(SHL8TARGETN) : \
         $(STDOBJ) \
         $(SHL8OBJS) \
         $(SHL8STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
@@ -3621,7 +3621,7 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -3647,7 +3647,7 @@ $(SHL8TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -3671,7 +3671,7 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -3968,7 +3968,7 @@ $(SHL9TARGETN) : \
         $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3978,7 +3978,7 @@ $(SHL9TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL9STDLIBS) $(STDSHL) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL9STDLIBS) $(STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -3993,7 +3993,7 @@ $(SHL9TARGETN) : \
         $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -4007,7 +4007,7 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)   \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -4026,7 +4026,7 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)    \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -4045,7 +4045,7 @@ $(SHL9TARGETN) : \
         $(STDOBJ) \
         $(SHL9OBJS) \
         $(SHL9STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
@@ -4083,7 +4083,7 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -4109,7 +4109,7 @@ $(SHL9TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -4133,7 +4133,7 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
@@ -4430,7 +4430,7 @@ $(SHL10TARGETN) : \
         $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -4440,7 +4440,7 @@ $(SHL10TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL10STDLIBS) $(STDSHL) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL10STDLIBS) $(STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -4455,7 +4455,7 @@ $(SHL10TARGETN) : \
         $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -4469,7 +4469,7 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)   \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -4488,7 +4488,7 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)    \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -4507,7 +4507,7 @@ $(SHL10TARGETN) : \
         $(STDOBJ) \
         $(SHL10OBJS) \
         $(SHL10STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
@@ -4545,7 +4545,7 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -4571,7 +4571,7 @@ $(SHL10TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -4595,7 +4595,7 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------

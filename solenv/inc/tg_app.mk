@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: mh $ $Date: 2002-04-23 15:24:41 $
+#   last change: $Author: hro $ $Date: 2002-12-10 16:27:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -192,7 +192,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -238,7 +238,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB$(TNR)) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
@@ -256,7 +256,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB$(TNR)))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
         +if exist $(MISC)\$(APP$(TNR)TARGET).lst type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
         $(LINK) @$(MISC)\$(APP$(TNR)TARGET).lnk
@@ -276,7 +276,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP$(TNR)STACKN) $(STDOBJ) $(APP$(TNR)OBJS), $@, $(MISC)\$(APP$(TNR)TARGET).map, $(APP$(TNR)LIBS) $(APP$(TNR)STDLIBS) $(STDLIB), $(APP$(TNR)DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP$(TNR)STACKN) $(STDOBJ) $(APP$(TNR)OBJS), $@, $(MISC)\$(APP$(TNR)TARGET).map, $(APP$(TNR)LIBS) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)), $(APP$(TNR)DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE

@@ -70,7 +70,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -86,7 +86,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -98,7 +97,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -144,7 +143,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB1) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP1TARGET).lnk
@@ -162,7 +161,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB1))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
         +if exist $(MISC)\$(APP1TARGET).lst type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
         $(LINK) @$(MISC)\$(APP1TARGET).lnk
@@ -182,7 +181,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP1STACKN) $(STDOBJ) $(APP1OBJS), $@, $(MISC)\$(APP1TARGET).map, $(APP1LIBS) $(APP1STDLIBS) $(STDLIB), $(APP1DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP1STACKN) $(STDOBJ) $(APP1OBJS), $@, $(MISC)\$(APP1TARGET).map, $(APP1LIBS) $(APP1STDLIBS) $(STDLIB) $(STDLIB1), $(APP1DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -282,7 +281,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -298,7 +297,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -310,7 +308,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -356,7 +354,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB2) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP2TARGET).lnk
@@ -374,7 +372,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB2))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
         +if exist $(MISC)\$(APP2TARGET).lst type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
         $(LINK) @$(MISC)\$(APP2TARGET).lnk
@@ -394,7 +392,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP2STACKN) $(STDOBJ) $(APP2OBJS), $@, $(MISC)\$(APP2TARGET).map, $(APP2LIBS) $(APP2STDLIBS) $(STDLIB), $(APP2DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP2STACKN) $(STDOBJ) $(APP2OBJS), $@, $(MISC)\$(APP2TARGET).map, $(APP2LIBS) $(APP2STDLIBS) $(STDLIB) $(STDLIB2), $(APP2DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -494,7 +492,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -510,7 +508,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -522,7 +519,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -568,7 +565,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB3) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP3TARGET).lnk
@@ -586,7 +583,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB3))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
         +if exist $(MISC)\$(APP3TARGET).lst type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
         $(LINK) @$(MISC)\$(APP3TARGET).lnk
@@ -606,7 +603,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP3STACKN) $(STDOBJ) $(APP3OBJS), $@, $(MISC)\$(APP3TARGET).map, $(APP3LIBS) $(APP3STDLIBS) $(STDLIB), $(APP3DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP3STACKN) $(STDOBJ) $(APP3OBJS), $@, $(MISC)\$(APP3TARGET).map, $(APP3LIBS) $(APP3STDLIBS) $(STDLIB) $(STDLIB3), $(APP3DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -706,7 +703,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -722,7 +719,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -734,7 +730,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -780,7 +776,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB4) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP4TARGET).lnk
@@ -798,7 +794,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB4))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
         +if exist $(MISC)\$(APP4TARGET).lst type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
         $(LINK) @$(MISC)\$(APP4TARGET).lnk
@@ -818,7 +814,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP4STACKN) $(STDOBJ) $(APP4OBJS), $@, $(MISC)\$(APP4TARGET).map, $(APP4LIBS) $(APP4STDLIBS) $(STDLIB), $(APP4DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP4STACKN) $(STDOBJ) $(APP4OBJS), $@, $(MISC)\$(APP4TARGET).map, $(APP4LIBS) $(APP4STDLIBS) $(STDLIB) $(STDLIB4), $(APP4DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -918,7 +914,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -934,7 +930,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -946,7 +941,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -992,7 +987,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB5) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP5TARGET).lnk
@@ -1010,7 +1005,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB5))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
         +if exist $(MISC)\$(APP5TARGET).lst type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
         $(LINK) @$(MISC)\$(APP5TARGET).lnk
@@ -1030,7 +1025,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP5STACKN) $(STDOBJ) $(APP5OBJS), $@, $(MISC)\$(APP5TARGET).map, $(APP5LIBS) $(APP5STDLIBS) $(STDLIB), $(APP5DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP5STACKN) $(STDOBJ) $(APP5OBJS), $@, $(MISC)\$(APP5TARGET).map, $(APP5LIBS) $(APP5STDLIBS) $(STDLIB) $(STDLIB5), $(APP5DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -1130,7 +1125,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1146,7 +1141,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -1158,7 +1152,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1204,7 +1198,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB6) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP6TARGET).lnk
@@ -1222,7 +1216,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB6))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
         +if exist $(MISC)\$(APP6TARGET).lst type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
         $(LINK) @$(MISC)\$(APP6TARGET).lnk
@@ -1242,7 +1236,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP6STACKN) $(STDOBJ) $(APP6OBJS), $@, $(MISC)\$(APP6TARGET).map, $(APP6LIBS) $(APP6STDLIBS) $(STDLIB), $(APP6DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP6STACKN) $(STDOBJ) $(APP6OBJS), $@, $(MISC)\$(APP6TARGET).map, $(APP6LIBS) $(APP6STDLIBS) $(STDLIB) $(STDLIB6), $(APP6DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -1342,7 +1336,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1358,7 +1352,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -1370,7 +1363,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1416,7 +1409,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB7) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP7TARGET).lnk
@@ -1434,7 +1427,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB7))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
         +if exist $(MISC)\$(APP7TARGET).lst type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
         $(LINK) @$(MISC)\$(APP7TARGET).lnk
@@ -1454,7 +1447,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP7STACKN) $(STDOBJ) $(APP7OBJS), $@, $(MISC)\$(APP7TARGET).map, $(APP7LIBS) $(APP7STDLIBS) $(STDLIB), $(APP7DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP7STACKN) $(STDOBJ) $(APP7OBJS), $@, $(MISC)\$(APP7TARGET).map, $(APP7LIBS) $(APP7STDLIBS) $(STDLIB) $(STDLIB7), $(APP7DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -1554,7 +1547,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1570,7 +1563,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -1582,7 +1574,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1628,7 +1620,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB8) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP8TARGET).lnk
@@ -1646,7 +1638,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB8))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
         +if exist $(MISC)\$(APP8TARGET).lst type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
         $(LINK) @$(MISC)\$(APP8TARGET).lnk
@@ -1666,7 +1658,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP8STACKN) $(STDOBJ) $(APP8OBJS), $@, $(MISC)\$(APP8TARGET).map, $(APP8LIBS) $(APP8STDLIBS) $(STDLIB), $(APP8DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP8STACKN) $(STDOBJ) $(APP8OBJS), $@, $(MISC)\$(APP8TARGET).map, $(APP8LIBS) $(APP8STDLIBS) $(STDLIB) $(STDLIB8), $(APP8DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -1766,7 +1758,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1782,7 +1774,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -1794,7 +1785,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1840,7 +1831,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB9) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP9TARGET).lnk
@@ -1858,7 +1849,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB9))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
         +if exist $(MISC)\$(APP9TARGET).lst type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
         $(LINK) @$(MISC)\$(APP9TARGET).lnk
@@ -1878,7 +1869,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP9STACKN) $(STDOBJ) $(APP9OBJS), $@, $(MISC)\$(APP9TARGET).map, $(APP9LIBS) $(APP9STDLIBS) $(STDLIB), $(APP9DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP9STACKN) $(STDOBJ) $(APP9OBJS), $@, $(MISC)\$(APP9TARGET).map, $(APP9LIBS) $(APP9STDLIBS) $(STDLIB) $(STDLIB9), $(APP9DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE
@@ -1978,7 +1969,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1994,7 +1985,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
-# Set up links to libstlport_gcc.dylib before creating bundle
 .IF "$(STLPORT4)"!=""
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
 .ENDIF		# "$(STLPORT4)!=""
@@ -2006,7 +1996,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -2052,7 +2042,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
-        $(STDLIB) \
+        $(STDLIB) $(STDLIB10) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP10TARGET).lnk
@@ -2070,7 +2060,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
-        $(STDLIB))
+        $(STDLIB) $(STDLIB10))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
         +if exist $(MISC)\$(APP10TARGET).lst type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
         $(LINK) @$(MISC)\$(APP10TARGET).lnk
@@ -2090,7 +2080,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP10STACKN) $(STDOBJ) $(APP10OBJS), $@, $(MISC)\$(APP10TARGET).map, $(APP10LIBS) $(APP10STDLIBS) $(STDLIB), $(APP10DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
+    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP10STACKN) $(STDOBJ) $(APP10OBJS), $@, $(MISC)\$(APP10TARGET).map, $(APP10LIBS) $(APP10STDLIBS) $(STDLIB) $(STDLIB10), $(APP10DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
     @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
 .ELSE

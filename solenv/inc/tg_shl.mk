@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-30 11:04:46 $
+#   last change: $Author: hro $ $Date: 2002-12-10 16:27:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -372,7 +372,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -382,7 +382,7 @@ $(SHL$(TNR)TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL$(TNR)STDLIBS) $(STDSHL) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL$(TNR)STDLIBS) $(STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(LINK) @$(mktmp \
@@ -397,7 +397,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
@@ -411,7 +411,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)   \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     )
 .IF "$(BOTH)"!=""
@@ -430,7 +430,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)    \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
-        $(STDSHL)                           \
+        $(STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     )
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -449,7 +449,7 @@ $(SHL$(TNR)TARGETN) : \
         $(STDOBJ) \
         $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) \
+        $(STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -487,7 +487,7 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 # This is a hack as libstatic and libcppuhelper have a circular dependency
@@ -513,7 +513,7 @@ $(SHL$(TNR)TARGETN) : \
     @+echo $(LINK) $(LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -537,7 +537,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
