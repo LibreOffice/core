@@ -51,7 +51,7 @@ SHAREDLIB_EXT=dll
 SHAREDLIB_OUT=$(OUT_BIN)
 PACKAGE_LIB_DIR=windows.plt
 UNOPKG_PLATFORM=Windows
-    
+
 OSEP=^<
 CSEP=^>
 QUOTE=
@@ -252,7 +252,7 @@ QM=\"
 SQM='
 ECHOLINE=@echo
 P2BG=&
-    
+
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
@@ -314,7 +314,7 @@ endif
 ###########################################################################
 ifeq "$(PLATFORM)" "darwin"
 # Settings for MacOSX using gcc 3.3 compiler
-    
+
 # Default is MacOSX on a ppc machine    
 PLATFORM=macosx
 PACKAGE_LIB_DIR=macosx_ppc.plt
@@ -403,7 +403,7 @@ ifeq "$(PLATFORM)" "freebsd"
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
 # Default is freebsd on a intel machine    
-PLATFORM=FreeBSD
+PLATFORM=freebsd
 PACKAGE_LIB_DIR=freebsd_x86.plt
 UNOPKG_PLATFORM=FreeBSD_x86
 JAVA_PROC_TYPE=i386
@@ -420,7 +420,7 @@ OBJ_EXT=o
 SHAREDLIB_EXT=so
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
- 
+
 GCC_VERSION=$(shell $(CC) -dumpversion)
 
 ifeq "$(shell echo $(GCC_VERSION) | cut -c 1)" "3"
@@ -437,7 +437,7 @@ QUOTE=$(subst S,\,S)
 QM=\"
 ECHOLINE=@echo
 P2BG=&
-   
+
 DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
