@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obr $ $Date: 2002-02-06 13:05:37 $
+ *  last change: $Author: mt $ $Date: 2002-02-08 08:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,26 @@ struct ImplCalcToTopData
     ImplCalcToTopData*  mpNext;
     Window*             mpWindow;
     Region*             mpInvalidateRegion;
+};
+
+struct ImplAccessibleInfos
+{
+    USHORT nAccessibleRole;
+    String* pAccessibleName;
+    String* pAccessibleDescription;
+
+    ImplAccessibleInfos()
+    {
+        nAccessibleRole = 0xFFFF;
+        pAccessibleName = NULL;
+        pAccessibleDescription = NULL;
+    }
+
+    ~ImplAccessibleInfos()
+    {
+        delete pAccessibleName;
+        delete pAccessibleDescription;
+    }
 };
 
 // -----------------------------------------------------------------------
@@ -487,7 +507,7 @@ void Window::ImplInitData( WindowType nType )
 
     mpDummy3_WindowEventListeners = new VclEventListeners;
     mpDummy4_WindowChildEventListeners = new VclEventListeners;
-    mnDummy3_AccessibleRole = 0xFFFF;
+    mpDummy2_AccessibleInfos = NULL;
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -4282,6 +4302,7 @@ Window::~Window()
 
     delete mpDummy3_WindowEventListeners;
     delete mpDummy4_WindowChildEventListeners;
+    delete mpDummy2_AccessibleInfos;
 }
 
 // -----------------------------------------------------------------------
@@ -7170,6 +7191,13 @@ Reference< XClipboard > Window::GetSelection()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
+    if ( /*!GetParent() &&*/ ( GetType() == WINDOW_BORDERWINDOW ) )
+    {
+        Window* pChild = GetAccessibleChildWindow( 0 );
+        if ( pChild )
+            return pChild->GetAccessible();
+    }
+
     if ( !mxAccessible.is() && bCreate )
         mxAccessible = CreateAccessible();
 
@@ -7198,6 +7226,11 @@ Window* Window::GetAccessibleParentWindow() const
     return pParent;
 }
 
+USHORT Window::GetAccessibleChildWindowCount()
+{
+    return GetChildCount();
+}
+
 Window* Window::GetAccessibleChildWindow( USHORT n )
 {
     Window* pChild = GetChild( n );
@@ -7211,15 +7244,18 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
 
 void Window::SetAccessibleRole( USHORT nRole )
 {
-    DBG_ASSERT( mnDummy3_AccessibleRole == 0xFFFF, "AccessibleRole already set!" );
-    mnDummy3_AccessibleRole = nRole;
+    if ( mpDummy2_AccessibleInfos )
+        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+
+    DBG_ASSERT( mpDummy2_AccessibleInfos->nAccessibleRole == 0xFFFF, "AccessibleRole already set!" );
+    mpDummy2_AccessibleInfos->nAccessibleRole = nRole;
 }
 
 USHORT Window::GetAccessibleRole() const
 {
     using namespace ::drafts::com::sun::star;
 
-    USHORT nRole = mnDummy3_AccessibleRole;
+    USHORT nRole = mpDummy2_AccessibleInfos ? mpDummy2_AccessibleInfos->nAccessibleRole : 0xFFFF;
     if ( nRole == 0xFFFF )
     {
         switch ( GetType() )
@@ -7321,3 +7357,50 @@ USHORT Window::GetAccessibleRole() const
     return nRole;
 }
 
+void Window::SetAccessibleName( const String& rName )
+{
+   if ( mpDummy2_AccessibleInfos )
+        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+
+    DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleName, "AccessibleName already set!" );
+    delete mpDummy2_AccessibleInfos->pAccessibleName;
+    mpDummy2_AccessibleInfos->pAccessibleName = new String( rName );
+}
+
+String Window::GetAccessibleName() const
+{
+    String aAccessibleName;
+    if ( mpDummy2_AccessibleInfos && mpDummy2_AccessibleInfos->pAccessibleName )
+    {
+        aAccessibleName = *mpDummy2_AccessibleInfos->pAccessibleName;
+    }
+    else
+    {
+    }
+
+    return aAccessibleName;
+}
+
+void Window::SetAccessibleDescription( const String& rDescription )
+{
+   if ( mpDummy2_AccessibleInfos )
+        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+
+    DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
+    delete mpDummy2_AccessibleInfos->pAccessibleDescription;
+    mpDummy2_AccessibleInfos->pAccessibleDescription = new String( rDescription );
+}
+
+String Window::GetAccessibleDescription() const
+{
+    String aAccessibleDescription;
+    if ( mpDummy2_AccessibleInfos && mpDummy2_AccessibleInfos->pAccessibleDescription )
+    {
+        aAccessibleDescription = *mpDummy2_AccessibleInfos->pAccessibleDescription;
+    }
+    else
+    {
+    }
+
+    return aAccessibleDescription;
+}
