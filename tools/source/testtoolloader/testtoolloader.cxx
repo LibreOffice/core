@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtoolloader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:37:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #ifndef _SOLAR_H
 #include "solar.h"
 #endif
+#ifndef _STRING_HXX
+#include "string.hxx"
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include "debug.hxx"
+#endif
 
 using namespace rtl;
 
@@ -86,9 +92,49 @@ namespace tools
 
 static oslModule    aTestToolModule = 0;
 
+
+sal_uInt32 GetCommandLineParamCount()
+{
+    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
+    return aStartInfo.getCommandArgCount();
+}
+
+String GetCommandLineParam( sal_uInt32 nParam )
+{
+    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
+    ::rtl::OUString aParam;
+    NAMESPACE_VOS( OStartupInfo )::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
+    if ( eError == NAMESPACE_VOS( OStartupInfo )::E_None )
+        return String( aParam );
+    else
+    {
+        DBG_ERROR( "Unable to get CommandLineParam" );
+        return String();
+    }
+}
+
+
 void InitTestToolLib()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::InitTestToolLib" );
+
+    sal_uInt32 i;
+    // are we to be automated at all?
+    bool bAutomate = false;
+
+    for ( i = 0 ; i < GetCommandLineParamCount() ; i++ )
+    {
+        if ( GetCommandLineParam( i ).EqualsIgnoreCaseAscii("/enableautomation")
+            || GetCommandLineParam( i ).EqualsIgnoreCaseAscii("-enableautomation"))
+        {
+            bAutomate = true;
+            break;
+        }
+    }
+
+    if ( !bAutomate )
+        return;
+
 
     OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
     OUString    aModulePath;
@@ -115,7 +161,19 @@ void InitTestToolLib()
             void* pInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
             if ( pInitFunc )
                 (*(pfunc_CreateRemoteControl)pInitFunc)();
+            else
+            {
+                   DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            }
         }
+        else
+        {
+               DBG_ERROR1( "Error loading library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+        }
+    }
+    else
+    {
+        DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
     }
 }
 
