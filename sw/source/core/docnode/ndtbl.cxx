@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-07 11:38:00 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,12 +1516,7 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
             return FALSE;
 
         // suche alle Boxen / Lines
-        _FndBox aFndBox( 0, 0 );
-        {
-            _FndPara aPara( aBoxes, &aFndBox );
-            pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        }
-
+        _FndBox aFndBox( aBoxes );
         if( !aFndBox.GetLines().Count() )
             return FALSE;
 
@@ -3006,11 +3001,7 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -3081,11 +3072,7 @@ BOOL SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:57:53 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,12 +587,7 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // Auf gehts sortieren
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );;
-    }
-
+    _FndBox aFndBox( rBoxes );
     if(!aFndBox.GetLines().Count())
         return FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,26 +171,22 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 
 BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 {
+    BOOL bRet = FALSE;
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
-    if( !pTblNd )
-        return FALSE;
-
-    _FndBox aFndBox( 0, 0 );
-
-    // suche alle Boxen / Lines
+    if( pTblNd )
     {
         SwSelBoxes aSelBoxes;
         ::GetTblSel( rSh, aSelBoxes );
-        _FndPara aPara( aSelBoxes, &aFndBox );
-        const SwTable& rTbl = pTblNd->GetTable();
-        ((SwTableLines&)rTbl.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
-    }
-    rX = aFndBox.GetLines().Count();
-    if( !rX )
-        return FALSE;
+        _FndBox aFndBox( aSelBoxes );
 
-    rY = aFndBox.GetLines()[0]->GetBoxes().Count();
-    return TRUE;
+        rX = aFndBox.GetLines().Count();
+        if( rX )
+        {
+            rY = aFndBox.GetLines()[0]->GetBoxes().Count();
+            bRet = TRUE;
+        }
+    }
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -536,6 +532,9 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/06/01 11:04:53  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.6  2001/04/24 18:11:39  jp
     use CollatorResource
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-01 10:25:31 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
+
 
 // defines, die bestimmen, wie Tabellen Boxen gemergt werden:
 //  - 1. alle leeren Zeilen entfernen, alle Boxen werden mit Blank,
@@ -1526,11 +1527,7 @@ USHORT CheckMergeSel( const SwSelBoxes& rBoxes )
     {
         eRet = TBLMERGE_OK;
 
-        _FndBox aFndBox( 0, 0 );
-        _FndPara aPara( rBoxes, &aFndBox );
-        const SwTableNode* pTblNd = aPara.rBoxes[0]->GetSttNd()->FindTableNode();
-        ((SwTable&)pTblNd->GetTable()).GetTabLines().ForEach(
-                    &_FndLineCopyCol, &aPara );
+        _FndBox aFndBox( rBoxes );
         if( aFndBox.GetLines().Count() )
         {
             BOOL bMergeSelOk = TRUE;
@@ -2077,51 +2074,6 @@ void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 }
 
 
-BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
-{
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndBox* pFndBox = new _FndBox( (SwTableBox*)rpBox, pFndPara->pFndLine );
-    if( rpBox->GetTabLines().Count() )
-    {
-        _FndPara aPara( *pFndPara, pFndBox );
-        pFndBox->GetBox()->GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        if( !pFndBox->GetLines().Count() )
-        {
-            delete pFndBox;
-            return TRUE;
-        }
-    }
-    else
-    {
-        SwTableBoxPtr pSrch = (SwTableBoxPtr)rpBox;
-        USHORT nFndPos;
-        if( !pFndPara->rBoxes.Seek_Entry( pSrch, &nFndPos ))
-        {
-            delete pFndBox;
-            return TRUE;
-        }
-    }
-    pFndPara->pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox,
-                    pFndPara->pFndLine->GetBoxes().Count() );
-    return TRUE;
-}
-
-BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
-{
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
-    _FndPara aPara( *pFndPara, pFndLine );
-    pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxCopyCol, &aPara );
-    if( pFndLine->GetBoxes().Count() )
-    {
-        pFndPara->pFndBox->GetLines().C40_INSERT( _FndLine, pFndLine,
-                pFndPara->pFndBox->GetLines().Count() );
-    }
-    else
-        delete pFndLine;
-    return TRUE;
-}
-
 void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
 {
     //Pointer auf die Lines vor und hinter den zu verarbeitenden Bereich
@@ -2576,6 +2528,112 @@ const SwTableBox *lcl_FindLastBox( const SwTable &rTable )
     return pBox;
 }
 
+    // fill the structure from the selection (the selboxes) into
+    // his own structure. Works only if the box contains no data!
+_FndBox::_FndBox( const SwSelBoxes& rBoxes )
+    : pBox( 0 ), pUpper( 0 ), pLineBefore( 0 ), pLineBehind( 0 )
+{
+    if( 1 == rBoxes.Count() )
+    {
+        _FndBox *pTmp = this;
+        AddToFndBox( pTmp, *rBoxes[0] );
+    }
+    else
+    {
+        SwSelBoxes aBoxes;
+        aBoxes.Insert( &rBoxes );
+        const SwTable &rTable = rBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
+        for( USHORT n = 0, nEnd = rTable.GetTabLines().Count();
+                n < nEnd && aBoxes.Count(); ++n )
+            _FndBox::AddSelLine( *this, *rTable.GetTabLines()[ n ], aBoxes );
+    }
+}
+
+_FndBox::_FndBox( const SwTableLine& rLine )
+    : pBox( 0 ), pUpper( 0 ), pLineBefore( 0 ), pLineBehind( 0 )
+{
+    AppendLine( *this, rLine );
+}
+
+void _FndBox::AddToFndBox( _FndBox*& rpParent, const SwTableBox& rBox )
+{
+    // search the toplevel parent
+    if( rBox.GetUpper()->GetUpper() )
+        _FndBox::AddToFndBox( rpParent, *rBox.GetUpper()->GetUpper() );
+
+    _FndLine* pFndLine = new _FndLine( (SwTableLine*)rBox.GetUpper(),
+                                        rpParent );
+    rpParent->GetLines().C40_INSERT( _FndLine, pFndLine, 0 );
+    _FndBox* pFndBox = new _FndBox( (SwTableBox*)&rBox, pFndLine );
+    pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox, 0 );
+
+    rpParent = pFndBox;
+}
+
+
+void _FndBox::AppendLine( _FndBox& rBox, const SwTableLine& rLine )
+{
+    USHORT n = 0, nEnd = rLine.GetTabBoxes().Count();
+    if( nEnd )
+    {
+        _FndLine* pFndLine = new _FndLine( (SwTableLine*)&rLine, &rBox );
+        rBox.GetLines().C40_INSERT( _FndLine, pFndLine, rBox.GetLines().Count() );
+        for( ; n < nEnd; ++n )
+            _FndBox::AppendBox( *pFndLine, *rLine.GetTabBoxes()[ n ] );
+    }
+}
+
+void _FndBox::AppendBox( _FndLine& rLine, const SwTableBox& rBox )
+{
+    _FndBox* pFndBox = new _FndBox( (SwTableBox*)&rBox, &rLine );
+    rLine.GetBoxes().C40_INSERT( _FndBox, pFndBox, rLine.GetBoxes().Count() );
+    for( USHORT n = 0, nEnd = rBox.GetTabLines().Count(); n < nEnd; ++n )
+        _FndBox::AppendLine( *pFndBox, *rBox.GetTabLines()[ n ] );
+}
+
+void _FndBox::AddSelLine( _FndBox& rBox, const SwTableLine& rLine,
+                                SwSelBoxes& rBoxes )
+{
+    _FndLine* pFndLine = new _FndLine( (SwTableLine*)&rLine, &rBox );
+    for( USHORT n = 0, nEnd = rLine.GetTabBoxes().Count();
+            n < nEnd && rBoxes.Count(); ++n )
+        _FndBox::AddSelBox( *pFndLine, *rLine.GetTabBoxes()[ n ], rBoxes );
+
+    if( pFndLine->GetBoxes().Count() )
+        rBox.GetLines().C40_INSERT( _FndLine, pFndLine, rBox.GetLines().Count() );
+    else
+        delete pFndLine;
+}
+
+void _FndBox::AddSelBox( _FndLine& rLine, const SwTableBox& rBox,
+                                SwSelBoxes& rBoxes )
+{
+    _FndBox* pFndBox;
+    USHORT n = 0, nEnd = rBox.GetTabLines().Count();
+    if( nEnd )
+    {
+        pFndBox = new _FndBox( (SwTableBox*)&rBox, &rLine );
+        for( ; n < nEnd && rBoxes.Count(); ++n )
+            _FndBox::AddSelLine( *pFndBox, *rBox.GetTabLines()[ n ], rBoxes );
+        if( !pFndBox->GetLines().Count() )
+            delete pFndBox, pFndBox = 0;
+    }
+    else
+    {
+        SwTableBoxPtr pSrch = (SwTableBoxPtr)&rBox;
+        USHORT nFndPos;
+        if( rBoxes.Seek_Entry( pSrch, &nFndPos ))
+        {
+            pFndBox = new _FndBox( pSrch, &rLine );
+            rBoxes.Remove( nFndPos );
+        }
+        else
+            pFndBox = 0;
+    }
+    if( pFndBox )
+        rLine.GetBoxes().C40_INSERT( _FndBox, pFndBox, rLine.GetBoxes().Count() );
+}
+
 
 //GPF bei Tab in letzer Zelle mit MSC4
 #pragma optimize("",off)
@@ -2677,4 +2735,5 @@ void _FndBox::RestoreChartData( const SwTable &rTable )
 }
 
 #pragma optimize("",on)
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-19 12:08:00 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,11 +578,7 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -619,11 +615,7 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -700,41 +692,6 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return TRUE;
 }
 
-BOOL _FndBoxAppendRowLine( const SwTableLine*& rpLine, void* pPara );
-
-BOOL _FndBoxAppendRowBox( const SwTableBox*& rpBox, void* pPara )
-{
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndBox* pFndBox = new _FndBox( (SwTableBox*)rpBox, pFndPara->pFndLine );
-    if( rpBox->GetTabLines().Count() )
-    {
-        _FndPara aPara( *pFndPara, pFndBox );
-        pFndBox->GetBox()->GetTabLines().ForEach( &_FndBoxAppendRowLine, &aPara );
-        if( !pFndBox->GetLines().Count() )
-            delete pFndBox;
-    }
-    else
-        pFndPara->pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox,
-                        pFndPara->pFndLine->GetBoxes().Count() );
-    return TRUE;
-}
-
-BOOL _FndBoxAppendRowLine( const SwTableLine*& rpLine, void* pPara )
-{
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
-    _FndPara aPara( *pFndPara, pFndLine );
-    pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxAppendRowBox, &aPara );
-    if( pFndLine->GetBoxes().Count() )
-    {
-        pFndPara->pFndBox->GetLines().C40_INSERT( _FndLine, pFndLine,
-                pFndPara->pFndBox->GetLines().Count() );
-    }
-    else
-        delete pFndLine;
-    return TRUE;
-}
-
 
 BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
 {
@@ -743,15 +700,7 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        const SwTableLine* pLLine = GetTabLines()[ GetTabLines().Count()-1 ];
-
-        const SwSelBoxes* pBxs = 0;     // Dummy !!!
-        _FndPara aPara( *pBxs, &aFndBox );
-
-        _FndBoxAppendRowLine( pLLine, &aPara );
-    }
+    _FndBox aFndBox( *GetTabLines()[ GetTabLines().Count()-1 ] );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -1701,11 +1650,7 @@ BOOL SwTable::Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rBoxes, &aFndBox );
-        GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -1975,11 +1920,7 @@ BOOL SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     pBox = GetTblBox( pBox->GetSttNd()->FindStartNode()->GetIndex() + 1 );
     SelLineFromBox( pBox, aSelBoxes, TRUE );
 
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( aSelBoxes, &aFndBox );
-        ((SwTableLines&)GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( aSelBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -2004,11 +1945,7 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                         BOOL bCpyName ) const
 {
     // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( rSelBoxes, &aFndBox );
-        ((SwTableLines&)GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( rSelBoxes );
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -3315,13 +3252,15 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
         rTbl.GetTabSortBoxes().Count() )
         return 0;
 
-    _FndBox* pFndBox = new _FndBox( 0, 0 );
+    _FndBox* pFndBox;
     if( rParam.bBigger )
+    {
+        pFndBox = new _FndBox( 0, 0 );
         pFndBox->SetTableLines( rParam.aBoxes, rTbl );
+    }
     else
     {
-        _FndPara aPara( rParam.aBoxes, pFndBox );
-        rTbl.GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        pFndBox = new _FndBox( rParam.aBoxes );
         ASSERT( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
         pFndBox->SetTableLines( rTbl );
 
@@ -3851,13 +3790,15 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
         rTbl.GetTabSortBoxes().Count() )
         return 0;
 
-    _FndBox* pFndBox = new _FndBox( 0, 0 );
+    _FndBox* pFndBox;
     if( !rParam.bBigger )
+    {
+        pFndBox = new _FndBox( 0, 0 );
         pFndBox->SetTableLines( rParam.aBoxes, rTbl );
+    }
     else
     {
-        _FndPara aPara( rParam.aBoxes, pFndBox );
-        rTbl.GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        pFndBox = new _FndBox( rParam.aBoxes );
         ASSERT( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
         pFndBox->SetTableLines( rTbl );
 

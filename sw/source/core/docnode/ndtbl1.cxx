@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,7 @@ BOOL _FindLine( const _FndLine*& rpLine, void* pPara )
     return TRUE;
 }
 
+
 void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
 {
     //Zuerst die selektierten Boxen einsammeln.
@@ -295,15 +296,11 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
         return ;
 
     //Die selektierte Struktur kopieren.
-    const SwTable &rTable = aBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
-    LinesAndTable aPara( rArr, rTable );
-    _FndBox aFndBox( 0, 0 );
-    {
-        _FndPara aPara( aBoxes, &aFndBox );
-        ((SwTableLines&)rTable.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
-    }
+    _FndBox aFndBox( aBoxes );
 
     //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
+    const SwTable &rTable = aBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
+    LinesAndTable aPara( rArr, rTable );
     const _FndBox *pTmp = &aFndBox;
     ::_FindBox( pTmp, &aPara );
 

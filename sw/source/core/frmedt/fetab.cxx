@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-07 11:37:07 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 13:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,12 +377,7 @@ BOOL SwFEShell::DeleteRow()
             SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
 
             // suche alle Boxen / Lines
-            _FndBox aFndBox( 0, 0 );
-            {
-                _FndPara aPara( aBoxes, &aFndBox );
-                pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-            }
-
+            _FndBox aFndBox( aBoxes );
             if( !aFndBox.GetLines().Count() )
             {
                 EndAllActionAndCall();
