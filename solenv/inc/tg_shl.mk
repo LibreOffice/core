@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-26 07:51:45 $
+#   last change: $Author: pluby $ $Date: 2001-02-26 21:51:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,9 +106,7 @@ SHL$(TNR)STDLIBS=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(TARGET)"!="$(STATICLIBNAME)"
 SHL$(TNR)STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -422,11 +420,9 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.IF "$(TARGET)"!="$(STATICLIBNAME)"
-    @echo "------------------------------"
-    @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+        @echo "------------------------------"
+        @echo "Updating static data member initializations"
+        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx

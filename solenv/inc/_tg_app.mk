@@ -33,9 +33,7 @@ USE_APP1DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP1STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP1TARGETN)"!=""
@@ -43,11 +41,9 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -198,9 +194,7 @@ USE_APP2DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP2STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP2TARGETN)"!=""
@@ -208,11 +202,9 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -363,9 +355,7 @@ USE_APP3DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP3STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP3TARGETN)"!=""
@@ -373,11 +363,9 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -528,9 +516,7 @@ USE_APP4DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP4STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP4TARGETN)"!=""
@@ -538,11 +524,9 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -693,9 +677,7 @@ USE_APP5DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP5STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP5TARGETN)"!=""
@@ -703,11 +685,9 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -858,9 +838,7 @@ USE_APP6DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP6STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP6TARGETN)"!=""
@@ -868,11 +846,9 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1023,9 +999,7 @@ USE_APP7DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP7STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP7TARGETN)"!=""
@@ -1033,11 +1007,9 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1188,9 +1160,7 @@ USE_APP8DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP8STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP8TARGETN)"!=""
@@ -1198,11 +1168,9 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1353,9 +1321,7 @@ USE_APP9DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP9STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP9TARGETN)"!=""
@@ -1363,11 +1329,9 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
@@ -1518,9 +1482,7 @@ USE_APP10DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP10STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP10TARGETN)"!=""
@@ -1528,11 +1490,9 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@

@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-02-26 07:51:45 $
-#*    $Revision: 1.12 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-02-26 21:51:20 $
+#*    $Revision: 1.13 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -79,9 +79,7 @@ USE_APP$(TNR)DEF=
 
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
 APP$(TNR)STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(APP$(TNR)TARGETN)"!=""
@@ -89,11 +87,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
 .IF "$(OS)"=="MACOSX"
-.IF "$(PRJNAME)"!="xml2cmp"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
-    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
-.ENDIF
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)"
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
