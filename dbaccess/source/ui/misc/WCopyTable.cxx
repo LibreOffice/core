@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,7 +939,9 @@ OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
                                                     sal_Int32               _nMaxNameLen)
 {
 
-    ::rtl::OUString sAlias(::dbtools::convertName2SQLName(_sColumnName,_sExtraChars));
+    ::rtl::OUString sAlias = _sColumnName;
+    if ( isSQL92CheckEnabled(m_xConnection) )
+        sAlias = ::dbtools::convertName2SQLName(_sColumnName,_sExtraChars);
     if((_nMaxNameLen && sAlias.getLength() > _nMaxNameLen) || _rCmpFunctor(sAlias))
     {
         sal_Int32 nDiff = 1;
