@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_index.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:45:24 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,12 @@ PageMaker_Index::Display_Namespace( const ary::cpp::Namespace & i_rData )
 void
 PageMaker_Index::Display_Class( const ary::cpp::Class & i_rData )
 {
+    // KORR_FUTURE
+    //  Really throw out all anonymous classes from index?
+
+    if ( strncmp(i_rData.LocalName().c_str()+1,"_Anonymous",10) == 0 )
+        return;
+
     Write_CeIndexEntry( i_rData,
                         F_CK_Text(i_rData.ClassKey()),
                         F_OwnerType(i_rData, Env().Gate()) );
