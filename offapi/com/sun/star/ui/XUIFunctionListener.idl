@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUIFunctionListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:24:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,10 @@
 //=============================================================================
 /** special interface to receive notification that a user interface
     element will execute a function.
+
+    @since OOo 2.0.0
  */
-published interface XUIFunctionListener : com::sun::star::lang::XEventListener
+interface XUIFunctionListener : com::sun::star::lang::XEventListener
 {
     //=============================================================================
     /** gets called to notify a component that a user interface element
