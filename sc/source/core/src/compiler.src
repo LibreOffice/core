@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:28:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,22 +1330,22 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "CELL" ;
         Text[ english_us ] = "CELL";
         Text[ portuguese ] = "CELL";
-        Text[ russian ] = "CELL";
-        Text[ greek ] = "CELL";
-        Text[ dutch ] = "CELL";
-        Text[ french ] = "CELL";
-        Text[ spanish ] = "CELL";
-        Text[ italian ] = "CELL";
+        Text[ russian ] = "ﬂ◊≈… ¿";
+        Text[ greek ] = " ≈À…";
+        Text[ dutch ] = "CEL";
+        Text[ french ] = "CELLULE";
+        Text[ spanish ] = "CELDA";
+        Text[ italian ] = "CELLA";
         Text[ danish ] = "CELL";
         Text[ swedish ] = "CELL";
-        Text[ polish ] = "CELL";
+        Text[ polish ] = "KOM”RKA";
         Text[ portuguese_brazilian ] = "CELL";
         Text[ japanese ] = "CELL";
         Text[ korean ] = "CELL";
         Text[ chinese_simplified ] = "CELL";
         Text[ chinese_traditional ] = "CELL";
         Text[ turkish ] = "CELL";
-        Text[ arabic ] = "CELL";
+        Text[ arabic ] = "Œ·Ì…";
     };
     String SC_OPCODE_IS_REF
     {
@@ -1894,7 +1894,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "CHAR" ;
         Text [ danish ] = "TEGN" ;
         Text [ french ] = "CAR" ;
-        Text [ swedish ] = "TECKENKOD" ;
+        Text [ swedish ] = "TECKEN" ;
         Text [ dutch ] = "TEKEN" ;
         Text [ spanish ] = "CAR¡CTER" ;
         Text [ english_us ] = "CHAR" ;
@@ -2140,22 +2140,22 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "ARABIC" ;
         Text[ english_us ] = "ARABIC";
         Text[ portuguese ] = "ARABIC";
-        Text[ russian ] = "ARABIC";
-        Text[ greek ] = "ARABIC";
-        Text[ dutch ] = "ARABIC";
-        Text[ french ] = "ARABIC";
-        Text[ spanish ] = "ARABIC";
-        Text[ italian ] = "ARABIC";
+        Text[ russian ] = "¿–¿¡— »≈";
+        Text[ greek ] = "¡—¡¬… ¡";
+        Text[ dutch ] = "ARABISCH";
+        Text[ french ] = "ARABE";
+        Text[ spanish ] = "¡RABE";
+        Text[ italian ] = "ARABO";
         Text[ danish ] = "ARABIC";
-        Text[ swedish ] = "ARABIC";
-        Text[ polish ] = "ARABIC";
+        Text[ swedish ] = "ARABISK";
+        Text[ polish ] = "ARABSKIE";
         Text[ portuguese_brazilian ] = "ARABIC";
         Text[ japanese ] = "ARABIC";
         Text[ korean ] = "ARABIC";
         Text[ chinese_simplified ] = "ARABIC";
         Text[ chinese_traditional ] = "ARABIC";
         Text[ turkish ] = "ARABIC";
-        Text[ arabic ] = "ARABIC";
+        Text[ arabic ] = "«·⁄—»Ì…";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -3063,10 +3063,10 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ portuguese ] = "MIRR";
         Text[ russian ] = "MIRR";
         Text[ greek ] = "MIRR";
-        Text[ dutch ] = "MIRR";
-        Text[ french ] = "MIRR";
+        Text[ dutch ] = "QIR";
+        Text[ french ] = "TRIM";
         Text[ spanish ] = "MIRR";
-        Text[ italian ] = "MIRR";
+        Text[ italian ] = "TIR.VAR";
         Text[ danish ] = "MIRR";
         Text[ swedish ] = "MIRR";
         Text[ polish ] = "MIRR";
@@ -3082,6 +3082,24 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text = "ISPMT" ;
         Text [ english ] = "ISPMT" ;
+        Text[ english_us ] = "ISPMT";
+        Text[ portuguese ] = "ISPMT";
+        Text[ russian ] = "ISPMT";
+        Text[ greek ] = "ISPMT";
+        Text[ dutch ] = "ISPMT";
+        Text[ french ] = "ISPMT";
+        Text[ spanish ] = "ISPMT";
+        Text[ italian ] = "ISPMT";
+        Text[ danish ] = "ISPMT";
+        Text[ swedish ] = "ISPMT";
+        Text[ polish ] = "ISPMT";
+        Text[ portuguese_brazilian ] = "ISPMT";
+        Text[ japanese ] = "ISPMT";
+        Text[ korean ] = "ISPMT";
+        Text[ chinese_simplified ] = "ISPMT";
+        Text[ chinese_traditional ] = "ISPMT";
+        Text[ turkish ] = "ISPMT";
+        Text[ arabic ] = "ISPMT";
     };
     String SC_OPCODE_VAR
     {
@@ -4997,7 +5015,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ french ] = "CTXT" ;
         Text [ swedish ] = "FASTTAL" ;
         Text [ dutch ] = "VAST" ;
-        Text [ spanish ] = "DECIMAL" ;
+        Text [ spanish ] = "FIJO" ;
         Text [ english_us ] = "FIXED" ;
         Text[ chinese_simplified ] = "FIXED";
         Text[ russian ] = "‘» —»–Œ¬¿ÕÕ€…";
@@ -7198,15 +7216,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english ] = "ROMAN" ;
         Text[ english_us ] = "ROMAN";
         Text[ portuguese ] = "ROMAN";
-        Text[ russian ] = "ROMAN";
-        Text[ greek ] = "ROMAN";
-        Text[ dutch ] = "ROMAN";
-        Text[ french ] = "ROMAN";
-        Text[ spanish ] = "ROMAN";
-        Text[ italian ] = "ROMAN";
+        Text[ russian ] = "–»Ã— »≈";
+        Text[ greek ] = "—ŸÃ¡… ¡";
+        Text[ dutch ] = "ROMEINS";
+        Text[ french ] = "ROMAIN";
+        Text[ spanish ] = "ROMANO";
+        Text[ italian ] = "ROMANO";
         Text[ danish ] = "ROMAN";
-        Text[ swedish ] = "ROMAN";
-        Text[ polish ] = "ROMAN";
+        Text[ swedish ] = "ROMERSK";
+        Text[ polish ] = "RZYMSKIE";
         Text[ portuguese_brazilian ] = "ROMAN";
         Text[ japanese ] = "ROMAN";
         Text[ korean ] = "ROMAN";
