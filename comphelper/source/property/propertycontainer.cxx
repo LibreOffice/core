@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 06:05:20 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
 
             if (PropertyDescription::ltHoldMyself == aPos->eLocated)
             {
-                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
+                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                     "OPropertyContainer::convertFastPropertyValue : invalid position !");
                 pPropContainer = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
             }
@@ -287,14 +287,52 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
             // here we don't allow MAYBEVOID properties, so the type check is simple
             // (remember that we don't support value conversions, so the value type has to be exactly the one
             // required for the property)
-            if (!_rValue.getValueType().equals(aPos->aType))
-                throw IllegalArgumentException();
 
-            bModified = !uno_type_equalData(aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType(), const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_queryInterface, cpp_release);
+            // TODO: could we not even us uno_type_assignData for all types, not only for interfaces?
+
+            // okay, it was a lie, we have a conversion for interfaces ...
+            Any aProperlyTyped;
+            const Any* pNewValue = &_rValue;
+
+            if (!_rValue.getValueType().equals(aPos->aType))
+            {
+                sal_Bool bInterfaceQueried = sal_False;
+                // check if it are interfaces we can query for
+                if  (   (TypeClass_INTERFACE == _rValue.getValueTypeClass())
+                    &&  (TypeClass_INTERFACE == aPos->aType.getTypeClass())
+                    )
+                {
+                    // a temporary any of the correct (required) type
+                    aProperlyTyped.setValue( aPos->aLocation.pDerivedClassMember, aPos->aType );
+                        // (need this as we do not want to overwrite the derived class member here)
+
+                    if (    uno_type_assignData(
+                                const_cast<void*>(aProperlyTyped.getValue()), aProperlyTyped.getValueType().getTypeLibType(),
+                                const_cast<void*>(_rValue.getValue()), _rValue.getValueType().getTypeLibType(),
+                                cpp_queryInterface, cpp_acquire, cpp_release
+                            )
+                        )
+                    {
+                        // could query for the requested interface
+                        bInterfaceQueried = sal_True;
+                        pNewValue = &aProperlyTyped;
+                    }
+                }
+
+                if ( !bInterfaceQueried )
+                    throw IllegalArgumentException();
+            }
+
+            bModified = !uno_type_equalData(
+                            aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType(),
+                            const_cast<void*>(pNewValue->getValue()), aPos->aType.getTypeLibType(),
+                            cpp_queryInterface, cpp_release
+                        );
+
             if (bModified)
             {
                 _rOldValue.setValue(aPos->aLocation.pDerivedClassMember, aPos->aType);
-                _rConvertedValue = _rValue;
+                _rConvertedValue = *pNewValue;
             }
             break;
     }
@@ -355,7 +393,7 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
     switch (aPos->eLocated)
     {
         case PropertyDescription::ltHoldMyself:
-            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
+            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                 "OPropertyContainer::convertFastPropertyValue : invalid position !");
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;
@@ -413,7 +451,7 @@ struct PropertyCompareByName : public ::std::binary_function< Property, Property
 {
     bool operator() (const Property& x, const Property& y) const
     {
-        return x.Name < y.Name;
+        return x.Name < y.Name ? true : false;
     }
 };
 
@@ -430,7 +468,7 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
     {
         pOwnProps->Name = aLoop->sName;
         pOwnProps->Handle = aLoop->nHandle;
-        pOwnProps->Attributes = aLoop->nAttributes;
+        pOwnProps->Attributes = (sal_Int16)aLoop->nAttributes;
         pOwnProps->Type = aLoop->aType;
     }
 
@@ -459,6 +497,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/06/12 06:05:20  fs
+ *  added some assertions
+ *
  *  Revision 1.6  2001/03/22 13:32:35  jl
  *  OSL_ENSHURE replaced by OSL_ENSHURE
  *
