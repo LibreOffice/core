@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoaderFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module frame {
     </ul>
     </p>
  */
-service FrameLoaderFactory
+published service FrameLoaderFactory
 {
     //-------------------------------------------------------------------------
     /** interface to create loader objects by using his internal name
