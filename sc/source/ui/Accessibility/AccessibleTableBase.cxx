@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@
 #include "sc.hrc"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -99,7 +99,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -491,7 +491,7 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleTableBase::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 }
@@ -537,7 +537,7 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     aModelChange.Type = nId;
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
+    aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
     aEvent.NewValue <<= aModelChange;
 
