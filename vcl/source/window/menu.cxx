@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,26 +203,27 @@ inline BOOL ImplIsMouseFollow()
 
 struct MenuItemData
 {
-    USHORT          nId;            // SV Id
-    MenuItemType    eType;          // MenuItem-Type
-    MenuItemBits    nBits;          // MenuItem-Bits
-    Menu*           pSubMenu;       // Pointer auf das SubMenu
-    Menu*           pAutoSubMenu;   // Pointer auf SubMenu aus Resource
-    XubString       aText;          // Menu-Text
-    XubString       aHelpText;      // Help-String
-    XubString       aTipHelpText;   // TipHelp-String (eg, expanded filenames)
-    XubString       aCommandStr;    // CommandString
-    ULONG           nHelpId;        // Help-Id
-    ULONG           nUserValue;     // User value
-    Image           aImage;         // Image
-    KeyCode         aAccelKey;      // Accelerator-Key
-    BOOL            bChecked;       // Checked
-    BOOL            bEnabled;       // Enabled
-    BOOL            bIsTemporary;   // Temporary inserted ('No selection possible')
+    USHORT          nId;                    // SV Id
+    MenuItemType    eType;                  // MenuItem-Type
+    MenuItemBits    nBits;                  // MenuItem-Bits
+    Menu*           pSubMenu;               // Pointer auf das SubMenu
+    Menu*           pAutoSubMenu;           // Pointer auf SubMenu aus Resource
+    XubString       aText;                  // Menu-Text
+    XubString       aHelpText;              // Help-String
+    XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
+    XubString       aCommandStr;            // CommandString
+    ULONG           nHelpId;                // Help-Id
+    ULONG           nUserValue;             // User value
+    Image           aImage;                 // Image
+    KeyCode         aAccelKey;              // Accelerator-Key
+    BOOL            bChecked;               // Checked
+    BOOL            bEnabled;               // Enabled
+    BOOL            bIsTemporary;           // Temporary inserted ('No selection possible')
     BOOL            bMirrorMode;
     long            nItemImageAngle;
-
-    Size            aSz;            // nur temporaer gueltig
+    Size            aSz;                    // nur temporaer gueltig
+    XubString       aAccessibleName;        // accessible name
+    XubString       aAccessibleDescription; // accessible description
 
                     MenuItemData() {}
                     MenuItemData( const XubString& rStr, const Image& rImage ) :
@@ -2448,6 +2449,46 @@ Rectangle Menu::GetBoundingRectangle( USHORT nPos ) const
     return aRet;
 }
 
+void Menu::SetAccessibleName( USHORT nItemId, const XubString& rStr )
+{
+    USHORT        nPos;
+    MenuItemData* pData = pItemList->GetData( nItemId, nPos );
+
+    if ( pData && !rStr.Equals( pData->aAccessibleName ) )
+    {
+        pData->aAccessibleName = rStr;
+        ImplCallEventListeners( VCLEVENT_MENU_ACCESSIBLENAMECHANGED, nPos );
+    }
+}
+
+XubString Menu::GetAccessibleName( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->aAccessibleName;
+    else
+        return ImplGetSVEmptyStr();
+}
+
+void Menu::SetAccessibleDescription( USHORT nItemId, const XubString& rStr )
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        pData->aAccessibleDescription = rStr;
+}
+
+XubString Menu::GetAccessibleDescription( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->aAccessibleDescription;
+    else
+        return ImplGetSVEmptyStr();
+}
+
 // -----------
 // - MenuBar -
 // -----------
@@ -2949,12 +2990,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
     if ( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_START, pMenu ) );
-
-    SetAccessibleRole( ::drafts::com::sun::star::accessibility::AccessibleRole::MENU );
-
-#ifdef DEBUG
-    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Menu" ) ) );
-#endif
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
@@ -2993,8 +3028,11 @@ MenuFloatingWindow::~MenuFloatingWindow()
 
     // #95056# invalidate screen area covered by system window
     // so this can be taken into account if the commandhandler performs a scroll operation
-    Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
-    GetParent()->Invalidate( aInvRect );
+    if( GetParent() )
+    {
+        Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
+        GetParent()->Invalidate( aInvRect );
+    }
 }
 
 void MenuFloatingWindow::Resize()
@@ -3430,10 +3468,10 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
             // #102461# do not remove highlight if a popup menu is open at this position
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
             // close popup with some delayed if we leave somewhere else
-            if( pActivePopup && pData->pSubMenu != pActivePopup )
+            if( pActivePopup && pData && pData->pSubMenu != pActivePopup )
                 pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start();
 
-            if( !pActivePopup || pData->pSubMenu != pActivePopup )
+            if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
                 ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
         }
         if ( IsScrollMenu() )
@@ -4099,12 +4137,6 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
-
-    SetAccessibleRole( ::drafts::com::sun::star::accessibility::AccessibleRole::MENUBAR );
-
-#ifdef DEBUG
-    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MenuBar" ) ) );
-#endif
 }
 
 MenuBarWindow::~MenuBarWindow()
