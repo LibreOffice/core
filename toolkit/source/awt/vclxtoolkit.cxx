@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:57:58 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,23 @@ void SAL_CALL VCLXToolkit::disposing()
     {
         pNewWindow->SetCreatedWithToolkit( sal_True );
         //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
+
+        // formcontrols should have the same look on all platforms (ie, no native look)
+        // but basic dialogs should use native widget rendering
+        // so, disable NWF for all toolkit created controls, except for dialog controls
+        BOOL bDisableNWF = TRUE;
+        Window *pTestParent = pNewWindow->GetParent();
+        while( pTestParent )
+        {
+            if( pTestParent->IsDialog() )
+            {
+                bDisableNWF = FALSE;
+                break;
+            }
+            pTestParent = pTestParent->GetParent();
+        }
+        if( bDisableNWF )
+            pNewWindow->EnableNativeWidget( FALSE );
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
         {
