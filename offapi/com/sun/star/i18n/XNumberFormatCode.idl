@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatCode.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 09:21:46 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,11 @@ module com { module sun { module star { module i18n {
 
 
 
-/*
-        Attribute of Number format. LeastSignificantBit is used to distinguish between
-        positive or negagive and second LSB is used for Long or Short format.
+/**
+    Attribute of number format. LeastSignificantBit is used to distinguish between
+    positive or negative and second LSB is used for Long or Short format.
+
+    //! ER 02.11.00   ? description does not seem to match reality ?
 */
 constants KNumberFormatType
 {
@@ -103,9 +105,9 @@ constants KNumberFormatUsage
 
 
 struct NumberFormatCode {
-        /// One of KNumberFormatType values
+        /// One of <type>KNumberFormatType</type> values
         short Type;
-        /// One of KNumberFormatUsage values
+        /// One of <type>KNumberFormatUsage</type> values
         short Usage;
         /// Format code like DD/MM/YY
         string Code;
@@ -113,28 +115,48 @@ struct NumberFormatCode {
         string DefaultName;
         /// Message identifier to be used if the name of the format is localized
         string NameID;
-        /// Index of the NumberformatCode as defined in enum NfIndexTableOffset in the file svtools/zforlist.hxx
+        /// Index of the code as defined in <type>NumberFormatIndex</type>
         short Index;
-        /// Whether this format is the default format of the Usage group
+        /// Whether this format is the default format of the usage group
         boolean Default;
 };
 
 
+
+/**
+    This interface provides access to specific number format codes.
+ */
 [ uik(a0474bfe-5db2-4bb3-90381a9a-1e4d49a0), ident( "XNumberFormatCode", 1.0 ) ]
 interface XNumberFormatCode : com::sun::star::uno::XInterface
-
 {
+    /**
+         returns the default number format code of a specific category
+         (usage group) for a given locale and format length type.
 
+        @param nFormatType
+            one of the constants listed in <type>KNumberFormatType</type>
 
-// Returns default formatcode for the locale. formatType can be one of the constants
-// listed in KNumberFormatType, formatUsage is one of KNumberFormatUsage values
-    NumberFormatCode   getDefault ([in] short formatType, [in] short formatUsage, [in] com::sun::star::lang::Locale rLocale);
+        @param nFormatUsage
+             one of <type>KNumberFormatUsage</type> values
+     */
+    NumberFormatCode getDefault( [in] short nFormatType, [in] short nFormatUsage, [in] com::sun::star::lang::Locale rLocale );
 
-// Returns the numberformat pointed by formatIndex.
-    NumberFormatCode   getFormatCode  ([in] long formatIndex , [in] com::sun::star::lang::Locale rLocale);
+    /**
+        returns the number format pointed to by <code>nFormatIndex</code> for
+        a given locale.
 
-// Returns all format codes for a given formatUsage. formatUsage is one of KNumberFormatUsage values
-    sequence<NumberFormatCode> getAllFormatCode ([in] short formatUsage, [in] com::sun::star::lang::Locale rLocale);
+        @param nFormatIndex
+            one of <type>NumberFormatIndex</type> values
+     */
+    NumberFormatCode getFormatCode( [in] short nFormatIndex, [in] com::sun::star::lang::Locale rLocale );
+
+    /**
+        returns all format codes for a given <code>nFormatUsage</code> and locale.
+
+        @param nFormatUsage
+            one of <type>KNumberFormatUsage</type> values
+     */
+    sequence< NumberFormatCode > getAllFormatCode( [in] short nFormatUsage, [in] com::sun::star::lang::Locale rLocale );
 
 };
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 09:21:46 $
+#   last change: $Author: mi $ $Date: 2000-11-06 13:15:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,12 @@ PACKAGE=com$/sun$/star$/i18n
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    XCharacterClassification.idl\
-    XLocale.idl\
-    XLocaleData.idl\
+    Currency.idl \
+    LanguageCountryInfo.idl \
+    LocaleItem.idl \
+    NumberFormatIndex.idl \
+    XCharacterClassification.idl \
+    XLocaleData.idl \
     XNumberFormatCode.idl
 
 # ------------------------------------------------------------------

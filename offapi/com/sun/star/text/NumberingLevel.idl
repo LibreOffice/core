@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingLevel.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,20 +117,20 @@ service NumberingLevel
 
     // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletId
     /** the ID of the symbol in the given font. This is only valid if the
-        numbering type is <const>NumberingType_CHAR_SPECIAL</const>.
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
           @deprecated
      */
     [optional, property] short BulletId;
     //-------------------------------------------------------------------------
     /** contains the symbol in the given font. This is only valid if the
-        numbering type is <const>NumberingType_CHAR_SPECIAL</const>.
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
     [property] string BulletChar;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletFontName
     /** the name of the font for the symbol. This is only valid if the
-        numbering type is NumberingType_CHAR_SPECIAL.
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
      */
     [property] string BulletFontName;
 
@@ -141,7 +141,7 @@ service NumberingLevel
 
 
         <p> This is only valid if the numbering type is
-        <const>NumberingType::BITMAP</const>.</p>
+        <const scope="com::sun::star::style">NumberingType::BITMAP</const>.</p>
      */
     [property] string GraphicURL;
 

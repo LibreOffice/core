@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 09:22:15 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <com/sun/star/style/DropCapFormat.idl>
 #endif
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
-#include <com/sun/star/container/XIndexAccess.idl>
+#ifndef __com_sun_star_container_XIndexReplace_idl__
+#include <com/sun/star/container/XIndexReplace.idl>
 #endif
 #ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
@@ -342,7 +342,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingRules
     /** contains the numbering rules applied to this paragraph.
      */
-    [readonly, property] com::sun::star::container::XIndexAccess NumberingRules;
+    [readonly, property] com::sun::star::container::XIndexReplace NumberingRules;
 
     //-------------------------------------------------------------------------
 

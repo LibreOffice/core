@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 09:21:46 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,29 +63,14 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/i18n/LanguageCountryInfo.idl>
+#include <com/sun/star/i18n/Currency.idl>
+
 //=============================================================================
 
 module com { module sun { module star { module i18n {
 
 //=============================================================================
-
-
-struct LCInfo {
-    string lang;
-    string langDefaultName;
-    string country;
-    string countryDefaultName;
-    string variant;
-};
-
-
-struct Currency {
-    string currencyID;
-    string symbol;
-    string currencyName;
-    string bankSymbol;
-    boolean isDefault;
-};
 
 
 struct CalendarItem {
@@ -144,12 +129,13 @@ struct ForbiddenCharacters {
 };
 
 constants reservedWords {
-    const short TRUE_WORD   =0;
-    const short FALSE_WORD  =1;
+    const short TRUE_WORD       = 0;
+    const short FALSE_WORD      = 1;
+    const short QUARTER_WORD    = 2;
 
     //! Yes, this must be the count of known reserved words and one more than
     //! the maximum number used above!
-    const short COUNT       =2;
+    const short COUNT           = 3;
 };
 
 
@@ -158,7 +144,7 @@ constants reservedWords {
 interface XLocaleData: com::sun::star::uno::XInterface
 {
 
-    LCInfo getLCInfo([in]  com::sun::star::lang::Locale rLocale);
+    LanguageCountryInfo getLanguageCountryInfo([in]  com::sun::star::lang::Locale rLocale);
     LocaleDataItem getLocaleItem ([in]  com::sun::star::lang::Locale rLocale);
 
     sequence<Calendar> getAllCalendars ([in] com::sun::star::lang::Locale rLocale);
