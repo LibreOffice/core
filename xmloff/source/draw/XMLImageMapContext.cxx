@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 08:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
@@ -745,8 +749,15 @@ XMLImageMapContext::XMLImageMapContext(
         xPropertySet(rPropertySet)
 
 {
-    Any aAny = xPropertySet->getPropertyValue(sImageMap);
-    aAny >>= xImageMap;
+    try
+    {
+        xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
+    }
+    catch( com::sun::star::uno::Exception e )
+    {
+        uno::Sequence<OUString> aSeq(0);
+        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+    }
 }
 
 XMLImageMapContext::~XMLImageMapContext()
