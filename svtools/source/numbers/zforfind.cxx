@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2002-09-25 11:19:16 $
+ *  last change: $Author: er $ $Date: 2002-09-30 12:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #ifdef PRODUCT
 #define NF_TEST_CALENDAR 0
 #else
-#define NF_TEST_CALENDAR 1
+#define NF_TEST_CALENDAR 0
 #endif
 #if NF_TEST_CALENDAR
 #include <comphelper/processfactory.hxx>
