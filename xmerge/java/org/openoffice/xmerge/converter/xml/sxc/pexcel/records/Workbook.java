@@ -371,8 +371,14 @@ OfficeConstants {
                 currentWS.addCell(errorCell);
             }
         } else if(category.equalsIgnoreCase(OfficeConstants.CELLTYPE_FLOAT)) {
-            FloatNumber num = new FloatNumber(row, col, cellContents, ixfe);
-            currentWS.addCell(num);
+            try {
+                FloatNumber num = new FloatNumber(row, col, cellContents, ixfe);
+                currentWS.addCell(num);
+            } catch(Exception e) {
+                Debug.log(Debug.TRACE,"Error could not parse Float " + cellContents);
+                LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
+                currentWS.addCell(lc);
+            }
         } else {
             LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
             currentWS.addCell(lc);  // three because we assume the last three
