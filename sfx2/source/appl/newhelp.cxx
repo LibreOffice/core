@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
+ *  last change: $Author: gt $ $Date: 2001-09-10 14:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,8 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
     aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
 
 {
+    SetWindowBits( WB_HIDESELECTION );
+
     SetEntryHeight( 16 );
     SetSelectionMode( SINGLE_SELECTION );
     SetSpaceBetweenEntries( 2 );
