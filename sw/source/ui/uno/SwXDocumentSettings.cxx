@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-25 16:13:53 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 16:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,18 +300,21 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             //the printer must be created
             OUString sPrinterName;
-            if ( (rValue >>= sPrinterName) && (sPrinterName.getLength()) )
+            if( rValue >>= sPrinterName  )
             {
-                SfxPrinter *pPrinter = mpDoc->GetPrt();
-                if ( !pPrinter )
-                    pPrinter = mpDoc->GetPrt ( sal_True );
-                if ( OUString ( pPrinter->GetName()) != sPrinterName )
+                if( sPrinterName.getLength() > 0 )
                 {
-                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                    if (pNewPrinter->IsKnown())
-                        mpDoc->SetPrt ( pNewPrinter, sal_False );
-                    else
-                        delete pNewPrinter;
+                    SfxPrinter *pPrinter = mpDoc->GetPrt();
+                    if ( !pPrinter )
+                        pPrinter = mpDoc->GetPrt ( sal_True );
+                    if ( OUString ( pPrinter->GetName()) != sPrinterName )
+                    {
+                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                        if (pNewPrinter->IsKnown())
+                            mpDoc->SetPrt ( pNewPrinter, sal_False );
+                        else
+                            delete pNewPrinter;
+                    }
                 }
             }
             else
@@ -326,7 +329,8 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 sal_uInt32 nSize = aSequence.getLength();
                 if( nSize > 0 )
                 {
-                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                    SvMemoryStream aStream (aSequence.getArray(), nSize,
+                                            STREAM_READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                     static sal_uInt16 __READONLY_DATA nRange[] =
                     {
