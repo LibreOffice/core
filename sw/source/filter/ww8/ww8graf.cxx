@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-07 10:13:02 $
+ *  last change: $Author: cmc $ $Date: 2001-02-16 15:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2389,6 +2389,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             aSur.SetOutside( TRUE ); // Winword kann nur Aussen-Konturen
             aFlySet.Put( aSur );
 
+            //If we are to be "below text" then we are not to be opaque
+            if( pF->bBelowText )
+                aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
+
             if( bOrgObjectWasReplace )
             {
                 pRecord = (    aData.HasRecords()
@@ -2997,11 +3001,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.9 2001-02-07 10:13:02 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.10 2001-02-16 15:26:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/07 10:13:02  cmc
+      #80372# Paragraph border instead of Paragraph text border == WW edge align
+
       Revision 1.8  2001/01/18 11:47:19  cmc
       #82894# ocx controls 79055 related oversight
 
