@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-25 09:48:09 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
@@ -171,11 +168,7 @@ ImplDockFloatWin::~ImplDockFloatWin()
 IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
 {
     maDockTimer.Stop();
-#ifndef REMOTE_APPSERVER
-    ULONG nModes = ImplGetFrame()->GetCurrentModButtons();
-#else
-    ULONG nModes = KEY_MOD1;
-#endif
+    ULONG nModes = GetCurrentModButtons();
     if( ! ( nModes & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         BOOL bFloatMode = ! ( nModes & KEY_MOD1 );
@@ -200,9 +193,7 @@ IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
     mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
         Time::GetSystemTicks() - mnLastTicks > 500
-#ifndef REMOTE_APPSERVER
-        && ImplGetFrame()->GetCurrentModButtons() & KEY_MOD1
-#endif
+        && GetCurrentModButtons() & KEY_MOD1
         )
     {
         maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( GetPosPixel() ) ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-03 08:00:49 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,10 +828,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 void Window::ImplSetFrameParent( const Window* pParent )
 {
-#ifndef REMOTE_APPSERVER
     if( mpFrame )
     {
-        SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
         Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
         while( pFrameWindow )
         {
@@ -839,7 +837,8 @@ void Window::ImplSetFrameParent( const Window* pParent )
             {
                 DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
                 DBG_ASSERT( mpFrame, "no frame" );
-                pFrameWindow->mpFrame->SetParent( pParentFrame );
+
+                pFrameWindow->SetFrameParent( pParent );
             }
             pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
         }
@@ -851,6 +850,18 @@ void Window::ImplSetFrameParent( const Window* pParent )
         pChild->ImplSetFrameParent( pParent );
         pChild = pChild->mpNext;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::SetFrameParent( const Window* pParent )
+{
+#ifndef REMOTE_APPSERVER
+        SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
+        mpFrame->SetParent( pParentFrame );
+#else
+        RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
+        mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
 #endif
 }
 
@@ -6710,6 +6721,13 @@ void Window::ShowPointer( BOOL bVisible )
         if ( !mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
             mpFrame->SetPointer( ImplGetMousePointer() );
     }
+}
+
+// -----------------------------------------------------------------------
+
+ULONG Window::GetCurrentModButtons()
+{
+    return mpFrame ? mpFrame->GetCurrentModButtons() : 0;
 }
 
 // -----------------------------------------------------------------------
