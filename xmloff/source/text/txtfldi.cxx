@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 15:14:08 $
+ *  last change: $Author: dvo $ $Date: 2001-03-30 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1523,11 +1523,11 @@ void XMLDatabaseFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= sDatabaseName;
-    xPropertySet->setPropertyValue(sPropertyDatabaseName, aAny);
-
     aAny <<= sTableName;
     xPropertySet->setPropertyValue(sPropertyTableName, aAny);
+
+    aAny <<= sDatabaseName;
+    xPropertySet->setPropertyValue(sPropertyDatabaseName, aAny);
 }
 
 

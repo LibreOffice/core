@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-03-30 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,12 +1123,12 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         OUString(RTL_CONSTASCII_USTRINGPARAM(
                             sAPI_fieldmaster_database))))
         {
-            // fieldmaster takes database, table and column name
-            XMLDatabaseFieldImportContext::PrepareField(xMaster);
-
             Any aAny;
             aAny <<= sColumnName;
             xMaster->setPropertyValue(sPropertyColumnName, aAny);
+
+            // fieldmaster takes database, table and column name
+            XMLDatabaseFieldImportContext::PrepareField(xMaster);
 
             // create field
             Reference<XPropertySet> xField;
