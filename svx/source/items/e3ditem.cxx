@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ SvStream& SvxVector3DItem::Store(SvStream &rStream, USHORT nItemVersion) const
 {
     DBG_CHKTHIS(SvxVector3DItem, 0);
 
-    if (nItemVersion) rStream << aVal;
+    // ## if (nItemVersion)
+    rStream << aVal;
 
     return rStream;
 }
