@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:56:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
 #ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
 #include <drafts/com/sun/star/geometry/RealSize2D.hpp>
 #endif
@@ -89,6 +93,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
 #include <drafts/com/sun/star/geometry/RealBezierSegment2D.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_INTEGERBITMAPFORMAT_HPP__
+#include <drafts/com/sun/star/rendering/IntegerBitmapFormat.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_ENDIANNESS_HPP__
+#include <drafts/com/sun/star/rendering/Endianness.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP__
 #include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -254,6 +264,8 @@ namespace vcl
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromPolygon( const uno::Reference< rendering::XGraphicDevice >&     xGraphicDevice,
                                                                              const ::Polygon&                                       inputPolygon )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolygon()" );
+
             if( !xGraphicDevice.is() )
                 return uno::Reference< rendering::XPolyPolygon2D >();
 
@@ -282,6 +294,8 @@ namespace vcl
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice,
                                                                                  const ::PolyPolygon&                               inputPolyPolygon )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolyPolygon()" );
+
             if( !xGraphicDevice.is() )
                 return uno::Reference< rendering::XPolyPolygon2D >();
 
@@ -331,6 +345,8 @@ namespace vcl
 
         ::Polygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polygonFromPoint2DSequence()" );
+
             const int nCurrSize( points.getLength() );
 
             ::Polygon aPoly( nCurrSize );
@@ -346,6 +362,8 @@ namespace vcl
 
         ::PolyPolygon polyPolygonFromPoint2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polyPolygonFromPoint2DSequenceSequence()" );
+
             ::PolyPolygon aRes;
 
             int nCurrPoly;
@@ -437,6 +455,8 @@ namespace vcl
         uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                 const ::Bitmap&                                     inputBitmap )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmap()" );
+
             if( !xGraphicDevice.is() )
                 return uno::Reference< rendering::XBitmap >();
 
@@ -473,24 +493,111 @@ namespace vcl
                 int x, y, i;
                 for( y=0, i=0; y<aPixelSize.Height(); ++y )
                 {
-                    for( x=0; x<aPixelSize.Width(); ++x )
+                    switch( pAcc->GetScanlineFormat() )
                     {
-                        // yes. x and y are swapped on Get/SetPixel
-                        aCol = pAcc->GetColor(y,x);
+                        case BMP_FORMAT_8BIT_PAL:
+                        {
+                            Scanline pScan = pAcc->GetScanline( y );
 
-                        // store as RGBA
-                        // TODO: differentiate between alpha and non-alpha
-                        // bitmaps. Maybe we even need a
-                        // createCompatibleAlphaBitmap on the XGraphicDevice
-                        bmpData[i++] = aCol.GetBlue();
-                        bmpData[i++] = aCol.GetGreen();
-                        bmpData[i++] = aCol.GetRed();
-                        bmpData[i++] = static_cast<sal_uInt8>(255);
+                            for( x=0; x<aPixelSize.Width(); ++x )
+                            {
+                                aCol = pAcc->GetPaletteColor( pScan[x] );
+
+                                // store as RGBA
+                                // TODO: differentiate between alpha and non-alpha
+                                // bitmaps. Maybe we even need a
+                                // createCompatibleAlphaBitmap on the XGraphicDevice
+                                bmpData[i++] = aCol.GetBlue();
+                                bmpData[i++] = aCol.GetGreen();
+                                bmpData[i++] = aCol.GetRed();
+                                bmpData[i++] = static_cast<sal_uInt8>(255);
+                            }
+                        }
+                        break;
+
+                        case BMP_FORMAT_24BIT_TC_BGR:
+                        {
+                            Scanline pScan = pAcc->GetScanline( y );
+
+                            for( x=0; x<aPixelSize.Width(); ++x )
+                            {
+                                Scanline pTmp = pScan + x * 3;
+
+                                // store as RGBA
+                                // TODO: differentiate between alpha and non-alpha
+                                // bitmaps. Maybe we even need a
+                                // createCompatibleAlphaBitmap on the XGraphicDevice
+                                bmpData[i++] = pTmp[ 0 ];
+                                bmpData[i++] = pTmp[ 1 ];
+                                bmpData[i++] = pTmp[ 2 ];
+                                bmpData[i++] = static_cast<sal_uInt8>(255);
+                            }
+                        }
+                        break;
+
+                        case BMP_FORMAT_24BIT_TC_RGB:
+                        {
+                            Scanline pScan = pAcc->GetScanline( y );
+
+                            for( x=0; x<aPixelSize.Width(); ++x )
+                            {
+                                Scanline pTmp = pScan + x * 3;
+
+                                // store as RGBA
+                                // TODO: differentiate between alpha and non-alpha
+                                // bitmaps. Maybe we even need a
+                                // createCompatibleAlphaBitmap on the XGraphicDevice
+                                bmpData[i++] = pTmp[ 2 ];
+                                bmpData[i++] = pTmp[ 1 ];
+                                bmpData[i++] = pTmp[ 0 ];
+                                bmpData[i++] = static_cast<sal_uInt8>(255);
+                            }
+                        }
+                        break;
+
+                        default:
+                        {
+                            for( x=0; x<aPixelSize.Width(); ++x )
+                            {
+                                // yes. x and y are swapped on Get/SetPixel
+                                aCol = pAcc->GetColor(y,x);
+
+                                // store as RGBA
+                                // TODO: differentiate between alpha and non-alpha
+                                // bitmaps. Maybe we even need a
+                                // createCompatibleAlphaBitmap on the XGraphicDevice
+                                bmpData[i++] = aCol.GetBlue();
+                                bmpData[i++] = aCol.GetGreen();
+                                bmpData[i++] = aCol.GetRed();
+                                bmpData[i++] = static_cast<sal_uInt8>(255);
+                            }
+                        }
+                        break;
                     }
                 }
             }
 
+            // TODO(P2): Completely avoid alpha channel for plain
+            // bitmaps here!
+            uno::Sequence< sal_Int64 > aComponentMask(4);
+            aComponentMask[0] = 0x0000FF00;
+            aComponentMask[1] = 0x00FF0000;
+            aComponentMask[2] = 0xFF000000;
+            aComponentMask[3] = 0x000000FF;
+
+            rendering::IntegerBitmapLayout aMemLayout(
+                aPixelSize.Height(),
+                4*aPixelSize.Width(),
+                4*aPixelSize.Width(),
+                0,
+                4,
+                aComponentMask,
+                rendering::Endianness::LITTLE,
+                rendering::IntegerBitmapFormat::CHUNKY_32BIT,
+                sal_False );
+
             xIntegerBitmap->setData( bmpData,
+                                     aMemLayout,
                                      geometry::IntegerRectangle2D(0,0,
                                                                   aPixelSize.Width(),
                                                                   aPixelSize.Height()) );
@@ -504,13 +611,21 @@ namespace vcl
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    xGraphicDevice,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmapEx()" );
+
+            // if bitmapex is not transparent: revert to plain bitmap
+            // method
+            if( !inputBitmap.IsTransparent() )
+                return xBitmapFromBitmap( xGraphicDevice,
+                                          inputBitmap.GetBitmap() );
+
             if( !xGraphicDevice.is() )
                 return uno::Reference< rendering::XBitmap >();
 
             const Size aPixelSize( inputBitmap.GetSizePixel() );
 
             uno::Reference< rendering::XBitmap >
-                xBitmap( xGraphicDevice->createCompatibleBitmap(
+                xBitmap( xGraphicDevice->createCompatibleAlphaBitmap(
                              integerSize2DFromSize( aPixelSize ) ) );
 
             uno::Reference< rendering::XIntegerBitmap >
@@ -545,22 +660,92 @@ namespace vcl
                         ScopedBitmapReadAccess pAlphaAcc( aAlpha.AcquireReadAccess(),
                                                           aAlpha );
 
+                        DBG_ASSERT( pAlphaAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
+                                    pAlphaAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
+                                    "::vcl::unotools::xBitmapFromBitmapEx(): non-8bit alpha not supported!" );
+
                         if( pAlphaAcc.get() )
                         {
                             int x, y, i;
                             for( y=0, i=0; y<aPixelSize.Height(); ++y )
                             {
-                                for( x=0; x<aPixelSize.Width(); ++x )
+                                switch( pAcc->GetScanlineFormat() )
                                 {
-                                    // yes. x and y are swapped on Get/SetPixel
-                                    aCol = pAcc->GetColor(y,x);
+                                    case BMP_FORMAT_8BIT_PAL:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pAScan = pAlphaAcc->GetScanline( y );
 
-                                    bmpData[i++] = aCol.GetBlue();
-                                    bmpData[i++] = aCol.GetGreen();
-                                    bmpData[i++] = aCol.GetRed();
+                                        for( x=0; x<aPixelSize.Width(); ++x )
+                                        {
+                                            aCol = pAcc->GetPaletteColor( pScan[x] );
 
-                                    // out notion of alpha is different from the rest of the world's
-                                    bmpData[i++] = 255 - (BYTE)pAlphaAcc->GetPixel(y,x);
+                                            bmpData[i++] = aCol.GetBlue();
+                                            bmpData[i++] = aCol.GetGreen();
+                                            bmpData[i++] = aCol.GetRed();
+
+                                            // out notion of alpha is different from the rest of the world's
+                                            bmpData[i++] = 255 - (BYTE)pAScan[x];
+                                        }
+                                    }
+                                    break;
+
+                                    case BMP_FORMAT_24BIT_TC_BGR:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pAScan = pAlphaAcc->GetScanline( y );
+
+                                        for( x=0; x<aPixelSize.Width(); ++x )
+                                        {
+                                            Scanline pTmp = pScan + x * 3;
+
+                                            // store as RGBA
+                                            bmpData[i++] = pTmp[ 0 ];
+                                            bmpData[i++] = pTmp[ 1 ];
+                                            bmpData[i++] = pTmp[ 2 ];
+
+                                            // out notion of alpha is different from the rest of the world's
+                                            bmpData[i++] = 255 - (BYTE)pAScan[x];
+                                        }
+                                    }
+                                    break;
+
+                                    case BMP_FORMAT_24BIT_TC_RGB:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pAScan = pAlphaAcc->GetScanline( y );
+
+                                        for( x=0; x<aPixelSize.Width(); ++x )
+                                        {
+                                            Scanline pTmp = pScan + x * 3;
+
+                                            // store as RGBA
+                                            bmpData[i++] = pTmp[ 2 ];
+                                            bmpData[i++] = pTmp[ 1 ];
+                                            bmpData[i++] = pTmp[ 0 ];
+
+                                            // out notion of alpha is different from the rest of the world's
+                                            bmpData[i++] = 255 - (BYTE)pAScan[x];
+                                        }
+                                    }
+                                    break;
+
+                                    default:
+                                    {
+                                        for( x=0; x<aPixelSize.Width(); ++x )
+                                        {
+                                            // yes. x and y are swapped on Get/SetPixel
+                                            aCol = pAcc->GetColor(y,x);
+
+                                            bmpData[i++] = aCol.GetBlue();
+                                            bmpData[i++] = aCol.GetGreen();
+                                            bmpData[i++] = aCol.GetRed();
+
+                                            // out notion of alpha is different from the rest of the world's
+                                            bmpData[i++] = 255 - (BYTE)pAlphaAcc->GetPixel(y,x);
+                                        }
+                                    }
+                                    break;
                                 }
                             }
                         }
@@ -576,51 +761,123 @@ namespace vcl
 
                         if( pMaskAcc.get() )
                         {
-                            int x, y, i;
+                            DBG_ASSERT( pMaskAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL ||
+                                        pMaskAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_LSB_PAL,
+                                        "::vcl::unotools::xBitmapFromBitmapEx(): non-1bit masks not supported!" );
+
+                            const int nBitIncrement(
+                                pMaskAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL ? -1 : 1 );
+                            const int nInitialBit(
+                                pMaskAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL ? 7 : 0 );
+
+                            int x, y, i, nCurrBit, nMask;
                             for( y=0, i=0; y<aPixelSize.Height(); ++y )
                             {
-                                for( x=0; x<aPixelSize.Width(); ++x )
+                                switch( pAcc->GetScanlineFormat() )
                                 {
-                                    // yes. x and y are swapped on Get/SetPixel
-                                    aCol = pAcc->GetColor(y,x);
+                                    case BMP_FORMAT_8BIT_PAL:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pMScan = pMaskAcc->GetScanline( y );
 
-                                    // store as RGBA
-                                    bmpData[i++] = aCol.GetBlue();
-                                    bmpData[i++] = aCol.GetGreen();
-                                    bmpData[i++] = aCol.GetRed();
-                                    bmpData[i++] = ((BYTE)pMaskAcc->GetPixel(y,x)) ? 0 : 255;
+                                        for( x=0, nCurrBit=nInitialBit; x<aPixelSize.Width(); ++x )
+                                        {
+                                            aCol = pAcc->GetPaletteColor( pScan[x] );
+
+                                            bmpData[i++] = aCol.GetBlue();
+                                            bmpData[i++] = aCol.GetGreen();
+                                            bmpData[i++] = aCol.GetRed();
+
+                                            nMask = 1L << nCurrBit;
+                                            bmpData[i++] = (1 - (pMScan[ (x & ~7L) >> 3L ] & nMask) / nMask) * 255;
+                                            nCurrBit = ((nCurrBit + nBitIncrement) % 8L) & 7L;
+                                        }
+                                    }
+                                    break;
+
+                                    case BMP_FORMAT_24BIT_TC_BGR:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pMScan = pMaskAcc->GetScanline( y );
+
+                                        for( x=0, nCurrBit=nInitialBit; x<aPixelSize.Width(); ++x )
+                                        {
+                                            Scanline pTmp = pScan + x * 3;
+
+                                            // store as RGBA
+                                            bmpData[i++] = pTmp[ 0 ];
+                                            bmpData[i++] = pTmp[ 1 ];
+                                            bmpData[i++] = pTmp[ 2 ];
+
+                                            nMask = 1L << nCurrBit;
+                                            bmpData[i++] = (1 - (pMScan[ (x & ~7L) >> 3L ] & nMask) / nMask) * 255;
+                                            nCurrBit = ((nCurrBit + nBitIncrement) % 8L) & 7L;
+                                        }
+                                    }
+                                    break;
+
+                                    case BMP_FORMAT_24BIT_TC_RGB:
+                                    {
+                                        Scanline pScan  = pAcc->GetScanline( y );
+                                        Scanline pMScan = pMaskAcc->GetScanline( y );
+
+                                        for( x=0, nCurrBit=nInitialBit; x<aPixelSize.Width(); ++x )
+                                        {
+                                            Scanline pTmp = pScan + x * 3;
+
+                                            // store as RGBA
+                                            bmpData[i++] = pTmp[ 2 ];
+                                            bmpData[i++] = pTmp[ 1 ];
+                                            bmpData[i++] = pTmp[ 0 ];
+
+                                            nMask = 1L << nCurrBit;
+                                            bmpData[i++] = (1 - (pMScan[ (x & ~7L) >> 3L ] & nMask) / nMask) * 255;
+                                            nCurrBit = ((nCurrBit + nBitIncrement) % 8L) & 7L;
+                                        }
+                                    }
+                                    break;
+
+                                    default:
+                                    {
+                                        for( x=0; x<aPixelSize.Width(); ++x )
+                                        {
+                                            // yes. x and y are swapped on Get/SetPixel
+                                            aCol = pAcc->GetColor(y,x);
+
+                                            // store as RGBA
+                                            bmpData[i++] = aCol.GetBlue();
+                                            bmpData[i++] = aCol.GetGreen();
+                                            bmpData[i++] = aCol.GetRed();
+                                            bmpData[i++] = ((BYTE)pMaskAcc->GetPixel(y,x)) ? 0 : 255;
+                                        }
+                                    }
+                                    break;
                                 }
                             }
                         }
                     }
                 }
-                else
-                {
-                    // read plain bitmap
-                    // =================
-
-                    int x, y, i;
-                    for( y=0, i=0; y<aPixelSize.Height(); ++y )
-                    {
-                        for( x=0; x<aPixelSize.Width(); ++x )
-                        {
-                            // yes. x and y are swapped on Get/SetPixel
-                            aCol = pAcc->GetColor(y,x);
-
-                            // store as RGBA
-                            // TODO: differentiate between alpha and non-alpha
-                            // bitmaps. Maybe we even need a
-                            // createCompatibleAlphaBitmap on the XGraphicDevice
-                            bmpData[i++] = aCol.GetBlue();
-                            bmpData[i++] = aCol.GetGreen();
-                            bmpData[i++] = aCol.GetRed();
-                            bmpData[i++] = static_cast<sal_uInt8>(255);
-                        }
-                    }
-                }
             }
 
+            uno::Sequence< sal_Int64 > aComponentMask(4);
+            aComponentMask[0] = 0x0000FF00;
+            aComponentMask[1] = 0x00FF0000;
+            aComponentMask[2] = 0xFF000000;
+            aComponentMask[3] = 0x000000FF;
+
+            rendering::IntegerBitmapLayout aMemLayout(
+                aPixelSize.Height(),
+                4*aPixelSize.Width(),
+                4*aPixelSize.Width(),
+                0,
+                4,
+                aComponentMask,
+                rendering::Endianness::LITTLE,
+                rendering::IntegerBitmapFormat::CHUNKY_32BIT,
+                sal_False );
+
             xIntegerBitmap->setData( bmpData,
+                                     aMemLayout,
                                      geometry::IntegerRectangle2D(0,0,
                                                                   aPixelSize.Width(),
                                                                   aPixelSize.Height()) );
@@ -634,6 +891,8 @@ namespace vcl
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                         const uno::Reference< rendering::XIntegerBitmap >&  xInputBitmap )
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::bitmapExFromXBitmap()" );
+
             if( !xGraphicDevice.is() || !xInputBitmap.is() )
                 return ::BitmapEx();
 
