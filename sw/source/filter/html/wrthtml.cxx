@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 11:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,9 +704,9 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         rHTMLWrt.Strm() << sOut.GetBuffer();
 
         const String& aFName = rSection.GetLinkFileName();
-        String aURL( aFName.GetToken(0,cTokenSeperator) );
-        String aFilter( aFName.GetToken(1,cTokenSeperator) );
-        String aSection( aFName.GetToken(2,cTokenSeperator) );
+        String aURL( aFName.GetToken(0,so3::cTokenSeperator) );
+        String aFilter( aFName.GetToken(1,so3::cTokenSeperator) );
+        String aSection( aFName.GetToken(2,so3::cTokenSeperator) );
 
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(),
                                   INetURLObject::AbsToRel(aURL,
@@ -1411,11 +1411,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.9 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.10 2001-07-09 11:40:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.8  2001/06/29 10:37:29  mib
       #88918#: Use UTF-8 for Clipboard, evaluate encoding in insert mode
 
