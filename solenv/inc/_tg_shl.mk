@@ -48,9 +48,9 @@ SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL1DEPN+=$(SHL1VERSIONOBJ)
+SHL1DEPN+=$(SHL1VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL1VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -465,9 +465,9 @@ SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL2DEPN+=$(SHL2VERSIONOBJ)
+SHL2DEPN+=$(SHL2VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL2VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -882,9 +882,9 @@ SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL3DEPN+=$(SHL3VERSIONOBJ)
+SHL3DEPN+=$(SHL3VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL3VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1299,9 +1299,9 @@ SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL4DEPN+=$(SHL4VERSIONOBJ)
+SHL4DEPN+=$(SHL4VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL4VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -1716,9 +1716,9 @@ SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL5DEPN+=$(SHL5VERSIONOBJ)
+SHL5DEPN+=$(SHL5VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL5VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2133,9 +2133,9 @@ SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL6DEPN+=$(SHL6VERSIONOBJ)
+SHL6DEPN+=$(SHL6VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL6VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2550,9 +2550,9 @@ SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL7DEPN+=$(SHL7VERSIONOBJ)
+SHL7DEPN+=$(SHL7VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL7VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -2967,9 +2967,9 @@ SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL8DEPN+=$(SHL8VERSIONOBJ)
+SHL8DEPN+=$(SHL8VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL8VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3384,9 +3384,9 @@ SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL9DEPN+=$(SHL9VERSIONOBJ)
+SHL9DEPN+=$(SHL9VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL9VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
@@ -3801,9 +3801,9 @@ SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET
 .IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL10DEPN+=$(SHL10VERSIONOBJ)
+SHL10DEPN+=$(SHL10VERSIONOBJ:s/.o/.obj/)
 $(MISC)$/$(SHL10VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
-    +$(COPY) $< $@
+    +$(COPY) $(SOLARENV)$/src$/version.cxx $@
 
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
