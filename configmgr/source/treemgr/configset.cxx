@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 12:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,11 +487,32 @@ Name ValueSetUpdater::implValidateElement(Tree const& aTree, NodeRef const& aNod
     return aNode.getName();
 }
 //-----------------------------------------------------------------------------
+static void checkEligibleChild(ElementTree const& aElementTree, Tree const& aParentTree)
+{
+    ElementTreeImpl const * const pElement = aElementTree.getImpl();    OSL_ASSERT(pElement);
+
+    if (pElement->getContextTree() != NULL)
+        throw ConstraintViolation( "Set Update: cannot insert an element that already has a parent." );
+
+    TreeImpl const* pAncestor = TreeImplHelper::impl(aParentTree);
+    while (pAncestor != NULL)
+    {
+        if (pElement == pAncestor)
+            throw ConstraintViolation( "Set Update: Circular insertion - trying to insert an element into self or descendant" );
+
+        pAncestor = pAncestor->getContextTree();
+        OSL_ENSURE(pAncestor != TreeImplHelper::impl(aParentTree), "ERROR: Circular tree found");
+    }
+}
+
+//-----------------------------------------------------------------------------
 
 void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
 {
     if (!aElementTree.isValid())
         throw ConstraintViolation( "Set Update: cannot replace element of complex set with NULL node. Remove the element instead !" );
+
+    checkEligibleChild(aElementTree,m_aParentTree);
 
     if (! aElementTree->isTemplateInstance())
     {
