@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 12:19:12 $
+ *  last change: $Author: os $ $Date: 2002-12-10 15:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,7 +1361,14 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                    ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
                     SetZoom( eZoom, nZoomFactor, sal_True );
                 if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
-                    SetVisArea( aVis.TopLeft() );
+                {
+                    Point aTopLeft(aVis.TopLeft());
+                    //check if the values are possible
+                    long nXMax = pHScrollbar->GetRangeMax() - pHScrollbar->GetVisibleSize();
+                    if( aTopLeft.X() > nXMax )
+                        aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
+                    SetVisArea( aTopLeft );
+                }
                 else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
                     SetVisArea( aVis );
 
