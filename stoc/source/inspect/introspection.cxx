@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:33:25 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 08:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-//#ifndef _VOS_MODULE_HXX_
-//#include <vos/module.hxx>
-//#endif
-#include <vos/macros.hxx>
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
