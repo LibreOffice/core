@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:23:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ static long nAccCfgTabs[] =
 {
         2,                              // Number of Tabs
         0,
-        120                             // Function
+        90                             // Function
 };
 
 #define ACC_CODEARRSIZE   ( sizeof( aCodeArr ) / sizeof( aCodeArr[ 0 ] ) )
