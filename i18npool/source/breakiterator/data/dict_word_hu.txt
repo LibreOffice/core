@@ -24,7 +24,7 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
 $Ideographic = [:Ideographic:];
 $Hangul = [:Script = HANGUL:];
 
-$ALetter   = [\u0002 [:Alphabetic:] [:name= FULL STOP:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
+$ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
                            - $Ideographic
                            - $Katakana
                            - $Hangul
@@ -32,11 +32,12 @@ $ALetter   = [\u0002 [:Alphabetic:] [:name= FULL STOP:] [:name= COMMERCIAL AT:] 
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
                            
-$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:]
+$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:] 
               [:name = HEBREW PUNCTUATION GERSHAYIM:] [:name = DOUBLE VERTICAL LINE:] [:name = LEFT SINGLE QUOTATION MARK:]
               [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] [:name = HYPHEN-MINUS:]
               [:name = FULL STOP:] [:name = PERCENT SIGN:] [:name = SECTION SIGN:] [:name = DEGREE SIGN:]];  
               
+$SufixLetter = [:name= FULL STOP:];
 
 $MidNum    = [[:LineBreak = Infix_Numeric:] [:name= COMMERCIAL AT:] \u0084 [:name = GREEK TONOS:] [:name = ARABIC DECIMAL SEPARATOR:]
              [:name = LEFT SINGLE QUOTATION MARK:] [:name = RIGHT SINGLE QUOTATION MARK:] [:name = SINGLE HIGH-REVERSED-9 QUOTATION MARK:]
@@ -80,6 +81,7 @@ $ALetterEx    = $ALetter   $Extend*;
 $NumericEx    = $Numeric   $Extend*;
 $MidNumEx     = $MidNum    $Extend*;
 $MidLetterEx  = $MidLetter $Extend*;
+$SufixLetterEx= $SufixLetter $Extend*;
 $KatakanaEx   = $Katakana  $Extend*;
 $IdeographicEx= $Ideographic  $Extend*;
 $HangulEx = $Hangul  $Extend*;
@@ -99,7 +101,7 @@ $NumberSequence {100};
 #     - may include  MideLetter, MidNumber punctuation.
 #
 $LetterSequence = $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)*;     # rules #6, #7
-($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* {200};
+$LetterSequence $SufixLetterEx? {200};
 
 [[:P:][:S:]]*;
 
@@ -136,7 +138,7 @@ $CR $LF;
 #    reaches something that can only be the start (and probably only) char in a "word".
 #    A space or punctuation meets the test.
 #
-$NonStarters = [$Numeric $ALetter $Katakana $Ideographic $Hangul [:P:] [:S:] $MidLetter $MidNum $Extend $Format];
+$NonStarters = [$Numeric $ALetter $Katakana $Ideographic $Hangul [:P:] [:S:] $MidLetter $MidNum $SufixLetter $Extend $Format];
 
 #!.*;
 ! ($NonStarters* | \n \r) .;
