@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-13 14:53:50 $
+ *  last change: $Author: gh $ $Date: 2001-07-20 08:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,31 @@ using namespace com::sun::star::beans;
 
 #endif /* _USE_UNO */
 
+#ifdef DBG_UTIL
+// filter Messages generated due to missing configuration  Bug:#83887#
+void TestToolDebugMessageFilter( const sal_Char *pString )
+{
+    ByteString aMessage( pString );
+
+    // OSL
+    if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND ) return;
+    if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND ) return;
+
+    // VCL
+    if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND ) return;
+    if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
+      && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND ) return;
+
+    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
+    DBG_ERROR( pString );
+    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+}
+void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
+{
+    if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
+        TestToolDebugMessageFilter( pString );
+}
+#endif
 
 BasicApp aBasicApp;                     // Applikations-Instanz
 
@@ -155,8 +180,6 @@ Reference< XContentProviderManager > InitializeUCB( void )
 #ifdef DEBUG
     ::rtl::OUString test(getPathToSystemRegistry());
 #endif
-    try
-    {
 
 #ifdef DEBUG
     ::rtl::OUString aTemp ( getPathToSystemRegistry() );
@@ -177,6 +200,8 @@ Reference< XContentProviderManager > InitializeUCB( void )
         Reference< XImplementationRegistration >
             xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
 
+        // Ask stefaqn bergmann or Kai Sommerfeld
+        // Andreas Bille
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
                                         Reference< XSimpleRegistry >() );
@@ -186,16 +211,27 @@ Reference< XContentProviderManager > InitializeUCB( void )
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
                                         Reference< XSimpleRegistry >() );
-        //Clipboard
+        //Clipboard   Ask Oliver Braun
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "mcnttype" )),
+                                        Reference< XSimpleRegistry >() );
+
+#ifdef UNX
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SVLIBRARY( "dtransX11" )),
+                                        Reference< XSimpleRegistry >() );
+#endif
+#ifdef WNT
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "sysdtrans" )),
                                         Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "mcnttype" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "ftransl" )),
                                         Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "dnd" )),
+                                        Reference< XSimpleRegistry >() );
+#endif
 
 
 /*      // Packages
@@ -250,9 +286,20 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
     Reference< XContentProvider > xConfProvider
         ( xSMgr->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), aConfArgs), UNO_QUERY );
-
 */
-    // Create unconfigured Ucb:
+
+
+
+#ifdef DBG_UTIL
+//  Install filter for OSLAsserts
+    DbgSetPrintTestTool( TestToolDebugMessageFilter );
+    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+
+    if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
+        DBG_ERROR("osl_setDebugMessageFunc returns non NULL pointer");
+#endif
+
+//  Create unconfigured Ucb:
 /*  Sequence< Any > aArgs(1);
     aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
@@ -274,18 +321,6 @@ Reference< XContentProviderManager > InitializeUCB( void )
     BOOL bFolder = aTester.isFolder();
 #endif
 
-
-    }
-    catch( Exception & rEx)
-    {
-        DBG_ERROR( ByteString( String( rEx.Message ), RTL_TEXTENCODING_ASCII_US).GetBuffer() )
-        throw;
-    }
-    catch( ... )
-    {
-        DBG_ERROR( "unknown exception occured" )
-        throw;
-    }
     return xUcb;
 }
 #endif
@@ -362,12 +397,12 @@ void BasicApp::Main( )
     }
     catch( class Exception & rEx)
     {
-        DBG_ERROR( ByteString( String( rEx.Message ), RTL_TEXTENCODING_ASCII_US).GetBuffer() )
+        InfoBox( NULL, String( rEx.Message ) ).Execute();
         throw;
     }
     catch( ... )
     {
-        DBG_ERROR( "unknown exception occured" )
+        InfoBox( NULL, String::CreateFromAscii( "unknown exception occured" ) ).Execute();
         throw;
     }
 }
