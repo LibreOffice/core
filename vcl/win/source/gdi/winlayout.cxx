@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:39:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <tools/svwin.h>
 #endif
 
+#include <rtl/ustring.hxx>
+#include <osl/module.h>
+
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif // _SV_SALGDI_HXX
@@ -89,6 +92,8 @@
 #endif // USE_UNISCRIBE
 
 #define DROPPED_OUTGLYPH 0xFFFF
+
+using namespace rtl;
 
 // =======================================================================
 
@@ -1159,7 +1164,7 @@ private:
 // -----------------------------------------------------------------------
 // dynamic loading of usp library
 
-static HMODULE aUspModule;
+static oslModule aUspModule = NULL;
 static bool bUspEnabled = true;
 
 static HRESULT ((WINAPI *pScriptIsComplex)( const WCHAR*, int, DWORD ));
@@ -1185,61 +1190,72 @@ static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
 
 static bool InitUSP()
 {
-    aUspModule = LoadLibraryA( "usp10" );
+    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "usp10" ) );
+    aUspModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
     if( !aUspModule )
         return (bUspEnabled = false);
 
+    OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "ScriptIsComplex" ) );
     pScriptIsComplex = (HRESULT (WINAPI*)(const WCHAR*,int,DWORD))
-        ::GetProcAddress( aUspModule, "ScriptIsComplex" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptIsComplex);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptItemize" ) );
     pScriptItemize = (HRESULT (WINAPI*)(const WCHAR*,int,int,
         const SCRIPT_CONTROL*,const SCRIPT_STATE*,SCRIPT_ITEM*,int*))
-        ::GetProcAddress( aUspModule, "ScriptItemize" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptItemize);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptShape" ) );
     pScriptShape = (HRESULT (WINAPI*)(HDC,SCRIPT_CACHE*,const WCHAR*,
         int,int,SCRIPT_ANALYSIS*,WORD*,WORD*,SCRIPT_VISATTR*,int*))
-        ::GetProcAddress( aUspModule, "ScriptShape" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptShape);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptPlace" ) );
     pScriptPlace = (HRESULT (WINAPI*)(HDC, SCRIPT_CACHE*, const WORD*, int,
         const SCRIPT_VISATTR*,SCRIPT_ANALYSIS*,int*,GOFFSET*,ABC*))
-        ::GetProcAddress( aUspModule, "ScriptPlace" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptPlace);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptGetLogicalWidths" ) );
     pScriptGetLogicalWidths = (HRESULT (WINAPI*)(const SCRIPT_ANALYSIS*,
         int,int,const int*,const WORD*,const SCRIPT_VISATTR*,int*))
-        ::GetProcAddress( aUspModule, "ScriptGetLogicalWidths" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptGetLogicalWidths);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptApplyLogicalWidth" ) );
     pScriptApplyLogicalWidth = (HRESULT (WINAPI*)(const int*,int,int,const WORD*,
         const SCRIPT_VISATTR*,const int*,const SCRIPT_ANALYSIS*,ABC*,int*))
-        ::GetProcAddress( aUspModule, "ScriptApplyLogicalWidth" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptApplyLogicalWidth);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptJustify" ) );
     pScriptJustify = (HRESULT (WINAPI*)(const SCRIPT_VISATTR*,const int*,
         int,int,int,int*))
-        ::GetProcAddress( aUspModule, "ScriptJustify" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptJustify);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptGetFontProperties" ) );
     pScriptGetFontProperties = (HRESULT (WINAPI*)( HDC,SCRIPT_CACHE*,SCRIPT_FONTPROPERTIES*))
-        ::GetProcAddress( aUspModule, "ScriptGetFontProperties" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptGetFontProperties);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptTextOut" ) );
     pScriptTextOut = (HRESULT (WINAPI*)(const HDC,SCRIPT_CACHE*,
         int,int,UINT,const RECT*,const SCRIPT_ANALYSIS*,const WCHAR*,
         int,const WORD*,int,const int*,const int*,const GOFFSET*))
-        ::GetProcAddress( aUspModule, "ScriptTextOut" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptTextOut);
 
+    queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptFreeCache" ) );
     pScriptFreeCache = (HRESULT (WINAPI*)(SCRIPT_CACHE*))
-        ::GetProcAddress( aUspModule, "ScriptFreeCache" );
+        osl_getSymbol( aUspModule, queryFuncName.pData );
     bUspEnabled &= (NULL != pScriptFreeCache);
 
     if( !bUspEnabled )
     {
-        FreeLibrary( aUspModule );
+        osl_unloadModule( aUspModule );
         aUspModule = NULL;
     }
 
