@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_rbmp.cxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: hdu $ $Date: 2001-12-13 14:54:19 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 //------------------------------------------------------------------------
 
 RawBitmap::RawBitmap()
-: mnAllocated(0), mpBits(0)
+: mpBits(0), mnAllocated(0)
 {}
 
 //------------------------------------------------------------------------
