@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 13:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,15 +114,15 @@ String INetImage::CopyExchange() const
 
 //-----------------------------------------------------------------------
 
-void INetImage::PasteExchange( String aString )
+void INetImage::PasteExchange( const String& rString )
 {
-    USHORT nStart = 0;
-    aImageURL = aString.GetToken( 0, TOKEN_SEPARATOR, nStart );
-    aTargetURL = aString.GetToken( 0, TOKEN_SEPARATOR, nStart );
-    aTargetFrame = aString.GetToken( 0, TOKEN_SEPARATOR, nStart );
-    aAlternateText = aString.GetToken( 0, TOKEN_SEPARATOR, nStart );
-    aSizePixel.Width() = aString.GetToken( 0, TOKEN_SEPARATOR, nStart ).ToInt32();
-    aSizePixel.Height() = aString.GetToken( 0, TOKEN_SEPARATOR, nStart ).ToInt32();
+    xub_StrLen nStart = 0;
+    aImageURL = rString.GetToken( 0, TOKEN_SEPARATOR, nStart );
+    aTargetURL = rString.GetToken( 0, TOKEN_SEPARATOR, nStart );
+    aTargetFrame = rString.GetToken( 0, TOKEN_SEPARATOR, nStart );
+    aAlternateText = rString.GetToken( 0, TOKEN_SEPARATOR, nStart );
+    aSizePixel.Width() = rString.GetToken( 0, TOKEN_SEPARATOR, nStart ).ToInt32();
+    aSizePixel.Height() = rString.GetToken( 0, TOKEN_SEPARATOR, nStart ).ToInt32();
 }
 
 //-----------------------------------------------------------------------

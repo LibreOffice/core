@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 08:39:50 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@ class INetImage
     Size            aSizePixel;
 
 protected:
-    String          CopyExchange() const;
-    void            PasteExchange( String aString );
-
     void            SetImageURL( const String& rS )     { aImageURL = rS; }
     void            SetTargetURL( const String& rS )    { aTargetURL = rS; }
     void            SetTargetFrame( const String& rS )  { aTargetFrame = rS; }
@@ -107,6 +104,9 @@ public:
                     {}
                     INetImage()
                     {}
+
+    String          CopyExchange() const;
+    void            PasteExchange( const String& rString );
 
     const String&   GetImageURL() const { return aImageURL; }
     const String&   GetTargetURL() const { return aTargetURL; }
