@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_singleton.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ HF_IdlSingleton::make_Navibar( const client & i_ce ) const
 {
     HF_IdlNavigationBar
         aNaviBar(Env(), CurOut());
-    aNaviBar.Produce_CeMainRow(i_ce);
+    aNaviBar.Produce_CeMainRow(i_ce,true);  // true := avoid link to Use-page.
 
     CurOut() << new Html::HorizontalLine();
 }
