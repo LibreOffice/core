@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
+#   last change: $Author: hr $ $Date: 2002-05-28 13:16:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ BMP_IN=$(PRJ)$/win/res
 EXCEPTIONSFILES=\
         $(SLO)$/filtergrouping.obj	\
         $(SLO)$/filedlghelper.obj	\
-        $(SLO)$/mailmodel.obj
+        $(SLO)$/mailmodel.obj		\
+        $(SLO)$/partwnd.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -111,7 +112,6 @@ SLOFILES =\
         $(SLO)$/templdlg.obj		\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-        $(SLO)$/partwnd.obj			\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj		\
         $(SLO)$/cfgtreelstbox.obj
