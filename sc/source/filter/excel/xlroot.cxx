@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:40:04 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,31 +261,42 @@ const String& XclRoot::QueryPassword() const
     return mrData.maPassw;
 }
 
-SvStorage* XclRoot::GetRootStorage() const
+SotStorage* XclRoot::GetRootStorage() const
 {
-    return GetMedium().GetStorage();
+    if ( !mrData.mrStorage.Is() )
+    {
+        SvStream* pStream = GetMedium().GetInStream();
+        if ( pStream && SotStorage::IsStorageFile( pStream ) )
+        {
+            mrData.mrStorage = new SotStorage( pStream, sal_False );
+            if ( mrData.mrStorage->GetError() )
+                mrData.mrStorage = NULL;
+        }
+    }
+
+    return mrData.mrStorage;
 }
 
-SvStorageRef XclRoot::OpenStorage( SvStorage* pStrg, const String& rStrgName ) const
+SotStorageRef XclRoot::OpenStorage( SotStorage* pStrg, const String& rStrgName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageWrite( pStrg, rStrgName ) :
         ScfTools::OpenStorageRead( pStrg, rStrgName );
 }
 
-SvStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
+SotStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
 {
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-SvStorageStreamRef XclRoot::OpenStream( SvStorage* pStrg, const String& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( SotStorage* pStrg, const String& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( pStrg, rStrmName ) :
         ScfTools::OpenStorageStreamRead( pStrg, rStrmName );
 }
 
-SvStorageStreamRef XclRoot::OpenStream( const String& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( const String& rStrmName ) const
 {
     return OpenStream( GetRootStorage(), rStrmName );
 }
