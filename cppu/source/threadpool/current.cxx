@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-07 15:07:00 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
                 if (pCurrentEnv)
                 {
                     Mapping aMapping( pCurrentEnv, pTargetEnv );
+                    (*pCurrentEnv->release)( pCurrentEnv );
                     if (aMapping.is())
                     {
                         aMapping.mapInterface(

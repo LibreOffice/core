@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #define CPPU_TRACE
 #endif
 
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -412,7 +415,10 @@ static Mapping loadExternalMapping(
                 (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
                 OSL_ASSERT( aExt.is() );
                 if (aExt.is())
+                {
+                    ::rtl_registerModuleForUnloading( hModule );
                     return aExt;
+                }
             }
             ::osl_unloadModule( hModule );
             setNegativeBridge( aName );

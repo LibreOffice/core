@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-27 08:24:08 $
+ *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
+#endif
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
 #endif
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
@@ -229,14 +232,13 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
 {
     sal_Int32           nRef;
     sal_Int32           nWeakRef;
-    oslModule           hModule;
 
     Mutex               aAccess;
     Ptr2ObjectMap       aPtr2ObjectMap;
     OId2ObjectMap       aOId2ObjectMap;
 
     uno_DefaultEnvironment(
-        const OUString & rTypeName_, void * pContext_, oslModule hMod_ )
+        const OUString & rTypeName_, void * pContext_ )
         SAL_THROW( () );
     ~uno_DefaultEnvironment()
         SAL_THROW( () );
@@ -532,11 +534,6 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
         {
             (*pEnv->environmentDisposing)( pEnv );
         }
-        // unload init module
-        if (that->hModule)
-        {
-            ::osl_unloadModule( that->hModule );
-        }
 
         OSL_ENSURE( that->aOId2ObjectMap.empty(), "### object entries left!" );
     }
@@ -594,11 +591,10 @@ static void SAL_CALL defenv_dispose( uno_Environment * pEnv )
 
 //__________________________________________________________________________________________________
 uno_DefaultEnvironment::uno_DefaultEnvironment(
-    const OUString & rTypeName_, void * pContext_, oslModule hMod_ )
+    const OUString & rTypeName_, void * pContext_ )
     SAL_THROW( () )
     : nRef( 0 )
     , nWeakRef( 0 )
-    , hModule( hMod_ )
 {
     uno_Environment * that = (uno_Environment *)this;
     that->pReserved                 = 0;
@@ -1012,7 +1008,7 @@ static uno_Environment * initDefaultEnvironment(
     // create default environment
     if (rEnvTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
     {
-        uno_DefaultEnvironment * that = new uno_DefaultEnvironment( rEnvTypeName, pContext, 0 );
+        uno_DefaultEnvironment * that = new uno_DefaultEnvironment( rEnvTypeName, pContext );
         pEnv = (uno_Environment *)that;
         (*pEnv->acquire)( pEnv );
         that->computeObjectIdentifier = unoenv_computeObjectIdentifier;
@@ -1045,9 +1041,11 @@ static uno_Environment * initDefaultEnvironment(
                 (uno_initEnvironmentFunc)::osl_getSymbol( hMod, aSymbolName.pData );
             if (fpInit)
             {
-                pEnv = (uno_Environment *)new uno_DefaultEnvironment( rEnvTypeName, pContext, hMod );
+                pEnv = (uno_Environment *)new uno_DefaultEnvironment(
+                    rEnvTypeName, pContext );
                 (*pEnv->acquire)( pEnv );
                 (*fpInit)( pEnv ); // init of environment
+                ::rtl_registerModuleForUnloading( hMod );
             }
             else
             {
