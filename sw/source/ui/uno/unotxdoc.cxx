@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-20 10:32:01 $
+ *  last change: $Author: os $ $Date: 2001-01-12 10:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,16 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
                                         rId.getConstArray(), 16 ) )
     {
             return (sal_Int64)this;
+    }
+    else
+    {
+        if(!xNumFmtAgg.is())
+            GetNumberFormatter();
+        Any aNumTunnel = xNumFmtAgg->queryAggregation(::getCppuType((Reference<XUnoTunnel>*)0));
+        Reference<XUnoTunnel> xNumTunnel;
+        aNumTunnel >>= xNumTunnel;
+        if(xNumTunnel.is())
+            return xNumTunnel->getSomething(rId);
     }
     return 0;
 }
