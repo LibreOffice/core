@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:34:55 $
+#   last change: $Author: obo $ $Date: 2005-01-27 11:10:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -236,6 +236,8 @@ $(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     +$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$i) && $(TOUCH) $(MISC)$/convert_dos_flag
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
+
+patch : $(MISC)$/convert_dos_flag
 
 .ENDIF          # "$(CONVERTFILES)"!=""
 
