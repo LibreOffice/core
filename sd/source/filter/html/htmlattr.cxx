@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlattr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,22 @@
  *
  ************************************************************************/
 
-#include <tools/link.hxx>
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
+#include "htmlattr.hxx"
+
+#ifndef _SD_HTMLEX_HXX
+#include "htmlex.hxx"
+#endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 #ifndef _SV_DECOVIEW_HXX //autogen
 #include <vcl/decoview.hxx>
 #endif
 
-#include "htmlex.hxx"
-#include "htmlattr.hxx"
 
 // =====================================================================
 // =====================================================================
