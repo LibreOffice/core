@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:35:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ namespace sd {
 class DrawView;
 class Ruler;
 class SdUnoDrawView;
+class FormShellManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -483,6 +484,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
     TransferableClipboardListener*                                                  pClipEvtLstnr;
     BOOL                                                                            bPastePossible;
+    ::std::auto_ptr<FormShellManager> mpFormShellManager;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
 };
