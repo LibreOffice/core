@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:42:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class SwGlobalDocShell : public SwDocShell
 {
 public:
 
-    SFX_DECL_OBJECTFACTORY(SwGlobalDocShell);
+    SFX_DECL_OBJECTFACTORY();
     TYPEINFO();
 
     SwGlobalDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
@@ -81,7 +81,7 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
+                                   sal_Int32 nFileFormat ) const;
 };
 
 #endif
