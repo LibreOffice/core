@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:17:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ SwCntntNode *SwOLENode::SplitNode( const SwPosition & )
 
 BOOL SwOLENode::RestorePersistentData()
 {
+    aOLEObj.GetOleRef();
     if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
     {
         SvPersist* p = GetDoc()->GetPersist();
@@ -216,13 +217,20 @@ BOOL SwOLENode::SavePersistentData()
         {
             SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
             if( aRef.Is() )
+            {
                 aRef->SetDeleted( TRUE );
+                aRef->SetObj(0);
+            }
         }
+
         (*aOLEObj.pOLERef)->DoClose();
     }
 
     if( SwOLEObj::pOLELRU_Cache )
         SwOLEObj::pOLELRU_Cache->RemovePtr( &aOLEObj );
+
+    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+        (*aOLEObj.pOLERef).Clear();
 
     return TRUE;
 }
