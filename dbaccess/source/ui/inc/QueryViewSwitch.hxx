@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace dbaui
     class OQueryDesignView;
     class OQueryTextView;
     class OAddTableDlg;
-    class OQueryViewSwitch : public OQueryView
+    class OQueryViewSwitch
     {
         OQueryDesignView*   m_pDesignView;
         OQueryTextView*     m_pTextView;
@@ -103,6 +103,11 @@ namespace dbaui
         void zoomTableView(const Fraction& _rFraction);
         void SaveUIConfig();
         void clearDesignView();
+
+        OQueryDesignView*   getRealView() const { return m_pDesignView; }
+
+        void SetPosSizePixel( Point _rPt,Size _rSize);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeControl(Rectangle& rRect);

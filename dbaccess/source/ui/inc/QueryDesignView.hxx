@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         ::rtl::OUString                     m_sDecimalSep;
 
-        OScrollWindowHelper*    m_pScrollWindow;    // contains only the scrollbars
-        OQueryTableView*        m_pTableView;       // presents the upper window
-        OAddTableDlg*           m_pAddTabDlg;       // create by the first execute of the add table slot
         OSelectionBrowseBox*    m_pSelectionBox;    // presents the lower window
 
         ::rtl::OUString QuoteField( const ::rtl::OUString& rValue, sal_Int32 aType );
@@ -188,8 +185,6 @@ namespace dbaui
         // window overloads
         virtual long        PreNotify( NotifyEvent& rNEvt );
 
-        // returs the add table dialog from the design view
-        OAddTableDlg* getAddTableDialog() { return m_pAddTabDlg; }
         BOOL IsAddAllowed();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
@@ -206,7 +201,6 @@ namespace dbaui
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
 
-        OQueryTableView* getTableView() { return m_pTableView; }
         BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, ULONG& nWidth );
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
         void zoomTableView(const Fraction& _rFraction);

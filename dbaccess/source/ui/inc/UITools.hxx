@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:58:50 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _VECTOR_
+#include <vector>
+#endif
 
 class Window;
 // .........................................................................
@@ -89,11 +92,21 @@ namespace dbaui
 {
 // .........................................................................
 
+    /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
+        the PropertySet must be support the service com::sun::star::sdbc::table
+    */
     void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
                             ::rtl::OUString& _rComposedName,
                             sal_Bool _bQuote);
 
+    /** creates a new connection and appends the eventlistener
+        @param  _rsDataSourceName       name of the datasource
+        @param  _xDatabaseContext       the database context
+        @param  _rEvtLst                the eventlistener which will be added to the new created connection
+        @param  _rOUTConnection         this parameter will be filled with the new created connection
+        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
+    */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const ::rtl::OUString& _rsDataSourceName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
@@ -101,9 +114,24 @@ namespace dbaui
                                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
 
+    /**  creates a error dialog which displays the SQLExceptionInfo. Also it supports a "more" button where detailed information are available
+        @param  _rInfo                  the error which should be shown, if the info is not valid no error dialog will appear
+        @param  _pParent                the parent of the error dialog
+        @param  _xFactory               need to create the dialog
+    */
     void showError( const ::dbtools::SQLExceptionInfo& _rInfo,
                     Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);
+
+    /** return a vector which contains all key columns for the @see com::sun::star::sdbc::KeyType _nKeyType
+        @param  _rxTable                the table which must be a @see com::sun::star::sdbcx::XColumnsSupplier
+        @param  _nKeyType               @see com::sun::star::sdbc::KeyType
+    */
+
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> >
+        getKeyColumns(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
+                        sal_Int32 _nKeyType);
+
 // .........................................................................
 }
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,11 +384,11 @@ BOOL ORTFImportExport::Write()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     Color aColor(nColor);
 
-    ByteString aFonts(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding());
+    ByteString aFonts(String(m_aFont.Name),gsl_getSystemTextEncoding());
     if(!aFonts.Len())
     {
         String aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();;
-        aFonts = ByteString (aName,aName.Len(), gsl_getSystemTextEncoding());
+        aFonts = ByteString (aName,gsl_getSystemTextEncoding());
     }
         // TODO : think about the encoding of the font name
     ::rtl::OString aFormat("\\fcharset0\\fnil ");
@@ -838,7 +838,7 @@ void OHTMLImportExport::WriteTables()
     IncIndent(-1); TAG_OFF_LF( sHTML_table );
 }
 //-----------------------------------------------------------------------
-void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int16 nWidthPixel,sal_Int16 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag)
+void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag)
 {
     BOOL bValueData;
     bValueData = FALSE;

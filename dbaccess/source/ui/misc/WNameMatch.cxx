@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:06:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
     SvLBoxEntry* pEntry = NULL;
     if(pEntry = m_CTRL_LEFT.FirstSelected())
     {
-        sal_uInt32 nPos     = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        sal_Int32 nPos      = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_pbColumn_up && nPos)
             --nPos;
         else if(pButton == &m_pbColumn_down)
@@ -257,7 +257,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     SvLBoxEntry* pEntry = NULL;
     if(pEntry = m_CTRL_RIGHT.FirstSelected())
     {
-        sal_uInt32 nPos     = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        sal_Int32 nPos      = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_pbColumn_up_right && nPos)
             --nPos;
         else if(pButton == &m_pbColumn_down_right)

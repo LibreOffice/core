@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace dbaui
     class OQueryTabConnUndoAction;
     class OQueryTableConnection;
     class OQueryTableWindow;
+    class OQueryDesignView;
     class OQueryTableView : public OJoinTableView
     {
         Link    m_lnkTabWinsChangeHandler;
@@ -167,6 +168,9 @@ namespace dbaui
             // der Handler bekommt einen Zeiger auf eine TabWinsChangeNotification-Struktur
 
         BOOL ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
+
+        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
+                                             const ::rtl::OUString& _rWinName);
     };
 }
 #endif // DBAUI_QUERYTABLEVIEW_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 16:43:57 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ namespace dbaui
     class OTableConnection;
     class OTableWindow;
     struct OJoinExchangeData;
-    class OQueryDesignView;
+    class OJoinDesignView;
+    class OTableWindowData;
 
     ////////////////////////////////////////////////////////////////
     // Konstanten fuer das Fensterlayout
@@ -149,11 +150,11 @@ namespace dbaui
 
     protected:
         OTableWindow*       m_pLastFocusTabWin;
-        OQueryDesignView*   m_pView;
+        OJoinDesignView*    m_pView;
 
     public:
         TYPEINFO();
-        OJoinTableView( Window* pParent, OQueryDesignView* pView );
+        OJoinTableView( Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
 
         // window override
@@ -182,7 +183,7 @@ namespace dbaui
         ULONG           GetTabWinCount();
         Point           GetScrollOffset() const { return m_aScrollOffset; }
 
-        OQueryDesignView*           getDesignView() { return m_pView; }
+        OJoinDesignView*            getDesignView() { return m_pView; }
         OTableWindow*               GetWindow( const String& rName );
 
         OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
@@ -237,6 +238,9 @@ namespace dbaui
         virtual void Command(const CommandEvent& rEvt);
 
         virtual void EnsureVisible(const OTableWindow* _pWin);
+
+        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
+                                             const ::rtl::OUString& _rWinName);
 
     private:
         void    InitColors();

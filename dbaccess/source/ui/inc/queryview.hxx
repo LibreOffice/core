@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:12:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,18 @@
 #ifndef DBAUI_QUERYVIEW_HXX
 #define DBAUI_QUERYVIEW_HXX
 
-#ifndef DBAUI_DATAVIEW_HXX
-#include "dataview.hxx"
+#ifndef DBAUI_JOINDESIGNVIEW_HXX
+#include "JoinDesignView.hxx"
 #endif
 
 namespace dbaui
 {
     class OQueryController;
-    class OQueryView : public ODataView
+    class OQueryView : public OJoinDesignView
     {
-        OQueryController* m_pController;
     public:
         OQueryView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryView();
-
-        OQueryController* getController() const { return m_pController; }
 
         virtual sal_Bool isCutAllowed() = 0;
         virtual void copy()     = 0;

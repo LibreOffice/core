@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,9 @@ void ORTFReader::NextToken( int nToken )
                         {
                             switch(nTmpToken2)
                             {
-                                case RTF_RED:   aColor.SetRed(nTokenValue); break;
-                                case RTF_BLUE:  aColor.SetBlue(nTokenValue); break;
-                                case RTF_GREEN: aColor.SetGreen(nTokenValue); break;
+                                case RTF_RED:   aColor.SetRed((sal_uInt8)nTokenValue); break;
+                                case RTF_BLUE:  aColor.SetBlue((sal_uInt8)nTokenValue); break;
+                                case RTF_GREEN: aColor.SetGreen((sal_uInt8)nTokenValue); break;
                                 default:
                                     bNext = sal_False;
                             }
@@ -238,7 +238,7 @@ void ORTFReader::NextToken( int nToken )
 
             case RTF_DEFLANG:
             case RTF_LANG: // Sprache abfragen
-                m_nDefToken = nTokenValue;
+                m_nDefToken = (rtl_TextEncoding)nTokenValue;
                 break;
             case RTF_TROWD:
                 if(!m_xTable.is()) // erste Zeile als Header verwenden

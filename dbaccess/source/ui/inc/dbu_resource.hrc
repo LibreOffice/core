@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
+#define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
 
 //========================================================================
 // tab pages
@@ -160,6 +161,7 @@
 #define RID_BRW_QRY_TOOLBOX             RID_TOOLBOX_START +  1
 #define RID_QRY_TOOLBOX_SQL             RID_TOOLBOX_START +  2
 #define RID_BRW_QUERYDESIGN_TOOLBOX     RID_TOOLBOX_START +  3
+#define RID_BRW_REALTIONDESIGN_TOOLBOX  RID_TOOLBOX_START +  4
 
 //========================================================================
 // bitmaps
@@ -338,6 +340,9 @@
 #define STR_TITLE_CONFIRM_DELETION          RID_STRING_START + 122
 #define STR_SVT_SQL_SYNTAX_TABLE            RID_STRING_START + 123
 #define STR_SVT_SQL_SYNTAX_COLUMN           RID_STRING_START + 124
+#define STR_QUERY_REL_EDIT_RELATION         RID_STRING_START + 125
+#define STR_RELATIONDESIGN                  RID_STRING_START + 126
+#define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STRING_START + 127
 
 
 //========================================================================
@@ -352,6 +357,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/02/23 15:02:06  oj
+ *  a lot of import export
+ *
  *  Revision 1.25  2001/02/16 15:54:53  oj
  *  new ex- import data
  *

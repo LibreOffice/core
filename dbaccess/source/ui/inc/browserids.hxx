@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,11 @@
 #define ID_TREE_TABLE_COPY                 11
 #define ID_TREE_QUERY_COPY                 12
 #define ID_TREE_TABLE_PASTE                13
+#define ID_TREE_RELATION_DESIGN            14
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              (SID_SBA_START+130)
+#define ID_REALTION_ADD_RELATION            (SID_SBA_START+131)
 #define ID_BROWSER_QUERY_VIEW_FUNCTIONS     (SID_SBA_START+134)
 #define ID_BROWSER_QUERY_VIEW_TABLES        (SID_SBA_START+135)
 #define ID_BROWSER_QUERY_VIEW_ALIASES       (SID_SBA_START+136)
@@ -129,6 +131,8 @@
 #define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // Distinct anzeigen
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
+
+
 
 
 #endif // DBACCESS_UI_BROWSER_ID_HXX

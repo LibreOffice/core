@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:12:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,13 @@ namespace dbaui
     // end of temp classes
 
     class OSqlEdit;
-    class OQueryTextView : public OQueryView
+    class OQueryTextView : public Window
     {
         friend class OQueryViewSwitch;
         OSqlEdit*   m_pEdit;
+        ToolBox*    m_pToolBox; // the toolbox is owned by OQueryDesignView
     public:
-        OQueryTextView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        OQueryTextView(Window* pParent,ToolBox* _pToolBox);
         virtual ~OQueryTextView();
 
         virtual sal_Bool isCutAllowed();
@@ -129,8 +130,7 @@ namespace dbaui
         /// late construction
         virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
     protected:
-        // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void Resize();
     };
 }
 #endif // DBAUI_QUERYVIEW_TEXT_HXX

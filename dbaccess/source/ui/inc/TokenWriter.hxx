@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ namespace dbaui
         void WriteHeader();
         void WriteBody();
         void WriteTables();
-        void WriteCell( sal_Int32 nFormat,sal_Int16 nWidthPixel,sal_Int16 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag);
+        void WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag);
         void IncIndent( sal_Int16 nVal );
         const char*         GetIndentStr() { return sIndent; }
         void FontOn();
