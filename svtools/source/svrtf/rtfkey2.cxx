@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,8 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DN, "\\dn" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DOCCOMM, "\\doccomm" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DOCTEMP, "\\doctemp" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DROPCAPLI, "\\dropcapli" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DROPCAPLT, "\\dropcapt" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DROPCAPT, "\\dropcapt" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ABSNOOVRLP, "\\absnoovrlp" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DXFRTEXT, "\\dxfrtext" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DY, "\\dy" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_EDMINS, "\\edmins" );
