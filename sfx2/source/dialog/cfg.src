@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:53:39 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@
     Text[ thai ] = "~บันทึก...";    \
     Text[ czech ] = "Uložit...";   \
     Text[ hebrew ] = "‮שמירה...‬"; \
-    Text[ hindi ] = "~संचित करो...";
+    Text[ hindi ] = "~संचित करो...";    \
+    Text[ slovak ] = "~Uložiť...";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~�cksetzen" ; \
@@ -120,7 +121,8 @@
     Text[ thai ] = "ตั้~งค่าใหม่";    \
     Text[ czech ] = "Obnovit";  \
     Text[ hebrew ] = "‮אתחול‬";    \
-    Text[ hindi ] = "रि~सेट्ट करो";
+    Text[ hindi ] = "रि~सेट्ट करो"; \
+    Text[ slovak ] = "O~bnoviť";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -150,7 +152,8 @@
     Text[ thai ] = "โ~หลด...";  \
     Text[ czech ] = "Načíst...";  \
     Text[ hebrew ] = "‮טעינה...‬"; \
-    Text[ hindi ] = "~लोड़ करो...";
+    Text[ hindi ] = "~लोड़ करो...";   \
+    Text[ slovak ] = "~Načítať...";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~L�schen : ~L�schen */\
@@ -181,7 +184,8 @@
     Text[ thai ] = "~ลบ";   \
     Text[ czech ] = "Smazat";   \
     Text[ hebrew ] = "‮מחיקה‬";    \
-    Text[ hindi ] = "~मिटाओ";
+    Text[ hindi ] = "~मिटाओ"; \
+    Text[ slovak ] = "~Zmazať";
 
 #define PUSHBUTTON_TEXT_CHANGE \
 /* ### ACHTUNG: Neuer Text in Resource? ~�ndern : ~�ndern */\
@@ -212,7 +216,8 @@
     Text[ thai ] = "~ดัดแปลงแก้ไข"; \
     Text[ czech ] = "Změnit";  \
     Text[ hebrew ] = "‮שינוי‬";    \
-    Text[ hindi ] = "~सुधारो";
+    Text[ hindi ] = "~सुधारो";  \
+    Text[ slovak ] = "Z~meniť";
 
 #define PUSHBUTTON_TEXT_NEW \
     Text = "~Neu" ; \
@@ -242,7 +247,8 @@
     Text[ thai ] = "ใ~หม่"; \
     Text[ czech ] = "Nový";    \
     Text[ hebrew ] = "‮חדש‬";    \
-    Text[ hindi ] = "~नया";
+    Text[ hindi ] = "~नया";   \
+    Text[ slovak ] = "~Nový";
 
 #define FIXEDTEXT_TEXT_GROUP \
     Text = "~Bereich" ; \
@@ -272,7 +278,8 @@
     Text[ thai ] = "~ประเภท";   \
     Text[ czech ] = "Kategorie";    \
     Text[ hebrew ] = "‮סיווג‬";    \
-    Text[ hindi ] = "~वर्ग";
+    Text[ hindi ] = "~वर्ग";    \
+    Text[ slovak ] = "~Kategória";
 
 #define FIXEDTEXT_TEXT_FUNCTION \
     Text = "~Funktion" ; \
@@ -302,7 +309,8 @@
     Text[ thai ] = "ฟังก์ชั่น";   \
     Text[ czech ] = "Funkce";   \
     Text[ hebrew ] = "‮פעולה‬";    \
-    Text[ hindi ] = "फंक्शन्";
+    Text[ hindi ] = "फंक्शन्";    \
+    Text[ slovak ] = "Funkcia";
 
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text = "Funktionen" ; \
@@ -332,7 +340,8 @@
     Text[ thai ] = "ฟังก์ชั่น";   \
     Text[ czech ] = "Funkce";   \
     Text[ hebrew ] = "‮תפקודים‬";    \
-    Text[ hindi ] = "फंक्शन्स";
+    Text[ hindi ] = "फंक्शन्स"; \
+    Text[ slovak ] = "Funkcie";
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -370,6 +379,7 @@ TabPage TP_CONFIG_MENU
         Text[ czech ] = "Položky menu";
         Text[ hebrew ] = "‮ערכי תפריט‬";
         Text[ hindi ] = "मेनु प्रविष्टियाँ";
+        Text[ slovak ] = "Položky menu";
     };
     PushButton BTN_MN_NEW
     {
@@ -409,6 +419,7 @@ TabPage TP_CONFIG_MENU
         Text[ czech ] = "Nové menu";
         Text[ hebrew ] = "‮תפריט חדש‬";
         Text[ hindi ] = "नया मे~नु";
+        Text[ slovak ] = "Nové men~u";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -503,6 +514,7 @@ TabPage TP_CONFIG_MENU
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "‮תפקודים‬";
         Text[ hindi ] = "फंक्शन्स";
+        Text[ slovak ] = "Funkcie";
     };
     FixedText TXT_MN_GROUP
     {
@@ -537,6 +549,7 @@ TabPage TP_CONFIG_MENU
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "व~र्ग";
+        Text[ slovak ] = "K~ategória";
     };
     Control BOX_MN_GROUP
     {
@@ -626,6 +639,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ czech ] = "Zkratky";
         Text[ hebrew ] = "‮מקשי קיצור‬";
         Text[ hindi ] = "सरलविधि की";
+        Text[ slovak ] = "Klávesové skratky";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -707,6 +721,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ czech ] = "Klávesy";
         Text[ hebrew ] = "‮מקשים‬";
         Text[ hindi ] = "~की";
+        Text[ slovak ] = "~Klávesy";
     };
     ListBox BOX_ACC_KEY
     {
@@ -779,6 +794,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ czech ] = "Stavový panel";
         Text[ hebrew ] = "‮סרגל מצב ‬";
         Text[ hindi ] = "वस्तुस्थिति पट्टी ";
+        Text[ slovak ] = "Stavový panel";
     };
     Control BOX_STATBAR_ENTRIES
     {
@@ -877,6 +893,7 @@ TabDialog DLG_CONFIG
                 Text[ czech ] = "Menu";
                 Text[ hebrew ] = "‮תפריט‬";
                 Text[ hindi ] = "मेनु";
+                Text[ slovak ] = "Menu";
             };
             PageItem
             {
@@ -910,6 +927,7 @@ TabDialog DLG_CONFIG
                 Text[ czech ] = "Klávesnice";
                 Text[ hebrew ] = "‮מקלדת‬";
                 Text[ hindi ] = "कीबोर्ड";
+                Text[ slovak ] = "Klávesnica";
             };
             PageItem
             {
@@ -943,6 +961,7 @@ TabDialog DLG_CONFIG
                 Text[ czech ] = "Stavový panel";
                 Text[ hebrew ] = "‮סרגל מצב‬";
                 Text[ hindi ] = "वस्तुस्थिति पट्टी";
+                Text[ slovak ] = "Stavový riadok";
             };
             PageItem
             {
@@ -976,6 +995,7 @@ TabDialog DLG_CONFIG
                 Text[ czech ] = "Panely nástrojů";
                 Text[ hebrew ] = "‮סרגלי כלים‬";
                 Text[ hindi ] = "औज़ार पट्टी";
+                Text[ slovak ] = "Panely nástrojov";
             };
             PageItem
             {
@@ -998,7 +1018,7 @@ TabDialog DLG_CONFIG
                 Text[ russian ] = "�������";
                 Text[ polish ] = "Wydarzenia";
                 Text[ japanese ] = "イベント";
-                Text[ chinese_traditional ] = "動作";
+                Text[ chinese_traditional ] = "事件";
                 Text[ arabic ] = "�������";
                 Text[ greek ] = "��������";
                 Text[ korean ] = "이벤트";
@@ -1009,6 +1029,7 @@ TabDialog DLG_CONFIG
                 Text[ czech ] = "Události";
                 Text[ hebrew ] = "‮ארועים‬";
                 Text[ hindi ] = "घटना";
+                Text[ slovak ] = "Udalosti";
             };
         };
     };
@@ -1027,6 +1048,7 @@ TabDialog DLG_CONFIG
     Text[ czech ] = "Konfigurace";
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
+    Text[ slovak ] = "Konfigurácia";
 };
  // Strings ---------------------------------------------------------------
 String STR_NEW
@@ -1059,6 +1081,7 @@ String STR_NEW
     Text[ czech ] = "Nový";
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "नया";
+    Text[ slovak ] = "Nový";
 };
 String STR_OPEN
 {
@@ -1092,6 +1115,7 @@ String STR_OPEN
     Text[ czech ] = "Otevřít";
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "खोलो";
+    Text[ slovak ] = "Otvoriť";
 };
 String STR_SAVE
 {
@@ -1123,6 +1147,7 @@ String STR_SAVE
     Text[ czech ] = "Uložit";
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "संचित करो";
+    Text[ slovak ] = "Uložiť";
 };
 String STR_SAVEAS
 {
@@ -1154,6 +1179,7 @@ String STR_SAVEAS
     Text[ czech ] = "Uložit jako";
     Text[ hebrew ] = "‮שמירה בשם‬";
     Text[ hindi ] = "संचित करो जैसे";
+    Text[ slovak ] = "Uložiť ako";
 };
 String STR_PRINT
 {
@@ -1185,6 +1211,7 @@ String STR_PRINT
     Text[ czech ] = "Tisk";
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई";
+    Text[ slovak ] = "Tlač";
 };
 String STR_QUIT
 {
@@ -1216,6 +1243,7 @@ String STR_QUIT
     Text[ czech ] = "Konec";
     Text[ hebrew ] = "‮יציאה‬";
     Text[ hindi ] = "निर्गम";
+    Text[ slovak ] = "Ukončiť";
 };
 String STR_CUT
 {
@@ -1247,6 +1275,7 @@ String STR_CUT
     Text[ czech ] = "Vyjmout";
     Text[ hebrew ] = "‮גזירה‬";
     Text[ hindi ] = "काटो";
+    Text[ slovak ] = "Vybrať";
 };
 String STR_COPY
 {
@@ -1278,6 +1307,7 @@ String STR_COPY
     Text[ czech ] = "Kopírovat";
     Text[ hebrew ] = "‮העתקה‬";
     Text[ hindi ] = "प्रतिलिपि";
+    Text[ slovak ] = "Kopírovať";
 };
 String STR_PASTE
 {
@@ -1311,6 +1341,7 @@ String STR_PASTE
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הדבקה‬";
     Text[ hindi ] = "छिपकाओ";
+    Text[ slovak ] = "Vložiť";
 };
 String STR_DELETE
 {
@@ -1344,6 +1375,7 @@ String STR_DELETE
     Text[ czech ] = "Smazat";
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "मिटाओ";
+    Text[ slovak ] = "Zmazať";
 };
 String STR_FIND
 {
@@ -1375,6 +1407,7 @@ String STR_FIND
     Text[ czech ] = "Hledat";
     Text[ hebrew ] = "‮חיפוש‬";
     Text[ hindi ] = "खोज";
+    Text[ slovak ] = "Hľadať";
 };
 String STR_FINDBACKWARD
 {
@@ -1408,6 +1441,7 @@ String STR_FINDBACKWARD
     Text[ czech ] = "Hledat zpětně";
     Text[ hebrew ] = "‮חיפוש לאחור‬";
     Text[ hindi ] = "पीछे की ओर खोज";
+    Text[ slovak ] = "Spätné vyhľadávanie";
 };
 String STR_PROPERTIES
 {
@@ -1439,6 +1473,7 @@ String STR_PROPERTIES
     Text[ czech ] = "Vlastnosti";
     Text[ hebrew ] = "‮מאפיינים‬";
     Text[ hindi ] = "विशेषतायें";
+    Text[ slovak ] = "Vlastnosti";
 };
 String STR_FRONT
 {
@@ -1470,6 +1505,7 @@ String STR_FRONT
     Text[ czech ] = "Na popředí";
     Text[ hebrew ] = "‮קדימה‬";
     Text[ hindi ] = "आगे की ओर";
+    Text[ slovak ] = "Na popredie";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
@@ -1506,6 +1542,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message[ czech ] = "Některé funkce stále nebyly definovány (???)-\n\nPřejete si přesto přijmout tuto konfiguraci?";
     Message[ hebrew ] = "‮ישנם עדיין תפקודים לא מוגדרים (???).\n\nהאם אכן לאשר את התצורה בכל זאת?‬";
     Message[ hindi ] = "अभी भी बिना परिभाषा किया हुआ बहुत फंक्शन् है (???)।\n\nआप किसी तरह रूपरेखा को स्वीकार करना चाहते है?";
+    Message[ slovak ] = "Niektoré funkcie stále neboli definované (???)-\n\nPrajete si i napriek tomu prijať túto konfiguráciu?";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
@@ -1541,6 +1578,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ czech ] = "Stále existují položky s funkcemi, které mohou být přiřazeny pouze k pop-ups.\n\nPřesto pokračovat?";
     Message[ hebrew ] = "‮ישנם עדיין ערכים עם תפקודים שניתנים להשמה רק ל pop-ups.\n\nהאם בכל זאת להמשיך?‬";
     Message[ hindi ] = "अभी भी फंक्शन् में कुछ प्रविष्टियाँ है जिनको सिर्फ़ पॉप्-अप् केलिए निर्दिष्ट कर सकते है ।\n\nकिसी तरह जारी रखना है?";
+    Message[ slovak ] = "Stále existujú položky s funkciami, ktoré môžu byť priradené iba ku kontextovému menu.\n\nChcete i napriek tomu pokračovať?";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
@@ -1572,6 +1610,7 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message[ czech ] = "Funkce už byla zahrnuta v tomto kontextovém menu.";
     Message[ hebrew ] = "‮הפופאפ כבר מכיל תפקוד זה‬";
     Message[ hindi ] = "फंक्शन् को इस पॉप्-अप् में पहिले से ही सम्मिलित किया है ।";
+    Message[ slovak ] = "Funkcia už bola zahrnutá v tomto kontextovom menu.";
 };
 String STR_LOADMENUCONFIG
 {
@@ -1604,6 +1643,7 @@ String STR_LOADMENUCONFIG
     Text[ czech ] = "Načíst konfiguraci menu";
     Text[ hebrew ] = "‮טעינת תצורת תפריט‬";
     Text[ hindi ] = "मेनु रूपरेखा लोड़ करो";
+    Text[ slovak ] = "Načítať konfiguráciu menu";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1633,6 +1673,7 @@ String STR_SAVEMENUCONFIG
     Text[ czech ] = "Uložit konfiguraci menu";
     Text[ hebrew ] = "‮שמירת תצורת תפריט‬";
     Text[ hindi ] = "मेनु रूपरेखा संचित करो";
+    Text[ slovak ] = "Uložiť konfiguráciu menu";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1663,6 +1704,7 @@ String STR_LOADACCELCONFIG
     Text[ czech ] = "Načíst konfiguraci klávesnice";
     Text[ hebrew ] = "‮טעינת תצורת מקלדת‬";
     Text[ hindi ] = "किबोर्ड रूपरेखा को लोड़ करो";
+    Text[ slovak ] = "Načítať konfiguráciu klávesnice";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1692,6 +1734,7 @@ String STR_SAVEACCELCONFIG
     Text[ czech ] = "Uložit konfiguraci klávesnice";
     Text[ hebrew ] = "‮שמירת תצורת מקלדת‬";
     Text[ hindi ] = "किबोर्ड रूपरेखा को संचित करो";
+    Text[ slovak ] = "Uložiť konfiguráciu klávesnice";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1722,6 +1765,7 @@ String STR_LOADSTATBARCONFIG
     Text[ czech ] = "Načíst konfiguraci stavového panelu";
     Text[ hebrew ] = "‮טעינת תצורת סרגל המצב‬";
     Text[ hindi ] = "वस्तुस्थिति पट्टी का रूपरेखा लोड़ करो";
+    Text[ slovak ] = "Načítať konfiguráciu stavového panelu";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1751,6 +1795,7 @@ String STR_SAVESTATBARCONFIG
     Text[ czech ] = "Uložit konfiguraci stavového panelu";
     Text[ hebrew ] = "‮שמירת תצורת סרגל המצב‬";
     Text[ hindi ] = "Save Status Bar Configuration";
+    Text[ slovak ] = "Uložiť konfiguráciu stavového panelu";
 };
 String STR_MENU
 {
@@ -1781,6 +1826,7 @@ String STR_MENU
     Text[ czech ] = "Menu";
     Text[ hebrew ] = "‮תפריט‬";
     Text[ hindi ] = "मेनु";
+    Text[ slovak ] = "Menu";
 };
 String STR_TOOLBAR_SEPARATOR
 {
@@ -1810,6 +1856,7 @@ String STR_TOOLBAR_SEPARATOR
     Text[ czech ] = "Oddělovač";
     Text[ hebrew ] = "‮מפריד‬";
     Text[ hindi ] = "Separator";
+    Text[ slovak ] = "Oddeľovač";
 };
 
 String STR_TOOLBAR_SPACE
@@ -1840,6 +1887,7 @@ String STR_TOOLBAR_SPACE
     Text[ czech ] = "Neviditelný oddělovač";
     Text[ hebrew ] = "‮מחיצה בלתי נראית‬";
     Text[ hindi ] = "Invisible separator";
+    Text[ slovak ] = "Neviditeľný oddeľovač";
 };
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
@@ -1870,8 +1918,11 @@ String STR_FUNCTION_ALREADY_IN_TOOLBOX
     Text[ czech ] = "Vybraná funkce se již nachází na současném panelu nástrojů.";
     Text[ hebrew ] = "‮סרגל הכלים כבר מכיל את התפקוד שנבחר.‬";
     Text[ hindi ] = "The selected function is already on the current toolbar.";
+    Text[ slovak ] = "Vybraná funkcia sa už nachádza na paneli nástrojov.";
 };
  // ********************************************************************** EOF
+
+
 
 
 
