@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace dbaui
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
 
     namespace
@@ -200,7 +201,7 @@ void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFacto
         for (sal_Int32 i=0;pDriverKeys != pDriverKeysEnd && i <= DST_USERDEFINE10; ++pDriverKeys)
         {
             ::utl::OConfigurationNode aThisDriverSettings = aUserDefinedDriverRoot.openNode(*pDriverKeys);
-            if ( aUserDefinedDriverRoot.isValid() )
+            if ( aThisDriverSettings.isValid() )
             {
                 // read the needed information
                 ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName;
@@ -268,7 +269,51 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn)
     return _rDsn.Copy(sPrefix.Len());
 }
 // -----------------------------------------------------------------------------
-void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber)
+namespace
+{
+    ::rtl::OUString lcl_getEmbeddedDatabases()
+    {
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/EmbeddedDatabases"));
+        return s_sNodeName;
+    }
+    // -----------------------------------------------------------------------------
+    ::rtl::OUString lcl_getDefaultEmbeddedDatabase()
+    {
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DefaultEmbeddedDatabase"));
+        return s_sNodeName;
+    }
+    // -----------------------------------------------------------------------------
+    ::rtl::OUString lcl_getEmbeddedDatabaseNames()
+    {
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabaseNames"));
+        return s_sNodeName;
+    }
+    // -----------------------------------------------------------------------------
+    ::utl::OConfigurationNode lcl_getEmbeddedDatabase(const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        ::utl::OConfigurationTreeRoot aEmbeddedDatabases = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+            _rxORB, ::dbaui::lcl_getEmbeddedDatabases(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+
+        if ( aEmbeddedDatabases.isValid() )
+        {
+            ::rtl::OUString sDefaultEmbededDatabaseName;
+            aEmbeddedDatabases.getNodeValue(::dbaui::lcl_getDefaultEmbeddedDatabase()) >>= sDefaultEmbededDatabaseName;
+
+            ::utl::OConfigurationNode aEmbddedDatabaseNames = aEmbeddedDatabases.openNode(::dbaui::lcl_getEmbeddedDatabaseNames());
+            if ( aEmbddedDatabaseNames.isValid() )
+            {
+                ::utl::OConfigurationNode aEmbeddedDatabase = aEmbddedDatabaseNames.openNode(sDefaultEmbededDatabaseName);
+                if ( aEmbeddedDatabase.isValid() )
+                {
+                    return aEmbeddedDatabase;
+                }
+            }
+        }
+        return ::utl::OConfigurationNode();
+    }
+}
+// -----------------------------------------------------------------------------
+void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,const Reference< XMultiServiceFactory >& _rxORB,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber)
 {
     DATASOURCE_TYPE eType = getType(_rDsn);
     String sUrl = cutPrefix(_rDsn);
@@ -365,37 +410,35 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
         }
         return bSupportsTableCreation;
 }
-
-
-
+// -----------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
 {
-    BOOL bEnableBrowseButton;
-        switch( _eType )
-        {
-            case DST_DBASE:
-            case DST_FLAT:
-            case DST_CALC:
-            case DST_ADABAS:
-            case DST_ADO:
-            case DST_MSACCESS:
-            case DST_MYSQL_ODBC:
-            case DST_ODBC:
-                bEnableBrowseButton = TRUE;
-                break;
-            case DST_MYSQL_JDBC:
-            case DST_ORACLE_JDBC:
-            case DST_LDAP:
-            case DST_MOZILLA:
-            case DST_OUTLOOK:
-            case DST_OUTLOOKEXP:
-            case DST_JDBC:
-            case DST_EVOLUTION:
-            default:
-                bEnableBrowseButton = FALSE;
-                break;
-        }
-        return bEnableBrowseButton;
+    sal_Bool bEnableBrowseButton = sal_False;
+    switch( _eType )
+    {
+        case DST_DBASE:
+        case DST_FLAT:
+        case DST_CALC:
+        case DST_ADABAS:
+        case DST_ADO:
+        case DST_MSACCESS:
+        case DST_MYSQL_ODBC:
+        case DST_ODBC:
+            bEnableBrowseButton = TRUE;
+            break;
+        case DST_MYSQL_JDBC:
+        case DST_ORACLE_JDBC:
+        case DST_LDAP:
+        case DST_MOZILLA:
+        case DST_OUTLOOK:
+        case DST_OUTLOOKEXP:
+        case DST_JDBC:
+        case DST_EVOLUTION:
+        default:
+            bEnableBrowseButton = FALSE;
+            break;
+    }
+    return bEnableBrowseButton;
 }
 
 
@@ -432,6 +475,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
         case DST_OUTLOOKEXP: //????
         case DST_DBASE:
         case DST_FLAT:
+        case DST_EMBEDDED:
         default:
             return sal_False;
     }
@@ -486,6 +530,9 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_FLAT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
+
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:", 0, nSeparator))
+        return DST_EMBEDDED;
 
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
     {
@@ -545,7 +592,68 @@ sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
     DBG_ERROR("ODsnTypeCollection::implDetermineTypeIndex : recognized the DSN schema, but did not find the type!");
     return -1;
 }
+// -----------------------------------------------------------------------------
+DATASOURCE_TYPE ODsnTypeCollection::getEmbeddedDatabaseType(const Reference< XMultiServiceFactory >& _rxORB) const
+{
+    DATASOURCE_TYPE eRet = DST_DBASE;
+    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
+    if ( aEmbeddedDatabase.isValid() )
+        eRet = DST_EMBEDDED;
+    return eRet;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODsnTypeCollection::getEmbeddedDatabaseURL(const Reference< XMultiServiceFactory >& _rxORB) const
+{
+    ::rtl::OUString sRet;
+    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
+    if ( aEmbeddedDatabase.isValid() )
+    {
+        static ::rtl::OUString s_sURL(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aEmbeddedDatabase.getNodeValue(s_sURL) >>= sRet;
+    }
+    return sRet;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODsnTypeCollection::getEmbeddedDatabaseUIName(const Reference< XMultiServiceFactory >& _rxORB) const
+{
+    ::rtl::OUString sRet;
+    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
+    if ( aEmbeddedDatabase.isValid() )
+    {
+        // read the needed information
+        static ::rtl::OUString s_sUIName(RTL_CONSTASCII_USTRINGPARAM("UIName"));
+        aEmbeddedDatabase.getNodeValue(s_sUIName) >>= sRet;
+    }
+    return sRet;
+}
+// -----------------------------------------------------------------------------
+Sequence<PropertyValue> ODsnTypeCollection::getEmbeddedDatabaseProperties(const Reference< XMultiServiceFactory >& _rxORB) const
+{
+    Sequence<PropertyValue> aRet;
+    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
+    if ( aEmbeddedDatabase.isValid() )
+    {
+        static ::rtl::OUString s_sEmbeddedDatabaseSettings(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabaseSettings"));
+        ::utl::OConfigurationNode aSettings = aEmbeddedDatabase.openNode(s_sEmbeddedDatabaseSettings);
+        if ( aSettings.isValid() )
+        {
+            Sequence< ::rtl::OUString > aNodeNames = aSettings.getNodeNames();
+            aRet.realloc(aNodeNames.getLength());
+            PropertyValue* pInfos = aRet.getArray();
 
+            for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
+                    pNodeNames >= aNodeNames.getConstArray();
+                    --pNodeNames, ++pInfos
+                )
+            {
+                ::utl::OConfigurationNode aItemSubNode = aSettings.openNode(*pNodeNames);
+                pInfos->Name = *pNodeNames;
+                pInfos->Value = aItemSubNode.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")));
+            }
+        }
+    }
+    return aRet;
+}
 //-------------------------------------------------------------------------
 sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(const String& _rDsn)
 {
