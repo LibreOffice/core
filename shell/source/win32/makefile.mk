@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 11:28:27 $
+#   last change: $Author: rt $ $Date: 2004-06-17 15:42:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 SLOFILES=$(SLO)$/SysShentry.obj\
          $(SLO)$/SysShExec.obj
 
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET).uno
 
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
