@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-04 15:48:26 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,9 +1015,12 @@ void ScXMLExport::WriteRowStartTag(const sal_Int32 nRow, const sal_Int32 nIndex,
     AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, *pRowStyles->GetStyleNameByIndex(nIndex));
     if (nFlag)
         if (nFlag & CR_HIDDEN)
-            AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
-        else
-            AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_FILTER);
+        {
+            if (nFlag & CR_FILTERED)
+                AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_FILTER);
+            else
+                AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
+        }
     if (nEqualRows > 1)
     {
         rtl::OUStringBuffer aBuf;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,8 @@ void ScXMLTableRowContext::EndElement()
                             if (pStyle)
                                 pStyle->FillPropertySet(xRowProperties);
                         }
-                        uno::Any aVisibleAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
-                        uno::Any aFilteredAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
+                        uno::Any aVisibleAny;
+                        uno::Any aFilteredAny;
                         sal_Bool bVisible (sal_True);
                         sal_Bool bFiltered (sal_False);
                         if (IsXMLToken(sVisibility, XML_COLLAPSE))
@@ -249,24 +249,6 @@ void ScXMLTableRowContext::EndElement()
                             bFiltered = sal_True;
                             aFilteredAny <<= bFiltered;
                         }
-                        /*else
-                        {
-                            sal_Bool bValue = sal_True;
-                            aVisibleAny <<= bValue;
-                            bValue = sal_False;
-                            aFilteredAny <<= bValue;
-                        }*/
-                        /*uno::Any aAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OPTIMALHEIGHT)));
-                        if (sOptimalHeight.compareToAscii(sXML_true) != 0)
-                        {
-                            sal_Bool bValue = sal_False;
-                            aAny <<= bValue;
-                        }
-                        else
-                        {
-                            sal_Bool bValue = sal_True;
-                            aAny <<= bValue;
-                        }*/
                         if (!bVisible)
                             xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), aVisibleAny);
                         if (bFiltered)

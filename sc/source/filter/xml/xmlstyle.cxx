@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-04 15:48:27 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,12 +399,12 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
             case CTF_SC_ROWOPTIMALHEIGHT:       pOptimalHeight = propertie; break;
         }
     }
-    if (pHeight && pOptimalHeight)
-        if ( ::cppu::any2bool( pOptimalHeight->maValue ) )
-        {
-            pHeight->mnIndex = -1;
-            pHeight->maValue.clear();
-        }
+    if ((pHeight && pOptimalHeight && ::cppu::any2bool( pOptimalHeight->maValue )) ||
+        (pHeight && !pOptimalHeight))
+    {
+        pHeight->mnIndex = -1;
+        pHeight->maValue.clear();
+    }
     if (pOptimalHeight)
     {
         pOptimalHeight->mnIndex = -1;
