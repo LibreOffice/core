@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:42:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart/XChartDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
@@ -96,6 +99,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_CLASSIDS_HXX
+#include <comphelper/classids.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -191,23 +197,23 @@
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
-
-#ifndef SC_XCLIMPCHARTS_HXX
-#include "XclImpCharts.hxx"
+#ifndef SC_XIPAGE_HXX
+#include "xipage.hxx"
 #endif
+#ifndef SC_XICHART_HXX
+#include "xichart.hxx"
+#endif
+
 #include "excform.hxx"
-
-#include <sot/clsids.hxx>
-
-#include <stdio.h>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::embed::XEmbeddedObject;
+using ::com::sun::star::embed::XEmbedPersist;
+using ::com::sun::star::chart::XChartDocument;
 using ::com::sun::star::script::ScriptEventDescriptor;
 
 // Escher stream consumer =====================================================
@@ -391,12 +397,16 @@ sal_uInt32 XclImpEscherObj::GetProgressSize() const
     return 1;
 }
 
-void XclImpEscherObj::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherObj::Apply( ScfProgressBar& rProgress )
 {
+    bool bInserted = false;
     if( IsValid() )
     {
         if( SdrPage* pPage = GetSdrPage( mnScTab ) )
+        {
             pPage->InsertObject( mxSdrObj.release() );
+            bInserted = true;
+        }
         // Trace if object is not printable.
         if( !GetPrintable() && !ISA( XclImpEscherTbxCtrl ) )
         {
@@ -408,6 +418,7 @@ void XclImpEscherObj::Apply( ScfProgressBar& rProgress )
         }
     }
     rProgress.Progress();
+    return bInserted;
 }
 
 // ----------------------------------------------------------------------------
@@ -420,13 +431,13 @@ XclImpEscherDrawing::XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaOb
     SetAreaObj( bAreaObj );
 }
 
-void XclImpEscherDrawing::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherDrawing::Apply( ScfProgressBar& rProgress )
 {
     // #119010# - allow for the possibility that valid connectors
     // may have no height or width set.
     if( !GetIsSkip() && GetSdrObj() && GetSdrObj()->ISA(SdrEdgeObj) && !IsValidSize() )
         SetAreaObj( false );
-    XclImpEscherObj::Apply( rProgress );
+    return XclImpEscherObj::Apply( rProgress );
 }
 
 // ----------------------------------------------------------------------------
@@ -499,72 +510,60 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
     }
 }
 
-void XclImpEscherTxo::SetSdrObj( SdrObject* pNewSdrObj )
-{
-    XclImpEscherDrawing::SetSdrObj( pNewSdrObj );
-}
-
 // ----------------------------------------------------------------------------
 
 TYPEINIT1( XclImpEscherNote, XclImpEscherTxo );
 
 XclImpEscherNote::XclImpEscherNote( XclImpEscherObj& rSrcObj ) :
     XclImpEscherTxo( rSrcObj ),
-    mnCol(0),
-    mnRow(0)
+    maScPos( ScAddress::UNINITIALIZED )
 {
 }
 
-void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherNote::Apply( ScfProgressBar& rProgress )
 {
-    if( IsValid() )
+    if( IsValid() && maScPos.IsValid() )
     {
-        ScPostIt aNote(GetDocPtr());
-        if(GetDoc().GetNote( GetCol(), GetRow(), mnScTab, aNote ))
+        ScPostIt aNote( GetDocPtr() );
+        if( GetDoc().GetNote( maScPos.Col(), maScPos.Row(), mnScTab, aNote ) )
         {
-            Rectangle aRect = maAnchorRect;
-            aNote.SetRectangle(aRect);
+            aNote.SetRectangle( maAnchorRect );
             SdrObject* pObj = mxSdrObj.get();
 
             // get the actual container from this group object.
-            if (pObj->IsGroupObject())
+            if( pObj->IsGroupObject() )
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
+                SdrObjListIter aIter( *pObj->GetSubList() );
                 pObj = aIter.Next();
             }
-            if(pObj)
+            if( pObj )
             {
-                SvxWritingModeItem aWriteMode(com::sun::star::text::WritingMode_LR_TB);
+                namespace csst = ::com::sun::star::text;
+                csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
                 switch( GetRotation() )
                 {
-                    case xlTxoNoRot:
-                        aWriteMode = com::sun::star::text::WritingMode_LR_TB ;
-                        break;
-                    case xlTxoRotStacked:
-                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
-                        break;
-                    case xlTxoRot90ccw:
-                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
-                        break;
-                    case xlTxoRot90cw:
-                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
-                        break;
+                    case xlTxoNoRot:        eWriteMode = csst::WritingMode_LR_TB;   break;
+                    case xlTxoRotStacked:   eWriteMode = csst::WritingMode_TB_RL;   break;
+                    case xlTxoRot90ccw:     eWriteMode = csst::WritingMode_TB_RL;   break;
+                    case xlTxoRot90cw:      eWriteMode = csst::WritingMode_TB_RL;   break;
                 }
-                pObj->SetMergedItem( SvxWritingModeItem(aWriteMode));
-                pObj->SetMergedItem(SdrTextAutoGrowWidthItem(false));
-                pObj->SetMergedItem(SdrTextAutoGrowHeightItem(false));
-                aNote.SetAndApplyItemSet(pObj->GetMergedItemSet());
+                pObj->SetMergedItem( SvxWritingModeItem( eWriteMode ) );
+                pObj->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
+                pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                aNote.SetAndApplyItemSet( pObj->GetMergedItemSet() );
             }
-            GetDoc().SetNote( GetCol(), GetRow(), mnScTab, aNote );
+            GetDoc().SetNote( maScPos.Col(), maScPos.Row(), mnScTab, aNote );
 
-            if(aNote.IsShown())
+            if( aNote.IsShown() )
             {
                 ScDetectiveFunc aDetFunc( GetDocPtr(), mnScTab );
-                aDetFunc.ShowComment( GetCol(), GetRow(), TRUE );
+                aDetFunc.ShowComment( maScPos.Col(), maScPos.Row(), TRUE );
             }
         }
     }
     rProgress.Progress();
+    // notes are not inserted into the drawing layer -> return false
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -726,9 +725,9 @@ OUString XclImpEscherTbxCtrl::GetServiceName() const
     return XclTbxControlHelper::GetServiceName( mnCtrlType );
 }
 
-void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
+void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 {
-    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
+    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), GetPrintable() );
 
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
@@ -738,14 +737,14 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 
     OUString aName = XclTbxControlHelper::GetControlName( mnCtrlType );
     if( aName.getLength() )
-        ::setPropValue( rxPropSet, CREATE_OUSTRING( "Name" ), aName );
+        rPropSet.SetProperty( CREATE_OUSTRING( "Name" ), aName );
 
     // control label ----------------------------------------------------------
 
     if( const XclImpString* pString = GetString() )
     {
         // the visible label (caption)
-        ::setPropString( rxPropSet, CREATE_OUSTRING( "Label" ), pString->GetText() );
+        rPropSet.SetStringProperty( CREATE_OUSTRING( "Label" ), pString->GetText() );
 
         // font properties
         if( !pString->GetFormats().empty() )
@@ -754,17 +753,16 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             if( const XclImpFont* pFont = GetFontBuffer().GetFont( rFormatRun.mnXclFont ) )
             {
                 const XclFontData& rFontData = pFont->GetFontData();
-                ::setPropString( rxPropSet, CREATE_OUSTRING( "FontName" ), rFontData.maName );
+                rPropSet.SetStringProperty( CREATE_OUSTRING( "FontName" ), rFontData.maName );
                 sal_Int16 nHeight = static_cast< sal_Int16 >( rFontData.GetApiHeight() + 0.5 );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontHeight" ), nHeight );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontFamily" ), rFontData.GetApiFamily() );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontCharset" ), rFontData.GetApiCharSet() );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontWeight" ), rFontData.GetApiWeight() );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontSlant" ), rFontData.GetApiPosture() );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontUnderline" ), rFontData.GetApiUnderline() );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontStrikeout" ), rFontData.GetApiStrikeout() );
-                sal_Int32 nColor = static_cast< sal_Int32 >( GetPalette().GetColorData( rFontData.mnColor ) );
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "TextColor" ), nColor );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontHeight" ), nHeight );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontFamily" ), rFontData.GetApiFamily() );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontCharset" ), rFontData.GetApiCharSet() );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontWeight" ), rFontData.GetApiWeight() );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontSlant" ), rFontData.GetApiPosture() );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontUnderline" ), rFontData.GetApiUnderline() );
+                rPropSet.SetProperty( CREATE_OUSTRING( "FontStrikeout" ), rFontData.GetApiStrikeout() );
+                rPropSet.SetColorProperty( CREATE_OUSTRING( "TextColor" ), GetPalette().GetColor( rFontData.mnColor ) );
             }
         }
     }
@@ -788,14 +786,14 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
                 case EXC_OBJ_CBLS_STATE_TRI:        nApiState = bCheckBox ? 2 : 1;  break;
             }
             if( bCheckBox )
-                ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultState" ), nApiState );
+                rPropSet.SetBoolProperty( CREATE_OUSTRING( "TriState" ), nApiState == 2 );
+            rPropSet.SetProperty( CREATE_OUSTRING( "DefaultState" ), nApiState );
 
             sal_Int16 nApiBorder = mbFlatButton ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
+            rPropSet.SetProperty( CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
 
             // #i40279# always centered vertically
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VerticalAlign" ), VerticalAlignment_MIDDLE );
+            rPropSet.SetProperty( CREATE_OUSTRING( "VerticalAlign" ), VerticalAlignment_MIDDLE );
         }
         break;
 
@@ -805,7 +803,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         case EXC_OBJ_CMO_COMBOBOX:
         {
             sal_Int16 nApiBorder = mbFlatBorder ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), nApiBorder );
+            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), nApiBorder );
 
             Sequence< sal_Int16 > aSelection;
 
@@ -815,7 +813,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
                 {
                     // selection type
                     bool bMultiSel = (mnSelType != EXC_OBJ_LBS_SEL_SIMPLE);
-                    ::setPropBool( rxPropSet, CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
+                    rPropSet.SetBoolProperty( CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
 
                     // selection
                     if( bMultiSel )
@@ -837,9 +835,9 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
                 case EXC_OBJ_CMO_COMBOBOX:
                 {
                     // dropdown button
-                    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Dropdown" ), true );
+                    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Dropdown" ), true );
                     // dropdown line count
-                    ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineCount" ), mnLineCount );
+                    rPropSet.SetProperty( CREATE_OUSTRING( "LineCount" ), mnLineCount );
                     // selection
                     if( mnSelEntry > 0 )
                     {
@@ -851,7 +849,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             }
 
             if( !GetCellLink() && aSelection.getLength() )
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSelection" ), aSelection );
+                rPropSet.SetProperty( CREATE_OUSTRING( "DefaultSelection" ), aSelection );
         }
         break;
 
@@ -860,13 +858,13 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         case EXC_OBJ_CMO_SPIN:
         {
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
+            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMin" ), mnScrollMin );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinValueMax" ), mnScrollMax );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "SpinIncrement" ), mnScrollStep );
             // Excel spin buttons always vertical
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Orientation" ), AwtScrollOrient::VERTICAL );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSpinValue" ), static_cast< sal_Int32 >( mnScrollValue ) );
+            rPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), AwtScrollOrient::VERTICAL );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultSpinValue" ), mnScrollValue );
         }
         break;
 
@@ -878,14 +876,14 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             sal_Int32 nVisSize = std::min< sal_Int32 >( mnScrollPage, 1 );
 
             // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "BlockIncrement" ), static_cast< sal_Int32 >( mnScrollPage ) );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VisibleSize" ), nVisSize );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Orientation" ), nApiOrient );
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultScrollValue" ), static_cast< sal_Int32 >( mnScrollValue ) );
+            rPropSet.SetProperty( CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMin" ), mnScrollMin );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "ScrollValueMax" ), mnScrollMax );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "LineIncrement" ), mnScrollStep );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "BlockIncrement" ), mnScrollPage );
+            rPropSet.SetProperty( CREATE_OUSTRING( "VisibleSize" ), nVisSize );
+            rPropSet.SetProperty( CREATE_OUSTRING( "Orientation" ), nApiOrient );
+            rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "DefaultScrollValue" ), mnScrollValue );
         }
         break;
     }
@@ -909,8 +907,9 @@ bool XclImpEscherTbxCtrl::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) c
     return false;
 }
 
-void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
 {
+    bool bInserted = false;
     // do not use IsValid() - the SdrObject is still missing
     if( !GetIsSkip() && IsValidSize() )
     {
@@ -921,16 +920,19 @@ void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
             // #i30543# insert into control layer
             mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
             // insert the SdrObj into the draw page
-            XclImpEscherObj::Apply( rProgress );
+            bInserted = XclImpEscherObj::Apply( rProgress );
         }
         else
         {
             // no success to create a control -> create a text box
-            XclImpEscherTxo::Apply( rProgress );
+            bInserted = XclImpEscherTxo::Apply( rProgress );
         }
     }
     else
+    {
         rProgress.Progress();   // invalid objects are included in progress bar
+    }
+    return bInserted;
 }
 
 // ----------------------------------------------------------------------------
@@ -1069,17 +1071,15 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
     }
 }
 
-void XclImpEscherOle::SetProperties( Reference< XPropertySet >& rxPropSet ) const
+void XclImpEscherOle::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 {
-    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
+    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), GetPrintable() );
     // #118053 set control name
-    if ( msName.getLength() > 0 )
-    {
-        setPropValue( rxPropSet, CREATE_OUSTRING( "Name" ), msName );
-    }
+    if( maName.getLength() > 0 )
+        rPropSet.SetProperty( CREATE_OUSTRING( "Name" ), maName );
 }
 
-void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherOle::Apply( ScfProgressBar& rProgress )
 {
     // do not use IsValid() - the SdrObject is still missing
     if( !GetIsSkip() && IsValidSize() && GetObjectManager().CreateSdrObj( *this ) )
@@ -1108,157 +1108,133 @@ void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
             mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
         }
     }
-    XclImpEscherObj::Apply( rProgress );
+    return XclImpEscherObj::Apply( rProgress );
 }
 
 // ----------------------------------------------------------------------------
 
 TYPEINIT1( XclImpEscherChart, XclImpEscherObj );
 
-XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj ) :
-    XclImpEscherObj( rSrcObj )
+XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj, bool bOwnTab ) :
+    XclImpEscherObj( rSrcObj ),
+    mbOwnTab( bOwnTab )
 {
     SetAreaObj( true );
-    mxChart.reset( new XclImpChart( GetOldRoot() ) );
-    mxChart->nBaseTab = static_cast< sal_uInt16 >( GetScTab() );
 }
 
-void XclImpEscherChart::SetChartData( XclImpChart* pChart )
+void XclImpEscherChart::ReadChartSubStream( XclImpStream& rStrm )
 {
-    mxChart.reset( pChart );
+    DBG_ASSERT( rStrm.GetRecId() == EXC_ID5_BOF, "XclImpEscherChart::ReadChartSubStream - no BOF record found" );
+    if( rStrm.GetRecId() == EXC_ID5_BOF )
+    {
+        mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
+        mxChart->ReadChartSubStream( rStrm );
+        if( mbOwnTab )
+            SetTabChartAnchor();
+    }
 }
 
 sal_uInt32 XclImpEscherChart::GetProgressSize() const
 {
-    return mxChart.get() ? mxChart->GetProgressSize() : 0;
+    return mxChart.is() ? mxChart->GetProgressSize() : 0;
 }
 
-void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
+bool XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 {
     // do not use IsValid() - the SdrObject is still missing
-    if( !mxChart.get() || GetIsSkip() || !IsValidSize() )
-        return;
+    if( !mxChart || GetIsSkip() || !IsValidSize() )
+        return false;
 
-    const XclImpChart_LinkedData* pLinkData = mxChart->GetSourceData();
-    if( !pLinkData ) return;
-
-    mxChart->CloseSourceData();
-
-    if(GetTracer().IsEnabled())
-    {
-        // Trace unsupported chart types.
-        if(mxChart->GetChartType() == ctUnknown)
-            GetTracer().TraceChartUnKnownType();
-
-        // Trace if chart range is not symmetrical.
-        if(!pLinkData->GetValidChartRange())
-            GetTracer().TraceChartRange();
-
-        // Trace if the axis intervals are automatically generated. In this
-        // case we may not get the same result. Ignore charts with no axis.
-        if(mxChart->GetChartType() != ctUnknown &&
-            mxChart->GetChartType() != ctPie &&
-              mxChart->GetChartType() != ctDonut)
-        {
-            if(const XclImpChart_ValueRange* pPrimaryAxis = mxChart->GetPrimaryAxisValueRange())
-            {
-                if(pPrimaryAxis->bAutoMin && pPrimaryAxis->bAutoMax &&
-                  pPrimaryAxis->bAutoMinor && pPrimaryAxis->bAutoMajor)
-                    GetTracer().TraceChartAxisAuto();
-            }
-        }
-
-        // Trace if chart object is not printable.
-        if(!GetPrintable())
-            GetTracer().TraceObjectNotPrintable();
-    }
+    // Trace if chart object is not printable.
+    if( !GetPrintable() )
+        GetTracer().TraceObjectNotPrintable();
 
     SfxObjectShell* pDocShell = GetDocShell();
-    if( !pDocShell ) return;
+    if( !pDocShell ) return false;
 
-    ::rtl::OUString aName;
+    bool bInserted = false;
     if( SvtModuleOptions().IsChart() )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = pDocShell->GetEmbeddedObjectContainer().
+        OUString aName;
+        Reference< XEmbeddedObject > xObj = pDocShell->GetEmbeddedObjectContainer().
                 CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
 
-        //TODO/LATER: hacking?!
-        /*
-        BOOL bEnabled = xIPObj->IsEnableSetModified();
-        if( bEnabled )
-            xIPObj->EnableSetModified( FALSE );
-        */
-
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-        Size aSize( aSz.Width, aSz.Height );
+        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+        ::com::sun::star::awt::Size aAwtSize = xObj->getVisualAreaSize( nAspect );
+        Size aSize( aAwtSize.Width, aAwtSize.Height );
         if( (aSize.Height() < 1) || (aSize.Width() < 1) )
         {
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             aSize.Width() = aSize.Height() = 5000;
             aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aUnit ) );
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aSz );
+            aAwtSize.Width = aSize.Width();
+            aAwtSize.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aAwtSize );
         }
 
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, maAnchorRect );
         pSdrObj->NbcSetLayer( SC_LAYER_FRONT );
-        if( SdrPage* pPage = GetSdrPage( mxChart->nBaseTab ) )
+        if( SdrPage* pPage = GetSdrPage( GetScTab() ) )
+        {
             pPage->InsertObject( pSdrObj );
+            bInserted = true;
+        }
         pSdrObj->NbcSetLogicRect( maAnchorRect );
 
-        ScChartArray aChartObj( GetDocPtr(), pLinkData->GetRangeList(), aName );
-
-        bool bSwap = pLinkData && pLinkData->GetDir();
-        bool bColHdr = bSwap ? mxChart->bHasSeriesNames : mxChart->bHasCategoryNames;
-        bool bRowHdr = bSwap ? mxChart->bHasCategoryNames : mxChart->bHasSeriesNames;
-        aChartObj.SetHeaders( bColHdr, bRowHdr );
+        // create the chart array (core representation of source data)
+        ScChartArray aChartObj( GetDocPtr(), mxChart->GetSourceData(), aName );
+        aChartObj.SetHeaders( mxChart->HasHeaderRow(), mxChart->HasHeaderColumn() );
 
         SchMemChart* pMemChart = aChartObj.CreateMemChart();
         SchDLL::Update( xObj, pMemChart );
         pSdrObj->GetNewReplacement();
         delete pMemChart;
 
-        if ( svt::EmbeddedObjectRef::TryRunningState(xObj) )
+        if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
-            Reference< XComponent > xComp( xObj->getComponent(), uno::UNO_QUERY );
-            if( xComp.is() )
-                mxChart->Apply( xComp, maAnchorRect, rProgress );
+            Reference< XChartDocument > xChartDoc( xObj->getComponent(), UNO_QUERY );
+            mxChart->Convert( xChartDoc, rProgress );
 
-            //TODO/LATER: hacking?!
-            //if( bEnabled )
-            //    xIPObj->EnableSetModified( TRUE );
-            //xIPObj->SetModified();
-
-            uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
-            if ( xPers.is() )
+            Reference< XEmbedPersist > xPers( xObj, UNO_QUERY );
+            if( xPers.is() )
                 xPers->storeOwn();
         }
     }
+    return bInserted;
+}
+
+void XclImpEscherChart::SetTabChartAnchor()
+{
+    // set uninitialized page to landscape
+    if ( !GetPageSettings().GetPageData().mbValid )
+        GetPageSettings().SetPaperSize( EXC_PAPERSIZE_DEFAULT, false );
+
+    // calculate size of the chart object
+    const XclPageData& rPageData = GetPageSettings().GetPageData();
+    Size aPaperSize( rPageData.GetScPaperSize( GetPrinter() ) );
+
+    long nWidth = XclTools::GetHmmFromTwips( aPaperSize.Width() );
+    long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
+
+    // subtract page margins, give 1cm extra space
+    nWidth -= (XclTools::GetHmmFromInch( rPageData.mfLeftMargin + rPageData.mfRightMargin ) + 1000);
+    nHeight -= (XclTools::GetHmmFromInch( rPageData.mfTopMargin + rPageData.mfBottomMargin ) + 1000);
+
+    // print column/row headers?
+    if( rPageData.mbPrintHeadings )
+    {
+        nWidth -= 2000;
+        nHeight -= 1000;
+    }
+
+    SetAnchor( Rectangle( 500, 500, nWidth, nHeight ) );
 }
 
 // Escher object data =========================================================
 
-XclImpEscherAnchor::XclImpEscherAnchor( SCTAB nScTab )
-{
-    memset( this, 0, sizeof( XclImpEscherAnchor ) );
-    mnScTab = nScTab;
-}
-
-SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor )
-{
-    return rStrm
-        >> rAnchor.mnLCol >> rAnchor.mnLX
-        >> rAnchor.mnTRow >> rAnchor.mnTY
-        >> rAnchor.mnRCol >> rAnchor.mnRX
-        >> rAnchor.mnBRow >> rAnchor.mnBY;
-}
-
-// ----------------------------------------------------------------------------
-
 XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
-    maAnchor( 0 )
+    maAnchor( 0 ),
+    mbInserted( false )
 {
     SetObj( pEscherObj );
 }
@@ -1274,7 +1250,40 @@ bool XclImpObjData::ContainsStrmPos( ULONG nStrmPos ) const
     return mxEscherObj.get() && (mxEscherObj->GetStrmBegin() <= nStrmPos) && (nStrmPos < mxEscherObj->GetStrmEnd());
 }
 
+sal_uInt32 XclImpObjData::GetProgressSize() const
+{
+    return mxEscherObj.get() ? mxEscherObj->GetProgressSize() : 0;
+}
+
+void XclImpObjData::Apply( ScfProgressBar& rProgress )
+{
+    mbInserted = mxEscherObj.get() && mxEscherObj->Apply( rProgress );
+}
+
+void XclImpObjData::ExtendUsedArea( const XclImpRoot& rRoot, ScRange& rScUsedArea, SCTAB nScTab ) const
+{
+    if( mbInserted && mxEscherObj.get() && (mxEscherObj->GetScTab() == nScTab) )
+    {
+        // #i44077# object inserted -> update used area for OLE object import
+        ScRange aScRange( ScAddress::UNINITIALIZED );
+        if( rRoot.GetAddressConverter().ConvertRange( aScRange, maAnchor.maXclRange, nScTab, nScTab, false ) )
+        {
+            // reduce range, if object ends directly on borders between two columns or rows
+            if( (maAnchor.mnRX == 0) && (aScRange.aStart.Col() < aScRange.aEnd.Col()) )
+                aScRange.aEnd.IncCol( -1 );
+            if( (maAnchor.mnBY == 0) && (aScRange.aStart.Row() < aScRange.aEnd.Row()) )
+                aScRange.aEnd.IncRow( -1 );
+            rScUsedArea.ExtendTo( aScRange );
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
+
+XclImpEscherObjList::XclImpEscherObjList( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
 
 void XclImpEscherObjList::AppendObj( XclImpEscherObj* pEscherObj )
 {
@@ -1349,15 +1358,19 @@ void XclImpEscherObjList::Apply( ScfProgressBar& rProgress )
     // initialize progress bar
     sal_uInt32 nSegSize = 0;
     for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        if( const XclImpEscherObj* pEscherObj = pData->GetObj() )
-            nSegSize += pEscherObj->GetProgressSize();
+        nSegSize += pData->GetProgressSize();
 
     // insert the objects into the drawing layer
     sal_Int32 nSeg = rProgress.AddSegment( std::max< sal_uInt32 >( nSegSize, 1 ) );
     rProgress.ActivateSegment( nSeg );
     for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        if( XclImpEscherObj* pEscherObj = pData->GetObj() )
-            pEscherObj->Apply( rProgress );
+        pData->Apply( rProgress );
+}
+
+void XclImpEscherObjList::ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const
+{
+    for( const XclImpObjData* pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
+        pData->ExtendUsedArea( GetRoot(), rScUsedArea, nScTab );
 }
 
 void XclImpEscherObjList::UpdateCache()
@@ -1490,27 +1503,24 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& r
 SdrObject* XclImpDffManager::ProcessObj(
     SvStream& rStrm, DffObjData& rObjData, void*, Rectangle& rTextRect, SdrObject* pRetSdrObj )
 {
-
     // #118052# import control name
-    sal_uInt32 cNameLen = GetPropertyValue( DFF_Prop_wzName );
-
-    if ( cNameLen )
+    XclImpEscherObj* pObj = mrObjManager.GetEscherObjAcc( rObjData.rSpHd.nFilePos );
+    if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, pObj ) )
     {
-        SeekToContent( DFF_Prop_wzName,
-             mrObjManager.GetEscherStream() );
-        sal_Int32 strLen =  cNameLen / 2;
-        OUStringBuffer buf( strLen );
-        sal_uInt16 ch = 0;
-        for ( sal_Int32 i=0; i<strLen; i++ )
+        sal_uInt32 nNameLen = GetPropertyValue( DFF_Prop_wzName );
+        if( nNameLen > 0 )
         {
-            mrObjManager.GetEscherStream() >> ch;
-            buf.append( static_cast< sal_Unicode >( ch ) );
-        }
-        OUString sCName = buf.makeStringAndClear();
-        if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle,
-            mrObjManager.GetEscherObjAcc( rObjData.rSpHd.nFilePos ) ) )
-        {
-            pOleObj->SetName( sCName );
+            SeekToContent( DFF_Prop_wzName, mrObjManager.GetEscherStream() );
+            sal_Int32 nStrLen = nNameLen / 2;
+            OUStringBuffer aNameBfr( nStrLen );
+            sal_uInt16 cChar = 0;
+            for( sal_Int32 nIdx = 0; nIdx < nStrLen; ++nIdx )
+            {
+                mrObjManager.GetEscherStream() >> cChar;
+                aNameBfr.append( static_cast< sal_Unicode >( cChar ) );
+            }
+            OUString aName( aNameBfr.makeStringAndClear() );
+            pOleObj->SetName( aName );
         }
     }
 
@@ -1583,6 +1593,7 @@ sal_Bool XclImpDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
 
 XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
+    maEscherObjList( rRoot ),
     mbStartWithDummy( true )
 {
 }
@@ -1652,68 +1663,10 @@ const XclImpEscherNote* XclImpObjectManager::GetEscherNote( SCTAB nScTab, sal_uI
 
 // *** Chart *** --------------------------------------------------------------
 
-bool XclImpObjectManager::IsCurrObjChart() const
-{
-    return PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) != 0;
-}
-
-XclImpChart* XclImpObjectManager::GetCurrChartData()
-{
-    if( XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) )
-        return pChartObj->GetChartData();
-    return 0;
-}
-
-XclImpChart* XclImpObjectManager::ReplaceChartData( XclImpStream& rStrm, XclChartType eNewType )
-{
-    XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() );
-    XclImpChart* pChart = pChartObj ? pChartObj->GetChartData() : 0;
-
-    DBG_ASSERT( pChart, "XclImpObjectManager::ReplaceChartData - no chart data found" );
-    if( !pChart )
-        return 0;
-
-    // #92909# create line chart if no X values present
-    // #94149# of course only for XY charts!
-    if( (eNewType == ctScatter) && !pChart->HasXValues() )
-        eNewType = ctLine;
-
-    XclImpChart* pNewChart = 0;
-    switch( eNewType )
-    {
-        case ctLine:
-        case ctArea:
-            pNewChart = new XclImpChartLine( *pChart, rStrm, eNewType == ctArea );
-        break;
-        case ctBar:
-            pNewChart = new XclImpChartBar( *pChart, rStrm );
-        break;
-        case ctPie:
-            pNewChart = new XclImpChartPie( *pChart, rStrm );
-        break;
-        case ctNet:
-        case ctNetArea:
-            pNewChart = new XclImpChartRadar( *pChart );
-        break;
-        case ctScatter:
-            pNewChart = new XclImpChartScatter( *pChart, rStrm );
-        break;
-        case ctSurface:
-            pNewChart = new XclImpChartSurface( *pChart );
-        break;
-        default:
-            DBG_ERROR( "XclImpObjectManager::ReplaceChartData - unknown chart type" );
-            return pChart;
-    }
-
-    pChartObj->SetChartData( pNewChart );
-    return pNewChart;
-}
-
 void XclImpObjectManager::StartNewChartObj()
 {
     XclImpEscherObj aTmp( GetRoot() );
-    AppendEscherObj( new XclImpEscherChart( aTmp ) );
+    AppendEscherObj( new XclImpEscherChart( aTmp, true ) );
 }
 
 // *** OLE / controls *** -----------------------------------------------------
@@ -1886,6 +1839,14 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
     }
 }
 
+void XclImpObjectManager::ReadChartSubStream( XclImpStream& rStrm )
+{
+    if( XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) )
+        pChartObj->ReadChartSubStream( rStrm );
+    else
+        XclTools::SkipSubStream( rStrm );
+}
+
 // *** Misc *** ---------------------------------------------------------------
 
 XclImpDffManager& XclImpObjectManager::GetDffManager()
@@ -1941,6 +1902,11 @@ void XclImpObjectManager::Apply( ScfProgressBar& rProgress )
     // connector rules
     if( mxSolverContainer.get() )
         GetDffManager().SolveSolver( *mxSolverContainer );
+}
+
+void XclImpObjectManager::ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const
+{
+    maEscherObjList.ExtendUsedArea( rScUsedArea, nScTab );
 }
 
 // private --------------------------------------------------------------------
@@ -2006,7 +1972,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
             ReplaceEscherObj( new XclImpEscherOle( *pEscherObj ) );
         break;
         case EXC_OBJ_CMO_CHART:
-            ReplaceEscherObj( new XclImpEscherChart( *pEscherObj ) );
+            ReplaceEscherObj( new XclImpEscherChart( *pEscherObj, false ) );
         break;
         case EXC_OBJ_CMO_EDIT:          // only in dialogs
         case EXC_OBJ_CMO_DIALOG:        // not supported
