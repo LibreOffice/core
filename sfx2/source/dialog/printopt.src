@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-18 14:17:47 $
+ *  last change: $Author: ka $ $Date: 2001-05-22 08:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,9 +411,9 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 18, 85 ) ;
         Size = MAP_APPFONT ( 236, 10 ) ;
-        Text = "~Gute Druckqualität" ;
-        Text [ ENGLISH ] = "~Good quality" ;
-        Text[ english_us ] = "~Good print quality";
+        Text = "Gute Druck~qualität" ;
+        Text [ ENGLISH ] = "Good ~quality" ;
+        Text[ english_us ] = "Good print ~quality";
         Text[ portuguese ] = "~Boa qualidade de impressão";
         Text[ russian ] = "~Õîðîøåå êà÷åñòâî ïå÷àòè";
         Text[ greek ] = "~Good quality";
