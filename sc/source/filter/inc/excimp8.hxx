@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:53:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,6 @@
 #include "ftools.hxx"
 #endif
 
-#ifndef SC_XCLIMPPIVOTTABLES_HXX
-#include "XclImpPivotTables.hxx"
-#endif
-
 class SvStorage;
 
 class ScBaseCell;
@@ -110,10 +106,6 @@ class ImportExcel8 : public ImportExcel
     protected:
         ExcScenarioList         aScenList;
 
-        XclImpPivotTableList    aPivotTabList;
-        XclImpPivotTable*       pCurrPivTab;
-        XclImpPivotCache*       pCurrPivotCache;
-
         BOOL                    bObjSection;
 
         BOOL                    bHasBasic;
@@ -127,7 +119,6 @@ class ImportExcel8 : public ImportExcel
         void                    Note( void );                   // 0x1C
         void                    WinProtection(  void );         // 0x19
         void                    Cont( void );                   // 0x3C
-        void                    Dconref( void );                // 0x51
         void                    Obj( void );                    // 0x5D
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B
@@ -135,26 +126,12 @@ class ImportExcel8 : public ImportExcel
         void                    AutoFilter( void );             // 0x9E
         void                    Scenman( void );                // 0xAE
         void                    Scenario( void );               // 0xAF
-        void                    SXView( void );                 // 0xB0
-        void                    SXVd( void );                   // 0xB1
-        void                    SXVi( void );                   // 0xB2
-        void                    SXIvd( void );                  // 0xB4
-        void                    SXLi( void );                   // 0xB5
-        void                    SXPi( void );                   // 0xB6
-        void                    SXDi( void );                   // 0xC5
-        void                    SXIdStm( void );                // 0xD5
-        void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
         void                    Msodrawinggroup( void );        // 0xEB
         void                    Msodrawing( void );             // 0xEC
         void                    Msodrawingselection( void );    // 0xED
-        void                    SXRule( void );                 // 0xF0
-        void                    SXEx( void );                   // 0xF1
-        void                    SXFilt( void );                 // 0xF2
-        void                    SXSelect( void );               // 0xF7
         void                    Labelsst( void );               // 0xFD
         void                    Rstring( void );                // 0xD6
-        void                    SXVdex( void );                 // 0x0100
         void                    Label( void );                  // 0x0204
 
         void                    Txo( void );                    // 0x01B6
