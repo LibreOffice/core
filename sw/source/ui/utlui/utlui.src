@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 22:01:25 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 23:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1746,4 +1746,5 @@ String STR_HYPH_TITLE
     Text[ catalan ] = "Separación silábica";
     Text[ finnish ] = "Tavutus";
 };
+
 
