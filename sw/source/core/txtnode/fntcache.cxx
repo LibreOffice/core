@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 07:43:41 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 09:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,18 +989,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 // Kashida Justification
                 if ( SW_CTL == nActual && nSpaceAdd )
                 {
-                    LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
-
-                    // Oh my god!!!
-                    if ( LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
-                         LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
-                         LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
-                         LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
-                         LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
-                         LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
-                         LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
-                         LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
-                         LANGUAGE_ARABIC_QATAR == aLang )
+                    if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
+                                                         GetLanguage( SW_CTL ) ) )
                     {
                         if ( pSI && pSI->CountKashida() )
                             pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
@@ -1204,18 +1194,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             // Kashida Justification
             if ( SW_CTL == nActual && nSpaceAdd )
             {
-                LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
-
-                // Oh my god!!!
-                if ( LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
-                    LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
-                    LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
-                    LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
-                    LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
-                    LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
-                    LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
-                    LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
-                    LANGUAGE_ARABIC_QATAR == aLang )
+                if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
+                                                        GetLanguage( SW_CTL ) ) )
                 {
                     if ( pSI && pSI->CountKashida() )
                         pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(),
@@ -1880,18 +1860,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         // Kashida Justification
         if ( SW_CTL == nActual && rInf.GetSpace() )
         {
-            LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
-
-            // Oh my god!!!
-            if ( LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
-                 LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
-                 LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
-                 LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
-                 LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
-                 LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
-                 LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
-                 LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
-                 LANGUAGE_ARABIC_QATAR == aLang )
+            if ( SwScriptInfo::IsArabicLanguage( rInf.GetFont()->
+                                                    GetLanguage( SW_CTL ) ) )
             {
                 if ( pSI && pSI->CountKashida() )
                     pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),

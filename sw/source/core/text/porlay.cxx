@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-06 15:03:50 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 09:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,6 +1358,23 @@ USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
     }
 
     return 0;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::IsArabicLanguage()
+ *************************************************************************/
+
+sal_Bool SwScriptInfo::IsArabicLanguage( LanguageType aLang )
+{
+    return LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
+           LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
+           LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
+           LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
+           LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
+           LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
+           LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
+           LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
+           LANGUAGE_ARABIC_QATAR == aLang;
 }
 
 #endif

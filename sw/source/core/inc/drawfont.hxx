@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 07:45:53 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 09:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,16 @@ public:
     USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
                            USHORT nSpace = 0 ) const;
+
+/** Checks if language is one of the 16 Arabic languages
+
+    @descr  Checks if language is one of the 16 Arabic languages
+    @param  aLang
+                The language which has to be checked.
+    @return Returns if the language is an Arabic language
+*/
+    static BOOL IsArabicLanguage( LanguageType aLang );
+
 #endif
 
 /** Performes a thai justification on the kerning array
