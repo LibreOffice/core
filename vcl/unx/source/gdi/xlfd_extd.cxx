@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:34:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
     return nRangeCount;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void
 ExtendedXlfd::Dump() const
 {
@@ -1157,7 +1157,7 @@ XlfdStorage::Add( const XlfdStorage* pXlfd )
     }
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void
 XlfdStorage::Dump() const
 {
