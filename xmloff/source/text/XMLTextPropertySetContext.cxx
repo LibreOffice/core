@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
 #include "XMLTextPropertySetContext.hxx"
 #endif
+#ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
+#include "XMLTextColumnsContext.hxx"
+#endif
 
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include "txtprmap.hxx"
@@ -112,6 +115,11 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
     case CTF_TABSTOP:
         pContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix,
                                                    rLocalName, rProp,
+                                                   rProperties );
+        break;
+    case CTF_TEXTCOLUMNS:
+        pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
+                                                   rLocalName, xAttrList, rProp,
                                                    rProperties );
         break;
     case CTF_DROPCAPFORMAT:
