@@ -1615,3 +1615,11 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ?iquery@?$Reference@VXRow@sdbc@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ??ASvStorageInfoList@@QBEAAVSvStorageInfo@@K@Z
 ??YString@@QAEAAV0@D@Z
+??0?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4UnoReference_Query@1234@@Z
+??0?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??4?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
+??C?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QBAPAVXSeekable@io@234@XZ
+??_2uno@star@sun@com@@YAEABVAny@0123@AA_J@Z
+?iquery@?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@CAPAVXSeekable@io@345@PAVXInterface@2345@@Z
+?set@?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAAEPAVXSeekable@io@345@@Z
