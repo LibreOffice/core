@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-24 07:53:46 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
 #endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
@@ -266,6 +269,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 #ifndef _SHELLS_HRC
@@ -954,20 +960,38 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
     SwWrtShell &rSh = GetShell();
     String aChars( rChars );
 
-    SfxItemSet aSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+    SfxItemSet aSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
+                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
+                                0 );
     rSh.GetAttr( aSet );
-    SvxFontItem aFont( (SvxFontItem &) aSet.Get( RES_CHRATR_FONT ));
+    USHORT nScript = rSh.GetScriptType();
+
+    SvxFontItem aFont;
+    {
+        SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
+        aSetItem.GetItemSet().Put( aSet, FALSE );
+        const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
+        if( pI )
+            aFont = *(SvxFontItem*)pI;
+        else
+            aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
+                        RES_CHRATR_FONT,
+                        GetScriptTypeOfLanguage( GetAppLanguage() ) ));
+    }
+
     Font aNewFont(rFontName, Size(1,1)); // Size nur wg. CTOR
 
     if( !rChars.Len() )
     {
         // Eingestellten Font als Default
-        SvxCharacterMap* pDlg = new SvxCharacterMap(&GetView().GetViewFrame()->GetWindow(), FALSE);
+        SvxCharacterMap* pDlg = new SvxCharacterMap(
+                            &GetView().GetViewFrame()->GetWindow(), FALSE );
 
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
-        if(!rFontName.Len() && sSymbolFont.Len())
+        if( !rFontName.Len() && sSymbolFont.Len() )
             aDlgFont.SetName(sSymbolFont);
         else
             aDlgFont.SetName( aFont.GetFamilyName() );
@@ -995,7 +1019,16 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
             rSh.DelRight();
             aSet.ClearItem();
             rSh.GetAttr( aSet );
-            aFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
+
+            SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
+            aSetItem.GetItemSet().Put( aSet, FALSE );
+            const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
+            if( pI )
+                aFont = *(SvxFontItem*)pI;
+            else
+                aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
+                            RES_CHRATR_FONT,
+                            GetScriptTypeOfLanguage( GetAppLanguage() ) ));
         }
 
         // Zeichen einfuegen
@@ -1009,7 +1042,14 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
             aNewFontItem.GetFamily()     = aNewFont.GetFamily();
             aNewFontItem.GetPitch()      = aNewFont.GetPitch();
             aNewFontItem.GetCharSet()    = aNewFont.GetCharSet();
-            aSet.Put(aNewFontItem);
+
+            nScript = pBreakIt->GetAllScriptsOfText( aChars );
+            if( SCRIPTTYPE_LATIN & nScript )
+                aSet.Put( aNewFontItem, RES_CHRATR_FONT);
+            if( SCRIPTTYPE_ASIAN & nScript )
+                aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
+            if( SCRIPTTYPE_COMPLEX & nScript )
+                aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );
 
             rSh.SetMark();
             rSh.ExtendSelection( FALSE, aChars.Len() );
@@ -1029,6 +1069,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/07/24 07:53:46  os
+    #90122# ruby dialog registered at the thext shell instead of the view
+
     Revision 1.7  2001/05/15 09:59:40  os
     #86986# SfxFileDialog/SvxImportGraphicDialog removed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 14:22:55 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -649,56 +652,61 @@ void SwDrawTextShell::InsertSymbol()
     // pDlg->SetChar( );
     USHORT nResult = pDlg->Execute();
 
-    //char c;
-    String s;
+    String sSym;
 
     Font aFont;
 
     if( nResult == RET_OK )
     {
         aFont = pDlg->GetCharFont();
-        s     = pDlg->GetCharacters();
+        sSym  = pDlg->GetCharacters();
     }
     delete( pDlg );
 
-    if( nResult == RET_OK )
+    if( sSym.Len() && pOLV )
     {
-        // Sonderzeichen einfuegen
-        if (pOLV)
-        {
-            // nicht flackern
-            pOLV->HideCursor();
-            pOutliner->SetUpdateMode(FALSE);
+        // nicht flackern
+        pOLV->HideCursor();
+        pOutliner->SetUpdateMode(FALSE);
 
-            SfxItemSet aOldSet(pOLV->GetAttribs());
-            SvxFontItem aOldFontItem((const SvxFontItem&)aOldSet.Get(EE_CHAR_FONTINFO));
+        SfxItemSet aOldSet( pOLV->GetAttribs() );
+        SfxItemSet aFontSet( *aOldSet.GetPool(),
+                            EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
+                            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CJK,
+                            EE_CHAR_FONTINFO_CTL, EE_CHAR_FONTINFO_CTL,
+                            0 );
+        aFontSet.Set( aOldSet );
 
-            // String einfuegen
-            pOLV->InsertText(s, TRUE);
+        // String einfuegen
+        pOLV->InsertText( sSym, TRUE );
 
-            // attributieren (Font setzen)
-            SfxItemSet aSet(pOutliner->GetEmptyItemSet());
-            SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
-                                   aFont.GetStyleName(), aFont.GetPitch(),
-                                   aFont.GetCharSet(),
-                                   EE_CHAR_FONTINFO);
-            aSet.Put(aFontItem);
-            pOLV->SetAttribs(aSet);
+        // attributieren (Font setzen)
+        SfxItemSet aSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
+        SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
+                                aFont.GetStyleName(), aFont.GetPitch(),
+                                aFont.GetCharSet(),
+                                EE_CHAR_FONTINFO );
+        USHORT nScript = pBreakIt->GetAllScriptsOfText( sSym );
+        if( SCRIPTTYPE_LATIN & nScript )
+            aSet.Put( aFontItem, EE_CHAR_FONTINFO );
+        if( SCRIPTTYPE_ASIAN & nScript )
+            aSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
+        if( SCRIPTTYPE_COMPLEX & nScript )
+            aSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
+        pOLV->SetAttribs(aSet);
 
-            // Selektion loeschen
-            ESelection aSel(pOLV->GetSelection());
-            aSel.nStartPara = aSel.nEndPara;
-            aSel.nStartPos = aSel.nEndPos;
-            pOLV->SetSelection(aSel);
+        // Selektion loeschen
+        ESelection aSel(pOLV->GetSelection());
+        aSel.nStartPara = aSel.nEndPara;
+        aSel.nStartPos = aSel.nEndPos;
+        pOLV->SetSelection(aSel);
 
-            // Alten Font restaurieren
-            aSet.Put(aOldFontItem);
-            pOLV->SetAttribs(aSet);
+        // Alten Font restaurieren
+        pOLV->SetAttribs( aFontSet );
 
-            // ab jetzt wieder anzeigen
-            pOutliner->SetUpdateMode(TRUE);
-            pOLV->ShowCursor();
-        }
+        // ab jetzt wieder anzeigen
+        pOutliner->SetUpdateMode(TRUE);
+        pOLV->ShowCursor();
     }
 }
 
