@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:41:55 $
+#   last change: $Author: obo $ $Date: 2003-12-16 14:52:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ LIBTARGET=NO
 DLLPRE =
 .INCLUDE :  sv.mk
 
-.IF "$(COM)$(COMEX)" == "MSC8"
+.IF "$(COM)$(COMEX)" == "MSC8" || "$(COM)$(COMEX)"=="MSC10"
 
 # ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
@@ -88,19 +88,19 @@ WINTARGETS=  \
     $(DESTDIR)$/regcomp.exe \
     $(DESTDIR)$/uno.exe \
     $(DESTDIR)$/regcomp.exe.config \
-    $(DESTDIR)$/uno.exe.config
+    $(DESTDIR)$/uno.exe.config 
 
 .ELSE
 MY_DLLPOSTFIX=.so
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
-GIVE_EXEC_RIGHTS=chmod +x
+GIVE_EXEC_RIGHTS=chmod +x 
 .ENDIF		$(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc
@@ -111,7 +111,7 @@ INCPRE+=$(OUT)$/inc
 CFLAGS += -clr /AI $(OUT)$/bin /AI $(SOLARBINDIR)
 
 SLOFILES= \
-    $(SLO)$/cli_cpp_bridgetest.obj
+    $(SLO)$/cli_cpp_bridgetest.obj		
 
 SHL1OBJS = $(SLOFILES)
 
@@ -172,31 +172,6 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         -reference:System.dll \
         cli_cs_bridgetest.cs
 
-$(DESTDIR)$/cli_bridgetest_inprocess.exe : \
-        cli_bridgetest_inprocess.cs \
-        $(DESTDIR)$/cli_cs_bridgetest.uno.dll \
-        $(DESTDIR)$/cli_cs_testobj.uno.dll \
-        $(DESTDIR)$/cli_vb_bridgetest.uno.dll \
-        $(DESTDIR)$/cli_vb_testobj.uno.dll \
-        $(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
-        $(CLI_TYPES) \
-        $(CLI_URE) \
-        $(CLI_CPPUHELPER)
-    +csc $(CSCFLAGS) -target:exe -out:$@ \
-        -reference:$(CLI_TYPES) \
-        -reference:$(CLI_URE) \
-        -reference:$(CLI_CPPUHELPER) \
-        -reference:$(DESTDIR)$/cli_cs_bridgetest.uno.dll \
-        -reference:$(DESTDIR)$/cli_cs_testobj.uno.dll \
-        -reference:$(DESTDIR)$/cli_vb_bridgetest.uno.dll \
-        -reference:$(DESTDIR)$/cli_vb_testobj.uno.dll \
-        -reference:$(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
-        cli_bridgetest_inprocess.cs
-    $(GNUCOPY) -p cli_bridgetest_inprocess.ini $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_TYPES) $(DESTDIR)
-    $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)
-
 # Visual Basic ------------------------------------------
 $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         cli_vb_bridgetest.vb \
@@ -226,6 +201,31 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         -reference:System.Windows.Forms.dll \
         cli_vb_testobj.vb
 
+
+$(DESTDIR)$/cli_bridgetest_inprocess.exe : \
+        cli_bridgetest_inprocess.cs \
+        $(DESTDIR)$/cli_cs_bridgetest.uno.dll \
+        $(DESTDIR)$/cli_cs_testobj.uno.dll \
+        $(DESTDIR)$/cli_vb_bridgetest.uno.dll \
+        $(DESTDIR)$/cli_vb_testobj.uno.dll \
+        $(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
+        $(CLI_TYPES) \
+        $(CLI_URE) \
+        $(CLI_CPPUHELPER)
+    +csc $(CSCFLAGS) -target:exe -out:$@ \
+        -reference:$(CLI_TYPES) \
+        -reference:$(CLI_URE) \
+        -reference:$(CLI_CPPUHELPER) \
+        -reference:$(DESTDIR)$/cli_cs_bridgetest.uno.dll \
+        -reference:$(DESTDIR)$/cli_cs_testobj.uno.dll \
+        -reference:$(DESTDIR)$/cli_vb_bridgetest.uno.dll \
+        -reference:$(DESTDIR)$/cli_vb_testobj.uno.dll \
+        -reference:$(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
+        cli_bridgetest_inprocess.cs
+    $(GNUCOPY) -p cli_bridgetest_inprocess.ini $(DESTDIR)
+    $(GNUCOPY) -p $(CLI_CPPUHELPER) $(DESTDIR)
+    $(GNUCOPY) -p $(CLI_TYPES) $(DESTDIR)
+    $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)
 
 .ENDIF
 
