@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cb
     if ( FAILED( hr ) )
         throw CStgTransferException( hr );
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     HGLOBAL hGlob;
     hr = GetHGlobalFromStream( m_lpStream, &hGlob );
     OSL_ASSERT( SUCCEEDED( hr ) );
@@ -192,7 +192,7 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
         throw CStgTransferException( hr );
     }
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     STATSTG statstg;
     hr = m_lpStream->Stat( &statstg, STATFLAG_DEFAULT );
     OSL_ASSERT( SUCCEEDED( hr ) );
