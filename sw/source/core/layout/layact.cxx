@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:23:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,13 +460,13 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
             //pSelfFly nicht innerhalb von ihnen steht.
             if ( bInCnt )
             {
-                const SwFlyFrm *pTmp = pSelfFly->GetAnchor()->FindFlyFrm();
+                const SwFlyFrm *pTmp = pSelfFly->GetAnchorFrm()->FindFlyFrm();
                 while ( pTmp )
                 {
                     if ( pTmp == pFly )
                         return FALSE;
                     else
-                        pTmp = pTmp->GetAnchor()->FindFlyFrm();
+                        pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
                 }
             } else if ( pObj->GetOrdNum() < pSelfFly->GetVirtDrawObj()->GetOrdNum() )
             {
@@ -475,7 +475,7 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
                 {   if ( pTmp == pSelfFly )
                         return TRUE;
                     else
-                        pTmp = pTmp->GetAnchor()->FindFlyFrm();
+                        pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
                 } while ( pTmp );
             } else
                 return TRUE;
@@ -1454,10 +1454,10 @@ void SwLayAction::ChkFlyAnchor( SwFlyFrm *pFly, const SwPageFrm *pPage )
     //Wenn der Fly innerhalb eines anderen Rahmens gebunden ist, so sollte
     //dieser zuerst Formatiert werden.
 
-    if ( pFly->GetAnchor()->IsInTab() )
-        pFly->GetAnchor()->FindTabFrm()->Calc();
+    if ( pFly->GetAnchorFrm()->IsInTab() )
+        pFly->GetAnchorFrm()->FindTabFrm()->Calc();
 
-    SwFlyFrm *pAnch = pFly->GetAnchor()->FindFlyFrm();
+    SwFlyFrm *pAnch = pFly->AnchorFrm()->FindFlyFrm();
     if ( pAnch )
     {
         ChkFlyAnchor( pAnch, pPage );
@@ -1476,6 +1476,8 @@ void SwLayAction::ChkFlyAnchor( SwFlyFrm *pFly, const SwPageFrm *pPage )
 |*  Letzte Aenderung    MA 03. Jun. 96
 |*
 |*************************************************************************/
+// OD 2004-03-30 #i26791# - Consider also drawing objects - the position
+// of the drawing objects will be calculated.
 void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
 {
     for ( USHORT i = 0; pPage->GetSortedObjs() &&
@@ -1493,10 +1495,10 @@ void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
             {
                 SwFrmFmt *pFmt = pFly->GetFmt();
                 if( FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId() &&
-                    pFly->GetAnchor() &&
+                    pFly->GetAnchorFrm() &&
                     ( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() ||
                       REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() ) )
-                    _FormatCntnt( (SwCntntFrm*)pFly->GetAnchor(), pPage );
+                    _FormatCntnt( (SwCntntFrm*)pFly->GetAnchorFrm(), pPage );
                  if( !FormatLayoutFly( pFly ) )
                     break;
             }
@@ -1514,6 +1516,13 @@ void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
                 else if ( nAct > i )
                     --i;
             }
+        }
+        else
+        {
+            // calculate position of drawing objects
+            SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(GetUserCall( pO ));
+            pDrawContact->GetAnchoredObj( pO )->MakeObjPos();
         }
     }
 }
@@ -1838,30 +1847,18 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                     }
                     else
                     {
-                        // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
-                        if ( pO->ISA(SwDrawVirtObj) )
+                        // OD 2004-04-06 #i26791# - Direct object positioning
+                        // no longer needed. Instead invalidate and determine
+                        // its position
+                        SwContact* pContact = ::GetUserCall( pO );
+                        ASSERT( pContact,
+                                "<lcl_ValidateLowers((..)> - missing contact object - please inform OD." );
+                        if ( pContact )
                         {
-                            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pO);
-                            pDrawVirtObj->SetAnchorPos( pLow->GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                            pDrawVirtObj->AdjustRelativePosToReference();
-                        }
-                        else
-                        {
-                            pO->SetAnchorPos( pLow->GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                            SwFrmFmt *pFrmFmt = FindFrmFmt( pO );
-                            if( !pFrmFmt ||
-                                FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
-                            {
-                                ((SwDrawContact*)pO->GetUserCall())->ChkPage();
-                            }
-                            // OD 30.06.2003 #108784# - correct relative position
-                            // of 'virtual' drawing objects.
-                            SwDrawContact* pDrawContact =
-                                static_cast<SwDrawContact*>(pO->GetUserCall());
-                            if ( pDrawContact )
-                            {
-                                pDrawContact->CorrectRelativePosOfVirtObjs();
-                            }
+                            SwAnchoredObject* pAnchoredObj =
+                                                pContact->GetAnchoredObj( pO );
+                            pAnchoredObj->InvalidateObjPos();
+                            pAnchoredObj->MakeObjPos();
                         }
                     }
                 }
