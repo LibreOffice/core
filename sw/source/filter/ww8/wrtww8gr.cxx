@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:04:35 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@
 #endif
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
+#endif
+
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
 #endif
 
 #ifndef _WW8STRUC_HXX
@@ -296,7 +300,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 UINT32 nPictureId = (UINT32)pObj;
                 Set_UInt32(pDataAdr, nPictureId);
 
-                WW8OleMap *pMap = new WW8OleMap(nPictureId, pObj);
+                WW8OleMap *pMap = new WW8OleMap(nPictureId);
                 bool bDuplicate = false;
                 WW8OleMaps &rOleMap = rWW8Wrt.GetOLEMap();
                 USHORT nPos;
@@ -558,13 +562,12 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
             if( pBox )
             {
                 bool bShadow = false;               // Shadow ?
-                const SfxPoolItem* pShadItem;
-                if (SFX_ITEM_ON
-                    == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
+                const SvxShadowItem* pSI =
+                    sw::util::HasItem<SvxShadowItem>(rAttrSet, RES_SHADOW);
+                if (pSI)
                 {
-                    const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
-                    bShadow = ( pSI->GetLocation() != SVX_SHADOW_NONE )
-                            && ( pSI->GetWidth() != 0 );
+                    bShadow = (pSI->GetLocation() != SVX_SHADOW_NONE) &&
+                        (pSI->GetWidth() != 0);
                 }
 
                 BYTE aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
