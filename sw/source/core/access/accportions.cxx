@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:54:47 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 
 
 using rtl::OUString;
+using rtl::OUStringBuffer;
 using com::sun::star::i18n::Boundary;
 
 
@@ -307,6 +308,14 @@ void SwAccessiblePortionData::Special(
             sDisplay = SwAccessibleContext::GetResource(
                 STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS );
             break;
+        case POR_NUMBER:
+        {
+            OUStringBuffer aBuffer( rText.Len() + 1 );
+            aBuffer.append( rText );
+            aBuffer.append( sal_Unicode(' ') );
+            sDisplay = aBuffer.makeStringAndClear();
+            break;
+        }
         default:
             sDisplay = rText;
             break;
