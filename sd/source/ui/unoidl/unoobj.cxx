@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:38:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,17 +759,27 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
     {
         if( pObj->IsEmptyPresObj() != bEmpty )
         {
-            SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
-            if(pPage)
             {
-                uno::Reference< text::XTextRange > xTextRange( (drawing::XShape*)this, uno::UNO_QUERY );
-                if( xTextRange.is() )
+                OUString aEmptyStr;
+                if( bEmpty)
                 {
-                    OUString aEmptyStr;
-                    if( bEmpty)
-                        aEmptyStr = pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
+                    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+                    if(pPage)
+                    aEmptyStr = pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
+                }
 
-                    xTextRange->setString( aEmptyStr );
+                if(!bEmpty && pObj->ISA(SdrOle2Obj))
+                {
+                    // really delete SdrOutlinerObj at pObj
+                    pObj->NbcSetOutlinerParaObject(0L);
+                }
+                else
+                {
+                    uno::Reference< text::XTextRange > xTextRange( (drawing::XShape*)this, uno::UNO_QUERY );
+                    if( xTextRange.is() )
+                    {
+                        xTextRange->setString( aEmptyStr );
+                    }
                 }
             }
 
