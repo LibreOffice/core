@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:59:13 $
+ *  last change: $Author: nf $ $Date: 2002-03-11 17:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,31 +146,31 @@ using namespace com::sun::star::uno;
 #define REPLACELENGTH_WORKDIRURL        13
 
 // Strings to replace $(vlang)
-#define REPLACEMENT_ARABIC              ASCII_STR("arabic")
-#define REPLACEMENT_CZECH               ASCII_STR("czech")
-#define REPLACEMENT_DANISH              ASCII_STR("danish")
-#define REPLACEMENT_DUTCH               ASCII_STR("dutch")
+//#define   REPLACEMENT_ARABIC              ASCII_STR("arabic")
+//#define   REPLACEMENT_CZECH               ASCII_STR("czech")
+//#define   REPLACEMENT_DANISH              ASCII_STR("danish")
+//#define   REPLACEMENT_DUTCH               ASCII_STR("dutch")
 #define REPLACEMENT_ENGLISH             ASCII_STR("english")
-#define REPLACEMENT_FINNISH             ASCII_STR("finnish")
+//#define   REPLACEMENT_FINNISH             ASCII_STR("finnish")
 #define REPLACEMENT_FRENCH              ASCII_STR("french")
 #define REPLACEMENT_GERMAN              ASCII_STR("german")
-#define REPLACEMENT_GREEK               ASCII_STR("greek")
-#define REPLACEMENT_HEBREW              ASCII_STR("hebrew")
+//#define   REPLACEMENT_GREEK               ASCII_STR("greek")
+//#define   REPLACEMENT_HEBREW              ASCII_STR("hebrew")
 #define REPLACEMENT_ITALIAN             ASCII_STR("italian")
 #define REPLACEMENT_JAPANESE            ASCII_STR("japanese")
 #define REPLACEMENT_KOREAN              ASCII_STR("korean")
-#define REPLACEMENT_POLISH              ASCII_STR("polish")
-#define REPLACEMENT_RUSSIAN             ASCII_STR("russian")
-#define REPLACEMENT_SLOVAK              ASCII_STR("slovak")
+//#define   REPLACEMENT_POLISH              ASCII_STR("polish")
+//#define   REPLACEMENT_RUSSIAN             ASCII_STR("russian")
+//#define   REPLACEMENT_SLOVAK              ASCII_STR("slovak")
 #define REPLACEMENT_SPANISH             ASCII_STR("spanish")
 #define REPLACEMENT_SWEDISH             ASCII_STR("swedish")
-#define REPLACEMENT_TURKISH             ASCII_STR("turkish")
-#define REPLACEMENT_NORWEGIAN           ASCII_STR("norwegian")
-#define REPLACEMENT_HUNGARIAN           ASCII_STR("hungarian")
-#define REPLACEMENT_BULGARIAN           ASCII_STR("bulgarian")
+//#define   REPLACEMENT_TURKISH             ASCII_STR("turkish")
+//#define   REPLACEMENT_NORWEGIAN           ASCII_STR("norwegian")
+//#define   REPLACEMENT_HUNGARIAN           ASCII_STR("hungarian")
+//#define   REPLACEMENT_BULGARIAN           ASCII_STR("bulgarian")
 #define REPLACEMENT_CHINESE_TRADITIONAL ASCII_STR("chinese_traditional")
 #define REPLACEMENT_CHINESE_SIMPLIFIED  ASCII_STR("chinese_simplified")
-#define REPLACEMENT_PORTUGUESE          ASCII_STR("portuguese")
+//#define   REPLACEMENT_PORTUGUESE          ASCII_STR("portuguese")
 
 #define STRPOS_NOTFOUND                 -1
 
@@ -574,7 +574,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             nReplaceLength = REPLACELENGTH_VLANG ;
             switch ( m_eLanguageType )
             {
-                case LANGUAGE_ARABIC                :
+/*              case LANGUAGE_ARABIC                :
                 case LANGUAGE_ARABIC_IRAQ           :
                 case LANGUAGE_ARABIC_EGYPT          :
                 case LANGUAGE_ARABIC_LIBYA          :
@@ -600,7 +600,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 
                 case LANGUAGE_DUTCH                 :
                 case LANGUAGE_DUTCH_BELGIAN         :   aReplacement = REPLACEMENT_DUTCH;
-                                                        break ;
+                                                        break ; */
 
                 case LANGUAGE_ENGLISH               :
                 case LANGUAGE_ENGLISH_AUS           :
@@ -618,8 +618,8 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_ENGLISH_UK            :   aReplacement = REPLACEMENT_ENGLISH;
                                                         break ;
 
-                case LANGUAGE_FINNISH               :   aReplacement = REPLACEMENT_FINNISH;
-                                                        break ;
+/*              case LANGUAGE_FINNISH               :   aReplacement = REPLACEMENT_FINNISH;
+                                                        break ; */
 
                 case LANGUAGE_FRENCH                :
                 case LANGUAGE_FRENCH_BELGIAN        :
@@ -636,11 +636,11 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_GERMAN_LIECHTENSTEIN  :   aReplacement = REPLACEMENT_GERMAN;
                                                         break ;
 
-                case LANGUAGE_GREEK                 :   aReplacement = REPLACEMENT_GREEK;
+/*              case LANGUAGE_GREEK                 :   aReplacement = REPLACEMENT_GREEK;
                                                         break ;
 
                 case LANGUAGE_HEBREW                :   aReplacement = REPLACEMENT_HEBREW;
-                                                        break ;
+                                                        break ; */
 
                 case LANGUAGE_ITALIAN               :
                 case LANGUAGE_ITALIAN_SWISS         :   aReplacement = REPLACEMENT_ITALIAN;
@@ -653,14 +653,14 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_KOREAN_JOHAB          :   aReplacement = REPLACEMENT_KOREAN;
                                                         break ;
 
-                case LANGUAGE_POLISH                :   aReplacement = REPLACEMENT_POLISH;
+/*              case LANGUAGE_POLISH                :   aReplacement = REPLACEMENT_POLISH;
                                                         break ;
 
                 case LANGUAGE_RUSSIAN               :   aReplacement = REPLACEMENT_RUSSIAN;
                                                         break ;
 
                 case LANGUAGE_SLOVAK                :   aReplacement = REPLACEMENT_SLOVAK;
-                                                        break ;
+                                                        break ; */
 
                 case LANGUAGE_SPANISH               :
                 case LANGUAGE_SPANISH_MEXICAN       :
@@ -688,7 +688,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_SWEDISH_FINLAND       :   aReplacement = REPLACEMENT_SWEDISH;
                                                         break ;
 
-                case LANGUAGE_TURKISH               :   aReplacement = REPLACEMENT_TURKISH;
+/*              case LANGUAGE_TURKISH               :   aReplacement = REPLACEMENT_TURKISH;
                                                         break ;
 
                 case LANGUAGE_NORWEGIAN             :
@@ -700,7 +700,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                                                         break ;
 
                 case LANGUAGE_BULGARIAN             :   aReplacement = REPLACEMENT_BULGARIAN;
-                                                        break ;
+                                                        break ; */
 
                 case LANGUAGE_CHINESE_TRADITIONAL   :   aReplacement = REPLACEMENT_CHINESE_TRADITIONAL;
                                                         break ;
@@ -708,12 +708,21 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_CHINESE_SIMPLIFIED    :   aReplacement = REPLACEMENT_CHINESE_SIMPLIFIED;
                                                         break ;
 
-                case LANGUAGE_PORTUGUESE            :
+/*              case LANGUAGE_PORTUGUESE            :
                 case LANGUAGE_PORTUGUESE_BRAZILIAN  :   aReplacement = REPLACEMENT_PORTUGUESE;
-                                                        break ;
+                                                        break ; */
 
                 default                             :   // no fallback any longer
-                                                        DBG_ERRORFILE( "Language unknown." );
+                                                        {
+                                                            String rLangStr;
+                                                            String rCountry;
+                                                            ConvertLanguageToIsoNames(m_eLanguageType,rLangStr,rCountry);
+                                                            if ( rCountry.Len()) {
+                                                                rLangStr += String::CreateFromAscii( "-" );
+                                                                rLangStr += rCountry;
+                                                            }
+                                                            aReplacement = rLangStr;
+                                                        }
                                                         break ;
             }
         }
