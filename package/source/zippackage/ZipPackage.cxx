@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:18:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
@@ -142,8 +145,14 @@
 #ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_USEBACKUPEXCEPTION_HPP_
+#include <com/sun/star/embed/UseBackupException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -304,6 +313,14 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 ZipPackage::~ZipPackage( void )
 {
     delete pZipFile;
+
+    // All folders and streams contain pointers to their parents, when a parent diappeares
+    // it should disconnect all the children from itself during destruction automatically.
+    // So there is no need in explicit pRootFolder->releaseUpwardRef() call here any more
+    // since pRootFolder has no parent and cleaning of it's children will be done automatically
+    // during pRootFolder dieing by refcount.
+
+#if 0
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
     // the hash_map of the root folder is cleared, releasing all subfolders
@@ -312,6 +329,7 @@ ZipPackage::~ZipPackage( void )
     // deleted fully (and automagically).
 
     pRootFolder->releaseUpwardRef();
+#endif
 }
 
 void ZipPackage::getZipFileContents()
@@ -649,7 +667,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             {
                 // clean up the memory, and tell the UCB about the error
                 if( pZipFile ) { delete pZipFile; pZipFile = NULL; }
-                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
+
+                throw com::sun::star::packages::zip::ZipIOException (
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
@@ -1062,29 +1082,6 @@ sal_Bool ZipPackage::writeFileIsTemp()
                 makeAny( r ) );
     }
 
-    if ( eMode == e_IMode_XStream )
-    {
-        // First truncate our output stream
-        Reference < XOutputStream > xOutputStream = xStream->getOutputStream();
-        Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
-        if ( !xTruncate.is() )
-        {
-            IOException aException;
-            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
-                    static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
-        }
-        xTruncate->truncate();
-
-        // Then set up the tempfile to be read from
-        Reference < XInputStream > xTempIn ( xTempOut, UNO_QUERY );
-        Reference < XSeekable > xTempSeek ( xTempOut, UNO_QUERY );
-        xTempSeek->seek ( 0 );
-
-        // then copy the contents of the tempfile to our output stream
-        copyInputToOutput_Impl( xTempIn, xOutputStream );
-        xOutputStream->flush();
-    }
-
     // Update our References to point to the new temp file
     if( aUseTemp )
     {
@@ -1187,82 +1184,163 @@ void SAL_CALL ZipPackage::commitChanges(  )
     // xContentSeek and xContentStream will reference the new temporary file.
     // Exception - empty or nonexistent local file that is written directly
 
-    if ( writeFileIsTemp() && eMode == e_IMode_URL )
+    if ( writeFileIsTemp() )
     {
-        Reference< XOutputStream > aOrigFileStream;
-
-        if( isLocalFile_Impl( sURL ) )
+        if ( eMode == e_IMode_XStream )
         {
-            // write directly in case of local file
-            Reference< XActiveDataStreamer > xSink = openOriginalForOutput();
+            // First truncate our output stream
+            Reference < XOutputStream > xOutputStream;
 
-            if( xSink.is() )
+            // preparation for copy step
+            try
             {
-                Reference< XStream > xStr = xSink->getStream();
-                if( xStr.is() )
+                xContentSeek->seek( 0 );
+
+                xOutputStream = xStream->getOutputStream();
+                Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
+                if ( !xTruncate.is() )
+                    throw uno::RuntimeException();
+
+                // after successful truncation the original file contents are already lost
+                xTruncate->truncate();
+            }
+            catch( uno::Exception& r )
+            {
+                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
+                        static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+            }
+
+            try
+            {
+                // then copy the contents of the tempfile to our output stream
+                copyInputToOutput_Impl( xContentStream, xOutputStream );
+                xOutputStream->flush();
+            }
+            catch( uno::Exception& )
+            {
+                // if anything goes wrong in this block the target file becomes corrupted
+                // so an exception should be thrown as a notification about it
+                // and the package must disconnect from the stream
+                DisconnectFromTargetAndThrowException_Impl( xContentStream );
+            }
+        }
+        else if ( eMode == e_IMode_URL )
+        {
+            Reference< XOutputStream > aOrigFileStream;
+            sal_Bool bCanBeCorrupted = sal_False;
+
+            if( isLocalFile_Impl( sURL ) )
+            {
+                // write directly in case of local file
+                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleAccess(
+                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                    uno::UNO_QUERY );
+                OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
+                uno::Reference< io::XTruncate > xOrigTruncate;
+                if ( xSimpleAccess.is() )
                 {
-                    aOrigFileStream = xStr->getOutputStream();
-                    if( aOrigFileStream.is() )
+                    try
+                    {
+                        aOrigFileStream = xSimpleAccess->openFileWrite( sURL );
+                        xOrigTruncate = uno::Reference< io::XTruncate >( aOrigFileStream, uno::UNO_QUERY_THROW );
+                        // after successful truncation the file is already corrupted
+                        xOrigTruncate->truncate();
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
+                if( xOrigTruncate.is() )
+                {
+                    try
                     {
                         copyInputToOutput_Impl( xContentStream, aOrigFileStream );
                         aOrigFileStream->closeOutput();
-                        xContentSeek->seek ( 0 );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        try {
+                            aOrigFileStream->closeOutput();
+                        } catch ( uno::Exception& ) {}
+
+                        aOrigFileStream = uno::Reference< XOutputStream >();
+                        // the original file can already be corrupted
+                        bCanBeCorrupted = sal_True;
                     }
                 }
             }
-        }
 
-        if( !aOrigFileStream.is() )
-        {
-            Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
-            if ( xPropSet.is() )
+            if( !aOrigFileStream.is() )
             {
-                OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
-                Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
-
-                OUString sTempURL;
-                Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
-                aAny >>= sTempURL;
-
-                TransferInfo aInfo;
-                aInfo.NameClash = NameClash::OVERWRITE;
-                aInfo.MoveData = sal_False;
-                aInfo.SourceURL = sTempURL;
-                aInfo.NewTitle = rtl::Uri::decode ( sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
-                                                    rtl_UriDecodeWithCharset,
-                                                    RTL_TEXTENCODING_UTF8 );
-                aAny <<= aInfo;
                 try
                 {
+                    Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+                    OSL_ENSURE( xPropSet.is(), "This is a temporary file that must implement XPropertySet!\n" );
+                    if ( !xPropSet.is() )
+                        throw uno::RuntimeException();
+
+                    OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+                    Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
+
+                    OUString sTempURL;
+                    Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
+                    aAny >>= sTempURL;
+
+                    TransferInfo aInfo;
+                    aInfo.NameClash = NameClash::OVERWRITE;
+                    aInfo.MoveData = sal_False;
+                    aInfo.SourceURL = sTempURL;
+                    aInfo.NewTitle = rtl::Uri::decode ( sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
+                                                        rtl_UriDecodeWithCharset,
+                                                        RTL_TEXTENCODING_UTF8 );
+                    aAny <<= aInfo;
+
+                    // if the file is still not corrupted, it can become after the next step
                     aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
                 }
                 catch (::com::sun::star::uno::Exception& r)
                 {
-                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
-                }
-            }
-            else
-            {
-                // not quite sure how it could happen that xContentStream WOULDN'T support
-                // XPropertySet, but just in case... :)
+                    if ( bCanBeCorrupted )
+                        DisconnectFromTargetAndThrowException_Impl( xContentStream );
 
-                Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
-
-                try
-                {
-                    aOriginalContent.writeStream ( xContentStream, sal_True );
-                }
-                catch (::com::sun::star::uno::Exception& r)
-                {
-                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                    throw WrappedTargetException(
+                                                OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package may be read only!" ) ),
+                                                static_cast < OWeakObject * > ( this ),
+                                                makeAny ( r ) );
                 }
             }
         }
     }
 
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::commitChanges" );
+}
+
+void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Reference< io::XInputStream >& xTempStream )
+{
+    xStream = uno::Reference< io::XStream >( xTempStream, uno::UNO_QUERY );
+    if ( xStream.is() )
+        eMode = e_IMode_XStream;
+    else
+        eMode = e_IMode_XInputStream;
+
+    ::rtl::OUString aTempURL;
+    try {
+        uno::Reference< beans::XPropertySet > xTempFile( xContentStream, uno::UNO_QUERY_THROW );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        aUrl >>= aTempURL;
+        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),
+                                     uno::makeAny( sal_False ) );
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "This calls are pretty simple, they should not fail!\n" );
+    }
+
+    ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) );
+    embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
+    throw WrappedTargetException( aErrTxt,
+                                    static_cast < OWeakObject * > ( this ),
+                                    makeAny ( aException ) );
 }
 
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
