@@ -1,0 +1,2206 @@
+<html>
+<head>
+  <title>[TITLE] - Developer's Guide Examples</title>
+  <link rel="stylesheet" type="text/css" href="../../docs/sdk_styles.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="AUTHOR" content="J&uuml;rgen Schmidt">
+  <meta name="CREATED" content="20020311;11245374">
+  <meta name="CHANGEDBY" content="J&uuml;rgen Schmidt">
+  <meta name="CHANGED" content="20020311;11420968">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="15" colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1"  width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left"><img src="../../docs/images/sdk_logo.gif" width="328" height="121"></div>
+    </td>
+    <td><img src="../../docs/images/black_dot.gif" width="1" height="121"></td>
+    <td class="logo_color" width="222"> 
+      <div align="center"><img src="../../docs/images/logo.gif" width="222" height="121"></div>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color1" height="12"></td>
+    <td bgcolor="#000000" height="12"><img src="../../docs/images/black_dot.gif" width="1" height="12"></td>
+    <td class="color2" height="12" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8">
+      <blockquote>
+      <table width="100%" border="0" cellpadding="4">
+        <tr> 
+          <td colspan="4" align=center><a href="../../index.html" title="link to the SDK start page">
+	     SDK home</a></td>
+        </tr>
+        <tr>
+          <td colspan="4" align=center><a name="examples"/><font size="6"><b>Developer's Guide Examples</b></font>
+          </td>
+        </tr>
+        <tr> 
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td colspan="4">
+            <p>The Developer's Guide comes with a wide range of examples from all application areas which
+               shows the use of the API in the context of the different functional areas. Furthermore the
+               examples can be used as a first starting point to modify an existing example to their own
+               needs.<br>
+               In order to connect most of the following client programs to the running office server, 
+               before running those programs, you should invoke the office with the following command:</p>
+	    <pre>soffice &quot;-accept=socket,host=localhost,port=8100;urp;&quot;</pre>
+	    <p>You could also customize the mentioned host and port to your needs.</p>
+	    <p>All examples marked with a <font color="#1C3BF9">&lowast;</font> are executables which can
+	    be executed using a run target in the makefile. The name of the binary (C++) can differ compared
+	    to the source file, please see the run target in the appropriate makefile.
+	    Some of the examples which create a component have no run target. In these cases a document is
+	    provided which instantiates and runs the component (see the makefile output). Also the Basic 
+	    examples provide documents which use and shows the implemented functionality. The database and 
+	    forms examples need a running database, please see the description below. But note that is
+	    not described in detail how to create a working data source (see the office help).</p>
+          </td>
+        </tr>
+        <tr> 
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width=34%>
+             <font size="3"><a href="#FirstSteps" title="link to the First Steps examples">First Steps</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Text" title="link to the Text examples">Text Documents</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#BasicandDialogs" title="link to the Basic And Dialogs examples">[PRODUCTNAME] Basic and Dialogs</a></font>
+          </td>
+        </tr> 
+        <tr>
+          <td width=34%>
+             <font size="3"><a href="#ProfessionalUNO" title="link to the Professional UNO examples">Professional UNO</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Spreadsheet" title="link to the Spreadsheet examples">Spreadsheet Documents</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Database" title="link to the Database examples">Database Access</a></font>
+          </td>
+        </tr> 
+        <tr>
+          <td width=34%>
+            <font size="3"><a href="#Components" title="link to the Components examples">Writing UNO components</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#OfficeBean" title="link to the OfficeBean examples">Office Bean</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Forms" title="link to the Forms examples">Forms</a></font>
+          </td>
+        </tr> 
+        <tr>
+          <td width=34%>
+<!--            <font size="3"><a href="#AdvancedUNO" title="link to the Advanced UNO examples">Advanced UNO</a></font> -->
+                <font size="3">Advanced UNO (no examples available)</font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Drawing" title="link to the Drawing And Presentation examples">Drawing and Presentation Documents</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#UniversalContentBroker(UCB)" title="link to the Universal Content Broker examples">Universal Content Broker (UCB)</a></font>
+          </td>
+        </tr> 
+        <tr>
+          <td width=34%>
+            <font size="3"><a href="#OfficeDevelopment" title="link to the Office Development examples">Office Development</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Charts" title="link to the Charts examples">Charts</a></font>
+          </td>
+          <td width=33%>
+             <font size="3"><a href="#Configuration" title="link to the Configuration examples">Configuration Management</a></font>
+          </td>
+        </tr> 
+        <tr>
+          <td width=34%>
+            <font size="3"><a href="#Accessibility" title="link to the Accessibility examples">Accessibility</a></font>
+          </td>
+          <td width=33%>
+          </td>
+          <td width=33%>
+          </td>
+        </tr> 
+      </table>
+      </blockquote>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="FirstSteps">FirstSteps examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./FirstSteps/FirstConnection.java" title="link to FirstSteps/FirstConnection.java">
+	  <font color="#1C3BF9">&lowast;</font>FirstConnection</a></td>
+          <td width=80%>
+            Shows how to set up a connection to a [PRODUCTNAME] in a different process space or even on a 
+	    remote machine.
+          </td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./FirstSteps/FirstLoadComponent.java" title="link to FirstSteps/FirstLoadComponent.java">
+	  <font color="#1C3BF9">&lowast;</font>FirstLoadComponent</a></td>
+          <td width=80%>
+            Demonstrates how to load a component into [PRODUCTNAME] by a Java application.
+          </td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./FirstSteps/HelloTextTableShape.java" title="link to FirstSteps/HelloTextTableShape.java">
+	  <font color="#1C3BF9">&lowast;</font>HelloTextTableShape</a></td>
+          <td width=80%>
+            Performs some generic text and shape operations on a text document, a spreadsheet document 
+	    and a drawing document.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="ProfessionalUNO">Professional UNO examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Lifetime Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./ProfUNO/Lifetime/MyUnoObject.java" title="link to ProfUNO/Lifetime/MyUnoObject.java">
+	  <font color="#1C3BF9">&lowast;</font>MyUnoObject</a></td>
+          <td width=80%>
+            Shows that it depends on the implementation of the Java VM whether finalize() will be 
+	    called or not.
+          </td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./ProfUNO/Lifetime/object_lifetime.cxx" title="link to ProfUNO/Lifetime/object_lifetime.java">
+	  <font color="#1C3BF9">&lowast;</font>object_lifetime.cxx (ProfUnoLifetime)
+          <td width=80%>
+            Shows the UNO reference counting mechanism in C++.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Interprocess Connection Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./ProfUNO/InterprocessConn/ConnectionAwareClient.java" title="link to ProfUNO/InterprocessConn/ConnectionAwareClient/.java">
+	  <font color="#1C3BF9">&lowast;</font>ConnectionAwareClient</a></td>
+          <td width=80%>
+            Implements a client which is aware of losing connection to [PRODUCTNAME].
+          </td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./ProfUNO/InterprocessConn/UrlResolver.java"  title="link to ProfUNO/InterProcessConn/UrlResolver.java">
+	  <font color="#1C3BF9">&lowast;</font>UrlResolver</a></td>
+          <td width=80%>
+            Builds a connection to [PRODUCTNAME] using the URL given on the command line. This example
+	     shows the usage of <a href="../../docs/common/ref/com/sun/star/bridge/XUnoUrlResolver.html" title ="link to the reference documentation of com.sun.star.bridge.XUnoResolver">
+	     <code>XUnoUrlResolver</code></a>.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>C++ Binding Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./ProfUNO/CppBinding/office_connect.cxx" title="link to ProfUNO/CppBinding/office_connect.java">
+	  <font color="#1C3BF9">&lowast;</font>office_connect.cxx</a></td>
+          <td width=80%>
+            Builds a connection to [PRODUCTNAME] using C++.
+          </td>
+        </tr>
+        <tr>
+          <td width=20%><a href="./ProfUNO/CppBinding/string_samples.cxx" title="link to ProfUNO/Cppbinding/string_samples.java">
+	  <font color="#1C3BF9">&lowast;</font>string_samples.cxx</a></td>
+          <td width=80%>
+           Demonstrates usage of RTL string classes 
+	   <a href="../../docs/cpp/ref/names/rtl/c-OString.html" title="link to the reference documentation of rtl::OString"><code>OString</code></a>, 
+	   <a href="../../docs/cpp/ref/names/rtl/c-OUString.html" title="link to the reference documentation of rtl::OUString"><code>OUString</code></a> and 
+	   <a href="../../docs/cpp/ref/names/rtl/c-OUStringBuffer.html" title="link to the reference documentation of rtl::OUStringBuffer"><code>OUStringBuffer</code></a>.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Components">Writing UNO components  examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Jobs Addon Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/JobsAddon/AsyncJob.java" title="link to Components/Addons/JobsAddon/AsyncJob.java">AsyncJob</a></td>
+          <td width=80%>
+          An java example showing how a job can analyze the given arguments and how the environment can 
+	  be detected, in which the job is executed.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/JobsAddon/Jobs.xcu" title="link to Components/Addons/JobsAddon/Jobs.xcu">Jobs.xcu</a></td>
+          <td width=80%>
+	  Contains the example job configuration.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/JobsAddon/Addons.xcu" title="link to Components/Addons/JobsAddon/Addons.xcu">Addons.xcu</a></td>
+          <td width=80%>
+	  Contains the configuration entries for the Jobs addon where different entries are configured.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>ProtocolHandler Addon Java</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_java/ProtocolHandlerAddon.java" title="link to Components/Addons/ProtocolHandlerAddon_java/ProtocolHandlerAddon.java">ProtocolHandlerAddon</a></td>
+          <td width=80%>
+         Implments a ProtocolHandler addon component in Java.
+          </td>
+        </tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu" title="link to Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu">ProtocolHandler.xcu</a></td>
+          <td width=80%>
+         Contains the ProtocolHandler configuration.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu" title="link to Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu">Addons.xcu</a></td>
+          <td width=80%>
+	  Contains the configuration entries for the ProtocolHandler addon where different entries 
+	  are configured.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>ProtocolHandler Addon C++</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/addon.cxx" title="link to Components/Addons/ProtocolHandlerAddon_cpp/addon.cxx">addon.cxx</a></td>
+          <td width=80%>
+         Implments a ProtocolHandler addon component in C++.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/addon.hxx" title="link to Components/Addons/ProtocolHandlerAddon_cpp/addon.hxx">addon.hxx</a></td>
+          <td width=80%>
+	  Contans the class definition of the c++ ProtocolHandler example.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/component.cxx" title="link to Components/Addons/ProtocolHandlerAddon_cpp/component.cxx">component.cxx</a></td>
+          <td width=80%>
+          Implements the administrative component functions (component_writeInfo, component_getFactory). 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu" title="link to Components/Addons/ProtocolHandlerAddon_cpp/ProtocolHandler.xcu">ProtocolHandler.xcu</a></td>
+          <td width=80%>
+         Contains the ProtocolHandler configuration.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu" title="link to Components/Addons/ProtocolHandlerAddon_cpp/Addons.xcu">Addons.xcu</a></td>
+          <td width=80%>
+	  Contains the configuration entries for the ProtocolHandler addon where different entries 
+	  are configured.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Java Component Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/JavaComponent/RunComponent.java" title="link to Components/JavaComponent/RunComponent.java">
+	  <font color="#1C3BF9">&lowast;</font>RunComponent</a></td>
+          <td width=80%>
+            Demonstrates how to extend the service provider with a new factory and instantiates the 
+	    example components.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/JavaComponent/TestComponentA.java" title="link to Components/JavaComponent/TestComponentA.java">TestComponentA</a></td>
+          <td width=80%>
+            Shows a simple demo component which implements 
+	    <a href="../../docs/common/ref/com/sun/star/lang/XTypeProvider.html" title="link to the reference documentation of com.sun.star.lang.XTypeProvider">
+	    <code>XTypeProvider</code></a>, 
+	    <a href="../../docs/common/ref/com/sun/star/lang/XServiceInfo.html" title="link to the reference documentation of com.sun.star.lang.XServicedInfo">
+	    <code>XServiceInfo</code></a> and 
+	    an own interface <code>XSomethingA</code>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/JavaComponent/TestComponentB.java" title="link to Components/JavaComponent/TestComponentB.java">TestComponentB</a></td>
+          <td width=80%>
+            Shows a simple demo component which implements 
+	    <a href="../../docs/common/ref/com/sun/star/lang/XTypeProvider.html"  title="link to the reference documentation of com.sun.star.lang.XTypeProvider">
+	    <code>XTypeProvider</code></a>, 
+	    <a href="../../docs/common/ref/com/sun/star/lang/XServiceInfo.html" title="link to the reference documentation of com.sun.star.lang.XServiceInfo">
+	    <code>XServiceInfo</code></a> and an own interface <code>XSomethingB</code>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/JavaComponent/TestServiceProvider.java" title="link to Components/JavaComponent/TestServiceProvider.java">TestServiceProvider</a></td>
+          <td width=80%>
+            Implements a factory (service provider) which can create the two test components.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>C++ Component Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/CppComponent/service1_impl.cxx" title="link to Components/CppComponent/service1_impl.cxx">
+	  service1_impl.cxx</a></td>
+          <td width=80%>
+            Implements a simple UNO service with an own interface in C++.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/CppComponent/service2_impl.cxx" title="link to Components/CppComponent/service2_impl.cxx">
+	  service2_impl.cxx</a></td>
+          <td width=80%>
+            Implements another simple UNO service in C++.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Thumbs Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Thumbs/org/openoffice/comp/test/ImageShrink.java" title="link to Components/Thumbs/org/openoffice/comp/test/ImageShrink.java">
+	  ImageShrink</a></td>
+          <td width=80%>
+            Contains a framework for a component which scales images in a directory and stores them to 
+	    another directory. This code does not really do anything, it just contains the framework.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Components/Thumbs/org/openoffice/comp/test/Thumbs.java" title="link to Components/Thumbs/org/openoffice/comp/test/Thumbs.java">Thumbs</a></td>
+          <td width=80%>
+            This example registers a factory for the image shrink component and instantiates it.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="OfficeDevelopment">Office Development examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Ascii Filter Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/AsciiFilter/AsciiReplaceFilter.java" title="link to OfficeDev/FilterDevelopment/AsciiFilter/AsciiReplaceFilter.java">AsciiReplaceFilter</a></td>
+          <td width=80%>
+            Implements an example for an import/export filter service.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/AsciiFilter/Factory.java" title="link to OfficeDev/FilterDevelopment/AsciiFilter/Factory.java">Factory</a></td>
+          <td width=80%>
+            Implements a factory class which can be registered for the UNO service manager. It is used 
+	    to create new instances of the filter service.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/AsciiFilter/FilterOptions.java" title="link to OfficeDev/FilterDevelopment/AsciiFilter/FilterOptions.java">FilterOptions</a></td>
+          <td width=80%>
+            Offers some helper methods to analyze and prepare the arguments of the filter method.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>FlatXmlFilter C++ Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXml.cxx" title="link to OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXml.cxx">FlatXml.cxx</a></td>
+          <td width=80%>
+          Implements an import/export filter storing the data in one xml stream instead of the normal three
+	   streams in a sxw file. The example is implemented in C++.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>FlatXmlFilter Java Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXml.java" title="link to OfficeDev/FilterDevelopment/FlatXmlFilter_java/FlatXml.java">FlatXml</a></td>
+          <td width=80%>
+          Implements an import/export filter storing the data in one xml stream instead of the normal three
+	   streams in a sxw file. The example is implemented in Java.           
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>FlatXml FilterDetection Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/FlatXmlFilterDetection/filterdetect.cxx" title="link to OfficeDev/FilterDevelopment/FlatXmlFilterDetection/filterdetect.cxx">filterdetect.cxx</a></td>
+          <td width=80%>
+          Implements an example filter detection for the flat xml filter. 
+	  The example is implemented in C++. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/FlatXmlFilterDetection/filterdetect.hxx" title="link to OfficeDev/FilterDevelopment/FlatXmlFilterDetection/filterdetect.hxx">filterdetect.hxx</a></td>
+          <td width=80%>
+          Contains the class definition of the filter detection example. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/FilterDevelopment/FlatXmlFilterDetection/fdcomp.cxx" title="link to OfficeDev/FilterDevelopment/FlatXmlFilterDetection/fdcomp.cxx">fdcomp.cxx</a></td>
+          <td width=80%>
+          Implements the administrative component functions (component_writeInfo, component_getFactory). 
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Desktop Environment Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/CustomizeView.java" title="link to OfficeDev/DesktopEnvironment/CustomizeView.java">CustomizeView</a></td>
+          <td width=80%>
+            Offers a view which allows hiding and showing of the menubar, toolbar and objectbar of the 
+	    related document component.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/Desk.java" title="link to OfficeDev/DesktopEnvironment/Desk.java">
+	   <font color="#1C3BF9">&lowast;</font>Desk</a></td>
+          <td width=80%>
+            This is the main part of a demo application based on the framework APIs. It mainly shows the 
+	    mechanisms to load, store and convert documents, as well as dispatch and dispatch interception.
+	    It integrates windows from [PRODUCTNAME] via system window handle. This is the same mechanism
+	    as used by the OfficeBean, but the OfficeBean itself is not used here, just the JNI window 
+	    handle access.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/DocumentView.java" title="link to OfficeDev/DesktopEnvironment/DocumentView.java">DocumentView</a></td>
+          <td width=80%>
+            Deals with the application window and it's actions.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/FunctionHelper.java" title="link to OfficeDev/DesktopEnvironment/FunctionHelper.java">FunctionHelper</a></td>
+          <td width=80%>
+            This helper comprises all [PRODUCTNAME] API calls. Thus it is possible to learn about these 
+	    aspects separately from the rest of the application example.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/IOnewayLink.java" title="link to OfficeDev/DesktopEnvironment/IOnewayLink.java">IOnewayLink</a></td>
+          <td width=80%>
+            This is an interface to receive asynchronous events from UNO oneway calls.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/IShutdownListener.java" title="link to OfficeDev/DesktopEnvironment/IShutdownListener.java">
+	  IShutdownListener</a></td>
+          <td width=80%>
+            This is a listener interface to clean up on shutdown of [PRODUCTNAME].
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/Interceptor.java" title="link to OfficeDev/DesktopEnvironment/Interceptor.java">Interceptor</a></td>
+          <td width=80%>
+            This implements a dispatch interceptor for a specific URL.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/JavaWindowPeerFake.java" title="link to OfficeDev/DesktopEnvironment/JavaWindowPeerFake.java">
+	  JavaWindowPeerFake</a></td>
+          <td width=80%>
+            Fakes an <a href="../../docs/common/ref/com/sun/star/awt/XWindowPeer.html" title=" link to the reference documentation of com.sun.star.awt.XWindowPeer">
+	    <code>XWindowPeer</code></a> for the Java native window handle to create a child window 
+	    for the office frame.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/NativeView.java" title="link to OfficeDev/DesktopEnvironment/NativeView.java">NativeView</a></td>
+          <td width=80%>
+            Implements native JNI methods to get the window handle of the Java window.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/OfficeConnect.java" title=" link to OfficeDev/DesktopEnvironment/OfficeConnect.java">OfficeConnect</a></td>
+          <td width=80%>
+            Builds the remote bridge to [PRODUCTNAME] and exports its UNO service manager for the Java 
+	    side of the application.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/OnewayExecutor.java" title="link to OfficeDev/DesktopEnvironment/OnewayExecutor.java">OnewayExecutor</a></td>
+          <td width=80%>
+            Implements <code>IOnewayLink</code> to decouple asynchronous oneway calls in the Java process.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/StatusListener.java" title="link to OfficeDev/DesktopEnvironment/StatusListener.java">StatusListener</a></td>
+          <td width=80%>
+            Implements a listener for a 
+	    <a href="../../docs/common/ref/com/sun/star/frame/FeatureStateEvent.html" title="link to the reference documentation of com.sun.star.frame.FeatureStateEvent">
+	    <code>FeatureStateEvent</code></a>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/StatusView.java" title="link to OfficeDev/DesktopEnvironment/StatusView.java">StatusView</a></td>
+          <td width=80%>
+            Shows the current status for which the application is registered as an event listener.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DesktopEnvironment/ViewContainer.java" title="link to OfficeDev/DesktopEnvironment/ViewContainer.java">ViewContainer</a></td>
+          <td width=80%>
+            Performs a clean up on the Java side on [PRODUCTNAME] shutdown.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Office Development Examples</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/OfficeConnect.java" title="link to OfficeDev/OfficeConnect.java">OfficeConnect</a></td>
+          <td width=80%>
+            Builds the remote bridge to [PRODUCTNAME] and exports its UNO service manager to the Java side.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/ContextMenuInterceptor.java" title="link to OfficeDev/ContextMenuInterceptor.java">
+	  <font color="#1C3BF9">&lowast;</font>ContextMenuInterceptor</a></td>
+          <td width=80%>
+            This example shows a context menu interceptor that creates a new menu entry that has a 
+	    sub menu. This sub menu is in inserted into the context menu on the topmost position. 
+	    It provides some helper functions to the user that are reachable through the menu Help.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/MenuElement.java" title="link to OfficeDev/MenuElement.java">MenuElement</a></td>
+          <td width=80%>
+            A helper class for the context menu interceptor example. It determines the menu element type.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Number_Formats.java" title="link to OfficeDev/Number_Formats.java">
+	  <font color="#1C3BF9">&lowast;</font>Number_Formats</a></td>
+          <td width=80%>
+            Demonstrates the use of number formats in a spreadsheet document.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Termination Test Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/TerminationTest/TerminationTest.java" title="link to OfficeDev/TerminationTest/TerminationTest.java">
+	  <font color="#1C3BF9">&lowast;</font>TerminationTest</a></td>
+          <td width=80%>
+            This example uses the TerminateListener and shows the use of them in a running program.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/TerminationTest/TerminateListener.java" title="link to OfficeDev/TerminationTest/TerminateListener.java">
+	  TerminateListener</a></td>
+          <td width=80%>
+            An example implementation of 
+	    <a href="../../docs/common/ref/com/sun/star/frame/XTerminateListener.html" title="link to the reference documentation of com.sun.star.frame.XTerminationListener">
+	    <code>XTerminateListener</code></a>. It is called when [PRODUCTNAME] terminates.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Clipboard Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Clipboard/Clipboard.java" title="link to OfficeDev/Clipboard/Clipboard.java">
+	  <font color="#1C3BF9">&lowast;</font>Clipboard</a></td>
+          <td width=80%>
+            Demonstrates the usage of the clipboard service by registering a clipboard listener, getting 
+	    a list of formats from the current clipboard content and copying some data to the clipboard.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Clipboard/ClipboardListener.java" title="link to OfficeDev/Clipboard/ClipboardListener.java">ClipboardListener</a></td>
+          <td width=80%>
+            Implements a clipboard listener for the Clipboard example. In such a class, actions can be 
+	    implemented which happen whenever the clipboard content changes.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Clipboard/ClipboardOwner.java" title="link to OfficeDev/Clipboard/ClipboardOwner.java">ClipboardOwner</a></td>
+          <td width=80%>
+            Implements a clipboard owner for the Clipboard example. This class is notified when it loses 
+	    ownership of the clipboard.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Clipboard/TextTransferable.java" title="link to OfficeDev/Clipboard/TextTransferable.java">TextTransferable</a></td>
+          <td width=80%>
+            Implements a data object for the Clipboard example. Such classes supply clients with data 
+	    in a variety of formats.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Linguistic Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/LinguisticExamples.java" title="link to OfficeDev/Linguistic/LinguisticExamples.java">
+	  <font color="#1C3BF9">&lowast;</font>LinguisticExamples</a></td>
+          <td width=80%>
+            A short example that uses most of the functionality from the [PRODUCTNAME] linguistic API.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/OneInstanceFactory.java" title="link to OfficeDev/Linguistic/OneInstanceFactory.java">OneInstanceFactory</a></td>
+          <td width=80%>
+            This class is used to provide a service factory for the linguistic services. It enforces that 
+	    the actual implementations are only instantiated once.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/PropChgHelper.java" title="link to OfficeDev/Linguistic/PropChgHelper.java">PropChgHelper</a></td>
+          <td width=80%>
+            The base class for several property change helpers which are used to keep track of the 
+	    changes of the service relevant linguistic properties. It is also used by the thesaurus directly.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/PropChgHelper_Hyph.java" title="link to OfficeDev/Linguistic/PropChgHelper_Hyph.java">PropChgHelper_Hyph</a></td>
+          <td width=80%>
+            The property change helper that is tracking the hyphenation relevant properties.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/PropChgHelper_Spell.java" title="link to OfficeDev/Linguistic/PropChgHelper_Spell.java">
+	  PropChgHelper_Spell</a></td>
+          <td width=80%>
+            The property change helper that is tracking the spell checking relevant properties.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/SampleHyphenator.java" title="link to OfficeDev/Linguistic/SampleHyphenator.java">SampleHyphenator</a></td>
+          <td width=80%>
+            A simple implementation for a 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/Hyphenator.html" title="link to the reference documentation of com.sun.star.linguistic2.Hypenator">
+	    <code>Hyphenator</code></a> service.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/SampleSpellChecker.java" title="link to OfficeDev/Linguistic/SampleSpellChecker.java">SampleSpellChecker</a></td>
+          <td width=80%>
+            A simple implementation for a 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/SpellChecker.html" title="link to the reference documentation of com.sun.star.linguistic2.SpellChecker">
+	    <code>SpellChecker</code></a> service.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/SampleThesaurus.java" title="link to OfficeDev/Linguistic/SampleThesaurus.java">SampleThesaurus</a></td>
+          <td width=80%>
+            A simple implementation for a 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/Thesaurus.html" title="link to the reference documentation of com.sun.star.linguistic2.Thesaurus">
+	    <code>Thesaurus</code></a> service.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/XHyphenatedWord_impl.java" title="link to OfficeDev/Linguistic/XHyphenatedWord_impl.java">
+	  XHyphenatedWord_impl</a></td>
+          <td width=80%>
+            An object implementing the 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/XHyphenatedWord.html" title="link to the reference documentation of com.sun.star.linguistic2/XHyphenatedWord">
+	    <code>XHyphenatedWord</code></a> interface. An instance of this type may be returned by 
+	    the hyphenator.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/XMeaning_impl.java" title="link to OfficeDev/Linguistic/XMeaning_impl.java">XMeaning_impl</a></td>
+          <td width=80%>
+            An object implementing the 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/XMeaning.html" title="link to the reference documentation of com.sun.star.linguistic2.XMeaning">
+	    <code>XMeaning</code></a> interface. An instance of this type may be returned by the thesaurus.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/XPossibleHyphens_impl.java" title="link to OfficeDev/Linguistic/XPossibleHyphens_impl.java">
+	  XPossibleHyphens_impl</a></td>
+          <td width=80%>
+            An object implementing the 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/XPossibleHyphens.html" title="link to the reference documentation of com.sun.star.linguistic2.XPossibleHyphens">
+	    <code>XPossibleHyphens</code></a> interface. An instance of this type may be returned by 
+	    the hyphenator.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/Linguistic/XSpellAlternatives_impl.java" title="link to OfficeDev/Linguistic/XSpellAlternatives_impl.java">
+	  XSpellAlternatives_impl</a></td>
+          <td width=80%>
+            An object implementing the 
+	    <a href="../../docs/common/ref/com/sun/star/linguistic2/XSpellAlternatives.html" title="link to the reference documentation of com.sun.star.linguistic2.XSpellAlternatives">
+	    <code>XSpellAlternatives</code></a> interface. An instance of this type may be returned 
+	    by the spell checker.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Path Settings Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/PathSettings/PathSettingsTest.java" title="link to OfficeDev/PathSettings/PathSettingsTest.java">
+	  PathsettingsTest</a></td>
+          <td width=80%>
+	  This code example creates the service "com.sun.star.util.PathSettings" and retrieves all path properties from it. 
+	  It shows how a developer can change the path properties using the 
+	  <a href="../../docs/common/ref/com/sun/star/beans/XPropertySet.html" title="link to the reference documentation of com.sun.star.beans.XPropertySet"><code>XPropertySet</code></a> interface.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Path Substitution Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/PathSubstitution/PathSubstitutionTest.java" title="link to OfficeDev/PathSubstitution/PathSubstitutionTest.java">
+	  PathSubstitutionTest</a></td>
+          <td width=80%>
+	  This code example creates the path substitution service &quot;com.sun.star.util.PathSubstitution&quot; and retrieves the 
+	  pre-defined Office path variables. It shows the variable values on the screen. The reSubstiuteVariables function 
+	  is used to show how the service exchanges parts of a path with a path variable supporting platform independent 
+	  path usage.
+          </td>
+        </tr>
+      </table>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Disable Commands Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeDev/DisableCommands/DisableCommandsTest.java" title="link to OfficeDev/DisableCommands/DisableCommandsTest.java">
+	  DisableCommandsTest</a></td>
+          <td width=80%>
+	  Implements an example showing how a developer can use the configuration API to disable/enable 
+	  commands at runtime.
+         </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Text">Text Documents examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Text/TextDocuments.java" title="link to Text/TextDocuments.java">
+	  <font color="#1C3BF9">&lowast;</font>TextDocuments</a></td>
+          <td width=80%>
+            <p>Demonstrates a wide variety of API functions in text documents and text document views.</p>
+	    <ul>
+	    <li>use of templates</li>
+	    <li>using the view cursor, including visible text selections</li>
+	    <li>changing the paragraph style</li>
+	    <li>using various editing facilities like text insertion</li>
+	    <li>using various cursor interfaces</li>
+	    <li>creating text contents, like tables, sections and frames, well as text fields and 
+	        columns</li>
+	    <li>using stylesheets</li>
+	    <li>applying numbering styles</li>
+	    <li>using references, indexes, footnotes and autotext</li>
+	    <li>loading, storing and printing a text document</li>
+	    </ul>
+	    <p>Adjust the strings at the beginning of the class definition to match your installation!</p>
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Spreadsheet">Spreadsheet Documents examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/ExampleAddIn.java" title="link to Spreadsheet/ExampleAddIn.java">ExampleAddIn</a></td>
+          <td width=80%>
+            Implements a simple add-in component for spreadsheet documents. This component needs to be 
+	    deployed before it can be used.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/ExampleDataPilotSource.java" title="link to Spreadsheet/ExampleDataPilotSource.java">ExampleDataPilotSource</a></td>
+          <td width=80%>
+            Shows usage of a wide variety of spreadsheet interfaces like 
+	    <a href="../../docs/common/ref/com/sun/star/sheet/XCellRangeData.html" title="link to the reference documentation of com.sun.star.sheet.XCellRangeData">
+	    <code>XCellRangeData</code></a>, 
+	    <a href="../../docs/common/ref/com/sun/star/sheet/XCellSeries.html" title="link to the reference documentation of com.sun.star.sheet.XCellSeries">
+	    <code>XCellSeries</code></a>, 
+	    <a href="../../docs/common/ref/com/sun/star/sheet/XArrayFormulaRange.html" title="link to the reference documentation of com.sun.star.sheet.XArrayFormularRange">
+	    <code>XArrayFormulaRange
+	    </code></a> and <a href="../../docs/common/ref/com/sun/star/sheet/XMultipleOperation.html" title="link to the reference documentation of com.sun.star.sheet.XMultipleOperation"><code>
+	    XMultipleOperations</code></a> as well as named ranges, label ranges and data pilot.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/GeneralTableSample.java" title="link to Spreadsheet/GeneralTableSample.java">
+	  <font color="#1C3BF9">&lowast;</font>GeneralTableSample</a></td>
+          <td width=80%>
+            Executes some examples working on generic tables.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/SpreadsheetDocHelper.java" title="link to Spreadsheet/SpreadsheetDocHelper.java">SpreadsheetDocHelper</a></td>
+          <td width=80%>
+            Defines a helper class for the other examples to access spreadsheet documents, sheets 
+	    and cells.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/SpreadsheetSample.java" title="link to Spreadsheet/SpreadsheetSample.java">
+	  <font color="#1C3BF9">&lowast;</font>SpreadsheetSample</a></td>
+          <td width=80%>
+            Executes some examples working on a spreadsheet document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Spreadsheet/ViewSample.java" title="link to Spreadsheet/ViewSample.java">
+	  <font color="#1C3BF9">&lowast;</font>ViewSample</a></td>
+          <td width=80%>
+            Shows how to manipulate view settings like splitting sheeting sheets and selecting cells.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="OfficeBean">Office Bean examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeCommand.java" title="link to OfficeBean/OfficeCommand.java">OfficeCommand</a></td>
+          <td width=80%>
+            A helper class to send UI events (see 
+	    <a href="../../docs/common/ref/com/sun/star/frame/XDispatch.html" title="link to the reference documentation of com.sun.star.frame.XDispatch">
+	    <code>XDispatch</code></a>) to [PRODUCTNAME].
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/BasicOfficeBean.java" title="link to OfficeBean/BasicOfficeBean.java">BasicOfficeBean</a></td>
+          <td width=80%>
+            Shows a JavaBean which can contain arbitrary [PRODUCTNAME] documents.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/BeanInfoAdapter.java" title="link to OfficeBean/BeanInfoAdapter.java">BeanInfoAdapter</a></td>
+          <td width=80%>
+            Implements a helper class to make it easier to create BeanInfo classes.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/SimpleBean/SimpleBean.java" title="link to OfficeBean/SimpleBean/SimpleBean.java">SimpleBean</a></td>
+          <td width=80%>
+            Extends the <code>BasicOfficeBean</code> by a method to show and hide the menu bar.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/SimpleBean/SimpleBeanBeanInfo.java" title="link to OfficeBean/SimpleBean/SimpleBeanBeanInfo.java">SimpleBeanBeanInfo</a></td>
+          <td width=80%>
+            Implements BeanInfo for the <code>SimpleBean</code> example.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/SimpleBean/SimpleViewer.java" title="link to OfficeBean/SimpleBean/SimpleViewer.java">
+	  <font color="#1C3BF9">&lowast;</font>SimpleViewer</a></td>
+          <td width=80%>
+            A Java wrapper application which makes it possible to view [PRODUCTNAME] documents in 
+	    [PRODUCTNAME] beans.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeWriterBean/DocViewer.java" title="link to OfficeBean/OfficeWriterBean/DocViewer.java">
+	  <font color="#1C3BF9">&lowast;</font>DocViewer</a></td>
+          <td width=80%>
+            Demonstrates a JavaBean with which arbitrary [PRODUCTNAME] documents can be viewed.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeWriterBean/Office.java" title="link to OfficeBean/OfficeWriterBean/Office.java">Office</a></td>
+          <td width=80%>
+            A generic base class for the <code>OfficeWrite</code> JavaBean example. This class could 
+	    be used as a base class for other specialized JavaBeans too.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeWriterBean/OfficeBeanInfo.java" title="link to OfficeBean/OfficeWriterBean/OfficeBeanInfo.java">OfficeBeanInfo</a></td>
+          <td width=80%>
+            Example implementation of a BeanInfo object for an office JavaBean.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeWriterBean/OfficeWriter.java" title="link to OfficeBean/OfficeWriterBean/OfficeWriter.java">OfficeWriter</a></td>
+          <td width=80%>
+            Demonstrates how an specialized JavaBean can look like. This example is for the text 
+	    document component.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./OfficeBean/OfficeWriterBean/OfficeWriterBeanInfo.java" title="link to OfficeBean/OfficeWriterBean/OfficeWriterBeanInfo.java">
+	  OfficeWriterBeanInfo</a></td>
+          <td width=80%>
+            Implementation of the BeanInfo for the OficeWriter JavaBean example.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Drawing">Drawing and Presentation Documents examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/ChangeOrderDemo.java" title="link to Drawing/ChangeOrderDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>ChangeOrderDemo</a></td>
+          <td width=80%>
+            Shows how to change the painting order of shapes.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/ControlAndSelectDemo.java" title="link to Drawing/ControlAndSelectDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>ControlAndSelectDemo</a></td>
+          <td width=80%>
+            Demonstrates the creation of a control shape and selects it in the current view.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/CustomShowDemo.java" title="link to Drawing/CustomShowDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>CustomShowDemo</a></td>
+          <td width=80%>
+            Creates two custom shows and selects one of these.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/DrawViewDemo.java" title="link to Drawing/DrawViewDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>DrawViewDemo</a></td>
+          <td width=80%>
+            Prints the view data properties and the controller properties of a drawing view and 
+	    shows an example of setting such a property.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/DrawingDemo.java" title="link to Drawing/DrawingDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>DrawingDemo</a></td>
+          <td width=80%>
+            Creates several shapes on several slides. Nice pattern included!
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/FillAndLineStyleDemo.java" title="link to Drawing/FillAndLineStyleDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>FillAndLineStyleDemo</a></td>
+          <td width=80%>
+            Demonstrates usage of area fill and line style properties.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/GluePointDemo.java" title="link to Drawing/GluePointDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>GluePointDemo</a></td>
+          <td width=80%>
+            Creates two shapes with glue points and connects them with two connectors.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/GraphicExportDemo.java" title="link to Drawing/GraphicExportDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>GraphicExportDemo</a></td>
+          <td width=80%>
+            Loads a drawing document and exports it to a GIF file. Run this program with source URL, 
+	    target URL and page index on the command line, where the URLs are fully qualified URLs.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/Helper.java" title="link to Drawing/Helper.java">Helper</a></td>
+          <td width=80%>
+            Contains a helper class for the other examples to connect to [PRODUCTNAME] and open or 
+	    create a drawing document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/LayerDemo.java" title="link to Drawing/LayerDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>LayerDemo</a></td>
+          <td width=80%>
+            Creates shapes in different layers to show how to protect shapes from modifications.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/ObjectTransformationDemo.java" title="link to Drawing/ObjectTransformationDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>ObjectTransformationDemo</a></td>
+          <td width=80%>
+            Shows geometric transformations on a shape using a homogenous matrix.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/Organigram.java" title="link to Drawing/Organigram.java">
+	  <font color="#1C3BF9">&lowast;</font>Organigram</a></td>
+          <td width=80%>
+            Demonstrates the creation of an organigram consisting of shapes and connectors.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/PageHelper.java" title="link to Drawing/PageHelper.java">PageHelper</a></td>
+          <td width=80%>
+            Contains a helper class for accessing several kinds of draw pages in a presentation or 
+	    drawing document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/PresentationDemo.java" title="link to Drawing/PresentationDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>PresentationDemo</a></td>
+          <td width=80%>
+            Creates a presentation and runs it with some user interaction.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/ShapeHelper.java" title="link to Drawing/ShapeHelper.java">ShapeHelper</a></td>
+          <td width=80%>
+            Contains a helper class for accessing and creating shapes for the other examples.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/StyleDemo.java" title="link to Drawing/StyleDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>StyleDemo</a></td>
+          <td width=80%>
+            Creates a shape and applies a predefined shape stylesheet.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Drawing/TextDemo.java" title="link to Drawing/TextDemo.java">
+	  <font color="#1C3BF9">&lowast;</font>TextDemo</a></td>
+          <td width=80%>
+            Demonstrates usage of text and text styles in shapes.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Charts">Charts examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/CalcHelper.java" title="link to Charts/CalcHelper.java">CalcHelper</a></td>
+          <td width=80%>
+            Contains some helper methods for charts in spreadsheet documents, like accessing sheets by 
+	    name, inserting a chart into a sheet, filling cell ranges with random numbers etc.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/ChartHelper.java" title="link to Charts/ChartHelper.java">ChartHelper</a></td>
+          <td width=80%>
+            Contains some helper methods for charts, like creating a chart as an embedded object.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/ChartInCalc.java" title="link to Charts/ChartInCalc.java">
+	  <font color="#1C3BF9">&lowast;</font>ChartInCalc</a></td>
+          <td width=80%>
+            Demonstrates how to create an embedded chart object with a random scatter chart within a 
+	    spreadsheet.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/ChartInDraw.java" title="link to Charts/ChartInDraw.java">
+	  <font color="#1C3BF9">&lowast;</font>ChartInDraw</a></td>
+          <td width=80%>
+            Inserts a 3D-bar chart into a drawing document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/ChartInWriter.java" title="link to Charts/ChartInWriter.java">
+	  <font color="#1C3BF9">&lowast;</font>ChartInWriter</a></td>
+          <td width=80%>
+            Inserts an embedded chart object with a random bar chart in a text document. This example 
+	    does not really work, because the API for embedding objects into text documents is not 
+	    implemented.  To be more 
+	    precise.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/Helper.java" title="link to Charts/Helper.java">Helper</a></td>
+          <td width=80%>
+            Shows how to connect to [PRODUCTNAME] and create text, drawing or spreadsheet document. 
+	    This class is used as a helper class for the other examples.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/JavaSampleChartAddIn.java" title="link to Charts/JavaSampleChartAddIn.java">JavaSampleChartAddIn</a></td>
+          <td width=80%>
+            Gives an example of how to implement chart add-ins to create new or specialized diagram types.
+	    The resulting component has to be deployed before it can be used.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/ListenAtCalcRangeInDraw.java" title="link to Charts/ListenAtCalcRangeInDraw.java">
+	  <font color="#1C3BF9">&lowast;</font>ListenAtCalcRangeInDraw</a></td>
+          <td width=80%>
+            This helper class is used to build connection between an embedded chart object in a 
+	    drawing document and a data range in a spreadsheet document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Charts/SelectionChangeListener.java" title="link to Charts/SelectionChangeListener.java">
+	  <font color="#1C3BF9">&lowast;</font>SelectionChangeListener</a></td>
+          <td width=80%>
+            Shows how to register a handler which is called when the selection within an embedded 
+	    chart object changes.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="BasicandDialogs">[PRODUCTNAME] Basic and Dialogs examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./BasicAndDialogs/FirstStepsBasic.sxw" title="link to BasicAndDialogs/FirstStepsBasic.sxw">FirstStepsBasic.sxw</a></td>
+          <td width=80%>
+            This StarBasc example shows how to create an own dialog which inserts a graphics object 
+	    into a text document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./BasicAndDialogs/CreatingDialogs/SampleDialog.java" title="link to BasicAndDialogs/CreatingDialogs/SampleDialog.java">SampleDialog</a></td>
+          <td width=80%>
+            This example builds a Java component which creates a simple dialog.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./BasicAndDialogs/CreatingDialogs/CreatingDialogs.sxw" title="link to BasicAndDialogs/CreatingDialogs/CreatingDialogs.sxw">
+	  CreatingDialogs.sxw</a></td>
+          <td width=80%>
+            This document contains a simple Basic macro which loads the SampleDialog component. The 
+	    macro will be executed by pressing a Push button.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./BasicAndDialogs/ToolkitControls" title="link to BasicAndDialogs/ToolkitControls">
+	  ToolkitControls</a></td>
+          <td width=80%>
+            In this directory you find a Basic library which implements several examples using 
+	     toolkit controls. You can install this Basic library in the internal Basic IDE.
+	     Navigate to Tools &rarr; Macro &rarr; Organizer...(button) &rarr; Libraries (tab page) 
+	     &rarr; Append... (button) and choose the &quot;script.slb&quot; file &rarr; open (button) 
+	     &rarr; Ok (button). Back on the Libraries tab page, select &quot;ToolkitControl&quot; and 
+	     press the Edit button. In the Basic IDE you will find several modules which contains the 
+	     examples and the necessary dialogs.<br>
+	     Select one of the following modules and press the Run button:
+	     <ul>
+	       <li>FileDialog = simple dialog which ask for a filename (nothing else)
+	       <li>MultiPage = a more complex dialog with several tab pages
+	       <li>ProgressBar = a dialog which shows a progress bar
+	       <li>ScrollBar = a dialog which shows a scroll bar
+	     </ul>
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Database">Database Access examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      The Database examples use a SQL database named &quot;MYDB0&quot; with write access. Make sure that 
+      you have a data source operating on such a database in your office before you run the example.
+      <p>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Database Examples</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/CodeSamples.java" title="link to Database/CodeSamples.java">
+	  <font color="#1C3BF9">&lowast;</font>CodeSamples</a></td>
+          <td width=80%>
+            Creates the connection to [PRODUCTNAME] and executes the code SalesMan samples for database 
+	    API.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/OpenQuery.java" title="link to Database/OpenQuery.java">
+	  <font color="#1C3BF9">&lowast;</font>OpenQuery</a></td>
+          <td width=80%>
+            Demonstrates the use of <a href="../../docs/common/ref/com/sun/star/sdbc/XResultSetUpdate.html" title="link to the reference documentation of com.sun.star.sdbc.XResultSetUpdate">
+	    <code>XResultSetUpdate
+	    </code></a> and <a href="../../docs/common/ref/com/sun/star/sdbc/XRowUpdate.html" title="link to the reference documentation of com.sun.star.sdbc.XRowUpdate">
+	    <code>XRowUpdate</code></a>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/RowSet.java" title="link to Database/RowSet.java">
+	  <font color="#1C3BF9">&lowast;</font>RowSet</a></td>
+          <td width=80%>
+            Demonstrates the usage of a row set.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/RowSetEventListener.java" title="link to Database/RowSetEventListener.java">RowSetEventListener</a></td>
+          <td width=80%>
+            Demonstrates how to define listener for the row set example.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/Sales.java" title="link to Database/Sales.java">Sales</a></td>
+          <td width=80%>
+            Creates a simple database table.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/SalesMan.java" title="link to Database/SalesMan.java">SalesMan</a></td>
+          <td width=80%>
+            Creates a simple database table.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/sdbcx.java" title="link to Database/sdbcx.java">sdbcx</a></td>
+          <td width=80%>
+            Demonstrates the usage of the SDBCX layer services.
+          </td>
+        </tr>
+      </table><br>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Driver Skeleton Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/OSubComponent.hxx" title="link to Database/DriverSkeleton/OSubComponent.hxx">OSubComponent.hxx</a></td>
+          <td width=80%>
+            Helper class to delegate special dispose handling.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/OTypeInfo.hxx" title="link to Database/DriverSkeleton/OTypeInfo.hxx">OTypeInfo.hxx</a></td>
+          <td width=80%>
+            Contains the database types from the DatabaseMetaData getTypes call.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SConnection.hxx" title="link to Database/DriverSkeleton/SConnection.hxx">SConnection.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the service 
+	    com.sun.star.sdbc.Connection.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SConnection.cxx" title="link to Database/DriverSkeleton/SConnection.cxx">SConnection.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SConnection.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SDatabaseMetaData.hxx" title="link to Database/DriverSkeleton/SDatabaseMetaData.hxx">SDatabaseMetaData.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the interface 
+	    com.sun.star.sdbc.XDatabaseMetaData.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SDatabaseMetaData.cxx" title="link to Database/DriverSkeleton/SDatabaseMetaData.cxx">SDatabaseMetaData.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SDatabaseMetaData.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SDriver.hxx" title="link to Database/DriverSkeleton/SDriver.hxx">SDriver.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the service 
+	    com.sun.star.sdbc.Driver.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SDriver.cxx" title="link to Database/DriverSkeleton/SDriver.cxx">SDriver.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SDriver.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SPreparedStatement.hxx" title="link to Database/DriverSkeleton/SPreparedStatement.hxx">SPreparedStatement.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the service 
+	    com.sun.star.sdbc.PreparedStatement.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SPreparedStatement.cxx" title="link to Database/DriverSkeleton/SPreparedStatement.cxx">SPreparedStatement.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SPreparedStatement.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SResultSet.hxx" title="link to Database/DriverSkeleton/SResultSet.hxx">SResultSet.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the service 
+	    com.sun.star.sdbc.ResultSet.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SResultSet.cxx" title="link to Database/DriverSkeleton/SResultSet.cxx">SResultSet.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SResultSet.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SResultSetMetaData.hxx" title="link to Database/DriverSkeleton/SResultSetMetaData.hxx">SResultSetMetaData.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the interface 
+	    com.sun.star.sdbc.XResultSetMetaData.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SResultSetMetaData.cxx" title="link to Database/DriverSkeleton/SResultSetMetaData.cxx">SResultSetMetaData.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SResultSetMetaData.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SServices.cxx" title="link to Database/DriverSkeleton/SServices.cxx">SServices.cxx</a></td>
+          <td width=80%>
+            This file contains a class implementing the service needed to register the driver.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SStatement.hxx" title="link to Database/DriverSkeleton/SStatement.hxx">SStatement.hxx</a></td>
+          <td width=80%>
+            This file contains the declaration of a class implementing the service com.sun.star.sdbc.Statement.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/SStatement.cxx" title="link to Database/DriverSkeleton/SStatement.cxx">SStatement.cxx</a></td>
+          <td width=80%>
+            This file contains the implementation of the class declared in SStatement.hxx.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/propertyids.hxx" title="link to Database/DriverSkeleton/propertyids.hxx">propertyids.hxx</a></td>
+          <td width=80%>
+	     Defines some common used strings and declare a helper class for properties.        
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Database/DriverSkeleton/propertyids.cxx" title="link to Database/DriverSkeleton/propertyids.cxx">propertyids.cxx</a></td>
+          <td width=80%>
+            Implements the property helper class.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Forms">Forms examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <p>This example uses a SQL data source in the Office named "OO_SDK_Demo_DB" with write access. Make
+      sure that you have such a datasurce available in your office before you run the example.
+      For running the FormLayer example you should start your office with the following command:<br>
+      <pre>soffice &quot;-accept=socket,host=localhost,port=8100;urp,ForceSynchronous=1,Negotiate=0;
+      StarOffice.ServiceManager&quot;</pre><br>
+      The additonal connection parameters are necessary to avoid snychronization problems.
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/ButtonOperator.java" title="link to Forms/ButtonOperator.java">ButtonOperator</a></td>
+          <td width=80%>
+            The form created by the sample program contains various buttons which are tied to certain 
+	    functionality. The class ButtonOperator, well, operates these buttons.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/ComponentTreeTraversal.java" title="link to Forms/ComponentTreeTraversal.java">ComponentTreeTraversal</a></td>
+          <td width=80%>
+            Helper classes for traveling through a tree of 
+	    <a href="../../docs/common/ref/com/sun/star/form/FormComponent.html" title="link to the reference documentation of com.sun.star.form.FormComponent"><code>
+	    FormComponent's</code></a>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/ControlLock.java" title="link to Forms/ControlLock.java">ControlLock</a></td>
+          <td width=80%>
+            Helper class for implementing the locking of control depending on the state of the underlying 
+	    <a href="../../docs/common/ref/com/sun/star/sdb/RowSet.html" title="link to the reference documentation of com.sun.star.sdb.RowSet"><code>RowSet</code></a>.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/DocumentHelper.java" title="link to Forms/DocumentHelper.java">DocumentHelper</a></td>
+          <td width=80%>
+            Helper class for encapsulating working with a (logical) form document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/DocumentType.java" title="link to Forms/DocumentType.java">DocumentType</a></td>
+          <td width=80%>
+            A simple enumeration class for classifying a document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/DocumentViewHelper.java" title="link to Forms/DocumentViewHelper.java">DocumentViewHelper</a></td>
+          <td width=80%>
+            Helper class for encapsulating working with a view for a form document.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/FLTools.java" title="link to Forms/FLTools.java">FLTools</a></td>
+          <td width=80%>
+            Various small tools for the form layer sample program.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/FormLayer.java" title="link to Forms/FormLayer.java">
+	  <font color="#1C3BF9">&lowast;</font>FormLayer</a></td>
+          <td width=80%>
+            Main class for central form operation. Two tables will be created and a form (writer document) 
+	    with a bussiness example will fill it fields from these tables.
+        </tr>
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/GridFieldValidator.java" title="link to Forms/GridFieldValidator.java">GridFieldValidator</a></td>
+          <td width=80%>
+            <code>GridFieldValidator</code> is responsible for validating the input in a specific grid 
+	    control column.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/InteractionRequest.java" title="link to Forms/InteractionRequest.java">InteractionRequest</a></td>
+          <td width=80%>
+            A simple implementation of a 
+	    <a href="../../docs/common/ref/com/sun/star/task/XInteractionRequest.html" title="link to the reference documentation of com.sun.star.task.XInteractionRequest">
+	    <code>XInteractionRequest</code></a>. Not tied to the form layer example, but a general helper.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/KeyGenerator.java" title="link to Forms/KeyGenerator.java">KeyGenerator</a></td>
+          <td width=80%>
+            Helper class which is able to generate (unique) keys for a 
+	    (<a href="../../docs/common/ref/com/sun/star/sdb/RowSet.html" title="link to the reference documentation of com.sun.star.sdb.RowSet"><code>RowSet</code></a>) column. 
+	    An instance of this class can be tied to a specific row set column. It then monitors the state 
+	    of the underlying row set, and upon inserting a new record into it (two operation modi are 
+	    possible here), it automatically inserts a newly created (two modi, too) key into the column.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/SalesFilter.java" title="link to Forms/SalesFilter.java">SalesFilter</a></td>
+          <td width=80%>
+            Helper class operating the on-the-fly filter control in the sample document. The document 
+	    contains several controls which can be used to interactively change the filter of the form. 
+	    The class <code>SalesFilter</code> operates these controls.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Forms/UNO.java" title="link to Forms/UNO.java">UNO</a></td>
+          <td width=80%>
+            A small UNO-syntax related helper class.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="UniversalContentBroker(UCB)">Universal Content Broker (UCB) examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/ChildrenRetriever.java" title="link to UCB/ChildrenRetriever.java">
+	  <font color="#1C3BF9">&lowast;</font>ChildrenRetriever</a></td>
+          <td width=80%>
+            Shows child entries of a given folder. Try -help or -? on the command line to view optional 
+	    parameters.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/DataStreamComposer.java" title="link to UCB/DataStreamComposer.java">
+	  <font color="#1C3BF9">&lowast;</font>DataStreamComposer</a></td>
+          <td width=80%>
+            Demonstrates usage of the data stream by copying the data from one UCB node to another.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/DataStreamRetriever.java" title="link to UCB/DataStreamRetriever.java">
+	  <font color="#1C3BF9">&lowast;</font>DataStreamRetriever</a></td>
+          <td width=80%>
+            Shows how to obtain the data stream from a document resource.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/Helper.java" title="link to UCB/Helper.java">Helper</a></td>
+          <td width=80%>
+            Some helper methods to access the UCB which are used by the other examples.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/MyActiveDataSink.java" title="link to UCB/MyActiveDataSink.java">MyActiveDataSink</a></td>
+          <td width=80%>
+            A helper class for the <code>DataStreamRetriever</code> example which implements a data sink.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/PropertiesComposer.java" title="link to UCB/PropertiesComposer.java">
+	  <font color="#1C3BF9">&lowast;</font>PropertiesComposer</a></td>
+          <td width=80%>
+            Shows how to set property values of an UCB resource.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/PropertiesRetriever.java" title="link to UCB/PropertiesRetriever.java">
+	  <font color="#1C3BF9">&lowast;</font>PropertiesRetriever</a></td>
+          <td width=80%>
+            Shows how to access property values of an UCB resource.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/ResourceCreator.java" title="link to UCB/ResourceCreator.java">
+	  <font color="#1C3BF9">&lowast;</font>ResourceCreator</a></td>
+          <td width=80%>
+            Creates a new file in an existing file system folder.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/ResourceManager.java" title="link to UCB/ResourceManager.java">
+	  <font color="#1C3BF9">&lowast;</font>ResourceManager</a></td>
+          <td width=80%>
+            Demonstrates how to copy and move UCB resources.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./UCB/ResourceRemover.java" title="link to UCB/ResourceRemover.java">
+	  <font color="#1C3BF9">&lowast;</font>ResourceRemover</a></td>
+          <td width=80%>
+            Demonstrates how to remove UCB resources.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Configuration">Configuration Management examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Config/ConfigExamples.java" title="link to Config/ConfigExamples.java">
+	  <font color="#1C3BF9">&lowast;</font>ConfigExamples</a></td>
+          <td width=80%>
+            This example connects to a [PRODUCTNAME], gets the configuration manager and accesses the 
+	    configuration in various ways.
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <blockquote> 
+      <p><font size="5"><b><a name="Accessibility">Accessibility examples</a></b></font>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="../../index.html" title="link to the SDK start page">SDK home</a>&nbsp;&nbsp;<a href="#examples" title="link to the examples overview">examples overview</a>
+      </p>
+      <table width=100% border=1 cellpadding=4 cellspacing=0>
+        <tr valign=top bgcolor="#f0f0f0"> 
+          <td width=20%><b>Example</b></td>
+          <td width=80%><b>Description</b></td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/ConnectionTask.java" title="link to Accessibility/ConnectionTask.java">ConnectionTask</a></td>
+          <td width=80%>
+           A timer task that tries to (re-)connect to a running Office application.  When it can not detect 
+	  an Office application that accepts connections then it waits for some time and tries again. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/EventHandler.java" title="link to Accessibility/EventHandler.java">EventHandler</a></td>
+          <td width=80%>
+           Handle all events that are used by this tool.  It is called by the EventListenerProxy class 
+	   with somewhat preprocessed events.
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/EventListenerProxy.java" title="link to Accessibility/EventListenerProxy.java">EventListenerProxy</a></td>
+          <td width=80%>
+           This proxy runs in its own thread to avoid deadlocks with the Office it listens to.  It waits 
+	   for top window events to be informed of new or removed top level windows and for some 
+	   accessibility events that are relevant to display the currently focused object. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/GraphicalDisplay.java" title="link to Accessibility/GraphicalDisplay.java">GraphicalDisplay</a></td>
+          <td width=80%>
+           This widget displays a graphical representation of the currently focused object.  The focused 
+	   object is painted as a green rectangle and its ancestors as gray rectangles to give an impression
+	    of the relative location of the objects. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/IAccessibleObjectDisplay.java" title="link to Accessibility/IAccessibleObjectDisplay.java">IAccessibleObjectDisplay</a></td>
+          <td width=80%>
+           This interface is implemented by all classes that display the currently focused object, namely 
+	   GraphicalDisplay and TextualDisplay.  It allows the owner of the display classes to tell them to
+	    display a specific object: usually the focused object. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/MessageArea.java" title="link to Accessibility/MessageArea.java">MessageArea</a></td>
+          <td width=80%>
+           A text area that shows messages about what the tools is currently doing. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/NameProvider.java" title="link to Accessibility/NameProvider.java">
+	  <font color="#1C3BF9">&lowast;</font>NameProvider</a></td>
+          <td width=80%>
+           In contrast to the Java Accessibility API which uses Strings for event types, roles, states, 
+	   and relation types, the UNO Accessibility API uses numbers for this task.  In order to present 
+	   them to the user in a more readable form this class returns the string name for each event, 
+	   role, state, or relation. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/RegistrationThread.java" title="link to Accessibility/RegistrationThread.java">RegistrationThread</a></td>
+          <td width=80%>
+           When a new window appears or an existing one is removed the tool registers or unregisters at 
+	   all the window's children as accessibility event listener.  This is handled by RegistrationThread
+	    objects in their own threads so that the user interface is not blocked. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/SSR.java" title="link to Accessibility/SSR.java">
+	  <font color="#1C3BF9">&lowast;</font>SSR</a></td>
+          <td width=80%>
+           The main class sets up the user interface and starts the ConnectionTask object that eventually 
+	   will initiate a connection to a running Office application and in turn will create 
+	   RegistrationThread objects to register at all Office windows as accessibility event listener 
+	   and thus gets informed about the currently focused object. 
+          </td>
+        </tr>
+        <tr>
+	  <td width=20%><a href="./Accessibility/TextualDisplay.java" title="link to Accessibility/TextualDisplay.java">TextualDisplay</a></td>
+          <td width=80%>
+           Show some textual information about the currently focused object like its name, description, 
+	   and role.  
+          </td>
+        </tr>
+      </table>
+      <blockquote> 
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td class="color2" height="6"></td>
+    <td bgcolor="#000000" height="6" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="6"></td>
+    <td class="color1" height="6" width="222"></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#000000" height="1"></td>
+    <td bgcolor="#000000" height="1" width="1"><img src="../../docs/images/black_dot.gif" width="1" height="1"></td>
+    <td bgcolor="#000000" height="1" width="222"></td>
+  </tr>
+  <tr> 
+    <td colspan="3" height="8"></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <p align=center><font size=2><b>Copyright 2003 Sun Microsystems, Inc.</b></font>
+      </p>
+      &nbsp
+    </td>
+  </tr>
+</table>
+</body>
+</html>
