@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: dr $
- //     $Date: 2001-05-23 16:56:55 $
- // $Revision: 1.11 $
+ //   $Author: vg $
+ //     $Date: 2001-05-30 20:31:23 $
+ // $Revision: 1.12 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -146,7 +146,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -178,7 +178,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ english_us ] = "Target ~value" ;
         Text[ chinese_simplified ] = "Ä¿±êÖµ(~V)";
         Text[ russian ] = "Êîíå÷íîå çíà÷åíèå";
-        Text[ polish ] = "Warto?æ docelowa";
+        Text[ polish ] = "Wartoœæ docelowa";
         Text[ japanese ] = "–Ú•W’l(~V)";
         Text[ chinese_traditional ] = "¥Ø¼Ğ­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ ÇáåÏİ";
@@ -248,7 +248,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -327,7 +327,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ english_us ] = "Invalid target value." ;
         Text[ chinese_simplified ] = "Ä¿±êÊıÖµÎŞĞ§£¡";
         Text[ russian ] = "Íåäîïóñòèìîå êîíå÷íîå çíà÷åíèå!";
-        Text[ polish ] = "Nieprawid³owa warto?æ docelowa!";
+        Text[ polish ] = "Nieprawid³owa wartoœæ docelowa!";
         Text[ japanese ] = "‚±‚ÌÀ°¹Ş¯Ä’l‚Í–³Œø‚Å‚·B";
         Text[ chinese_traditional ] = "¥Ø¼Ğ¼Æ­ÈµL®Ä¡I";
         Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
