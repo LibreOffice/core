@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:36:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,15 +847,9 @@ ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 SimpleResMgr* SfxApplication::CreateSimpleResManager()
 {
     SimpleResMgr    *pRet;
-    ::rtl::OUString sAppName;
-
-    if ( ::vos::OStartupInfo().getExecutableFile(sAppName) != ::vos::OStartupInfo::E_None )
-        sAppName = ::rtl::OUString();
-
     const AllSettings& rAllSettings = Application::GetSettings();
     ::com::sun::star::lang::Locale aLocale = rAllSettings.GetUILocale();
-    String sTemp( sAppName );
-    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), aLocale, &sTemp, 0 );
+    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), aLocale );
 
     return pRet;
 }
