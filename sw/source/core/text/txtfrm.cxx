@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-14 11:31:36 $
+ *  last change: $Author: fme $ $Date: 2001-11-22 15:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,18 @@ TYPEINIT1( SwTxtFrm, SwCntntFrm );
 // Switches width and height of the text frame
 void SwTxtFrm::SwapWidthAndHeight()
 {
-    bIsSwapped = ! bIsSwapped;
+    if ( ! bIsSwapped )
+    {
+        const long nPrtOfstX = Prt().Pos().X();
+        Prt().Pos().X() = Prt().Pos().Y();
+        Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+    }
+    else
+    {
+        const long nPrtOfstY = Prt().Pos().Y();
+        Prt().Pos().Y() = Prt().Pos().X();
+        Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
+    }
 
     const long nFrmWidth = Frm().Width();
     Frm().Width( Frm().Height() );
@@ -214,9 +225,8 @@ void SwTxtFrm::SwapWidthAndHeight()
     const long nPrtWidth = Prt().Width();
     Prt().Width( Prt().Height() );
     Prt().Height( nPrtWidth );
-    const long nPrtOfstX = Prt().Pos().X(); //Frm().Width() - ( Prt().Pos().X() + Prt().Width() );
-    Prt().Pos().X() = Prt().Pos().Y();
-    Prt().Pos().Y() = nPrtOfstX;
+
+    bIsSwapped = ! bIsSwapped;
 }
 
 // Calculates the coordinates of a rectangle when switching from
