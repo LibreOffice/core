@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:12:33 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void ComboBox::ImplLoadRes( const ResId& rResId )
 {
     Edit::ImplLoadRes( rResId );
 
-    USHORT nNumber = ReadShortRes();
+    ULONG nNumber = ReadLongRes();
 
     if( nNumber )
     {
