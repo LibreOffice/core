@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 13:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #ifndef _SMMOD_HXX
 #include "smmod.hxx"
@@ -126,12 +129,12 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 
 SmModule::SmModule(SvFactory* pObjFact) :
-    SmModuleDummy(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact)
+    SmModuleDummy(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact),
+    pConfig( 0 ),
+    pRectCache( new SmRectCache ),
+    pSysLocale( 0 )
 {
     SetName( C2S("StarMath" ));
-
-    pConfig     = 0;
-    pRectCache  = new SmRectCache;
 }
 
 
@@ -139,8 +142,14 @@ SmModule::~SmModule()
 {
     delete pConfig;
     delete pRectCache;
+    delete pSysLocale;
 }
 
+void SmModule::_CreateSysLocale() const
+{
+    SmModule* pThis = (SmModule*)this;
+    pThis->pSysLocale = new SvtSysLocale;
+}
 
 SmConfig * SmModule::GetConfig()
 {

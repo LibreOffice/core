@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-05 08:25:33 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 13:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #ifndef PARSE_HXX
@@ -408,14 +411,6 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
 
 ///////////////////////////////////////////////////////////////////////////
 
-static CharClass& GetCharClass()
-{
-    static CharClass aCharClass( SvxCreateLocale(
-                        Application::GetAppInternational().GetLanguage() ) );
-    return aCharClass;
-}
-
-
 BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     // returns 'TRUE' iff cChar is '\0' or a delimeter
 {
@@ -433,7 +428,7 @@ BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
 
     BOOL bIsDelim = *pDelim != 0;
 
-    INT16 nTypJp = ::GetCharClass().getType( rTxt, nPos );
+    INT16 nTypJp = SM_MOD1()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
     bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
                 nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
 
@@ -468,7 +463,7 @@ void SmParser::NextToken()
     ParseResult aRes;
     xub_StrLen  nRealStart;
     BOOL        bCont;
-    CharClass& rCC = ::GetCharClass();
+    const CharClass& rCC = SM_MOD1()->GetSysLocale().GetCharClass();
     do
     {
         //?? does parseAnyToken handles Japanese (CJK) spaces correct ??

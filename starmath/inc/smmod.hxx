@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 13:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,16 @@ class SmModule;
 \************************************************************************/
 
 class SmRectCache;
+class SvtSysLocale;
 
 class SmModule : public SmModuleDummy
 {
     SmConfig            *pConfig;
     SmRectCache         *pRectCache;
+    SvtSysLocale        *pSysLocale;
 
     virtual void FillStatusBar(StatusBar &rBar);
+    void _CreateSysLocale() const;
 
 public:
     TYPEINFO();
@@ -109,6 +112,13 @@ public:
     SmRectCache *       GetRectCache()     { return pRectCache; }
 
     void GetState(SfxItemSet&);
+
+    const SvtSysLocale& GetSysLocale() const
+    {
+        if( !pSysLocale )
+            _CreateSysLocale();
+        return *pSysLocale;
+    }
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
