@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
+ *  last change: $Author: jb $ $Date: 2001-07-19 13:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@ static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_
 static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.TypeDetection";
 static const sal_Char*      s_pServerType   =   "setup";
 static const sal_Char*      s_pLocale       =   "de-DE";
-static const sal_Char*      s_pServer       =   "lautrec-3108:19205";
-static const sal_Char*      s_pUser         =   "lars";
+static const sal_Char*      s_pServer       =   "lautrec-3108:48205";
+static const sal_Char*      s_pUser         =   "nobody";
 static const sal_Char*      s_pPassword     =   "";
 #endif
 
@@ -455,8 +455,19 @@ int _cdecl main( int argc, char * argv[] )
 
             aCPArgs = createSequence(sUser, sPasswd);
 
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sServer);
+            if (sServer.getLength())
+            {
+                sal_Int32 nPortPos = sServer.lastIndexOf(':');
+                sal_Int16 nPort = (nPortPos > 0) ? sServer.copy(nPortPos+1).toInt32() : 0;
+                if (nPort != 0)
+                {
+                    aCPArgs.realloc(aCPArgs.getLength() + 1);
+                    aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("port"), nPort);
+                    sServer = sServer.copy(0,nPortPos);
+                }
+                aCPArgs.realloc(aCPArgs.getLength() + 1);
+                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sServer);
+            }
 
             OUString sTimeout = ASCII("10000");
             aCPArgs.realloc(aCPArgs.getLength() + 1);
