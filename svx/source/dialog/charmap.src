@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:52:11 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,7 +1534,7 @@ String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
         Text[ japanese ] = "ˆÍ‚İCJK—p•¶šEŒ";
         Text[ korean ] = "CJK ¹®ÀÚ¿Í ¿ù, ¿ø¹®ÀÚ";
         Text[ chinese_simplified ] = "´øÀ¨ºÅµÄÖĞÈÕº«×Ö·ûºÍÔÂ·İ";
-        Text[ chinese_traditional ] = "±a¬A¸¹ªº¤¤¤éÁú¦r²Å©M¤ë¥÷";
+        Text[ chinese_traditional ] = "±a¬A¸¹ªº¤¤¤éÁú¦r¤¸©M¤ë¥÷";
         Text[ turkish ] = "Enclosed CJK Letters And Months";
         Text[ arabic ] = "ÃÍÑİ æÃÔåÑ ÕíäíÉ æíÇÈÇäíÉ æßæÑíÉ İí ÏÇÆÑÉ";
     };
