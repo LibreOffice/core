@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 11:59:01 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 15:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace connectivity
         {
             if (osl_decrementInterlockedCount( &m_pDerivedImplementation->m_refCount ) == 0)
             {
-                if (! m_pDerivedImplementation->rBHelper.bDisposed)
+                if (!m_pDerivedImplementation->rBHelper.bDisposed && !m_pDerivedImplementation->rBHelper.bInDispose)
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHoldAlive( *m_pDerivedImplementation );
 
