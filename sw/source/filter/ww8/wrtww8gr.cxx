@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,25 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
     }
 }
 
+static Size lcl_GetSwappedInSize(const SwNoTxtNode& rNd)
+{
+    Size aGrTwipSz(rNd.GetTwipSize());
+    //JP 05.12.98: falls die Grafik noch nie angezeigt wurde und es sich
+    //              um eine gelinkte handelt, so ist keine Size gesetzt. In
+    //              diesem Fall sollte man sie mal reinswappen.
+    if (
+         (!aGrTwipSz.Width() || !aGrTwipSz.Height()) &&
+         rNd.IsGrfNode() &&
+         GRAPHIC_NONE != ((const SwGrfNode&)rNd).GetGrf().GetType()
+       )
+    {
+        ((SwGrfNode&)rNd).SwapIn();
+        aGrTwipSz = rNd.GetTwipSize();
+    }
+
+    return aGrTwipSz;
+}
+
 void SwWW8WrGrf::Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly )
 {
     UINT16 nWidth;
@@ -495,20 +514,9 @@ void SwWW8WrGrf::Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly )
         nWidth = (UINT16)rWrt.nFlyWidth;
         nHeight = (UINT16)rWrt.nFlyHeight;
     }
-    else
+    else if (pNd)
     {
-        Size aGrTwipSz( pNd->GetTwipSize() );
-        //JP 05.12.98: falls die Grafik noch nie angezeigt wurde und es sich
-        //              um eine gelinkte handelt, so ist keine Size gesetzt. In
-        //              diesem Fall sollte man sie mal reinswappen.
-        if( ( !aGrTwipSz.Width() || !aGrTwipSz.Height() ) &&
-            pNd->IsGrfNode() &&
-            GRAPHIC_DEFAULT == ((SwGrfNode*)pNd)->GetGrf().GetType() )
-        {
-            ((SwGrfNode*)pNd)->SwapIn();
-            aGrTwipSz = pNd->GetTwipSize();
-        }
-
+        Size aGrTwipSz(lcl_GetSwappedInSize(*pNd));
         nWidth = (UINT16)aGrTwipSz.Width();
         nHeight = (UINT16)aGrTwipSz.Height();
     }
@@ -537,28 +545,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
         nYSizeAdd -= (INT16)( rCr.GetTop() + rCr.GetBottom() );
     }
 
-    Size aGrTwipSz( pNd->GetTwipSize() );
-    //JP 05.12.98: falls die Grafik noch nie angezeigt wurde und es sich
-    //              um eine gelinkte handelt, so ist keine Size gesetzt. In
-    //              diesem Fall sollte man sie mal reinswappen.
-    if( ( !aGrTwipSz.Width() || !aGrTwipSz.Height() ) &&
-        pNd->IsGrfNode() &&
-        GRAPHIC_DEFAULT == ((SwGrfNode*)pNd)->GetGrf().GetType() )
-    {
-        ((SwGrfNode*)pNd)->SwapIn();
-        aGrTwipSz = pNd->GetTwipSize();
-    }
-
-#if 0
-    //I think this is a bad idea, if we really want to do this, then
-    //lets actually draw in the space we want here. And remember that
-    //there is a default 0.32 to the left and right in word already
-    const SvxLRSpaceItem &rLR = (SvxLRSpaceItem &)pFly->GetAttr(RES_LR_SPACE);
-    const SvxULSpaceItem &rUL = (SvxULSpaceItem &)pFly->GetAttr(RES_UL_SPACE);
-    nWidth += (INT16)(rLR.GetLeft() + rLR.GetRight());
-    nHeight += rUL.GetUpper() + rUL.GetLower();
-#endif
-
+    Size aGrTwipSz(lcl_GetSwappedInSize(*pNd));
     bool bWrtWW8 = rWrt.bWrtWW8;
     UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
 
