@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-01-22 07:34:08 $
+#   last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ SLOFILES=	\
         $(SLO)$/query.obj				\
         $(SLO)$/querycontainer.obj		\
         $(SLO)$/table.obj				\
+        $(SLO)$/viewcontainer.obj		\
         $(SLO)$/tablecontainer.obj		\
         $(SLO)$/querydescriptor.obj		\
         $(SLO)$/datasettings.obj

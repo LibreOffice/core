@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
     DBG_CTOR(OConnection,NULL);
 
     m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
+    m_pViews = new OViewContainer(*this, m_aMutex, this, this);
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }
@@ -416,6 +417,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
 OConnection::~OConnection()
 {
     delete m_pTables;
+    delete m_pViews;
     DBG_DTOR(OConnection,NULL);
 }
 
@@ -536,6 +538,8 @@ void OConnection::disposing()
 
     if(m_pTables)
         m_pTables->disposing();
+    if(m_pViews)
+        m_pViews->disposing();
     m_aQueries.dispose();
 
     for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
@@ -613,7 +617,29 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 
     return m_pTables;
 }
+// -----------------------------------------------------------------------------
+Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
 
+    if (!m_pViews->isInitialized())
+    {
+        // check if out "master connection" can supply tables
+        Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+        Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+        Reference< XViewsSupplier > xMaster;
+        if(xSupp.is())
+            xMaster = Reference< XViewsSupplier >(xSupp->getDataDefinitionByConnection(m_xMasterConnection),UNO_QUERY);
+
+        if (xMaster.is() && xMaster->getViews().is())
+        {   // yes -> wrap them
+            m_pViews->construct(xMaster->getViews(),m_aTableFilter, m_aTableTypeFilter);
+        }
+    }
+
+    return m_pViews;
+}
 // XQueriesSupplier
 //------------------------------------------------------------------------------
 Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException )
@@ -626,7 +652,7 @@ Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException 
 
 // ::com::sun::star::sdb::XCommandPreparation
 //------------------------------------------------------------------------------
-Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::rtl::OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::rtl::OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();

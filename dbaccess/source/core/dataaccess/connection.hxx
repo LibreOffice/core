@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 17:01:04 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -91,8 +94,8 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -102,6 +105,9 @@
 #endif
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
+#endif
+#ifndef _DBA_CORE_VIEWCONTAINER_HXX_
+#include "viewcontainer.hxx"
 #endif
 
 //........................................................................
@@ -178,8 +184,9 @@ inline void OConnectionRerouter::checkDisposed() throw (::com::sun::star::lang::
         throw ::com::sun::star::lang::DisposedException();
 }
 //==========================================================================
-typedef ::cppu::ImplHelper5< ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper6< ::com::sun::star::container::XChild
                             ,::com::sun::star::sdbcx::XTablesSupplier
+                            ,::com::sun::star::sdbcx::XViewsSupplier
                             ,::com::sun::star::sdb::XQueriesSupplier
                             ,::com::sun::star::sdb::XSQLQueryComposerFactory
                             ,::com::sun::star::sdb::XCommandPreparation
@@ -205,6 +212,7 @@ protected:
                             m_xORB;
 
     OTableContainer*            m_pTables;
+    OViewContainer*             m_pViews;
     ::com::sun::star::uno::Any  m_aAdditionalWarnings;  // own warnings (appended to the ones got by the master connection)
 
 protected:
@@ -233,6 +241,8 @@ public:
 
 // ::com::sun::star::sdbcx::XTablesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
+// ::com::sun::star::sdbcx::XViewsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getViews(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::sdb::XQueriesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getQueries(  ) throw(::com::sun::star::uno::RuntimeException);
