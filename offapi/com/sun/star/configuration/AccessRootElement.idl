@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessRootElement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-02-13 17:35:57 $
+ *  last change: $Author: arellano $ $Date: 2001-02-22 19:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,20 @@ module com { module sun { module star { module configuration {
  It represents the <em>root</em> of the accessible part of the hierarchy.
  </p>
 
- <!--missing the <em> tag </em> is making 'root' look like a hyperlink -->
-
  <p><em><strong>NOTE:</strong> In this description 'hierarchy' may actually
  designate a part or fragment of a larger hierarchy. It is that part that is
  rooted in the element represented by an implementation of this service
  and that is accessible starting from this element.</em>
  </p>
 
- <p>Generally it is not possible to navigate the 'surroundings' (if any) of this
+<!-- Dennis: Why is hierarchy in quotes? -->
+
+ <p>Generally it is not possible to navigate the 'surroundings', if any, of this
  element, so <type scope="com::sun::star::container">XChild</type> is not
  supported.
  </p>
+
+<!-- Dennis: Why is surroundings in quotes? -->
 
  @see com::sun::star::configuration::UpdateRootElement
     Implementations that support modifying data in the hierarchy
@@ -145,7 +147,7 @@ service AccessRootElement
  </p>
 
  <p>The provider of this object may still dispose of this object, when the
- lifetime of the provider ends itself or if these objects represent
+ lifetime of the provider ends or if these objects represent
  the root of only a fragment of an enclosing hierarchy and
  this fragment is removed from the complete hierarchy by an outside source.
  </p>
@@ -158,7 +160,7 @@ service AccessRootElement
 
 /** allows registering listeners that observe the whole hierarchy.
 
- <p>A client can register a
+ <p>A client can register an
  <type scope="com::sun::star::util">XChangesListener</type>,
  which will receive notifications for any changes within the
  hierarchy (fragment) this object represents.
