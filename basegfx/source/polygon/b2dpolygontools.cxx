@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:48:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1432,30 +1432,36 @@ namespace basegfx
 
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double nRadius )
         {
+            return createPolygonFromEllipse( rCenter, nRadius, nRadius );
+        }
+
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double nRadiusX, double nRadiusY )
+        {
             B2DPolygon aRet;
 
             const double aX( rCenter.getX() );
             const double aY( rCenter.getY() );
 
             const double nKappa( (M_SQRT2-1.0)*4.0/3.0 );
-            const double l( nRadius * nKappa );
+            const double nlX( nRadiusX * nKappa );
+            const double nlY( nRadiusY * nKappa );
 
-            aRet.append( B2DPoint( aX, aY-nRadius ) );
-            aRet.append( B2DPoint( aX+nRadius, aY ) );
-            aRet.append( B2DPoint( aX, aY+nRadius ) );
-            aRet.append( B2DPoint( aX-nRadius, aY ) );
+            aRet.append( B2DPoint( aX,          aY-nRadiusY ) );
+            aRet.append( B2DPoint( aX+nRadiusX, aY ) );
+            aRet.append( B2DPoint( aX,          aY+nRadiusY ) );
+            aRet.append( B2DPoint( aX-nRadiusX, aY ) );
 
-            aRet.setControlPointA( 0, B2DPoint( aX+l, aY-nRadius ) );
-            aRet.setControlPointB( 0, B2DPoint( aX+nRadius, aY-l ) );
+            aRet.setControlPointA( 0, B2DPoint( aX+nlX,         aY-nRadiusY ) );
+            aRet.setControlPointB( 0, B2DPoint( aX+nRadiusX,    aY-nlY ) );
 
-            aRet.setControlPointA( 1, B2DPoint( aX+nRadius, aY+l ) );
-            aRet.setControlPointB( 1, B2DPoint( aX+l, aY+nRadius ) );
+            aRet.setControlPointA( 1, B2DPoint( aX+nRadiusX,    aY+nlY ) );
+            aRet.setControlPointB( 1, B2DPoint( aX+nlX,         aY+nRadiusY ) );
 
-            aRet.setControlPointA( 2, B2DPoint( aX-l, aY+nRadius ) );
-            aRet.setControlPointB( 2, B2DPoint( aX-nRadius, aY+l ) );
+            aRet.setControlPointA( 2, B2DPoint( aX-nlX,         aY+nRadiusY ) );
+            aRet.setControlPointB( 2, B2DPoint( aX-nRadiusX,    aY+nlY ) );
 
-            aRet.setControlPointA( 3, B2DPoint( aX-nRadius, aY-l ) );
-            aRet.setControlPointB( 3, B2DPoint( aX-l, aY-nRadius ) );
+            aRet.setControlPointA( 3, B2DPoint( aX-nRadiusX,    aY-nlY ) );
+            aRet.setControlPointB( 3, B2DPoint( aX-nlX,         aY-nRadiusY ) );
 
             aRet.setClosed( true );
 
