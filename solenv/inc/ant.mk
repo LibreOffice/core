@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-15 08:33:35 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,8 @@ SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 
 # --- ANT build environment  ---------------------------------------
 
+.IF "$(SOLAR_JAVA)"!=""
+
 .IF "$(ANT_HOME)" == ""
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
 .EXPORT : ANT_HOME
@@ -118,7 +120,12 @@ ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(
  -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) \
  -Dcommon.jar=$(SOLARCOMMONBINDIR) -Dcommon.doc=$(SOLARCOMMONDOCDIR) \
  -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-
+.ELSE # No java
+ANT=
+ANT_FLAGS=
+.ENDIF
+ 
+ 
 .INCLUDE : target.mk
 
 CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
