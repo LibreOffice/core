@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:15:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,15 @@
 
  module com {  module sun {  module star {  module sdb {
 
-interface XDatabaseAccess;
-interface XCompletedConnection;
+ published interface XDatabaseAccess;
+ published interface XCompletedConnection;
 
 
 // DocMerge from xml: service com::sun::star::sdb::DatabaseAccess
 /** specifies a component, which controls DatabaseAccessConnections and acts like a
     shared DataSource.
  */
-service DatabaseAccess
+published service DatabaseAccess
 {
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
