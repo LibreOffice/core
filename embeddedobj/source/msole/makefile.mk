@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-13 17:00:56 $
+#   last change: $Author: mav $ $Date: 2003-11-28 17:25:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ INCPRE+=$(ATL_INCLUDE)
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/xolefactory.obj\
         $(SLO)$/olecomponent.obj\
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\
@@ -87,6 +88,7 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES= \
+        $(SLO)$/xolefactory.obj\
         $(SLO)$/olecomponent.obj\
         $(SLO)$/olepersist.obj\
         $(SLO)$/oleembed.obj\

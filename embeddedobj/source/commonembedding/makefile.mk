@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2003-10-27 12:57:21 $
+#   last change: $Author: mav $ $Date: 2003-11-28 17:25:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ USE_DEFFILE=NO
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/xfactory.obj\
         $(SLO)$/miscobj.obj\
         $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
@@ -83,6 +84,7 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES= \
+        $(SLO)$/xfactory.obj\
         $(SLO)$/miscobj.obj\
         $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
