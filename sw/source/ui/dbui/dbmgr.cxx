@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:23:24 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1768,9 +1768,11 @@ BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName
     aURL.Complete = C2U(".component:DB/DataSourceBrowser");
     Reference<XDispatch> xD = xDP->queryDispatch(aURL,
                 C2U("_beamer"),
-                 0xff);
-    xD->dispatch(aURL,
-                 Sequence<PropertyValue>());
+                 0x0C);
+    if (xD.is())
+        xD->dispatch(aURL, Sequence<PropertyValue>());
+    else
+        DBG_ERROR("SwNewDBMgr::ShowInBeamer: no dispatcher for the database URL!");
 //  Reference<XComponentLoader> xLoader(xInstance, UNO_QUERY);
 //  DBG_ASSERT(xLoader.is(), "no loader available?")
 //  if(!xLoader.is())
