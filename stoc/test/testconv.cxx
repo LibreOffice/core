@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-19 14:02:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( aExcMsg.getStr() );
         printf( "]\n" );
         aRet = s_xConverter->convertTo( rVal, rDestType );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         // for debugging, to trace again
         try
         {
@@ -246,7 +246,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( " to " );
         printValue( aRet );
         printf( " was successful, but was not expected to be!\n" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         // for debugging, to trace again
         aRet = s_xConverter->convertTo( rVal, rDestType );
 #endif
