@@ -1,4 +1,4 @@
-ac  accessibility	: offuh unoil vcl jvmaccess cppu sal NULL
+ac  accessibility	: jurt offuh unoil vcl jvmaccess cppu sal NULL
 ac	accessibility                                         	usr1	-	all	ac_mkout NULL
 ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	all	ac_ooja NULL
 ac	accessibility\bridge\org\openoffice\accessibility   	nmake	-	all	ac_ooa ac_ooja NULL
