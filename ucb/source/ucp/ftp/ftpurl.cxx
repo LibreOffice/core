@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2002-09-18 15:22:01 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,85 @@
 #include "ftphandleprovider.hxx"
 #include "ftpinpstr.hxx"
 #include "ftpcfunc.hxx"
+#include "debughelper.hxx"
 
 using namespace ftp;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+
+
+class MemoryContainer {
+
+public:
+
+    MemoryContainer();
+
+    ~MemoryContainer();
+
+    int append(
+        const void* pBuffer,
+        size_t size,
+        size_t nmemb
+    ) throw();
+
+
+    sal_uInt32 m_nLen,m_nWritePos;
+    void *m_pBuffer;
+};
+
+
+MemoryContainer::MemoryContainer()
+    : m_nLen(0),
+      m_nWritePos(0),
+      m_pBuffer(0)
+{
+}
+
+MemoryContainer::~MemoryContainer()
+{
+    rtl_freeMemory(m_pBuffer);
+}
+
+
+int MemoryContainer::append(
+    const void* pBuffer,
+    size_t size,
+    size_t nmemb
+) throw()
+{
+    sal_uInt32 nLen = size*nmemb;
+    sal_uInt32 tmp(nLen + m_nWritePos);
+
+    if(m_nLen < tmp) { // enlarge in steps of multiples of 1K
+        do {
+            m_nLen+=1024;
+        } while(m_nLen < tmp);
+
+        m_pBuffer = rtl_reallocateMemory(m_pBuffer,m_nLen);
+    }
+
+    rtl_copyMemory(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
+                   pBuffer,nLen);
+    m_nWritePos = tmp;
+    return nLen;
+}
+
+
+extern "C" {
+
+    int memory_write(void *buffer,size_t size,size_t nmemb,void *stream)
+    {
+        MemoryContainer *_stream =
+            reinterpret_cast<MemoryContainer*>(stream);
+
+        if(!_stream)
+            return 0;
+
+        return _stream->append(buffer,size,nmemb);
+    }
+
+}
 
 
 
@@ -88,12 +162,12 @@ FTPURL::FTPURL(const rtl::OUString& url,
     throw(
         malformed_exception
     )
-    : m_aIdent(url),
-      m_aUsername(rtl::OUString::createFromAscii("anonymous")),
+    : m_aUsername(rtl::OUString::createFromAscii("anonymous")),
       m_aPort(rtl::OUString::createFromAscii("21")),
-      m_pFCP(pFCP)
+      m_pFCP(pFCP),
+      m_bShowPassword(false)
 {
-    parse();
+    parse(url);  // can reset m_bShowPassword
 }
 
 
@@ -102,13 +176,14 @@ FTPURL::~FTPURL()
 }
 
 
-void FTPURL::parse()
+void FTPURL::parse(const rtl::OUString& url)
     throw(
         malformed_exception
     )
 {
-    rtl::OString aIdent(m_aIdent.getStr(),
-                        m_aIdent.getLength(),
+    rtl::OUString aPassword,aAccount;
+    rtl::OString aIdent(url.getStr(),
+                        url.getLength(),
                         RTL_TEXTENCODING_UTF8);
     char *buffer = new char[1+aIdent.getLength()];
 
@@ -135,11 +210,16 @@ void FTPURL::parse()
         // Now username and password.
         aExpr = aExpr.copy(0,l);
         l = aExpr.indexOf(sal_Unicode(':'));
-        if(l != -1)
-            m_aPassword = aExpr.copy(1+l);
+        if(l != -1) {
+            aPassword = aExpr.copy(1+l);
+            if(aPassword.getLength())
+                m_bShowPassword = true;
+        }
         if(l > 0)
             // Overwritte only if the username is not empty.
             m_aUsername = aExpr.copy(0,l);
+        else if(aExpr.getLength())
+            m_aUsername = aExpr;
     }
 
     l = m_aHost.indexOf(sal_Unicode(':'));
@@ -173,21 +253,112 @@ void FTPURL::parse()
 
     delete[] buffer;
 
-    // ... and rebuild the url as one without ellipses,
+    if(m_bShowPassword)
+        m_pFCP->setHost(m_aHost,
+                        m_aPort,
+                        m_aUsername,
+                        aPassword,
+                        aAccount);
+}
+
+
+rtl::OUString FTPURL::ident(bool withslash,bool internal) const
+{
+    // rebuild the url as one without ellipses,
     // and more important, as one without username and
     // password. ( These are set together with the command. )
 
-    rtl::OUStringBuffer bff(m_aIdent.getLength());
-    bff.appendAscii("ftp://")
-        .append(m_aHost)
-          .append(sal_Unicode(':'))
-          .append(m_aPort);
-    for(unsigned i = 0; i < m_aPathSegmentVec.size(); ++i)
-        bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
+    rtl::OUStringBuffer bff;
+    bff.appendAscii("ftp://");
 
-    m_aIdent = bff.makeStringAndClear();
+    if(!m_aUsername.equalsAscii("anonymous")) {
+        bff.append(m_aUsername);
+
+        rtl::OUString aPassword,aAccount;
+        m_pFCP->forHost(m_aHost,
+                        m_aPort,
+                        m_aUsername,
+                        aPassword,
+                        aAccount);
+
+        if((m_bShowPassword || internal) &&
+           aPassword.getLength() )
+            bff.append(sal_Unicode(':'))
+                .append(aPassword);
+
+        bff.append(sal_Unicode('@'));
+    }
+    bff.append(m_aHost);
+
+    if(!m_aPort.equalsAscii("21"))
+        bff.append(sal_Unicode(':'))
+            .append(m_aPort)
+            .append(sal_Unicode('/'));
+    else
+        bff.append(sal_Unicode('/'));
+
+    for(unsigned i = 0; i < m_aPathSegmentVec.size(); ++i)
+        if(i == 0)
+            bff.append(m_aPathSegmentVec[i]);
+        else
+            bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
+    if(withslash)
+        if(bff.getLength() && bff[bff.getLength()-1] != sal_Unicode('/'))
+            bff.append(sal_Unicode('/'));
+
+    return bff.makeStringAndClear();
 }
 
+
+rtl::OUString FTPURL::parent() const
+{
+    rtl::OUStringBuffer bff;
+
+    bff.appendAscii("ftp://");
+
+    if(!m_aUsername.equalsAscii("anonymous")) {
+        bff.append(m_aUsername);
+
+        rtl::OUString aPassword,aAccount;
+        m_pFCP->forHost(m_aHost,
+                        m_aPort,
+                        m_aUsername,
+                        aPassword,
+                        aAccount);
+
+        if(m_bShowPassword && aPassword.getLength())
+            bff.append(sal_Unicode(':'))
+                .append(aPassword);
+
+        bff.append(sal_Unicode('@'));
+    }
+
+    bff.append(m_aHost);
+
+    if(!m_aPort.equalsAscii("21"))
+        bff.append(sal_Unicode(':'))
+            .append(m_aPort)
+            .append(sal_Unicode('/'));
+    else
+        bff.append(sal_Unicode('/'));
+
+    rtl::OUString last;
+
+    for(unsigned int i = 0; i < m_aPathSegmentVec.size(); ++i)
+        if(1+i == m_aPathSegmentVec.size())
+            last = m_aPathSegmentVec[i];
+        else if(i == 0)
+            bff.append(m_aPathSegmentVec[i]);
+        else
+            bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
+
+    if(!last.getLength())
+        bff.appendAscii("..");
+    else if(last.equalsAscii(".."))
+        bff.append(last).appendAscii("/..");
+
+    return bff.makeStringAndClear();
+}
 
 
 /** Listing of a directory.
@@ -201,69 +372,112 @@ namespace ftp {
 
 }
 
+
+extern "C" int  no_func(void  *client,  char  *prompt, char*
+                        buffer, int buflen ) { return 1; }
+
+
+#define SET_CONTROL_CONTAINER \
+    MemoryContainer control;                                      \
+    curl_easy_setopt(curl,                                        \
+                     CURLOPT_HEADERFUNCTION,                      \
+                     memory_write);                               \
+    curl_easy_setopt(curl,                                        \
+                     CURLOPT_WRITEHEADER,                         \
+                     &control)
+
+
+#define SET_DATA_CONTAINER                                        \
+       curl_easy_setopt(curl,CURLOPT_NOBODY,false);                  \
+    MemoryContainer data;                                         \
+    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);    \
+    curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data)
+
+
+#define SET_URL(url)                                              \
+    rtl::OString urlParAscii(url.getStr(),                        \
+                             url.getLength(),                     \
+                             RTL_TEXTENCODING_UTF8);              \
+    curl_easy_setopt(curl,                                        \
+                     CURLOPT_URL,                                 \
+                     urlParAscii.getStr());                       \
+    curl_easy_setopt(curl,                                        \
+                     CURLOPT_PASSWDFUNCTION,                      \
+                     no_func)
+
+
+        // Setting username:password
+#define SET_USER_PASSWORD(username,password)                      \
+   rtl::OUString combi(username  +                                \
+                       rtl::OUString::createFromAscii(":") +      \
+                       password);                                 \
+   rtl::OString aUserPsswd(combi.getStr(),                        \
+                           combi.getLength(),                     \
+                           RTL_TEXTENCODING_UTF8);                \
+   curl_easy_setopt(curl,                                         \
+                    CURLOPT_USERPWD,                              \
+                    aUserPsswd.getStr())
+
+
+
+FILE* FTPURL::open()
+    throw(curl_exception)
+{
+    CURL *curl = m_pFCP->handle();
+
+    SET_CONTROL_CONTAINER;
+    rtl::OUString url(ident(false,true));
+    SET_URL(url);
+    FILE *res = tmpfile();
+    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,file_write);
+    curl_easy_setopt(curl,CURLOPT_WRITEDATA,res);
+
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+    CURLcode err = curl_easy_perform(curl);
+
+    if(err == CURLE_OK)
+        rewind(res);
+    else {
+        fclose(res),res = 0;
+        throw curl_exception(err);
+    }
+
+    return res;
+}
+
+
 std::vector<FTPDirentry> FTPURL::list(
     sal_Int16 nMode
 ) const
     throw(
-        no_such_directory_exception
+        curl_exception
     )
 {
     CURL *curl = m_pFCP->handle();
 
-    std::auto_ptr<FTPInputStream> control(new FTPInputStream()); // control
-    FTPInputStreamContainer controlContainer(control.get());
-    curl_easy_setopt(curl,
-                     CURLOPT_HEADERFUNCTION,
-                     ftp_write);
-    curl_easy_setopt(curl,
-                     CURLOPT_WRITEHEADER,
-                     &controlContainer);
-
-
-       curl_easy_setopt(curl,CURLOPT_NOBODY,false);  // data
-    std::auto_ptr<FTPInputStream> data(new FTPInputStream());
-    FTPInputStreamContainer dataContainer(data.get());
-    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,ftp_write);
-    curl_easy_setopt(curl,CURLOPT_WRITEDATA,&dataContainer);
-
-    rtl::OUString url(ident() +               // setting the URL
-                      rtl::OUString::createFromAscii("/"));
-
-    curl_easy_setopt(curl,
-                     CURLOPT_URL,
-                     rtl::OString(url.getStr(),
-                                  url.getLength(),
-                                  // Only ASCII in URLs => UTF8 ok
-                                  RTL_TEXTENCODING_UTF8).getStr());
-
-    // Setting username:password
-    // Setting username:password
-    rtl::OUString combi(username()  +
-                        rtl::OUString::createFromAscii(":") +
-                        password());
-    rtl::OString aUserPsswd(combi.getStr(),
-                            combi.getLength(),
-                            RTL_TEXTENCODING_UTF8);
-    curl_easy_setopt(curl,
-                     CURLOPT_USERPWD,
-                     aUserPsswd.getStr());
-
+    SET_CONTROL_CONTAINER;
+    SET_DATA_CONTAINER;
+    rtl::OUString url(ident(true,true));
+    SET_URL(url);
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
 
     CURLcode err = curl_easy_perform(curl);
     if(err != CURLE_OK)
-        throw no_such_directory_exception(err);
+        throw curl_exception(err);
 
     // now evaluate the error messages
 
-    sal_uInt32 len = (sal_uInt32) data->getLength();
-    char* fwd = (char*) data->getBuffer();
+    sal_uInt32 len = data.m_nWritePos;
+    char* fwd = (char*) data.m_pBuffer;
+    rtl::OString str(fwd,len);
     char *p1, *p2;
     p1 = p2 = fwd;
 
     OS osKind(FTP_UNKNOWN);
     std::vector<FTPDirentry> resvec;
     FTPDirentry aDirEntry;
+    // ensure slash at the end
+    rtl::OUString viewurl(ident(true,false));
 
     while(true) {
         while(p2-fwd < int(len) && *p2 != '\n') ++p2;
@@ -275,55 +489,47 @@ std::vector<FTPDirentry> FTPURL::list(
             // which returns the operating system type,
             // this is not usable here: There are Windows-server
             // formatting the output like UNIX-ls command.
-            case FTP_DOS:
-                FTPDirectoryParser::parseDOS(aDirEntry,p1);
-                break;
-            case FTP_UNIX:
-                FTPDirectoryParser::parseUNIX(aDirEntry,p1);
-                break;
-            case FTP_VMS:
-                FTPDirectoryParser::parseVMS(aDirEntry,p1);
-                break;
-            default:
-                if(FTPDirectoryParser::parseUNIX(aDirEntry,p1))
-                    osKind = FTP_UNIX;
-                else if(FTPDirectoryParser::parseDOS(aDirEntry,p1))
-                    osKind = FTP_DOS;
-                else if(FTPDirectoryParser::parseVMS(aDirEntry,p1))
-                    osKind = FTP_VMS;
+        case FTP_DOS:
+            FTPDirectoryParser::parseDOS(aDirEntry,p1);
+            break;
+        case FTP_UNIX:
+            FTPDirectoryParser::parseUNIX(aDirEntry,p1);
+            break;
+        case FTP_VMS:
+            FTPDirectoryParser::parseVMS(aDirEntry,p1);
+            break;
+        default:
+            if(FTPDirectoryParser::parseUNIX(aDirEntry,p1))
+                osKind = FTP_UNIX;
+            else if(FTPDirectoryParser::parseDOS(aDirEntry,p1))
+                osKind = FTP_DOS;
+            else if(FTPDirectoryParser::parseVMS(aDirEntry,p1))
+                osKind = FTP_VMS;
         }
         aDirEntry.m_aName = aDirEntry.m_aName.trim();
         if(osKind != int(FTP_UNKNOWN) &&
            !aDirEntry.m_aName.equalsAscii("..") &&
            !aDirEntry.m_aName.equalsAscii(".")) {
-            if(1 + url.lastIndexOf(sal_Unicode('/')) ==
-               url.getLength())
-                aDirEntry.m_aURL =
-                    url +
-                    aDirEntry.m_aName;
-            else
-                aDirEntry.m_aURL =
-                    url +
-                    sal_Unicode('/') +
-                    aDirEntry.m_aName;
+            aDirEntry.m_aURL = viewurl + aDirEntry.m_aName;
+
             sal_Bool isDir =
                 sal_Bool(aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR);
             switch(nMode) {
                 case OpenMode::DOCUMENTS:
-                    if(!isDir) {
-                        resvec.push_back(aDirEntry);
-                        aDirEntry.clear();
-                    }
-                    break;
-                case OpenMode::FOLDERS:
-                    if(isDir) {
-                        resvec.push_back(aDirEntry);
-                        aDirEntry.clear();
-                    }
-                    break;
-                default:
+                if(!isDir) {
                     resvec.push_back(aDirEntry);
                     aDirEntry.clear();
+                }
+                break;
+            case OpenMode::FOLDERS:
+                if(isDir) {
+                    resvec.push_back(aDirEntry);
+                    aDirEntry.clear();
+                }
+                break;
+            default:
+                resvec.push_back(aDirEntry);
+                aDirEntry.clear();
             };
         }
 
@@ -331,122 +537,110 @@ std::vector<FTPDirentry> FTPURL::list(
     }
 
     if(osKind == int(FTP_UNKNOWN))
-        throw no_such_directory_exception(FTPCouldNotDetermineSystem);
+        throw curl_exception(FTPCouldNotDetermineSystem);
 
     return resvec;
 }
 
 
-
-FTPDirentry FTPURL::direntry(
-    const rtl::OUString& passwd
-) const
-    throw(
-        no_such_directory_exception
-    )
+rtl::OUString FTPURL::net_title() const
+    throw(curl_exception)
 {
     CURL *curl = m_pFCP->handle();
 
-
-    std::auto_ptr<FTPInputStream> control(new FTPInputStream()); // control
-    FTPInputStreamContainer controlContainer(control.get());
-    curl_easy_setopt(curl,
-                     CURLOPT_HEADERFUNCTION,
-                     ftp_write);
-    curl_easy_setopt(curl,
-                     CURLOPT_WRITEHEADER,
-                     &controlContainer);
-
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE); // no data => no transfer
-
-    rtl::OUString url(ident() +                      // url
-                      rtl::OUString::createFromAscii("/"));
-    curl_easy_setopt(curl,
-                     CURLOPT_URL,
-                     rtl::OString(url.getStr(),
-                                  url.getLength(),
-                                  // Only ASCII in URLs => UTF8 ok
-                                  RTL_TEXTENCODING_UTF8).getStr());
-    // Setting username:password
-    rtl::OUString combi(username()  +
-                        rtl::OUString::createFromAscii(":") +
-                        password());
-    rtl::OString aUserPsswd(combi.getStr(),
-                            combi.getLength(),
-                            RTL_TEXTENCODING_UTF8);
-    curl_easy_setopt(curl,
-                     CURLOPT_USERPWD,
-                     aUserPsswd.getStr());
-
-    // post request
+    SET_CONTROL_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
     struct curl_slist *slist = 0;
+    // post request
     slist = curl_slist_append(slist,"PWD");
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
-    CURLcode err = curl_easy_perform(curl);
-    // clean up
-    curl_slist_free_all(slist);
+    bool try_more(true);
+    CURLcode err;
+    rtl::OUString net_title;
 
-    /* now decide on the error codes:*/
-    if(err == CURLE_FTP_ACCESS_DENIED)
-        throw no_such_directory_exception(err);
+    while(true) {
+        rtl::OUString url(ident(false,true));
 
+        if(try_more &&
+           1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
+            url += rtl::OUString::createFromAscii("/");  // add end-slash
+        else if(!try_more &&
+                1+url.lastIndexOf(sal_Unicode('/')) == url.getLength())
+            url = url.copy(0,url.getLength()-1);         // remove end-slash
 
-    rtl::OUString title;
-    if(err == CURLE_OK) {
-        // get the title
-        sal_uInt32 len = (sal_uInt32) control->getLength();
-        char* fwd = (char*) control->getBuffer();
-        title = rtl::OUString(fwd,len,RTL_TEXTENCODING_UTF8);
+        SET_URL(url);
+        err = curl_easy_perform(curl);
 
-        // the buffer now contains the name of the file;
-        // analyze the output:
-        // Format of current working directory:
-        // 257 "/bla" is current directory
-        sal_Int32 index1 = title.lastIndexOf(
-            rtl::OUString::createFromAscii("257"));
-        index1 = 1+title.indexOf(sal_Unicode('"'),index1);
-        sal_Int32 index2 = title.indexOf(sal_Unicode('"'),index1);
-        title = title.copy(index1,index2-index1);
-        if(!title.equalsAscii("/")) {
-            index1 = title.lastIndexOf(sal_Unicode('/'));
-            title = title.copy(1+index1);
+        if(err == CURLE_OK) {       // get the title from the server
+            char* fwd = (char*) control.m_pBuffer;
+            sal_uInt32 len = (sal_uInt32) control.m_nWritePos;
+
+            net_title = rtl::OUString(fwd,len,RTL_TEXTENCODING_UTF8);
+            // the buffer now contains the name of the file;
+            // analyze the output:
+            // Format of current working directory:
+            // 257 "/bla/bla" is current directory
+            sal_Int32 index1 = net_title.lastIndexOf(
+                rtl::OUString::createFromAscii("257"));
+            index1 = 1+net_title.indexOf(sal_Unicode('"'),index1);
+            sal_Int32 index2 = net_title.indexOf(sal_Unicode('"'),index1);
+            net_title = net_title.copy(index1,index2-index1);
+            if(!net_title.equalsAscii("/")) {
+                index1 = net_title.lastIndexOf(sal_Unicode('/'));
+                net_title = net_title.copy(1+index1);
+            }
+            try_more = false;
+        } else if(err == CURLE_BAD_PASSWORD_ENTERED)
+            // the client should retry after getting the correct
+            // username + password
+            throw curl_exception(err);
+        else if(try_more && err == CURLE_FTP_ACCESS_DENIED) {
+            // We  were  either denied access when trying to login to
+            //  an FTP server or when trying to change working directory
+            //  to the one given in the URL.
+            if(m_aPathSegmentVec.size())
+                // determine title form url
+                net_title = m_aPathSegmentVec.back();
+            else
+                // must be root
+                net_title = rtl::OUString::createFromAscii("/");
+            try_more = false;
         }
-    }
-    /** The ideas is to have always a title,
-     *  either determined by 'pwd' or else from the URL.
-     */
-    else if(m_aPathSegmentVec.size())
-        // Determine title form url
-        title = m_aPathSegmentVec.back();
-    else
-        // title is root.
-        title = rtl::OUString::createFromAscii("/");
 
+        if(try_more)
+            try_more = false;
+        else
+            break;
+    }
+
+    curl_slist_free_all(slist);
+    return net_title;
+}
+
+
+FTPDirentry FTPURL::direntry() const
+    throw(curl_exception)
+{
+    rtl::OUString nettitle = net_title();
     FTPDirentry aDirentry;
-    // init aDirentry
-    aDirentry.m_aName = title;
+
+    aDirentry.m_aName = nettitle;                 // init aDirentry
     aDirentry.m_nMode = INETCOREFTP_FILEMODE_ISDIR;
     aDirentry.m_nSize = 0;
 
-    try {
-        if(!title.equalsAscii("/")) {
-            // try to open it the parent directory
-            FTPURL aURL(url + rtl::OUString::createFromAscii("../"),
-                        m_pFCP);
+    if(!nettitle.equalsAscii("/")) {
+        // try to open the parent directory
+        FTPURL aURL(parent(),m_pFCP);
 
-            std::vector<FTPDirentry> list = aURL.list(OpenMode::ALL);
+        std::vector<FTPDirentry> list = aURL.list(OpenMode::ALL);
 
-            for(unsigned i = 0; i < list.size(); ++i) {
-                if(list[i].m_aName == title) {
-                    aDirentry = list[i];
-                    break;
-                }
+        for(unsigned i = 0; i < list.size(); ++i) {
+            if(list[i].m_aName == nettitle) { // the relevant file is found
+                aDirentry = list[i];
+                break;
             }
         }
-    } catch(const no_such_directory_exception&) {
-        // no hope, we cannot get any propertyvalues
     }
-
     return aDirentry;
 }

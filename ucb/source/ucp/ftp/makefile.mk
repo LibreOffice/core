@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: abi $ $Date: 2002-09-09 12:28:17 $
+#   last change: $Author: abi $ $Date: 2002-10-15 09:21:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,9 @@ UCPFTP_MAJOR=1
 
 # --- General -----------------------------------------------------
 
-SLOFILES=\
+# first target ( shared library )
+
+SLOFILES1=\
     $(SLO)$/ftpservices.obj  \
     $(SLO)$/ftpcontentprovider.obj  \
     $(SLO)$/ftpcontent.obj   \
@@ -93,9 +95,9 @@ SLOFILES=\
     $(SLO)$/debughelper.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
+LIB1OBJFILES=$(SLOFILES1)
 
-# --- Shared-Library ---------------------------------------------------
+# --- Shared-Library 1 ---------------------------------------------------
 
 SHL1TARGET=$(TARGET)$(UCPFTP_MAJOR)
 SHL1IMPLIB=i$(TARGET)
@@ -116,26 +118,40 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
     $(LIB1TARGET)
 
+# Make symbol renaming match library name for Mac OS X
+.IF "$(OS)"=="MACOSX"
+SYMBOLPREFIX=$(TARGET)$(UCPFTP_MAJOR)
+.ENDIF
+
+# --- Def-File ---------------------------------------------------------
+
+DEF1NAME=$(SHL1TARGET)
+DEF1EXPORTFILE=	$(TARGET).dxp
+DEF1DES=UCB Ftp Content Provider
+
+# --- Targets ----------------------------------------------------------
+
 APP1TARGET=ftptest
 APP1OBJS=\
     $(OBJ)$/test.obj \
+    $(OBJ)$/test_activedatasink.obj \
     $(OBJ)$/test_ftpurl.obj \
-    $(OBJ)$/test_activedatasink.obj  \
-    $(OBJ)$/test_multiservicefac.obj  \
-    $(SLO)$/ftpcontentcaps.obj \
-    $(SLO)$/ftpservices.obj  \
-    $(SLO)$/ftpcontentprovider.obj  \
-    $(SLO)$/ftpcontent.obj   \
-    $(SLO)$/ftpdynresultset.obj  \
-    $(SLO)$/ftpresultsetbase.obj \
-    $(SLO)$/ftpresultsetI.obj  \
-    $(SLO)$/ftpcontentidentifier.obj   \
-    $(SLO)$/ftploaderthread.obj  \
-    $(SLO)$/ftpinpstr.obj	\
-    $(SLO)$/ftpurl.obj     \
-    $(SLO)$/ftpdirp.obj     \
-    $(SLO)$/ftpcfunc.obj     \
-    $(SLO)$/debughelper.obj
+    $(OBJ)$/test_multiservicefac.obj \
+    $(OBJ)$/ftpservices.obj  \
+    $(OBJ)$/ftpcontentprovider.obj  \
+    $(OBJ)$/ftpcontent.obj   \
+    $(OBJ)$/ftpcontentidentifier.obj   \
+    $(OBJ)$/ftpcontentcaps.obj \
+    $(OBJ)$/ftpdynresultset.obj  \
+    $(OBJ)$/ftpresultsetbase.obj \
+    $(OBJ)$/ftpresultsetI.obj \
+    $(OBJ)$/ftploaderthread.obj  \
+    $(OBJ)$/ftpinpstr.obj	\
+    $(OBJ)$/ftpdirp.obj     \
+    $(OBJ)$/ftpcfunc.obj     \
+    $(OBJ)$/ftpurl.obj     \
+    $(OBJ)$/debughelper.obj
+
 
 .IF "$(COMPHELPERLIB)"==""
 .IF "$(GUI)" == "UNX"
@@ -155,20 +171,17 @@ APP1STDLIBS=\
     $(UCBHELPERLIB) \
     $(CURLLIB)
 
-APP1DEF=	$(MISC)\$(APP1TARGET).def
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(TARGET)$(UCPFTP_MAJOR)
-.ENDIF
-
-# --- Def-File ---------------------------------------------------------
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
-DEF1DES=UCB Ftp Content Provider
-
-# --- Targets ----------------------------------------------------------
-
 .INCLUDE: target.mk
+
+
+
+
+
+
+
+
+
+
+
+
 

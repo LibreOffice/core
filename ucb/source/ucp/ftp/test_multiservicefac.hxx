@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_multiservicefac.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:29:51 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,3 +133,4 @@ namespace test_ftp {
 }
 
 #endif
+

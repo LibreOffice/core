@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ftpcontentidentifier.hxx,v $
+ *  $RCSfile: test_interactionhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,37 +64,21 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPCONTENTIDENTIFIER_HXX_
-#define _FTP_FTPCONTENTIDENTIFIER_HXX_
+#ifndef _TEST_ACTIVEDATASINK_HXX_
+#define _TEST_ACTIVEDATASINK_HXX_
 
-#include <vector>
-#include <curl/curl.h>
-#include <curl/easy.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+
+namespace test_ftp {
 
 
-#include "ftpdirp.hxx"
-#include "ftpurl.hxx"
-
-namespace ftp {
-
-
-    class FTPContentProvider;
-
-
-    class FTPContentIdentifier
+    class Test_InteractionHandler
         : public cppu::OWeakObject,
-          public com::sun::star::ucb::XContentIdentifier
+          public com::sun::star::task::XInteractionHandler
     {
     public:
-
-        FTPContentIdentifier(const rtl::OUString& ident,
-                             FTPContentProvider* pFCP = 0);
-
-        ~FTPContentIdentifier();
 
         // XInterface
 
@@ -102,31 +86,21 @@ namespace ftp {
         queryInterface( const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException );
 
+
         virtual void SAL_CALL acquire( void ) throw();
 
         virtual void SAL_CALL release( void ) throw();
 
 
-        // XContentIdentifier
+        // XInteractionHandler
 
-        virtual ::rtl::OUString SAL_CALL
-        getContentIdentifier(
-        )
-            throw (
-                ::com::sun::star::uno::RuntimeException
-            );
-
-        virtual ::rtl::OUString SAL_CALL
-        getContentProviderScheme(
-        )
-            throw (
-                ::com::sun::star::uno::RuntimeException
-            );
-
+        virtual void SAL_CALL
+        handle( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::task::XInteractionRequest >& Request )
+            throw (::com::sun::star::uno::RuntimeException);
 
     private:
 
-        FTPURL m_pURL;
     };
 
 }

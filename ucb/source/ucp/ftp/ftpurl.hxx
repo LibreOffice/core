@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-09-09 12:28:17 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <curl/easy.h>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vector>
@@ -96,11 +97,11 @@ namespace ftp {
     class malformed_exception { };
 
 
-    class no_such_directory_exception
+    class curl_exception
     {
     public:
 
-        no_such_directory_exception(sal_Int32 err)
+        curl_exception(sal_Int32 err)
             : n_err(err) { }
 
         sal_Int32 code() const { return n_err; }
@@ -127,34 +128,32 @@ namespace ftp {
 
         ~FTPURL();
 
-        rtl::OUString username() const { return m_aUsername; }
-
-        rtl::OUString password() const { return m_aPassword; }
-
         rtl::OUString host() const { return m_aHost; }
 
         rtl::OUString port() const { return m_aPort; }
+
+        rtl::OUString username() const { return m_aUsername; }
 
         /** This returns the URL, but cleaned from
          *  unnessary ellipses.
          */
 
-        rtl::OUString ident() const { return m_aIdent; }
+        rtl::OUString ident(bool withslash,bool internal) const;
+
+        /** returns the parent url.
+         */
+
+        rtl::OUString parent() const;
 
 
-        std::vector<FTPDirentry> list(
-            sal_Int16 nMode
-        ) const
-            throw(
-                no_such_directory_exception
-            );
+        std::vector<FTPDirentry> list(sal_Int16 nMode) const
+            throw(curl_exception);
 
-        FTPDirentry direntry(
-            const rtl::OUString& passwd = rtl::OUString()
-        ) const
-            throw(
-                no_such_directory_exception
-            );
+        // returns a pointer to an open tempfile,
+        // seeked to the beginning of.
+        FILE* open() throw(curl_exception);
+
+        FTPDirentry direntry() const throw(curl_exception);
 
 
     private:
@@ -163,23 +162,21 @@ namespace ftp {
 
         FTPHandleProvider *m_pFCP;
 
-        rtl::OUString m_aIdent;
-
-
-        rtl::OUString m_aUsername;
-        rtl::OUString m_aPassword;
-        rtl::OUString m_aHost;
-        rtl::OUString m_aPort;
+        mutable rtl::OUString m_aUsername;
+        bool m_bShowPassword;
+        mutable rtl::OUString m_aHost;
+        mutable rtl::OUString m_aPort;
 
         /** Contains the decoded pathsegments of the url.
          */
         std::vector<rtl::OUString> m_aPathSegmentVec;
 
-        void parse()
+        void parse(const rtl::OUString& url)
             throw(
                 malformed_exception
             );
 
+        rtl::OUString net_title() const throw(curl_exception);
     };
 
 }

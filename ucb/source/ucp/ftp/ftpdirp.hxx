@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdirp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,14 @@ namespace ftp {
             m_aDate = DateTime(0,0,0,0,0,0,0);
             m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
             m_nSize = sal_uInt32(-1);
+        }
+
+        bool isDir() const {
+            return bool(m_nMode && INETCOREFTP_FILEMODE_ISDIR);
+        }
+
+        bool isFile() const {
+            return ! bool(m_nMode && INETCOREFTP_FILEMODE_ISDIR);
         }
     };
 

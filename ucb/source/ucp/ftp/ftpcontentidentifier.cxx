@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentidentifier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-09-09 12:28:15 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,13 @@ FTPContentIdentifier::FTPContentIdentifier(
     const rtl::OUString& aIdent,
     FTPContentProvider* pFCP
 )
-    : m_pURL(new FTPURL(aIdent,pFCP))
-{
-}
-
-FTPContentIdentifier::FTPContentIdentifier(FTPURL* pURL)
-    : m_pURL(pURL)
+    : m_pURL(aIdent,pFCP)
 {
 }
 
 
 FTPContentIdentifier::~FTPContentIdentifier()
 {
-    delete m_pURL;
 }
 
 
@@ -127,7 +121,7 @@ FTPContentIdentifier::getContentIdentifier(
         ::com::sun::star::uno::RuntimeException
     )
 {
-    return m_pURL->ident();
+    return m_pURL.ident(false,false);
 }
 
 
@@ -140,4 +134,9 @@ FTPContentIdentifier::getContentProviderScheme(
 {
     return rtl::OUString::createFromAscii("ftp");
 }
+
+
+
+
+
 

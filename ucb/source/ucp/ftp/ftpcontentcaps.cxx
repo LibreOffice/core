@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -144,7 +145,7 @@ Sequence< CommandInfo > FTPContent::getCommands(
     //
     //=================================================================
 
-#define COMMAND_COUNT 5
+#define COMMAND_COUNT 6
 
     static CommandInfo aCommandInfoTable[] =
     {
@@ -175,6 +176,11 @@ Sequence< CommandInfo > FTPContent::getCommands(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
             getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+        ),
+        CommandInfo(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+            -1,
+            getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
         )
     };
 

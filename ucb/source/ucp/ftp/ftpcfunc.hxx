@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:29:50 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ extern "C" {
 
 
     int ftp_write(void *buffer,size_t size,size_t nmemb,void *stream);
+
+    int file_write(void *buffer,size_t size,size_t nmemb,void *stream);
+
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -95,15 +96,18 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-
+#include <com/sun/star/ucb/IOErrorCode.hpp>
 
 using namespace ftp;
+using namespace com::sun::star::task;
+using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
 using namespace com::sun::star::sdbc;
+
 
 
 //=========================================================================
@@ -118,7 +122,9 @@ FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier)
     : ContentImplHelper(rxSMgr,pProvider,Identifier),
-      m_pFCP(pProvider)
+      m_pFCP(pProvider),
+      m_aFTPURL(Identifier->getContentIdentifier(),
+                pProvider)
 {
 }
 
@@ -135,11 +141,12 @@ FTPContent::~FTPContent()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_4( FTPContent,
+XINTERFACE_IMPL_5( FTPContent,
                    XTypeProvider,
                    XServiceInfo,
                    XContent,
-                   XCommandProcessor);
+                   XCommandProcessor,
+                   XChild);
 
 //=========================================================================
 //
@@ -147,11 +154,12 @@ XINTERFACE_IMPL_4( FTPContent,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_4( FTPContent,
+XTYPEPROVIDER_IMPL_5( FTPContent,
                          XTypeProvider,
                          XServiceInfo,
                          XContent,
-                      XCommandProcessor);
+                      XCommandProcessor,
+                      XChild);
 
 //=========================================================================
 //
@@ -254,6 +262,13 @@ public:
 //
 //=========================================================================
 
+#include "debughelper.hxx"
+
+enum ACTION { NOACTION,
+              THROWAUTHENTICATIONREQUEST,
+              THROWACCESSDENIED,
+              THROWINTERACTIVECONNECT };
+
 
 // virtual
 Any SAL_CALL FTPContent::execute(
@@ -268,164 +283,232 @@ Any SAL_CALL FTPContent::execute(
         RuntimeException
     )
 {
+    ACTION action(NOACTION);
     Any aRet;
 
-    if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
-        Sequence<Property> Properties;
-        if(!(aCommand.Argument >>= Properties))
-        {
-            aRet <<= IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
-        }
+    while(true)
+        try {
+            if(action == THROWAUTHENTICATIONREQUEST) {
+                // try to get a continuation first
+                rtl::OUString aRealm,aPassword,aAccount;
+                rtl::Reference<ucbhelper::SimpleAuthenticationRequest>
+                    p( new ucbhelper::SimpleAuthenticationRequest(
+                        m_aFTPURL.host(),      // ServerName
+                        ucbhelper::SimpleAuthenticationRequest::ENTITY_NA,
+                        aRealm,
+                        ucbhelper::SimpleAuthenticationRequest
+                        ::ENTITY_FIXED,
+                        m_aFTPURL.username(),
+                        ucbhelper::SimpleAuthenticationRequest
+                        ::ENTITY_MODIFY,
+                        aPassword));
 
-        aRet <<= getPropertyValues(Properties,Environment);
-    }
-    else if(aCommand.Name.compareToAscii("setPropertyValues") == 0) {
-    }
-    else if(aCommand.Name.compareToAscii("getCommandInfo") == 0) {
-        // Note: Implemented by base class.
-        aRet <<= getCommandInfo(Environment);
-    }
-    else if(aCommand.Name.compareToAscii("getPropertySetInfo") == 0) {
-        // Note: Implemented by base class.
-        aRet <<= getPropertySetInfo(Environment);
-    }
-    else if ( aCommand.Name.compareToAscii( "open" ) == 0 ) {
-        OpenCommandArgument2 aOpenCommand;
-        if ( !( aCommand.Argument >>= aOpenCommand ) ) {
-            aRet <<= IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
-        }
+                Reference<XInteractionHandler> xInteractionHandler;
+                if(Environment.is())
+                    xInteractionHandler =
+                        Environment->getInteractionHandler();
 
-        if(aOpenCommand.Mode == OpenMode::DOCUMENT) {
-            // Open as a document
-            CURL *curl = m_pFCP->handle();
+                if( xInteractionHandler.is()) {
+                    xInteractionHandler->handle(p.get());
 
-            // Setting the header write function,
-            // which receives the output of the control connection.
+                    Reference<XInterface> xSelection(
+                        p->getSelection().get());
 
-            std::auto_ptr<FTPInputStream> control(new FTPInputStream());
-            FTPInputStreamContainer controlContainer(control.get());
-
-            curl_easy_setopt(curl,CURLOPT_NOBODY,false);
-            curl_easy_setopt(curl,
-                             CURLOPT_HEADERFUNCTION,
-                             ftp_write);
-            curl_easy_setopt(curl,
-                             CURLOPT_WRITEHEADER,
-                             &controlContainer);
-
-            // Now setting the URL
-
-            rtl::OUString url(m_xIdentifier->getContentIdentifier());
-
-            curl_easy_setopt(curl,
-                             CURLOPT_URL,
-                             rtl::OString(url.getStr(),
-                                          url.getLength(),
-                                          // Only ASCII in URLs => UTF8 ok
-                                          RTL_TEXTENCODING_UTF8).getStr());
-
-            curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
-
-            Reference<XActiveDataSink>
-                xActiveDataSink(aOpenCommand.Sink,UNO_QUERY);
-            Reference< XOutputStream >
-                xOutputStream(aOpenCommand.Sink,UNO_QUERY);
-
-            if(xActiveDataSink.is()) {
-                FTPInputStreamContainer dataContainer(new FTPInputStream());
-                curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,ftp_write);
-                curl_easy_setopt(curl,CURLOPT_WRITEDATA,&dataContainer);
-                curl_easy_perform(curl);
-                xActiveDataSink->setInputStream(dataContainer());
+                    if(Reference<XInteractionRetry>(
+                        xSelection,UNO_QUERY).is())
+                        action = NOACTION;
+                    else if(Reference<XInteractionSupplyAuthentication>(
+                        xSelection,UNO_QUERY).is()) {
+                        m_pFCP->setHost(
+                            m_aFTPURL.host(),
+                            m_aFTPURL.port(),
+                            m_aFTPURL.username(),
+                            p->getAuthenticationSupplier()->getPassword(),
+                            aAccount);
+                        action = NOACTION;
+                    }
+                }
+                aRet = p->getRequest();
             }
-            else if(xOutputStream.is()) {
-                FTPOutputStreamContainer dataContainer(xOutputStream);
-                curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,
-                                 ftp_write);
-                curl_easy_setopt(curl,CURLOPT_WRITEDATA,&dataContainer);
-                curl_easy_perform(curl);
+
+
+            if(aCommand.Name.compareToAscii(
+                "getPropertyValues") == 0 &&
+               action != NOACTION) {
+                // It is not allowed to throw if
+                // command is getPropertyValues
+                vos::ORef<ucb::PropertyValueSet> xRow =
+                    new ucb::PropertyValueSet(m_xSMgr);
+                Sequence<Property> Properties;
+                aCommand.Argument >>= Properties;
+                for(int i = 0; i < Properties.getLength(); ++i)
+                    xRow->appendVoid(Properties[i]);
+                aRet <<= Reference<XRow>(xRow.getBodyPtr());
+                return aRet;
             }
-            else {
-                aRet <<= UnsupportedDataSinkException();
-                ucbhelper::cancelCommandExecution(aRet,Environment);
+
+            if(action == THROWAUTHENTICATIONREQUEST) {
+                ucbhelper::cancelCommandExecution(
+                    aRet,
+                    Reference<XCommandEnvironment>(0));
+            } else if(action == THROWACCESSDENIED) {
+                Sequence<Any> seq(1);
+                seq[0] <<= m_aFTPURL.ident(false,false);
+                ucbhelper::cancelCommandExecution(
+                    IOErrorCode_ACCESS_DENIED,
+                    seq,
+                    Environment);
+            } else if(action == THROWINTERACTIVECONNECT) {
+                InteractiveNetworkConnectException
+                    excep;
+                excep.Server = m_aFTPURL.host();
+                aRet <<= excep;
+                ucbhelper::cancelCommandExecution(
+                    aRet,
+                    Environment);
             }
-        }
-        else if(aOpenCommand.Mode == OpenMode::ALL ||
-                aOpenCommand.Mode == OpenMode::DOCUMENTS ||
-                aOpenCommand.Mode == OpenMode::FOLDERS ) {
-            FTPURL aFTPURL(m_xIdentifier->getContentIdentifier(),
-                           m_pFCP);
-            try{
-                std::vector<FTPDirentry> resvec =
-                    aFTPURL.list(aOpenCommand.Mode);
-                Reference< XDynamicResultSet > xSet
-                    = new DynamicResultSet(
-                        m_xSMgr,
-                        this,
-                        aOpenCommand,
-                        Environment,
-                        new ResultSetFactoryI(m_xSMgr,
-                                              m_xProvider.getBodyPtr(),
-                                              aOpenCommand.Mode,
-                                              aOpenCommand.Properties,
-                                              aOpenCommand.SortingInfo,
-                                              resvec));
-                aRet <<= xSet;
-            } catch(const no_such_directory_exception& e) {
-                if(e.code() == CURLE_COULDNT_CONNECT) {
-                    InteractiveNetworkConnectException
-                        excep;
-                    excep.Server == aFTPURL.host();
-                    aRet <<= excep;
+
+            if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
+                Sequence<Property> Properties;
+                if(!(aCommand.Argument >>= Properties))
+                {
+                    aRet <<= IllegalArgumentException();
+                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                }
+
+                aRet <<= getPropertyValues(Properties,Environment);
+            }
+            else if(aCommand.Name.compareToAscii("setPropertyValues") == 0) {
+            }
+            else if(aCommand.Name.compareToAscii("getCommandInfo") == 0) {
+                // Note: Implemented by base class.
+                aRet <<= getCommandInfo(Environment);
+            }
+            else if(aCommand.Name.compareToAscii("getPropertySetInfo") == 0) {
+                // Note: Implemented by base class.
+                aRet <<= getPropertySetInfo(Environment);
+            }
+            else if(aCommand.Name.compareToAscii( "insert" ) == 0)
+            {
+                InsertCommandArgument aInsertArgument;
+                if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
+                    aRet <<= IllegalArgumentException();
+                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                }
+                insert(aInsertArgument);
+            }
+            else if(aCommand.Name.compareToAscii( "open" ) == 0) {
+                OpenCommandArgument2 aOpenCommand;
+                if ( !( aCommand.Argument >>= aOpenCommand ) ) {
+                    aRet <<= IllegalArgumentException();
+                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                }
+
+                if(aOpenCommand.Mode == OpenMode::DOCUMENT) {
+                    // Open as a document
+                    Reference<XActiveDataSink>
+                        xActiveDataSink(aOpenCommand.Sink,UNO_QUERY);
+                    Reference< XOutputStream >
+                        xOutputStream(aOpenCommand.Sink,UNO_QUERY);
+
+                    if(xActiveDataSink.is()) {
+                        xActiveDataSink->setInputStream(
+                            new FTPInputStream(m_aFTPURL.open()));
+                    }
+                    else if(xOutputStream.is()) {
+                    }
+                    else {
+                        aRet <<= UnsupportedDataSinkException();
+                        ucbhelper::cancelCommandExecution(aRet,Environment);
+                    }
+                }
+                else if(aOpenCommand.Mode == OpenMode::ALL ||
+                        aOpenCommand.Mode == OpenMode::DOCUMENTS ||
+                        aOpenCommand.Mode == OpenMode::FOLDERS ) {
+                    std::vector<FTPDirentry> resvec =
+                        m_aFTPURL.list(sal_Int16(aOpenCommand.Mode));
+                    Reference< XDynamicResultSet > xSet
+                        = new DynamicResultSet(
+                            m_xSMgr,
+                            this,
+                            aOpenCommand,
+                            Environment,
+                            new ResultSetFactoryI(m_xSMgr,
+                                                  m_xProvider.getBodyPtr(),
+                                                  aOpenCommand.Mode,
+                                                  aOpenCommand.Properties,
+                                                  aOpenCommand.SortingInfo,
+                                                  resvec));
+                    aRet <<= xSet;
+                }
+                else if(aOpenCommand.Mode ==
+                        OpenMode::DOCUMENT_SHARE_DENY_NONE ||
+                        aOpenCommand.Mode ==
+                        OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
+                    // Unsupported OpenMode
+                    aRet <<= UnsupportedOpenModeException();
+                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                }
+                else {
+                    // IllegalArgumentException:: No OpenMode
+                    aRet <<= IllegalArgumentException();
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
             }
+            else
+                throw CommandAbortedException();
+
+            return aRet;
+        } catch(const curl_exception& e) {
+            if(e.code() == CURLE_COULDNT_CONNECT)
+                action = THROWINTERACTIVECONNECT;
+            else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
+                    e.code() == CURLE_BAD_PASSWORD_ENTERED ||
+                    e.code() == CURLE_FTP_WEIRD_PASS_REPLY )
+                action = THROWAUTHENTICATIONREQUEST;
+            else if(e.code() == CURLE_FTP_ACCESS_DENIED)
+                action = THROWACCESSDENIED;
+            else
+                break;
         }
-        else if(aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE ||
-                aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
-            // Unsupported OpenMode
-            aRet <<= UnsupportedOpenModeException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
-        }
-        else {
-            // IllegalArgumentException:: No OpenMode
-            aRet <<= IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
-        }
-    }
-    else
-        throw CommandAbortedException();
 
     return aRet;
+}
+
+
+Reference<XInterface > SAL_CALL
+FTPContent::getParent(  )
+    throw (RuntimeException)
+{
+    Reference<XContentIdentifier>
+        xIdent(new FTPContentIdentifier(m_aFTPURL.parent(),m_pFCP));
+    Reference<XContent> xContent(m_xProvider->queryContent(xIdent));
+    return Reference<XInterface>(xContent,UNO_QUERY);
+}
+
+
+void SAL_CALL
+FTPContent::setParent(const Reference<XInterface >& Parent )
+    throw (NoSupportException,
+           RuntimeException)
+{
+    throw NoSupportException();
 }
 
 
 
 rtl::OUString FTPContent::getParentURL()
 {
-    return rtl::OUString();
+    return m_aFTPURL.parent();
 }
 
 
-extern void err_msg( const char* p,
-                     const rtl::OUString& aOUString );
 
-
-class FTPClientI
-    : public FTPClient
+void FTPContent::insert(const InsertCommandArgument& aInsertCommand)
 {
-public:
+//      m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),
 
-    FTPClientI(const Reference<XCommandEnvironment>& env);
-
-    virtual rtl::OUString passwd() const;
-
-private:
-
-    Reference<XCommandEnvironment> m_env;
-};
+}
 
 
 
@@ -437,124 +520,37 @@ Reference< XRow > FTPContent::getPropertyValues(
     vos::ORef<ucb::PropertyValueSet> xRow =
         new ucb::PropertyValueSet(m_xSMgr);
 
-    FTPURL aFTPURL(m_xIdentifier->getContentIdentifier(),
-                   m_pFCP);
+    FTPDirentry aDirEntry = m_aFTPURL.direntry();
 
-    rtl::OUString passwd;
-    bool retried(false);
-    FTPDirentry aDirEntry;
-
- tryconnect:
-    try {
-        aDirEntry = aFTPURL.direntry(passwd);
-        for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
-            const rtl::OUString& Name = seqProp[i].Name;
-            if(Name.compareToAscii("ContentType") == 0)
-                xRow->appendString(seqProp[i],
-                                   rtl::OUString::createFromAscii(
-                                       "application/ftp"));
-            else if(Name.compareToAscii("Title") == 0)
-                xRow->appendString(seqProp[i],aDirEntry.m_aName);
-            else if(Name.compareToAscii("IsReadOnly") == 0)
-                xRow->appendBoolean(seqProp[i],
-                                    ! sal_Bool(aDirEntry.m_nMode &
-                                               INETCOREFTP_FILEMODE_WRITE));
-            else if(Name.compareToAscii("IsDocument") == 0)
-                xRow->appendBoolean(seqProp[i],
-                                    ! sal_Bool(aDirEntry.m_nMode &
-                                               INETCOREFTP_FILEMODE_ISDIR));
-            else if(Name.compareToAscii("IsFolder") == 0)
-                xRow->appendBoolean(seqProp[i],
-                                    sal_Bool(aDirEntry.m_nMode &
-                                             INETCOREFTP_FILEMODE_ISDIR));
-            else if(Name.compareToAscii("Size") == 0)
-                xRow->appendLong(seqProp[i],
-                                 aDirEntry.m_nSize);
-            else if(Name.compareToAscii("DateCreated") == 0)
-                xRow->appendTimestamp(seqProp[i],
-                                      aDirEntry.m_aDate);
-            else
-                xRow->appendVoid(seqProp[i]);
-        }
-    } catch(const no_such_directory_exception& e) {
-        if(e.code() == CURLE_FTP_ACCESS_DENIED && !retried) {
-            retried = true;
-            FTPClientI aClient(environment);
-            passwd = aClient.passwd();
-            goto tryconnect;
-        }
-        else if(e.code() == CURLE_COULDNT_CONNECT) {
-            InteractiveNetworkConnectException excep;
-            excep.Server == aFTPURL.host();
-            for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
-                xRow->appendVoid(seqProp[i]);
-            }
-        }
+    for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
+        const rtl::OUString& Name = seqProp[i].Name;
+        if(Name.compareToAscii("ContentType") == 0)
+            xRow->appendString(seqProp[i],
+                               rtl::OUString::createFromAscii(
+                                   "application/ftp"));
+        else if(Name.compareToAscii("Title") == 0)
+            xRow->appendString(seqProp[i],aDirEntry.m_aName);
+        else if(Name.compareToAscii("IsReadOnly") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                ! sal_Bool(aDirEntry.m_nMode &
+                                           INETCOREFTP_FILEMODE_WRITE));
+        else if(Name.compareToAscii("IsDocument") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                ! sal_Bool(aDirEntry.m_nMode &
+                                           INETCOREFTP_FILEMODE_ISDIR));
+        else if(Name.compareToAscii("IsFolder") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                sal_Bool(aDirEntry.m_nMode &
+                                         INETCOREFTP_FILEMODE_ISDIR));
+        else if(Name.compareToAscii("Size") == 0)
+            xRow->appendLong(seqProp[i],
+                             aDirEntry.m_nSize);
+        else if(Name.compareToAscii("DateCreated") == 0)
+            xRow->appendTimestamp(seqProp[i],
+                                  aDirEntry.m_aDate);
+        else
+            xRow->appendVoid(seqProp[i]);
     }
 
     return Reference<XRow>(xRow.getBodyPtr());
-}
-
-
-
-// Some minor defs for 'ftpstrcont.hxx'
-
-
-FTPOutputStreamContainer::FTPOutputStreamContainer(
-    const Reference<XOutputStream>& out)
-    : m_out(out) { }
-
-
-int FTPOutputStreamContainer::write(
-    void *buffer,size_t size,size_t nmemb)
-{
-    size_t ret = size*nmemb;
-    if(ret && m_out.is()) {
-        try {
-            m_out->writeBytes(
-                Sequence<sal_Int8>(static_cast<sal_Int8*>(buffer),
-                                   ret)
-            );
-            return ret;
-        } catch(const Exception&) {
-        }
-    }
-    return 0;
-}
-
-
-
-FTPInputStreamContainer::FTPInputStreamContainer(
-    FTPInputStream* out)
-    : m_out(out)
-{
-}
-
-int FTPInputStreamContainer::write(
-    void *buffer,size_t size,size_t nmemb)
-{
-    size_t ret = size*nmemb;
-    if(ret && m_out) {
-        m_out->append(buffer,size,nmemb);
-        return ret;
-    }
-    return 0;
-}
-
-Reference<XInputStream> FTPInputStreamContainer::operator()()
-{
-    return Reference<XInputStream>(m_out);
-}
-
-
-
-
-FTPClientI::FTPClientI(const Reference<XCommandEnvironment>& env)
-    : m_env(env)
-{
-}
-
-rtl::OUString FTPClientI::passwd() const
-{
-    return rtl::OUString::createFromAscii("abi:psswd");
 }

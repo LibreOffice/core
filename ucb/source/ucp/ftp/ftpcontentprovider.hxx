@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-09-09 12:28:15 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,10 @@
 #ifndef _FTP_FTPCONTENTPROVIDER_HXX_
 #define _FTP_FTPCONTENTPROVIDER_HXX_
 
-#ifndef _OSL_MUTEX_HXX_
+#include <vector>
 #include <osl/mutex.hxx>
-#endif
-#ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
-#endif
-#ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
-#endif
 #include "ftphandleprovider.hxx"
 
 
@@ -127,12 +122,34 @@ namespace ftp {
 
         virtual CURL* handle();
 
+        virtual bool forHost(const rtl::OUString& host,
+                             const rtl::OUString& port,
+                             const rtl::OUString& username,
+                             rtl::OUString& password,
+                             rtl::OUString& account);
+
+        virtual bool setHost(const rtl::OUString& host,
+                             const rtl::OUString& port,
+                             const rtl::OUString& username,
+                             const rtl::OUString& password,
+                             const rtl::OUString& account);
+
+
+        struct ServerInfo {
+            rtl::OUString host;
+            rtl::OUString port;
+            rtl::OUString username;
+            rtl::OUString password;
+            rtl::OUString account;
+        };
+
     private:
 
         osl::Mutex m_aMutex;
         FTPLoaderThread *m_ftpLoaderThread;
         void init();
 
+        std::vector<ServerInfo> m_ServerInfo;
     };  // end class FTPContentProvider
 
 }       // end namespace ftp

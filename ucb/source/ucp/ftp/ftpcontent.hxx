@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,10 @@
 #ifndef _FTP_FTPCONTENT_HXX
 #define _FTP_FTPCONTENT_HXX
 
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTHELPER_HXX
 #include <ucbhelper/contenthelper.hxx>
-#endif
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include "ftpurl.hxx"
 
 
 namespace com { namespace sun { namespace star { namespace beans {
@@ -146,13 +144,28 @@ namespace ftp
                    com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL
-        abort( sal_Int32 CommandId )
-            throw( com::sun::star::uno::RuntimeException );
+        abort(sal_Int32 CommandId)
+            throw( com::sun::star::uno::RuntimeException);
+
+
+        // XChild
+
+        virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XInterface > SAL_CALL
+        getParent(  )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual void SAL_CALL
+        setParent( const ::com::sun::star::uno::Reference<
+                   ::com::sun::star::uno::XInterface >& Parent )
+            throw (::com::sun::star::lang::NoSupportException,
+                   ::com::sun::star::uno::RuntimeException);
 
 
     private:
 
         FTPContentProvider *m_pFCP;
+        FTPURL              m_aFTPURL;
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<
@@ -175,6 +188,7 @@ namespace ftp
             com::sun::star::ucb::XCommandEnvironment >& Environment
         );
 
+        void insert(const com::sun::star::ucb::InsertCommandArgument&);
     };
 
 }

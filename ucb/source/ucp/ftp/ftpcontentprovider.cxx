@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,3 +194,64 @@ CURL* FTPContentProvider::handle() {
     // Cannot be zero if called from here;
     return m_ftpLoaderThread->handle();
 }
+
+
+bool FTPContentProvider::forHost(
+    const rtl::OUString& host,
+    const rtl::OUString& port,
+    const rtl::OUString& username,
+    rtl::OUString& password,
+    rtl::OUString& account)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
+        if(host == m_ServerInfo[i].host &&
+           port == m_ServerInfo[i].port &&
+           username == m_ServerInfo[i].username )
+        {
+            password = m_ServerInfo[i].password;
+            account = m_ServerInfo[i].account;
+            return true;
+        }
+
+    return false;
+}
+
+
+bool  FTPContentProvider::setHost(
+    const rtl::OUString& host,
+    const rtl::OUString& port,
+    const rtl::OUString& username,
+    const rtl::OUString& password,
+    const rtl::OUString& account)
+{
+    ServerInfo inf;
+    inf.host = host;
+    inf.port = port;
+    inf.username = username;
+    inf.password = password;
+    inf.account = account;
+
+    bool present(false);
+    osl::MutexGuard aGuard(m_aMutex);
+    for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
+        if(host == m_ServerInfo[i].host &&
+           port == m_ServerInfo[i].port &&
+           username == m_ServerInfo[i].username)
+        {
+            present = true;
+            m_ServerInfo[i].password = password;
+            m_ServerInfo[i].account = account;
+        }
+
+    if(!present)
+        m_ServerInfo.push_back(inf);
+
+    return !present;
+}
+
+
+
+
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpinpstr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,21 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 
 
-FTPInputStream::FTPInputStream()
-    : m_nMaxLen(1024*1024),
-      m_nLen(0),
-      m_nWritePos(0),
-      m_nReadPos(0),
-      m_pBuffer(0),
-      m_pFile(0)  { }
+FTPInputStream::FTPInputStream(FILE* tmpfl)
+    : m_tmpfl(tmpfl ? tmpfl : tmpfile())
+{
+    fseek(m_tmpfl,0,SEEK_END);
+    fpos_t pos;
+    fgetpos(m_tmpfl,&pos);
+    rewind(m_tmpfl);
+    m_nLength = sal_Int64(pos);
+}
 
 
 
-FTPInputStream::~FTPInputStream() {
-    rtl_freeMemory(m_pBuffer);
+FTPInputStream::~FTPInputStream()
+{
+    fclose(m_tmpfl);
 }
 
 
@@ -125,28 +128,25 @@ void SAL_CALL FTPInputStream::release( void ) throw() {
 }
 
 
-/** nBytesToRead < 0
-    returns zero written bytes.
-*/
-
 sal_Int32 SAL_CALL FTPInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                              sal_Int32 nBytesToRead)
     throw(NotConnectedException,
           BufferSizeExceededException,
           IOException,
-          RuntimeException) {
-    osl::MutexGuard aGuard( m_aMutex );
+          RuntimeException)
+{
+    osl::MutexGuard aGuard(m_aMutex);
 
-    sal_Int32 curr =
-        std::min(nBytesToRead,sal_Int32(m_nWritePos)-sal_Int32(m_nReadPos));
+    if(0 <= nBytesToRead && aData.getLength() < nBytesToRead)
+        aData.realloc(nBytesToRead);
 
-    if(0 <= curr && aData.getLength() < curr)
-        aData.realloc(curr);
+    fpos_t bpos,epos;
 
-    for(sal_Int32 k = 0; k < curr; )
-        aData[k++] = static_cast<sal_Int8*>(m_pBuffer)[m_nReadPos++];
+    fgetpos(m_tmpfl,&bpos);
+    fread(aData.getArray(),nBytesToRead,1,m_tmpfl);
+    fgetpos(m_tmpfl,&epos);
 
-    return curr > 0 ? curr : 0;
+    return sal_Int32(epos-bpos);
 }
 
 
@@ -165,13 +165,13 @@ void SAL_CALL FTPInputStream::skipBytes(sal_Int32 nBytesToSkip)
     throw(NotConnectedException,
           BufferSizeExceededException,
           IOException,
-          RuntimeException) {
+          RuntimeException)
+{
     osl::MutexGuard aGuard(m_aMutex);
-    if(nBytesToSkip < 0)
+    if(!m_tmpfl)
         throw IOException();
-    m_nReadPos += nBytesToSkip;
-    if(m_nReadPos > m_nWritePos)   // Can't skip behind the end of the current write-position.
-        m_nReadPos = m_nWritePos;
+
+    fseek(m_tmpfl,long(nBytesToSkip),SEEK_CUR);
 }
 
 
@@ -179,9 +179,9 @@ void SAL_CALL FTPInputStream::skipBytes(sal_Int32 nBytesToSkip)
 sal_Int32 SAL_CALL FTPInputStream::available(void)
     throw(NotConnectedException,
           IOException,
-          RuntimeException) {
-      osl::MutexGuard aGuard(m_aMutex);
-      return std::max(sal_Int32(m_nWritePos)-sal_Int32(m_nReadPos),sal_Int32(0));
+          RuntimeException)
+{
+    return m_nLength - getPosition();
 }
 
 
@@ -189,8 +189,11 @@ sal_Int32 SAL_CALL FTPInputStream::available(void)
 void SAL_CALL FTPInputStream::closeInput(void)
     throw(NotConnectedException,
           IOException,
-          RuntimeException) {
-    // fclose(m_pFile);
+          RuntimeException)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    if(m_tmpfl)
+        fclose(m_tmpfl),m_tmpfl = 0;
 }
 
 
@@ -198,15 +201,13 @@ void SAL_CALL FTPInputStream::closeInput(void)
 void SAL_CALL FTPInputStream::seek(sal_Int64 location)
     throw( IllegalArgumentException,
            IOException,
-           RuntimeException ) {
+           RuntimeException )
+{
     osl::MutexGuard aGuard(m_aMutex);
-    if(location < 0)
-        throw IllegalArgumentException();
+    if(!m_tmpfl)
+        throw IOException();
 
-    m_nReadPos = sal_uInt32(location);
-    if(m_nReadPos > m_nWritePos)   // Can't seek behind the end
-        //                         // of the current write-position.
-        m_nReadPos = m_nWritePos;
+    fseek(m_tmpfl,long(location),SEEK_SET);
 }
 
 
@@ -218,7 +219,12 @@ FTPInputStream::getPosition(
            RuntimeException )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int64(m_nReadPos);
+    if(!m_tmpfl)
+        throw IOException();
+
+    fpos_t pos;
+    fgetpos(m_tmpfl,&pos);
+    return sal_Int64(pos);
 }
 
 
@@ -229,76 +235,5 @@ sal_Int64 SAL_CALL FTPInputStream::getLength(
     IOException,RuntimeException
 )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int64(m_nWritePos);
-}
-
-
-const void* FTPInputStream::getBuffer(
-    void
-) const
-    throw(
-    )
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    return m_pBuffer;
-}
-
-
-//  void
-//  FTPInputStream::append(
-//      const void* pBuffer,
-//      size_t size,
-//      size_t nmemb
-//  ) throw()
-//  {
-//      if(!m_pFile)
-//          m_pFile = tmpfile();
-
-//      fwrite(pBuffer,size,nmemb,m_pFile);
-//  }
-
-void
-FTPInputStream::append(
-    const void* pBuffer,
-    size_t size,
-    size_t nmemb
-) throw()
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    sal_uInt32 nLen = size*nmemb;
-    sal_uInt32 tmp(nLen + m_nWritePos);
-
-    if(m_nLen < tmp) { // enlarge in steps of multiples of 1K
-        do {
-            m_nLen+=1024;
-            } while(m_nLen < tmp);
-
-        m_pBuffer = rtl_reallocateMemory(m_pBuffer,m_nLen);
-    }
-
-    rtl_copyMemory(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
-                   pBuffer,nLen);
-    m_nWritePos = tmp;
-}
-
-
-void FTPInputStream::reset() throw()
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    m_nLen = 0;
-    m_nWritePos = 0;
-    m_nReadPos = 0;
-    rtl_freeMemory(m_pBuffer),m_pBuffer = 0;
-}
-
-
-void
-FTPInputStream::append2File(
-    const void* pBuffer,
-    size_t size,
-    size_t nmemb
-) throw()
-{
-    fwrite(pBuffer,size,nmemb,m_pFile);
+    return m_nLength;
 }
