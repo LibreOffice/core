@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-08 08:14:49 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 10:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,11 +390,10 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const USHORT nP
     // do we still have enough space?
     if ( nCount >= nSize )
     {
-        nSize += STACK_INCREMENT;
-
-        // we are still in our initial array
+         // we are still in our initial array
         if ( INITIAL_NUM_ATTR == nSize )
         {
+            nSize += STACK_INCREMENT;
             pArray = new SwTxtAttr*[ nSize ];
             // copy from pInitArray to new Array
             memcpy( pArray, pInitialArray,
@@ -404,6 +403,7 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const USHORT nP
         // we are in new memory
         else
         {
+            nSize += STACK_INCREMENT;
             SwTxtAttr** pTmpArray = new SwTxtAttr*[ nSize ];
             // copy from pArray to new Array
             memcpy( pTmpArray, pArray, nCount * sizeof(SwTxtAttr*) );
