@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-27 13:58:24 $
+ *  last change: $Author: os $ $Date: 2000-10-25 14:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,18 +1484,25 @@ uno::Reference< XTextCursor >  SwXHeadFootText::createTextCursorByRange(
 /* -----------------19.03.99 15:44-------------------
  *
  * --------------------------------------------------*/
-uno::Reference< container::XEnumeration >  SwXHeadFootText::createEnumeration(void) throw( uno::RuntimeException )
+uno::Reference< container::XEnumeration >  SwXHeadFootText::createEnumeration(void)
+    throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< container::XEnumeration >  aRef;
     //wenn this ungueltig ist, dann kommt die uno::Exception aus createTextCursor()
-    uno::Reference< XTextCursor >  xCrsr = createTextCursor();
-    uno::Reference< lang::XUnoTunnel > xTunnel(xCrsr, uno::UNO_QUERY);
-    SwXTextCursor* pxCrsr = (SwXTextCursor*)xTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
-    SwUnoCrsr* pUnoCrsr = pxCrsr->GetCrsr();
-    SwUnoCrsr* pNewUnoCrsr = GetDoc()->CreateUnoCrsr(*pUnoCrsr->GetPoint(), sal_False);
-    aRef = new SwXParagraphEnumeration(this, pNewUnoCrsr, bIsHeader ? CURSOR_HEADER : CURSOR_FOOTER);
+    SwFrmFmt* pHeadFootFmt = GetFmt();
+    if(pHeadFootFmt)
+    {
+        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
+        const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
+        SwPosition aPos(rNode);
+        SwUnoCrsr* pUnoCrsr = GetDoc()->CreateUnoCrsr(aPos, sal_False);
+        pUnoCrsr->Move(fnMoveForward, fnGoNode);
+        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, bIsHeader ? CURSOR_HEADER : CURSOR_FOOTER);
+    }
+    else
+        throw RuntimeException();
+
     return aRef;
 }
 /* -----------------19.03.99 15:50-------------------
