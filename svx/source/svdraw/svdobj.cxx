@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 17:20:25 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 14:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4059,6 +4059,19 @@ void SdrObject::AfterRead()
     }
 }
 
+// #97849#
+#ifndef _SVX_FMMODEL_HXX
+#include "fmmodel.hxx"
+#endif
+
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+
+#ifndef _SFXOBJFACE_HXX
+#include <sfx2/objface.hxx>
+#endif
+
 void SdrObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 {
     if (rIn.GetError()!=0) return;
@@ -4069,6 +4082,35 @@ void SdrObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     rIn>>aOutRect;
     rIn>>nLayerId;
     rIn>>aAnchor;
+
+    // #97849# when in a Draw/Impress binary import the anchor pos is set it's an error.
+    // So, when could figure out that a Draw/Impress is running, correct that position
+    // to (0,0). Anchor is not used but with 6.0 and XML no longer ignored in Draw/Impress
+    // so this correction needs to be made for objects with that error. These could
+    // be created when copying back anchor based draw objects from Calc or Writer to
+    // Draw/Impress, this did not reset the anchor position.
+    if((aAnchor.X() || aAnchor.Y()) && GetModel() && GetModel()->ISA(FmFormModel))
+    {
+        // find out which application is running
+        SfxObjectShell* pObjectShell = ((FmFormModel*)GetModel())->GetObjectShell();
+
+        if(pObjectShell)
+        {
+            SfxInterface* pInterface = pObjectShell->GetInterface();
+
+            if(pInterface)
+            {
+                sal_uInt16 nInterfaceID = pInterface->GetInterfaceId();
+
+                if(nInterfaceID >= SFX_INTERFACE_SD_START && nInterfaceID <= SFX_INTERFACE_SD_END)
+                {
+                    // it's a draw/Impress, reset anchor pos hard
+                    aAnchor = Point(0, 0);
+                }
+            }
+        }
+    }
+
     BOOL bTemp;
     rIn>>bTemp; bMovProt=bTemp;
     rIn>>bTemp; bSizProt=bTemp;
