@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-13 12:04:57 $
+ *  last change: $Author: mfe $ $Date: 2000-10-27 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,9 +705,7 @@ sal_Bool OSocket::isValid() const
 /*****************************************************************************/
 void OSocket::close()
 {
-    VOS_ASSERT(m_pSockRef && (*m_pSockRef)());
-
-    if (m_pSockRef && (m_pSockRef->release() == 0))
+    if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
         osl_destroySocket((*m_pSockRef)());
         delete m_pSockRef;
@@ -1263,9 +1261,7 @@ OAcceptorSocket::~OAcceptorSocket()
 /*****************************************************************************/
 void OAcceptorSocket::close()
 {
-    VOS_ASSERT(m_pSockRef && (*m_pSockRef)());
-
-    if (m_pSockRef && (m_pSockRef->release() == 0))
+    if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
         // shutdown() needed only on some systems to unblock accept
         osl_shutdownSocket((*m_pSockRef)(), osl_Socket_DirReadWrite);
@@ -1406,9 +1402,7 @@ OStreamSocket::~OStreamSocket()
 /*****************************************************************************/
 void OStreamSocket::close()
 {
-    VOS_ASSERT(m_pSockRef && (*m_pSockRef)());
-
-    if (m_pSockRef && (m_pSockRef->release() == 0))
+    if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
         shutdown();
         osl_destroySocket((*m_pSockRef)());
