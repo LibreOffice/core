@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:41:34 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
 #include <sch/schdll.hxx>
-#include <sch/schdll0.hxx>
 #include <sch/memchrt.hxx>
 #include <sfx2/app.hxx>
+#include <sot/clsids.hxx>
 
 #include "scfobj.hxx"
 #include "document.hxx"
@@ -96,11 +96,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rec
     if ( !SvtModuleOptions().IsChart() )
         return;
 
-    SvStorageRef aStor = new SvStorage(String());
-    SvInPlaceObjectRef aNewIPObj = &(( SvFactory *)
-            SvInPlaceObject::ClassFactory()) ->CreateAndInit(
-                                        *SCH_MOD()->pSchChartDocShellFactory, aStor );
-
+    SvInPlaceObjectRef aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
     if ( aNewIPObj.Is() )
     {
         String aName = pDoc->GetDocumentShell()->InsertObject( aNewIPObj, String() )->GetObjName();
