@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:34:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,35 @@
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
 #endif
+
+#ifdef MACOSX
+/* MacOS X print system discovery constants:
+ *
+ * These values enumerate Apple OS printing systems we could use.
+ * They are used as indications _as well as_ indexes into the
+ * aParms structure used below for print commands.
+ */
+#define     kApplePrintingFailure       0       /* For whatever reason, we can't print at all */
+#define     kApplePrintingLPR           1       /* Darwin 5.x style LPR printing */
+#define     kApplePrintingCUPS          2       /* MacOS X 10.2/Darwin 6 style CUPS (also CUPS installed by users on 10.1) */
+#define     kApplePrintingPrintCenter   3       /* MacOS X 10.1 /usr/sbin/Print printing */
+
+/* Constants for PostScript vs PDF printing */
+#define     kApplePrintingUsePDF        1       /* Default; Run PS through ps2pdf first (requires GhostScript) */
+#define     kApplePrintingUsePS         2       /* Optional, print PS directly to printer (less compatible, requires PS printer) */
+
+/* Define various printing commands */
+#define     kApplePCPrintCommand    "/usr/sbin/Print"       /* Mac OS X 10.1 Print Center Printing command */
+#define     kApplePS2PDFLocation    "/usr/local/bin/ps2pdf" /* PS -> PDF conversion command */
+#define     kApplePCQueueName       "Apple Print Center Default Printer"    /* Name that appears in Print... dialog as the default */
+                                                                /* printer for 10.1 Print Center printing */
+
+/* Prototype for print method discovery function.  Returns
+ * a constant defined in printerinfomanager.hxx
+ */
+sal_Int32   macxp_GetSystemPrintMethod( void );
+#endif
+
 
 namespace psp
 {
