@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:31:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,11 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
-class ScPrintOptions
+class SC_DLLPUBLIC ScPrintOptions
 {
 private:
     BOOL    bSkipEmpty;
@@ -98,7 +101,7 @@ public:
 // item for the dialog / options page
 //==================================================================
 
-class ScTpPrintItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
@@ -136,4 +139,3 @@ public:
 };
 
 #endif
-
