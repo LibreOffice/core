@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:50:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,7 +1280,6 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
     {
         Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
-
         if ( xLayoutManager.is() )
         {
             xLayoutManager->createElement( m_aProgressBarResName );
@@ -1370,6 +1369,8 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     }
 
     UpdateStatusBar_Impl();
+
+    // unlocking automatically forces Layout
     xLayoutManager->unlock();
 
     UpdateChildWindows_Impl();
