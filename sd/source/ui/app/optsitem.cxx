@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 09:55:17 $
+ *  last change: $Author: cl $ $Date: 2002-11-25 16:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SV_SALBTYPE_HRC //autogen
 #include <vcl/salbtype.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include "app.hxx"
@@ -220,6 +223,16 @@ void SdOptionsGeneric::Store()
         mpCfgItem->Commit();
 }
 
+// -----------------------------------------------------------------------------
+
+bool SdOptionsGeneric::isMetricSystem()
+{
+    SvtSysLocale aSysLocale;
+    MeasurementSystem eSys = aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum();
+
+    return ( eSys == MEASURE_METRIC );
+}
+
 /*************************************************************************
 |*
 |* SdOptionsLayout
@@ -247,7 +260,10 @@ void SdOptionsLayout::SetDefaults()
     SetHandlesBezier( FALSE );
     SetMoveOutline( TRUE );
     SetDragStripes( FALSE );
-    SetMetric( 0xffff );
+    if ( isMetricSystem() )
+        SetMetric( FUNIT_CM );              // default for countries with metric system
+    else
+        SetMetric( FUNIT_INCH );            // default for others
     SetDefTab( 1250 );
 }
 
@@ -268,7 +284,7 @@ BOOL SdOptionsLayout::operator==( const SdOptionsLayout& rOpt ) const
 
 void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) const
 {
-    static const char* aPropNames[] =
+    static const char* aPropNamesMetric[] =
     {
         "Display/Ruler",
         "Display/Bezier",
@@ -279,8 +295,23 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) c
         "Other/TabStop/Metric"
     };
 
+    static const char* aPropNamesNonMetric[] =
+    {
+        "Display/Ruler",
+        "Display/Bezier",
+        "Display/Contour",
+        "Display/Guide",
+        "Display/Helpline",
+        "Other/MeasureUnit/NonMetric",
+        "Other/TabStop/NonMetric"
+    };
+
     rCount = 7;
-    ppNames = aPropNames;
+
+    if( isMetricSystem() )
+        ppNames = aPropNamesMetric;
+    else
+        ppNames = aPropNamesNonMetric;
 }
 
 // -----------------------------------------------------------------------------
@@ -1177,7 +1208,7 @@ BOOL SdOptionsGrid::operator==( const SdOptionsGrid& rOpt ) const
 
 void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) const
 {
-    static const char* aPropNames[] =
+    static const char* aPropNamesMetric[] =
     {
         "Resolution/XAxis/Metric",
         "Resolution/YAxis/Metric",
@@ -1191,8 +1222,26 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "SnapGrid/Size"
     };
 
+    static const char* aPropNamesNonMetric[] =
+    {
+        "Resolution/XAxis/NonMetric",
+        "Resolution/YAxis/NonMetric",
+        "Subdivision/XAxis",
+        "Subdivision/YAxis",
+        "SnapGrid/XAxis/NonMetric",
+        "SnapGrid/YAxis/NonMetric",
+        "Option/SnapToGrid",
+        "Option/Synchronize",
+        "Option/VisibleGrid",
+        "SnapGrid/Size"
+    };
+
     rCount = 10;
-    ppNames = aPropNames;
+
+    if( isMetricSystem() )
+        ppNames = aPropNamesMetric;
+    else
+        ppNames = aPropNamesNonMetric;
 }
 
 // -----------------------------------------------------------------------------
