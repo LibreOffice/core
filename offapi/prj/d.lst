@@ -58,8 +58,8 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\portal\daemons\sadmind
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\portal\daemons\sofficed
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\portal\system
 
-..\%__SRC%\ucr\api.db %_DEST%\bin%_EXT%\applicat.rdb
-..\%__SRC%\ucrdoc\api_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
+..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\applicat.rdb
+..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
 
 ..\com\sun\star\address\*.idl %_DEST%\idl%_EXT%\com\sun\star\address\*.idl
 ..\com\sun\star\awt\*.idl %_DEST%\idl%_EXT%\com\sun\star\awt\*.idl
