@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:44:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,43 +530,6 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     return bRet;
 }
 
-/** The file formats of our sdw documents are equal between templates
-    and documents. So they can be detected by its extension only :-(
-    We have to check the extension against the current possible filter.
-*/
-BOOL checkResultForSDWAndTemplates(const String&    sExtension,
-                                     const SfxFilter& aFilter   )
-{
-    BOOL   bRet      = TRUE;
-    String sUserData = aFilter.GetUserData();
-
-    if (
-        sExtension.SearchAscii("sdw") != STRING_NOTFOUND &&
-        (
-            sUserData.EqualsAscii(FILTER_SW3V) ||
-            sUserData.EqualsAscii(FILTER_SW4V) ||
-            sUserData.EqualsAscii(FILTER_SW5V)
-        )
-        )
-    {
-        bRet = FALSE;
-    }
-    else
-    if (
-        sExtension.SearchAscii("vor") != STRING_NOTFOUND &&
-        (
-            sUserData.EqualsAscii(FILTER_SW3) ||
-            sUserData.EqualsAscii(FILTER_SW4) ||
-            sUserData.EqualsAscii(FILTER_SW5)
-        )
-        )
-    {
-        bRet = FALSE;
-    }
-
-    return bRet;
-}
-
 /* die Methode stellt fest, von welchem Typ der stream (File) ist.        */
 /* Es wird versucht, eine dem Filter entsprechende Byte-Folge zu finden.  */
 /* Wird kein entsprechender gefunden, wird zur Zeit der ASCII-Reader      */
@@ -580,7 +543,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
-
     if( !pFCntnr )
         return 0;
 
@@ -592,9 +554,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
 
     if( pMedium ? ( pMedium->IsStorage() || SotStorage::IsStorageFile( pMedium->GetInStream() ) ) : SotStorage::IsStorageFile( rFileName ) )
     {
-        /* Storage: Suchen nach einem Sub-Storage, dessen Name  */
-        /* dem in einem Filter stehenden DLL-Namen entspricht   */
-        uno::Reference < embed::XStorage > xStor;
+        // package storage or OLEStorage based format
         SotStorageRef xStg;
         BOOL bDeleteMedium = FALSE;
         if (!pMedium )
@@ -606,63 +566,63 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             bDeleteMedium = TRUE;
         }
 
-        if ( pMedium->IsStorage())
-            xStor = pMedium->GetStorage();
+        // templates should not get precedence over "normal" filters (#i35508, #i33168)
+        const SfxFilter* pTemplateFilter = 0;
+        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
+        BOOL bLookForTemplate = pOldFilter && pOldFilter->IsAllowedAsTemplate();
+        if ( pMedium->IsStorage() )
+        {
+            uno::Reference < embed::XStorage > xStor = pMedium->GetStorage();
+            if ( xStor.is() )
+            {
+                while ( pFilter )
+                {
+                    if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( xStor, *pFilter ) )
+                    {
+                        if ( pFilter->IsAllowedAsTemplate() && !bLookForTemplate )
+                            // found template filter; maybe there's a "normal" one also
+                            pTemplateFilter = pFilter;
+                        else
+                            return pFilter;
+                    }
+
+                    pFilter = aIter.Next();
+                }
+
+                // there's only a template filter that could be found
+                if ( pTemplateFilter )
+                    pFilter = pTemplateFilter;
+            }
+        }
         else
         {
             SvStream* pStream = pMedium->GetInStream();
             if ( pStream && SotStorage::IsStorageFile(pStream) )
                 xStg = new SotStorage( pStream, FALSE );
-        }
 
-        if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
-        {
-            while ( pFilter )
+            if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
             {
-                if( 'C' == *pFilter->GetUserData().GetBuffer() &&
-                    IsValidStgFilter( *xStg, *pFilter ) &&
-                    (pMedium ? checkResultForSDWAndTemplates(pMedium->GetURLObject().GetExtension(), *pFilter) : TRUE)
-                )
-                    return pFilter;
-                pFilter = aIter.Next();
-            }
-
-            if( IsDocShellRegistered() && 0 != ( pFCntnr = &aCntSwWeb ) )
-            {
-                pFilter = aIter.First();
                 while ( pFilter )
                 {
-                    if( 'C' == *pFilter->GetUserData().GetBuffer() &&
-                        IsValidStgFilter( *xStg, *pFilter ) )
-                        return pFilter;
-                    pFilter = aIter.Next();
-                }
-            }
-        }
-        else if ( xStor.is() )
-        {
-            while ( pFilter )
-            {
-                if( 'C' == *pFilter->GetUserData().GetBuffer() &&
-                    IsValidStgFilter( xStor, *pFilter ) &&
-                    (pMedium ? checkResultForSDWAndTemplates(pMedium->GetURLObject().GetExtension(), *pFilter) : TRUE)
-                )
-                    return pFilter;
-                pFilter = aIter.Next();
-            }
+                    if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( *xStg, *pFilter ) )
+                    {
+                        if ( pFilter->IsAllowedAsTemplate() && !bLookForTemplate )
+                            // found template filter; maybe there's a "normal" one also
+                            pTemplateFilter = pFilter;
+                        else
+                            return pFilter;
+                    }
 
-            if( IsDocShellRegistered() && 0 != ( pFCntnr = &aCntSwWeb ) )
-            {
-                pFilter = aIter.First();
-                while ( pFilter )
-                {
-                    if( 'C' == *pFilter->GetUserData().GetBuffer() &&
-                        IsValidStgFilter( xStor, *pFilter ) )
-                        return pFilter;
                     pFilter = aIter.Next();
                 }
+
+                // there's only a template filter that could be found
+                if ( pTemplateFilter )
+                    pFilter = pTemplateFilter;
+
             }
         }
+
         return 0;
     }
 
