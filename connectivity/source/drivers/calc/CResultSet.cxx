@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:18:05 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 17:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,12 +216,12 @@ sal_Bool OCalcResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xI
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OCalcResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OCalcResultSet::acquire() throw()
 {
     OCalcResultSet_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OCalcResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OCalcResultSet::release() throw()
 {
     OCalcResultSet_BASE2::release();
 }
