@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:51:30 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 16:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,7 @@ VirtualDevice* SdView::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
     SdrView* pView = new SdrView(pDoc, pVDev);
+    pView->SetPageVisible( FALSE );
     pView->SetBordVisible( FALSE );
     pView->SetGridVisible( FALSE );
     pView->SetHlplVisible( FALSE );
