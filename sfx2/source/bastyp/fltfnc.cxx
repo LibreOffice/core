@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: as $ $Date: 2001-06-08 07:46:04 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,6 @@ using namespace ::vos;
 #endif
 
 #include "app.hxx"
-#include "fltdlg.hxx"
 #include "sfxhelp.hxx"
 #include "sfxbasic.hxx"
 #include "docfilt.hxx"
