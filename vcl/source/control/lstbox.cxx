@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 14:34:01 $
+ *  last change: $Author: mt $ $Date: 2002-11-01 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,21 @@ void ListBox::EnableAutoSize( BOOL bAuto )
         else if ( !bAuto )
             mpFloatWin->SetDropDownLineCount( 0 );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::EnableDDAutoWidth( BOOL b )
+{
+    if ( mpFloatWin )
+        mpFloatWin->SetAutoWidth( b );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ListBox::IsDDAutoWidthEnabled() const
+{
+    return mpFloatWin ? mpFloatWin->IsAutoWidth() : FALSE;
 }
 
 // -----------------------------------------------------------------------

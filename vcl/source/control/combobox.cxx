@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
+ *  last change: $Author: mt $ $Date: 2002-11-01 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,22 @@ void ComboBox::EnableAutoSize( BOOL bAuto )
             mpFloatWin->SetDropDownLineCount( 0 );
     }
 }
+
+// -----------------------------------------------------------------------
+
+void ComboBox::EnableDDAutoWidth( BOOL b )
+{
+    if ( mpFloatWin )
+        mpFloatWin->SetAutoWidth( b );
+}
+
+ // -----------------------------------------------------------------------
+
+BOOL ComboBox::IsDDAutoWidthEnabled() const
+{
+    return mpFloatWin ? mpFloatWin->IsAutoWidth() : FALSE;
+}
+
 
 // -----------------------------------------------------------------------
 
