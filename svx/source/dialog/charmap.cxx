@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-20 11:18:19 $
+ *  last change: $Author: hdu $ $Date: 2001-07-20 12:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,8 +1189,8 @@ void SubsetMap::InitList()
     FreeResource();
 
     mnSubsets = ppSubSet - maSubsets;
-    DBG_ASSERT( (nSubsets < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
-    DBG_ASSERT( (2*nSubsets > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
+    DBG_ASSERT( (mnSubsets < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
+    DBG_ASSERT( (2*mnSubsets > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
 }
 
 void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
