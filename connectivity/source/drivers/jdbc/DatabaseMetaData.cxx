@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:06:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ jclass java_sql_DatabaseMetaData::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
         if( !t.pEnv ) return (jclass)0;
         jclass tempClass = t.pEnv->FindClass("java/sql/DatabaseMetaData"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
@@ -139,7 +139,7 @@ void java_sql_DatabaseMetaData::saveClassRef( jclass pClass )
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -162,7 +162,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTypeInfo(  ) thro
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -184,7 +184,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv )
 
@@ -209,7 +209,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         static char * cSignature = "()Ljava/sql/ResultSet;";
@@ -232,7 +232,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
@@ -271,7 +271,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
@@ -310,7 +310,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
 
@@ -398,7 +398,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedureColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
 
@@ -438,7 +438,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedures( const
                 catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
 
@@ -476,7 +476,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -511,7 +511,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         static char * cSignature = "()I";
@@ -531,7 +531,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxBinaryLiteralLength(  ) thro
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -553,7 +553,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxRowSize(  ) throw(SQLExcepti
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -575,7 +575,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCatalogNameLength(  ) throw(
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -597,7 +597,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCharLiteralLength(  ) throw(
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -619,7 +619,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnNameLength(  ) throw(S
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -640,7 +640,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQL
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -661,7 +661,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCursorNameLength(  ) throw(S
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -682,7 +682,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxConnections(  ) throw(SQLExc
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -703,7 +703,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInTable(  ) throw(SQL
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -724,7 +724,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatementLength(  ) throw(SQ
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -745,7 +745,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTableNameLength(  ) throw(SQ
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -767,7 +767,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getExportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -803,7 +803,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getImportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -839,7 +839,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getPrimaryKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -876,7 +876,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
         sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -915,7 +915,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
         sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
@@ -954,7 +954,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
         return new OResultSetPrivileges(this,catalog,schemaPattern,tableNamePattern);
     }
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
 
@@ -1060,7 +1060,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
         const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1104,7 +1104,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1125,7 +1125,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) thro
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1146,7 +1146,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseQuotedIdentifiers(  
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1167,7 +1167,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseIdentifiers(  ) thro
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1188,7 +1188,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1209,7 +1209,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseIdentifiers(  ) thro
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1230,7 +1230,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1251,7 +1251,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseIdentifiers(  ) thro
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1272,7 +1272,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithAddColumn(  )
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1293,7 +1293,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithDropColumn(  
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1314,7 +1314,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxIndexLength(  ) throw(SQLExc
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1334,7 +1334,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
 
@@ -1357,7 +1357,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
 
@@ -1380,7 +1380,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
 
@@ -1404,7 +1404,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1425,7 +1425,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDifferentTableCorrelationNa
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1446,7 +1446,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::isCatalogAtStart(  ) throw(SQLExcep
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1467,7 +1467,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionIgnoredInTransactions
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1488,7 +1488,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::dataDefinitionCausesTransactionComm
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1509,7 +1509,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataManipulationTransaction
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1530,7 +1530,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDataDefinitionAndDataManipu
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1551,7 +1551,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedDelete(  ) throw(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1572,7 +1572,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsPositionedUpdate(  ) throw(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1593,7 +1593,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossRollbac
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1614,7 +1614,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenStatementsAcrossCommit(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1635,7 +1635,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1656,7 +1656,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOpenCursorsAcrossRollback( 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1678,7 +1678,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactionIsolationLevel( 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1699,7 +1699,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInDataManipulation( 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1720,7 +1720,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQL
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1762,7 +1762,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsIntegrityEnhancementFacilit
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1783,7 +1783,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInIndexDefinitions( 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1804,7 +1804,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInTableDefinitions( 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1825,7 +1825,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInTableDefinitions(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1846,7 +1846,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInIndexDefinitions(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1867,7 +1867,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInDataManipulation(
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1888,7 +1888,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOuterJoins(  ) throw(SQLExc
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1910,7 +1910,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTableTypes(  ) th
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1931,7 +1931,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatements(  ) throw(SQLExce
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1952,7 +1952,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxProcedureNameLength(  ) thro
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -1973,7 +1973,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxSchemaNameLength(  ) throw(S
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -3369,7 +3369,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxUserNameLength(  ) throw(SQL
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3390,7 +3390,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetType( sal_Int32 se
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3411,7 +3411,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3432,7 +3432,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 set
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3453,7 +3453,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownDeletesAreVisible( sal_Int32 set
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3474,7 +3474,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::ownInsertsAreVisible( sal_Int32 set
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3495,7 +3495,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3516,7 +3516,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersDeletesAreVisible( sal_Int32 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3537,7 +3537,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::othersInsertsAreVisible( sal_Int32 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3558,7 +3558,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::updatesAreDetected( sal_Int32 setTy
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3579,7 +3579,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::deletesAreDetected( sal_Int32 setTy
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3600,7 +3600,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::insertsAreDetected( sal_Int32 setTy
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -3623,7 +3623,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
         const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
 
