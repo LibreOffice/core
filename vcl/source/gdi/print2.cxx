@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:03 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
+#ifndef _SV_BMPACC_HXX
+#include "bmpacc.hxx"
+#endif
 
 // -----------
 // - Defines -
@@ -110,20 +113,96 @@
 // #i10613# Extracted from Printer::GetPreparedMetaFile
 static bool ImplIsActionSpecial( const MetaAction& rAct )
 {
-    bool bRet( false );
+    switch( rAct.GetType() )
+    {
+        case META_TRANSPARENT_ACTION:
+            return true;
 
-    if( META_TRANSPARENT_ACTION == rAct.GetType() )
-        bRet = true;
-    else if( META_FLOATTRANSPARENT_ACTION == rAct.GetType() )
-        bRet = true;
-    else if( META_BMPEX_ACTION == rAct.GetType() )
-        bRet = static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
-    else if( META_BMPEXSCALE_ACTION == rAct.GetType() )
-        bRet = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
-    else if( META_BMPEXSCALEPART_ACTION == rAct.GetType() )
-        bRet = static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
+        case META_FLOATTRANSPARENT_ACTION:
+            return true;
 
-    return bRet;
+        case META_BMPEX_ACTION:
+            return static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
+
+        case META_BMPEXSCALE_ACTION:
+            return static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
+
+        case META_BMPEXSCALEPART_ACTION:
+            return static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsAlpha() != 0;
+
+        default:
+            return false;
+    }
+}
+
+// #107169# Check whether given metaaction is a masked bitmap
+static bool ImplIsActionMaskedBitmap( const MetaAction& rAct )
+{
+    switch( rAct.GetType() )
+    {
+        case META_BMPEX_ACTION:
+            return static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().IsAlpha() == 0;
+
+        case META_BMPEXSCALE_ACTION:
+            return static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsAlpha() == 0;
+
+        case META_BMPEXSCALEPART_ACTION:
+            return static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsAlpha() == 0;
+
+        default:
+            return false;
+    }
+}
+
+// #107169# Convert BitmapEx with mask to Bitmap with white background at masked-out places
+static Bitmap ImplConvertBmpEx2Bmp( const MetaAction& rAct )
+{
+    BitmapEx aBmpEx;
+
+    switch( rAct.GetType() )
+    {
+        case META_BMPEX_ACTION:
+            aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx();
+            break;
+
+        case META_BMPEXSCALE_ACTION:
+            aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
+            break;
+
+        case META_BMPEXSCALEPART_ACTION:
+            aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
+            break;
+
+        default:
+            DBG_ERROR("Printer::GetPreparedMetafile impossible state reached");
+            break;
+    }
+
+    Bitmap            aBmp( aBmpEx.GetBitmap() );
+    BitmapReadAccess* pRA = aBmp.AcquireReadAccess();
+
+    if( !pRA )
+        return aBmp; // what else should I do?
+
+    Color aWhite( pRA->GetBestPaletteColor( Color( COL_WHITE ) ).operator Color() );
+    aBmp.ReleaseAccess(pRA);
+
+    // did we get true white?
+    if( aWhite.GetColorError( Color( COL_WHITE ) ) )
+    {
+        // no, create truecolor bitmap, then
+        aBmp.Convert( BMP_CONVERSION_24BIT );
+
+        // fill masked out areas white
+        aBmp.Replace( aBmpEx.GetMask(), COL_WHITE );
+    }
+    else
+    {
+        // fill masked out areas white
+        aBmp.Replace( aBmpEx.GetMask(), aWhite );
+    }
+
+    return aBmp;
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
@@ -455,15 +534,19 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
     // currently cannot emulate transparent painting on a white
     // background reliably.
 
-    // For the time being, bitmaps are also not handled correctly,
-    // since they don't calculate explicit alpha against white
-    // background in ImplQPrinter::ImplPrintMtf.
+    // the remainder can handle printing itself correctly on a uniform
+    // white background.
+    switch( rAct.GetType() )
+    {
+        case META_TRANSPARENT_ACTION:
+        case META_BMPEX_ACTION:
+        case META_BMPEXSCALE_ACTION:
+        case META_BMPEXSCALEPART_ACTION:
+            return true;
 
-    // Leaves us with META_TRANSPARENT_ACTION
-    if( rAct.GetType() == META_TRANSPARENT_ACTION )
-        return true;
-    else
-        return false;
+        default:
+            return false;
+    }
 }
 
 // predicate functor for checking whether given element is fully transparent
@@ -515,8 +598,19 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
              pCurrAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
         {
             // #i10613# Extracted "specialness" predicate into extra method
-            if( ImplIsActionSpecial( *pCurrAct ) )
+
+            // #107169# Also examine metafiles with masked bitmaps in
+            // detail. Further down, this is optimized in such a way
+            // that there's no unnecessary painting of masked bitmaps
+            // (which are _always_ subdivided into rectangular regions
+            // of uniform opacity): if a masked bitmap is printed over
+            // empty background, we convert to a plain bitmap with
+            // white background.
+            if( ImplIsActionMaskedBitmap( *pCurrAct ) ||
+                ImplIsActionSpecial( *pCurrAct ) )
+            {
                 bTransparent = true;
+            }
         }
     }
 
@@ -958,7 +1052,49 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                 (aCCList_MemberMap[nActionNum]->aBounds.IsEmpty() ||
                  !aCCList_MemberMap[nActionNum]->bIsSpecial) )
             {
-                rOutMtf.AddAction( ( pCurrAct->Duplicate(), pCurrAct ) );
+                // #107169# Treat masked bitmaps special, if they are
+                // the first (or sole) action in their bounds list.
+                if( ImplIsActionMaskedBitmap( *pCurrAct ) &&
+                    aCCList_MemberMap[nActionNum]->aComponentList.begin()->first == pCurrAct )
+                {
+                    // convert to plain Bitmap, where masked-out parts are white
+                    Bitmap aBmp( ImplConvertBmpEx2Bmp(*pCurrAct) );
+
+                    // add corresponding action
+                    switch( pCurrAct->GetType() )
+                    {
+                        case META_BMPEX_ACTION:
+                            rOutMtf.AddAction( new MetaBmpExAction(
+                                                   static_cast<const MetaBmpExAction*>(pCurrAct)->GetPoint(),
+                                                   aBmp ) );
+                            break;
+
+                        case META_BMPEXSCALE_ACTION:
+                            rOutMtf.AddAction( new MetaBmpExScaleAction(
+                                                   static_cast<const MetaBmpExScaleAction*>(pCurrAct)->GetPoint(),
+                                                   static_cast<const MetaBmpExScaleAction*>(pCurrAct)->GetSize(),
+                                                   aBmp ) );
+                            break;
+
+                        case META_BMPEXSCALEPART_ACTION:
+                            rOutMtf.AddAction( new MetaBmpExScalePartAction(
+                                                   static_cast<const MetaBmpExScalePartAction*>(pCurrAct)->GetDestPoint(),
+                                                   static_cast<const MetaBmpExScalePartAction*>(pCurrAct)->GetDestSize(),
+                                                   static_cast<const MetaBmpExScalePartAction*>(pCurrAct)->GetSrcPoint(),
+                                                   static_cast<const MetaBmpExScalePartAction*>(pCurrAct)->GetSrcSize(),
+                                                   aBmp ) );
+                            break;
+
+                        default:
+                            DBG_ERROR("Printer::GetPreparedMetafile impossible state reached");
+                            break;
+                    }
+                }
+                else
+                {
+                    // simply add this action
+                    rOutMtf.AddAction( ( pCurrAct->Duplicate(), pCurrAct ) );
+                }
             }
         }
 
