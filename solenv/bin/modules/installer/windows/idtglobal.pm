@@ -1450,7 +1450,7 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable);
         $featurename = get_feature_name("_Adabas", $featuretable);
-        $line = "InstallAdabas\t\&$featurename\=3 And Not Installed\t$number\n";
+        $line = "InstallAdabas\t\&$featurename\=3 And Not Installed And Not PATCH\t$number\n";
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
@@ -1461,7 +1461,7 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 2;
         $featurename = get_feature_name("_Java", $featuretable);
-        $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\"\t$number\n";
+        $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n";
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
@@ -1472,7 +1472,7 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 4;
         $featurename = get_feature_name("_Adabas", $featuretable);
-        $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed\t$number\n";
+        $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed And Not PATCH\t$number\n";
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
@@ -1483,7 +1483,7 @@ sub add_childprojects
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 6;
         $featurename = get_feature_name("_Java", $featuretable);
-        $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\"\t$number\n";
+        $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n";
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
