@@ -958,11 +958,8 @@ Optional Packages:
 
   --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 
-  --without-gpc           *NOT RECOMMENDED*  Removes GPC code from
-                          openoffice.org Reduces some graphics capability
-                          slightly.
-                          This is required to allow some strict packagers to
-                          comply with their distrubution policy.
+  --without-gpc           Use the internal polygon clipping code instead of
+			  the external GPC polygon clipping library.
 
   --without-fonts         Removes Bitstream Vera fonts from
                           openoffice.org installation set, for people building
