@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:57:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,29 @@ namespace dbtools
         sal_Bool _bAllowDefault = sal_False,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>()
     );
+
+    /** returns the statement which is composed from the current settings of a row set
+
+        If the row set is currently not connected, it is attempted to do so with it's current settings.
+        (TODO: isn't this a resource leak? Do we really need this behaviour?).
+
+        @param _rxRowSet
+            the row set whose settings should be examined. Must not be <NULL/>
+        @param _rxFactory
+            a service factory which may be needed to connect the row set
+        @param _bUseRowSetFilter
+            If <TRUE/>, the <b>Filter</b> property of the row set will also be examined. In case it is
+            not empty, and <b>ApplyFilter</b> is <TRUE/>, it will also be added to the composed statement.
+        @param _bUseRowSetOrder
+            If <TRUE/>, the <b>Order</b> property of the row set will also be examined. In case it is
+            not empty, it will also be added to the composed statement.
+    */
+    ::rtl::OUString getComposedRowSetStatement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRowSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            sal_Bool _bUseRowSetFilter = sal_True,
+            sal_Bool _bUseRowSetOrder = sal_True
+    )   SAL_THROW( ( ::com::sun::star::sdbc::SQLException ) );
 
     /** create an XSQLQueryComposer which represents the current settings (Command/CommandType/Filter/Order)
         of the given rowset.
