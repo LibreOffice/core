@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-14 10:49:18 $
+ *  last change: $Author: dl $ $Date: 2001-08-24 12:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,10 @@ void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         rAttr.Put( SdrTextAutoGrowWidthItem( TRUE ) );
         rAttr.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+        rAttr.Put( SdrTextLeftDistItem( 100 ) );
+        rAttr.Put( SdrTextRightDistItem( 100 ) );
+        rAttr.Put( SdrTextUpperDistItem( 100 ) );
+        rAttr.Put( SdrTextLowerDistItem( 100 ) );
     }
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {
