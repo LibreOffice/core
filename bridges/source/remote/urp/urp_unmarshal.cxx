@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:43:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <string.h>
 
 #include <osl/diagnose.h>
@@ -88,13 +87,13 @@ char g_bSystemIsLittleEndian = ((char*)&g_nDetectLittleEndian)[0];
 Unmarshal::Unmarshal( struct urp_BridgeImpl *pBridgeImpl,
                       uno_Environment *pEnvRemote,
                       remote_createStubFunc callback ) :
-    m_pBridgeImpl( pBridgeImpl ),
-    m_pEnvRemote( pEnvRemote ),
-    m_callback( callback ),
     m_nBufferSize( 4096 ),
     m_base( (sal_Int8*) rtl_allocateMemory( m_nBufferSize ) ),
     m_pos( m_base ),
-    m_nLength( 0 )
+    m_nLength( 0 ),
+    m_callback( callback ),
+    m_pEnvRemote( pEnvRemote ),
+    m_pBridgeImpl( pBridgeImpl )
 {
 }
 
