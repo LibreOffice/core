@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 16:25:53 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 18:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "ChartController.hxx"
 #include "SelectionHelper.hxx"
+#include "PositionAndSizeHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 #include "ChartWindow.hxx"
 #include "chartview/ChartView.hxx"
@@ -772,116 +773,14 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     }
                     else
                     {
-                        if(m_aSelectedObjectCID.indexOf(C2U("Title"))!=-1)
-                        {
-                            //@todo decide wether x is primary or secondary
-                            Size aRefSize = m_pChartWindow->GetOutputSize();
+                        if(pObj->ISA(E3dObject))
+                            aObjectRect = ((E3dObject*)pObj)->GetScene()->GetSnapRect();
 
-                            ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
-                            //the anchor point at the title object is top/middle
-                            Point aPos = aObjectRect.TopLeft();
-                            aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aRefSize.Width());
-                            aRelativePosition.Secondary = double(aPos.Y())/double(aRefSize.Height());
-                            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
-                        }
-                        else if(m_aSelectedObjectCID.indexOf(C2U("Legend"))!=-1)
-                        {
-                            LegendPosition ePos = LegendPosition_LINE_END;
-                            xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
-                            Point aLegendAnchor(0,0);//point at legend
-                            Point aPageAnchor(0,0);//point at page
-                            ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
-                            switch( ePos )
-                            {
-                                case LegendPosition_LINE_START:
-                                    //@todo language dependent positions ...
-                                    aLegendAnchor = aObjectRect.LeftCenter();
-                                    aPageAnchor = aPageRect.LeftCenter();
-                                    aRelativePosition.Primary = aLegendAnchor.X()-aPageAnchor.X();
-                                    aRelativePosition.Secondary = aPageAnchor.Y()-aLegendAnchor.Y();
-                                    aRelativePosition.Primary /= double(aPageRect.getWidth());
-                                    aRelativePosition.Secondary /= double(aPageRect.getHeight());
-                                    break;
-                                case LegendPosition_LINE_END:
-                                    //@todo language dependent positions ...
-                                    aLegendAnchor = aObjectRect.RightCenter();
-                                    aPageAnchor = aPageRect.RightCenter();
-                                    aRelativePosition.Primary = aPageAnchor.X()-aLegendAnchor.X();
-                                    aRelativePosition.Secondary = aLegendAnchor.Y()-aPageAnchor.Y();
-                                    aRelativePosition.Primary /= double(aPageRect.getWidth());
-                                    aRelativePosition.Secondary /= double(aPageRect.getHeight());
-                                    break;
-                                case LegendPosition_PAGE_START:
-                                    //@todo language dependent positions ...
-                                    aLegendAnchor = aObjectRect.TopCenter();
-                                    aPageAnchor = aPageRect.TopCenter();
-                                    aRelativePosition.Primary = aLegendAnchor.Y()-aPageAnchor.Y();
-                                    aRelativePosition.Secondary = aLegendAnchor.X()-aPageAnchor.X();
-                                    aRelativePosition.Primary /= double(aPageRect.getHeight());
-                                    aRelativePosition.Secondary /= double(aPageRect.getWidth());
-                                    break;
-                                case LegendPosition_PAGE_END:
-                                case LegendPosition_CUSTOM:
-                                case LegendPosition_MAKE_FIXED_SIZE:
-                                    //@todo language dependent positions ...
-                                    aLegendAnchor = aObjectRect.BottomCenter();
-                                    aPageAnchor = aPageRect.BottomCenter();
-                                    aRelativePosition.Primary = aPageAnchor.Y()-aLegendAnchor.Y();
-                                    aRelativePosition.Secondary = aPageAnchor.X()-aLegendAnchor.X();
-                                    aRelativePosition.Primary /= double(aPageRect.getHeight());
-                                    aRelativePosition.Secondary /= double(aPageRect.getWidth());
-                                    break;
-                            }
-                            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
-                        }
-                        else
-                        {
-                            xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
-                            if( xProp.is() )
-                            {
-                                //@todo decide wether x is primary or secondary
-                                Size aRefSize = m_pChartWindow->GetOutputSize();
-
-                                if(pObj->ISA(E3dObject))
-                                {
-                                    E3dObject* pE3dObject = (E3dObject*)pObj;
-                                    E3dScene* pScene = pE3dObject->GetScene();
-                                    aObjectRect = pScene->GetLogicRect();
-
-                                    /*
-                                    Matrix4D aSceneMatrix;
-                                    E3dObject* pE3dObject = (E3dObject*)pObj;
-                                    E3dScene* pScene = pE3dObject->GetScene();
-                                    aSceneMatrix = pScene->GetFullTransform();
-
-                                    if(pE3dObject->GetParentObj())
-                                        aSceneMatrix = pE3dObject->GetParentObj()->GetFullTransform();
-
-                                    Matrix4D aTranslateM4Inverse;
-                                    aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
-
-                                    aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
-                                    */
-                                }
-
-                                //set position:
-                                Point aPos = aObjectRect.TopLeft();
-                                ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
-                                //the anchor points for the diagram are in the middle of the diagram
-                                //and in the middle of the page
-                                aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0-double(aRefSize.Width())/2.0)/double(aRefSize.Width());
-                                aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0-double(aRefSize.Height())/2.0)/double(aRefSize.Height());
-                                xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
-
-                                //set size:
-                                ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
-                                //the anchor points for the diagram are in the middle of the diagram
-                                //and in the middle of the page
-                                aRelativeSize.Primary = double(aObjectRect.getWidth())/double(aPageRect.getWidth());
-                                aRelativeSize.Secondary = double(aObjectRect.getHeight())/double(aPageRect.getHeight());
-                                xProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
-                            }
-                        }
+                        PositionAndSizeHelper::moveObject( m_aSelectedObjectCID
+                                        , m_aModel->getModel()
+                                        , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
+                                        );
                     }
                 }
             }
