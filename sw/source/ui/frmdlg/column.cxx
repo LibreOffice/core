@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,18 +967,23 @@ void SwColumnPage::SetLabels( USHORT nVis )
 
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
-    if(pNF)
-        aDefaultVS.SetNoSelection();
     nCols = (USHORT)aCLNrEdt.GetValue();
-    long nDist = aDistEd1.Denormalize(aDistEd1.GetValue(FUNIT_TWIP));
-    pColMgr->SetCount(nCols, (USHORT)nDist);
-    for(USHORT i = 0; i < nCols; i++)
-        nColDist[i] = nDist;
-    nFirstVis = 0;
-    SetLabels( nFirstVis );
-    UpdateCols();
-    ResetColWidth();
-    Update();
+    //#107890# the handler is also called from LoseFocus()
+    //then no change has been made and thus no action should be taken
+    if(pColMgr->GetCount() != nCols)
+    {
+        if(pNF)
+            aDefaultVS.SetNoSelection();
+        long nDist = aDistEd1.Denormalize(aDistEd1.GetValue(FUNIT_TWIP));
+        pColMgr->SetCount(nCols, (USHORT)nDist);
+        for(USHORT i = 0; i < nCols; i++)
+            nColDist[i] = nDist;
+        nFirstVis = 0;
+        SetLabels( nFirstVis );
+        UpdateCols();
+        ResetColWidth();
+        Update();
+    }
 
     return 0;
 }
