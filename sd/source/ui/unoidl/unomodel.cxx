@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 16:10:20 $
+ *  last change: $Author: cl $ $Date: 2002-01-30 10:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,11 @@
 #include <unomodel.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -145,9 +143,7 @@
 #include <svx/unonrule.hxx>
 #include <svx/eeitem.hxx>
 
-#ifndef SVX_LIGHT
 #include <docshell.hxx>
-#endif
 
 #ifndef _SD_UNODOCUMENTSETTINGS_HXX_
 #include <UnoDocumentSettings.hxx>
@@ -225,8 +221,13 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
-    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
-        mpModel = NULL;
+    if( pSdrHint )
+    {
+        if( HINT_MODELCLEARED == pSdrHint->GetKind() )
+        {
+            mpModel = NULL;
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -438,6 +439,14 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( pSdrHint )
     {
+        if( hasEventListeners() )
+        {
+            document::EventObject aEvent;
+
+            if( SvxUnoDrawMSFactory::createEvent( pDoc, pSdrHint, aEvent ) )
+                notifyEvent( aEvent );
+        }
+
         if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
             pDoc = NULL;
@@ -819,14 +828,12 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
-#ifndef SVX_LIGHT
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
 
         return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool() );
     }
-#endif
 
     uno::Reference< uno::XInterface > xRet;
 
@@ -1019,7 +1026,6 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         }
         case WID_MODEL_VISAREA:
-#ifndef SVX_LIGHT
             {
                 SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
@@ -1031,7 +1037,6 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
 
                 pEmbeddedObj->SetVisArea( Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width - 1, aVisArea.Y + aVisArea.Height - 1 ) );
             }
-#endif
             break;
         case WID_MODEL_CONTFOCUS:
             {
@@ -1084,7 +1089,6 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         case WID_MODEL_VISAREA:
             {
-#ifndef SVX_LIGHT
                 SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
                     break;
@@ -1093,12 +1097,10 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
 
                 aAny <<= aVisArea;
-#endif
             }
             break;
         case WID_MODEL_MAPUNIT:
             {
-#ifndef SVX_LIGHT
                 SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
                     break;
@@ -1106,7 +1108,6 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 sal_Int16 nMeasureUnit = 0;
                 SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
                 aAny <<= (sal_Int16)nMeasureUnit;
-#endif
         }
         break;
         case WID_MODEL_FORBCHARS:
@@ -1735,13 +1736,4 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-#ifdef SVX_LIGHT
-uno::Reference< frame::XModel > SdDrawDocShell::GetModel()
-{
-    if( !mxModel.is() )
-        mxModel = new SdXImpressDocument( this );
-
-    return mxModel;
-}
-#endif
 
