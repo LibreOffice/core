@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfsize.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:56:18 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ enum SwFrmSize
 class SwFmtFrmSize: public SfxPoolItem
 {
     Size      aSize;
-    SwFrmSize eFrmSize;
+    SwFrmSize eFrmHeightType;
+    SwFrmSize eFrmWidthType;
     BYTE      nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
     BYTE      nHeightPercent;   //angegeben sein.
                                 //Fuer Rahmen koennen Hoehe und/oder Breite
@@ -128,8 +129,11 @@ public:
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
-    SwFrmSize GetSizeType() const { return eFrmSize; }
-    void SetSizeType( SwFrmSize eSize ) { eFrmSize = eSize; }
+    SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
+    void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
+
+    SwFrmSize GetWidthSizeType() const { return eFrmWidthType; }
+    void SetWidthSizeType( SwFrmSize eSize ) { eFrmWidthType = eSize; }
 
     const Size& GetSize() const { return aSize; }
           void  SetSize( const Size &rNew ) { aSize = rNew; }
