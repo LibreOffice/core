@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:25:05 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,17 @@ namespace configmgr
 
         namespace SchemaAttribute = backenduno::SchemaAttribute;
 // -----------------------------------------------------------------------------
-        static void check_if_complete(MergedComponentData & md)
+        static void check_if_complete(MergedComponentData & md, SchemaBuilder::Context const & xContext)
         {
             uno::Reference< backenduno::XSchemaHandler >
-                 test(new SchemaBuilder(OUString(),md,NULL));
+                 test(new SchemaBuilder(xContext, OUString(),md,NULL));
         }
 // -----------------------------------------------------------------------------
 
-SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
+SchemaBuilder::SchemaBuilder(Context const & xContext, const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
 : m_aData(rData)
-, m_aContext(static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
+, m_aContext(xContext,static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
 , m_aFactory()
-, m_aTemplateProvider(aTemplateProvider)
 {
 
 }
@@ -121,6 +120,8 @@ SchemaBuilder::~SchemaBuilder(  )
 MergedComponentData & SchemaBuilder::result()
 {
     OSL_ENSURE(isDone(), "SchemaBuilder: Warning: Schema not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().warning("Schema not terminated properly", "result()", "configmgr::SchemaBuilder");
 
     return m_aData;
 }
@@ -129,6 +130,8 @@ MergedComponentData & SchemaBuilder::result()
 MergedComponentData const & SchemaBuilder::result() const
 {
     OSL_ENSURE(isDone(), "SchemaBuilder: Warning: Schema not terminated properly");
+    if (!isDone())
+        m_aContext.getLogger().warning("Schema not terminated properly", "result()", "configmgr::SchemaBuilder");
 
     return m_aData;
 }
@@ -164,7 +167,6 @@ void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
         throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
-    // OSL_ENSURE(false, "Cross-component references are not yet supported");
 }
 // -----------------------------------------------------------------------------
 
@@ -425,9 +427,9 @@ namespace
         InstanceList            m_aReplacementList;
         TemplateStack           m_aTemplateStack;
     public:
-        SubstitutionHelper(MergedComponentData & _rData, uno::XInterface * _pContext, ITemplateDataProvider* aTemplateProvider=NULL  )
+        SubstitutionHelper(DataBuilderContext const & aBaseContext, MergedComponentData & _rData, uno::XInterface * _pContext)
         : m_rData(_rData)
-        , m_aContext(_pContext,aTemplateProvider)
+        , m_aContext(aBaseContext,_pContext)
         , m_aReplacementList()
         , m_aTemplateStack()
         {}
@@ -448,7 +450,7 @@ namespace
 
 void SchemaBuilder::substituteInstances()
 {
-    SubstitutionHelper helper(m_aData, static_cast<backenduno::XSchemaHandler*>(this),m_aTemplateProvider);
+    SubstitutionHelper helper(m_aContext, m_aData, static_cast<backenduno::XSchemaHandler*>(this));
 
     helper.substituteInData();
 }
