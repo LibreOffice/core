@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:40:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
 {
     if ( !pLst )
-        pLst = pSh->HasDrawView() ? &pSh->Imp()->GetDrawView()->GetMarkList():0;
+        pLst = pSh->HasDrawView() ? &pSh->Imp()->GetDrawView()->GetMarkedObjectList():0;
 
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
@@ -241,7 +241,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
 
     ASSERT( Imp()->HasDrawView(), "SelectObj without DrawView?" );
     SwDrawView *pDView = Imp()->GetDrawView();
-    const SdrMarkList &rMrkList = pDView->GetMarkList();
+    const SdrMarkList &rMrkList = pDView->GetMarkedObjectList();
     const BOOL bHadSelection = rMrkList.GetMarkCount() ? TRUE : FALSE;
     const BOOL bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
     const BOOL bEnterGroup = 0 != (SW_ENTER_GROUP & nFlag);
@@ -393,7 +393,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
 {
     const SdrMarkList* pMrkList;
     if( !Imp()->GetDrawView() ||
-        0 == (pMrkList = &Imp()->GetDrawView()->GetMarkList()) ||
+        0 == (pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList()) ||
         1 != pMrkList->GetMarkCount())
         return sal_False;
     SwFrm* pOld;
@@ -625,7 +625,7 @@ const SdrMarkList* SwFEShell::_GetMarkList() const
 {
     const SdrMarkList* pMarkList = NULL;
     if( Imp()->GetDrawView() != NULL )
-        pMarkList = &Imp()->GetDrawView()->GetMarkList();
+        pMarkList = &Imp()->GetDrawView()->GetMarkedObjectList();
     return pMarkList;
 }
 
@@ -692,7 +692,7 @@ void SwFEShell::Scroll( const Point &rPt )
 {
     const SwRect aRect( rPt, rPt );
     if ( IsScrollMDI( this, aRect ) &&
-         (!Imp()->GetDrawView()->GetMarkList().GetMarkCount() ||
+         (!Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ||
           Imp()->IsDragPossible( rPt )) )
     {
         SwSaveHdl aSave( Imp() );
@@ -727,7 +727,7 @@ void SwFEShell::SetDragMode( UINT16 eDragMode )
 long SwFEShell::BeginDrag( const Point* pPt, BOOL )
 {
     SdrView *pView = Imp()->GetDrawView();
-    if ( pView && pView->HasMarkedObj() )
+    if ( pView && pView->AreObjectsMarked() )
     {
         delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
         SdrHdl* pHdl = pView->HitHandle( *pPt, *GetWin() );
@@ -855,7 +855,7 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 {
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
 
         if( pFly )
@@ -977,7 +977,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 void SwFEShell::SelectionToTop( BOOL bTop )
 {
     ASSERT( Imp()->HasDrawView(), "SelectionToTop without DrawView?" );
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     ASSERT( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
 
     SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
@@ -997,7 +997,7 @@ void SwFEShell::SelectionToTop( BOOL bTop )
 void SwFEShell::SelectionToBottom( BOOL bBottom )
 {
     ASSERT( Imp()->HasDrawView(), "SelectionToBottom without DrawView?" );
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     ASSERT( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
 
     SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
@@ -1030,7 +1030,7 @@ short SwFEShell::GetLayerId() const
     short nRet = SHRT_MAX;
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -1065,7 +1065,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
 {
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         // OD 25.06.2003 #108784# - correct type of <nControls>
         const SdrLayerID nControls = GetDoc()->GetControlsId();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -1116,7 +1116,7 @@ USHORT SwFEShell::IsObjSelected() const
     if ( IsFrmSelected() || !Imp()->HasDrawView() )
         return 0;
     else
-        return USHORT( Imp()->GetDrawView()->GetMarkList().GetMarkCount() );
+        return USHORT( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() );
 }
 
 BOOL SwFEShell::IsFrmSelected() const
@@ -1124,7 +1124,7 @@ BOOL SwFEShell::IsFrmSelected() const
     if ( !Imp()->HasDrawView() )
         return FALSE;
     else
-        return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkList(),
+        return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
                                         (ViewShell*)this );
 }
 
@@ -1180,10 +1180,10 @@ void SwFEShell::EndTextEdit()
     {
         if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->EndTextEdit( TRUE ) )
         {
-            if ( pView->GetMarkList().GetMarkCount() > 1 )
+            if ( pView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
                 {
-                    SdrMarkList aSave( pView->GetMarkList() );
+                    SdrMarkList aSave( pView->GetMarkedObjectList() );
                     aSave.DeleteMark( aSave.FindObject( pObj ) );
                     if ( aSave.GetMarkCount() )
                     {
@@ -1223,7 +1223,7 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
     {
         SwDrawView *pDView = Imp()->GetDrawView();
 
-        if( pDView->GetMarkList().GetMarkCount() &&
+        if( pDView->GetMarkedObjectList().GetMarkCount() &&
             pDView->IsMarkedObjHit( rPt ) )
         {
             return SDRHIT_OBJECT;
@@ -1358,7 +1358,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
             if( pFly )
                 pBest = pFly->GetVirtDrawObj();
         }
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         SdrPageView* pPV = Imp()->GetDrawView()->GetPageViewPvNum( 0 );
 
         if( !pBest || rMrkList.GetMarkCount() == 1 )
@@ -1688,10 +1688,10 @@ BOOL SwFEShell::EndCreate( UINT16 eSdrCreateCmd )
 
 BOOL SwFEShell::ImpEndCreate()
 {
-    ASSERT( Imp()->GetDrawView()->GetMarkList().GetMarkCount() == 1,
+    ASSERT( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1,
             "Neues Object nicht selektiert." );
 
-    SdrObject& rSdrObj = *Imp()->GetDrawView()->GetMarkList().GetMark(0)->GetObj();
+    SdrObject& rSdrObj = *Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetObj();
 
     if( rSdrObj.GetSnapRect().IsEmpty() )
     {
@@ -2123,7 +2123,7 @@ BOOL SwFEShell::EndMark()
             SwDrawView* pDView = Imp()->GetDrawView();
             //Rahmen werden auf diese Art nicht Selektiert, es sein denn es
             //ist nur ein Rahmen.
-            SdrMarkList &rMrkList = (SdrMarkList&)pDView->GetMarkList();
+            SdrMarkList &rMrkList = (SdrMarkList&)pDView->GetMarkedObjectList();
             SwFlyFrm* pOldSelFly = ::GetFlyFromMarked( &rMrkList, this );
 
             if ( rMrkList.GetMarkCount() > 1 )
@@ -2137,7 +2137,7 @@ BOOL SwFEShell::EndMark()
                             pDView->HideMarkHdl( GetOut() );
                             bShowHdl = TRUE;
                         }
-                        rMrkList.DeleteMarkNum( i );
+                        rMrkList.DeleteMark( i );
                         --i;    //keinen auslassen.
                     }
                 }
@@ -2196,7 +2196,7 @@ short SwFEShell::GetAnchorId() const
     short nRet = SHRT_MAX;
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -2233,7 +2233,7 @@ short SwFEShell::GetAnchorId() const
 void SwFEShell::ChgAnchor( int eAnchorId, BOOL bSameOnly, BOOL bPosCorr )
 {
     ASSERT( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if( rMrkList.GetMarkCount() &&
         !rMrkList.GetMark( 0 )->GetObj()->GetUpGroup() )
     {
@@ -2313,8 +2313,8 @@ Point SwFEShell::GetAnchorObjDiff() const
     }
     else
     {
-        const SdrObject *pObj = pView->GetMarkList().GetMarkCount() == 1 ?
-                                pView->GetMarkList().GetMark(0)->GetObj() : 0;
+        const SdrObject *pObj = pView->GetMarkedObjectList().GetMarkCount() == 1 ?
+                                pView->GetMarkedObjectList().GetMark(0)->GetObj() : 0;
         if ( pObj )
             aRet -= pObj->GetAnchorPos();
     }
@@ -2343,7 +2343,7 @@ BOOL SwFEShell::IsGroupSelected()
 {
     if ( IsObjSelected() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -2372,7 +2372,7 @@ bool SwFEShell::IsGroupAllowed() const
         bIsGroupAllowed = true;
         const SdrObject* pUpGroup = 0L;
         const SwFrm* pHeaderFooterFrm = 0L;
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; bIsGroupAllowed && i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject* pObj = rMrkList.GetMark( i )->GetObj();
@@ -2572,7 +2572,7 @@ const SwFrmFmt*  SwFEShell::GetFlyNum(USHORT nIdx, FlyCntType eType ) const
 void SwFEShell::MakeSelVisible()
 {
     if( Imp()->HasDrawView() &&
-        Imp()->GetDrawView()->GetMarkList().GetMarkCount() )
+        Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         MakeVisible( Imp()->GetDrawView()->GetAllMarkedRect() );
     }
@@ -2588,7 +2588,7 @@ BYTE SwFEShell::IsSelObjProtected( FlyProtectType eType ) const
     BOOL bParent = eType & FLYPROTECT_PARENT;
     if( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for( ULONG i = rMrkList.GetMarkCount(); i; )
         {
             SdrObject *pObj = rMrkList.GetMark( --i )->GetObj();
@@ -2642,7 +2642,7 @@ BOOL SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     if ( !IsObjSelected() )
         return FALSE;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -2667,7 +2667,7 @@ BOOL SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     StartAllAction();
     StartUndo( UNDO_INSATTR );
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -2689,7 +2689,7 @@ BOOL SwFEShell::IsAlignPossible() const
         BOOL bRet = TRUE;
         if ( nCnt == 1 )
         {
-            SdrObject *pO = Imp()->GetDrawView()->GetMarkList().GetMark(0)->GetObj();
+            SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
             //only as character bound drawings can be aligned
             bRet = pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
@@ -2706,7 +2706,7 @@ void SwFEShell::CheckUnboundObjects()
 {
     SET_CURR_SHELL( this );
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -3130,7 +3130,7 @@ const Color SwFEShell::GetShapeBackgrd() const
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
-        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
         ASSERT( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
@@ -3182,7 +3182,7 @@ const bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
-        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
         ASSERT( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
