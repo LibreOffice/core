@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:31:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,8 +252,8 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
         aTmp.SSize().Height()+= aPixSz.Height()/2 + 1;
         Rectangle aTmpRect( pO->LogicToPixel( aTmp.SVRect() ) );
 
-        ASSERT( aTmpRect.GetWidth() <=
-                pSh->GetWin()->GetOutputSizePixel().Width() + 2,
+        ASSERT( !pSh->GetWin()->IsReallyVisible() ||
+                aTmpRect.GetWidth() <= pSh->GetWin()->GetOutputSizePixel().Width() + 2,
                 "Paintwidth bigger than visarea?" );
         // Passt das Rechteck in unseren Buffer ?
         if( !DoesFit( aTmpRect.GetSize() ) )
