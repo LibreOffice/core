@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:10:01 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,9 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     CheckBox    aHSpacesCB;
     CheckBox    aTabCB;
     CheckBox    aBreakCB;
-    CheckBox    aHiddenCB;
-    CheckBox    aHiddenParaCB;
+    CheckBox    aCharHiddenCB;
+    CheckBox    aFldHiddenCB;
+    CheckBox    aFldHiddenParaCB;
 
     FixedLine   aSeparatorFL;
 
