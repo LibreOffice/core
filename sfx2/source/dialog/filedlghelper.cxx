@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 15:22:57 $
+ *  last change: $Author: thb $ $Date: 2001-11-09 08:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,17 +752,18 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
             Rectangle aSrcRect( 0, 0, nBmpWidth, nBmpHeight );
             Rectangle aDstRect( nMidX, nMidY, nMidX + nBmpWidth, nMidY + nBmpHeight );
 
-            // #92765# Have to conserve bitmap palette. There is no method setting it explicitely,
-            // thus doing it this way. Performance penalty is low, as bitmap is refcounted.
-            Bitmap aScaledBmp( aBmp );
-            aScaledBmp.SetSizePixel( Size(nOutWidth, nOutHeight) );
-            aScaledBmp.Erase( Color( COL_WHITE ) );
-            aScaledBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
+            // #94505# Convert to true color, to allow CopyPixel
+            aBmp.Convert( BMP_CONVERSION_24BIT );
+
+            // Use true color, otherwise white might not be in palette
+            Bitmap aOutputBmp( Size(nOutWidth, nOutHeight), 24 );
+            aOutputBmp.Erase( Color( COL_WHITE ) );
+            aOutputBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
 
             // and copy it into the Any
             SvMemoryStream aData;
 
-            aData << aScaledBmp;
+            aData << aOutputBmp;
 
             Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
 
