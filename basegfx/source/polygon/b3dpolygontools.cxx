@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:31:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,46 +130,6 @@ namespace basegfx
             {
                 return 0L;
             }
-        }
-
-        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate)
-        {
-            sal_uInt32 nNewIndex(nIndex);
-            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-
-            if(rCandidate.count() > 1)
-            {
-                nNewIndex = getIndexOfPredecessor(nIndex, rCandidate);
-                ::basegfx::B3DPoint aPoint(rCandidate.getB3DPoint(nIndex));
-
-                while(nNewIndex != nIndex
-                    && aPoint.equal(rCandidate.getB3DPoint(nNewIndex)))
-                {
-                    nNewIndex = getIndexOfPredecessor(nNewIndex, rCandidate);
-                }
-            }
-
-            return nNewIndex;
-        }
-
-        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate)
-        {
-            sal_uInt32 nNewIndex(nIndex);
-            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-
-            if(rCandidate.count() > 1)
-            {
-                nNewIndex = getIndexOfSuccessor(nIndex, rCandidate);
-                ::basegfx::B3DPoint aPoint(rCandidate.getB3DPoint(nIndex));
-
-                while(nNewIndex != nIndex
-                    && aPoint.equal(rCandidate.getB3DPoint(nNewIndex)))
-                {
-                    nNewIndex = getIndexOfSuccessor(nNewIndex, rCandidate);
-                }
-            }
-
-            return nNewIndex;
         }
 
         ::basegfx::B3DRange getRange(const ::basegfx::B3DPolygon& rCandidate)
