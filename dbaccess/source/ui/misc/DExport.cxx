@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:32:36 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,13 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
     pField->SetAutoIncrement(sal_False);
     pField->SetPrimaryKey(sal_False);
     pField->SetCurrency(sal_False);
+
+    TColumns::iterator aFind = m_aDestColumns.find( aAlias );
+    if ( aFind != m_aDestColumns.end() )
+    {
+        delete aFind->second;
+        m_aDestColumns.erase(aFind);
+    }
 
     m_vDestVector.push_back(m_aDestColumns.insert(TColumns::value_type(aAlias,pField)).first);
 }
