@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:15:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
+#endif
+
+#ifndef _SV_GDIMTF_HXX //autogen
+#include <vcl/gdimtf.hxx>
 #endif
 
 #ifndef _SV_CURSOR_HXX //autogen
@@ -520,7 +524,7 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyphenator;
     SpellInfo*          pSpellInfo;
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
+    mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
 
     ConvInfo *          pConvInfo;
 
@@ -541,6 +545,9 @@ private:
     sal_Bool            bUseAutoColor;
     sal_Bool            bForceAutoColor;
     sal_Bool            bCallParaInsertedOrDeleted;
+    sal_Bool            bVerboseTextComments; // #110496# Optional mtf
+                                              // comments for text
+                                              // layout (paras, lines etc)
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
 
     // Fuer Formatierung / Update....
@@ -733,9 +740,24 @@ private:
 
     void                SetValidPaperSize( const Size& rSz );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator();
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
 
+    /** Decorate metafile output with verbose text comments
 
+        This method is used to call SvxFont::QuickDrawText
+        character-by-character wise, adding informational metafile
+        comments after logical text units like characters, words and
+        sentences. This is necessary for slideshow text effects.
+     */
+    void                ImplDrawWithComments( SvxFont&                              rFont,
+                                              const ::com::sun::star::lang::Locale& rLocale,
+                                              OutputDevice&                         rOut,
+                                              GDIMetaFile&                          rMtf,
+                                              const Point&                          rPos,
+                                              const String&                         rTxt,
+                                              const USHORT                          nIdx,
+                                              const USHORT                          nLen,
+                                              const long*                           pDXArray ) const;
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -1037,6 +1059,10 @@ public:
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
+
+    // #110496#
+    void                EnableVerboseTextComments( BOOL bEnable ) { bVerboseTextComments=bEnable; }
+    BOOL                IsVerboseTextComments() const { return bVerboseTextComments; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
