@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:49:00 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf) const
             }
         }
     }
-    else
+    else if ( ! rInf.IsMulti() )
     {
         // 1) Die Fussnotenzahlen
         if( !rInf.IsFtnDone() )
@@ -914,7 +914,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf) const
             }
             rInf.SetNumDone( sal_True );
         }
-        // 3) Die DropCaps
+        // 4) Die DropCaps
         if( !pPor && GetDropFmt() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
     }
@@ -1577,7 +1577,12 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
 
         ASSERT( nReformat < rInf.GetIdx(), "Reformat too small for me!" );
         SwRect aRect;
+
+        // Note: GetChareRect is not const. It definitely changes the
+        // bMulti flag. We have to save and resore the old value.
+        sal_Bool bOldMulti = rInf.IsMulti();
         GetCharRect( &aRect, nReformat );
+        rInf.SetMulti( bOldMulti );
 
         return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
                                 aRect.Left();

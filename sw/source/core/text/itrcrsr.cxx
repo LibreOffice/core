@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-04 12:49:41 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,6 +777,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 if( pPor->IsDropPortion() )
                 {
                     nPorAscent = ((SwDropPortion*)pPor)->GetDropHeight();
+                    // The drop height is only calculated, if we have more than
+                    // one line. Otherwise it is 0.
+                    if ( ! nPorAscent)
+                        nPorAscent = pPor->Height();
                     nPorHeight = nPorAscent;
                     pOrig->Height( nPorHeight +
                         ((SwDropPortion*)pPor)->GetDropDescent() );
@@ -1179,7 +1183,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nTmpY = pPor->Height() - nTmpY;
                 if( nTmpY < 0 )
                     nTmpY = 0;
-                nX = nTmpY;
+                nX = (KSHORT)nTmpY;
             }
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
             {

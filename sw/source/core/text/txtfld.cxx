@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-06 15:19:06 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                         pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
                     // Die SSize muss erhalten bleiben
                     // pNumFnt->ChangeSize( rInf.GetFont()->GetSize() );
+
+                    // we do not allow a vertical font
+                    pNumFnt->SetVertical( 0 );
+
                     pRet = new SwNumberPortion( aTxt, pNumFnt, bLeft, bCenter,
                                                 nMinDist );
                 }

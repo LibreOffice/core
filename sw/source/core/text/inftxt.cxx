@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,8 +1405,16 @@ SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
     if( pFnt )
     {
         pInf = &((SwTxtSizeInfo&)rInf);
+        // In these cases we temporarily switch to the new font:
+        // 1. the fonts have a different magic number
+        // 2. they have different script types
+        // 3. their background colors differ (this is not covered by 1.)
         if( pFnt->DifferentMagic( pNew, pFnt->GetActual() ) ||
-            pNew->GetActual() != pFnt->GetActual() )
+            pNew->GetActual() != pFnt->GetActual() ||
+            ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
+            ( pNew->GetBackColor() && ! pFnt->GetBackColor() ) ||
+            ( pNew->GetBackColor() && pFnt->GetBackColor() &&
+              ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) ) )
         {
             pNew->SetTransparent( sal_True );
             pNew->SetAlign( ALIGN_BASELINE );

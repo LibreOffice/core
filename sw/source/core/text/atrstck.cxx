@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-12 13:19:59 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,9 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
     }
 
     pDoc = &rDoc;
-    ASSERT( ! pFnt, "Memory leak, Init called more than once!" );
+    // It is possible, that Init is called more than once, e.g., in a
+    // SwTxtFrm::FormatOnceMore situation.
+    delete pFnt;
     pFnt = new SwFont( rFnt );
 }
 

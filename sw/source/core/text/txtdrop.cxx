@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     const KSHORT nOldWidth  = Width();
     const KSHORT nOldAscent = GetAscent();
     const SwTwips nOldPosY  = rInf.Y();
-    const KSHORT nOldPosX   = rInf.X();
+    const KSHORT nOldPosX   = (KSHORT)rInf.X();
     const SwParaPortion *pPara = rInf.GetParaPortion();
     const Point aOutPos( nOldPosX + nX, nOldPosY - pPara->GetAscent()
                          - pPara->GetRealHeight() + pPara->Height() );
@@ -436,6 +436,8 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf ) const
     SwFont *pTmpFnt = new SwFont( pDropFmt->GetCharFmt()
                                  ? &pDropFmt->GetCharFmt()->GetAttrSet()
                                  : &rInf.GetCharAttr(), rInf.GetDoc() );
+    // we do not allow a vertical font for the drop portion
+    pTmpFnt->SetVertical( 0 );
 
     // the constructor above does not set the right script
     pTmpFnt->SetActual( rInf.GetFont()->GetActual() );
@@ -718,7 +720,7 @@ void SwDropPortion::DeleteDropCapCache()
 sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = sal_False;
-    Fix( rInf.X() );
+    Fix( (USHORT)rInf.X() );
     if( nDropHeight && pFnt && nLines!=1 )
     {
         pFnt->ChkMagic( rInf.GetVsh(), pFnt->GetActual() );

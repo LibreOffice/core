@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-12 11:19:17 $
+ *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     // search for a text frame this node belongs to
     SwClientIter aClientIter( *(SwTxtNode*)this );
     SwClient* pLast = aClientIter.GoStart();
-    SwTxtFrm* pFrm;
+    SwTxtFrm* pFrm = 0;
 
     while( pLast )
     {
