@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:48:39 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,8 +449,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
 
 SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
     aInfo(TRUE),
-    aPages(1024,32,32),
-    aMaPag(1024,32,32)
+    maPages(1024,32,32),
+    maMaPag(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -462,8 +462,8 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
     aInfo(TRUE),
-    aPages(1024,32,32),
-    aMaPag(1024,32,32),
+    maPages(1024,32,32),
+    maMaPag(1024,32,32),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -476,8 +476,8 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, IN
 
 SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
     aInfo(TRUE),
-    aPages(1024,32,32),
-    aMaPag(1024,32,32)
+    maPages(1024,32,32),
+    maMaPag(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -489,8 +489,8 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTa
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
     aInfo(TRUE),
-    aPages(1024,32,32),
-    aMaPag(1024,32,32),
+    maPages(1024,32,32),
+    maMaPag(1024,32,32),
     aTablePath(rPath)
 {
 #ifdef TIMELOG
@@ -502,8 +502,8 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, FA
 }
 
 SdrModel::SdrModel(const SdrModel& rSrcModel):
-    aPages(1024,32,32),
-    aMaPag(1024,32,32)
+    maPages(1024,32,32),
+    maMaPag(1024,32,32)
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
@@ -853,7 +853,9 @@ void SdrModel::Clear()
     {
         DeletePage( (USHORT)i );
     }
-    aPages.Clear();
+    maPages.Clear();
+    // #109538#
+    PageListChanged();
 
     // delete all Masterpages
     nAnz=GetMasterPageCount();
@@ -861,7 +863,9 @@ void SdrModel::Clear()
     {
         DeleteMasterPage( (USHORT)i );
     }
-    aMaPag.Clear();
+    maMaPag.Clear();
+    // #109538#
+    MasterPageListChanged();
 
     pLayerAdmin->ClearLayer();
     pLayerAdmin->ClearLayerSets();
@@ -1570,7 +1574,7 @@ void SdrModel::SetChanged(FASTBOOL bFlg)
 
 void SdrModel::RecalcPageNums(FASTBOOL bMaster)
 {
-    Container& rPL=*(bMaster ? &aMaPag : &aPages);
+    Container& rPL=*(bMaster ? &maMaPag : &maPages);
     USHORT nAnz=USHORT(rPL.Count());
     USHORT i;
     for (i=0; i<nAnz; i++) {
@@ -1585,7 +1589,9 @@ void SdrModel::InsertPage(SdrPage* pPage, USHORT nPos)
 {
     USHORT nAnz=GetPageCount();
     if (nPos>nAnz) nPos=nAnz;
-    aPages.Insert(pPage,nPos);
+    maPages.Insert(pPage,nPos);
+    // #109538#
+    PageListChanged();
     pPage->SetInserted(TRUE);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
@@ -1604,7 +1610,9 @@ void SdrModel::DeletePage(USHORT nPgNum)
 
 SdrPage* SdrModel::RemovePage(USHORT nPgNum)
 {
-    SdrPage* pPg=(SdrPage*)aPages.Remove(nPgNum);
+    SdrPage* pPg=(SdrPage*)maPages.Remove(nPgNum);
+    // #109538#
+    PageListChanged();
     if (pPg!=NULL) {
         pPg->SetInserted(FALSE);
     }
@@ -1618,7 +1626,9 @@ SdrPage* SdrModel::RemovePage(USHORT nPgNum)
 
 void SdrModel::MovePage(USHORT nPgNum, USHORT nNewPos)
 {
-    SdrPage* pPg=(SdrPage*)aPages.Remove(nPgNum);
+    SdrPage* pPg=(SdrPage*)maPages.Remove(nPgNum);
+    // #109538#
+    PageListChanged();
     if (pPg!=NULL) {
         pPg->SetInserted(FALSE);
         InsertPage(pPg,nNewPos);
@@ -1629,7 +1639,9 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, USHORT nPos)
 {
     USHORT nAnz=GetMasterPageCount();
     if (nPos>nAnz) nPos=nAnz;
-    aMaPag.Insert(pPage,nPos);
+    maMaPag.Insert(pPage,nPos);
+    // #109538#
+    MasterPageListChanged();
     pPage->SetInserted(TRUE);
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
@@ -1655,7 +1667,9 @@ void SdrModel::DeleteMasterPage(USHORT nPgNum)
 
 SdrPage* SdrModel::RemoveMasterPage(USHORT nPgNum)
 {
-    SdrPage* pRetPg=(SdrPage*)aMaPag.Remove(nPgNum);
+    SdrPage* pRetPg=(SdrPage*)maMaPag.Remove(nPgNum);
+    // #109538#
+    MasterPageListChanged();
     // Nun die Verweise der normalen Zeichenseiten auf die entfernte MasterPage loeschen
     // und Verweise auf dahinterliegende Masterpages anpassen.
     USHORT nPageAnz=GetPageCount();
@@ -1675,10 +1689,14 @@ SdrPage* SdrModel::RemoveMasterPage(USHORT nPgNum)
 
 void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
 {
-    SdrPage* pPg=(SdrPage*)aMaPag.Remove(nPgNum);
+    SdrPage* pPg=(SdrPage*)maMaPag.Remove(nPgNum);
+    // #109538#
+    MasterPageListChanged();
     if (pPg!=NULL) {
         pPg->SetInserted(FALSE);
-        aMaPag.Insert(pPg,nNewPos);
+        maMaPag.Insert(pPg,nNewPos);
+        // #109538#
+        MasterPageListChanged();
         // Anpassen der MasterPageDescriptoren
         USHORT nPageAnz=GetPageCount();
         for (USHORT np=0; np<nPageAnz; np++) {
@@ -2614,7 +2632,9 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     // und alle ans einstige Ende des DstModel reinschieben.
                     // nicht InsertMasterPage() verwenden da die Sache
                     // inkonsistent ist bis alle drin sind
-                    aMaPag.Insert(pPg,nDstMasterPageAnz);
+                    maMaPag.Insert(pPg,nDstMasterPageAnz);
+                    // #109538#
+                    MasterPageListChanged();
                     pPg->SetInserted(TRUE);
                     pPg->SetModel(this);
                     bMPgNumsDirty=TRUE;
@@ -2916,6 +2936,44 @@ SvxNumType SdrModel::GetPageNumType() const
     return SVX_ARABIC;
 }
 
+const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
+{
+    return (SdrPage*)(maPages.GetObject(nPgNum));
+}
+
+SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
+{
+    return (SdrPage*)(maPages.GetObject(nPgNum));
+}
+
+sal_uInt16 SdrModel::GetPageCount() const
+{
+    return sal_uInt16(maPages.Count());
+}
+
+void SdrModel::PageListChanged()
+{
+}
+
+const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
+{
+    return (SdrPage*)(maMaPag.GetObject(nPgNum));
+}
+
+SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum)
+{
+    return (SdrPage*)(maMaPag.GetObject(nPgNum));
+}
+
+sal_uInt16 SdrModel::GetMasterPageCount() const
+{
+    return sal_uInt16(maMaPag.Count());
+}
+
+void SdrModel::MasterPageListChanged()
+{
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrHint,SfxHint);
@@ -2949,3 +3007,4 @@ SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
     bNeedRepaint = TRUE;
     eHint = HINT_OBJCHG;
 }
+// eof
