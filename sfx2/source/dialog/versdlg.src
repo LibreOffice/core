@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:18:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,11 @@ ModalDialog DLG_VERSIONS
         Text [ french ] = "~Toujours enregistrer une version lors de la fermeture" ;
         Text [ dutch ] = "~Bij sluiten altijd versie opslaan" ;
         Text [ portuguese ] = "~Guardar sempre uma versão ao fechar." ;
-        Text[ chinese_simplified ] = "ÔÚ¹Ø±ÕÊ±×ÜÊÇ±£´æ°æ±¾ĞÅÏ¢(~A)";
+        Text[ chinese_simplified ] = "ÔÚ¹Ø±ÕÊ±×Ô¶¯±£´æ°æ±¾ĞÅÏ¢(~A)";
         Text[ russian ] = "Ïğè çàêğûòèè âñåãäà ñîõğàíÿòü âåğñèş";
         Text[ polish ] = "Zawsze zapisuj wersjê przy zamykaniu";
         Text[ japanese ] = "•Â‚¶‚é‚Æ‚«Aí‚ÉÊŞ°¼Ş®İ‚Ì•Û‘¶(~A)";
-        Text[ chinese_traditional ] = "¦bÃö³¬®ÉÁ`¬O«O¦sª©¥»¸ê°T(~A)";
+        Text[ chinese_traditional ] = "¦bÃö³¬®É¦Û°Ê«O¦sª©¥»¸ê°T(~A)";
         Text[ arabic ] = "ÍİÙ ÇáÅÕÏÇÑ ÏÇÆãÇğ ÚäÏ ÇáÅÛáÇŞ";
         Text[ greek ] = "ÊáôÜ ôï êëåßóéìï íá áğïèçêåıåôáé ğÜíôá ç İêäïóç";
         Text[ korean ] = "´İÀ» ¶§ Ç×»ó ¹öÀü ÀúÀå(~A)";
@@ -615,6 +615,7 @@ String DLG_COMMENTS
     Text[ catalan ] = "Comentario sobre la versión";
     Text[ finnish ] = "Versiohuomautus";
 };
+
 
 
 
