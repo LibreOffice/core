@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-12 15:50:38 $
+ *  last change: $Author: dl $ $Date: 2001-03-14 10:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,8 +499,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
                 aTempAttr.Put( SdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
             else
                 aTempAttr.Put( SdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
-
-            aTempAttr.Put( SdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
 
             if (bMaster)
             {
