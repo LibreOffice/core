@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,8 @@ friend class SwConnectionDisposedListener_Impl;
 
     BOOL                bInMerge    : 1;    //merge process active
     BOOL                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
+    BOOL                bMergeLock : 1;     // prevent update of database fields while document is
+                                            // actually printed at the ViewShell
     SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
