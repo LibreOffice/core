@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 13:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,7 +640,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 SdrEngineDefaults::SdrEngineDefaults():
     aFontName( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
     eFontFamily(FAMILY_ROMAN),
-    aFontColor(COL_BLACK),
+    aFontColor(COL_AUTO),
     nFontHeight(847),             // 847/100mm = ca. 24 Point
     eMapUnit(MAP_100TH_MM),
     aMapFraction(1,1)
