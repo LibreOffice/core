@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:30:49 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-08-06 08:30:49 $ $Revision: 1.20 $
+// $Author: sb $ $Date: 2001-08-07 13:31:50 $ $Revision: 1.21 $
 //============================================================================
 
 #define __RSC
@@ -1118,10 +1118,16 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) has an incorrect version";
         Text[ catalan ] = "$(ARG1) has an incorrect version";
     };
+    // IOErrorCode_NOT_EXISTING_VOLUME = 36,
+    String ( ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK )
+    {
+        Text = "Laufwerk $(ARG1) existiert nicht" ;
+        Text [ ENGLISH ] = "Volume $(ARG1) does not exist" ;
+    };
+    // IOErrorCode_NOT_EXISTING_FOLDER = 37,
+    String ( ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK )
+    {
+        Text = "Ordner $(ARG1) existiert nicht" ;
+        Text [ ENGLISH ] = "Folder $(ARG1) does not exist" ;
+    };
 };
-
-
-
-
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 14:38:18 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: mav $ $Date: 2001-06-26 14:38:18 $ $Revision: 1.4 $
+// $Author: sb $ $Date: 2001-08-07 13:31:50 $ $Revision: 1.5 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -136,6 +136,8 @@
 #define ERRCODE_UUI_IO_WRITEPROTECTED     (ERRCODE_AREA_UUI + 33)
 #define ERRCODE_UUI_IO_WRONGFORMAT        (ERRCODE_AREA_UUI + 34)
 #define ERRCODE_UUI_IO_WRONGVERSION       (ERRCODE_AREA_UUI + 35)
+#define ERRCODE_UUI_IO_NOTEXISTS_VOLUME   (ERRCODE_AREA_UUI + 36)
+#define ERRCODE_UUI_IO_NOTEXISTS_FOLDER   (ERRCODE_AREA_UUI + 37)
 
 //============================================================================
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
