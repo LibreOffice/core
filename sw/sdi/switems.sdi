@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switems.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:07:25 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 13:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@ item SwLineNumber SwFmtLineNumber;
 struct INetFmt
 {
     String      URL             MID_URL_URL;
-    String      TargetFrame     MID_URL_TARGET;
-    String      HyperlinkName   MID_URL_HYPERLINKNAME;
+    String      Target          MID_URL_TARGET;
+    String      Name            MID_URL_HYPERLINKNAME;
     String      VisitedFormat   MID_URL_VISITED_FMT;
     String      UnvisitedFormat MID_URL_UNVISITED_FMT;
 };
