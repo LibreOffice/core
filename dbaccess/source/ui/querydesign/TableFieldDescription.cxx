@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:14:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ sal_Bool OTableFieldDesc::IsNumericDataType() const
     switch (m_eDataType)
     {
         case DataType::BIT:
+        case DataType::BOOLEAN:
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
