@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:54:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 15:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ namespace svt
         ,m_aTable                   (this, ResId(CB_TABLE))
         ,m_aFieldsTitle             (this, ResId(FT_FIELDS))
         ,m_aFieldsFrame             (this, ResId(CT_BORDER))
-        ,m_nFieldScrollPos(-1)
+        ,m_nFieldScrollPos(0)
         ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))
         ,m_aOK                      (this, ResId(PB_OK))
         ,m_aCancel                  (this, ResId(PB_CANCEL))
