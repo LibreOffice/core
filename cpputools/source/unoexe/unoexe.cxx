@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:19:30 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,7 @@ static Reference< XInterface > loadComponent(
 
         if (aExt.compareToAscii( "dll" ) == 0 ||
             aExt.compareToAscii( "exe" ) == 0 ||
+            aExt.compareToAscii( "dylib" ) == 0 ||
             aExt.compareToAscii( "so" ) == 0)
         {
             createInstance(
