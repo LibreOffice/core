@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:05:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_DBCOLECT_HXX
 #define SC_DBCOLECT_HXX
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
@@ -248,7 +252,7 @@ public:
 
 
 //------------------------------------------------------------------------
-class ScDBCollection : public SortedCollection
+class SC_DLLPUBLIC ScDBCollection : public SortedCollection
 {
 
 private:
