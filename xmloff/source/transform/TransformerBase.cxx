@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:11:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,19 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
             OUString aPrefix( ( rAttrName.getLength() == 5 )
                                  ? OUString()
                                  : rAttrName.copy( 6 ) );
-            sal_uInt16 nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
+            // Add namespace, but only if it is known.
+            sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
+            // If namespace is unknwon, try to match a name with similar
+            // TC Id an version
+            if( XML_NAMESPACE_UNKNOWN == nKey  )
+            {
+                OUString aTestName( rAttrValue );
+                if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
+                    nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aTestName );
+            }
+            // If that namespace is not known, too, add it as unknown
+            if( XML_NAMESPACE_UNKNOWN == nKey  )
+                nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
 
             const OUString& rRepName = m_pReplaceNamespaceMap->GetNameByKey( nKey );
             if( rRepName.getLength() )
