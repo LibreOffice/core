@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-26 15:18:49 $
+ *  last change: $Author: cl $ $Date: 2001-12-05 14:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,10 +1491,14 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
             {
-                uno::Any aAny;
-                aAny <<= mnRadius;
-                xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+                try
+                {
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "exception during setting of corner radius!");
+                }
             }
         }
 
