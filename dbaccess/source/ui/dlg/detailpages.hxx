@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:03:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,18 @@ namespace dbaui
         sal_Int32           m_iSSLPort;
         sal_Int32           m_iNormalPort;
         DECL_LINK( OnCheckBoxClick, CheckBox * );
+    };
+
+    //========================================================================
+    //= OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook
+    //========================================================================
+    class OMozillaDetailsPage : public OCommonBehaviourTabPage
+    {
+    protected:
+        virtual ~OMozillaDetailsPage();
+    public:
+
+        OMozillaDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
     //========================================================================
