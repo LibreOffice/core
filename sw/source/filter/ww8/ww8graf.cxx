@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
+ *  last change: $Author: khz $ $Date: 2000-12-20 16:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
+#endif
+
+#ifndef _OUTLINER_HXX
+#include <svx/outliner.hxx>         // #79453#
 #endif
 
 #ifndef _IPOBJ_HXX //autogen
@@ -1480,14 +1484,9 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     //      pDrawEditEngine->QuickFormatDoc();  // nach MT nicht noetig
         }
 
-#if SUPD>600
-#if SUPD>601
         OutlinerParaObject* pOp = new OutlinerParaObject( *pDrawEditEngine->CreateTextObject() );
-#else
-        OutlinerParaObject* pOp = new OutlinerParaObject( *pDrawEditEngine );
-#endif
+        pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
         pTextObj->NbcSetOutlinerParaObject( pOp );
-#endif
 
         // Fuer die naechste Textbox noch die alten Absatz-Attribute
         // und Styles entfernen, sonst startet die naechste Box
@@ -2998,11 +2997,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.6 2000-12-15 15:33:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.7 2000-12-20 16:22:42 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/15 15:33:06  cmc
+      #79055# OCX FormControls changes
+
       Revision 1.5  2000/11/23 16:18:18  sj
       #78880# the SdrTextObjects needs to know the model
 
