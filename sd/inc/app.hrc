@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:56:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,3 +473,20 @@
 #define SID_SDMODE_FLAG                     (SID_SD_START+413)
 #define SD_DRAW_MODE        1
 #define SD_IMPRESS_MODE     2
+
+#define SID_LEFT_PANE                       (SID_SD_START+414)
+#define SID_RIGHT_PANE                      (SID_SD_START+415)
+#define SID_NOTES_WINDOW                    (SID_SD_START+416)
+#define SID_SWITCH_SHELL_PANE               (SID_SD_START+417)
+#define SID_LAYER_DIALOG_WIN                (SID_SD_START+418)
+#define SID_NORMAL_MULTI_PANE_GUI           (SID_SD_START+419)
+#define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+420)
+
+
+// Slots for the tool pane popup
+#define SID_TP_APPLY_TO_ALL_SLIDES          (SID_SD_START+425)
+#define SID_TP_APPLY_TO_SELECTED_SLIDES     (SID_SD_START+426)
+#define SID_TP_USE_FOR_NEW_PRESENTATIONS    (SID_SD_START+427)
+#define SID_TP_SHOW_LARGE_PREVIEW           (SID_SD_START+428)
+#define SID_TP_SHOW_SMALL_PREVIEW           (SID_SD_START+429)
+
