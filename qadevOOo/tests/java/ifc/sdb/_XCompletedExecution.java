@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCompletedExecution.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:23:18 $
+ *  last change:$Date: 2003-12-11 11:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ import com.sun.star.sdb.XCompletedExecution;
 import com.sun.star.task.XInteractionHandler;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
+import lib.StatusException;
 
 /**
  *
@@ -92,6 +93,8 @@ public class _XCompletedExecution extends MultiMethodTest {
     protected void before() {
         checkHandler = (CheckInteractionHandler)
                         tEnv.getObjRelation("InteractionHandlerChecker");
+        if (checkHandler == null)
+            throw new StatusException("Missing object relation 'InteractionHandlerChecker'", new Exception());
         checkHandler.setLog((PrintWriter)log);
     }
 
@@ -109,4 +112,7 @@ public class _XCompletedExecution extends MultiMethodTest {
         tRes.tested("executeWithCompletion()", checkHandler.checkInteractionHandler());
     }
 
+    protected void after() {
+        disposeEnvironment();
+    }
 }
