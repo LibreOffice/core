@@ -63,14 +63,13 @@ protected:
     void        DrawChar(VirtualDevice&, const Color&);
 
 private:
-    USHORT      nDrawMode;
-    USHORT      nBtnId;
-    ToolBox*    pTbx;
-    Bitmap*     pBtnBmp;
-    Color       aCurColor;
-    Rectangle   theUpdRect;
-    Size        theBmpSize;
-    BOOL        bWasHiContrastMode;
+    USHORT      mnDrawMode;
+    USHORT      mnBtnId;
+    ToolBox*    mpTbx;
+    Color       maCurColor;
+    Rectangle   maUpdRect;
+    Size        maBmpSize;
+    BOOL        mbWasHiContrastMode;
 };
 
 #endif
