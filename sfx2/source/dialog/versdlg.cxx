@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:42:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+
 #include "versdlg.hrc"
 #include "versdlg.hxx"
 #include "viewfrm.hxx"
@@ -82,7 +85,97 @@
 #include "dispatch.hxx"
 #include "request.hxx"
 
+using namespace com::sun::star;
+
 // **************************************************************************
+struct SfxVersionInfo
+{
+    String                  aName;
+    String                  aComment;
+    SfxStamp                aCreateStamp;
+
+                            SfxVersionInfo();
+                            SfxVersionInfo( const SfxVersionInfo& rInfo )
+                            { *this = rInfo; }
+
+    SfxVersionInfo&         operator=( const SfxVersionInfo &rInfo )
+                            {
+                                aName = rInfo.aName;
+                                aComment = rInfo.aComment;
+                                aCreateStamp = rInfo.aCreateStamp;
+                                return *this;
+                            }
+};
+DECLARE_LIST( _SfxVersionTable, SfxVersionInfo* )
+class SfxVersionTableDtor : public _SfxVersionTable
+{
+public:
+                            SfxVersionTableDtor( const sal_uInt16 nInitSz=0, const sal_uInt16 nReSz=1 )
+                                : _SfxVersionTable( nInitSz, nReSz )
+                            {}
+
+                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy )
+                            { *this = rCpy; }
+
+                            SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
+
+                            ~SfxVersionTableDtor()
+                            { DelDtor(); }
+
+    SfxVersionTableDtor&    operator=( const SfxVersionTableDtor &rCpy );
+    void                    DelDtor();
+    SvStream&               Read( SvStream & );
+    SvStream&               Write( SvStream & ) const;
+    SvStringsDtor*          GetVersions() const;
+};
+
+SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
+{
+    for ( sal_Int32 n=0; n<(sal_Int32)rInfo.getLength(); n++ )
+    {
+        SfxVersionInfo* pInfo = new SfxVersionInfo;
+        pInfo->aName = rInfo[n].Identifier;
+        pInfo->aComment = rInfo[n].Comment;
+        pInfo->aCreateStamp.SetName( rInfo[n].Author );
+
+        Date aDate ( rInfo[n].TimeStamp.Day, rInfo[n].TimeStamp.Month, rInfo[n].TimeStamp.Year );
+        Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.HundredthSeconds );
+
+        pInfo->aCreateStamp.SetTime( DateTime( aDate, aTime ) );
+        Insert( pInfo, Count() );
+    }
+}
+
+void SfxVersionTableDtor::DelDtor()
+{
+    SfxVersionInfo* pTmp = First();
+    while( pTmp )
+    {
+        delete pTmp;
+        pTmp = Next();
+    }
+    Clear();
+}
+
+SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& rTbl )
+{
+    DelDtor();
+    SfxVersionInfo* pTmp = ((SfxVersionTableDtor&)rTbl).First();
+    while( pTmp )
+    {
+        SfxVersionInfo *pNew = new SfxVersionInfo( *pTmp );
+        Insert( pNew, LIST_APPEND );
+        pTmp = ((SfxVersionTableDtor&)rTbl).Next();
+    }
+    return *this;
+}
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+SfxVersionInfo::SfxVersionInfo()
+{
+}
 
 static String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper)
 {
@@ -91,6 +184,23 @@ static String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrappe
      aStr += pDelim;
      aStr += rWrapper.getTime(rTime.GetTime(), TRUE, FALSE);
      return aStr;
+}
+
+SvStringsDtor* SfxVersionTableDtor::GetVersions() const
+{
+    SvStringsDtor *pList = new SvStringsDtor;
+    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*) this)->First();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    while ( pInfo )
+    {
+        String *pString = new String( pInfo->aComment );
+        (*pString) += DEFINE_CONST_UNICODE( "; " );
+        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
+        pList->Insert( pString, pList->Count() );
+        pInfo = ((SfxVersionTableDtor*) this)->Next();
+    }
+
+    return pList;
 }
 
 // Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
@@ -138,6 +248,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
     , aCompareButton( this, ResId( PB_COMPARE ) )
     , aHelpButton( this, ResId ( PB_HELP ) )
     , pViewFrame( pFrame )
+    , mpTable( 0 )
 {
     FreeResource();
 
@@ -186,13 +297,14 @@ void SfxVersionDialog::Init_Impl()
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SfxMedium* pMedium = pObjShell->GetMedium();
-    const SfxVersionTableDtor* pTable = pMedium->GetVersionList();
-    if ( pTable )
+    uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList();
+    delete mpTable;
+    mpTable = new SfxVersionTableDtor( aVersions );
     {
         LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        for ( USHORT n=0; n<pTable->Count(); n++ )
+        for ( USHORT n=0; n<mpTable->Count(); n++ )
         {
-            SfxVersionInfo *pInfo = pTable->GetObject(n);
+            SfxVersionInfo *pInfo = mpTable->GetObject(n);
             String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
             aEntry += '\t';
             aEntry += pInfo->aCreateStamp.GetName();
@@ -223,6 +335,7 @@ void SfxVersionDialog::Init_Impl()
 
 SfxVersionDialog::~SfxVersionDialog ()
 {
+    delete mpTable;
 }
 
 void SfxVersionDialog::Open_Impl()
@@ -292,7 +405,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     if ( pButton == &aDeleteButton && pEntry )
     {
-        pObjShell->GetMedium()->RemoveVersion_Impl( *(SfxVersionInfo*) pEntry->GetUserData() );
+        pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
         pObjShell->SetModified( TRUE );
             aVersionBox.SetUpdateMode( FALSE );
         aVersionBox.Clear();
