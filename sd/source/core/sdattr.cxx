@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ using namespace ::com::sun::star;
 |*  DiaEffectItem
 |*
 *************************************************************************/
-TYPEINIT1( DiaEffectItem, SfxEnumItem );
+TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
 
 
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
@@ -101,7 +101,7 @@ SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT nVer ) const
 |*  DiaSpeedItem
 |*
 *************************************************************************/
-TYPEINIT1( DiaSpeedItem, SfxEnumItem );
+TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
 
 
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
@@ -132,7 +132,7 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT nVer ) const
 |*  DiaAutoItem
 |*
 *************************************************************************/
-TYPEINIT1( DiaAutoItem, SfxEnumItem );
+TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
 
 DiaAutoItem::DiaAutoItem( PresChange eChange ) :
     SfxEnumItem( ATTR_DIA_AUTO, eChange )
@@ -162,7 +162,7 @@ SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT nVer ) const
 |*  DiaTimeItem
 |*
 *************************************************************************/
-TYPEINIT1( DiaTimeItem, SfxUInt32Item );
+TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );
 
 
 DiaTimeItem::DiaTimeItem( UINT32 nValue ) :
