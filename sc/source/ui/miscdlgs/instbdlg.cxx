@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 //==================================================================
 
-ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, USHORT nTabCount)
+ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount)
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
         //
@@ -142,7 +142,7 @@ void ScInsertTableDlg::Init_Impl()
     SetNewTable_Impl();
 
     ScMarkData& rMark    = rViewData.GetMarkData();
-    USHORT  nTabSelCount = rMark.GetSelectCount();
+    SCTAB   nTabSelCount = rMark.GetSelectCount();
 
     aNfCount.SetText( String::CreateFromInt32(nTableCount) );
     aNfCount.SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
@@ -226,10 +226,10 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 
     if ( pSrcDoc )
     {
-        USHORT nCount = pSrcDoc->GetTableCount();
+        SCTAB nCount = pSrcDoc->GetTableCount();
         String aName;
 
-        for ( USHORT i=0; i<nCount; i++ )
+        for ( SCTAB i=0; i<nCount; i++ )
         {
             pSrcDoc->GetName( i, aName );
             aLbTables.InsertEntry( aName );
@@ -290,7 +290,7 @@ const String* ScInsertTableDlg::GetNextTable( USHORT* pN )
 
 IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
 {
-    nTableCount = aNfCount.GetValue();
+    nTableCount = static_cast<SCTAB>(aNfCount.GetValue());
     if ( nTableCount==1)
     {
         String aName;
