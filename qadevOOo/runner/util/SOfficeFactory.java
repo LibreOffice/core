@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOfficeFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:57 $
+ *  last change:$Date: 2003-02-07 10:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ public class SOfficeFactory {
     public XChartDocument createChartDoc( String frameName )
                                         throws com.sun.star.uno.Exception {
 
-        XComponent oDoc = openDoc("schart",frameName);
+        XComponent oDoc = loadDocument(
+                            util.utils.getFullTestURL("emptyChart.sds"));
 
         if ( oDoc != null) {
             return (XChartDocument)
@@ -215,6 +216,7 @@ public class SOfficeFactory {
         else {
             return null;
         }
+
     } // finished createChartDoc
 
 
