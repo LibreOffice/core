@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-21 17:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
             bGaps = TRUE;
-
+/*
         // since we have no portion with our item or if there were gaps
         if( bEmpty || bGaps )
         {
@@ -265,6 +265,13 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         {
             eParaState = SFX_ITEM_SET;
         }
+*/
+        if( bEmpty )
+            eParaState = SFX_ITEM_DEFAULT;
+        else if( bGaps )
+            eParaState = SFX_ITEM_DONTCARE;
+        else
+            eParaState = SFX_ITEM_SET;
 
         // if we already found an item check if we found the same
         if( pLastItem )
