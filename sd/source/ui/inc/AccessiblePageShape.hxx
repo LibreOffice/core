@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:45:06 $
+ *  last change: $Author: af $ $Date: 2002-10-23 09:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,6 @@ public:
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
-
-    //=====  XAccessibleExtendedComponent  ====================================
 
     virtual sal_Int32 SAL_CALL getForeground (void)
         throw (::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:46:41 $
+ *  last change: $Author: af $ $Date: 2002-10-23 09:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,6 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
 
 
 
-
-//=====  XAccessibleExtendedComponent  ========================================
 
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
