@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svtools/cntnrsrt.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
+#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
@@ -83,6 +87,9 @@
 #endif
 #ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 #include "XMLTextListAutoStylePool.hxx"
+#endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
 
 using namespace ::rtl;
@@ -219,6 +226,9 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     nName( 0 ),
     sPrefix( RTL_CONSTASCII_USTRINGPARAM("L") )
 {
+    Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
+    if( xCompareFac.is() )
+        mxNumRuleCompare = xCompareFac->createAnyCompareByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
 }
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
@@ -239,13 +249,40 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
     return pNames->Seek_Entry( &rName, 0 );
 }
 
+sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
+{
+    sal_uInt32 nPos;
+    if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
+    {
+        const sal_uInt32 nCount = pPool->Count();
+
+        uno::Any aAny1, aAny2;
+        aAny1 <<= pEntry->GetNumRules();
+
+        for( nPos = 0; nPos < nCount; nPos++ )
+        {
+            aAny2 <<= pPool->GetObject(nPos)->GetNumRules();
+
+            if( mxNumRuleCompare->compare( aAny1, aAny2 ) == 0 )
+                return nPos;
+        }
+    }
+    else if( pPool->Seek_Entry( pEntry, &nPos ) )
+    {
+        return nPos;
+    }
+
+    return (sal_uInt32)-1;
+}
+
 OUString XMLTextListAutoStylePool::Add(
             const Reference < XIndexReplace > & rNumRules )
 {
     OUString sName;
     XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
-    sal_uInt32 nPos;
-    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+
+    sal_uInt32 nPos = Find( &aTmp );
+    if( nPos != (sal_uInt32)-1 )
     {
         sName = pPool->GetObject( nPos )->GetName();
     }
@@ -267,8 +304,9 @@ OUString XMLTextListAutoStylePool::Add(
 {
     OUString sName;
     XMLTextListAutoStylePoolEntry_Impl aTmp( rNumRules );
-    sal_uInt32 nPos;
-    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+
+    sal_uInt32 nPos = Find( &aTmp );
+    if( nPos != (sal_uInt32)-1 )
         sName = pPool->GetObject( nPos )->GetName();
 
     return sName;
@@ -279,13 +317,12 @@ OUString XMLTextListAutoStylePool::Add(
 {
     OUString sName;
     XMLTextListAutoStylePoolEntry_Impl aTmp( rInternalName );
-    sal_uInt32 nPos;
-    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+    sal_uInt32 nPos = Find( &aTmp );
+    if( nPos != (sal_uInt32)-1 )
         sName = pPool->GetObject( nPos )->GetName();
 
     return sName;
 }
-
 
 void XMLTextListAutoStylePool::exportXML() const
 {

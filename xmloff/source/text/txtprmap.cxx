@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-01 17:18:16 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "ParaRegisterModeActive",  STYLE,  register_true,  XML_TYPE_BOOL, 0 ),
     // RES_PARATR_NUMRULE
     M_E( "NumberingStyleName",  STYLE,  list_style_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_NUMBERINGSTYLENAME ),
+    M_E( "IsNumbering",         STYLE,  enable_numbering,   XML_TYPE_BOOL, 0 ),
 
     // RES_FILL_ORDER
     // not required
