@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:11:14 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-07 17:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef ECOMP_LDAPBE_SINGLEBACKENDADAPTER_HXX_
-#define ECOMP_LDAPBE_SINGLEBACKENDADAPTER_HXX_
+#ifndef CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
+#define CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
@@ -86,15 +86,15 @@
 #include <cppuhelper/compbase3.hxx>
 #endif // _CPPUHELPER_COMPBASE3_HXX_
 
-namespace ecomp { namespace ldapbe {
+namespace configmgr { namespace backend {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 //namespace backend = css::configuration::backend ;
-namespace backend = drafts::com::sun::star::configuration::backend ;
+namespace backenduno = drafts::com::sun::star::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper3<backend::XBackend,
+typedef cppu::WeakComponentImplHelper3<backenduno::XBackend,
                                        lang::XInitialization,
                                        lang::XServiceInfo> BackendBase ;
 /**
@@ -115,26 +115,44 @@ class SingleBackendAdapter : public BackendBase {
 
         // XInitialize
         virtual void SAL_CALL initialize(
-                                const uno::Sequence<uno::Any>& aParameters) ;
+                                const uno::Sequence<uno::Any>& aParameters)
+            throw (uno::RuntimeException, uno::Exception) ;
         // XBackend
-        virtual uno::Reference<backend::XSchema>
-            SAL_CALL getComponentSchema(const rtl::OUString& aComponent) ;
-        virtual uno::Sequence<uno::Reference<backend::XLayer> >
-            SAL_CALL listOwnLayers(const rtl::OUString& aComponent) ;
-        virtual uno::Reference<backend::XUpdateHandler>
-            SAL_CALL getOwnUpdateHandler(const rtl::OUString& aComponent) ;
-        virtual uno::Sequence<uno::Reference<backend::XLayer> > SAL_CALL
+        virtual uno::Reference<backenduno::XSchema>
+            SAL_CALL getComponentSchema(const rtl::OUString& aComponent)
+            throw (backenduno::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
+        virtual uno::Sequence<uno::Reference<backenduno::XLayer> >
+            SAL_CALL listOwnLayers(const rtl::OUString& aComponent)
+            throw (backenduno::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
+        virtual uno::Reference<backenduno::XUpdateHandler>
+            SAL_CALL getOwnUpdateHandler(const rtl::OUString& aComponent)
+            throw (backenduno::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
+        virtual uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
             listLayers(const rtl::OUString& aComponent,
-                       const rtl::OUString& aEntity) ;
-        virtual uno::Reference<backend::XUpdateHandler> SAL_CALL
+                       const rtl::OUString& aEntity)
+            throw (backenduno::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
+        virtual uno::Reference<backenduno::XUpdateHandler> SAL_CALL
             getUpdateHandler(const rtl::OUString& aComponent,
-                             const rtl::OUString& aEntity) ;
+                             const rtl::OUString& aEntity)
+            throw (backenduno::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName(void) ;
+        virtual rtl::OUString SAL_CALL getImplementationName(void)
+            throw (uno::RuntimeException) ;
         virtual sal_Bool SAL_CALL supportsService(
-                                            const rtl::OUString& aServiceName) ;
+                                            const rtl::OUString& aServiceName)
+            throw (uno::RuntimeException) ;
         virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(void) ;
+            getSupportedServiceNames(void) throw (uno::RuntimeException) ;
 
         /**
           Provides the implementation name.
@@ -155,9 +173,9 @@ class SingleBackendAdapter : public BackendBase {
         /** Mutex for resource protection */
         osl::Mutex mMutex ;
         /** Remote backend that the offline cache is handling */
-        uno::Reference<backend::XSingleBackend> mBackend ;
+        uno::Reference<backenduno::XSingleBackend> mBackend ;
 } ;
 
-} } // ecomp.ldapbe
+} } // configmgr.backend
 
-#endif // ECOMP_LDAPBE_SINGLEBACKENDADAPTER_HXX_
+#endif // CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
