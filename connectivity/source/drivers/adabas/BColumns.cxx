@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
                                                             m_pTable->getSchema(),m_pTable->getTableName(),_rName);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -131,7 +131,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
                 sal_Int32 nPrec             = xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
 
-                OColumn* pRet = new OColumn(_rName,
+                xRet = new OColumn(_rName,
                                             sTypeName,
                                             xRow->getString(13),
                                             xRow->getInt(11),
@@ -139,7 +139,6 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
                                             xRow->getInt(9),
                                             nType,
                                             sal_False,sal_False,sal_False,sal_True);
-                xRet = pRet;
                 break;
             }
         }
@@ -160,14 +159,11 @@ Reference< XPropertySet > OColumns::createEmptyObject()
     return new OColumn(sal_True);
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OColumn* pColumn = new OColumn(sal_True);
-    Reference<XPropertySet> xProp = pColumn;
+    sdbcx::ObjectType xProp = new OColumn(sal_True);
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -------------------------------------------------------------------------
 // XAppend
@@ -179,7 +175,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 
     if(descriptor.is() && !m_pTable->isNew())
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
         ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -189,11 +185,11 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
             ::rtl::OUString sColumnName;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
             aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
-            aSql += ::rtl::OUString::createFromAscii(" ADD (");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD ("));
             aSql += ::dbtools::quoteName(sQuote,sColumnName);
-            aSql += ::rtl::OUString::createFromAscii(" ");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
             aSql += OTables::getColumnSqlType(descriptor);
-            aSql += ::rtl::OUString::createFromAscii(" )");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement();
             xStmt->execute(aSql);
@@ -216,12 +212,12 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     OSL_ENSURE(m_pTable,"OColumns::dropByName: Table is null!");
     if(!m_pTable->isNew())
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
         ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
-        aSql += ::rtl::OUString::createFromAscii(" DROP ");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP "));
         aSql += ::dbtools::quoteName(sQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
