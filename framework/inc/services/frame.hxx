@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 12:52:41 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 09:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
 #include <com/sun/star/awt/FocusEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -531,6 +535,9 @@ class Frame :   // interfaces
         css::uno::Reference< css::awt::XWindow >                    m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
         css::uno::Reference< css::awt::XWindow >                    m_xComponentWindow                  ;   /// window of the actual component
         css::uno::Reference< css::frame::XController >              m_xController                       ;   /// controller of the actual frame
+        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >
+                                                                    m_xDropTargetListener               ;   /// listen to d&d
+
         EActiveState                                                m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
         ::rtl::OUString                                             m_sName                             ;   /// name of this frame
         sal_Bool                                                    m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
