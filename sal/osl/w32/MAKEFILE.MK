@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-19 08:39:39 $
+#   last change: $Author: rt $ $Date: 2003-04-08 15:49:41 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -49,7 +49,9 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
             $(SLO)$/dir.obj      \
-            $(SLO)$/tempfile.obj
+            $(SLO)$/tempfile.obj\
+            $(SLO)$/fileimpl.obj\
+            $(SLO)$/path_helper.obj
 
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -71,7 +73,9 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
             $(OBJ)$/dir.obj      \
-            $(OBJ)$/tempfile.obj
+            $(OBJ)$/tempfile.obj\
+            $(OBJ)$/fileimpl.obj\
+            $(OBJ)$/path_helper.obj
 
 .ENDIF
 
