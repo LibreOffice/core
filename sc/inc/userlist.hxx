@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userlist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-09-23 15:09:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,16 @@
 #include <tools/stream.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
 #endif
 
 //------------------------------------------------------------------------
-class ScUserListData : public DataObject
+class SC_DLLPUBLIC ScUserListData : public DataObject
 {
 friend class ScUserList;
     String  aStr;
@@ -79,7 +83,7 @@ friend class ScUserList;
     String* pSubStrings;
     String* pUpperSub;
 
-    void    InitTokens();
+    SC_DLLPRIVATE void  InitTokens();
 
 public:
                     ScUserListData(const String& rStr);
@@ -99,7 +103,7 @@ public:
 };
 
 //------------------------------------------------------------------------
-class ScUserList : public Collection
+class SC_DLLPUBLIC ScUserList : public Collection
 {
 public:
                     ScUserList( USHORT nLim = 4, USHORT nDel = 4);
