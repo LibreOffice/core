@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:41:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
-#endif
-#ifndef _SFXTBXMGR_HXX
-#include <sfx2/tbxmgr.hxx>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
