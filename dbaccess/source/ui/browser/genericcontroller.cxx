@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:03:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -136,6 +139,10 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 #include <algorithm>
 
 using namespace ::com::sun::star::uno;
@@ -931,6 +938,24 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 // -----------------------------------------------------------------------------
 void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 {
+    Reference< XPropertySet > xPropSet( _xFrame, UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    if ( xPropSet.is() )
+    {
+        try
+        {
+            Any a;
+            a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            a >>= xLayoutManager;
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    if ( xLayoutManager.is() )
+        xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
+/*
     String sMenuName = getMenu();
     if(sMenuName.Len())
     {
@@ -956,6 +981,7 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
             }
         }
     }
+*/
 }
 // -----------------------------------------------------------------------------
 String OGenericUnoController::getMenu() const
