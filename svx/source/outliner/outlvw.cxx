@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:54:10 $
+ *  last change: $Author: mt $ $Date: 2001-08-24 13:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,8 +431,7 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     ULONG nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseOutside )
         return FALSE;
-    if ( nPara == EE_PARA_NOT_FOUND )
-        return TRUE;
+
     ImpSetMousePointer( eTarget );
     if ( eTarget == MouseBullet )
     {
