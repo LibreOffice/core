@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-27 12:39:30 $
+ *  last change: $Author: ab $ $Date: 2001-08-28 08:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,10 +664,13 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
         pLibs->aBasicLibPath = *pLibPath;
 
     String aStorName( rStorage.GetName() );
-    DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
-
     aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL();
-    DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
+
+    // #91251: Storage name not longer available for documents < 5.0
+    // Should be no real problem, because only relative storage names
+    // (links) can be affected.
+    // DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
+    // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     // Wenn es den Manager-Stream nicht gibt, sind keine weiteren
     // Aktionen noetig.
