@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_CellAreaLinksEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:27 $
+ *  last change:$Date: 2003-02-03 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
     XSpreadsheetDocument xSheetDoc = null;
 
@@ -118,7 +121,8 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
         // creation of testobject here
         XPropertySet props = (XPropertySet)UnoRuntime.queryInterface
             (XPropertySet.class, xSheetDoc);
-        oObj = (XInterface) props.getPropertyValue("AreaLinks") ;
+        oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),props.getPropertyValue("AreaLinks")) ;
         XAreaLinks links = null ;
 
         // adding one link into collection (for best testing)
@@ -138,13 +142,17 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
         tEnv.addObjRelation("ENUM",ea);
 
       } catch (com.sun.star.beans.UnknownPropertyException e) {
-        log.println ("Exception occured while creating test Object.") ;
-        e.printStackTrace(log) ;
-        throw new StatusException("Couldn't create test object", e);
+            log.println ("Exception occured while creating test Object.") ;
+            e.printStackTrace(log) ;
+            throw new StatusException("Couldn't create test object", e);
       } catch (com.sun.star.lang.WrappedTargetException e) {
-        log.println ("Exception occured while creating test Object.") ;
-        e.printStackTrace(log) ;
-        throw new StatusException("Couldn't create test object", e);
+            log.println ("Exception occured while creating test Object.") ;
+            e.printStackTrace(log) ;
+            throw new StatusException("Couldn't create test object", e);
+      } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println ("Exception occured while creating test Object.") ;
+            e.printStackTrace(log) ;
+            throw new StatusException("Couldn't create test object", e);
       }
 
        return tEnv ;

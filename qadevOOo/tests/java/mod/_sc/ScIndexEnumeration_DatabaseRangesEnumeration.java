@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_DatabaseRangesEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:25 $
+ *  last change:$Date: 2003-02-03 13:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 
 public class ScIndexEnumeration_DatabaseRangesEnumeration extends TestCase {
         XSpreadsheetDocument xSheetDoc = null;
@@ -122,13 +125,18 @@ public class ScIndexEnumeration_DatabaseRangesEnumeration extends TestCase {
 
         XDatabaseRanges dbRanges = null;
         try {
-            dbRanges = (XDatabaseRanges)
-                docProps.getPropertyValue("DatabaseRanges");
+            dbRanges = (XDatabaseRanges) AnyConverter.toObject(
+                new Type(XDatabaseRanges.class),
+                    docProps.getPropertyValue("DatabaseRanges"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log) ;
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e) ;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+            e.printStackTrace(log) ;
+            throw new StatusException(
+                "Error getting test object from spreadsheet document",e) ;
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log) ;
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e) ;
