@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-06-12 07:24:35 $
+ *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,8 @@ public:
     // XLoader
     virtual void            SAL_CALL load(const Reference< frame::XFrame > & aFrame, const rtl::OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< frame::XLoadEventListener > & aListener);
-    virtual void            SAL_CALL cancel(void);
+                                const Reference< frame::XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException);
+    virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException);
 };
 
 BibliographyLoader::BibliographyLoader() :
@@ -380,7 +380,7 @@ extern "C"
 
 }
 // -----------------------------------------------------------------------
-void BibliographyLoader::cancel(void)
+void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeException)
 {
     //!
     //!
@@ -388,7 +388,7 @@ void BibliographyLoader::cancel(void)
 // -----------------------------------------------------------------------
 void BibliographyLoader::load(const Reference< frame::XFrame > & rFrame, const rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< frame::XLoadEventListener > & rListener)
+        const Reference< frame::XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException)
 {
     //!
 

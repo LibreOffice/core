@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-17 09:23:32 $
+ *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,7 +1543,7 @@ void BibDataManager::saveCtrModel(const rtl::OUString& rName,const Reference< aw
 
 }
 //------------------------------------------------------------------------
-void BibDataManager::disposing( const lang::EventObject& Source )
+void BibDataManager::disposing( const lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException )
 {
     try
     {

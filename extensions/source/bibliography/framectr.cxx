@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-17 09:23:52 $
+ *  last change: $Author: hjs $ $Date: 2001-09-13 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ public:
                                         ~BibFrameCtrl_Impl();
 
     virtual void                        SAL_CALL frameAction(const FrameActionEvent& aEvent) throw( RuntimeException );
-    virtual void                        SAL_CALL disposing( const lang::EventObject& Source );
+    virtual void                        SAL_CALL disposing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 
@@ -175,6 +175,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 }
 
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
+    throw (::com::sun::star::uno::RuntimeException)
 {
     util::URL aURL;
     aURL.Complete = C2U("0");
@@ -243,18 +244,18 @@ BibFrameController_Impl::~BibFrameController_Impl()
         CloseBibModul(pBibMod);
 }
 
-void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg )
+void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg ) throw (::com::sun::star::uno::RuntimeException)
 {
     xFrame = xArg;
     xFrame->addFrameActionListener( pImp );
 }
 
-sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & xModel )
+sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & xModel ) throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend )
+sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( bSuspend )
         getFrame()->removeFrameActionListener( pImp );
@@ -263,26 +264,26 @@ sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend )
     return sal_True;
 }
 
-uno::Any BibFrameController_Impl::getViewData()
+uno::Any BibFrameController_Impl::getViewData() throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Any();
 }
 
-void BibFrameController_Impl::restoreViewData( const uno::Any& Value )
+void BibFrameController_Impl::restoreViewData( const uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-uno::Reference< XFrame >  BibFrameController_Impl::getFrame()
+uno::Reference< XFrame >  BibFrameController_Impl::getFrame() throw (::com::sun::star::uno::RuntimeException)
 {
     return xFrame;
 }
 
-uno::Reference< XModel >  BibFrameController_Impl::getModel()
+uno::Reference< XModel >  BibFrameController_Impl::getModel() throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Reference< XModel > ();
 }
 
-void BibFrameController_Impl::dispose()
+void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
     bDisposing = sal_True;
     lang::EventObject aObject;
@@ -293,17 +294,17 @@ void BibFrameController_Impl::dispose()
      aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
  }
 
-void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )
+void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     pImp->aLC.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener )
+void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     pImp->aLC.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const rtl::OUString& aTarget, sal_Int32 nSearchFlags )
+uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const rtl::OUString& aTarget, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !bDisposing )
     {
@@ -319,13 +320,13 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
     return uno::Reference< frame::XDispatch > ();
 }
 
-uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts )
+uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts ) throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Sequence<uno::Reference< XDispatch > >();
 }
 
 //class XDispatch
-void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs)
+void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !bDisposing )
     {
@@ -480,6 +481,7 @@ IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
 void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
     const util::URL& aURL)
+    throw (::com::sun::star::uno::RuntimeException)
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
@@ -549,6 +551,7 @@ void BibFrameController_Impl::addStatusListener(
 //-----------------------------------------------------------------------------
 void BibFrameController_Impl::removeStatusListener(
     const uno::Reference< frame::XStatusListener > & aObject, const util::URL& aURL)
+    throw (::com::sun::star::uno::RuntimeException)
 {
     // search listener array for given listener
     // for checking equality always "cast" to XInterface
