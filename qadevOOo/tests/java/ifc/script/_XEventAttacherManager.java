@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEventAttacherManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:27:36 $
+ *  last change:$Date: 2003-09-08 10:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.script;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.ScriptEvent;
 import com.sun.star.script.ScriptEventDescriptor;
 import com.sun.star.script.XEventAttacherManager;
 import com.sun.star.script.XScriptListener;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.script.XEventAttacherManager</code>
