@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ci_text2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ void    DocuText_Display::Display_SeeAlsoAtTag(
                             const csi::dsapi::DT_SeeAlsoAtTag & ) {}
 void    DocuText_Display::Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag & ) {}
+void    DocuText_Display::Display_SinceAtTag(
+                            const csi::dsapi::DT_SinceAtTag & ) {}
 
 
 
