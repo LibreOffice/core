@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-16 15:30:51 $
+#   last change: $Author: vg $ $Date: 2003-05-22 10:29:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,8 @@ SLOFILES =	\
         $(SLO)$/sdxfer.obj		
 
 EXCEPTIONSFILES= \
-        $(SLO)$/sdxfer.obj		
+        $(SLO)$/sdxfer.obj		\
+        $(SLO)$/sdmod1.obj		
 
 .IF "$(GUI)" == "WNT"
 
