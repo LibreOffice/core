@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-16 12:55:58 $
+ *  last change: $Author: cd $ $Date: 2002-04-09 09:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ public:
     inline  long            Call( USHORT nEvent, const void *pEvent ) const
                 { return pProc_( pInst_, pFrame_, nEvent, pEvent ); }
     inline  SalFrame       *GetNextFrame() const { return pNextFrame_; }
+              ULONG           GetStyle() const { return nStyle_; }
+
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
     inline  BOOL            IsCaptured() const { return nCaptured_ == 1; }
     #if !defined(__synchronous_extinput__)
