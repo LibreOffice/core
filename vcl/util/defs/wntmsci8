@@ -8516,3 +8516,5 @@ component_writeInfo
 ?GetInvalidTime@TimeFormatter@@SA?AVTime@@XZ
 ?bezierSequenceFromPolygon@?A0xbbca3827@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
 ?pointSequenceFromPolygon@?A0xbbca3827@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+?bezierSequenceFromPolygon@?A0xe80b0494@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+?pointSequenceFromPolygon@?A0xe80b0494@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
