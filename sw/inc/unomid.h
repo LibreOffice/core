@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:46:22 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 
 #define MID_ANCHOR_ANCHORTYPE                   0
 #define MID_ANCHOR_PAGENUM                      1
+#define MID_ANCHOR_ANCHORFRAME                  2
 
 #define MID_URL_HYPERLINKFORMAT                 0
 #define MID_URL_HYPERLINKNAME                   1

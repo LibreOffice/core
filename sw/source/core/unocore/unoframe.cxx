@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 10:00:47 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1374,6 +1374,34 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
             }
+        }
+        else if(RES_ANCHOR == pCur->nWID && MID_ANCHOR_ANCHORFRAME == pCur->nMemberId)
+        {
+            sal_Bool bDone = sal_True;
+            Reference<XTextFrame> xFrame;
+            if(aValue >>= xFrame)
+            {
+                Reference<XUnoTunnel> xTunnel(xFrame, UNO_QUERY);
+                SwXFrame* pFrame = xTunnel.is() ?
+                        (SwXFrame*)xTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
+                if(pFrame && this != pFrame && pFrame->GetFrmFmt() && pFrame->GetFrmFmt()->GetDoc() == pDoc)
+                {
+                    SfxItemSet aSet( pDoc->GetAttrPool(),
+                                RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
+                    aSet.SetParent(&pFmt->GetAttrSet());
+                    SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(pCur->nWID);
+
+
+                    SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
+                    aAnchor.SetAnchor(&aPos);
+                    aAnchor.SetType(FLY_AT_FLY);
+                    aSet.Put(aAnchor);
+                    pDoc->SetFlyFrmAttr( *pFmt, aSet );
+                    bDone = sal_True;
+                }
+            }
+            if(!bDone)
+                throw (IllegalArgumentException());
         }
         else
         {

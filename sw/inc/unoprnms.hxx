@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:55 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_USER_METRIC                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ANCHOR_TYPE                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ANCHOR_TYPES                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ANCHOR_PAGE_NO                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ANCHOR_FRAME;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTHOR                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_BREAK_TYPE                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAIN_NEXT_NAME              ;

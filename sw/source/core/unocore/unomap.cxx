@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((text::TextContentAnchorType*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
+    { SW_PROP_NAME(UNO_NAME_ANCHOR_FRAME   ),           RES_ANCHOR,             &::getCppuType((uno::Reference<text::XTextFrame>*)0),    PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORFRAME},             \
     ANCHOR_TYPES_PROPERTY\
     { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },                      \
     { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },                          \

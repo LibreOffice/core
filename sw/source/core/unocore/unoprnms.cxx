@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_USER_METRIC                            
 const SwPropNameLen __FAR_DATA  UNO_NAME_ANCHOR_TYPE                            (MAP_CHAR_LEN("AnchorType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_ANCHOR_TYPES                           (MAP_CHAR_LEN("AnchorTypes"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_ANCHOR_PAGE_NO                         (MAP_CHAR_LEN("AnchorPageNo"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_ANCHOR_FRAME                           (MAP_CHAR_LEN("AnchorFrame"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_AUTHOR                                 (MAP_CHAR_LEN("Author"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_BREAK_TYPE                             (MAP_CHAR_LEN("BreakType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAIN_NEXT_NAME                        (MAP_CHAR_LEN("ChainNextName"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:47:13 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,12 @@
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
+#ifndef _UNOCOLL_HXX
+#include <unocoll.hxx>
+#endif
+#ifndef _UNOFRAME_HXX
+#include <unoframe.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -249,6 +255,9 @@
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
+#include <com/sun/star/text/XTextFrame.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
@@ -265,6 +274,9 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
 SV_IMPL_PTRARR(SwColumns,SwColumn*)
@@ -1699,7 +1711,21 @@ BOOL SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_ANCHOR_PAGENUM:
             rVal <<= (sal_Int16)GetPageNum();
-            break;
+        break;
+        case MID_ANCHOR_ANCHORFRAME:
+        {
+            if(pCntntAnchor && FLY_AT_FLY == nAnchorId)
+            {
+                SwFrmFmt* pFmt = pCntntAnchor->nNode.GetNode().GetFlyFmt();
+                if(pFmt)
+                {
+                    Reference<XNamed> xNamed = SwXFrames::GetObject( *pFmt, FLYCNTTYPE_FRM );
+                    Reference<XTextFrame> xRet(xNamed, UNO_QUERY);
+                    rVal <<= xRet;
+                }
+            }
+        }
+        break;
         default:
             ASSERT( !this, "unknown MemberId" );
             bRet = sal_False;
@@ -1744,6 +1770,8 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 bRet = sal_False;
         }
         break;
+        case MID_ANCHOR_ANCHORFRAME:
+        //no break here!;
         default:
             ASSERT( !this, "unknown MemberId" );
             bRet = sal_False;
