@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 12:44:43 $
+ *  last change: $Author: os $ $Date: 2001-06-26 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
     String sCurFltr( IDX_FILE_EXTENSION );
     xFltMgr->appendFilter( rFileString, sCurFltr );
-    xFltMgr->setCurrentFilter( sCurFltr ) ;
+    xFltMgr->setCurrentFilter( rFileString ) ;
 
     String& rLastSaveDir = (String&)SFX_APP()->GetLastSaveDirectory();
     String sSaveDir = rLastSaveDir;
