@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 12:11:15 $
+ *  last change: $Author: dl $ $Date: 2001-05-28 07:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,20 @@
 #ifndef _SFXSTBMGR_HXX //autogen
 #include <sfx2/stbmgr.hxx>
 #endif
-#ifndef _SFXFILEDLG_HXX //autogen
-#include <sfx2/iodlg.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
@@ -150,6 +162,12 @@
 #include <sfx2/fcontnr.hxx>
 #endif
 
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star;
+using namespace ::rtl;
+
 
 TYPEINIT1( FuInsertFile, FuPoor );
 
@@ -180,14 +198,18 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
     if (!pArgs)
     {
-        SfxFileDialog       aFileDialog( pWin, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL );
+//      SfxFileDialog       aFileDialog( pWin, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL );
+        sfx2::FileDialogHelper aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
+        Reference< XFilePicker > xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
+        Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
+
         SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
         SfxFilterContainer* pCont = NULL;
         SfxFilterContainer* pSecondCont = NULL;
         String              aExt;
         const SfxFilter*    pFilter = NULL;
 
-        aFileDialog.SetText( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
+        aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) );
@@ -198,8 +220,8 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         pFilter = pCont->GetFilter( 0 );
         if( pFilter )
         {
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-            aFileDialog.SetCurFilter( pFilter->GetUIName() ); // set default-filter
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->setCurrentFilter( pFilter->GetUIName() ); // set default-filter
         }
 
         // Get Draw filter for Impress and Impress filter for Draw as secondary
@@ -210,47 +232,47 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
         pFilter = pCont->GetFilter4Extension( aExt );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         // Get other filters
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
         if( pFilter )
-            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-        aFileDialog.AddFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
-        aFileDialog.AddFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
-        aFileDialog.AddFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
-        aFileDialog.AddFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+        xFilterManager->appendFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
+        xFilterManager->appendFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
+        xFilterManager->appendFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
+        xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
-        if( !aFileDialog.Execute () )
+        if( aFileDialog.Execute() != ERRCODE_NONE )
             return;
         else
         {
-            aFilterName = aFileDialog.GetCurFilter();
+            aFilterName = aFileDialog.GetCurrentFilter();
             aFile = aFileDialog.GetPath();
             INetURLObject::SetBaseURL( aFile );
             aFile = ::URIHelper::SmartRelToAbs( aFile, FALSE,
