@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-18 15:19:25 $
+ *  last change: $Author: tl $ $Date: 2001-01-30 12:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1757,6 +1757,8 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioDownPB.SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
     aBackPB.SetClickHdl(LINK( this, SvxEditModulesDlg, BackHdl_Impl));
 
+    aModulesCLB.SetCheckButtonHdl( LINK( this, SvxEditModulesDlg, CheckButtonHdl_Impl) );
+
     xDicList = Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
@@ -1869,16 +1871,18 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
         if (pEntry)
         {
             ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-            if(!pData->IsParent() && pData->GetType() == TYPE_HYPH)
+            if(!pData->IsParent() && pData->GetType() != TYPE_HYPH)
             {
                 USHORT  nCurPos = pBox->GetSelectEntryPos();
-                if(nCurPos < pBox->GetEntryCount() - 2)
+                if(nCurPos < pBox->GetEntryCount() - 1)
                 {
-                    bDisableDown = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos + 1)->GetUserData())->IsParent();
+                    bDisableDown = ((ModuleUserData_Impl*)pBox->
+                            GetEntry(nCurPos + 1)->GetUserData())->IsParent();
                 }
                 if(nCurPos > 1)
                 {
-                    bDisableUp = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos - 1)->GetUserData())->IsParent();
+                    bDisableUp = ((ModuleUserData_Impl*)pBox->
+                            GetEntry(nCurPos - 1)->GetUserData())->IsParent();
                 }
             }
             aPrioUpPB.Enable(!bDisableUp);
@@ -1900,6 +1904,40 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
         DBG_ERROR( "pBox unexpected value" );
     }
 
+    return 0;
+}
+/* -----------------------------30.01.01 10:50--------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK( SvxEditModulesDlg, CheckButtonHdl_Impl, SvTreeListBox *, pBox )
+{
+    if (pBox == &aModulesCLB)
+    {
+        SvLBoxEntry *pCurEntry = pBox->GetCurEntry();
+        if (pCurEntry)
+        {
+            ModuleUserData_Impl* pData = (ModuleUserData_Impl *)
+                                                pCurEntry->GetUserData();
+            if (!pData->IsParent()  &&  pData->GetType() == TYPE_HYPH)
+            {
+                // make hyphenator checkboxes function as radio-buttons
+                // (at most one box may be checked)
+                SvLBoxEntry *pEntry = pBox->First();
+                while (pEntry)
+                {
+                    pData = (ModuleUserData_Impl *) pEntry->GetUserData();
+                    if (!pData->IsParent()  &&
+                         pData->GetType() == TYPE_HYPH  &&
+                         pEntry != pCurEntry)
+                    {
+                        lcl_SetCheckButton( pEntry, FALSE );
+                        pBox->InvalidateEntry( pEntry );
+                    }
+                    pEntry = pBox->Next( pEntry );
+                }
+            }
+        }
+    }
     return 0;
 }
 /* -----------------------------27.11.00 14:00--------------------------------
