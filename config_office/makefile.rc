@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-17 14:46:32 $
+#   last change: $Author: mh $ $Date: 2001-10-19 15:25:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,8 @@
 #
 #*************************************************************************
 
-
 TARGET=OpenOffice.org
+MAKEFILERC=true
 
 # 
 # implementation of cvs checkout
