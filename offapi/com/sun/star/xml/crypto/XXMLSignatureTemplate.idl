@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLSignatureTemplate.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:55:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
 #include <com/sun/star/xml/crypto/XUriBinding.idl>
+#include <com/sun/star/xml/crypto/XXMLSecurityTemplate.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
@@ -90,28 +91,8 @@ module com { module sun { module star { module xml { module crypto {
  *
  * Owner: Andrew Fan
  */
-interface XXMLSignatureTemplate : com::sun::star::uno::XInterface
+interface XXMLSignatureTemplate : XXMLSecurityTemplate
 {
-    /**
-     * Load a XML signature template from xml signature element
-     */
-    void setTemplate(
-        [in] com::sun::star::xml::wrapper::XXMLElementWrapper aXmlElement
-    ) raises( com::sun::star::lang::IllegalArgumentException ) ;
-
-    /**
-     * Get the XML signature element that represents the signature template
-     */
-    com::sun::star::xml::wrapper::XXMLElementWrapper getTemplate(
-    ) ;
-
-    /**
-     * Load the target xml element, i.e. the element to be signed
-     */
-    void setTarget(
-        [in] com::sun::star::xml::wrapper::XXMLElementWrapper aXmlElement
-    ) raises( com::sun::star::lang::IllegalArgumentException ) ;
-
     /**
      * Get the target xml element, i.e. the element to be signed
      */

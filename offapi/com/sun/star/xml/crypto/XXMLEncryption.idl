@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLEncryption.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:54:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ interface XXMLEncryption : com::sun::star::uno::XInterface
     /**
      * Perform decryption in the environment of encrytpion template and context.
      */
-    com::sun::star::xml::wrapper::XXMLElementWrapper decrypt(
+    com::sun::star::xml::crypto::XXMLEncryptionTemplate decrypt(
         [in] com::sun::star::xml::crypto::XXMLEncryptionTemplate aTemplate ,
         [in] com::sun::star::xml::crypto::XXMLSecurityContext aContext
     ) raises( com::sun::star::xml::crypto::XMLEncryptionException ,
