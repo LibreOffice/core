@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 12:32:22 $
+ *  last change: $Author: mt $ $Date: 2001-10-29 16:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,7 +1273,7 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 void OKButton::Click()
 {
     // Ist kein Link gesetzt, dann schliesse Parent
-    if ( !GetClickHdl() )
+    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
         Window* pParent = GetParent();
         if ( pParent->IsSystemWindow() )
@@ -1296,8 +1296,10 @@ void OKButton::Click()
             }
         }
     }
-    else
+    if ( GetClickHdl().IsSet() )
+    {
         PushButton::Click();
+    }
 }
 
 // =======================================================================
@@ -1337,7 +1339,7 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 void CancelButton::Click()
 {
     // Ist kein Link gesetzt, dann schliesse Parent
-    if ( !GetClickHdl() )
+    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
         Window* pParent = GetParent();
         if ( pParent->IsSystemWindow() )
@@ -1361,7 +1363,10 @@ void CancelButton::Click()
         }
     }
     else
+    if ( GetClickHdl().IsSet() )
+    {
         PushButton::Click();
+    }
 }
 
 // =======================================================================
@@ -1401,7 +1406,7 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 void HelpButton::Click()
 {
     // Ist kein Link gesetzt, loese Hilfe aus
-    if ( !GetClickHdl() )
+    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
         Window* pFocusWin = Application::GetFocusWindow();
         if ( !pFocusWin )
@@ -1410,8 +1415,11 @@ void HelpButton::Click()
         HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HELPMODE_CONTEXT );
         pFocusWin->RequestHelp( aEvt );
     }
-    else
+
+    if ( GetClickHdl().IsSet() )
+    {
         PushButton::Click();
+    }
 }
 
 // =======================================================================
