@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-18 18:46:56 $
+ *  last change: $Author: gh $ $Date: 2002-05-29 07:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #endif
 
 #include <time.h>
+#if SUPD > 652
 #include <stdarg.h> // include both to satisfy all compiler/platform
+#endif
 #include <cstdarg>  // combinations
 #include <stdlib.h>
 #include <string.h>
@@ -1029,7 +1031,10 @@ void* DbgFunc( USHORT nAction, void* pParam )
 
     if ( nAction == DBG_FUNC_GETDATA )
         return (void*)&(pData->aDbgData);
+    else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
+        return (void*)(pData->pDbgPrintMsgBox);
     else
+
     {
         switch ( nAction )
         {
