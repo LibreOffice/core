@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-05-03 20:39:39 $
+ *  last change: $Author: mhu $ $Date: 2001-05-06 15:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.2 $"
+#define _RTL_DIGEST_H_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -105,6 +105,10 @@ void      SAL_CALL rtl_digest_destroy (rtlDigest Digest);
 
 rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (rtlDigest Digest);
 sal_uInt32         SAL_CALL rtl_digest_queryLength    (rtlDigest Digest);
+
+rtlDigestError SAL_CALL rtl_digest_init (
+    rtlDigest Digest,
+    const sal_uInt8 *pData, sal_uInt32 nDatLen);
 
 rtlDigestError SAL_CALL rtl_digest_update (
     rtlDigest Digest,
@@ -244,6 +248,11 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
 
+rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
+    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
+    const void      *pData,    sal_uInt32 nDatLen,
+    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen);
+
 /*========================================================================
  *
  * rtl_digest_HMAC_SHA1 interface.
@@ -271,6 +280,11 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
 rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
+
+rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
+    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
+    const void      *pData,    sal_uInt32 nDatLen,
+    sal_uInt8       *pBuffer,  sal_uInt32 nBufLen);
 
 /*========================================================================
  *
