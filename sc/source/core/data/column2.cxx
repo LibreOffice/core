@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-30 09:36:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/unolingu.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/broadcast.hxx>
+#include <svtools/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 #include <math.h>
 
@@ -100,7 +102,6 @@
 #include "markdata.hxx"
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
-#include "bclist.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -162,15 +163,18 @@ String lcl_ReadOriginalStringCell( SvStream& rStream, USHORT nVer, CharSet eSyst
 
 void ScColumn::LoadData( SvStream& rStream )
 {
-    USHORT      nNewCount;
-    USHORT      nNewRow;
+    SCSIZE      nNewCount;
+    SCROW       nNewRow;
     BYTE        nByte;
     USHORT      nVer = (USHORT) pDocument->GetSrcVersion();
 
     ScMultipleReadHeader aHdr( rStream );
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream >> nNewCount;
-    if ( nNewCount > MAXROW+1 )                     // wuerde das Array zu gross?
+#endif
+    if ( nNewCount > static_cast<SCSIZE>(MAXROW+1) )                        // wuerde das Array zu gross?
     {
         pDocument->SetLostData();
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -178,9 +182,12 @@ void ScColumn::LoadData( SvStream& rStream )
     }
 
     Resize( nNewCount );                            // veraendert nCount nicht
-    for (USHORT i=0; i<nNewCount; i++)
+    for (SCSIZE i=0; i<nNewCount; i++)
     {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
         rStream >> nNewRow;
+#endif
         rStream >> nByte;
 
         if ( nNewRow > MAXROW )                 // Zeilennummer zu gross?
@@ -246,7 +253,7 @@ void ScColumn::LoadData( SvStream& rStream )
     }
 }
 
-BOOL lcl_RemoveAny( ScDocument* pDocument, USHORT nCol, USHORT nTab )
+BOOL lcl_RemoveAny( ScDocument* pDocument, SCCOL nCol, SCTAB nTab )
 {
     ScDBCollection* pDBColl = pDocument->GetDBCollection();
     if ( pDBColl )
@@ -270,7 +277,7 @@ BOOL lcl_RemoveAny( ScDocument* pDocument, USHORT nCol, USHORT nTab )
     return FALSE;
 }
 
-BOOL lcl_RemoveThis( ScDocument* pDocument, USHORT nCol, USHORT nRow, USHORT nTab )
+BOOL lcl_RemoveThis( ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScDBCollection* pDBColl = pDocument->GetDBCollection();
     if ( pDBColl )
@@ -299,16 +306,16 @@ void ScColumn::SaveData( SvStream& rStream ) const
 {
     CellType eCellType;
     ScBaseCell* pCell;
-    USHORT i;
+    SCSIZE i;
     ScFontToSubsFontConverter_AutoPtr xFontConverter;
     const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
 
     ScMultipleWriteHeader aHdr( rStream );
 
-    USHORT nSaveCount = nCount;
+    SCSIZE nSaveCount = nCount;
 
     //  Zeilen hinter MAXROW abziehen
-    USHORT nSaveMaxRow = pDocument->GetSrcMaxRow();
+    SCROW nSaveMaxRow = pDocument->GetSrcMaxRow();
     if ( nSaveMaxRow != MAXROW )
     {
         if ( nSaveCount && pItems[nSaveCount-1].nRow > nSaveMaxRow )
@@ -322,7 +329,7 @@ void ScColumn::SaveData( SvStream& rStream ) const
 
     //  Zellen abziehen, die wegen Import nicht gespeichert werden
     BOOL bRemoveAny = lcl_RemoveAny( pDocument, nCol, nTab );
-    USHORT nEffCount = nSaveCount;
+    SCSIZE nEffCount = nSaveCount;
     if ( bRemoveAny )
     {
         for (i=0; i<nSaveCount; i++)
@@ -333,10 +340,13 @@ void ScColumn::SaveData( SvStream& rStream ) const
 //      aDbg+=" Remove ";aDbg+=nSaveCount-nEffCount; DBG_ERROR(aDbg);
     }
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << nEffCount;           // nEffCount: Zellen, die wirklich gespeichert werden
+#endif
 
     ScAttrIterator aIter( pAttrArray, 0, MAXROW );
-    USHORT nStt, nEnd;
+    SCROW nStt, nEnd;
     const ScPatternAttr* pAttr;
     do
     {
@@ -348,11 +358,14 @@ void ScColumn::SaveData( SvStream& rStream ) const
 
     for (i=0; i<nSaveCount; i++)        // nSaveCount: Ende auf MAXROW angepasst
     {
-        USHORT nRow = pItems[i].nRow;
+        SCROW nRow = pItems[i].nRow;
 
         if ( !bRemoveAny || !lcl_RemoveThis( pDocument, nCol, nRow, nTab ) )
         {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
             rStream << nRow;
+#endif
 
             pCell = pItems[i].pCell;
             eCellType = pCell->GetCellType();
@@ -429,12 +442,18 @@ void ScColumn::LoadNotes( SvStream& rStream )
 {
     ScReadHeader aHdr(rStream);
 
-    USHORT nNoteCount;
+    SCSIZE nNoteCount;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream >> nNoteCount;
-    for (USHORT i=0; i<nNoteCount && rStream.GetError() == SVSTREAM_OK; i++)
+#endif
+    for (SCSIZE i=0; i<nNoteCount && rStream.GetError() == SVSTREAM_OK; i++)
     {
-        USHORT nPos;
+        SCSIZE nPos;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
         rStream >> nPos;
+#endif
         if (nPos < nCount)
             pItems[nPos].pCell->LoadNote(rStream);
         else
@@ -445,10 +464,10 @@ void ScColumn::LoadNotes( SvStream& rStream )
     }
 }
 
-USHORT ScColumn::NoteCount( USHORT nMaxRow ) const
+SCROW ScColumn::NoteCount( SCROW nMaxRow ) const
 {
-    USHORT nNoteCount = 0;
-    USHORT i;
+    SCROW nNoteCount = 0;
+    SCSIZE i;
 
     for (i=0; i<nCount; i++)
         if ( pItems[i].pCell->GetNotePtr() && pItems[i].nRow<=nMaxRow )
@@ -459,11 +478,11 @@ USHORT ScColumn::NoteCount( USHORT nMaxRow ) const
 
 void ScColumn::SaveNotes( SvStream& rStream ) const
 {
-    USHORT nSaveMaxRow = pDocument->GetSrcMaxRow();
-    USHORT i;
+    SCROW nSaveMaxRow = pDocument->GetSrcMaxRow();
+    SCSIZE i;
 
     BOOL bRemoveAny = lcl_RemoveAny( pDocument, nCol, nTab );
-    USHORT nNoteCount;
+    SCROW nNoteCount;
     if ( bRemoveAny )
     {
         //  vorher zaehlen, wieviele Notizen es werden
@@ -482,12 +501,15 @@ void ScColumn::SaveNotes( SvStream& rStream ) const
     //  also ohne die weggelassenen Zellen mitzuzaehlen.
 
     ScWriteHeader aHdr(rStream);
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << nNoteCount;
+#endif
 
     USHORT nDestPos = 0;
     for (i=0; i<nCount && rStream.GetError() == SVSTREAM_OK; i++)
     {
-        USHORT nRow = pItems[i].nRow;
+        SCROW nRow = pItems[i].nRow;
         if ( !bRemoveAny || !lcl_RemoveThis( pDocument, nCol, nRow, nTab ) )
         {
             const ScPostIt* pNote = pItems[i].pCell->GetNotePtr();
@@ -518,7 +540,7 @@ void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
     ScSymbolStringCellEntry* pCurrentEntry = NULL;
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    USHORT nStt, nEnd;
+    SCROW nStt, nEnd;
     const ScPatternAttr* pAttr = aAttrIter.Next( nStt, nEnd );
     while ( pAttr )
     {
@@ -526,7 +548,7 @@ void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
                 pAttr->IsSymbolFont() )
         {
             ScColumnIterator aCellIter( this, nStt, nEnd );
-            USHORT nRow;
+            SCROW nRow;
             ScBaseCell* pCell;
             while ( aCellIter.Next( nRow, pCell ) )
             {
@@ -615,7 +637,7 @@ BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
         ScFontToSubsFontConverter_AutoPtr xFontConverter;
         const ULONG nFontConverterFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
         ScSymbolStringCellEntry* pE;
-        USHORT nStt, nEnd;
+        SCROW nStt, nEnd;
 
         ScAttrIterator aIter( pAttrArray, 0, MAXROW );
         const ScPatternAttr* pAttr = aIter.Next( nStt, nEnd );
@@ -651,8 +673,8 @@ BOOL ScColumn::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
         rStream << (USHORT) SCID_COLDATA;
         SaveData( rStream );
     }
-    USHORT nNotes = NoteCount();    //! Test, ob alles weggelassen wird?
-    if (nNotes)
+    SCROW nNotes = NoteCount(); //! Test, ob alles weggelassen wird?
+    if (nNotes > 0)
     {
         rStream << (USHORT) SCID_COLNOTES;
         SaveNotes( rStream );
@@ -672,13 +694,13 @@ BOOL ScColumn::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
                                     //  GetNeededSize: optimale Hoehe / Breite in Pixeln
 
-long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
+long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                               double nPPTX, double nPPTY,
                               const Fraction& rZoomX, const Fraction& rZoomY,
                               BOOL bWidth, const ScNeededSizeOptions& rOptions )
 {
     long nValue=0;
-    USHORT nIndex;
+    SCSIZE nIndex;
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
@@ -942,9 +964,9 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
 
                 // use original width for hidden columns:
                 long nDocWidth = (long) ( pDocument->GetOriginalWidth(nCol,nTab) * fWidthFactor );
-                USHORT nColMerge = pMerge->GetColMerge();
+                SCCOL nColMerge = pMerge->GetColMerge();
                 if (nColMerge > 1)
-                    for (USHORT nColAdd=1; nColAdd<nColMerge; nColAdd++)
+                    for (SCCOL nColAdd=1; nColAdd<nColMerge; nColAdd++)
                         nDocWidth += (long) ( pDocument->GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
                 nDocWidth -= (long) ( pMargin->GetLeftMargin() * fWidthFactor )
                            + (long) ( pMargin->GetRightMargin() * fWidthFactor )
@@ -1090,13 +1112,13 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
     return nValue;
 }
 
-long ScColumn::GetSimpleTextNeededSize( USHORT nIndex, OutputDevice* pDev,
+long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
         BOOL bWidth )
 {
     long nValue=0;
     if ( nIndex < nCount )
     {
-        USHORT nRow = pItems[nIndex].nRow;
+        SCROW nRow = pItems[nIndex].nRow;
         const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
         ScBaseCell* pCell = pItems[nIndex].pCell;
         String aValStr;
@@ -1128,7 +1150,7 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
     USHORT  nWidth = (USHORT) (nOldWidth * nPPTX);
     BOOL    bFound = FALSE;
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     ScMarkedDataIter aDataIter(this, pMarkData, TRUE);
     if ( bSimpleTextImport )
     {   // alles eins bis auf NumberFormate
@@ -1164,7 +1186,7 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
 
         while (aDataIter.Next( nIndex ))
         {
-            USHORT nRow = pItems[nIndex].nRow;
+            SCROW nRow = pItems[nIndex].nRow;
 
             BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
             if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
@@ -1232,18 +1254,18 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
 //  nMinHeight, nMinStart zur Optimierung: ab nRow >= nMinStart ist mindestens nMinHeight
 //  (wird nur bei bStdAllowed ausgewertet)
 
-void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeight,
+void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
-                                BOOL bShrink, USHORT nMinHeight, USHORT nMinStart )
+                                BOOL bShrink, USHORT nMinHeight, SCROW nMinStart )
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
-    USHORT nStart;
-    USHORT nEnd;
-    USHORT nEditPos = 0;
-    USHORT nNextEnd = 0;
+    SCROW nStart;
+    SCROW nEnd;
+    SCROW nEditPos = 0;
+    SCROW nNextEnd = 0;
 
     //  bei bedingter Formatierung werden immer die einzelnen Zellen angesehen
 
@@ -1260,7 +1282,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
         }
         else
         {
-            USHORT nRow;
+            SCROW nRow;
             BOOL bStdAllowed = ((const SvxOrientationItem&) pPattern->GetItem(ATTR_ORIENTATION)).
                                         GetValue() == (USHORT) SVX_ORIENTATION_STANDARD;
             BOOL bStdOnly = FALSE;
@@ -1317,9 +1339,9 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
 
                 //  if everything below is already larger, the loop doesn't have to
                 //  be run again
-                USHORT nStdEnd = nEnd;
+                SCROW nStdEnd = nEnd;
                 if ( nDefHeight <= nMinHeight && nStdEnd >= nMinStart )
-                    nStdEnd = nMinStart ? nMinStart-1 : 0;
+                    nStdEnd = (nMinStart>0) ? nMinStart-1 : 0;
 
                 for (nRow=nStart; nRow<=nStdEnd; nRow++)
                     if (nDefHeight > pHeight[nRow-nStartRow])
@@ -1330,7 +1352,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
                     //  if cells are not handled individually below,
                     //  check for cells with different script type
 
-                    USHORT nIndex;
+                    SCSIZE nIndex;
                     Search(nStart,nIndex);
                     while ( nIndex < nCount && (nRow=pItems[nIndex].nRow) <= nEnd )
                     {
@@ -1368,7 +1390,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
             {
                 ScNeededSizeOptions aOptions;
 
-                USHORT nIndex;
+                SCSIZE nIndex;
                 Search(nStart,nIndex);
                 while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEnd) : FALSE )
                 {
@@ -1388,7 +1410,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
             }
         }
 
-        if (nNextEnd)
+        if (nNextEnd > 0)
         {
             nStart = nEnd + 1;
             nEnd = nNextEnd;
@@ -1399,11 +1421,11 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
     }
 }
 
-BOOL ScColumn::GetNextSpellingCell(USHORT& nRow, BOOL bInSel, const ScMarkData& rData) const
+BOOL ScColumn::GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& rData) const
 {
     BOOL bStop = FALSE;
     CellType eCellType;
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (!bInSel && Search(nRow, nIndex))
     {
         eCellType = GetCellType(nRow);
@@ -1417,7 +1439,7 @@ BOOL ScColumn::GetNextSpellingCell(USHORT& nRow, BOOL bInSel, const ScMarkData& 
         if (bInSel)
         {
             nRow = rData.GetNextMarked(nCol, nRow, FALSE);
-            if (nRow > MAXROW)
+            if (!ValidRow(nRow))
             {
                 nRow = MAXROW+1;
                 bStop = TRUE;
@@ -1487,7 +1509,7 @@ void ScColumn::RemoveAutoSpellObj()
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                ScBroadcasterList* pBC = pOldCell->GetBroadcaster();
+                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
                 pNewCell->SetBroadcaster( pBC );
                 pOldCell->ForgetBroadcaster();
                 if (pOldCell->GetNotePtr())
@@ -1500,11 +1522,11 @@ void ScColumn::RemoveAutoSpellObj()
     delete pEngine;
 }
 
-void ScColumn::RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow )
+void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 {
     ScFieldEditEngine* pEngine = NULL;
 
-    USHORT i;
+    SCSIZE i;
     Search( nStartRow, i );
     for (; i<nCount && pItems[i].nRow <= nEndRow; i++)
         if ( pItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
@@ -1562,7 +1584,7 @@ void ScColumn::RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow )
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                ScBroadcasterList* pBC = pOldCell->GetBroadcaster();
+                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
                 pNewCell->SetBroadcaster( pBC );
                 pOldCell->ForgetBroadcaster();
                 if (pOldCell->GetNotePtr())
@@ -1577,7 +1599,7 @@ void ScColumn::RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow )
 
 // =========================================================================================
 
-BOOL ScColumn::TestTabRefAbs(USHORT nTable)
+BOOL ScColumn::TestTabRefAbs(SCTAB nTable)
 {
     BOOL bRet = FALSE;
     if (pItems)
@@ -1590,7 +1612,7 @@ BOOL ScColumn::TestTabRefAbs(USHORT nTable)
 
 // =========================================================================================
 
-ScColumnIterator::ScColumnIterator( const ScColumn* pCol, USHORT nStart, USHORT nEnd ) :
+ScColumnIterator::ScColumnIterator( const ScColumn* pCol, SCROW nStart, SCROW nEnd ) :
     pColumn( pCol ),
     nTop( nStart ),
     nBottom( nEnd )
@@ -1602,7 +1624,7 @@ ScColumnIterator::~ScColumnIterator()
 {
 }
 
-BOOL ScColumnIterator::Next( USHORT& rRow, ScBaseCell*& rpCell )
+BOOL ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
 {
     if ( nPos < pColumn->nCount )
     {
@@ -1620,7 +1642,7 @@ BOOL ScColumnIterator::Next( USHORT& rRow, ScBaseCell*& rpCell )
     return FALSE;
 }
 
-USHORT ScColumnIterator::GetIndex() const           // Index zur letzen abgefragten Zelle
+SCSIZE ScColumnIterator::GetIndex() const           // Index zur letzen abgefragten Zelle
 {
     return nPos - 1;        // bei Next ist Pos hochgezaehlt worden
 }
@@ -1643,7 +1665,7 @@ ScMarkedDataIter::~ScMarkedDataIter()
     delete pMarkIter;
 }
 
-BOOL ScMarkedDataIter::Next( USHORT& rIndex )
+BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
 {
     BOOL bFound = FALSE;
     do
@@ -1679,9 +1701,9 @@ BOOL ScMarkedDataIter::Next( USHORT& rIndex )
     return TRUE;
 }
 
-USHORT ScColumn::GetErrorData( USHORT nRow ) const
+USHORT ScColumn::GetErrorData( SCROW nRow ) const
 {
-    USHORT  nIndex;
+    SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
@@ -1722,12 +1744,12 @@ BOOL ScColumn::IsEmptyVisData(BOOL bNotes) const
     }
 }
 
-USHORT ScColumn::VisibleCount( USHORT nStartRow, USHORT nEndRow ) const
+SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
 {
     //  Notizen werden nicht mitgezaehlt
 
-    USHORT nVisCount = 0;
-    USHORT nIndex;
+    SCSIZE nVisCount = 0;
+    SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
@@ -1741,12 +1763,12 @@ USHORT ScColumn::VisibleCount( USHORT nStartRow, USHORT nEndRow ) const
     return nVisCount;
 }
 
-USHORT ScColumn::GetLastVisDataPos(BOOL bNotes) const
+SCROW ScColumn::GetLastVisDataPos(BOOL bNotes) const
 {
-    USHORT nRet = 0;
+    SCROW nRet = 0;
     if (pItems)
     {
-        USHORT i;
+        SCSIZE i;
         BOOL bFound = FALSE;
         for (i=nCount; i>0 && !bFound; )
         {
@@ -1762,12 +1784,12 @@ USHORT ScColumn::GetLastVisDataPos(BOOL bNotes) const
     return nRet;
 }
 
-USHORT ScColumn::GetFirstVisDataPos(BOOL bNotes) const
+SCROW ScColumn::GetFirstVisDataPos(BOOL bNotes) const
 {
-    USHORT nRet = 0;
+    SCROW nRet = 0;
     if (pItems)
     {
-        USHORT i;
+        SCSIZE i;
         BOOL bFound = FALSE;
         for (i=0; i<nCount && !bFound; i++)
         {
@@ -1782,9 +1804,9 @@ USHORT ScColumn::GetFirstVisDataPos(BOOL bNotes) const
     return nRet;
 }
 
-BOOL ScColumn::HasVisibleDataAt(USHORT nRow) const
+BOOL ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nRow, nIndex))
         if (CellVisible(pItems[nIndex].pCell))
             return TRUE;
@@ -1805,12 +1827,12 @@ BOOL ScColumn::IsEmpty() const
     return (IsEmptyData() && IsEmptyAttr());
 }
 
-BOOL ScColumn::IsEmptyBlock(USHORT nStartRow, USHORT nEndRow) const
+BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 {
     if ( nCount == 0 || !pItems )
         return TRUE;
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
@@ -1821,11 +1843,11 @@ BOOL ScColumn::IsEmptyBlock(USHORT nStartRow, USHORT nEndRow) const
     return TRUE;                                    // no cell found
 }
 
-USHORT ScColumn::GetEmptyLinesInBlock( USHORT nStartRow, USHORT nEndRow, ScDirection eDir ) const
+SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
-    USHORT nLines = 0;
+    SCSIZE nLines = 0;
     BOOL bFound = FALSE;
-    short i;
+    SCSIZE i;
     if (pItems && (nCount > 0))
     {
         if (eDir == DIR_BOTTOM)
@@ -1839,32 +1861,32 @@ USHORT ScColumn::GetEmptyLinesInBlock( USHORT nStartRow, USHORT nEndRow, ScDirec
                 bFound = pItems[i].nRow <= nEndRow && CellVisible(pItems[i].pCell);
             }
             if (bFound)
-                nLines = nEndRow - pItems[i].nRow;
+                nLines = static_cast<SCSIZE>(nEndRow - pItems[i].nRow);
             else
-                nLines = nEndRow - nStartRow;
+                nLines = static_cast<SCSIZE>(nEndRow - nStartRow);
         }
         else if (eDir == DIR_TOP)
         {
-            i = -1;
-            while (!bFound && (i+1 < (short)nCount))
+            i = 0;
+            while (!bFound && (i < nCount))
             {
-                i++;
                 if ( pItems[i].nRow > nEndRow )
                     break;
                 bFound = pItems[i].nRow >= nStartRow && CellVisible(pItems[i].pCell);
+                i++;
             }
             if (bFound)
-                nLines = pItems[i].nRow - nStartRow;
+                nLines = static_cast<SCSIZE>(pItems[i-1].nRow - nStartRow);
             else
-                nLines = nEndRow - nStartRow;
+                nLines = static_cast<SCSIZE>(nEndRow - nStartRow);
         }
     }
     else
-        nLines = nEndRow - nStartRow;
+        nLines = static_cast<SCSIZE>(nEndRow - nStartRow);
     return nLines;
 }
 
-USHORT ScColumn::GetFirstDataPos() const
+SCROW ScColumn::GetFirstDataPos() const
 {
     if (nCount)
         return pItems[0].nRow;
@@ -1872,7 +1894,7 @@ USHORT ScColumn::GetFirstDataPos() const
         return 0;
 }
 
-USHORT ScColumn::GetLastDataPos() const
+SCROW ScColumn::GetLastDataPos() const
 {
     if (nCount)
         return pItems[nCount-1].nRow;
@@ -1880,23 +1902,23 @@ USHORT ScColumn::GetLastDataPos() const
         return 0;
 }
 
-BOOL ScColumn::GetPrevDataPos(USHORT& rRow) const
+BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
 {
     BOOL bFound = FALSE;
-    short i = (short)nCount - 1;
-    while (!bFound && (i >= 0))
+    SCSIZE i = nCount;
+    while (!bFound && (i > 0))
     {
-        bFound = (pItems[USHORT(i)].nRow < rRow);
+        --i;
+        bFound = (pItems[i].nRow < rRow);
         if (bFound)
-            rRow = pItems[USHORT(i)].nRow;
-        i--;
+            rRow = pItems[i].nRow;
     }
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(USHORT& rRow) const       // groesser als rRow
+BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // groesser als rRow
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search( rRow, nIndex ))
         ++nIndex;                   // naechste Zelle
 
@@ -1906,20 +1928,20 @@ BOOL ScColumn::GetNextDataPos(USHORT& rRow) const       // groesser als rRow
     return bMore;
 }
 
-void ScColumn::FindDataAreaPos(USHORT& rRow, short nMovY) const
+void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 {
     if (!nMovY) return;
     BOOL bForward = (nMovY>0);
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     BOOL bThere = Search(rRow, nIndex);
     if (bThere && !CellVisible(pItems[nIndex].pCell))
         bThere = FALSE;
 
     if (bThere)
     {
-        USHORT nLast = rRow;
-        USHORT nOldIndex = nIndex;
+        SCROW nLast = rRow;
+        SCSIZE nOldIndex = nIndex;
         if (bForward)
         {
             if (nIndex<nCount-1)
@@ -1984,15 +2006,15 @@ void ScColumn::FindDataAreaPos(USHORT& rRow, short nMovY) const
     }
 }
 
-BOOL ScColumn::HasDataAt(USHORT nRow) const
+BOOL ScColumn::HasDataAt(SCROW nRow) const
 {
-/*  USHORT nIndex;
+/*  SCSIZE nIndex;
     return Search( nRow, nIndex );
 */
         //  immer nur sichtbare interessant ?
         //! dann HasVisibleDataAt raus
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nRow, nIndex))
         if (CellVisible(pItems[nIndex].pCell))
             return TRUE;
@@ -2001,7 +2023,7 @@ BOOL ScColumn::HasDataAt(USHORT nRow) const
 
 }
 
-USHORT ScColumn::GetFirstEntryPos() const
+SCROW ScColumn::GetFirstEntryPos() const
 {
     if (pAttrArray)
         return Min( GetFirstDataPos(), pAttrArray->GetFirstEntryPos() );
@@ -2009,7 +2031,7 @@ USHORT ScColumn::GetFirstEntryPos() const
         return GetFirstDataPos();
 }
 
-USHORT ScColumn::GetLastEntryPos() const
+SCROW ScColumn::GetLastEntryPos() const
 {
     if (pAttrArray)
         return Max( GetLastDataPos(), pAttrArray->GetLastEntryPos(TRUE) );
@@ -2017,7 +2039,7 @@ USHORT ScColumn::GetLastEntryPos() const
         return GetLastDataPos();
 }
 
-USHORT ScColumn::GetLastAttrPos() const
+SCROW ScColumn::GetLastAttrPos() const
 {
     if (pAttrArray)
         return pAttrArray->GetLastEntryPos(FALSE);
@@ -2025,7 +2047,7 @@ USHORT ScColumn::GetLastAttrPos() const
         return 0;
 }
 
-BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, USHORT nStartRow, USHORT nEndRow ) const
+BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray && rCol.pAttrArray)
         return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
@@ -2033,7 +2055,7 @@ BOOL ScColumn::IsAllAttrEqual( const ScColumn& rCol, USHORT nStartRow, USHORT nE
         return !pAttrArray && !rCol.pAttrArray;
 }
 
-BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, USHORT nStartRow, USHORT nEndRow ) const
+BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray && rCol.pAttrArray)
         return pAttrArray->IsVisibleEqual( *rCol.pAttrArray, nStartRow, nEndRow );
@@ -2041,7 +2063,7 @@ BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, USHORT nStartRow, USHOR
         return !pAttrArray && !rCol.pAttrArray;
 }
 
-BOOL ScColumn::HasVisibleAttr( USHORT& rFirstRow, USHORT& rLastRow, BOOL bSkipFirst ) const
+BOOL ScColumn::HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const
 {
     if (pAttrArray)
         return pAttrArray->HasVisibleAttr(rFirstRow,rLastRow,bSkipFirst);
@@ -2049,7 +2071,7 @@ BOOL ScColumn::HasVisibleAttr( USHORT& rFirstRow, USHORT& rLastRow, BOOL bSkipFi
         return FALSE;
 }
 
-BOOL ScColumn::HasVisibleAttrIn( USHORT nStartRow, USHORT nEndRow ) const
+BOOL ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray)
         return pAttrArray->HasVisibleAttrIn( nStartRow, nEndRow );
@@ -2057,10 +2079,10 @@ BOOL ScColumn::HasVisibleAttrIn( USHORT nStartRow, USHORT nEndRow ) const
         return FALSE;
 }
 
-void ScColumn::FindUsed( USHORT nStartRow, USHORT nEndRow, BOOL* pUsed ) const
+void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, BOOL* pUsed ) const
 {
-    USHORT nRow;
-    USHORT nIndex;
+    SCROW nRow;
+    SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
@@ -2069,12 +2091,12 @@ void ScColumn::FindUsed( USHORT nStartRow, USHORT nEndRow, BOOL* pUsed ) const
     }
 }
 
-void ScColumn::StartListening( SfxListener& rLst, USHORT nRow )
+void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
-    ScBroadcasterList* pBC = NULL;
+    SvtBroadcaster* pBC = NULL;
     ScBaseCell* pCell;
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nRow,nIndex))
     {
         pCell = pItems[nIndex].pCell;
@@ -2088,19 +2110,18 @@ void ScColumn::StartListening( SfxListener& rLst, USHORT nRow )
 
     if (!pBC)
     {
-        pBC = new ScBroadcasterList;
+        pBC = new SvtBroadcaster;
         pCell->SetBroadcaster(pBC);
     }
-//  rLst.StartListening(*pBC,TRUE);
-    pBC->StartBroadcasting( rLst, TRUE );
+    rLst.StartListening(*pBC);
 }
 
-void ScColumn::MoveListeners( ScBroadcasterList& rSource, USHORT nDestRow )
+void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
 {
-    ScBroadcasterList* pBC = NULL;
+    SvtBroadcaster* pBC = NULL;
     ScBaseCell* pCell;
 
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nDestRow,nIndex))
     {
         pCell = pItems[nIndex].pCell;
@@ -2114,34 +2135,31 @@ void ScColumn::MoveListeners( ScBroadcasterList& rSource, USHORT nDestRow )
 
     if (!pBC)
     {
-        pBC = new ScBroadcasterList;
+        pBC = new SvtBroadcaster;
         pCell->SetBroadcaster(pBC);
     }
 
-#if 0
-    USHORT nCount = rSource.GetListenerCount();
-    for (USHORT i=nCount; i>0;)
+    if (rSource.HasListeners())
     {
-        --i;
-        SfxListener* pLst = rSource.GetListener(i);
-        pLst->StartListening(*pBC,TRUE);
-        pLst->EndListening(rSource);
+        SvtListenerIter aIter( rSource);
+        for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
+        {
+            pLst->StartListening( *pBC);
+            pLst->EndListening( rSource);
+        }
     }
-#endif
-    rSource.MoveListenersTo( *pBC );
 }
 
-void ScColumn::EndListening( SfxListener& rLst, USHORT nRow )
+void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nRow,nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
-        ScBroadcasterList* pBC = pCell->GetBroadcaster();
+        SvtBroadcaster* pBC = pCell->GetBroadcaster();
         if (pBC)
         {
-//          rLst.EndListening(*pBC);
-            pBC->EndBroadcasting(rLst);
+            rLst.EndListening(*pBC);
 
             if (!pBC->HasListeners())
             {
@@ -2276,13 +2294,13 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 //  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData, const BYTE* pRowFlags,
-                                        BOOL bDoExclude, USHORT nExStartRow, USHORT nExEndRow )
+                                        BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     ScMarkedDataIter aDataIter(this, &rMark, FALSE);
     while (aDataIter.Next( nIndex ))
     {
-        USHORT nRow = pItems[nIndex].nRow;
+        SCROW nRow = pItems[nIndex].nRow;
         if ( !pRowFlags || !( pRowFlags[nRow] & CR_HIDDEN ) )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
                 lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
@@ -2291,26 +2309,26 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
 
 //  bei bNoMarked die Mehrfachselektion weglassen
 void ScColumn::UpdateAreaFunction( ScFunctionData& rData, BYTE* pRowFlags,
-                                    USHORT nStartRow, USHORT nEndRow )
+                                    SCROW nStartRow, SCROW nEndRow )
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
     {
-        USHORT nRow = pItems[nIndex].nRow;
+        SCROW nRow = pItems[nIndex].nRow;
         if ( !pRowFlags || !( pRowFlags[nRow] & CR_HIDDEN ) )
             lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
         ++nIndex;
     }
 }
 
-long ScColumn::GetWeightedCount() const
+ULONG ScColumn::GetWeightedCount() const
 {
-    long nTotal = 0;
+    ULONG nTotal = 0;
 
     //  Notizen werden nicht gezaehlt
 
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScBaseCell* pCell = pItems[i].pCell;
         switch ( pCell->GetCellType() )
