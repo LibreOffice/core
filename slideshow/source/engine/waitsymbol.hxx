@@ -2,9 +2,9 @@
  *
  *  $RCSfile: waitsymbol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,23 +112,12 @@ private:
                   cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
 
-    // interims solution only:
-    template <typename PairT>
-    static typename PairT::second_type const & mySelect2nd( PairT const & p ) {
-        return p.second;
-    }
     template <typename FuncT>
     FuncT for_each_sprite( FuncT func ) const {
-        std::for_each(
-            m_views.begin(), m_views.end(),
-            boost::bind( func,
-                         // select sprite:
-                         boost::bind(
-                             // due to bind problems:
-                             &WaitSymbol::mySelect2nd<
-                             ViewsVecT::value_type>,
-//                              std::select2nd<ViewsVecT::value_type>(),
-                             _1 ) ) );
+        ViewsVecT::const_iterator iPos( m_views.begin() );
+        const ViewsVecT::const_iterator iEnd( m_views.end() );
+        for ( ; iPos != iEnd; ++iPos )
+            func( iPos->second );
         return func;
     }
 

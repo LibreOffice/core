@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:56:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,16 +181,10 @@ private:
     }
     template <typename FuncT>
     FuncT for_each_sprite( FuncT func ) const {
-        std::for_each(
-            m_views.begin(), m_views.end(),
-            boost::bind( func,
-                         // select sprite:
-                         boost::bind(
-                             // due to bind problems:
-                             &RehearseTimingsActivity::mySelect2nd<
-                             ViewsVecT::value_type>,
-//                              std::select2nd<ViewsVecT::value_type>(),
-                             _1 ) ) );
+        ViewsVecT::const_iterator iPos( m_views.begin() );
+        const ViewsVecT::const_iterator iEnd( m_views.end() );
+        for ( ; iPos != iEnd; ++iPos )
+            func( iPos->second );
         return func;
     }
 
