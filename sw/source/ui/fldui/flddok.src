@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:52:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FLD_DOK
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "~Tipo de campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -119,7 +119,7 @@ TabPage TP_FLD_DOK
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "Valinta" ;
+        Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "~Sélection" ;
         Text [ swedish ] = "Urv~al" ;
@@ -173,6 +173,7 @@ TabPage TP_FLD_DOK
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_DOKFORMAT
     {
@@ -203,7 +204,7 @@ TabPage TP_FLD_DOK
         TEXT [ italian ] = "~Correzione" ;
         TEXT [ portuguese_brazilian ] = "Deslocar" ;
         TEXT [ portuguese ] = "~Correcção" ;
-        TEXT [ finnish ] = "Siirroa" ;
+        TEXT [ finnish ] = "~Siirtymä" ;
         TEXT [ danish ] = "Korrektion" ;
         TEXT [ french ] = "C~orrecture" ;
         TEXT [ swedish ] = "Ko~rrigering" ;
@@ -289,6 +290,7 @@ TabPage TP_FLD_DOK
         Text[ turkish ] = "Ýçeriði sabitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fijar contenido";
+        Text[ finnish ] = "~Kiinteä sisältö";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -322,6 +324,7 @@ TabPage TP_FLD_DOK
         Text[ turkish ] = "Düzeltme (gün)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Corrección en días";
+        Text[ finnish ] = "~Siirtymä päivinä";
     };
     String STR_DOKTIMEOFF
     {
@@ -347,6 +350,7 @@ TabPage TP_FLD_DOK
         Text[ turkish ] = "Düzeltme (dakika)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Corrección en minutos";
+        Text[ finnish ] = "~Siirtymä minuutteina";
     };
     Text [ english_us ] = "Document" ;
     Text [ portuguese_brazilian ] = "Dokument" ;
@@ -368,4 +372,5 @@ TabPage TP_FLD_DOK
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Documento";
+    Text[ finnish ] = "Asiakirja";
 };
