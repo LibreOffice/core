@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:59:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,11 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
 #endif
 
+#include <algorithm>
 #include <math.h>
 
 #ifndef _SV_FONTCVT_HXX
@@ -114,12 +108,11 @@
 #include "xiroot.hxx"
 #endif
 
-
 // GUID import/export =========================================================
 
 XclGuid::XclGuid()
 {
-    memset( mpData, 0, 16 );
+    memset( mpnData, 0, 16 );
 }
 
 XclGuid::XclGuid(
@@ -128,36 +121,35 @@ XclGuid::XclGuid(
         sal_uInt8 nData45, sal_uInt8 nData46, sal_uInt8 nData47, sal_uInt8 nData48 )
 {
     // convert to little endian -> makes streaming easy
-    LongToSVBT32( nData1, mpData );
-    ShortToSVBT16( nData2, mpData + 4 );
-    ShortToSVBT16( nData3, mpData + 6 );
-    mpData[  8 ] = nData41;
-    mpData[  9 ] = nData42;
-    mpData[ 10 ] = nData43;
-    mpData[ 11 ] = nData44;
-    mpData[ 12 ] = nData45;
-    mpData[ 13 ] = nData46;
-    mpData[ 14 ] = nData47;
-    mpData[ 15 ] = nData48;
+    LongToSVBT32( nData1, mpnData );
+    ShortToSVBT16( nData2, mpnData + 4 );
+    ShortToSVBT16( nData3, mpnData + 6 );
+    mpnData[  8 ] = nData41;
+    mpnData[  9 ] = nData42;
+    mpnData[ 10 ] = nData43;
+    mpnData[ 11 ] = nData44;
+    mpnData[ 12 ] = nData45;
+    mpnData[ 13 ] = nData46;
+    mpnData[ 14 ] = nData47;
+    mpnData[ 15 ] = nData48;
 }
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return memcmp( rCmp1.mpData, rCmp2.mpData, 16 ) == 0;
+    return memcmp( rCmp1.mpnData, rCmp2.mpnData, 16 ) == 0;
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
 {
-    rStrm.Read( rGuid.mpData, 16 );     // mpData always in little endian
+    rStrm.Read( rGuid.mpnData, 16 );     // mpnData always in little endian
     return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid )
 {
-    rStrm.Write( rGuid.mpData, 16 );    // mpData already in little endian
+    rStrm.Write( rGuid.mpnData, 16 );    // mpnData already in little endian
     return rStrm;
 }
-
 
 // Excel Tools ================================================================
 
@@ -171,7 +163,6 @@ const XclGuid XclTools::maGuidUrlMoniker(
 
 const XclGuid XclTools::maGuidFileMoniker(
     0x00000303, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-
 
 // numeric conversion ---------------------------------------------------------
 
@@ -351,19 +342,42 @@ sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
     return GetHmmFromInch( GetInchFromTwips( nTwips ) );
 }
 
-sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
+USHORT XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
 {
     double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
-    return static_cast< sal_uInt16 >( ::std::min( fScWidth, 65535.0 ) );
+    return limit_cast< USHORT >( fScWidth );
 }
 
-sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetXclColumnWidth( USHORT nScWidth, long nScCharWidth )
 {
     double fXclWidth = static_cast< double >( nScWidth ) * 256.0 / nScCharWidth + 0.5;
-    return static_cast< sal_uInt16 >( ::std::min( fXclWidth, 65535.0 ) );
+    return limit_cast< sal_uInt16 >( fXclWidth );
+}
+
+double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
+{
+    return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
+}
+
+// cell/range addresses -------------------------------------------------------
+
+ScAddress XclTools::MakeScAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
+{
+    return ScAddress( static_cast< SCCOL >( nXclCol ), static_cast< SCROW >( nXclRow ), nScTab );
+}
+
+ScRange XclTools::MakeScRange(
+        sal_uInt16 nStartXclCol, sal_uInt16 nStartXclRow, SCTAB nStartScTab,
+        sal_uInt16 nEndXclCol, sal_uInt16 nEndXclRow, SCTAB nEndScTab )
+{
+    return ScRange(
+        static_cast< SCCOL >( nStartXclCol ), static_cast< SCROW >( nStartXclRow ), nStartScTab,
+        static_cast< SCCOL >( nEndXclCol ), static_cast< SCROW >( nEndXclRow ), nEndScTab );
 }
 
 // text encoding --------------------------------------------------------------
+
+namespace {
 
 const struct XclCodePageEntry
 {
@@ -413,17 +427,19 @@ const XclCodePageEntry* const pCodePageTableEnd = STATIC_TABLE_END( pCodePageTab
 
 struct XclCodePageEntry_CPPred
 {
-    inline explicit             XclCodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
-    inline bool                 operator()( const XclCodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
-    sal_uInt16                  mnCodePage;
+    inline explicit     XclCodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
+    inline bool         operator()( const XclCodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
+    sal_uInt16          mnCodePage;
 };
 
 struct XclCodePageEntry_TEPred
 {
-    inline explicit             XclCodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
-    inline bool                 operator()( const XclCodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
-    rtl_TextEncoding            meTextEnc;
+    inline explicit     XclCodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
+    inline bool         operator()( const XclCodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
+    rtl_TextEncoding    meTextEnc;
 };
+
+} // namespace
 
 rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
 {
@@ -446,7 +462,6 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     }
     return pEntry->mnCodePage;
 }
-
 
 // font names -----------------------------------------------------------------
 
@@ -498,17 +513,17 @@ String XclTools::GetBuiltInDefName( sal_Unicode nBuiltInIndex )
     return GetXclBuiltInDefName( nBuiltInIndex ).Insert( maDefNamePrefix, 0 );
 }
 
-bool XclTools::IsBuiltInDefName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex )
+bool XclTools::IsBuiltInDefName( sal_uInt16& rnXclTab, const String& rName, sal_Unicode nIndex )
 {
     String aTestName( GetBuiltInDefName( nIndex ).Append( '_' ) );
     if( !rName.EqualsIgnoreCaseAscii( aTestName, 0, aTestName.Len() ) )
         return false;
     sal_Int32 nTab = rName.Copy( aTestName.Len() ).ToInt32();
-    if( (nTab < 1) || (nTab > MAXTAB + 1) )
+    if( (nTab < 1) || (nTab > static_cast< sal_Int32 >( MAXTAB + 1 )) )
         return false;
     if( String::CreateFromInt32( nTab ).Len() != (rName.Len() - aTestName.Len()) )
         return false;
-    rnSheet = static_cast< sal_uInt16 >( nTab );
+    rnXclTab = static_cast< sal_uInt16 >( nTab );
     return true;
 }
 
@@ -529,7 +544,6 @@ bool XclTools::IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInI
     }
     return false;
 }
-
 
 // built-in style names -------------------------------------------------------
 
@@ -576,7 +590,7 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
 
     // try the other built-in styles
     xub_StrLen nPrefixLen = maStyleNamePrefix.Len();
-    sal_uInt8 nFoundId;
+    sal_uInt8 nFoundId = 0;
     xub_StrLen nNextChar = 0;
     if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix, 0, nPrefixLen ) )
     {
@@ -637,31 +651,6 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
     return false;
 }
 
-sal_uInt16 XclTools::GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel )
-{
-    switch( nStyleId )
-    {
-        case EXC_STYLE_NORMAL:      return EXC_XF_DEFAULTSTYLE;
-        case EXC_STYLE_ROWLEVEL:
-            DBG_ASSERT( nLevel < EXC_STYLE_LEVELCOUNT, "XclTools::GetBuiltInXFIndex - invalid level" );
-            return 1 + 2 * nLevel;
-        case EXC_STYLE_COLLEVEL:
-            DBG_ASSERT( nLevel < EXC_STYLE_LEVELCOUNT, "XclTools::GetBuiltInXFIndex - invalid level" );
-            return 2 + 2 * nLevel;
-        case EXC_STYLE_COMMA:               return 16;
-        case EXC_STYLE_COMMA_0:             return 17;
-        case EXC_STYLE_CURRENCY:            return 18;
-        case EXC_STYLE_CURRENCY_0:          return 19;
-        case EXC_STYLE_PERCENT:             return 20;
-        case EXC_STYLE_HYPERLINK:           return 21;
-        case EXC_STYLE_FOLLOWED_HYPERLINK:  return 22;
-        default:
-            DBG_ERRORFILE( "XclTools::GetBuiltInXFIndex - unknown style id" );
-    }
-    return EXC_XF_DEFAULTSTYLE;
-}
-
-
 // conditional formatting style names -----------------------------------------
 
 const String XclTools::maCFStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
@@ -694,17 +683,14 @@ XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges )
     for( ; nCount; --nCount )
     {
         rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        rRanges.Append( ScRange( static_cast<SCCOL>(nCol1),
-                    static_cast<SCROW>(nRow1), nScTab,
-                    static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2),
-                    nScTab ) );
+        rRanges.Append( XclTools::MakeScRange( nCol1, nRow1, nScTab, nCol2, nRow2, nScTab ) );
     }
     return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
 {
-    sal_uInt16 nCount = ::ulimit< sal_uInt16 >( rRanges.Count() );
+    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( rRanges.Count() );
     rStrm << nCount;
     rStrm.SetSliceSize( 8 );
 
@@ -723,7 +709,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
     }
     return rStrm;
 }
-
 
 // ============================================================================
 
