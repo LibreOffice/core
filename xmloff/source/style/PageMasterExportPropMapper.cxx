@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,5 +398,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         lcl_RemoveStateIfZero16( pPMScaleTo );
     if( pPMScaleToPages )
         lcl_RemoveStateIfZero16( pPMScaleToPages );
+
+    SvXMLExportPropertyMapper::ContextFilter(rPropState,rPropSet);
 }
 
