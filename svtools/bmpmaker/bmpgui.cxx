@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:45:08 $
+ *  last change: $Author: hr $ $Date: 2002-02-25 13:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include <cstdio>
-#include <csignal>
+#include <stdio.h>
+#include <signal.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -386,7 +386,7 @@ void BmpApp::Main( )
     }
 
     if( EXIT_NOERROR != cExitCode )
-        std::raise( SIGABRT );
+        raise( SIGABRT );
 
     return;
 }

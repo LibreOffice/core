@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:45:08 $
+ *  last change: $Author: hr $ $Date: 2002-02-25 13:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-#include <cstdio>
-#include <csignal>
+#include <stdio.h>
+#include <signal.h>
 #include <vector>
+using namespace std;
+
 #include <vcl/svapp.hxx>
 
 #include "solar.hrc"
@@ -151,7 +153,7 @@ void BmpApp::Message( const String& rText, BYTE cExitCode )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    std::fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
@@ -208,7 +210,7 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
     }
 
     if ( EXIT_NOERROR != cExitCode )
-        std::raise( SIGABRT );
+        raise( SIGABRT );
 
     return cExitCode;
 }
