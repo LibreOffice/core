@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:50 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 11:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,8 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
 
     if ( !pSalData->mbObjClassInit )
     {
-        if ( aSalShlData.mbWNT )
+        // #95301# shockwave plugin has bug; expects ASCII functions to be used
+        if ( false )//aSalShlData.mbWNT )
         {
             WNDCLASSEXW aWndClassEx;
             aWndClassEx.cbSize          = sizeof( aWndClassEx );
@@ -579,7 +580,8 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
         SalObject* pObject = new SalObject;
         HWND        hWnd;
         HWND        hWndChild = 0;
-        if ( aSalShlData.mbWNT )
+        // #95301# shockwave plugin has bug; expects ASCII functions to be used
+        if ( false )//aSalShlData.mbWNT )
         {
             hWnd = CreateWindowExW( 0, SAL_OBJECT_CLASSNAMEW, L"",
                                     WS_CHILD, 0, 0, 0, 0,
