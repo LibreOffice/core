@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_title.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,24 @@ class HF_TitleTable : public HtmlMaker
 class HF_SubTitleTable : public HtmlMaker
 {
   public:
-    /// @param i_nColumns [1 .. n]
+    enum E_SubLevel
+    {
+        sublevel_1,     /// Big title.
+        sublevel_2,     /// Small title.
+        sublevel_3      /// No title.
+    };
+
+    /** @param i_nColumns [1 .. n]
+        @param i_nSubTitleLevel [1 .. 2]
+        1 is a bit bigger than 2.
+    */
+
                         HF_SubTitleTable(
                             Xml::Element &      o_rOut,
                             const String &      i_label,
                             const String &      i_title,
-                            int                 i_nColumns );
+                            int                 i_nColumns,
+                            E_SubLevel          i_eSubTitleLevel = sublevel_1 );
     virtual             ~HF_SubTitleTable();
 
     /// @return an Html::TableRow reference.

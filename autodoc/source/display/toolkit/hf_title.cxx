@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_title.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,28 +111,38 @@ HF_TitleTable::Add_Row()
 }
 
 
-
+inline const char *
+get_SubTitleCssClass(HF_SubTitleTable::E_SubLevel i_eSubTitleLevel)
+{
+    return i_eSubTitleLevel == HF_SubTitleTable::sublevel_1
+            ?   "subtitle"
+            :   "crosstitle";
+}
 
 
 HF_SubTitleTable::HF_SubTitleTable( Xml::Element &      o_rOut,
                                     const String &      i_label,
                                     const String &      i_title,
-                                    int                 i_nColumns )
+                                    int                 i_nColumns,
+                                    E_SubLevel          i_eSubTitleLevel )
     :   HtmlMaker( o_rOut
                     << new Html::Label(i_label)
                     >> *new Html::Table( C_sSubTitleBorder,
                                          C_sSubTitleWidth,
                                          C_sSubTitlePadding,
                                          C_sSubTitleSpacing )
-                        << new Html::ClassAttr("subtitle") )
+                        << new Html::ClassAttr(get_SubTitleCssClass(i_eSubTitleLevel)) )
 {
     csv_assert(i_nColumns > 0);
+
+    if (i_eSubTitleLevel == sublevel_3)
+        return;
 
     Xml::Element &
         rCell = CurOut()
                     >> *new Html::TableRow
                         >> *new Html::TableCell
-                        << new Html::ClassAttr("subtitle") ;
+                        << new Html::ClassAttr(get_SubTitleCssClass(i_eSubTitleLevel)) ;
 
     if (i_nColumns > 1)
     {
