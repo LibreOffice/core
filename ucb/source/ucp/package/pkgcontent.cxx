@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,24 +169,60 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
 {
     PackageUri aURI( Identifier->getContentIdentifier() );
     ContentProperties aProps;
-    if ( !loadData( rxSMgr, aURI, aProps ) )
-        return 0;
+    Reference< XHierarchicalNameAccess > xPackage;
 
-    Reference< XContentIdentifier > xId = Identifier;
-    OUString aURL = xId->getContentIdentifier();
-    sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
-    if ( ( nLastSlash + 1 ) == aURL.getLength() )
+    if ( loadData( rxSMgr, aURI, aProps, xPackage ) )
     {
-        // Client explicitely requested a folder!
-        if ( !aProps.bIsFolder )
-            return 0;
+        // resource exists
 
-        // Note: Internally ids have no trailing slash.
-        aURL = aURL.copy( 0, nLastSlash );
-        xId = new ::ucb::ContentIdentifier( rxSMgr, aURL );
+        Reference< XContentIdentifier > xId = Identifier;
+        OUString aURL = xId->getContentIdentifier();
+        sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
+        if ( ( nLastSlash + 1 ) == aURL.getLength() )
+        {
+            // Client explicitely requested a folder!
+            if ( !aProps.bIsFolder )
+                return 0;
+
+            // Note: Internally ids have no trailing slash.
+            aURL = aURL.copy( 0, nLastSlash );
+            xId = new ::ucb::ContentIdentifier( rxSMgr, aURL );
+        }
+
+        return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aProps );
     }
+    else
+    {
+        // resource doesn't exist
 
-    return new Content( rxSMgr, pProvider, xId, aURI, aProps );
+        sal_Bool bFolder = sal_False;
+
+        Reference< XContentIdentifier > xId = Identifier;
+        OUString aURL = xId->getContentIdentifier();
+        sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
+        if ( ( nLastSlash + 1 ) == aURL.getLength() )
+        {
+            bFolder = sal_True;
+
+            // Note: Internally ids have no trailing slash.
+            aURL = aURL.copy( 0, nLastSlash );
+            xId = new ::ucb::ContentIdentifier( rxSMgr, aURL );
+        }
+
+        // Guess type according to URI.
+        ContentInfo aInfo;
+        if ( bFolder )
+            aInfo.Type = OUString::createFromAscii(
+                            PACKAGE_FOLDER_CONTENT_TYPE );
+        else if ( aURI.getPath().compareToAscii( "/" ) == 0 )
+            aInfo.Type = OUString::createFromAscii(
+                            PACKAGE_FOLDER_CONTENT_TYPE ); // root folder
+        else
+            aInfo.Type = OUString::createFromAscii(
+                            PACKAGE_STREAM_CONTENT_TYPE );
+
+        return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aInfo );
+    }
 }
 
 //=========================================================================
@@ -211,16 +247,19 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
         return 0;
 #endif
 
-    return new Content( rxSMgr, pProvider, Identifier, aURI, Info );
+    Reference< XHierarchicalNameAccess > xPackage;
+    return new Content( rxSMgr, pProvider, Identifier, xPackage, aURI, Info );
 }
 
 //=========================================================================
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
                   ::ucb::ContentProviderImplHelper* pProvider,
                   const Reference< XContentIdentifier >& Identifier,
+                  const Reference< XHierarchicalNameAccess >& Package,
                   const PackageUri& rUri,
                   const ContentProperties& rProps )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
+  m_xPackage( Package ),
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT )
@@ -231,9 +270,11 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
                   ::ucb::ContentProviderImplHelper* pProvider,
                   const Reference< XContentIdentifier >& Identifier,
+                  const Reference< XHierarchicalNameAccess >& Package,
                   const PackageUri& rUri,
                   const ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  m_xPackage( Package ),
   m_aUri( rUri ),
   m_eState( TRANSIENT )
 {
@@ -249,9 +290,9 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
     }
     else
     {
-        VOS_ENSURE(
-            Info.Type.compareToAscii( PACKAGE_STREAM_CONTENT_TYPE ) == 0,
-            "Content::Content - Wrong content info!" );
+//      VOS_ENSURE(
+//          Info.Type.compareToAscii( PACKAGE_STREAM_CONTENT_TYPE ) == 0,
+//          "Content::Content - Wrong content info!" );
 
         // New stream...
         m_aProps.aContentType = Info.Type;
@@ -685,7 +726,8 @@ Reference< XRow > Content::getPropertyValues(
                 const OUString& rContentId )
 {
     ContentProperties aData;
-    if ( loadData( rSMgr, PackageUri( rContentId ), aData ) )
+    Reference< XHierarchicalNameAccess > xPackage;
+    if ( loadData( rSMgr, PackageUri( rContentId ), aData, xPackage ) )
     {
         return getPropertyValues( rSMgr,
                                   rProperties,
@@ -1626,6 +1668,17 @@ void Content::queryChildren( ContentRefList& rChildren )
 }
 
 //=========================================================================
+Reference< XHierarchicalNameAccess > Content::getPackage()
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    if ( !m_xPackage.is() )
+        m_xPackage = getPackage( m_xSMgr, m_aUri );
+
+    return m_xPackage;
+}
+
+//=========================================================================
 // static
 Reference< XHierarchicalNameAccess > Content::getPackage(
                              const Reference< XMultiServiceFactory > & rxSMgr,
@@ -1688,15 +1741,16 @@ sal_Bool Content::hasData( const Reference< XMultiServiceFactory >& rxSMgr,
 //static
 sal_Bool Content::loadData( const Reference< XMultiServiceFactory >& rxSMgr,
                             const PackageUri& rURI,
-                            ContentProperties& rProps )
+                            ContentProperties& rProps,
+                            Reference< XHierarchicalNameAccess > & rxPackage )
 {
-    Reference< XHierarchicalNameAccess > xNA = getPackage( rxSMgr, rURI );
-    if ( !xNA.is() )
+    rxPackage = getPackage( rxSMgr, rURI );
+    if ( !rxPackage.is() )
         return sal_False;
 
     try
     {
-        Any aEntry = xNA->getByHierarchicalName( rURI.getPath() );
+        Any aEntry = rxPackage->getByHierarchicalName( rURI.getPath() );
         if ( aEntry.hasValue() )
         {
             Reference< XPropertySet > xPropSet;
@@ -1835,7 +1889,7 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
 //=========================================================================
 sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 {
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return sal_False;
 
@@ -1985,7 +2039,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 //=========================================================================
 sal_Bool Content::removeData()
 {
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return sal_False;
 
@@ -2026,7 +2080,7 @@ sal_Bool Content::flushData()
     // Note: XChangesBatch is only implemented by the package itself, not
     //       by the single entries. Maybe this has to change...
 
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return sal_False;
 
@@ -2041,6 +2095,7 @@ sal_Bool Content::flushData()
     try
     {
         xBatch->commitChanges();
+        return sal_True;
     }
     catch ( WrappedTargetException & )
     {
@@ -2054,7 +2109,7 @@ sal_Bool Content::flushData()
 Reference< XInputStream > Content::getInputStream()
 {
     Reference< XInputStream > xStream;
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return xStream;
 
@@ -2089,7 +2144,7 @@ Reference< XInputStream > Content::getInputStream()
 Reference< XEnumeration > Content::getIterator()
 {
     Reference< XEnumeration > xIter;
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return xIter;
 

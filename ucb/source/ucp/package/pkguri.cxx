@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,11 @@ void PackageUri::init() const
 //              m_aPath = m_aUri.copy( nEnd );
                 m_aPath = m_aUri.copy( nEnd + 1 );
 
-                sal_Int32 nLastSlash = m_aPath.lastIndexOf( '/' );
+                sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
                 {
                     m_aParentUri = m_aUri.copy( 0, nLastSlash );
-                    m_aName      = m_aPath.copy( nLastSlash + 1 );
+                    m_aName      = m_aUri.copy( nLastSlash + 1 );
                 }
             }
 

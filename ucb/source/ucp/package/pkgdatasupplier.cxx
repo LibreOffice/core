@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ struct DataSupplier_Impl
                        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
       m_xFolderEnum( rContent->getIterator() ),
-      m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
+      m_nOpenMode( nOpenMode ), m_bCountFinal( !m_xFolderEnum.is() ) {}
     ~DataSupplier_Impl();
 };
 

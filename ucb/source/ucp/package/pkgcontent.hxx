@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace package_ucp
 #define PACKAGE_FOLDER_CONTENT_SERVICE_NAME \
                             "com.sun.star.ucb.PackageFolderContent"
 #define PACKAGE_STREAM_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.PacakeStreamContent"
+                            "com.sun.star.ucb.PackageStreamContent"
 
 //=========================================================================
 
@@ -145,6 +145,8 @@ class Content : public ::ucb::ContentImplHelper,
     PackageUri        m_aUri;
     ContentProperties m_aProps;
     ContentState      m_eState;
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess > m_xPackage;
 
 private:
     Content( const com::sun::star::uno::Reference<
@@ -152,6 +154,8 @@ private:
              ::ucb::ContentProviderImplHelper* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
+             const com::sun::star::uno::Reference<
+                com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const ContentProperties& rProps );
     Content( const com::sun::star::uno::Reference<
@@ -159,6 +163,8 @@ private:
              ::ucb::ContentProviderImplHelper* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
+             const com::sun::star::uno::Reference<
+                com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const com::sun::star::ucb::ContentInfo& Info );
 
@@ -183,6 +189,9 @@ private:
             const ::com::sun::star::uno::Sequence<
                      ::com::sun::star::beans::PropertyValue >& rValues );
 
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::container::XHierarchicalNameAccess >
+    getPackage();
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
     getPackage( const ::com::sun::star::uno::Reference<
@@ -192,7 +201,9 @@ private:
     loadData( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
               const PackageUri& rURI,
-              ContentProperties& rProps );
+              ContentProperties& rProps,
+              com::sun::star::uno::Reference<
+                com::sun::star::container::XHierarchicalNameAccess >& Package );
     static sal_Bool
     hasData( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
