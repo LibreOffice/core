@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2004-11-09 13:57:41 $
+#   last change: $Author: rt $ $Date: 2004-11-26 13:10:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,8 +68,9 @@ TARGET=so_hsqldb
 .INCLUDE :	settings.mk
 .INCLUDE :  version.mk
 
-.IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
+
+.IF "$(SOLAR_JAVA)" != ""
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
 PATCH_FILE_NAME=hsqldb_$(HSQLDB_VERSION).patch
@@ -97,12 +98,14 @@ ANT_BUILDFILE=build$/build.xml
 
 BUILD_ACTION=$(ANT) -f $(ANT_BUILDFILE) jar				
 
-.ENDIF
+.ENDIF # $(SOLAR_JAVA)!= ""
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-.INCLUDE : tg_ext.mk
 
+.IF "$(SOLAR_JAVA)" != ""
+.INCLUDE : tg_ext.mk
+.ENDIF
 
