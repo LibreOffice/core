@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:55:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,21 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
+#endif
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -96,21 +107,25 @@ namespace dbaui
                     m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                     m_xDocumentContainer;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
+                    m_xConnection;
         String      m_sCurrentlyEditing;
 
     public:
         OLinkedDocumentsAccess(
-            Window* _pDialogParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer);
+            Window* _pDialogParent
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+            );
 
-        sal_Bool        open(const ::rtl::OUString& _rLinkName, sal_Bool _bReadOnly = sal_True);
-        sal_Bool        edit(const ::rtl::OUString& _rLinkName, ::rtl::OUString& _rNewName, ::rtl::OUString& _rNewLocation);
-        void            drop(const ::rtl::OUString& _rLinkName);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       open(const ::rtl::OUString& _rLinkName
+                                                                                    ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
+                                                                                    , sal_Bool _bReadOnly = sal_True);
 
-        sal_Bool        addLinkUI();
-        sal_Bool        newForm(sal_Int32 _nNewFormId);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newForm(sal_Int32 _nNewFormId
+                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition);
+
         sal_Bool        newFormWithPilot(
                             const String& _rDataSourceName,
                             const sal_Int32 _nCommandType,
@@ -129,9 +144,6 @@ namespace dbaui
                             const String& _rObjectName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         );
-
-        ::rtl::OUString getLocation(const ::rtl::OUString& _rLinkName);
-
     protected:
         enum RESULT
         {
@@ -139,13 +151,10 @@ namespace dbaui
             SUCCESS,
             CANCEL
         };
-        RESULT  implOpen(const ::rtl::OUString& _rLinkName, sal_Bool _bReadOnly = sal_True);
-        RESULT  implEdit(const ::rtl::OUString& _rLinkName, ::rtl::OUString& _rNewName, ::rtl::OUString& _rNewLocation);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   implOpen(const ::rtl::OUString& _rLinkName
+                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
+                                , sal_Bool _bReadOnly = sal_True);
         void    implDrop(const ::rtl::OUString& _rLinkName);
-
-        sal_Bool implFileExists( const ::rtl::OUString& _rURL );
-
-        DECL_LINK( OnValidateLinkName, String* );
     };
 
 //......................................................................
