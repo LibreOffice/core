@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:50:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@
 #include <comphelper/extract.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
+
+extern sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
 
 // --------------------------------------------------------------
 using namespace ::com::sun::star::beans;
@@ -368,8 +370,15 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         SfxStringItem* pFilterName = NULL;
         if ( pFilter && bHasFilter )
             pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() );
+
+        SfxStringItem* pPassItem = NULL;
+        String aPasswd;
+        if ( GetPasswd_Impl( xDocShell->GetMedium()->GetItemSet(), aPasswd ) )
+            pPassItem = new SfxStringItem( SID_PASSWORD, aPasswd );
+
         const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
-                                                                        pFilterName, 0L );
+                                                                        pFilterName ? pFilterName : pPassItem,
+                                                                        pFilterName ? pPassItem : 0L, 0L );
         BOOL bRet = pRet ? pRet->GetValue() : FALSE;
 
         delete pFilterName;
