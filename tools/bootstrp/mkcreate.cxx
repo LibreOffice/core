@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-15 16:14:16 $
+ *  last change: $Author: mh $ $Date: 2001-03-16 09:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ char *NoBuildProject[] = {
 char *LimitedPath[] = {
     "jurt\\com\\sun\\star",
     "r_tools",
+    "ridljar",
     "setup2",
     "connectivity",
     "EndOf_LimitedPath"
@@ -799,9 +800,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.5 $\n"
+        "#   $Revision: 1.6 $\n"
         "#\n"
-        "#   last change: $Author: nf $ $Date: 2001-03-15 16:14:16 $\n"
+        "#   last change: $Author: mh $ $Date: 2001-03-16 09:43:22 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
