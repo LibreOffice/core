@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RenderDescriptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 15:02:17 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,32 +78,15 @@ service RenderDescriptor
     //-------------------------------------------------------------------------
 
     /** specifies the page size for all pages to be rendered. The unit of this page
-    size is given by the PageSizeMeasureUnit property.
+    size is 1/100th mm.
      */
     [property] com::sun::star::awt::Size PageSize;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the measure unit of the page size. This measure unit is also
-    taken as measure unit for all output of the renderer. It is the 'internal'
-    measure unit of the renderer.
-
-    @see com::sun::star::util::MeasureUnit
+    /** specifies if this page has currently a selected state.
      */
-    [property] short PageSizeMeasureUnit;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the number of pages that can be rendered
-     */
-    [property] long PageCount;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the range of pages that are currently selected and that
-    should be rendered if rendering of a page selection is chosen
-     */
-    [property] string PageSelectionRange;
+    [property] boolean Selected;
 };
 
 //=============================================================================
@@ -113,6 +96,9 @@ service RenderDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/08/19 15:02:17  ka
+    #101571#: added PageSelectionRange
+
     Revision 1.1  2002/08/13 11:16:01  ka
     #101570#: added XRenderable
 
