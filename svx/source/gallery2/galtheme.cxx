@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-18 14:28:32 $
+ *  last change: $Author: ka $ $Date: 2001-12-18 15:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,12 +1179,12 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
 
 BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG nInsertPos )
 {
+    INetURLObject                   aURL;
     ::std::vector< INetURLObject >  aURLVector;
     BOOL                            bRet = FALSE;
 
     try
     {
-        INetURLObject   aURL;
         Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
         sal_Bool        bFolder;
 
@@ -1253,11 +1253,11 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
         {
             String aFile;
 
-            if( aDataHelper.GetString( FORMAT_FILE, aFile ) )
+            if( aDataHelper.GetString( FORMAT_FILE, aFile ) && aFile.Len() )
             {
                 INetURLObject aURL( aFile );
 
-                if( aFile.Len() && ( aURL.GetProtocol() == INET_PROT_NOT_VALID ) )
+                if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
                 {
                     String aLocalURL;
 
