@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2000-12-06 08:57:45 $
+ *  last change: $Author: hro $ $Date: 2001-03-20 16:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
                               const sal_Char* pszDefault)
 {
     sal_uInt32    NoEntry;
-    sal_Char* pStr = 0;
+    const sal_Char* pStr = 0;
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
 
