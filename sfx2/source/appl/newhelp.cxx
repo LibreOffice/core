@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 13:08:18 $
+ *  last change: $Author: pb $ $Date: 2001-10-15 07:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ namespace {
     it =                                                                                        \
     aInfo.insert( KeywordInfo::value_type( aToken, 0 ) ).first;                                 \
     if ( ( tmp = it->second++ ) != 0 )                                                          \
-       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append,tmp ) );                     \
+       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                    \
     else                                                                                        \
        nPos = aIndexCB.InsertEntry( aToken )
 
@@ -605,10 +605,10 @@ namespace {
     if ( aAnchorList[j].getLength() > 0 )                                                       \
     {                                                                                           \
         aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );        \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(),insert ) );          \
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );         \
     }                                                                                           \
     else                                                                                        \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j],insert ) )
+        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) )
 
 // -----------------------------------------------------------------------
 
@@ -659,7 +659,7 @@ void IndexTabPage_Impl::InitializeIndex()
                 sal_Bool insert;
                 USHORT nPos;
                 int ndx,tmp;
-                ::rtl::OUString aIndex,aToken,aTempString;
+                ::rtl::OUString aIndex, aTempString;
                 ::rtl::OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
                 KeywordInfo::iterator it;
 
@@ -678,31 +678,27 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     if ( insert )
                     {
-                        aToken = aKeywordPair.copy( 0,ndx );
-                        if ( aIndex != aToken )
+                        aTempString = aKeywordPair.copy( 0, ndx );
+                        if ( aIndex != aTempString )
                         {
-                            aIndex = aToken;
-                            UNIFY_AND_INSERT_TOKEN( aToken );
+                            aIndex = aTempString;
+                            UNIFY_AND_INSERT_TOKEN( aTempString );
                         }
-
-                        aToken = aKeywordPair.trim();
                     }
                     else
-                    {
                         aIndex = ::rtl::OUString();
-                        aToken = aKeywordPair;
-                    }
 
-                    UNIFY_AND_INSERT_TOKEN( aToken );
+                    // Assume the token is trimed
+                    UNIFY_AND_INSERT_TOKEN( aKeywordPair );
                     INSERT_DATA( 0 );
 
                     for ( int j = 1; j < aRefList.getLength(); ++j )
                     {
-                        aData = aToken;
                         aData
-                            .append(sal_Unicode(' '))
-                            .append(sal_Unicode('-'))
-                            .append(sal_Unicode(' '))
+                            .append( aKeywordPair )
+                            .append( sal_Unicode(' ') )
+                            .append( sal_Unicode('-') )
+                            .append( sal_Unicode(' ') )
                             .append( aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();
