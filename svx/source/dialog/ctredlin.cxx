@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 13:53:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,9 @@ SvxTPView::SvxTPView( Window * pParent)
     aStrMyName  ( ResId( STR_VIEW) )
 {
     FreeResource();
+
+    aViewData.SetHelpId(HID_REDLINING_VIEW_DG_VIEW_TABLE);
+    aViewData.SetHeaderBarHelpId(HID_REDLINING_VIEW_DG_VIEW_HEADER);
 
     aMinSize=GetSizePixel();
 
