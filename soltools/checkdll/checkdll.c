@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-28 11:15:18 $
+ *  last change: $Author: mhu $ $Date: 2003-04-16 10:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,24 +157,26 @@ int main(int argc, char *argv[])
 
 #else /* MACOSX */
 
-    if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
-        if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
+    if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL )
+    {
+        if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL )
+        {
             printf(": ok\n");
-#ifdef NO_UNLOAD_CHECK
-            _exit(0);
-#else
-            dlclose(phandle);
-#endif
-            return 0;
         }
-    }
-    printf(": ERROR: %s\n", dlerror());
-    if (phandle)
+        else
+        {
+            printf(": WARNING: %s\n", dlerror());
+        }
+
 #ifdef NO_UNLOAD_CHECK
-        _exit(3);
+        _exit(0);
 #else
         dlclose(phandle);
 #endif
+        return 0;
+    }
+
+    printf(": ERROR: %s\n", dlerror());
     return 3;
 
 #endif /* MACOSX */
