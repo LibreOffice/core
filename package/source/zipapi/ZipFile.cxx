@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,10 +184,9 @@ Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry
         const vos::ORef < EncryptionData > &rData)
     throw(io::IOException, ZipException, RuntimeException)
 {
-    sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
     if (rEntry.nOffset <= 0)
         readLOC(rEntry);
-    Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, rEntry, rData, rEntry.nMethod == DEFLATED );
+    Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, rEntry, rData, sal_False );
     return xStreamRef;
 }
 
@@ -195,11 +194,9 @@ Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData)
     throw(io::IOException, ZipException, RuntimeException)
 {
-    sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
     if (rEntry.nOffset <= 0)
         readLOC(rEntry);
-    Reference< io::XInputStream > xStreamRef =
-        new EntryInputStream(xStream, rEntry, rData, sal_False );
+    Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, rEntry, rData, sal_True );
     return xStreamRef;
 }
 
