@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsave.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,26 +66,30 @@
 #include <tools/solar.h>
 #endif
 
+#include <vector>
+
 class ScRange;
 
 class ScPrintSaverTab
 {
-    USHORT      nPrintCount;
-    ScRange*    pPrintRanges;   // Array
-    ScRange*    pRepeatCol;     // einzeln
-    ScRange*    pRepeatRow;     // einzeln
+    typedef ::std::vector< ScRange > ScRangeVec;
+
+    ScRangeVec  maPrintRanges;      // Array
+    ScRange*    mpRepeatCol;        // einzeln
+    ScRange*    mpRepeatRow;        // einzeln
+    BOOL        mbEntireSheet;
 
 public:
             ScPrintSaverTab();
             ~ScPrintSaverTab();
 
-    void    SetAreas( USHORT nCount, const ScRange* pRanges );
-    void    SetRepeat( const ScRange* pCol, const ScRange* pRow );
+    void            SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet );
+    void            SetRepeat( const ScRange* pCol, const ScRange* pRow );
 
-    USHORT          GetPrintCount() const   { return nPrintCount; }
-    const ScRange*  GetPrintRanges() const  { return pPrintRanges; }
-    const ScRange*  GetRepeatCol() const    { return pRepeatCol; }
-    const ScRange*  GetRepeatRow() const    { return pRepeatRow; }
+    const ScRangeVec&   GetPrintRanges() const  { return maPrintRanges; }
+    BOOL                IsEntireSheet() const   { return mbEntireSheet; }
+    const ScRange*      GetRepeatCol() const    { return mpRepeatCol; }
+    const ScRange*      GetRepeatRow() const    { return mpRepeatRow; }
 
     BOOL    operator==( const ScPrintSaverTab& rCmp ) const;
 };
