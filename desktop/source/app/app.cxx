@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mh $ $Date: 2002-01-11 12:20:36 $
+ *  last change: $Author: mba $ $Date: 2002-01-17 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,84 +1241,15 @@ void Desktop::Main()
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 
-    // ----  Startup screen ----
-    OpenStartupScreen();
-
-#ifndef BUILD_SOSL
-    // get the tabreg service to determine the product extension string for an evaluation version
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
-    if ( xHolder.is() )
-    {
-        // get a sequence of strings for the defined locales
-        // a registered version doesn't provide data
-        Any aData = xHolder->getMaterial();
-        Sequence < NamedValue > aSeq;
-        if ( aData >>= aSeq )
-        {
-            // determine current locale
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            ::rtl::OUString aTmp;
-            aRet >>= aTmp;
-
-            // only first part of locale must match
-            ::rtl::OUString aLocale;
-            sal_Int32 nPos = aTmp.indexOf('_');
-            if ( nPos > 0 )
-                aLocale = aTmp.copy( 0, nPos );
-            else
-                aLocale = aTmp;
-
-            // find string for matching locale
-            sal_Int32 nCount = aSeq.getLength();
-            for ( sal_Int32 n=0; n<nCount; n++ )
-            {
-                const NamedValue& rValue = aSeq[n];
-                if ( rValue.Name == aLocale )
-                {
-                    rValue.Value >>= aTmp;
-                    aExtension = aTmp;
-                    break;
-                }
-            }
-
-            if ( n == nCount )
-                // current locale is unknown for service, use default
-                aExtension = DEFINE_CONST_UNICODE("Evaluation Version");
-        }
-    }
-    else
-    {
-        // library missing
-        aExtension = DEFINE_CONST_UNICODE("Evaluation Version");
-        //StartSetup( DEFINE_CONST_UNICODE("-repair") );
-        //_exit(666);
-    }
-
-#endif
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
-#ifdef TIMEBOMB
-/*
-    Date aDate;
-    Date aFinalDate( 31, 03, 2010 );
-    if ( aFinalDate < aDate )
-    {
-        String aMsg;
-        aMsg += DEFINE_CONST_UNICODE("This Beta Version has expired!\n");
-        InfoBox aBox( NULL, aMsg );
-        aBox.Execute();
-        return;
-    }
-*/
-#endif
-
-    sal_Bool bTerminate = pCmdLineArgs->IsTerminateAfterInit();
+    // ----  Startup screen ----
+    OpenStartupScreen();
 
     //  Read the common configuration items for optimization purpose
     //  do not do it if terminate flag was specified, to avoid exception
+    sal_Bool bTerminate = pCmdLineArgs->IsTerminateAfterInit();
     if( !bTerminate )
     {
         try
@@ -1363,6 +1294,116 @@ void Desktop::Main()
             HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
         }
     }
+
+    LanguageType aLanguageType;
+    String aMgrName = String::CreateFromAscii( "iso" );
+    aMgrName += String::CreateFromInt32(SOLARUPD); // current build version
+    ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+    String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
+    delete pLabelResMgr;
+
+#ifndef BUILD_SOSL
+    // get the tabreg service for an evaluation version
+    // without this service office shouldn't run at all
+    String aEval;
+    sal_Bool bExpired = sal_True;
+    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
+    if ( xHolder.is() )
+    {
+        // get a sequence of strings for the defined locales
+        // a registered version doesn't provide data
+        bExpired = sal_False;
+        Any aData = xHolder->getMaterial();
+        Sequence < NamedValue > aSeq;
+        if ( aData >>= aSeq )
+        {
+            // this is an evaluation version, because it provides "material"
+            bExpired = sal_True;
+
+            // determine current locale
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+            ::rtl::OUString aTmp;
+            aRet >>= aTmp;
+
+            // only first part of locale must match
+            ::rtl::OUString aLocale;
+            sal_Int32 nPos = aTmp.indexOf('_');
+            if ( nPos > 0 )
+                aLocale = aTmp.copy( 0, nPos );
+            else
+                aLocale = aTmp;
+
+            sal_Int32 nCount = aSeq.getLength();
+            if ( nCount )
+            {
+                // first entry is for expiry
+                const NamedValue& rValue = aSeq[0];
+                if ( rValue.Name.equalsAscii("expired") )
+                    rValue.Value >>= bExpired;
+            }
+
+            // find string for matching locale
+            for ( sal_Int32 n=0; n<nCount; n++ )
+            {
+                const NamedValue& rValue = aSeq[n];
+                if ( rValue.Name == aLocale )
+                {
+                    rValue.Value >>= aTmp;
+                    aEval = aTmp;
+                    break;
+                }
+            }
+
+            if ( n == nCount )
+            {
+                // current locale is unknown for service, use default english
+                sal_Int32 nCount = aSeq.getLength();
+                for ( n=0; n<nCount; n++ )
+                {
+                    const NamedValue& rValue = aSeq[n];
+                    if ( rValue.Name.equalsAscii("en") )
+                    {
+                        rValue.Value >>= aTmp;
+                        aEval = aTmp;
+                        break;
+                    }
+                }
+
+                if ( n == nCount )
+                    // strange version, no english string
+                    bExpired = sal_True;
+            }
+        }
+    }
+
+    if ( bExpired )
+    {
+        String aMsg;
+        aMsg += DEFINE_CONST_UNICODE("This Version has expired!\n");
+        InfoBox aBox( NULL, aMsg );
+        aBox.Execute();
+        return;
+    }
+
+    if ( aEval.Len() )
+    {
+        if ( aTitle.GetChar(aTitle.Len()-1) != ' ' )
+            aTitle += ' ';
+        aTitle += aEval;
+    }
+#endif
+
+#ifndef PRODUCT
+    ::rtl::OUString aDefault;
+    aTitle += DEFINE_CONST_UNICODE(" [");
+    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+    aTitle += aVerId;
+    aTitle += 0x005D ; // 5Dh ^= ']'
+#endif
+
+    SetDisplayName( aTitle );
 
     //  The only step that should be done if terminate flag was specified
     //  Typically called by the plugin only
