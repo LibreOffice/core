@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreHyuByu_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:50:39 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@ using namespace rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static Mapping HyuByu[] = {
-        { 0x30D5, 0x30E5, 0x30D2 },
-        { 0x3075, 0x3085, 0x3072 },
-        { 0x30F4, 0x30E5, 0x30D3 },
-        { 0x3094, 0x3085, 0x3073 },
-        { 0, 0, 0 }
+        { 0x30D5, 0x30E5, 0x30D2, sal_False },
+        { 0x3075, 0x3085, 0x3072, sal_False },
+        { 0x30F4, 0x30E5, 0x30D3, sal_False },
+        { 0x3094, 0x3085, 0x3073, sal_False },
+        { 0, 0, 0, sal_False }
 };
 
 ignoreHyuByu_ja_JP::ignoreHyuByu_ja_JP()

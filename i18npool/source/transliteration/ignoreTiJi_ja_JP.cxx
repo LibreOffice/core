@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreTiJi_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:52:37 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,19 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 static Mapping TiJi[] = {
         // TU + I --> TI
-        { 0x30C4, 0x30A3, 0x30C1 },
+        { 0x30C4, 0x30A3, 0x30C1, sal_True },
         // TE + I --> TI
-        { 0x30C6, 0x30A3, 0x30C1 },
+        { 0x30C6, 0x30A3, 0x30C1, sal_True },
         // TU + I --> TI
-        { 0x3064, 0x3043, 0x3061 },
+        { 0x3064, 0x3043, 0x3061, sal_True },
         // TE + I --> TI
-        { 0x3066, 0x3043, 0x3061 },
+        { 0x3066, 0x3043, 0x3061, sal_True },
         // DE + I --> ZI
-        { 0x30C7, 0x30A3, 0x30B8 },
+        { 0x30C7, 0x30A3, 0x30B8, sal_True },
         // DE + I --> ZI
-        { 0x3067, 0x3043, 0x3058 },
+        { 0x3067, 0x3043, 0x3058, sal_True },
 
-        { 0, 0, 0 }
+        { 0, 0, 0, sal_True }
 };
 
 ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreSeZe_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:51:57 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,15 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 static Mapping SeZe[] = {
         // SI + E --> SE
-        { 0x30B7, 0x30A7, 0x30BB },
+        { 0x30B7, 0x30A7, 0x30BB, sal_True },
         // SI + E --> SE
-        { 0x3057, 0x3047, 0x305B },
+        { 0x3057, 0x3047, 0x305B, sal_True },
         // ZI + E --> ZE
-        { 0x30B8, 0x30A7, 0x30BC },
+        { 0x30B8, 0x30A7, 0x30BC, sal_True },
         // ZI + E --> ZE
-        { 0x3058, 0x3047, 0x305C },
+        { 0x3058, 0x3047, 0x305C, sal_True },
 
-        { 0, 0, 0 }
+        { 0, 0, 0, sal_True }
 };
 
 ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()
