@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-28 07:48:30 $
+ *  last change: $Author: pb $ $Date: 2002-11-21 08:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2518,14 +2518,10 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
 {
     DBG_ASSERT( pEntry, "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry" );
 
-    // expandable if children exist
-    if ( GetChildCount( pEntry ) )
-    {
-        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
-        sal_Int16 nState = IsExpanded( pEntry ) ? (sal_Int16)AccessibleStateType::EXPANDED
-                                                : (sal_Int16)AccessibleStateType::COLLAPSED;
-        rStateSet.AddState( nState );
-    }
+    rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+    sal_Int16 nState = IsExpanded( pEntry ) ? (sal_Int16)AccessibleStateType::EXPANDED
+                                            : (sal_Int16)AccessibleStateType::COLLAPSED;
+    rStateSet.AddState( nState );
 
     if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
         rStateSet.AddState( AccessibleStateType::CHECKED );
