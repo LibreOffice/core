@@ -2,9 +2,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2003-04-06 17:13:09 $
+#   last change: $Author: jbu $ $Date: 2003-05-24 23:24:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -206,8 +206,6 @@ class Char:
 #
 #    value = property(_get_value)        
 
-
-
 class ByteSequence:
     def __init__(self, value):
         if isinstance(value, str):
@@ -245,6 +243,20 @@ class ByteSequence:
 
     def __hash__( self ):
         return self.value.hash()
+
+
+class Any:
+    "use only in connection with uno.invoke() to pass an explicit typed any"
+    def __init__(self, type, value ):
+        if isinstance( type, Type ):
+            self.type = type
+        else:
+            self.type = getTypeByName( type )
+        self.value = value
+
+def invoke( object, methodname, argTuple ):
+    "use this function to pass exactly typed anys to the callee (using uno.Any)"
+    return pyuno.invoke( object, methodname, argTuple )
     
 #---------------------------------------------------------------------------------------
 # don't use any functions beyond this point, private section, likely to change
