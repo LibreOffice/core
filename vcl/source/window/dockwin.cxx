@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-22 13:55:39 $
+ *  last change: $Author: pl $ $Date: 2002-03-25 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,14 @@ private:
     Point           maDockPos;
     Rectangle       maDockRect;
     BOOL            mbInMove;
+    ULONG           mnLastUserEvent;
 
     DECL_LINK( DockingHdl, ImplDockFloatWin* );
     DECL_LINK( DockTimerHdl, ImplDockFloatWin* );
 public:
     ImplDockFloatWin( Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
+    ~ImplDockFloatWin();
 
     virtual void    Move();
     virtual void    Resize();
@@ -136,7 +138,8 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( Time::GetSystemTicks() ),
-        mbInMove( FALSE )
+        mbInMove( FALSE ),
+        mnLastUserEvent( 0 )
 {
     // Daten vom DockingWindow uebernehmen
     if ( pDockingWin )
@@ -153,6 +156,14 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
 
     maDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
     maDockTimer.SetTimeout( 50 );
+}
+
+// -----------------------------------------------------------------------
+
+ImplDockFloatWin::~ImplDockFloatWin()
+{
+    if( mnLastUserEvent )
+        Application::RemoveUserEvent( mnLastUserEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -186,6 +197,7 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
 
 IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
 {
+    mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
         Time::GetSystemTicks() - mnLastTicks > 500
 #ifndef REMOTE_APPSERVER
@@ -235,7 +247,8 @@ void ImplDockFloatWin::Move()
      *  to see whether they are in the right condition shortly after the
      *  last Move message.
      */
-    Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ) );
+    if( ! mnLastUserEvent )
+        mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -901,7 +914,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                 mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
                 mpRealParent = pRealParent;
-                delete mpFloatWin;
+                delete static_cast<ImplDockFloatWin*>(mpFloatWin);
                 mpFloatWin = NULL;
                 SetPosPixel( maDockPos );
 
