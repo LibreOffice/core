@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:34:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "ç∂";
         Text[ korean ] = "øﬁ¬ ";
         Text[ chinese_simplified ] = "◊Û";
-        Text[ chinese_traditional ] = "•™";
+        Text[ chinese_traditional ] = "¶V•™";
         Text[ arabic ] = "Ì”«—";
         Text[ turkish ] = "Sol";
         Text[ catalan ] = "Izquierda";
@@ -236,7 +236,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "âE";
         Text[ korean ] = "ø¿∏•¬ ";
         Text[ chinese_simplified ] = "”“";
-        Text[ chinese_traditional ] = "•k";
+        Text[ chinese_traditional ] = "¶V•k";
         Text[ arabic ] = "Ì„Ì‰";
         Text[ turkish ] = "Sa";
         Text[ catalan ] = "Derecha";
@@ -359,8 +359,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese_brazilian ] = "Top";
         Text[ japanese ] = "è„";
         Text[ korean ] = "¿ß";
-        Text[ chinese_simplified ] = "…œ∑Ω";
-        Text[ chinese_traditional ] = "§W";
+        Text[ chinese_simplified ] = "œÚ…œ";
+        Text[ chinese_traditional ] = "¶V§W";
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "‹st";
         Text[ catalan ] = "Arriba";
@@ -443,8 +443,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese_brazilian ] = "Bottom";
         Text[ japanese ] = "â∫";
         Text[ korean ] = "æ∆∑°";
-        Text[ chinese_simplified ] = "œ¬∑Ω";
-        Text[ chinese_traditional ] = "§U";
+        Text[ chinese_simplified ] = "œÚœ¬";
+        Text[ chinese_traditional ] = "¶V§U";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Alt";
         Text[ catalan ] = "Abajo";
@@ -540,5 +540,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 };
 
 // ********************************************************************** EOF
+
 
 
