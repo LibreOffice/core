@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-21 13:51:25 $
+#   last change: $Author: kr $ $Date: 2001-07-24 12:20:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,11 +101,17 @@ APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
 ALLIDLFILES:=	helpertest.idl
 
+APP2OBJS = $(OBJ)$/testdefaultbootstrapping.obj
+APP2STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB)
+APP2TARGET = testdefaultbootstrapping
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
 ALL : 	$(BIN)$/cpputest.rdb	\
         unoheader 	\
+        $(BIN)$/testrc \
+        $(BIN)$/testdefaultbootstrapping.pl	\
         ALLTAR 
 
 .ELSE
@@ -128,7 +134,22 @@ $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
     touch $@
-    
+
 unoheader: $(BIN)$/cpputest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES);$(FACTORYTYPES)" $(BIN)$/cpputest.rdb
+
+
+$(BIN)$/testdefaultbootstrapping.pl: testdefaultbootstrapping.pl
+    cp testdefaultbootstrapping.pl $@
+
+$(BIN)$/testrc: makefile.mk
+.IF "$(GUI)"=="WNT"
+    echo [Tests] > $@
+    echo TestKey1=com.sun.star.script.Invocation.rdb >> $@
+.ELSE
+    echo '[Tests]' > $@
+    echo 'TestKey1=file:///'$(PWD)/$(BIN)'/com.sun.star.script.Invocation.rdb' >> $@
+.ENDIF
+
+
 
