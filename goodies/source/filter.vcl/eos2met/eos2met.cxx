@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-28 14:39:24 $
+ *  last change: $Author: sj $ $Date: 2000-10-23 15:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ struct METGDIStackMember
     RasterOp                    eRasterOp;
     Font                        aFont;
     MapMode                     aMapMode;
-    Region                      aClipRegion;
+    Rectangle                   aClipRect;
 };
 
 class METWriter
@@ -185,7 +185,7 @@ private:
     RasterOp            eGDIRasterOp;
     Font                aGDIFont;
     MapMode             aGDIMapMode;   // derzeit unbenutzt!
-    Region              aGDIClipRegion; // derzeit unbenutzt!
+    Rectangle           aGDIClipRect; // derzeit unbenutzt!
     METGDIStackMember*  pGDIStack;
     Color               aMETColor;
     Color               aMETBackgroundColor;
@@ -217,7 +217,7 @@ private:
     void WriteBigEndianLong(ULONG nLong);
 
     void WritePoint(Point aPt);
-
+    void WriteClipRect( const Rectangle& rRect );
     void WriteFieldIntroducer(USHORT nFieldSize, USHORT nFieldType,
                               BYTE nFlags, USHORT nSegSeqNum);
     void UpdateFieldSize();
@@ -311,6 +311,22 @@ void METWriter::MayCallback()
                 bStatus=FALSE;
         }
     }
+}
+
+void METWriter::WriteClipRect( const Rectangle& rRect )
+{
+    aGDIClipRect = rRect;
+    sal_uInt32 nPathId = ( rRect.IsEmpty() ) ? 0 : 1;
+    if ( nPathId )
+    {
+        Polygon aPoly( rRect );
+        METBeginPath( nPathId );
+        METLine( aPoly );
+        METEndPath();
+    }
+    WillWriteOrder(8);
+    *pMET << (BYTE)0xb4 << (BYTE)6
+          << (BYTE)0x00 << (BYTE)0 << nPathId;
 }
 
 void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
@@ -2123,7 +2139,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
-//              DBG_ERROR( "Unsupported MET-Action: META_ISECTRECTCLIPREGION_ACTION!" );
+                const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
+                WriteClipRect( pA->GetRect() );
             }
             break;
 
@@ -2268,7 +2285,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 pGS->eRasterOp=eGDIRasterOp;
                 pGS->aFont=aGDIFont;
                 pGS->aMapMode=aPictureMapMode;
-                pGS->aClipRegion=aGDIClipRegion;
+                pGS->aClipRect=aGDIClipRect;
             }
             break;
 
@@ -2283,7 +2300,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     aGDIFillColor=pGS->aFillColor;
                     eGDIRasterOp=pGS->eRasterOp;
                     aGDIFont=pGS->aFont;
-                    aGDIClipRegion=pGS->aClipRegion;
+                    if ( pGS->aClipRect != aGDIClipRect )
+                        WriteClipRect( pGS->aClipRect );
                     aPictureMapMode=pGS->aMapMode;
                     delete pGS;
                 }
@@ -2544,7 +2562,7 @@ BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     eGDIRasterOp=ROP_OVERPAINT;
     aGDIFont=Font();
     aGDIMapMode=MapMode();
-    aGDIClipRegion=Region();
+    aGDIClipRect=Rectangle();
     pGDIStack=NULL;
     aMETColor=Color(COL_BLACK);
     aMETBackgroundColor=Color(COL_WHITE);
