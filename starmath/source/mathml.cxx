@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-19 15:19:26 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1549,20 +1549,11 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.eType = TLPARENT;
     aToken.cMathChar = cBegin;
     SmStructureNode *pSNode = new SmBraceNode(aToken);
-#ifdef USE_POLYGON
-    SmNode *pLeft = new SmPolygonNode(aToken);
-#else
     SmNode *pLeft = new SmMathSymbolNode(aToken);
-#endif
 
     aToken.cMathChar = cEnd;
     aToken.eType = TRPARENT;
-#ifdef USE_POLYGON
-    SmNode *pRight = new SmPolygonNode(aToken);
-#else
     SmNode *pRight = new SmMathSymbolNode(aToken);
-#endif
-
 
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -3577,18 +3568,6 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
-void SmXMLExport::ExportPolygon(const SmNode *pNode, int nLevel)
-{
-    const SmPolygonNode *pTemp = static_cast<const SmPolygonNode *>
-        (pNode);
-    SvXMLElementExport aMath(*this,XML_NAMESPACE_MATH,sXML_mo,
-        sal_True,sal_False);
-    sal_Unicode nArse[2];
-    nArse[0] = pTemp->GetPolygon().GetChar();
-    DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
-    nArse[1] = 0;
-    GetDocHandler()->characters(nArse);
-}
 
 void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
 {
@@ -3773,28 +3752,12 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     {
         sal_Unicode nArse[2];
         nArse[1] = 0;
-        if (pLeft->GetType() == NPOLYGON)
-        {
-            nArse[0] = static_cast<
-                const SmPolygonNode* >(pLeft)->GetPolygon().GetChar();
-        }
-        else
-        {
-            nArse[0] = static_cast<
-                const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
-        }
+        nArse[0] = static_cast<
+            const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
         DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_open,nArse);
-        if (pRight->GetType() == NPOLYGON)
-        {
-            nArse[0] = static_cast<
-                const SmPolygonNode* >(pRight)->GetPolygon().GetChar();
-        }
-        else
-        {
-            nArse[0] = static_cast<
-                const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
-        }
+        nArse[0] = static_cast<
+            const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
         DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_close,nArse);
         pFences = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mfenced,
@@ -4141,9 +4104,6 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             break;
         case NTEXT:
             ExportText(pNode,nLevel);
-            break;
-        case NPOLYGON:
-            ExportPolygon(pNode,nLevel);
             break;
         case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in
                     //the XML engine.

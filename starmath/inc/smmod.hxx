@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-11 15:36:08 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ class SmModule;
 
 class SmRectCache;
 class SvtSysLocale;
+class VirtualDevice;
 
 /////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-17 07:20:35 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,27 +87,12 @@
 #include <sfx2/module.hxx>
 #endif
 
-#ifdef USE_POLYGON
-
-#ifndef _SV_POLY_HXX //autogen
-#include <vcl/poly.hxx>
-#endif
-#ifndef _XPOLY_HXX //autogen
-#include <svx/xpoly.hxx>
-#endif
-#ifndef _XOUTX_HXX //autogen
-#include <svx/xoutx.hxx>
-#endif
-
-#ifndef XCHAR_HXX
-#include "xchar.hxx"
-#endif
-
-#endif //USE_POLYGON
-
 
 #ifndef NODE_HXX
 #include "node.hxx"
+#endif
+#ifndef RECT_HXX
+#include <rect.hxx>
 #endif
 #ifndef SYMBOL_HXX
 #include "symbol.hxx"
@@ -1039,8 +1024,9 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     nHeight += rFormat.GetDistance(DIS_ROOT)
                * GetFont().GetSize().Height() / 100L;
 
-    pRootSym->AdaptToX(rDev, pBody->GetItalicWidth());
+    // font specialist advised to change the width first
     pRootSym->AdaptToY(rDev, nHeight);
+    pRootSym->AdaptToX(rDev, pBody->GetItalicWidth());
 
     pRootSym->Arrange(rDev, rFormat);
 
@@ -1151,8 +1137,9 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nDenomDist  = bIsTextmode ? 0 :
                             nFontHeight * rFormat.GetDistance(DIS_DENOMINATOR) / 100L;
 
-    pLine->AdaptToX(rDev, nWidth + 2 * nExtLen);
+    // font specialist advised to change the width first
     pLine->AdaptToY(rDev, nThick);
+    pLine->AdaptToX(rDev, nWidth + 2 * nExtLen);
     pLine->Arrange(rDev, rFormat);
 
     // get horizontal alignment for numerator
@@ -1452,9 +1439,9 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     Size  aSize;
     GetOperPosSize(aPos, aSize, aLogCenter, IsAscending() ? 60.0 : -60.0);
 
-    // die Größe setzen
-    pOper->AdaptToX(aTmpDev, aSize.Width());
+    // font specialist advised to change the width first
     pOper->AdaptToY(aTmpDev, aSize.Height());
+    pOper->AdaptToX(aTmpDev, aSize.Width());
     // und diese wirksam machen
     pOper->Arrange(aTmpDev, rFormat);
 
@@ -2286,115 +2273,9 @@ void SmPolyLineNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 
 /**************************************************************************/
 
-
-void SmPolygonNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
+void SmRootSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
 {
-    aToSize.Width() = nWidth;
-}
-
-
-void SmPolygonNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
-{
-    GetFont().FreezeBorderWidth();
-    aToSize.Height() = nHeight;
-}
-
-
-void SmPolygonNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
-{
-    //! some routines being called extract some info from the OutputDevice's
-    //! font (eg the space to be used for borders OR the font name(!!)).
-    //! Thus the font should reflect the needs and has to be set!
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
-    aTmpDev.SetFont(GetFont());
-
-    long nBorderWidth = GetFont().GetBorderWidth();
-
-    // das Polygon der gewaehlten FontSize anpassen
-    Size aSize     (rDev.GetFont().GetSize()),
-         aOrigSize (aPolygon.GetOrigFontSize());
-    double  fScaleY = (double) aSize.Height() / aOrigSize.Height(),
-            fScaleX = aSize.Width() ?
-                            (double) aSize.Width() / aOrigSize.Width() : fScaleY;
-    aPolygon.ScaleBy(fScaleX / aPolygon.GetScaleX(), fScaleY / aPolygon.GetScaleY());
-
-    long  nTmp;
-    if ((nTmp = aToSize.Width())  > 0)
-        // Breite anpassen und dabei Platz für Rand links und rechts lassen
-        // (das resultierende SmRect soll den Rand beinhalten und trotzdem
-        // nicht breiter als gewünscht sein)
-        aPolygon.AdaptToX(aTmpDev, Max(nTmp - 2L * nBorderWidth, 10L));
-    if ((nTmp = aToSize.Height()) > 0)
-        // wie oben jedoch mit oberen und unterem Rand
-        aPolygon.AdaptToY(aTmpDev, Max(nTmp - 2L * nBorderWidth, 10L));
-
-    if (aPolygon.GetChar() == xub_Unicode('\0'))
-        SmRect::operator = (SmRect());
-    else
-        SmRect::operator = (SmRect(aTmpDev, &rFormat, aPolygon, nBorderWidth));
-}
-
-
-void SmPolygonNode::Draw(OutputDevice &rDev, const Point &rPosition) const
-{
-    if (IsPhantom())
-        return;
-
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, FALSE);
-    aTmpDev.SetFillColor(GetFont().GetColor());
-    rDev.SetLineColor();
-
-    // calculate offset to position the polygon centered within the
-    // surrounding rectangle of the node
-    // (the root sign will be positioned right within the rectangle in order
-    // to attach the horizontal bar easily)
-    Size   aPolySize (aPolygon.GetBoundRect( aTmpDev ).GetSize()),
-           aRectSize (GetRect().GetSize());
-    Point  aOffset   ((aRectSize.Width()  - aPolySize.Width())  /
-                            (aPolygon.GetChar() == MS_SQRT ? 1 : 2),
-                      (aRectSize.Height() - aPolySize.Height()) / 2);
-
-    aPolygon.Draw(aTmpDev, rPosition + aOffset);
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
-}
-
-void SmPolygonNode::GetAccessibleText( String &rText ) const
-{
-    rText += String( GetToken().cMathChar );
-}
-
-/**************************************************************************/
-
-
-void SmRootSymbolNode::DrawBar(OutputDevice &rDev, const Point &rPosition) const
-{
-    // get polygon and rectangle
-    SmPolygon  aBarPoly = SmPolygon( MS_BAR );
-
-    // extra length to close small (wedge formed) gap between root-sign and
-    // horizontal bar
-    long  nExtraLen = aBarPoly.GetBoundRect(rDev).GetSize().Height() / 2;
-
-    aBarPoly.AdaptToX((OutputDevice &) rDev, nBodyWidth + nExtraLen);
-    aBarPoly.ScaleBy( 1.0, (double) GetFont().GetSize().Height()
-                                / aBarPoly.GetOrigFontSize().Height());
-
-    Point  aDrawPos (rPosition);
-    aDrawPos.X() -= nExtraLen;
-    aDrawPos = rDev.PixelToLogic(rDev.LogicToPixel(aDrawPos));
-
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, FALSE);
-    aTmpDev.SetFillColor(GetFont().GetColor());
-    rDev.SetLineColor();
-
-    aBarPoly.Draw(aTmpDev, aDrawPos);
+    nBodyWidth = nWidth;
 }
 
 
@@ -2402,7 +2283,7 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
 {
     // etwas extra Länge damit der horizontale Balken später über dem
     // Argument positioniert ist
-    SmPolygonNode::AdaptToY(rDev, nHeight + nHeight / 10L);
+    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
 }
 
 
@@ -2412,13 +2293,33 @@ void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
         return;
 
     // draw root-sign itself
-    SmPolygonNode::Draw(rDev, rPosition);
+    SmMathSymbolNode::Draw(rDev, rPosition);
 
-    // get offset for horizontal bar
-    long   nPolyHeight = GetPolygon().GetBoundRect(rDev).GetSize().Height();
-    Point  aBarOffset (GetWidth(), (GetHeight() - nPolyHeight) / 2);
+    static String aBarStr( (sal_Unicode) MS_BAR );
+    SmTmpDevice  aTmpDev( (OutputDevice &) rDev, TRUE );
+    aTmpDev.SetFillColor(GetFont().GetColor());
+    rDev.SetLineColor();
+    aTmpDev.SetFont( GetFont() );
 
-    DrawBar(rDev, rPosition + aBarOffset);
+    // since the width is always unscaled it corresponds ot the _original_
+    // _unscaled_ font height to be used, we use that to calculate the
+    // bar height. Thus it is independent of the arguments height.
+    // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
+    long nBarHeight = GetWidth() * 7L / 100L;
+    long nBarWidth = nBodyWidth + GetBorderWidth();
+    Point aBarOffset( GetWidth(), +GetBorderWidth() );
+    Point aBarPos( rPosition + aBarOffset );
+
+    Rectangle  aBar(aBarPos, Size( nBarWidth, nBarHeight) );
+    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
+    //! increasing zoomfactor.
+    //  This is done by shifting it's output-position to a point that
+    //  corresponds exactly to a pixel on the output device.
+    Point  aDrawPos( rDev.PixelToLogic(rDev.LogicToPixel(aBar.TopLeft())) );
+    //aDrawPos.X() = aBar.Left();     //! don't change X position
+    aBar.SetPos( aDrawPos );
+
+    rDev.DrawRect( aBar );
 
 #ifdef SM_RECT_DEBUG
     if (!IsDebug())
@@ -2427,12 +2328,6 @@ void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
     int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
     SmRect::Draw(rDev, rPosition, nRFlags);
 #endif
-}
-
-
-void SmRootSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
-{
-    nBodyWidth = nWidth;
 }
 
 
@@ -2780,28 +2675,21 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
         SetText( cChar );
 }
 
-
 void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
-    // Scale charwidth to mach 'nWidth' while keeping the height
-    // (that is: actually the font width will be scaled)
 {
-    // Since there is no function to do this, we try to approximate
-    // it:
-    //
-    Font &rFace = GetFont();
-    Size  aFntSize (rFace.GetSize());
+    // Since there is no function to do this, we try to approximate it:
+    Size  aFntSize (GetFont().GetSize());
 
-    //! however the result is a bit better with 'nWidth' as initial
-    //! font width
+    //! however the result is a bit better with 'nWidth' as initial font width
     aFntSize.Width() = nWidth;
-    rFace.SetSize(aFntSize);
+    GetFont().SetSize(aFntSize);
 
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
-    aTmpDev.SetFont(rFace);
+    aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for width
-    long  nDenom = SmRect(aTmpDev, NULL, GetText(),
-                          GetFont().GetBorderWidth()).GetItalicWidth();
+    long nBorderWidth = GetFont().GetBorderWidth();
+    long nDenom = SmRect(aTmpDev, NULL, GetText(), nBorderWidth).GetItalicWidth();
 
     // scale fontwidth with this error factor
     aFntSize.Width() *= nWidth;
@@ -2810,13 +2698,10 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
     GetFont().SetSize(aFntSize);
 }
 
-
 void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
 {
     GetFont().FreezeBorderWidth();
-
-    Font &rFace = GetFont();
-    Size  aFntSize (rFace.GetSize());
+    Size  aFntSize (GetFont().GetSize());
 
     // da wir nur die Höhe skalieren wollen müsen wir hier ggf die Fontweite
     // ermitteln um diese beizubehalten.
@@ -2824,7 +2709,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
     {
         OutputDevice &rDevNC = (OutputDevice &) rDev;
         rDevNC.Push(PUSH_FONT | PUSH_MAPMODE);
-        rDevNC.SetFont(rFace);
+        rDevNC.SetFont(GetFont());
         aFntSize.Width() = rDev.GetFontMetric().GetSize().Width();
         rDevNC.Pop();
     }
@@ -2833,14 +2718,14 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
     //! however the result is a bit better with 'nHeight' as initial
     //! font height
     aFntSize.Height() = nHeight;
-    rFace.SetSize(aFntSize);
+    GetFont().SetSize(aFntSize);
 
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
-    aTmpDev.SetFont(rFace);
+    aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for height
-    long  nDenom = SmRect(aTmpDev, NULL, GetText(),
-                          GetFont().GetBorderWidth()).GetHeight();
+    long nBorderWidth = GetFont().GetBorderWidth();
+    long nDenom = SmRect(aTmpDev, NULL, GetText(), nBorderWidth).GetHeight();
 
     // scale fontwidth with this error factor
     aFntSize.Height() *= nHeight;
@@ -2882,13 +2767,6 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 }
 
 void SmMathSymbolNode::CreateTextFromNode(String &rText)
-{
-    String sStr;
-    MathType::LookupChar(GetToken().cMathChar, sStr);
-    rText.Append(sStr);
-}
-
-void SmPolygonNode::CreateTextFromNode(String &rText)
 {
     String sStr;
     MathType::LookupChar(GetToken().cMathChar, sStr);

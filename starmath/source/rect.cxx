@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-31 05:32:51 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 
 #include "rect.hxx"
 #include "types.hxx"
-#include "xchar.hxx"
 #include "utility.hxx"
 #include "smmod.hxx"
 
@@ -145,6 +144,7 @@ SmRect::SmRect()
     nGlyphTop = nGlyphBottom =
     nItalicLeftSpace = nItalicRightSpace =
     nLoAttrFence = nHiAttrFence = 0;
+    nBorderWidth = 0;
 }
 
 
@@ -164,6 +164,7 @@ SmRect::SmRect(const SmRect &rRect)
     bHasAlignInfo = rRect.bHasAlignInfo;
     nItalicLeftSpace  = rRect.nItalicLeftSpace;
     nItalicRightSpace = rRect.nItalicRightSpace;
+    nBorderWidth  = rRect.nBorderWidth;
 }
 
 
@@ -181,7 +182,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 
 
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                       const XubString &rText, long nBorderWidth)
+                       const XubString &rText, USHORT nBorder)
 {
 #ifndef PRODUCT
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
@@ -198,6 +199,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     BOOL              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 
+    nBorderWidth  = nBorder;
     bHasAlignInfo = TRUE;
     bHasBaseline  = TRUE;
     nBaseline     = aFM.GetAscent();
@@ -273,7 +275,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                  const XubString &rText, long nBorderWidth)
+                  const XubString &rText, USHORT nBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
     SmRectCache *pRectCache = SM_MOD1()->GetRectCache();
@@ -297,33 +299,10 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
                const XubString &rText, long nBorderWidth)
 {
-    Init(rDev, pFormat, rText, nBorderWidth);
-}
-
-
-SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-               const SmPolygon &rPoly, long nBorderWidth)
-{
-    Init(rDev, pFormat, rPoly.GetChar(), nBorderWidth);
-
-    // den Offset in der Zeichenzelle passend waehlen
-    Point aPolyOffset (rPoly.GetOrigPos());
-    aPolyOffset.X() *= rPoly.GetScaleX();
-    aPolyOffset.Y() *= rPoly.GetScaleY();
-
-    // und es an diese Position schieben
-    Rectangle aPolyRect ( rPoly.GetBoundRect(rDev) );
-    Point  aDelta (aPolyOffset - aPolyRect.TopLeft());
-    aPolyRect.Move( aDelta.X(), aDelta.Y() );
-
-    aTopLeft.X() = aPolyRect.Left() - nBorderWidth;
-    aTopLeft.Y() = aPolyRect.Top()  - nBorderWidth;
-
-    aSize = aPolyRect.GetSize();
-    aSize.Width()  += 2 * nBorderWidth;
-    aSize.Height() += 2 * nBorderWidth;
-
-    nItalicLeftSpace = nItalicRightSpace = 0;
+    DBG_ASSERT( nBorderWidth >= 0, "BorderWidth negativ" );
+    if (nBorderWidth < 0)
+        nBorderWidth = 0;
+    Init(rDev, pFormat, rText, (USHORT) nBorderWidth);
 }
 
 
@@ -345,6 +324,7 @@ SmRect::SmRect(long nWidth, long nHeight)
     nItalicLeftSpace = nItalicRightSpace = 0;
     nGlyphTop    = nHiAttrFence  = GetTop();
     nGlyphBottom = nLoAttrFence  = GetBottom();
+    nBorderWidth  = 0;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,6 @@
 #include "format.hxx"
 
 
-class SmPolygon;
-
 BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect);
 
@@ -151,14 +149,15 @@ class SmRect
             nItalicRightSpace,
             nLoAttrFence,
             nHiAttrFence;
+    USHORT  nBorderWidth;
     BOOL    bHasBaseline,
             bHasAlignInfo;
 
 protected:
             void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const XubString &rText, long nBorderWidth);
+                            const XubString &rText, USHORT nBorderWidth);
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                      const XubString &rText, long nBorderWidth);
+                      const XubString &rText, USHORT nBorderWidth);
 
             void ClearBaseline()    { bHasBaseline = FALSE; };
     inline  void CopyMBL(const SmRect& rRect);
@@ -170,12 +169,13 @@ public:
             SmRect();
             SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
                    const XubString &rText, long nBorderWidth);
-            SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                   const SmPolygon &rPoly, long nBorderWidth);
             SmRect(long nWidth, long nHeight);
             SmRect(const SmRect &rRect);
 
-    inline  void SetItalicSpaces(long nLeftSpace, long nRightSpace);
+
+            USHORT  GetBorderWidth() const  { return nBorderWidth; }
+
+            void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
             void SetWidth(ULONG nWidth)     { aSize.Width()  = nWidth; }
             void SetHeight(ULONG nHeight)   { aSize.Height() = nHeight; }

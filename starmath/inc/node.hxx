@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:21 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #endif
 
 #include "parse.hxx"
-#include "xchar.hxx"
 #include "types.hxx"
 #include "rect.hxx"
 #include "format.hxx"
@@ -111,8 +110,8 @@ enum SmNodeType
     NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
     NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
     NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
-    NLINE,          NEXPRESSION,    NPOLYGON,       NPOLYLINE,      NROOT,
-    NROOTSYMBOL,    NRECTANGLE,     NVERTICAL_BRACE
+    NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
+    NRECTANGLE,     NVERTICAL_BRACE
 };
 
 
@@ -327,67 +326,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 
 
-class SmPolygonNode : public SmGraphicNode
-{
-    SmPolygon  aPolygon;
-    Size       aToSize;
-
-protected:
-    SmPolygonNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmGraphicNode(eNodeType, rNodeToken),
-        aPolygon( rNodeToken.cMathChar )
-    {}
-
-public:
-    SmPolygonNode(const SmToken &rNodeToken)
-    :   SmGraphicNode(NPOLYGON, rNodeToken),
-        aPolygon( rNodeToken.cMathChar )
-    {}
-
-    SmPolygon &                 GetPolygon() { return aPolygon; }
-    inline const SmPolygon &    GetPolygon() const;
-
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
-
-    virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
-    void CreateTextFromNode(String &rText);
-
-    virtual void  GetAccessibleText( String &rText ) const;
-};
-
-inline const SmPolygon & SmPolygonNode::GetPolygon() const
-{
-    return ((SmPolygonNode *) this)->GetPolygon();
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-
-class SmRootSymbolNode : public SmPolygonNode
-{
-    ULONG  nBodyWidth;  // width of body (argument) of root sign
-
-    void DrawBar(OutputDevice &rDev, const Point &rPosition) const;
-
-public:
-    SmRootSymbolNode(const SmToken &rNodeToken)
-    :   SmPolygonNode(NROOTSYMBOL, rNodeToken)
-    {}
-
-
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
-
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
-};
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-
 class SmTextNode : public SmVisibleNode
 {
     XubString   aText;
@@ -465,7 +403,11 @@ class SmMathSymbolNode : public SmSpecialNode
 protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
-    {}
+    {
+        xub_Unicode cChar = GetToken().cMathChar;
+        if ((xub_Unicode) '\0' != cChar)
+            SetText( cChar );
+    }
 
 public:
     SmMathSymbolNode(const SmToken &rNodeToken);
@@ -476,6 +418,25 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+class SmRootSymbolNode : public SmMathSymbolNode
+{
+    ULONG  nBodyWidth;  // width of body (argument) of root sign
+
+public:
+    SmRootSymbolNode(const SmToken &rNodeToken)
+    :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
+    {}
+
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+
+    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
 

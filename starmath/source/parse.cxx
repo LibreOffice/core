@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 06:36:45 $
+ *  last change: $Author: tl $ $Date: 2002-11-06 12:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 
 #ifndef PARSE_HXX
 #include "parse.hxx"
-#endif
-#ifndef XCHAR_HXX
-#include "xchar.hxx"
 #endif
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"
@@ -1239,11 +1236,8 @@ void SmParser::Product()
             case TOVERBRACE :
             case TUNDERBRACE :
                 pSNode = new SmVerticalBraceNode(CurToken);
-#ifdef USE_POLYGON
-                pOper = new SmPolygonNode(CurToken);
-#else
                 pOper = new SmMathSymbolNode(CurToken);
-#endif
+
                 NextToken();
                 break;
 
@@ -1673,11 +1667,7 @@ void SmParser::Oper()
 
         case TOVERBRACE :
         case TUNDERBRACE :
-#ifdef USE_POLYGON
-                pNode = new SmPolygonNode(CurToken);
-#else
                 pNode = new SmMathSymbolNode(CurToken);
-#endif
             break;
 
         case TOPER :
@@ -1756,18 +1746,10 @@ void SmParser::UnOper()
         aNodeToken.eType = TABS;
         //
         aNodeToken.cMathChar = MS_LINE;
-#ifdef USE_POLYGON
-        SmNode* pLeft = new SmPolygonNode(aNodeToken);
-#else
         SmNode* pLeft = new SmMathSymbolNode(aNodeToken);
-#endif
         //
         aNodeToken.cMathChar = MS_LINE;
-#ifdef USE_POLYGON
-        SmNode* pRight = new SmPolygonNode(aNodeToken);
-#else
         SmNode* pRight = new SmMathSymbolNode(aNodeToken);
-#endif
 
         pSNode->SetSubNodes(pLeft, pArg, pRight);
     }
@@ -1810,11 +1792,7 @@ void SmParser::Attribut()
         case TWIDEVEC :
         case TWIDEHAT :
         case TWIDETILDE :
-#ifdef USE_POLYGON
-            pAttr = new SmPolygonNode(CurToken);
-#else
             pAttr = new SmMathSymbolNode(CurToken);
-#endif
             eScaleMode = SCALE_WIDTH;
             break;
 
@@ -1991,11 +1969,8 @@ void SmParser::Brace()
         // check for left bracket
         if (TokenInGroup(TGLBRACES) || TokenInGroup(TGRBRACES))
         {
-#ifdef USE_POLYGON
-            pLeft = new SmPolygonNode(CurToken);
-#else
             pLeft = new SmMathSymbolNode(CurToken);
-#endif
+
             NextToken();
             Bracebody(TRUE);
             pBody = NodeStack.Pop();
@@ -2006,11 +1981,7 @@ void SmParser::Brace()
                 // check for right bracket
                 if (TokenInGroup(TGLBRACES) || TokenInGroup(TGRBRACES))
                 {
-#ifdef USE_POLYGON
-                    pRight = new SmPolygonNode(CurToken);
-#else
                     pRight = new SmMathSymbolNode(CurToken);
-#endif
                     NextToken();
                 }
                 else
@@ -2026,11 +1997,8 @@ void SmParser::Brace()
     {
         if (TokenInGroup(TGLBRACES))
         {
-#ifdef USE_POLYGON
-            pLeft = new SmPolygonNode(CurToken);
-#else
             pLeft = new SmMathSymbolNode(CurToken);
-#endif
+
             NextToken();
             Bracebody(FALSE);
             pBody = NodeStack.Pop();
@@ -2052,11 +2020,7 @@ void SmParser::Brace()
 
             if (CurToken.eType == eExpectedType)
             {
-#ifdef USE_POLYGON
-                pRight = new SmPolygonNode(CurToken);
-#else
                 pRight = new SmMathSymbolNode(CurToken);
-#endif
                 NextToken();
             }
             else
@@ -2097,11 +2061,7 @@ void SmParser::Bracebody(BOOL bIsLeftRight)
         {
             if (CurToken.eType == TMLINE)
             {
-#ifdef USE_POLYGON
-                NodeStack.Push(new SmPolygonNode(CurToken));
-#else
                 NodeStack.Push(new SmMathSymbolNode(CurToken));
-#endif
                 NextToken();
                 nNum++;
             }
@@ -2120,11 +2080,7 @@ void SmParser::Bracebody(BOOL bIsLeftRight)
         {
             if (CurToken.eType == TMLINE)
             {
-#ifdef USE_POLYGON
-                NodeStack.Push(new SmPolygonNode(CurToken));
-#else
                 NodeStack.Push(new SmMathSymbolNode(CurToken));
-#endif
                 NextToken();
                 nNum++;
             }
