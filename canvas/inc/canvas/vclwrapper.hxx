@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,20 +170,12 @@ namespace canvas
             Wrappee&        operator*() { return *mpWrappee; }
             const Wrappee&  operator*() const { return *mpWrappee; }
 
-            bool            operator==( const Wrappee& rhs ) const
-            {
-                if( mpWrappee )
-                    return *const_cast<const Wrappee*>(mpWrappee) == rhs; // force operator==() const call on wrappee
-                else
-                    return mpWrappee == rhs.mpWrappee; // handle both-sides-null correctly
-            }
+            Wrappee&        get() { return *mpWrappee; }
+            const Wrappee&  get() const { return *mpWrappee; }
 
-            bool            operator==( const Wrappee& rhs )
+            void swap( VCLObject& rOther )
             {
-                if( mpWrappee )
-                    return *mpWrappee == rhs;
-                else
-                    return mpWrappee == rhs.mpWrappee; // handle both-sides-null correctly
+                ::std::swap( mpWrappee, rOther.mpWrappee );
             }
 
         private:
