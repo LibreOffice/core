@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:41:22 $
+ *  last change: $Author: os $ $Date: 2000-11-03 10:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2060,6 +2060,26 @@ USHORT* SwFrmPage::GetRanges()
 {
     return aPageRg;
 }
+/* -----------------------------03.11.00 10:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwFrmPage::SetFormatUsed(BOOL bFmt)
+{
+    bFormat     = bFmt;
+    if(bFormat)
+    {
+        aAnchorTypeRB   .Show(FALSE);
+        aAnchorAsCharRB .Show(FALSE);
+        aAnchorTypeLB   .Show(FALSE);
+        aTypeGB         .Show(FALSE);
+
+        Point aSizePos = aSizeGB.GetPosPixel();
+        Size aSizeSize = aSizeGB.GetSizePixel();
+        aSizeSize.Width() = aTypeGB.GetPosPixel().X() +
+                    aTypeGB.GetSizePixel().Width() - aSizePos.X();
+        aSizeGB.SetSizePixel(aSizeSize);
+    }
+}
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -2786,55 +2806,43 @@ IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 
     return 0;
 }
-/*--------------------------------------------------------------------
-   $Log: not supported by cvs2svn $
-   Revision 1.1.1.1  2000/09/18 17:14:37  hr
-   initial import
+/* -----------------------------03.11.00 10:56--------------------------------
 
-   Revision 1.255  2000/09/18 16:05:33  willem.vandorp
-   OpenOffice header added.
+ ---------------------------------------------------------------------------*/
+void lcl_Move(Window& rWin, sal_Int32 nDiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
+}
+//-----------------------------------------------------------------------------
+void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
+{
+    bFormat  = bFmt;
+    if(bFormat)
+    {
+        aNameFT.Show(FALSE);
+        aNameED.Show(FALSE);
+        aAltNameFT.Show(FALSE);
+        aAltNameED.Show(FALSE);
+        aPrevFT.Show(FALSE);
+        aPrevED.Show(FALSE);
+        aNextFT.Show(FALSE);
+        aNextED.Show(FALSE);
+          aNamesGB.Show(FALSE);
 
-   Revision 1.254  2000/08/25 14:09:49  jp
-   Graphic Crop-Attribut and TabPage exported to SVX
+        sal_Int32 nDiff = aExtGB.GetPosPixel().Y() - aNamesGB.GetPosPixel().Y();
 
-   Revision 1.253  2000/08/17 11:38:50  jp
-   remove the SW graphicmanager and UI with decoded URLs
+        lcl_Move(aProtectContentCB, nDiff);
+        lcl_Move(aProtectFrameCB, nDiff);
+        lcl_Move(aProtectSizeCB, nDiff);
+        lcl_Move(aProtectGB, nDiff);
 
-   Revision 1.252  2000/06/26 13:13:31  os
-   INetURLObject::SmartRelToAbs removed
+        lcl_Move(aEditInReadonlyCB, nDiff);
+        lcl_Move(aPrintFrameCB, nDiff);
+        lcl_Move(aExtGB, nDiff);
 
-   Revision 1.251  2000/05/10 14:05:18  os
-   #75737# ReadioButtons used for hori mirror type
-
-   Revision 1.250  2000/04/26 14:49:17  os
-   GetName() returns const String&
-
-   Revision 1.249  2000/04/19 12:56:34  os
-   include sfx2/filedlg.hxx removed
-
-   Revision 1.248  2000/04/18 15:14:56  os
-   UNICODE
-
-   Revision 1.247  2000/02/11 14:47:20  hr
-   #70473# changes for unicode ( patched by automated patchtool )
-
-   Revision 1.246  2000/01/24 12:45:28  os
-   #72153# call SfxFileDialog::DisableSaveLastDirectory
-
-   Revision 1.245  1999/11/23 13:18:55  os
-   #69479# relative/fixed ratio handling corrected
-
-   Revision 1.244  1999/06/21 11:30:30  OS
-   #64885# width/height matching corrected
+    }
+}
 
 
-      Rev 1.243   21 Jun 1999 13:30:30   OS
-   #64885# width/height matching corrected
-
-      Rev 1.242   09 Jun 1999 10:48:10   OS
-   #66733# CropPage: reset relative values
-
-      Rev 1.241   09 Apr 1999 12:17:24   OS
-   #64438# Grenzwerte fuer L+R richtig berechnen
-
---------------------------------------------------*/
