@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdialmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:21:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,53 +59,25 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 // include ---------------------------------------------------------------
 
-#ifndef _TOOLS_RESID_HXX
-#include <tools/resid.hxx>
+#include "dialmgr.hxx"
+
+#ifndef _STRING_HXX
+#include "tools/string.hxx"
 #endif
-#include <tools/rc.hxx>
-#include <svtools/solar.hrc>
-#include <vcl/svapp.hxx>
-#include "swdlgfact.hxx"
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#ifndef _GLOSDOC_HXX
-#include <glosdoc.hxx>
 #endif
-#ifndef _GLOSLST_HXX
-#include <gloslst.hxx>
-#endif
-ResMgr* pSwResMgr=0;
 
 //copy from core\bastyp\swtypes.cxx
 String aEmptyStr;               // Konstante Strings
-/*
-//copy from ui/utlui/initui.cxx --begin
-String* pOldGrfCat = 0;         //for SwCaptionDialog
-String* pOldTabCat = 0;         //for SwCaptionDialog
-String* pOldFrmCat = 0;         //for SwCaptionDialog
-String* pOldDrwCat = 0;         //for SwCaptionDialog
-String* pCurrGlosGroup = 0;         // for SwGlossaryDlg
-//copy from ui/utlui/initui.cxx --end
 
-//copy from core\bastyp\init.cxx
-#include <breakit.hxx>
-SwBreakIt* pBreakIt = new SwBreakIt;  //for SwAutoFormatDlg
-*/
-//copy from core\tox\tox.cxx
-#include <tox.hxx>
-const sal_Char* SwForm::aFormEntry      = "<E>";        //for SwTOXEntryTabPage
-const sal_Char* SwForm::aFormTab        = "<T>";
-const sal_Char* SwForm::aFormPageNums   = "<#>";
-const sal_Char* SwForm::aFormLinkStt    = "<LS>";
-const sal_Char* SwForm::aFormLinkEnd    = "<LE>";
-const sal_Char* SwForm::aFormEntryNum   = "<E#>";
-const sal_Char* SwForm::aFormEntryTxt   = "<ET>";
-const sal_Char* SwForm::aFormChapterMark= "<C>";
-const sal_Char* SwForm::aFormText       = "<X>";
-const sal_Char* SwForm::aFormAuth       = "<A>";
-
-
+ResMgr* pSwResMgr=0;
 
 ResMgr* SwDialogsResMgr::GetResMgr()
 {

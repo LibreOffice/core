@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swuiexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:22:18 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,20 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 #include "swdlgfact.hxx"
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 namespace swui
 {
     static SwAbstractDialogFactory_Impl* pFactory=NULL;
-    SwAbstractDialogFactory_Impl* GetFactory()
+    SwAbstractDialogFactory * GetFactory()
     {
         if ( !pFactory )
             pFactory = new SwAbstractDialogFactory_Impl;
@@ -76,7 +84,7 @@ namespace swui
 
 extern "C"
 {
-    SwAbstractDialogFactory* CreateDialogFactory()
+    SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* CreateDialogFactory()
     {
         return ::swui::GetFactory();
     }
