@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.32 2001-05-29 12:32:57 dvo Exp $
+	$Id: text.mod,v 1.33 2001-06-12 17:46:19 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -760,6 +760,9 @@
 														"document">
 <!ATTLIST text:table-of-content-source text:relative-tab-stop-position 
 															%boolean; "true">
+<!ATTLIST text:table-of-content-source fo:language %string; #IMPLIED>
+<!ATTLIST text:table-of-content-source fo:country %string; #IMPLIED>
+<!ATTLIST text:table-of-content-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:table-of-content-entry-template (text:index-entry-chapter-number |
 												text:index-entry-page-number |
@@ -789,6 +792,9 @@
 									%string; #IMPLIED>
 <!ATTLIST text:illustration-index-source text:caption-sequence-format 
 									(text|category-and-value|caption) "text">
+<!ATTLIST text:illustration-index-source fo:language %string; #IMPLIED>
+<!ATTLIST text:illustration-index-source fo:country %string; #IMPLIED>
+<!ATTLIST text:illustration-index-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:illustration-index-entry-template 
 								( text:index-entry-page-number |
@@ -813,6 +819,9 @@
 									%string; #IMPLIED>
 <!ATTLIST text:table-index-source text:caption-sequence-format 
 									(text|category-and-value|caption) "text">
+<!ATTLIST text:table-index-source fo:language %string; #IMPLIED>
+<!ATTLIST text:table-index-source fo:country %string; #IMPLIED>
+<!ATTLIST text:table-index-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:table-index-entry-template ( text:index-entry-page-number |
 											text:index-entry-text |
@@ -837,6 +846,9 @@
 <!ATTLIST text:object-index-source text:use-chart-objects %boolean; "false">
 <!ATTLIST text:object-index-source text:use-other-objects %boolean; "false">
 <!ATTLIST text:object-index-source text:use-math-objects %boolean; "false">
+<!ATTLIST text:object-index-source fo:language %string; #IMPLIED>
+<!ATTLIST text:object-index-source fo:country %string; #IMPLIED>
+<!ATTLIST text:object-index-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:object-index-entry-template ( text:index-entry-page-number |
 											 text:index-entry-text |
@@ -864,6 +876,9 @@
 <!ATTLIST text:user-index-source text:use-index-source-styles 
 													%boolean; "false">
 <!ATTLIST text:user-index-source text:copy-outline-level %boolean; "false">
+<!ATTLIST text:user-index-source fo:language %string; #IMPLIED>
+<!ATTLIST text:user-index-source fo:country %string; #IMPLIED>
+<!ATTLIST text:user-index-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:user-index-entry-template ( text:index-entry-chapter |
 										   text:index-entry-page-number |
@@ -901,6 +916,9 @@
 												%boolean; "false">
 <!ATTLIST text:alphabetical-index-source text:comma-separated
 												%boolean; "false">
+<!ATTLIST text:alphabetical-index-source fo:language %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-source fo:country %string; #IMPLIED>
+<!ATTLIST text:alphabetical-index-source text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:alphabetical-index-entry-template ( text:index-entry-chapter |
 												text:index-entry-page-number |
@@ -1039,6 +1057,9 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:bibliography-configuration text:suffix %string; #IMPLIED>
 <!ATTLIST text:bibliography-configuration text:sort-by-position %boolean; "true">
 <!ATTLIST text:bibliography-configuration text:numbered-entries %boolean; "false">
+<!ATTLIST text:bibliography-configuration fo:language %string; #IMPLIED>
+<!ATTLIST text:bibliography-configuration fo:country %string; #IMPLIED>
+<!ATTLIST text:bibliography-configuration text:sort-algorithm %string; #IMPLIED>
 
 <!ELEMENT text:sort-key EMPTY>
 <!ATTLIST text:sort-key text:key ( address | annote | author | 

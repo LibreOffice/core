@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-05 16:05:21 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2015,4 +2015,6 @@ XML_CONSTASCII_ACTION( sXML_escape_direction, "escape-direction" );
 XML_CONSTASCII_ACTION( sXML_glue_point, "glue-point" );
 
 XML_CONSTASCII_ACTION( sXML_text_style_name, "text-style-name" );
+
+XML_CONSTASCII_ACTION( sXML_sort_algorithm, "sort-algorithm" );
 #endif

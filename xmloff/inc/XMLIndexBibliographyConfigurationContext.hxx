@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,21 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+
 #include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl { class OUString; }
+
 
 /**
  * Import bibliography configuration.
@@ -100,9 +109,13 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
     const ::rtl::OUString sSortKeys;
     const ::rtl::OUString sSortKey;
     const ::rtl::OUString sIsSortAscending;
+    const ::rtl::OUString sSortAlgorithm;
+    const ::rtl::OUString sLocale;
 
     ::rtl::OUString sSuffix;
     ::rtl::OUString sPrefix;
+    ::rtl::OUString sAlgorithm;
+    ::com::sun::star::lang::Locale aLocale;
     sal_Bool bNumberedEntries;
     sal_Bool bSortByPosition;
 
@@ -137,6 +150,7 @@ protected:
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     void ProcessAttribute(
+        sal_uInt16 nPrefix,
         const ::rtl::OUString sLocalName,
         const ::rtl::OUString sValue);
 };

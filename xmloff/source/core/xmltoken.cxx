@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-05 16:05:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1985,7 +1985,7 @@ namespace xmloff { namespace token {
         TOKEN( "use-regular-expressions" ),    // XML_USE_REGULAR_EXPRESSIONS
         TOKEN( "data-source-has-labels" ),     // XML_DATA_SOURCE_HAS_LABELS
         TOKEN( "link-data-style-to-source" ),  // XML_LINK_DATA_STYLE_TO_SOURCE
-
+        TOKEN( "sort-algorithm" ),             // XML_SORT_ALGORITHM
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

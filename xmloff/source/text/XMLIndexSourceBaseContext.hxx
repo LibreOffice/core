@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -109,7 +113,10 @@ enum IndexSourceParamEnum
     XML_TOK_INDEXSOURCE_SEQUENCE_NAME,
     XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT,
     XML_TOK_INDEXSOURCE_COMMA_SEPARATED,
-    XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES
+    XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES,
+    XML_TOK_INDEXSOURCE_SORT_ALGORITHM,
+    XML_TOK_INDEXSOURCE_LANGUAGE,
+    XML_TOK_INDEXSOURCE_COUNTRY
 };
 
 
@@ -120,6 +127,11 @@ class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
     const ::rtl::OUString sCreateFromChapter;
     const ::rtl::OUString sIsRelativeTabstops;
+    const ::rtl::OUString sSortAlgorithm;
+    const ::rtl::OUString sLocale;
+
+    ::com::sun::star::lang::Locale aLocale;
+    ::rtl::OUString sAlgorithm;
 
     sal_Bool bUseLevelFormats;
 

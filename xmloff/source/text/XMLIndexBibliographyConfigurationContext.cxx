@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-21 10:52:49 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
@@ -114,6 +118,7 @@
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -142,8 +147,12 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
         sSortKeys(RTL_CONSTASCII_USTRINGPARAM("SortKeys")),
         sSortKey(RTL_CONSTASCII_USTRINGPARAM("SortKey")),
         sIsSortAscending(RTL_CONSTASCII_USTRINGPARAM("IsSortAscending")),
+        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm")),
+        sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
         sSuffix(),
         sPrefix(),
+        sAlgorithm(),
+        aLocale(),
         bNumberedEntries(sal_False),
         bSortByPosition(sal_True)
 {
@@ -164,42 +173,57 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
-        if (nPrefix == XML_NAMESPACE_TEXT)
-        {
-            ProcessAttribute(sLocalName, xAttrList->getValueByIndex(nAttr));
-        }
+        ProcessAttribute(nPrefix, sLocalName,
+                         xAttrList->getValueByIndex(nAttr));
         // else: ignore
     }
 }
 
 void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
+    sal_uInt16 nPrefix,
     OUString sLocalName,
     OUString sValue)
 {
-    if (sLocalName.equalsAsciiL(sXML_prefix, sizeof(sXML_prefix)-1))
+    if( XML_NAMESPACE_TEXT == nPrefix )
     {
-        sPrefix = sValue;
-    }
-    else if (sLocalName.equalsAsciiL(sXML_suffix, sizeof(sXML_suffix)-1))
-    {
-        sSuffix = sValue;
-    }
-    else if (sLocalName.equalsAsciiL(sXML_numbered_entries,
-                                     sizeof(sXML_numbered_entries)-1))
-    {
-        sal_Bool bTmp;
-        if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+        if( IsXMLToken(sLocalName, XML_PREFIX) )
         {
-            bNumberedEntries = bTmp;
+            sPrefix = sValue;
+        }
+        else if( IsXMLToken(sLocalName, XML_SUFFIX) )
+        {
+            sSuffix = sValue;
+        }
+        else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
+        {
+            sal_Bool bTmp;
+            if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
+            {
+                bNumberedEntries = bTmp;
+            }
+        }
+        else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
+        {
+            sal_Bool bTmp;
+            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            {
+                bSortByPosition = bTmp;
+            }
+        }
+        else if( IsXMLToken(sLocalName, XML_SORT_ALGORITHM) )
+        {
+            sAlgorithm = sValue;
         }
     }
-    else if (sLocalName.equalsAsciiL(sXML_sort_by_position,
-                                     sizeof(sXML_sort_by_position)-1))
+    else if( XML_NAMESPACE_FO == nPrefix )
     {
-        sal_Bool bTmp;
-        if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+        if( IsXMLToken(sLocalName, XML_LANGUAGE) )
         {
-            bSortByPosition = bTmp;
+            aLocale.Language = sValue;
+        }
+        else if( IsXMLToken(sLocalName, XML_COUNTRY) )
+        {
+            aLocale.Country = sValue;
         }
     }
 }
@@ -324,6 +348,19 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
 
                 aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
                 xPropSet->setPropertyValue(sIsSortByPosition, aAny);
+
+                if( (aLocale.Language.getLength() > 0) &&
+                    (aLocale.Country.getLength() > 0)     )
+                {
+                    aAny <<= aLocale;
+                    xPropSet->setPropertyValue(sLocale, aAny);
+                }
+
+                if( sAlgorithm.getLength() > 0 )
+                {
+                    aAny <<= sAlgorithm;
+                    xPropSet->setPropertyValue(sSortAlgorithm, aAny);
+                }
 
                 sal_Int32 nCount = aSortKeys.size();
                 Sequence<Sequence<PropertyValue> > aKeysSeq(nCount);

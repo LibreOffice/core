@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
+const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
+const sal_Char sAPI_Locale[] = "Locale";
 
 static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
@@ -218,6 +220,10 @@ static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
     { XML_NAMESPACE_TEXT,
           sXML_use_index_source_styles,
           XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES },
+    { XML_NAMESPACE_TEXT, sXML_sort_algorithm,
+          XML_TOK_INDEXSOURCE_SORT_ALGORITHM },
+    { XML_NAMESPACE_FO, sXML_language, XML_TOK_INDEXSOURCE_LANGUAGE },
+    { XML_NAMESPACE_FO, sXML_country, XML_TOK_INDEXSOURCE_COUNTRY },
 
     XML_TOKEN_MAP_END
 };
@@ -236,7 +242,9 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
         bChapterIndex(sal_False),
         bRelativeTabs(sal_True),
         bUseLevelFormats(bLevelFormats),
-      sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter)),
+        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm)),
+        sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale)),
+       sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter)),
       sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
 {
 }
@@ -288,6 +296,15 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
             }
             break;
         }
+        case XML_TOK_INDEXSOURCE_SORT_ALGORITHM:
+            sAlgorithm = rValue;
+            break;
+        case XML_TOK_INDEXSOURCE_LANGUAGE:
+            aLocale.Language = rValue;
+            break;
+        case XML_TOK_INDEXSOURCE_COUNTRY:
+            aLocale.Country = rValue;
+            break;
 
         default:
             // unknown attribute -> ignore
@@ -304,6 +321,19 @@ void XMLIndexSourceBaseContext::EndElement()
 
     aAny.setValue(&bChapterIndex, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
+
+    if (sAlgorithm.getLength() > 0)
+    {
+        aAny <<= sAlgorithm;
+        rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
+    }
+
+    if ( (aLocale.Language.getLength() > 0) &&
+         (aLocale.Country.getLength() > 0)      )
+    {
+        aAny <<= aLocale;
+        rIndexPropertySet->setPropertyValue(sLocale, aAny);
+    }
 }
 
 SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
 #endif
@@ -142,6 +146,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -178,6 +186,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -189,6 +198,7 @@ using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::lang::Locale;
 using ::com::sun::star::uno::XInterface;
 
 
@@ -260,6 +270,8 @@ XMLSectionExport::XMLSectionExport(
         sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
         sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
         sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
+        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm")),
+        sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
         sEmpty()
 {
 }
@@ -951,6 +963,25 @@ void XMLSectionExport::ExportBaseIndexSource(
                                           sXML_relative_tab_stop_position,
                                           sXML_false);
         }
+
+        // sort algorithm
+        aAny = rPropertySet->getPropertyValue(sSortAlgorithm);
+        OUString sAlgorithm;
+        aAny >>= sAlgorithm;
+        if (sAlgorithm.getLength() > 0)
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SORT_ALGORITHM,
+                                      sAlgorithm );
+        }
+
+        // locale
+        aAny = rPropertySet->getPropertyValue(sLocale);
+        Locale aLocale;
+        aAny >>= aLocale;
+        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
+                                 aLocale.Language);
+        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
+                                 aLocale.Country);
     }
 
     // the index source element (all indices)
@@ -1644,6 +1675,10 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                 RTL_CONSTASCII_USTRINGPARAM("IsSortByPosition"));
             const OUString sSortKeys(
                 RTL_CONSTASCII_USTRINGPARAM("SortKeys"));
+            const OUString sSortAlgorithm(
+                RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"));
+            const OUString sLocale(
+                RTL_CONSTASCII_USTRINGPARAM("Locale"));
 
             OUString sTmp;
 
@@ -1669,8 +1704,26 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                           sXML_sort_by_position, sXML_false);
             }
 
-            // configuration elementXML_CONSTASCII_ACTION( sXML_suffix, "suffix" );
+            // sort algorithm
+            aAny = xPropSet->getPropertyValue(sSortAlgorithm);
+            OUString sAlgorithm;
+            aAny >>= sAlgorithm;
+            if( sAlgorithm.getLength() > 0 )
+            {
+                rExport.AddAttribute( XML_NAMESPACE_TEXT,
+                                      XML_SORT_ALGORITHM, sAlgorithm );
+            }
 
+            // locale
+            aAny = xPropSet->getPropertyValue(sLocale);
+            Locale aLocale;
+            aAny >>= aLocale;
+            rExport.AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
+                                     aLocale.Language);
+            rExport.AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
+                                     aLocale.Country);
+
+            // configuration element
             SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
                                         sXML_bibliography_configuration,
                                         sal_True, sal_True);
