@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:24:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,6 +1369,10 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
         if( ! pReferenceFrame->maFrameData.bMapped_ )
             pFrame->maFrameData.mbTransientForRoot = true;
     }
+    // #110333# in case no one ever sets a title prevent
+    // the Dtwm taking the class instead
+    if( m_aWMName.EqualsAscii( "Dtwm" ) )
+        setWMName( pFrame, String() );
 }
 
 /*
@@ -1391,6 +1395,14 @@ void NetWMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eTy
         WMAtom eWMType;
         switch( eType )
         {
+            case windowType_Utility:
+#if 0
+                // advertise tool windows as dialogues not utilities for now
+                // due to a bug in metacity 2.4.34 (smaller titlebar font on
+                // resizable utility windows)
+                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ? NET_WM_WINDOW_TYPE_UTILITY : NET_WM_WINDOW_TYPE_DIALOG;
+                break;
+#endif
             case windowType_ModelessDialogue:
             case windowType_ModalDialogue:
                 eWMType = NET_WM_WINDOW_TYPE_DIALOG;
