@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:26:47 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@ public:
         SfxItemPool& rItemPool );
     virtual ~StatisticsItemConverter();
 
-    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
-    virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
-
 protected:
     virtual const USHORT * GetWhichPairs() const;
     virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
@@ -95,9 +92,6 @@ protected:
         throw( ::com::sun::star::uno::Exception );
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
-
-private:
-    ::std::vector< ItemConverter * >    m_aConverters;
 };
 
 } //  namespace wrapper
