@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
+ *  last change: $Author: cmc $ $Date: 2001-05-22 09:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,17 +618,35 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId, BYTE* 
                 // If so, we take it's data and store it as 'previous'
                 //                              or the other way around
                 if( pOldAttr )
-                {           // Insert on top of Delete ?  This is not allowed !
+                {
+#if 0
+                    // Insert on top of Delete ?  This is not allowed !
                     BOOL bDateWrongWayAround
                             =    (REDLINE_INSERT == eType)
                               && (REDLINE_DELETE == pOldAttr->eType);
                     if(    bDateWrongWayAround
+
                         || (      (aStamp < pOldAttr->aStamp)
                              && ! (    (REDLINE_INSERT == pOldAttr->eType)
                                     && (REDLINE_DELETE == eType)
                                   )
                            )
                       )
+#else
+                    /*
+                    ##928##
+                    Only use hack to ignore inserts on deletes, do not
+                    disallow deletes on property changes
+                    */
+                    // Insert on top of Delete ?  This is not allowed !
+                    BOOL bDateWrongWayAround =
+                    (
+                        (REDLINE_INSERT == eType)
+                        && (REDLINE_DELETE == pOldAttr->eType)
+                        && (aStamp < pOldAttr->aStamp)
+                    );
+                    if (bDateWrongWayAround)
+#endif
                     {
                         if(     bDateWrongWayAround
                             && !(nAutorNo == pOldAttr->nAutorNo) )
@@ -679,11 +697,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.9 2001-05-21 15:45:50 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.10 2001-05-22 09:45:13 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/05/21 15:45:50  cmc
+      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
+
       Revision 1.8  2001/05/03 15:38:21  jp
       don't insert empty graphics
 
