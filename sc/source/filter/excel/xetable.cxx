@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:31:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2177,7 +2177,15 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
                 sal_uInt32 nXFId = xCell.is() ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
-                mxMergedcells->AppendRange( aScRange, nXFId );
+                // #120156# blank cells merged vertically may occur repeatedly
+                DBG_ASSERT( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
+                    "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );
+                for( SCCOL nIndex = nScCol; nIndex <= nLastScCol; ++nIndex )
+                {
+                    mxMergedcells->AppendRange( aScRange, nXFId );
+                    aScRange.aStart.IncCol();
+                    aScRange.aEnd.IncCol();
+                }
             }
 
             // data validation
