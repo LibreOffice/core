@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-12 15:27:42 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
+
+using namespace ::com::sun::star;
 
 //  ----------------------------------------------------
 //  class UnoControlHolder
@@ -217,8 +219,8 @@ void UnoControlContainer::ImplActivateTabControllers()
     sal_uInt32 nCount = maTabControllers.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-         maTabControllers.getArray()[n]->setContainer( this );
-         maTabControllers.getArray()[n]->activateTabOrder();
+        maTabControllers.getArray()[n]->setContainer( this );
+        maTabControllers.getArray()[n]->activateTabOrder();
     }
 }
 
@@ -245,41 +247,46 @@ void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeExcept
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
+    lang::EventObject aDisposeEvent;
+    aDisposeEvent.Source = static_cast< uno::XAggregation* >( this );
+
     // DG: zuerst der Welt mitteilen, daﬂ der Container wegfliegt. Dieses ist um einiges
     // schneller wenn die Welt sowohl an den Controls als auch am Container horcht
-    ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
-    maDisposeListeners.disposeAndClear(aEvt);
+    maDisposeListeners.disposeAndClear( aDisposeEvent );
+    maCListeners.disposeAndClear( aDisposeEvent );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > * pCtrls = aCtrls.getArray();
-    sal_uInt32 nCtrls = aCtrls.getLength();
+
+    uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    uno::Reference< awt::XControl >* pCtrls = aCtrls.getArray();
+    uno::Reference< awt::XControl >* pCtrlsEnd = pCtrls + aCtrls.getLength();
+
+    for( ; pCtrls < pCtrlsEnd; ++pCtrls )
+    {
+        removingControl( *pCtrls );
+        // Control wegwerfen
+        (*pCtrls)->dispose();
+    }
+
 
     // alle Strukturen entfernen
-    sal_uInt32 n;
-    for ( n = mpControls->Count(); n; )
+    for ( sal_Int32 n = mpControls->Count();  n; )
         delete mpControls->GetObject( --n );
     mpControls->Clear();
 
-    for( n = 0; n < nCtrls; n++ )
-    {
-        pCtrls[n]->removeEventListener(this);
-
-        // Control wegwerfen
-        pCtrls[n]->dispose();
-    }
 
     UnoControlBase::dispose();
 }
 
 // ::com::sun::star::lang::XEventListener
-void UnoControlContainer::disposing( const ::com::sun::star::lang::EventObject& rEvt ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::disposing( const ::com::sun::star::lang::EventObject& _rEvt ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl(rEvt.Source, ::com::sun::star::uno::UNO_QUERY );
-    if (xControl.is())
-        removeControl(xControl);
+    uno::Reference< awt::XControl >  xControl( _rEvt.Source, uno::UNO_QUERY );
+    if ( xControl.is() )
+        removeControl( xControl );
+
+    UnoControlBase::disposing( _rEvt );
 }
 
 // ::com::sun::star::container::XContainer
@@ -344,6 +351,18 @@ void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) th
     return xCtrl;
 }
 
+void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& _rxControl )
+{
+    if ( _rxControl.is() )
+    {
+        uno::Reference< uno::XInterface > xThis;
+        OWeakAggObject::queryInterface( ::getCppuType( static_cast< uno::Reference< uno::XInterface >* >( NULL ) ) ) >>= xThis;
+
+        _rxControl->setContext( xThis );
+        _rxControl->addEventListener( this );
+    }
+}
+
 void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl ) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( rControl.is() )
@@ -353,11 +372,7 @@ void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com:
         UnoControlHolder* pHolder = new UnoControlHolder( rName, rControl );
         mpControls->Insert( pHolder, LIST_APPEND );
 
-        ::com::sun::star::uno::Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)0) );
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis;
-        aAny >>= xThis;
-        rControl->setContext( xThis );
-        rControl->addEventListener(this);
+        addingControl( rControl );
 
         if( mxPeer.is() )
         {
@@ -376,9 +391,18 @@ void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com:
     }
 }
 
-void UnoControlContainer::removeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >& _rxControl )
 {
-    if ( rControl.is() )
+    if ( _rxControl.is() )
+    {
+        _rxControl->removeEventListener( this );
+        _rxControl->setContext( NULL );
+    }
+}
+
+void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& _rxControl ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if ( _rxControl.is() )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -386,18 +410,18 @@ void UnoControlContainer::removeControl( const ::com::sun::star::uno::Reference<
         for( sal_uInt32 n = 0; n < nCtrls; n++ )
         {
             UnoControlHolder* pHolder = mpControls->GetObject( n );
-            if ( (::com::sun::star::awt::XControl*)rControl.get() == (::com::sun::star::awt::XControl*)pHolder->xCtrl.get() )
+            if ( _rxControl.get() == pHolder->xCtrl.get() )
             {
-                rControl->removeEventListener(this);
-                rControl->setContext( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () );
+                removingControl( _rxControl );
 
                 delete pHolder;
                 mpControls->Remove( n );
+
                 if ( maCListeners.getLength() )
                 {
                     ::com::sun::star::container::ContainerEvent aEvent;
                     aEvent.Source = *this;
-                    aEvent.Element <<= rControl;
+                    aEvent.Element <<= _rxControl;
                     maCListeners.elementRemoved( aEvent );
                 }
                 break;
