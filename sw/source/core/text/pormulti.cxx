@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 08:43:45 $
+ *  last change: $Author: fme $ $Date: 2002-05-02 07:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,14 +1020,14 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 
     if ( GetTxt().Len() != rPos && nNextLevel > nCurrLevel )
     {
-        rPos = bFldBidi ? rPos + 1 : rSI.NextDirChg( rPos, sal_True );
+        rPos = bFldBidi ? rPos + 1 : rSI.NextDirChg( rPos, &nCurrLevel );
         if ( STRING_LEN == rPos )
             return NULL;
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = NULL;
         pRet->pAttr = NULL;
         pRet->nId = SW_MC_BIDI;
-        pRet->nLevel = nNextLevel;
+        pRet->nLevel = nCurrLevel + 1;
         return pRet;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 14:31:58 $
+ *  last change: $Author: fme $ $Date: 2002-05-02 07:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ public:
     // than the level at position nPos is returned. This is required to
     // obtain the end of a SwBidiPortion
     xub_StrLen NextDirChg( const xub_StrLen nPos,
-                           sal_Bool bLevel = sal_False ) const;
+                           const BYTE* pLevel = 0 ) const;
     BYTE DirType( const xub_StrLen nPos ) const;
 #endif
     BYTE CompType( const xub_StrLen nPos ) const;
@@ -226,6 +226,7 @@ public:
     USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
                            const USHORT nSpace = 0 ) const;
+#endif
 
 /** Performes a thai justification on the kerning array
 
@@ -248,7 +249,6 @@ public:
     static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
                                long* pScrArray, xub_StrLen nIdx,
                                xub_StrLen nLen, const USHORT nSpace = 0 );
-#endif
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
