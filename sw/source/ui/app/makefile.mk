@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-22 13:56:17 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:21:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
-        acc.src     \
         app.src     \
         mn.src      \
         error.src
