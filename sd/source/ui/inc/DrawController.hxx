@@ -5,7 +5,7 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
+//#include <cppuhelper/interfacecontainer.h>
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -25,23 +25,21 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
+#include <memory>
+#include <vector>
 
 class SfxViewShell;
+class SdXImpressDocument;
 
 namespace {
 
-class DrawControllerMutexOwner
-{
-protected:
-    osl::Mutex maMutex;
-};
-
-typedef ::cppu::ImplHelper4 <
+typedef ::cppu::ImplHelper5 <
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::drawing::XDrawView,
     ::com::sun::star::awt::XWindow,
     ::com::sun::star::view::XSelectionChangeListener
     > DrawControllerInterfaceBase;
@@ -53,7 +51,8 @@ namespace sd {
 
 class DrawSubController;
 class ViewShellBase;
-
+class ViewShell;
+class View;
 
 /** Main controller for all sub-shells that are stacked onto a single
     view shell.
@@ -71,23 +70,33 @@ class ViewShellBase;
     controller.</p>
 */
 class DrawController
-    : public DrawControllerMutexOwner,
+    : public SfxBaseController,
       public ::cppu::OBroadcastHelper,
       public ::cppu::OPropertySetHelper,
-      public SfxBaseController,
       public DrawControllerInterfaceBase
 {
 public:
-    DrawController (ViewShellBase& rBase) throw();
+    enum properties
+    {
+        PROPERTY_WORKAREA = 0,
+        PROPERTY_FIRST_FREE,
+        PROPERTY_COUNT = PROPERTY_FIRST_FREE
+    };
+
+    DrawController (
+        ViewShellBase& rBase,
+        ViewShell& rViewShell,
+        View& rView) throw();
     virtual ~DrawController (void) throw();
 
-    /** This method is designed to be called from a
-        DrawSubController that has already prepared to Anys to given
-        to the broadcast helper.
+    ::com::sun::star::awt::Rectangle GetVisArea (void) const;
+
+    virtual void FireVisAreaChanged (const Rectangle& rVisArea) throw();
+
+    /** Call this method to tell the sub-controller that the selection
+        has changed.
     */
-    void FireVisAreaChanged (
-        const ::com::sun::star::uno::Any& rNewVisArea,
-        const ::com::sun::star::uno::Any& rOldVisArea) throw();
+    virtual void FireSelectionChangeListener (void) throw();
 
     DECLARE_XINTERFACE();
     DECLARE_XTYPEPROVIDER();
@@ -132,6 +141,19 @@ public:
     virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 
+    // XDrawView
+    virtual void SAL_CALL
+        setCurrentPage (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XDrawPage >& xPage)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XDrawPage > SAL_CALL
+        getCurrentPage (void)
+        throw(::com::sun::star::uno::RuntimeException);
+
+
     // lang::XEventListener
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
@@ -144,10 +166,41 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
+    View& mrView;
+
+    ViewShell& mrViewShell;
+
+    Rectangle maLastVisArea;
+
     /** This method must return the name to index table. This table
         contains all property names and types of this object.
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    /** Send an event to all relevant property listeners that a
+        property has changed its value.  The fire() method of the
+        OPropertySetHelper is wrapped by this method to handle
+        exceptions thrown by called listeners.
+    */
+    void FirePropertyChange (
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rNewValue,
+        const ::com::sun::star::uno::Any& rOldValue);
+
+    SdXImpressDocument* GetModel (void) const throw();
+
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::beans::Property>& GetPropertyTable (void);
+    virtual void FillPropertyTable (
+        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
+
+    /**
+     * The same as getFastProperyValue, but return the value through
+     * rValue and nHandle is always valid.
+     */
+    virtual void SAL_CALL getFastPropertyValue(
+        ::com::sun::star::uno::Any& rValue,
+        sal_Int32 nHandle ) const;
 
     /**
      * Converted the value rValue and return the result in rConvertedValue and the
@@ -166,6 +219,7 @@ protected:
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::lang::IllegalArgumentException);
+
     /**
      * The same as setFastProperyValue, but no exception is thrown and nHandle
      * is always valid. You must not broadcast the changes in this method.<BR>
@@ -175,14 +229,12 @@ protected:
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::uno::Exception);
-    /**
-     * The same as getFastProperyValue, but return the value through
-     * rValue and nHandle is always valid.
-     */
-    virtual void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
-        sal_Int32 nHandle) const;
 
+    /** When the called object has been disposed already this method throws
+        a Disposed exception and does not return.
+    */
+    void ThrowIfDisposed (void) const
+        throw (::com::sun::star::lang::DisposedException);
 
 private:
     ViewShellBase& mrBase;
@@ -192,20 +244,11 @@ private:
     */
     bool mbDisposing;
 
-    /** The currently active sub-controller.  Most of the calls will
-        be forwarded to this object.
-    */
-    DrawSubController* mpSubController;
+    ::std::auto_ptr< ::com::sun::star::uno::Sequence<
+        ::com::sun::star::beans::Property> > mpProperties;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
-        getWindow (void);
-
-    /** Returns the currently active-subcontroller.  When the member
-        variable mpSubController is set then its content is returned.
-        Otherwise it is set to the sub-controller of the currently
-        active sub-shell.
-    */
-    DrawSubController* GetSubController (void);
+        GetWindow (void);
 };
 
 } // end of namespace sd
