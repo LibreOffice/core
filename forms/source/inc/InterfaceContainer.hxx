@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #define _FRM_INTERFACE_CONTAINER_HXX_
 
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
@@ -135,7 +135,7 @@
 #include <cppuhelper/component.hxx>
 #endif
 
-using namespace utl;
+using namespace comphelper;
 
 //.........................................................................
 namespace frm
@@ -151,7 +151,7 @@ namespace frm
 
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
-typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::utl::UStringHash, ::utl::UStringEqual> OInterfaceMap;
+typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
 
 //==================================================================
 // FmForms
@@ -279,7 +279,7 @@ class OFormComponents   : public FormComponentsBase,
 {
 protected:
     ::osl::Mutex            m_aMutex;
-    ::utl::InterfaceRef     m_xParent;
+    ::comphelper::InterfaceRef  m_xParent;
 
 public:
     OFormComponents(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
@@ -294,8 +294,8 @@ public:
     virtual void SAL_CALL disposing();
 
 // starform::XFormComponent
-    virtual ::utl::InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException);
-    virtual void SAL_CALL setParent(const ::utl::InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
+    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException);
+    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
 };
 //.........................................................................
 }   // namespace frm

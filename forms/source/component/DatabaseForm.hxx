@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,20 @@
 #include "ids.hxx"
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_AGGREGATION_HXX_
-#include <unotools/propagg.hxx>
+#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#include <comphelper/propagg.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_MULTIPLEX_HXX_
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#ifndef _UNOTOOLS_GUARDING_HXX_
-#include <unotools/guarding.hxx>
+#ifndef _COMPHELPER_GUARDING_HXX_
+#include <comphelper/guarding.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace sdbc {
@@ -175,7 +175,7 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 class Timer;
 class INetMIMEMessage;
 
-typedef ::utl::OReusableGuard< ::osl::Mutex > ReusableMutexGuard;
+typedef ::comphelper::OReusableGuard< ::osl::Mutex > ReusableMutexGuard;
 
 //.........................................................................
 namespace frm
@@ -228,7 +228,7 @@ struct OParameterInfoImpl;
 class ODatabaseForm :public OFormComponents
                     ,public OPropertySetAggregationHelper
                     ,public OPropertyChangeListener
-                    ,public ::utl::OAggregationArrayUsageHelper<ODatabaseForm>
+                    ,public ::comphelper::OAggregationArrayUsageHelper<ODatabaseForm>
                     ,public starsdb::XSQLErrorBroadcaster
                     // service com::sun::star::form::component::Form (supported by com::sun::star::form::component::DataForm)
                         ,public starform::XForm

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,23 +66,23 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
-#ifndef _UNOTOOLS_EVENTATTACHERMGR_HXX_
-#include <unotools/eventattachermgr.hxx>
+#ifndef _COMPHELPER_EVENTATTACHERMGR_HXX_
+#include <comphelper/eventattachermgr.hxx>
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
-#ifndef _UNOTOOLS_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 #ifndef _FRM_PROPERTY_HRC_
@@ -130,7 +130,7 @@ OInterfaceContainer::OInterfaceContainer(
         ,m_aElementType(_rElementType)
         ,m_xServiceFactory(_rxFactory)
 {
-    m_xEventAttacher = ::utl::createEventAttacherManager(m_xServiceFactory);
+    m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
 }
 
 //------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const staruno::Reference<stario::X
     else
     {
         // neuen EventManager
-        m_xEventAttacher = ::utl::createEventAttacherManager(m_xServiceFactory);
+        m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
     }
 }
 
@@ -408,12 +408,12 @@ void OInterfaceContainer::propertyChange(const starbeans::PropertyChangeEvent& e
     {
         ::osl::MutexGuard aGuard( m_rMutex );
         OInterfaceMap::iterator i = find(m_aMap.begin(), m_aMap.end(),
-            pair<const ::rtl::OUString, InterfaceRef >(::utl::getString(evt.OldValue),evt.Source));
+            pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
         if (i != m_aMap.end())
         {
             InterfaceRef  xCorrectType((*i).second);
             m_aMap.erase(i);
-            m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef >(::utl::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
     }
 }
@@ -436,7 +436,7 @@ staruno::Type SAL_CALL OInterfaceContainer::getElementType() throw(staruno::Runt
 staruno::Reference<starcontainer::XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw( staruno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    return new ::utl::OEnumerationByIndex(static_cast<starcontainer::XIndexAccess*>(this));
+    return new ::comphelper::OEnumerationByIndex(static_cast<starcontainer::XIndexAccess*>(this));
 }
 
 // starcontainer::XNameAccess
@@ -847,7 +847,7 @@ staruno::Sequence<staruno::Type> SAL_CALL OFormComponents::getTypes() throw(star
     staruno::Sequence<staruno::Type> aOwnTypes(1);
     aOwnTypes.getArray()[0] = ::getCppuType(static_cast<staruno::Reference<starform::XFormComponent>*>(NULL));
 
-    return ::utl::concatSequences(aBaseTypes, aComponentTypes, aOwnTypes);
+    return ::comphelper::concatSequences(aBaseTypes, aComponentTypes, aOwnTypes);
 }
 
 //------------------------------------------------------------------------------

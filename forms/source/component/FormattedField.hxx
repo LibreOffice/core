@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <tools/lang.hxx>
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_MULTIPLEX_HXX_
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
 #endif
 
 //.........................................................................
@@ -84,12 +84,12 @@ namespace frm
 class OFormattedModel
                 :public OEditBaseModel
                 ,public OPropertyChangeListener
-                ,public ::utl::OAggregationArrayUsageHelper< OFormattedModel >
+                ,public ::comphelper::OAggregationArrayUsageHelper< OFormattedModel >
 {
     // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
     // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
     staruno::Reference<starutil::XNumberFormatsSupplier>    m_xOriginalFormatter;
-    Date                        m_aNullDate;
+    starutil::Date              m_aNullDate;
     staruno::Any                m_aSaveValue;
     sal_Int16                   m_nKeyType;
 

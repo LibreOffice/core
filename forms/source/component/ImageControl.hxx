@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_MULTIPLEX_HXX_
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
 #endif
-using namespace utl;
+using namespace comphelper;
 
 //.........................................................................
 namespace frm
@@ -90,7 +90,7 @@ namespace frm
 //==================================================================
 class OImageControlModel
                 :public starform::XImageProducerSupplier
-                ,public ::utl::OAggregationArrayUsageHelper<OImageControlModel>
+                ,public ::comphelper::OAggregationArrayUsageHelper<OImageControlModel>
                 ,public OBoundControlModel
                 ,public OPropertyChangeListener
 {
@@ -150,7 +150,7 @@ public:
 // starform::XImageProducerSupplier
     virtual staruno::Reference<starawt::XImageProducer> SAL_CALL getImageProducer() { return m_xImageProducer; }
 
-// ::utl::OAggregationArrayUsageHelper
+// ::comphelper::OAggregationArrayUsageHelper
     virtual void fillProperties(
         staruno::Sequence< starbeans::Property >& /* [out] */ _rProps,
         staruno::Sequence< starbeans::Property >& /* [out] */ _rAggregateProps

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,17 +79,17 @@
 #include <cppuhelper/proptypehlp.hxx>
 #endif
 
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_AGGREGATION_HXX_
-#include <unotools/propagg.hxx>
+#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#include <comphelper/propagg.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
-using namespace utl;
+using namespace comphelper;
 
 //=========================================================================
 //= property helper classes
@@ -153,8 +153,8 @@ private:
 };
 
 //..................................................................
-// a class implementing the utl::IPropertyInfoService
-class ConcretInfoService : public ::utl::IPropertyInfoService
+// a class implementing the comphelper::IPropertyInfoService
+class ConcretInfoService : public ::comphelper::IPropertyInfoService
 {
 public:
     virtual sal_Int32 getPreferedPropertyId(const ::rtl::OUString& _rName);

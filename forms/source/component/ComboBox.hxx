@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace frm
 class OComboBoxModel
             :public OBoundControlModel
             ,public starsdb::XSQLErrorBroadcaster
-            ,public ::utl::OAggregationArrayUsageHelper< OComboBoxModel >
+            ,public ::comphelper::OAggregationArrayUsageHelper< OComboBoxModel >
 {
     staruno::Reference<starutil::XNumberFormatter>  m_xFormatter;
     starform::ListSourceType    m_eListSourceType;      // type der list source
@@ -102,7 +102,7 @@ class OComboBoxModel
     ::rtl::OUString             m_aDefaultText;         // DefaultText
     ::rtl::OUString             m_aSaveValue;
     sal_Int32                   m_nFormatKey;
-    Date                        m_aNullDate;
+    starutil::Date              m_aNullDate;
     sal_Int32                   m_nFieldType;
     sal_Int16                   m_nKeyType;
     sal_Bool                    m_bEmptyIsNull;         // LeerString wird als NULL interpretiert

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX

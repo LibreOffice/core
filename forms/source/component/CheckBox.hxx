@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "FormComponent.hxx"
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_MULTIPLEX_HXX_
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
 #endif
 
 //.........................................................................
@@ -81,7 +81,7 @@ enum { CB_NOCHECK, CB_CHECK, CB_DONTKNOW };
 //==================================================================
 class OCheckBoxModel    :public OBoundControlModel
                         ,public OPropertyChangeListener
-                        ,public ::utl::OAggregationArrayUsageHelper< OCheckBoxModel >
+                        ,public ::comphelper::OAggregationArrayUsageHelper< OCheckBoxModel >
 {
     ::rtl::OUString     m_sReferenceValue;  // Referenzwert zum Checken des Buttons
     sal_Int16           m_nDefaultChecked;      // Soll beim Reset gecheckt werden ?

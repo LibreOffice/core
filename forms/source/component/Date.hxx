@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace frm
 //==================================================================
 class ODateModel
                 :public OEditBaseModel
-                ,public ::utl::OAggregationArrayUsageHelper< ODateModel >
+                ,public ::comphelper::OAggregationArrayUsageHelper< ODateModel >
 {
     staruno::Any        m_aSaveValue;
     sal_Bool            m_bDateTimeField;

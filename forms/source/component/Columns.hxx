@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,14 @@
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_AGGREGATION_HXX_
-#include <unotools/propagg.hxx>
+#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#include <comphelper/propagg.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #include "strings.hxx"
 
@@ -89,7 +89,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
-using namespace utl;
+using namespace comphelper;
 
 //.........................................................................
 namespace frm

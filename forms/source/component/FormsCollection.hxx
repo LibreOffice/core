@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormsCollection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <cppuhelper/component.hxx>
 #endif
 
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
@@ -101,7 +101,7 @@ class OFormsCollection
 {
     ::osl::Mutex            m_aMutex;
     OImplementationIdsRef   m_aHoldIdHelper;
-    ::utl::InterfaceRef     m_xParent;          // Parent
+    ::comphelper::InterfaceRef  m_xParent;          // Parent
 
 public:
     OFormsCollection(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
@@ -128,8 +128,8 @@ public:
     virtual void SAL_CALL disposing();
 
 // starcontainer::XChild
-    virtual ::utl::InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException);
-    virtual void SAL_CALL setParent(const ::utl::InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
+    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException);
+    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
 };
 
 //.........................................................................

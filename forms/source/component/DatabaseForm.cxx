@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 10:41:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,26 +187,26 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#ifndef _UNOTOOLS_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -216,15 +216,6 @@
 #endif
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
-#endif
-#ifndef _DATE_HXX
-#include <tools/Date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
-#include <tools/Time.hxx>
-#endif
-#ifndef _DATETIME_HXX
-#include <tools/DateTime.hxx>
 #endif
 #ifndef _INETTYPE_HXX
 #include <svtools/inettype.hxx>
@@ -243,6 +234,8 @@
 #endif
 
 #define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.form.component.ODatabaseForm")
+
+using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -282,7 +275,7 @@ staruno::Reference< starframe::XModel> getXModel(const staruno::Reference< staru
 class OParameterWrapper
         :public ::cppu::OWeakObject
         ,public ::cppu::OPropertySetHelper
-        ,public ::utl::OAggregationArrayUsageHelper<OParameterWrapper>
+        ,public ::comphelper::OAggregationArrayUsageHelper<OParameterWrapper>
 {
     staruno::Any                m_aValue;
     ::osl::Mutex                m_aMutex;

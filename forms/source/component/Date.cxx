@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,18 @@
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
-#include <unotools/datetime.hxx>
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+
+using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -232,8 +234,7 @@ sal_Bool ODateModel::_commit()
                 {
                     sal_Int32 nAsInt(0);
                     aNewValue >>= nAsInt;
-                    Date aToolsValue(nAsInt);
-                    typeConvert(aToolsValue, aDate);
+                    aDate = DBTypeConversion::toDate(nAsInt);
                 }
 
                 if (!m_bDateTimeField)
@@ -285,7 +286,7 @@ void ODateModel::_reset()
     else
     {   // aktuelles Datum einstellen
         Date aCurrentDate;
-        aValue <<= DBTypeConversion::toINT32(aCurrentDate);
+        aValue <<= (sal_Int32)aCurrentDate.GetDate();
     }
 
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties

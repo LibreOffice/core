@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,24 @@
 #include <tools/vclrsc.hxx>
 #endif
 
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#include <unotools/datetime.hxx>
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
+#endif
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
+#endif
 
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
+
+using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -354,7 +360,7 @@ OEditModel::OEditModel(const staruno::Reference<starlang::XMultiServiceFactory>&
              :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
                                     // use the old control name for compytibility reasons
              ,m_nMaxLen(0)
-             ,m_aNullDate(STANDARD_DB_DATE)
+             ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
              ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
              ,m_nFormatKey(0)
              ,m_nFieldType(starsdbc::DataType::OTHER)
@@ -529,7 +535,8 @@ void OEditModel::_loaded(const starlang::EventObject& rEvent)
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
             m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), m_nFormatKey);
-            typeConvert(*(starutil::Date*)xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")).getValue(), m_aNullDate);
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate"))
+                >>= m_aNullDate;
         }
 
         if (m_nKeyType != starutil::NumberFormat::SCIENTIFIC)
@@ -573,7 +580,7 @@ void OEditModel::_unloaded()
         m_nFieldType = starsdbc::DataType::OTHER;
         m_nFormatKey = 0;
         m_nKeyType   = starutil::NumberFormat::UNDEFINED;
-        m_aNullDate  = STANDARD_DB_DATE;
+        m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 #ifndef _ISOLANG_HXX
@@ -225,7 +225,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const staruno::Reference<stario::XOb
         sCountry,
         ::rtl::OUString());
 
-    TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
+    dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
 
     // then write the edit part, after switching to "fake mode"
     m_pEditPart->enableFormattedWriteFake();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,20 @@
 #include "property.hxx"
 #endif
 
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
-#include <unotools/datetime.hxx>
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 
 #ifndef _ZFORLIST_HXX //autogen
@@ -156,6 +156,8 @@
 #include <usr/smartconv.hxx>
 #endif
 #endif
+
+using namespace dbtools;
 
 /** implements handling for compatibly reading/writing data from/into an input/output stream.
     data written in a block secured by this class should be readable by older versions which
@@ -478,7 +480,7 @@ OFormattedModel::OFormattedModel(const staruno::Reference<starlang::XMultiServic
             ,m_bOriginalNumeric(sal_False)
             ,m_bNumeric(sal_False)
             ,m_xOriginalFormatter(NULL)
-            ,m_aNullDate(STANDARD_DB_DATE)
+            ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
             ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
 {
     m_nClassId = starform::FormComponentType::TEXTFIELD;
@@ -841,8 +843,8 @@ void OFormattedModel::_loaded(const starlang::EventObject& rEvent)
                 setPropertyValue(PROPERTY_TREATASNUMERIC, staruno::makeAny((sal_Bool)m_bNumeric));
 
                 m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-                typeConvert(*(starutil::Date*)xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp).getValue(),
-                    m_aNullDate);
+                xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
+                    >>= m_aNullDate;
             }
         }
         else
@@ -851,8 +853,8 @@ void OFormattedModel::_loaded(const starlang::EventObject& rEvent)
 
             m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
             m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(aFmtKey));
-            typeConvert(*(starutil::Date*)xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp).getValue(),
-                m_aNullDate);
+            xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
+                >>= m_aNullDate;
         }
     }
     else
@@ -861,8 +863,8 @@ void OFormattedModel::_loaded(const starlang::EventObject& rEvent)
 
         m_bNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
         m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), 0);
-        typeConvert(*(starutil::Date*)xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp).getValue(),
-            m_aNullDate);
+        xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp)
+            >>= m_aNullDate;
     }
 
     OEditBaseModel::_loaded(rEvent);
@@ -881,7 +883,7 @@ void OFormattedModel::_unloaded()
     }
 
     m_nKeyType   = starutil::NumberFormat::UNDEFINED;
-    m_aNullDate  = STANDARD_DB_DATE;
+    m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
 }
 
 //------------------------------------------------------------------------------
@@ -979,11 +981,11 @@ void OFormattedModel::write(const staruno::Reference<stario::XObjectOutputStream
             {
                 case staruno::TypeClass_STRING:
                     _rxOutStream->writeShort(0x0000);
-                    _rxOutStream->writeUTF(::utl::getString(aEffectiveValue));
+                    _rxOutStream->writeUTF(::comphelper::getString(aEffectiveValue));
                     break;
                 case staruno::TypeClass_DOUBLE:
                     _rxOutStream->writeShort(0x0001);
-                    _rxOutStream->writeDouble(::utl::getDouble(aEffectiveValue));
+                    _rxOutStream->writeDouble(::comphelper::getDouble(aEffectiveValue));
                     break;
                 default:    // void and all unknown states
                     DBG_ASSERT(!aEffectiveValue.hasValue(), "FmXFormattedModel::write : unknown property value type !");

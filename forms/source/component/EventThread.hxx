@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,16 @@
 #include <cppuhelper/component.hxx>
 #endif
 
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UNOTOOLS_GUARDING_HXX_
-#include <unotools/guarding.hxx>
+#ifndef _COMPHELPER_GUARDING_HXX_
+#include <comphelper/guarding.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-using namespace utl;
+using namespace comphelper;
 
 //.........................................................................
 namespace frm

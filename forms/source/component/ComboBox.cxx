@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,17 @@
 #ifndef _FORMS_BASELISTBOX_HXX_
 #include "BaseListBox.hxx"
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
-#include <unotools/datetime.hxx>
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
@@ -123,6 +123,8 @@
 #ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
 #include <com/sun/star/awt/XListBox.hpp>
 #endif
+
+using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -190,7 +192,7 @@ OComboBoxModel::OComboBoxModel(const staruno::Reference<starlang::XMultiServiceF
                                     // use the old control name for compytibility reasons
                  ,m_eListSourceType(starform::ListSourceType_TABLE)
                  ,m_bEmptyIsNull(sal_True)
-                  ,m_aNullDate(STANDARD_DB_DATE)
+                 ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
                  ,m_nKeyType(starutil::NumberFormat::UNDEFINED)
                  ,m_nFormatKey(0)
                  ,m_nFieldType(starsdbc::DataType::OTHER)
@@ -717,8 +719,7 @@ void OComboBoxModel::_loaded(const starlang::EventObject& rEvent)
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
             m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), m_nFormatKey);
-            typeConvert(*(starutil::Date*)xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")).getValue(),
-                m_aNullDate);
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= m_aNullDate;
         }
     }
 
@@ -736,7 +737,7 @@ void OComboBoxModel::_unloaded()
         m_nFieldType = starsdbc::DataType::OTHER;
         m_nFormatKey = 0;
         m_nKeyType   = starutil::NumberFormat::UNDEFINED;
-        m_aNullDate  = STANDARD_DB_DATE;
+        m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
     }
 
     // Zuruecksetzen der Inhalte (s.o)

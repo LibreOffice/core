@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,20 +86,20 @@
 #ifndef _FORMS_BASELISTBOX_HXX_
 #include "BaseListBox.hxx"
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
-#include <unotools/datetime.hxx>
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
@@ -129,6 +129,8 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
+
+using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -765,7 +767,7 @@ void OListBoxModel::loadData()
                     return;
                 }
 
-                Date aNullDate(STANDARD_DB_DATE);
+                starutil::Date aNullDate(DBTypeConversion::STANDARD_DB_DATE);
                 sal_Int32 nFormatKey = 0;
                 sal_Int32 nFieldType = starsdbc::DataType::OTHER;
                 sal_Int16 nKeyType   = starutil::NumberFormat::UNDEFINED;
@@ -790,9 +792,8 @@ void OListBoxModel::loadData()
                     if (xFormatter.is())
                     {
                         xFormatter->attachNumberFormatsSupplier(xSupplier);
-                        typeConvert(*(starutil::Date*)xFormatter->getNumberFormatsSupplier()->getNumberFormatSettings()->getPropertyValue(
-                            ::rtl::OUString::createFromAscii("NullDate")).getValue(),
-                            aNullDate);
+                        xFormatter->getNumberFormatsSupplier()->getNumberFormatSettings()->getPropertyValue(
+                            ::rtl::OUString::createFromAscii("NullDate")) >>= aNullDate;
                         nKeyType = getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
                     }
                 }
