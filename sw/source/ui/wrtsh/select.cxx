@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:13:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, BOOL )
     }
 
     // check the direction of the selection with the new point
-    BOOL bRet = FALSE, bMoveCrsr = TRUE, bToTop;
+    BOOL bRet = FALSE, bMoveCrsr = TRUE, bToTop = FALSE;
     SwCrsrShell::SelectWord( &aStart );     // select the startword
     SwCrsrShell::Push();                    // save the cursor
     SwCrsrShell::SetCrsr( *pPt );           // and check the direction
