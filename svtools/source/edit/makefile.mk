@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pb $ $Date: 2001-05-21 07:50:22 $
+#   last change: $Author: rt $ $Date: 2001-06-07 15:04:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,9 @@ OBJFILES+=   \
             $(OBJ)$/svmedit.obj		\
             $(OBJ)$/svmedit2.obj
 .ENDIF
+
+EXCEPTIONSFILES=	\
+            $(OBJ)$/textview.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  $(SLOFILES)
