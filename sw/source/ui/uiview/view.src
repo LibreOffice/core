@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:01:22 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ chinese_traditional ] = "Äæ¦ì¦WºÙ¿ï¶µÁÙ³B©ó¿E¬¡ª¬ºA¡C\n±z­n³s¦PÄæ¦ì¦WºÙ¤@°_¦C¦L³o­ÓÀÉ®×¡S";
     MESSAGE[ arabic ] = "ÇáÎíÇÑ \"ÅÙåÇÑ ÇÓã ÇáÍŞá\" äÔØ.\nåá ÊÑíÏ ØÈÇÚÉ ÇáãÓÊäÏ ÈÃÓãÇÁ ÇáÍŞæá¿";
     MESSAGE[ greek ] = "Ç åğéëïãŞ üíïìá ğåäßïõ åßíáé åíåñãïğïéçìİíç.\nÈİëåôå íá åêôõğùèåß ôï İããñáöï ìáæß ìå ôá ïíüìáôá ôùí ğåäßùí;";
-    MESSAGE[ korean ] = "ÇÊµå º¸±â ¸í·É ¿É¼ÇÀÌ Ã¼Å©µÇ¾î ÀÖ½À´Ï´Ù.\nÇÊµå ÀÌ¸§°ú ÇÔ²² ¹®¼­¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "ÇÊµå ÀÌ¸§ ¿É¼ÇÀÌ È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.\nÇÊµå ÀÌ¸§°ú ÇÔ²² ¹®¼­¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "\"Alan adını görüntüle\" seçeneği etkin.\nBelgeyi alan adlarıyla yazdırmak istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
 };
@@ -255,56 +255,56 @@ QueryBox MSG_SEARCH_END
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message = "StarOffice Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+    Message = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
     Message [ ENGLISH ] = "StarOffice Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message [ norwegian ] = "StarOffice Writer har søkt til slutten av  dokumentet. Vil du fortsette fra begynnelsen?" ;
-    Message [ italian ] = "StarOffice Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?" ;
-    Message [ portuguese_brazilian ] = "O StarOffice Writer buscou até o final do documento. Deseja continuar do início?" ;
-    Message [ portuguese ] = "O StarOffice Writer procurou até ao fim do documento. Deseja continuar a procura no início do documento?" ;
+    Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?" ;
+    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o final do documento. Deseja continuar do início?" ;
+    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao fim do documento. Deseja continuar a procura no início do documento?" ;
     Message [ finnish ] = "StarOffice Writer on etsinyt asiakirjan loppuun asti.Jatketaanko alusta?" ;
-    Message [ danish ] = "StarOffice Writer har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
-    Message [ french ] = "StarOffice Writer a atteint la fin du document. Souhaitez-vous reprendre la recherche au début du document ?" ;
-    Message [ swedish ] = "StarOffice Writer har sökt till slutet av dokument. Vill Du fortsätta sökningen i början av dokumentet?" ;
-    Message [ dutch ] = "StarOffice Writer heeft tot aan het einde van het document gezocht. Wilt u doorgaan met zoeken vanaf het begin?" ;
-    Message [ spanish ] = "StarOffice Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?" ;
-    Message [ english_us ] = "StarOffice Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
-    Message[ chinese_simplified ] = "StarOffice Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÎ²¶Ë¡£Òª¼ÌĞø´ÓÎÄµµÊ×¶Ë¿ªÊ¼ËÑÑ°£¿";
-    Message[ russian ] = "StarOffice Writer îñóùåñòâèë ïîèñê äî êîíöà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
-    Message[ polish ] = "StarOffice Writer szuka³ do koñca dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
-    Message[ japanese ] = "StarOffice Writer ‚Í•¶‘––‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘‚Ìn‚ß‚É–ß‚Á‚Ä‘±s‚µ‚Ü‚·‚©H";
-    Message[ chinese_traditional ] = "StarOffice Writer ¤w¸g·j´M¦Ü¤å¥óªº§Àºİ¡C­nÄ~Äò·j´M¦Ü¤å¥ó­ººİ¡H";
-    Message[ arabic ] = "ŞÇã StarOffice Writer ÈÇáÈÍË ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
-    Message[ greek ] = "Ôï StarOffice Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
-    Message[ korean ] = "StarOffice Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ Ã³À½ ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
-    Message[ turkish ] = "StarOffice Writer belgenin sonuna kadar aramayı tamamladı. Belgenin başından aramaya devam etmek istiyor musunuz?";
+    Message [ danish ] = "%PRODUCTNAME Writer har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
+    Message [ french ] = "%PRODUCTNAME Writer a atteint la fin du document. Souhaitez-vous reprendre la recherche au début du document ?" ;
+    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till slutet av dokument. Vill Du fortsätta sökningen i början av dokumentet?" ;
+    Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het einde van het document gezocht. Wilt u doorgaan met zoeken vanaf het begin?" ;
+    Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?" ;
+    Message [ english_us ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
+    Message[ chinese_simplified ] = "%PRODUCTNAME Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÎ²¶Ë¡£Òª¼ÌĞø´ÓÎÄµµÊ×¶Ë¿ªÊ¼ËÑÑ°£¿";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê äî êîíöà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
+    Message[ polish ] = "%PRODUCTNAME Writer szuka³ do koñca dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
+    Message[ japanese ] = "%PRODUCTNAME Writer ‚Í•¶‘––‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘‚Ìn‚ß‚É–ß‚Á‚Ä‘±s‚µ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªº§Àºİ¡C­nÄ~Äò·j´M¦Ü¤å¥ó­ººİ¡H";
+    Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
+    Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
+    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ Ã³À½ ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "%PRODUCTNAME Writer belgenin sonuna kadar aramayı tamamladı. Belgenin başından aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
 };
 QueryBox MSG_SEARCH_START
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message = "StarOffice Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+    Message = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
     Message [ ENGLISH ] = "StarOffice Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message [ norwegian ] = "StarOffice Writer har søkt til begynnelsen av dokumentet. Vil du fortsette fra slutten?" ;
-    Message [ italian ] = "StarOffice Writer ha cercato fino all'inizio del documento. Volete continuare dalla fine del documento?" ;
-    Message [ portuguese_brazilian ] = "O StarOffice Writer buscou até o início do documento. Deseja continuar no final?" ;
-    Message [ portuguese ] = "O StarOffice Writer procurou até ao início do documento. Deseja continuar a procura no fim do documento?" ;
+    Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino all'inizio del documento. Volete continuare dalla fine del documento?" ;
+    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o início do documento. Deseja continuar no final?" ;
+    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao início do documento. Deseja continuar a procura no fim do documento?" ;
     Message [ finnish ] = "StarOffice Writer on etsinyt asiakirjan alkuun asti.Jatketaanko lopusta?" ;
-    Message [ danish ] = "StarOffice Writer har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
-    Message [ french ] = "StarOffice Writer a atteint le début du document. Souhaitez-vous reprendre la recherche à la fin du document ?" ;
-    Message [ swedish ] = "StarOffice Writer har sökt till början av dokumentet. Vill Du fortsätta sökningen i slutet av dokumentet?" ;
-    Message [ dutch ] = "StarOffice Writer heeft tot aan het begin van het document gezocht. Wilt u doorgaan met zoeken vanaf het einde?" ;
-    Message [ spanish ] = "StarOffice Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?" ;
-    Message [ english_us ] = "StarOffice Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
-    Message[ chinese_simplified ] = "StarOffice Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÊ×¶Ë¡£Òª¼ÌĞø´ÓÎÄ¼şÎ²¶Ë¿ªÊ¼ËÑÑ°£¿";
-    Message[ russian ] = "StarOffice Writer îñóùåñòâèë ïîèñê äî íà÷àëà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê â êîíöå äîêóìåíòà?";
-    Message[ polish ] = "StarOffice Writer szuka³ do pocz¹tku dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na koñcu dokumentu?";
-    Message[ japanese ] = "StarOffice Writer ‚Í•¶‘‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘––‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©H";
-    Message[ chinese_traditional ] = "StarOffice Writer ¤w¸g·j´M¦Ü¤å¥óªº­ººİ¡C­nÄ~Äò·j´M¤å¥ó¦Ü§Àºİ¡S";
-    Message[ arabic ] = "ŞÇã StarOffice Writer ÈÇáÈÍË ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
-    Message[ greek ] = "Ôï StarOffice Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
-    Message[ korean ] = "StarOffice Writer°¡ ¹®¼­ÀÇ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡±îÁö °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
-    Message[ turkish ] = "StarOffice Writer belgenin başına kadar aramayı tamamladı. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
+    Message [ danish ] = "%PRODUCTNAME Writer har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
+    Message [ french ] = "%PRODUCTNAME Writer a atteint le début du document. Souhaitez-vous reprendre la recherche à la fin du document ?" ;
+    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till början av dokumentet. Vill Du fortsätta sökningen i slutet av dokumentet?" ;
+    Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het begin van het document gezocht. Wilt u doorgaan met zoeken vanaf het einde?" ;
+    Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?" ;
+    Message [ english_us ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
+    Message[ chinese_simplified ] = "%PRODUCTNAME Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÊ×¶Ë¡£Òª¼ÌĞø´ÓÎÄ¼şÎ²¶Ë¿ªÊ¼ËÑÑ°£¿";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê äî íà÷àëà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê â êîíöå äîêóìåíòà?";
+    Message[ polish ] = "%PRODUCTNAME Writer szuka³ do pocz¹tku dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na koñcu dokumentu?";
+    Message[ japanese ] = "%PRODUCTNAME Writer ‚Í•¶‘‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘––‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªº­ººİ¡C­nÄ~Äò·j´M¤å¥ó¦Ü§Àºİ¡S";
+    Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
+    Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
+    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡±îÁö °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "%PRODUCTNAME Writer belgenin başına kadar aramayı tamamladı. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
 };
 InfoBox MSG_NO_MERGE_ENTRY
@@ -327,7 +327,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ chinese_traditional ] = "µLªk¦X¨Ö¤å¥ó¡C";
     Message[ arabic ] = ".áã íãßä ÏãÌ ÃíÉ ãÓÊäÏÇÊ";
     Message[ greek ] = "Ç óõã÷şíåõóç äåí Şôáí äõíáôŞ.";
-    Message[ korean ] = "¹®¼­ º´ÇÕÀÌ ¾È¾ú½À´Ï´Ù.";
+    Message[ korean ] = "¹®¼­ º´ÇÕÀ» ¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Belgeler birleştirilemedi.";
     Message[ language_user1 ] = " ";
 };
@@ -401,7 +401,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Ê³n¥ó¡C";
     Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/ØÈÇÚÉ\".";
     Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá fax óôï êáôÜëïãï Åñãáëåßá/Åğéëïãİò/Åêôığùóç.";
-    Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼â ¿¡ ÆÑ½º ÇÁ¸°ÅÍ°¡ ±¸¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Message[ turkish ] = "Araçlar/Seçenekler/Yazdırma altında faks konfigürasyonu yapılmadı.";
     Message[ language_user1 ] = " ";
 };
