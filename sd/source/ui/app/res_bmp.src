@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:18:15 $
+ *  last change: $Author: ka $ $Date: 2000-10-30 12:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,53 +302,101 @@ Bitmap BMP_GRAPHIC
     File = "graphic.bmp" ;
 };
  // Effekte BMPs fuer ValueSet
-Bitmap BMP_EFFECT_FADE_FROM_UPPERLEFT
+Bitmap BMP_EFFECT_FADE_FROM_UL
 {
     File = "fadetl.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_TOP
+Bitmap BMP_EFFECT_FADE_FROM_T
 {
     File = "fadetop.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_UPPERRIGHT
+Bitmap BMP_EFFECT_FADE_FROM_UR
 {
     File = "fadetr.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_LEFT
+Bitmap BMP_EFFECT_FADE_FROM_L
 {
     File = "fadeleft.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_RIGHT
+Bitmap BMP_EFFECT_FADE_FROM_R
 {
     File = "faderght.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_LOWERLEFT
+Bitmap BMP_EFFECT_FADE_FROM_LL
 {
     File = "fadebl.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_BOTTOM
+Bitmap BMP_EFFECT_FADE_FROM_B
 {
     File = "fadebotm.bmp" ;
 };
-Bitmap BMP_EFFECT_FADE_FROM_LOWERRIGHT
+Bitmap BMP_EFFECT_FADE_FROM_LR
 {
     File = "fadebr.bmp" ;
 };
-Bitmap BMP_EFFECT_DISCARD_FROM_TOP
-{
-    File = "disctop.bmp" ;
-};
-Bitmap BMP_EFFECT_DISCARD_FROM_LEFT
+Bitmap BMP_EFFECT_DISCARD_FROM_L
 {
     File = "discleft.bmp" ;
 };
-Bitmap BMP_EFFECT_DISCARD_FROM_RIGHT
+Bitmap BMP_EFFECT_DISCARD_FROM_UL
+{
+    File = "disculft.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_T
+{
+    File = "disctop.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_UR
+{
+    File = "discurgt.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_R
 {
     File = "discrght.bmp" ;
 };
-Bitmap BMP_EFFECT_DISCARD_FROM_BOTTOM
+Bitmap BMP_EFFECT_DISCARD_FROM_LR
+{
+    File = "disclrgt.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_B
 {
     File = "discbotm.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_FROM_LL
+{
+    File = "discllft.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_L
+{
+    File = "dissleft.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_UL
+{
+    File = "dissulft.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_T
+{
+    File = "disstop.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_UR
+{
+    File = "dissurgt.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_R
+{
+    File = "dissrght.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_LR
+{
+    File = "disslrgt.bmp";
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_B
+{
+    File = "dissbotm.bmp" ;
+};
+Bitmap BMP_EFFECT_DISCARD_S_FROM_LL
+{
+    File = "dissllft.bmp";
 };
 Bitmap BMP_EFFECT_FADE_TO_CENTER
 {
@@ -390,67 +438,67 @@ Bitmap BMP_EFFECT_CLOSE_HORIZONTAL
 {
     File = "closhorz.bmp" ;
 };
-Bitmap BMP_EFFECT_WAVYLINE_FROM_TOP
+Bitmap BMP_EFFECT_WAVYLINE_FROM_T
 {
     File = "wavytop.bmp" ;
 };
-Bitmap BMP_EFFECT_WAVYLINE_FROM_LEFT
+Bitmap BMP_EFFECT_WAVYLINE_FROM_L
 {
     File = "wavyleft.bmp" ;
 };
-Bitmap BMP_EFFECT_WAVYLINE_FROM_RIGHT
+Bitmap BMP_EFFECT_WAVYLINE_FROM_R
 {
     File = "wavyrght.bmp" ;
 };
-Bitmap BMP_EFFECT_WAVYLINE_FROM_BOTTOM
+Bitmap BMP_EFFECT_WAVYLINE_FROM_B
 {
     File = "wavybotm.bmp" ;
 };
-Bitmap BMP_EFFECT_SPIRALIN_LEFT
+Bitmap BMP_EFFECT_SPIRALIN_L
 {
     File = "spiralil.bmp" ;
 };
-Bitmap BMP_EFFECT_SPIRALIN_RIGHT
+Bitmap BMP_EFFECT_SPIRALIN_R
 {
     File = "spiralir.bmp" ;
 };
-Bitmap BMP_EFFECT_SPIRALOUT_LEFT
+Bitmap BMP_EFFECT_SPIRALOUT_L
 {
     File = "spiralol.bmp" ;
 };
-Bitmap BMP_EFFECT_SPIRALOUT_RIGHT
+Bitmap BMP_EFFECT_SPIRALOUT_R
 {
     File = "spiralor.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_UPPERLEFT
+Bitmap BMP_EFFECT_LASER_FROM_UL
 {
     File = "lasrtlft.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_TOP
+Bitmap BMP_EFFECT_LASER_FROM_T
 {
     File = "lasrtop.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_UPPERRIGHT
+Bitmap BMP_EFFECT_LASER_FROM_UR
 {
     File = "lasrtrgt.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_LEFT
+Bitmap BMP_EFFECT_LASER_FROM_L
 {
     File = "lasrleft.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_RIGHT
+Bitmap BMP_EFFECT_LASER_FROM_R
 {
     File = "lasrrght.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_LOWERLEFT
+Bitmap BMP_EFFECT_LASER_FROM_LL
 {
     File = "lasrblft.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_BOTTOM
+Bitmap BMP_EFFECT_LASER_FROM_B
 {
     File = "lasrbotm.bmp" ;
 };
-Bitmap BMP_EFFECT_LASER_FROM_LOWERRIGHT
+Bitmap BMP_EFFECT_LASER_FROM_LR
 {
     File = "lasrbrgt.bmp" ;
 };
@@ -461,6 +509,14 @@ Bitmap BMP_EFFECT_VERTICAL_LINES
 Bitmap BMP_EFFECT_HORIZONTAL_LINES
 {
     File = "linehorz.bmp" ;
+};
+Bitmap BMP_EFFECT_VERTICAL_CHECKERBOARD
+{
+    File = "chckvert.bmp" ;
+};
+Bitmap BMP_EFFECT_HORIZONTAL_CHECKERBOARD
+{
+    File = "chckhorz.bmp" ;
 };
 Bitmap BMP_EFFECT_DISSOLVE
 {
@@ -474,35 +530,35 @@ Bitmap BMP_EFFECT_PATH
 {
     File = "effpath.bmp" ;
 };
-Bitmap BMP_EFFECT_ROLL_FROM_TOP
-{
-    File = "rolltop.bmp" ;
-};
-Bitmap BMP_EFFECT_ROLL_FROM_LEFT
+Bitmap BMP_EFFECT_ROLL_FROM_L
 {
     File = "rollleft.bmp" ;
 };
-Bitmap BMP_EFFECT_ROLL_FROM_RIGHT
+Bitmap BMP_EFFECT_ROLL_FROM_T
+{
+    File = "rolltop.bmp" ;
+};
+Bitmap BMP_EFFECT_ROLL_FROM_R
 {
     File = "rollrght.bmp" ;
 };
-Bitmap BMP_EFFECT_ROLL_FROM_BOTTOM
+Bitmap BMP_EFFECT_ROLL_FROM_B
 {
     File = "rollbotm.bmp" ;
 };
-Bitmap BMP_EFFECT_STRETCH_FROM_TOP
-{
-    File = "stretop.bmp" ;
-};
-Bitmap BMP_EFFECT_STRETCH_FROM_LEFT
+Bitmap BMP_EFFECT_STRETCH_FROM_L
 {
     File = "streleft.bmp" ;
 };
-Bitmap BMP_EFFECT_STRETCH_FROM_RIGHT
+Bitmap BMP_EFFECT_STRETCH_FROM_T
+{
+    File = "stretop.bmp" ;
+};
+Bitmap BMP_EFFECT_STRETCH_FROM_R
 {
     File = "strerght.bmp" ;
 };
-Bitmap BMP_EFFECT_STRETCH_FROM_BOTTOM
+Bitmap BMP_EFFECT_STRETCH_FROM_B
 {
     File = "strebotm.bmp" ;
 };
@@ -510,7 +566,7 @@ Bitmap BMP_EFFECT_NONE
 {
     File = "effnone.bmp" ;
 };
-Bitmap BMP_TEXTEFFECT_DISCARD_FROM_TOP
+Bitmap BMP_TEXTEFFECT_DISCARD_FROM_T
 {
     File = "disctxtt.bmp" ;
 };
@@ -526,6 +582,7 @@ Bitmap BMP_EFFECT_APPEAR
 {
     File = "effapear.bmp" ;
 };
+
 Image IMG_EMBEDDED
 {
     ImageBitmap = Bitmap { File = "kopie.bmp" ; };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-27 14:32:08 $
+ *  last change: $Author: ka $ $Date: 2000-10-30 12:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6884,7 +6884,7 @@ String STR_EFFECT_NONE
     Text[ arabic ] = "»œÊ‰  √ÀÌ—";
     Text[ turkish ] = "Efekt yok";
 };
-String STR_EFFECT_FADE_FROM_LEFT
+String STR_EFFECT_FADE_FROM_L
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von links ¸berblenden : Von links ≥berblenden */
     Text = "Von links ¸berblenden" ;
@@ -6910,7 +6910,7 @@ String STR_EFFECT_FADE_FROM_LEFT
     Text[ arabic ] = " €ÿÌ… „‰ «·Ì”«—";
     Text[ turkish ] = "Soldan ser";
 };
-String STR_EFFECT_FADE_FROM_TOP
+String STR_EFFECT_FADE_FROM_T
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von oben ¸berblenden : Von oben ≥berblenden */
     Text = "Von oben ¸berblenden" ;
@@ -6936,7 +6936,7 @@ String STR_EFFECT_FADE_FROM_TOP
     Text[ arabic ] = " €ÿÌ… „‰ √⁄·Ï";
     Text[ turkish ] = "Yukar˝dan ser";
 };
-String STR_EFFECT_FADE_FROM_RIGHT
+String STR_EFFECT_FADE_FROM_R
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts ¸berblenden : Von rechts ≥berblenden */
     Text = "Von rechts ¸berblenden" ;
@@ -6962,7 +6962,7 @@ String STR_EFFECT_FADE_FROM_RIGHT
     Text[ arabic ] = " €ÿÌ… „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sadan ser";
 };
-String STR_EFFECT_FADE_FROM_BOTTOM
+String STR_EFFECT_FADE_FROM_B
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von unten ¸berblenden : Von unten ≥berblenden */
     Text = "Von unten ¸berblenden" ;
@@ -7039,7 +7039,7 @@ String STR_EFFECT_FADE_FROM_CENTER
     Text[ arabic ] = " ⁄·Ì» ≈·Ï «·Œ«—Ã";
     Text[ turkish ] = "D˝˛a doru perdele";
 };
-String STR_EFFECT_DISCARD_FROM_LEFT
+String STR_EFFECT_DISCARD_FROM_L
 {
     Text = "Von links aufdecken" ;
     Text [ ENGLISH ] = "Discard from left" ;
@@ -7053,7 +7053,7 @@ String STR_EFFECT_DISCARD_FROM_LEFT
     Text [ swedish ] = "Avt‰ck frÂn v‰nster" ;
     Text [ dutch ] = "Vertonen vanaf links" ;
     Text [ spanish ] = "Entrar desde la izquierda" ;
-    Text [ english_us ] = "Uncover from Left" ;
+    Text [ english_us ] = "Discard from Left" ;
     Text[ chinese_simplified ] = "¥”◊Û√Ê≤Â»Î";
     Text[ russian ] = "ŒÚÍ˚Ú¸ ÒÎÂ‚‡";
     Text[ polish ] = "Odkryj z lewej";
@@ -7064,32 +7064,25 @@ String STR_EFFECT_DISCARD_FROM_LEFT
     Text[ arabic ] = "ﬂ‘› „‰ «·Ì”«—";
     Text[ turkish ] = "Soldan s¸r";
 };
-String STR_EFFECT_DISCARD_FROM_TOP
+String STR_EFFECT_DISCARD_FROM_UL
+{
+    Text = "Von links oben aufdecken" ;
+    Text [ ENGLISH ] = "Discard from upper left" ;
+    Text [ english_us ] = "Discard from Top Left" ;
+};
+String STR_EFFECT_DISCARD_FROM_T
 {
     Text = "Von oben aufdecken" ;
     Text [ ENGLISH ] = "Discard from top" ;
-    Text [ norwegian ] = "Discard from top" ;
-    Text [ italian ] = "Sovrapponi dall'alto" ;
-    Text [ portuguese_brazilian ] = "Descartar a partir do topo" ;
-    Text [ portuguese ] = "Descobrir a partir de cima" ;
-    Text [ finnish ] = "Poista ylh‰‰lt‰" ;
-    Text [ danish ] = "AfdÊk nedad" ;
-    Text [ french ] = "DÈcouvrir du haut" ;
-    Text [ swedish ] = "Avt‰ck uppifrÂn" ;
-    Text [ dutch ] = "Vertonen van boven af" ;
-    Text [ spanish ] = "Entrar desde arriba" ;
-    Text [ english_us ] = "Uncover from Top" ;
-    Text[ chinese_simplified ] = "¥”…œ∑Ω≤Â»Î";
-    Text[ russian ] = "ŒÚÍ˚Ú¸ Ò‚ÂıÛ";
-    Text[ polish ] = "Odkryj z gÛry";
-    Text[ japanese ] = "è„Ç©ÇÁåªÇÍèoÇÈ";
-    Text[ greek ] = "¡ÔÍ‹Îı¯Á ·¸ ‹Ì˘";
-    Text[ korean ] = "¿ß∫Œ≈Õ ≥Î√‚";
-    Text[ chinese_traditional ] = "±q§W≈„≈S";
-    Text[ arabic ] = "ﬂ‘› „‰ √⁄·Ï";
-    Text[ turkish ] = "Yukar˝dan s¸r";
+    Text [ english_us ] = "Discard from Top" ;
 };
-String STR_EFFECT_DISCARD_FROM_RIGHT
+String STR_EFFECT_DISCARD_FROM_UR
+{
+    Text = "Von rechts oben aufdecken" ;
+    Text [ ENGLISH ] = "Discard from upper right" ;
+    Text [ english_us ] = "Discard from Upper Right" ;
+};
+String STR_EFFECT_DISCARD_FROM_R
 {
     Text = "Von rechts aufdecken" ;
     Text [ ENGLISH ] = "Discard from right" ;
@@ -7103,7 +7096,7 @@ String STR_EFFECT_DISCARD_FROM_RIGHT
     Text [ swedish ] = "Avt‰ck frÂn hˆger" ;
     Text [ dutch ] = "Vertonen vanaf rechts" ;
     Text [ spanish ] = "Entrar desde la derecha" ;
-    Text [ english_us ] = "Uncover from Right" ;
+    Text [ english_us ] = "Discard from Right" ;
     Text[ chinese_simplified ] = "¥””“√Ê≤Â»Î";
     Text[ russian ] = "ŒÚÍ˚Ú¸ ÒÔ‡‚‡";
     Text[ polish ] = "Odkryj z prawej";
@@ -7114,7 +7107,13 @@ String STR_EFFECT_DISCARD_FROM_RIGHT
     Text[ arabic ] = "ﬂ‘› „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sadan s¸r";
 };
-String STR_EFFECT_DISCARD_FROM_BOTTOM
+String STR_EFFECT_DISCARD_FROM_LR
+{
+    Text = "Von rechts unten aufdecken" ;
+    Text [ ENGLISH ] = "Discard from lower right" ;
+    Text [ english_us ] = "Discard from Lower Right" ;
+};
+String STR_EFFECT_DISCARD_FROM_B
 {
     Text = "Von unten aufdecken" ;
     Text [ ENGLISH ] = "Discard from bottom" ;
@@ -7128,7 +7127,7 @@ String STR_EFFECT_DISCARD_FROM_BOTTOM
     Text [ swedish ] = "Avt‰ck nedifrÂn" ;
     Text [ dutch ] = "Vertonen van onder af" ;
     Text [ spanish ] = "Entrar desde abajo" ;
-    Text [ english_us ] = "Uncover from Bottom" ;
+    Text [ english_us ] = "Discard from Bottom" ;
     Text[ chinese_simplified ] = "¥”œ¬∑Ω≤Â»Î";
     Text[ russian ] = "ŒÚÍ˚Ú¸ ÒÌËÁÛ";
     Text[ polish ] = "Odkryj z do≥u";
@@ -7138,6 +7137,60 @@ String STR_EFFECT_DISCARD_FROM_BOTTOM
     Text[ chinese_traditional ] = "±q§U≈„≈S";
     Text[ arabic ] = "ﬂ‘› „‰ √”›·";
     Text[ turkish ] = "A˛a˝dan s¸r";
+};
+String STR_EFFECT_DISCARD_FROM_LL
+{
+    Text = "Von links unten aufdecken" ;
+    Text [ ENGLISH ] = "Discard from lower left" ;
+    Text [ english_us ] = "Discard from Lower Left" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_L
+{
+    Text = "Von links verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from left" ;
+    Text [ english_us ] = "Discard short from Left" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_UL
+{
+    Text = "Von links oben verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from upper left" ;
+    Text [ english_us ] = "Discard short from Upper Left" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_T
+{
+    Text = "Von oben verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from top" ;
+    Text [ english_us ] = "Discard short from Top" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_UR
+{
+    Text = "Von rechts oben verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from upper right" ;
+    Text [ english_us ] = "Discard short from Upper Right" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_R
+{
+    Text = "Von rechts verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from right" ;
+    Text [ english_us ] = "Discard short from Right" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_LR
+{
+    Text = "Von rechts unten verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from lower right" ;
+    Text [ english_us ] = "Discard short from Lower Right" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_B
+{
+    Text = "Von unten verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from bottom" ;
+    Text [ english_us ] = "Discard short from Bottom" ;
+};
+String STR_EFFECT_DISCARD_S_FROM_LL
+{
+    Text = "Von links unten verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short from lower left" ;
+    Text [ english_us ] = "Discard short from Lower Left" ;
 };
 String STR_EFFECT_VERTICAL_STRIPES
 {
@@ -7189,7 +7242,65 @@ String STR_EFFECT_HORIZONTAL_STRIPES
     Text[ arabic ] = "” «∆— √›ﬁÌ…";
     Text[ turkish ] = "Yatay perdele";
 };
-String STR_EFFECT_ROLL_FROM_LEFT
+String STR_EFFECT_VERTICAL_LINES
+{
+    Text = "Vertikale Linien" ;
+    Text [ ENGLISH ] = "Vertical lines" ;
+    Text [ dutch ] = "Verticale lijnen" ;
+    Text [ english_us ] = "Vertical Lines" ;
+    Text [ italian ] = "Linee verticali" ;
+    Text [ spanish ] = "LÌneas verticales" ;
+    Text [ french ] = "Lignes verticales" ;
+    Text [ swedish ] = "Vertikala linjer" ;
+    Text [ danish ] = "Lodrette linjer" ;
+    Text [ portuguese ] = "Linhas verticais" ;
+    Text [ portuguese_brazilian ] = "Vertikale Linien" ;
+    Text[ chinese_simplified ] = "¥π÷±œﬂÃı";
+    Text[ russian ] = "¬ÂÚËÍ‡Î¸Ì˚Â ÎËÌËË";
+    Text[ polish ] = "Linie pionowe";
+    Text[ japanese ] = "êÇíºÇ»ê¸";
+    Text[ greek ] = " ·Ù·Í¸ÒıˆÂÚ „Ò·ÏÏ›Ú";
+    Text[ korean ] = "ºˆ¡˜º±";
+    Text[ chinese_traditional ] = "´´™ΩΩu±¯";
+    Text[ arabic ] = "ŒÿÊÿ —√”Ì…";
+    Text[ turkish ] = "Dikey Áizgiler";
+};
+String STR_EFFECT_HORIZONTAL_LINES
+{
+    Text = "Horizontale Linien" ;
+    Text [ ENGLISH ] = "Horizontal lines" ;
+    Text [ dutch ] = "Horizontale lijnen" ;
+    Text [ english_us ] = "Horizontal Lines" ;
+    Text [ italian ] = "Linee orizzontali" ;
+    Text [ spanish ] = "LÌneas horizontales" ;
+    Text [ french ] = "Lignes horizontales" ;
+    Text [ swedish ] = "Horisontella linjer" ;
+    Text [ danish ] = "Vandrette linjer" ;
+    Text [ portuguese ] = "Linhas horizontais" ;
+    Text [ portuguese_brazilian ] = "Horizontale Linien" ;
+    Text[ chinese_simplified ] = "ÀÆ∆ΩœﬂÃı";
+    Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸Ì˚Â ÎËÌËË";
+    Text[ polish ] = "Linie poziome";
+    Text[ japanese ] = "êÖïΩÇ»ê¸";
+    Text[ greek ] = "œÒÈÊ¸ÌÙÈÂÚ „Ò·ÏÏ›Ú";
+    Text[ korean ] = "ºˆ∆Úº±";
+    Text[ chinese_traditional ] = "§Ù•≠Ωu±¯";
+    Text[ arabic ] = "ŒÿÊÿ √›ﬁÌ…";
+    Text[ turkish ] = "Yatay Áizgiler";
+};
+String STR_EFFECT_VERTICAL_CHECKERBOARD
+{
+    Text = "Vertikales Schachbrett" ;
+    Text [ ENGLISH ] = "Vertical checkerboard";
+    Text [ english_us ] = "Vertical checkerboard";
+};
+String STR_EFFECT_HORIZONTAL_CHECKERBOARD
+{
+    Text = "Horiziontales Schachbrett" ;
+    Text [ ENGLISH ] = "Horizontal checkerboard";
+    Text [ english_us ] = "Horizontal checkerboard";
+};
+String STR_EFFECT_ROLL_FROM_L
 {
     Text = "Von links rollen" ;
     Text [ ENGLISH ] = "Roll from left" ;
@@ -7214,7 +7325,7 @@ String STR_EFFECT_ROLL_FROM_LEFT
     Text[ arabic ] = "›—‘ „‰ «·Ì”«—";
     Text[ turkish ] = "Saa kayd˝r";
 };
-String STR_EFFECT_ROLL_FROM_TOP
+String STR_EFFECT_ROLL_FROM_T
 {
     Text = "Von oben rollen" ;
     Text [ ENGLISH ] = "Roll from top" ;
@@ -7239,7 +7350,7 @@ String STR_EFFECT_ROLL_FROM_TOP
     Text[ arabic ] = "›—‘ „‰ √⁄·Ï";
     Text[ turkish ] = "A˛a˝ kayd˝r";
 };
-String STR_EFFECT_ROLL_FROM_RIGHT
+String STR_EFFECT_ROLL_FROM_R
 {
     Text = "Von rechts rollen" ;
     Text [ ENGLISH ] = "Roll from right" ;
@@ -7264,7 +7375,7 @@ String STR_EFFECT_ROLL_FROM_RIGHT
     Text[ arabic ] = "›—‘ „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sola kayd˝r";
 };
-String STR_EFFECT_ROLL_FROM_BOTTOM
+String STR_EFFECT_ROLL_FROM_B
 {
     Text = "Von unten rollen" ;
     Text [ ENGLISH ] = "Roll from bottom" ;
@@ -7289,7 +7400,7 @@ String STR_EFFECT_ROLL_FROM_BOTTOM
     Text[ arabic ] = "›—‘ „‰ √”›·";
     Text[ turkish ] = "Yukar˝ kayd˝r";
 };
-String STR_EFFECT_WAVYLINE_FROM_LEFT
+String STR_EFFECT_WAVYLINE_FROM_L
 {
     Text = "Schlangenlinie von links" ;
     Text [ ENGLISH ] = "Wavyline from left" ;
@@ -7312,7 +7423,7 @@ String STR_EFFECT_WAVYLINE_FROM_LEFT
     Text[ arabic ] = "Œÿ „ „Ê¯ˆÃ „‰ «·Ì”«—";
     Text[ turkish ] = "Soldan y˝lan hareketi";
 };
-String STR_EFFECT_WAVYLINE_FROM_RIGHT
+String STR_EFFECT_WAVYLINE_FROM_R
 {
     Text = "Schlangenlinie von rechts" ;
     Text [ ENGLISH ] = "Wavyline from right" ;
@@ -7335,7 +7446,7 @@ String STR_EFFECT_WAVYLINE_FROM_RIGHT
     Text[ arabic ] = "Œÿ „ „Ê¯ˆÃ „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sadan y˝lan hareketi";
 };
-String STR_EFFECT_WAVYLINE_FROM_TOP
+String STR_EFFECT_WAVYLINE_FROM_T
 {
     Text = "Schlangenlinie von oben" ;
     Text [ ENGLISH ] = "Wavyline from top" ;
@@ -7358,7 +7469,7 @@ String STR_EFFECT_WAVYLINE_FROM_TOP
     Text[ arabic ] = "Œÿ „ „Ê¯ˆÃ „‰ √⁄·Ï";
     Text[ turkish ] = "Yukar˝dan y˝lan hareketi";
 };
-String STR_EFFECT_WAVYLINE_FROM_BOTTOM
+String STR_EFFECT_WAVYLINE_FROM_B
 {
     Text = "Schlangenlinie von unten" ;
     Text [ ENGLISH ] = "Wavyline from bottom" ;
@@ -7427,7 +7538,7 @@ String STR_EFFECT_COUNTERCLOCKWISE
     Text[ arabic ] = "œÊ—«‰ ⁄ﬂ” « Ã«Â ⁄ﬁ«—» «·”«⁄…";
     Text[ turkish ] = "Saat yˆn¸n¸n tersine perdele";
 };
-String STR_EFFECT_FADE_FROM_UPPERLEFT
+String STR_EFFECT_FADE_FROM_UL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von links oben ¸berblenden : Von links oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links oben ¸berblenden : Von links oben blenden */
@@ -7453,7 +7564,7 @@ String STR_EFFECT_FADE_FROM_UPPERLEFT
     Text[ arabic ] = " €ÿÌ… „‰ √⁄·Ï «·Ì”«—";
     Text[ turkish ] = "Sol ¸stten ser";
 };
-String STR_EFFECT_FADE_FROM_UPPERRIGHT
+String STR_EFFECT_FADE_FROM_UR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben ¸berblenden : Von rechts oben blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben ¸berblenden : Von rechts oben blenden */
@@ -7479,7 +7590,7 @@ String STR_EFFECT_FADE_FROM_UPPERRIGHT
     Text[ arabic ] = " €ÿÌ… „‰ √⁄·Ï «·Ì„Ì‰";
     Text[ turkish ] = "Sa ¸stten ser";
 };
-String STR_EFFECT_FADE_FROM_LOWERLEFT
+String STR_EFFECT_FADE_FROM_LL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von links unten ¸berblenden : Von links unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von links unten ¸berblenden : Von links unten blenden */
@@ -7505,7 +7616,7 @@ String STR_EFFECT_FADE_FROM_LOWERLEFT
     Text[ arabic ] = " €ÿÌ… „‰ √”›· «·Ì”«—";
     Text[ turkish ] = "Sol alttan ser";
 };
-String STR_EFFECT_FADE_FROM_LOWERRIGHT
+String STR_EFFECT_FADE_FROM_LR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten ¸berblenden : Von rechts unten blenden */
     /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten ¸berblenden : Von rechts unten blenden */
@@ -7650,12 +7761,12 @@ String STR_EFFECT_PATH
     Text[ arabic ] = "›Ì „Õ«–«… «·„‰Õ‰Ï";
     Text[ turkish ] = "Eriyi izle";
 };
-String STR_EFFECT_MOVE_TO_LEFT
+String STR_EFFECT_MOVE_TO_L
 {
     Text = "Nach links bewegen" ;
     Text [ ENGLISH ] = "Move to left" ;
-    Text [ dutch ] = "Naar links bewegen" ;
     Text [ english_us ] = "Move left" ;
+    Text [ dutch ] = "Naar links bewegen" ;
     Text [ italian ] = "Spostare verso sinistra" ;
     Text [ spanish ] = "Desplazar hacia la izquierda" ;
     Text [ french ] = "DÈplacer vers la gauche" ;
@@ -7673,30 +7784,13 @@ String STR_EFFECT_MOVE_TO_LEFT
     Text[ arabic ] = " Õ—Ìﬂ ··Ì”«—";
     Text[ turkish ] = "Sola hareket et";
 };
-String STR_EFFECT_MOVE_TO_RIGHT
+String STR_EFFECT_MOVE_TO_UL
 {
-    Text = "Nach rechts bewegen" ;
-    Text [ ENGLISH ] = "Move to right" ;
-    Text [ english_us ] = "Move right" ;
-    Text [ italian ] = "Spostare verso destra" ;
-    Text [ spanish ] = "Desplazar hacia la derecha" ;
-    Text [ french ] = "DÈplacer vers la droite" ;
-    Text [ dutch ] = "Naar rechts bewegen" ;
-    Text [ swedish ] = "Flytta till hˆger" ;
-    Text [ danish ] = "Flyt mod h¯jre" ;
-    Text [ portuguese ] = "Mover para a direita" ;
-    Text [ portuguese_brazilian ] = "Nach rechts bewegen" ;
-    Text[ chinese_simplified ] = "œÚ”““∆∂Ø";
-    Text[ russian ] = "œÂÂÏÂ˘ÂÌËÂ ‚Ô‡‚Ó";
-    Text[ polish ] = "Przenieú w prawo";
-    Text[ japanese ] = "âEÇ÷à⁄ìÆ";
-    Text[ greek ] = "ÃÂÙ·ÍﬂÌÁÛÁ ÒÔÚ Ù· ‰ÂÓÈ‹";
-    Text[ korean ] = "ø¿∏•¬ ¿∏∑Œ ¿Ãµø";
-    Text[ chinese_traditional ] = "¶V•k≤æ∞ ";
-    Text[ arabic ] = " Õ—Ìﬂ ··Ì„Ì‰";
-    Text[ turkish ] = "Saa hareket et";
+    Text = "Nach links oben bewegen" ;
+    Text [ ENGLISH ] = "Move to upper left" ;
+    Text [ english_us ] = "Move to upper left" ;
 };
-String STR_EFFECT_MOVE_TO_TOP
+String STR_EFFECT_MOVE_TO_T
 {
     Text = "Nach oben bewegen" ;
     Text [ ENGLISH ] = "Move to top" ;
@@ -7719,12 +7813,47 @@ String STR_EFFECT_MOVE_TO_TOP
     Text[ arabic ] = " Õ—Ìﬂ ·√⁄·Ï";
     Text[ turkish ] = "Yukar˝ hareket et";
 };
-String STR_EFFECT_MOVE_TO_BOTTOM
+String STR_EFFECT_MOVE_TO_UR
+{
+    Text = "Nach rechts oben bewegen" ;
+    Text [ ENGLISH ] = "Move to upper right" ;
+    Text [ english_us ] = "Move to upper right" ;
+};
+String STR_EFFECT_MOVE_TO_R
+{
+    Text = "Nach rechts bewegen" ;
+    Text [ ENGLISH ] = "Move to right" ;
+    Text [ english_us ] = "Move right" ;
+    Text [ italian ] = "Spostare verso destra" ;
+    Text [ spanish ] = "Desplazar hacia la derecha" ;
+    Text [ french ] = "DÈplacer vers la droite" ;
+    Text [ dutch ] = "Naar rechts bewegen" ;
+    Text [ swedish ] = "Flytta till hˆger" ;
+    Text [ danish ] = "Flyt mod h¯jre" ;
+    Text [ portuguese ] = "Mover para a direita" ;
+    Text [ portuguese_brazilian ] = "Nach rechts bewegen" ;
+    Text[ chinese_simplified ] = "œÚ”““∆∂Ø";
+    Text[ russian ] = "œÂÂÏÂ˘ÂÌËÂ ‚Ô‡‚Ó";
+    Text[ polish ] = "Przenieú w prawo";
+    Text[ japanese ] = "âEÇ÷à⁄ìÆ";
+    Text[ greek ] = "ÃÂÙ·ÍﬂÌÁÛÁ ÒÔÚ Ù· ‰ÂÓÈ‹";
+    Text[ korean ] = "ø¿∏•¬ ¿∏∑Œ ¿Ãµø";
+    Text[ chinese_traditional ] = "¶V•k≤æ∞ ";
+    Text[ arabic ] = " Õ—Ìﬂ ··Ì„Ì‰";
+    Text[ turkish ] = "Saa hareket et";
+};
+String STR_EFFECT_MOVE_TO_LR
+{
+    Text = "Nach rechts unten bewegen" ;
+    Text [ ENGLISH ] = "Move to lower right" ;
+    Text [ english_us ] = "Move to lower right" ;
+};
+String STR_EFFECT_MOVE_TO_B
 {
     Text = "Nach unten bewegen" ;
     Text [ ENGLISH ] = "Move to bottom" ;
-    Text [ dutch ] = "Naar beneden bewegen" ;
     Text [ english_us ] = "Move down" ;
+    Text [ dutch ] = "Naar beneden bewegen" ;
     Text [ italian ] = "Spostare verso il basso" ;
     Text [ spanish ] = "Desplazar hacia abajo" ;
     Text [ french ] = "DÈplacer vers le bas" ;
@@ -7742,7 +7871,61 @@ String STR_EFFECT_MOVE_TO_BOTTOM
     Text[ arabic ] = " Õ—Ìﬂ ·√”›·";
     Text[ turkish ] = "A˛a˝ hareket et";
 };
-String STR_EFFECT_SPIRALIN_LEFT
+String STR_EFFECT_MOVE_TO_LL
+{
+    Text = "Nach links unten bewegen" ;
+    Text [ ENGLISH ] = "Move to lower left" ;
+    Text [ english_us ] = "Move to lower left" ;
+};
+String STR_EFFECT_MOVE_S_TO_L
+{
+    Text = "Nach links verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to left" ;
+    Text [ english_us ] = "Move short to left" ;
+};
+String STR_EFFECT_MOVE_S_TO_UL
+{
+    Text = "Nach links oben verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to upper left" ;
+    Text [ english_us ] = "Move short to upper left" ;
+};
+String STR_EFFECT_MOVE_S_TO_T
+{
+    Text = "Nach oben verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to top" ;
+    Text [ english_us ] = "Move short to top" ;
+};
+String STR_EFFECT_MOVE_S_TO_UR
+{
+    Text = "Nach rechts oben verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to upper right" ;
+    Text [ english_us ] = "Move short to upper right" ;
+};
+String STR_EFFECT_MOVE_S_TO_R
+{
+    Text = "Nach rechts verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to right" ;
+    Text [ english_us ] = "Move short to right" ;
+};
+String STR_EFFECT_MOVE_S_TO_LR
+{
+    Text = "Nach rechts unten verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to lower right" ;
+    Text [ english_us ] = "Move short to lower right" ;
+};
+String STR_EFFECT_MOVE_S_TO_B
+{
+    Text = "Nach unten verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to bottom" ;
+    Text [ english_us ] = "Move short to bottom" ;
+};
+String STR_EFFECT_MOVE_S_TO_LL
+{
+    Text = "Nach links unten verk¸rzt bewegen" ;
+    Text [ ENGLISH ] = "Move short to lower left" ;
+    Text [ english_us ] = "Move short to lower left" ;
+};
+String STR_EFFECT_SPIRALIN_L
 {
     Text = "Spirale nach innen links" ;
     Text [ ENGLISH ] = "Spiral inward to the left" ;
@@ -7765,7 +7948,7 @@ String STR_EFFECT_SPIRALIN_LEFT
     Text[ arabic ] = "Õ·“Ê‰ ≈·Ï «·œ«Œ· Ì”«—«";
     Text[ turkish ] = "Sol iÁe doru sarmal";
 };
-String STR_EFFECT_SPIRALIN_RIGHT
+String STR_EFFECT_SPIRALIN_R
 {
     Text = "Spirale nach innen rechts" ;
     Text [ ENGLISH ] = "Spiral inward to the right" ;
@@ -7788,7 +7971,7 @@ String STR_EFFECT_SPIRALIN_RIGHT
     Text[ arabic ] = "Õ·“Ê‰ ≈·Ï «·œ«Œ· Ì„Ì‰«";
     Text[ turkish ] = "Sa iÁe doru sarmal";
 };
-String STR_EFFECT_SPIRALOUT_LEFT
+String STR_EFFECT_SPIRALOUT_L
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spirale nach auﬂen links : Spirale nach auòen links */
     Text = "Spirale nach auﬂen links" ;
@@ -7812,7 +7995,7 @@ String STR_EFFECT_SPIRALOUT_LEFT
     Text[ arabic ] = "Õ·“Ê‰ ≈·Ï «·Œ«—Ã Ì”«—«";
     Text[ turkish ] = "Sol d˝˛a doru sarmal";
 };
-String STR_EFFECT_SPIRALOUT_RIGHT
+String STR_EFFECT_SPIRALOUT_R
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spirale nach auﬂen rechts : Spirale nach auòen rechts */
     Text = "Spirale nach auﬂen rechts" ;
@@ -8186,52 +8369,6 @@ String STR_LOAD_PRESENTATION_LAYOUT
     Text[ arabic ] = " Õ„Ì· ﬁ«·» «·’›Õ…";
     Text[ turkish ] = "Sayfa biÁimini y¸kle";
 };
-String STR_EFFECT_VERTICAL_LINES
-{
-    Text = "Vertikale Linien" ;
-    Text [ ENGLISH ] = "Vertical lines" ;
-    Text [ dutch ] = "Verticale lijnen" ;
-    Text [ english_us ] = "Vertical Lines" ;
-    Text [ italian ] = "Linee verticali" ;
-    Text [ spanish ] = "LÌneas verticales" ;
-    Text [ french ] = "Lignes verticales" ;
-    Text [ swedish ] = "Vertikala linjer" ;
-    Text [ danish ] = "Lodrette linjer" ;
-    Text [ portuguese ] = "Linhas verticais" ;
-    Text [ portuguese_brazilian ] = "Vertikale Linien" ;
-    Text[ chinese_simplified ] = "¥π÷±œﬂÃı";
-    Text[ russian ] = "¬ÂÚËÍ‡Î¸Ì˚Â ÎËÌËË";
-    Text[ polish ] = "Linie pionowe";
-    Text[ japanese ] = "êÇíºÇ»ê¸";
-    Text[ greek ] = " ·Ù·Í¸ÒıˆÂÚ „Ò·ÏÏ›Ú";
-    Text[ korean ] = "ºˆ¡˜º±";
-    Text[ chinese_traditional ] = "´´™ΩΩu±¯";
-    Text[ arabic ] = "ŒÿÊÿ —√”Ì…";
-    Text[ turkish ] = "Dikey Áizgiler";
-};
-String STR_EFFECT_HORIZONTAL_LINES
-{
-    Text = "Horizontale Linien" ;
-    Text [ ENGLISH ] = "Horizontal lines" ;
-    Text [ dutch ] = "Horizontale lijnen" ;
-    Text [ english_us ] = "Horizontal Lines" ;
-    Text [ italian ] = "Linee orizzontali" ;
-    Text [ spanish ] = "LÌneas horizontales" ;
-    Text [ french ] = "Lignes horizontales" ;
-    Text [ swedish ] = "Horisontella linjer" ;
-    Text [ danish ] = "Vandrette linjer" ;
-    Text [ portuguese ] = "Linhas horizontais" ;
-    Text [ portuguese_brazilian ] = "Horizontale Linien" ;
-    Text[ chinese_simplified ] = "ÀÆ∆ΩœﬂÃı";
-    Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸Ì˚Â ÎËÌËË";
-    Text[ polish ] = "Linie poziome";
-    Text[ japanese ] = "êÖïΩÇ»ê¸";
-    Text[ greek ] = "œÒÈÊ¸ÌÙÈÂÚ „Ò·ÏÏ›Ú";
-    Text[ korean ] = "ºˆ∆Úº±";
-    Text[ chinese_traditional ] = "§Ù•≠Ωu±¯";
-    Text[ arabic ] = "ŒÿÊÿ √›ﬁÌ…";
-    Text[ turkish ] = "Yatay Áizgiler";
-};
 String STR_EFFECT_RANDOM
 {
     Text = "Automatisch (Zufall)" ;
@@ -8255,7 +8392,7 @@ String STR_EFFECT_RANDOM
     Text[ arabic ] = " ·ﬁ«∆Ì (⁄‘Ê«∆Ì)";
     Text[ turkish ] = "Otomatik (rasgele)";
 };
-String STR_EFFECT_STRETCH_FROM_LEFT
+String STR_EFFECT_STRETCH_FROM_L
 {
     Text = "Tropfen von links" ;
     Text [ ENGLISH ] = "Drop from left" ;
@@ -8278,7 +8415,7 @@ String STR_EFFECT_STRETCH_FROM_LEFT
     Text[ arabic ] = " ‰ﬁÌÿ „‰ «·Ì”«—";
     Text[ turkish ] = "Soldan damla";
 };
-String STR_EFFECT_STRETCH_FROM_TOP
+String STR_EFFECT_STRETCH_FROM_T
 {
     Text = "Tropfen von oben" ;
     Text [ ENGLISH ] = "Drop from top" ;
@@ -8301,7 +8438,7 @@ String STR_EFFECT_STRETCH_FROM_TOP
     Text[ arabic ] = " ‰ﬁÌÿ „‰ √⁄·Ï";
     Text[ turkish ] = "Yukar˝dan damla";
 };
-String STR_EFFECT_STRETCH_FROM_RIGHT
+String STR_EFFECT_STRETCH_FROM_R
 {
     Text = "Tropfen von rechts" ;
     Text [ ENGLISH ] = "Drop from right" ;
@@ -8324,7 +8461,7 @@ String STR_EFFECT_STRETCH_FROM_RIGHT
     Text[ arabic ] = " ‰ﬁÌÿ „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sadan damla";
 };
-String STR_EFFECT_STRETCH_FROM_BOTTOM
+String STR_EFFECT_STRETCH_FROM_B
 {
     Text = "Tropfen von unten" ;
     Text [ ENGLISH ] = "Drop from bottom" ;
@@ -8420,7 +8557,7 @@ String STR_DRAGTYPE_LINK
     Text[ arabic ] = "≈œ—«Ã ﬂ«— »«ÿ";
     Text[ turkish ] = "Balant˝ olarak ekle";
 };
-String STR_EFFECT_LASER_FROM_LEFT
+String STR_EFFECT_LASER_FROM_L
 {
     Text = "Lasereffekt von links" ;
     Text [ ENGLISH ] = "Laser effect from left" ;
@@ -8443,7 +8580,7 @@ String STR_EFFECT_LASER_FROM_LEFT
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ «·Ì”«—";
     Text[ turkish ] = "Soldan lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_TOP
+String STR_EFFECT_LASER_FROM_T
 {
     Text = "Lasereffekt von oben" ;
     Text [ ENGLISH ] = "Laser effect from top" ;
@@ -8466,7 +8603,7 @@ String STR_EFFECT_LASER_FROM_TOP
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ √⁄·Ï";
     Text[ turkish ] = "‹stten lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_RIGHT
+String STR_EFFECT_LASER_FROM_R
 {
     Text = "Lasereffekt von rechts" ;
     Text [ ENGLISH ] = "Laser effect from right" ;
@@ -8489,7 +8626,7 @@ String STR_EFFECT_LASER_FROM_RIGHT
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ «·Ì„Ì‰";
     Text[ turkish ] = "Sadan lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_BOTTOM
+String STR_EFFECT_LASER_FROM_B
 {
     Text = "Lasereffekt von unten" ;
     Text [ ENGLISH ] = "Laser effect from bottom" ;
@@ -8512,7 +8649,7 @@ String STR_EFFECT_LASER_FROM_BOTTOM
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ √”›·";
     Text[ turkish ] = "Alttan lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_UPPERLEFT
+String STR_EFFECT_LASER_FROM_UL
 {
     Text = "Lasereffekt von oben links" ;
     Text [ ENGLISH ] = "Laser effect from upper left" ;
@@ -8535,7 +8672,7 @@ String STR_EFFECT_LASER_FROM_UPPERLEFT
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ √⁄·Ï «·Ì”«—";
     Text[ turkish ] = "‹st soldan lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_UPPERRIGHT
+String STR_EFFECT_LASER_FROM_UR
 {
     Text = "Lasereffekt von oben rechts" ;
     Text [ ENGLISH ] = "Laser effect from upper right" ;
@@ -8558,7 +8695,7 @@ String STR_EFFECT_LASER_FROM_UPPERRIGHT
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ √⁄·Ï «·Ì„Ì‰";
     Text[ turkish ] = "Sa ¸stten lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_LOWERLEFT
+String STR_EFFECT_LASER_FROM_LL
 {
     Text = "Lasereffekt von unten links" ;
     Text [ ENGLISH ] = "Laser effect from lower left" ;
@@ -8581,7 +8718,7 @@ String STR_EFFECT_LASER_FROM_LOWERLEFT
     Text[ arabic ] = " √ÀÌ— ·Ì“— „‰ √”›· «·Ì”«—";
     Text[ turkish ] = "Sol alttan lazer efekti";
 };
-String STR_EFFECT_LASER_FROM_LOWERRIGHT
+String STR_EFFECT_LASER_FROM_LR
 {
     Text = "Lasereffekt von unten rechts" ;
     Text [ ENGLISH ] = "Laser effect from lower right" ;
@@ -8673,6 +8810,12 @@ String STR_EFFECT_DISCARD
     Text[ chinese_traditional ] = "≈„≈S";
     Text[ arabic ] = "ﬂ‘›";
     Text[ turkish ] = "S¸r";
+};
+String STR_EFFECT_DISCARD_SHORT
+{
+    Text = "Verk¸rzt aufdecken" ;
+    Text [ ENGLISH ] = "Discard short" ;
+    Text [ english_us ] = "Discard short" ;
 };
 String STR_EFFECT_FADE
 {
