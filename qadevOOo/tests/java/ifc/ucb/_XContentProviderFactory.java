@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XContentProviderFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:38 $
+ *  last change:$Date: 2003-09-08 11:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XContentProviderFactory;
-import lib.MultiMethodTest;
 
 
 /**
