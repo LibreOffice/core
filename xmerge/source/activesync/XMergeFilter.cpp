@@ -123,29 +123,61 @@ STDMETHODIMP CXMergeFilter::FormatMessage(DWORD dwFlags, DWORD dwMessageId,
                         DWORD dwLanguageId, LPTSTR lpBuffer, DWORD nSize,
                         va_list *Arguments, DWORD *pcb)
 {
-    char errMsg[50];
+    TCHAR errMsg[1024];
+
+    HKEY  hKey   = NULL;
+    DWORD dwSize = 1024;
+
+
+    long lRet = 0;
+
+    // Attempt to find the messages in the registry
+    lRet = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Sun Microsystems\\StarOffice\\XMergeSync\\Messages\\Error"),
+                            0, KEY_READ, &hKey);
+    if (lRet != ERROR_SUCCESS)
+    {
+        // Try the user's portion of the registry
+        lRet = ::RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\Sun Microsystems\\StarOffice\\XMergeSync\\Messages\\Error"),
+                            0, KEY_READ, &hKey);
+        if (lRet != ERROR_SUCCESS)
+        {
+            hKey = NULL;
+        }
+    }
+
 
     switch(dwMessageId)
     {
     case ERR_NOJAVA:
-        lstrcpy(errMsg, "Unable to locate Java 1.4 installation.");
+        lRet = ::RegQueryValueEx(hKey, _T("Java"), 0, NULL, (LPBYTE)errMsg, &dwSize);
+        if (lRet != ERROR_SUCCESS)
+        {
+            lstrcpy(errMsg, "Unable to locate Java 1.4 installation.");
+        }
         break;
 
     case ERR_BADCLASSPATH:
-        lstrcpy(errMsg, "Unable to locate XMerge Jar files.");
+        lRet = ::RegQueryValueEx(hKey, _T("Classpath"), 0, NULL, (LPBYTE)errMsg, &dwSize);
+        if (lRet != ERROR_SUCCESS)
+        {
+            lstrcpy(errMsg, "Unable to locate XMerge Jar files.");
+        }
         break;
 
     case ERR_INITJAVA:
-        lstrcpy(errMsg, "Error initialising Java Runtime Environment.");
+        lRet = ::RegQueryValueEx(hKey, _T("JavaInit"), 0, NULL, (LPBYTE)errMsg, &dwSize);
+        if (lRet != ERROR_SUCCESS)
+        {
+            lstrcpy(errMsg, "Error initialising the Java Runtime Environment.");
+        }
         break;
     }
 
-    char* buf = (char*)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, strlen(errMsg));
-    lstrcpy(buf, errMsg);
+    char* buf = (char*)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, (lstrlen(errMsg) + 1) * sizeof(TCHAR));
+    lstrcpyn(buf, errMsg, lstrlen(errMsg));
 
     *(char**)lpBuffer = buf;
     *pcb = strlen(errMsg);
-
 
     return HRESULT_FROM_WIN32(NOERROR);
 }
@@ -269,7 +301,6 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
     appArgs += "\" \"";
     appArgs += pdf->szFullpath;
     appArgs += "\"";
-
 
     if(!CreateProcess(NULL,
                   (char*)appArgs.c_str(),
@@ -396,6 +427,7 @@ TCHAR* CXMergeFilter::GetXMergeClassPath()
     GetModuleFileName(_Module.m_hInst, szTmpPath, MAX_PATH);
 
     // Strip off the xmergesync.dll component
+    _strlwr(szTmpPath);
     char* modName = strstr(szTmpPath, "xmergesync.dll");
     strncpy(szJarPath, szTmpPath, modName - szTmpPath);
 
