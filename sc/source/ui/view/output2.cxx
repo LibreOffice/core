@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:31:21 $
+ *  last change: $Author: nn $ $Date: 2001-05-08 19:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,7 +1517,7 @@ BOOL lcl_SafeIsValue( ScBaseCell* pCell )
     return bRet;
 }
 
-void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
+void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
     UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
@@ -1562,7 +1562,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                             //  Ein RefDevice muss auf jeden Fall gesetzt werden,
                             //  sonst legt sich die EditEngine ein VirtualDevice an!
                             pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-                            pEngine->SetRefDevice( pRefDevice );    // immer gesetzt
+                            pEngine->SetRefDevice( pFmtDevice );    // always set
                             ULONG nCtrl = pEngine->GetControlWord();
                             if ( bShowSpellErrors )
                                 nCtrl |= EE_CNTRL_ONLINESPELLING;
@@ -1695,8 +1695,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                             ((const SvxFontHeightItem&)pPattern->
                             GetItem(ATTR_FONT_HEIGHT)).GetHeight() <= nMinHeight )
                         {
-                            Point aPos((long)( nStartX / nScaleX ),
-                                        (long)( nStartY / nScaleY ));
+                            Point aPos( nStartX, nStartY );
                             pDev->DrawPixel( aPos,
                                             ((const SvxColorItem&)pPattern->
                                             GetItem( ATTR_FONT_COLOR )).GetValue() );
@@ -1862,11 +1861,25 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                     aPaperSize.Width() = nOutHeight - 1;
                             }
                             if (bPixelToLogic)
-                                pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
+                            {
+                                if ( bBreak && pFmtDevice != pRefDevice )
+                                {
+                                    //  calculate PaperSize for automatic line breaks from logic size,
+                                    //  not pixel sizes, to get the same breaks at all scales
+
+                                    Fraction aFract(1,1);
+                                    Rectangle aUtilRect = ScEditUtil( pDoc,nX,nY,nTab,
+                                                            Point(nStartX,nStartY), pDev,
+                                                            HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract )
+                                                        .GetEditArea( pPattern, FALSE );
+                                    Size aLogic = aUtilRect.GetSize();
+                                    pEngine->SetPaperSize( aLogic );
+                                }
+                                else
+                                    pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
+                            }
                             else
-                                pEngine->SetPaperSize(Size(
-                                            (long)(aPaperSize.Width() / nScaleX),
-                                            (long)(aPaperSize.Height() / nScaleY)));
+                                pEngine->SetPaperSize(aPaperSize);
 
                             //  Daten aus Zelle lesen
 
@@ -1928,7 +1941,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                             {
                                 long nEnginePixel = bPixelToLogic ?
                                         pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() :
-                                        (long)( nEngineWidth * nScaleX );
+                                        nEngineWidth;
                                 if ( nStartX + nEnginePixel < (long) nScrX )
                                     bHidden = TRUE;
                             }
@@ -1951,8 +1964,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                 if (bPixelToLogic)
                                     aCellSize = pRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
                                 else
-                                    aCellSize = Size( (long)( nOutWidth / nScaleX ),
-                                                        (long)( nOutHeight / nScaleY ) );
+                                    aCellSize = Size( nOutWidth, nOutHeight );
                                 if ( bIsValue )
                                 {
                                     if ( nEngineWidth > aCellSize.Width() )
@@ -2004,8 +2016,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                                 if (bPixelToLogic)
                                                     aCellSize = pRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
                                                 else
-                                                    aCellSize = Size( (long)( nOutWidth / nScaleX ),
-                                                                        (long)( nOutHeight / nScaleY ) );
+                                                    aCellSize = Size( nOutWidth, nOutHeight );
                                                 bExtend = TRUE;
                                             }
                                             ++nNextX;
@@ -2087,12 +2098,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                         aClipRect = pRefDevice->PixelToLogic( Rectangle(
                                                         Point(nClipStartX,nClipStartY), aClipSize ) );
                                     else
-                                        aClipRect = Rectangle(Point(
-                                                        (long)( nClipStartX / nScaleX ),
-                                                        (long)( nClipStartY / nScaleY )),
-                                                        Size(
-                                                        (long)( aClipSize.Width() / nScaleX ),
-                                                        (long)( aClipSize.Height() / nScaleY )));
+                                        aClipRect = Rectangle(Point(nClipStartX, nClipStartY), aClipSize);
 
 #if 0
                                     //! Test
@@ -2124,8 +2130,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                 if (bPixelToLogic)
                                     aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
                                 else
-                                    aLogicStart = Point((long)( nStartX / nScaleX ),
-                                                        (long)( nStartY / nScaleY ));
+                                    aLogicStart = Point(nStartX, nStartY);
                                 if ( (eOrient!=SVX_ORIENTATION_STANDARD || !bBreak) && !bExtend )
                                 {
                                     long nAvailWidth = aCellSize.Width();
@@ -2138,13 +2143,13 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                         if (bPixelToLogic)
                                             nAvailWidth -= pRefDevice->PixelToLogic(Size(0,nSub)).Height();
                                         else
-                                            nAvailWidth -= (long) (nSub / nScaleX);
+                                            nAvailWidth -= nSub;
                                         if (nAvailWidth < nEngineWidth) nAvailWidth = nEngineWidth;
 
                                         nOutWidth -= nSub;
                                         long nEnginePixel = bPixelToLogic ?
                                                 pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() :
-                                                (long)( nEngineWidth * nScaleX );
+                                                nEngineWidth;
                                         if (nOutWidth <= nEnginePixel) nOutWidth = nEnginePixel+1;
                                     }
 
@@ -2169,9 +2174,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                             if (bPixelToLogic)
                                                 pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
                                             else
-                                                pEngine->SetPaperSize(Size(
-                                                            (long)(aPaperSize.Width() / nScaleX),
-                                                            (long)(aPaperSize.Height() / nScaleY)));
+                                                pEngine->SetPaperSize(aPaperSize);
                                         }
                                     }
                                     else
@@ -2315,7 +2318,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             //  Ein RefDevice muss auf jeden Fall gesetzt werden,
                             //  sonst legt sich die EditEngine ein VirtualDevice an!
                             pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-                            pEngine->SetRefDevice( pRefDevice );    // immer gesetzt
+                            pEngine->SetRefDevice( pFmtDevice );    // always set
                             ULONG nCtrl = pEngine->GetControlWord();
                             if ( bShowSpellErrors )
                                 nCtrl |= EE_CNTRL_ONLINESPELLING;
