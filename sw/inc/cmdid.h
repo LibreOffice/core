@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:56:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_MODEL                        (FN_EXTRA2 + 96)
 #define FN_UNO_COMPONENT                    (FN_EXTRA2 + 97)
 #define FN_WORDCOUNT_DIALOG                 (FN_EXTRA2 + 98)
-#define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 99)
+
+#define FN_UNO_DEFAULT_OUTLINE_LEVEL        (FN_EXTRA2 + 99)
+
+#define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 100)
+
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
