@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:47:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,8 @@ IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
             if( aFormatName.Len() > 0 )
             {
-                for( USHORT n = 0; n < pTableTbl->Count(); ++n )
+                USHORT n;
+                for( n = 0; n < pTableTbl->Count(); ++n )
                     if( (*pTableTbl)[n]->GetName() == aFormatName )
                         break;
 
@@ -573,7 +574,8 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
             if ( aFormatName.Len() > 0 )
             {
-                for( USHORT n = 0; n < pTableTbl->Count(); ++n )
+                USHORT n;
+                for( n = 0; n < pTableTbl->Count(); ++n )
                     if ((*pTableTbl)[n]->GetName() == aFormatName)
                         break;
 
