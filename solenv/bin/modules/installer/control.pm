@@ -440,27 +440,32 @@ sub check_updatepack
                         # In this case the content of SOLARENV starts with the content of SOL_TMP
 
                         my $solarenv = "";
-                        my $sol_tmp = "";
+                        my $sol_tmp;
                         if ( $ENV{'SOLARENV'} ) { $solarenv = $ENV{'SOLARENV'}; }
-                        if ( $ENV{'SOL_TMP'} ) { $sol_tmp = $ENV{'SOL_TMP'}; }
 
                         $infoline = "Environment variable SOLARENV: $solarenv\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
 
-                        $infoline = "Environment variable SOL_TMP: $sol_tmp\n";
+                        if ( $ENV{'SOL_TMP'} )
+                        {
+                            $sol_tmp = $ENV{'SOL_TMP'};
+                            $infoline = "Environment variable SOL_TMP: $sol_tmp\n";
+                        } else {
+                            $infoline = "Environment variable SOL_TMP not set\n";
+                        }
                         push(@installer::globals::globallogfileinfo, $infoline);
 
-                        if ( ! ( $solarenv =~ /^\s*$sol_tmp/ ))
+                        if ( defined $sol_tmp && ( $solarenv =~ /^\s*$sol_tmp/ ))
+                        {
+                            $infoline = "Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n";
+                            push(@installer::globals::globallogfileinfo, $infoline);
+                        }
+                        else
                         {
                             $infoline = "Content of SOLARENV does not start with the content of SOL_TMP: No local environment\n";
                             push(@installer::globals::globallogfileinfo, $infoline);
 
                             $installer::globals::updatepack = 1;    # That's it
-                        }
-                        else
-                        {
-                            $infoline = "Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n";
-                            push(@installer::globals::globallogfileinfo, $infoline);
                         }
                     }
                     else
