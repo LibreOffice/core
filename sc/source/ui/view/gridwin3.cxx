@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:53:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect )
 MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
 
     MapMode aDrawMode = pViewData->GetLogicMode();
@@ -317,8 +317,8 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
             pDrView->GetScale( aScaleX, aScaleY );
         else
         {
-            USHORT nEndCol = 0;
-            USHORT nEndRow = 0;
+            SCCOL nEndCol = 0;
+            SCROW nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
             if (nEndRow<20) nEndRow = 20;
