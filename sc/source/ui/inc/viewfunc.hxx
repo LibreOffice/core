@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-16 13:11:50 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 18:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ public:
     void                    GetSelectionFrame   ( SvxBoxItem&       rLineOuter,
                                                   SvxBoxInfoItem&   rLineInner );
 
+    BYTE            GetSelectionScriptType();
+
     BOOL            GetAutoSumArea(ScRangeList& rRangeList);
     void            EnterAutoSum(const ScRangeList& rRangeList);
 
@@ -203,6 +205,8 @@ public:
     void            ApplyPatternLines( const ScPatternAttr& rAttr,
                                         const SvxBoxItem* pNewOuter,
                                         const SvxBoxInfoItem* pNewInner, BOOL bRecord = TRUE );
+
+    void            ApplyUserItemSet( const SfxItemSet& rItemSet );
 
     const SfxStyleSheet*    GetStyleSheetFromMarked();
     void                    SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,

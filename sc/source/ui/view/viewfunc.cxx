@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-16 13:13:46 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 18:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <svx/editview.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
@@ -121,6 +122,7 @@
 #include "compiler.hxx"
 #include "docfunc.hxx"
 #include "appoptio.hxx"
+#include "dociter.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -396,6 +398,7 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
     if (pDoc->IsSelectedBlockEditable( nCol,nRow, nCol,nRow, rMark ))
     {
         BOOL bEditDeleted = FALSE;
+        BYTE nOldScript = 0;
 
         ScBaseCell** ppOldCells = NULL;
         BOOL* pHasFormat        = NULL;
@@ -420,6 +423,12 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
                     {
                         ppOldCells[nUndoPos] = pDocCell->Clone(pDoc);
                         if ( pDocCell->GetCellType() == CELLTYPE_EDIT )
+                            bEditDeleted = TRUE;
+
+                        BYTE nDocScript = pDoc->GetScriptType( nCol, nRow, i, pDocCell );
+                        if ( nOldScript == 0 )
+                            nOldScript = nDocScript;
+                        else if ( nDocScript != nOldScript )
                             bEditDeleted = TRUE;
                     }
                     else
@@ -594,6 +603,12 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
                     if (pDoc->SetString( nCol, nRow, i, rString ))
                         bNumFmtChanged = TRUE;
         }
+
+        //  row height must be changed if new text has a different script type
+        for (i=0; i<nTabCount && !bEditDeleted; i++)
+            if (rMark.GetTableSelect(i))
+                if ( pDoc->GetScriptType( nCol, nRow, i ) != nOldScript )
+                    bEditDeleted = TRUE;
 
         HideAllCursors();
 
@@ -852,6 +867,43 @@ void ScViewFunc::EnterMatrix( const String& rString )
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
+}
+
+BYTE ScViewFunc::GetSelectionScriptType()
+{
+    BYTE nScript = 0;
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    const ScMarkData& rMark = GetViewData()->GetMarkData();
+    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+    {
+        // no selection -> cursor
+
+        nScript = pDoc->GetScriptType( GetViewData()->GetCurX(),
+                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+    }
+    else
+    {
+        ScRangeList aRanges;
+        rMark.FillRangeListWithMarks( &aRanges, FALSE );
+        ULONG nCount = aRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
+        {
+            ScRange aRange = *aRanges.GetObject(i);
+            ScCellIterator aIter( pDoc, aRange );
+            ScBaseCell* pCell = aIter.GetFirst();
+            while ( pCell )
+            {
+                nScript |= pDoc->GetScriptType( aIter.GetCol(), aIter.GetRow(), aIter.GetTab(), pCell );
+                pCell = aIter.GetNext();
+            }
+        }
+    }
+
+    if (nScript == 0)
+        nScript = SCRIPTTYPE_LATIN;
+
+    return nScript;
 }
 
 const ScPatternAttr* ScViewFunc::GetSelectionPattern()
@@ -1242,6 +1294,25 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     }
 
     StartFormatArea();
+}
+
+void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
+{
+    //  ItemSet from UI, may have different pool
+
+    BOOL bOnlyNotBecauseOfMatrix;
+    if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
+    {
+        ErrorMessage(STR_PROTECTIONERR);
+        return;
+    }
+
+    ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
+    SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+    rNewSet.Put( rItemSet, FALSE );
+    ApplySelectionPattern( aNewAttrs );
+
+    AdjustBlockHeight();
 }
 
 const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
