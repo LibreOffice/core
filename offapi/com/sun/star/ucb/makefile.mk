@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: abi $ $Date: 2001-04-27 09:25:28 $
+#   last change: $Author: iha $ $Date: 2001-04-27 15:04:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,13 @@ IDLFILES=\
     AlreadyInitializedException.idl\
     AuthenticationRequest.idl\
     CachedContentResultSet.idl\
+    CachedContentResultSetFactory.idl\
     CachedContentResultSetStub.idl\
+    CachedContentResultSetStubFactory.idl\
     CachedDynamicResultSet.idl\
+    CachedDynamicResultSetFactory.idl\
     CachedDynamicResultSetStub.idl\
+    CachedDynamicResultSetStubFactory.idl\
     CHAOSProgressStart.idl\
     ChaosContent.idl\
     ChaosContentProvider.idl\
