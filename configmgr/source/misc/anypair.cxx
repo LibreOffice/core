@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-17 16:21:16 $
+ *  last change: $Author: rt $ $Date: 2001-07-20 14:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    static inline void * impl_setDataPointer(cfgmgr_AnyPair_Data * _pAnyPairData, void* _pData)
+    static inline void impl_setDataPointer(cfgmgr_AnyPair_Data * _pAnyPairData, void* _pData)
     {
         *_pAnyPairData = _pData;
     }
@@ -121,7 +121,7 @@ namespace configmgr
     static const unsigned SHIFT_DATA_FLAG = 4;
 // -----------------------------------------------------------------------------
     static
-    inline bool impl_state_setState(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType _nState, cfgmgr_SelectorType  _nSelect)
+    inline void impl_state_setState(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType _nState, cfgmgr_SelectorType  _nSelect)
     {
         cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         OSL_ENSURE( (_nState & nSelectMask) == _nState, "State specified does not belong to the selector");
@@ -132,7 +132,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static
-    inline bool impl_state_setNull(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
+    inline void impl_state_setNull(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
     {
         cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         *_pState &= ~nSelectMask;
@@ -140,7 +140,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static
-    inline bool impl_state_setPtr(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
+    inline void impl_state_setPtr(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
     {
         *_pState &= ~(_nSelect<<SHIFT_DATA_FLAG);
         *_pState |=   _nSelect;
@@ -148,7 +148,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static inline
-    bool impl_state_setData(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
+    void impl_state_setData(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect)
     {
         cfgmgr_SelectorType const nSelectMask = _nSelect | (_nSelect<<SHIFT_DATA_FLAG);
         *_pState |= nSelectMask;
@@ -156,7 +156,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
     static inline
-    bool impl_state_setValue(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect, bool _bStoresData)
+    void impl_state_setValue(cfgmgr_SelectorType* _pState, cfgmgr_SelectorType  _nSelect, bool _bStoresData)
     {
         *_pState |= _nSelect;
 
