@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_cuno.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-23 10:20:01 $
+ *  last change: $Author: jsc $ $Date: 2001-04-24 08:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,27 +248,16 @@ cuno_ErrorCode SAL_CALL XInterface_queryInterface( com_sun_star_uno_XInterface *
 {
     InstanceData * pImpl = GET_THIS( pIFace );
     com_sun_star_uno_XInterface * pIFaceRet = 0;
-    sal_Char* sXInterface= "com.sun.star.uno.XInterface";
-    sal_Char* sXLBTestBase= "test.XLBTestBase";
-    sal_Char* sXLanguageBindingTest= "test.XLanguageBindingTest";
-    rtl_uString* usXInterface= 0;
-    rtl_uString* usXLBTestBase= 0;
-    rtl_uString* usXLanguageBindingTest= 0;
-
     if ( pTypeRef )
     {
-        rtl_uString_newFromAscii( &usXInterface, sXInterface);
-        rtl_uString_newFromAscii( &usXLBTestBase, sXLBTestBase);
-        rtl_uString_newFromAscii( &usXLanguageBindingTest, sXLanguageBindingTest);
-
-        if( ! rtl_ustr_compare_WithLength( usXInterface->buffer, usXInterface->length,
-                                           pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length ) )
+        if( ! rtl_ustr_ascii_compare_WithLength( pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length,
+                                                 "com.sun.star.uno.XInterface" ) )
                pIFaceRet = (com_sun_star_uno_XInterface *)&pImpl->m_XInterface;
-        else if( !rtl_ustr_compare_WithLength( usXLBTestBase->buffer, usXLBTestBase->length,
-                                               pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length ) )
+        else if( !rtl_ustr_ascii_compare_WithLength( pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length,
+                                                        "test.XLBTestBase" ) )
                pIFaceRet = (com_sun_star_uno_XInterface *)&pImpl->m_XLBTestBase;
-        else if( !rtl_ustr_compare_WithLength( usXLanguageBindingTest->buffer, usXLanguageBindingTest->length,
-                                               pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length ) )
+        else if( !rtl_ustr_ascii_compare_WithLength( pTypeRef->pTypeName->buffer, pTypeRef->pTypeName->length,
+                                                        "test.XLanguageBindingTest" ) )
                pIFaceRet = (com_sun_star_uno_XInterface *)&pImpl->m_XLanguageBindingTest;
 
         if( pIFaceRet )
@@ -279,10 +268,6 @@ cuno_ErrorCode SAL_CALL XInterface_queryInterface( com_sun_star_uno_XInterface *
         {
             *pRet = 0;
         }
-
-        rtl_uString_release( usXInterface);
-        rtl_uString_release( usXLBTestBase);
-        rtl_uString_release( usXLanguageBindingTest);
     }
     return CUNO_ERROR_NONE;
 }
