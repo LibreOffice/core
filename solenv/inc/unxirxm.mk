@@ -14,8 +14,8 @@ AFLAGS=
 cc=			cc -KPIC -c -n32
 CC=			CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
 CFLAGS=		$(INCLUDE)
-CFLAGS+=	-DVCL -D_PTHREADS
-CFLAGS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
+CDEFS+=	-DVCL -D_PTHREADS
+CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 # 1009    ...nested comment is not allowed...
 # 1021    ...type qualifiers are meaningless in this declaration...
 # 1107    ...signed bit field of length 1...
