@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:05:15 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ModalDialog DLG_PASSWD
     Text [ dutch ] = "Wachtwoord invoeren" ;
     Text [ spanish ] = "Introduzca la contraseña" ;
     Text [ english_us ] = "Enter Password" ;
-    Text[ chinese_simplified ] = "ÊäÈë¿ÚÁî";
+    Text[ chinese_simplified ] = "ÊäÈëÃÜÂë";
     Text[ russian ] = "Ââåñòè ïàğîëü";
     Text[ polish ] = "WprowadŸ has³o";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì“ü—Í";
@@ -145,7 +145,7 @@ ModalDialog DLG_PASSWD
         Text[ portuguese_brazilian ] = "Password";
         Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
         Text[ korean ] = "ÆĞ½º¿öµå(~P)";
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ chinese_traditional ] = "±K½X(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "~Şifre";
@@ -207,7 +207,7 @@ ModalDialog DLG_PASSWD
         Text [ dutch ] = "Wachtwoord" ;
         Text [ spanish ] = "Contraseña" ;
         Text [ english_us ] = "Password" ;
-        Text[ chinese_simplified ] = "¿ÚÁî";
+        Text[ chinese_simplified ] = "ÃÜÂë";
         Text[ russian ] = "Ïàğîëü";
         Text[ polish ] = "Has³o";
         Text[ japanese ] = "Êß½Ü°ÄŞ";
@@ -250,7 +250,7 @@ ModalDialog DLG_PASSWD
         Text [ dutch ] = "Wachtwoord bevestigen" ;
         Text [ spanish ] = "Confirmar contraseña" ;
         Text [ english_us ] = "Confirm password" ;
-        Text[ chinese_simplified ] = "È·ÈÏ¿ÚÁî";
+        Text[ chinese_simplified ] = "È·ÈÏÃÜÂë";
         Text[ russian ] = "Ïîäòâåğäèòü ïàğîëü";
         Text[ polish ] = "PotwierdŸ has³o";
         Text[ japanese ] = "Êß½Ü°ÄŞ‚ÌŠm”F";
