@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: os $ $Date: 2002-11-08 10:34:40 $
+ *  last change: $Author: os $ $Date: 2002-11-27 09:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <svtools/sbxvar.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
@@ -3926,9 +3929,6 @@ BOOL SwEditWin::IsDrawSelMode()
 
 void SwEditWin::GetFocus()
 {
-#ifdef ACCESSIBLE_LAYOUT
-    rView.GetWrtShell().InvalidateAccessibleFocus();
-#endif
     rView.GotFocus();
     Window::GetFocus();
 #ifdef ACCESSIBLE_LAYOUT
@@ -3951,9 +3951,6 @@ void SwEditWin::LoseFocus()
     if( pQuickHlpData->bClear )
         pQuickHlpData->Stop( rView.GetWrtShell() );
     rView.LostFocus();
-#ifdef ACCESSIBLE_LAYOUT
-    rView.GetWrtShell().InvalidateAccessibleFocus();
-#endif
 }
 
 /******************************************************************************
@@ -4223,6 +4220,21 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                                     nDropFormat, nDropDestination, FALSE,
                                     FALSE, &aDocPt, EXCHG_IN_ACTION_COPY,
                                     TRUE );
+            }
+        }
+        break;
+        case COMMAND_MODKEYCHANGE :
+        {
+            const CommandModKeyData* pCommandData = (const CommandModKeyData*)rCEvt.GetData();
+            if(pCommandData->IsMod1() && !pCommandData->IsMod2())
+            {
+                USHORT nSlot = 0;
+                if(pCommandData->IsLeftShift() && !pCommandData->IsRightShift())
+                    nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT;
+                else if(!pCommandData->IsLeftShift() && pCommandData->IsRightShift())
+                    nSlot = SID_ATTR_PARA_RIGHT_TO_LEFT;
+                if(nSlot && SvtLanguageOptions().IsCTLFontEnabled())
+                    GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
             }
         }
         break;
