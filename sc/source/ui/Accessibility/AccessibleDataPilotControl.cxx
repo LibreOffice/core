@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:57 $
+ *  last change: $Author: sab $ $Date: 2002-10-28 06:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,13 +245,13 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
 
         ::std::vector < AccessibleWeak >::iterator aEndItr = maChildren.end();
         uno::Reference< XAccessible > xTempAcc;
-        ++nNewIndex;
+        sal_Int32 nIndex = nNewIndex + 1;
         while (aItr != aEndItr)
         {
             xTempAcc = aItr->xWeakAcc;
             if (xTempAcc.is() && aItr->pAcc)
-                aItr->pAcc->SetIndex(nNewIndex);
-            ++nNewIndex;
+                aItr->pAcc->SetIndex(nIndex);
+            ++nIndex;
             ++aItr;
         }
         bAdded = sal_True;
