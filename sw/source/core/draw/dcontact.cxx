@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-14 09:47:30 $
+ *  last change: $Author: od $ $Date: 2002-08-22 08:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,8 +424,10 @@ void SwDrawContact::_Changed(const SdrObject& rObj, SdrUserCallType eType,
                              const Rectangle* pOldBoundRect)
 {
     BOOL bInCntnt = FLY_IN_CNTNT == GetFmt()->GetAnchor().GetAnchorId();
+    /// OD 05.08.2002 #100843# - do *not* notify, if document is destructing
     BOOL bNotify = !bInCntnt &&
-        ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() );
+         !(GetFmt()->GetDoc()->IsInDtor()) &&
+         ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() );
     switch( eType )
     {
         case SDRUSERCALL_DELETE:
