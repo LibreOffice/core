@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:41:36 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,10 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     {
             return (sal_Int64)this;
     }
+
+    sal_Int64 nRet = SfxBaseModel::getSomething( rId );
+    if ( nRet )
+        return nRet;
     else
     {
         GetNumberFormatter();
@@ -355,7 +359,8 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
         if(xNumTunnel.is())
             return xNumTunnel->getSomething(rId);
     }
-    return 0;
+
+    return SfxBaseModel::getSomething( rId );
 }
 /* -----------------------------16.03.00 14:12--------------------------------
 
