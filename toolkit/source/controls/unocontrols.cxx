@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 07:33:04 $
+ *  last change: $Author: mt $ $Date: 2001-12-14 09:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ UnoControlDialogModel::UnoControlDialogModel()
     mpModels = new UnoControlModelHolderList;
 
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-    ImplRegisterProperty( BASEPROPERTY_BORDER );
+//  ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
