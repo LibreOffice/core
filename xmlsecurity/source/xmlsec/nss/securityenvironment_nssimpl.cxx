@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-02 14:16:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-07 11:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,16 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
             validity = 0x00000000 ;
         } else {
             validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+#if (  __GNUC__ == 3 && __GNUC_MINOR__ == 4 )
+            // Gcc-3.4.1 has a serious bug which prevents compiling this switch construct,
+            // if "status" in the switch statement is a signed integer type.
+            // It wrongly complains about "duplicate values".
+            // Note that all SEC_ERROR_* below are negativ enum values, starting from -0x2000
+            // This gross WORKAROUND should be removed as soon as possible.
+            switch( (unsigned int)status ) {
+#else
             switch( status ) {
+#endif
                 case SEC_ERROR_BAD_SIGNATURE :
                     validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ;
                     break ;
