@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include <drafts/com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include "xmlnumfe.hxx"
 #include "xmlnmspe.hxx"
@@ -1190,7 +1190,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //
     // Native number transliteration
     //
-    ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
+    ::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
     rFormat.GetNatNumXml( aAttr, nPart );
     if ( aAttr.Format.getLength() )
     {
