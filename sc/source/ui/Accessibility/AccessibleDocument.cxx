@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-23 13:35:16 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "unonames.hxx"
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
@@ -81,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
 #include <com/sun/star/util/XProtectable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -98,8 +104,9 @@ using namespace ::drafts::com::sun::star::accessibility;
 ScAccessibleDocument::ScAccessibleDocument(
         const uno::Reference<XAccessible>& rxParent,
         const uno::Reference<sheet::XSpreadsheetView >& rxSheetView )
-    : SvAccessibleDocumentBase(rxParent, getModel(rxSheetView)),
-    mxSheetView(rxSheetView)
+    : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT),
+    mxSheetView(rxSheetView),
+    mxModel(getModel(rxSheetView))
 {
 }
 
@@ -162,7 +169,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (uno::RuntimeException/*,
         lang::IndexOutOfBoundsException*/)
 {
-    uno::Reference<XAccessible> xAccessible = GetChild(nIndex);
+    uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
         if (nIndex == 0)
@@ -174,7 +181,7 @@ uno::Reference<XAccessible> SAL_CALL
             throw lang::IndexOutOfBoundsException();
         }
 
-        SetChild(nIndex, xAccessible);
+        //SetChild(nIndex, xAccessible);
     }
     return xAccessible;
 }

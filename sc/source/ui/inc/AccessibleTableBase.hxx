@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 16:33:13 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _SC_ACCESSIBLETABLEBASE_HXX
 #define _SC_ACCESSIBLETABLEBASE_HXX
 
-#ifndef _SVTOOLS_ACCESSIBLE_CONTEXT_BASE_HXX
-#include <svtools/AccessibleContextBase.hxx>
+#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
+#include "AccessibleContextBase.hxx"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
@@ -84,7 +84,7 @@
 */
 class ScAccessibleTableBase
     :   public  ::drafts::com::sun::star::accessibility::XAccessibleTable,
-        public  SvAccessibleContextBase
+        public  ScAccessibleContextBase
 {
 public:
     //=====  internal  ========================================================

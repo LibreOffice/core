@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 16:34:01 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 
 #include "AccessibleTableBase.hxx"
+#ifndef _SC_ACCESSIBLECELL_HXX
+#include "AccessibleCell.hxx"
+#endif
 #ifndef SC_MISCUNO_HXX
 #include "miscuno.hxx"
 #endif
@@ -96,7 +99,7 @@ ScAccessibleTableBase::ScAccessibleTableBase (
         const uno::Reference<sheet::XSpreadsheetView >& rxSheetView,
         const table::CellRangeAddress& rRange)
     :
-    SvAccessibleContextBase (rxParent, AccessibleRole::TABLE),
+    ScAccessibleContextBase (rxParent, AccessibleRole::TABLE),
     mxSheetView(rxSheetView),
     maRange(rRange),
     mxSheet(rxSheetView->getActiveSheet())
@@ -116,7 +119,7 @@ uno::Any SAL_CALL
 {
     SC_QUERYINTERFACE( XAccessibleTable )
 
-    return SvAccessibleContextBase::queryInterface( rType );
+    return ScAccessibleContextBase::queryInterface( rType );
 }
 
 /** Increase the reference count.
@@ -332,7 +335,7 @@ long SAL_CALL
                     throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented yet");
-    return 0;
+    return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -341,7 +344,12 @@ uno::Reference< XAccessible > SAL_CALL
         lang::IndexOutOfBoundsException*/)
 {
     DBG_ERROR("not implemented yet");
-    return SvAccessibleContextBase::getAccessibleChild(nIndex);
+    uno::Reference<table::XCellRange> xCellRange(mxSheet, uno::UNO_QUERY);
+    if (xCellRange.is())
+    {
+        return new ScAccessibleCell(this, xCellRange->getCellByPosition(5, 5));
+    }
+    return uno::Reference< XAccessible >();
 }
 
 ::rtl::OUString SAL_CALL
@@ -393,7 +401,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleTableBase::getSupportedServiceNames (void)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = SvAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
@@ -409,7 +417,7 @@ uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes (void)
         throw (uno::RuntimeException)
 {
     uno::Sequence< uno::Type>
-        aTypeSequence = SvAccessibleContextBase::getTypes();
+        aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());
     aTypeSequence.realloc(nOldSize + 1);
     uno::Type* pTypes = aTypeSequence.getArray();
@@ -426,7 +434,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleTableBase::getImplementationId (voi
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
-        ::vos::OGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (maMutex);
         aId.realloc (16);
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 14:17:14 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return the set of current states.
-    // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-23 13:34:27 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,18 @@
 #ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #define _SC_ACCESSIBLEDOCUMENT_HXX
 
-#ifndef _SVTOOLS_ACCESSIBLE_DOCUMENT_BASE_HXX
-#include <svtools/AccessibleDocumentBase.hxx>
+#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
+#include "AccessibleContextBase.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HPP_
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 
 /** @descr
@@ -81,7 +83,7 @@
 */
 
 class ScAccessibleDocument
-    :   public SvAccessibleDocumentBase
+    :   public ScAccessibleContextBase
 {
 public:
     //=====  internal  ========================================================
@@ -149,6 +151,8 @@ private:
     sal_Bool IsVisible(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    com::sun::star::uno::Reference < com::sun::star::frame::XModel > mxModel;
 };
 
 
