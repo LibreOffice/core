@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleItem.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:17 $
+ *  last change: $Author: er $ $Date: 2000-11-18 18:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,20 @@ constants LocaleItem
     const short TIME_AM                 = 11;
     /// time PM symbol, e.g. <bold>PM</bold> or <bold>pm</bold>
     const short TIME_PM                 = 12;
+    /// long date day of week separator, e.g. ", "
+    const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
+    /// long date day separator, e.g. ", "
+    const short LONG_DATE_DAY_SEPARATOR = 14;
+    /// long date month separator, e.g. " "
+    const short LONG_DATE_MONTH_SEPARATOR   = 15;
+    /// long date year separator, e.g. " "
+    const short LONG_DATE_YEAR_SEPARATOR    = 16;
 
     //! New values may be inserted here if locale data provides them.
-    //! Do not forget to adjust the COUNT vallue.
+    //! Do not forget to adjust the COUNT value.
 
     /// count of items available
-    const short COUNT                   = 13;
+    const short COUNT                   = 17;
 };
 
 

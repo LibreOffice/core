@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-08 17:39:19 $
+ *  last change: $Author: er $ $Date: 2000-11-18 18:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ struct LocaleDataItem {
     string timeAM;
     string timePM;
     string measurementSystem;
+    string LongDateDayOfWeekSeparator;
+    string LongDateDaySeparator;
+    string LongDateMonthSeparator;
+    string LongDateYearSeparator;
 };
 
 struct Implementation {
