@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:40:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,20 +105,20 @@
 #include "dialmgr.hxx"
 
 #include "charmapacc.hxx"
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
 
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 // class SvxShowText =====================================================
 
@@ -752,15 +752,15 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         if( m_pAccessible )
         {
             ::svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
-            m_pAccessible->fireEvent( AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+            m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
 
             OSL_ENSURE(pItem->m_pItem,"No accessible created!");
             Any aOldAny, aNewAny;
             aNewAny <<= AccessibleStateType::FOCUSED;
-            pItem->m_pItem->fireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+            pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
 
             aNewAny <<= AccessibleStateType::SELECTED;
-            pItem->m_pItem->fireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
+            pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
     }
 
@@ -802,7 +802,7 @@ IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
             for ( ; nLast != nSelectedIndex; ++nLast)
             {
                 aOldAny <<= ImplGetItem(nLast)->GetAccessible();
-                m_pAccessible ->fireEvent( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+                m_pAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
