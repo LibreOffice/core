@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:05:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2387,11 +2387,11 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwTxtFld* pRefTxtFld = aTmpLst[ nLast ]->GetFld();
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
-    if( pSetFld->IsOn() )
+    Point aPt;
+    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False ) : 0;
+    if( pSetFld->IsOn() && pRefFrm )
     {
         // dann bestimme mal den entsp. Offset
-        Point aPt;
-        const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False );
         const SwPageFrm* pPgFrm = pFrm->FindPageFrm();
         sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
