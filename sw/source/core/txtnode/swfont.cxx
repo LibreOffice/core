@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-19 12:53:59 $
+ *  last change: $Author: fme $ $Date: 2001-07-06 15:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,10 @@ void SwFont::SetFnt( const SwAttrHandler& rAttrHandler )
 
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet, const SwDoc *pDoc )
 {
+    delete pBackColor;
+    pBackColor = NULL;
+
+
     if( pAttrSet )
     {
         const SfxPoolItem* pItem;
@@ -571,6 +575,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet, const SwDoc *pDoc )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ROTATE,
             TRUE, &pItem ))
             SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
+            TRUE, &pItem ))
+            pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
+        else
+            pBackColor = NULL;
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
                 pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pTwoLinesItem ))
