@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-18 11:12:40 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:18:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -166,15 +166,15 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)\$(DEFLIB$(TNR)NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @$(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it

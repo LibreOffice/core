@@ -63,15 +63,15 @@ $(DEF1TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)\$(DEFLIB1NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF1CEXP)"!=""
-    @$(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -241,15 +241,15 @@ $(DEF2TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)\$(DEFLIB2NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF2CEXP)"!=""
-    @$(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -419,15 +419,15 @@ $(DEF3TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)\$(DEFLIB3NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF3CEXP)"!=""
-    @$(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -597,15 +597,15 @@ $(DEF4TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)\$(DEFLIB4NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF4CEXP)"!=""
-    @$(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -775,15 +775,15 @@ $(DEF5TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)\$(DEFLIB5NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF5CEXP)"!=""
-    @$(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -953,15 +953,15 @@ $(DEF6TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)\$(DEFLIB6NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF6CEXP)"!=""
-    @$(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1131,15 +1131,15 @@ $(DEF7TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)\$(DEFLIB7NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF7CEXP)"!=""
-    @$(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1309,15 +1309,15 @@ $(DEF8TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)\$(DEFLIB8NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF8CEXP)"!=""
-    @$(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1487,15 +1487,15 @@ $(DEF9TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)\$(DEFLIB9NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF9CEXP)"!=""
-    @$(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1665,15 +1665,15 @@ $(DEF10TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
-    lib -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)\$(DEFLIB10NAME).lib
+    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF10CEXP)"!=""
-    @$(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @$(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
