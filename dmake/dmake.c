@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.4 $
--- last change: $Author: rt $ $Date: 2004-09-08 16:05:19 $
+-- $Revision: 1.5 $
+-- last change: $Author: rt $ $Date: 2004-10-22 08:04:42 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -77,10 +77,8 @@
  * when this module is compiled. */
 #define _DEFINE_GLOBALS_ 1
 
-#include "extern.h"
+#include "extern.h" /* this includes config.h */
 #include "sysintf.h"
-#include "patchlvl.h"
-#include "version.h"
 
 #ifndef MSDOS
 #define USAGE \
@@ -841,7 +839,7 @@ Version()
    char **p;
 
    printf("%s - %s, ", Pname, sccid);
-   printf("Version %s, PL %d\n\n", VERSION, PATCHLEVEL);
+   printf("Version %s\n\n", VERSION);
 
    puts("Default Configuration:");
    for (p=Rule_tab;  *p != NIL(char);  p++)
