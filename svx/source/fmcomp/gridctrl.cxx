@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:58:14 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 18:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2820,16 +2820,43 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
 }
 
 //------------------------------------------------------------------------------
+void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
+{
+    PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
+
+    PreExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu );
+    aContextMenu.RemoveDisabledEntries( sal_True, sal_True );
+    PostExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu, aContextMenu.Execute( this, _rPreferredPos ) );
+
+    // TODO: why this weird cast to sal_uInt16? What if we really have more than 65535 lines?
+    // -> change this to sal_uInt32
+}
+
+//------------------------------------------------------------------------------
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
         {
-            if (!rEvt.IsMouseEvent() || !m_pSeekCursor)
+            if ( !m_pSeekCursor )
             {
                 DbGridControl_Base::Command(rEvt);
                 return;
+            }
+
+            if ( !rEvt.IsMouseEvent() )
+            {   // context menu requested by keyboard
+                if ( GetSelectRowCount() )
+                {
+                    long nRow = FirstSelectedRow( );
+
+                    ::Rectangle aRowRect( GetRowRectPixel( nRow, sal_True ) );
+                    executeRowContextMenu( nRow, aRowRect.LeftCenter() );
+
+                    // handled
+                    return;
+                }
             }
 
             sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
@@ -2837,11 +2864,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
 
             if (nColId == HANDLE_ID)
             {
-                PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_ROWS));
-
-                PreExecuteRowContextMenu((sal_uInt16)nRow, aContextMenu);
-                aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
-                PostExecuteRowContextMenu((sal_uInt16)nRow, aContextMenu, aContextMenu.Execute(this, rEvt.GetMousePosPixel()));
+                executeRowContextMenu( nRow, rEvt.GetMousePosPixel() );
             }
             else if (canCopyCellText(nRow, nColId))
             {
