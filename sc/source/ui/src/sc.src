@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:21:25 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // StarCalc Applikations Resource
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-11-16 23:21:25 $ $Revision: 1.12 $
+ // $Author: dr $ $Date: 2002-05-31 11:17:06 $ $Revision: 1.13 $
  // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
  //==================================================================
 
@@ -105,21 +105,12 @@ String RID_APPTITLE
     Text[ turkish ] = "%PRODUCTNAME Calc";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc";
+    Text[ thai ] = "%PRODUCTNAME Calc";
 };
 
  // About-Dialog --------------------------------------------------------------
 
  // Icons & Bitmaps: ----------------------------------------------------------
-
-
- //Bitmap RID_DEFAULTINTRO         { File = "scintro.bmp"; };
- //Bitmap RID_DROPDOWNBITMAP        { File = "dropdown.bmp"; };
- //Bitmap RID_BLUEDROPDOWNBITMAP    { File = "dropblue.bmp"; };
-//Bitmap RID_ANCHORBITMAP { File = "anchor.bmp" ; };
-//Bitmap RID_GRAYANCHORBITMAP { File = "anchor.bmp" ; };  //! andere Bitmap !!!
-
-// Bitmap RID_BMP_REFBTN1 { File = "refinp1.bmp" ; };
-// Bitmap RID_BMP_REFBTN2 { File = "refinp2.bmp" ; };
 
 Image RID_BMP_REFBTN1
 {
@@ -127,13 +118,16 @@ Image RID_BMP_REFBTN1
     {
         File = "refinp1.bmp";
     };
+    MaskColor = STD_MASKCOLOR;
+};
 
-    MaskColor = Color
+Image RID_BMP_REFBTN1_H
+{
+    ImageBitmap = Bitmap
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        File = "refinp1_h.bmp";
     };
+    MaskColor = SC_HC_MASKCOLOR;
 };
 
 Image RID_BMP_REFBTN2
@@ -142,13 +136,16 @@ Image RID_BMP_REFBTN2
     {
         File = "refinp2.bmp";
     };
+    MaskColor = STD_MASKCOLOR;
+};
 
-    MaskColor = Color
+Image RID_BMP_REFBTN2_H
+{
+    ImageBitmap = Bitmap
     {
-        Red = 0xC000 ;
-        Green = 0xC000 ;
-        Blue = 0xC000 ;
+        File = "refinp2_h.bmp";
     };
+    MaskColor = SC_HC_MASKCOLOR;
 };
 
 
@@ -156,24 +153,4 @@ Image RID_BMP_REFBTN2
 String 30001 { Text = "Dummy1" ; };
 String 30002 { Text = "Dummy2" ; };
 String 30006 { Text = "Dummy3" ; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

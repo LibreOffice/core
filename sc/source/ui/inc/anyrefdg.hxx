@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,19 @@ private:
     Image               aImgRefDone;    // Symbol fuer Ref.-Eingabe beenden
     ScAnyRefDlg*        pAnyRefDlg;     // parent dialog
     ScRefEdit*          pRefEdit;       // zugeordnetes Edit-Control
+    sal_Bool            bIsStartImage;  /// TRUE = Start image, FALSE = End image.
+
+    /** Sets normal or HC images, depending on current settings. */
+    void                InitImages();
+    /** Activates start (TRUE) or end (FALSE) image. */
+    void                ShowImage( sal_Bool bStartImage );
 
 protected:
     virtual void        Click();
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        GetFocus();
     virtual void        LoseFocus();
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
                         ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit );

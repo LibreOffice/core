@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,23 +277,45 @@ IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi )
 //----------------------------------------------------------------------------
 
 ScRefButton::ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit ) :
-    ImageButton ( pParent, rResId ),
-    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
-    aImgRefDone ( ScResId( RID_BMP_REFBTN2 ) ),
-    pAnyRefDlg  ( pParent ),
-    pRefEdit    ( pEdit )
+    ImageButton( pParent, rResId ),
+    pAnyRefDlg( pParent ),
+    pRefEdit( pEdit ),
+    bIsStartImage( sal_True )
 {
-    SetStartImage();
+    InitImages();
 }
 
 ScRefButton::ScRefButton( Window *pParent, const ResId& rResId ) :
-    ImageButton ( pParent, rResId ),
-    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
-    aImgRefDone ( ScResId( RID_BMP_REFBTN2 ) ),
-    pAnyRefDlg  ( NULL ),
-    pRefEdit    ( NULL )
+    ImageButton( pParent, rResId ),
+    pAnyRefDlg( NULL ),
+    pRefEdit( NULL ),
+    bIsStartImage( sal_True )
 {
-    SetStartImage();
+    InitImages();
+}
+
+void ScRefButton::InitImages()
+{
+    sal_Bool bDark = GetDisplayBackground().GetColor().IsDark();
+    aImgRefStart = Image( ScResId( bDark ? RID_BMP_REFBTN1_H : RID_BMP_REFBTN1 ) );
+    aImgRefDone = Image( ScResId( bDark ? RID_BMP_REFBTN2_H : RID_BMP_REFBTN2 ) );
+    ShowImage( bIsStartImage );
+}
+
+void ScRefButton::ShowImage( sal_Bool bStartImage )
+{
+    SetImage( bStartImage ? aImgRefStart : aImgRefDone );
+    bIsStartImage = bStartImage;
+}
+
+void ScRefButton::SetStartImage()
+{
+    ShowImage( sal_True );
+}
+
+void ScRefButton::SetEndImage()
+{
+    ShowImage( sal_False );
 }
 
 void ScRefButton::SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit )
@@ -301,7 +323,6 @@ void ScRefButton::SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit )
     pAnyRefDlg = pDlg;
     pRefEdit = pEdit;
 }
-
 
 //----------------------------------------------------------------------------
 
@@ -334,14 +355,11 @@ void ScRefButton::LoseFocus()
         pRefEdit->Modify();
 }
 
-void ScRefButton::SetStartImage()
+void ScRefButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SetImage( aImgRefStart );
-}
-
-void ScRefButton::SetEndImage()
-{
-    SetImage( aImgRefDone );
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        InitImages();
+    ImageButton::DataChanged( rDCEvt );
 }
 
 
