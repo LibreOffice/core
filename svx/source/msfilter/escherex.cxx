@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 16:55:12 $
+ *  last change: $Author: sj $ $Date: 2000-12-20 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
 #endif
+#ifndef _SV_HATCH_HXX_
+#include <vcl/hatch.hxx>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
@@ -125,7 +128,9 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>
 #endif
-
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
@@ -134,9 +139,6 @@
 using namespace vos;
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
 // ---------------------------------------------------------------------------------------------
@@ -440,21 +442,7 @@ void EscherPropertyContainer::CreateFillProperties(
             break;
             case ::com::sun::star::drawing::FillStyle_HATCH :
             {
-                if ( EscherPropertyValueHelper::GetPropertyValue(
-                    aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ), sal_True ) )
-                {
-                    ::com::sun::star::drawing::Hatch aHatch;
-                    if ( aAny >>= aHatch )
-                    {
-                        sal_uInt32 nFillColor = ImplGetColor( aHatch.Color );
-                        nFillBackColor = nFillColor ^ 0xffffff;
-                        AddOpt( ESCHER_Prop_fillColor, nFillColor );
-
-                        // hatches are not supported by ms
-                        // to do: generate a bitmap or something similar
-
-                    }
-                }
+                CreateGraphicProperties( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ), sal_True );
             }
             break;
             case ::com::sun::star::drawing::FillStyle_SOLID :
@@ -736,6 +724,63 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
             }
+            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ) )
+            {
+                ::com::sun::star::drawing::Hatch aHatch;
+                if ( aAny >>= aHatch )
+                {
+                    sal_Bool        bBackground = sal_False;
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "FillBackground" ) ), sal_True ) )
+                    {
+                        aAny >>= bBackground;
+                    }
+
+                    const MapMode   aMap100( MAP_100TH_MM );
+                    VirtualDevice   aVDev;
+                    const Size      aOutSize( aVDev.PixelToLogic( Size( 28, 28 ), aMap100 ) );
+
+                    if( aVDev.SetOutputSize( aOutSize ) )
+                    {
+                        const PolyPolygon   aPolyPoly( Rectangle( Point(), aOutSize ) );
+                        Hatch               aVclHatch( (HatchStyle) aHatch.Style, Color( aHatch.Color ), aHatch.Distance, (sal_uInt16)aHatch.Angle );
+
+                        if ( bBackground )
+                        {
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                                String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
+                            {
+                                aVDev.SetLineColor();
+                                aVDev.SetFillColor( ImplGetColor( *((sal_uInt32*)aAny.getValue()), sal_False ) );
+                                aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
+                            }
+                        }
+                        aVDev.SetMapMode( aMap100 );
+                        aVDev.DrawHatch( aPolyPoly, aVclHatch );
+                        Bitmap  aBitmap( aVDev.GetBitmap( Point(), aOutSize ) );
+
+                        if ( bBackground )
+                            aGraphicObject = Graphic( aBitmap );
+                        else
+                        {
+                            VirtualDevice   aMaskVDev( 1 );
+                            aMaskVDev.SetMapMode( aMap100 );
+                            if( aMaskVDev.SetOutputSize( aOutSize ) )
+                            {
+                                aVclHatch.SetColor( Color( COL_BLACK ) );
+                                aMaskVDev.DrawHatch( aPolyPoly, aVclHatch );
+                                Graphic   aGraphic( BitmapEx( aBitmap, aMaskVDev.GetBitmap( Point(), aOutSize ) ) );
+                                aGraphicObject = aGraphic;
+                            }
+                            else
+                                aGraphicObject = Graphic( aBitmap );
+
+                        }
+                        bBitmapTile = sal_True;
+                        aUniqueId = aGraphicObject.GetUniqueID();
+                    }
+                }
+            }
             if ( aGraphicUrl.Len() )
             {
                 xub_StrLen nIndex = aGraphicUrl.Search( (sal_Unicode)':', 0 );
@@ -777,7 +822,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         }
                     }
                 }
-                if ( ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) ) && bBitmapTile )
+                if ( bBitmapTile )
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
                 else
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -1936,7 +1981,7 @@ UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 
 // ---------------------------------------------------------------------------------------------
 
-UINT32 EscherEx::GetGradientColor( const awt::Gradient* pVCLGradient, UINT32 nStartColor )
+UINT32 EscherEx::GetGradientColor( const ::com::sun::star::awt::Gradient* pVCLGradient, UINT32 nStartColor )
 {
     UINT32 nIntensity;
     Color   aColor;
@@ -1958,7 +2003,7 @@ UINT32 EscherEx::GetGradientColor( const awt::Gradient* pVCLGradient, UINT32 nSt
 
 // ---------------------------------------------------------------------------------------------
 
-void EscherEx::WriteGradient( EscherPropertyContainer& rPropOpt, const awt::Gradient* pVCLGradient )
+void EscherEx::WriteGradient( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Gradient* pVCLGradient )
 {
     UINT32 nFillFocus = 0x64;
     UINT32 nFirstColor = 0;
