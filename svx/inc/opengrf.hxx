@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:59:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,14 @@
 #include <svtools/filter.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 struct  SvxOpenGrf_Impl;
 
-class SvxOpenGraphicDialog
+class SVX_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
     SvxOpenGraphicDialog    ( const String& rTitle );
@@ -97,8 +101,8 @@ public:
     void                    SetDialogHelpId( const INT32 _nHelpId );
 private:
     // disable copy and assignment
-    SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
-    SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
+    SVX_DLLPRIVATE SvxOpenGraphicDialog (const SvxOpenGraphicDialog&);
+    SVX_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
 
     const std::auto_ptr< SvxOpenGrf_Impl >  mpImpl;
 };
