@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 22:52:24 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 19:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,8 @@ uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
 
     //iterate through the nmodel to find the given xSeries in the tree
     //the found parent indicates the charttype
+    if( !xGivenDataSeries.is() )
+        return xRet;
     uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
     if(!xDiagram.is())
         return xRet;
