@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:59:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,6 +717,10 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     for (int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
+        // #112689# sanity check
+        if( nPoints == 0 )
+            continue;
+
         snprintf(pString, nBezString, "%i %i moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
         WritePS(mpPageBody, pString);
         for (int j=1; j < nPoints;)
@@ -730,7 +734,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
             else
             {
                 if (j+2 >= nPoints)
-                    return; //Error: wrong sequence of contol/normal points somehow
+                    break; //Error: wrong sequence of contol/normal points somehow
                 if ((pFlgAry[i][j] == POLY_CONTROL) && (pFlgAry[i][j+1] == POLY_CONTROL) && (pFlgAry[i][j+2] != POLY_CONTROL))
                 {
                     snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
@@ -741,7 +745,9 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                 }
                 else
                 {
+#if OSL_DEBUG_LEVEL > 1
                     fprintf(stderr, "Strange output\n");
+#endif
                 }
                 j+=3;
             }
