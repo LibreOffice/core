@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: od $ $Date: 2004-08-03 05:55:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ class SwAnchoredObject
         // note: no page frame for as-character anchored objects
         SwPageFrm* mpPageFrm;
         // <--
-        // last relative position
+        // current relative position (relative to anchor position of anchor frame)
         Point maRelPos;
 
         // for to-character anchored objects:
@@ -344,7 +344,8 @@ class SwAnchoredObject
                                        const SwRect& _rRect,
                                        PrepareHint _eHint ) = 0;
 
-        // accessors to the current relative position
+        // accessors to the current relative position (relative to anchor
+        // position of anchor frame)
         const Point GetCurrRelPos() const;
         void SetCurrRelPos( Point _aRelPos );
 
@@ -356,6 +357,17 @@ class SwAnchoredObject
         virtual const SwRect GetObjRect() const = 0;
         virtual void SetObjTop( const SwTwips _nTop) = 0;
         virtual void SetObjLeft( const SwTwips _nLeft) = 0;
+
+        /** method update layout direction the layout direction, the anchored
+            object is assigned to
+
+            OD 2004-07-27 #i31698#
+            method has typically to be called, if the anchored object gets its
+            anchor frame assigned and if the anchor frame changes its layout direction
+
+            @author OD
+        */
+        void UpdateLayoutDir();
 
         /** method to determine object area inclusive its spacing
 
