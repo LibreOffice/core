@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-13 18:11:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        USHORT nPos = 0;
-        SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(nPos);
+        SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
 
         bOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
         bOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
@@ -148,7 +147,7 @@ void ModifyPageUndoAction::Undo()
 
     while(pView)
     {
-        if(pView->HasMarked())
+        if(pView->AreObjectsMarked())
             pView->UnmarkAll();
         pView = aIter.NextView();
     }
@@ -171,13 +170,10 @@ void ModifyPageUndoAction::Undo()
         SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        USHORT nPos = 0;
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, bOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, bOldBckgrndObjsVisible);
-
-        nPos = 0;
-        pPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos);
+        pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
 
     // Redisplay
@@ -208,7 +204,7 @@ void ModifyPageUndoAction::Redo()
 
     while(pView)
     {
-        if(pView->HasMarked())
+        if(pView->AreObjectsMarked())
             pView->UnmarkAll();
         pView = aIter.NextView();
     }
@@ -231,13 +227,10 @@ void ModifyPageUndoAction::Redo()
         SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        USHORT nPos = 0;
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, bNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, bNewBckgrndObjsVisible);
-
-        nPos = 0;
-        pPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos);
+        pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
     }
 
     // Redisplay
