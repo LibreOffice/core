@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:00:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,4 +714,14 @@ void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceAction
         mpTheme->SetDragPos( mnObjectPos );
         TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
     }
+}
+
+BitmapEx GalleryResGetBitmapEx( ULONG nId )
+{
+    BitmapEx aBmpEx( GAL_RESID( nId ) );
+
+    if( !aBmpEx.IsTransparent() )
+            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
+
+    return aBmpEx;
 }
