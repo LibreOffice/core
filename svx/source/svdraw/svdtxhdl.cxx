@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-23 14:31:14 $
+ *  last change: $Author: aw $ $Date: 2001-02-19 13:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // term solution here
         sal_Unicode aUnicode = (pInfo->rText).GetChar(i);
         XPolyPolygon aXPP(XOutGetCharOutline(aUnicode, aVDev));
-// offset in Y(!)       Rectangle aPolyRect(aXPP.GetBoundRect());
+
+// offset in Y(!) for testing make rough correction here
+Rectangle aPolyRect(aXPP.GetBoundRect());
+aXPP.Move(0, -aPolyRect.Top());
 
         if(aXPP.Count())
         {
@@ -271,6 +274,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     if (eUndl!=UNDERLINE_NONE) {
         FASTBOOL bDouble=eUndl==UNDERLINE_DOUBLE;
         long nDescent=aFontMetric.GetDescent();
+        long nAscend=aFontMetric.GetAscent();
         long nDick=nDescent / (bDouble ? 5 : 3);
         long nDist=(nDescent-nDick*2)/3; // Linienabstand bei doppelt
 
@@ -278,6 +282,8 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (eUndl!=UNDERLINE_DOTTED) {
             Point aPoint(0,0);
             XPolygon aXP(Rectangle(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
+            if(bIsVertical)
+                aXP.Move(nAscend-nDist,0);
             aXPP.Insert(aXP);
             if (bDouble) {
                 if(bIsVertical)
@@ -323,6 +329,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     if (eStrk!=STRIKEOUT_NONE) {
         FASTBOOL bDouble=eStrk==STRIKEOUT_DOUBLE;
         long nDescent=aFontMetric.GetDescent();
+        long nAscend=aFontMetric.GetAscent();
         long nDick=nDescent / (bDouble ? 5 : 3);
         long nDist=(nDescent-nDick*2)/3; // Linienabstand bei doppelt
 
@@ -367,14 +374,12 @@ void ImpTextPortionHandler::DrawFitText(ExtOutputDevice& rXOut, const Point& rPo
     rOutliner.SetDrawPortionHdl(Link());
 }
 
-IMPL_LINK_INLINE_START(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,pInfo)
+IMPL_LINK(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,pInfo)
 {
     return 0;
 }
 
-IMPL_LINK_INLINE_END(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,pInfo)
-
-IMPL_LINK_INLINE_START(ImpTextPortionHandler,FormTextWidthHdl,DrawPortionInfo*,pInfo)
+IMPL_LINK(ImpTextPortionHandler,FormTextWidthHdl,DrawPortionInfo*,pInfo)
 {
     if(pInfo->nPara == nParagraph && pInfo->rText.Len())
     {
@@ -384,9 +389,7 @@ IMPL_LINK_INLINE_START(ImpTextPortionHandler,FormTextWidthHdl,DrawPortionInfo*,p
     return 0;
 }
 
-IMPL_LINK_INLINE_END(ImpTextPortionHandler,FormTextWidthHdl,DrawPortionInfo*,pInfo)
-
-IMPL_LINK_INLINE_START(ImpTextPortionHandler,FormTextDrawHdl,DrawPortionInfo*,pInfo)
+IMPL_LINK(ImpTextPortionHandler,FormTextDrawHdl,DrawPortionInfo*,pInfo)
 {
     if (pInfo->nPara==nParagraph) {
         nTextWidth=pXOut->DrawFormText(pInfo->rText,aPoly,pInfo->rFont,
@@ -394,6 +397,3 @@ IMPL_LINK_INLINE_START(ImpTextPortionHandler,FormTextDrawHdl,DrawPortionInfo*,pI
     }
     return 0;
 }
-
-IMPL_LINK_INLINE_END(ImpTextPortionHandler,FormTextDrawHdl,DrawPortionInfo*,pInfo)
-
