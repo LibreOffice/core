@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
@@ -499,9 +499,10 @@ BOOL SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 
     xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->Len()-1;
     sal_Unicode cDelChar = pDelTxtNd->GetTxt().GetChar( pStt->nContent.GetIndex() );
+    CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar && CH_TXTATR_INWORD == cDelChar ) ||
-        WordSelection::IsNormalChar( cDelChar ) !=
-        WordSelection::IsNormalChar( pSttStr->GetChar( nUChrPos ) ))
+        rCC.isLetterNumeric( String( cDelChar ), 0 ) !=
+        rCC.isLetterNumeric( *pSttStr, nUChrPos ) )
         return FALSE;
 
     {
@@ -903,11 +904,14 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.1.1.1 2000-09-19 00:08:27 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:27  hr
+      initial import
+
       Revision 1.91  2000/09/18 16:04:28  willem.vandorp
       OpenOffice header added.
 

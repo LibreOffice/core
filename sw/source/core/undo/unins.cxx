@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -232,7 +232,8 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rInsPos, sal_Unicode cIns )
 
 BOOL SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
-    if( !bIsAppend && bIsWordDelim == !WordSelection::IsNormalChar( cIns ) )
+    if( !bIsAppend && bIsWordDelim ==
+        !GetAppCharClass().isLetterNumeric( String( cIns )) )
     {
         nLen++;
         nCntnt++;
@@ -1033,11 +1034,14 @@ void SwUndoInsertLabel::SetDrawObj( const Point& rPos, BYTE nLId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.1.1.1 2000-09-19 00:08:27 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:27  hr
+      initial import
+
       Revision 1.65  2000/09/18 16:04:29  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
+
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
+
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -225,7 +227,8 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, USHORT nUsrId )
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
         {
             bCanGroup = TRUE;
-            bIsDelim = !WordSelection::IsNormalChar( cCh );
+            bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetTxt(),
+                                                            nSttCntnt );
             bIsBackspace = nSttCntnt == rRange.GetPoint()->nContent.GetIndex();
         }
     }
@@ -509,11 +512,14 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unredln.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unredln.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:28  hr
+      initial import
+
       Revision 1.19  2000/09/18 16:04:29  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 #pragma hdrstop
 
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -179,10 +179,12 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.Len() )))
         return FALSE;
 
+    CharClass& rCC = GetAppCharClass();
+
     // befrage das einzufuegende Charakter
     if( ( CH_TXTATR_BREAKWORD == cIns && CH_TXTATR_INWORD == cIns ) ||
-        WordSelection::IsNormalChar( cIns ) !=
-        WordSelection::IsNormalChar( aInsStr.GetChar( aInsStr.Len()-1) ) )
+        rCC.isLetterNumeric( String( cIns ), 0 ) !=
+        rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
         return FALSE;
 
     {
@@ -357,11 +359,14 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:28  hr
+      initial import
+
       Revision 1.35  2000/09/18 16:04:29  willem.vandorp
       OpenOffice header added.
 
