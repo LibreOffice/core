@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:36:38 $
+ *  last change: $Author: cd $ $Date: 2002-07-04 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,78 @@ ULONG SfxPSProperty_Impl::Load( SvStream& )
     return 0;
 }
 
+
+//=========================================================================
+
+class SfxPSCodePageProperty_Impl : public SfxPSProperty_Impl
+{
+    private:
+        CharSet nEncoding;
+
+        UINT16 GetCodePage( CharSet nEncoding );
+
+    public:
+        SfxPSCodePageProperty_Impl( CharSet nCharSet ) : SfxPSProperty_Impl( 1, VT_I2 ), nEncoding( nCharSet ) {}
+        virtual ~SfxPSCodePageProperty_Impl() {}
+
+    virtual ULONG   Save( SvStream& rStream );
+    virtual ULONG   Len();
+};
+
+ULONG SfxPSCodePageProperty_Impl::Save( SvStream& rStream )
+{
+    rStream << (UINT16)GetCodePage( nEncoding );
+    return rStream.GetErrorCode();
+}
+
+ULONG SfxPSCodePageProperty_Impl::Len()
+{
+    return sizeof( UINT16 );
+}
+
+UINT16 SfxPSCodePageProperty_Impl::GetCodePage( CharSet nEncoding )
+{
+    switch ( nEncoding )
+    {
+        case RTL_TEXTENCODING_MS_1252:
+            return 1252;
+        case RTL_TEXTENCODING_MS_1250:
+            return 1250;
+        case RTL_TEXTENCODING_MS_1251:
+            return 1251;
+        case RTL_TEXTENCODING_MS_1253:
+            return 1253;
+        case RTL_TEXTENCODING_MS_1254:
+            return 1254;
+        case RTL_TEXTENCODING_MS_1255:
+            return 1255;
+        case RTL_TEXTENCODING_MS_1256:
+            return 1256;
+        case RTL_TEXTENCODING_MS_1257:
+            return 1257;
+        case RTL_TEXTENCODING_MS_1258:
+            return 1258;
+        case RTL_TEXTENCODING_MS_874:
+            return 874;
+        case RTL_TEXTENCODING_MS_932:
+            return 932;
+        case RTL_TEXTENCODING_MS_936:
+            return 936;
+        case RTL_TEXTENCODING_MS_949:
+            return 949;
+        case RTL_TEXTENCODING_MS_950:
+            return 950;
+        case RTL_TEXTENCODING_MS_1361:
+            return 1361;
+        case RTL_TEXTENCODING_UTF7:
+            return 65000;
+        case RTL_TEXTENCODING_UTF8:
+            return 65001;
+        default:
+            return 1252; // defautl case
+    }
+}
+
 //=========================================================================
 
 class SfxPSStringProperty_Impl : public SfxPSProperty_Impl
@@ -237,7 +309,10 @@ void SfxPSStringProperty_Impl::SetCodePage( UINT16 nCodePage )
 
 ULONG SfxPSStringProperty_Impl::Save( SvStream& rStream )
 {
-    ByteString aTemp( aString, rStream.GetStreamCharSet() );
+    // Now we always write property strings with UTF8 encoding, so we
+    // can ensure full unicode compatibility. The code page attribute is
+    // written with UTF8 set!
+    ByteString aTemp( aString, RTL_TEXTENCODING_UTF8 );
     UINT32 nLen = aTemp.Len();
     rStream << (UINT32)( nLen + 1 );
     rStream.Write( aTemp.GetBuffer(), nLen );
@@ -1020,6 +1095,7 @@ BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
         DBG_ERRORFILE( "can not open the property set" );
         return FALSE;
     }
+
     pPS->SetSectionName( SvGlobalName(
         0xf29f85e0, 0x4ff9, 0x1068, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9 ) );
     pPS->AddProperty( new SfxPSStringProperty_Impl( PID_TITLE, GetTitle() ) );
@@ -1038,6 +1114,7 @@ BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
     pPS->AddProperty( new SfxPSDateTimeProperty_Impl( PID_EDITTIME, aEditTime ) );
     pPS->AddProperty( new SfxPSStringProperty_Impl(
         PID_REVNUMBER, String::CreateFromInt32( GetDocumentNumber() ) ) );
+    pPS->AddProperty( new SfxPSCodePageProperty_Impl( RTL_TEXTENCODING_UTF8 ));
     pPS->Save( *aStrPropSet );
     delete pPS;
     return ( aStrPropSet->GetErrorCode() == 0 );
