@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SbaXGridControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:35 $
+ *  last change:$Date: 2003-01-31 11:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,8 @@ public class SbaXGridControl extends TestCase {
 
         // Adding relation for XDispatch
         URL url = new URL() ;
-        //url.Complete = ".uno:FormSlots/moveToNext" ;
-        url.Complete = ".uno:GridSlots/RowHeight";
+        url.Complete = ".uno:FormSlots/moveToNext" ;
+        //url.Complete = ".uno:GridSlots/RowHeight";
         //url.Complete = ".uno:GridSlots/RowHeight" ;
         tEnv.addObjRelation("XDispatch.URL", url) ;
 
