@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 15:54:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
