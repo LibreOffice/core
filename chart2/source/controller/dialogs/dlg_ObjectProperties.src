@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:38:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,36 +70,8 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_LINE ; \
     PageResID = RID_SVXPAGE_LINE ; \
-    Text = "Linie" ; \
-    Text [ ENGLISH ] = "Line" ; \
-    Text [ english_us ] = "Borders" ; \
-    Text [ italian ] = "Linea" ; \
-    Text [ spanish ] = "Bordes" ; \
-    Text [ french ] = "Bordure" ; \
-    Text [ dutch ] = "Lijn" ; \
-    Text [ swedish ] = "Linje" ; \
-    Text [ danish ] = "Ramme" ; \
-    Text [ portuguese ] = "Contornos" ; \
-    Text [ portuguese_brazilian ] = "Bordas" ; \
-    Text[ chinese_simplified ] = "è¾¹æ¡†"; \
-    Text[ russian ] = "Îáğàìëåíèå"; \
-    Text[ polish ] = "Krawêdzie"; \
-    Text[ japanese ] = "å¤–æ ç·š"; \
-    Text[ chinese_traditional ] = "ç·šæ¢"; \
-    Text[ arabic ] = "ÍÏæÏ"; \
-    Text[ dutch ] = "Lijn"; \
-    Text[ chinese_simplified ] = "è¾¹æ¡†"; \
-    Text[ greek ] = "ÃñáììŞ"; \
-    Text[ korean ] = "í…Œë‘ë¦¬"; \
-    Text[ turkish ] = "Çizgi"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Vores"; \
-    Text[ finnish ] = "Reunat"; \
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š"; \
-    Text[ czech ] = "Okraje"; \
-    Text[ hebrew ] = "â€®××¡×’×¨×•×ªâ€¬"; \
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡à¤‚"; \
-    Text[ slovak ] = "Okraje"; \
+    Text[ de ] = "Linie" ; \
+    Text [ en-US ] = "Borders" ; \
 };
 
 #define PAGE_AREA \
@@ -107,37 +79,9 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_AREA ; \
     PageResID = RID_SVXPAGE_AREA ; \
-    Text = "Fläche" ; \
-    Text [ ENGLISH ] = "Area" ; \
-    Text [ english_us ] = "Area" ; \
-    Text [ norwegian ] = "Område" ; \
-    Text [ italian ] = "Area" ; \
-    Text [ portuguese_brazilian ] = "Área" ; \
-    Text [ portuguese ] = "Preenchimento" ; \
-    Text [ finnish ] = "Alue" ; \
-    Text [ danish ] = "Område" ; \
-    Text [ french ] = "Remplissage" ; \
-    Text [ swedish ] = "Yta" ; \
-    Text [ dutch ] = "Vlak" ; \
-    Text [ spanish ] = "Área" ; \
-    Text[ chinese_simplified ] = "å¹³é¢"; \
-    Text[ russian ] = "Îáëàñòü"; \
-    Text[ polish ] = "Obszar"; \
-    Text[ japanese ] = "ã‚¨ãƒªã‚¢"; \
-    Text[ chinese_traditional ] = "å¹³é¢"; \
-    Text[ arabic ] = "ãÓÇÍÉ"; \
-    Text[ dutch ] = "Vlak"; \
-    Text[ chinese_simplified ] = "å¹³é¢"; \
-    Text[ greek ] = "ÅğéöÜíåéá"; \
-    Text[ korean ] = "ì˜ì—­"; \
-    Text[ turkish ] = "Yüzey"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Àrea"; \
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ"; \
-    Text[ czech ] = "Oblast"; \
-    Text[ hebrew ] = "FlÃ¤che"; \
-    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£"; \
-    Text[ slovak ] = "OblasÅ¥"; \
+    Text [ de ] = "Fläche" ; \
+    Text [ en-US ] = "Area" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_TRANSPARENCE \
@@ -145,33 +89,8 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_TRANSPARENCE ; \
     PageResID = RID_SVXPAGE_TRANSPARENCE ; \
-    Text = "Transparenz" ; \
-    Text [ ENGLISH ] = "Transparence"; \
-    Text[ english_us ] = "Transparency"; \
-    Text[ portuguese ] = "Transparência"; \
-    Text[ russian ] = "Ïğîçğà÷íîñòü"; \
-    Text[ greek ] = "ÄéáöÜíåéá"; \
-    Text[ dutch ] = "Transparantie"; \
-    Text[ french ] = "Transparence"; \
-    Text[ spanish ] = "Transparencia"; \
-    Text[ italian ] = "Trasparenza"; \
-    Text[ danish ] = "Transparens"; \
-    Text[ swedish ] = "Transparens"; \
-    Text[ polish ] = "Przezroczystoœæ"; \
-    Text[ portuguese_brazilian ] = "Transparência"; \
-    Text[ japanese ] = "é€éæ€§"; \
-    Text[ korean ] = "íˆ¬ëª…ë„"; \
-    Text[ chinese_simplified ] = "é€æ˜"; \
-    Text[ chinese_traditional ] = "é€æ˜"; \
-    Text[ arabic ] = "ÔİÇİíÉ"; \
-    Text[ turkish ] = "Saydamlık"; \
-    Text[ catalan ] = "Transparència"; \
-    Text[ finnish ] = "Läpinäkyvyys"; \
-    Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡"; \
-    Text[ czech ] = "PrÅ¯hlednost"; \
-    Text[ hebrew ] = "Transparenz"; \
-    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾"; \
-    Text[ slovak ] = "PriehÄ¾adnosÅ¥"; \
+    Text [ de ] = "Transparenz" ; \
+    Text [ en-US ] = "Transparency"; \
 };
 
 #define PAGE_CHARACTERS \
@@ -179,37 +98,9 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_CHAR_NAME ; \
     PageResID = RID_SVXPAGE_CHAR_NAME ; \
-    Text = "Zeichen" ; \
-    Text [ ENGLISH ] = "Char" ; \
-    Text [ english_us ] = "Characters" ; \
-    Text [ norwegian ] = "Char" ; \
-    Text [ italian ] = "Carattere" ; \
-    Text [ portuguese_brazilian ] = "Caracteres" ; \
-    Text [ portuguese ] = "Caracteres" ; \
-    Text [ finnish ] = "Merkit" ; \
-    Text [ danish ] = "Tegn" ; \
-    Text [ french ] = "Caractères" ; \
-    Text [ swedish ] = "Tecken" ; \
-    Text [ dutch ] = "Tekens" ; \
-    Text [ spanish ] = "Caracteres" ; \
-    Text[ chinese_simplified ] = "å­—ç¬¦"; \
-    Text[ russian ] = "Øğèôò"; \
-    Text[ polish ] = "Znaki"; \
-    Text[ japanese ] = "æ–‡å­—"; \
-    Text[ chinese_traditional ] = "å­—å…ƒ"; \
-    Text[ arabic ] = "ÎØæØ"; \
-    Text[ dutch ] = "Tekens"; \
-    Text[ chinese_simplified ] = "å­—ç¬¦"; \
-    Text[ greek ] = "×áñáêôŞñåò"; \
-    Text[ korean ] = "ê¸€ê¼´"; \
-    Text[ turkish ] = "Karakterler"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Caràcters"; \
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°"; \
-    Text[ czech ] = "Znaky"; \
-    Text[ hebrew ] = "â€®×ª×•×™×â€¬"; \
-    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°à¥‡à¤‚"; \
-    Text[ slovak ] = "Znaky"; \
+    Text [ de ] = "Zeichen" ; \
+    Text [ en-US ] = "Characters" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_FONTEFFECTS \
@@ -217,35 +108,9 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_CHAR_EFFECTS ; \
     PageResID = RID_SVXPAGE_CHAR_EFFECTS ; \
-    Text = "Schrifteffekt" ; \
-    Text [ ENGLISH ] = "Character Extension" ; \
-    Text [ english_us ] = "Font Effects" ; \
-    Text [ norwegian ] = "Character Extension" ; \
-    Text [ italian ] = "Effetto carattere" ; \
-    Text [ portuguese_brazilian ] = "Efeitos da Fonte" ; \
-    Text [ portuguese ] = "Efeitos do tipo de letra" ; \
-    Text [ finnish ] = "Fonttitehosteet" ; \
-    Text [ danish ] = "Skrifteffekt" ; \
-    Text [ french ] = "Effets de caractères" ; \
-    Text [ swedish ] = "Teckeneffekt" ; \
-    Text [ dutch ] = "Schrifteffect" ; \
-    Text [ spanish ] = "Efectos de fuente" ; \
-    Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ"; \
-    Text[ russian ] = "İôôåêòû øğèôòà"; \
-    Text[ polish ] = "Efekty czcionki"; \
-    Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ"; \
-    Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ"; \
-    Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ"; \
-    Text[ greek ] = "Åöİ ÷áñáêôŞñùí"; \
-    Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼"; \
-    Text[ turkish ] = "Yazı Tipi Efektleri"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Efectes de lletra"; \
-    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£"; \
-    Text[ czech ] = "Efekty pÃ­sma"; \
-    Text[ hebrew ] = "Font Effects"; \
-    Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥ à¤ªà¥à¤°à¤­à¤¾à¤µ"; \
-    Text[ slovak ] = "Efekty pre pÃ­smo"; \
+    Text [ de ] = "Schrifteffekt" ; \
+    Text [ en-US ] = "Font Effects" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_DATALABELS \
@@ -253,37 +118,9 @@ PageItem \
 { \
     Identifier = TP_DATA_DESCR ; \
     PageResID = TP_DATA_DESCR ; \
-    Text = "Datenbeschriftung" ; \
-    Text [ ENGLISH ] = "Data Descritption" ; \
-    Text [ english_us ] = "Data Labels" ; \
-    Text [ norwegian ] = "Data Descritption" ; \
-    Text [ italian ] = "Dicitura dati" ; \
-    Text [ portuguese_brazilian ] = "Rótulos dos Dados" ; \
-    Text [ portuguese ] = "Legenda para dados" ; \
-    Text [ finnish ] = "Tietoselitteet" ; \
-    Text [ danish ] = "Dataetiketter" ; \
-    Text [ french ] = "Étiquetage des données" ; \
-    Text [ swedish ] = "Dataetiketter" ; \
-    Text [ dutch ] = "Gegevenslabels" ; \
-    Text [ spanish ] = "Etiqueta de datos" ; \
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
-    Text[ russian ] = "Ïîäïèñè äàííûõ"; \
-    Text[ polish ] = "Etykiety danych"; \
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«"; \
-    Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤"; \
-    Text[ arabic ] = "ÚäæäÉ ÇáÈíÇäÇÊ"; \
-    Text[ dutch ] = "Gegevenslabels"; \
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
-    Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí"; \
-    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”"; \
-    Text[ turkish ] = "Veri etiketi"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Etiquetes de dades"; \
-    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥"; \
-    Text[ czech ] = "Popisky dat"; \
-    Text[ hebrew ] = "Datenbeschriftung"; \
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚"; \
-    Text[ slovak ] = "Popisy dÃ¡t"; \
+    Text [ de ] = "Datenbeschriftung" ; \
+    Text [ en-US ] = "Data Labels" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_STATISTIC \
@@ -291,36 +128,8 @@ PageItem \
 { \
     Identifier = TP_STAT ; \
     PageResID = TP_STAT ; \
-    Text = "Statistik" ; \
-    Text [ ENGLISH ] = "Statistics" ; \
-    Text [ english_us ] = "Statistics" ; \
-    Text [ italian ] = "Statistica" ; \
-    Text [ spanish ] = "Estadística" ; \
-    Text [ french ] = "Statistiques" ; \
-    Text [ dutch ] = "Statistiek" ; \
-    Text [ swedish ] = "Statistik" ; \
-    Text [ danish ] = "Statistik" ; \
-    Text [ portuguese_brazilian ] = "Estatísticas" ; \
-    Text [ portuguese ] = "Estatística" ; \
-    Text[ chinese_simplified ] = "ç»Ÿè®¡å‡½æ•°"; \
-    Text[ russian ] = "Ñòàòèñòèêà"; \
-    Text[ polish ] = "Statystyka"; \
-    Text[ japanese ] = "çµ±è¨ˆ"; \
-    Text[ chinese_traditional ] = "çµ±è¨ˆ"; \
-    Text[ arabic ] = "ÅÍÕÇÆíÇÊ"; \
-    Text[ dutch ] = "Statistiek"; \
-    Text[ chinese_simplified ] = "ç»Ÿè®¡å‡½æ•°"; \
-    Text[ greek ] = "ÓôáôéóôéêÜ"; \
-    Text[ korean ] = "í†µê³„"; \
-    Text[ turkish ] = "İstatistik"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Estadística"; \
-    Text[ finnish ] = "Tilastotiedot"; \
-    Text[ thai ] = "à¸ªà¸–à¸´à¸•à¸´"; \
-    Text[ czech ] = "Statistika"; \
-    Text[ hebrew ] = "×¡×˜×˜×™×¡×˜×™×§×•×ª"; \
-    Text[ hindi ] = "à¤…à¤à¤•à¤¡à¤¼à¥‡"; \
-    Text[ slovak ] = "Å tatistika"; \
+    Text[ de ] = "Statistik" ; \
+    Text [ en-US ] = "Statistics" ; \
 };
 
 #define PAGE_LAYOUT \
@@ -328,36 +137,9 @@ PageItem \
 { \
     Identifier = TP_LAYOUT ; \
     PageResID = TP_LAYOUT ; \
-    Text = "Layout" ; \
-    Text [ ENGLISH ] = "Layout" ; \
-    Text[ english_us ] = "Layout"; \
-    Text[ italian ] = "Layout"; \
-    Text[ portuguese_brazilian ] = "Layout"; \
-    Text[ portuguese ] = "Layout"; \
-    Text[ danish ] = "Layout"; \
-    Text[ french ] = "Mise en page"; \
-    Text[ swedish ] = "Layout"; \
-    Text[ dutch ] = "Lay-out"; \
-    Text[ spanish ] = "Diseño"; \
-    Text[ chinese_simplified ] = "ç‰ˆå¼"; \
-    Text[ russian ] = "Ğàçìåòêà"; \
-    Text[ polish ] = "Uk³ad"; \
-    Text[ japanese ] = "ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ"; \
-    Text[ chinese_traditional ] = "ç‰ˆå¼"; \
-    Text[ arabic ] = "ÊÎØíØ"; \
-    Text[ dutch ] = "Lay-out"; \
-    Text[ chinese_simplified ] = "ç‰ˆå¼"; \
-    Text[ greek ] = "ÄéÜôáîç"; \
-    Text[ korean ] = "ë ˆì´ì•„ì›ƒ"; \
-    Text[ turkish ] = "Sayfa düzeni"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Format"; \
-    Text[ finnish ] = "Asettelu"; \
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡"; \
-    Text[ czech ] = "Vzhled"; \
-    Text[ hebrew ] = "â€®×¤×¨×™×¡×”â€¬"; \
-    Text[ hindi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸"; \
-    Text[ slovak ] = "FormÃ¡t"; \
+    Text [ de ] = "Layout" ; \
+    Text [ en-US ] = "Layout"; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_OPTIONS \
@@ -365,36 +147,9 @@ PageItem \
 { \
     Identifier = TP_OPTIONS; \
     PageResID = TP_OPTIONS; \
-    Text = "Optionen"; \
-    Text[ENGLISH] = "Options"; \
-    Text[ english_us ] = "Options"; \
-    Text[ portuguese ] = "Opções"; \
-    Text[ russian ] = "Ïàğàìåòğû"; \
-    Text[ dutch ] = "Opties"; \
-    Text[ french ] = "Options"; \
-    Text[ spanish ] = "Opciones"; \
-    Text[ italian ] = "Opzioni"; \
-    Text[ danish ] = "Indstillinger"; \
-    Text[ swedish ] = "Alternativ"; \
-    Text[ polish ] = "Opcje"; \
-    Text[ portuguese_brazilian ] = "Opções"; \
-    Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³"; \
-    Text[ chinese_simplified ] = "é€‰é¡¹"; \
-    Text[ chinese_traditional ] = "é¸é …"; \
-    Text[ arabic ] = "ÎíÇÑÇÊ"; \
-    Text[ dutch ] = "Opties"; \
-    Text[ chinese_simplified ] = "é€‰é¡¹"; \
-    Text[ greek ] = "Åğéëïãİò"; \
-    Text[ korean ] = "ì˜µì…˜"; \
-    Text[ turkish ] = "Seçenekler"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Opcions"; \
-    Text[ finnish ] = "Asetukset"; \
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸"; \
-    Text[ czech ] = "Volby"; \
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬"; \
-    Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª"; \
-    Text[ slovak ] = "Nastavenia"; \
+    Text [ de ] = "Optionen"; \
+    Text [ en-US ] = "Options"; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_AXISLABEL \
@@ -402,34 +157,9 @@ PageItem \
 { \
     Identifier = TP_AXIS_LABEL ; \
     PageResID = TP_AXIS_LABEL ; \
-    Text = "Beschriftung" ; \
-    Text [ ENGLISH ] = "Labelling" ; \
-    Text [ english_us ] = "Label" ; \
-    Text[ portuguese ] = "Legenda"; \
-    Text[ russian ] = "Ïîäïèñü"; \
-    Text[ greek ] = "ÅğéãñáöŞ"; \
-    Text[ dutch ] = "Opschrift"; \
-    Text[ french ] = "Étiquette"; \
-    Text[ spanish ] = "Etiqueta"; \
-    Text[ italian ] = "Dicitura"; \
-    Text[ danish ] = "Etiket"; \
-    Text[ swedish ] = "Etikett"; \
-    Text[ polish ] = "Etykieta"; \
-    Text[ portuguese_brazilian ] = "Rótulo"; \
-    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«"; \
-    Text[ korean ] = "ë ˆì´ë¸”"; \
-    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—"; \
-    Text[ chinese_traditional ] = "æ¨™ç±¤"; \
-    Text[ arabic ] = "ÚäæäÉ"; \
-    Text[ turkish ] = "Etiket"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Etiqueta"; \
-    Text[ finnish ] = "Selite"; \
-    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­"; \
-    Text[ czech ] = "Popisek"; \
-    Text[ hebrew ] = "Beschriftung"; \
-    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²"; \
-    Text[ slovak ] = "OznaÄenie"; \
+    Text [ de ] = "Beschriftung" ; \
+    Text [ en-US ] = "Label" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_AXISSCALE \
@@ -437,37 +167,9 @@ PageItem \
 { \
     Identifier = TP_SCALE_Y ; \
     PageResID = TP_SCALE_Y ; \
-    Text = "Skalierung" ; \
-    Text [ ENGLISH ] = "Scale" ; \
-    Text [ english_us ] = "Scale" ; \
-    Text [ norwegian ] = "Scale" ; \
-    Text [ italian ] = "Scala" ; \
-    Text [ portuguese_brazilian ] = "Escala" ; \
-    Text [ portuguese ] = "Escala" ; \
-    Text [ finnish ] = "Skaalaa" ; \
-    Text [ danish ] = "Skalering" ; \
-    Text [ french ] = "Échelle" ; \
-    Text [ swedish ] = "Skalning" ; \
-    Text [ dutch ] = "Schaal" ; \
-    Text [ spanish ] = "Escala" ; \
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹"; \
-    Text[ russian ] = "Ìàñøòàáèğîâàíèå"; \
-    Text[ polish ] = "Skala"; \
-    Text[ japanese ] = "ç›®ç››"; \
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹"; \
-    Text[ arabic ] = "ãŞíÇÓ"; \
-    Text[ dutch ] = "Schaal"; \
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹"; \
-    Text[ greek ] = "Êëßìáêá"; \
-    Text[ korean ] = "ë°°ìœ¨ ì¡°ì •"; \
-    Text[ turkish ] = "Ölçeklendirme"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Escala"; \
-    Text[ thai ] = "à¸ªà¹€à¸à¸¥"; \
-    Text[ czech ] = "MÄ›Å™Ã­tko"; \
-    Text[ hebrew ] = "â€®×”×ª×××ª ×’×•×“×œâ€¬"; \
-    Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²"; \
-    Text[ slovak ] = "PravÃ­tko"; \
+    Text [ de ] = "Skalierung" ; \
+    Text [ en-US ] = "Scale" ; \
+    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_NUMBERFORMAT \
@@ -475,37 +177,9 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_NUMBERFORMAT ; \
     PageResID = RID_SVXPAGE_NUMBERFORMAT ; \
-    Text = "Zahlen" ; \
-    Text [ english_us ] = "Numbers" ; \
-    Text [ ENGLISH ] = "Number" ; \
-    Text [ norwegian ] = "Number" ; \
-    Text [ italian ] = "Numeri" ; \
-    Text [ portuguese_brazilian ] = "Números" ; \
-    Text [ portuguese ] = "Números" ; \
-    Text [ finnish ] = "Luku" ; \
-    Text [ danish ] = "Tal" ; \
-    Text [ french ] = "Nombres" ; \
-    Text [ swedish ] = "Tal" ; \
-    Text [ dutch ] = "Getallen" ; \
-    Text [ spanish ] = "Números" ; \
-    Text[ chinese_simplified ] = "æ•°å­—"; \
-    Text[ russian ] = "×èñëà"; \
-    Text[ polish ] = "Liczby"; \
-    Text[ japanese ] = "æ•°"; \
-    Text[ chinese_traditional ] = "æ•¸å­—"; \
-    Text[ arabic ] = "ÃÑŞÇã"; \
-    Text[ dutch ] = "Getallen"; \
-    Text[ chinese_simplified ] = "æ•°å­—"; \
-    Text[ greek ] = "Áñéèìïß"; \
-    Text[ korean ] = "ìˆ«ì"; \
-    Text[ turkish ] = "Sayılar"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Números"; \
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚"; \
-    Text[ czech ] = "ÄŒÃ­sla"; \
-    Text[ hebrew ] = "Zahlen"; \
-    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾"; \
-    Text[ slovak ] = "ÄŒÃ­sla"; \
+    Text [ de ] = "Zahlen" ; \
+    Text [ en-US ] = "Numbers" ; \
+    Text [ x-comment ] = " "; \
 };
 
 //-----------------------------------------------------------------------------
@@ -537,37 +211,9 @@ PushButton 1 \
     Pos = MAP_APPFONT ( 169 , 151 ) ; \
     Size = MAP_APPFONT ( 50 , 14 ) ; \
     TabStop = TRUE ; \
-    Text = "Zurück" ; \
-    Text [ ENGLISH ] = "Return" ; \
-    Text [ norwegian ] = "Return" ; \
-    Text [ italian ] = "Indietro" ; \
-    Text [ portuguese_brazilian ] = "Voltar" ; \
-    Text [ portuguese ] = "Anterior" ; \
-    Text [ finnish ] = "Edellinen" ; \
-    Text [ danish ] = "Tilbage" ; \
-    Text [ french ] = "Précédent" ; \
-    Text [ swedish ] = "Tillbaka" ; \
-    Text [ dutch ] = "Vorige" ; \
-    Text [ spanish ] = "Regresar" ; \
-    Text [ english_us ] = "Back" ; \
-    Text[ chinese_simplified ] = "è¿”å›"; \
-    Text[ russian ] = "Íàçàä"; \
-    Text[ polish ] = "Wstecz"; \
-    Text[ japanese ] = "æˆ»ã‚‹"; \
-    Text[ chinese_traditional ] = "è¿”å›"; \
-    Text[ arabic ] = "ÇáÓÇÈŞ"; \
-    Text[ dutch ] = "Vorige"; \
-    Text[ chinese_simplified ] = "è¿”å›"; \
-    Text[ greek ] = "Ğßóù"; \
-    Text[ korean ] = "ë’¤ë¡œ"; \
-    Text[ turkish ] = "Geri"; \
-    Text[ language_user1 ] = " "; \
-    Text[ catalan ] = "Enrere"; \
-    Text[ thai ] = "à¸à¸¥à¸±à¸š"; \
-    Text[ czech ] = "ZpÄ›t"; \
-    Text[ hebrew ] = "â€®×§×•×“×â€¬"; \
-    Text[ hindi ] = "à¤ªà¥€à¤›à¥‡"; \
-    Text[ slovak ] = "SpÃ¤Å¥"; \
+    Text [ de ] = "Zurück" ; \
+    Text [ en-US ] = "Back" ; \
+    Text [ x-comment ] = " "; \
 };
 
 //-----------------------------------------------------------------------------
@@ -579,19 +225,8 @@ TabDialog TAB_TITLE
      // HelpID = SID_CHART_TITLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Titel" ;
-    Text [ ENGLISH ] = "Title" ;
-    Text [ norwegian ] = "Tittel" ;
-    Text [ italian ] = "Titolo" ;
-    Text [ portuguese_brazilian ] = "Título" ;
-    Text [ portuguese ] = "Título" ;
-    Text [ finnish ] = "Otsikko" ;
-    Text [ danish ] = "Titel" ;
-    Text [ french ] = "Titre" ;
-    Text [ swedish ] = "Rubrik" ;
-    Text [ dutch ] = "Titel" ;
-    Text [ spanish ] = "Título" ;
-    Text [ english_us ] = "Title" ;
+    Text [ de ] = "Titel" ;
+    Text [ en-US ] = "Title" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -607,60 +242,15 @@ TabDialog TAB_TITLE
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;
-                Text = "Ausrichtung" ;
-                Text [ ENGLISH ] = "Alignment" ;
-                Text [ norwegian ] = "Alignment" ;
-                Text [ italian ] = "Allineamento" ;
-                Text [ portuguese_brazilian ] = "Alinhamento" ;
-                Text [ portuguese ] = "Alinhamento" ;
-                Text [ finnish ] = "Tasaus" ;
-                Text [ danish ] = "Justering" ;
-                Text [ french ] = "Alignement" ;
-                Text [ swedish ] = "Justering" ;
-                Text [ dutch ] = "Uitlijning" ;
-                Text [ spanish ] = "Alineación" ;
-                Text [ english_us ] = "Alignment" ;
+                Text [ de ] = "Ausrichtung" ;
+                Text [ en-US ] = "Alignment" ;
                 PageResID = TP_ALIGNMENT ;
-                Text[ chinese_simplified ] = "å¯¹é½";
-                Text[ russian ] = "Âûğàâíèâàíèå";
-                Text[ polish ] = "Wyrównanie";
-                Text[ japanese ] = "é…ç½®";
-                Text[ chinese_traditional ] = "å°é½Š";
-                Text[ arabic ] = "ãÍÇĞÇÉ";
-                Text[ dutch ] = "Uitlijning";
-                Text[ chinese_simplified ] = "å¯¹é½";
-                Text[ greek ] = "Óôïß÷éóç";
-                Text[ korean ] = "ë§ì¶¤";
-                Text[ turkish ] = "Hizalama";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineament";
-                Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-                Text[ czech ] = "ZarovnÃ¡nÃ­";
-                Text[ hebrew ] = "â€®×™×©×•×¨â€¬";
-                Text[ hindi ] = "Alignment";
-                Text[ slovak ] = "Zarovnanie";
+                Text [ x-comment ] = " ";
             };
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "æ ‡é¢˜";
-    Text[ russian ] = "Çàãîëîâîê";
-    Text[ polish ] = "Tytu³";
-    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
-    Text[ chinese_traditional ] = "æ¨™é¡Œ";
-    Text[ arabic ] = "ÚäæÇä";
-    Text[ dutch ] = "Titel";
-    Text[ chinese_simplified ] = "æ ‡é¢˜";
-    Text[ greek ] = "Ôßôëïò";
-    Text[ korean ] = "ì œëª©";
-    Text[ turkish ] = "Başlık";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Títol";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
-    Text[ czech ] = "Titul";
-    Text[ hebrew ] = "â€®×›×•×ª×§×ªâ€¬";
-    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
-    Text[ slovak ] = "Nadpis";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -671,19 +261,8 @@ TabDialog TAB_LEGEND
      // HelpID = SID_LEGEND ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Legende" ;
-    Text [ ENGLISH ] = "Legend" ;
-    Text [ norwegian ] = "Legend" ;
-    Text [ italian ] = "Legenda" ;
-    Text [ portuguese_brazilian ] = "Legenda" ;
-    Text [ portuguese ] = "Legenda" ;
-    Text [ finnish ] = "Selite" ;
-    Text [ danish ] = "Forklaring" ;
-    Text [ french ] = "Légende" ;
-    Text [ swedish ] = "Förklaring" ;
-    Text [ dutch ] = "Legenda" ;
-    Text [ spanish ] = "Leyenda" ;
-    Text [ english_us ] = "Legend" ;
+    Text [ de ] = "Legende" ;
+    Text [ en-US ] = "Legend" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -699,60 +278,15 @@ TabDialog TAB_LEGEND
             PageItem
             {
                 Identifier = TP_LEGEND_POS ;
-                Text = "Anordnung" ;
-                Text [ ENGLISH ] = "Arrangement" ;
-                Text [ norwegian ] = "Arrangement" ;
-                Text [ italian ] = "Disponi" ;
-                Text [ portuguese_brazilian ] = "Posição" ;
-                Text [ portuguese ] = "Disposição" ;
-                Text [ finnish ] = "Sijainti" ;
-                Text [ danish ] = "Placering" ;
-                Text [ french ] = "Disposition" ;
-                Text [ swedish ] = "Placering" ;
-                Text [ dutch ] = "Positie" ;
-                Text [ spanish ] = "Posición" ;
-                Text [ english_us ] = "Position" ;
+                Text [ de ] = "Anordnung" ;
+                Text [ en-US ] = "Position" ;
                 PageResID = TP_LEGEND_POS ;
-                Text[ chinese_simplified ] = "æ’åº";
-                Text[ russian ] = "Ïîëîæåíèå";
-                Text[ polish ] = "Pozycja";
-                Text[ japanese ] = "é…ç½®";
-                Text[ chinese_traditional ] = "æ’åº";
-                Text[ arabic ] = "ÊÑÊíÈ";
-                Text[ dutch ] = "Positie";
-                Text[ chinese_simplified ] = "æ’åº";
-                Text[ greek ] = "Èİóç";
-                Text[ korean ] = "ìœ„ì¹˜";
-                Text[ turkish ] = "Konum";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Posició";
-                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-                Text[ czech ] = "UmÃ­stÄ›nÃ­";
-                Text[ hebrew ] = "â€®××™×§×•×â€¬";
-                Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-                Text[ slovak ] = "Umiestnenie";
+                Text [ x-comment ] = " ";
             };
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "å›¾ä¾‹";
-    Text[ russian ] = "Ëåãåíäà";
-    Text[ polish ] = "Legenda";
-    Text[ japanese ] = "å‡¡ä¾‹";
-    Text[ chinese_traditional ] = "åœ–ä¾‹";
-    Text[ arabic ] = "ãİÊÇÍ ÑÓã ÈíÇäí";
-    Text[ dutch ] = "Legenda";
-    Text[ chinese_simplified ] = "å›¾ä¾‹";
-    Text[ greek ] = "Õğüìíçìá";
-    Text[ korean ] = "ë²”ë¡€";
-    Text[ turkish ] = "Açıklama";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llegenda";
-    Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
-    Text[ czech ] = "Legenda";
-    Text[ hebrew ] = "Legende";
-    Text[ hindi ] = "à¤²à¥‡à¤œà¥‡à¤¨à¥à¤¡à¤¼";
-    Text[ slovak ] = "Legenda";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -763,19 +297,8 @@ TabDialog TAB_DATA_ROW
      // HelpID = HID_SCH_DATA_ROW ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Datenreihe" ;
-    Text [ ENGLISH ] = "Data Row" ;
-    Text [ norwegian ] = "Data Row" ;
-    Text [ italian ] = "Serie di dati" ;
-    Text [ portuguese_brazilian ] = "Série de Dados" ;
-    Text [ portuguese ] = "Série de dados" ;
-    Text [ finnish ] = "Tietojoukot" ;
-    Text [ danish ] = "Dataserie" ;
-    Text [ french ] = "Série de données" ;
-    Text [ swedish ] = "Dataserie" ;
-    Text [ dutch ] = "Gegevensreeks" ;
-    Text [ spanish ] = "Serie de datos" ;
-    Text [ english_us ] = "Data Series" ;
+    Text [ de ] = "Datenreihe" ;
+    Text [ en-US ] = "Data Series" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -795,24 +318,7 @@ TabDialog TAB_DATA_ROW
         };
     };
 //      BUTTONS
-    Text[ chinese_simplified ] = "æ•°æ®ç»„";
-    Text[ russian ] = "Ğÿä äàííûõ";
-    Text[ polish ] = "Seria danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—";
-    Text[ chinese_traditional ] = "æ•¸æ“šæ¬„";
-    Text[ arabic ] = "Õİ ÈíÇäÇÊ";
-    Text[ dutch ] = "Gegevensreeks";
-    Text[ chinese_simplified ] = "æ•°æ®ç»„";
-    Text[ greek ] = "ÓåéñÜ äåäïìİíùí";
-    Text[ korean ] = "ì—°ì† ë°ì´í„° ";
-    Text[ turkish ] = "Veri dizisi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sèrie de dades";
-    Text[ thai ] = "à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "DatovÃ¡ Å™ada";
-    Text[ hebrew ] = "Datenreihe";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾";
-    Text[ slovak ] = "DÃ¡tovÃ¡ rada";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -824,19 +330,8 @@ TabDialog TAB_DATA_LINE
      // HelpID = HID_SCH_DATA_LINE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Datenreihe" ;
-    Text [ ENGLISH ] = "Data Row" ;
-    Text [ norwegian ] = "Data Row" ;
-    Text [ italian ] = "Serie di dati" ;
-    Text [ portuguese_brazilian ] = "Série de Dados" ;
-    Text [ portuguese ] = "Série de dados" ;
-    Text [ finnish ] = "Tietojoukot" ;
-    Text [ danish ] = "Dataserie" ;
-    Text [ french ] = "Série de données" ;
-    Text [ swedish ] = "Dataserie" ;
-    Text [ dutch ] = "Gegevensreeks" ;
-    Text [ spanish ] = "Serie de datos" ;
-    Text [ english_us ] = "Data Series" ;
+    Text [ de ] = "Datenreihe" ;
+    Text [ en-US ] = "Data Series" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -853,24 +348,7 @@ TabDialog TAB_DATA_LINE
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "æ•°æ®ç»„";
-    Text[ russian ] = "Ğÿä äàííûõ";
-    Text[ polish ] = "Seria danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—";
-    Text[ chinese_traditional ] = "æ•¸æ“šæ¬„";
-    Text[ arabic ] = "Õİ ÈíÇäÇÊ";
-    Text[ dutch ] = "Gegevensreeks";
-    Text[ chinese_simplified ] = "æ•°æ®ç»„";
-    Text[ greek ] = "ÓåéñÜ äåäïìİíùí";
-    Text[ korean ] = "ì—°ì† ë°ì´í„°";
-    Text[ turkish ] = "Veri dizisi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sèrie de dades";
-    Text[ thai ] = "à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "DatovÃ¡ Å™ada";
-    Text[ hebrew ] = "Datenreihe";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾";
-    Text[ slovak ] = "DÃ¡tovÃ© rady";
+    Text [ x-comment ] = " ";
 };
 */
 //-----------------------------------------------------------------------------
@@ -882,19 +360,8 @@ TabDialog TAB_DATA_POINT
      // HelpID = HID_SCH_DATA_POINT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Datenpunkt" ;
-    Text [ ENGLISH ] = "Data Point" ;
-    Text [ norwegian ] = "Data Point" ;
-    Text [ italian ] = "Punto dati" ;
-    Text [ portuguese_brazilian ] = "Ponto de dados" ;
-    Text [ portuguese ] = "Ponto de dados" ;
-    Text [ finnish ] = "Arvopiste" ;
-    Text [ danish ] = "Datapunkt" ;
-    Text [ french ] = "Point de données" ;
-    Text [ swedish ] = "Datapunkt" ;
-    Text [ dutch ] = "Gegevenspunt" ;
-    Text [ spanish ] = "Punto de datos" ;
-    Text [ english_us ] = "Data Point" ;
+    Text [ de ] = "Datenpunkt" ;
+    Text [ en-US ] = "Data Point" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -913,24 +380,7 @@ TabDialog TAB_DATA_POINT
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "æ•°æ®ç‚¹";
-    Text[ russian ] = "Òî÷êà äàííûõ";
-    Text[ polish ] = "Punkt danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆ";
-    Text[ chinese_traditional ] = "è³‡æ–™é»";
-    Text[ arabic ] = "äŞØÉ ÈíÇäÇÊ";
-    Text[ dutch ] = "Gegevenspunt";
-    Text[ chinese_simplified ] = "æ•°æ®ç‚¹";
-    Text[ greek ] = "Óçìåßï äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° í¬ì¸íŠ¸";
-    Text[ turkish ] = "Veri noktası";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Punt de dades";
-    Text[ thai ] = "à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "DatovÃ½ bod";
-    Text[ hebrew ] = "Datenpunkt";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¬à¤¿à¤‚à¤¦à¥";
-    Text[ slovak ] = "DÃ¡tovÃ½ bod";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -942,9 +392,8 @@ TabDialog TAB_LINE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Linien" ;
-    Text [ ENGLISH ] = "Lines" ;
-    Text [ english_us ] = "Lines" ;
+    Text [ de ] = "Linien" ;
+    Text [ en-US ] = "Lines" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -958,33 +407,7 @@ TabDialog TAB_LINE
         };
     };
 ////    BUTTONS
-    Text [ italian ] = "Linee" ;
-    Text [ spanish ] = "Líneas" ;
-    Text [ french ] = "Lignes" ;
-    Text [ dutch ] = "Lijnen" ;
-    Text [ swedish ] = "Linjer" ;
-    Text [ danish ] = "Linjer" ;
-    Text [ portuguese ] = "Linhas" ;
-    Text [ portuguese_brazilian ] = "Linhas" ;
-    Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ russian ] = "Ëèíèè";
-    Text[ polish ] = "Linie";
-    Text[ japanese ] = "è»¸";
-    Text[ chinese_traditional ] = "ç·šæ¢";
-    Text[ arabic ] = "ÎØæØ";
-    Text[ dutch ] = "Lijnen";
-    Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ greek ] = "Ãñáììİò";
-    Text[ korean ] = "ì„ ";
-    Text[ turkish ] = "Çizgi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línies";
-    Text[ finnish ] = "Rivit";
-    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
-    Text[ czech ] = "Å˜Ã¡dky";
-    Text[ hebrew ] = "Linien";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾";
-    Text[ slovak ] = "Riadky";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -994,8 +417,7 @@ TabDialog TAB_DIAGRAM_STOCK_LOSS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Negative Abweichung" ;
-    Text [ ENGLISH ] = "negativ deviation" ;
+    Text [ de ] = "Negative Abweichung" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -1009,34 +431,8 @@ TabDialog TAB_DIAGRAM_STOCK_LOSS
         };
     };
 ////    BUTTONS
-    Text[ italian ] = "Deviazione negativa";
-    Text[ portuguese_brazilian ] = "Desvio negativo";
-    Text[ portuguese ] = "Desvio negativo";
-    Text[ danish ] = "Negativ afvigelse";
-    Text[ french ] = "Déviation négative";
-    Text[ swedish ] = "Negativ avvikelse";
-    Text[ dutch ] = "Negatieve deviatie";
-    Text[ spanish ] = "Desviación negativa";
-    Text[ english_us ] = "Negative deviation";
-    Text[ chinese_simplified ] = "è´Ÿå€¼åå·®";
-    Text[ russian ] = "Îòğèöàòåëüíîå îòêëîíåíèå";
-    Text[ polish ] = "Odchylenie ujemne";
-    Text[ japanese ] = "ãƒã‚¤ãƒŠã‚¹åå·®";
-    Text[ chinese_traditional ] = "è² å€¼åå·®";
-    Text[ arabic ] = "ÇÎÊáÇİ ÓáÈí";
-    Text[ dutch ] = "Negatieve deviatie";
-    Text[ chinese_simplified ] = "è´Ÿå€¼åå·®";
-    Text[ greek ] = "ÁñíçôéêŞ áğüêëéóç";
-    Text[ korean ] = "ìŒìˆ˜ í¸ì°¨";
-    Text[ turkish ] = "Negatif sapma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desviació negativa";
-    Text[ finnish ] = "Negatiivinen poikkeama";
-    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸šà¸µà¹ˆà¸¢à¸‡à¹€à¸šà¸™à¸šà¸§à¸";
-    Text[ czech ] = "ZÃ¡pornÃ¡ odchylka";
-    Text[ hebrew ] = "Negative Abweichung";
-    Text[ hindi ] = "Negative deviation";
-    Text[ slovak ] = "ZÃ¡pornÃ¡ odchÃ½lka";
+    Text [ en-US ] = "Negative deviation";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1046,8 +442,7 @@ TabDialog TAB_DIAGRAM_STOCK_PLUS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Positive Abweichung" ;
-    Text [ ENGLISH ] = "positive deviation" ;
+    Text [ de ] = "Positive Abweichung" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -1061,34 +456,8 @@ TabDialog TAB_DIAGRAM_STOCK_PLUS
         };
     };
 ////    BUTTONS
-    Text[ italian ] = "Deviazione positiva";
-    Text[ portuguese_brazilian ] = "Desvio positivo";
-    Text[ portuguese ] = "Desvio positivo";
-    Text[ danish ] = "Positiv afvigelse";
-    Text[ french ] = "Déviation positive";
-    Text[ swedish ] = "Positiv avvikelse";
-    Text[ dutch ] = "Positieve deviatie";
-    Text[ spanish ] = "Desviación positiva";
-    Text[ english_us ] = "Positive deviation";
-    Text[ chinese_simplified ] = "æ­£å€¼åå·®";
-    Text[ russian ] = "Ïîëîæèòåëüíîå îòêëîíåíèå";
-    Text[ polish ] = "Odchylenie dodatnie";
-    Text[ japanese ] = "ãƒ—ãƒ©ã‚¹åå·®";
-    Text[ chinese_traditional ] = "æ­£å€¼åå·®";
-    Text[ arabic ] = "ÇÎÊáÇİ ãæÌÈ";
-    Text[ dutch ] = "Positieve deviatie";
-    Text[ chinese_simplified ] = "æ­£å€¼åå·®";
-    Text[ greek ] = "ÈåôéêŞ áğüêëéóç";
-    Text[ korean ] = "ì–‘ìˆ˜ í¸ì°¨";
-    Text[ turkish ] = "Pozitif sapma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desviació positiva";
-    Text[ finnish ] = "Positiivinen poikkeama";
-    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸šà¸µà¹ˆà¸¢à¸‡à¹€à¸šà¸™à¸šà¸§à¸";
-    Text[ czech ] = "KladnÃ¡ odchylka";
-    Text[ hebrew ] = "Positive Abweichung";
-    Text[ hindi ] = "à¤§à¤¨à¤¾à¤¤à¥à¤®à¤• à¤¡à¥€à¤µà¤¿à¤à¤¶à¤¨";
-    Text[ slovak ] = "KladnÃ¡ odchÃ½lka";
+    Text [ en-US ] = "Positive deviation";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1127,19 +496,8 @@ TabDialog TAB_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Achsen" ;
-    Text [ ENGLISH ] = "Axis" ;
-    Text [ norwegian ] = "Axis" ;
-    Text [ italian ] = "Asse" ;
-    Text [ portuguese_brazilian ] = "Eixos" ;
-    Text [ portuguese ] = "Eixos" ;
-    Text [ finnish ] = "Akselit" ;
-    Text [ danish ] = "Akser" ;
-    Text [ french ] = "Axes" ;
-    Text [ swedish ] = "Axlar" ;
-    Text [ dutch ] = "Assen" ;
-    Text [ spanish ] = "Ejes" ;
-    Text [ english_us ] = "Axes" ;
+    Text [ de ] = "Achsen" ;
+    Text [ en-US ] = "Axes" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1156,24 +514,7 @@ TabDialog TAB_AXIS
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "è½´";
-    Text[ russian ] = "Îñè";
-    Text[ polish ] = "Osie";
-    Text[ japanese ] = "è»¸";
-    Text[ chinese_traditional ] = "è»¸";
-    Text[ arabic ] = "ãÍÇæÑ";
-    Text[ dutch ] = "Assen";
-    Text[ chinese_simplified ] = "è½´";
-    Text[ greek ] = "¢îïíåò";
-    Text[ korean ] = "ì¶•";
-    Text[ turkish ] = "Eksen";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eixos";
-    Text[ thai ] = "à¹à¸à¸™";
-    Text[ czech ] = "Osy";
-    Text[ hebrew ] = "Achsen";
-    Text[ hindi ] = "à¤…à¤•à¥à¤· à¤°à¥‡à¤–à¤¾à¤à¤";
-    Text[ slovak ] = "Osi";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1185,19 +526,8 @@ TabDialog TAB_X_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "X-Achse" ;
-    Text [ ENGLISH ] = "X-Axis" ;
-    Text [ norwegian ] = "X-Axis" ;
-    Text [ italian ] = "Asse X" ;
-    Text [ portuguese_brazilian ] = "Eixo X" ;
-    Text [ portuguese ] = "Eixo X" ;
-    Text [ finnish ] = "X-akseli" ;
-    Text [ danish ] = "X-akse" ;
-    Text [ french ] = "Axe X" ;
-    Text [ swedish ] = "X-axel" ;
-    Text [ dutch ] = "X-as" ;
-    Text [ spanish ] = "Eje X" ;
-    Text [ english_us ] = "X Axis" ;
+    Text [ de ] = "X-Achse" ;
+    Text [ en-US ] = "X Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1216,24 +546,7 @@ TabDialog TAB_X_AXIS
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "X è½´æ•°å€¼";
-    Text[ russian ] = "Îñü X";
-    Text[ polish ] = "Oœ X";
-    Text[ japanese ] = "Xè»¸";
-    Text[ chinese_traditional ] = "X è»¸";
-    Text[ arabic ] = "ÇáãÍæÑ Ó";
-    Text[ dutch ] = "X-as";
-    Text[ chinese_simplified ] = "X è½´æ•°å€¼";
-    Text[ greek ] = "¢îïíáò X";
-    Text[ korean ] = "X ì¶•";
-    Text[ turkish ] = "X ekseni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eix X";
-    Text[ thai ] = "à¹à¸à¸™X ";
-    Text[ czech ] = "Osa X";
-    Text[ hebrew ] = "X-Achse";
-    Text[ hindi ] = "X à¤…à¤•à¥à¤·";
-    Text[ slovak ] = "Os X";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1245,19 +558,8 @@ TabDialog TAB_Y_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Y-Achse" ;
-    Text [ ENGLISH ] = "Y-Axis" ;
-    Text [ norwegian ] = "Y-Axis" ;
-    Text [ italian ] = "Asse Y" ;
-    Text [ portuguese_brazilian ] = "Eixo Y" ;
-    Text [ portuguese ] = "Eixo Y" ;
-    Text [ finnish ] = "Y-akseli" ;
-    Text [ danish ] = "Y-akse" ;
-    Text [ french ] = "Axe Y" ;
-    Text [ swedish ] = "Y-axel" ;
-    Text [ dutch ] = "Y-as" ;
-    Text [ spanish ] = "Eje Y" ;
-    Text [ english_us ] = "Y Axis" ;
+    Text [ de ] = "Y-Achse" ;
+    Text [ en-US ] = "Y Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1276,24 +578,7 @@ TabDialog TAB_Y_AXIS
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "Y è½´æ•°å€¼";
-    Text[ russian ] = "Îñü Y";
-    Text[ polish ] = "Oœ Y";
-    Text[ japanese ] = "Yè»¸";
-    Text[ chinese_traditional ] = "Y è»¸";
-    Text[ arabic ] = "ÇáãÍæÑ Õ";
-    Text[ dutch ] = "Y-as";
-    Text[ chinese_simplified ] = "Y è½´æ•°å€¼";
-    Text[ greek ] = "¢îïíáò Y";
-    Text[ korean ] = "Y ì¶•";
-    Text[ turkish ] = "Y ekseni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eix Y";
-    Text[ thai ] = "à¹à¸à¸™Y ";
-    Text[ czech ] = "Osa Y";
-    Text[ hebrew ] = "Y-Achse";
-    Text[ hindi ] = "Y à¤…à¤•à¥à¤·";
-    Text[ slovak ] = "Os Y";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1305,19 +590,8 @@ TabDialog TAB_Z_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Z-Achse" ;
-    Text [ ENGLISH ] = "Z-Axis" ;
-    Text [ norwegian ] = "Z-Axis" ;
-    Text [ italian ] = "Asse Z" ;
-    Text [ portuguese_brazilian ] = "Eixo Z" ;
-    Text [ portuguese ] = "Eixo Z" ;
-    Text [ finnish ] = "Z-akseli" ;
-    Text [ danish ] = "Z-akse" ;
-    Text [ french ] = "Axe Z" ;
-    Text [ swedish ] = "Z-axel" ;
-    Text [ dutch ] = "Z-as" ;
-    Text [ spanish ] = "Eje Z" ;
-    Text [ english_us ] = "Z Axis" ;
+    Text [ de ] = "Z-Achse" ;
+    Text [ en-US ] = "Z Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1334,24 +608,7 @@ TabDialog TAB_Z_AXIS
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "Z è½´";
-    Text[ russian ] = "Îñü Z";
-    Text[ polish ] = "Oœ Z";
-    Text[ japanese ] = "Zè»¸";
-    Text[ chinese_traditional ] = "Z è»¸";
-    Text[ arabic ] = "ÇáãÍæÑ Ú";
-    Text[ dutch ] = "Z-as";
-    Text[ chinese_simplified ] = "Z è½´";
-    Text[ greek ] = "¢îïíáò Z";
-    Text[ korean ] = "Z ì¶•";
-    Text[ turkish ] = "Z ekseni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eix Z";
-    Text[ thai ] = "à¹à¸à¸™Z ";
-    Text[ czech ] = "Osa Z";
-    Text[ hebrew ] = "Z-Achse";
-    Text[ hindi ] = "Z à¤…à¤•à¥à¤·";
-    Text[ slovak ] = "Os Z";
+    Text [ x-comment ] = " ";
 };
 */
 //-----------------------------------------------------------------------------
@@ -1364,19 +621,8 @@ TabDialog TAB_GRID
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Gitter" ;
-    Text [ ENGLISH ] = "Grid" ;
-    Text [ norwegian ] = "Grid" ;
-    Text [ italian ] = "Griglia" ;
-    Text [ portuguese_brazilian ] = "Grade" ;
-    Text [ portuguese ] = "Grelha" ;
-    Text [ finnish ] = "Ruudukko" ;
-    Text [ danish ] = "Gitter" ;
-    Text [ french ] = "Grille" ;
-    Text [ swedish ] = "Gitter" ;
-    Text [ dutch ] = "Raster" ;
-    Text [ spanish ] = "Cuadrícula" ;
-    Text [ english_us ] = "Grid" ;
+    Text [ de ] = "Gitter" ;
+    Text [ en-US ] = "Grid" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1390,24 +636,7 @@ TabDialog TAB_GRID
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
-    Text[ russian ] = "Ñåòêà";
-    Text[ polish ] = "Siatka";
-    Text[ japanese ] = "ç›®ç››ç·š";
-    Text[ chinese_traditional ] = "ç¶²æ ¼";
-    Text[ arabic ] = "ÔÈßÉ";
-    Text[ dutch ] = "Raster";
-    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
-    Text[ greek ] = "Ğëİãìá";
-    Text[ korean ] = "ëˆˆê¸ˆì„ ";
-    Text[ turkish ] = "Kılavuz çizgiler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Graella";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "MÅ™Ã­Å¾ka";
-    Text[ hebrew ] = "Gitter";
-    Text[ hindi ] = "à¤œà¤¾à¤²";
-    Text[ slovak ] = "MrieÅ¾ka";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1418,8 +647,7 @@ TabDialog TAB_DIAGRAM_WALL
      // HelpID = SID_DIAGRAM_WALL ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Diagrammwand" ;
-    Text [ ENGLISH ] = "Diagram Wall" ;
+    Text [ de ] = "Diagrammwand" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1435,34 +663,8 @@ TabDialog TAB_DIAGRAM_WALL
         };
     };
 //      BUTTONS
-    Text[ italian ] = "Pareti del diagramma";
-    Text[ portuguese_brazilian ] = "Parede do Gráfico";
-    Text[ portuguese ] = "Parede do gráfico";
-    Text[ danish ] = "Diagramvæg";
-    Text[ french ] = "Paroi du diagramme";
-    Text[ swedish ] = "Diagramvägg";
-    Text[ dutch ] = "Diagramwand";
-    Text[ spanish ] = "Plano lateral";
-    Text[ english_us ] = "Chart Wall";
-    Text[ chinese_simplified ] = "å›¾è¡¨èƒŒæ™¯å¢™";
-    Text[ russian ] = "Îáëàñòü ïîñòğîåíèÿ äèàãğàììû";
-    Text[ polish ] = "Œciana wykresu";
-    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®å£é¢";
-    Text[ chinese_traditional ] = "åœ–è¡¨èƒŒæ™¯ç‰†";
-    Text[ arabic ] = "ÍÇÆØ ÇáÑÓã ÇáÈíÇäí";
-    Text[ dutch ] = "Diagramwand";
-    Text[ chinese_simplified ] = "å›¾è¡¨èƒŒæ™¯å¢™";
-    Text[ greek ] = "Ôïß÷ïò äéáãñÜììáôïò";
-    Text[ korean ] = "ì°¨íŠ¸ ì˜†ë©´";
-    Text[ turkish ] = "Şema duvarı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pla lateral del diagrama";
-    Text[ finnish ] = "Kaavioseinä";
-    Text[ thai ] = "à¸œà¸™à¸±à¸‡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
-    Text[ czech ] = "StÄ›na grafu";
-    Text[ hebrew ] = "Diagrammwand";
-    Text[ hindi ] = "Chart Wall";
-    Text[ slovak ] = "Bok grafu";
+    Text [ en-US ] = "Chart Wall";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1473,19 +675,8 @@ TabDialog TAB_DIAGRAM_FLOOR
      // HelpID = SID_DIAGRAM_FLOOR ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Diagrammboden" ;
-    Text [ ENGLISH ] = "Diagram Floor" ;
-    Text [ norwegian ] = "Diagram Floor" ;
-    Text [ italian ] = "Pavimento del diagramma" ;
-    Text [ portuguese_brazilian ] = "Piso do Gráfico" ;
-    Text [ portuguese ] = "Base do gráfico" ;
-    Text [ finnish ] = "Kaavion perusta" ;
-    Text [ danish ] = "Diagramgulv" ;
-    Text [ french ] = "Plancher du diagramme" ;
-    Text [ swedish ] = "Diagramgolv" ;
-    Text [ dutch ] = "Diagrambodem" ;
-    Text [ spanish ] = "Base del diagrama" ;
-    Text [ english_us ] = "Chart Floor" ;
+    Text [ de ] = "Diagrammboden" ;
+    Text [ en-US ] = "Chart Floor" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1500,24 +691,7 @@ TabDialog TAB_DIAGRAM_FLOOR
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "å›¾è¡¨åŸºåº•";
-    Text[ russian ] = "Îñíîâàíèå äèàãğàììû";
-    Text[ polish ] = "Podstawa wykresu";
-    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®åºŠé¢";
-    Text[ chinese_traditional ] = "åº§æ¨™è»¸";
-    Text[ arabic ] = "ÃÑÖíÉ ÇáÑÓã ÇáÈíÇäí";
-    Text[ dutch ] = "Diagrambodem";
-    Text[ chinese_simplified ] = "å›¾è¡¨åŸºåº•";
-    Text[ greek ] = "ÄÜğåäï äéáãñÜììáôïò";
-    Text[ korean ] = "ì°¨íŠ¸ ë°‘ë©´";
-    Text[ turkish ] = "Şema tabanı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Base del diagrama";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
-    Text[ czech ] = "Pata grafu";
-    Text[ hebrew ] = "Diagrammboden";
-    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤«à¥à¤²à¥‹à¤°";
-    Text[ slovak ] = "PÃ¤ta grafu";
+    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -1528,19 +702,8 @@ TabDialog TAB_DIAGRAM_AREA
      // HelpID = SID_DIAGRAM_AREA ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Diagrammfläche" ;
-    Text [ ENGLISH ] = "Diagram Area" ;
-    Text [ norwegian ] = "Diagram Area" ;
-    Text [ italian ] = "Area del diagramma" ;
-    Text [ portuguese_brazilian ] = "Área do Gráfico" ;
-    Text [ portuguese ] = "Área do gráfico" ;
-    Text [ finnish ] = "Kaavioalue" ;
-    Text [ danish ] = "Diagramområde" ;
-    Text [ french ] = "Arrière-plan du diagramme" ;
-    Text [ swedish ] = "Diagramområde" ;
-    Text [ dutch ] = "Diagramoppervlak" ;
-    Text [ spanish ] = "Superficie del diagrama" ;
-    Text [ english_us ] = "Chart Area" ;
+    Text [ de ] = "Diagrammfläche" ;
+    Text [ en-US ] = "Chart Area" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -1555,22 +718,5 @@ TabDialog TAB_DIAGRAM_AREA
         };
     };
 ////    BUTTONS
-    Text[ chinese_simplified ] = "å›¾è¡¨åŒº";
-    Text[ russian ] = "Îáëàñòü äèàãğàììû";
-    Text[ polish ] = "Obszar wykresu";
-    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã‚¨ãƒªã‚¢";
-    Text[ chinese_traditional ] = "åœ–è¡¨å¹³é¢";
-    Text[ arabic ] = "ãÓÇÍÉ ÇáÑÓã ÇáÈíÇäí";
-    Text[ dutch ] = "Diagramoppervlak";
-    Text[ chinese_simplified ] = "å›¾è¡¨åŒº";
-    Text[ greek ] = "ÅğéöÜíåéá äéáãñÜììáôïò";
-    Text[ korean ] = "ì°¨íŠ¸ ì˜ì—­";
-    Text[ turkish ] = "Şema yüzeyi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Àrea del diagrama";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
-    Text[ czech ] = "Plocha grafu";
-    Text[ hebrew ] = "DiagrammflÃ¤che";
-    Text[ hindi ] = "Chart Area";
-    Text[ slovak ] = "Plocha grafu";
+    Text [ x-comment ] = " ";
 };
