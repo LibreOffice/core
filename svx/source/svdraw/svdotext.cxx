@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-20 15:11:49 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 12:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,10 +2097,14 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
 
     // build matrix
     rMat.Identity();
-    rMat.Scale(aScale.X(), aScale.Y());
-    rMat.ShearX(fShear);
-    rMat.Rotate(fRotate);
-    rMat.Translate(aTranslate.X(), aTranslate.Y());
+    if(aScale.X() != 1.0 || aScale.Y() != 1.0)
+        rMat.Scale(aScale.X(), aScale.Y());
+    if(fShear != 0.0)
+        rMat.ShearX(tan(fShear));
+    if(fRotate != 0.0)
+        rMat.Rotate(fRotate);
+    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+        rMat.Translate(aTranslate.X(), aTranslate.Y());
 
     return FALSE;
 }
