@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:33:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 15:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
-#include <com/sun/star/text/XBreakIterator.hpp>
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 class SwBreakIt
 {
 public:
-    com::sun::star::uno::Reference < com::sun::star::text::XBreakIterator > xBreak;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > xBreak;
 private:
     com::sun::star::lang::Locale* pLocale;
     LanguageType aLast;
