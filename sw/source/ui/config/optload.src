@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 21:02:20 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Automatique";
         Text[ spanish ] = "Autom·tico";
         Text[ finnish ] = "Felder und Diagramme aktualisieren";
-        Text[ italian ] = "Automatico";
+        Text[ italian ] = "In modo automatico";
         Text[ danish ] = "Felter og diagrammer";
         Text[ swedish ] = "Automatiskt";
         Text[ polish ] = "Automatycznie";
@@ -335,7 +335,7 @@ TabPage TP_OPTLOAD_PAGE
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "Automatic" ;
         TabStop = TRUE ;
-        Text[ italian ] = "Automatico";
+        Text[ italian ] = "In modo ~automatico";
         Text[ portuguese_brazilian ] = "Automatic";
         Text[ portuguese ] = "~Autom·tico";
         Text[ danish ] = "Automatisk";
@@ -845,7 +845,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_simplified ] = "Ê†áÁ≠æ";
         Text[ russian ] = "œÓ‰ÔËÒ¸";
         Text[ polish ] = "Etykieta";
-        Text[ japanese ] = "Âõ≥Ë°®Áï™Âè∑(~C)";
+        Text[ japanese ] = "ÔæÉÔΩ∑ÔΩΩÔæÑ(~C)";
         Text[ chinese_traditional ] = "Ê®ôÁ±§";
         Text[ arabic ] = "«· ”„Ì… «· Ê÷ÌÕÌ…";
         Text[ greek ] = "≈È„Ò·ˆﬁ";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
