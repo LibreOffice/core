@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 14:26:57 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_IS_PROTECTED                           
 const SwPropNameLen __FAR_DATA  UNO_NAME_KEY_AS_ENTRY                           (MAP_CHAR_LEN("KeyAsEntry"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_KEEP_TOGETHER                     (MAP_CHAR_LEN("ParaKeepTogether"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_KEEP_TOGETHER                          (MAP_CHAR_LEN("KeepTogether"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_LANDSCAPE                              (MAP_CHAR_LEN("Landscape"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_IS_LANDSCAPE                           (MAP_CHAR_LEN("IsLandscape"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LINE_SEPARATOR                         (MAP_CHAR_LEN("LineSeparator"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_MARKS                                  (MAP_CHAR_LEN("Marks"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_NUMBER_POSITION                        (MAP_CHAR_LEN("NumberPosition"));
@@ -545,3 +545,10 @@ const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS                         
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT                      (MAP_CHAR_LEN("ParaShadowFormat"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON                    (MAP_CHAR_LEN("ContourPolyPolygon"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_WIDTH                    (MAP_CHAR_LEN("SeparatorLineWidth"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_COLOR                    (MAP_CHAR_LEN("SeparatorLineColor"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT          (MAP_CHAR_LEN("SeparatorLineRelativeHeight"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT       (MAP_CHAR_LEN("SeparatorLineVerticalAlignment"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON                    (MAP_CHAR_LEN("SeparatorLineIsOn"));
+

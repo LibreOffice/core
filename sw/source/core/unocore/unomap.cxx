@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 14:26:57 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -856,13 +859,15 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_FOOTER_IS_ON),                      FN_UNO_FOOTER_ON,           &::getBooleanCppuType(),            PROPERTY_NONE ,0         },
 
 
-                    { SW_PROP_NAME(UNO_NAME_LANDSCAPE),                 SID_ATTR_PAGE,          &::getBooleanCppuType(),            PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
+                    { SW_PROP_NAME(UNO_NAME_IS_LANDSCAPE),              SID_ATTR_PAGE,          &::getBooleanCppuType(),            PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
                     { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),            SID_ATTR_PAGE,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE , MID_PAGE_NUMTYPE       },
                     { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_LAYOUT),         SID_ATTR_PAGE,          &::getCppuType((const style::PageStyleLayout*)0),   PROPERTY_NONE ,MID_PAGE_LAYOUT     },
                     { SW_PROP_NAME(UNO_NAME_PRINTER_PAPER_TRAY),        RES_PAPER_BIN,          &::getCppuType((const sal_Int8*)0),             PROPERTY_NONE , 0 },
                     { SW_PROP_NAME(UNO_NAME_REGISTER_MODE_ACTIVE),  SID_SWREGISTER_MODE,    &::getBooleanCppuType(),            PROPERTY_NONE , 0 },
                     { SW_PROP_NAME(UNO_NAME_REGISTER_PARAGRAPH_STYLE),SID_ATTR_PAGE_EXT1,   &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0 },
-                    { SW_PROP_NAME(UNO_NAME_SIZE),                  SID_ATTR_PAGE_SIZE,     &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_SIZE),                  SID_ATTR_PAGE_SIZE,     &::getCppuType((const awt::Size*)0),            PROPERTY_NONE,   MID_SIZE_SIZE|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_WIDTH),                 SID_ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_SIZE_WIDTH|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_HEIGHT),                SID_ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_SIZE_HEIGHT|CONVERT_TWIPS            },
                     { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((uno::Reference<text::XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),            RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
@@ -1780,6 +1785,20 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFootnoteMap_Impl;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_COLUMS :
+            {
+                static SfxItemPropertyMap aTextColumns_Impl[] =
+                {
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_WIDTH),               WID_TXTCOL_LINE_WIDTH, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_COLOR),               WID_TXTCOL_LINE_COLOR, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT),     WID_TXTCOL_LINE_REL_HGT, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT),  WID_TXTCOL_LINE_ALIGN, &::getCppuType((style::VerticalAlignment*)0),PROPERTY_NONE,  0},
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_IS_ON),               WID_TXTCOL_LINE_IS_ON, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aTextColumns_Impl;
             }
             break;
         }
