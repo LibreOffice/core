@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-29 11:00:26 $
+ *  last change: $Author: pb $ $Date: 2001-11-22 14:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@
 #define IMG_IMPRESSPACKED               (IMAGELIST_START + 165)
 #define IMG_NEWFROMTEMPLATE             (IMAGELIST_START + 166)
 
-#define RID_DESCRIPTION_START                       256
+#define RID_DESCRIPTION_START           256
 
 #define STR_DESCRIPTION_SOURCEFILE                  (RID_DESCRIPTION_START +  0)
 #define STR_DESCRIPTION_BOOKMARKFILE                (RID_DESCRIPTION_START +  1)
@@ -176,6 +176,9 @@
 #define STR_DESCRIPTION_DRAW_TEMPLATE               (RID_DESCRIPTION_START + 36)
 #define STR_DESCRIPTION_IMPRESS_TEMPLATE            (RID_DESCRIPTION_START + 37)
 #define STR_DESCRIPTION_WRITER_TEMPLATE             (RID_DESCRIPTION_START + 38)
+#define STR_DESCRIPTION_REMOTE_VOLUME               (RID_DESCRIPTION_START + 39)
+#define STR_DESCRIPTION_LOCALE_VOLUME               (RID_DESCRIPTION_START + 40)
+#define STR_DESCRIPTION_CDROM_VOLUME                (RID_DESCRIPTION_START + 41)
 
 #endif
 
