@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 19:03:16 $
+ *  last change: $Author: iha $ $Date: 2003-12-18 12:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,8 @@ private:
         switch(eObjectType)
         {
             case OBJECTTYPE_TITLE:
+                pItemConverter =  new wrapper::AllTitleItemConverter( xChartModel, rDrawModel.GetItemPool(),
+                                                                     rDrawModel );
                 break;
             case OBJECTTYPE_AXIS:
             {
