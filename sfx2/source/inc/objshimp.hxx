@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 12:29:03 $
+ *  last change: $Author: mav $ $Date: 2002-03-26 16:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ struct SfxObjectShell_Impl
     sal_uInt32               lErr;
     sal_uInt16              nEventId;           // falls vor Activate noch ein
                                             // Open/Create gesendet werden mu/s
-    sal_Bool                bSilent;            // e.g. in API-Call => no dialogs
+    sal_Bool                bDoNotTouchDocInfo;
 
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
@@ -213,7 +213,7 @@ struct SfxObjectShell_Impl
         pEventConfig(NULL),
         bIsHelpObjSh( sal_False ),
         bForbidCaching( sal_False ),
-        bSilent(sal_False),
+        bDoNotTouchDocInfo( sal_False ),
         bForbidReload( sal_False ),
         bBasicInitialized( sal_False ),
         eFlags( SFXOBJECTSHELL_UNDEFINED ),
