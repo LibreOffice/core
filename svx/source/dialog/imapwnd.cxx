@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-08 12:02:06 $
+ *  last change: $Author: ka $ $Date: 2002-03-20 11:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,6 +939,8 @@ void IMapWindow::DoMacroAssign()
             {
                 const SfxItemSet* pOutSet = aMacroDlg.GetOutputItemSet();
                 pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
+                pModel->SetChanged( TRUE );
+                UpdateInfo( FALSE );
             }
         }
     }

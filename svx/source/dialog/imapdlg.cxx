@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
+ *  last change: $Author: ka $ $Date: 2002-03-20 11:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,8 +536,6 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 {
     USHORT nNewItemId = pTbx->GetCurItemId();
 
-    URLLoseFocusHdl( NULL );
-
     switch( pTbx->GetCurItemId() )
     {
         case( TBI_APPLY ):
@@ -593,8 +591,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_ACTIVE ):
         {
+            URLLoseFocusHdl( NULL );
             BOOL bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
-
             pTbx->CheckItem( TBI_ACTIVE, bNewState );
             pIMapWnd->SetCurrentObjState( !bNewState );
         }
@@ -625,11 +623,17 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         break;
 
         case( TBI_UNDO ):
+        {
+            URLLoseFocusHdl( NULL );
             pIMapWnd->GetSdrModel()->Undo();
+        }
         break;
 
         case( TBI_REDO ):
+        {
+            URLLoseFocusHdl( NULL );
             pIMapWnd->GetSdrModel()->Redo();
+        }
         break;
 
         default:
