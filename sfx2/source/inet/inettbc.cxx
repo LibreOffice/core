@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:18:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include <svtools/inettbc.hxx>
 
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "sfx.hrc"
 #include "dispatch.hxx"
@@ -132,9 +133,15 @@ using namespace ::com::sun::star::task;
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
 SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
-    : SfxToolBoxControl( nSlotId, nId, rBox )
+    : SfxToolBoxControl( nSlotId, nId, rBox ),
+    pAccExec( 0 )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CurrentURL" )));
+}
+
+SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
+{
+    delete pAccExec;
 }
 
 SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
@@ -223,6 +230,11 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
     SvtURLBox* pURLBox = new SvtURLBox( pParent );
     pURLBox->SetOpenHdl( LINK( this, SfxURLToolBoxControl_Impl, OpenHdl ) );
     pURLBox->SetSelectHdl( LINK( this, SfxURLToolBoxControl_Impl, SelectHdl ) );
+
+    pURLBox->AddEventListener( LINK( this, SfxURLToolBoxControl_Impl, WindowEventListener ));
+    pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
+    pAccExec->init(::comphelper::getProcessServiceFactory(), getFrameInterface() );
+
     return pURLBox;
 }
 
@@ -260,6 +272,22 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
     }
 
     return 1L;
+}
+
+IMPL_LINK( SfxURLToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    if ( pAccExec &&
+         pEvent &&
+         pEvent->ISA( VclWindowEvent ) &&
+         ( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT ))
+    {
+        VclWindowEvent* pWinEvent = static_cast< VclWindowEvent* >( pEvent );
+        KeyEvent* pKeyEvent = static_cast< KeyEvent* >( pWinEvent->GetData() );
+
+        pAccExec->execute( pKeyEvent->GetKeyCode() );
+    }
+
+    return 1;
 }
 
 //***************************************************************************
