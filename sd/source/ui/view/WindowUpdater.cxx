@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:04:08 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 void WindowUpdater::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const SfxSimpleHint& rSimpleHint (static_cast<const SfxSimpleHint&>(rHint));
+    const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
     if (rSimpleHint.GetId() == SFX_HINT_CTL_SETTINGS_CHANGED)
     {
         // Clear the master page cache so that master pages will be redrawn.
