@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 18:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,23 @@
 #include "docufld.hxx"
 #endif
 
+// for in-line graphics replacement:
+#ifndef _NDINDEX_HXX
+#include "ndindex.hxx"
+#endif
+#ifndef _NDNOTXT_HXX
+#include "ndnotxt.hxx"
+#endif
+#ifndef _FMTFLCNT_HXX
+#include "fmtflcnt.hxx"
+#endif
+#ifndef _FRMFMT_HXX
+#include "frmfmt.hxx"
+#endif
+#ifndef _FMTCNTNT_HXX
+#include "fmtcntnt.hxx"
+#endif
+
 
 
 
@@ -239,8 +256,24 @@ void SwAccessiblePortionData::Special(
         break;
         case POR_FLYCNT:
         {
-            // TODO: get frame text
-            sDisplay = SW_RES(STR_ACCESS_REPLACEMENT_FRAME);
+            // retrieve the Graphic/OLE-Node for this graphic (as
+            // SwNoTxtNode) and ask for the text description
+            SwTxtAttr* pAttr = pTxtNode->GetTxtAttr(
+                static_cast<USHORT>( nModelPosition ), RES_TXTATR_FLYCNT );
+            DBG_ASSERT( pAttr != NULL, "Fly expected!" );
+
+            const SfxPoolItem& rItem =
+                pAttr->GetFlyCnt().GetFrmFmt()->GetAttr( RES_CNTNT, FALSE );
+            SwNodeIndex aIndex =
+                *( static_cast<const SwFmtCntnt&>( rItem ).GetCntntIdx() );
+
+            aIndex++;
+            SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
+            DBG_ASSERT( pNoTxtNode != NULL, "FlyCnt without graphics?" );
+
+            sDisplay = SwAccessibleContext::GetResource(
+                STR_ACCESS_REPLACEMENT_FRAME,
+                & OUString( pNoTxtNode->GetAlternateText() ) );
         }
         break;
         default:
