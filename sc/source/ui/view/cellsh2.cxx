@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-16 17:58:18 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 19:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,16 +782,30 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             ScRange aRange;
                             if ( GetViewData()->GetSimpleArea( aRange ) )
                             {
-                                ScSheetSourceDesc aShtDesc;
-                                aShtDesc.aSourceRange = aRange;
-                                pNewDPObject = new ScDPObject( pDoc );
-                                pNewDPObject->SetSheetDesc( aShtDesc );
+                                BOOL bOK = TRUE;
+                                if ( pDoc->HasSubTotalCells( aRange ) )
+                                {
+                                    //  confirm selection if it contains SubTotal cells
 
-                                //  output below source data
-                                if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
-                                    aDestPos = ScAddress( aRange.aStart.Col(),
-                                                            aRange.aEnd.Row()+2,
-                                                            aRange.aStart.Tab() );
+                                    QueryBox aBox( pTabViewShell->GetDialogParent(),
+                                                    WinBits(WB_YES_NO | WB_DEF_YES),
+                                                    ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
+                                    if (aBox.Execute() == RET_NO)
+                                        bOK = FALSE;
+                                }
+                                if (bOK)
+                                {
+                                    ScSheetSourceDesc aShtDesc;
+                                    aShtDesc.aSourceRange = aRange;
+                                    pNewDPObject = new ScDPObject( pDoc );
+                                    pNewDPObject->SetSheetDesc( aShtDesc );
+
+                                    //  output below source data
+                                    if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
+                                        aDestPos = ScAddress( aRange.aStart.Col(),
+                                                                aRange.aEnd.Row()+2,
+                                                                aRange.aStart.Tab() );
+                                }
                             }
                         }
                     }
