@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:31:53 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:58:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,9 +117,7 @@ SLOFILES=\
 # --- MOZAB BASE Library -----------------------------------
 
 SHL1VERSIONMAP= $(TARGET).map
-.IF "$(OS)"!="FREEBSD"
 SHL1TARGET=	$(TARGET)$(MOZAB_MAJOR)
-.ENDIF
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
