@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:02 $
+ *  last change: $Author: er $ $Date: 2002-11-28 16:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,8 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 
     DBG_ASSERT( List::Count() + nBase <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
-    ScRangeData*    pData = new ScRangeData( pExcRoot->pDoc, aName, rToken, 0, 0, 0, RT_SHARED );
+    ScRangeData*    pData = new ScRangeData( pExcRoot->pDoc, aName, rToken, rRange.aStart, RT_SHARED );
 
-    pData->GuessPosition();
     pData->SetIndex( ( UINT16 ) ( List::Count() + nBase ) );
 
     pExcRoot->pScRangeName->Insert( pData );
