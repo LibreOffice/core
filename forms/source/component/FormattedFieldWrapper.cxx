@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 14:21:52 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 13:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ using namespace ::com::sun::star::util;
 //==================================================================
 // OFormattedFieldWrapper
 //==================================================================
+DBG_NAME(OFormattedFieldWrapper)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -126,6 +127,8 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFact
     :m_pEditPart(NULL)
     ,m_xServiceFactory(_rxFactory)
 {
+    DBG_CTOR(OFormattedFieldWrapper, NULL);
+
     if (_bActAsFormatted)
     {
         increment(m_refCount);
@@ -161,6 +164,8 @@ OFormattedFieldWrapper::~OFormattedFieldWrapper()
 
     if (m_pEditPart)
         m_pEditPart->release();
+
+    DBG_DTOR(OFormattedFieldWrapper, NULL);
 }
 
 //------------------------------------------------------------------
