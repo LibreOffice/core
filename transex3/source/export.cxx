@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-29 13:16:38 $
+ *  last change: $Author: nf $ $Date: 2001-08-29 14:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2448,13 +2448,15 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             if ( !sLine.Len())
                 sLine = sLastListLine;
 
-            if (( nList != LIST_UIENTRIES ) &&
-                (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
-                ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
-                (( sLine.Search( "<" ) == STRING_NOTFOUND ) ||
-                ( sLine.Search( "<" ) >= sLine.Search( "\"" ))))
-            {
-                sLine.SearchAndReplace( "\"", "< \"" );
+            if ( sLastListLine.Search( "<" ) != STRING_NOTFOUND ) {
+                if (( nList != LIST_UIENTRIES ) &&
+                    (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
+                    ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
+                    (( sLine.Search( "<" ) == STRING_NOTFOUND ) ||
+                    ( sLine.Search( "<" ) >= sLine.Search( "\"" ))))
+                {
+                    sLine.SearchAndReplace( "\"", "< \"" );
+                }
             }
             while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex < nMaxIndex )) {
                 ByteString sText( "\t" );
