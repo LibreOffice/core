@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 12:53:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 class ZipPackageFolder;
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 class ZipPackageEntry : public com::sun::star::container::XNamed,
                                                 public com::sun::star::container::XChild,
                                                 public com::sun::star::lang::XUnoTunnel,
@@ -126,7 +126,7 @@ public:
     {
         xParent.clear();
     }
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
         // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException) = 0;
