@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2002-11-04 14:04:06 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:08:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     DatasourceAdministrationDialog.idl \
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
+    DocumentDefinition.idl \
     ErrorMessageDialog.idl \
     InteractionHandler.idl \
     ParametersRequest.idl \
@@ -97,6 +98,7 @@ IDLFILES=\
     Query.idl \
     QueryDefinition.idl \
     QueryDescriptor.idl \
+    QueryDesign.idl \
     ResultColumn.idl \
     ResultSet.idl \
     RowChangeAction.idl \

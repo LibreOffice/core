@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mav $ $Date: 2002-11-25 16:38:00 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:14:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ IDLFILES=\
     JobExecutor.idl\
     MasterPasswordRequest.idl\
     NoMasterException.idl\
+    PasswordContainer.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
     UnsupportedOverwriteRequest.idl\
@@ -97,21 +98,6 @@ IDLFILES=\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl
 
-#	XInteractionRequest.idl\
-#	XInteractionRetry.idl\
-#	XInteractionHandler.idl\
-#	XInteractionContinuation.idl\
-#	XInteractionAbort.idl\
-#		FinishTaskEvent.idl	\
-#		ResourceAccess.idl	\
-#		ResourceLockException.idl	\
-#		TaskFinishReason.idl	\
-#		TaskType.idl	\
-#		XResource.idl	\
-#		XSimpleTask.idl	\
-#		XTask.idl	\
-#		XTaskListener.idl	\
-#		XTaskManager.idl
 
 # ------------------------------------------------------------------
 

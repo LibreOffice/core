@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: tl $ $Date: 2002-11-14 16:09:38 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:04:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,51 +73,52 @@ PACKAGE=com$/sun$/star$/document
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    XMimeTypeInfo.idl\
-    XViewDataSupplier.idl\
-    XEmbeddedObjectResolver.idl\
-    XGraphicObjectResolver.idl\
-    XBinaryStreamResolver.idl\
-    XEventBroadcaster.idl\
-    XEventListener.idl\
-    XEventsSupplier.idl\
-    EventDescriptor.idl\
-    Events.idl\
-    EventObject.idl\
-    UpdateDocMode.idl\
+    AmbigousFilterRequest.idl\
     DocumentInfo.idl\
+    EventDescriptor.idl\
+    EventObject.idl\
+    Events.idl\
     ExportFilter.idl\
+    ExtendedTypeDetection.idl\
+    FilterAdapter.idl\
     FilterFactory.idl\
+    FilterOptionsRequest.idl\
     ImportFilter.idl\
     LinkTarget.idl\
     LinkTargets.idl\
-    MediaDescriptor.idl\
     MacroExecMode.idl\
+    MediaDescriptor.idl\
+    NoSuchFilterRequest.idl\
     OfficeDocument.idl\
     RedlineDisplayType.idl \
-        Settings.idl \
+    Settings.idl\
     StandaloneDocumentInfo.idl\
     TypeDetection.idl\
+    UpdateDocMode.idl\
     XActionLockable.idl\
+    XBinaryStreamResolver.idl\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
+    XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
+    XEventBroadcaster.idl\
+    XEventListener.idl\
+    XEventsSupplier.idl\
     XExporter.idl\
     XExtendedFilterDetection.idl\
     XFilter.idl\
     XFilterAdapter.idl\
-    FilterAdapter.idl\
+    XGraphicObjectResolver.idl\
     XImporter.idl\
+    XInteractionFilterOptions.idl\
+    XInteractionFilterSelect.idl\
     XLinkTargetSupplier.idl\
+    XMimeTypeInfo.idl\
     XRedlinesSupplier.idl \
     XStandaloneDocumentInfo.idl\
     XTypeDetection.idl\
-    XInteractionFilterSelect.idl\
-    NoSuchFilterRequest.idl\
-    AmbigousFilterRequest.idl\
-    XInteractionFilterOptions.idl\
-    FilterOptionsRequest.idl
+    XViewDataSupplier.idl
 
 # ------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:18 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:07:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,12 +75,14 @@ PACKAGE=com$/sun$/star$/installation
 
 IDLFILES=\
     InstallationCheck.idl\
+    InstallationCheckService.idl\
+    InternetSettings.idl\
     ProtDlgRes.idl\
     ProtocolHandlerCheck.idl\
+    ProtocolHandlerCheckService.idl\
     protocols.idl\
     XInstallationCheck.idl\
     XProtocolHandlerCheck.idl\
-        InternetSettings.idl
 
 # ------------------------------------------------------------------
 

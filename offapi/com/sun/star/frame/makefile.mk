@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mba $ $Date: 2002-08-29 13:36:52 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:05:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -45,7 +45,8 @@
 #   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
 #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific provisions governing your rights and
+#   See the License for the specific p	XTypeDetection.idl\
+rovisions governing your rights and
 #   obligations concerning the Software.
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -74,15 +75,20 @@ PACKAGE=com$/sun$/star$/frame
 
 IDLFILES=\
     Components.idl\
+    ContentHandler.idl\
+    ContentHandlerFactory.idl\
     Controller.idl\
     Desktop.idl\
     DesktopTask.idl\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
+    DispatchProvider.idl\
     DispatchRecorder.idl\
     DispatchRecorderSupplier.idl\
+    DispatchResultState.idl\
+    DispatchResultEvent.idl\
     DispatchStatement.idl\
-        DocumentTemplates.idl\
+    DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
     FrameAction.idl\
@@ -97,6 +103,7 @@ IDLFILES=\
     ProtocolHandler.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
+    Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
     WindowArrange.idl\
@@ -111,9 +118,9 @@ IDLFILES=\
     XDispatchProvider.idl\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
-        XDispatchRecorder.idl\
-        XDispatchRecorderSupplier.idl\
-        XRecordableDispatch.idl\
+    XDispatchRecorder.idl\
+    XDispatchRecorderSupplier.idl\
+    XDispatchResultListener.idl\
     XDocumentTemplates.idl\
     XExtendedFilterDetection.idl\
     XFilterDetect.idl\
@@ -127,6 +134,8 @@ IDLFILES=\
     XInterceptorInfo.idl\
     XLoadEventListener.idl\
     XModel.idl\
+    XNotifyingDispatch.idl\
+    XRecordableDispatch.idl\
     XStatusListener.idl\
     XStorable.idl\
     XSynchronousFrameLoader.idl\
@@ -135,10 +144,6 @@ IDLFILES=\
     XTerminateListener.idl\
     XUrlList.idl\
     XWindowArranger.idl\
-        DispatchResultState.idl\
-        DispatchResultEvent.idl\
-        XDispatchResultListener.idl\
-        XNotifyingDispatch.idl\
 
 # ------------------------------------------------------------------
 
