@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:30:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,9 +1425,6 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
         {
-            if ( pOffset )
-                aInRect.Move( pOffset->X(), pOffset->Y() );
-
             aInRect.Left()  += 2;
             aInRect.Right() -= 2;
 
@@ -1444,6 +1441,10 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
                 aInRect.Right() = pData->maDockRect.Left()-2;
             else if ( !pData->maCloseRect.IsEmpty() )
                 aInRect.Right() = pData->maCloseRect.Left()-2;
+
+            if ( pOffset )
+                aInRect.Move( pOffset->X(), pOffset->Y() );
+
             pDev->DrawText( aInRect, pBorderWindow->GetText(),
                             TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER |
                             TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_CLIP );
@@ -1758,12 +1759,11 @@ long ImplOS2BorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
+void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
-    OutputDevice*           pDev = pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
-    Point                   aTmpPoint;
+    Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
@@ -1813,6 +1813,9 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         else if ( !pData->maDockRect.IsEmpty() )
             aInRect.Right() = pData->maDockRect.Left()-1;
 
+        if ( pOffset )
+            aInRect.Move( pOffset->X(), pOffset->Y() );
+
         if ( bActive )
         {
             pDev->SetFillColor( rStyleSettings.GetActiveColor() );
@@ -1830,7 +1833,7 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
             Rectangle aOrgInRect = aInRect;
 
             if ( !pData->maPinRect.IsEmpty() )
-                aInRect.Left() = pData->maPinRect.Right();
+                aInRect.Left() += pData->maPinRect.Right();
 
             aInRect.Left()  += 2;
             aInRect.Right() -= 2;
@@ -1848,6 +1851,8 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
          !pData->maCloseRect.IsEmpty() )
     {
         Rectangle aRect = DrawOS2TitleButton( pData->maCloseRect, pData->mnCloseState );
+        if ( pOffset )
+            aRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawOS2Symbol( pDev, aRect, pData->mnCloseState, TRUE );
     }
 
@@ -1855,6 +1860,8 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
          !pData->maDockRect.IsEmpty() )
     {
         Rectangle aRect = DrawOS2TitleButton( pData->maDockRect, pData->mnDockState );
+        if ( pOffset )
+            aRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawOS2Symbol( pDev, aRect, pData->mnDockState, FALSE );
     }
 
@@ -1866,6 +1873,8 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         aRect.Top()    += 2;
         aRect.Right()  -= 2;
         aRect.Bottom() -= 2;
+        if ( pOffset )
+            aRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawOS2Symbol( pDev, aRect, pData->mnHideState, FALSE );
     }
 
@@ -1875,6 +1884,8 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         Rectangle aRect = DrawOS2TitleButton( pData->maRollRect, pData->mnRollState );
         if ( !pBorderWindow->mbRollUp )
             aRect.Bottom() = aRect.Top()+6;
+        if ( pOffset )
+            aRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawOS2Symbol( pDev, aRect, pData->mnRollState, FALSE );
         if ( pBorderWindow->mbRollUp )
         {
@@ -1901,6 +1912,8 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
          !pData->maHelpRect.IsEmpty() )
     {
         Rectangle aRect = DrawOS2TitleButton( pData->maHelpRect, pData->mnHelpState );
+        if ( pOffset )
+            aRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawBrdWinSymbol( pDev, aRect, SYMBOL_HELP );
     }
 
@@ -1911,16 +1924,19 @@ void ImplOS2BorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPined, aImage );
         Size  aImageSize = aImage.GetSizePixel();
         long  nRectHeight = pData->maPinRect.GetHeight();
+        Point aPos = pData->maPinRect.TopLeft();
+        if( pOffset )
+            aPos += *pOffset;
         if ( nRectHeight < aImageSize.Height() )
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(), pData->maPinRect.Top() ),
+            pDev->DrawImage( aPos,
                              Size( aImageSize.Width(), nRectHeight ),
                              aImage );
         }
         else
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(),
-                                    pData->maPinRect.Top()+(nRectHeight-aImageSize.Height())/2 ),
+            pDev->DrawImage( Point( aPos.X(),
+                                    aPos.Y()+(nRectHeight-aImageSize.Height())/2 ),
                              aImage );
         }
     }
@@ -2183,12 +2199,11 @@ long ImplUnxBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
+void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
-    OutputDevice*           pDev = pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
-    Point                   aTmpPoint;
+    Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
@@ -2342,6 +2357,9 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         // Title Rect
         aInRect = pData->maTitleRect;
 
+        if( pOffset )
+            aInRect.Move( pOffset->X(), pOffset->Y() );
+
         pDev->SetFillColor( aFillColor );
         pDev->SetTextColor( aTextColor );
         pDev->DrawRect( aInRect );
@@ -2360,26 +2378,31 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
 
         long nLeft;
         if ( !pData->maCloseRect.IsEmpty() )
+        {
             nLeft = pData->maCloseRect.Right()+1;
+            if( pOffset )
+                nLeft += pOffset->X();
+        }
         else
             nLeft = aInRect.Left()+1;
 
         // Title Text
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
         {
+            long nXOff = pOffset ? pOffset->X() : 0;
             if ( !pData->maPinRect.IsEmpty() )
-                aInRect.Left() = pData->maPinRect.Right()+1;
+                aInRect.Left() = pData->maPinRect.Right()+1 + nXOff;
             else if ( !pData->maCloseRect.IsEmpty() )
-                aInRect.Left() = pData->maCloseRect.Right()+1;
+                aInRect.Left() = pData->maCloseRect.Right()+1 + nXOff;
 
             if ( !pData->maHelpRect.IsEmpty() )
-                aInRect.Right() = pData->maHelpRect.Left()-1;
+                aInRect.Right() = pData->maHelpRect.Left()-1 + nXOff;
             else if ( !pData->maRollRect.IsEmpty() )
-                aInRect.Right() = pData->maRollRect.Left()-1;
+                aInRect.Right() = pData->maRollRect.Left()-1 + nXOff;
             else if ( !pData->maHideRect.IsEmpty() )
-                aInRect.Right() = pData->maHideRect.Left()-1;
+                aInRect.Right() = pData->maHideRect.Left()-1 + nXOff;
             else if ( !pData->maDockRect.IsEmpty() )
-                aInRect.Right() = pData->maDockRect.Left()-1;
+                aInRect.Right() = pData->maDockRect.Left()-1 + nXOff;
 
             pDev->DrawText( aInRect, pBorderWindow->GetText(),
                             TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER |
@@ -2401,6 +2424,8 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     {
         Rectangle aInCloseRect = DrawUnxTitleButton( pData->maCloseRect,
                                                      pData->mnCloseState );
+        if( pOffset )
+            aInCloseRect.Move( pOffset->X(), pOffset->Y() );
         aDecoView.DrawSymbol( aInCloseRect, SYMBOL_CLOSE, aTextColor, 0 );
     }
 
@@ -2409,6 +2434,8 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     {
         Rectangle aInDockRect = DrawUnxTitleButton( pData->maDockRect,
                                                     pData->mnDockState );
+        if( pOffset )
+            aInDockRect.Move( pOffset->X(), pOffset->Y() );
         aDecoView.DrawSymbol( aInDockRect, SYMBOL_DOCK, aTextColor, 0 );
     }
 
@@ -2417,6 +2444,8 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     {
         Rectangle aInHideRect = DrawUnxTitleButton( pData->maHideRect,
                                                     pData->mnHideState );
+        if( pOffset )
+            aInHideRect.Move( pOffset->X(), pOffset->Y() );
         aDecoView.DrawSymbol( aInHideRect, SYMBOL_HIDE, aTextColor, 0 );
     }
 
@@ -2430,6 +2459,8 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
             eType = SYMBOL_ROLLDOWN;
         else
             eType = SYMBOL_ROLLUP;
+        if( pOffset )
+            aInRollRect.Move( pOffset->X(), pOffset->Y() );
         aDecoView.DrawSymbol( aInRollRect, eType, aTextColor, 0 );
     }
 
@@ -2438,6 +2469,8 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     {
         Rectangle aInHelpRect = DrawUnxTitleButton( pData->maHelpRect,
                                                     pData->mnHelpState );
+        if( pOffset )
+            aInHelpRect.Move( pOffset->X(), pOffset->Y() );
         aDecoView.DrawSymbol( aInHelpRect, SYMBOL_HELP, aTextColor, 0 );
     }
 
@@ -2448,17 +2481,19 @@ void ImplUnxBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPined, aImage );
         Size  aImageSize = aImage.GetSizePixel();
         long  nRectHeight = pData->maPinRect.GetHeight();
+        Point aPos( pData->maPinRect.TopLeft() );
+        if( pOffset )
+            aPos += *pOffset;
         if ( nRectHeight < aImageSize.Height() )
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(),
-                                    pData->maPinRect.Top() ),
+            pDev->DrawImage( aPos,
                              Size( aImageSize.Width(), nRectHeight ),
                              aImage );
         }
         else
         {
-            pDev->DrawImage( Point( pData->maPinRect.Left(),
-                                    pData->maPinRect.Top()+(nRectHeight-aImageSize.Height())/2 ),
+            pDev->DrawImage( Point( aPos.X(),
+                                    aPos.Y()+(nRectHeight-aImageSize.Height())/2 ),
                              aImage );
         }
     }
@@ -2559,7 +2594,7 @@ public:
     virtual long            CalcTitleWidth() const;
     virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 
-    Rectangle               DrawMacTitleButton( const Rectangle& rRect, USHORT nStyle );
+    Rectangle               DrawMacTitleButton( OutputDevice* pDev, const Rectangle& rRect, USHORT nStyle );
 };
 
 // =======================================================================
@@ -2772,12 +2807,11 @@ long ImplMacBorderWindowView::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, const Point* )
+void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pDev, const Point* pOffset )
 {
     ImplBorderFrameData*    pData = &maFrameData;
-    OutputDevice*           pDev = pData->mpOutDev;
     ImplBorderWindow*       pBorderWindow = pData->mpBorderWindow;
-    Point                   aTmpPoint;
+    Point                   aTmpPoint( pOffset ? *pOffset : Point() );
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
     BOOL                    bActive = pBorderWindow->IsDisplayActive();
@@ -2845,6 +2879,8 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     aInRect.Bottom() -= nBorderSize;
 
     Rectangle   aTitleRect = pData->maTitleRect;
+    if( pOffset )
+        aTitleRect.Move( pOffset->X(), pOffset->Y() );
     XubString   aText = pBorderWindow->GetText();
     BOOL        bDrawText = FALSE;
     if ( (nDrawFlags & BORDERWINDOW_DRAW_TITLE) && !pData->maTitleRect.IsEmpty() )
@@ -2864,19 +2900,20 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
         {
+            long nXOff = pOffset ? pOffset->X() : 0;
             if ( !pData->maPinRect.IsEmpty() )
-                aTitleRect.Left() = pData->maPinRect.Right()+3;
+                aTitleRect.Left() = pData->maPinRect.Right()+3 + nXOff;
             else if ( !pData->maCloseRect.IsEmpty() )
-                aTitleRect.Left() = pData->maCloseRect.Right()+3;
+                aTitleRect.Left() = pData->maCloseRect.Right()+3 + nXOff;
 
             if ( !pData->maHelpRect.IsEmpty() )
-                aTitleRect.Right() = pData->maHelpRect.Left()-3;
+                aTitleRect.Right() = pData->maHelpRect.Left()-3 + nXOff;
             else if ( !pData->maHideRect.IsEmpty() )
-                aTitleRect.Right() = pData->maHideRect.Left()-3;
+                aTitleRect.Right() = pData->maHideRect.Left()-3 + nXOff;
             else if ( !pData->maDockRect.IsEmpty() )
-                aTitleRect.Right() = pData->maDockRect.Left()-3;
+                aTitleRect.Right() = pData->maDockRect.Left()-3 + nXOff;
             else if ( !pData->maRollRect.IsEmpty() )
-                aTitleRect.Right() = pData->maRollRect.Left()-3;
+                aTitleRect.Right() = pData->maRollRect.Left()-3 + nXOff;
 
             if ( aText.Len() )
             {
@@ -2948,7 +2985,12 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
     {
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_CLOSE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maCloseRect.IsEmpty() )
-            DrawMacTitleButton( pData->maCloseRect, pData->mnCloseState );
+        {
+            Rectangle aRect = pData->maCloseRect;
+            if( pOffset )
+                aRect.Move( pOffset->X(), pOffset->Y() );
+            DrawMacTitleButton( pDev, aRect, pData->mnCloseState );
+        }
 
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_PIN) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maPinRect.IsEmpty() )
@@ -2957,16 +2999,19 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
             ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPined, aImage );
             Size  aImageSize = aImage.GetSizePixel();
             long  nRectHeight = pData->maPinRect.GetHeight();
+            Point aPos( pData->maPinRect.TopLeft() );
+            if( pOffset )
+                aPos += *pOffset;
             if ( nRectHeight < aImageSize.Height() )
             {
-                pDev->DrawImage( Point( pData->maPinRect.Left(), pData->maPinRect.Top() ),
+                pDev->DrawImage( aPos,
                                  Size( aImageSize.Width(), nRectHeight ),
                                  aImage );
             }
             else
             {
-                pDev->DrawImage( Point( pData->maPinRect.Left(),
-                                        pData->maPinRect.Top()+(nRectHeight-aImageSize.Height())/2 ),
+                pDev->DrawImage( Point( aPos.X(),
+                                        aPos.Y()+(nRectHeight-aImageSize.Height())/2 ),
                                  aImage );
             }
         }
@@ -2974,7 +3019,10 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_DOCK) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maDockRect.IsEmpty() )
         {
-            Rectangle aInDockRect = DrawMacTitleButton( pData->maDockRect, pData->mnDockState );
+            Rectangle aRect = pData->maDockRect;
+            if( pOffset )
+                aRect.Move( pOffset->X(), pOffset->Y() );
+            Rectangle aInDockRect = DrawMacTitleButton( pDev, aRect, pData->mnDockState );
             pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
             pDev->SetFillColor();
             aInDockRect.Left()++;
@@ -2987,7 +3035,10 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_HIDE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maHideRect.IsEmpty() )
         {
-            Rectangle aInHideRect = DrawMacTitleButton( pData->maHideRect, pData->mnHideState );
+            Rectangle aRect = pData->maHideRect;
+            if( pOffset )
+                aRect.Move( pOffset->X(), pOffset->Y() );
+            Rectangle aInHideRect = DrawMacTitleButton( pDev, aRect, pData->mnHideState );
             pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
             pDev->DrawLine( Point( aInHideRect.Left(), aInHideRect.Bottom()-1 ), Point( aInHideRect.Right(), aInHideRect.Bottom()-1 ) );
             pDev->DrawLine( Point( aInHideRect.Left(), aInHideRect.Bottom() ), Point( aInHideRect.Right(), aInHideRect.Bottom() ) );
@@ -2996,7 +3047,10 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_ROLL) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maRollRect.IsEmpty() )
         {
-            Rectangle aInRollRect = DrawMacTitleButton( pData->maRollRect, pData->mnRollState );
+            Rectangle aRect = pData->maRollRect;
+            if( pOffset )
+                aRect.Move( pOffset->X(), pOffset->Y() );
+            Rectangle aInRollRect = DrawMacTitleButton( pDev, aRect, pData->mnRollState );
             pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
             long nY = aInRollRect.Center().Y();
             pDev->DrawLine( Point( aInRollRect.Left(), nY-1 ), Point( aInRollRect.Right(), nY-1 ) );
@@ -3006,7 +3060,10 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
         if ( ((nDrawFlags & BORDERWINDOW_DRAW_HELP) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
              !pData->maHelpRect.IsEmpty() )
         {
-            Rectangle aInHelpRect = DrawMacTitleButton( pData->maHelpRect, pData->mnHelpState );
+            Rectangle aRect = pData->maHelpRect;
+            if( pOffset )
+                aRect.Move( pOffset->X(), pOffset->Y() );
+            Rectangle aInHelpRect = DrawMacTitleButton( pDev, aRect, pData->mnHelpState );
             // ...
         }
     }
@@ -3087,9 +3144,8 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, cons
 
 // -----------------------------------------------------------------------
 
-Rectangle ImplMacBorderWindowView::DrawMacTitleButton( const Rectangle& rRect, USHORT nStyle )
+Rectangle ImplMacBorderWindowView::DrawMacTitleButton( OutputDevice* pDev, const Rectangle& rRect, USHORT nStyle )
 {
-    OutputDevice*           pDev = maFrameData.mpOutDev;
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
     Rectangle               aRect = rRect;
 
