@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:17:58 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #endif
@@ -158,7 +155,6 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::beans::XPropertySet,
                            public ::com::sun::star::style::XStyleFamiliesSupplier,
                            public ::com::sun::star::lang::XServiceInfo,
-                           public ::com::sun::star::lang::XUnoTunnel,
                            public ::com::sun::star::ucb::XAnyCompareFactory,
                            public ::com::sun::star::presentation::XHandoutMasterSupplier,
                            public ::com::sun::star::view::XRenderable
