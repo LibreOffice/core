@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 16:20:15 $
+ *  last change: $Author: tl $ $Date: 2001-11-06 09:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4046,7 +4046,7 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
         sal_True);
     {//Scoping
         AddAttribute(XML_NAMESPACE_MATH,sXML_accent,OUString(
-            RTL_CONSTASCII_USTRINGPARAM(sXML_accent)));
+            RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
         SvXMLElementExport aOver2(*this,XML_NAMESPACE_MATH,pWhich, sal_True,
             sal_True);
         ExportNodes(pNode->GetSubNode(0),nLevel);
