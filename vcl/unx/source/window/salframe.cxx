@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-29 12:04:21 $
+ *  last change: $Author: pl $ $Date: 2001-12-03 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,10 @@ using namespace vcl;
 #define _IsMapped()         maFrameData.bMapped_
 
 static XLIB_Window  hPresentationWindow = None;
-::std::list< XLIB_Window > aPresentationReparentList;
-static SalFrame*    pIntroBitmap = NULL;
-static bool     bWasIntroBitmap = false;
+static ::std::list< XLIB_Window > aPresentationReparentList;
+static SalFrame*    pIntroBitmap        = NULL;
+static bool     bWasIntroBitmap     = false;
+static int          nVisibleFloats      = 0;
 
 // -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -739,10 +740,10 @@ void SalFrame::SetIcon( USHORT nIcon )
     {
         maFrameData.mnIconID = nIcon;
 
-        XIconSize *pIconSize;
-        int nSizes;
+        XIconSize *pIconSize = NULL;
+        int nSizes = 0;
         int iconSize = 32;
-        if ( XGetIconSizes( _GetXDisplay(), maFrameData.GetShellWindow(), &pIconSize, &nSizes ) )
+        if ( XGetIconSizes( _GetXDisplay(), _GetDisplay()->GetRootWindow(), &pIconSize, &nSizes ) )
         {
 #if defined DEBUG
             fprintf(stderr, "SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
@@ -761,6 +762,7 @@ void SalFrame::SetIcon( USHORT nIcon )
                         pIconSize[i].width_inc, pIconSize[i].height_inc);
 #endif
             }
+            XFree( pIconSize );
         }
         else
         {
@@ -905,17 +907,34 @@ void SalFrame::Show( BOOL bVisible )
         }
 
         XSync( _GetXDisplay(), False );
-        if (maFrameData.mpParent != NULL && maFrameData.nStyle_ == 0)
+        if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT
+            && _GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Sawfish" )
+            )
         {
-            ImplSVData* pSVData = ImplGetSVData();
-            if (pSVData->maWinData.mpFirstFloat != NULL)
+            /*
+             *  #95453#
+             *  Sawfish can be switched to enter-exit focus behaviour. In this case
+             *  we must grab the pointer else the dumb WM will put the focus to the
+             *  override-redirect float window. The application window will be deactivated
+             *  which causes that the floats are destroyed, so the user can never click on
+             *  a menu because it vanishes as soon as he enters it.
+             *  Since we want to grab as seldom as possible this case is bound to the WM
+             *  name being Sawfish.
+             */
+            nVisibleFloats++;
+            if( nVisibleFloats == 1 )
             {
-                ULONG nMode =
-                        pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
-                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
-                               nMode | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+                XGrabPointer( _GetXDisplay(),
+                              maFrameData.GetWindow(),
+                              True,
+                              PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                              GrabModeAsync,
+                              GrabModeAsync,
+                              None,
+                              None,
+                              CurrentTime
+                              );
             }
-            XSetInputFocus(_GetXDisplay(), maFrameData.GetWindow(), RevertToParent, 0);
         }
         maFrameData.Call( SALEVENT_RESIZE, NULL );
 
@@ -945,6 +964,14 @@ void SalFrame::Show( BOOL bVisible )
             XDeleteProperty( _GetXDisplay(), maFrameData.GetShellWindow(), _GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
         XWithdrawWindow( _GetXDisplay(), maFrameData.GetWindow(), _GetDisplay()->GetScreenNumber() );
         maFrameData.nShowState_ = SHOWSTATE_HIDDEN;
+        if( nVisibleFloats
+            && maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
+        {
+            nVisibleFloats--;
+            if( nVisibleFloats == 0 )
+                XUngrabPointer( _GetXDisplay(),
+                                CurrentTime );
+        }
     }
 }
 
@@ -1987,6 +2014,9 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
     USHORT              nEvent;
     static ULONG        nLines = 0;
 
+    if( nVisibleFloats && pEvent->type == EnterNotify )
+        return 0;
+
     // Solaris X86: clicking the right button on a two-button mouse
     // generates a button2 event not a button3 event
     if (pDisplay_->GetProperties() & PROPERTY_SUPPORT_3ButtonMouse )
@@ -2062,16 +2092,9 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
     }
     else
     {
-        // get input focus on SAL_FRAME_STYLE_CHILD windows
-        // because the focus handling in this case (running as plugin)
-        // is "a little tricky"
-        // on some wm however, this leads to closing our menues before the menu event
-        // was fired (#89867), so we cancel this now
-          //if( nStyle_ & SAL_FRAME_STYLE_CHILD )
-        //XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
-
         // let mouse events reach the correct window
-        XUngrabPointer( GetXDisplay(), CurrentTime );
+        if( nVisibleFloats < 1 )
+            XUngrabPointer( GetXDisplay(), CurrentTime );
 
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
@@ -2125,7 +2148,8 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
     if( nEvent == SALEVENT_MOUSELEAVE
         || ( aMouseEvt.mnX <  nWidth_  && aMouseEvt.mnX >  -1 &&
              aMouseEvt.mnY <  nHeight_ && aMouseEvt.mnY >  -1 )
-        || pDisplay_->MouseCaptured( this ) )
+        || pDisplay_->MouseCaptured( this )
+        )
         return Call( nEvent, &aMouseEvt );
 
 #ifdef DBG_UTIL
