@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:35:12 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,17 +1454,14 @@ RTLFUNC(Split)
     }
 
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
-    if( nArraySize )
-    {
-        pArray->AddDim( 0, nArraySize-1 );
+    pArray->unoAddDim( 0, nArraySize-1 );
 
-        // Parameter ins Array uebernehmen
-        for( short i = 0 ; i < nArraySize ; i++ )
-        {
-            SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-            xVar->PutString( vRet[i] );
-            pArray->Put( (SbxVariable*)xVar, &i );
-        }
+    // Parameter ins Array uebernehmen
+    for( short i = 0 ; i < nArraySize ; i++ )
+    {
+        SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+        xVar->PutString( vRet[i] );
+        pArray->Put( (SbxVariable*)xVar, &i );
     }
 
     // Array zurueckliefern
