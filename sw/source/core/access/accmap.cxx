@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:27:56 $
+ *  last change: $Author: mib $ $Date: 2002-09-27 11:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2031,15 +2031,6 @@ sal_Bool SwAccessibleMap::ReplaceChild (
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException)
 {
-    // create the new child
-    ::accessibility::AccessibleShape* pReplacement = ::accessibility::ShapeTypeHandler::Instance().CreateAccessibleObject (
-        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
-        _rShapeTreeInfo
-    );
-    Reference< XAccessible > xNewChild( pReplacement ); // keep this alive (do this before calling Init!)
-    if ( pReplacement )
-        pReplacement->Init();
-
     const SdrObject *pObj = 0;
     {
         vos::OGuard aGuard( maMutex );
@@ -2063,6 +2054,12 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     if( !pObj )
         return sal_False;
 
+    Reference < XShape > xShape( _rxShape ); //keep reference to shape, because
+                                             // we might be the only one that
+                                             // hold it.
+    // Also get keep parent.
+    Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
+    pCurrentChild = 0;  // well be realease by dispose
     Dispose( 0, pObj );
 
     {
@@ -2071,17 +2068,31 @@ sal_Bool SwAccessibleMap::ReplaceChild (
         if( !mpShapeMap )
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
 
-        SwAccessibleShapeMap_Impl::iterator aIter =
-            mpShapeMap->find( pObj );
+        // create the new child
+        accessibility::ShapeTypeHandler& rShapeTypeHandler =
+                        accessibility::ShapeTypeHandler::Instance();
+        ::accessibility::AccessibleShapeInfo aShapeInfo(
+                                            xShape, xParent, this );
+        ::accessibility::AccessibleShape* pReplacement =
+            rShapeTypeHandler.CreateAccessibleObject (
+                aShapeInfo, mpShapeMap->GetInfo() );
+
         Reference < XAccessible > xAcc( pReplacement );
-        if( aIter != mpShapeMap->end() )
+        if( xAcc.is() )
         {
-            (*aIter).second = xAcc;
-        }
-        else
-        {
-            SwAccessibleShapeMap_Impl::value_type aEntry( pObj, xAcc );
-            mpShapeMap->insert( aEntry );
+            pReplacement->Init();
+
+            SwAccessibleShapeMap_Impl::iterator aIter =
+                mpShapeMap->find( pObj );
+            if( aIter != mpShapeMap->end() )
+            {
+                (*aIter).second = xAcc;
+            }
+            else
+            {
+                SwAccessibleShapeMap_Impl::value_type aEntry( pObj, xAcc );
+                mpShapeMap->insert( aEntry );
+            }
         }
     }
 
