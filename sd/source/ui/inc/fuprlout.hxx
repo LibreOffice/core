@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,37 +59,44 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUPRLOUT_HXX
-#define _SD_FUPRLOUT_HXX
+#ifndef SD_FU_PRESENTATION_LAYOUT_HXX
+#define SD_FU_PRESENTATION_LAYOUT_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdView;
-class SdViewShell;
-class SdWindow;
 class SdDrawDocument;
 class SfxRequest;
 class SfxStyleSheetBasePool;
 
-class FuPresentationLayout : public FuPoor
+namespace sd {
+
+class View;
+class ViewShell;
+class Window;
+
+class FuPresentationLayout
+    : public FuPoor
 {
+public:
+    TYPEINFO();
+
+    FuPresentationLayout (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuPresentationLayout (void);
+
 private:
     void TransferLayoutTemplate(String aFromName, String aToName,
                                 SfxStyleSheetBasePool* pFrom,
                                 SfxStyleSheetBasePool* pTo);
-
-public:
-    TYPEINFO();
-
-    FuPresentationLayout(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuPresentationLayout();
-
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUPRLOUT_HXX
+#endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprtmpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,33 +59,39 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUPRTMPL_HXX
-#define _SD_FUPRTMPL_HXX
+#ifndef SD_FU_PRESENTATION_TEMPLATES_HXX
+#define SD_FU_PRESENTATION_TEMPLATES_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdView;
-class SdViewShell;
-class SdWindow;
 class SdDrawDocument;
 class SfxRequest;
 
+namespace sd {
 
-class FuPresentationTemplates : public FuPoor
+class View;
+class ViewShell;
+class Window;
+
+class FuPresentationTemplates
+    : public FuPoor
 {
 
 public:
     TYPEINFO();
 
-    FuPresentationTemplates(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                            SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuPresentationTemplates();
-
+    FuPresentationTemplates (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuPresentationTemplates (void);
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUPRTMPL_HXX
+#endif
 
