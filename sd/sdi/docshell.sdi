@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:20:27 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,7 @@ interface ImpressDocument : DrawDocument
 {
 }
 
-shell SdDrawDocShell : SfxObjectShell
+shell DrawDocShell : SfxObjectShell
 {
     import ImpressDocument[Automation];
 }
-
-
