@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-05 09:27:41 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 11:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,32 +418,37 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pCellStyles(NULL),
     pMergedRangesContainer(NULL),
     pValidationsContainer(NULL),
-    xChartExportMapper(new ScExportMapper()),
-    nOpenRow(-1),
     pRowFormatRanges(NULL),
-    nCurrentTable(0),
-    aTableStyles(),
     pCellsItr(NULL),
-    bHasRowHeader(sal_False),
-    bRowHeaderOpen(sal_False),
     pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL),
-    aXShapesVec(),
     pDefaults(NULL),
     pNumberFormatAttributesExportHelper(NULL),
+    pGroupColumns (NULL),
+    pGroupRows (NULL),
+    xChartExportMapper(new ScExportMapper()),
+    nOpenRow(-1),
+    nCurrentTable(0),
+    aTableStyles(),
+    bHasRowHeader(sal_False),
+    bRowHeaderOpen(sal_False),
+    aXShapesVec(),
     sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ))
 {
-    pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP);
-    pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP);
-    pColumnStyles = new ScColumnRowStyles();
-    pRowStyles = new ScColumnRowStyles();
+    if (getExportFlags() & EXPORT_CONTENT)
+    {
+        pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP);
+        pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP);
+        pColumnStyles = new ScColumnRowStyles();
+        pRowStyles = new ScColumnRowStyles();
+        pRowFormatRanges = new ScRowFormatRanges();
+        pMergedRangesContainer = new ScMyMergedRangesContainer();
+        pValidationsContainer = new ScMyValidationsContainer();
+        pDetectiveObjContainer = new ScMyDetectiveObjContainer();
+        pCellsItr = new ScMyNotEmptyCellsIterator(*this);
+        pDefaults = new ScMyDefaultStyles();
+    }
     pCellStyles = new ScFormatRangeStyles();
-    pRowFormatRanges = new ScRowFormatRanges();
-    pMergedRangesContainer = new ScMyMergedRangesContainer();
-    pValidationsContainer = new ScMyValidationsContainer();
-    pDetectiveObjContainer = new ScMyDetectiveObjContainer();
-    pCellsItr = new ScMyNotEmptyCellsIterator(*this);
-    pDefaults = new ScMyDefaultStyles();
 
     // document is not set here - create ScChangeTrackingExportHelper later
 
