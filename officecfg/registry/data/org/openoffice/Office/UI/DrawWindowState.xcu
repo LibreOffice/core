@@ -90,6 +90,36 @@
      <value>true</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/drawingobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Locked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="Pos" oor:type="xs:string">
+     <value>89,283</value>
+    </prop>
+    <prop oor:name="Size" oor:type="xs:string">
+     <value>613,27</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Format Graphic</value>
+     <value xml:lang="de">Grafik formatieren</value>
+    </prop>
+   </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
      <value>0,0</value>
