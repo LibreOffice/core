@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-21 13:55:21 $
+ *  last change: $Author: tl $ $Date: 2002-12-09 14:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         pVerStr = pVerStr6;
     else
         pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
-    strcpy( aWordBuf, pVerStr );
+    strcpy( aWordBuf, pVerStr );    // #100211# - checked
     USHORT nLen = strlen( aWordBuf );
     *pStream << nLen;
     if ((nErr = pStream->GetError()))
