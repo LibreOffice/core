@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLOutput.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
  module com {  module sun {  module star {  module io {
-interface XInputStream;
+ published interface XInputStream;
 };};};};
 
 #ifndef __com_sun_star_sdbc_SQLException_idl__
@@ -87,12 +87,12 @@ interface XInputStream;
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XRef;
-interface XArray;
-interface XBlob;
-interface XClob;
-interface XStruct;
-interface XSQLData;
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
+ published interface XStruct;
+ published interface XSQLData;
 
 
 // DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XSQLOutput
@@ -123,7 +123,7 @@ interface XSQLData;
     <code>XSQLOutput</code>
     output stream as the representation of a SQL user-defined type.</p>
  */
-interface XSQLOutput: com::sun::star::uno::XInterface
+published interface XSQLOutput: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeString
