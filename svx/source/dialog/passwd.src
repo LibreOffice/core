@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:11:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,43 +71,15 @@ ModalDialog RID_SVXDLG_PASSWORD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 77 ) ;
-    Text = "Kennwort ändern" ;
-    Text [ English ] = "Change password" ;
+    Text [ de ] = "Kennwort ändern" ;
     Moveable = TRUE ;
     FixedText FT_OLD_PASSWD
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text = "~Kennwort" ;
-        Text [ English ] = "~Password" ;
-        Text [ english_us ] = "~Password" ;
-        Text [ italian ] = "Password" ;
-        Text [ spanish ] = "~Contraseña" ;
-        Text [ french ] = "Mot de passe" ;
-        Text [ dutch ] = "~Wachtwoord" ;
-        Text [ swedish ] = "~Lösenord" ;
-        Text [ danish ] = "~Adgangskode" ;
-        Text [ portuguese_brazilian ] = "~Senha" ;
-        Text [ portuguese ] = "~Senha" ;
-        Text[ chinese_simplified ] = "å¯†ç (~P)";
-        Text[ russian ] = "Ïàğîëü";
-        Text[ polish ] = "~Has³o";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~P)";
-        Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ greek ] = "Ê~ùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "ì•”í˜¸(~P)";
-        Text[ turkish ] = "Şifre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Contrasenya";
-        Text[ finnish ] = "~Salasana";
-        Text[ thai ] = "~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "Heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××”â€¬";
-        Text[ hindi ] = "~à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "~Heslo";
-        Text[ hungarian ] = "~JelszÃ³";
-        Text[ slovenian ] = "~Geslo";
+        Text [ de ] = "~Kennwort" ;
+        Text [ en-US ] = "~Password" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_OLD_PASSWD
     {
@@ -120,71 +92,17 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text = "Altes Kennwort" ;
-        Text [ English ] = "Old password" ;
-        Text [ english_us ] = "Old password" ;
-        Text [ italian ] = "Vecchia password" ;
-        Text [ spanish ] = "Anterior" ;
-        Text [ french ] = "Ancien" ;
-        Text [ dutch ] = "Oud wachtwoord" ;
-        Text [ swedish ] = "Gammalt lösenord" ;
-        Text [ danish ] = "Gammel adgangskode" ;
-        Text [ portuguese_brazilian ] = "Senha antiga" ;
-        Text [ portuguese ] = "Antiga" ;
-        Text[ chinese_simplified ] = "æ—§å¯†ç ";
-        Text[ russian ] = "Ñòàğûé ïàğîëü";
-        Text[ polish ] = "Stare has³o";
-        Text[ japanese ] = "æ—§ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰";
-        Text[ chinese_traditional ] = "èˆŠå¯†ç¢¼";
-        Text[ arabic ] = "ŞÏíãÉ";
-        Text[ greek ] = "Ğáëéüò êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "ì´ì „ ì•”í˜¸";
-        Text[ turkish ] = "Eski Parola";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Anterior";
-        Text[ finnish ] = "Vanha salasana";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹€à¸à¹ˆà¸²";
-        Text[ czech ] = "StarÃ© heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××” ×™×©× ×”â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤¨à¤¾ à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "StarÃ© heslo";
-        Text[ hungarian ] = "RÃ©gi jelszÃ³";
-        Text[ slovenian ] = "Staro geslo";
+        Text [ de ] = "Altes Kennwort" ;
+        Text [ en-US ] = "Old password" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_NEW_PASSWD
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text = "K~ennwort" ;
-        Text [ English ] = "Pa~ssword" ;
-        Text [ english_us ] = "Pa~ssword" ;
-        Text [ italian ] = "Password" ;
-        Text [ spanish ] = "Co~ntraseña" ;
-        Text [ french ] = "Mot de passe" ;
-        Text [ dutch ] = "W~achtwoord" ;
-        Text [ swedish ] = "Lös~enord" ;
-        Text [ danish ] = "A~dgangskode" ;
-        Text [ portuguese_brazilian ] = "~Senha" ;
-        Text [ portuguese ] = "~Senha" ;
-        Text[ chinese_simplified ] = "å¯†ç (~S)";
-        Text[ russian ] = "Ïàğîëü";
-        Text[ polish ] = "Ha~s³o";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~S)";
-        Text[ chinese_traditional ] = "å¯†ç¢¼(~S)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ greek ] = "Êù~äéêüò ğñüóâáóçò";
-        Text[ korean ] = "ì•”í˜¸(~S)";
-        Text[ turkish ] = "Şifre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~ntrasenya";
-        Text[ finnish ] = "~Salasana";
-        Text[ thai ] = "à¸£à¸«à¸±~à¸ªà¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "Heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××”â€¬";
-        Text[ hindi ] = "à¤•à¥‚~à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "He~slo";
-        Text[ hungarian ] = "~JelszÃ³";
-        Text[ slovenian ] = "Ge~slo";
+        Text [ de ] = "K~ennwort" ;
+        Text [ en-US ] = "Pa~ssword" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_NEW_PASSWD
     {
@@ -197,35 +115,8 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text = "~Bestätigen" ;
-        Text [ English ] = "~Confirm" ;
-        Text[ english_us ] = "Confi~rm";
-        Text[ portuguese ] = "~Confirmar";
-        Text[ russian ] = "Ïîäòâåğäèòü";
-        Text[ greek ] = "Åğé~âåâáßùóç";
-        Text[ dutch ] = "~Bevestigen";
-        Text[ french ] = "Confirmation";
-        Text[ spanish ] = "~Repetir";
-        Text[ finnish ] = "~Vahvista";
-        Text[ italian ] = "Ripeti";
-        Text[ danish ] = "~Bekræft";
-        Text[ swedish ] = "~Bekräfta";
-        Text[ polish ] = "~PotwierdŸ";
-        Text[ portuguese_brazilian ] = "~Confirmar";
-        Text[ japanese ] = "ç¢ºèªç”¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~R)";
-        Text[ korean ] = "í™•ì¸(~R)";
-        Text[ chinese_simplified ] = "ç¡®è®¤(~R)";
-        Text[ chinese_traditional ] = "ç¢ºèª(~R)";
-        Text[ turkish ] = "Onayla";
-        Text[ arabic ] = "ÅÚÇÏÉ";
-        Text[ catalan ] = "~Repeteix";
-        Text[ thai ] = "à¸¢à¸·~à¸™à¸¢à¸±à¸™";
-        Text[ czech ] = "Potvrdit";
-        Text[ hebrew ] = "â€®× × ×œ××©×¨â€¬";
-        Text[ hindi ] = "à¤¦à¥ƒà¤¢à¤¼ ~à¤•à¤°à¥‹";
-        Text[ slovak ] = "Potv~rdiÅ¥";
-        Text[ hungarian ] = "~MegerÅ‘sÃ­tÃ©s";
-        Text[ slovenian ] = "Po~trdi";
+        Text [ de ] = "~Bestätigen" ;
+        Text [ en-US ] = "Confi~rm";
     };
     Edit ED_REPEAT_PASSWD
     {
@@ -238,36 +129,9 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text = "Neues Kennwort" ;
-        Text [ English ] = "New password" ;
-        Text [ english_us ] = "New password" ;
-        Text [ italian ] = "Nuova password" ;
-        Text [ spanish ] = "Contraseña nueva" ;
-        Text [ french ] = "Nouveau" ;
-        Text [ dutch ] = "Nieuw wachtwoord" ;
-        Text [ swedish ] = "Nytt lösenord" ;
-        Text [ danish ] = "Ny adgangskode" ;
-        Text [ portuguese_brazilian ] = "Nova senha" ;
-        Text [ portuguese ] = "Nova" ;
-        Text[ chinese_simplified ] = "æ–°å¯†ç ";
-        Text[ russian ] = "Íîâûé ïàğîëü";
-        Text[ polish ] = "Nowe has³o";
-        Text[ japanese ] = "æ–°ã—ã„ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰";
-        Text[ chinese_traditional ] = "æ–°å¯†ç¢¼";
-        Text[ arabic ] = "ÌÏíÏÉ";
-        Text[ greek ] = "Íİïò êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "ìƒˆ ì•”í˜¸";
-        Text[ turkish ] = "Yeni şifre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nova";
-        Text[ finnish ] = "Uusi salasana";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ© heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××” ×—×“×©×”â€¬";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "NovÃ© heslo";
-        Text[ hungarian ] = "Ãšj jelszÃ³";
-        Text[ slovenian ] = "Novo geslo";
+        Text [ de ] = "Neues Kennwort" ;
+        Text [ en-US ] = "New password" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -288,98 +152,18 @@ ModalDialog RID_SVXDLG_PASSWORD
     };
     String STR_ERR_OLD_PASSWD
     {
-        Text = "Ungültiges Kennwort" ;
-        Text [ English ] = "Invalid password" ;
-        Text [ dutch ] = "Ongeldig wachtwoord" ;
-        Text [ english_us ] = "Invalid password" ;
-        Text [ italian ] = "Password non valida" ;
-        Text [ spanish ] = "Contraseña incorrecta" ;
-        Text [ french ] = "Mot de passe incorrect" ;
-        Text [ swedish ] = "Ogiltigt lösenord" ;
-        Text [ danish ] = "Forkert adgangskode" ;
-        Text [ portuguese ] = "Senha incorrecta" ;
-        Text [ portuguese_brazilian ] = "Senha inválida" ;
-        Text[ chinese_simplified ] = "å¯†ç æ— æ•ˆ";
-        Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
-        Text[ polish ] = "Nieprawid³owe has³o";
-        Text[ japanese ] = "ç„¡åŠ¹ãªãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰";
-        Text[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆ";
-        Text[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ";
-        Text[ greek ] = "Ï êùäéêüò ğñüóâáóçò äåí åßíáé İãêõñïò";
-        Text[ korean ] = "ì•”í˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Geçersiz Parola";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "La contrasenya no és correcta";
-        Text[ finnish ] = "Virheellinen salasana";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
-        Text[ czech ] = "NeplatnÃ© heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××” ×œ× × ×›×•× ×”â€¬";
-        Text[ hindi ] = "à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "NeplatnÃ© heslo";
-        Text[ hungarian ] = "Ã‰rvÃ©nytelen jelszÃ³";
-        Text[ slovenian ] = "Neveljavno geslo";
+        Text [ de ] = "Ungültiges Kennwort" ;
+        Text [ en-US ] = "Invalid password" ;
+        Text [ x-comment ] = " ";
     };
     String STR_ERR_REPEAT_PASSWD
     {
-        Text = "Kennwörter stimmen nicht überein" ;
-        Text [ English ] = "Passwords are unequal" ;
-        Text [ dutch ] = "Wachtwoorden komen niet overeen" ;
-        Text [ english_us ] = "Passwords do not match" ;
-        Text [ italian ] = "Le password non sono uguali" ;
-        Text [ spanish ] = "Las contraseñas no coinciden" ;
-        Text [ french ] = "Les mots de passe ne concordent pas." ;
-        Text [ swedish ] = "Lösenord stämmer inte överens" ;
-        Text [ danish ] = "Adgangskoder stemmer ikke overens" ;
-        Text [ portuguese ] = "As senhas não combinam." ;
-        Text [ portuguese_brazilian ] = "As senhas não coincidem" ;
-        Text[ chinese_simplified ] = "å¯†ç ä¸ä¸€è‡´";
-        Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò";
-        Text[ polish ] = "Has³a ró¿ni¹ siê";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸€è‡´ã—ã¾ã›ã‚“";
-        Text[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆ";
-        Text[ arabic ] = "ßáãÇÊ ÇáÓÑ ÛíÑ ãÊØÇÈŞÉ";
-        Text[ greek ] = "Ïé êùäéêïß ğñüóâáóçò äåí óõìöùíïıí";
-        Text[ korean ] = "ì•”í˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Parolalar uyuşmuyor";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Les contrasenyes no coincideixen";
-        Text[ finnish ] = "Salasanat eivät vastaa toisiaan";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸™";
-        Text[ czech ] = "Hesla se liÅ¡Ã­";
-        Text[ hebrew ] = "â€®×”×¡×™×¡×××•×ª ××™× ×Ÿ ××ª××™××•×ªâ€¬";
-        Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤¸à¤®à¤¾à¤¨ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
-        Text[ slovak ] = "HeslÃ¡ sa lÃ­Å¡ia";
-        Text[ hungarian ] = "A jelszavak nem egyeznek";
-        Text[ slovenian ] = "Gesli se ne ujemata";
+        Text [ de ] = "Kennwörter stimmen nicht überein" ;
+        Text [ en-US ] = "Passwords do not match" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Change Password" ;
-    Text [ italian ] = "Cambia password" ;
-    Text [ spanish ] = "Cambiar contraseña" ;
-    Text [ french ] = "Modification du mot de passe" ;
-    Text [ dutch ] = "Wachtwoord wijzigen" ;
-    Text [ swedish ] = "Ändra lösenord" ;
-    Text [ danish ] = "Skift adgangskode" ;
-    Text [ portuguese_brazilian ] = "Alterar a Senha" ;
-    Text [ portuguese ] = "Modificar senha" ;
-    Text[ chinese_simplified ] = "æ›´æ”¹å¯†ç ";
-    Text[ russian ] = "Èçìåíèòü ïàğîëü";
-    Text[ polish ] = "Zmieñ has³o";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å¤‰æ›´";
-    Text[ chinese_traditional ] = "è®Šæ›´å¯†ç¢¼";
-    Text[ arabic ] = "ÊÛííÑ ßáãÉ ÇáÓÑ";
-    Text[ greek ] = "ÁëëáãŞ êùäéêïı ğñüóâáóçò";
-    Text[ korean ] = "ì•”í˜¸ ë³€ê²½";
-    Text[ turkish ] = "Şifre değiştir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Canvia la contrasenya";
-    Text[ finnish ] = "Muuta salasana";
-    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "ZmÄ›nit heslo";
-    Text[ hebrew ] = "â€®×©×™× ×•×™ ×¡×™×¡××”â€¬";
-    Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤¬à¤¦à¤²à¥‹";
-    Text[ slovak ] = "ZmeniÅ¥ heslo";
-    Text[ hungarian ] = "JelszÃ³ megvÃ¡ltoztatÃ¡sa";
-    Text[ slovenian ] = "Sprememba gesla";
+    Text [ en-US ] = "Change Password" ;
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
