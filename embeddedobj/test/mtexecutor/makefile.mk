@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2003-12-17 11:27:04 $
+#   last change: $Author: mav $ $Date: 2003-12-17 11:32:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,10 @@ SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
 
 SLOFILES = \
-        $(SLO)$/MainThreadExecutor.obj\
+        $(SLO)$/mainthreadexecutor.obj\
         $(SLO)$/mteregister.obj
 
-EXCEPTIONSFILES = $(SLO)$/MainThreadExecutor.obj
+EXCEPTIONSFILES = $(SLO)$/mainthreadexecutor.obj
 
 SHL1OBJS= $(SLOFILES)
 

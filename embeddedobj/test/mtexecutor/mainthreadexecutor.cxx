@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mainthreadexecutor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-17 11:26:39 $
+ *  last change: $Author: mav $ $Date: 2003-12-17 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "MainThreadExecutor.hxx"
+#include "mainthreadexecutor.hxx"
 
 #include <vcl/svapp.hxx>
 
