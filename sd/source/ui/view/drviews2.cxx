@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:45:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -152,27 +154,45 @@
 #include "glob.hrc"
 #include "helpids.h"
 #include "sdattr.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "ins_page.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdpage.hxx"
-#include "preview.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_FU_SCALE_HXX
 #include "fuscale.hxx"
+#endif
 #include "sdresid.hxx"
 #include "new_foil.hxx"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
 #include "unmodpg.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
+#ifndef SD_FU_VECTORIZE_HXX
 #include "fuvect.hxx"
+#endif
 #include "stlpool.hxx"
 
 // #90356#
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
 #endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -222,7 +242,7 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
+void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
     if (pFuSlideShow && !pFuSlideShow->IsLivePresentation() &&
@@ -273,7 +293,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rReq.GetArgs() )
             {
                 BOOL bMergeUndo = FALSE;
-                SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+                SfxUndoManager* pUndoMgr = GetDocSh()->GetUndoManager();
 
                 // Anpassungen Start/EndWidth #63083#
                 if(nSId == SID_ATTR_LINE_WIDTH)
@@ -286,7 +306,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     for (ULONG i=0; i<nCount; i++)
                     {
-                        SfxItemSet aAttr(pDoc->GetPool());
+                        SfxItemSet aAttr(GetDoc()->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
                         aAttr.Put(pObj->GetMergedItemSet());
 
@@ -333,7 +353,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     for (ULONG i=0; i<nCount; i++)
                     {
-                        SfxItemSet aAttr(pDoc->GetPool());
+                        SfxItemSet aAttr(GetDoc()->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
                         aAttr.Put(pObj->GetMergedItemSet());
 
@@ -444,8 +464,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 USHORT nPage = aTabControl.GetCurPageId() - 1;
-                pActualPage = pDoc->GetSdPage(nPage, ePageKind);
-                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                pActualPage = GetDoc()->GetSdPage(nPage, ePageKind);
+                SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
                 BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
                 USHORT nPos = 0;
@@ -495,7 +515,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                         else
                         {
                             bHandoutMode = TRUE;
-                            pHandoutMPage = pDoc->GetMasterSdPage(0, PK_HANDOUT);
+                            pHandoutMPage = GetDoc()->GetMasterSdPage(0, PK_HANDOUT);
                             eNewAutoLayout = pHandoutMPage->GetAutoLayout();
                         }
                     }
@@ -505,7 +525,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT, aOldAutoLayout ) );
 
-                    SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, TRUE);
+                    SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE);
 
                     if (pDlg->Execute() == RET_OK)
                     {
@@ -525,8 +545,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     else
                     {
-                        SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-                        if (pDoc->GetSdPageCount(PK_STANDARD) == 1 &&
+                        SdPage* pPage = GetDoc()->GetSdPage(0, PK_STANDARD);
+                        if (GetDoc()->GetSdPageCount(PK_STANDARD) == 1 &&
                             pPage->GetAutoLayout() == AUTOLAYOUT_TITLE &&
                             pPage->GetPresObjList()->Count() == 0)
                         {
@@ -573,7 +593,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                             bHandoutMode ? pHandoutMPage : pActualPage;
 
                 // #67720#
-                SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
+                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
                 DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
                 // #90356#
@@ -583,7 +603,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 if(nActionCount)
                 {
                     // #90356# get SdOptions
-                    SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+                    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
                     sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
 
                     // #95981# If only name is changed do not show
@@ -622,14 +642,18 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 if(bContinue)
                 {
                     ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                        pUndoManager, pDoc, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
+                        pUndoManager, GetDoc(), pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
                     pUndoManager->AddUndoAction(pAction);
 
-                    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
-                    SdPreviewWin*   pPreviewWin = NULL;
+                    SfxChildWindow* pPreviewChildWindow =
+                        GetViewFrame()->GetChildWindow(
+                            PreviewChildWindow::GetChildWindowId() );
+                    PreviewWindow* pPreviewWin = NULL;
 
                     // notify preview slide show are changes are to be done
-                    if( pPreviewChildWindow && ( ( pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow() ) != NULL ) )
+                    if( pPreviewChildWindow!=NULL
+                        && (pPreviewWin = static_cast<PreviewWindow*>(
+                            pPreviewChildWindow->GetWindow()))!= NULL)
                     {
                         FuSlideShow* pShow = pPreviewWin->GetSlideShow();
 
@@ -645,7 +669,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                             if (ePageKind == PK_STANDARD)
                             {
-                                SdPage* pNotesPage = pDoc->GetSdPage(nPage, PK_NOTES);
+                                SdPage* pNotesPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
                                 pNotesPage->SetName(aNewName);
                             }
                         }
@@ -680,7 +704,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                         bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
                     }
 
-                    pDoc->SetChanged(bSetModified);
+                    GetDoc()->SetChanged(bSetModified);
                 }
             }
 
@@ -700,8 +724,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 USHORT nPageId = aTabControl.GetCurPageId();
                 SdPage* pCurrentPage = ( GetEditMode() == EM_PAGE )
-                    ? pDoc->GetSdPage( nPageId - 1, GetPageKind() )
-                    : pDoc->GetMasterSdPage( nPageId - 1, GetPageKind() );
+                    ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
+                    : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
 
                 String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
                 String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
@@ -709,7 +733,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
                 aNameDlg.SetText( aTitle );
-                aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
+                aNameDlg.SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
                 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
                 if( aNameDlg.Execute() == RET_OK )
@@ -860,7 +884,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 // hier den Zoom-Dialog oeffnen
-                pFuActual = new FuScale( this, pWindow, pDrView, pDoc, rReq );
+                pFuActual = new FuScale( this, pWindow, pDrView, GetDoc(), rReq );
             }
             Cancel();
         }
@@ -888,7 +912,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 else
                 {
                     if( pDrView->IsVectorizeAllowed() )
-                        pFuActual = new FuVectorize( this, pWindow, pDrView, pDoc, rReq );
+                        pFuActual = new FuVectorize( this, pWindow, pDrView, GetDoc(), rReq );
                     else
                     {
                         WaitObject aWait( (Window*)GetActiveWindow() );
@@ -1010,7 +1034,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (pDrView->IsTextEdit())
             {
-                Outliner* pOutl = pDrView->GetTextEditOutliner();
+                ::Outliner* pOutl = pDrView->GetTextEditOutliner();
                 if (pOutl)
                 {
                     pOutl->RemoveFields(TRUE, (TypeId) SvxURLField::StaticType());
@@ -1039,7 +1063,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresObjList->GetPos( pObj ) != LIST_ENTRY_NOTFOUND )
                     {
-                        SfxItemSet* pSet = new SfxItemSet( pDoc->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
+                        SfxItemSet* pSet = new SfxItemSet( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
                         pSet->Put(pObj->GetMergedItemSet());
                         pAttrList->Insert( pSet, LIST_APPEND );
                         pAttrList->Insert( pObj->GetUserCall(), LIST_APPEND );
@@ -1114,7 +1138,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SdrPageView* pPV;
             Point   aMPos = pWindow->PixelToLogic( aMousePos );
-            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width();
+            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic( Size(
+                FuPoor::HITPIX, 0 ) ).Width();
             USHORT  nHelpLine;
 
             bMousePosFreezed = FALSE;
@@ -1170,7 +1195,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
     2. Use the model to create a new page or duplicate an existing one.
     3. Update the tab control and switch to the new page.
 */
-void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
+void DrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
 {
     USHORT nSId = rReq.GetSlot();
     if (ePageKind == PK_STANDARD && eEditMode != EM_MASTERPAGE)
@@ -1180,8 +1205,8 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
             pDrView->EndTextEdit();
         }
 
-        USHORT nPageCount = pDoc->GetSdPageCount(ePageKind);
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+        USHORT nPageCount = GetDoc()->GetSdPageCount(ePageKind);
+        SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
         USHORT nPos = 0;
@@ -1219,8 +1244,8 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
 
             SdNewFoilDlg* pDlg = NULL;
 
-            if (nSId == SID_INSERTPAGE && !this->ISA( SdGraphicViewShell ))
-                pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, FALSE);
+            if (nSId == SID_INSERTPAGE && !this->ISA(GraphicViewShell))
+                pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE);
 
             if (pDlg && pDlg->Execute () != RET_OK)
             {
@@ -1236,7 +1261,7 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
             else
             {
                 // AutoLayouts muessen fertig sein
-                pDoc->StopWorkStartupDelay();
+                GetDoc()->StopWorkStartupDelay();
 
                 if (pDlg)
                 {
@@ -1259,7 +1284,7 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
                 bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
                 bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
 
-                pDoc->SetChanged(TRUE);
+                GetDoc()->SetChanged(TRUE);
             }
 
             delete pDlg;
@@ -1278,7 +1303,7 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
         else
         {
             // AutoLayouts muessen fertig sein
-            pDoc->StopWorkStartupDelay();
+            GetDoc()->StopWorkStartupDelay();
 
             SFX_REQUEST_ARG (rReq, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
             SFX_REQUEST_ARG (rReq, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
@@ -1319,18 +1344,18 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
 
         USHORT nNewPageIndex;
         if ((nSId == SID_INSERTPAGE) || (nSId == SID_INSERTPAGE_QUICK))
-            nNewPageIndex = pDoc->CreatePage (pActualPage, ePageKind,
+            nNewPageIndex = GetDoc()->CreatePage (pActualPage, ePageKind,
                 aStandardPageName, aNotesPageName,
                 eStandardLayout, eNotesLayout,
                 bIsPageBack, bIsPageObj);
         else
-            nNewPageIndex = pDoc->DuplicatePage (pActualPage, ePageKind,
+            nNewPageIndex = GetDoc()->DuplicatePage (pActualPage, ePageKind,
                 aStandardPageName, aNotesPageName,
                 eStandardLayout, eNotesLayout,
                 bIsPageBack, bIsPageObj);
 
-        pDrView->AddUndo (new SdrUndoNewPage (*pDoc->GetSdPage (nNewPageIndex, PK_STANDARD)));
-        pDrView->AddUndo (new SdrUndoNewPage (*pDoc->GetSdPage (nNewPageIndex, PK_NOTES)));
+        pDrView->AddUndo (new SdrUndoNewPage (*GetDoc()->GetSdPage (nNewPageIndex, PK_STANDARD)));
+        pDrView->AddUndo (new SdrUndoNewPage (*GetDoc()->GetSdPage (nNewPageIndex, PK_NOTES)));
 
         pDrView->EndUndo();
 
@@ -1339,11 +1364,11 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
 
         SdPage* pPage;
         String aPageName;
-        USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+        USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
 
         for (USHORT i = 0; i < nPageCnt; i++)
         {
-            pPage = pDoc->GetSdPage(i, ePageKind);
+            pPage = GetDoc()->GetSdPage(i, ePageKind);
 
             aPageName = pPage->GetName();
             aTabControl.InsertPage(i + 1, aPageName);
@@ -1362,3 +1387,5 @@ void SdDrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
         GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
     rReq.Done ();
 }
+
+} // end of namespace sd
