@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-05 15:49:05 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,8 +1410,7 @@ inline FASTBOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
 
 void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
 {
-    const Color& rColor = pSh->GetWin()->GetSettings().
-                          GetStyleSettings().GetFieldTextColor();
+    const Color& rColor = SwViewOption::GetFontColor();
     Color aFill( pSh->GetOut()->GetFillColor() );
     Color aLine( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetFillColor( Color( COL_TRANSPARENT ) );
@@ -2908,8 +2907,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
         pOut->SetDrawMode( 0 );
-        aShadowColor = pGlobalShell->GetWin()->GetSettings().
-                       GetStyleSettings().GetWindowTextColor();
+        aShadowColor = SwViewOption::GetFontColor();
     }
 
     if ( pOut->GetFillColor() != aShadowColor )
@@ -2965,8 +2963,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     if( pColor && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings()
-                                                       .GetWindowTextColor();
+        pColor = &SwViewOption::GetFontColor();
     }
 
     if ( pPage->GetSortedObjs() )
