@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 09:58:13 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 12:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include "svdocapt.hxx" // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
 #include <svdetc.hxx>
 #include "writingmodeitem.hxx"
+#include "editeng.hxx"
+#include "eeitem.hxx"
+#include "flditem.hxx"
+
 
 #ifndef _MyEDITVIEW_HXX
 #include "editview.hxx"
@@ -198,9 +202,18 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
         rOutliner.SetText(*pOutlinerParaObject);
         USHORT nParaCount=(USHORT)rOutliner.GetParagraphCount();
-        if (nParaCount!=0) {
+        if (nParaCount!=0)
+        {
+            SfxItemSet* pTempSet;
             for (USHORT nPara=0; nPara<nParaCount; nPara++)
             {
+                // since setting the stylesheet removes all para attributes
+                if( bDontRemoveHardAttr )
+                {
+                    // we need to remember them if we want to keep them
+                    pTempSet = new SfxItemSet( rOutliner.GetParaAttribs( nPara ) );
+                }
+
                 if ( GetStyleSheet() )
                 {
                     if( eTextKind == OBJ_OUTLINETEXT && GetObjInventor() == SdrInventor )
@@ -221,21 +234,31 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
                 else
                     rOutliner.SetStyleSheet( nPara, NULL ); // StyleSheet entfernen
 
-                if (!bDontRemoveHardAttr && pNewStyleSheet!=NULL) {
-                    // Harte Absatz-Attributierung aller im
-                    // StyleSheet vorhandenen Items entfernen
-                    // -> Parents beruecksichtigen !!!
-                    SfxItemIter aIter(pNewStyleSheet->GetItemSet());
-                    const SfxPoolItem* pItem=aIter.FirstItem();
-                    while (pItem!=NULL) {
-                        if (!IsInvalidItem(pItem)) {
-                            USHORT nW=pItem->Which();
-                            if (nW>=EE_ITEMS_START && nW<=EE_ITEMS_END) {
-                                // gibts noch nicht, baut Malte aber ein:
-                                rOutliner.QuickRemoveCharAttribs(nPara,nW);
+                if( bDontRemoveHardAttr )
+                {
+                    // restore para attributes
+                    rOutliner.SetParaAttribs( nPara, *pTempSet );
+                    delete pTempSet;
+                }
+                else
+                {
+                    if(pNewStyleSheet!=NULL)
+                    {
+                        // Harte Absatz-Attributierung aller im
+                        // StyleSheet vorhandenen Items entfernen
+                        // -> Parents beruecksichtigen !!!
+                        SfxItemIter aIter(pNewStyleSheet->GetItemSet());
+                        const SfxPoolItem* pItem=aIter.FirstItem();
+                        while (pItem!=NULL) {
+                            if (!IsInvalidItem(pItem)) {
+                                USHORT nW=pItem->Which();
+                                if (nW>=EE_ITEMS_START && nW<=EE_ITEMS_END) {
+                                    // gibts noch nicht, baut Malte aber ein:
+                                    rOutliner.QuickRemoveCharAttribs(nPara,nW);
+                                }
                             }
+                            pItem=aIter.NextItem();
                         }
-                        pItem=aIter.NextItem();
                     }
                 }
             }
@@ -357,8 +380,91 @@ void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( nPara );
                 if( pSheet && ( !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO ) )
                 {
-                    SfxItemSet aSet( pSheet->GetItemSet() );
-                    aSet.Put( pOutliner->GetParaAttribs( nPara ), FALSE );
+                    SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
+
+                    SfxItemSet aSet( *aParaSet.GetPool() );
+                    aSet.Put( pSheet->GetItemSet() );
+
+                    /** the next code handles a special case for paragraphs that contain a
+                        url field. The color for URL fields is either the system color for
+                        urls or the char color attribute that formats the portion in which the
+                        url field is contained.
+                        When we set a char color attribute to the paragraphs item set from the
+                        styles item set, we would have this char color attribute as an attribute
+                        that is spanned over the complete paragraph after xml import due to some
+                        problems in the xml import (using a XCursor on import so it does not know
+                        the paragraphs and can't set char attributes to paragraphs ).
+
+                        To avoid this, as soon as we try to set a char color attribute from the style
+                        we
+                        1. check if we have at least one url field in this paragraph
+                        2. if we found at least one url field, we span the char color attribute over
+                           all portions that are not url fields and remove the char color attribute
+                           from the paragraphs item set
+                    */
+
+                    bool bHasURL = false;
+                    if( SFX_ITEM_SET == aSet.GetItemState(EE_CHAR_COLOR) )
+                    {
+
+                        EditEngine* pEditEngine = const_cast<EditEngine*>( &(pOutliner->GetEditEngine()) );
+
+                        EECharAttribArray aAttribs;
+                        pEditEngine->GetCharAttribs( nPara, aAttribs );
+                        USHORT nAttrib;
+
+                        for( nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+                        {
+                            struct EECharAttrib aAttrib(aAttribs.GetObject( nAttrib ));
+                            if( aAttrib.pAttr->Which() == EE_FEATURE_FIELD )
+                            {
+                                if( aAttrib.pAttr )
+                                {
+                                    SvxFieldItem* pFieldItem = (SvxFieldItem*)aAttrib.pAttr;
+                                    if( pFieldItem )
+                                    {
+                                        const SvxFieldData* pData = pFieldItem->GetField();
+                                        if( pData && pData->ISA( SvxURLField ) )
+                                        {
+                                            bHasURL = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if( bHasURL )
+                        {
+                            SfxItemSet aColorSet( *aSet.GetPool(), EE_CHAR_COLOR, EE_CHAR_COLOR );
+                            aColorSet.Put( aSet, FALSE );
+
+                            ESelection aSel( nPara, 0 );
+                            for( nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+                            {
+                                struct EECharAttrib aAttrib(aAttribs.GetObject( nAttrib ));
+                                if( aAttrib.pAttr->Which() == EE_FEATURE_FIELD )
+                                {
+                                    aSel.nEndPos = aAttrib.nStart;
+                                    if( aSel.nStartPos != aSel.nEndPos )
+                                        pEditEngine->QuickSetAttribs( aColorSet, aSel );
+
+                                    aSel.nStartPos = aAttrib.nEnd;
+                                }
+                            }
+                            aSel.nEndPos = pEditEngine->GetTextLen( nPara );
+                            if( aSel.nStartPos != aSel.nEndPos )
+                                pEditEngine->QuickSetAttribs( aColorSet, aSel );
+                        }
+
+                    }
+
+                    aSet.Put( aParaSet, FALSE );
+
+                    if( bHasURL )
+                        aSet.ClearItem( EE_CHAR_COLOR );
+
                     pOutliner->SetParaAttribs( nPara, aSet );
                     bBurnIn = TRUE;
                 }
