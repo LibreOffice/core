@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-13 15:39:15 $
+ *  last change: $Author: jsc $ $Date: 2001-02-19 16:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <string.h>
 
 #include <vector>
+
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 #include <cppuhelper/servicefactory.hxx>
 
@@ -164,7 +168,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         if (i < ac - 1 && av[i+1][0] != '-')
                         {
                             i++;
-                            rOptions.sRegName = OUString::createFromAscii(av[i]);
+                            rOptions.sRegName = OStringToOUString(av[i], osl_getThreadTextEncoding());
                         } else
                         {
                             OString tmp("'-r', please check");
@@ -176,7 +180,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         }
                     } else
                     {
-                        rOptions.sRegName = OUString::createFromAscii(av[i]+2);
+                        rOptions.sRegName = OStringToOUString(av[i]+2, osl_getThreadTextEncoding());
                     }
                     break;
                 case 'b':
@@ -190,7 +194,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         if (i < ac - 1 && av[i+1][0] != '-')
                         {
                             i++;
-                            rOptions.sBootRegName = OUString::createFromAscii(av[i]);
+                            rOptions.sBootRegName = OStringToOUString(av[i], osl_getThreadTextEncoding());
                         } else
                         {
                             OString tmp("'-br', please check");
@@ -202,7 +206,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         }
                     } else
                     {
-                        rOptions.sBootRegName = OUString::createFromAscii(av[i]+3);
+                        rOptions.sBootRegName = OStringToOUString(av[i]+3, osl_getThreadTextEncoding());
                     }
                     break;
                 case 'c':
@@ -213,7 +217,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         if (i < ac - 1 && av[i+1][0] != '-')
                         {
                             i++;
-                            sUrls = OUString::createFromAscii(av[i]);
+                            sUrls = OStringToOUString(av[i], osl_getThreadTextEncoding());
                         } else
                         {
                             OString tmp("'-c', please check");
@@ -225,12 +229,12 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         }
                     } else
                     {
-                        sUrls = OUString::createFromAscii(av[i]+2);
+                        sUrls = OStringToOUString(av[i]+2, osl_getThreadTextEncoding());
                     }
 
                     if (rOptions.sComponentUrls.getLength())
                     {
-                        OUString tmp(rOptions.sComponentUrls + OUString(RTL_CONSTASCII_USTRINGPARAM(";")) + sUrls);
+                        OUString tmp(rOptions.sComponentUrls + OUString(";", 1, osl_getThreadTextEncoding()) + sUrls);
                         rOptions.sComponentUrls = tmp;
                     } else
                     {
@@ -343,7 +347,7 @@ DoIt::DoIt(sal_Bool bRegister,
 
 void DoIt::operator() (const OUString & url) throw()
 {
-    OString sUrl = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
+    OString sUrl = OUStringToOString(url, osl_getThreadTextEncoding());
 
     if (_bRegister)
     {
@@ -381,7 +385,7 @@ void DoIt::operator() (const OUString & url) throw()
         }
         catch( CannotRegisterImplementationException& e )
         {
-            OString aMessage( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
+            OString aMessage( OUStringToOString(e.Message, osl_getThreadTextEncoding()) );
             fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
             fprintf(stderr, "\nERROR: %s\n", aMessage.getStr() );
 
@@ -431,7 +435,7 @@ void _cdecl main( int argc, char * argv[] )
         fprintf(stderr, "ERROR: create ServiceManager failed!\n");
         if ( e.Message.getLength() )
         {
-            fprintf(stderr, "ERROR description: %s\n", OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+            fprintf(stderr, "ERROR description: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         }
         exit(1);
     }
@@ -439,14 +443,14 @@ void _cdecl main( int argc, char * argv[] )
     OString     sRegName;
     if ( aOptions.sRegName.getLength() )
     {
-        sRegName = OUStringToOString(aOptions.sRegName, RTL_TEXTENCODING_ASCII_US);
+        sRegName = OUStringToOString(aOptions.sRegName, osl_getThreadTextEncoding());
     } else
     {
-        sRegName = OUStringToOString(aOptions.sBootRegName, RTL_TEXTENCODING_ASCII_US);
+        sRegName = OUStringToOString(aOptions.sBootRegName, osl_getThreadTextEncoding());
     }
 
 
-    OString tmp = OUStringToOString(aOptions.sComponentUrls, RTL_TEXTENCODING_ASCII_US);
+    OString tmp = OUStringToOString(aOptions.sComponentUrls, osl_getThreadTextEncoding());
     OSL_TRACE("regcomp - aOptions.sComponentUrls: %s", tmp.getStr());
 
 
@@ -456,7 +460,7 @@ void _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    if ( !sRegName.equals(OUStringToOString(aOptions.sBootRegName, RTL_TEXTENCODING_ASCII_US)) )
+    if ( !sRegName.equals(OUStringToOString(aOptions.sBootRegName, osl_getThreadTextEncoding())) )
     {
         xReg = Reference< XSimpleRegistry >( xSMgr->createInstance(rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
 
