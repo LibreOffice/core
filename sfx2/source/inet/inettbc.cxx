@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-08 10:15:01 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 13:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <vos/mutex.hxx>
 #endif
 
+#include <svtools/itemset.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -728,27 +729,27 @@ void SfxURLBox::OpenURL( const String& rName, BOOL bNew ) const
     if ( !aName.Len() )
         return;
 
-    SfxStringItem aUrl( SID_FILE_NAME, aName );
-    SfxViewFrame *pViewFrame = bNew ? 0 : SfxViewFrame::Current();
+    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
+    DBG_ASSERT( pViewFrame, "No ViewFrame ?!" );
     if ( pViewFrame )
-        pViewFrame = pViewFrame->GetTopViewFrame();
-    SfxFrameItem aView( SID_DOCFRAME , pViewFrame ? pViewFrame->GetFrame() : 0 );
-    SfxBoolItem aBrowsing( SID_BROWSING, TRUE );
-    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_USER) );
-    SfxStringItem aFilterItem( SID_FILTER_NAME, aFilter );
-    SfxStringItem aOptionItem( SID_FILE_FILTEROPTIONS, aOptions );
-
-    const SfxPoolItem* pFilterItem = NULL;
-    const SfxPoolItem* pOptionItem = NULL;
-
-    if ( aFilter.Len() )
     {
-        pFilterItem = &aFilterItem;
-        pOptionItem = &aOptionItem;
-    }
+        pViewFrame = pViewFrame->GetTopViewFrame();
+        SfxAllItemSet aSet( pViewFrame->GetPool() );
+        aSet.Put( SfxStringItem( SID_FILE_NAME, aName ) );
+        aSet.Put( SfxFrameItem( SID_DOCFRAME , pViewFrame ? pViewFrame->GetFrame() : 0 ) );
+        aSet.Put( SfxBoolItem( SID_BROWSING, TRUE ) );
+        aSet.Put( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_USER) ) );
+        if ( bNew )
+            aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
 
-    SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENURL, SFX_CALLMODE_RECORD, &aUrl, &aBrowsing, &aReferer, &aView,
-                pFilterItem, pOptionItem, 0L );
+        if ( aFilter.Len() )
+        {
+            aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilter ) );
+            aSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
+        }
+
+        SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENURL, SFX_CALLMODE_RECORD, aSet );
+    }
 }
 
 // **************************************************************************
