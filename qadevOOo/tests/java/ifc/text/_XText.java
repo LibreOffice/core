@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XText.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:18:33 $
+ *  last change:$Date: 2005-01-13 17:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.XInterface;
+import lib.StatusException;
 
 /**
  * Testing <code>com.sun.star.text.XText</code>
@@ -119,8 +120,9 @@ public class _XText extends MultiMethodTest {
             oObj.insertTextContent(oCursor, (XTextContent)oInt, false);
         }
         catch( com.sun.star.lang.IllegalArgumentException iaE ){
-            Status.failed(iaE.toString());
-            return;
+            throw new StatusException("Couldn't insert textcontent",iaE);
+            //Status.failed(iaE.toString());
+            //return;
         }
 
         // get indexaccess to the tablecollection
