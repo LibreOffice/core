@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.54 2001-05-28 13:19:14 cl Exp $
+	$Id: drawing.mod,v 1.55 2001-06-01 13:24:17 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -61,7 +61,7 @@
 <!ENTITY % draw-size "svg:width %coordinate; #IMPLIED svg:height %coordinate; #IMPLIED">
 <!ENTITY % draw-transform "svg:transform CDATA #IMPLIED">
 <!ENTITY % draw-viewbox "svg:viewBox CDATA #REQUIRED">
-<!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED">
+<!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED draw:text-style-name %styleName; #IMPLIED">
 <!ENTITY % shapeId "CDATA" >
 <!ENTITY % draw-text "(text:p|text:unordered-list|text:ordered-list)*">
 <!ENTITY % zindex "draw:z-index %nonNegativeInteger; #IMPLIED">
