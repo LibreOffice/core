@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ void SwHTMLParser::InsertEmbed()
     // die URL aufbereiten
     INetURLObject aURLObj;
     bool bHasURL = aURL.Len() &&
-                   !aURLObj.SetURL( INetURLObject::RelToAbs(aURL) );
+                   aURLObj.SetURL( INetURLObject::RelToAbs(aURL) );
 
     // #109761# do not insert plugin if it has neither URL nor type
     bool bHasType = aType.Len() != 0;
@@ -1145,10 +1145,10 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         String aURL;
         if( pPlugin->GetURL() != NULL )
         {
-            INetURLObject::AbsToRel(
-                    pPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ),
-                    INetURLObject::WAS_ENCODED,
-                    INetURLObject::DECODE_UNAMBIGUOUS);
+            aURL = INetURLObject::AbsToRel(
+                      pPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ),
+                      INetURLObject::WAS_ENCODED,
+                      INetURLObject::DECODE_UNAMBIGUOUS);
         }
 
         if( aURL.Len() )
