@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                     while (pPara)
                     {
                         ULONG nParaPos = pOutliner->GetAbsPos( pPara );
-                        USHORT nDepth = pOutliner->GetDepth( nParaPos );
+                        USHORT nDepth = pOutliner->GetDepth( (USHORT) nParaPos );
                         String aName(pPage->GetLayoutName());
                         aName += (sal_Unicode)(' ');
                         aName += String::CreateFromInt32( (sal_Int32)nDepth );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,9 +397,9 @@ void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
             }
 
             ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
-                SetColor( Color( (USHORT) ( nRed / fDiv + .5 ),
-                                 (USHORT) ( nGreen / fDiv + .5 ),
-                                 (USHORT) ( nBlue / fDiv + .5 ) ) );
+                SetColor( Color( (BYTE) ( nRed / fDiv + .5 ),
+                                 (BYTE) ( nGreen / fDiv + .5 ),
+                                 (BYTE) ( nBlue / fDiv + .5 ) ) );
         }
     }
 }

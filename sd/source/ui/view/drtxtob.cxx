@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-06 07:26:52 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     while (pPara)
                     {
-                        USHORT nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+                        USHORT nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
                         if (nDepth > nMinDepth)
                         {

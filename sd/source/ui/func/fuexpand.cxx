@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:20:50 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE, FALSE);
-                    pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( nParaPos, 1));
+                    pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, 1));
                     pTextObj->SetEmptyPresObj(FALSE);
 
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
@@ -227,7 +227,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE, FALSE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
-                        pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( nParaPos, nChildCount) );
+                        pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount) );
                         pTextObj->SetEmptyPresObj(FALSE);
 
                         // Harte Attribute entfernen (Flag auf TRUE)

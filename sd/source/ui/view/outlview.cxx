@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-21 15:27:11 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,46 +367,6 @@ void SdOutlineView::DelWin(SdWindow* pWin)
 
     SdView::DelWin(pWin);
 }
-
-/*************************************************************************
-|*
-|* QueryDrop()
-|*
-\************************************************************************/
-
-BOOL SdOutlineView::QueryDrop(DropEvent& rDEvt, SdWindow* pWindow,
-                              USHORT nPage, USHORT nLayer)
-{
-    BOOL bResult          = FALSE;
-    OutlinerView* pOlView = GetViewByWindow(pWindow);
-    if (pOlView)
-    {
-        bResult = pOlView->QueryDrop(rDEvt);
-    }
-    return bResult;
-}
-
-/*************************************************************************
-|*
-|* Drop()
-|*
-\************************************************************************/
-
-BOOL SdOutlineView::Drop(const DropEvent& rDEvt, SdWindow* pWindow,
-                         USHORT nPage, USHORT nLayer)
-{
-    BOOL bResult          = FALSE;
-    OutlinerView* pOlView = GetViewByWindow(pWindow);
-    if (pOlView)
-    {
-        bResult = pOlView->Drop(rDEvt);
-    }
-
-    ( pOutlineViewShell ? pOutlineViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Invalidate( SidArray );
-
-    return bResult;
-}
-
 
 /*************************************************************************
 |*
@@ -2005,5 +1965,36 @@ void SdOutlineView::ResetLinks() const
     pOutliner->SetMinDepth(0);
 }
 
+/*************************************************************************
+|*
+|* AcceptDrop
+|*
+\************************************************************************/
 
+sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    return DND_ACTION_NONE;
+/*!!!DND
+    OutlinerView* pOlView = GetViewByWindow( pWin );
+    return( pOlView ? pOlView->AcceptDrop( nDropAction, rPointerPos, nDnDSourceActions, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+*/
+}
 
+/*************************************************************************
+|*
+|* ExecuteDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdOutlineView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    return DND_ACTION_NONE;
+/*!!!DND
+    OutlinerView*   pOlView = GetViewByWindow( pWin );
+    sal_Int8        nRet = ( pOlView ? pOlView->ExecuteDrop( nDropAction, rPointerPos, nDnDSourceActions, rxTransferable, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+
+    ( pOutlineViewShell ? pOutlineViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Invalidate( SidArray );
+
+    return nRet;
+*/
+}

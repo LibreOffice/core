@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-02 14:40:03 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@
 #ifndef SVX_LIGHT
 #include "../ui/inc/docshell.hxx"
 #include "../ui/inc/grdocsh.hxx"
-#include "../ui/inc/dragserv.hxx"
 #include "../ui/inc/sdxfer.hxx"
 #include "../ui/inc/viewshel.hxx"
 #include "../ui/inc/grdocsh.hxx"
@@ -188,7 +187,6 @@
 #include "docshell.hxx"
 #include "grdocsh.hxx"
 #include "sdresid.hxx"
-#include "dragserv.hxx"
 #include "sdxfer.hxx"
 #include "viewshel.hxx"
 #include "grdocsh.hxx"
@@ -600,7 +598,7 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
         SvEmbeddedObject*   pObj = NULL;
         SdDrawDocShell*     pNewDocSh = NULL;
-        SdDataObject*       pTransferDrag = (SdDataObject*) SD_MOD()->pDragData;
+        SdTransferable*     pTransferDrag = SD_MOD()->pTransferDrag;
         SdTransferable*     pTransferClip = SD_MOD()->pTransferClip;
 
         if( pTransferDrag )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:24:52 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,8 +1297,8 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
 
         if (!pMaster)
         {
-            pMaster = (SdPage*) GetMasterSdPage( nMPage, PK_STANDARD );
-            pNotesMaster = (SdPage*) GetMasterSdPage( nMPage, PK_NOTES );
+            pMaster = (SdPage*) GetMasterSdPage( (USHORT) nMPage, PK_STANDARD );
+            pNotesMaster = (SdPage*) GetMasterSdPage( (USHORT) nMPage, PK_NOTES );
         }
         else
         {

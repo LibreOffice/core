@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-06 16:57:00 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,10 +829,12 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
             ePageKind = PK_NOTES;
         }
 
+#if SUPD >= 624
         SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
         pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
         pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
         pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+#endif
 
 /// Neu
         // Ausgabequalitaet setzen

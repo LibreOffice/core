@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:12:15 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,51 +907,6 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-
-
-/*************************************************************************
-|*
-|* QueryDrop-Event
-|*
-\************************************************************************/
-
-BOOL SdViewShell::QueryDrop(DropEvent& rEvt, SdWindow* pWin,
-                            USHORT nPage, USHORT nLayer)
-{
-    BOOL bReturn = FALSE;
-
-    SdView* pView = GetView();
-
-    if (pView)
-    {
-        bReturn = pView->QueryDrop(rEvt, pWin, nPage, nLayer);
-    }
-
-    return (bReturn);
-}
-
-/*************************************************************************
-|*
-|* Drop-Event
-|*
-\************************************************************************/
-
-BOOL SdViewShell::Drop(const DropEvent& rEvt, SdWindow* pWin,
-                       USHORT nPage, USHORT nLayer)
-{
-    BOOL bReturn = FALSE;
-
-    SdView* pView = GetView();
-
-    if (pView)
-    {
-        bReturn = pView->Drop(rEvt, pWin, nPage, nLayer);
-    }
-
-    return (bReturn);
-}
-
-
 /*************************************************************************
 |*
 |* Zoom-Faktor fuer InPlace einstellen
@@ -1352,10 +1307,30 @@ void SdViewShell::SetRuler(BOOL bRuler)
     InvalidateBorder();
 }
 
+/*************************************************************************
+|*
+|* AcceptDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    SdView* pView = GetView();
+    return( pView ? pView->AcceptDrop( rEvt, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+}
+
+/*************************************************************************
+|*
+|* ExecuteDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    SdView* pView = GetView();
+    return( pView ? pView->ExecuteDrop( rEvt, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+}
 
 #ifdef WNT
 #pragma optimize ( "", on )
 #endif
-
-
-

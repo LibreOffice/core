@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-20 15:09:56 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 // fit rectangle of graphic-object to  mark-rect
                 Rectangle aAllMarkedRect;
                 SdrMarkList aMarkList = pDrView->GetMarkList();
-                for (int i=0; i<aMarkList.GetMarkCount(); i++)
+                for (int i=0; i < (int) aMarkList.GetMarkCount(); i++)
                 {
                     aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetObj()->GetBoundRect() );
                 }

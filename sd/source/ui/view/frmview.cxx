@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc)
         nSlidesPerRow = pFrameView->GetSlidesPerRow();
         nDrawMode = pFrameView->GetDrawMode();
         nPreviewDrawMode = pFrameView->GetPreviewDrawMode();
-        bShowPreviewInPageMode = pFrameView->IsShowPreviewInPageMode();
-        bShowPreviewInMasterPageMode = pFrameView->IsShowPreviewInMasterPageMode();
-        bShowPreviewInOutlineMode = pFrameView->IsShowPreviewInOutlineMode();
+        bShowPreviewInPageMode = pFrameView->IsShowPreviewInPageMode() != 0;
+        bShowPreviewInMasterPageMode = pFrameView->IsShowPreviewInMasterPageMode() != 0;
+        bShowPreviewInOutlineMode = pFrameView->IsShowPreviewInOutlineMode() != 0;
     }
     else
     {

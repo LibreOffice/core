@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:34:36 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,7 +1330,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         BOOL bFoundNoGraphicObj = FALSE;
         BOOL bFoundAny            = FALSE;
 
-        for (int i=0; i<aMarkList.GetMarkCount() && !bFoundAny; i++)
+        for (int i=0; i < (int) aMarkList.GetMarkCount() && !bFoundAny; i++)
         {
             SdrObject* pObj=  aMarkList.GetMark(i)->GetObj();
             UINT16 nId = pObj->GetObjIdentifier();

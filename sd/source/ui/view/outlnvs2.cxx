@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-13 09:57:09 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             ULONG nParaCount = pOutl->GetParagraphCount();
             if (nParaCount > 0)
             {
-                pOutlinerView->SelectRange(0L, nParaCount);
+                pOutlinerView->SelectRange( 0, (USHORT) nParaCount );
             }
             Cancel();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,395 +59,457 @@
  *
  ************************************************************************/
 
-class SbxArray;
-
 #pragma hdrstop
 
-#include <tools/ref.hxx>
+#if defined (WIN) || defined (WNT)
+#include <tools/svwin.h>
+#endif
 
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
+#endif
+
+#ifndef _SFX_DOCFILT_HACK_HXX //autogen
+#include <sfx2/docfilt.hxx>
+#endif
+
+#ifndef _SFX_FCONTNR_HXX //autogen
+#include <sfx2/fcontnr.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFX_CHILDWIN_HXX //autogen
-#include <sfx2/childwin.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
-#include <svtools/urlbmk.hxx>
-#endif
-#ifndef _OUTLINER_HXX //autogen
-#include <svx/outliner.hxx>
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
+#ifndef _SVX_FILLITEM_HXX //autogen
+#include <svx/xfillit.hxx>
+#endif
+#ifndef _SVDUNDO_HXX //autogen
+#include <svx/svdundo.hxx>
+#endif
+#ifndef _XOUTBMP_HXX //autogen
+#include <svx/xoutbmp.hxx>
+#endif
+#ifndef _SVDOGRAF_HXX
+#include <svx/svdograf.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
+#endif
+#ifndef _IMPGRF_HXX
+#include <svx/impgrf.hxx>
+#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _SOT_SOTREF_HXX //autogen
-#include <sot/sotref.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
+#ifndef _URLBMK_HXX //autogen
+#include <svtools/urlbmk.hxx>
 #endif
 
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
 
 #include "app.hrc"
-#include "strings.hrc"
-
-#include "sdview.hxx"
-#include "sdmod.hxx"
-#include "drviewsh.hxx"
-#include "navigatr.hxx"
-#include "docshell.hxx"
 #include "sdwindow.hxx"
-#include "sdpage.hxx"
+#include "docshell.hxx"
+#include "drviewsh.hxx"
+#include "graphpro.hxx"
+#include "fuinsfil.hxx"
 #include "drawdoc.hxx"
-#include "anminfo.hxx"
-#include "fupoor.hxx"
-#include "unoaprms.hxx"
+#include "sdresid.hxx"
+#include "strings.hrc"
+#include "imapinfo.hxx"
+#include "sdpage.hxx"
+#include "sdview.hxx"
+#include "slidview.hxx"
 
-using namespace ::com::sun::star;
+/*************************************************************************
+|*
+|* Paste
+|*
+\************************************************************************/
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
+#ifdef WNT
+#pragma optimize ( "", off )
 #endif
 
 /*************************************************************************
 |*
-|* Drop-Event
+|* Graphik einfuegen
+|* Wird ein leeres Graphikobjekt uebergeben, so wird dieses gefuellt.
+|* Andernfalls wird ein an der gegebenen Position vorhandenes Objekt
+|* gefuellt. Ist an der Position kein Objekt vorhanden, so wird ein neues
+|* Objekt erzeugt und ein Pointer auf dieses Objekt zurueckgegeben.
 |*
 \************************************************************************/
 
-BOOL __EXPORT SdView::Drop(const DropEvent& rMEvt, SdWindow* pWin,
-                           USHORT nPage, USHORT nLayer)
+SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
+                                   const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
-    if (pDropMarker)
+    EndTextEdit();
+    nAction = rAction;
+
+    // Liegt ein Objekt an der Position rPos?
+    SdrGrafObj*     pNewGrafObj = NULL;
+    SdrPageView*    pPV = GetPageViewPvNum(0);
+    SdrObject*      pPickObj = pObj;
+
+    if( this->ISA( SdSlideView ) )
+        pPV = HitPage( rPos );
+
+    if( !pPickObj && pPV )
     {
-        pDropMarker->Hide();
-        delete pDropMarker;
-        pDropMarker = NULL;
-        pDropMarkerObj = NULL;
+        SdrPageView* pPageView = pPV;
+        PickObj(rPos, pPickObj, pPageView);
     }
 
-    SdrPageView*    pPV = GetPageViewPvNum(0);
-    String          aActiveLayer = GetActiveLayer();
-    BOOL            bReturn = FALSE;
-
-    if (!pPV->IsLayerLocked(aActiveLayer))
+    if( nAction == DND_ACTION_LINK && pPickObj && pPV )
     {
-        /**********************************************************************
-        * Drop nur moeglich, wenn aktiver Layer nicht gesperrt ist
-        **********************************************************************/
-        const OutlinerView* pOLV = GetTextEditOutlinerView();
-        BOOL                bIsInsideOutlinerView = FALSE;
-
-        if (pOLV)
+        if( pPickObj->ISA( SdrGrafObj ) )
         {
-            Rectangle aRect( pOLV->GetOutputArea() );
+            // Das Objekt wird mit der Bitmap gefuellt
+            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+            pNewGrafObj->SetGraphic(rGraphic);
 
-            if (aMark.GetMarkCount() == 1)
+            if ( pNewGrafObj->IsEmptyPresObj() )
             {
-                SdrMark* pMark = aMark.GetMark(0);
-                SdrObject* pObj = pMark->GetObj();
-                aRect.Union( pObj->GetLogicRect() );
+                Rectangle aRect( pNewGrafObj->GetLogicRect() );
+                pNewGrafObj->AdjustToMaxRect( aRect, FALSE );
+                pNewGrafObj->SetOutlinerParaObject(NULL);
+                pNewGrafObj->SetEmptyPresObj(FALSE);
             }
 
-            Point aPos = pOLV->GetWindow()->PixelToLogic( rMEvt.GetPosPixel() );
+            SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
-            if ( aRect.IsInside(aPos) )
+            if (pPage && pPage->GetPresObjKind(pPickObj) == PRESOBJ_GRAPHIC)
             {
-                bIsInsideOutlinerView = TRUE;
-                bReturn = ( (OutlinerView*) pOLV)->Drop(rMEvt);
+                // Neues PresObj in die Liste eintragen
+                pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
+                pPage->GetPresObjList()->Remove(pPickObj);
+                pPage->GetPresObjList()->Insert(pNewGrafObj, LIST_APPEND);
             }
+
+            if (pImageMap)
+                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            ReplaceObject(pPickObj, *pPV, pNewGrafObj);
+            EndUndo();
+        }
+        else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
+        {
+            /******************************************************************
+            * Das Objekt wird mit der Graphik gefuellt
+            ******************************************************************/
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            AddUndo(new SdrUndoAttrObj(*pPickObj));
+            EndUndo();
+
+            XOBitmap aXOBitmap( rGraphic.GetBitmap() );
+            SfxItemSet aSet(pDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+            aSet.Put(XFillStyleItem(XFILL_BITMAP));
+            aSet.Put(XFillBitmapItem(&pDocSh->GetPool(), aXOBitmap));
+            pPickObj->SetItemSetAndBroadcast(aSet);
+        }
+    }
+    else if ( pPV )
+    {
+        // create  new object
+        Size aSize;
+
+        if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+            aSize = pViewSh->GetActiveWindow()->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(),
+                                                rGraphic.GetPrefMapMode(),
+                                                MapMode( MAP_100TH_MM ) );
         }
 
-        if (!bReturn && !bIsInsideOutlinerView)
+        pNewGrafObj = new SdrGrafObj( rGraphic, Rectangle( rPos, aSize ) );
+        SdrPage* pPage = pPV->GetPage();
+        Size aPageSize( pPage->GetSize() );
+        aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
+        aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+        pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
+
+        ULONG   nOptions = SDRINSERT_SETDEFLAYER;
+        BOOL    bIsPresTarget = FALSE;
+
+        if ((pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive()) || this->ISA(SdSlideView))
+            nOptions |= SDRINSERT_DONTMARK;
+
+        if( ( nAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
         {
-            SvDataObjectRef     aDataObj;
-            Point               aPos;
-            SdDrawViewShell*    pDrViewSh = (SdDrawViewShell*) pDocSh->
-                                            GetViewShell();
-            SdrPage*            pPage = NULL;
+            SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
-            if (pWin)
-                aPos = pWin->PixelToLogic( rMEvt.GetPosPixel() );
+            if ( pPage && pPage->IsMasterPage() )
+                bIsPresTarget = pPage->GetPresObjList()->GetPos(pPickObj) != LIST_ENTRY_NOTFOUND;
+        }
 
-            aDataObj = (SvDataObject*) SD_MOD()->pDragData;
+        if( ( nAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
+        {
+            // replace object
+            if (pImageMap)
+                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            if ( !aDataObj.Is() )
-                aDataObj = SvDataObject::PasteDragServer(rMEvt);
+            Rectangle aPickObjRect(pPickObj->GetBoundRect());
+            Size aPickObjSize(aPickObjRect.GetSize());
+            Rectangle aObjRect(pNewGrafObj->GetBoundRect());
+            Size aObjSize(aObjRect.GetSize());
 
-            DropAction eAction = rMEvt.GetAction();
+            Fraction aScaleWidth(aPickObjSize.Width(), aObjSize.Width());
+            Fraction aScaleHeight(aPickObjSize.Height(), aObjSize.Height());
+            pNewGrafObj->NbcResize(aObjRect.TopLeft(), aScaleWidth, aScaleHeight);
 
-            if ( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) )
-                bReturn = InsertData(aDataObj, aPos, eAction, TRUE, 0, nPage, nLayer);
+            Point aVec = aPickObjRect.TopLeft() - aObjRect.TopLeft();
+            pNewGrafObj->NbcMove(Size(aVec.X(), aVec.Y()));
 
-            if (!bReturn && pViewSh)
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
+            SdrPage* pPage = pPV->GetPage();
+            pPage->InsertObject(pNewGrafObj);
+            AddUndo(new SdrUndoNewObj(*pNewGrafObj));
+            AddUndo(new SdrUndoDelObj(*pPickObj));
+            pPage->RemoveObject(pPickObj->GetOrdNum());
+            EndUndo();
+            nAction = DND_ACTION_COPY;
+        }
+        else
+        {
+            InsertObject(pNewGrafObj, *pPV, nOptions);
+
+            if( pImageMap )
+                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+        }
+    }
+
+    rAction = nAction;
+
+    return pNewGrafObj;
+}
+
+
+/*************************************************************************
+|*
+|* Timer-Handler fuer InsertFile beim Drop()
+|*
+\************************************************************************/
+
+IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
+{
+    BOOL bOK = FALSE;
+    const SfxFilter* pFilter = NULL;
+
+    SfxMedium aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+    ErrCode nErr = SFX_APP()->GetFilterMatcher().
+                              GuessFilter(aSfxMedium, &pFilter, SFX_FILTER_IMPORT,
+                                          SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+
+    if (pFilter && !nErr)
+    {
+        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        String          aFilterName( pFilter->GetFilterName() );
+        USHORT          nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
+
+        if (aFilterName.EqualsAscii( "Text" )               ||
+            aFilterName.EqualsAscii( "Rich Text Format" )   ||
+            aFilterName.EqualsAscii( "HTML" )               ||
+            aDropFile.ToLowerAscii().SearchAscii(".sdd") != STRING_NOTFOUND ||  //TODO: birnig!
+            aDropFile.ToLowerAscii().SearchAscii(".sda") != STRING_NOTFOUND )
+        {
+            /******************************************************************
+            * Eigenes Format, Text oder RTF
+            ******************************************************************/
+            bOK = TRUE;
+            SdWindow* pWin = pViewSh->GetActiveWindow();
+            SfxRequest aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
+            SfxStringItem aItem1(ID_VAL_DUMMY0, aDropFile);
+            SfxStringItem aItem2(ID_VAL_DUMMY1, pFilter->GetFilterName());
+            aReq.AppendItem (aItem1);
+            aReq.AppendItem (aItem2);
+            FuInsertFile* pFunc = new FuInsertFile(pViewSh, pWin, this,
+                                                   pDoc, aReq);
+            delete pFunc;
+        }
+        else if( nFormat != GRFILTER_FORMAT_DONTKNOW )
+        {
+            /******************************************************************
+            * Graphik-Format
+            ******************************************************************/
+            FilterProgress  aFilterProgress(pGraphicFilter, pViewSh->GetDocSh());
+            Graphic         aGraphic;
+
+            // keine native Tempdatei anlegen (DummyLink setzen)
+            aGraphic.SetLink( GfxLink() );
+
+            SvStream* pIStm = aSfxMedium.GetInStream();
+
+            if( pIStm && !pGraphicFilter->ImportGraphic( aGraphic, aDropFile, *pIStm, nFormat ) )
             {
-                if( !bReturn && pViewSh )
+                bOK = TRUE;
+
+                SdrGrafObj* pGrafObj = InsertGraphic(aGraphic, nAction, aDropPos, NULL, NULL);
+
+                if( pGrafObj )
+                    pGrafObj->SetGraphicLink( aDropFile, aFilterName );
+            }
+        }
+    }
+
+    if (!bOK)
+    {
+        String          aTmpStr;
+        INetBookmark    aINetBookmark(aTmpStr, aTmpStr);
+
+        if( ( nAction && DND_ACTION_LINK ) || !INetBookmark::DragServerHasFormat(0) || !aINetBookmark.PasteDragServer(0))
+        {
+            ((SdDrawViewShell*) pViewSh)->InsertURLButton(aDropFile, aDropFile, String(), &aDropPos);
+        }
+        else
+        {
+            /**********************************************************************
+            * Datei als OLE-Objekt einfuegen
+            **********************************************************************/
+            SvInPlaceObjectRef  aIPObj;
+            SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
+            String              aName;
+
+            if (pViewSh)
+            {
+#ifndef SO3
+                aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(aDropFile, aStor);
+#else
+                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(aDropFile, aStor);
+#endif
+                if ( aIPObj.Is() )
                 {
-                    /**************************************************************
-                    * URLs droppen
-                    **************************************************************/
-                    String aTmpString1;
-                    String aTmpString2;
-                    INetBookmark aINetBookmark(aTmpString1, aTmpString2);
-                    const USHORT nCount = DragServer::GetItemCount();
+                    Size        aSize(aIPObj->GetVisArea(ASPECT_CONTENT).GetSize());
+                    Rectangle   aRect;
 
-                    SdNavigatorWin* pNavWin = NULL;
-                    USHORT nId = SID_NAVIGATOR;
-
-                    if (pViewSh->GetViewFrame()->HasChildWindow(nId))
-                        pNavWin = (SdNavigatorWin*) (pViewSh->GetViewFrame()->GetChildWindow(nId)->GetContextWindow( SD_MOD() ));
-
-                    NavigatorDragType eDragType = NAVIGATOR_DRAGTYPE_NONE;
-
-                    if (pNavWin && pNavWin->GetDropDocSh())
+                    if (!aSize.Width() || !aSize.Height())
                     {
-                        eDragType = pNavWin->GetNavigatorDragType();
-                    }
+                        aSize.Width()   = 1410;
+                        aSize.Height()  = 1000;
 
-                    if (eDragType == NAVIGATOR_DRAGTYPE_LINK ||
-                        eDragType == NAVIGATOR_DRAGTYPE_EMBEDDED)
-                    {
-                        /**********************************************************
-                        * Als Objekt oder gelinktes Objekt
-                        **********************************************************/
-                        List aBookmarkList;
-                        String aBookmark;
-                        String aFile;
-
-                        for (USHORT i = 0; i < nCount; i++)
-                        {
-                            // Bookmark-Liste fuellen
-                            if (aINetBookmark.PasteDragServer(i))
-                            {
-                                if (i==0)
-                                {
-                                    aFile = aINetBookmark.GetURL().GetToken(0, '#');
-                                }
-
-                                aBookmark = aINetBookmark.GetURL().GetToken(1, '#');
-                                aBookmarkList.Insert(&aBookmark);
-                            }
-                        }
-
-                        SdPage* pPage = (SdPage*) GetPageViewPvNum(0)->GetPage();
-                        USHORT nPgPos = 0xFFFF;
-
-                        if (!pPage->IsMasterPage())
-                        {
-                            if (pPage->GetPageKind() == PK_STANDARD)
-                            {
-                                nPgPos = pPage->GetPageNum() + 2;
-                            }
-                            else if (pPage->GetPageKind() == PK_NOTES)
-                            {
-                                nPgPos = pPage->GetPageNum() + 1;
-                            }
-                        }
-
-                        BOOL bLink = eDragType == NAVIGATOR_DRAGTYPE_LINK ? TRUE : FALSE;
-                        BOOL bReplace = FALSE;
-
-                        // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
-                        // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
-                        // aufgenommen
-                        // bNameOK == FALSE -> Benutzer hat abgebrochen
-                        List* pExchangeList = NULL;
-                        BOOL bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
-
-                        // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt
-                        // handelt, wird eine Liste sowohl mit Seiten, als auch mit Objekten
-                        // gefuellt.
-                        // Sollten Seitennamen und Objektnamen identisch sein gibt es hier
-                        // natuerlich Probleme !!!
-
-                        if( bNameOK )
-                            bReturn = pDoc->InsertBookmark(&aBookmarkList, pExchangeList, bLink,
-                                        bReplace, nPgPos, FALSE, pNavWin->GetDropDocSh(),
-                                        TRUE, &aPos);
-
-                        // Loeschen der ExchangeList
-                        if( pExchangeList )
-                        {
-                            String* pString = (String*) pExchangeList->First();
-                            while( pString )
-                            {
-                                delete pString;
-                                pString = (String*) pExchangeList->Next();
-                            }
-                            delete pExchangeList;
-                        }
+                        aRect = Rectangle(aDropPos, aSize);
                     }
                     else
                     {
-                        /**********************************************************
-                        * Als URL
-                        **********************************************************/
-                        SdrObject* pPickObj = NULL;
-                        SdrPageView* pPV = NULL;
-                        SdWindow* pWindow = pViewSh->GetActiveWindow();
-                        USHORT nHitLog = USHORT(pWindow->PixelToLogic(Size(HITPIX,0)).Width());
-
-                        if (nCount == 1 && PickObj(aPos, pPickObj, pPV))
-                        {
-                            /******************************************************
-                            * URL dem getroffenen Objekt zuweisen (presentation::ClickAction)
-                            ******************************************************/
-                            aINetBookmark.PasteDragServer(0);
-
-                            String aBookmark(aINetBookmark.GetURL());
-
-                            if (aBookmark.Len())
-                            {
-                                presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
-                                String aDocName(aBookmark.GetToken(0, '#'));
-
-                                if (pDocSh->GetMedium()->GetName() == aDocName ||
-                                    pDocSh->GetName() == aDocName)
-                                {
-                                    // Interner Sprung -> nur "#Bookmark" verwenden
-                                    aBookmark = aBookmark.GetToken(1, '#');
-                                    eClickAction = presentation::ClickAction_BOOKMARK;
-                                }
-
-                                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pPickObj);
-
-                                BOOL bCreated = FALSE;
-                                if (!pInfo)
-                                {
-                                    pInfo = new SdAnimationInfo(pDoc);
-                                    pPickObj->InsertUserData(pInfo);
-                                    bCreated = TRUE;
-                                }
-
-                                // Undo-Action mit alten und neuen Groessen erzeugen
-                                SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                                                (pDoc, pPickObj, bCreated);
-                                pAction->SetActive(pInfo->bActive, pInfo->bActive);
-                                pAction->SetEffect(pInfo->eEffect, pInfo->eEffect);
-                                pAction->SetTextEffect(pInfo->eTextEffect, pInfo->eTextEffect);
-                                pAction->SetSpeed(pInfo->eSpeed, pInfo->eSpeed);
-                                pAction->SetDim(pInfo->bDimPrevious, pInfo->bDimPrevious);
-                                pAction->SetDimColor(pInfo->aDimColor, pInfo->aDimColor);
-                                pAction->SetDimHide(pInfo->bDimHide, pInfo->bDimHide);
-                                pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
-                                pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
-                                pAction->SetBlueScreen(pInfo->aBlueScreen, pInfo->aBlueScreen);
-                                pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
-                                pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
-                                pAction->SetClickAction(pInfo->eClickAction, eClickAction);
-                                pAction->SetBookmark(pInfo->aBookmark, aBookmark);
-                                pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
-                                pAction->SetVerb(pInfo->nVerb, pInfo->nVerb);
-                                pAction->SetSecondEffect(pInfo->eSecondEffect, pInfo->eSecondEffect);
-                                pAction->SetSecondSpeed(pInfo->eSecondSpeed, pInfo->eSecondSpeed);
-                                pAction->SetSecondSoundOn(pInfo->bSecondSoundOn, pInfo->bSecondSoundOn);
-                                pAction->SetSecondPlayFull(pInfo->bSecondPlayFull, pInfo->bSecondPlayFull);
-
-                                String aString(SdResId(STR_UNDO_ANIMATION));
-                                pAction->SetComment(aString);
-
-                                pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                                pInfo->eClickAction = eClickAction;
-                                pInfo->aBookmark = aBookmark;
-
-                                // Model geaendert
-                                pDoc->SetChanged();
-                            }
-                        }
-                        else if (pViewSh->ISA(SdDrawViewShell))
-                        {
-                            /******************************************************
-                            * URLs als Buttons einfuegen
-                            ******************************************************/
-                            for (USHORT i = 0; i < nCount; i++)
-                            {
-                                if (aINetBookmark.PasteDragServer(i))
-                                {
-                                    ((SdDrawViewShell*)pViewSh)->InsertURLButton(
-                                        aINetBookmark.GetURL(), aINetBookmark.GetDescription(),
-                                        String(), &aPos);
-                                    bReturn = TRUE;
-                                }
-                            }
-                        }
+                        aRect = Rectangle(aDropPos, aSize);
                     }
+
+                    aName = pDocSh->InsertObject(aIPObj, String())->GetObjName();
+
+                    SdrOle2Obj* pOleObj = new SdrOle2Obj(aIPObj, aName, aRect);
+
+                    ULONG nOptions = SDRINSERT_SETDEFLAYER;
+
+                    if (pViewSh && pViewSh->GetIPClient() &&
+                        pViewSh->GetIPClient()->IsInPlaceActive())
+                    {
+                        nOptions |= SDRINSERT_DONTMARK;
+                    }
+
+                    InsertObject(pOleObj, *GetPageViewPvNum(0), nOptions);
+
+                    pOleObj->SetLogicRect(aRect);
+                    aIPObj->SetVisAreaSize(aRect.GetSize());
                 }
             }
         }
     }
 
-    return bReturn;
+    return 0;
+}
+IMPL_LINK_INLINE_END( SdView, DropInsertFileHdl, Timer*, pTimer )
+
+
+/*************************************************************************
+|*
+|* Timer-Handler fuer Errorhandling beim Drop()
+|*
+\************************************************************************/
+
+IMPL_LINK_INLINE_START( SdView, DropErrorHdl, Timer*, pTimer )
+{
+    InfoBox( pViewSh->GetActiveWindow(),
+             String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+    return 0;
+}
+IMPL_LINK_INLINE_END( SdView, DropErrorHdl, Timer*, pTimer )
+
+
+#ifdef WNT
+#pragma optimize ( "", on )
+#endif
+
+/*************************************************************************
+|*
+|* Redraw sperren oder erlauben
+|*
+\************************************************************************/
+
+void SdView::LockRedraw(BOOL bLock)
+{
+    if (bLock)
+    {
+        nLockRedrawSmph++;
+        DBG_ASSERT(nLockRedrawSmph, "Ueberlauf im LockRedraw");
+    }
+    else
+    {
+        DBG_ASSERT(nLockRedrawSmph, "Unterlauf im LockRedraw");
+        nLockRedrawSmph--;
+
+        // alle gespeicherten Redraws ausfuehren
+        if (!nLockRedrawSmph)
+        {
+            while (pLockedRedraws && pLockedRedraws->Count())
+            {
+                SdViewRedrawRec* pRec = (SdViewRedrawRec*)pLockedRedraws->First();
+                OutputDevice* pCurrentOut = pRec->pOut;
+                Rectangle aBoundRect(pRec->aRect);
+                pLockedRedraws->Remove(pRec);
+                delete pRec;
+
+                pRec = (SdViewRedrawRec*)pLockedRedraws->First();
+                while (pRec)
+                {
+                    if (pRec->pOut == pCurrentOut)
+                    {
+                        aBoundRect.Union(pRec->aRect);
+                        pLockedRedraws->Remove(pRec);
+                        delete pRec;
+                        pRec = (SdViewRedrawRec*)pLockedRedraws->GetCurObject();
+                    }
+                    else
+                    {
+                        pRec = (SdViewRedrawRec*)pLockedRedraws->Next();
+                    }
+                }
+
+                InitRedraw(pCurrentOut, Region(aBoundRect));
+            }
+            delete pLockedRedraws;
+            pLockedRedraws = NULL;
+        }
+    }
 }
 
 /*************************************************************************
 |*
-|* Rueckgabeparameter:
-|* pExchangeList == NULL -> Namen sind alle eindeutig
-|* bNameOK == FALSE -> Benutzer hat abgebrochen
-|* nType == 0 -> Seiten
-|* nType == 1 -> Objekte
-|* nType == 2 -> Seiten + Objekte
+|* StyleSheet aus der Sleketion besorgen
 |*
 \************************************************************************/
 
-BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType )
+SfxStyleSheet* SdView::GetStyleSheet() const
 {
-    DBG_ASSERT( !rpExchangeList, "ExchangeList muss NULL sein!");
-
-    BOOL bListIdentical = TRUE; // BookmarkList und ExchangeList sind gleich
-    BOOL bNameOK = TRUE;        // Name ist eindeutig
-
-    rpExchangeList = new List();
-
-    if( pBookmarkList )
-    {
-        String* pString = (String*) pBookmarkList->First();
-        while( pString && bNameOK )
-        {
-            String* pNewName = new String( *pString );
-            if( nType == 0  || nType == 2 )
-                bNameOK = pDocSh->CheckPageName( pViewSh->GetWindow(), *pNewName );
-            if( bNameOK && (nType == 1  || nType == 2) )
-                bNameOK = pDocSh->CheckObjectName( pViewSh->GetWindow(), *pNewName );
-
-            if( bListIdentical )
-                bListIdentical = ( *pString == *pNewName );
-
-            rpExchangeList->Insert( pNewName, LIST_APPEND );
-            pString = (String*) pBookmarkList->Next();
-        }
-    }
-
-    // ExchangeList ist mit BookmarkList identisch
-    if( rpExchangeList && bListIdentical )
-    {
-        String* pString = (String*) rpExchangeList->First();
-        while( pString )
-        {
-            delete pString;
-            pString = (String*) rpExchangeList->Next();
-        }
-        delete rpExchangeList;
-        rpExchangeList = NULL;
-    }
-
-    return( bNameOK );
+    return SdrView::GetStyleSheet();
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-07 10:30:05 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         nUpper -= 100;
                         nUpper = (USHORT) Max( (long) nUpper, 0L );
                     }
-                    pNewItem->SetUpper( nUpper );
+                    pNewItem->SetUpper( (USHORT) nUpper );
 
                     USHORT nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
@@ -242,7 +242,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         nLower -= 100;
                         nLower = (USHORT) Max( (long) nLower, 0L );
                     }
-                    pNewItem->SetLower( nLower );
+                    pNewItem->SetLower( (USHORT) nLower );
 
                     SfxItemSet aNewAttrs( aAttr );
                     aNewAttrs.Put( *pNewItem );
@@ -272,7 +272,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         nUpper -= 100;
                         nUpper = (USHORT) Max( (long) nUpper, 0L );
                     }
-                    pNewItem->SetUpper( nUpper );
+                    pNewItem->SetUpper( (USHORT) nUpper );
 
                     USHORT nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
@@ -282,7 +282,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         nLower -= 100;
                         nLower = (USHORT) Max( (long) nLower, 0L );
                     }
-                    pNewItem->SetLower( nLower );
+                    pNewItem->SetLower( (USHORT) nLower );
 
                     aNewAttrs.Put( *pNewItem );
                     delete pNewItem;

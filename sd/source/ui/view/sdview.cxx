@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-08 10:03:41 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #pragma hdrstop
 
 #include "app.hrc"
+#include "strings.hrc"
 #include "sdwindow.hxx"
 #include "sdview.hxx"
 #include "sdclient.hxx"
@@ -121,8 +122,6 @@
 #include "fuslshow.hxx"
 #include "stlpool.hxx"
 #include "frmview.hxx"
-
-#include "strings.hrc"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -143,14 +142,13 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     pDoc(pDrawDoc),
     pDocSh( pDrawDoc->GetDocSh() ),
     pViewSh(pViewShell),
-    bDragActive (FALSE),
     pDragSrcMarkList(NULL),
     nDragSrcPgNum(SDRPAGE_NOTFOUND),
     pDropMarkerObj(NULL),
     pDropMarker(NULL),
     pLockedRedraws(NULL),
     nLockRedrawSmph(0),
-    eAction(DROP_NONE),
+    nAction(DND_ACTION_NONE),
     bIsDropAllowed(TRUE)
 {
     EnableExtendedKeyInputDispatcher(FALSE);
@@ -367,7 +365,7 @@ void SdView::SelectAll()
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
         const Outliner* pOutliner = GetTextEditOutliner();
-        pOLV->SelectRange( 0, pOutliner->GetParagraphCount() );
+        pOLV->SelectRange( 0, (USHORT) pOutliner->GetParagraphCount() );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:12:15 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,9 @@ void __EXPORT SdDrawViewShell::Activate(BOOL bIsMDIActivate)
         BOOL bPreview = FALSE;
 
         if (eEditMode == EM_PAGE)
-            bPreview = pFrameView->IsShowPreviewInPageMode();
+            bPreview = pFrameView->IsShowPreviewInPageMode() != 0;
         else
-            bPreview = pFrameView->IsShowPreviewInMasterPageMode();
+            bPreview = pFrameView->IsShowPreviewInMasterPageMode() != 0;
 
         SfxBoolItem aItem(SID_PREVIEW_WIN, bPreview);
         GetViewFrame()->GetDispatcher()->Execute(
@@ -411,54 +411,6 @@ IMPL_LINK( SdDrawViewShell, TabModeBtnHdl, Button *, pButton )
 
 /*************************************************************************
 |*
-|* QueryDrop-Event
-|*
-\************************************************************************/
-
-BOOL SdDrawViewShell::QueryDrop(DropEvent& rEvt, SdWindow* pWin,
-                                USHORT nPage, USHORT nLayer)
-{
-    if (nPage != SDRPAGE_NOTFOUND)
-    {
-        SdPage* pPage = pDoc->GetSdPage(nPage, ePageKind);
-        nPage = pPage->GetPageNum();
-    }
-
-    if (nLayer != SDRLAYER_NOTFOUND)
-    {
-    }
-
-    BOOL bReturn = pDrView->QueryDrop(rEvt, pWin, nPage, nLayer);
-
-    return (bReturn);
-}
-
-/*************************************************************************
-|*
-|* Drop-Event
-|*
-\************************************************************************/
-
-BOOL SdDrawViewShell::Drop(const DropEvent& rEvt, SdWindow* pWin,
-                           USHORT nPage, USHORT nLayer)
-{
-    if (nPage != SDRPAGE_NOTFOUND)
-    {
-        SdPage* pPage = pDoc->GetSdPage(nPage, ePageKind);
-        nPage = pPage->GetPageNum();
-    }
-
-    if (nLayer != SDRLAYER_NOTFOUND)
-    {
-    }
-
-    BOOL bReturn = pDrView->Drop(rEvt, pWin, nPage, nLayer);
-
-    return (bReturn);
-}
-
-/*************************************************************************
-|*
 |* PrepareClose, ggfs. Texteingabe beenden, damit andere Viewshells ein
 |* aktualisiertes Textobjekt vorfinden
 |*
@@ -566,7 +518,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 
             SwitchPage(nActualPageNum);
 
-            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInPageMode());
+            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInPageMode() != 0 );
             GetViewFrame()->GetDispatcher()->Execute(
                 SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
@@ -609,7 +561,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             aTabControl.SetCurPageId(nActualMasterPageNum + 1);
             SwitchPage(nActualMasterPageNum);
 
-            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode());
+            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode() != 0 );
             GetViewFrame()->GetDispatcher()->Execute(
                 SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
@@ -1545,9 +1497,42 @@ void SdDrawViewShell::SetHelpIdBySelection()
     }
 }
 
+/*************************************************************************
+|*
+|* AcceptDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    if( nPage != SDRPAGE_NOTFOUND )
+        nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
+
+    if( nLayer != SDRLAYER_NOTFOUND )
+    {
+    }
+
+    return( pDrView->AcceptDrop( rEvt, pWin, nPage, nLayer ) );
+}
+
+/*************************************************************************
+|*
+|* ExecuteDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+{
+    if( nPage != SDRPAGE_NOTFOUND )
+        nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
+
+    if( nLayer != SDRLAYER_NOTFOUND )
+    {
+    }
+
+    return( pDrView->ExecuteDrop( rEvt, pWin, nPage, nLayer ) );
+}
 
 #ifdef WNT
 #pragma optimize ( "", on )
 #endif
-
-

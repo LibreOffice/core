@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-11 16:20:06 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 
 SdWindow::SdWindow(Window* pParent) :
     Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+    DropTargetHelper( this ),
     pShareWin(NULL),
     pViewShell(NULL),
     aWinPos(0, 0),          // vorsichtshalber; die Werte sollten aber
@@ -113,8 +114,6 @@ SdWindow::SdWindow(Window* pParent) :
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
     SetUniqueId(HID_SD_WIN_DOCUMENT);
-
-    EnableDrop();
 }
 
 /*************************************************************************
@@ -635,53 +634,6 @@ double SdWindow::GetScrlPageHeight()
     return (GetVisibleHeight() * SCROLL_PAGE_FACT);
 }
 
-
-/*************************************************************************
-|*
-|* QueryDrop-Event
-|*
-\************************************************************************/
-
-BOOL SdWindow::QueryDrop(DropEvent& rEvt)
-{
-    BOOL bReturn = FALSE;
-
-    if (pViewShell && !pViewShell->GetDocSh()->IsReadOnly())
-    {
-        if (pViewShell)
-        {
-            bReturn = pViewShell->QueryDrop(rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND);
-        }
-
-        // der Outliner scrollt selbst, darum im Gliederungsmodus kein DropScroll!!
-        if (!pViewShell->ISA(SdOutlineViewShell))
-        {
-            DropScroll( rEvt.GetPosPixel() );
-        }
-    }
-
-    return (bReturn);
-}
-
-/*************************************************************************
-|*
-|* Drop-Event
-|*
-\************************************************************************/
-
-BOOL SdWindow::Drop(const DropEvent& rEvt)
-{
-    BOOL bReturn = FALSE;
-
-    if (pViewShell)
-    {
-        bReturn = pViewShell->Drop(rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND);
-    }
-
-    return (bReturn);
-}
-
-
 /*************************************************************************
 |*
 |* Scrolling bei QueryDrop-Events
@@ -853,5 +805,42 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+/*************************************************************************
+|*
+|* DropTargetHelper::AcceptDrop
+|*
+\************************************************************************/
 
+sal_Int8 SdWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    sal_Int8 nRet = DND_ACTION_NONE;
 
+    if( pViewShell && !pViewShell->GetDocSh()->IsReadOnly() )
+    {
+        if( pViewShell )
+            nRet = pViewShell->AcceptDrop( rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+
+        if( !pViewShell->ISA( SdOutlineViewShell ) )
+            DropScroll( rEvt.maPos );
+    }
+
+    return nRet;
+}
+
+/*************************************************************************
+|*
+|* DropTargetHelper::ExecuteDrop
+|*
+\************************************************************************/
+
+sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    if( pViewShell )
+    {
+        nRet = pViewShell->ExecuteDrop( rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+    }
+
+    return nRet;
+}

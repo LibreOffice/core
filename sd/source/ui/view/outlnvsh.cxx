@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-18 12:51:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ void SdOutlineViewShell::Activate( BOOL bIsMDIActivate )
         Outliner* pOutl = pOutlinerView->GetOutliner();
         pOutl->UpdateFields();
 
-        SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInOutlineMode());
+        SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInOutlineMode() != 0 );
         GetViewFrame()->GetDispatcher()->Execute(
             SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }

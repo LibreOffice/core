@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ BOOL SdTabControl::QueryDrop(DropEvent& rEvt)
             if ( nPageId >= 0 && pDoc->GetPage(nPageId) )
             {
                 SdWindow* pWindow = NULL;
-                bReturn = pDrViewSh->QueryDrop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
+//!!!           bReturn = pDrViewSh->QueryDrop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
 
                 SwitchPage( aPos );
             }
@@ -251,7 +251,7 @@ BOOL SdTabControl::Drop(const DropEvent& rEvt)
         if ( nPageId >= 0 && pDoc->GetPage(nPageId) )
         {
             SdWindow* pWindow = NULL;
-            bReturn = pDrViewSh->Drop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
+//!!!       bReturn = pDrViewSh->Drop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
         }
     }
 
@@ -290,7 +290,7 @@ void SdTabControl::Command(const CommandEvent& rCEvt)
                 String( RTL_CONSTASCII_USTRINGPARAM( "StarDraw TabBar" ))));
 
             bInternalMove = TRUE;
-            ExecuteDrag(POINTER_MOVEDATA, POINTER_COPYDATA, DROP_MOVE, &aRegion);
+            ExecuteDrag( POINTER_MOVEDATA, POINTER_COPYDATA, DROP_MOVE, &aRegion );
             bInternalMove = FALSE;
         }
     }
