@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:44:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Destinatario" ;
         Text [ portuguese_brazilian ] = "Endereço" ;
         Text [ portuguese ] = "Destinatário" ;
-        Text [ finnish ] = "Vastaanottaja" ;
+        Text [ finnish ] = "Empfänger" ;
         Text [ danish ] = "Modtager" ;
         Text [ french ] = "Destinataire" ;
         Text [ swedish ] = "Mottagare" ;
@@ -113,7 +113,7 @@ TabPage TP_ENV_FMT
         Text[ french ] = "Position";
         Text[ spanish ] = "Posición";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Position";
+        Text[ danish ] = "Start_ved";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Stanowisko";
         Text[ portuguese_brazilian ] = "Position";
@@ -121,9 +121,10 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "Position";
         Text[ chinese_simplified ] = "Î»ÖÃ";
         Text[ chinese_traditional ] = "¦ì¸m";
-        Text[ turkish ] = "Position";
+        Text[ turkish ] = "Pozisyon";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ catalan ] = "Posición";
+        Text[ finnish ] = "Position";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -245,6 +246,7 @@ TabPage TP_ENV_FMT
         Text[ turkish ] = "Format";
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ catalan ] = "Formato";
+        Text[ finnish ] = "Format";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -286,7 +288,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Mittente" ;
         Text [ portuguese_brazilian ] = "Remetente" ;
         Text [ portuguese ] = "Remetente" ;
-        Text [ finnish ] = "Lähettäjä" ;
+        Text [ finnish ] = "Absender" ;
         Text [ danish ] = "Afsender" ;
         Text [ french ] = "Expéditeur" ;
         Text [ swedish ] = "Avsändare" ;
@@ -320,7 +322,7 @@ TabPage TP_ENV_FMT
         Text[ french ] = "Position";
         Text[ spanish ] = "Posición";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Position";
+        Text[ danish ] = "Stilling";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
@@ -328,9 +330,10 @@ TabPage TP_ENV_FMT
         Text[ korean ] = "Position";
         Text[ chinese_simplified ] = "Î»ÖÃ";
         Text[ chinese_traditional ] = "¦ì¸m";
-        Text[ turkish ] = "Position";
+        Text[ turkish ] = "Ýþ unvaný";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ catalan ] = "Posición";
+        Text[ finnish ] = "Position";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -452,6 +455,7 @@ TabPage TP_ENV_FMT
         Text[ turkish ] = "Format";
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ catalan ] = "Formato";
+        Text[ finnish ] = "Format";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -522,8 +526,8 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Fo~rmato" ;
-        Text [ finnish ] = "Muotoile" ;
-        Text [ danish ] = "~Format" ;
+        Text [ finnish ] = "~Format" ;
+        Text [ danish ] = "Forma~ter" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "~Format" ;
         Text [ dutch ] = "~Formaat" ;
@@ -560,7 +564,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "~Largh." ;
         Text [ portuguese_brazilian ] = "Largura" ;
         Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "Leveys" ;
+        Text [ finnish ] = "~Breite" ;
         Text [ danish ] = "Bredde" ;
         Text [ french ] = "~Largeur" ;
         Text [ swedish ] = "~Bredd" ;
@@ -608,7 +612,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "~Altezza" ;
         Text [ portuguese_brazilian ] = "Altura" ;
         Text [ portuguese ] = "~Altura" ;
-        Text [ finnish ] = "Korkeus" ;
+        Text [ finnish ] = "~Höhe" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "~Höjd" ;
@@ -665,7 +669,7 @@ Menu MNU_EDIT
             TEXT [ italian ] = "~Carattere..." ;
             TEXT [ portuguese_brazilian ] = "~Caracter..." ;
             TEXT [ portuguese ] = "~Caracteres..." ;
-            TEXT [ finnish ] = "~Merkki..." ;
+            TEXT [ finnish ] = "~Merkki" ;
             TEXT [ danish ] = "Tegn..." ;
             TEXT [ french ] = "~Caractère..." ;
             TEXT [ swedish ] = "~Tecken..." ;
@@ -693,7 +697,7 @@ Menu MNU_EDIT
             TEXT [ italian ] = "~Paragrafo..." ;
             TEXT [ portuguese_brazilian ] = "~Parágrafo..." ;
             TEXT [ portuguese ] = "~Parágrafo..." ;
-            TEXT [ finnish ] = "~Kappale..." ;
+            TEXT [ finnish ] = "~Kappale" ;
             TEXT [ danish ] = "Afsnit..." ;
             TEXT [ french ] = "~Paragraphe..." ;
             TEXT [ swedish ] = "~Stycke..." ;
