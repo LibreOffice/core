@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:59:10 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
 // ============================================================================
 
 #ifndef SC_XIROOT_HXX
@@ -74,6 +69,9 @@
 #include "addincol.hxx"
 #endif
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -92,8 +90,8 @@
 
 // Global data ================================================================
 
-XclImpRootData::XclImpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rBasePath, CharSet eCharSet ) :
-    XclRootData( eBiff, rDocument, rBasePath, eCharSet )
+XclImpRootData::XclImpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet ) :
+    XclRootData( eBiff, rDocument, rDocUrl, eCharSet )
 {
 }
 
@@ -108,6 +106,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
 {
+    mrImpData.mpTracer.reset( new XclTracer( GetDocUrl(), CREATE_OUSTRING( "Office.Tracing/Import/Excel" ) ) );
     mrImpData.mpPalette.reset( new XclImpPalette( GetRoot() ) );
     mrImpData.mpFontBuffer.reset( new XclImpFontBuffer( GetRoot() ) );
     mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( GetRoot() ) );
