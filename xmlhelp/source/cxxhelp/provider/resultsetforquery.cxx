@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
+ *  last change: $Author: abi $ $Date: 2001-07-16 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #endif
 #ifndef _XMLSEARCH_QE_QUERYPROCESSOR_HXX_
 #include <qe/QueryProcessor.hxx>
+#endif
+#ifndef INCLUDED_STL_SET
+#include <set>
+#define INCLUDED_STL_SET
 #endif
 
 using namespace chelp;
@@ -149,11 +153,17 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     if( queryResults )
         it = queryResults->makeQueryHitIterator();
 
+    rtl::OUString aStr;
+    std::set< rtl::OUString > aSet;
+
     while( it && it->next() )
     {
         QueryHitData* qhd = it->getHit( 0 );
-        if( qhd )
-            m_aPath.push_back( replWith + ( qhd->getDocument()).copy( replIdx ) );
+        if( qhd &&
+            aSet.insert(qhd->getDocument()).second )
+        {
+            m_aPath.push_back( replWith + (qhd->getDocument()).copy( replIdx ) );
+        }
     }
     delete it;  // deletes also queryResults
 
