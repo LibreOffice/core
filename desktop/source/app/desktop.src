@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,24 +207,6 @@ String STR_ASK_START_SETUP_MANUALLY
     Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
 };
 
-String STR_SSO_RELOGIN
-{
-    Text [ de ] = "Bitte wiederholen Sie Ihre Anmeldung. " ;
-    Text [ en-US ] = "Please log in again. ";
-};
-
-String STR_CONFIG_WARN_LOCAL_FALLBACK
-{
-    Text [ de ] = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
-    Text [ en-US ] = "StarOffice will continue the startup using your locally stored personal settings.";
-};
-
-String STR_CONFIG_WARN_OFFLINE
-{
-    Text [ de ] = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert. " ;
-    Text [ en-US ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
-};
-
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
     Text [ de ] = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
@@ -243,18 +225,6 @@ String STR_CONFIG_ERR_RIGHTS_MISSING
     Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
-String STR_CONFIG_ERR_LOGIN_FAILED
-{
-    Text [ de ] = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
-    Text [ en-US ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-};
-
-String STR_CONFIG_ERR_MECHANISM_INVALID
-{
-    Text [ de ] = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt. " ;
-    Text [ en-US ] = "The specified authentication method to access the central configuration is not supported. ";
-};
-
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
     Text [ de ] = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
@@ -265,21 +235,6 @@ String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
     Text [ de ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-};
-
-QueryBox QBX_CONFIG_IMPORTSETTINGS
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ de ] = "Auf Ihrem Rechner wurden persönliche %PRODUCTNAME-Einstellungen gefunden. \n"
-              "Möchten Sie diese in die zentrale Konfiguration übertragen, um weiter damit arbeiten zu können?" ;
-    Message [ en-US ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
-};
-
-String STR_TITLE_CONFIG_MSGBOX
-{
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 String STR_WARNING_JAVANOTFOUND
