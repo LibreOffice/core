@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:45:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrPolyEditView(pModel1,pXOut)
 {
     ImpClearVars();
