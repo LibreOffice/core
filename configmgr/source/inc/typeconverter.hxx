@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 09:19:18 $
+ *  last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ namespace configmgr
     {
         return isList ? toListType(_rsSimpleType) : toType(_rsSimpleType);
     }
-
-    inline uno::Type getBinaryType()    { return ::getCppuType(static_cast<uno::Sequence<sal_Int8> const*>(0)); }
-    inline uno::Type getAnyType()       { return ::getCppuType(static_cast<uno::Any const*>(0)); }
 
     // template names
     ::rtl::OUString toTemplateName(const uno::Type& _rType);

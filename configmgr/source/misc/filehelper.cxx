@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 11:35:39 $
+ *  last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,87 @@ void FileHelper::tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOExcept
             throw io::IOException(sError, NULL);
         }
     }
+// -----------------------------------------------------------------------------
+    bool FileHelper::fileExist(rtl::OUString const& _aFileURL)
+    {
+        DirectoryItem aItem;
+        FileBase::RC eError = DirectoryItem::get(_aFileURL, aItem);
+        if (eError != osl_File_E_None)
+        {
+            // IF not exists
+            return false;
+        }
+        return true;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool FileHelper::directoryExist(rtl::OUString const& _aDirexURL)
+    {
+        bool bDirectoryExist;
+        Directory aDirex(_aDirexURL);
+        FileBase::RC eError = aDirex.open();
+        if (eError != osl_File_E_None)
+        {
+            bDirectoryExist = false;
+        }
+        else
+        {
+            bDirectoryExist = true;
+        }
+
+        aDirex.close();
+        return bDirectoryExist;
+    }
+
+// -----------------------------------------------------------------------------
+    rtl::OUString FileHelper::splitDirectoryOff(rtl::OUString const& _sFilename)
+    {
+        // split off the directory
+        // there is no test, if last string after '/' is a directory, it will cut off
+
+        // evtl. should a test like: check if the last string contain a dot '.'
+        // help to test it.
+
+        sal_Int32 nIdx = _sFilename.lastIndexOf(FileHelper::getFileDelimiter(), _sFilename.getLength());
+        rtl::OUString sDirex = _sFilename.copy(0,nIdx);
+        return sDirex;
+    }
+// -----------------------------------------------------------------------------
+// return a TimeValue at which time the given file is modified
+
+    TimeValue FileHelper::getFileModificationStamp(rtl::OUString const& _aNormalizedFilename) throw (io::IOException)
+    {
+        TimeValue aTime = {0,0};
+
+        DirectoryItem aItem;
+        osl::FileBase::RC eError = DirectoryItem::get(_aNormalizedFilename, aItem);
+        if (eError != osl::FileBase::E_None)
+        {
+            rtl::OUString aUStr = FileHelper::createOSLErrorString(eError);
+            throw io::IOException(aUStr, NULL);
+        }
+
+        FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type);
+        eError = aItem.getFileStatus(aStatus);
+        if (eError != osl::FileBase::E_None)
+        {
+            return aTime;
+            rtl::OUString aUStr = FileHelper::createOSLErrorString(eError);
+            throw io::IOException(aUStr, NULL);
+        }
+        if (aStatus.isValid(osl_FileStatus_Mask_Type))
+        {
+            FileStatus::Type eType = aStatus.getFileType();
+            volatile int dummy = 0;
+        }
+
+        if (aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
+        {
+            aTime = aStatus.getModifyTime();
+        }
+        return aTime;
+    }
+
 // ------------------ Create a string from FileBase::RC Error ------------------
     rtl::OUString FileHelper::createOSLErrorString(FileBase::RC eError)
     {

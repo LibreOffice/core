@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: filehelper.hxx,v $
+ *  $RCSfile: simpletypehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
+ *  last change: $Author: lla $ $Date: 2001-05-14 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,43 +59,34 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIGMGR_FILEHELPER_HXX_
-#define _CONFIGMGR_FILEHELPER_HXX_
+#include "simpletypehelper.hxx"
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
-#include <com/sun/star/io/IOException.hpp>
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
 
 namespace configmgr
 {
-    namespace FileHelper
+    namespace uno = com::sun::star::uno;
+    namespace SimpleTypeHelper
     {
-        namespace io = com::sun::star::io;
 
-        // convert a filename like "d:\foo\bar\file.xyz to
-        // something like file:///d|/foo/bar/file.xyz
-        rtl::OUString convertFilenameToFileURL(rtl::OUString const& _sFilename);
+        uno::Type getBooleanType() { return ::getBooleanCppuType(); }
 
-        void createBackupRemoveAndRename(
-            const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException);
+        uno::Type getByteType()     { return ::getCppuType(static_cast<sal_Int8 const*>(0)); }
+        uno::Type getShortType()        { return ::getCppuType(static_cast<sal_Int16 const*>(0)); }
+        uno::Type getIntType()      { return ::getCppuType(static_cast<sal_Int32 const*>(0)); }
+        uno::Type getLongType()     { return ::getCppuType(static_cast<sal_Int64 const*>(0)); }
 
+        uno::Type getDoubleType()   { return ::getCppuType(static_cast<double const*>(0)); }
 
-        void tryToRemoveFile(const rtl::OUString& _aURL) throw (io::IOException);
+        uno::Type getStringType()   { return ::getCppuType(static_cast<rtl::OUString const*>(0)); }
 
-        rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
-
-        bool fileExist(rtl::OUString const& _aFileURL);
-        bool directoryExist(rtl::OUString const& _aDirexURL);
-
-        rtl::OUString splitDirectoryOff(rtl::OUString const& _sFilename);
-        inline const sal_Unicode getFileDelimiter() { return sal_Unicode('/'); }
-
-        TimeValue getFileModificationStamp(rtl::OUString const& _aNormalizedFilename) throw (io::IOException);
+        uno::Type getBinaryType()   { return ::getCppuType(static_cast<uno::Sequence<sal_Int8> const*>(0)); }
+        uno::Type getAnyType()      { return ::getCppuType(static_cast<uno::Any const*>(0)); }
     }
-} // namespace configmgr
-
-#endif
+}

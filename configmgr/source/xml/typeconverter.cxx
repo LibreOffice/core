@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:25:44 $
+ *  last change: $Author: lla $ $Date: 2001-05-14 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include "simpletypehelper.hxx"
 
 namespace uno = ::com::sun::star::uno;
 namespace script = ::com::sun::star::script;
@@ -205,19 +207,6 @@ namespace configmgr
     }
 
 // *************************************************************************
-    namespace
-    {
-
-        inline uno::Type getBooleanType() { return ::getBooleanCppuType(); }
-
-        inline uno::Type getShortType()     { return ::getCppuType(static_cast<sal_Int16 const*>(0)); }
-        inline uno::Type getIntType()       { return ::getCppuType(static_cast<sal_Int32 const*>(0)); }
-        inline uno::Type getLongType()      { return ::getCppuType(static_cast<sal_Int64 const*>(0)); }
-
-        inline uno::Type getDoubleType()    { return ::getCppuType(static_cast<double const*>(0)); }
-
-        inline uno::Type getStringType()    { return ::getCppuType(static_cast<rtl::OUString const*>(0)); }
-
 // *************************************************************************
 /*
   ::rtl::OUString findXMLTypeName(const uno::Type& _rType)
@@ -270,27 +259,26 @@ namespace configmgr
   return aRet;
   }
  */
-    } // unamed namespace
 // *************************************************************************
 
     uno::Type toType(const ::rtl::OUString& _rType)
     {
         uno::Type aRet;
 
-        if     (_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("boolean")))  aRet = getBooleanType();
+        if     (_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("boolean")))  aRet = SimpleTypeHelper::getBooleanType();
 
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("short")))       aRet = getShortType();
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("int")))     aRet = getIntType();
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))  aRet = getIntType();
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("long")))    aRet = getLongType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("short")))       aRet = SimpleTypeHelper::getShortType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("int")))     aRet = SimpleTypeHelper::getIntType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))  aRet = SimpleTypeHelper::getIntType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("long")))    aRet = SimpleTypeHelper::getLongType();
 
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("double")))   aRet = getDoubleType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("double")))   aRet = SimpleTypeHelper::getDoubleType();
 
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("string")))   aRet = getStringType();
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("binary")))   aRet = getBinaryType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("string")))   aRet = SimpleTypeHelper::getStringType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("binary")))   aRet = SimpleTypeHelper::getBinaryType();
 //  else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
 
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("any")))   aRet = getAnyType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("any")))   aRet = SimpleTypeHelper::getAnyType();
         else
         {
             ::rtl::OString aStr("Unknown type! ");
@@ -372,7 +360,7 @@ namespace configmgr
     uno::Type getBasicType(uno::Type const& rType, bool& bSequence)
     {
         bSequence = rType.getTypeClass() == uno::TypeClass_SEQUENCE &&
-                    rType != getBinaryType();
+                    rType != SimpleTypeHelper::getBinaryType();
 
         if (!bSequence)
             return rType;

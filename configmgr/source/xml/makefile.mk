@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: lla $ $Date: 2001-03-23 12:44:26 $
+#   last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,10 +98,14 @@ SLOFILES=\
     $(SLO)$/updatehandler.obj \
     $(SLO)$/updatetree.obj \
     $(SLO)$/namehelper.obj \
+    $(SLO)$/binarywritehandler.obj \
+    $(SLO)$/writesubtreeasbinaryhandler.obj \
+    $(SLO)$/binarywriter.obj \
+    $(SLO)$/binaryreader.obj \
+    $(SLO)$/simpletypehelper.obj \
+    $(SLO)$/binarydecide.obj \
+    $(SLO)$/pathhelper.obj \
 
-#	$(SLO)$/binaryhandler.obj \
-#	$(SLO)$/binarywriter.obj \
-#	$(SLO)$/binaryreader.obj \
 
 # --- Targets ---
 
