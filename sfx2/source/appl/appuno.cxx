@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:35:07 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 07:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_CONFIGITEMAPIMODE_HPP_
+#include <com/sun/star/document/ConfigItemAPIMode.hpp>
+#endif
 
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
@@ -257,6 +260,7 @@ static const String sFilterData     = String::CreateFromAscii( "FilterData" );
 static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" );
 static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
 static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMode" );
+static const String sUpdateDocFromTemplate = String::CreateFromAscii( "UpdateDocFromTemplate" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -576,8 +580,15 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     sal_Int16 nValue;
                     if ( rProp.Value >>= nValue )
-                        rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, *((sal_Int16*)rProp.Value.getValue()) ) );
+                        rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nValue ) );
                 }
+                else if ( aName == sUpdateDocFromTemplate )
+                {
+                    sal_Int16 nValue;
+                    if ( rProp.Value >>= nValue )
+                        rSet.Put( SfxUInt16Item( SID_UPDATEDOCFROMTEMP, nValue ) );
+                }
+
             }
         }
 #ifdef DB_UTIL
@@ -726,6 +737,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_MACROEXECMODE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_UPDATEDOCFROMTEMP ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -823,6 +836,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_CHARSET )
                         continue;
                     if ( nId == SID_MACROEXECMODE )
+                        continue;
+                    if ( nId == SID_UPDATEDOCFROMTEMP )
                         continue;
                 }
 
@@ -1080,6 +1095,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_MACROEXECMODE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sMacroExecMode;
+                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_UPDATEDOCFROMTEMP, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sUpdateDocFromTemplate;
                 pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
         }
