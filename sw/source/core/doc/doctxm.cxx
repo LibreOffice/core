@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:09:37 $
+ *  last change: $Author: os $ $Date: 2001-10-02 11:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
             ( !IsFromChapter() ||
                ::lcl_FindChapterNode( *pTxtNd, 0 ) == pOwnChapterNode ))
         {
-            SwTOXPara * pNew = new SwTOXPara( *pTxtNd, TOX_TEMPLATE );
+            SwTOXPara * pNew = new SwTOXPara( *pTxtNd, TOX_OUTLINELEVEL );
             InsertSorted( pNew );
         }
     }

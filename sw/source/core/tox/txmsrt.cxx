@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 10:33:26 $
+ *  last change: $Author: os $ $Date: 2001-10-02 11:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,7 @@ void SwTOXPara::_GetText( String& rTxt )
     {
     case TOX_SEQUENCE:
     case TOX_TEMPLATE:
+    case TOX_OUTLINELEVEL:
         {
             xub_StrLen nStt = nStartIndex;
 /* JP 22.01.98:
@@ -671,7 +672,7 @@ void SwTOXPara::_GetText( String& rTxt )
 
 void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
 {
-    if( TOX_TEMPLATE == eType || TOX_SEQUENCE == eType )
+    if( TOX_TEMPLATE == eType || TOX_SEQUENCE == eType  || TOX_OUTLINELEVEL == eType)
     {
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         xub_StrLen nStt = nStartIndex;
@@ -695,7 +696,7 @@ USHORT SwTOXPara::GetLevel() const
     USHORT nRet = m_nLevel;
     const SwCntntNode*  pNd = aTOXSources[0].pNd;
 
-    if( TOX_TEMPLATE == eType && pNd->GetTxtNode() )
+    if( TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
         USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
         if(nTmp < NO_NUMBERING)
@@ -712,6 +713,7 @@ String SwTOXPara::GetURL() const
     switch( eType )
     {
     case TOX_TEMPLATE:
+    case TOX_OUTLINELEVEL:
         {
             if( MAXLEVEL >= ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel())
             {
