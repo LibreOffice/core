@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 06:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ static String aTempBase;
 
 static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (sb) ::configureUcb" );
     Reference< XMultiServiceFactory >
         xServiceFactory( comphelper::getProcessServiceFactory() );
     if (!xServiceFactory.is())
@@ -179,6 +180,8 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 
 Reference< XMultiServiceFactory > createApplicationServiceManager()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::createApplicationServiceManager" );
+
     try
     {
         ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
@@ -245,6 +248,8 @@ void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr 
 
 void registerServices( Reference< XMultiServiceFactory >& xSMgr )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::registerServices" );
+
     // read command line parameters
     ::rtl::OUString conDcp;
     ::rtl::OUString aClientDisplay;
@@ -275,7 +280,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     if ( conDcp.getLength() > 0 )
     {
         // accept incoming connections (scripting and one rvp)
-        RTL_LOGFILE_CONTEXT( aLog, "create OOfficeAcceptorThread" );
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::OOfficeAcceptorThread::OOfficeAcceptorThread" );
         pOfficeAcceptThread = new OOfficeAcceptorThread( xSMgr, conDcp, bHeadlessMode, aClientDisplay, aUserDir );
         pOfficeAcceptThread->create();
     }
@@ -284,6 +289,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     // servicemanager up -> copy user installation
     if ( Application::IsRemoteServer() )
     {
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.portal.InstallUser" );
         Any aAny;
         Reference <XInterface> xRef =  xSMgr->createInstanceWithArguments(
             OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
@@ -293,7 +299,9 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     // try to start OLE registration service.
     // on success (WIN32 only) this process will work
     // as OLE automation server for standard UNO objects.
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.bridge.OleApplicationRegistration" );
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.bridge.OleApplicationRegistration" );
 
     ::rtl::OUString aPortalConnect;
     sal_Bool        bServer = pCmdLine->IsServer();
@@ -311,6 +319,8 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
 
 void createTemporaryDirectory()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::createTemporaryDirectory" );
+
     // remove old temp dir
     SvtPathOptions aOpt;
     String aTemp( DEFINE_CONST_UNICODE( DESKTOP_TEMPNAMEBASE_DIR ) );
@@ -333,6 +343,8 @@ void createTemporaryDirectory()
 
 void removeTemporaryDirectory()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::removeTemporaryDirectory" );
+
     // remove temp directory
     if ( STRING_NOTFOUND != aTempBase.Search( aTempNameBaseDir ) )
     {
