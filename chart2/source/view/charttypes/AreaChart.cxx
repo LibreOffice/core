@@ -24,7 +24,17 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+// header for class Polygon3D
+#ifndef _POLY3D_HXX
+#include <svx/poly3d.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
+#include <com/sun/star/drawing/DoubleSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_NORMALSKIND_HPP_
+#include <com/sun/star/drawing/NormalsKind.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
@@ -95,7 +105,10 @@ Rectangle AreaPositionHelper::getTransformedClipRect() const
     aMaximum = SequenceToPosition3D( getTransformationLogicToScene()
                     ->transform( Position3DToSequence(aMaximum) ) );
 
-    Rectangle aRet( aMimimum.PositionX, aMaximum.PositionY, aMaximum.PositionX, aMimimum.PositionY );
+    Rectangle aRet( static_cast<long>(aMimimum.PositionX)
+                  , static_cast<long>(aMaximum.PositionY)
+                  , static_cast<long>(aMaximum.PositionX)
+                  , static_cast<long>(aMimimum.PositionY) );
     return aRet;
 }
 
@@ -116,9 +129,12 @@ double AreaPositionHelper::getLogicGrounding() const
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-AreaChart::AreaChart( sal_Int32 nDimension )
+AreaChart::AreaChart( sal_Int32 nDimension, sal_Bool bArea, sal_Bool bLine, sal_Bool bSymbol )
         : VSeriesPlotter( nDimension )
         , m_pPosHelper( new AreaPositionHelper() )
+        , m_bArea(bArea)
+        , m_bLine(bLine)
+        , m_bSymbol(bSymbol)
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
@@ -185,6 +201,214 @@ void closePolygon( drawing::PolyPolygonShape3D& rPoly)
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     VSeriesPlotter::addSeries( pSeries, xSlot, ySlot );
+}
+
+uno::Reference< drawing::XShape >
+        create3DLine( const uno::Reference< drawing::XShapes >& xTarget
+                    , uno::Reference< lang::XMultiServiceFactory > m_xShapeFactory
+                    , drawing::PolyPolygonShape3D& rPoly
+                    , double fDepth )
+{
+    //create shape
+    uno::Reference< drawing::XShape > xShape(
+            m_xShapeFactory->createInstance( C2U(
+            "com.sun.star.drawing.Shape3DExtrudeObject" ) ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    //set properties
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    if( xProp.is())
+    {
+        try
+        {
+            //depth
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
+                , uno::makeAny((sal_Int32)fDepth) );
+
+            //Polygon
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
+                , uno::makeAny( rPoly ) );
+
+            /*
+            //Normals Polygon
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
+                , uno::makeAny( aNewPoly ) );
+                */
+                /*
+            //NormalsKind
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
+                , uno::makeAny( drawing::NormalsKind_FLAT ) );
+
+            //LineOnly
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
+                , uno::makeAny( (sal_Bool)false) );
+
+            //DoubleSided
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+                , uno::makeAny( (sal_Bool)true) );
+                */
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    return xShape;
+}
+
+bool AreaChart::impl_createLine( VDataSeries* pSeries
+                , drawing::PolyPolygonShape3D* pSeriesPoly )
+{
+    //return true if a line was created successfully
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
+
+    drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
+    double fMinZ = m_pPosHelper->getLogicMinZ();
+    m_pPosHelper->doLogicScaling( NULL, NULL, &fMinZ );
+
+    Polygon aToolsPoly = PolyToToolsPoly( aPoly );
+    aToolsPoly.Clip( m_pPosHelper->getTransformedClipRect() );
+    aPoly = ToolsPolyToPoly( aToolsPoly, fMinZ );
+
+    if(isPolygonEmptyOrSinglePoint(aPoly))
+        return false;
+
+    //create line:
+    uno::Reference< drawing::XShape > xShape(NULL);
+    if(m_nDimension==3)
+    {
+        xShape = create3DLine( xSeriesGroupShape_Shapes, m_xShapeFactory
+                , aPoly, m_pPosHelper->getTransformedDepth() );
+        this->setMappedProperties( xShape
+                , pSeries->getPropertiesOfSeries()
+                , m_aShapePropertyMapForArea );
+    }
+    else //m_nDimension!=3
+    {
+        xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
+                , PolyToPointSequence( aPoly ), LineProperties() );
+        this->setMappedProperties( xShape
+                , pSeries->getPropertiesOfSeries()
+                , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+    }
+    return true;
+}
+
+bool AreaChart::impl_createArea( VDataSeries* pSeries
+                , drawing::PolyPolygonShape3D* pSeriesPoly
+                , drawing::PolyPolygonShape3D* pPreviousSeriesPoly )
+{
+    //return true if an area was created successfully
+
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
+    double zValue = m_pPosHelper->getLogicMinZ();
+
+    drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
+    //add second part to the polygon (grounding points or previous series points)
+    if(!pPreviousSeriesPoly)
+    {
+        double fMinX = pSeries->m_fMinX;
+        double fMaxX = pSeries->m_fMaxX;
+        //clip to scale
+        if(fMaxX<m_pPosHelper->getLogicMinX() || fMinX>m_pPosHelper->getLogicMaxX())
+            return false;//no visible shape needed
+        if(fMaxX > m_pPosHelper->getLogicMaxX())
+            fMaxX = m_pPosHelper->getLogicMaxX();
+        if(fMinX < m_pPosHelper->getLogicMinX())
+            fMinX = m_pPosHelper->getLogicMinX();
+
+        //apply scaling
+        {
+            m_pPosHelper->doLogicScaling( &fMinX, NULL, &zValue );
+            m_pPosHelper->doLogicScaling( &fMaxX, NULL, NULL );
+        }
+        double fY = m_pPosHelper->getLogicGrounding();
+
+        drawing::Position3D aScaledLogicPosition2( fMaxX,fY,zValue);
+        drawing::Position3D aTransformedPosition2( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition2) ) ) );
+        AddPointToPoly( aPoly, aTransformedPosition2 );
+
+        drawing::Position3D aScaledLogicPosition( fMinX,fY,zValue);
+        drawing::Position3D aTransformedPosition( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition) ) ) );
+        AddPointToPoly( aPoly, aTransformedPosition );
+    }
+    else
+    {
+        appendPoly( aPoly, *pPreviousSeriesPoly );
+    }
+
+    closePolygon(aPoly);
+
+    //apply clipping
+    //(for more accurat clipping it would be better to first clip and than scale and transform,
+    //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
+    {
+        Polygon aToolsPoly = PolyToToolsPoly( aPoly );
+        aToolsPoly.Clip( m_pPosHelper->getTransformedClipRect() );
+        aPoly = ToolsPolyToPoly( aToolsPoly, zValue );
+        closePolygon(aPoly); //again necessary after clipping
+    }
+
+    if(isPolygonEmptyOrSinglePoint(aPoly))
+        return false;
+
+    //create area:
+    uno::Reference< drawing::XShape > xShape(NULL);
+    if(m_nDimension==3)
+    {
+        xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
+                , aPoly, m_pPosHelper->getTransformedDepth() );
+    }
+    else //m_nDimension!=3
+    {
+        xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes
+                , aPoly );
+    }
+    this->setMappedProperties( xShape
+                , pSeries->getPropertiesOfSeries()
+                , m_aShapePropertyMapForArea );
+    return true;
+}
+
+void AreaChart::impl_createSeriesShapes()
+{
+    //the polygon shapes for each series need to be created before
+
+    //iterate through all series again to create the series shapes
+    ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aXSlots.begin();
+    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
+//=============================================================================
+    //for the area chart there should be at most one x slot (no side by side stacking available)
+    if( aXSlotIter != aXSlotEnd )
+    {
+        ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+
+        ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+        const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+//=============================================================================
+
+        drawing::PolyPolygonShape3D* pPreviousSeriesPoly = NULL;
+        drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
+
+        //iterate through all series
+        for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+        {
+            pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
+
+            if( m_bArea )
+            {
+                if( !impl_createArea( *aSeriesIter, pSeriesPoly, pPreviousSeriesPoly ) )
+                    continue;
+            }
+            if( m_bLine )
+            {
+                if( !impl_createLine( *aSeriesIter, pSeriesPoly ) )
+                    continue;
+            }
+            pPreviousSeriesPoly = pSeriesPoly;
+        }//next series in x slot (next y slot)
+    }//next x slot
 }
 
 void AreaChart::createShapes()
@@ -322,8 +546,7 @@ void AreaChart::createShapes()
                             aLogicGeom,m_pPosHelper->getTransformationLogicToScene()) );
 
                     //create data point
-                    bool bShowSymbols = false;
-                    if( bShowSymbols )
+                    if( m_bSymbol )
                     {
                         if(m_nDimension==3)
                         {
@@ -351,99 +574,7 @@ void AreaChart::createShapes()
 //=============================================================================
 //=============================================================================
 
-    //iterate through all series again to create the series shapes
-    ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aXSlots.begin();
-    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
-//=============================================================================
-    //for the area chart there should be at most one x slot (no side by side stacking available)
-    if( aXSlotIter != aXSlotEnd )
-    {
-        ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
-        ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-        const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-//=============================================================================
-
-        drawing::PolyPolygonShape3D* pPreviousSeriesPoly = NULL;
-        drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
-
-        //iterate through all series
-        for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
-        {
-            uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, m_xLogicTarget);
-            pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
-
-            double zValue = m_pPosHelper->getLogicMinZ();
-
-            drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
-            //add second part to the polygon (grounding points or previous series points)
-            if(!pPreviousSeriesPoly)
-            {
-                double fMinX = (*aSeriesIter)->m_fMinX;
-                double fMaxX = (*aSeriesIter)->m_fMaxX;
-                //clip to scale
-                if(fMaxX<m_pPosHelper->getLogicMinX() || fMinX>m_pPosHelper->getLogicMaxX())
-                    continue;//no visible shape needed
-                if(fMaxX > m_pPosHelper->getLogicMaxX())
-                   fMaxX = m_pPosHelper->getLogicMaxX();
-                if(fMinX < m_pPosHelper->getLogicMinX())
-                   fMinX = m_pPosHelper->getLogicMinX();
-
-                //apply scaling
-                {
-                    m_pPosHelper->doLogicScaling( &fMinX, NULL, &zValue );
-                    m_pPosHelper->doLogicScaling( &fMaxX, NULL, NULL );
-                }
-                double fY = m_pPosHelper->getLogicGrounding();
-
-                drawing::Position3D aScaledLogicPosition2( fMaxX,fY,zValue);
-                drawing::Position3D aTransformedPosition2( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition2) ) ) );
-                AddPointToPoly( aPoly, aTransformedPosition2 );
-
-                drawing::Position3D aScaledLogicPosition( fMinX,fY,zValue);
-                drawing::Position3D aTransformedPosition( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition) ) ) );
-                AddPointToPoly( aPoly, aTransformedPosition );
-            }
-            else
-            {
-                appendPoly( aPoly, *pPreviousSeriesPoly );
-            }
-
-            closePolygon(aPoly);
-
-            //apply clipping
-            //(for more accurat clipping it would be better to first clip and than scale and transform,
-            //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
-            {
-                Polygon aToolsPoly = PolyToToolsPoly( aPoly );
-                aToolsPoly.Clip( m_pPosHelper->getTransformedClipRect() );
-                aPoly = ToolsPolyToPoly( aToolsPoly, zValue );
-                closePolygon(aPoly); //again necessary after clipping
-            }
-
-            if(isPolygonEmptyOrSinglePoint(aPoly))
-                continue;
-
-            //create area:
-            uno::Reference< drawing::XShape > xShape(NULL);
-            if(m_nDimension==3)
-            {
-                xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
-                        , aPoly, m_pPosHelper->getTransformedDepth() );
-            }
-            else //m_nDimension!=3
-            {
-                xShape = m_pShapeFactory->createArea2D( xSeriesGroupShape_Shapes
-                        , aPoly );
-            }
-            this->setMappedProperties( xShape
-                        , (*aSeriesIter)->getPropertiesOfSeries()
-                        , m_aShapePropertyMapForArea );
-            pPreviousSeriesPoly = pSeriesPoly;
-        }//next series in x slot (next y slot)
-    }//next x slot
-//=============================================================================
-//=============================================================================
+    impl_createSeriesShapes();
 
     /* @todo remove series shapes if empty
     //remove and delete point-group-shape if empty

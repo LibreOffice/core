@@ -15,7 +15,7 @@ class AreaChart : public VSeriesPlotter
     // public methods
     //-------------------------------------------------------------------------
 public:
-    AreaChart( sal_Int32 nDimension );
+    AreaChart( sal_Int32 nDimension, sal_Bool bArea, sal_Bool bLine, sal_Bool bSymbol );
     virtual ~AreaChart();
 
     //-------------------------------------------------------------------------
@@ -38,8 +38,19 @@ private: //methods
     //no default constructor
     AreaChart();
 
+    void impl_createSeriesShapes();
+    bool impl_createArea( VDataSeries* pSeries
+                , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
+                , ::com::sun::star::drawing::PolyPolygonShape3D* pPreviousSeriesPoly );
+    bool impl_createLine( VDataSeries* pSeries
+                , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly );
+
 private: //member
     AreaPositionHelper*                 m_pPosHelper;
+
+    bool                                m_bArea;//false -> line or symbol only
+    bool                                m_bLine;
+    bool                                m_bSymbol;
 };
 //.............................................................................
 } //namespace chart

@@ -476,13 +476,14 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const rtl::OUString& rChart
     if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
         pRet = new BarChart(nDimension);
     else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.AreaChart")) )
-        pRet = new AreaChart(nDimension);
+        pRet = new AreaChart(nDimension,true,false,false);
+    else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.LineChart")) )
+        pRet = new AreaChart(nDimension,false,true,false);
     else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
         pRet = new PieChart(nDimension);
     else
     {
         //@todo create other charttypes
-        //com.sun.star.chart2.LineChart?
         //com.sun.star.chart2.NetChart?
         //com.sun.star.chart2.ScatterChart?
         pRet = new BarChart(nDimension);
