@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:14:44 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ TabPage TP_OPTIONS_SNAP
         Text [ english_us ] = "Point reductio~n" ;
         Text [ italian ] = "Riduzione punti" ;
         Text [ spanish ] = "R~educciσn de puntos" ;
-        Text [ french ] = "Rι~duction de point" ;
+        Text [ french ] = "Rι~duction de points" ;
         Text [ swedish ] = "~Punktreduktion" ;
         Text [ danish ] = "Punktreduktion" ;
         Text [ portuguese ] = "Reduηγo de pontos" ;
@@ -668,7 +668,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_simplified ] = "ΤΪÒΖ¶―¶ΤΟσΚ±ΟΤΚΎΈ¨ΦϊΟί(~G)";
         Text[ russian ] = "Νΰοπΰβ. λθνθθ οπθ οεπεμεωενθθ ξαϊεκςΰ";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
-        Text[ japanese ] = "Ϊ“®‚·‚ιΫ‚Ι•β•ό(~G)";
+        Text[ japanese ] = "Ϊ“®‚³‚Ή‚ι‚Ζ‚«‚Ι•β•ό‚Μ•\\¦(~G)";
         Text[ chinese_traditional ] = "¦b²Ύ°Κ®ΙΕγ¥ά»²§U½u(~G)";
         Text[ arabic ] = "ΗαΞΨζΨ ΗαγΣΗΪΟΙ ΓΛδΗΑ ΗαΕÒΗΝΙ";
         Text[ greek ] = "Βοηθητικές γραμμές κατά τη μετακίνηση";
@@ -695,7 +695,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_simplified ] = "ΗϊΟί±ΰΌ­ΖχΔΪµΔΘ«²ΏΏΨµγ(~A)";
         Text[ russian ] = "~Βρε ςξχκθ β Πεδΰκςξπε Αεηόε";
         Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
-        Text[ japanese ] = "ΝήΌήª‹Θό•ÒW‚Μ‚·‚Χ‚Δ‚Μ§δ“_(~A)";
+        Text[ japanese ] = "ΝήΌήª‹Θό•ÒW‚Μ§δ“_‚π‚·‚Χ‚Δ•\\¦(~A)";
         Text[ chinese_traditional ] = "¦±½u½sΏθµ{¦΅¤ΊªΊ¥ώ³΅±±ΒI(~A)";
         Text[ arabic ] = "ία δήΗΨ ΗαΚΝίγ έν γΝΡΡ Bιzier";
         Text[ greek ] = "Όλες τα σημε~ία ελέγχου σε επεξεργασία Bιzier";
@@ -722,7 +722,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_simplified ] = "µ¥Έφ¶ΤΟσµΔΒΦΐª(~C)";
         Text[ russian ] = "Κξνςσπ κΰζδξγξ ξαϊεκςΰ ξςδελόνξ";
         Text[ polish ] = "Kontur kaΏdego oddzielnego obiektu";
-        Text[ japanese ] = "eµΜήΌήªΈΔ‚Ι“K‚µ‚½—Φs(~C)";
+        Text[ japanese ] = "eµΜήΌήªΈΔ‚Ι“K‚µ‚½—Φs‚Μ•\\¦(~C)";
         Text[ chinese_traditional ] = "¨C­Σª«¥σªΊ½όΉψ(~C)";
         Text[ arabic ] = "ΗαΞΨ ΗαίέΗέν αία ίΗΖδ έΡΟν";
         Text[ greek ] = "Περίγραμμα κάθε μεμονωμέν. αντικειμένο~υ";
@@ -840,7 +840,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text [ danish ] = "Tabulatorafstand" ;
         Text [ italian ] = "Posizione tabulazioni" ;
         Text [ spanish ] = "Distancia entre tabuladores" ;
-        Text [ french ] = "Position des tabulations" ;
+        Text [ french ] = "Espace entre les tabulations" ;
         Text [ dutch ] = "Tabstops" ;
         Text [ portuguese ] = "Espaηos entre tabulaηυes" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
@@ -1089,7 +1089,7 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Only text area selectable" ;
         Text [ italian ] = "Seleziona solo area testo" ;
         Text [ spanish ] = "~Seleccionar solo αreas de texto" ;
-        Text [ french ] = "Sιlection que pour la zone de texte" ;
+        Text [ french ] = "Sιlection que pour la zone texte" ;
         Text [ swedish ] = "Bara textomrεde ka~n markeras" ;
         Text [ danish ] = "Kun tekstomrεde markerbar" ;
         Text [ portuguese ] = "Apenas αrea do texto seleccionαvel" ;
@@ -1278,7 +1278,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_simplified ] = "ΤΪÒΖ¶―Κ±Ιϊ³ΙΈ΄ΦΖΌώ";
         Text[ russian ] = "~Κξοθÿ οπθ οεπεμεωενθθ";
         Text[ polish ] = "Kopiuj przy przenoszeniu";
-        Text[ japanese ] = "Ϊ“®‚·‚ιΫ‚ΙΊΛί°";
+        Text[ japanese ] = "Ϊ“®‚³‚Ή‚ι‚Ζ‚«‚ΙΊΛί°";
         Text[ chinese_traditional ] = "¦b²Ύ°Κ®Ι¥Ν¦¨½Ζ»s¥σ";
         Text[ arabic ] = "Ϊγα δΣΞΙ ΓΛδΗΑ ΗαΕÒΗΝΙ";
         Text[ greek ] = "Αντίγραφο κατά την μετα~κίνηση";
@@ -1336,7 +1336,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_simplified ] = "Ιθ¶¨³ΙΤ²ΠΞ£Ί²»±δΠΞ";
         Text[ russian ] = "Νε οπεβπΰωΰςό ξαϊεκς β κπθβσώ";
         Text[ polish ] = "Osad na kole: nie zniekszta³caj";
-        Text[ japanese ] = "‰~`‚Ι‚Μ‚Ή‚ι:‚δ‚ª‚ί‚Θ‚Ά";
+        Text[ japanese ] = "‰~`‚Ι‚Μ‚Ή‚ιA‚δ‚ª‚ί‚Θ‚Ά";
         Text[ chinese_traditional ] = "³]©w¦¨¶κ§Ξ΅G¤£Εά§Ξ";
         Text[ arabic ] = "ΪΟγ ΚΤζνε ΗαίΗΖδ";
         Text[ greek ] = "Τοποθέτ. σ~ε κύκλο: Όχι παραμόρφωση";
