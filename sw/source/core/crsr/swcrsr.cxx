@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-20 15:43:47 $
+ *  last change: $Author: jp $ $Date: 2002-03-19 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,9 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
                     pNd = bSelTop
                         ? rNds.GoPrevSection( &GetPoint()->nNode,TRUE,FALSE )
                         : rNds.GoNextSection( &GetPoint()->nNode,TRUE,FALSE );
+
+                    if( 0 != ( pPtNd = pNd->FindTableNode() ))
+                        continue;
                 }
 
                 if( pNd->IsCntntNode() &&       // ist es ein ContentNode ??
