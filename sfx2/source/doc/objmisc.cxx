@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:53:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,21 +1526,32 @@ void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
     pImp->eFlags = eFlags;
 }
 
+/*
 void SfxObjectShell::SetBaseURL( const String& rURL )
 {
     pImp->aBaseURL = rURL;
+    pImp->bNoBaseURL = FALSE;
+}
+
+const String& SfxObjectShell::GetBaseURLForSaving() const
+{
+    if ( pImp->bNoBaseURL )
+        return String();
+    return GetBaseURL();
 }
 
 const String& SfxObjectShell::GetBaseURL() const
 {
     if ( pImp->aBaseURL.Len() )
         return pImp->aBaseURL;
-    else if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
-        return pMedium->GetPhysicalName();
-    else
-        return pMedium->GetBaseURL();
+    return pMedium->GetBaseURL();
 }
 
+void SfxObjectShell::SetEmptyBaseURL()
+{
+    pImp->bNoBaseURL = TRUE;
+}
+*/
 String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
 {
     String aRet;
