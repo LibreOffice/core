@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 13:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ namespace configmgr
             { return m_xStrategy->areValueDefaultsAvailable(_aNode); }
 
             /// retrieve data for the child value of the given name
-            configuration::ValueMemberNode getValue(GroupNode & _aNode, Name const& _aName) const
+            configuration::ValueMemberNode getValue(GroupNode const& _aNode, Name const& _aName) const
             { return m_xStrategy->getValue(_aNode,_aName); }
 
             /// retrieve data for updating the child value of the given name
