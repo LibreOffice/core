@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-12 20:10:27 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3228,14 +3228,14 @@ String STR_REPLCELLSWARN
     Text[ french ] = "Do you want to replace the contents of the destination cells?";
     Text[ spanish ] = "Do you want to replace the contents of the destination cells?";
     Text[ finnish ] = "Do you want to replace the contents of the destination cells?";
-    Text[ italian ] = "Do you want to replace the contents of the destination cells?";
+    Text[ italian ] = "Le celle in cui volete inserire i dati contengono gi� dei dati.\nVolete soprascriverli?";
     Text[ danish ] = "Do you want to replace the contents of the destination cells?";
-    Text[ swedish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ swedish ] = "Cellerna som du vill klistra in data i inneh�ller redan data.\nVill du verkligen skriva �ver dessa data?";
     Text[ polish ] = "Do you want to replace the contents of the destination cells?";
-    Text[ japanese ] = "Do you want to replace the contents of the destination cells?";
-    Text[ korean ] = "Do you want to replace the contents of the destination cells?";
+    Text[ japanese ] = "データを挿入しようとしているセルには、すでにデータがあります。\n既存のデータに上書きしますか。";
+    Text[ korean ] = "붙여넣기하려는 셀에는 이미 데이터가 있습니다. 정말로 기존의 데이터를 겹쳐쓰시겠습니까?";
     Text[ chinese_simplified ] = "Do you want to replace the contents of the destination cells?";
-    Text[ chinese_traditional ] = "Do you want to replace the contents of the destination cells?";
+    Text[ chinese_traditional ] = "要貼上資料的儲存格已經含有資料。\n您真的要覆寫現有的資料？";
     Text[ turkish ] = "Do you want to replace the contents of the destination cells?";
     Text[ arabic ] = "Do you want to replace the contents of the destination cells?";
 };
@@ -3246,6 +3246,26 @@ String STR_ACC_CSVRULER_NAME
     Text = "Lineal";
     Text[ english ] = "Ruler";
     Text[ english_us ] = "Ruler";
+    Text[ portuguese ] = "Ruler";
+    Text[ russian ] = "Ruler";
+    Text[ greek ] = "Ruler";
+    Text[ dutch ] = "Ruler";
+    Text[ french ] = "R�gle";
+    Text[ spanish ] = "Ruler";
+    Text[ finnish ] = "Ruler";
+    Text[ italian ] = "Righello";
+    Text[ danish ] = "Ruler";
+    Text[ swedish ] = "Ruler";
+    Text[ polish ] = "Ruler";
+    Text[ portuguese_brazilian ] = "Ruler";
+    Text[ japanese ] = "ルーラ";
+    Text[ korean ] = "눈금자";
+    Text[ chinese_simplified ] = "标尺";
+    Text[ chinese_traditional ] = "標尺";
+    Text[ turkish ] = "Ruler";
+    Text[ arabic ] = "Ruler";
+    Text[ catalan ] = "Ruler";
+    Text[ thai ] = "Ruler";
 };
 
 String STR_ACC_CSVRULER_DESCR
@@ -3258,6 +3278,26 @@ String STR_ACC_CSVGRID_NAME
     Text = "Vorschautabelle";
     Text[ english ] = "Preview table";
     Text[ english_us ] = "Preview table";
+    Text[ portuguese ] = "Preview table";
+    Text[ russian ] = "Preview table";
+    Text[ greek ] = "Preview table";
+    Text[ dutch ] = "Preview table";
+    Text[ french ] = "Feuille d'aper�u";
+    Text[ spanish ] = "Preview table";
+    Text[ finnish ] = "Preview table";
+    Text[ italian ] = "Anteprima tabella";
+    Text[ danish ] = "Preview table";
+    Text[ swedish ] = "Preview table";
+    Text[ polish ] = "Preview table";
+    Text[ portuguese_brazilian ] = "Preview table";
+    Text[ japanese ] = "Preview table";
+    Text[ korean ] = "표 미리보기";
+    Text[ chinese_simplified ] = "预视工作表";
+    Text[ chinese_traditional ] = "預覽工作表";
+    Text[ turkish ] = "Preview table";
+    Text[ arabic ] = "Preview table";
+    Text[ catalan ] = "Preview table";
+    Text[ thai ] = "Preview table";
 };
 
 String STR_ACC_CSVGRID_DESCR
@@ -3269,7 +3309,27 @@ String STR_ACC_DOC_NAME
 {
     Text = "Dokumentenansicht";
     Text[ english ] = "Document View";
-    Text[ english_us ] = "Document View";
+    Text[ english_us ] = "Document view";
+    Text[ portuguese ] = "Document View";
+    Text[ russian ] = "Document View";
+    Text[ greek ] = "Document View";
+    Text[ dutch ] = "Document View";
+    Text[ french ] = "Document View";
+    Text[ spanish ] = "Document View";
+    Text[ finnish ] = "Document View";
+    Text[ italian ] = "Vista documento";
+    Text[ danish ] = "Document View";
+    Text[ swedish ] = "Document View";
+    Text[ polish ] = "Document View";
+    Text[ portuguese_brazilian ] = "Document View";
+    Text[ japanese ] = "ドキュメント表示";
+    Text[ korean ] = "문서 보기";
+    Text[ chinese_simplified ] = "文档视图";
+    Text[ chinese_traditional ] = "文件檢視";
+    Text[ turkish ] = "Document View";
+    Text[ arabic ] = "Document View";
+    Text[ catalan ] = "Document View";
+    Text[ thai ] = "Document View";
 };
 
 String STR_ACC_DOC_DESCR
@@ -3282,6 +3342,26 @@ String STR_ACC_TABLE_NAME
     Text = "Tabelle %1";
     Text[ english ] = "Table %1";
     Text[ english_us ] = "Table %1";
+    Text[ portuguese ] = "Table %1";
+    Text[ russian ] = "Table %1";
+    Text[ greek ] = "Table %1";
+    Text[ dutch ] = "Table %1";
+    Text[ french ] = "Feuille %1";
+    Text[ spanish ] = "Table %1";
+    Text[ finnish ] = "Table %1";
+    Text[ italian ] = "Tabella %1";
+    Text[ danish ] = "Table %1";
+    Text[ swedish ] = "Table %1";
+    Text[ polish ] = "Table %1";
+    Text[ portuguese_brazilian ] = "Table %1";
+    Text[ japanese ] = "表 %1";
+    Text[ korean ] = "테이블 %1";
+    Text[ chinese_simplified ] = "工作表 %1";
+    Text[ chinese_traditional ] = "工作表 %1";
+    Text[ turkish ] = "Table %1";
+    Text[ arabic ] = "Table %1";
+    Text[ catalan ] = "Table %1";
+    Text[ thai ] = "Table %1";
 };
 
 String STR_ACC_TABLE_DESCR
@@ -3294,6 +3374,26 @@ String STR_ACC_CELL_NAME
     Text = "Tabellenzelle %1";
     Text[ english ] = "Table Cell %1";
     Text[ english_us ] = "Table Cell %1";
+    Text[ portuguese ] = "Table Cell %1";
+    Text[ russian ] = "Table Cell %1";
+    Text[ greek ] = "Table Cell %1";
+    Text[ dutch ] = "Table Cell %1";
+    Text[ french ] = "Cellule de feuille %1";
+    Text[ spanish ] = "Table Cell %1";
+    Text[ finnish ] = "Table Cell %1";
+    Text[ italian ] = "Cella della tabella %1";
+    Text[ danish ] = "Table Cell %1";
+    Text[ swedish ] = "Table Cell %1";
+    Text[ polish ] = "Table Cell %1";
+    Text[ portuguese_brazilian ] = "Table Cell %1";
+    Text[ japanese ] = "表のセル %1";
+    Text[ korean ] = "표의 셀 %1";
+    Text[ chinese_simplified ] = "工作表单元格 %1";
+    Text[ chinese_traditional ] = "工作表儲存格 %1";
+    Text[ turkish ] = "Table Cell %1";
+    Text[ arabic ] = "Table Cell %1";
+    Text[ catalan ] = "Table Cell %1";
+    Text[ thai ] = "Table Cell %1";
 };
 
 String STR_ACC_CELL_DESCR
@@ -3305,7 +3405,27 @@ String STR_ACC_PREVIEWDOC_NAME
 {
     Text = "Seitenvorschau";
     Text[ english ] = "Page Preview";
-    Text[ english_us ] = "Page Preview";
+    Text[ english_us ] = "Page preview";
+    Text[ portuguese ] = "Page Preview";
+    Text[ russian ] = "Page Preview";
+    Text[ greek ] = "Page Preview";
+    Text[ dutch ] = "Page Preview";
+    Text[ french ] = "Page Preview";
+    Text[ spanish ] = "Page Preview";
+    Text[ finnish ] = "Page Preview";
+    Text[ italian ] = "Anteprima di pagina";
+    Text[ danish ] = "Page Preview";
+    Text[ swedish ] = "Page Preview";
+    Text[ polish ] = "Page Preview";
+    Text[ portuguese_brazilian ] = "Page Preview";
+    Text[ japanese ] = "印刷プレビュー";
+    Text[ korean ] = "페이지 미리보기";
+    Text[ chinese_simplified ] = "Page Preview";
+    Text[ chinese_traditional ] = "頁面檢視";
+    Text[ turkish ] = "Page Preview";
+    Text[ arabic ] = "Page Preview";
+    Text[ catalan ] = "Page Preview";
+    Text[ thai ] = "Page Preview";
 };
 
 String STR_ACC_PREVIEWDOC_DESCR
@@ -3327,7 +3447,27 @@ String STR_ACC_LEFTAREA_NAME
 {
     Text = "Linker Bereich";
     Text[ english ] = "Left Area";
-    Text[ english_us ] = "Left Area";
+    Text[ english_us ] = "Left area";
+    Text[ portuguese ] = "Left Area";
+    Text[ russian ] = "Left Area";
+    Text[ greek ] = "Left Area";
+    Text[ dutch ] = "Left Area";
+    Text[ french ] = "Left Area";
+    Text[ spanish ] = "Left Area";
+    Text[ finnish ] = "Left Area";
+    Text[ italian ] = "Area sinistra";
+    Text[ danish ] = "Left Area";
+    Text[ swedish ] = "Left Area";
+    Text[ polish ] = "Left Area";
+    Text[ portuguese_brazilian ] = "Left Area";
+    Text[ japanese ] = "左の範囲";
+    Text[ korean ] = "왼쪽 영역";
+    Text[ chinese_simplified ] = "Left Area";
+    Text[ chinese_traditional ] = "左區域";
+    Text[ turkish ] = "Left Area";
+    Text[ arabic ] = "Left Area";
+    Text[ catalan ] = "Left Area";
+    Text[ thai ] = "Left Area";
 };
 
 String STR_ACC_LEFTAREA_DESCR
@@ -3339,7 +3479,27 @@ String STR_ACC_CENTERAREA_NAME
 {
     Text = "Mittlerer Bereich";
     Text[ english ] = "Center Area";
-    Text[ english_us ] = "Center Area";
+    Text[ english_us ] = "Center area";
+    Text[ portuguese ] = "Center Area";
+    Text[ russian ] = "Center Area";
+    Text[ greek ] = "Center Area";
+    Text[ dutch ] = "Center Area";
+    Text[ french ] = "Center Area";
+    Text[ spanish ] = "Center Area";
+    Text[ finnish ] = "Center Area";
+    Text[ italian ] = "Area centrale";
+    Text[ danish ] = "Center Area";
+    Text[ swedish ] = "Center Area";
+    Text[ polish ] = "Center Area";
+    Text[ portuguese_brazilian ] = "Center Area";
+    Text[ japanese ] = "中央の範囲";
+    Text[ korean ] = "중심 영역";
+    Text[ chinese_simplified ] = "Center Area";
+    Text[ chinese_traditional ] = "中間區域";
+    Text[ turkish ] = "Center Area";
+    Text[ arabic ] = "Center Area";
+    Text[ catalan ] = "Center Area";
+    Text[ thai ] = "Center Area";
 };
 
 String STR_ACC_CENTERAREA_DESCR
@@ -3351,7 +3511,27 @@ String STR_ACC_RIGHTAREA_NAME
 {
     Text = "Rechter Bereich";
     Text[ english ] = "Right Area";
-    Text[ english_us ] = "Right Area";
+    Text[ english_us ] = "Right area";
+    Text[ portuguese ] = "Right Area";
+    Text[ russian ] = "Right Area";
+    Text[ greek ] = "Right Area";
+    Text[ dutch ] = "Right Area";
+    Text[ french ] = "Plage droite";
+    Text[ spanish ] = "Right Area";
+    Text[ finnish ] = "Right Area";
+    Text[ italian ] = "Area destra";
+    Text[ danish ] = "Right Area";
+    Text[ swedish ] = "Right Area";
+    Text[ polish ] = "Right Area";
+    Text[ portuguese_brazilian ] = "Right Area";
+    Text[ japanese ] = "右の範囲";
+    Text[ korean ] = "오른쪽 영역";
+    Text[ chinese_simplified ] = "Right Area";
+    Text[ chinese_traditional ] = "右區域";
+    Text[ turkish ] = "Right Area";
+    Text[ arabic ] = "Right Area";
+    Text[ catalan ] = "Right Area";
+    Text[ thai ] = "Right Area";
 };
 
 String STR_ACC_RIGHTAREA_DESCR
@@ -3364,13 +3544,53 @@ String STR_ACC_HEADER_NAME
     Text = "Kopfzeile";
     Text[ english ] = "Header";
     Text[ english_us ] = "Header";
+    Text[ portuguese ] = "Header";
+    Text[ russian ] = "Header";
+    Text[ greek ] = "Header";
+    Text[ dutch ] = "Header";
+    Text[ french ] = "Header";
+    Text[ spanish ] = "Header";
+    Text[ finnish ] = "Header";
+    Text[ italian ] = "Riga d'intestazione";
+    Text[ danish ] = "Header";
+    Text[ swedish ] = "Header";
+    Text[ polish ] = "Header";
+    Text[ portuguese_brazilian ] = "Header";
+    Text[ japanese ] = "ヘッダ";
+    Text[ korean ] = "머리글";
+    Text[ chinese_simplified ] = "Header";
+    Text[ chinese_traditional ] = "頁首";
+    Text[ turkish ] = "Header";
+    Text[ arabic ] = "Header";
+    Text[ catalan ] = "Header";
+    Text[ thai ] = "Header";
 };
 
 String STR_ACC_HEADER_DESCR
 {
     Text = "Kopfzeile Seite %1";
     Text[ english ] = "Header Page %1";
-    Text[ english_us ] = "Header Page %1";
+    Text[ english_us ] = "Header of page %1";
+    Text[ portuguese ] = "Header Page %1";
+    Text[ russian ] = "Header Page %1";
+    Text[ greek ] = "Header Page %1";
+    Text[ dutch ] = "Header Page %1";
+    Text[ french ] = "Header Page %1";
+    Text[ spanish ] = "Header Page %1";
+    Text[ finnish ] = "Header Page %1";
+    Text[ italian ] = "Riga d'intestazione della pagina %1";
+    Text[ danish ] = "Header Page %1";
+    Text[ swedish ] = "Header Page %1";
+    Text[ polish ] = "Header Page %1";
+    Text[ portuguese_brazilian ] = "Header Page %1";
+    Text[ japanese ] = "ページ %1 のヘッダ";
+    Text[ korean ] = "머리글 페이지 %1";
+    Text[ chinese_simplified ] = "Header Page %1";
+    Text[ chinese_traditional ] = "頁首 頁 %1";
+    Text[ turkish ] = "Header Page %1";
+    Text[ arabic ] = "Header Page %1";
+    Text[ catalan ] = "Header Page %1";
+    Text[ thai ] = "Header Page %1";
 };
 
 String STR_ACC_FOOTER_NAME
@@ -3378,20 +3598,80 @@ String STR_ACC_FOOTER_NAME
     Text = "Fu�zeile";
     Text[ english ] = "Footer";
     Text[ english_us ] = "Footer";
+    Text[ portuguese ] = "Footer";
+    Text[ russian ] = "Footer";
+    Text[ greek ] = "Footer";
+    Text[ dutch ] = "Footer";
+    Text[ french ] = "Footer";
+    Text[ spanish ] = "Footer";
+    Text[ finnish ] = "Footer";
+    Text[ italian ] = "Pi� di pagina";
+    Text[ danish ] = "Footer";
+    Text[ swedish ] = "Footer";
+    Text[ polish ] = "Footer";
+    Text[ portuguese_brazilian ] = "Footer";
+    Text[ japanese ] = "フッタ";
+    Text[ korean ] = "바닥글";
+    Text[ chinese_simplified ] = "Footer";
+    Text[ chinese_traditional ] = "頁尾";
+    Text[ turkish ] = "Footer";
+    Text[ arabic ] = "Footer";
+    Text[ catalan ] = "Footer";
+    Text[ thai ] = "Footer";
 };
 
 String STR_ACC_FOOTER_DESCR
 {
     Text = "Fu�zeile Seite %1";
     Text[ english ] = "Footer Page %1";
-    Text[ english_us ] = "Footer Page %1";
+    Text[ english_us ] = "Footer of page %1";
+    Text[ portuguese ] = "Footer Page %1";
+    Text[ russian ] = "Footer Page %1";
+    Text[ greek ] = "Footer Page %1";
+    Text[ dutch ] = "Footer Page %1";
+    Text[ french ] = "Footer Page %1";
+    Text[ spanish ] = "Footer Page %1";
+    Text[ finnish ] = "Footer Page %1";
+    Text[ italian ] = "Pi� di pagina della pagina %1";
+    Text[ danish ] = "Footer Page %1";
+    Text[ swedish ] = "Footer Page %1";
+    Text[ polish ] = "Footer Page %1";
+    Text[ portuguese_brazilian ] = "Footer Page %1";
+    Text[ japanese ] = "ページ %1 のフッタ";
+    Text[ korean ] = "바닥글 페이지 %1";
+    Text[ chinese_simplified ] = "Footer Page %1";
+    Text[ chinese_traditional ] = "頁尾 頁 %1";
+    Text[ turkish ] = "Footer Page %1";
+    Text[ arabic ] = "Footer Page %1";
+    Text[ catalan ] = "Footer Page %1";
+    Text[ thai ] = "Footer Page %1";
 };
 
 String STR_ACC_EDITLINE_NAME
 {
     Text = "Editzeile";
     Text[ english ] = "Editline";
-    Text[ english_us ] = "Editline";
+    Text[ english_us ] = "Input line";
+    Text[ portuguese ] = "Editline";
+    Text[ russian ] = "Editline";
+    Text[ greek ] = "Editline";
+    Text[ dutch ] = "Editline";
+    Text[ french ] = "Ligne de saisie";
+    Text[ spanish ] = "Editline";
+    Text[ finnish ] = "Editline";
+    Text[ italian ] = "Riga di modifica";
+    Text[ danish ] = "Editline";
+    Text[ swedish ] = "Editline";
+    Text[ polish ] = "Editline";
+    Text[ portuguese_brazilian ] = "Editline";
+    Text[ japanese ] = "入力行";
+    Text[ korean ] = "편집선";
+    Text[ chinese_simplified ] = "输入行";
+    Text[ chinese_traditional ] = "編輯列";
+    Text[ turkish ] = "Editline";
+    Text[ arabic ] = "Editline";
+    Text[ catalan ] = "Editline";
+    Text[ thai ] = "Editline";
 };
 
 String STR_ACC_EDITLINE_DESCR
@@ -3404,6 +3684,26 @@ String STR_ACC_EDITCELL_NAME
     Text = "Tabellenzelle %1";
     Text[ english ] = "Table Cell %1";
     Text[ english_us ] = "Table Cell %1";
+    Text[ portuguese ] = "Table Cell %1";
+    Text[ russian ] = "Table Cell %1";
+    Text[ greek ] = "Table Cell %1";
+    Text[ dutch ] = "Table Cell %1";
+    Text[ french ] = "Cellule de feuille %1";
+    Text[ spanish ] = "Table Cell %1";
+    Text[ finnish ] = "Table Cell %1";
+    Text[ italian ] = "Cella della tabella %1";
+    Text[ danish ] = "Table Cell %1";
+    Text[ swedish ] = "Table Cell %1";
+    Text[ polish ] = "Table Cell %1";
+    Text[ portuguese_brazilian ] = "Table Cell %1";
+    Text[ japanese ] = "表のセル %1";
+    Text[ korean ] = "표의 셀 %1";
+    Text[ chinese_simplified ] = "工作表单元格 %1";
+    Text[ chinese_traditional ] = "工作表儲存格 %1";
+    Text[ turkish ] = "Table Cell %1";
+    Text[ arabic ] = "Table Cell %1";
+    Text[ catalan ] = "Table Cell %1";
+    Text[ thai ] = "Table Cell %1";
 };
 
 String STR_ACC_EDITCELL_DESCR
