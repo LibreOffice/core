@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 12:12:40 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 13:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,15 +158,6 @@
 #endif
 
 #pragma hdrstop
-
-// keycodes handled internally by VCL
-KeyCode ImplReservedKeyCodes[] = {
-    KeyCode(KEY_F1,0), KeyCode(KEY_F1,KEY_SHIFT), KeyCode(KEY_F1,KEY_MOD1),             // help
-    KeyCode(KEY_F2,KEY_SHIFT),                                                          // help
-    KeyCode(KEY_F6,0), KeyCode(KEY_F6,KEY_MOD1),KeyCode(KEY_F6,KEY_SHIFT),              // navigation
-    KeyCode(KEY_F10,0),                                                                 // menu
-    KeyCode(0,0)
-};
 
 // =======================================================================
 

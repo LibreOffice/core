@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 12:13:22 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 13:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,15 @@
 
 using namespace ::com::sun::star::uno;
 
-extern KeyCode ImplReservedKeyCodes[];
+// keycodes handled internally by VCL
+KeyCode ImplReservedKeyCodes[] = {
+    KeyCode(KEY_F1,0), KeyCode(KEY_F1,KEY_SHIFT), KeyCode(KEY_F1,KEY_MOD1),             // help
+    KeyCode(KEY_F2,KEY_SHIFT),                                                          // help
+    KeyCode(KEY_F4,KEY_MOD1), KeyCode(KEY_F4,KEY_MOD2), KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  // dock/undock
+    KeyCode(KEY_F6,0), KeyCode(KEY_F6,KEY_MOD1), KeyCode(KEY_F6,KEY_SHIFT),             // navigation
+    KeyCode(KEY_F10,0)                                                                  // menu
+};
+
 
 // #include <usr/refl.hxx>
 class Reflection;
@@ -481,9 +489,16 @@ void Application::Abort( const XubString& rErrorText )
 
 // -----------------------------------------------------------------------
 
-const KeyCode* Application::GetReservedKeyCodes()
+ULONG   Application::GetReservedKeyCodeCount()
 {
-    return ImplReservedKeyCodes;
+    return sizeof( ImplReservedKeyCodes ) / sizeof( KeyCode );
+}
+const KeyCode*  Application::GetReservedKeyCode( ULONG i )
+{
+    if( i >= GetReservedKeyCodeCount() )
+        return NULL;
+    else
+        return &ImplReservedKeyCodes[i];
 }
 
 // -----------------------------------------------------------------------
