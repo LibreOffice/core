@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTools.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-11-16 12:45:33 $
+ *  last change:$Date: 2005-02-24 17:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,14 +373,10 @@ public class DBTools {
             revokeDB(name) ;
         } catch (com.sun.star.uno.Exception e) {}
 
-        System.out.println("writing database file ...");
-
         XStorable store =
             (XStorable) UnoRuntime.queryInterface(XStorable.class, dataSource);
         String aFile = utils.getOfficeTemp(xMSF) + name + ".odb";
-        System.out.println("... filename will be " + aFile);
         store.storeAsURL(aFile, new PropertyValue[] {  });
-        System.out.println("... done");
 
         registerDB(name, dataSource) ;
     }
@@ -680,12 +676,12 @@ public class DBTools {
         XEnumerationAccess dbContEA = (XEnumerationAccess)
             UnoRuntime.queryInterface(XEnumerationAccess.class, dbContext) ;
 
-        XEnumeration enum = dbContEA.createEnumeration() ;
+        XEnumeration xEnum = dbContEA.createEnumeration() ;
 
         out.println("DatabaseContext registered DataSource's :") ;
-        while (enum.hasMoreElements()) {
+        while (xEnum.hasMoreElements()) {
             try {
-                DataSourceInfo inf = new DataSourceInfo(enum.nextElement()) ;
+                DataSourceInfo inf = new DataSourceInfo(xEnum.nextElement()) ;
                 inf.printInfo(out) ;
             } catch (com.sun.star.container.NoSuchElementException e) {}
             catch (com.sun.star.lang.WrappedTargetException e) {}
@@ -695,11 +691,22 @@ public class DBTools {
     /**
     * Convert system pathname to SOffice URL string
     * (for example 'C:\Temp\DBDir\' -> 'file:///C|/Temp/DBDir/').
+    * (for example '\\server\Temp\DBDir\' -> 'file://server/Temp/DBDir/').
     * Already converted string retured unchanged.
     */
     public static String dirToUrl(String dir) {
-        if (dir.startsWith("file:/")) return dir;
-            else return "file:///" + dir.replace(':', '|').replace('\\', '/') ;
+        String retVal = null;
+        if (dir.startsWith("file:/")) retVal = dir;
+        else {
+            retVal = dir.replace(':', '|').replace('\\', '/');
+
+            if (dir.startsWith("\\\\")) {
+                retVal = "file:" + retVal;
+            }
+
+            else retVal = "file:///" + retVal ;
+        }
+        return retVal;
     }
 
     /**
