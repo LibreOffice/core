@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:41 $
+ *  last change: $Author: sj $ $Date: 2002-09-16 09:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svtools/outstrm.hxx>
+#include <svtools/FilterConfigItem.hxx>
 
 // -------------
 // - PDFFilter -
@@ -98,6 +99,14 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= aFilterData;
     }
 
+    /* we don't get FilterData if we are exporting directly
+     to pdf, but we have to use the last user settings (especially for the CompressMode) */
+    if ( !aFilterData.getLength() )
+    {
+        FilterConfigItem aCfgItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ) );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
+        aFilterData = aCfgItem.GetFilterData();
+    }
     if( mxSrcDoc.is() && xOStm.is() )
     {
         PDFExport       aExport( mxSrcDoc );
