@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2004-05-25 16:17:29 $
+ *  last change: $Author: tra $ $Date: 2004-05-26 17:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 }
 
 //----------------------------------------------------------
-extern "C" UINT InstallActiveXControl( MSIHANDLE hMSI )
+extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
     int nOldInstallMode = 0;
     int nInstallMode = 0;
@@ -314,7 +314,7 @@ extern "C" UINT InstallActiveXControl( MSIHANDLE hMSI )
 }
 
 //----------------------------------------------------------
-extern "C" UINT DeinstallActiveXControl( MSIHANDLE hMSI )
+extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;

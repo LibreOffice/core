@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2004-05-25 15:44:32 $
+#   last change: $Author: tra $ $Date: 2004-05-26 17:02:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 PRJ=..$/..$/..$/..
 PRJNAME=setup2
 TARGET=regactivex
+USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="WNT"
 
