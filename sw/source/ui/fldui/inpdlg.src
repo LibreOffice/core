@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:18:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ ModalDialog DLG_FLD_INPUT
         Text[ czech ] = "Vstup";
         Text[ hebrew ] = "Eingabe";
         Text[ hindi ] = "इनपुट";
+        Text[ slovak ] = "Vstup";
     };
     MultiLineEdit ED_EDIT
     {
@@ -169,6 +170,7 @@ ModalDialog DLG_FLD_INPUT
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
+        Text[ slovak ] = "Upraviť";
     };
     OKButton BT_OK
     {
@@ -216,6 +218,7 @@ ModalDialog DLG_FLD_INPUT
         Text[ czech ] = "Další";
         Text[ hebrew ] = "‮הבא‬";
         Text[ hindi ] = "~आगे";
+        Text[ slovak ] = "Ďa~lší";
     };
     HelpButton PB_HELP
     {
@@ -247,7 +250,10 @@ ModalDialog DLG_FLD_INPUT
     Text[ czech ] = "Vstupní pole";
     Text[ hebrew ] = "Eingabefeld";
     Text[ hindi ] = "इनपुट् क्षेत्र";
+    Text[ slovak ] = "Vstupné pole";
 };
+
+
 
 
 
