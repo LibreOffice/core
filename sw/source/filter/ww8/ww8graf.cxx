@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:55:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2409,7 +2409,10 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
     UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
-    RndStdIds eAnchor = FLY_AUTO_CNTNT;
+    // --> OD 2005-03-03 #i43718#
+    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_IN_CNTNT : FLY_AUTO_CNTNT;
+    // <--
+
     SwFmtAnchor aAnchor( eAnchor );
     aAnchor.SetAnchor( pPaM->GetPoint() );
     rFlySet.Put( aAnchor );
@@ -2796,8 +2799,12 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // If we are to be "below text" then we are not to be opaque
     // #i14045# MM If we are in a header or footer then make the object transparent
     // Not exactly like word but close enough for now
-    if ( (pF->bBelowText || pRecord->bDrawHell) ||
-         ( ( bIsHeader || bIsFooter ) && pF->nwr == 3 ) )
+
+    // --> OD 2005-03-07 #b6234902# - both flags <bBelowText> and <bDrawHell>
+    // have to be set to move object into the background.
+    const bool bMoveToBackgrd = ( pF->bBelowText && pRecord->bDrawHell ) ||
+                                ( ( bIsHeader || bIsFooter ) && pF->nwr == 3 );
+    if ( bMoveToBackgrd )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
     SwFrmFmt* pRetFrmFmt = 0;
@@ -2831,30 +2838,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         if (!bDone)
         {
             sw::util::SetLayer aSetLayer(rDoc);
-            if (pF->bBelowText || pRecord->bDrawHell)
+            if ( bMoveToBackgrd )
                 aSetLayer.SendObjectToHell(*pObject);
             else
                 aSetLayer.SendObjectToHeaven(*pObject);
-
-            // OD 2004-04-01 #i26791# - no longer needed
-//            //#106167# Annoying problems with drawing objects
-//            if (nInTable)
-//            {
-//                const SwFmtHoriOrient *pHori =
-//                    (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
-//                if (
-//                    pHori && pHori->GetRelationOrient() == FRAME &&
-//                    pHori->GetHoriOrient() == HORI_NONE
-//                   )
-//                {
-//                    SwFmtHoriOrient aHori(*pHori);
-//                    Point aPoint(pObject->GetAnchorPos());
-//                    aPoint.X() = aHori.GetPos();
-//                    aHori.SetPos(0);
-//                    aFlySet.ClearItem(RES_HORI_ORIENT);
-//                    pObject->SetAnchorPos(aPoint);
-//                }
-//            }
 
             if (!IsInlineEscherHack())
             {
@@ -2897,12 +2884,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         }
     }
 
-    // --> OD 2005-02-07 #i24255# - position of floating screen object is
-    // given in the layout direction of its anchor.
-    if ( pRetFrmFmt )
+    // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
+    if ( pRetFrmFmt->ISA(SwDrawFrmFmt) )
     {
-        pRetFrmFmt->SetPositionLayoutDir(
-            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        static_cast<SwDrawFrmFmt*>(pRetFrmFmt)->PosAttrSet();
     }
     // <--
     if (!IsInlineEscherHack())
