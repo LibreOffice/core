@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 17:58:16 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ String STR_SVT_COLLATE_UNICODE
     Text[ swedish ] = "Unicode";
     Text[ polish ] = "Unicode";
     Text[ portuguese_brazilian ] = "Unicode";
-    Text[ japanese ] = "ユニコード";
+    Text[ japanese ] = "Unicode";
     Text[ korean ] = "유니코드";
     Text[ chinese_simplified ] = "统一码";
     Text[ chinese_traditional ] = "統一碼";
