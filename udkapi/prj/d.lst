@@ -17,6 +17,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\performance
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\test\bridge
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\uno
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\util\logging
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\security
 
 ..\%__SRC%\ucr\udkapi.db %_DEST%\bin%_EXT%\udkapi.rdb
 ..\%__SRC%\ucrdoc\udkapi_doc.db %_DEST%\bin%_EXT%\udkapi_doc.rdb
@@ -38,6 +39,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\util\logging
 ..\com\sun\star\text\*.idl %_DEST%\idl%_EXT%\com\sun\star\text\*.idl
 ..\com\sun\star\uno\*.idl %_DEST%\idl%_EXT%\com\sun\star\uno\*.idl
 ..\com\sun\star\util\logging\*.idl %_DEST%\idl%_EXT%\com\sun\star\util\logging\*.idl
+..\com\sun\star\security\*.idl %_DEST%\idl%_EXT%\com\sun\star\security\*.idl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
