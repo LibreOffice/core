@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:48:39 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,9 @@
 #include "frmatr.hxx"
 #include "cfgitems.hxx"
 #include "grfatr.hxx"
+#include "fmtline.hxx"
 #include <svx/clipfmtitem.hxx>
+#include <svx/blnkitem.hxx>
 #include <svtools/slstitm.hxx>
 
 #ifndef PROFILE
@@ -319,6 +321,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/05/27 14:48:39  mba
+    #98405#: Slots reorganized
+
     Revision 1.8  2002/04/25 14:56:31  os
     #97499# support for SID_IMAGE_ORIENTATION implemented
 
