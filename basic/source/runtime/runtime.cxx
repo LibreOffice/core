@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2000-10-18 09:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,8 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     MEMBER(SbiRuntime::StepEMPTY),      // Leeren Ausdruck auf Stack
     MEMBER(SbiRuntime::StepERROR),      // TOS = Fehlercode
     MEMBER(SbiRuntime::StepLSET),       // Speichern Objekt TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepRSET)        // Speichern Objekt TOS ==> TOS-1
+    MEMBER(SbiRuntime::StepRSET),       // Speichern Objekt TOS ==> TOS-1
+    MEMBER(SbiRuntime::StepREDIMP_ERASE)// Copy array object for REDIMP
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden

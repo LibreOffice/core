@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-12 14:44:47 $
+ *  last change: $Author: ab $ $Date: 2000-10-18 08:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ class SbiRuntime
     const SbiImage* pImg;           // Code-Image
     SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
+    SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
     SbxVariableRef xDummyVar;       // Ersatz fuer nicht gefundene Variablen
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiGosubStack* pGosubStk;       // GOSUB stack
@@ -414,7 +415,7 @@ class SbiRuntime
     void StepNOERROR(), StepCHANNEL(),  StepCHANNEL0(), StepPRINT();
     void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
-    void StepLSET(),    StepRSET();
+    void StepLSET(),    StepRSET(),     StepREDIMP_ERASE();
     // Alle Opcodes mit einem Operanden
     void StepLOADNC( USHORT ),  StepLOADSC( USHORT ),   StepLOADI( USHORT );
     void StepARGN( USHORT ),    StepBASED( USHORT ),    StepPAD( USHORT );
