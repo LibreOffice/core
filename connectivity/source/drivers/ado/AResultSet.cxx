@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _CONNECTIVITY_ADO_ARESULTSET_HXX_
 #include "ado/AResultSet.hxx"

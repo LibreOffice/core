@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUsers.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,12 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 
+using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -90,38 +94,34 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OUsers::createObject(const ::rtl::OUString& _rName)
 {
-    OAdoUser* pRet = new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
-    Reference< XNamed > xRet = pRet;
-    return xRet;
+    return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
 }
 // -------------------------------------------------------------------------
 void OUsers::impl_refresh() throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OUsers::createEmptyObject()
 {
-    OUserExtend* pNew = new OUserExtend(m_pCatalog,isCaseSensitive());
-    return pNew;
+    return new OUserExtend(m_pCatalog,isCaseSensitive());
 }
 // -------------------------------------------------------------------------
 // XAppend
 void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OUserExtend* pUser = NULL;
+    if(getImplementation(pUser,descriptor) && pUser != NULL)
     {
-        OUserExtend* pUser = (OUserExtend*)xTunnel->getSomething(OUserExtend::getUnoTunnelImplementationId());
-        if(pUser)
-            m_pCollection->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
+        ADOUsers* pUsers = (ADOUsers*)m_aCollection;
+        pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()));
     }
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
+    m_aCollection.Delete(_sElementName);
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OUsers::cloneObject(const Reference< XPropertySet >& _xDescriptor)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,19 +91,14 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
 {
-    ADOIndex* pIndex = NULL;
-    m_pCollection->get_Item(OLEVariant(_rName),&pIndex);
-
-    return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex);
+    return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 // -------------------------------------------------------------------------
 void OIndexes::impl_refresh() throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
@@ -114,29 +109,30 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
 // XAppend
 void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OAdoIndex* pIndex = NULL;
+    sal_Bool bError = sal_True;
+    if(getImplementation(pIndex,descriptor) && pIndex != NULL)
     {
-        OAdoIndex* pIndex = (OAdoIndex*)xTunnel->getSomething(OAdoIndex:: getUnoTunnelImplementationId());
-        if(pIndex)
-            m_pCollection->Append(OLEVariant(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),
-                                  OLEVariant(pIndex->getImpl()));
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        ADOIndexes* pIndexes = m_aCollection;
+        bError = FAILED(pIndexes->Append(OLEVariant(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),
+                                  OLEVariant(pIndex->getImpl())));
     }
+    if(bError)
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
+    m_aCollection.Delete(_sElementName);
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    OAdoIndex* pIndex = NULL;
+    if(getImplementation(pIndex,_xDescriptor) && pIndex != NULL)
+        return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex->getImpl());
+    return Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 

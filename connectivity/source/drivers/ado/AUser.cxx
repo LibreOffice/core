@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,11 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CONNECTIVITY_ADO_USER_HXX_
 #include "ado/AUser.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADO_GROUPS_HXX_
 #include "ado/AGroups.hxx"
@@ -80,9 +82,7 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
-#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
-#include "ado/ACatalog.hxx"
-#endif
+
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
@@ -117,32 +117,13 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const ::rtl::OUString& 
 // -------------------------------------------------------------------------
 void OAdoUser::refreshGroups()
 {
-
     TStringVector aVector;
-
-    ADOGroups* pGroups = m_aUser.get_Groups();
-    if(pGroups)
-    {
-        pGroups->Refresh();
-
-        sal_Int32 nCount = 0;
-        pGroups->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOGroup* pGroup = NULL;
-            pGroups->get_Item(OLEVariant(i),&pGroup);
-            if(pGroup)
-            {
-                WpADOGroup aGroup(pGroup);
-                aVector.push_back(aGroup.get_Name());
-            }
-        }
-    }
-
+    WpADOGroups aGroups(m_aUser.get_Groups());
+    aGroups.fillElementNames(aVector);
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
-        m_pGroups = new OGroups(m_pCatalog,m_aMutex,aVector,pGroups,isCaseSensitive());
+        m_pGroups = new OGroups(m_pCatalog,m_aMutex,aVector,aGroups,isCaseSensitive());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()

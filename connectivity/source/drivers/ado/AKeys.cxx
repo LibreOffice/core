@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,9 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HDL_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hdl>
-#endif
+//#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HDL_
+//#include <com/sun/star/sdbcx/XColumnsSupplier.hdl>
+//#endif
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -103,18 +103,14 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
 {
-    ADOKey* pKey = NULL;
-    m_pCollection->get_Item(OLEVariant(_rName),&pKey);
-    return new OAdoKey(isCaseSensitive(),m_pConnection,pKey);
+    return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 // -------------------------------------------------------------------------
 void OKeys::impl_refresh() throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
@@ -125,50 +121,42 @@ Reference< XPropertySet > OKeys::createEmptyObject()
 // XAppend
 void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OAdoKey* pKey = NULL;
+    if(getImplementation(pKey,descriptor) && pKey != NULL)
     {
-        OAdoKey* pKey = (OAdoKey*)xTunnel->getSomething(OAdoKey:: getUnoTunnelImplementationId());
-        if(pKey)
-        {
-            // To pass as column parameter to Key's Apppend method
-            OLEVariant vOptional;
-//          vOptional.vt = VT_ERROR;
-//          vOptional.scode = DISP_E_PARAMNOTFOUND;
+        // To pass as column parameter to Key's Apppend method
+        OLEVariant vOptional;
+        vOptional.setNoArg();
 
-            m_pCollection->Append(OLEVariant(pKey->getImpl()),OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))),vOptional);
+        KeyTypeEnum eKey = OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
+        WpADOKey aKey = pKey->getImpl();
+        ::rtl::OUString sName = aKey.get_Name();
+        if(!sName.getLength())
+            aKey.put_Name(::rtl::OUString::createFromAscii("PrimaryKey") );
+
+        ADOKeys* pKeys = m_aCollection;
+        if(FAILED(pKeys->Append(OLEVariant((ADOKey*)pKey->getImpl()),
+                                eKey,
+                                vOptional)))
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
-    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+    if(!m_aCollection.Delete(OLEVariant(_sElementName)))
+        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OAdoKey* pKey = new OAdoKey(isCaseSensitive(),m_pConnection);
-    Reference<XPropertySet> xProp = pKey;
-    Reference< XNamed > xName = pKey;
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
-    Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
-    Reference<XAppend> xAppend(pKey->getColumns(),UNO_QUERY);
-    sal_Int32 nCount = xIndex->getCount();
-    for(sal_Int32 i=0;i< nCount;++i)
-    {
-        Reference<XPropertySet> xProp;
-        xIndex->getByIndex(i) >>= xProp;
-        xAppend->appendByDescriptor(xProp);
-    }
-
-    return xName;
+    OAdoKey* pKey = NULL;
+    if(getImplementation(pKey,_xDescriptor) && pKey != NULL)
+        return new OAdoKey(isCaseSensitive(),m_pConnection,pKey->getImpl());
+    return Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 

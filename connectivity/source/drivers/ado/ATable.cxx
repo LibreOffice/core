@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,86 +146,39 @@ void OAdoTable::refreshColumns()
 {
     TStringVector aVector;
 
-    ADOColumns* pColumns = m_aTable.get_Columns();
-    if(pColumns)
-    {
-        pColumns->Refresh();
-
-        sal_Int32 nCount = 0;
-        pColumns->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOColumn* pColumn = NULL;
-            pColumns->get_Item(OLEVariant(i),&pColumn);
-            if(pColumn)
-            {
-                WpADOColumn aColumn(pColumn);
-                aVector.push_back(aColumn.get_Name());
-            }
-        }
-    }
+    WpADOColumns aColumns = m_aTable.get_Columns();
+    aColumns.fillElementNames(aVector);
 
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pCatalog->getConnection());
+        m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshKeys()
 {
     TStringVector aVector;
 
-    ADOKeys* pKeys = m_aTable.get_Keys();
-    if(pKeys)
-    {
-        pKeys->Refresh();
-
-        sal_Int32 nCount = 0;
-        pKeys->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOKey* pKey = NULL;
-            pKeys->get_Item(OLEVariant(i),&pKey);
-            if(pKey)
-            {
-                WpADOKey aKey(pKey);
-                aVector.push_back(aKey.get_Name());
-            }
-        }
-    }
+    WpADOKeys aKeys = m_aTable.get_Keys();
+    aKeys.fillElementNames(aVector);
 
     if(m_pKeys)
         m_pKeys->reFill(aVector);
     else
-        m_pKeys = new OKeys(*this,m_aMutex,aVector,pKeys,isCaseSensitive(),m_pCatalog->getConnection());
+        m_pKeys = new OKeys(*this,m_aMutex,aVector,aKeys,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshIndexes()
 {
     TStringVector aVector;
 
-    ADOIndexes* pIndexes = m_aTable.get_Indexes();
-    if(pIndexes)
-    {
-        pIndexes->Refresh();
+    WpADOIndexes aIndexes = m_aTable.get_Indexes();
+    aIndexes.fillElementNames(aVector);
 
-        sal_Int32 nCount = 0;
-        pIndexes->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOIndex* pIndex = NULL;
-            pIndexes->get_Item(OLEVariant(i),&pIndex);
-            if(pIndex)
-            {
-                WpADOIndex aIndex(pIndex);
-                aVector.push_back(aIndex.get_Name());
-            }
-        }
-    }
     if(m_pIndexes)
         m_pIndexes->reFill(aVector);
     else
-        m_pIndexes = new OIndexes(*this,m_aMutex,aVector,pIndexes,isCaseSensitive(),m_pCatalog->getConnection());
+        m_pIndexes = new OIndexes(*this,m_aMutex,aVector,aIndexes,isCaseSensitive(),m_pCatalog->getConnection());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
@@ -272,22 +225,19 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    sal_Bool bError = sal_True;
+    OAdoColumn* pColumn = NULL;
+    if(getImplementation(pColumn,descriptor) && pColumn != NULL)
     {
-        OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn:: getUnoTunnelImplementationId());
-        if(pColumn)
-        {
-            m_aTable.get_Columns()->Delete(OLEVariant(colName));
-            m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by name!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        WpADOColumns aColumns = m_aTable.get_Columns();
+        bError = !aColumns.Delete(colName);
+        bError = bError || !aColumns.Append(pColumn->getColumnImpl());
     }
+    if(bError)
+        ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
 
     m_pColumns->refresh();
-
+    refreshColumns();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
@@ -295,20 +245,10 @@ void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< X
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn:: getUnoTunnelImplementationId());
-        if(pColumn)
-        {
-            m_aTable.get_Columns()->Delete(OLEVariant(index));
-            m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-    }
-    m_pColumns->refresh();
+    Reference< XPropertySet > xOld;
+    m_pColumns->getByIndex(index) >>= xOld;
+    if(xOld.is())
+        alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
 // -------------------------------------------------------------------------
 void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 09:11:52 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+
 
 using namespace connectivity;
 using namespace connectivity::ado;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,28 +119,12 @@ void OAdoIndex::refreshColumns()
 {
     TStringVector aVector;
 
-    ADOColumns* pColumns = m_aIndex.get_Columns();
-    if(pColumns)
-    {
-        pColumns->Refresh();
-
-        sal_Int32 nCount = 0;
-        pColumns->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOColumn* pColumn = NULL;
-            pColumns->get_Item(OLEVariant(i),&pColumn);
-            if(pColumn)
-            {
-                WpADOColumn aColumn(pColumn);
-                aVector.push_back(aColumn.get_Name());
-            }
-        }
-    }
+    WpADOColumns aColumns = m_aIndex.get_Columns();
+    aColumns.fillElementNames(aVector);
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pConnection);
+        m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pConnection);
 }
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,29 +131,13 @@ void OAdoGroup::refreshUsers()
 {
     TStringVector aVector;
 
-    ADOUsers* pUsers = m_aGroup.get_Users();
-    if(pUsers)
-    {
-        pUsers->Refresh();
-
-        sal_Int32 nCount = 0;
-        pUsers->get_Count(&nCount);
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            ADOUser* pUser = NULL;
-            pUsers->get_Item(OLEVariant(i),&pUser);
-            if(pUser)
-            {
-                WpADOUser aUser(pUser);
-                aVector.push_back(aUser.get_Name());
-            }
-        }
-    }
+    WpADOUsers aUsers = m_aGroup.get_Users();
+    aUsers.fillElementNames(aVector);
 
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(m_pCatalog,m_aMutex,aVector,pUsers,isCaseSensitive());
+        m_pUsers = new OUsers(m_pCatalog,m_aMutex,aVector,aUsers,isCaseSensitive());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelImplementationId()

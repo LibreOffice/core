@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,52 +105,41 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
 {
-    ADOView* pView = NULL;
-    m_pCollection->get_Item(OLEVariant(_rName),&pView);
-
-    Reference< XNamed > xRet = new OAdoView(isCaseSensitive(),pView);
-
-    return xRet;
+    return new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
 }
 // -------------------------------------------------------------------------
 void OViews::impl_refresh(  ) throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OViews::createEmptyObject()
 {
-    OAdoView* pNew = new OAdoView(isCaseSensitive());
-    return pNew;
+    return new OAdoView(isCaseSensitive());
 }
 
 // -------------------------------------------------------------------------
 // XAppend
 void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OAdoView* pView = NULL;
+    if(getImplementation(pView,descriptor) && pView != NULL)
     {
-        OAdoView* pView = (OAdoView*)xTunnel->getSomething(OAdoView:: getUnoTunnelImplementationId());
-        if(pView)
-        {
-            m_pCollection->Append(OLEString(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),(IDispatch *)pView->getImpl());
+        ADOViews* pViews = (ADOViews*)m_aCollection;
+        if(FAILED(pViews->Append(OLEString(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),pView->getImpl())))
             ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    if(!m_aCollection.Delete(_sElementName))
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OViews::cloneObject(const Reference< XPropertySet >& _xDescriptor)

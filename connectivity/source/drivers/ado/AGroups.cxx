@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,11 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
-
+using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -98,7 +101,7 @@ Reference< XNamed > OGroups::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 void OGroups::impl_refresh() throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OGroups::createEmptyObject()
@@ -109,18 +112,15 @@ Reference< XPropertySet > OGroups::createEmptyObject()
 // XAppend
 void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OAdoGroup* pGroup = (OAdoGroup*)xTunnel->getSomething(OAdoGroup::getUnoTunnelImplementationId());
-        m_pCollection->Append(OLEVariant(pGroup->getImpl()));
-    }
+    OAdoGroup* pGroup = NULL;
+    if(getImplementation(pGroup,descriptor) && pGroup != NULL)
+        m_aCollection.Append(pGroup->getImpl());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OGroups::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
+    m_aCollection.Delete(_sElementName);
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OGroups::cloneObject(const Reference< XPropertySet >& _xDescriptor)

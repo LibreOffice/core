@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,29 +86,28 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::ado;
 using namespace connectivity;
+using namespace comphelper;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
-    ADOColumn* pColumn = NULL;
-    m_pCollection->get_Item(OLEVariant(_rName),&pColumn);
-
-    return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn);
+    return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 
 // -------------------------------------------------------------------------
 void OColumns::impl_refresh() throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
@@ -119,36 +118,29 @@ Reference< XPropertySet > OColumns::createEmptyObject()
 // XAppend
 void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OAdoColumn* pColumn = NULL;
+    if(getImplementation(pColumn,descriptor) && pColumn != NULL)
     {
-        OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn::getUnoTunnelImplementationId());
-        if(pColumn)
-        {
-            WpADOColumn aColumn = pColumn->getColumnImpl();
-            m_pCollection->Append(OLEVariant(aColumn));
+        if(!m_aCollection.Append(pColumn->getColumnImpl()))
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
-    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+    if(!m_aCollection.Delete(_sElementName))
+        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OAdoColumn* pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
-    Reference<XPropertySet> xProp = pColumn;
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    OAdoColumn* pColumn = NULL;
+    if(getImplementation(pColumn,_xDescriptor) && pColumn != NULL)
+        return new OAdoColumn(isCaseSensitive(),m_pConnection,pColumn->getColumnImpl());
+    return Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 

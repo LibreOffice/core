@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,12 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity;
+using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -106,14 +110,14 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
 {
-    ADOTable* pTable = NULL;
-    m_pCollection->get_Item(OLEVariant(_rName),&pTable);
-    return new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable);
+    OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+    return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
 }
 // -------------------------------------------------------------------------
 void OTables::impl_refresh(  ) throw(RuntimeException)
 {
-    m_pCollection->Refresh();
+    OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+    m_aCollection.Refresh();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
@@ -124,32 +128,34 @@ Reference< XPropertySet > OTables::createEmptyObject()
 // XAppend
 void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
+    OAdoTable* pTable = NULL;
+    if(getImplementation(pTable,descriptor) && pTable != NULL)
     {
-        OAdoTable* pTable = (OAdoTable*)xTunnel->getSomething(OAdoTable:: getUnoTunnelImplementationId());
-        if(pTable)
-        {
-            m_pCollection->Append(OLEVariant(pTable->getImpl()));
+        OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+        if(!m_aCollection.Append(pTable->getImpl()))
             ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-        }
-        else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    m_pCollection->Delete(OLEVariant(_sElementName));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
+    if(!m_aCollection.Delete(_sElementName))
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    OAdoTable* pTable = NULL;
+    if(getImplementation(pTable,_xDescriptor) && pTable != NULL)
+    {
+        WpADOTable aTable = pTable->getImpl();
+        return new OAdoTable(this,isCaseSensitive(),m_pCatalog,aTable);
+    }
+    return Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
