@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-31 12:12:52 $
+ *  last change: $Author: sj $ $Date: 2001-05-04 11:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
             nCount += 4;
 
             const SdrGluePointList* pList = mpObject->GetGluePointList();
-            nCount += pList->GetCount();
+            if( pList )
+                nCount += pList->GetCount();
         }
     }
 
