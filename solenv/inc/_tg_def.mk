@@ -15,10 +15,12 @@ DEF1DEPN+=$(SLB)$/$(DEFLIB1NAME).lib
 
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEF1EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF1EXPORTFILE=$(MISC)$/$(SHL1VERSIONMAP:b).dxp
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 
@@ -188,10 +190,12 @@ DEF2DEPN+=$(SLB)$/$(DEFLIB2NAME).lib
 
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEF2EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF2EXPORTFILE=$(MISC)$/$(SHL2VERSIONMAP:b).dxp
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 
@@ -361,10 +365,12 @@ DEF3DEPN+=$(SLB)$/$(DEFLIB3NAME).lib
 
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEF3EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF3EXPORTFILE=$(MISC)$/$(SHL3VERSIONMAP:b).dxp
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 
@@ -534,10 +540,12 @@ DEF4DEPN+=$(SLB)$/$(DEFLIB4NAME).lib
 
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEF4EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF4EXPORTFILE=$(MISC)$/$(SHL4VERSIONMAP:b).dxp
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 
@@ -707,10 +715,12 @@ DEF5DEPN+=$(SLB)$/$(DEFLIB5NAME).lib
 
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEF5EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF5EXPORTFILE=$(MISC)$/$(SHL5VERSIONMAP:b).dxp
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 
@@ -880,10 +890,12 @@ DEF6DEPN+=$(SLB)$/$(DEFLIB6NAME).lib
 
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEF6EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF6EXPORTFILE=$(MISC)$/$(SHL6VERSIONMAP:b).dxp
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 
@@ -1053,10 +1065,12 @@ DEF7DEPN+=$(SLB)$/$(DEFLIB7NAME).lib
 
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEF7EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF7EXPORTFILE=$(MISC)$/$(SHL7VERSIONMAP:b).dxp
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 
@@ -1226,10 +1240,12 @@ DEF8DEPN+=$(SLB)$/$(DEFLIB8NAME).lib
 
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEF8EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF8EXPORTFILE=$(MISC)$/$(SHL8VERSIONMAP:b).dxp
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 
@@ -1399,10 +1415,12 @@ DEF9DEPN+=$(SLB)$/$(DEFLIB9NAME).lib
 
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEF9EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF9EXPORTFILE=$(MISC)$/$(SHL9VERSIONMAP:b).dxp
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 
@@ -1572,10 +1590,12 @@ DEF10DEPN+=$(SLB)$/$(DEFLIB10NAME).lib
 
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEF10EXPORTFILE)"==""
+.IF "$(GUI)"=="WNT"
 DEF10EXPORTFILE=$(MISC)$/$(SHL10VERSIONMAP:b).dxp
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 
