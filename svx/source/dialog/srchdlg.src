@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:03:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "dialogs.hrc"
 #include "srchdlg.hrc"
 
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+
  // Strings ---------------------------------------------------------------
 
 String RID_SVXSTR_SEARCH_STYLES
@@ -93,31 +95,29 @@ ModelessDialog RID_SVXDLG_SEARCH
     OutputSize = TRUE ;
     Hide = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 302 , 152 ) ;
+    Size = MAP_APPFONT ( 200 , 155 ) ;
     Text [ de ] = "Suchen & Ersetzen" ;
     Text [ en-US ] = "Find & Replace" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ de ] = "S~uchen nach" ;
         Text [ en-US ] = "~Search for" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox ED_SEARCH
     {
-        Pos = MAP_APPFONT ( 62 , 6 ) ;
-        Size = MAP_APPFONT ( 123 , 98 ) ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ListBox LB_SEARCH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 6 ) ;
-        Size = MAP_APPFONT ( 123 , 98 ) ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -125,37 +125,37 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     FixedText FT_SEARCH_ATTR
     {
-        Pos = MAP_APPFONT ( 10 , 26 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
+        Pos = MAP_APPFONT ( 9 , 35 ) ;
+        Size = MAP_APPFONT ( 129 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
     FixedText FT_SEARCH_FORMATS
     {
-        Pos = MAP_APPFONT ( 10 , 24 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
+        Pos = MAP_APPFONT ( 9 , 35 ) ;
+        Size = MAP_APPFONT ( 129 , 16 ) ;
+        WordBreak = TRUE ;
         Hide = TRUE ;
     };
     FixedText FT_REPLACE
     {
-        Pos = MAP_APPFONT ( 6 , 49 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 54 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ de ] = "Ersetzen ~durch" ;
         Text [ en-US ] = "Re~place with" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox ED_REPLACE
     {
-        Pos = MAP_APPFONT ( 62 , 48 ) ;
-        Size = MAP_APPFONT ( 123 , 98 ) ;
+        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ListBox LB_REPLACE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 48 ) ;
-        Size = MAP_APPFONT ( 123 , 98 ) ;
+        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -163,358 +163,297 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     FixedText FT_REPLACE_ATTR
     {
-        Pos = MAP_APPFONT ( 10 , 68 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
+        Pos = MAP_APPFONT ( 9 , 82 ) ;
+        Size = MAP_APPFONT ( 129 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
-#if SUPD < 641  || defined( GT_DEBUG )
-    MultiLineEdit ED_REPLACE_FORMATS
-    {
-        Pos = MAP_APPFONT ( 10 , 68 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
-        ReadOnly = TRUE ;
-        IgnoreTab = TRUE ;
-        Hide = TRUE ;
-    };
-#endif
     FixedText FT_REPLACE_FORMATS
     {
-        Pos = MAP_APPFONT ( 10 , 68 ) ;
-        Size = MAP_APPFONT ( 171 , 16 ) ;
+        Pos = MAP_APPFONT ( 9 , 82 ) ;
+        Size = MAP_APPFONT ( 129 , 16 ) ;
+        WordBreak = TRUE ;
         Hide = TRUE ;
-    };
-    CheckBox BTN_CELLS
-    {
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text [ de ] = "Nur ganze W~örter" ;
-        Text [ en-US ] = "Whole wor~ds only" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox CB_MATCH_CASE
-    {
-        Pos = MAP_APPFONT ( 102 , 103 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "E~xakte Suche" ;
-        Text [ x-comment ] = " ";
-        Text [ en-US ] = "Ma~tch case";
-    };
-    CheckBox BTN_BACKWARDS
-    {
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text [ de ] = "Rüc~kwärts" ;
-        Text [ en-US ] = "Bac~kwards" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox BTN_SELECTIONS
-    {
-        Pos = MAP_APPFONT ( 102 , 116 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text [ de ] = "~Nur in Selektion" ;
-        Text [ en-US ] = "Current selection ~only" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox BTN_REGEXP
-    {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text [ de ] = "Re~gulärer Ausdruck" ;
-        Text [ en-US ] = "Regular e~xpressions" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox BTN_LAYOUTS
-    {
-        Pos = MAP_APPFONT ( 102 , 129 ) ;
-        Size = MAP_APPFONT ( 87 , 10 ) ;
-        Text [ de ] = "Suche nach ~Vorlagen" ;
-        Text [ en-US ] = "Search for St~yles" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    CheckBox CB_SIMILARITY
-    {
-        Pos = MAP_APPFONT ( 192 , 103 ) ;
-        Size = MAP_APPFONT ( 81 , 10 ) ;
-        Text [ de ] = "~Ähnlichkeitssuche" ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "S~imilarity search" ;
-        Text [ x-comment ] = " ";
-    };
-    PushButton PB_SIMILARITY
-    {
-        Pos = MAP_APPFONT ( 282 , 101 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "~..." ;
-        TabStop = TRUE ;
-    };
-    CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
-    {
-        Pos = MAP_APPFONT ( 192 , 116 ) ;
-        Size = MAP_APPFONT ( 104 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "Zeichenbreite berücksichtigen" ;
-        Text [ en-US ] = "Match character width";
-    };
-    CheckBox CB_JAP_SOUNDS_LIKE
-    {
-        Pos = MAP_APPFONT ( 192 , 129 ) ;
-        Size = MAP_APPFONT ( 81 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ de ] = "Ähnl. Schreibweise (Jap.)" ;
-        Text [ en-US ] = "Sounds like (Japanese)";
-    };
-    PushButton PB_JAP_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 282 , 127 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "..." ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 91 ) ;
-        Size = MAP_APPFONT ( 290 , 8 ) ;
-        Text [ de ] = "Optionen" ;
-        Text [ en-US ] = "Options" ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton BTN_FORMULAS
-    {
-        Pos = MAP_APPFONT ( 12 , 163 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "F~ormeln" ;
-        Text [ en-US ] = "F~ormulas" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton BTN_VALUES
-    {
-        Pos = MAP_APPFONT ( 12 , 176 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "~Werten" ;
-        Text [ en-US ] = "~Values" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton BTN_NOTES
-    {
-        Pos = MAP_APPFONT ( 12 , 189 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "No~tizen" ;
-        Text [ en-US ] = "~Notes" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    FixedLine FL_SEARCH
-    {
-        Pos = MAP_APPFONT ( 6 , 152 ) ;
-        Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text [ de ] = "Suchen in" ;
-        Text [ en-US ] = "Search in" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    FixedLine FL_SEARCHDIR_VERT
-    {
-        Pos = MAP_APPFONT ( 93, 163 ) ;
-        Size = MAP_APPFONT ( 4,  43 ) ;
-        Vert = TRUE;
-    };
-    RadioButton BTN_ROWS
-    {
-        Pos = MAP_APPFONT ( 104 , 163 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "Zeilenwe~ise" ;
-        Text [ en-US ] = "Ro~ws" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton BTN_COLUMNS
-    {
-        Pos = MAP_APPFONT ( 104 , 176 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "S~paltenweise" ;
-        Text [ en-US ] = "Col~umns" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    FixedLine FL_SEARCHDIR
-    {
-        Pos = MAP_APPFONT ( 98 , 152 ) ;
-        Size = MAP_APPFONT ( 87 , 8 ) ;
-        Text [ de ] = "Suchrichtung" ;
-        Text [ en-US ] = "Search direction" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    FixedLine FL_SEARCH_VERT
-    {
-        Pos = MAP_APPFONT ( 186, 163 ) ;
-        Size = MAP_APPFONT ( 4,  43 ) ;
-        Vert = TRUE;
-    };
-    CheckBox CB_ALLTABLES
-    {
-        Pos = MAP_APPFONT ( 197 , 163 ) ;
-        Size = MAP_APPFONT ( 93 , 10 ) ;
-        Text [ de ] = "~In allen Tabellen suchen" ;
-        Hide = TRUE ;
-        Text [ en-US ] = "Search in all sheets" ;
-        Text [ x-comment ] = " ";
-    };
-    FixedLine FL_CALCEXTRAS
-    {
-        Pos = MAP_APPFONT ( 191 , 152 ) ;
-        Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text [ de ] = "Extras" ;
-        Hide = TRUE ;
-        Text [ en-US ] = "Options" ;
-        Text [ x-comment ] = " ";
-    };
-    PushButton BTN_SEARCH_ALL
-    {
-        Pos = MAP_APPFONT ( 192 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Suche ~alle" ;
-        Text [ en-US ] = "Find ~All" ;
-        TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_SEARCH
     {
-        Pos = MAP_APPFONT ( 246 , 6 ) ;
+        Pos = MAP_APPFONT ( 144 , 9 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Suchen" ;
         Text [ en-US ] = "~Find" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    PushButton BTN_REPLACE_ALL
+    PushButton BTN_SEARCH_ALL
     {
-        Pos = MAP_APPFONT ( 192 , 23 ) ;
+        Pos = MAP_APPFONT ( 144 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "E~rsetze alle" ;
-        Text [ en-US ] = "Replace A~ll" ;
+        Text [ de ] = "Suche ~alle" ;
+        Text [ en-US ] = "Find ~All" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
+    };
+    FixedLine FL_SEARCH_COMMAND
+    {
+        Pos = MAP_APPFONT ( 141 , 44 ) ;
+        Size = MAP_APPFONT ( 56 , 8 ) ;
     };
     PushButton BTN_REPLACE
     {
-        Pos = MAP_APPFONT ( 246 , 23 ) ;
+        Pos = MAP_APPFONT ( 144 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
+    };
+    PushButton BTN_REPLACE_ALL
+    {
+        Pos = MAP_APPFONT ( 144 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "E~rsetze alle" ;
+        Text [ en-US ] = "Replace A~ll" ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_MATCH_CASE
+    {
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "E~xakte Suche" ;
+        Text [ en-US ] = "Ma~tch case";
+    };
+    CheckBox CB_WHOLE_WORDS
+    {
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "Nur ganze W~örter" ;
+        Text [ en-US ] = "Whole wor~ds only" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 124 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
+    };
+    MoreButton BTN_MORE
+    {
+        Pos = MAP_APPFONT ( 6 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 174 ;
+        State = FALSE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 88 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
     };
     CancelButton BTN_CLOSE
     {
-        Pos = MAP_APPFONT ( 246 , 40 ) ;
+        Pos = MAP_APPFONT ( 144 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "S~chließen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    HelpButton BTN_HELP
+    FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 246 , 57 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    MoreButton BTN_MORE
-    {
-        Pos = MAP_APPFONT ( 246 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Zusätze" ;
-        Text [ en-US ] = "~More" ;
+        Pos = MAP_APPFONT ( 6 , 152 ) ;
+        Size = MAP_APPFONT ( 191 , 8 ) ;
         Hide = TRUE ;
+    };
+    CheckBox CB_SELECTIONS
+    {
+        Pos = MAP_APPFONT ( 12 , 163 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "~Nur in Selektion" ;
+        Text [ en-US ] = "Current selection ~only" ;
         TabStop = TRUE ;
-        MapUnit = MAP_APPFONT ;
-        Delta = 60 ;
-        Text [ x-comment ] = " ";
+        Hide = TRUE ;
+    };
+    CheckBox CB_BACKWARDS
+    {
+        Pos = MAP_APPFONT ( 12 , 176 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "Rüc~kwärts" ;
+        Text [ en-US ] = "Bac~kwards" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_REGEXP
+    {
+        Pos = MAP_APPFONT ( 12 , 189 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "Re~gulärer Ausdruck" ;
+        Text [ en-US ] = "Regular e~xpressions" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_SIMILARITY
+    {
+        Pos = MAP_APPFONT ( 12 , 204 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ de ] = "~Ähnlichkeitssuche" ;
+        Text [ en-US ] = "S~imilarity search" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    PushButton PB_SIMILARITY
+    {
+        Pos = MAP_APPFONT ( 124 , 202 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~..." ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_LAYOUTS
+    {
+        Pos = MAP_APPFONT ( 12 , 219 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "Suche nach ~Vorlagen" ;
+        Text [ en-US ] = "Search for St~yles" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 232 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Zeichenbreite berücksichtigen" ;
+        Text [ en-US ] = "Match character width";
+        Hide = TRUE ;
+    };
+    CheckBox CB_JAP_SOUNDS_LIKE
+    {
+        Pos = MAP_APPFONT ( 12 , 247 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Ähnliche Schreibweise (Japanisch)" ;
+        Text [ en-US ] = "Sounds like (Japanese)";
+        Hide = TRUE ;
+    };
+    PushButton PB_JAP_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 124 , 245 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "..." ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
     };
     PushButton BTN_ATTRIBUTE
     {
-        Pos = MAP_APPFONT ( 192 , 40 ) ;
+        Pos = MAP_APPFONT ( 144 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "Attri~bute..." ;
         Text [ en-US ] = "Attri~butes..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
+        Hide = TRUE ;
     };
     PushButton BTN_FORMAT
     {
-        Pos = MAP_APPFONT ( 192 , 57 ) ;
+        Pos = MAP_APPFONT ( 144 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Format..." ;
         Text [ en-US ] = "For~mat..." ;
         TabStop = TRUE ;
+        Hide = TRUE ;
     };
     PushButton BTN_NOFORMAT
     {
-        Pos = MAP_APPFONT ( 192 , 74 ) ;
+        Pos = MAP_APPFONT ( 144 , 197 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "Kein For~mat" ;
         Text [ en-US ] = "~No Format" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
+        Hide = TRUE ;
     };
+    FixedLine FL_CALC
+    {
+        Pos = MAP_APPFONT ( 6 , 259 ) ;
+        Size = MAP_APPFONT ( 191 , 8 ) ;
+        Hide = TRUE ;
+    };
+    FixedText FT_CALC_SEARCHIN
+    {
+        Pos = MAP_APPFONT ( 12 , 272 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ de ] = "S~uchen in" ;
+        Text [ en-US ] = "~Search in" ;
+        Hide = TRUE ;
+    };
+    ListBox LB_CALC_SEARCHIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 270 ) ;
+        Size = MAP_APPFONT ( 63 , 48 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList [ de ] =
+        {
+            < "Formeln" ; Default ; > ;
+            < "Werten" ; Default ; > ;
+            < "Notizen" ; Default ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Formulas" ; Default ; > ;
+            < "Values" ; Default ; > ;
+            < "Notes" ; Default ; > ;
+        };
+    };
+    FixedText FT_CALC_SEARCHDIR
+    {
+        Pos = MAP_APPFONT ( 12 , 287 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ de ] = "S~uchrichtung" ;
+        Text [ en-US ] = "~Search direction" ;
+        Hide = TRUE ;
+    };
+    RadioButton RB_CALC_ROWS
+    {
+        Pos = MAP_APPFONT ( 75 , 287 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text [ de ] = "Zeilenwe~ise" ;
+        Text [ en-US ] = "Ro~ws" ;
+        Hide = TRUE ;
+    };
+    RadioButton RB_CALC_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 75 , 300 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text [ de ] = "S~paltenweise" ;
+        Text [ en-US ] = "Col~umns" ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_ALL_SHEETS
+    {
+        Pos = MAP_APPFONT ( 12 , 313 ) ;
+        Size = MAP_APPFONT ( 126 , 10 ) ;
+        Text [ de ] = "~In allen Tabellen suchen" ;
+        Text [ en-US ] = "Search in all sheets" ;
+        Hide = TRUE ;
+    };
+
     String STR_WORDCALC
     {
         Text [ de ] = "Nur ganze Ze~llen" ;
         Text [ en-US ] = "~Entire cells" ;
-        Text [ x-comment ] = " ";
+    };
+    String STR_MORE_BTN
+    {
+        Text [ de ] = "Mehr ~Optionen" ;
+        Text [ en-US ] = "More ~Options" ;
+    };
+    String STR_LESS_BTN
+    {
+        Text [ de ] = "Weniger ~Optionen" ;
+        Text [ en-US ] = "Less ~Options" ;
     };
 };
 
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
