@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nn $ $Date: 2000-11-10 10:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "markdata.hxx"
+#include "editutil.hxx"
 
 #ifndef ITEMID_SEARCH
 #define ITEMID_SEARCH 0
@@ -106,6 +107,18 @@ void ScTable::ScReplaceTabsStr( String& rStr, const String& rSrch, const String&
     }
 }
 
+BOOL lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& rVal )
+{
+    //  TRUE = more than 1 paragraph
+
+    const EditTextObject* pData = NULL;
+    rCell.GetData( pData );
+    EditEngine& rEngine = pDoc->GetEditEngine();
+    rEngine.SetText( *pData );
+    rVal = rEngine.GetText( LINEEND_LF );
+    return ( rEngine.GetParagraphCount() > 1 );
+}
+
 BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT nRow,
                             const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
@@ -119,6 +132,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
     if ( bDoSearch && ((pCell = aCol[nCol].GetCell( nRow )) != NULL) )
     {
+        BOOL bMultiLine = FALSE;
         CellType eCellType = pCell->GetCellType();
         switch (rSearchItem.GetCellType())
         {
@@ -126,12 +140,19 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
             {
                 if ( eCellType == CELLTYPE_FORMULA )
                     ((ScFormulaCell*)pCell)->GetFormula( aString );
+                else if ( eCellType == CELLTYPE_EDIT )
+                    bMultiLine = lcl_GetTextWithBreaks(
+                        *(const ScEditCell*)pCell, pDocument, aString );
                 else
                     aCol[nCol].GetInputString( nRow, aString );
             }
             break;
             case SVX_SEARCHIN_VALUE:
-                aCol[nCol].GetInputString( nRow, aString );
+                if ( eCellType == CELLTYPE_EDIT )
+                    bMultiLine = lcl_GetTextWithBreaks(
+                        *(const ScEditCell*)pCell, pDocument, aString );
+                else
+                    aCol[nCol].GetInputString( nRow, aString );
                 break;
             case SVX_SEARCHIN_NOTE:
                 {
@@ -260,9 +281,11 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
                 pFCell->SetMatColsRows( nMatCols, nMatRows );
                 aCol[nCol].Insert( nRow, pFCell );
             }
+            else if ( bMultiLine && aString.Search('\n') != STRING_NOTFOUND )
+                PutCell( nCol, nRow, new ScEditCell( aString, pDocument ) );
             else
                 aCol[nCol].SetString(nRow, nTab, aString);
-            //! pCell ist jetzt ungueltig weil deleted
+            // pCell is invalid now (deleted)
         }
     }
     return bFound;
