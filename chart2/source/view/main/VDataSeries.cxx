@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 19:20:00 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 10:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,8 @@ double VDataSeries::getX( sal_Int32 index ) const
     }
     else
     {
-        return index;
+        if( 0<=index && index < m_YValues_Double.getLength() )
+            return index;
     }
     double fNan;
     ::rtl::math::setNan( & fNan );
