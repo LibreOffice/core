@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2001-08-09 12:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,10 @@ BOOL SdrMarkView::MarkPoint(SdrHdl& rHdl, BOOL bUnmark)
         }
     }
 
-    // refresh IAOs
-//--/   RefreshAllIAOManagers();
+    // #90239# refresh IAOs
+    // added this call again to make visible (un)marking of point(s)
+    if(bRet)
+        RefreshAllIAOManagers();
 
     return bRet;
 }
@@ -312,8 +314,10 @@ BOOL SdrMarkView::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
         MarkListHasChanged();
     }
 
-    // refresh IAOs
-//--/   RefreshAllIAOManagers();
+    // #90239# refresh IAOs
+    // added this call again to make visible (un)marking of point(s)
+    if(bChgd)
+        RefreshAllIAOManagers();
 
     return bChgd;
 }
