@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 13:52:05 $
+#   last change: $Author: kz $ $Date: 2005-01-13 17:27:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,6 +119,7 @@ IDLFILES=\
     CellAnnotation.idl\
     CellAnnotations.idl\
     CellAnnotationsEnumeration.idl\
+    CellAnnotationShape.idl\
     CellAreaLink.idl\
     CellAreaLinks.idl\
     CellAreaLinksEnumeration.idl\
@@ -311,6 +312,7 @@ IDLFILES=\
     XSheetAnnotation.idl\
     XSheetAnnotationAnchor.idl\
     XSheetAnnotations.idl\
+    XSheetAnnotationShapeSupplier.idl\
     XSheetAnnotationsSupplier.idl\
     XSheetAuditing.idl\
     XSheetCellCursor.idl\
