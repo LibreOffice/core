@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:39:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ BreakpointWindow::BreakpointWindow( Window *pParent )
 : Window( pParent )
 , nCurYOffset( 0 )
 , pModule( NULL )
+, nMarkerPos( MARKER_NOMARKER )
 {
     if ( !pImages )
         pImages = new ImageList( ResId( RID_IMGLST_LAYOUT ) );
@@ -155,7 +156,7 @@ void BreakpointWindow::SetBPsInModule()
     {
         pModule->SetBP( (USHORT)pBrk->nLine );
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         pBrk = Next();
     }
@@ -196,7 +197,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
     if ( pModule->SetBP( nLine ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         if ( StarBASIC::IsRunning() )
         {
@@ -209,7 +210,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
+    DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
 }
 
@@ -280,7 +281,7 @@ void BreakpointWindow::LoadBreakpoints( String aFilename )
 
     for ( i = 0 ; i < aBreakpoints.GetTokenCount( ';' ) ; i++ )
     {
-        InsertBreakpoint( aBreakpoints.GetToken( i, ';' ).ToInt32() );
+        InsertBreakpoint( (USHORT)aBreakpoints.GetToken( i, ';' ).ToInt32() );
     }
 }
 
@@ -326,7 +327,7 @@ void BreakpointWindow::Paint( const Rectangle& )
     while ( pBrk )
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         ULONG nLine = pBrk->nLine-1;
         ULONG nY = nLine*nLineHeight - nCurYOffset;
