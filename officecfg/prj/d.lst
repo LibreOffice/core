@@ -69,6 +69,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\instance\org\openoffice\Office\Draw.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Draw.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Impress.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Impress.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Java.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Java.xml
+..\%__SRC%\misc\instance\org\openoffice\Office\Jobs.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Jobs.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Labels.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Labels.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Linguistic.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Linguistic.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Math.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Math.xml
@@ -94,6 +95,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\template\org\openoffice\Office\Draw.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Draw.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Impress.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Impress.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Java.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Java.xml
+..\%__SRC%\misc\template\org\openoffice\Office\Jobs.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Jobs.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Labels.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Labels.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Linguistic.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Linguistic.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Math.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Math.xml
