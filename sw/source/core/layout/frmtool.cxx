@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:11:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // Es sind innerhalb von Fussnoten nur die Bereiche interessant,
             // die in den Fussnoten liegen, nicht etwa die (spaltigen) Bereiche,
             // in denen die Fussnoten(Container) liegen.
-            if( pSct && pFtnFrm && !pSct->IsInFtn() )
+            // #109767# Table frame is in section, insert section in cell frame.
+            if( pSct && ( pFtnFrm && !pSct->IsInFtn() ) || pUpper->IsCellFrm() )
                 pSct = NULL;
             if( pSct )
             {   // damit der SectionFrm nicht zerstoert wird durch pTmp->MoveFwd()
