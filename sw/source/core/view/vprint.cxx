@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
+ *  last change: $Author: jp $ $Date: 2001-01-17 12:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,8 +451,7 @@ void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
     aStr += pField->GetPar1();
     aStr += ' ';
     aStr += GetpApp()->GetAppInternational().GetDate( pField->GetDate() );
-    rtl_TextEncoding eCharSet = gsl_getSystemTextEncoding();
-    pDoc->Insert( aPam, aStr, eCharSet );
+    pDoc->Insert( aPam, aStr );
 
     pDoc->SplitNode( *aPam.GetPoint() );
     aStr = pField->GetPar2();
@@ -466,7 +465,7 @@ void lcl_FormatPostIt( SwDoc* pDoc, SwPaM& aPam, SwPostItField* pField,
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
-    pDoc->Insert( aPam, aStr, eCharSet );
+    pDoc->Insert( aPam, aStr );
     pDoc->SplitNode( *aPam.GetPoint() );
     pDoc->SplitNode( *aPam.GetPoint() );
 }
@@ -1555,6 +1554,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 12:03:41  jp
+      Spellchecker/Hyphenator are not longer member of the shells
+
       Revision 1.1.1.1  2000/09/19 00:08:29  hr
       initial import
 
