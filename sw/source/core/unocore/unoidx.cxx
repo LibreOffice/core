@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 12:27:19 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
 #include <com/sun/star/text/ChapterFormat.hpp>
@@ -468,6 +471,24 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 pTOXBase->SetTitle(sNewName);
             }
             break;
+            case WID_IDX_LOCALE:
+            {
+                lang::Locale aLocale;
+                if(aValue>>= aLocale)
+                    pTOXBase->SetLanguage(SvxLocaleToLanguage(aLocale));
+                else
+                    throw IllegalArgumentException();
+            }
+            break;
+            case WID_IDX_SORT_ALGORITHM:
+            {
+                OUString sTmp;
+                if(aValue >>= sTmp)
+                    pTOXBase->SetSortAlgorithm(sTmp);
+                else
+                    throw IllegalArgumentException();
+            }
+            break;
             case WID_LEVEL      :
                 pTOXBase->SetLevel(lcl_AnyToInt16(aValue));
             break;
@@ -752,6 +773,13 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 }
                 aRet <<= uRet;
             }
+            case WID_IDX_LOCALE:
+                bBOOL = sal_False;
+                aRet <<= SvxCreateLocale(pTOXBase->GetLanguage());
+            break;
+            case WID_IDX_SORT_ALGORITHM:
+                bBOOL = sal_False;
+                aRet <<= OUString(pTOXBase->GetSortAlgorithm());
             break;
             case WID_LEVEL      :
                 bBOOL = sal_False;

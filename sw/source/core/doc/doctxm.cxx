@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 13:34:20 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,8 +924,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr)
     pDoc->SetModified();
 
     // get current Language
-    SwTOXInternational aIntl(  ((const SvxLanguageItem&)pDoc->GetAttrPool().
-                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage() );
+    SwTOXInternational aIntl(  GetLanguage(), GetSortAlgorithm() );
 
     aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
 
@@ -1893,8 +1892,7 @@ void SwTOXBaseSection::UpdatePageNum()
     USHORT      nPage       = 0;
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
 
-    SwTOXInternational aIntl(  ((const SvxLanguageItem&)pDoc->GetAttrPool().
-                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage() );
+    SwTOXInternational aIntl( GetLanguage(), GetSortAlgorithm() );
 
     for( USHORT nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
     {

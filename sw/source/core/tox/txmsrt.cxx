@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 13:35:34 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,16 @@ USHORT SwTOXSortTabBase::nOpt = 0;
 SV_IMPL_VARARR( SwTOXSources, SwTOXSource )
 
 
-SwTOXInternational::SwTOXInternational( LanguageType nLang )
-    : eLang( nLang )
+SwTOXInternational::SwTOXInternational( LanguageType nLang, const String& rSortAlgorithm ) :
+    eLang( nLang ),
+    sSortAlgorithm(rSortAlgorithm)
 {
     Init();
 }
 
-SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl )
-    : eLang( rIntl.eLang )
+SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl ) :
+    eLang( rIntl.eLang ),
+    sSortAlgorithm(rIntl.sSortAlgorithm)
 {
     Init();
 }
@@ -183,21 +185,11 @@ void SwTOXInternational::Init()
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
 
-    bNewCollator = eLang != GetAppLanguage();
-    if( bNewCollator )
-    {
+    pCollator = new CollatorWrapper( xMSF );
+    pIgnCsCollator = new CollatorWrapper( xMSF );
 
-        pCollator = new CollatorWrapper( xMSF );
-        pIgnCsCollator = new CollatorWrapper( xMSF );
-
-        pCollator->loadDefaultCollator( aLcl, 0 );
-        pIgnCsCollator->loadDefaultCollator( aLcl, SW_COLLATOR_IGNORES );
-    }
-    else
-    {
-        pCollator = &::GetAppCaseCollator();
-        pIgnCsCollator = &::GetAppCollator();
-    }
+    pCollator->loadCollatorAlgorithm( sSortAlgorithm, aLcl, 0 );
+    pIgnCsCollator->loadCollatorAlgorithm( sSortAlgorithm, aLcl, SW_COLLATOR_IGNORES  );
 
     pIndexWrapper = new IndexEntrySupplierWrapper( aLcl, xMSF );
     pCharClass = new CharClass( aLcl );
@@ -206,11 +198,8 @@ void SwTOXInternational::Init()
 
 SwTOXInternational::~SwTOXInternational()
 {
-    if( bNewCollator )
-    {
-        delete pCollator;
-        delete pIgnCsCollator;
-    }
+    delete pCollator;
+    delete pIgnCsCollator;
     delete pCharClass;
     delete pIndexWrapper;
 }

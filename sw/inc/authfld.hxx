@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:40:02 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ class SwAuthorityFieldType : public SwFieldType
     sal_Unicode     m_cSuffix;
     BOOL            m_bIsSequence :1;
     BOOL            m_bSortByDocument :1;
+    LanguageType    m_eLanguage;
+    String          m_sSortAlgorithm;
 
     const SwAuthorityFieldType& operator=( const SwAuthorityFieldType& );
 
@@ -194,6 +196,12 @@ public:
     //initui.cxx
     static const String&    GetAuthFieldName(ToxAuthorityField eType);
     static const String&    GetAuthTypeName(ToxAuthorityType eType);
+
+    LanguageType    GetLanguage() const {return m_eLanguage;}
+    void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
+
+    const String&   GetSortAlgorithm()const {return m_sSortAlgorithm;}
+    void            SetSortAlgorithm(const String& rSet) {m_sSortAlgorithm = rSet;}
 
 };
 /* -----------------14.09.99 16:15-------------------

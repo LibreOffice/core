@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 16:42:54 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,15 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef SVTOOLS_COLLATORRESSOURCE_HXX
+#include <svtools/collatorres.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 #ifndef _COLUMN_HXX //autogen
 #include <column.hxx>
 #endif
@@ -431,17 +439,6 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
     }
     return nRet;
 }
-/* -----------------29.11.99 09:04-------------------
-
- --------------------------------------------------*/
-#if 0
-IdxExampleResource::IdxExampleResource(const ResId& rResId) :
-    Resource(rResId),
-    aTextArray(ResId(ARR_TEXT))
-{
-    FreeResource();
-}
-#endif
 /*************************************************************************
 
 *************************************************************************/
@@ -707,6 +704,8 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     pDesc->SetReadonly(pCurTOX->IsProtected());
     pDesc->SetOLEOptions(pCurTOX->GetOLEOptions());
     pDesc->SetLevelFromChapter(pCurTOX->IsLevelFromChapter());
+    pDesc->SetLanguage(pCurTOX->GetLanguage());
+    pDesc->SetSortAlgorithm(pCurTOX->GetSortAlgorithm());
     return pDesc;
 }
 
@@ -1532,9 +1531,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aKeyAsEntryCB(      this, ResId(CB_KEYASENTRY       )),
     aFromFileCB(        this, ResId(CB_FROMFILE         )),
     aAutoMarkPB(        this, ResId(MB_AUTOMARK         )),
-//  aFilePB(            this, ResId(PB_FILE             )),
-//  aCreateAutoMarkPB(  this, ResId(PB_CREATE_AUTOMARK  )),
-//  aEditAutoMarkPB(    this, ResId(PB_EDIT_AUTOMARK    )),
     aIdxOptionsFL(      this, ResId(FL_IDXOPTIONS       )),
     aFromNames(         ResId(RES_SRCTYPES              )),
     aFromObjCLB(        this, ResId(CLB_FROMOBJ         )),
@@ -1543,11 +1539,19 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aBracketFT(         this, ResId(FT_BRACKET          )),
     aBracketLB(         this, ResId(LB_BRACKET          )),
     aAuthorityFormatFL( this, ResId(FL_AUTHORITY        )),
+    aSortOptionsFL(     this, ResId(FL_SORTOPTIONS      )),
+    aLanguageFT(        this, ResId(FT_LANGUAGE         )),
+    aLanguageLB(        this, ResId(LB_LANGUAGE         )),
+    aSortAlgorithmFT(   this, ResId(FT_SORTALG          )),
+    aSortAlgorithmLB(   this, ResId(LB_SORTALG          )),
     sAddStyleUser(ResId(ST_USER_ADDSTYLE)),
     sAutoMarkType(ResId(ST_AUTOMARK_TYPE)),
-    bFirstCall(sal_True)
+    bFirstCall(sal_True),
+    pColRes(0)
 {
     FreeResource();
+    aLanguageLB.SetLanguageList( LANG_LIST_ALL, FALSE, FALSE, FALSE );
+
     sAddStyleContent = aAddStylesCB.GetText();
 
     aCBLeftPos1 = aFromHeadingsCB.GetPosPixel();
@@ -1572,10 +1576,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
     pMenu->SetSelectHdl(LINK(this, SwTOXSelectTabPage, MenuExecuteHdl));
 
-//  aFilePB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AutoMarkHdl));
-//  aCreateAutoMarkPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, CreateEditAutoMarkHdl));
-//  aEditAutoMarkPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, CreateEditAutoMarkHdl));
-
     Link aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
     aAddStylesCB    .SetClickHdl(aLk);
     aFromHeadingsCB .SetClickHdl(aLk);
@@ -1590,12 +1590,14 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     Link aModifyLk = LINK(this, SwTOXSelectTabPage, ModifyHdl);
     aTitleED.SetModifyHdl(aModifyLk);
     aLevelNF.SetModifyHdl(aModifyLk);
+    aSortAlgorithmLB.SetSelectHdl(aModifyLk);
 
     aLk =  LINK(this, SwTOXSelectTabPage, RadioButtonHdl);
     aFromCaptionsRB.SetClickHdl(aLk);
     aFromObjectNamesRB.SetClickHdl(aLk);
     RadioButtonHdl(&aFromCaptionsRB);
 
+    aLanguageLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, LanguageHdl));
     aTypeLB.SelectEntryPos(0);
     aTitleED.SaveValue();
 }
@@ -1604,6 +1606,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
   -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
+    delete pColRes;
 }
 /* -----------------21.10.99 17:03-------------------
 
@@ -1787,11 +1790,22 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
         aSequenceCB.Check(rDesc.IsAuthSequence());
     }
     aAutoMarkPB.Enable(aFromFileCB.IsChecked());
-//  aCreateAutoMarkPB.Enable(aFromFileCB.IsChecked());
-//  aEditAutoMarkPB.Enable(aFromFileCB.IsChecked() && sAutoMarkURL.Len());
 
     for(i = 0; i < MAXLEVEL; i++)
         aStyleArr[i] = rDesc.GetStyleNames(i);
+
+    aLanguageLB.SelectLanguage(rDesc.GetLanguage());
+    LanguageHdl(0);
+    for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
+    {
+        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( nCnt );
+        DBG_ASSERT(pEntryData, "no entry data available")
+        if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
+        {
+            aSortAlgorithmLB.SelectEntryPos( nCnt );
+            break;
+        }
+    }
 }
 /* -----------------09.09.99 11:57-------------------
 
@@ -1895,6 +1909,13 @@ void SwTOXSelectTabPage::FillTOXDescription()
 
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         rDesc.SetStyleNames(aStyleArr[i], i);
+
+    rDesc.SetLanguage(aLanguageLB.GetSelectLanguage());
+    const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData(
+                                            aSortAlgorithmLB.GetSelectEntryPos() );
+    DBG_ASSERT(pEntryData, "no entry data available")
+    if(pEntryData)
+        rDesc.SetSortAlgorithm(*pEntryData);
 }
 /* -----------------05.07.99 15:09-------------------
 
@@ -2096,9 +2117,6 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     else if(TOX_INDEX == aCurType.eType)
     {
         aAutoMarkPB.Enable(aFromFileCB.IsChecked());
-//      aCreateAutoMarkPB.Enable(aFromFileCB.IsChecked());
-//      aEditAutoMarkPB.Enable(aFromFileCB.IsChecked() && sAutoMarkURL.Len());
-
         aUseFFCB.Enable(aCollectSameCB.IsChecked() && !aUseDashCB.IsChecked());
         aUseDashCB.Enable(aCollectSameCB.IsChecked() && !aUseFFCB.IsChecked());
         aCaseSensitiveCB.Enable(aCollectSameCB.IsChecked());
@@ -2119,6 +2137,47 @@ IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, pButton )
     ModifyHdl(0);
     return 0;
 }
+/* -----------------------------06.06.01 09:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
+{
+    Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
+    Sequence < OUString > aSeq(
+                            GetAppCollator().listCollatorAlgorithms( aLcl ));
+    if( !pColRes )
+        pColRes = new CollatorRessource();
+
+    String sOldString;
+    void* pUserData;
+    if( 0 != (pUserData = aSortAlgorithmLB.GetEntryData( aSortAlgorithmLB.GetSelectEntryPos())) )
+        sOldString = *(String*)pUserData;
+    void* pDel;
+    long nEnd = aSortAlgorithmLB.GetEntryCount();
+    for( long n = 0; n < nEnd; ++n )
+        if( 0 != ( pDel = aSortAlgorithmLB.GetEntryData( n )) )
+            delete (String*)pDel;
+    aSortAlgorithmLB.Clear();
+
+    USHORT nInsPos;
+    String sAlg, sUINm;
+    nEnd = aSeq.getLength();
+    for( long nCnt = 0; nCnt < nEnd; ++nCnt )
+    {
+        sUINm = pColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
+        nInsPos = aSortAlgorithmLB.InsertEntry( sUINm );
+        aSortAlgorithmLB.SetEntryData( nInsPos, new String( sAlg ));
+        if( sAlg == sOldString )
+            aSortAlgorithmLB.SelectEntryPos( nInsPos );
+    }
+
+    if( LISTBOX_ENTRY_NOTFOUND == aSortAlgorithmLB.GetSelectEntryPos() )
+        aSortAlgorithmLB.SelectEntryPos( 0 );
+
+    if(pBox)
+        ModifyHdl(0);
+    return 0;
+};
 /* -----------------14.06.99 13:10-------------------
 
  --------------------------------------------------*/

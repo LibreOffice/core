@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 14:48:15 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,9 +653,11 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 
 
 #define _BASE_INDEX_PROPERTIES_\
-        { SW_PROP_NAME(UNO_NAME_TITLE), WID_IDX_TITLE,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},\
-        { SW_PROP_NAME(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::READONLY,     0},\
-        { SW_PROP_NAME(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
+        { SW_PROP_NAME(UNO_NAME_TITLE),             WID_IDX_TITLE,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},\
+        { SW_PROP_NAME(UNO_NAME_CONTENT_SECTION),   WID_IDX_CONTENT_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::READONLY,     0},\
+        { SW_PROP_NAME(UNO_NAME_HEADER_SECTION),    WID_IDX_HEADER_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
+        { SW_PROP_NAME(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         &::getCppuType((lang::Locale*)0)  , PROPERTY_NONE,     0},\
+        { SW_PROP_NAME(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  &::getCppuType((OUString*)0)  , PROPERTY_NONE,     0},\
 
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
 #define ANCHOR_TYPES_PROPERTY   { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 13:11:12 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,6 +874,8 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_BRACKET_AFTER      ) , 0, &::getCppuType((OUString*)0),               PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_NUMBER_ENTRIES  ) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_SORT_BY_POSITION) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
+                { SW_PROP_NAME(UNO_NAME_LOCALE),            0,  &::getCppuType((lang::Locale*)0)  , PROPERTY_NONE,     0},
+                { SW_PROP_NAME(UNO_NAME_SORT_ALGORITHM),    0,  &::getCppuType((OUString*)0)  , PROPERTY_NONE,     0},
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
                 {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, new uno::Type(::getCppuType((Sequence<PropertyValues>*)0)),PROPERTY_NONE, 0},
 #else

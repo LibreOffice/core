@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 14:46:52 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,4 +701,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_LOCALE                          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_ALGORITHM                         ;
+
 #endif

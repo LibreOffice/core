@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 11:34:00 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class SwDoc;
 SV_DECL_PTRARR(SwTOXMarks, SwTOXMark*, 0, 10)
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Eintrag fuer Inhaltsverzeichnis oder Benutzerverz.
+     Description:  Entry of content index, alphabetical index or user defined index
  --------------------------------------------------------------------*/
 
 #define IVER_TOXMARK_STRPOOL ((USHORT)1)
@@ -115,16 +115,16 @@ class SwTOXMark : public SfxPoolItem, public SwClient
     BOOL    bMainEntry : 1;         // main entry emphasized by character style
 
 
-    SwTOXMark();                    // for crete the dflt. atr. in _InitCore
+    SwTOXMark();                    // to create the dflt. atr. in _InitCore
 
 public:
-    TYPEINFO();   // fuers rtti
+    TYPEINFO();   // rtti
 
     SwTOXMark( const SwTOXType* pTyp );
     SwTOXMark( const SwTOXMark& rCopy );
     virtual ~SwTOXMark();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
@@ -139,11 +139,11 @@ public:
 
     inline void             SetAlternativeText( const String& rAlt );
 
-    // Inhalts-/Benutzerverzeichnis - spezifisch
+    // content or user defined index
     inline void             SetLevel(USHORT nLevel);
     inline USHORT           GetLevel() const;
 
-    // Index - spezifisch
+    // for alphabetical index only
     inline void             SetPrimaryKey(const String& rStr );
     inline void             SetSecondaryKey(const String& rStr);
     inline const String&    GetPrimaryKey() const;
@@ -162,7 +162,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Typen einzelner Verzeichnisse
+     Description:  index types
  --------------------------------------------------------------------*/
 
 class SwTOXType : public SwModify
@@ -181,7 +181,7 @@ private:
 };
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Muster fuer Zeilen eines Verzeichnisses
+     Description:  Structure of the index lines
  --------------------------------------------------------------------*/
 
 #define FORM_TITLE              0
@@ -205,7 +205,7 @@ private:
  <A00> - Authority entry field          <A02 CharStyleName, PoolId>
  */
 
-// These enum values are stored and must not change!
+// These enum values are stored and must not be changed!
 enum FormTokenType
 {
     TOKEN_ENTRY_NO,
@@ -325,29 +325,29 @@ public:
     static USHORT GetFormMaxLevel( USHORT nType );
 
     static const sal_Char*  aFormEntry;             // <E>
-    static BYTE nFormEntryLen;                      // 3 Zeichen
+    static BYTE nFormEntryLen;                      // 3 characters
     static const sal_Char*  aFormTab;               // <T>
-    static BYTE nFormTabLen;                        // 3 Zeichen
+    static BYTE nFormTabLen;                        // 3 characters
     static const sal_Char*  aFormPageNums;          // <P>
-    static BYTE nFormPageNumsLen;                   // 3 Zeichen
+    static BYTE nFormPageNumsLen;                   // 3 characters
     static const sal_Char* aFormLinkStt;            // <LS>
-    static BYTE nFormLinkSttLen;                    // 4 Zeichen
+    static BYTE nFormLinkSttLen;                    // 4 characters
     static const sal_Char* aFormLinkEnd;            // <LE>
-    static BYTE nFormLinkEndLen;                    // 4 Zeichen
+    static BYTE nFormLinkEndLen;                    // 4 characters
     static const sal_Char*  aFormEntryNum;          // <E#>
-    static BYTE nFormEntryNumLen;                   // 4 Zeichen
+    static BYTE nFormEntryNumLen;                   // 4 characters
     static const sal_Char*  aFormEntryTxt;          // <ET>
-    static BYTE nFormEntryTxtLen;                   // 4 Zeichen
+    static BYTE nFormEntryTxtLen;                   // 4 characters
     static const sal_Char*  aFormChapterMark;       // <C>
-    static BYTE nFormChapterMarkLen;                // 3 Zeichen
+    static BYTE nFormChapterMarkLen;                // 3 characters
     static const sal_Char*  aFormText;              // <TX>
-    static BYTE nFormTextLen;                       // 4 Zeichen
+    static BYTE nFormTextLen;                       // 4 characters
     static const sal_Char*  aFormAuth;              // <Axx> xx - decimal enum value
-    static BYTE nFormAuthLen;                       // 3 chars
+    static BYTE nFormAuthLen;                       // 3 characters
 };
 
 /*--------------------------------------------------------------------
-     Beschreibung: Inhalte aus denen Verzeichnisse generiert werden
+     Description: Content to create indexes of
  --------------------------------------------------------------------*/
 
 enum SwTOXElement
@@ -395,7 +395,7 @@ enum SwTOOElements
 #define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)     //JP 19.07.00: use a control char
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Klasse aller  Verzeichnisse
+     Description:  Class for all indexes
  --------------------------------------------------------------------*/
 
 class SwTOXBase : public SwClient
@@ -403,23 +403,24 @@ class SwTOXBase : public SwClient
     // not implemented
     SwTOXBase&          operator=(const SwTOXBase& rSource);
 
-//protected:
-
-    SwForm      aForm;              // Aussehen  der Eintragzeile
+    SwForm      aForm;              // description of the lines
     String      aName;              // unique name
-    String      aTitle;             // Der Verzeichnistitel
+    String      aTitle;             // title
 
     String      sMainEntryCharStyle; // name of the character style applied to main index entries
 
     String      aStyleNames[MAXLEVEL]; // (additional) style names TOX_CONTENT, TOX_USER
     String      sSequenceName;      // FieldTypeName of a caption sequence
 
+    LanguageType    eLanguage;
+    String          sSortAlgorithm;
+
     union {
-        USHORT      nLevel;             // Gliederungsebenen beachten
-        USHORT      nOptions;           // Optionen fuer Index
+        USHORT      nLevel;             // consider outline levels
+        USHORT      nOptions;           // options of alphabetical index
     } aData;
 
-    USHORT      nCreateType;        // Quellen aus dem das Verzeichnis generiert wird
+    USHORT      nCreateType;        // sources to create the index from
     USHORT      nOLEOptions;        // OLE sources
     SwCaptionDisplay eCaptionDisplay;   //
     BOOL        bProtected : 1;         // index protected ?
@@ -441,14 +442,14 @@ public:
 
     const SwTOXType*    GetTOXType() const; //
 
-    USHORT              GetCreateType() const;      // Aus Inhaltsformen generieren
+    USHORT              GetCreateType() const;      // creation types
 
     const String&       GetTOXName() const {return aName;}
     void                SetTOXName(const String& rSet) {aName = rSet;}
 
-    const String&       GetTitle() const;           // Titel des Verzeichnisses
-    const String&       GetTypeName() const;        // Name des Verzeichnisses
-    const SwForm&       GetTOXForm() const;         // Aussehen der Zeile
+    const String&       GetTitle() const;           // Title
+    const String&       GetTypeName() const;        // Name
+    const SwForm&       GetTOXForm() const;         // description of the lines
 
     void                SetCreate(USHORT);
     void                SetTitle(const String& rTitle);
@@ -459,12 +460,12 @@ public:
     const String&       GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
     void                SetMainEntryCharStyle(const String& rSet)  {sMainEntryCharStyle = rSet;}
 
-    // Inhaltsverzeichnis - spezifisch
-    inline void             SetLevel(USHORT);                   // Gliederungsebene beachten
+    // content index only
+    inline void             SetLevel(USHORT);                   // consider outline level
     inline USHORT           GetLevel() const;
 
-    // Index - spezifisch
-    inline USHORT           GetOptions() const;                 // Optionen fuer Index
+    // alphabetical index only
+    inline USHORT           GetOptions() const;                 // alphabetical index options
     inline void             SetOptions(USHORT nOpt);
 
     // index of objects
@@ -473,7 +474,7 @@ public:
 
     // index of objects
 
-    // Benutzerverzeichnis - spezifisch
+    // user defined index only
     inline void             SetTemplateName(const String& rName); // Absatzlayout beachten
     inline String           GetTemplateName() const;
 
@@ -514,11 +515,17 @@ public:
 
     static const String&    GetTOXName(TOXTypes eType);           // toxmgr.cxx
 
+    LanguageType    GetLanguage() const {return eLanguage;}
+    void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
+
+    const String&   GetSortAlgorithm()const {return sSortAlgorithm;}
+    void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
+
 };
 
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Inlines
+     Description:  Inlines
  --------------------------------------------------------------------*/
 
 //

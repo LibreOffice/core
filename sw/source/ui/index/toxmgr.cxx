@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 22:07:04 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,8 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     rArr[2] = rDesc.GetSortKey3();
                     pFType->SetSortKeys(3, rArr);
                     pFType->SetSortByDocument(rDesc.IsSortByDocument());
+                    pFType->SetLanguage(rDesc.GetLanguage());
+                    pFType->SetSortAlgorithm(rDesc.GetSortAlgorithm());
 
                     pFType->UpdateFlds();
                 }
@@ -699,6 +701,9 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         pTOX->SetTitle(*rDesc.GetTitle());
     if(rDesc.GetForm())
         pTOX->SetTOXForm(*rDesc.GetForm());
+    pTOX->SetLanguage(rDesc.GetLanguage());
+    pTOX->SetSortAlgorithm(rDesc.GetSortAlgorithm());
+
     if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
         // wird ppBase uebergeben, dann wird das TOXBase hier nur erzeugt
@@ -745,7 +750,6 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
     for(USHORT i = 0; i < MAXLEVEL; i++)
         rTOXBase.SetStyleNames(GetStyleNames(i), i);
     rTOXBase.SetTitle(GetTitle() ? *GetTitle() : aEmptyStr);
-//  const String*   GetTOUName() const {return pTOUName; }
     rTOXBase.SetCreate(GetContentOptions());
 
     if(GetTOXType() == TOX_INDEX)
@@ -759,48 +763,10 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
     rTOXBase.SetProtected(IsReadonly());
     rTOXBase.SetOLEOptions(GetOLEOptions());
     rTOXBase.SetLevelFromChapter(IsLevelFromChapter());
+    rTOXBase.SetLanguage(eLanguage);
+    rTOXBase.SetSortAlgorithm(sSortAlgorithm);
 
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/11/03 11:29:16  os
-    allow editing of indexes independent from the cursor position
-
-    Revision 1.1.1.1  2000/09/18 17:14:44  hr
-    initial import
-
-    Revision 1.59  2000/09/18 16:05:53  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.58  2000/06/27 19:42:10  jp
-    Bug #70447#: select the current TOXMark if the EditDialog is open
-
-    Revision 1.57  1999/10/21 08:53:42  os
-    sorting authority entries by content
-
-    Revision 1.56  1999/10/20 06:37:21  os
-    rsequence impl., Brackets selectable
-
-    Revision 1.55  1999/10/05 14:20:43  os
-    no jumps to null-pointers
-
-    Revision 1.54  1999/09/10 08:30:20  os
-    use doc default TOXs
-
-    Revision 1.53  1999/09/08 12:42:45  os
-    new: Is/SetLevelFromChapter
-
-    Revision 1.52  1999/08/26 14:01:00  OS
-    AutoMark implemented
-
-
-      Rev 1.51   26 Aug 1999 16:01:00   OS
-   AutoMark implemented
-
-      Rev 1.50   25 Aug 1999 15:29:14   OS
-   extended indexes: OLEOptions
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ class SwTOXDescription
     USHORT              nContent;
     USHORT              nIndexOptions;
     USHORT              nOLEOptions;
+    LanguageType        eLanguage;
+    String              sSortAlgorithm;
+
     String              sAuthBrackets;
     SwCaptionDisplay    eCaptionDisplay;
     SwTOXSortKey        eSortKey1;
@@ -111,6 +114,7 @@ public:
         pForm(0),
         nContent(TOX_MARK | TOX_OUTLINELEVEL),
         nLevel(MAXLEVEL),
+        eLanguage((LanguageType)::GetAppLanguage()),
         pTOUName(0),
         nIndexOptions(TOI_SAME_ENTRY|TOI_FF|TOI_CASE_SENSITIVE),
         nOLEOptions(0),
@@ -199,8 +203,14 @@ public:
     SwTOXSortKey GetSortKey2() const {return eSortKey2;}
     SwTOXSortKey GetSortKey3() const {return eSortKey3;}
 
+    LanguageType    GetLanguage() const {return eLanguage;}
+    void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
+
+    const String&   GetSortAlgorithm()const {return sSortAlgorithm;}
+    void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
 
     void            ApplyTo(SwTOXBase& rTOXBase);
+
 };
 // --------------------------------------------------------------------------------
 class SwTOXMarkDescription

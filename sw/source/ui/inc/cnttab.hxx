@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _SV_MENUBTN_HXX
 #include <vcl/menubtn.hxx>
 #endif
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
+#endif
 
 class SwWrtShell;
 class SwTOXMgr;
@@ -125,18 +128,6 @@ struct CurTOXType
     USHORT GetFlatIndex() const;
 
 };
-//-----------------------------------------------------------------------------
-#if 0
-class IdxExampleResource : public Resource
-{
-    ResStringArray      aTextArray;
-
-public:
-    IdxExampleResource(const ResId& rResId);
-
-    ResStringArray& GetTextArray() {return aTextArray;}
-};
-#endif
 
 //-----------------------------------------------------------------------------
 class SwOneExampleFrame;
@@ -194,7 +185,6 @@ public:
 
     void                UpdateExample();
     BOOL                IsTOXEditMode() const { return bEditTOX;}
-//  const SwTOXBase*    GetCurTOX() const;
 
     SwWrtShell&         GetWrtShell() {return rSh;}
 
@@ -222,6 +212,7 @@ public:
 /* -----------------14.07.99 12:17-------------------
 
  --------------------------------------------------*/
+class CollatorRessource;
 class SwTOXSelectTabPage : public SfxTabPage
 {
     FixedLine       aTypeTitleFL;
@@ -244,8 +235,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aAddStylesCB;
     PushButton      aAddStylesPB;
     //user
-//  CheckBox        aFromStylesCB; -> aAddStylesCB;
-//  PushButton      aFromStylesPB; -> aAddStylesPB;
     CheckBox        aFromTablesCB;
     CheckBox        aFromFramesCB;
     CheckBox        aFromGraphicsCB;
@@ -276,8 +265,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aKeyAsEntryCB;
     CheckBox        aFromFileCB;
     MenuButton      aAutoMarkPB;
-//  PushButton      aCreateAutoMarkPB;
-//  PushButton      aEditAutoMarkPB;
     FixedLine       aIdxOptionsFL; // index only
 
     // object only
@@ -289,6 +276,15 @@ class SwTOXSelectTabPage : public SfxTabPage
     FixedText       aBracketFT;
     ListBox         aBracketLB;
     FixedLine       aAuthorityFormatFL;
+
+    //all
+    FixedLine       aSortOptionsFL;
+    FixedText       aLanguageFT;
+    SvxLanguageBox  aLanguageLB;
+    FixedText       aSortAlgorithmFT;
+    ListBox         aSortAlgorithmLB;
+
+    CollatorRessource* pColRes;
 
     Point           aCBLeftPos1;
     Point           aCBLeftPos2;
@@ -306,10 +302,9 @@ class SwTOXSelectTabPage : public SfxTabPage
     DECL_LINK(TOXAreaHdl,   ListBox* );
     DECL_LINK(ChapterHdl,   PushButton* );
     DECL_LINK(AddStylesHdl, PushButton* );
-//  DECL_LINK(AutoMarkHdl,  PushButton* );
-//  DECL_LINK(CreateEditAutoMarkHdl,PushButton* );
     DECL_LINK(MenuEnableHdl, Menu*);
     DECL_LINK(MenuExecuteHdl, Menu*);
+    DECL_LINK(LanguageHdl, ListBox*);
 
     DECL_LINK(CheckBoxHdl,  CheckBox*   );
     DECL_LINK(RadioButtonHdl, RadioButton* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 14:50:03 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,4 +698,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY              (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE                  (MAP_CHAR_LEN("AutomaticDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS             (MAP_CHAR_LEN("AutomaticControlFocus"));
 const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE              (MAP_CHAR_LEN("ApplyFormDesignMode"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_LOCALE                              (MAP_CHAR_LEN("Locale"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SORT_ALGORITHM                      (MAP_CHAR_LEN("SortAlgorithm"));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 20:46:28 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -122,9 +125,13 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace rtl;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 typedef SwAuthEntry* SwAuthEntryPtr;
@@ -200,7 +207,8 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     m_bSortByDocument(TRUE),
     m_bIsSequence(FALSE),
     m_cPrefix('['),
-    m_cSuffix(']')
+    m_cSuffix(']'),
+    m_eLanguage((LanguageType)::GetAppLanguage())
 {
 }
 
@@ -212,7 +220,9 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
     m_bSortByDocument(rFType.m_bSortByDocument),
     m_bIsSequence(rFType.m_bIsSequence),
     m_cPrefix(rFType.m_cPrefix),
-    m_cSuffix(rFType.m_cSuffix)
+    m_cSuffix(rFType.m_cSuffix),
+    m_eLanguage(rFType.m_eLanguage),
+    m_sSortAlgorithm(rFType.m_sSortAlgorithm)
 {
     for(USHORT i = 0; i < rFType.m_pSortKeyArr->Count(); i++)
         m_pSortKeyArr->Insert((*rFType.m_pSortKeyArr)[i], i);
@@ -511,9 +521,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         SwTOXSortTabBases aSortArr;
         SwClientIter aIter( *this );
 
-        SwTOXInternational aIntl(
-                        ((const SvxLanguageItem&)m_pDoc->GetAttrPool().
-                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage());
+        SwTOXInternational aIntl(m_eLanguage, m_sSortAlgorithm);
 
         for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
                                 pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
@@ -627,6 +635,10 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) c
         }
         rVal <<= aRet;
     }
+    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
+        rVal <<= OUString(GetSortAlgorithm());
+    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+        rVal <<= SvxCreateLocale(GetLanguage());
     else
         return FALSE;
     return TRUE;
@@ -690,6 +702,20 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
                 m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
             }
         }
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
+    {
+        OUString sAlgorithm;
+        bRet = rVal >>= sAlgorithm;
+        if(bRet)
+            SetSortAlgorithm(sAlgorithm);
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+    {
+        Locale aLocale;
+        bRet = rVal >>= aLocale;
+        if(bRet)
+            SetLanguage(SvxLocaleToLanguage(aLocale));
     }
     else
         bRet = FALSE;

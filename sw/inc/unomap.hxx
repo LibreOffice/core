@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 14:45:37 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@
 #define WID_CREATE_FROM_PARAGRAPH_STYLES        1052
 #define WID_IDX_CONTENT_SECTION                 1053
 #define WID_IDX_HEADER_SECTION                  1054
+#define WID_IDX_LOCALE                          1055
+#define WID_IDX_SORT_ALGORITHM                  1056
 
 //text document
 #define WID_DOC_CHAR_COUNT                      1000

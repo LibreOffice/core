@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 13:36:37 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,12 @@ class SwTOXInternational
     CollatorWrapper *pCollator, *pIgnCsCollator;
     CharClass* pCharClass;
     LanguageType eLang;
-    BOOL bNewCollator;
+    String sSortAlgorithm;
 
     void Init();
 
 public:
-    SwTOXInternational( LanguageType nLang );
+    SwTOXInternational( LanguageType nLang, const String& rSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,6 +837,7 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
     aTitle(rTitle),
     aForm(rForm),
     eCaptionDisplay(CAPTION_COMPLETE),
+    eLanguage((LanguageType)::GetAppLanguage()),
     bProtected( TRUE ),
     bFromChapter(FALSE),
     bFromObjectNames(FALSE),
@@ -888,6 +889,8 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     sSequenceName = rSource.sSequenceName;
     eCaptionDisplay = rSource.eCaptionDisplay;
     nOLEOptions = rSource.nOLEOptions;
+    eLanguage = rSource.eLanguage;
+    sSortAlgorithm = rSource.sSortAlgorithm;
 
     for( USHORT i = 0; i < MAXLEVEL; ++i )
         aStyleNames[i] = rSource.aStyleNames[i];

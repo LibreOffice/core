@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 22:00:32 $
+ *  last change: $Author: os $ $Date: 2001-06-06 10:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,9 +966,16 @@ TabPage TP_TOX_SELECT
         < "Luku" ;              AREA_CHAPTER        ;> ;
     };
     };
+    FixedText       FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 130 , 70 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text = "Auswerten bis Ebene" ;
+        Text [ ENGLISH ] = "Evaluation level" ;
+    };
     NumericField    NF_LEVEL
     {
-        Pos = MAP_APPFONT ( 51 , 86 ) ;
+        Pos = MAP_APPFONT ( 231 , 72 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -980,36 +987,9 @@ TabPage TP_TOX_SELECT
         Value = 10 ;
         SpinSize = 1 ;
     };
-    FixedText       FT_LEVEL
-    {
-        Pos = MAP_APPFONT ( 77 , 88 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Ebenen auswerten" ;
-        Text [ ENGLISH ] = "Evaluation level" ;
-        Text[ english_us ] = "Evaluation level";
-        Text[ portuguese ] = "A~valiar até nível";
-        Text[ russian ] = "Îöåíèòü äî óðîâíÿ";
-        Text[ greek ] = "Áðïôßìçóç ùò åðßðåäï";
-        Text[ dutch ] = "~Aantal niveaus";
-        Text[ french ] = "~Niveau de profondeur souhaité";
-        Text[ spanish ] = "E~valuar hasta nivel";
-        Text[ finnish ] = "Arviointitaso";
-        Text[ italian ] = "Val~uta fino a livello";
-        Text[ danish ] = "Evaluer indtil niveau";
-        Text[ swedish ] = "Utvärdera nivåer";
-        Text[ polish ] = "Ewaluuj do poziomu";
-        Text[ portuguese_brazilian ] = "Evaluation level";
-        Text[ japanese ] = "ŽŸ‚ÌÚÍÞÙ‚Ü‚Å“K—p";
-        Text[ korean ] = "Æò°¡£¬°èÃþ±îÁö";
-        Text[ chinese_simplified ] = "°üÀ¨±êÌâ¼¶±ð";
-        Text[ chinese_traditional ] = "¥]¬A¼ÐÃD¯Å§O";
-        Text[ turkish ] = "Þu düzeye kadar:";
-        Text[ arabic ] = "ÊÞííã ÍÊì ÇáãÓÊæì";
-        Text[ catalan ] = "E~valuar hasta nivel";
-    };
     FixedLine        FL_CREATEFROM
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
+        Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "Erzeugen aus" ;
         Text [ ENGLISH ] = "Create from" ;
@@ -1037,7 +1017,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_FROMHEADINGS
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
         Check = TRUE;
         Text = "~Gliederung" ;
@@ -1066,14 +1046,14 @@ TabPage TP_TOX_SELECT
     };
     PushButton  PB_CHAPTERDLG
     {
-        Pos = MAP_APPFONT ( 115 , 112 ) ;
+        Pos = MAP_APPFONT ( 115 , 98 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "~..." ;
         TabStop = TRUE ;
     };
     CheckBox CB_ADDSTYLES
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 75 , 10  ) ;
         Text = "~weiteren Vorlagen" ;
         Text [ ENGLISH ] = "additional styles" ;
@@ -1127,14 +1107,14 @@ TabPage TP_TOX_SELECT
     };
     PushButton      PB_ADDSTYLES
     {
-        Pos = MAP_APPFONT ( 115 , 128 ) ;
+        Pos = MAP_APPFONT ( 115 , 114 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
         TabStop = TRUE ;
     };
     CheckBox        CB_TOXMARKS
     {
-        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Verzeichnism~arkierungen" ;
         Text [ ENGLISH ] = "Index entries" ;
@@ -1162,7 +1142,7 @@ TabPage TP_TOX_SELECT
 
     RadioButton     RB_FROMCAPTIONS
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Bes~chriftungen" ;
         Text [ ENGLISH ] = "Captions" ;
@@ -1190,7 +1170,7 @@ TabPage TP_TOX_SELECT
     };
     FixedText FT_CAPTIONSEQUENCE
     {
-        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Kategorie" ;
         Text [ ENGLISH ] = "Category" ;
@@ -1218,14 +1198,14 @@ TabPage TP_TOX_SELECT
     };
     ListBox LB_CAPTIONSEQUENCE
     {
-        Pos = MAP_APPFONT ( 55 , 126 ) ;
+        Pos = MAP_APPFONT ( 55 , 112 ) ;
         Size = MAP_APPFONT ( 70 , 40 ) ;
         DropDown = TRUE;
         TabStop = TRUE;
     };
     FixedText FT_DISPLAYTYPE
     {
-        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Anzeige" ;
         Text [ ENGLISH ] = "Display" ;
@@ -1253,7 +1233,7 @@ TabPage TP_TOX_SELECT
     };
     ListBox LB_DISPLAYTYPE
     {
-        Pos = MAP_APPFONT ( 55 , 142 ) ;
+        Pos = MAP_APPFONT ( 55 , 128 ) ;
         Size = MAP_APPFONT ( 70 , 40 ) ;
         DropDown = TRUE;
         TabStop = TRUE;
@@ -1398,7 +1378,7 @@ TabPage TP_TOX_SELECT
     };
     RadioButton        RB_FROMOBJECTNAMES
     {
-        Pos = MAP_APPFONT ( 156 , 112 ) ;
+        Pos = MAP_APPFONT ( 156 , 98 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Obje~ktnamen" ;
         Text [ ENGLISH ] = "Object names" ;
@@ -1426,7 +1406,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_COLLECTSAME
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 121 , 10 ) ;
         Text = "Zusammenfassen ~gleicher Einträge" ;
         Text [ ENGLISH ] = "Combine identical entries" ;
@@ -1453,7 +1433,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_USEFF
     {
-        Pos = MAP_APPFONT ( 18 ,  125 ) ;
+        Pos = MAP_APPFONT ( 18 ,  111 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Zusammenfassen mit ~f oder ff" ;
         Text [ english ] = "Combine identical entries with ~pp." ;
@@ -1480,7 +1460,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox CB_USE_DASH
     {
-        Pos = MAP_APPFONT ( 18 , 138 ) ;
+        Pos = MAP_APPFONT ( 18 , 124 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Zusammenfassen ~mit -" ;
         Text [ english ] = "Combine identical entries with -" ;
@@ -1507,7 +1487,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_CASESENSITIVE
     {
-        Pos = MAP_APPFONT ( 18 , 151 ) ;
+        Pos = MAP_APPFONT ( 18 , 137 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Groß- und ~Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "Case sensitive" ;
@@ -1535,7 +1515,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_INITIALCAPS
     {
-        Pos = MAP_APPFONT ( 136 , 112 ) ;
+        Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Einträge ~automatisch großschreiben";
         Text [ ENGLISH ] = "Capitalize entries";
@@ -1563,7 +1543,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_KEYASENTRY
     {
-        Pos = MAP_APPFONT ( 136, 125 ) ;
+        Pos = MAP_APPFONT ( 136, 111 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Schlüssel als eigener Eintrag" ;
         Text [ ENGLISH ] = "Keys as separate entries" ;
@@ -1590,8 +1570,8 @@ TabPage TP_TOX_SELECT
     };
     CheckBox    CB_FROMFILE
     {
-        Pos = MAP_APPFONT ( 136 , 138 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 136 , 124 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Konko~rdanzdatei" ;
         Text [ ENGLISH ] = "...file??" ;
         Text[ english_us ] = "~Concordance file";
@@ -1617,7 +1597,7 @@ TabPage TP_TOX_SELECT
     };
     MenuButton  MB_AUTOMARK
     {
-        Pos = MAP_APPFONT ( 144 , 152 ) ;
+        Pos = MAP_APPFONT ( 201 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Datei" ;
         Text [ ENGLISH ] = "File" ;
@@ -1729,7 +1709,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox    CB_FROMTABLES
     {
-        Pos = MAP_APPFONT ( 112 , 113 ) ;
+        Pos = MAP_APPFONT ( 112 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Tabellen" ;
         Text [ ENGLISH ] = "Tables" ;
@@ -1757,7 +1737,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox    CB_FROMFRAMES
     {
-        Pos = MAP_APPFONT ( 182 , 113 ) ;
+        Pos = MAP_APPFONT ( 182 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "Te~xtrahmen" ;
         Text [ ENGLISH ] = "Text frames" ;
@@ -1785,7 +1765,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox    CB_FROMGRAPHICS
     {
-        Pos = MAP_APPFONT ( 112 , 127 ) ;
+        Pos = MAP_APPFONT ( 112 , 113 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Grafiken" ;
         Text [ ENGLISH ] = "Graphics" ;
@@ -1813,7 +1793,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_FROMOLE
     {
-        Pos = MAP_APPFONT ( 182 , 127 ) ;
+        Pos = MAP_APPFONT ( 182 , 113 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~OLE-Objekten" ;
         Text [ ENGLISH ] = "OLE objects" ;
@@ -1841,7 +1821,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_LEVELFROMCHAPTER
     {
-        Pos = MAP_APPFONT ( 118 ,  141 ) ;
+        Pos = MAP_APPFONT ( 118 ,  127 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
         Text = "Ebene aus Urs~prungskapitel" ;
         Text [ ENGLISH ] = "Use level from source" ;
@@ -1868,7 +1848,7 @@ TabPage TP_TOX_SELECT
     };
     FixedLine        FL_IDXOPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
+        Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "Zusätze" ;
         Text [ ENGLISH ] = "Options" ;
@@ -1896,8 +1876,8 @@ TabPage TP_TOX_SELECT
     };
     Control CLB_FROMOBJ
     {
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
-        Size = MAP_APPFONT ( 236 , 55 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Size = MAP_APPFONT ( 236 ,49 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -2101,7 +2081,7 @@ TabPage TP_TOX_SELECT
     };
     FixedLine FL_FROMOBJ
     {
-        Pos = MAP_APPFONT ( 6 , 101) ;
+        Pos = MAP_APPFONT ( 6 , 87) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "Aus folgenden Objekten erzeugen" ;
         Text [ ENGLISH ] = "Create from the following objects" ;
@@ -2249,6 +2229,41 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Alfabetik dizin için seçim dosyasý (*.sdi)";
         Text[ catalan ] = "Archivo de marcas para índice alfabético (*.sdi)";
         Text[ finnish ] = "Aakkostetun hakemiston (*.sdi) luontitiedosto";
+    };
+    FixedLine FL_SORTOPTIONS
+    {
+        Pos = MAP_APPFONT ( 6, 150) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text = "Sortieren";
+        Text[English] = "Sort";
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 12, 163) ;
+        Size = MAP_APPFONT ( 33, 8 ) ;
+        Text = "Sprache";
+        Text[English] = "Language";
+    };
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 47, 161) ;
+        Size = MAP_APPFONT ( 80, 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_SORTALG
+    {
+        Pos = MAP_APPFONT ( 130, 163) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
+        Text = "Schlüsseltyp";
+        Text[English] = "Key type";
+    };
+    ListBox LB_SORTALG
+    {
+        Pos = MAP_APPFONT ( 201, 161) ;
+        Size = MAP_APPFONT ( 50, 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
     };
 };
 
