@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:40:07 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,13 +208,10 @@ namespace dbaui
     //========================================================================
     DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
-
-        :OGenericAdministrationPage(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
+        :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
         ,m_aUserNameLabel(this, ResId(FT_USERNAME))
         ,m_aUserName(this, ResId(ET_USERNAME))
         ,m_aPasswordRequired(this, ResId(CB_PASSWORD_REQUIRED))
-        ,m_aConnection(this, ResId(ET_CONNECTURL))
-        ,m_aBrowseConnection(this, ResId(PB_BROWSECONNECTION))
         ,m_aJavaDriverLabel(this, ResId(FT_JDBCDRIVERCLASS))
         ,m_aJavaDriver(this, ResId(ET_JDBCDRIVERCLASS))
         ,m_aTestJavaDriver(this, ResId(PB_TESTDRIVERCLASS))
@@ -223,18 +220,15 @@ namespace dbaui
         ,m_aFL2(this, ResId(FL_SEPARATOR2))
         ,m_aFL3(this, ResId(FL_SEPARATOR3))
         ,m_pCollection(NULL)
-        ,m_pConnectionLabel(NULL)
         ,m_bUserGrabFocus(sal_True)
-        ,m_eType(DST_JDBC)
     {
         DBG_CTOR(OConnectionTabPage,NULL);
-        m_aConnection.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
-        //  m_aJavaDriver.SetModifyHdl(getControlModifiedLink());
+        m_aET_Connection.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
+        m_aJavaDriver.SetModifyHdl(getControlModifiedLink());
         m_aJavaDriver.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
         m_aUserName.SetModifyHdl(getControlModifiedLink());
         m_aPasswordRequired.SetClickHdl(getControlModifiedLink());
 
-        m_aBrowseConnection.SetClickHdl(LINK(this, OConnectionTabPage, OnBrowseConnections));
         m_aTestConnection.SetClickHdl(LINK(this,OConnectionTabPage,OnTestConnectionClickHdl));
         m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
 
@@ -251,7 +245,6 @@ namespace dbaui
     OConnectionTabPage::~OConnectionTabPage()
     {
         DBG_DTOR(OConnectionTabPage,NULL);
-        DELETEZ(m_pConnectionLabel);
     }
     // -----------------------------------------------------------------------
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
@@ -262,107 +255,85 @@ namespace dbaui
 
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
 
-        BOOL bEnableBrowseButton = FALSE;
-        delete m_pConnectionLabel;
-        m_aConnection.Show();
-
-        m_aConnection.ShowPrefix(FALSE);
-
-        BOOL bShowUserAuthenfication = TRUE;
-
         OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
         {
             case DST_DBASE:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_DBASE_PATH_OR_FILE));
-                m_aConnection.SetHelpId(HID_DSADMIN_DBASE_PATH);
-                bEnableBrowseButton = TRUE;
-                bShowUserAuthenfication = FALSE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_DBASE_PATH_OR_FILE)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_DBASE_PATH);
                 break;
             case DST_FLAT:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_FLAT_PATH_OR_FILE));
-                m_aConnection.SetHelpId(HID_DSADMIN_FLAT_PATH);
-                bEnableBrowseButton = TRUE;
-                bShowUserAuthenfication = FALSE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_FLAT_PATH_OR_FILE)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_FLAT_PATH);
                 break;
             case DST_CALC:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_CALC_PATH_OR_FILE));
-                m_aConnection.SetHelpId(HID_DSADMIN_CALC_PATH);
-                bEnableBrowseButton = TRUE;
-                bShowUserAuthenfication = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
             case DST_ADABAS:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_ADABAS_DATABASE_NAME));
-                m_aConnection.SetHelpId(HID_DSADMIN_ADABAS_DATABASE);
-                bEnableBrowseButton = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_ADABAS_DATABASE);
                 break;
             case DST_ADO:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_CONNECTURL));
-                bEnableBrowseButton = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
             case DST_MSACCESS:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_MSACCESS_MDB_FILE));
-                m_aConnection.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
-                bEnableBrowseButton = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
             case DST_MYSQL_JDBC:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_MYSQL_DATABASE_NAME));
-                m_aConnection.SetHelpId(HID_DSADMIN_MYSQL_DATABASE);
+                m_aFT_Connection.SetText(String(ModuleRes(STR_MYSQL_DATABASE_NAME)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_MYSQL_DATABASE);
                 break;
             case DST_ORACLE_JDBC:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_ORACLE_DATABASE_NAME));
-                m_aConnection.SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
+                m_aFT_Connection.SetText(String(ModuleRes(STR_ORACLE_DATABASE_NAME)));
+                m_aET_Connection.SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
                 break;
             case DST_MYSQL_ODBC:
             case DST_ODBC:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_NAME_OF_ODBC_DATASOURCE));
-                m_aConnection.SetHelpId( m_eType == DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
-                bEnableBrowseButton = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
+                m_aET_Connection.SetHelpId( m_eType == DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
             case DST_LDAP:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_HOSTNAME));
-                m_aConnection.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
-                bShowUserAuthenfication = TRUE;
+                m_aFT_Connection.SetText(String(ModuleRes(STR_HOSTNAME)));
+                m_aET_Connection.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
             case DST_MOZILLA:
             case DST_OUTLOOK:
             case DST_OUTLOOKEXP:
             case DST_EVOLUTION:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_NO_ADDITIONAL_SETTINGS));
+                m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
                 {
-                    String sText = m_pConnectionLabel->GetText();
+                    String sText = m_aFT_Connection.GetText();
                     sText.SearchAndReplaceAscii("%test",m_aTestConnection.GetText());
                     String sTemp;
                     sText.SearchAndReplaceAscii("~",sTemp);
-                    m_pConnectionLabel->SetText(sText);
+                    m_aFT_Connection.SetText(sText);
                 }
-                m_aConnection.Hide();
-                bShowUserAuthenfication = FALSE;
+                m_aFT_Connection.Hide();
                 break;
             case DST_JDBC:
-                m_aConnection.ShowPrefix(TRUE);
+                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
+                m_aET_Connection.ShowPrefix(TRUE);
                 // run through
             default:
-                m_pConnectionLabel = new FixedText(this,ResId(FT_CONNECTURL));
+                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
         }
-
+        m_aPB_Connection.SetHelpId(HID_DSADMIN_BROWSECONN);
+        BOOL bShowUserAuthenfication = m_pCollection->hasAuthentication(m_eType);
         m_aFL2.Show(bShowUserAuthenfication);
         m_aUserNameLabel.Show(bShowUserAuthenfication);
         m_aUserName.Show(bShowUserAuthenfication);
         m_aPasswordRequired.Show(bShowUserAuthenfication);
 
-        m_aBrowseConnection.Show(bEnableBrowseButton);
-
-        OSL_ENSURE(m_pConnectionLabel,"Connectionlabel not set! ->GPF");
-        m_pConnectionLabel->Show();
         // collect the items
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
         SFX_ITEMSET_GET(_rSet, pPwdItem, SfxStringItem, DSID_PASSWORD, sal_True);
         SFX_ITEMSET_GET(_rSet, pJdbcDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
-        //  SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
 
         // forward the values to the controls
         if ( bValid )
@@ -385,18 +356,15 @@ namespace dbaui
             checkTestConnection();
 
             m_aUserName.ClearModifyFlag();
-            m_aConnection.ClearModifyFlag();
+            m_aET_Connection.ClearModifyFlag();
             m_aJavaDriver.ClearModifyFlag();
         }
-
-        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
+        OConnectionHelper::implInitControls( _rSet, _bSaveValue);
     }
     // -----------------------------------------------------------------------
     void OConnectionTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL1));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pConnectionLabel));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aBrowseConnection));
 
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL2));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aJavaDriverLabel));
@@ -405,14 +373,16 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL3));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
         _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aTestConnection));
+        OConnectionHelper::fillWindows(_rControlList);
+
     }
     // -----------------------------------------------------------------------
     void OConnectionTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aConnection));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aJavaDriver));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aUserName));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aPasswordRequired));
+        OConnectionHelper::fillControls(_rControlList);
     }
 
     // -----------------------------------------------------------------------
@@ -433,10 +403,12 @@ namespace dbaui
         {
             fillString(_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
-        fillString(_rSet,&m_aConnection, DSID_CONNECTURL, bChangedSomething);
+
+        fillString(_rSet,&m_aET_Connection, DSID_CONNECTURL, bChangedSomething);
 
         return bChangedSomething;
     }
+
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPage, OnTestConnectionClickHdl, PushButton*, _pButton)
     {
@@ -500,13 +472,14 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    void OConnectionTabPage::checkTestConnection()
+    bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        BOOL bEnableTestConnection = !m_aConnection.IsVisible() || (m_aConnection.GetTextNoPrefix().Len() != 0);
+        BOOL bEnableTestConnection = !m_aET_Connection.IsVisible() || (m_aET_Connection.GetTextNoPrefix().Len() != 0);
         if ( m_eType == DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
         m_aTestConnection.Enable(bEnableTestConnection);
+        return true;
     }
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
@@ -519,653 +492,9 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
-    // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionTabPage, OnBrowseConnections, PushButton*, _pButton)
-    {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        switch ( m_eType )
-        {
-            case DST_DBASE:
-            case DST_FLAT:
-            {
-                try
-                {
-                    ::rtl::OUString sFolderPickerService = ::rtl::OUString::createFromAscii(SERVICE_UI_FOLDERPICKER);
-                    Reference< XFolderPicker > xFolderPicker(m_xORB->createInstance(sFolderPickerService), UNO_QUERY);
-                    if (!xFolderPicker.is())
-                    {
-                        ShowServiceNotAvailableError(GetParent(), sFolderPickerService, sal_True);
-                        break;
-                    }
 
-                    sal_Bool bDoBrowse = sal_False;
-                    String sOldPath = getURLNoPrefix();
-                    do
-                    {
-                        if (sOldPath.Len())
-                            xFolderPicker->setDisplayDirectory(sOldPath);
-                        if (0 == xFolderPicker->execute())
-                            // cancelled by the user
-                            return 0L;
 
-                        sOldPath = xFolderPicker->getDirectory();
-                        switch (checkPathExistence(sOldPath))
-                        {
-                            case RET_RETRY:
-                                bDoBrowse = sal_True;
-                                break;
-                            case RET_CANCEL:
-                                return 0L;
-                            default:
-                                break;
-                        }
-                    }
-                    while (bDoBrowse);
 
-                    String sSelectedDirectory = xFolderPicker->getDirectory();
-                    INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
-
-                    // for UI purpose, we don't want to have the path encoded
-                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8  );
-
-                    setURLNoPrefix( sSelectedDirectory );
-                    callModifiedHdl();
-                }
-                catch(const Exception&)
-                {
-                    DBG_ERROR("OConnectionTabPage::OnBrowseConnections: caught an exception while browsing for the path!");
-                }
-            }
-            break;
-            case DST_CALC:
-            {
-                static const String s_sCalcType = String::CreateFromAscii("StarOffice XML (Calc)");
-                const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sCalcType);
-                OSL_ENSURE(pFilter,"Filter: StarOffice XML (Calc) could not be found!");
-                askForFileName(pFilter->GetUIName(),pFilter->GetDefaultExtension());
-            }
-            break;
-            case DST_MSACCESS:
-            {
-                ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
-                String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
-                askForFileName(sFilterName,sExt);
-            }
-            break;
-            case DST_ADABAS:
-            {
-                // collect all names from the config dir
-                // and all dir's of the DBWORK/wrk or DBROOT/wrk dir
-                // compare the names
-
-                // collect the names of the installed databases
-                StringBag aInstalledDBs;
-                ::rtl::OUString sAdabasConfigDir,sAdabasWorkDir,sRootDir;
-                ::rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
-                rtl_uString* pDbVar = NULL;
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sAdabasWorkDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sTemp);
-                    sAdabasWorkDir = sTemp;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sTemp = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sAdabasConfigDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sTemp);
-                    sAdabasConfigDir = sTemp;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sTemp = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
-                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                {
-                    sRootDir = pDbVar;
-                    String sTemp;
-                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sTemp);
-                    sRootDir = sTemp;
-                    rtl_uString_release(pDbVar);
-                    pDbVar = NULL;
-                }
-
-                sal_Bool bOldFashion = sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength();
-
-                if(!bOldFashion) // we have a normal adabas installation
-                {    // so we check the local database names in $DBROOT/config
-                    sAdabasConfigDir    = sRootDir;
-                    sAdabasWorkDir      = sRootDir;
-                }
-
-                if(sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength() && sRootDir.getLength())
-                {
-
-                    aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
-
-                    if(!aInstalledDBs.size() && bOldFashion)
-                    {
-                        sAdabasConfigDir    = sRootDir;
-                        sAdabasWorkDir      = sRootDir;
-                        aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
-                    }
-
-                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, m_eType,m_pItemSetHelper->getWriteOutputSet());
-                    if (RET_OK == aSelector.Execute())
-                    {
-                        setURLNoPrefix(aSelector.GetSelected());
-                        //  checkCreateDatabase(DST_ADABAS);
-                        callModifiedHdl();
-                    }
-                }
-                else
-                {
-                    OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
-                    String sError = String(ResId(STR_NO_ADABASE_DATASOURCES));
-                    ErrorBox aBox(this, WB_OK, sError);
-                    aBox.Execute();
-                }
-            }
-            break;
-            case DST_MYSQL_ODBC:
-            case DST_ODBC:
-            {
-                // collect all ODBC data source names
-                ::rtl::OUString sDataSource;
-                if ( getSelectedDataSource(m_eType,sDataSource) && sDataSource.getLength() )
-                {
-                    setURLNoPrefix(sDataSource);
-                    callModifiedHdl();
-                }
-                else
-                    return 1L;
-            }
-            break;
-#ifdef _ADO_DATALINK_BROWSE_
-            case DST_ADO:
-            {
-                ::rtl::OUString sOldDataSource=getURLNoPrefix();
-                ::rtl::OUString sNewDataSource;
-                HWND hWnd = GetParent()->GetSystemData()->hWnd;
-                sNewDataSource = getAdoDatalink((long)hWnd,sOldDataSource);
-                if ( sNewDataSource.getLength() )
-                {
-                    setURLNoPrefix(sNewDataSource);
-                    callModifiedHdl();
-                }
-                else
-                    return 1L;
-            }
-            break;
-#endif
-
-        }
-
-        checkTestConnection();
-
-        return 0L;
-    }
-    //-------------------------------------------------------------------------
-    void OConnectionTabPage::implSetURL( const String& _rURL, sal_Bool _bPrefix )
-    {
-        String sURL( _rURL );
-        DBG_ASSERT( m_pCollection, "OConnectionTabPage::setURL: have no interpreter for the URLs!" );
-
-        if ( m_pCollection && sURL.Len() )
-        {
-            if ( m_pCollection->isFileSystemBased( m_eType ) )
-            {
-                // get the tow parts: prefix and file URL
-                String sTypePrefix, sFileURLEncoded;
-                if ( _bPrefix )
-                {
-                    sTypePrefix = m_pCollection->getDatasourcePrefix( m_eType );
-                    sFileURLEncoded = m_pCollection->cutPrefix( sURL );
-                }
-                else
-                {
-                    sFileURLEncoded = sURL;
-                }
-
-                // substitute any variables
-                sFileURLEncoded = SvtPathOptions().SubstituteVariable( sFileURLEncoded );
-
-                // decode the URL
-                sURL = sTypePrefix;
-                if ( sFileURLEncoded.Len() )
-                {
-                    OFileNotation aFileNotation(sFileURLEncoded);
-                    // set this decoded URL as text
-                    sURL += String(aFileNotation.get(OFileNotation::N_SYSTEM));
-                }
-            }
-        }
-
-        if ( _bPrefix )
-            m_aConnection.SetText( sURL );
-        else
-            m_aConnection.SetTextNoPrefix( sURL );
-    }
-
-    //-------------------------------------------------------------------------
-    String OConnectionTabPage::implGetURL( sal_Bool _bPrefix ) const
-    {
-        // get the pure text
-        String sURL = _bPrefix ? m_aConnection.GetText() : m_aConnection.GetTextNoPrefix();
-
-        DBG_ASSERT( m_pCollection, "OConnectionTabPage::implGetURL: have no interpreter for the URLs!" );
-
-        if ( m_pCollection && sURL.Len() )
-        {
-            if ( m_pCollection->isFileSystemBased( m_eType ) )
-            {
-                // get the tow parts: prefix and file URL
-                String sTypePrefix, sFileURLDecoded;
-                if ( _bPrefix )
-                {
-                    sTypePrefix = m_pCollection->getDatasourcePrefix( m_eType );
-                    sFileURLDecoded = m_pCollection->cutPrefix( sURL );
-                }
-                else
-                {
-                    sFileURLDecoded = sURL;
-                }
-
-                // encode the URL
-                INetURLObject aFileURL( sFileURLDecoded, INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8 );
-                sFileURLDecoded = aFileURL.GetMainURL( INetURLObject::NO_DECODE );
-                sURL = sTypePrefix;
-                if ( sFileURLDecoded.Len() )
-                {
-                    OFileNotation aFileNotation(sFileURLDecoded,OFileNotation::N_SYSTEM);
-
-                    // set this decoded URL as text
-                    sURL += String(aFileNotation.get(OFileNotation::N_URL));
-                }
-            }
-        }
-        return sURL;
-    }
-    //-------------------------------------------------------------------------
-    String OConnectionTabPage::getURL( ) const
-    {
-        return implGetURL( sal_True );
-    }
-
-    //-------------------------------------------------------------------------
-    void OConnectionTabPage::setURL( const String& _rURL )
-    {
-        implSetURL( _rURL, sal_True );
-    }
-
-    //-------------------------------------------------------------------------
-    String OConnectionTabPage::getURLNoPrefix( ) const
-    {
-        return implGetURL( sal_False );
-    }
-
-    //-------------------------------------------------------------------------
-    void OConnectionTabPage::setURLNoPrefix( const String& _rURL )
-    {
-        implSetURL( _rURL, sal_False );
-    }
-
-    //-------------------------------------------------------------------------
-    String OConnectionTabPage::getConnectionURL( ) const
-    {
-        return getURL( );
-    }
-
-    //-------------------------------------------------------------------------
-    void OConnectionTabPage::changeConnectionURL( const String& _rNewDSN )
-    {
-        setURL( _rNewDSN );
-    }
-    //-------------------------------------------------------------------------
-    sal_Int32 OConnectionTabPage::checkPathExistence(const String& _rURL)
-    {
-        // #106016# ----------------
-        if ( pathExists(_rURL, sal_False) == PATH_NOT_EXIST )
-        {
-            String sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
-            OFileNotation aTransformer(_rURL);
-            sQuery.SearchAndReplaceAscii("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
-
-            m_bUserGrabFocus = sal_False;
-            QueryBox aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
-            sal_Int32 nQueryResult = aQuery.Execute();
-            m_bUserGrabFocus = sal_True;
-
-            switch (nQueryResult)
-            {
-                case RET_YES:
-                {
-                    sal_Bool bTryCreate = sal_False;
-                    do
-                    {
-                        if ( !createDirectoryDeep(_rURL) )
-                        {   // could not create the directory
-                            sQuery = String(ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY));
-                            sQuery.SearchAndReplaceAscii("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
-
-                            m_bUserGrabFocus = sal_False;
-                            QueryBox aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
-                            nQueryResult = aWhatToDo.Execute();
-                            m_bUserGrabFocus = sal_True;
-
-                            if (RET_RETRY == nQueryResult)
-                                bTryCreate = sal_True;
-                            else
-                                return RET_RETRY;
-                        }
-                    }
-                    while (bTryCreate);
-                }
-                break;
-
-                case RET_NO:
-                    return RET_OK;
-
-                default:
-                    // cancelled
-                    return RET_CANCEL;
-            }
-        }
-        return RET_OK;
-    }
-    //-------------------------------------------------------------------------
-    StringBag OConnectionTabPage::getInstalledAdabasDBDirs(const String& _rPath,const ::ucb::ResultSetInclude& _reResultSetInclude)
-    {
-        INetURLObject aNormalizer;
-        aNormalizer.SetSmartProtocol(INET_PROT_FILE);
-        aNormalizer.SetSmartURL(_rPath);
-        String sAdabasConfigDir = aNormalizer.GetMainURL(INetURLObject::NO_DECODE);
-
-        ::ucb::Content aAdabasConfigDir;
-        try
-        {
-            aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-        }
-        catch(::com::sun::star::ucb::ContentCreationException&)
-        {
-            return StringBag();
-        }
-
-        StringBag aInstalledDBs;
-        sal_Bool bIsFolder = sal_False;
-        try
-        {
-            bIsFolder = aAdabasConfigDir.isFolder();
-        }
-        catch(Exception&) // the exception is thrown when the path doesn't exists
-        {
-        }
-        if (bIsFolder && aAdabasConfigDir.get().is())
-        {   // we have a content for the directory, loop through all entries
-            Sequence< ::rtl::OUString > aProperties(1);
-            aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-
-            try
-            {
-                Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, _reResultSetInclude);
-                Reference< XRow > xRow(xFiles, UNO_QUERY);
-                xFiles->beforeFirst();
-                while (xFiles->next())
-                {
-#ifdef DBG_UTIL
-                    ::rtl::OUString sName = xRow->getString(1);
-#endif
-                    aInstalledDBs.insert(xRow->getString(1));
-                }
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("OConnectionTabPage::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
-            }
-        }
-
-
-        return aInstalledDBs;
-    }
-    // -----------------------------------------------------------------------------
-    StringBag OConnectionTabPage::getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir)
-    {
-        String sAdabasConfigDir(_rConfigDir),sAdabasWorkDir(_rWorkDir);
-
-        if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
-            sAdabasConfigDir.AppendAscii("config");
-        else
-            sAdabasConfigDir.AppendAscii("/config");
-
-        if (sAdabasWorkDir.Len() && ('/' == sAdabasWorkDir.GetBuffer()[sAdabasWorkDir.Len() - 1]))
-            sAdabasWorkDir.AppendAscii("wrk");
-        else
-            sAdabasWorkDir.AppendAscii("/wrk");
-        // collect the names of the installed databases
-        StringBag aInstalledDBs;
-        // collect the names of the installed databases
-        StringBag aConfigDBs,aWrkDBs;
-        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucb::INCLUDE_DOCUMENTS_ONLY);
-        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucb::INCLUDE_FOLDERS_ONLY);
-        ConstStringBagIterator aOuter = aConfigDBs.begin();
-        for(;aOuter != aConfigDBs.end();++aOuter)
-        {
-            ConstStringBagIterator aInner = aWrkDBs.begin();
-            for (;aInner != aWrkDBs.end(); ++aInner)
-            {
-                if (aInner->equalsIgnoreAsciiCase(*aOuter))
-                {
-                    aInstalledDBs.insert(*aInner);
-                    break;
-                }
-            }
-        }
-        return aInstalledDBs;
-    }
-    // #106016# -------------------------------------------------------------------
-    IS_PATH_EXIST OConnectionTabPage::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
-    {
-        ::ucb::Content aCheckExistence;
-        sal_Bool bExists = sal_False;
-        IS_PATH_EXIST eExists = PATH_NOT_EXIST;
-        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler >(
-            m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
-        OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
-        xInteractionHandler = pHandler;
-
-        Reference< XCommandEnvironment > xCmdEnv = new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        try
-        {
-            aCheckExistence = ::ucb::Content(_rURL, xCmdEnv );
-            bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
-            eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
-        }
-        catch(const Exception&)
-        {
-            eExists = ( pHandler && pHandler->isDoesNotExist() ) ? PATH_NOT_EXIST: PATH_NOT_KNOWN;
-           }
-        return eExists;
-    }
-    //-------------------------------------------------------------------------
-    long OConnectionTabPage::PreNotify( NotifyEvent& _rNEvt )
-    {
-        if (    (DST_DBASE == m_eType)
-            ||  (DST_FLAT == m_eType)
-            ||  (DST_CALC == m_eType) )
-            switch (_rNEvt.GetType())
-            {
-                case EVENT_GETFOCUS:
-                    if (m_aConnection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field got the focus
-                        m_aConnection.SaveValueNoPrefix();
-                    }
-                    break;
-
-                case EVENT_LOSEFOCUS:
-                    if (m_aConnection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field lost the focus
-                        if (!commitURL())
-                            return 1L;  // handled
-                    }
-                    break;
-            }
-
-        return OGenericAdministrationPage::PreNotify( _rNEvt );
-    }
-    //-------------------------------------------------------------------------
-    sal_Bool OConnectionTabPage::createDirectoryDeep(const String& _rPathURL)
-    {
-        ::rtl::OUString sPath(_rPathURL);
-
-        // get an URL object analyzing the URL for us ...
-        INetURLObject aParser;
-        aParser.SetURL(_rPathURL);
-
-        INetProtocol eProtocol = aParser.GetProtocol();
-
-        ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
-
-        // search a level which exists
-        // #106016# ---------------------
-        IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
-        while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
-        {
-            aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
-            aParser.removeSegment();                    // cut the local name
-            eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), sal_False);
-        }
-
-        if (!aParser.getSegmentCount())
-            return sal_False;
-
-        // create all the missing levels
-        try
-        {
-            // the parent content
-            Reference< XCommandEnvironment > xEmptyEnv;
-            ::ucb::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
-
-            ::rtl::OUString sContentType;
-            if ( INET_PROT_FILE == eProtocol )
-            {
-                sContentType = ::rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" );
-                // the file UCP currently does not support the ContentType property
-            }
-            else
-            {
-                Any aContentType = aParent.getPropertyValue( ::rtl::OUString::createFromAscii( "ContentType" ) );
-                aContentType >>= sContentType;
-            }
-
-            // the properties which need to be set on the new content
-            Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = ::rtl::OUString::createFromAscii("Title");
-
-            // the values to be set
-            Sequence< Any > aNewDirectoryAttributes(1);
-
-            // loop
-            for (   ::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
-                    aLocalName != aToBeCreated.rend();
-                    ++aLocalName
-                )
-            {
-                aNewDirectoryAttributes[0] <<= *aLocalName;
-                if (!aParent.insertNewContent(sContentType, aNewDirectoryProperties, aNewDirectoryAttributes, aParent))
-                    return sal_False;
-            }
-        }
-        catch (const Exception& e)
-        {
-            OSL_ENSURE( sal_False, "" );
-            e; // make compiler happy
-            return sal_False;
-        }
-
-        return sal_True;
-    }
-    //-------------------------------------------------------------------------
-    sal_Bool OConnectionTabPage::commitURL()
-    {
-        if (    (DST_DBASE == m_eType)
-            ||  (DST_FLAT == m_eType)
-            ||  (DST_CALC == m_eType) )
-        {
-            String sOldPath = m_aConnection.GetSavedValueNoPrefix();
-            String sURL = m_aConnection.GetTextNoPrefix();
-            if ((sURL != sOldPath) && (0 != sURL.Len()))
-            {   // the text changed since entering the control
-
-                // the path may be in system notation ....
-                OFileNotation aTransformer(sURL);
-                sURL = aTransformer.get(OFileNotation::N_URL);
-
-                if ( DST_CALC == m_eType )
-                { // #106016# --------------------------
-                    if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
-                    {
-                        String sFile = String(ModuleRes(STR_CALCDOC_DOESNOTEXIST));
-                        sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
-                        OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
-                        setURLNoPrefix(sOldPath);
-                        return sal_False;
-                    }
-                    else
-                    {
-                        setURLNoPrefix(sURL);
-                        m_aConnection.SaveValueNoPrefix();
-                    }
-                }
-                else
-                {
-                    switch (checkPathExistence(sURL))
-                    {
-                        case RET_RETRY:
-                            m_bUserGrabFocus = sal_False;
-                            m_aConnection.GrabFocus();
-                            m_bUserGrabFocus = sal_True;
-                            return sal_False;
-
-                        case RET_CANCEL:
-                            setURLNoPrefix(sOldPath);
-                            return sal_False;
-
-                        default:
-                            // accept the input
-                            setURLNoPrefix(sURL);
-                            m_aConnection.SaveValueNoPrefix();
-                            break;
-                    }
-                }
-            }
-        }
-
-        return sal_True;
-    }
-    //-------------------------------------------------------------------------
-    void OConnectionTabPage::askForFileName(const ::rtl::OUString& _sFilterName, const ::rtl::OUString& _sExtension)
-    {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
-
-        aFileDlg.AddFilter(_sFilterName,_sExtension);
-        aFileDlg.SetCurrentFilter(_sFilterName);
-
-        String sOldPath = getURLNoPrefix();
-        if ( sOldPath.Len() )
-            aFileDlg.SetDisplayDirectory(sOldPath);
-        else
-            aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
-        if (0 == aFileDlg.Execute())
-        {
-            setURLNoPrefix(aFileDlg.GetPath());
-            callModifiedHdl();
-        }
-    }
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
