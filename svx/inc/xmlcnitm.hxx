@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:06:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvXMLNamespaceMap;
 namespace rtl { class OUString; }
 
@@ -73,7 +77,7 @@ namespace rtl { class OUString; }
 
 class SvXMLAttrContainerData;
 
-class SvXMLAttrContainerItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem
 {
     SvXMLAttrContainerData  *pImpl;
 
