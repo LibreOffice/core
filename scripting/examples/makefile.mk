@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 16:03:47 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,12 @@ no_common_build_zip=true
 
 .INCLUDE : settings.mk
 
+.IF "$(SOLAR_JAVA)"!=""
 ZIP1FLAGS=-r
 ZIP1TARGET=ScriptsJava
 ZIP1DIR=$(OUT)$/class/examples
 ZIP1LIST=java
+.ENDIF
 
 ZIP2FLAGS=-r
 ZIP2TARGET=ScriptsBeanShell
