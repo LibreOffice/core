@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:21:42 $
+ *  last change: $Author: rt $ $Date: 2005-02-01 08:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
+#include <svapp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
