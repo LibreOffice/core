@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:51:38 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include "frmsh.hxx"
 #include "ndindex.hxx"
 #include "hfspacingitem.hxx"
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 extern FASTBOOL bObjsDirect;    //frmtool.cxx
 
@@ -544,7 +548,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
         // OD 10.04.2003 #108719# - notify fly frames, if necessary and triggered.
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
-            NotifyFlys();
+            NotifyLowerObjs();
         }
     }
 
@@ -663,7 +667,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         // OD 10.04.2003 #108719# - notify fly frames, if necessary.
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
-            NotifyFlys();
+            NotifyLowerObjs();
         }
     }
 
@@ -699,13 +703,13 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
                         pPage->GetSortedObjs()->Count() &&
                         i < (int)pPage->GetSortedObjs()->Count(); ++i )
     {
-        SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+        if ( pObj->ISA(SwFlyFrm) )
         {
-            SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
-            if ( pFrm->IsAnLower( pObj->GetFlyFrm() ) )
+            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
+            if ( pFrm->IsAnLower( pFlyFrm ) )
             {
-                delete pObj->GetFlyFrm();
+                delete pFlyFrm;
                 --i;
             }
         }
