@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 15:03:08 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 14:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1431,7 +1431,6 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync )    // Apo /
                                 bTable && (pSprm24 != 0) );
 
 //  look if we are in a Tabelle
-
     BOOL bStartTab = pSprm24 && !bTable && !bFtnEdn; // Table in FtnEdn nicht erlaubt
 
     BOOL bStopTab = bTable && (bWasTabRowEnd && !pSprm24) && !bFtnEdn;
@@ -1662,7 +1661,6 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                         SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ) );
                 }
                 break;
-
     case 0x7:   TabCellEnd();       // table cell end (Flags abfragen!)
                 if( bWasTabRowEnd )
                     pSBase->SetNoAttrScan( 0 );
@@ -1694,11 +1692,14 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                 pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
                 break;
 
-    case 0x1e:  rDoc.Insert( *pPaM, CHAR_HARDHYPHEN );// Non-breaking hyphen
+    case 0x1e:
+                rDoc.Insert( *pPaM, CHAR_HARDHYPHEN);   // Non-breaking hyphen
                 break;
-    case 0x1f:  rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN );   // Non-required hyphens
+    case 0x1f:
+                rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN);   // Non-required hyphens
                 break;
-    case 0xa0:  rDoc.Insert( *pPaM, CHAR_HARDBLANK );// Non-breaking spaces
+    case 0xa0:
+                rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
                 break;
 
     case 0x1:   if( bObj )
@@ -3048,11 +3049,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.13 2001-02-27 15:03:08 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.14 2001-03-16 14:15:34 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/02/27 15:03:08  os
+      Complete use of DefaultNumbering component
+
       Revision 1.12  2001/02/20 15:24:20  cmc
       #84095# Footnotes in field results that are being ignored shouldn't therefore be inserted
 
