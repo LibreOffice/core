@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 14:21:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 10:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1922,6 +1922,16 @@ String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáãÚíÇÑ¡ ÇáĞí Êã ÅÏÎÇáå¡ ÈåĞÇ ÇáÍŞá!!";
     Text[ turkish ] = "Belirtilen ölçüt, bu alan ile karşılaştırılamaz!!";
 };
+ErrorBox ERR_QRY_NOSTATEMENT
+{
+    Message = "Es konnte keine Abfrage erstellt werden!" ;
+    Message [ ENGLISH ] = "No query could be created!" ;
+};
 
+ErrorBox ERR_QRY_NOCRITERIA
+{
+    Message = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewählt wurden!" ;
+    Message [ ENGLISH ] = "No query could be created because no fields were selected!" ;
+};
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:57:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 10:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,105 +590,8 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             {
-                // we don't need to check the connection here because we already check the composer
-                // which can't live without his connection
-                m_sStatement = m_pWindow->getView()->getStatement();
-                ::rtl::OUString sTranslatedStmt;
-                if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
-                {
-                    try
-                    {
-                        ::rtl::OUString aErrorMsg;
-                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
-                        //  m_pParseNode = pNode;
-                        if(pNode)
-                        {
-                            pNode->parseNodeToStr(  sTranslatedStmt,
-                                                    m_xConnection->getMetaData());
-                            delete pNode;
-                        }
-                        m_xComposer->setQuery(sTranslatedStmt);
-                        sTranslatedStmt = m_xComposer->getComposedQuery();
-                    }
-                    catch(SQLException& e)
-                    {
-                        ::dbtools::SQLExceptionInfo aInfo(e);
-                        showError(aInfo);
-                        break;
-                    }
-                }
-                else
-                    sTranslatedStmt = m_sStatement;
-                if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
-                {
-                    URL aWantToDispatch;
-                    aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+                executeQuery();
 
-                    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
-                    //  | ::com::sun::star::frame::FrameSearchFlag::CREATE
-                    sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
-                    m_pWindow->showBeamer(m_xCurrentFrame);
-
-                    Reference< ::com::sun::star::frame::XDispatch> xDisp;
-                    Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
-                    if(!xProv.is())
-                    {
-                        xProv = Reference< ::com::sun::star::frame::XDispatchProvider>(m_xCurrentFrame, UNO_QUERY);
-                        if (xProv.is())
-                            xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
-                    }
-                    else
-                    {
-                        xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, FrameSearchFlag::SELF);
-                    }
-                    if (xDisp.is())
-                    {
-                        Sequence< PropertyValue> aProps(10);
-                        aProps[0].Name = PROPERTY_DATASOURCENAME;
-                        aProps[0].Value <<= m_sDataSourceName;
-
-                        aProps[1].Name = PROPERTY_COMMANDTYPE;
-                        aProps[1].Value <<= CommandType::COMMAND;
-
-                        aProps[2].Name = PROPERTY_COMMAND;
-                        aProps[2].Value <<= sTranslatedStmt;
-
-                        aProps[3].Name = PROPERTY_SHOWTREEVIEW;
-                        aProps[3].Value = ::cppu::bool2any(sal_False);
-
-                        aProps[4].Name = PROPERTY_SHOWTREEVIEWBUTTON;
-                        aProps[4].Value = ::cppu::bool2any(sal_False);
-
-                        aProps[5].Name = PROPERTY_ACTIVECONNECTION;
-                        aProps[5].Value <<= m_xConnection;
-
-                        aProps[6].Name = PROPERTY_UPDATE_CATALOGNAME;
-                        aProps[6].Value <<= m_sUpdateCatalogName;
-
-                        aProps[7].Name = PROPERTY_UPDATE_SCHEMANAME;
-                        aProps[7].Value <<= m_sUpdateSchemaName;
-
-                        aProps[8].Name = PROPERTY_UPDATE_TABLENAME;
-                        aProps[8].Value <<= m_sUpdateTableName;
-
-                        aProps[9].Name = PROPERTY_USE_ESCAPE_PROCESSING;
-                        aProps[9].Value = ::cppu::bool2any(m_bEsacpeProcessing);
-
-                        xDisp->dispatch(aWantToDispatch, aProps);
-                        // check the state of the beamer
-                        // be notified when the beamer frame is closed
-                        Reference< XComponent >  xComponent(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags), UNO_QUERY);
-                        if (xComponent.is())
-                        {
-                            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                            xComponent->addEventListener(xEvtL);
-                        }
-                    }
-                    else
-                    {
-                        OSL_ENSURE(0,"Couldn't create a beamer window!");
-                    }
-                }
             }
             break;
         case ID_QUERY_ZOOM_IN:
@@ -1075,6 +978,125 @@ Reference<XNameAccess> OQueryController::getQueries()
             xQueries = xSup->getQueryDefinitions();
     }
     return xQueries;
+}
+// -----------------------------------------------------------------------------
+void OQueryController::executeQuery()
+{
+    // we don't need to check the connection here because we already check the composer
+    // which can't live without his connection
+    m_sStatement = m_pWindow->getView()->getStatement();
+    ::rtl::OUString sTranslatedStmt;
+    if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
+    {
+        try
+        {
+            ::rtl::OUString aErrorMsg;
+            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+            //  m_pParseNode = pNode;
+            if(pNode)
+            {
+                pNode->parseNodeToStr(  sTranslatedStmt,
+                                        m_xConnection->getMetaData());
+                delete pNode;
+            }
+            m_xComposer->setQuery(sTranslatedStmt);
+            sTranslatedStmt = m_xComposer->getComposedQuery();
+        }
+        catch(SQLException& e)
+        {
+            ::dbtools::SQLExceptionInfo aInfo(e);
+            showError(aInfo);
+            return;
+        }
+    }
+    else
+        sTranslatedStmt = m_sStatement;
+    if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
+    {
+        try
+        {
+            URL aWantToDispatch;
+            aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+
+            ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+            //  | ::com::sun::star::frame::FrameSearchFlag::CREATE
+            sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
+            m_pWindow->showBeamer(m_xCurrentFrame);
+
+            Reference< ::com::sun::star::frame::XDispatch> xDisp;
+            Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
+            if(!xProv.is())
+            {
+                xProv = Reference< ::com::sun::star::frame::XDispatchProvider>(m_xCurrentFrame, UNO_QUERY);
+                if (xProv.is())
+                    xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
+            }
+            else
+            {
+                xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, FrameSearchFlag::SELF);
+            }
+            if (xDisp.is())
+            {
+                Sequence< PropertyValue> aProps(10);
+                aProps[0].Name = PROPERTY_DATASOURCENAME;
+                aProps[0].Value <<= m_sDataSourceName;
+
+                aProps[1].Name = PROPERTY_COMMANDTYPE;
+                aProps[1].Value <<= CommandType::COMMAND;
+
+                aProps[2].Name = PROPERTY_COMMAND;
+                aProps[2].Value <<= sTranslatedStmt;
+
+                aProps[3].Name = PROPERTY_SHOWTREEVIEW;
+                aProps[3].Value = ::cppu::bool2any(sal_False);
+
+                aProps[4].Name = PROPERTY_SHOWTREEVIEWBUTTON;
+                aProps[4].Value = ::cppu::bool2any(sal_False);
+
+                aProps[5].Name = PROPERTY_ACTIVECONNECTION;
+                aProps[5].Value <<= m_xConnection;
+
+                aProps[6].Name = PROPERTY_UPDATE_CATALOGNAME;
+                aProps[6].Value <<= m_sUpdateCatalogName;
+
+                aProps[7].Name = PROPERTY_UPDATE_SCHEMANAME;
+                aProps[7].Value <<= m_sUpdateSchemaName;
+
+                aProps[8].Name = PROPERTY_UPDATE_TABLENAME;
+                aProps[8].Value <<= m_sUpdateTableName;
+
+                aProps[9].Name = PROPERTY_USE_ESCAPE_PROCESSING;
+                aProps[9].Value = ::cppu::bool2any(m_bEsacpeProcessing);
+
+                xDisp->dispatch(aWantToDispatch, aProps);
+                // check the state of the beamer
+                // be notified when the beamer frame is closed
+                Reference< XComponent >  xComponent(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags), UNO_QUERY);
+                if (xComponent.is())
+                {
+                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                    xComponent->addEventListener(xEvtL);
+                }
+            }
+            else
+            {
+                OSL_ENSURE(0,"Couldn't create a beamer window!");
+            }
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Couldn't create a beamer window!");
+        }
+    }
+    else
+    {
+        sal_Bool bAllEmpty = sal_True;
+        ::std::vector< OTableFieldDesc*>::const_iterator aIter = m_vTableFieldDesc.begin();
+        for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
+            bAllEmpty = (*aIter)->IsEmpty();
+
+        ErrorBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT)).Execute();
+    }
 }
 // -----------------------------------------------------------------------------
 
