@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:43:19 $
+ *  last change: $Author: aw $ $Date: 2001-08-20 12:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,58 +238,16 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_DRAW_BEZIER_NOFILL ;
                 HelpID = SID_DRAW_BEZIER_NOFILL ;
                 RadioCheck = TRUE ;
-                Text = "Bezier" ;
-                Text [ ENGLISH ] = "Bezier" ;
-                Text [ spanish ] = "Bézier" ;
-                Text [ dutch ] = "Bézier" ;
-                Text [ english_us ] = "Bézier" ;
-                Text [ swedish ] = "Bézier" ;
-                Text [ danish ] = "Bezier" ;
-                Text [ italian ] = "Bézier" ;
-                Text [ french ] = "Bézier" ;
-                Text [ portuguese ] = "Bézier" ;
-                Text [ portuguese_brazilian ] = "Bezier" ;
-                Text[ chinese_simplified ] = "æ›²çº¿";
-                Text[ language_user1 ] = " ";
-                Text[ russian ] = "Áåçüå";
-                Text[ polish ] = "Krzywa Beziera";
-                Text[ japanese ] = "ï¾ï¾ï½¼ï¾ï½ªæ›²ç·š";
-                Text[ chinese_traditional ] = "æ›²ç·š";
-                Text[ greek ] = "Bézier";
-                Text[ korean ] = "ë² ì§€ì—";
-                Text[ arabic ] = "Bézier";
-                Text[ turkish ] = "Bezier";
-                Text[ catalan ] = "Bézier";
-                Text[ finnish ] = "Bézier";
+                Text = "Kurve" ;
+                Text [ ENGLISH ] = "Curve" ;
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_FREELINE_NOFILL ;
                 HelpID = SID_DRAW_FREELINE_NOFILL ;
                 RadioCheck = TRUE ;
-                Text = "Freihand" ;
-                Text [ ENGLISH ] = "???" ;
-                Text [ portuguese ] = "Forma livre" ;
-                Text [ english_us ] = "Freeform" ;
-                Text [ portuguese_brazilian ] = "Freihand" ;
-                Text [ swedish ] = "Frihand" ;
-                Text [ danish ] = "Frihånd" ;
-                Text [ italian ] = "Mano libera" ;
-                Text [ spanish ] = "Mano alzada" ;
-                Text [ french ] = "À main levée" ;
-                Text [ dutch ] = "Vrije hand" ;
-                Text[ chinese_simplified ] = "è‡ªç”±å½¢å¼";
-                Text[ russian ] = "Ğèñîâàííàÿ ôîğìà";
-                Text[ polish ] = "Dowolny kszta³t";
-                Text[ japanese ] = "ï¾Œï¾˜ï½°ï¾Šï¾ï¾„ï¾";
-                Text[ chinese_traditional ] = "è‡ªç”±å½¢";
-                Text[ greek ] = "Åëåıèåñç ó÷åäßáóç";
-                Text[ korean ] = "ììœ ì„œì‹";
-                Text[ arabic ] = "ÍÑ";
-                Text[ turkish ] = "Serbest biçim";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Mano alzada";
-                Text[ finnish ] = "Vapaamuoto";
+                Text = "Freihandkurve" ;
+                Text [ ENGLISH ] = "Freeform Curve" ;
             };
             ToolBoxItem
             {
