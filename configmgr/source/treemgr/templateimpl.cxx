@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
+ *  last change: $Author: as $ $Date: 2001-05-03 08:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
         OSL_ASSERT( aType != TemplateImplHelper::getNoTypeAvailable() );
 
         if (it == m_aRepository.end())
-            it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType, aSet.getAttributes()) ) ).first;
+            it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType, Attributes() /*aSet.getAttributes()*/) ) ).first;
 
         else
             TemplateImplHelper::assignActualType(it->second.getBody(), aType);
