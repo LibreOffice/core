@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:52:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ english_us ] = "~Table";
         Text[ portuguese ] = "~Tabela:";
         Text[ russian ] = "Òΰαλθφΰ";
-        Text[ greek ] = "Πίνακας:";
+        Text[ greek ] = "Πί~νακας";
         Text[ dutch ] = "~Tabel";
         Text[ french ] = "Table";
         Text[ spanish ] = "~Tabla";
@@ -208,7 +208,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english_us ] = "Assignment" ;
         Text[ portuguese ] = "Atribuiηγo";
         Text[ russian ] = "Νΰηνΰχενθε";
-        Text[ greek ] = "Αντιστοίχιση";
+        Text[ greek ] = "Ανάθεση";
         Text[ dutch ] = "Toewijzing ";
         Text[ french ] = "Assignation";
         Text[ spanish ] = "Asignaciσn";
@@ -240,7 +240,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ english_us ] = "T~able indexes";
         Text[ portuguese ] = "~Νndices de tabelas:";
         Text[ russian ] = "Θνδεκρϋ ςΰαλθφϋ";
-        Text[ greek ] = "Ευρετήρι~α πινάκων:";
+        Text[ greek ] = "Ευρετήρι~α πινάκων";
         Text[ dutch ] = "Tabel~indices";
         Text[ french ] = "Index de table";
         Text[ spanish ] = "Νndices de ta~bla";
@@ -412,6 +412,13 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28.8.1  2003/07/03 14:44:10  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.28  2003/06/13 12:52:39  hr
+ *  INTEGRATION: CWS rcmerge (1.27.24); FILE MERGED
+ *  2003/06/12 10:57:51 gh 1.27.24.1: final Merge RC
+ *
  *  Revision 1.27.24.1  2003/06/12 10:57:51  gh
  *  final Merge RC
  *
@@ -524,6 +531,7 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
 
