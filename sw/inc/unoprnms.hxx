@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 14:25:39 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_PROTECTED                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_KEY_AS_ENTRY                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_KEEP_TOGETHER             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_KEEP_TOGETHER                ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_LANDSCAPE                      ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_LANDSCAPE                      ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LINE_SEPARATOR                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_MARKS                          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_NUMBER_POSITION                ;
@@ -547,6 +547,13 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_WIDTH;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_COLOR;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON;
+
 #endif
 
 
