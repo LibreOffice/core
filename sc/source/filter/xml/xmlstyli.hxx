@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ public:
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
     virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties ) const;
+            ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 };
 
 struct ScXMLMapContent;
