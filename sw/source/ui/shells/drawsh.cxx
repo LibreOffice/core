@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:29:32 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,13 @@
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
 #endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
+#endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
+#endif
+
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -271,6 +278,19 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             rReq.Ignore ();
             break;
 
+        case SID_FONTWORK_SHAPE:
+        case SID_FONTWORK_SHAPE_TYPE:
+        case SID_FONTWORK_SHAPE_TYPES:
+        case SID_FONTWORK_ALIGNMENT:
+        case SID_FONTWORK_SAME_LETTER_HEIGHTS:
+        case SID_FONTWORK_CHARACTER_SPACING:
+        case SID_FONTWORK_KERN_CHARACTER_PAIRS:
+        case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
+        case SID_FONTWORK_ALIGNMENT_FLOATER:
+        case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
+            svx::FontworkBar::execute( pSdrView, rReq, rBnd );
+            rReq.Ignore ();
+            break;
 
         default:
             DBG_ASSERT(!this, "falscher Dispatcher");
@@ -357,8 +377,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
         }
         nWhich = aIter.NextWhich();
     }
-
     svx::ExtrusionBar::getState( pSdrView, rSet );
+    svx::FontworkBar::getState( pSdrView, rSet );
 }
 
 /*--------------------------------------------------------------------
