@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-27 18:09:42 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:47:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,10 +63,6 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=vclpch
 PROJECTPCHSOURCE=$(PRJ)$/util$/vclpch
 PDBTARGET=vcl
-
-.IF "$(OS)"=="MACOSX"
-GUIBASE=aqua
-.ENDIF
 
 .IF "$(remote)" != ""
 USE_BUILTIN_RASTERIZER=true
