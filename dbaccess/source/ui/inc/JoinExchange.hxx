@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:14 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,13 +91,14 @@ namespace dbaui
                     ,public OJoinExchObj_Base
     {
         static String           m_sJoinFormat;
+        sal_Bool                m_bFirstEntry;
 
     protected:
         OJoinExchangeData           m_jxdSourceDescription;
         IDragTransferableListener*  m_pDragListener;
 
     public:
-        OJoinExchObj(const OJoinExchangeData& jxdSource);
+        OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry=sal_False);
         ~OJoinExchObj();
 
         // XInterface
@@ -111,7 +112,7 @@ namespace dbaui
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
 
         static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
-        static sal_Bool             isFormatAvailable( const DataFlavorExVector& _rFormats );
+        static sal_Bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
 
     protected:
         virtual void                AddSupportedFormats();

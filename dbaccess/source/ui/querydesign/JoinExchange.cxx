@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 13:23:17 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@ namespace dbaui
     //==================================================================
     DBG_NAME(OJoinExchObj)
     //------------------------------------------------------------------------
-    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource)
+    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)
         :m_jxdSourceDescription(jxdSource)
         ,m_pDragListener(NULL)
+        ,m_bFirstEntry(_bFirstEntry)
     {
         DBG_CTOR(OJoinExchObj,NULL);
         // Verfuegbare Typen in Liste einfuegen
@@ -117,14 +118,14 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats )
+    sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
         for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
                 aCheck != _rFormats.end();
                 ++aCheck
             )
         {
-            if (SOT_FORMATSTR_ID_SBA_JOIN == aCheck->mnSotId)
+            if ( _nSlotID == aCheck->mnSotId )
                 return sal_True;
         }
         return sal_False;
@@ -173,6 +174,8 @@ namespace dbaui
     void OJoinExchObj::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_SBA_JOIN );
+        if ( m_bFirstEntry )
+            AddFormat( SOT_FORMATSTR_ID_SBA_TABID );
     }
 
     //------------------------------------------------------------------------
