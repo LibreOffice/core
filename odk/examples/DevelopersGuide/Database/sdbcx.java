@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcx.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:18:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,6 +42,7 @@ import java.io.*;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.*;
+import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XIndexAccess;
@@ -52,8 +53,62 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class sdbcx
 {
     private XMultiServiceFactory xORB;
-    private XConnection con;
+    private static XConnection con;
     private XTablesSupplier xTabSup;
+
+        public static XMultiServiceFactory rSmgr;
+    public static void main(String argv[]) throws java.lang.Exception
+    {
+        try{
+            rSmgr = connect("socket,host=localhost,port=8100");
+                        sdbcx test = new sdbcx(rSmgr);
+                        test.createConnection();
+                        test.displayTableProperties();
+                        // now we dispose the connection to close it
+                        XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class,con);
+                        if(xComponent != null)
+                        {
+                                xComponent.dispose();
+                                System.out.println("Connection disposed!");
+                        }
+                }
+        catch(com.sun.star.uno.Exception e)
+        {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        System.exit(0);
+        }
+        public static XMultiServiceFactory connect( String connectStr )
+        throws com.sun.star.uno.Exception,
+        com.sun.star.uno.RuntimeException, java.lang.Exception
+    {
+        // initial serviceManager
+        XMultiServiceFactory xLocalServiceManager =
+            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+
+        // create a connector, so that it can contact the office
+        Object  xUrlResolver  = xLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" );
+        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
+            XUnoUrlResolver.class, xUrlResolver );
+
+        Object rInitialObject = urlResolver.resolve( "uno:" + connectStr + ";urp;StarOffice.NamingService" );
+
+        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
+            XNamingService.class, rInitialObject );
+
+        XMultiServiceFactory xMSF = null;
+        if( rName != null ) {
+            System.err.println( "got the remote naming service !" );
+            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
+
+            xMSF = (XMultiServiceFactory)
+                UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
+        }
+
+        return ( xMSF );
+    }
+
 
     public sdbcx(XMultiServiceFactory rSmgr )
     {
@@ -102,13 +157,6 @@ public class sdbcx
                 }
                 else
                     System.out.println("The driver is not a SDBCX capable!");
-                // now we dispose the connection to close it
-                XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class,con);
-                if(xComponent != null)
-                {
-                    xComponent.dispose();
-                    System.out.println("Connection disposed!");
-                }
             }
             else
                 System.out.println("Connection could not be created!");
