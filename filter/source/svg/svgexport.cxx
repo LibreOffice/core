@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:52 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 15:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
                 {
                     GDIMetaFile aMtf;
                     const Point aNullPt;
-                    const Size  aSize( pObj->GetBoundRect().GetSize() );
+                    const Size  aSize( pObj->GetCurrentBoundRect().GetSize() );
 
                     aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmapEx() ) );
                     aMtf.SetPrefSize( aSize );
