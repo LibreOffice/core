@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-22 12:26:06 $
+ *  last change: $Author: mba $ $Date: 2002-09-12 15:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3373,3 +3373,58 @@ BOOL UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
 
     return FALSE;
 }
+
+BOOL UCBStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorageElement_Impl *pEle = FindElement_Impl( rEleName );
+    if ( !pEle )
+        return FALSE;
+
+    if ( !pEle->m_bIsFolder )
+    {
+        if ( !pEle->m_xStream.Is() )
+            pImp->OpenStream( pEle, pImp->m_nMode, pImp->m_bDirect );
+        if ( pEle->m_xStream->m_nError )
+        {
+            pEle->m_xStream.Clear();
+            return FALSE;
+        }
+
+        try
+        {
+            if ( pEle->m_xStream->m_pContent )
+            {
+                rValue = pEle->m_xStream->m_pContent->getPropertyValue( rName );
+                return TRUE;
+            }
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+    else
+    {
+        if ( !pEle->m_xStorage.Is() )
+            pImp->OpenStorage( pEle, pImp->m_nMode, pImp->m_bDirect );
+        if ( pEle->m_xStorage->m_nError )
+        {
+            pEle->m_xStorage.Clear();
+            return FALSE;
+        }
+
+        try
+        {
+            if ( pEle->m_xStorage->GetContent() )
+            {
+                rValue = pEle->m_xStorage->m_pContent->getPropertyValue( rName );
+                return TRUE;
+            }
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    return FALSE;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-22 12:27:34 $
+ *  last change: $Author: mba $ $Date: 2002-09-12 15:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,8 +313,7 @@ public:
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                                GetXInputStream() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetXInputStream() const;
 };
 
 namespace ucb
@@ -388,6 +387,7 @@ public:
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+    BOOL                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
                                 GetXInputStream();
 
 #if _SOLAR__PRIVATE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-29 07:17:32 $
+ *  last change: $Author: mba $ $Date: 2002-09-12 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,6 +1291,20 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
     if ( pStg )
     {
         return pStg->GetProperty( rName, rValue );
+    }
+    else
+    {
+        DBG_WARNING("W1:Not implemented!")
+        return FALSE;
+    }
+}
+
+BOOL SotStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    if ( pStg )
+    {
+        return pStg->GetProperty( rEleName, rName, rValue );
     }
     else
     {
