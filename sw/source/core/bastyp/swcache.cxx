@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 13:42:54 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 18:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,8 @@
 
 #pragma hdrstop
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
 #endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
@@ -80,12 +74,6 @@
 #ifndef _SWCACHE_HXX
 #include <swcache.hxx>
 #endif
-
-#ifndef PRODUCT
-    #include <stdlib.h>         // getenv()
-    #include <stdio.h>          // sprintf()
-#endif
-
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 
@@ -191,39 +179,43 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
 #ifndef PRODUCT
 
 
-
 SwCache::~SwCache()
 {
+#ifdef DEBUG
 #ifndef MAC
-    static USHORT nOpenMode = STREAM_WRITE | STREAM_TRUNC;
-    String sExt(String::CreateFromAscii(".log"));
-    utl::TempFile aTempFile( String::CreateFromAscii("swcache"), &sExt );
-    SvStream* pStream = aTempFile.GetStream( nOpenMode );
-    nOpenMode = STREAM_WRITE;
-
-    if( !pStream->GetError() )
     {
-        pStream->Seek( STREAM_SEEK_TO_END );
         ByteString sOut( aName ); sOut += '\n';
-        (( sOut += "Anzahl neuer Eintraege:             " ) += nAppend )+= '\n';
-        (( sOut += "Anzahl Insert auf freie Plaetze:    " ) += nInsertFree )+= '\n';
-        (( sOut += "Anzahl Ersetzungen:                 " ) += nReplace )+= '\n';
-        (( sOut += "Anzahl Erfolgreicher Get's:         " ) += nGetSuccess )+= '\n';
-        (( sOut += "Anzahl Fehlgeschlagener Get's:      " ) += nGetFail )+= '\n';
-        (( sOut += "Anzahl Umsortierungen (LRU):        " ) += nToTop )+= '\n';
-        (( sOut += "Anzahl Loeschungen:                 " ) += nDelete )+= '\n';
-        (( sOut += "Anzahl Get's ohne Index:            " ) += nGetSeek )+= '\n';
-        (( sOut += "Anzahl Seek fuer Get ohne Index:    " ) += nAverageSeekCnt )+= '\n';
-        (( sOut += "Anzahl Flush-Aufrufe:               " ) += nFlushCnt )+= '\n';
-        (( sOut += "Anzahl geflush'ter Objekte:         " ) += nFlushedObjects )+= '\n';
-        (( sOut += "Anzahl Cache-Erweiterungen:         " ) += nIncreaseMax )+= '\n';
-        (( sOut += "Anzahl Cache-Verkleinerungen:       " ) += nDecreaseMax )+= '\n';
+        (( sOut += "Anzahl neuer Eintraege:             " )
+                    += ByteString::CreateFromInt32( nAppend ))+= '\n';
+        (( sOut += "Anzahl Insert auf freie Plaetze:    " )
+                    += ByteString::CreateFromInt32( nInsertFree ))+= '\n';
+        (( sOut += "Anzahl Ersetzungen:                 " )
+                    += ByteString::CreateFromInt32( nReplace ))+= '\n';
+        (( sOut += "Anzahl Erfolgreicher Get's:         " )
+                    += ByteString::CreateFromInt32( nGetSuccess ))+= '\n';
+        (( sOut += "Anzahl Fehlgeschlagener Get's:      " )
+                    += ByteString::CreateFromInt32( nGetFail ))+= '\n';
+        (( sOut += "Anzahl Umsortierungen (LRU):        " )
+                    += ByteString::CreateFromInt32( nToTop ))+= '\n';
+        (( sOut += "Anzahl Loeschungen:                 " )
+                    += ByteString::CreateFromInt32( nDelete ))+= '\n';
+        (( sOut += "Anzahl Get's ohne Index:            " )
+                    += ByteString::CreateFromInt32( nGetSeek ))+= '\n';
+        (( sOut += "Anzahl Seek fuer Get ohne Index:    " )
+                    += ByteString::CreateFromInt32( nAverageSeekCnt ))+= '\n';
+        (( sOut += "Anzahl Flush-Aufrufe:               " )
+                    += ByteString::CreateFromInt32( nFlushCnt ))+= '\n';
+        (( sOut += "Anzahl geflush'ter Objekte:         " )
+                    += ByteString::CreateFromInt32( nFlushedObjects ))+= '\n';
+        (( sOut += "Anzahl Cache-Erweiterungen:         " )
+                    += ByteString::CreateFromInt32( nIncreaseMax ))+= '\n';
+        (( sOut += "Anzahl Cache-Verkleinerungen:       " )
+                    += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
 
-        *pStream << sOut.GetBuffer()
-                 << "-------------------------------------------------------"
-                 << endl;
+        DBG_ERROR( sOut.GetBuffer() );
     }
     Check();
+#endif
 #endif
 }
 #endif
