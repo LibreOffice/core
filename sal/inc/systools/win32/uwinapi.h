@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uwinapi.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-26 13:43:45 $
+ *  last change: $Author: hro $ $Date: 2002-08-26 13:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,7 @@ logged in.
 Parameters
     @param lpBuffer
         [out] Pointer to a buffer that receives a null-terminated string
-        containing the domain name. The buffer size should be large enough to
-        contain MAX_COMPUTERNAME_LENGTH + 1 characters.
+        containing the domain name.
     @param nBufferSize
         [in] Specifies the size, in TCHARs, of the buffer pointed to
         by the lpBuffer parameter.
