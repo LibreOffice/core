@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-01 13:30:46 $
+ *  last change: $Author: jl $ $Date: 2002-10-22 15:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2002-10-01 13:30:46 $
+ * @version     $Revision: 1.10 $ $ $Date: 2002-10-22 15:46:43 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -453,9 +453,7 @@ public class JavaLoader implements XImplementationLoader,
                 success = ((Boolean) oRet).booleanValue();
         }
         catch (Exception e) {
-            // default registration
-            ComponentFactoryWrapper wrapp = new ComponentFactoryWrapper(null, locationUrl);
-            success = wrapp.writeRegistryServiceInfo(regKey);
+            throw new CannotRegisterImplementationException( e.getMessage());
          }
 
         return success;
