@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:15:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ public:
 
     BOOL                    BegTextEdit( SdrObject* pObj, SdrPageView* pPV=NULL, Window* pWin=NULL, BOOL bIsNewObj=FALSE,
                                          SdrOutliner* pGivenOutliner=NULL, OutlinerView* pGivenOutlinerView=NULL,
-                                         BOOL bDontDeleteOutliner=FALSE, BOOL bOnlyOneView=FALSE );
+                                         BOOL bDontDeleteOutliner=FALSE, BOOL bOnlyOneView=FALSE, BOOL bGrabFocus=TRUE );
     virtual SdrEndTextEditKind EndTextEdit(BOOL bDontDeleteReally=FALSE);
 
     SdrEndTextEditKind          EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc);
