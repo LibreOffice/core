@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:51:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 16:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,7 +881,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
     const SwPosition* pCntntPos = 0;
     SdrView*  pSdrView = pSh->GetDrawView();
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
