@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 08:49:32 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include "protitem.hxx"
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
 
 // class SvxRulerItem ----------------------------------------------------
 
@@ -183,6 +186,13 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
             DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem erwartet");
             rRuler.UpdateParaBorder(pItem);
+        }
+        break;
+        case SID_RULER_TEXT_RIGHT_TO_LEFT :
+        {
+            const SfxBoolItem *pItem = PTR_CAST(SfxBoolItem, pState);
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SfxBoolItem erwartet");
+            rRuler.UpdateTextRTL(pItem);
         }
         break;
     }

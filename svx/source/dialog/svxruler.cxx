@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-03-12 16:46:11 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-#define CTRL_ITEM_COUNT 11
+#define CTRL_ITEM_COUNT 12
 #define GAP 10
 #define OBJECT_BORDER_COUNT 4
 #define TAB_GAP 1
@@ -179,7 +179,7 @@ void DebugParaMargin_Impl(const SvxLRSpaceItem& rLRSpace)
 }
 
 #endif // DEBUGLIN
-#ifdef DEBUG
+#ifdef DEBUG_RULER
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 class RulerDebugWindow : public Window
@@ -250,6 +250,7 @@ struct SvxRuler_Impl  {
     long   lMaxRightLogic;
     long   lLastLMargin;
     SvxProtectItem aProtectItem;
+    SfxBoolItem* pTextRTLItem;
     USHORT nControlerItems;
     USHORT nIdx;
     USHORT nColLeftPix, nColRightPix; // Pixelwerte fuer linken / rechten Rand
@@ -259,13 +260,14 @@ struct SvxRuler_Impl  {
                                       // aufgebohrt werden
     SvxRuler_Impl() :
     pPercBuf(0), pBlockBuf(0), nPercSize(0), nTotalDist(0), nIdx(0),
-    nColLeftPix(0), nColRightPix(0), lOldWinPos(0)
+    nColLeftPix(0), nColRightPix(0), lOldWinPos(0), pTextRTLItem(0)
     {
     }
     ~SvxRuler_Impl()
     {
         nPercSize = 0; nTotalDist = 0;
         delete pPercBuf; delete pBlockBuf; pPercBuf = 0;
+        delete pTextRTLItem;
     }
     void SetPercSize(USHORT nSize);
 
@@ -419,7 +421,10 @@ SvxRuler::SvxRuler
     }
 
     if((nFlags & SVXRULER_SUPPORT_BORDERS) ==  SVXRULER_SUPPORT_BORDERS)
+    {
         pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings);
+        pCtrlItem[i++] = new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings);
+    }
 
     if((nFlags & SVXRULER_SUPPORT_OBJECT) == SVXRULER_SUPPORT_OBJECT)
     {
@@ -763,6 +768,19 @@ void SvxRuler::Update( const SvxProtectItem* pItem )
 {
     if( pItem ) pRuler_Imp->aProtectItem = *pItem;
 }
+/* -----------------------------22.08.2002 13:10------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
+{
+  if(bActive)
+  {
+    delete pRuler_Imp->pTextRTLItem; pRuler_Imp->pTextRTLItem = 0;
+    if(pItem)
+        pRuler_Imp->pTextRTLItem = new SfxBoolItem(*pItem);
+    StartListening_Impl();
+  }
+}
 
 void SvxRuler::Update
 (
@@ -903,12 +921,18 @@ void SvxRuler::UpdatePara()
         // Erstzeileneinzug, ist negativ zum linken Absatzrand
         long nLeftFrameMargin = GetLeftFrameMargin();
         long nRightFrameMargin = GetRightFrameMargin();
-        pIndents[INDENT_FIRST_LINE].nPos =
-            ConvertHPosPixel(
-                nLeftFrameMargin +
-                pParaItem->GetTxtLeft() +
-                pParaItem->GetTxtFirstLineOfst() +
-                lAppNullOffset);
+        if(pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue())
+            pIndents[INDENT_FIRST_LINE].nPos =
+                ConvertHPosPixel(
+                nRightFrameMargin -
+                pParaItem->GetTxtFirstLineOfst() + lAppNullOffset );
+        else
+            pIndents[INDENT_FIRST_LINE].nPos =
+                ConvertHPosPixel(
+                    nLeftFrameMargin +
+                    pParaItem->GetTxtLeft() +
+                    pParaItem->GetTxtFirstLineOfst() +
+                    lAppNullOffset);
         if( pParaItem->IsAutoFirst() )
             pIndents[INDENT_FIRST_LINE].nStyle |= RULER_STYLE_INVISIBLE;
         else
@@ -1681,7 +1705,9 @@ void SvxRuler::DragIndents()
     const USHORT nIdx = GetDragAryPos()+INDENT_GAP;
     const long lDiff = pIndents[nIdx].nPos - lDragPos;
 
-    if(nIdx >= INDENT_FIRST_LINE && nIdx < INDENT_RIGHT_MARGIN &&
+    BOOL bRTL = pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue();
+    if((nIdx == INDENT_FIRST_LINE ||
+            (!bRTL && nIdx == INDENT_LEFT_MARGIN ) ||(bRTL && nIdx == INDENT_RIGHT_MARGIN ))&&
         (nDragType & DRAG_OBJECT_LEFT_INDENT_ONLY) !=
         DRAG_OBJECT_LEFT_INDENT_ONLY)
         pIndents[INDENT_FIRST_LINE].nPos -= lDiff;
@@ -2146,12 +2172,24 @@ void SvxRuler::ApplyIndents()
                 ConvertHPosLogic(pIndents[INDENT_LEFT_MARGIN].nPos),
                 pParaItem->GetTxtLeft());
 
-    long nNewFirstLineOffset =
-        PixelHAdjust(
-        ConvertHPosLogic(pIndents[INDENT_FIRST_LINE].nPos -
+    BOOL bRTL = pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue();
+
+    long nNewFirstLineOffset;
+    if(bRTL)
+    {
+        long nRightFrameMargin = GetRightFrameMargin();
+        nNewFirstLineOffset =   PixelHAdjust(nRightFrameMargin -
+                ConvertHPosLogic(pIndents[INDENT_FIRST_LINE].nPos ) -
+                lAppNullOffset,
+                pParaItem->GetTxtFirstLineOfst());
+    }
+    else
+        nNewFirstLineOffset=
+            PixelHAdjust(
+                ConvertHPosLogic(pIndents[INDENT_FIRST_LINE].nPos -
                              pIndents[INDENT_LEFT_MARGIN].nPos) -
-            lAppNullOffset,
-            pParaItem->GetTxtFirstLineOfst());
+                lAppNullOffset,
+                pParaItem->GetTxtFirstLineOfst());
 
     // #62986# : Ist der neue TxtLeft kleiner als der alte FirstLineIndent,
     // dann geht die Differenz verloren und der Absatz wird insgesamt
@@ -3001,7 +3039,9 @@ long __EXPORT SvxRuler::StartDrag()
         case RULER_TYPE_INDENT: {                // Absatzeinzuege (Modifier)
             if( bContentProtected )
                 return FALSE;
-            if((INDENT_LEFT_MARGIN) == GetDragAryPos() + INDENT_GAP) {        // Linker Absatzeinzug
+            BOOL bRTL = pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue();
+            USHORT nIndent = bRTL ? INDENT_RIGHT_MARGIN : INDENT_LEFT_MARGIN;
+            if((nIndent) == GetDragAryPos() + INDENT_GAP) {        // Linker Absatzeinzug
                 pIndents[0] = pIndents[INDENT_FIRST_LINE];
                 pIndents[0].nStyle |= RULER_STYLE_DONTKNOW;
                 EvalModifier();
