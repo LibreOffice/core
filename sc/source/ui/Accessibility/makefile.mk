@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: sab $ $Date: 2002-05-24 15:24:13 $
+#   last change: $Author: sab $ $Date: 2002-06-10 14:54:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ CXXFILES =						\
         AccessiblePageHeader.cxx		\
         AccessibleText.cxx              \
         AccessiblePageHeaderArea.cxx    \
-        DrawModelBroadcaster.cxx
+        DrawModelBroadcaster.cxx        \
+        AccessibleEditObject.cxx
 
 EXCEPTIONSFILES=\
         $(SLO)$/AccessibleContextBase.obj	\
@@ -114,7 +115,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/AccessiblePreviewHeaderCell.obj \
         $(SLO)$/AccessiblePageHeader.obj    \
         $(SLO)$/AccessiblePageHeaderArea.obj \
-        $(SLO)$/DrawModelBroadcaster.obj
+        $(SLO)$/DrawModelBroadcaster.obj    \
+        $(SLO)$/AccessibleEditObject.obj
 
 SLOFILES =  						\
         $(SLO)$/AccessibleContextBase.obj	\
@@ -132,7 +134,8 @@ SLOFILES =  						\
         $(SLO)$/AccessiblePageHeader.obj	\
         $(SLO)$/AccessibleText.obj          \
         $(SLO)$/AccessiblePageHeaderArea.obj \
-        $(SLO)$/DrawModelBroadcaster.obj
+        $(SLO)$/DrawModelBroadcaster.obj    \
+        $(SLO)$/AccessibleEditObject.obj
 
 # --- Tagets -------------------------------------------------------
 
