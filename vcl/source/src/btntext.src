@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 15:14:36 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,27 @@ String SV_BUTTONTEXT_ABORT
 {
     Text = "~Abbrechen";
     Text [ English ] = "~Abort";
+    Text[ english_us ] = "~Abort";
+    Text[ portuguese ] = "~Abort";
+    Text[ russian ] = "~Abort";
+    Text[ greek ] = "~Abort";
+    Text[ dutch ] = "~Abort";
+    Text[ french ] = "~Abort";
+    Text[ spanish ] = "~Abort";
+    Text[ finnish ] = "~Abort";
+    Text[ italian ] = "~Abort";
+    Text[ danish ] = "~Abort";
+    Text[ swedish ] = "~Abort";
+    Text[ polish ] = "~Abort";
+    Text[ portuguese_brazilian ] = "~Abort";
+    Text[ japanese ] = "~Abort";
+    Text[ korean ] = "~Abort";
+    Text[ chinese_simplified ] = "~Abort";
+    Text[ chinese_traditional ] = "~Abort";
+    Text[ turkish ] = "~Abort";
+    Text[ arabic ] = "~Abort";
+    Text[ catalan ] = "~Abort";
+    Text[ thai ] = "~Abort";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
