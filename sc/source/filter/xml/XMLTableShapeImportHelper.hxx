@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-28 06:55:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,13 @@
 #endif
 
 class ScXMLImport;
+class ScXMLAnnotationContext;
 
 class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
     ::com::sun::star::table::CellAddress aStartCell;
-    sal_Bool bOnTable : 1;
+    ScXMLAnnotationContext* pAnnotationContext;
+    sal_Bool bOnTable;
 
 public:
 
@@ -89,6 +91,7 @@ public:
 
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
+    void SetAnnotation(ScXMLAnnotationContext* pAnnotation) { pAnnotationContext = pAnnotation; }
 };
 
 
