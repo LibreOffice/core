@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2002-10-23 06:05:36 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:08:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -55,17 +55,18 @@
 #   All Rights Reserved.
 #
 #   Contributor(s): _______________________________________
-#			Martin Blapp (mbr@openoffice.org)
 #
 #
 #
 #*************************************************************************
 
 PRJ=..
+
 PRJPCH=
 
 PRJNAME=SVIDL
 TARGET=idl
+VERSION=$(UPD)
 
 TARGETTYPE=CUI
 
@@ -82,17 +83,32 @@ LIB1FILES = $(LB)$/prj.lib		 \
             $(LB)$/objects.lib	 \
             $(LB)$/cmptools.lib
 
+.IF "$(GUI)" != "WIN"
 APP1TARGET= svidl
 
+.IF "$(GUI)" != "MAC"
 APP1DEPN=       $(L)$/itools.lib
+.ENDIF
 
-APP1STDLIBS=\
-                $(TOOLSLIB)
+APP1STDLIBS=	\
+    $(TOOLSLIB)	\
+    $(SALLIB)
 
 APP1LIBS=	$(LIBPRE) $(LB)$/$(TARGET).lib
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)"=="WTC"
+APP1OBJS=	$(OBJ)$/svidl.obj
+.ELSE
 APP1OBJS=	$(OBJ)$/svidl.obj	\
             $(OBJ)$/command.obj
+.ENDIF
+.ENDIF
+.IF "$(COM)" == "WTC"
+APP1STACK=32768
+.ENDIF
+.IF "$(GUI)" != "OS2"
+APP1STACK=32768
+.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
@@ -103,8 +119,28 @@ APP1STDLIBS+=-lcrypt
 
 .INCLUDE :  target.mk
 
+# -------------------------------------------------------------------
+# PM2
+# -------------------------------------------------------------------
+
+.IF "$(GUI)" == "OS2"
+
+$(MISC)$/$(APP1TARGET).def : makefile
+    echo  NAME			SV-IDL WINDOWCOMPAT 				>$@
+    echo  DESCRIPTION	'SV-IDL-Compiler'                  >>$@
+.IF "$(COM)" != "BLC"
+    echo  STUB			'os2STUB.EXE'                      >>$@
+.ENDIF
+    echo  DATA			MULTIPLE						   >>$@
+    echo  EXETYPE		OS2 							   >>$@
+    echo  PROTMODE										   >>$@
+    echo  HEAPSIZE		16000							   >>$@
+    echo  STACKSIZE 	48000							   >>$@
+.ENDIF
+
 # --- Filter-Datei ---
 
+.IF "$(GUI)" != "DOS"
 $(MISC)$/$(SHL1TARGET).flt: makefile
     @echo ------------------------------
     @echo Making: $@
@@ -112,4 +148,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
     @echo Stg>>$@
+.ENDIF
 
