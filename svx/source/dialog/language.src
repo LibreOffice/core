@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:55:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,4 +93,5 @@ String RID_SVXSTR_LANGUAGE_ALL
 };
 
  // ********************************************************************** EOF
+
 
