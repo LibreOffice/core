@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:24:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ private:
 
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    Reference<XPropertySet>                         m_xDataSource;
     sal_Int32                                       m_nPreviewMode;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
@@ -196,6 +197,7 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
     inline Reference< XMultiServiceFactory > getORB() { return getServiceFactory(); }
+    inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 
     inline const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
     inline const TPropertyNameMap& getTableSettings() const { return m_aTablesSettings;}
