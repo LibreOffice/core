@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-05 16:10:42 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
 
 ClassData3 cppu::WeakImplHelper3<com::sun::star::io::XTextInputStream, com::sun::star::io::XActiveDataSink, com::sun::star::lang::XServiceInfo>::s_aCD(1);
