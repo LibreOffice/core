@@ -41,13 +41,13 @@ $(SRCTARGET) : $(SRCFILES)
 .IF "$(CPU)"=="I"
 .IF "$(UPDATER)"=="YES"
 .IF "$(BUILD_SOSL)"==""
-.IF "$(PRJNAME)"!="schedule"
 .IF "$(no_hids)$(NO_HIDS)"==""
     @+type $(mktmp $(SRCFILES:+"\n")) > $(TMP)$/$(TARGET).tra
     @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
     +type $(TMP)$/$(TARGET).art | $(SORT) -u  > $(TMP)$/$(TARGET).tra
     +call resp.bat r:\bat\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
-.ENDIF
+    @+-del $(TMP)$/$(TARGET).tra
+    @+-del $(TMP)$/$(TARGET).art
 .ENDIF
 .ENDIF
 .ENDIF
