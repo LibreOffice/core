@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:41:28 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 10:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,20 +1694,20 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             rtl::OUString sName(rChangeProps[i].Name);
-            if (sName.compareToAscii(sXML_show_changes) == 0)
+            if (sName.compareToAscii("ShowChanges") == 0)
                 pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_accepted_changes) == 0)
+            else if (sName.compareToAscii("ShowAcceptedChanges") == 0)
                 pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_rejected_changes) == 0)
+            else if (sName.compareToAscii("ShowRejectedChanges") == 0)
                 pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_changes_by_datetime) == 0)
+            else if (sName.compareToAscii("ShowChangesByDatetime") == 0)
                 pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_changes_by_datetime_mode) == 0)
+            else if (sName.compareToAscii("ShowChangesByDatetimeMode") == 0)
             {
                 if (rChangeProps[i].Value >>= nTemp16)
                     pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
             }
-            else if (sName.compareToAscii(sXML_show_changes_by_datetime_first_datetime) == 0)
+            else if (sName.compareToAscii("ShowChangesByDatetimeFirstDatetime") == 0)
             {
                 util::DateTime aDateTime;
                 if (rChangeProps[i].Value >>= aDateTime)
@@ -1717,7 +1717,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     pViewSettings->SetTheFirstDateTime(aCoreDateTime);
                 }
             }
-            else if (sName.compareToAscii(sXML_show_changes_by_datetime_second_datetime) == 0)
+            else if (sName.compareToAscii("ShowChangesByDatetimeSecondDatetime") == 0)
             {
                 util::DateTime aDateTime;
                 if (rChangeProps[i].Value >>= aDateTime)
@@ -1727,9 +1727,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     pViewSettings->SetTheLastDateTime(aCoreDateTime);
                 }
             }
-            else if (sName.compareToAscii(sXML_show_changes_by_author) == 0)
+            else if (sName.compareToAscii("ShowChangesByAuthor") == 0)
                 pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_changes_by_author_name) == 0)
+            else if (sName.compareToAscii("ShowChangesByAuthorName") == 0)
             {
                 rtl::OUString sOUName;
                 if (rChangeProps[i].Value >>= sOUName)
@@ -1738,9 +1738,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     pViewSettings->SetTheAuthorToShow(sName);
                 }
             }
-            else if (sName.compareToAscii(sXML_show_changes_by_comment) == 0)
+            else if (sName.compareToAscii("ShowChangesByComment") == 0)
                 pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_changes_by_comment_text) == 0)
+            else if (sName.compareToAscii("ShowChangesByCommentText") == 0)
             {
                 rtl::OUString sOUComment;
                 if (rChangeProps[i].Value >>= sOUComment)
@@ -1749,9 +1749,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     pViewSettings->SetTheComment(sComment);
                 }
             }
-            else if (sName.compareToAscii(sXML_show_changes_by_ranges) == 0)
+            else if (sName.compareToAscii("ShowChangesByRanges") == 0)
                 pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii(sXML_show_changes_by_ranges_list) == 0)
+            else if (sName.compareToAscii("ShowChangesByRangesList") == 0)
             {
                 rtl::OUString sRanges;
                 if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
@@ -1776,15 +1776,15 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         rtl::OUString sName(aViewProps[i].Name);
-        if (sName.compareToAscii(sXML_visible_area_height) == 0)
+        if (sName.compareToAscii("VisibleAreaHeight") == 0)
             aViewProps[i].Value >>= nHeight;
-        else if (sName.compareToAscii(sXML_visible_area_left) == 0)
+        else if (sName.compareToAscii("VisibleAreaLeft") == 0)
             aViewProps[i].Value >>= nLeft;
-        else if (sName.compareToAscii(sXML_visible_area_top) == 0)
+        else if (sName.compareToAscii("VisibleAreaTop") == 0)
             aViewProps[i].Value >>= nTop;
-        else if (sName.compareToAscii(sXML_visible_area_width) == 0)
+        else if (sName.compareToAscii("VisibleAreaWidth") == 0)
             aViewProps[i].Value >>= nWidth;
-        else if (sName.compareToAscii(sXML_tracked_changes_view_settings) == 0)
+        else if (sName.compareToAscii("TrackedChangesViewSettings") == 0)
         {
             uno::Sequence<beans::PropertyValue> aChangeProps;
             if(aViewProps[i].Value >>= aChangeProps)
