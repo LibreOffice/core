@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:18:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3549,7 +3549,7 @@ BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
                     // if not already done (may occur if document is loaded
                     // from old file format).
                     // Needs an "invalid" initialized address.
-                    aOrigin = UINT32(0xffffffff);
+                    aOrigin = ScAddress( 0xFFFFFFFF );
                     ((ScFormulaCell*)pCell)->GetMatrixEdge(aOrigin);
                     ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
                 }
