@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:00 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 15:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ friend class ImpItemEdit;
     FASTBOOL bShowWhichIds;
     FASTBOOL bShowRealValues;
 private:
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void ImpCtor();
     void ImpSetEntry(const ImpItemListRow& rEntry, ULONG nEntryNum);
     ImpItemListRow* ImpGetEntry(ULONG nPos) const { return (ImpItemListRow*)aList.GetObject(nPos); }
