@@ -9,6 +9,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
 ..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
+..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

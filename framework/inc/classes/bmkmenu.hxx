@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 08:03:11 $
+ *  last change: $Author: cd $ $Date: 2001-05-11 13:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
-#include <classes/menumanager.hxx>
 
 class String;
 class ImageList;
@@ -88,8 +87,12 @@ namespace framework
 class BmkMenu_Impl;
 class BmkMenu : public PopupMenu
 {
-
     public:
+                        struct Attributes
+                        {
+                            ::rtl::OUString aTargetFrame;
+                        };
+
                         enum BmkMenuType
                         {
                             BMK_NEWMENU,
@@ -107,18 +110,11 @@ class BmkMenu : public PopupMenu
         USHORT          CreateMenuId();
 
     private:
-        struct Attributes
-        {
-            ::rtl::OUString aTargetFrame;
-        };
-
                         BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                  BmkMenuType, BmkMenu* pRoot );
 
         BmkMenu_Impl*   _pImp;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xFrame;
-
-        friend class MenuManager;
 };
 
 } // namespace framework

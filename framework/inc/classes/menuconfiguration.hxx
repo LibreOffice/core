@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 10:09:46 $
+ *  last change: $Author: cd $ $Date: 2001-05-11 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ class MenuConfiguration
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
-        Menu* CreateBookmarkMenu(
+        PopupMenu* CreateBookmarkMenu(
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 const ::rtl::OUString& aURL )
             throw ( ::com::sun::star::lang::WrappedTargetException );
