@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:22:12 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void ColRowSettings::Reset( void )
 }
 
 
-void ColRowSettings::Apply( const UINT16 nAktTab )
+void ColRowSettings::Apply( sal_uInt16 nScTab )
 {
     if( !bDirty )
         return;
@@ -167,9 +167,8 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
     UINT16                  nWidth;
     UINT16                  nLastWidth = ( pWidth[ 0 ] >= 0 )? ( UINT16 ) pWidth[ 0 ] : nDefWidth;
     ScDocument&             rD = *pExcRoot->pDoc;
-    BOOL                    bExtraHide;
 
-    rD.IncSizeRecalcLevel( nAktTab );
+    rD.IncSizeRecalcLevel( nScTab );
 
     // Column-Bemachung
     for( nC = 0 ; nC <= MAXCOL ; nC++ )
@@ -181,14 +180,15 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
             // Default-Width
             nWidth = nDefWidth;
 
-        bExtraHide = ( nWidth == 0 );
-
-        if( !bExtraHide )
-            rD.SetColWidth( UINT16( nC ), nAktTab, nWidth );
-
-        if( pColHidden[ nC ] || bExtraHide )
-            // Column versteckt
-            rD.SetColFlags( UINT16( nC ), nAktTab, rD.GetColFlags( UINT16( nC ), nAktTab ) | CR_HIDDEN );
+        if( nWidth == 0 )
+        {
+            pColHidden[ nC ] = TRUE;
+            // Column hidden: remember original column width and set width 0.
+            // Needed for #i11776#, no HIDDEN flags in the document, until
+            // filters and outlines are inserted.
+            pWidth[ nC ] = rD.GetColWidth( UINT16( nC ), nScTab );
+        }
+        rD.SetColWidth( UINT16( nC ), nScTab, nWidth );
     }
 
     // Row-Bemachung
@@ -230,29 +230,32 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
 
             if( nFlags & ( ROWFLAG_HIDDEN | ROWFLAG_MAN ) )
             {
-                BYTE        nSCFlags = rD.GetRowFlags( UINT16( nC ), nAktTab );
-
-                if( nFlags & ROWFLAG_HIDDEN )
-                    nSCFlags |= CR_HIDDEN;
+                BYTE        nSCFlags = rD.GetRowFlags( UINT16( nC ), nScTab );
 
                 if( nFlags & ROWFLAG_MAN )
                     nSCFlags |= CR_MANUALSIZE;
 
-                rD.SetRowFlags( UINT16( nC ), nAktTab, nSCFlags );
+                rD.SetRowFlags( UINT16( nC ), nScTab, nSCFlags );
             }
         }
         else
             nHeight = nDefHeight;
 
         if( !nHeight )
-            rD.SetRowFlags( UINT16( nC ), nAktTab, rD.GetRowFlags( UINT16( nC ), nAktTab ) | CR_HIDDEN );
+        {
+            pRowFlags[ nC ] |= ROWFLAG_HIDDEN;
+            // Row hidden: remember original row height and set height 0.
+            // Needed for #i11776#, no HIDDEN flags in the document, until
+            // filters and outlines are inserted.
+            pHeight[ nC ] = rD.GetRowHeight( UINT16( nC ), nScTab );
+        }
 
         if( nLastHeight != nHeight )
         {
             DBG_ASSERT( nC > 0, "ColRowSettings::Apply(): Algorithmus-Fehler!" );
 
             if( nLastHeight )
-                rD.SetRowHeightRange( nStart, nC - 1, nAktTab, nLastHeight );
+                rD.SetRowHeightRange( nStart, nC - 1, nScTab, nLastHeight );
 
             nStart = UINT16( nC );
             nLastHeight = nHeight;
@@ -260,7 +263,7 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
     }
 
     if( nLastHeight && nMaxRow >= 0 )
-        rD.SetRowHeightRange( nStart, UINT16( nMaxRow ), nAktTab, nLastHeight );
+        rD.SetRowHeightRange( nStart, UINT16( nMaxRow ), nScTab, nLastHeight );
 
     if( pExtTabOpt )
         pExcRoot->pExtDocOpt->Add( *this );
@@ -271,7 +274,7 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
 
         while( n && n <= MAXROW )
         {
-            rD.SetRowFlags( n, nAktTab, rD.GetRowFlags( n, nAktTab ) | CR_MANUALBREAK );
+            rD.SetRowFlags( n, nScTab, rD.GetRowFlags( n, nScTab ) | CR_MANUALBREAK );
             n = pHorizPb->Next();
         }
     }
@@ -282,14 +285,44 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
 
         while( n && n <= MAXCOL )
         {
-            rD.SetColFlags( n, nAktTab, rD.GetColFlags( n, nAktTab ) | CR_MANUALBREAK );
+            rD.SetColFlags( n, nScTab, rD.GetColFlags( n, nScTab ) | CR_MANUALBREAK );
             n = pVertPb->Next();
         }
     }
 
     bDirty = FALSE; // jetzt stimmt Tabelle im ScDocument
 
-    rD.DecSizeRecalcLevel( nAktTab );
+    rD.DecSizeRecalcLevel( nScTab );
+}
+
+
+void ColRowSettings::SetHiddenFlags( sal_uInt16 nScTab )
+{
+    ScDocument& rDoc = *pExcRoot->pDoc;
+
+    for( sal_uInt16 nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    {
+        if( pColHidden[ nScCol ] )
+        {
+            // set original width, needed to unhide the column
+            if( pWidth[ nScCol ] > 0 )
+                rDoc.SetColWidth( nScCol, nScTab, static_cast< sal_uInt16 >( pWidth[ nScCol ] ) );
+            // really hide the column
+            rDoc.ShowCol( nScCol, nScTab, FALSE );
+        }
+    }
+
+    for( sal_uInt16 nScRow = 0; nScRow <= nMaxRow; ++nScRow )
+    {
+        if( pRowFlags[ nScRow ] & ROWFLAG_HIDDEN )
+        {
+            // set original height, needed to unhide the row
+            if( pHeight[ nScRow ] > 0 )
+                rDoc.SetRowHeight( nScRow, nScTab, pHeight[ nScRow ] );
+            // really hide the row
+            rDoc.ShowRow( nScRow, nScTab, FALSE );
+        }
+    }
 }
 
 
