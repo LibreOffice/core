@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:21:04 $
+#   last change: $Author: kz $ $Date: 2004-05-19 03:23:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,6 @@ AUTOSEG=true
 .INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-IMGLST_SRS=$(SRS)$/navipi.srs
-BMP_IN=$(PRJ)$/res/imglst/navipi
 # --- Files --------------------------------------------------------
 
 CXXFILES = navipi.cxx navcitem.cxx scenwnd.cxx content.cxx
