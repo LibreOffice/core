@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-10-23 09:48:39 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ uno::Reference<XAccessible> SAL_CALL
 awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     awt::Rectangle aBoundingBox;
 
@@ -233,7 +233,7 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -262,7 +262,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
 sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     sal_Int32 nColor (0x01020ffL);
 
     try
@@ -317,7 +317,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     AccessiblePageShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePageShape"));
 }
 
@@ -340,7 +340,6 @@ void SAL_CALL
     AccessiblePageShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
     AccessibleShape::disposing (aEvent);
 }
 
@@ -352,7 +351,6 @@ void SAL_CALL
 void AccessiblePageShape::dispose (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
     OSL_TRACE ("AccessiblePageShape::dispose");
 
     // Unregister listeners.

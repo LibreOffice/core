@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-12 15:38:51 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ AccessibleOutlineView::AccessibleOutlineView (
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // Beware! Here we leave the paths of the UNO API and descend into the
-    // depths of the core.  Necessary for makeing the edit engine accessible.
+    // depths of the core.  Necessary for making the edit engine accessible.
     if( pViewShell && pSdWindow )
     {
         SdView* pView = pViewShell->GetView();
@@ -182,9 +182,10 @@ AccessibleOutlineView::~AccessibleOutlineView (void)
 
 void AccessibleOutlineView::Init (void)
 {
-    AccessibleDocumentViewBase::Init ();
-
+    // #105479# Set event source _before_ starting to listen
     maTextHelper.SetEventSource(this);
+
+    AccessibleDocumentViewBase::Init ();
 }
 
 
@@ -248,9 +249,6 @@ void SAL_CALL
     AccessibleOutlineView::disposing (const lang::EventObject& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // dispose children
-    maTextHelper.Dispose();
-
     AccessibleDocumentViewBase::disposing (rEventObject);
 }
 

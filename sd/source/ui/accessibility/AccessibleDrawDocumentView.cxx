@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-11-27 13:33:06 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ void SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed();
     // Get list of supported service names from base class...
     uno::Sequence<OUString> aServiceNames =
         AccessibleDocumentViewBase::getSupportedServiceNames();

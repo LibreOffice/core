@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2002-09-06 14:43:19 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocation (void)
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
@@ -658,6 +658,9 @@ void SAL_CALL
     AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     ViewForwarderChanged (
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
@@ -670,6 +673,9 @@ void SAL_CALL
     AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     ViewForwarderChanged (
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
@@ -682,6 +688,9 @@ void SAL_CALL
     AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     ViewForwarderChanged (
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
@@ -694,6 +703,9 @@ void SAL_CALL
     AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     ViewForwarderChanged (
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
@@ -732,12 +744,18 @@ void SAL_CALL AccessibleDocumentViewBase::windowNormalized( const ::com::sun::st
 void SAL_CALL AccessibleDocumentViewBase::windowActivated( const ::com::sun::star::lang::EventObject& e )
         throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     Activated ();
 }
 
 void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
 {
+    if( IsDisposed() )
+        return;
+
     Deactivated ();
 }
 
