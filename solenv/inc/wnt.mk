@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 13:22:35 $
+#   last change: $Author: rt $ $Date: 2002-12-11 13:30:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -475,17 +475,10 @@ LIBCIMT=msvcirt.lib
 OLDNAMES=oldnames.lib
 UWINAPILIB*=uwinapi.lib
 .ELSE
-.IF "$(PRODUCT)"==""
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
 OLDNAMES=oldnames.lib
 UWINAPILIB*=uwinapi.lib
-.ELSE
-LIBCMT=libcmt.lib
-LIBCIMT=libcimt.lib
-OLDNAMES=oldnames.lib
-UWINAPILIB*=uwinapi.lib
-.ENDIF
 .ENDIF
 
 STDOBJVCL=$(L)$/salmain.obj
