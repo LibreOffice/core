@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:20:17 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
 #include "AccessibleOLEShape.hxx"
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
+#include "AccessibleControlShape.hxx"
+#endif
 
 namespace accessibility {
 
@@ -78,14 +81,13 @@ AccessibleShape* CreateSvxAccessibleShape (
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     ShapeTypeId nId)
 {
     switch (nId)
     {
         case DRAWING_RECTANGLE:
         case DRAWING_ELLIPSE:
-        case DRAWING_CONTROL:
         case DRAWING_CONNECTOR:
         case DRAWING_MEASURE:
         case DRAWING_LINE:
@@ -107,6 +109,9 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_POLYGON:
             return new AccessibleShape (rxShape, rxParent, rShapeTreeInfo);
+
+        case DRAWING_CONTROL:
+            return new AccessibleControlShape (rxShape, rxParent, rShapeTreeInfo);
 
         case DRAWING_GRAPHIC_OBJECT:
             return new AccessibleGraphicShape (rxShape, rxParent, rShapeTreeInfo);
