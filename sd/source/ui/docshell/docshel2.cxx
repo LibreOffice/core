@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:49:07 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 10:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,34 +296,6 @@ Size __EXPORT SdDrawDocShell::GetFirstPageSize()
     return pPage->GetSize();
 */
     return SfxObjectShell::GetFirstPageSize();
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void __EXPORT SdDrawDocShell::FillRegInfo( SvEmbeddedRegistryInfo * pInfo )
-{
-    SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->nMajorVers = 6;
-    pInfo->nMinorVers = 0;
-
-    if (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)
-    {
-        pInfo->aObjName = String( RTL_CONSTASCII_USTRINGPARAM("StarDrawDocument") );
-        pInfo->aHumanShortTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT));
-        pInfo->aExt = String(RTL_CONSTASCII_USTRINGPARAM(".sda"));
-        pInfo->nIconResId = REG_ICON_RESID_GRAPHIC;
-    }
-    else
-    {
-        pInfo->aObjName = String( RTL_CONSTASCII_USTRINGPARAM("StarImpressDocument") );
-        pInfo->aHumanShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
-        pInfo->aExt = String(RTL_CONSTASCII_USTRINGPARAM(".sdd"));
-        pInfo->nIconResId = REG_ICON_RESID_DRAW;
-    }
 }
 
 /*************************************************************************
