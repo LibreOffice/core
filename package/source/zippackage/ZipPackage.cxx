@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-04-23 15:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,7 @@ Sequence< OUString > ZipPackage::getSupportedServiceNames()
     return aNames;
 }
 sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
+    throw (RuntimeException)
 {
     return rServiceName == getSupportedServiceNames()[0];
 }
