@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-05-02 12:09:31 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 10:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 String STR_NONAME
 {
-    Text = "unbenannt" ;
+    Text = "Unbenannt" ;
     Text [ ENGLISH ] = "noname" ;
     Text [ norwegian ] = "noname" ;
     Text [ italian ] = "Senza nome" ;
@@ -79,13 +79,14 @@ String STR_NONAME
     Text[ chinese_simplified ] = "æœªå‘½å";
     Text[ russian ] = "áåç èìåíè";
     Text[ polish ] = "Bez nazwy";
-    Text[ japanese ] = "ç„¡å";
+    Text[ japanese ] = "ç„¡é¡Œ";
     Text[ chinese_traditional ] = "æœªå‘½å";
     Text[ arabic ] = "ÈÏæä ÚäæÇä";
     Text[ greek ] = "Äß÷ùò üíïìá";
     Text[ korean ] = "ì œëª©ì—†ìŒ";
     Text[ turkish ] = "Adsız";
-    Text[ catalan ] = "Sin nombre";
+    Text[ catalan ] = "Sense nom";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸Šà¸·à¹ˆà¸­";
 };
 
 String STR_NONE
@@ -112,7 +113,8 @@ String STR_NONE
     Text[ greek ] = "- Êáíİíá -";
     Text[ korean ] = "- ì—†ìŒ -";
     Text[ turkish ] = "- Yok -";
-    Text[ catalan ] = "- Ninguno -";
+    Text[ catalan ] = "- cap -";
+    Text[ thai ] = "- à¹„à¸¡à¹ˆà¸¡à¸µ -";
 };
 
 String STR_CLOSE
@@ -139,7 +141,8 @@ String STR_CLOSE
     Text[ greek ] = "Êëåßóéìï";
     Text[ korean ] = "ë‹«ê¸°";
     Text[ turkish ] = "Kapat";
-    Text[ catalan ] = "Cerrar";
+    Text[ catalan ] = "Tanca";
+    Text[ thai ] = "à¸›à¸´à¸”";
 };
 
 String STR_STYLE_FILTER_AUTO
@@ -166,7 +169,8 @@ String STR_STYLE_FILTER_AUTO
     TEXT[ greek ] = "Áõôüìáôá";
     TEXT[ korean ] = "ìë™";
     TEXT[ turkish ] = "Otomatik";
-    TEXT[ catalan ] = "Automático";
+    TEXT[ catalan ] = "Automàtic";
+    TEXT[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 
 String STR_STYLE_FILTER_USED
@@ -187,13 +191,14 @@ String STR_STYLE_FILTER_USED
     TEXT[ chinese_simplified ] = "ä½¿ç”¨çš„æ ·å¼";
     TEXT[ russian ] = "Ïğèìåíåííûå ñòèëè";
     TEXT[ polish ] = "U¿ywane style";
-    TEXT[ japanese ] = "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™";
+    TEXT[ japanese ] = "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«";
     TEXT[ chinese_traditional ] = "ä½¿ç”¨çš„æ¨£å¼";
     TEXT[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
     TEXT[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
-    TEXT[ korean ] = "ì‚¬ìš©ëœ í…œí”Œë¦¿.";
+    TEXT[ korean ] = "ì‚¬ìš©ëœ ìŠ¤íƒ€ì¼";
     TEXT[ turkish ] = "Kullanılan biçimler";
-    TEXT[ catalan ] = "Estilos utilizados";
+    TEXT[ catalan ] = "Estils aplicats";
+    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ";
 };
 
 
@@ -216,13 +221,14 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ chinese_simplified ] = "ä½¿ç”¨è€…æ ·å¼";
     TEXT[ russian ] = "Ñòèëè ïîëüçîâàòåëÿ";
     TEXT[ polish ] = "Style indywidualne";
-    TEXT[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™";
+    TEXT[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«";
     TEXT[ chinese_traditional ] = "è‡ªè¨‚æ¨£å¼";
     TEXT[ arabic ] = "ÃäãÇØ ãÎÕÕÉ";
     TEXT[ greek ] = "Óôõë ÷ñŞóôç";
-    TEXT[ korean ] = "ì‚¬ìš©ì ì •ì˜ í…œí”Œë¦¿";
+    TEXT[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¤íƒ€ì¼";
     TEXT[ turkish ] = "Kullanıcı tanımlı biçimler";
-    TEXT[ catalan ] = "Estilos del usuario";
+    TEXT[ catalan ] = "Estils personalitzats";
+    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
 };
 
 String STR_STYLE_FILTER_ALL
@@ -243,13 +249,14 @@ String STR_STYLE_FILTER_ALL
     TEXT[ chinese_simplified ] = "å…¨éƒ¨æ ·å¼";
     TEXT[ russian ] = "Âñå ñòèëè";
     TEXT[ polish ] = "Wszystkie style";
-    TEXT[ japanese ] = "ã™ã¹ã¦ã®ï½½ï¾€ï½²ï¾™";
+    TEXT[ japanese ] = "ã™ã¹ã¦ã®ã‚¹ã‚¿ã‚¤ãƒ«";
     TEXT[ chinese_traditional ] = "å…¨éƒ¨æ¨£å¼";
     TEXT[ arabic ] = "ßá ÇáÃäãÇØ";
     TEXT[ greek ] = "¼ëá ôá ğñüôõğá";
-    TEXT[ korean ] = "ëª¨ë“  í…œí”Œë¦¿";
+    TEXT[ korean ] = "ëª¨ë“  ìŠ¤íƒ€ì¼";
     TEXT[ turkish ] = "Tüm biçimler";
-    TEXT[ catalan ] = "Todos los estilos";
+    TEXT[ catalan ] = "Tots els estils";
+    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
 };
 
 String STR_STANDARD
@@ -274,14 +281,34 @@ String STR_STANDARD
     Text[ chinese_traditional ] = "æ¨™æº–";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Predeterminat";
     Text[ finnish ] = "Vakio";
+    Text[ thai ] = "à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
 };
 String STR_STANDARD_SHORTCUT
 {
     Text = "~Standard" ;
     Text [ English ] = "~Standard" ;
-    Text [ english_us ] = "~Standard" ;
+    Text [ english_us ] = "Standard" ;
+    Text[ portuguese ] = "~Padrão";
+    Text[ russian ] = "Ñòàíäàğò";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ dutch ] = "Standaar~d";
+    Text[ french ] = "Standard";
+    Text[ spanish ] = "~Predeterminado";
+    Text[ finnish ] = "Vakio";
+    Text[ italian ] = "Standard";
+    Text[ danish ] = "Standard";
+    Text[ swedish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
+    Text[ japanese ] = "æ¨™æº–";
+    Text[ korean ] = "ê¸°ë³¸ ê°’";
+    Text[ chinese_simplified ] = "æ ‡å‡†";
+    Text[ chinese_traditional ] = "æ¨™æº–";
+    Text[ turkish ] = "Standart";
+    Text[ arabic ] = "ŞíÇÓí";
+    Text[ catalan ] = "~Estàndard";
+    Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
 };
 
 String STR_FILTERNAME_ALL
@@ -297,17 +324,18 @@ String STR_FILTERNAME_ALL
     Text[ spanish ] = "Todos los archivos (*.*)";
     Text[ finnish ] = "<Kaikki>";
     Text[ italian ] = "Tutti i file (*.*)";
-    Text[ danish ] = "<Alle>";
+    Text[ danish ] = "Alle filer (*.*)";
     Text[ swedish ] = "Alla filer (*.*)";
     Text[ polish ] = "Wszystkie pliki (*.*)";
     Text[ portuguese_brazilian ] = "<Tudo>";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾Œï½§ï½²ï¾™ (*.*)";
-    Text[ korean ] = "<ëª¨ë‘>";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ« (*.*)";
+    Text[ korean ] = "ëª¨ë“  íŒŒì¼(*.*)";
     Text[ chinese_simplified ] = "å…¨éƒ¨æ–‡ä»¶ (*.*)";
     Text[ chinese_traditional ] = "å…¨éƒ¨çš„æª”æ¡ˆ(*.*)";
     Text[ turkish ] = "<Tümü>";
     Text[ arabic ] = "<Çáßá>";
-    Text[ catalan ] = "<Todos>";
+    Text[ catalan ] = "<Tot>";
+    Text[ thai ] = "à¸—à¸¸à¸à¹„à¸Ÿà¸¥à¹Œ (*.*)";
 };
 
 String STR_HUMAN_APPNAME
@@ -331,7 +359,7 @@ String STR_BYTES
     Text[ chinese_simplified ] = "å­—èŠ‚";
     Text[ russian ] = "áàéò";
     Text[ polish ] = "Bajty";
-    Text[ japanese ] = "ï¾Šï¾ï½²ï¾„";
+    Text[ japanese ] = "ãƒã‚¤ãƒˆ";
     Text[ chinese_traditional ] = "Bytes";
     Text[ arabic ] = "ÈÇíÊ";
     Text[ greek ] = "Bytes";
@@ -339,6 +367,7 @@ String STR_BYTES
     Text[ turkish ] = "Byte";
     Text[ catalan ] = "Bytes";
     Text[ finnish ] = "Tavuja";
+    Text[ thai ] = "à¹„à¸šà¸•à¹Œ";
 };
 
 String STR_KB
@@ -357,14 +386,15 @@ String STR_KB
     Text[ chinese_simplified ] = "åƒå­—èŠ‚";
     Text[ russian ] = "ÊÁ";
     Text[ polish ] = "KB";
-    Text[ japanese ] = "ï½·ï¾›ï¾Šï¾ï½²ï¾„";
+    Text[ japanese ] = "ã‚­ãƒ­ãƒã‚¤ãƒˆ";
     Text[ chinese_traditional ] = "KB";
     Text[ arabic ] = "ßíáæÈÇíÊ";
     Text[ greek ] = "KB";
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
-    Text[ catalan ] = "KB";
+    Text[ catalan ] = "kB";
     Text[ finnish ] = "Kt";
+    Text[ thai ] = "KB";
 };
 
 String STR_MB
@@ -391,6 +421,7 @@ String STR_MB
     Text[ turkish ] = "MB";
     Text[ catalan ] = "MB";
     Text[ finnish ] = "Mt";
+    Text[ thai ] = "MB";
 };
 
 
@@ -418,6 +449,7 @@ String STR_GB
     Text[ turkish ] = "GB";
     Text[ catalan ] = "GB";
     Text[ finnish ] = "Gt";
+    Text[ thai ] = "GB";
 };
 
 String STR_UNDO
@@ -445,7 +477,8 @@ String STR_UNDO
     Text[ greek ] = "Áíáßñåóç: ";
     Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ: ";
     Text[ turkish ] = "Geri al: ";
-    Text[ catalan ] = "Deshacer: ";
+    Text[ catalan ] = "Desfés: ";
+    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³: ";
 };
 
 String STR_REDO
@@ -472,6 +505,7 @@ String STR_REDO
     Text[ turkish ] = "~Yinele: ";
     Text[ catalan ] = "Restaurar: ";
     Text[ finnish ] = "Tois~ta: ";
+    Text[ thai ] = "~à¸—à¸³à¸‹à¹‰à¸³: ";
 };
 
 String STR_REPEAT
@@ -496,8 +530,9 @@ String STR_REPEAT
     Text[ greek ] = "ÅğáíÜëçøç: ";
     Text[ korean ] = "ë§ˆì§€ë§‰ ëª…ë ¹(~R):";
     Text[ turkish ] = "Son ~komutu yinele: ";
-    Text[ catalan ] = "~Último comando: ";
+    Text[ catalan ] = "~Repeteix: ";
     Text[ finnish ] = "~Toisto: ";
+    Text[ thai ] = "~à¸‹à¹‰à¸³: ";
 };
 
 String RID_STR_NEW_TASK
@@ -515,15 +550,16 @@ String RID_STR_NEW_TASK
     Text[ swedish ] = "Ny aktivitet";
     Text[ polish ] = "Nowe zadanie";
     Text[ portuguese_brazilian ] = "New task";
-    Text[ japanese ] = "æ–°ã—ã„ï½³ï½¨ï¾ï¾„ï¾ï½³";
+    Text[ japanese ] = "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
     Text[ chinese_simplified ] = "æ–°å¢è§†çª—";
     Text[ chinese_traditional ] = "é–‹æ–°æª”æ¡ˆ";
     Text[ arabic ] = "ãåãÉ ÌÏíÏÉ";
     Text[ greek ] = "Íİá åñãáóßá";
     Text[ korean ] = "ìƒˆë¡œìš´ ì‘ì—…";
     Text[ turkish ] = "Yeni görev";
-    Text[ catalan ] = "Nueva tarea";
+    Text[ catalan ] = "Tasca nova";
     Text[ finnish ] = "Uusi tehtävä";
+    Text[ thai ] = "à¸‡à¸²à¸™à¹ƒà¸«à¸¡à¹ˆ";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -552,7 +588,8 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ korean ] = "ëª¨ë“  ë³€ê²½ì„ ì·¨ì†Œí•˜ê² ìŠµë‹ˆê¹Œ?";
     Message[ arabic ] = "åá ÊÑíÏ ÑİÖ ßá ÇáÊÛííÑÇÊ¿";
     Message[ turkish ] = "Tüm değişiklikleri iptal et?";
-    Message[ catalan ] = "¿Cancelar todos los cambios?";
+    Message[ catalan ] = "Cancel.la tots els canvis?";
+    Message[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 
 
