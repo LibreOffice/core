@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:34:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2165,7 +2165,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
             }
 
     }
-    __DELETE( nFlagSize ) pSetFlags;
+    delete [] pSetFlags;
     if( pChkStr && pChkStr->Len() )
         return *pChkStr;
     return aName += String::CreateFromInt32( ++nNum );
