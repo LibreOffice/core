@@ -87,11 +87,11 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n
+mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
-
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
@@ -260,9 +260,10 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hdl
-
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hdl
+..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hpp
+..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\script\browse\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\script\browse\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse\*.hdl
