@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 15:22:36 $
+ *  last change: $Author: mav $ $Date: 2002-07-31 11:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,73 +655,74 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     SfxBoolResetter aDocInfoReset( pImp->bDoNotTouchDocInfo );
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
+
+    if( bSaveTo || bUseFilterOptions )
+    {
+        // call filter dialog
+        if( xFilterCFG.is() )
+        {
+            try {
+                   Sequence < PropertyValue > aProps;
+                   Any aAny = xFilterCFG->getByName( aFilterName );
+                   if ( aAny >>= aProps )
+                   {
+                       ::rtl::OUString aServiceName;
+                       sal_Int32 nPropertyCount = aProps.getLength();
+                       for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                           if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                           {
+                            ::rtl::OUString aServiceName;
+                               aProps[nProperty].Value >>= aServiceName;
+                            if( aServiceName.getLength() )
+                            {
+                                Reference< XExecutableDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
+                                Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
+
+                                if( xFilterDialog.is() && xFilterProperties.is() )
+                                {
+                                    bDialogUsed = sal_True;
+
+                                    Reference< XExporter > xExporter( xFilterDialog, UNO_QUERY );
+                                    if( xExporter.is() )
+                                        xExporter->setSourceDocument( Reference< XComponent >( GetModel(), UNO_QUERY ) );
+
+                                    Sequence< PropertyValue > aPropsForDialog;
+                                    TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
+                                    xFilterProperties->setPropertyValues( aPropsForDialog );
+
+                                    if( xFilterDialog->execute() )
+                                    {
+                                        SfxAllItemSet aNewParams( GetPool() );
+                                        TransformParameters( pRequest->GetSlot(),
+                                                             xFilterProperties->getPropertyValues(),
+                                                             aNewParams,
+                                                             NULL );
+                                        pParams->Put( aNewParams );
+                                    }
+                                    else return sal_True;   // cancel
+                                }
+                            }
+
+                            break;
+                        }
+                }
+            }
+            catch( NoSuchElementException& )
+            {
+                // the filter name is unknown
+               SetError( ERRCODE_IO_INVALIDPARAMETER );
+                return sal_False;
+            }
+            catch( Exception& )
+            {
+            }
+        }
+    }
+
     if ( aURL != aActName )
     {
         // this is defenitly not a Save
         pImp->bIsSaving = sal_False; // here it's already clear
-
-        if( bSaveTo || bUseFilterOptions )
-        {
-            // call filter dialog
-            if( xFilterCFG.is() )
-            {
-                try {
-                    Sequence < PropertyValue > aProps;
-                       Any aAny = xFilterCFG->getByName( aFilterName );
-                       if ( aAny >>= aProps )
-                       {
-                           ::rtl::OUString aServiceName;
-                           sal_Int32 nPropertyCount = aProps.getLength();
-                           for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                               if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
-                               {
-                                ::rtl::OUString aServiceName;
-                                   aProps[nProperty].Value >>= aServiceName;
-                                if( aServiceName.getLength() )
-                                {
-                                    Reference< XExecutableDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
-                                    Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
-
-                                    if( xFilterDialog.is() && xFilterProperties.is() )
-                                    {
-                                        bDialogUsed = sal_True;
-
-                                        Reference< XExporter > xExporter( xFilterDialog, UNO_QUERY );
-                                        if( xExporter.is() )
-                                            xExporter->setSourceDocument( Reference< XComponent >( GetModel(), UNO_QUERY ) );
-
-                                        Sequence< PropertyValue > aPropsForDialog;
-                                        TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
-                                        xFilterProperties->setPropertyValues( aPropsForDialog );
-
-                                        if( xFilterDialog->execute() )
-                                        {
-                                            SfxAllItemSet aNewParams( GetPool() );
-                                            TransformParameters( pRequest->GetSlot(),
-                                                                 xFilterProperties->getPropertyValues(),
-                                                                 aNewParams,
-                                                                 NULL );
-                                            pParams->Put( aNewParams );
-                                        }
-                                        else return sal_True;   // cancel
-                                    }
-                                }
-
-                                break;
-                            }
-                    }
-                }
-                catch( NoSuchElementException& )
-                {
-                    // the filter name is unknown
-                       SetError( ERRCODE_IO_INVALIDPARAMETER );
-                    return sal_False;
-                }
-                catch( Exception& )
-                {
-                }
-            }
-        }
 
         // ggf. DocInfo Dialog
         UpdateDocInfoForSave();
