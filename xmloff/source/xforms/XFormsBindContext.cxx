@@ -1,0 +1,221 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XFormsBindContext.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:13:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "XFormsBindContext.hxx"
+
+#include "xformsapi.hxx"
+
+#include "xmlimp.hxx"
+#include "xmlerror.hxx"
+#include "xmltoken.hxx"
+#include "xmltkmap.hxx"
+#include "xmlnmspe.hxx"
+#include "nmspmap.hxx"
+
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
+
+#include <tools/debug.hxx>
+
+using rtl::OUString;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::makeAny;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xforms::XModel;
+using namespace xmloff::token;
+
+
+
+
+static struct SvXMLTokenMapEntry aAttributeMap[] =
+{
+    TOKEN_MAP_ENTRY( NONE, NODESET ),
+    TOKEN_MAP_ENTRY( NONE, ID ),
+    TOKEN_MAP_ENTRY( NONE, READONLY ),
+    TOKEN_MAP_ENTRY( NONE, RELEVANT ),
+    TOKEN_MAP_ENTRY( NONE, REQUIRED ),
+    TOKEN_MAP_ENTRY( NONE, CONSTRAINT ),
+    TOKEN_MAP_ENTRY( NONE, CALCULATE ),
+    TOKEN_MAP_ENTRY( NONE, TYPE ),
+    XML_TOKEN_MAP_END
+};
+
+// helper function; see below
+void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
+                                 Reference<XNameContainer>& );
+
+XFormsBindContext::XFormsBindContext(
+    SvXMLImport& rImport,
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XPropertySet>& xModel ) :
+        TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
+        mxModel( xModel, UNO_QUERY_THROW ),
+        mxBinding( NULL )
+{
+    // attach binding to model
+    mxBinding = mxModel->createBinding();
+    DBG_ASSERT( mxBinding.is(), "can't create binding" );
+    mxModel->getBindings()->insert( makeAny( mxBinding ) );
+}
+
+XFormsBindContext::~XFormsBindContext()
+{
+}
+
+void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
+                                         const OUString& rValue )
+{
+    switch( nToken )
+    {
+    case XML_NODESET:
+        lcl_setValue( mxBinding, OUSTRING("BindingExpression"), rValue );
+        break;
+    case XML_ID:
+        lcl_setValue( mxBinding, OUSTRING("BindingID"), rValue );
+        break;
+    case XML_READONLY:
+        lcl_setValue( mxBinding, OUSTRING("ReadonlyExpression"), rValue );
+        break;
+    case XML_RELEVANT:
+        lcl_setValue( mxBinding, OUSTRING("RelevantExpression"), rValue );
+        break;
+    case XML_REQUIRED:
+        lcl_setValue( mxBinding, OUSTRING("RequiredExpression"), rValue );
+        break;
+    case XML_CONSTRAINT:
+        lcl_setValue( mxBinding, OUSTRING("ConstraintExpression"), rValue );
+        break;
+    case XML_CALCULATE:
+        lcl_setValue( mxBinding, OUSTRING("CalculateExpression"), rValue );
+        break;
+    case XML_TYPE:
+        lcl_setValue( mxBinding, OUSTRING("Type"),
+                      makeAny( lcl_getTypeName( mxModel->getDataTypeRepository(),
+                                       GetImport().GetNamespaceMap(),
+                                       rValue ) ) );
+        break;
+    default:
+        DBG_ERROR( "should not happen" );
+        break;
+    }
+}
+
+void XFormsBindContext::StartElement(
+    const Reference<XAttributeList>& xAttributeList )
+{
+    // we need to register the namespaces
+    Reference<XNameContainer> xContainer(
+        mxBinding->getPropertyValue( OUSTRING("BindingNamespaces") ),
+        UNO_QUERY );
+
+    DBG_ASSERT( xContainer.is(), "binding should have a namespace container" );
+    if( xContainer.is() )
+        lcl_fillNamespaceContainer( GetImport().GetNamespaceMap(), xContainer);
+
+    // call super-class for attribute handling
+    TokenContext::StartElement( xAttributeList );
+}
+
+/** will be called for each child element */
+SvXMLImportContext* XFormsBindContext::HandleChild(
+    sal_uInt16 nToken,
+    sal_uInt16 nNamespace,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& xAttrList )
+{
+    DBG_ERROR( "no children supported" );
+    return NULL;
+}
+
+
+void lcl_fillNamespaceContainer(
+    const SvXMLNamespaceMap& aMap,
+    Reference<XNameContainer>& xContainer )
+{
+    sal_uInt16 nKeyIter = aMap.GetFirstKey();
+    do
+    {
+        // get prefix and namespace
+        const OUString& sPrefix = aMap.GetPrefixByKey( nKeyIter );
+        const OUString& sNamespace = aMap.GetNameByKey( nKeyIter );
+
+        // as a hack, we will ignore our own 'default' namespaces
+        DBG_ASSERT( sPrefix.getLength() > 0, "no prefix?" );
+        if( sPrefix.getStr()[0] != sal_Unicode( '_' )  &&
+            nKeyIter >= XML_OLD_NAMESPACE_META_IDX )
+        {
+            // insert prefix (use replace if already known)
+            if( xContainer->hasByName( sPrefix ) )
+                xContainer->replaceByName( sPrefix, makeAny( sNamespace ) );
+            else
+                xContainer->insertByName( sPrefix, makeAny( sNamespace ) );
+        }
+
+        // proceed to next
+        nKeyIter = aMap.GetNextKey( nKeyIter );
+    }
+    while( nKeyIter != XML_NAMESPACE_UNKNOWN );
+}
