@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:31 $
+#   last change: $Author: mt $ $Date: 2002-02-14 17:23:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
+            $(SLO)$/vclxaccessiblecomponent.obj 	\
             $(SLO)$/vclxbitmap.obj 					\
             $(SLO)$/vclxcontainer.obj 				\
             $(SLO)$/vclxdevice.obj 					\
