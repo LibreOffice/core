@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:44:48 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,6 +1082,8 @@ friend class wwSectionManager;
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
 
+    WW8FlyPara *ConstructApo(const BYTE* pSprm29,
+        const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos);
     bool StartApo(const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
         WW8_TablePos *pTabPos);
     void StopApo();
