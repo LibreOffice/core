@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:03:01 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef EXTENSIONS_ABPRESID_HRC
 #define EXTENSIONS_ABPRESID_HRC
+
+#include "abpenvironment.hxx"
 
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include "extensio.hrc"
@@ -205,6 +207,16 @@
 
 //........................................................................
 #define LB_TABLELIST            1
+
+#if defined( ABP_USE_ROADMAP )
+    //........................................................................
+    #define STR_SELECT_ABTYPE           1
+    #define STR_INVOKE_ADMIN_DIALOG     2
+    #define STR_TABLE_SELECTION         3
+    #define STR_MANUAL_FIELD_MAPPING    4
+    #define STR_FINAL_CONFIRM           5
+    #define STR_ROADMAP_TITLE           6
+#endif
 
 //========================================================================
 // some defines
