@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:43:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,9 @@
 #define HID_HANGULDLG_BUTTON_OPTIONS                (HID_SVX_EXT0_START + 122)
 #define HID_HANGULHANJA_OPT_DICTS_LB                (HID_SVX_EXT0_START + 123)
 
+#define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 124)
+    // please adjust ACT_SVX_HID_END2 below if you add entries here!
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
@@ -732,7 +735,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2        HID_HANGULHANJA_OPT_DICTS_LB
+#define ACT_SVX_HID_END2        HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
