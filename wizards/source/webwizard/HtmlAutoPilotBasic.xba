@@ -220,7 +220,7 @@ Dim oDocument as Object
 &apos; from the AutoPilot or from a template. It is not possible to set these
 &apos; links for the template created by the AutoPilot because then it is not
 &apos; possible to modify the template.
-        BasicLibraries.LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
@@ -236,7 +236,7 @@ Dim i as Integer
 Dim GraphicFilePath as String
 Dim SavePath$
 Dim GraphicFileName as String
-        BasicLibraries.LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	GetPaths()
 	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
 	Msgbox oBaseDocument.Url
