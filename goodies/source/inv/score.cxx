@@ -2,9 +2,9 @@
  *
  *  $RCSfile: score.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:08:56 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ void ScoreWindow::Paint(const Rectangle& rRect)
     if(bPaintBack)
     {
         Push( PUSH_LINECOLOR );
-        SetLineColor()
+        SetLineColor();
         DrawRect(Rectangle(Point(0,0),GetOutputSizePixel()));
         Pop();
     }
