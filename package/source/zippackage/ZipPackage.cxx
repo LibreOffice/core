@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-12 11:56:11 $
+ *  last change: $Author: mtg $ $Date: 2001-07-18 16:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,10 +347,11 @@ void ZipPackage::getZipFileContents()
 void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
-    aArguments[0] >>= sURL;
+    if (! (aArguments[0] >>= sURL))
+        throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad URL." ),
+            static_cast < ::cppu::OWeakObject * > ( this ) );
     pContent = new Content(sURL, Reference < XCommandEnvironment >() );
-    sal_Bool bBadZipFile = sal_False;
-    pContent = new ::ucb::Content(sURL, Reference < com::sun::star::ucb::XCommandEnvironment >() );
+    sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
 
     Reference < XActiveDataSink > xSink = new ZipPackageSink;
     try
@@ -366,37 +367,43 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             pSeq[1] == 'K' &&
             pSeq[2] == '7' &&
             pSeq[3] == '8' )
-            bSpanned= sal_True;
+            bSpanned = sal_True;
     }
     catch (com::sun::star::uno::Exception&)
     {
         // Exception derived from uno::Exception thrown. This probably
         // means the file doesn't exist...we'll create it at
         // commitChanges time
+        bHaveZipFile = sal_False;
     }
-    try
+    if ( bHaveZipFile )
     {
-        if ( bSpanned)
-            pZipFile = new ZipFile ( xContentStream, sURL );
-        else
-            pZipFile    = new ZipFile( xContentStream, sal_True);
-        getZipFileContents();
-    }
-    catch ( IOException & )
-    {
-        bBadZipFile = sal_True;
-    }
-    catch ( ZipException & )
-    {
-        bBadZipFile = sal_True;
-    }
-    if ( bBadZipFile )
-    {
-        // clean up the memory, and tell the UCB about the error
-        delete pZipFile; pZipFile = NULL;
-        delete pContent; pContent = NULL;
-        throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad Zip File." ),
-            static_cast < ::cppu::OWeakObject * > ( this ) );
+        try
+        {
+            /*
+            if ( bSpanned)
+                pZipFile = new ZipFile ( xContentStream, sURL );
+            else
+            */
+            pZipFile = new ZipFile ( xContentStream, sal_True);
+            getZipFileContents();
+        }
+        catch ( IOException & )
+        {
+            bBadZipFile = sal_True;
+        }
+        catch ( ZipException & )
+        {
+            bBadZipFile = sal_True;
+        }
+        if ( bBadZipFile )
+        {
+            // clean up the memory, and tell the UCB about the error
+            delete pZipFile; pZipFile = NULL;
+            delete pContent; pContent = NULL;
+            throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad Zip File." ),
+                static_cast < ::cppu::OWeakObject * > ( this ) );
+        }
     }
 }
 
@@ -670,9 +677,13 @@ void SAL_CALL ZipPackage::commitChanges(  )
         OUString sMountPath ( sURL.copy ( 0, nPrefixLength ) );
         VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
         FileBase::RC aRC = Directory::getVolumeInfo ( sMountPath, aInfo );
+#ifdef MTG_DEBUG
         fprintf(stderr, "MTG: url is %s first getVolumeInfo on %s returned %d\n", ImplGetChars ( sURL), ImplGetChars ( sMountPath), aRC);
+#endif
         sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
+#ifdef MTG_DEBUG
         fprintf(stderr, "MTG: Removable flag is %d\n", bIsRemovable);
+#endif
         do
         {
             pBuffer->nextSegment( ++nDiskNum);
@@ -714,7 +725,9 @@ void SAL_CALL ZipPackage::commitChanges(  )
         }
         while ( !pBuffer->isOutputFinished() );
     }
+#ifdef MTG_DEBUG
     fprintf ( stderr, "MTG: ZipPackage Commit finished\n");
+#endif
 }
 
 sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
@@ -784,12 +797,16 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
     sal_uInt64 nLeft, nWritten;
     VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
 
+#ifdef MTG_DEBUG
     fprintf (stderr, "MTG: In writeSegment, disk num is %d, file is %s, dir is %s\n",
                      nDiskNum, ImplGetChars(rFileName), ImplGetChars(rMountPath));
+#endif
     do
     {
         aRC = Directory::getVolumeInfo ( rMountPath, aInfo );
+#ifdef MTG_DEBUG
         fprintf(stderr, "MTG: getVolumeInfo returned %d\n", aRC );
+#endif
         if (aRC == FileBase::E_None )
         {
             sal_Bool bReCheck;
@@ -803,7 +820,9 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
             {
                 bReCheck = sal_False;
                 sal_uInt64 nFree = aInfo.getFreeSpace();
+#ifdef MTG_DEBUG
                 fprintf(stderr, "MTG: free is  %d\n", nFree );
+#endif
                 if (( bDynamicSpan && nFree < 1000) ||
                      !bDynamicSpan && nFree < nSegmentSize )
                 {
@@ -823,13 +842,16 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 else
                 {
                     nLeft = bDynamicSpan ? nFree : nSegmentSize;
+#ifdef MTG_DEBUG
                     fprintf(stderr, "MTG: left is  %d\n", nLeft );
+#endif
                 }
             }
             while ( bReCheck );
-
+#ifdef MTG_DEBUG
             fprintf( stderr, "MTG: sDirectoryName is %s sFileName is %s FullPath is %s\n",
                               ImplGetChars ( rMountPath ), ImplGetChars ( rFileName ), ImplGetChars ( sFullPath ) );
+#endif
             pFile = new File ( sFullPath );
             aRC = pFile->open ( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
             if ( aRC == FileBase::E_EXIST )
@@ -843,7 +865,9 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 }
             }
         }
+#ifdef MTG_DEBUG
         fprintf(stderr, "MTG: file open returned %d\n", aRC );
+#endif
     }
     while (aRC != FileBase::E_None );
 
@@ -874,14 +898,18 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
         nRead = xInBuffer->readBytes ( rBuffer, static_cast < sal_Int32 > ( nLeft ) );
 
     aRC = pFile->write ( rBuffer.getConstArray(), nRead, nWritten );
+#ifdef MTG_DEBUG
     fprintf ( stderr, "MTG: write returned %d\n", aRC );
+#endif
 
     if ( nWritten != nRead || aRC != FileBase::E_None )
         bRetry = sal_True;
     else
     {
         aRC = pFile->close ();
+#ifdef MTG_DEBUG
         fprintf ( stderr, "MTG: close returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None )
             bRetry = sal_True;
     }
