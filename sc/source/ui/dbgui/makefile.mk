@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:30:28 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:26:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,7 @@ SLOFILES =	\
      $(SLO)$/scuiimoptdlg.obj
 
 EXCEPTIONSFILES= \
+    $(SLO)$/pvlaydlg.obj	\
     $(SLO)$/dapidata.obj
 
 SRS1NAME=$(TARGET)
