@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:35:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,15 @@
 #endif
 
 
+#include <vector>
+typedef ::std::vector< String > IfaceVector;
+
 struct SbiParseStack;
 
 class SbiParser : public SbiTokenizer
 {
+    friend class SbiExpression;
+
     SbiParseStack* pStack;          // Block-Stack
     SbiProcDef* pProc;              // aktuelle Prozedur
     SbiExprNode*  pWithVar;         // aktuelle With-Variable
@@ -115,6 +120,7 @@ public:
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
     BOOL          bClassModule;     // TRUE: OPTION ClassModule
+    IfaceVector   aIfaceVector;     // Holds all interfaces implemented by a class module
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );
@@ -150,6 +156,7 @@ public:
     void For();                     // FOR...NEXT
     void Goto();                    // GOTO / GOSUB
     void If();                      // IF
+    void Implements();              // IMPLEMENTS
     void Input();                   // INPUT, INPUT #
     void LineInput();               // LINE INPUT, LINE INPUT #
     void LSet();                    // LSET
