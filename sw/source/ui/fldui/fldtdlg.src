@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "Document" ;
                 PageResID = TP_FLD_DOK ;
                 Text [ english_us ] = "Document" ;
-                Text [ portuguese_brazilian ] = "Dokument" ;
+                Text [ portuguese_brazilian ] = "Documento" ;
                 Text [ swedish ] = "Dokument" ;
                 Text [ danish ] = "Dokument" ;
                 Text [ italian ] = "Documento" ;
@@ -104,6 +104,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Document";
                 Text[ finnish ] = "Asiakirja";
                 Text[ thai ] = "เอกสาร";
+                Text[ czech ] = "Dokument";
+                Text[ hebrew ] = "Dokument";
+                Text[ hindi ] = "लेखपत्र";
             };
             PageItem
             {
@@ -112,7 +115,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "References" ;
                 PageResID = TP_FLD_REF ;
                 Text [ english_us ] = "References" ;
-                Text [ portuguese_brazilian ] = "Referenzen" ;
+                Text [ portuguese_brazilian ] = "Refer�ncias" ;
                 Text [ swedish ] = "Referenser" ;
                 Text [ danish ] = "Referencer" ;
                 Text [ italian ] = "Riferimenti" ;
@@ -133,6 +136,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Refer�ncies";
                 Text[ finnish ] = "Viitteet";
                 Text[ thai ] = "อ้างอิง";
+                Text[ czech ] = "Odkazy";
+                Text[ hebrew ] = "Referenzen";
+                Text[ hindi ] = "रेफरेन्स";
             };
             PageItem
             {
@@ -141,7 +147,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "Functions" ;
                 PageResID = TP_FLD_FUNC ;
                 Text [ english_us ] = "Functions" ;
-                Text [ portuguese_brazilian ] = "Funktionen" ;
+                Text [ portuguese_brazilian ] = "Fun��es" ;
                 Text [ swedish ] = "Funktioner" ;
                 Text [ danish ] = "Funktioner" ;
                 Text [ italian ] = "Funzioni" ;
@@ -162,6 +168,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Funcions";
                 Text[ finnish ] = "Toiminnot";
                 Text[ thai ] = "ฟังก์ชั่น";
+                Text[ czech ] = "Funkce";
+                Text[ hebrew ] = "Funktionen";
+                Text[ hindi ] = "फंक्शन्स";
             };
             PageItem
             {
@@ -170,7 +179,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "Document information" ;
                 PageResID = TP_FLD_DOKINF ;
                 Text [ english_us ] = "DocInformation" ;
-                Text [ portuguese_brazilian ] = "Dokumentinfo" ;
+                Text [ portuguese_brazilian ] = "Info. do Doc." ;
                 Text [ swedish ] = "Dokumentinfo" ;
                 Text [ danish ] = "Dokumentinfo" ;
                 Text [ italian ] = "Info documento" ;
@@ -191,6 +200,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Informaci� del document";
                 Text[ finnish ] = "Asiakirjatiedot";
                 Text[ thai ] = "ข้อมูลเอกสาร";
+                Text[ czech ] = "Informace o dokumentu";
+                Text[ hebrew ] = "Dokumentinfo";
+                Text[ hindi ] = "DocInformation";
             };
             PageItem
             {
@@ -199,7 +211,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "Variables" ;
                 PageResID = TP_FLD_VAR ;
                 Text [ english_us ] = "Variables" ;
-                Text [ portuguese_brazilian ] = "Variablen" ;
+                Text [ portuguese_brazilian ] = "Vari�veis" ;
                 Text [ swedish ] = "Variabler" ;
                 Text [ danish ] = "Variabler" ;
                 Text [ italian ] = "Variabili" ;
@@ -220,6 +232,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Variables";
                 Text[ finnish ] = "Muuttujat";
                 Text[ thai ] = "ตัวแปร";
+                Text[ czech ] = "Proměnné";
+                Text[ hebrew ] = "Variablen";
+                Text[ hindi ] = "वेरिऐबल";
             };
             PageItem
             {
@@ -228,7 +243,7 @@ TabDialog DLG_FLD_INSERT
                 Text [ ENGLISH ] = "Database" ;
                 PageResID = TP_FLD_DB ;
                 Text [ english_us ] = "Database" ;
-                Text [ portuguese_brazilian ] = "Datenbank" ;
+                Text [ portuguese_brazilian ] = "Banco de Dados" ;
                 Text [ swedish ] = "Databas" ;
                 Text [ danish ] = "Database" ;
                 Text [ italian ] = "Database" ;
@@ -249,6 +264,9 @@ TabDialog DLG_FLD_INSERT
                 Text[ catalan ] = "Base de dades";
                 Text[ finnish ] = "Tietokanta";
                 Text[ thai ] = "ฐานข้อมูล";
+                Text[ czech ] = "Databáze";
+                Text[ hebrew ] = "Datenbank";
+                Text[ hindi ] = "लेखासंचय";
             };
         };
     };
@@ -269,7 +287,7 @@ TabDialog DLG_FLD_INSERT
         Text [ english_us ] = "~Insert" ;
         Text[ chinese_simplified ] = "插入(~I)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Wstaw";
+        Text[ polish ] = "W~staw";
         Text[ japanese ] = "挿入(~I)";
         Text[ chinese_traditional ] = "插入(~I)";
         Text[ arabic ] = "�����";
@@ -279,6 +297,9 @@ TabDialog DLG_FLD_INSERT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insereix";
         Text[ thai ] = "แ~ทรก";
+        Text[ czech ] = "Vložit";
+        Text[ hebrew ] = "‮הוספה‬";
+        Text[ hindi ] = "~जोड़ो";
     };
     String STR_FLD_CLOSE
     {
@@ -291,11 +312,11 @@ TabDialog DLG_FLD_INSERT
         Text [ dutch ] = "~Sluiten" ;
         Text [ swedish ] = "~St�ng" ;
         Text [ danish ] = "Luk" ;
-        Text [ portuguese_brazilian ] = "~Schlie?en" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
         Text[ chinese_simplified ] = "关闭(~C)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Zamknij";
+        Text[ polish ] = "~Zamknij";
         Text[ japanese ] = "閉じる(~C)";
         Text[ chinese_traditional ] = "關閉(~C)";
         Text[ arabic ] = "�����";
@@ -306,9 +327,12 @@ TabDialog DLG_FLD_INSERT
         Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
         Text[ thai ] = "~ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "~बन्द करो";
     };
     Text [ english_us ] = "Fields" ;
-    Text [ portuguese_brazilian ] = "Feldbefehle" ;
+    Text [ portuguese_brazilian ] = "Campos" ;
     Text [ swedish ] = "F�ltkommandon" ;
     Text [ danish ] = "Felter" ;
     Text [ italian ] = "Comandi di campo" ;
@@ -329,7 +353,19 @@ TabDialog DLG_FLD_INSERT
     Text[ catalan ] = "Camps";
     Text[ finnish ] = "Kentt�";
     Text[ thai ] = "เขตข้อมูล";
+    Text[ czech ] = "Pole";
+    Text[ hebrew ] = "‮שדות‬";
+    Text[ hindi ] = "क्षेत्र";
 };
+
+
+
+
+
+
+
+
+
 
 
 
