@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:45:45 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1612,15 +1612,14 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
     }
-    const SvEditObjectProtocol& rProt = GetDocSh()->GetProtocol();
 
     // #101976# Removed [GetDocSh()->GetActualFunction() ||] from the following
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    if (rProt.IsInPlaceActive() || pFuSlideShow)
+    if (GetDocSh()->IsInPlaceActive() || pFuSlideShow)
     {
-        if ( !rProt.IsInPlaceActive() )
+        if ( !GetDocSh()->IsInPlaceActive() )
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );
