@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:41:37 $
+ *  last change: $Author: nn $ $Date: 2002-05-07 17:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,8 @@ void FuText::SelectionHasChanged()
 |*
 \************************************************************************/
 
-void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel)
+void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
+                            BOOL bCursorToEnd, const KeyEvent* pInitialKey)
 {
     //  pObj != NULL, wenn ein spezielles (nicht markiertes) Objekt editiert werden soll
     //  (-> Legendenobjekt von Notizen)
@@ -811,15 +812,27 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel)
                     pTextObj = (SdrTextObj*) pObj;
                     pView->SetEditMode();
 
-                    //  ggf. Text-Cursor an Klickposition setzen
-                    if (pMousePixel)
+                    //  set text cursor to click position or to end,
+                    //  pass initial key event to outliner view
+                    if ( pMousePixel || bCursorToEnd || pInitialKey )
                     {
                         OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                         if (pOLV)
                         {
-                            MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
-                            pOLV->MouseButtonDown(aEditEvt);
-                            pOLV->MouseButtonUp(aEditEvt);
+                            if ( pMousePixel )
+                            {
+                                MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                                pOLV->MouseButtonDown(aEditEvt);
+                                pOLV->MouseButtonUp(aEditEvt);
+                            }
+                            else if ( bCursorToEnd )
+                            {
+                                ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+                                pOLV->SetSelection(aNewSelection);
+                            }
+
+                            if ( pInitialKey )
+                                pOLV->PostKeyEvent( *pInitialKey );
                         }
                     }
                 }

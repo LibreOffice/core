@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:58:12 $
+ *  last change: $Author: nn $ $Date: 2002-05-07 17:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ public:
 
     virtual void SelectionHasChanged();
 
-    void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL );
+    void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
+                            BOOL bCursorToEnd = FALSE, const KeyEvent* pInitialKey = NULL );
     void    StopEditMode();
 
     // #98185# Create default drawing objects via keyboard

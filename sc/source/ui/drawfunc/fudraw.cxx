@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-06 10:07:21 $
+ *  last change: $Author: nn $ $Date: 2002-05-07 17:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,17 @@
 
 //------------------------------------------------------------------------
 
+#include <svx/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <svx/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "sc.hrc"
 #include "fudraw.hxx"
+#include "futext.hxx"
 #include "tabvwsh.hxx"
 #include "drwlayer.hxx"
 #include "scresid.hxx"
@@ -220,6 +224,39 @@ BOOL __EXPORT FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
+BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
+{
+    BOOL bReturn = FALSE;
+    if ( pObj && pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
+    {
+        // start text edit - like FuSelection::MouseButtonUp,
+        // but with bCursorToEnd instead of mouse position
+
+        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+        BOOL bVertical = ( pOPO && pOPO->IsVertical() );
+        USHORT nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
+
+        // don't switch shells if text shell is already active
+        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+        if ( !pPoor || pPoor->GetSlotID() != nTextSlotId )
+        {
+            pViewShell->GetViewData()->GetDispatcher().
+                Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+        }
+
+        // get the resulting FuText and set in edit mode
+        pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
+        {
+            FuText* pText = (FuText*)pPoor;
+            pText->SetInEditMode( pObj, NULL, TRUE, pInitialKey );
+            //! set cursor to end of text
+        }
+        bReturn = TRUE;
+    }
+    return bReturn;
+}
+
 BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
@@ -293,6 +330,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             if( rKEvt.GetKeyCode().GetModifier() == 0 )
             {
                 // #98256# activate OLE object on RETURN for selected object
+                // #98198# put selected text object in edit mode
                 const SdrMarkList& rMarkList = pView->GetMarkList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
@@ -306,6 +344,25 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                         // consumed
                         bReturn = TRUE;
                     }
+                    else if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )       // start text edit for suitable object
+                        bReturn = TRUE;
+                }
+            }
+        }
+        break;
+
+        case KEY_F2:
+        {
+            if( rKEvt.GetKeyCode().GetModifier() == 0 )
+            {
+                // #98198# put selected text object in edit mode
+                // (this is not SID_SETINPUTMODE, but F2 hardcoded, like in Writer)
+                const SdrMarkList& rMarkList = pView->GetMarkList();
+                if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
+                {
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )            // start text edit for suitable object
+                        bReturn = TRUE;
                 }
             }
         }
@@ -637,6 +694,21 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
     if (!bReturn)
     {
         bReturn = FuPoor::KeyInput(rKEvt);
+    }
+
+    if (!bReturn)
+    {
+        // #98198# allow direct typing into a selected text object
+
+        const SdrMarkList& rMarkList = pView->GetMarkList();
+        if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() && EditEngine::IsSimpleCharInput(rKEvt) )
+        {
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+
+            // start text edit for suitable object, pass key event to OutlinerView
+            if ( lcl_KeyEditMode( pObj, pViewShell, &rKEvt ) )
+                bReturn = TRUE;
+        }
     }
 
     return (bReturn);
