@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:24:29 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,164 @@ ScHideTextCursor::~ScHideTextCursor()
 
 // -----------------------------------------------------------------------
 
+BOOL ScGridWindow::ShowNoteMarker( short nPosX, short nPosY, BOOL bKeyboard )
+{
+    BOOL bDone = FALSE;
+
+    ScPostIt    aNote;
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT      nTab = pViewData->GetTabNo();
+    ScAddress   aCellPos( nPosX, nPosY, nTab );
+
+    String aTrackText;
+    BOOL bLeftEdge = FALSE;
+
+    //  Change-Tracking
+
+    ScChangeTrack* pTrack = pDoc->GetChangeTrack();
+    ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
+    if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
+    {
+        const ScChangeAction* pFound = NULL;
+        const ScChangeAction* pFoundContent = NULL;
+        const ScChangeAction* pFoundMove = NULL;
+        long nModified = 0;
+        const ScChangeAction* pAction = pTrack->GetFirst();
+        while (pAction)
+        {
+            if ( pAction->IsVisible() &&
+                 ScViewUtil::IsActionShown( *pAction, *pSettings, *pDoc ) )
+            {
+                ScChangeActionType eType = pAction->GetType();
+                const ScBigRange& rBig = pAction->GetBigRange();
+                if ( rBig.aStart.Tab() == nTab )
+                {
+                    ScRange aRange = rBig.MakeRange();
+
+                    if ( eType == SC_CAT_DELETE_ROWS )
+                        aRange.aEnd.SetRow( aRange.aStart.Row() );
+                    else if ( eType == SC_CAT_DELETE_COLS )
+                        aRange.aEnd.SetCol( aRange.aStart.Col() );
+
+                    if ( aRange.In( aCellPos ) )
+                    {
+                        pFound = pAction;       // der letzte gewinnt
+                        switch ( eType )
+                        {
+                            case SC_CAT_CONTENT :
+                                pFoundContent = pAction;
+                            break;
+                            case SC_CAT_MOVE :
+                                pFoundMove = pAction;
+                            break;
+                        }
+                        ++nModified;
+                    }
+                }
+                if ( eType == SC_CAT_MOVE )
+                {
+                    ScRange aRange =
+                        ((const ScChangeActionMove*)pAction)->
+                        GetFromRange().MakeRange();
+                    if ( aRange.In( aCellPos ) )
+                    {
+                        pFound = pAction;
+                        ++nModified;
+                    }
+                }
+            }
+            pAction = pAction->GetNext();
+        }
+
+        if ( pFound )
+        {
+            if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
+                pFound = pFoundContent;     // Content gewinnt
+            if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
+                    pFoundMove->GetActionNumber() >
+                    pFound->GetActionNumber() )
+                pFound = pFoundMove;        // Move gewinnt
+
+            //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
+            if ( pFound->GetType() == SC_CAT_DELETE_COLS )
+                bLeftEdge = TRUE;
+
+            DateTime aDT = pFound->GetDateTime();
+            aTrackText  = pFound->GetUser();
+            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
+            aTrackText += ScGlobal::pLocaleData->getDate(aDT);
+            aTrackText += ' ';
+            aTrackText += ScGlobal::pLocaleData->getTime(aDT);
+            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n" ));
+            String aComStr=pFound->GetComment();
+            if(aComStr.Len()>0)
+            {
+                aTrackText += aComStr;
+                aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n( " ));
+            }
+            pFound->GetDescription( aTrackText, pDoc );
+            if(aComStr.Len()>0)
+            {
+                aTrackText +=')';
+            }
+        }
+    }
+
+    //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
+    if ( aTrackText.Len() || ( pDoc->GetNote( nPosX, nPosY, nTab, aNote ) &&
+                                 !pDoc->HasNoteObject( nPosX, nPosY, nTab ) ) )
+    {
+        BOOL bNew = TRUE;
+        BOOL bFast = FALSE;
+        if ( pNoteMarker )          // schon eine Notiz angezeigt
+        {
+            if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
+                bNew = FALSE;                           // dann stehenlassen
+            else
+                bFast = TRUE;                           // sonst sofort
+
+            //  marker which was shown for ctrl-F1 isn't removed by mouse events
+            if ( pNoteMarker->IsByKeyboard() && !bKeyboard )
+                bNew = FALSE;
+        }
+        if ( bNew )
+        {
+            if ( bKeyboard )
+                bFast = TRUE;           // keyboard also shows the marker immediately
+
+            delete pNoteMarker;
+
+            Window* pRight = NULL;
+            Window* pBottom = NULL;
+            Window* pDiagonal = NULL;
+            if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX && eHWhich == SC_SPLIT_LEFT )
+            {
+                ScSplitPos eRight = ( eVWhich == SC_SPLIT_TOP ) ?
+                                        SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
+                pRight = pViewData->GetView()->GetWindowByPos(eRight);
+            }
+            if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX && eVWhich == SC_SPLIT_TOP )
+            {
+                ScSplitPos eBottom = ( eHWhich == SC_SPLIT_LEFT ) ?
+                                        SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
+                pBottom = pViewData->GetView()->GetWindowByPos(eBottom);
+            }
+            if ( pRight && pBottom )
+                pDiagonal = pViewData->GetView()->GetWindowByPos(SC_SPLIT_BOTTOMRIGHT);
+
+            pNoteMarker = new ScNoteMarker( this, pRight, pBottom, pDiagonal,
+                                            pDoc, aCellPos, aTrackText,
+                                            GetDrawMapMode(TRUE), bLeftEdge, bFast, bKeyboard );
+        }
+
+        bDone = TRUE;       // something is shown (old or new)
+    }
+
+    return bDone;
+}
+
+// -----------------------------------------------------------------------
+
 void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
     BOOL bDone = FALSE;
@@ -150,159 +308,30 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
 
-    //  Notizen
+    //  notes or change tracking
 
     if ( bHelpEnabled && !bDrawTextEdit )
     {
-        ScPostIt    aNote;
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        ScDocument* pDoc = pViewData->GetDocument();
         short       nPosX, nPosY;
         pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
-        USHORT      nTab = pViewData->GetTabNo();
-        ScAddress   aCellPos( nPosX, nPosY, nTab );
 
-        String aTrackText;
-        BOOL bLeftEdge = FALSE;
-
-        //  Change-Tracking
-
-        ScChangeTrack* pTrack = pDoc->GetChangeTrack();
-        ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
-        if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
+        if ( ShowNoteMarker( nPosX, nPosY, FALSE ) )
         {
-            const ScChangeAction* pFound = NULL;
-            const ScChangeAction* pFoundContent = NULL;
-            const ScChangeAction* pFoundMove = NULL;
-            long nModified = 0;
-            const ScChangeAction* pAction = pTrack->GetFirst();
-            while (pAction)
-            {
-                if ( pAction->IsVisible() &&
-                     ScViewUtil::IsActionShown( *pAction, *pSettings, *pDoc ) )
-                {
-                    ScChangeActionType eType = pAction->GetType();
-                    const ScBigRange& rBig = pAction->GetBigRange();
-                    if ( rBig.aStart.Tab() == nTab )
-                    {
-                        ScRange aRange = rBig.MakeRange();
-
-                        if ( eType == SC_CAT_DELETE_ROWS )
-                            aRange.aEnd.SetRow( aRange.aStart.Row() );
-                        else if ( eType == SC_CAT_DELETE_COLS )
-                            aRange.aEnd.SetCol( aRange.aStart.Col() );
-
-                        if ( aRange.In( aCellPos ) )
-                        {
-                            pFound = pAction;       // der letzte gewinnt
-                            switch ( eType )
-                            {
-                                case SC_CAT_CONTENT :
-                                    pFoundContent = pAction;
-                                break;
-                                case SC_CAT_MOVE :
-                                    pFoundMove = pAction;
-                                break;
-                            }
-                            ++nModified;
-                        }
-                    }
-                    if ( eType == SC_CAT_MOVE )
-                    {
-                        ScRange aRange =
-                            ((const ScChangeActionMove*)pAction)->
-                            GetFromRange().MakeRange();
-                        if ( aRange.In( aCellPos ) )
-                        {
-                            pFound = pAction;
-                            ++nModified;
-                        }
-                    }
-                }
-                pAction = pAction->GetNext();
-            }
-
-            if ( pFound )
-            {
-                if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
-                    pFound = pFoundContent;     // Content gewinnt
-                if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
-                        pFoundMove->GetActionNumber() >
-                        pFound->GetActionNumber() )
-                    pFound = pFoundMove;        // Move gewinnt
-
-                //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
-                if ( pFound->GetType() == SC_CAT_DELETE_COLS )
-                    bLeftEdge = TRUE;
-
-                DateTime aDT = pFound->GetDateTime();
-                aTrackText  = pFound->GetUser();
-                aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-                aTrackText += ScGlobal::pLocaleData->getDate(aDT);
-                aTrackText += ' ';
-                aTrackText += ScGlobal::pLocaleData->getTime(aDT);
-                aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n" ));
-                String aComStr=pFound->GetComment();
-                if(aComStr.Len()>0)
-                {
-                    aTrackText += aComStr;
-                    aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n( " ));
-                }
-                pFound->GetDescription( aTrackText, pDoc );
-                if(aComStr.Len()>0)
-                {
-                    aTrackText +=')';
-                }
-            }
-        }
-
-        //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
-        if ( aTrackText.Len() || ( pDoc->GetNote( nPosX, nPosY, nTab, aNote ) &&
-                                     !pDoc->HasNoteObject( nPosX, nPosY, nTab ) ) )
-        {
-            BOOL bNew = TRUE;
-            BOOL bFast = FALSE;
-            if ( pNoteMarker )          // schon eine Notiz angezeigt
-            {
-                if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
-                    bNew = FALSE;                           // dann stehenlassen
-                else
-                    bFast = TRUE;                           // sonst sofort
-            }
-            if ( bNew )
-            {
-                delete pNoteMarker;
-
-                Window* pRight = NULL;
-                Window* pBottom = NULL;
-                Window* pDiagonal = NULL;
-                if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX && eHWhich == SC_SPLIT_LEFT )
-                {
-                    ScSplitPos eRight = ( eVWhich == SC_SPLIT_TOP ) ?
-                                            SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
-                    pRight = pViewData->GetView()->GetWindowByPos(eRight);
-                }
-                if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX && eVWhich == SC_SPLIT_TOP )
-                {
-                    ScSplitPos eBottom = ( eHWhich == SC_SPLIT_LEFT ) ?
-                                            SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
-                    pBottom = pViewData->GetView()->GetWindowByPos(eBottom);
-                }
-                if ( pRight && pBottom )
-                    pDiagonal = pViewData->GetView()->GetWindowByPos(SC_SPLIT_BOTTOMRIGHT);
-
-                pNoteMarker = new ScNoteMarker( this, pRight, pBottom, pDiagonal,
-                                                pDoc, aCellPos, aTrackText,
-                                                GetDrawMapMode(TRUE), bLeftEdge, bFast );
-            }
-
             Window::RequestHelp( rHEvt );   // alte Tip/Balloon ausschalten
             bDone = TRUE;
         }
     }
 
-    if (!bDone)
-        DELETEZ(pNoteMarker);
+    if ( !bDone && pNoteMarker )
+    {
+        if ( pNoteMarker->IsByKeyboard() )
+        {
+            //  marker which was shown for ctrl-F1 isn't removed by mouse events
+        }
+        else
+            DELETEZ(pNoteMarker);
+    }
 
     //  Image-Map / Text-URL
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 10:03:20 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,7 @@ public:
     void            DrawAutoFillMark();
     void            UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange);
 
+    BOOL            ShowNoteMarker( short nPosX, short nPosY, BOOL bKeyboard );
     void            HideNoteMarker();
 
     MapMode         GetDrawMapMode( BOOL bForce = FALSE );

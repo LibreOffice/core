@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 15:08:47 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2635,6 +2635,8 @@ void ScTabView::ZoomChanged()
 
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
+
+    HideNoteMarker();
 }
 
 void ScTabView::CheckNeedsRepaint()

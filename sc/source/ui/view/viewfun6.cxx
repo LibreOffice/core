@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:20:57 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,8 @@ void ScViewFunc::ShowNote()
     if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
          !pDoc->HasNoteObject( nCol, nRow, nTab ) )
     {
+        HideNoteMarker();
+
         pDocSh->MakeDrawLayer();
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
 
@@ -332,6 +334,8 @@ void ScViewFunc::EditNote()
     BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
     if ( !bFound || !pDoc->HasNoteObject( nCol, nRow, nTab ) )      // neu oder versteckt
     {
+        HideNoteMarker();
+
         pDocSh->MakeDrawLayer();
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
 

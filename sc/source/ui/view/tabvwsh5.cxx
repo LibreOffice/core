@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-29 18:01:16 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,8 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
             if (nParts & PAINT_INVERT)
                 InvertBlockMark( pHint->GetStartCol(), pHint->GetStartRow(),
                                  pHint->GetEndCol(), pHint->GetEndRow() );
+
+            HideNoteMarker();
         }
     }
     else if (rHint.ISA(ScEditViewHint))                 // Edit-View anlegen
@@ -235,6 +237,8 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
 //          if (pDoc->IsSelectionOrBlockEditable( nTab, nCol,nRow, nCol,nRow ))
 #endif
             {
+                HideNoteMarker();
+
                 MakeEditView( pHint->GetEngine(), nCol, nRow );
 
                 StopEditShell();                    // sollte nicht gesetzt sein

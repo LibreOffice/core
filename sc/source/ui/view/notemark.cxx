@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:19:55 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const String& rUser,
-                            const MapMode& rMap, BOOL bLeftEdge, BOOL bForce ) :
+                            const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard ) :
     pWindow( pWin ),
     pRightWin( pRight ),
     pBottomWin( pBottom ),
@@ -98,6 +98,7 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     aUserText( rUser ),
     aMapMode( rMap ),
     bLeft( bLeftEdge ),
+    bByKeyboard( bKeyboard ),
     bVisible( FALSE ),
     pModel( NULL ),
     pObject( NULL )

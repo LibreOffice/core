@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,7 +1859,7 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
 
-    if ( rMEvt.IsLeaveWindow() )
+    if ( rMEvt.IsLeaveWindow() && pNoteMarker && !pNoteMarker->IsByKeyboard() )
         HideNoteMarker();
 
     ScModule* pScMod = SC_MOD();
@@ -2385,6 +2385,9 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
     else if( !pViewData->IsAnyFillMode() )
     {
+        //  query for existing note marker before calling ViewShell's keyboard handling
+        //  which may remove the marker
+        BOOL bHadKeyMarker = ( pNoteMarker && pNoteMarker->IsByKeyboard() );
         ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
         if (pViewData->GetDocShell()->GetProgress())
@@ -2405,7 +2408,21 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         KeyCode aCode = rKEvt.GetKeyCode();
         if ( aCode.GetCode() == KEY_ESCAPE && aCode.GetModifier() == 0 )
         {
-            pViewData->GetDocShell()->DoInPlaceActivate(FALSE);
+            if ( bHadKeyMarker )
+                HideNoteMarker();
+            else
+                pViewData->GetDocShell()->DoInPlaceActivate(FALSE);
+            return;
+        }
+        if ( aCode.GetCode() == KEY_F1 && aCode.GetModifier() == KEY_MOD1 )
+        {
+            //  ctrl-F1 shows or hides the note or redlining info for the cursor position
+            //  (hard-coded because F1 can't be configured)
+
+            if ( bHadKeyMarker )
+                HideNoteMarker();       // hide when previously visible
+            else
+                ShowNoteMarker( pViewData->GetCurX(), pViewData->GetCurY(), TRUE );
             return;
         }
     }
@@ -3291,6 +3308,7 @@ void ScGridWindow::UpdateEditViewPos()
 void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
 {
     ClickExtern();
+    HideNoteMarker();
 
     bIsInScroll = TRUE;
     BOOL bXor=DrawBeforeScroll();
