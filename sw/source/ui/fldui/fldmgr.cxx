@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:29:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -812,8 +811,8 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
                         //skip all values below or equal to CHARS_LOWER_LETTER_N
                         if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                         {
-                            nCount += aTypes.getLength() - nType;
-                            break;
+                            // #i28073# it's not necessarily a sorted sequence
+                            ++nCount;
                         }
                     }
                 }
@@ -855,15 +854,19 @@ String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
         {
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
+            sal_Int32 nOffset = aSwFlds[nPos].nFmtEnd - nStart;
+            sal_Int32 nValidEntry = 0;
             for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                 {
-                    sal_Int32 nOffset = nFormatId - (aSwFlds[nPos].nFmtEnd - nStart);
-                    if(aTypes.getLength() > (nOffset + nType))
-                        aRet = xNumberingInfo->getNumberingIdentifier( pTypes[nOffset + nType] );
-                    break;
+                    if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
+                    {
+                        aRet = xNumberingInfo->getNumberingIdentifier( pTypes[nType] );
+                        break;
+                    }
+                    ++nValidEntry;
                 }
             }
         }
@@ -921,18 +924,19 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
         {
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
+            sal_Int32 nOffset = nEnd - nBegin;
+            sal_Int32 nValidEntry = 0;
             for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
-                //skip all values below or equal to CHARS_LOWER_LETTER_N
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                 {
-                    sal_Int32 nOffset = nFormatId + nBegin - aSwFlds[nPos].nFmtEnd;
-                    if((nOffset + nType) < aTypes.getLength())
+                    if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
                     {
-                        nId = pTypes[nOffset + nType];
+                        nId = pTypes[nType];
                         break;
                     }
+                    ++nValidEntry;
                 }
             }
         }
