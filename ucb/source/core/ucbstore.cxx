@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 14:57:40 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 11:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,7 +1795,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
     if ( !aPropertyName.getLength() )
         throw UnknownPropertyException();
 
-    m_pImpl->m_aMutex.acquire();
+    osl::ClearableGuard< osl::Mutex > aCGuard( m_pImpl->m_aMutex );
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
@@ -1828,7 +1828,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                     // Check value type.
                     if ( aOldValue.getValueType() != aValue.getValueType() )
                     {
-                        m_pImpl->m_aMutex.release();
+                        aCGuard.clear();
                         throw IllegalArgumentException();
                     }
 
@@ -1863,7 +1863,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                         aEvt.NewValue       = aValue;
 
                         // Callback follows!
-                        m_pImpl->m_aMutex.release();
+                        aCGuard.clear();
 
                         notifyPropertyChangeEvent( aEvt );
                     }
@@ -1885,7 +1885,6 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
         }
     }
 
-    m_pImpl->m_aMutex.release();
     throw UnknownPropertyException();
 }
 
@@ -2545,7 +2544,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     if ( !nCount )
         return;
 
-    m_pImpl->m_aMutex.acquire();
+    osl::ClearableGuard< osl::Mutex > aCGuard( m_pImpl->m_aMutex );
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
@@ -2636,7 +2635,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         }
 
         // Callback follows!
-        m_pImpl->m_aMutex.release();
+        aCGuard.clear();
 
         if ( m_pImpl->m_pPropertyChangeListeners )
         {
@@ -2653,8 +2652,6 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 
         return;
     }
-
-    m_pImpl->m_aMutex.release();
 
     OSL_ENSURE( sal_False,
                 "PersistentPropertySet::setPropertyValues - Nothing set!" );
