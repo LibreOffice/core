@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:25 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-25 16:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,14 @@ ScriptMetadataImporter::ScriptMetadataImporter(
     : m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptMetadataImporter ctor called >\n" );
+    ms_localeDesc = new OUStringBuffer();
 }
 
 //*************************************************************************
 ScriptMetadataImporter::~ScriptMetadataImporter() SAL_THROW( () )
 {
     OSL_TRACE( "< ScriptMetadataImporter dtor called >\n" );
+    delete ms_localeDesc;
 }
 
 
@@ -389,7 +391,7 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
             break;
         case LOCALE:
             m_ScriptData.locales[ ms_localeLang ] = ::std::make_pair(
-                ms_localeDisName, ms_localeDesc );
+                ms_localeDisName, ms_localeDesc->makeStringAndClear().trim() );
             break;
         case FILESET:
             OSL_TRACE("adding fileset %s to filesets map",
@@ -414,7 +416,7 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
 void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
     throw ( xml::sax::SAXException, RuntimeException )
 {
-    OSL_TRACE( "ScriptMetadataImporter: characters()\n" );
+    OSL_TRACE( "ScriptMetadataImporter: characters()\n");
 
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
 
@@ -422,7 +424,7 @@ void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
     {
     case DESCRIPTION:
         //Put description into the struct
-        ms_localeDesc = aChars;
+        ms_localeDesc->append(aChars);
         break;
     }
 }

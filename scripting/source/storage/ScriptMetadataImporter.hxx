@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-24 10:37:53 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-25 16:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <vector>
 
 #include <rtl/ustring.h>
+#include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for component factory
 
@@ -256,7 +257,7 @@ private:
     /** @internal */
     ::rtl::OUString ms_localeLang;
     ::rtl::OUString ms_localeDisName;
-    ::rtl::OUString ms_localeDesc;
+    ::rtl::OUStringBuffer *ms_localeDesc;
 
     props_vec mv_filesetprops;
 
