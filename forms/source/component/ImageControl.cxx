@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:46:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
+#ifndef SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
+#include <svtools/imageresourceaccess.hxx>
+#endif
 #ifndef _UNTOOLS_UCBLOCKBYTES_HXX
 #include <unotools/ucblockbytes.hxx>
 #endif
@@ -141,6 +144,8 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+
+#include <memory>
 
 #define ID_OPEN_GRAPHICS            1
 #define ID_CLEAR_GRAPHICS           2
@@ -437,22 +442,35 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
     if ( !xSink.is() )
         return sal_False;
 
-    SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( _rURL, STREAM_READ );
-    sal_Bool bSetNull = (NULL == pFileStream) || (ERRCODE_NONE != pFileStream->GetErrorCode());
+    // create a stream for the image specified by the URL
+    ::std::auto_ptr< SvStream > pImageStream;
+    Reference< XInputStream > xImageStream;
 
-    if (!bSetNull)
+    if ( ::svt::ImageResourceAccess::isImageResourceURL( _rURL ) )
     {
-        // get the size of the stream
-        pFileStream->Seek(STREAM_SEEK_TO_END);
-        sal_Int32 nSize = (sal_Int32)pFileStream->Tell();
-        if (pFileStream->GetBufferSize() < 8192)
-            pFileStream->SetBufferSize(8192);
-        pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+        xImageStream = ::svt::ImageResourceAccess::getImageXStream( getORB(), _rURL );
+    }
+    else
+    {
+        pImageStream.reset( ::utl::UcbStreamHelper::CreateStream( _rURL, STREAM_READ ) );
+        sal_Bool bSetNull = ( pImageStream.get() == NULL ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
 
-        Reference<XInputStream> xInput
-            (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
-                                        nSize));
-        xSink->setInputStream( xInput );
+        if (!bSetNull)
+        {
+            // get the size of the stream
+            pImageStream->Seek(STREAM_SEEK_TO_END);
+            sal_Int32 nSize = (sal_Int32)pImageStream->Tell();
+            if (pImageStream->GetBufferSize() < 8192)
+                pImageStream->SetBufferSize(8192);
+            pImageStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), sal_True ), nSize );
+        }
+    }
+
+    if ( xImageStream.is() )
+    {
+        xSink->setInputStream( xImageStream );
         Reference< XInputStream >  xInStream(xSink, UNO_QUERY);
 
         if ( m_xColumnUpdate.is() )
@@ -475,8 +493,6 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
             updateColumnWithStream( NULL );
         else
             setControlValue( Any() );
-
-        delete pFileStream;
     }
 
     return sal_True;
