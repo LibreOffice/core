@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 15:41:17 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2445,7 +2445,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                         break;
                     }
                 }
-                if( nLeft )
+                if( nLeft > 0 )
                 {
                     LINESTART();
                     ADDTEXT( "*UNKNOWN* data:" );
