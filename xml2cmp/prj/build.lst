@@ -1,5 +1,6 @@
-xc	xml2cmp									usr1	-	all	xc_mkout NULL
-xc	xml2cmp\prj								get		-	all	xc_prj NULL
+xc	xml2cmp							usr1	-	all	xc_mkout NULL
+xc	xml2cmp\prj						get	-	all	xc_prj NULL
 xc	xml2cmp\source\support					nmake	-	all	xc_supp NULL
-xc	xml2cmp\source\xcd						nmake	-	all	xc_xcd NULL
-xc	xml2cmp\util							nmake	-	all	xc_util xc_supp xc_xcd NULL
+xc	xml2cmp\source\xcd					nmake	-	all	xc_xcd NULL
+xc	xml2cmp\util						nmake	-	all	xc_util xc_supp xc_xcd NULL
+xc	xml2cmp\source\finder					nmake	-	all	xc_sfi  xc_supp xc_xcd NULL
