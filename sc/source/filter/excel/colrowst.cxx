@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:31:06 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
         rD.SetRowHeightRange( nStart, UINT16( nMaxRow ), nScTab, nLastHeight );
 
     if( pExtTabOpt )
-        pExcRoot->pExtDocOpt->Add( *this );
+        pExcRoot->pIR->GetExtDocOptions().Add( *this );
 
     bDirty = FALSE; // jetzt stimmt Tabelle im ScDocument
 
@@ -376,7 +376,7 @@ void ColRowSettings::ReadSplit( XclImpStream& rIn )
     else
         pExtTabOpt->nActPane = rIn.ReaduInt8();
 
-    pExtTabOpt->nTabNum = pExcRoot->pIR->GetScTab();
+    pExtTabOpt->nTabNum = pExcRoot->pIR->GetCurrScTab();
 }
 
 
@@ -390,13 +390,30 @@ void ColRowSettings::SetVisCorner( UINT16 nCol, UINT16 nRow )
 
 void ColRowSettings::SetFrozen( const BOOL bFrozen )
 {
-    GetExtTabOpt().nTabNum = pExcRoot->pIR->GetScTab();
+    GetExtTabOpt().nTabNum = pExcRoot->pIR->GetCurrScTab();
     GetExtTabOpt().bFrozen = bFrozen;
 }
 
 
 
 
+
+
+ScExtTabOptions::ScExtTabOptions() :
+    nTabNum( 0 ),
+    nSplitX( 0 ),
+    nSplitY( 0 ),
+    nLeftCol( 0 ),
+    nTopRow( 0 ),
+    nLeftSplitCol( 0 ),
+    nTopSplitRow( 0 ),
+    nActPane( 3 ),
+    bSelected( FALSE ),
+    bFrozen( FALSE ),
+    bValidSel( FALSE ),
+    bValidDim( FALSE )
+{
+}
 
 
 void ScExtTabOptions::SetSelection( const ScRange& r )
@@ -453,7 +470,7 @@ CodenameList::~CodenameList()
 
 
 
-ScExtDocOptions::ScExtDocOptions( void )
+void ScExtDocOptions::Reset()
 {
     pGridCol = NULL;
     nActTab = nSelTabs = nCurCol = nCurRow = 0;
@@ -470,6 +487,19 @@ ScExtDocOptions::ScExtDocOptions( void )
     bChanged = TRUE;
 
     SetWinProtection(false);
+}
+
+
+ScExtDocOptions::ScExtDocOptions( void )
+{
+    Reset();
+}
+
+
+ScExtDocOptions::ScExtDocOptions( const ScExtDocOptions& rCpy )
+{
+    Reset();
+    *this = rCpy;
 }
 
 
@@ -605,7 +635,7 @@ void ScExtDocOptions::SetZoom( UINT16 nZaehler, UINT16 nNenner )
 
 void ScExtDocOptions::Add( const ColRowSettings& rCRS )
 {
-    const UINT16 nTab = rCRS.pExcRoot->pIR->GetScTab();
+    const UINT16 nTab = rCRS.pExcRoot->pIR->GetCurrScTab();
 
     if( nTab <= MAXTAB )
     {
