@@ -70,14 +70,14 @@ Public CONST CalBLThueringen     = 16
 Sub CalAutopilotTable()
 
 &apos; On Error Goto ErrorHandler
-	Application.LoadLibrary(&quot;tools&quot;)
+        Application.BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	&apos; HauptRoutine zur Erstellung des Kalenders
 	Set DlgBuffer = DlgCalendar
 
 	DlgBuffer.Load()
 	sCurLangLocale = StarDesktop.ISOLocale.Language
     LoadLanguage(sCurLangLocale)
-	&apos; Da modulübergreifende Variablen unsicher sind, 
+	&apos; Da modulübergreifende Variablen unsicher sind,
 	&apos; wird ihre Initialisierung noch einmal explizit
 	&apos; angegeben.
 	CalInitGlobalVariablesDate()
@@ -102,7 +102,7 @@ Sub CalAutopilotTable()
 	DlgBuffer.cmbState.ListIndex = 0
 
 	DlgBuffer.CurrentStep = 1
-	
+
 	DlgBuffer.Show()
 	Exit Sub
 
@@ -116,7 +116,7 @@ Sub CalChooseCalendar()
 	DlgBuffer.txtYear.Enabled = True
 	DlgBuffer.spinButton1.Enabled = True
 	DlgBuffer.cmbState.Enabled = True
-	
+
 	DlgBuffer.txtMonth.Enabled = DlgBuffer.optMonth.Value
 	DlgBuffer.lblMonth.Enabled = DlgBuffer.optMonth.Value
 	DlgBuffer.spinButton3.Enabled = DlgBuffer.optMonth.Value
@@ -147,12 +147,12 @@ Sub CalCmdOk()
 		End If
 	End If
 
-	oDocument = StarDesktop.ActiveFrame.Controller.Model      		
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oSheets = oDocument.sheets
-	If CalOwnDataChanged% Then 
+	If CalOwnDataChanged% Then
  		Call CalSaveOwnData()
     End If
-      		
+
 	&apos; Unprotect all tables so they can be deleted or modified
    	For i = 0 To oSheets.Count - 1
 		oSheets.GetbyIndex(i).unprotect(&quot;&quot;)
@@ -188,14 +188,14 @@ Sub CalCmdOk()
 	Call CalInsertOwnDataInTables(iSelYear)
 
 	oStatusline = oDocument.GetCurrentController.GetFrame.GetStatusIndicator
-			
-	If optYear.Value Then 
+
+	If optYear.Value Then
 		oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 		oSheet = oSheets.GetbyIndex(0)
 		oSheet.Name = sCalendarTitle$ + &quot; &quot; + txtYear.Text
 		oDocument.AddActionLock
 		Call CalCreateYearTable(iSelYear)
-	ElseIf optMonth.Value Then 
+	ElseIf optMonth.Value Then
 		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
 		oSheet = oSheets.GetbyIndex(0)
 		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames$(CalGetIntOfShortMonthName%(txtMonth.Text))

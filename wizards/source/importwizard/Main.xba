@@ -10,7 +10,7 @@ Public ImportDialog as Object
 Public ImportDialogArea as Object
 
 Sub Main
-	LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	sCRLF = CHR(10) &amp; CHR(13)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	If Not bDebugWizard Then
@@ -36,7 +36,7 @@ End Sub
 
 
 Sub SetStates
-	With ImportDialog	
+	With ImportDialog
 		.OptSODocuments.State = 1
 	    .OptMSDocuments.State = 0
 		.TemplateCheckbox.State = 1

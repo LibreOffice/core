@@ -11,7 +11,7 @@
 &apos; Namen von Notizenseiten mit Peter durchsprechen
 
 &apos; Macro-Description:
-&apos; This Macro extracts the Strings out of the currently activated document und inserts them into a logdocument 
+&apos; This Macro extracts the Strings out of the currently activated document und inserts them into a logdocument
 &apos; The aim of the macro is to provide the programmer an insight into the StarOffice API
 &apos; It focusses on how document-Objects are accessed.
 &apos; Therefor not only texts of the document-body are retrieved but also Texts of general
@@ -28,7 +28,7 @@ Dim sDocType as String
 Dim oHyperCursor as Object
 Dim oCharStyles as Object
 
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 
 	On Local Error GoTo NODOCUMENT
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
@@ -40,22 +40,22 @@ Dim oCharStyles as Object
 		Exit Sub
 	End If
 	On Local Error Goto 0
-		
+
 	&apos; Open a new document where all the texts are inserted
-	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs()) 
+	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs())
 	oLogText = oLogDocument.Text
 
 	&apos; create and define the character styles of the Log-document
 	oCharStyles = oLogDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
 	oLogHeaderStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oLogBodyTextStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
 	oCharStyles.InsertbyName(&quot;LogHeading&quot;, oLogHeaderStyle)
 	oCharStyles.InsertbyName(&quot;LogBodyText&quot;, oLogBodyTextStyle)
 
 	&apos; Insert the title of the activated document as a hyperlink
 	oHyperCursor = oLogText.createTextCursor()
-	oHyperCursor.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oHyperCursor.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oHyperCursor.gotoStart(False)
 	oHyperCursor.HyperLinkURL = oDocument.URL
 	oHyperCursor.HyperLinkTarget = oDocument.URL
@@ -84,7 +84,7 @@ Dim oCharStyles as Object
 		Case &quot;sDraw&quot;
 			GetDrawStrings()
 		Case Else
-			Msgbox(&quot;This Macro only works with Writer-, Calc or Draw/Impress-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;) 
+			Msgbox(&quot;This Macro only works with Writer-, Calc or Draw/Impress-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;)
 	End Select
 
 End Sub
@@ -92,7 +92,7 @@ End Sub
 
 &apos; ***********************************************Calc-Documents**************************************************
 
-Sub GetCalcStrings()		
+Sub GetCalcStrings()
 Dim i, n as integer
 Dim oSheet as Object
 Dim SheetName as String
@@ -117,7 +117,7 @@ Dim oSheets as Object
 
 		GetChartStrings(oSheet, &quot;Charts of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 
-		GetControlStrings(oSheet.DrawPage, &quot;Controls of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)		
+		GetControlStrings(oSheet.DrawPage, &quot;Controls of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 	Next
 
 	&apos; Pictures
@@ -127,10 +127,10 @@ Dim oSheets as Object
 End Sub
 
 
-Sub GetCellTexts(oSheet as Object)		
+Sub GetCellTexts(oSheet as Object)
 Dim BigRange, BigEnum, oCell as Object
 	BigRange = oDocument.CreateInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
-	BigRange.InsertbyName(&quot;&quot;,oSheet)	
+	BigRange.InsertbyName(&quot;&quot;,oSheet)
 	BigEnum = BigRange.GetCells.CreateEnumeration
 	While BigEnum.hasmoreElements
 		oCell = BigEnum.NextElement
@@ -147,7 +147,7 @@ Dim n as Integer
 	oNotes = oSheet.getAnnotations
 	If oNotes.hasElements() then
 		MakeLogHeadLine(HeaderLine)
-		For n = 0 to oNotes.Count-1 
+		For n = 0 to oNotes.Count-1
 			WriteStringtoLogFile(oNotes.GetbyIndex(n).String)
 		Next
 	End if
@@ -185,7 +185,7 @@ Dim i as integer
 Dim oCellNames()
 Dim oCell as Object
 
-	MakeLogHeadLine(HeadLine)	
+	MakeLogHeadLine(HeadLine)
 	ParaEnum = oParaObject.Text.CreateEnumeration
 
 	While ParaEnum.HasMoreElements
@@ -220,7 +220,7 @@ Dim i as Integer
 Dim aChartObject as Object
 Dim aChartDiagram as Object
 
-	MakeLogHeadLine(HeaderLine)		
+	MakeLogHeadLine(HeaderLine)
 
 	For i = 0 to oSheet.Charts.Count-1
 		aChartObject = oSheet.Charts.GetByIndex(i).EmbeddedObject
@@ -263,7 +263,7 @@ Dim oFrameTextPort as Object
 		oTextFrame = oDocument.TextFrames.GetbyIndex(i)
 		WriteStringToLogFile(oTextFrame.Name)
 
-		&apos; Is the frame bound to the Page 
+		&apos; Is the frame bound to the Page
 		If oTextFrame.AnchorType  = com.sun.star.text.TextContentAnchorType.AT_PAGE  Then
 			GetParagraphTexts(oTextFrame, &quot;Textframe Content&quot;)
 		End If
@@ -338,14 +338,14 @@ End Sub
 
 Sub GetWriterStrings()
 	GetParagraphTexts(oDocument, &quot;Document Body&quot;)
-	GetGraphicNames()		
+	GetGraphicNames()
 	GetStyles()
-	GetControlStrings(oDocument.DrawPage, &quot;Controls&quot;)		
+	GetControlStrings(oDocument.DrawPage, &quot;Controls&quot;)
 	GetTextFieldStrings()
 	GetSectionNames()
 	GetFrameTexts()
 	GetHyperLinks
-	GetLinkedFileNames()	
+	GetLinkedFileNames()
 End Sub
 
 
@@ -363,9 +363,9 @@ Dim oPage as Object
 			&apos; Get the Name of the NotesPage (only relevant for Impress-Documents)
 			If oDocument.supportsService(&quot;com.sun.star.presentation.PresentationDocument&quot;) then
 				WriteStringtoLogFile(oPage.NotesPage.Name)
-			End If	
+			End If
 		End If
-	Next		
+	Next
 End Sub
 
 
@@ -401,7 +401,7 @@ Dim oDPages, oMPages as Object
 	GetDrawPageTitles(oDPages)
 	GetDrawPageTitles(oMPages)
 
-	MakeLogHeadLine(&quot;Document Body&quot;)	
+	MakeLogHeadLine(&quot;Document Body&quot;)
 	GetPageStrings(oDPages)
 	GetPageStrings(oMPages)
 End Sub
@@ -467,7 +467,7 @@ End Sub
 Sub GetStyles()
 Dim m,n as integer
 	MakeLogHeadLine(&quot;Userdefined Templates&quot;)
-	
+
 	&apos; Check all StyleFamilies(i.e. PageStyles, ParagraphStyles, CharacterStyles, cellStyles)
 	For n = 0 to oDocument.StyleFamilies.Count - 1
 		For m = 0 to oDocument.StyleFamilies.getbyIndex(n).Count-1
@@ -482,7 +482,7 @@ End Sub
 Sub GetControlStrings(oDPage as Object, HeaderLine as String)
 Dim aForm as Object
 Dim m,n as integer
-	MakeLogHeadLine(HeaderLine)		
+	MakeLogHeadLine(HeaderLine)
 	&apos;SearchFor all possible Controls
 	For n = 0 to oDPage.Forms.Count - 1
 		aForm = oDPage.Forms(n)
@@ -541,12 +541,12 @@ End Sub
 &apos;Dim LeaveLoop as Boolean
 
 &apos;	oSearchDesc = oDocument.createSearchDescriptor()
-&apos;	oSearchDesc.SearchRegularExpression = True 
-&apos;	oSearchDesc.Searchstring = SearchString &amp; &quot;&quot;&quot;&quot; &amp; &quot;*&quot; &amp; &quot;&quot;&quot;&quot; 
-&apos;	oFoundall = oDocument.FindAll(oSearchDesc)	
+&apos;	oSearchDesc.SearchRegularExpression = True
+&apos;	oSearchDesc.Searchstring = SearchString &amp; &quot;&quot;&quot;&quot; &amp; &quot;*&quot; &amp; &quot;&quot;&quot;&quot;
+&apos;	oFoundall = oDocument.FindAll(oSearchDesc)
 
 &apos;	For i = 0 to oFoundAll.Count-1
-&apos;		oFound = oFoundall(i) 
+&apos;		oFound = oFoundall(i)
 &apos;		oTextCursor = oDocument.text.CreateTextCursorbyRange(oFound)
 &apos;		oTextCursor.GotoNextWord(false)
 &apos;		oTextCursor.GotoStartofWord(True)
@@ -555,7 +555,7 @@ End Sub
 &apos;		If	Left(TTString,1) = &quot;&quot;&quot;&quot; Then
 &apos;			LeaveLoop = False
 &apos;			oTextCursor.GoRight(1,True)
-&apos;			Do 			
+&apos;			Do
 &apos;				oTextCursor.GoRight(1,True)
 &apos;				TTString = TTString + Right(oTextCursor.String,1)
 &apos;				If Right(oTextCursor.String,1) = &quot;&quot;&quot;&quot; Then
@@ -579,7 +579,7 @@ End Sub
 &apos;		FileProperties(0).Value = &quot;swriter: TEXT&quot;
 &apos;		FilePath = oDocument.URL
 &apos;		oDocument.Dispose
-&apos;		
+&apos;
 &apos;		oDocument = OpenDocument(FilePath,FileProperties(),StarDesktop)   	&apos;!!!!!!!
 &apos;
 &apos;		MakeLogHeadLine(&quot;Alternativtexte&quot;)
@@ -606,7 +606,7 @@ Dim oDisp as Object
 	oUrl.Complete = &quot;slot:6517&quot;
 	oTrans.parsestrict(oUrl)
 
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)
 	oDisp.dispatch(oUrl, oArg())
 End Sub
 </script:module>

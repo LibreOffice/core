@@ -15,7 +15,7 @@ Dim i as Integer
 Const MBYES = 6
 Const MBABORT = 2
 Const MBNO = 7
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	Call SetLanguage
 
 	On Local Error GoTo NODOCUMENT
@@ -26,13 +26,13 @@ Const MBNO = 7
 		Exit Sub
 	End If
 	On Local Error Goto 0
-	
+
 	sDocType = GetDocumentType(oDocument)
 
 	If oDocument.IsModified And oDocument.Url &lt;&gt; &quot;&quot; Then
 		Status = MsgBox(NOTSAVEDTEXT, 3+32, MSGBOXTITLE)
 		Select Case Status
-			Case MBYES  
+			Case MBYES
 				oDocument.Store
 			Case MBABORT, MBNO
 				End
@@ -46,15 +46,15 @@ Const MBNO = 7
 
 	Select Case sDocType
 		Case &quot;sWriter&quot;
-			ReplaceAllStrings(oDocument)	
+			ReplaceAllStrings(oDocument)
 
 		Case Else
-			Msgbox(&quot;This Macro only works with Writer-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;) 
+			Msgbox(&quot;This Macro only works with Writer-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;)
 	End Select
 End Sub
 
 
-Sub ReplaceAllStrings(oContainer as Object)	
+Sub ReplaceAllStrings(oContainer as Object)
 	ReplaceStrings(oContainer, &quot;[a-z]&quot;, LOWERREPLACECHAR)
 	ReplaceStrings(oContainer, &quot;[à-þ]&quot;, LOWERREPLACECHAR)
 	ReplaceStrings(oContainer, &quot;[A-Z]&quot;, UPPERREPLACECHAR)
@@ -69,7 +69,7 @@ Sub ReplaceStrings(oContainer as Object, sSearchString, sReplaceString  as Strin
 	oReplaceDesc.SearchRegularExpression = True
 	oReplaceDesc.Searchstring = sSearchString
 	oReplaceDesc.ReplaceString = sReplaceString
-	oReplCount = oContainer.ReplaceAll(oReplaceDesc)	
+	oReplCount = oContainer.ReplaceAll(oReplaceDesc)
 End Sub
 
 
@@ -87,12 +87,12 @@ Dim ISOLanguage as String
 		Case &quot;fr&quot;
 			MSGBOXTITLE = &quot;Remplacer tous les caractères par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
 			NOTSAVEDTEXT = &quot;Le document a été modifé, la macro remplacera tous les caractères par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Enregistrer avant de procéder?&quot;
-			WARNING = &quot;La macro remplacera tous les caractères et nombres par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; dans le document.&quot; 
+			WARNING = &quot;La macro remplacera tous les caractères et nombres par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; dans le document.&quot;
 
 		Case &quot;it&quot;
 			MSGBOXTITLE = &quot;Sostituire tutti i caratteri &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
 			NOTSAVEDTEXT = &quot;Il documento è stato modificato, la macro sostituerà tutti i caratteri con &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Salvare il documento prima di procedere?&quot;
-			WARNING = &quot;La macro sostituirà tutti i caratteri e numeri con  &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; nel documento attivo.&quot; 	
+			WARNING = &quot;La macro sostituirà tutti i caratteri e numeri con  &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; nel documento attivo.&quot;
 
 		Case &quot;es&quot;
 			MSGBOXTITLE = &quot;Sustituir todos los caracteres por &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;

@@ -34,9 +34,9 @@ Public Tablename as String
 
 Sub MainWithDefault()
 &apos;On Local Error Goto GlobalError
-	LoadLibrary(&quot;tools&quot;)
-	LoadLibrary(&quot;webwizard&quot;)
-	bControlsareCreated = False	
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;webwizard&quot;)
+	bControlsareCreated = False
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
 		Exit Sub
 	End If
@@ -73,7 +73,7 @@ Dim i as Integer
 	oDialogModel.cmdBack.Enabled = False
 	oDialogModel.cmdGoOn.Enabled = False
 	oDialogModel.lblTables.Enabled = False
-	oDialogModel.lstSelFields.Tag = False	
+	oDialogModel.lstSelFields.Tag = False
 	ToggleListboxControls(oDialogModel, False)
 	oDialogModel.Step = 1
 	oDialogModel.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
@@ -96,7 +96,7 @@ End Sub
 Function AddListtoList(FirstArray(), SecondArray(), Optional StarIndex)
 Dim n as Integer
 Dim m as Integer
-Dim MaxIndex as Integer	
+Dim MaxIndex as Integer
 	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
 	Dim ResultArray(MaxIndex)
 	For m = 0 To Ubound(FirstArray())
@@ -108,7 +108,7 @@ Dim MaxIndex as Integer
 	Next n
 	AddListToList() = ResultArray()
 End Function
-	
+
 
 Sub FormGetFields()
 Dim i as Integer
@@ -171,12 +171,12 @@ Sub NextStep()
 	Select Case oDialogModel.Step
 		Case 1
 			GetTableMetaData()
-			CreateDBForm()	
+			CreateDBForm()
 			InitializeLayoutSettings()
 			oDialogModel.Step = 2
 		Case 2
 			oDialogModel.cmdGoOn.Label = Form_5_cmdReady
-			ToggleControlsofLastPage()				
+			ToggleControlsofLastPage()
 			oDialogModel.Step = 3
 		Case 3
 			HandleCreatedDocument()
@@ -196,10 +196,10 @@ Sub InitializeLayoutSettings()
 		ToggleAlignGroup(False)
 		ArrangeControls()
 	End If
-		
+
 	&apos; Todo: Hier die Grafik Urls der ImageControls setzen.
 	&apos; Alternativ würde es vielleicht reichen die Border auf 3-D zu setzen
-End Sub	
+End Sub
 
 
 Sub HandleCreatedDocument()

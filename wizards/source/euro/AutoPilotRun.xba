@@ -19,7 +19,7 @@ Public UnprotectList(50,1) as String
 Public DoUnprotect as Integer
 Public Password as String
 Public DocIndex as Integer
-Public oPathSettings as Object	
+Public oPathSettings as Object
 Public oDocInfo as Object
 Public oUcb as Object
 Public TotDocCount as Integer
@@ -27,7 +27,7 @@ Public sTotDocCount as String
 
 Sub StartAutoPilot()
 Dim i As Integer
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
@@ -39,7 +39,7 @@ Dim i As Integer
 End Sub
 
 
-Sub ConvertDocuments()		
+Sub ConvertDocuments()
 Dim FilesList()
 Msgbox DialogModel.lblSource.Label
 	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
@@ -115,7 +115,7 @@ Function StoreDocument()
 	If TargetFile &lt;&gt; &quot;&quot; Then
 		On Local Error Goto NOSAVING
 		If TargetFile &lt;&gt; SourceFile Then
-			oDocument.StoreToUrl(TargetFile,NoArgs) 
+			oDocument.StoreToUrl(TargetFile,NoArgs)
 		Else
 			oDocument.Store
 		End If
@@ -152,7 +152,7 @@ End Sub
 
 Sub SourceSearchDialog()
 	If DialogModel.optWholeDir.State = 1 Then
-		&apos;Konvertierung eines gesamten Verzeichnisses	
+		&apos;Konvertierung eines gesamten Verzeichnisses
 		Source = Application.FileDialog( &quot;P&quot;, sMsgSELDIR, DialogModel.txtSource.Text )  &apos; &quot;WÃ¤hlen Sie ein Verzeichnis&quot;
 	Else
 		Source = Application.FileDialog( &quot;O&quot;, sMsgSELFILE, DialogModel.txtSource.Text ) &apos; &quot;WÃ¤hlen Sie eine Datei&quot;
@@ -195,14 +195,14 @@ Dim sNoDirMessage as String
 			End If
 		End if
 	Else
-		Msgbox(HeaderString &amp; &quot; &apos;&quot; &amp; sPath &amp; &quot;&apos; &quot; &amp;  sMsgNOTTHERE,48, sMsgDLGTITLE)	
+		Msgbox(HeaderString &amp; &quot; &apos;&quot; &amp; sPath &amp; &quot;&apos; &quot; &amp;  sMsgNOTTHERE,48, sMsgDLGTITLE)
 	End If
 	If bIsValid Then
 		AssignFileName() = sPath
 	Else
 		AssignFilename() = &quot;&quot;
 	End If
-End Function	
+End Function
 
 
 
@@ -227,8 +227,8 @@ Dim sStatustext as String
 			If oListSheet.IsProtected Then
 				&apos; Sheet is protected by a Password
 				oDocument.CurrentController.SetActiveSheet(oListSheet)
-		
-				QueryText = ReplaceString(sMsgPWPROTECT,&quot;&apos;&quot; &amp; ListSheetName &amp; &quot;&apos;&quot;, &quot;%1TableName%1&quot;) 
+
+				QueryText = ReplaceString(sMsgPWPROTECT,&quot;&apos;&quot; &amp; ListSheetName &amp; &quot;&apos;&quot;, &quot;%1TableName%1&quot;)
 				&apos;&quot;Geben Sie das Kennwort zum EntschÃ¼tzen der Tabelle &apos;&quot; &amp; ListSheetName &amp; &quot; ein:&apos;&quot;
 				Do
 					InitializePasswordDialog()
@@ -256,7 +256,7 @@ Dim sStatustext as String
 			End If
 		Else
 			&apos; The Answer is &apos;No&apos; (Tables shall not be unprotected)
-			If OldDoUnprotect = 0 Then 
+			If OldDoUnprotect = 0 Then
 				Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
 			End If       &apos;&quot;Tabellen werden nicht entschÃ¼tzt!&quot;
 			Unprotectsheet = False
@@ -315,11 +315,11 @@ End Sub
 &apos; unprotected
 Sub AddSheettoUnprotectionlist(ListSheetName,Password)
 	UnprotectList(Int(UnProtectList(0,0))+ 1,0) = ListSheetName
-	UnprotectList(Int(UnProtectList(0,0))+ 1,1) = Password		
+	UnprotectList(Int(UnProtectList(0,0))+ 1,1) = Password
 	&apos; The first Field contains the highest Index of the list
 	&apos; and therefor has to be incremented
 	UnprotectList(0,0) = Str(Val(UnProtectList(0,0)) + 1)
-End Sub	
+End Sub
 
 
 Sub HelperDialog()
@@ -331,7 +331,7 @@ End Sub
 Sub	InitializeThirdStep()
 Dim TextBoxText as String
 	DialogModel.lblCurrencies.Visible = False
-	DialogModel.lstCurrencies.Visible = False 
+	DialogModel.lstCurrencies.Visible = False
 	DialogModel.cmdBack.Label = sBACK
 	DialogModel.LabelRetrieval.FontBold = True
 	DialogModel.LabelRetrieval.Label = sPrgsRETRIEVAL
@@ -339,14 +339,14 @@ Dim TextBoxText as String
 	DialogModel.cmdGoOn.Visible = False
 	DialogModel.Step = 3
 	If DialogModel.optWholeDir.State = 1 Then
-		TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot; 
+		TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
 		If DialogModel.chkRecursive.State = 1 Then
-			TextBoxText = TextBoxText &amp; DeleteStr(sSUBDIR,&quot;&amp;&quot;) &amp; chr(13)&apos; &amp; &quot; &quot; 
+			TextBoxText = TextBoxText &amp; DeleteStr(sSUBDIR,&quot;&amp;&quot;) &amp; chr(13)&apos; &amp; &quot; &quot;
 		End If
 	Else
-		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot; 
+		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
 	End If
-	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)&apos; &amp; &quot; &quot; 
+	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)&apos; &amp; &quot; &quot;
 	If DialogModel.chkProtect.State = 1 Then
 		TextBoxText = TextboxText &amp; sPrgsUNPROTECT
 	End If
@@ -358,9 +358,9 @@ End Sub
 Sub SwitchBack()
 	DialogModel.Step = 2
 	DialogModel.lblCurrencies.Visible = True
-	DialogModel.lstCurrencies.Visible = True 
+	DialogModel.lstCurrencies.Visible = True
 	DialogModel.cmdBack.Visible = False
-	DialogModel.cmdGoOn.Visible = True	
+	DialogModel.cmdGoOn.Visible = True
 End Sub
 
 

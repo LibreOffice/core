@@ -2,13 +2,13 @@
 
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
 &apos; Todo Den Bug mit der Statuszeilengeschichte Ã¼berprÃ¼fen
-&apos; Todo Vorselektion der Listbox 
+&apos; Todo Vorselektion der Listbox
 &apos; Mauspointer umschalten:
 
 &apos; Todo: Sinnigkeit von &apos;DocDisposed&apos; noch einmal überprüfen
 
 Sub Main()
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		DoUnProtect = 0
 		bPreSelected = True
@@ -78,7 +78,7 @@ Dim AddStyle as Boolean
 					oSheetRanges = oCursheet.CellFormatRanges.createEnumeration
 					While oSheetRanges.hasMoreElements
 						oRange = oSheetRanges.NextElement
-						If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then	
+						If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
 							If oRange.CellStyle = CurStyleName Then
 								oSelRanges.InsertbyName(&quot;&quot;,oRange)
 							End If
@@ -94,7 +94,7 @@ Dim AddStyle as Boolean
 			For n = 0 To Ubound(Listbox.SelectedItems())
 				m = Listbox.SelectedItems(n)
 				RangeName = Listbox.StringItemList(m)
-				oListSheet = RetrieveSheetoutofRangeName(RangeName)	
+				oListSheet = RetrieveSheetoutofRangeName(RangeName)
 				AddRange = UnprotectSheet(oListSheet)
 &apos; Todo: Klären wie das am besten geht!
 				If Not AddRange Then
@@ -103,9 +103,9 @@ Dim AddStyle as Boolean
 					SelRangeList(a) = RangeName
 					SelRangeList(0) = Str(a)
 					a = a + 1
-					If oListSheet.Name = sCurSheetName Then				
+					If oListSheet.Name = sCurSheetName Then
 						oRange = RetrieveRangeoutofRangeName(RangeName)
-						oSelRanges.InsertbyName(&quot;&quot;,oRange)		
+						oSelRanges.InsertbyName(&quot;&quot;,oRange)
 					End If
 				End If
 			Next n
@@ -158,7 +158,7 @@ Dim bNoLBSelection as Boolean
 End Sub
 
 
-Sub ConvertRangesOrStylesOfDocument()	
+Sub ConvertRangesOrStylesOfDocument()
 Dim i as Integer
 Dim Listbox as Object
 Dim ItemName as String
@@ -229,10 +229,10 @@ Dim OldCurrIndex as Integer
 	If DialogModel.Step = 1 Then
 		If OldCurrIndex = -1 Then
 			DialogModel.chkComplete.State = 1
-			EnableStep1DialogControls(True,False, True)		
+			EnableStep1DialogControls(True,False, True)
 			SetOptionValuestoNull()
 		Else
-			EnableStep1DialogControls(False,False, False)		
+			EnableStep1DialogControls(False,False, False)
 			If DialogModel.optCellTemplates.State = 1 Then
 				EnableStep1DialogControls(False, False, False)
 				CreateStyleEnumeration()
@@ -243,9 +243,9 @@ Dim OldCurrIndex as Integer
 				CreateRangeEnumeration(False)
 			ElseIf DialogModel.optSelRange.State= 1 Then
 				&apos;Preselected Range
-				CheckRangeSelection()				
+				CheckRangeSelection()
 			End If
-			EnableStep1DialogControls(True, True, True)	
+			EnableStep1DialogControls(True, True, True)
 		End If
 	ElseIf DialogModel.Step = 2 Then
 		EnableStep2DialogControls(True)
@@ -311,8 +311,8 @@ Dim OldCurExtension(1) as String
 	AddSelectedRangeToSelRangesEnum()
 	bPreSelected =  CheckIfRangeisCurrency(oRange)
  	If bPreSelected Then
-&apos; Todo: Array als ganzes übergeben! 
-		OldCurrSymbolList() = CurrSymbolList()		
+&apos; Todo: Array als ganzes übergeben!
+		OldCurrSymbolList() = CurrSymbolList()
 		OldCurExtension() = CurExtension()
 		OldCurrIndex = CurrIndex
 		For i = 0 To 10
@@ -389,7 +389,7 @@ Dim LocCountry as String
 Dim LocLanguage as String
 	LocCountry = oLocale.Country
 	LocLanguage = oLocale.Language
-	For i = 0 To 1 
+	For i = 0 To 1
 		If LocLanguage = LangIDValue(CurrIndex,i,0) AND LocCountry = LangIDValue(CurrIndex,i,1) Then
 			CheckLocale = True
 			Exit Function

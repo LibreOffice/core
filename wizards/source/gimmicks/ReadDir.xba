@@ -38,8 +38,8 @@ Public oOldArrivingLine As Object
 
 
 Sub Main
-	LoadLibrary(&quot;tools&quot;)
-	LoadLibrary(&quot;template&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Template&quot;)
 	ReadDirDlg.Load
 	ReadDirDlg.Show
 End Sub
@@ -54,7 +54,7 @@ Dim oPage As Object
 Dim oOldPage As Object
 Dim i, n, s  as Integer
 Dim bStartUpRun As Boolean
-Dim FileNames(600,2) as String 
+Dim FileNames(600,2) as String
 Dim CurFile as String
 Dim BaseLevel as Integer
 Dim oController as Object
@@ -67,25 +67,25 @@ Dim oStatusline as Object
 	nOldX = SBPAGEX
 	nOldWidth = SBPAGEX
 	iCurPage = 0
-	
+
 	oDesktop = createUnoService(&quot;com.sun.star.frame.Desktop&quot;)
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oPage = oDocument.DrawPages(iCurPage)
 	oStatusline = oDocument.GetCurrentController.GetFrame.GetStatusIndicator
 	oStatusLine.Start(&quot;Fortschritt:&quot;,100)
 	oController = oDocument.GetCurrentController
-	Source = ConvertToURL(ReadDirdlg.Textbox1.Text) 
+	Source = ConvertToURL(ReadDirdlg.Textbox1.Text)
 	BaseLevel = CountCharsInString(Source, &quot;/&quot;, 1)
 
-	oStatusline.SetValue(2)	
+	oStatusline.SetValue(2)
 	FileNames() = ReadSourceDirectory(Source)
 	oStatusline.SetValue(8)
 	FileNames() = BubbleSortList(FileNames())
 	oStatusline.SetValue(10)
-	
+
 	FileCount = Val(FileNames(0,0))
 	For i = 1 To FileCount
-		oStatusLine.SetValue(10 + i/FileCount * 90) 
+		oStatusLine.SetValue(10 + i/FileCount * 90)
 		CurFile = FileNames(i,1)
 		iCurLevel= CountCharsInString(FileNames(i,0), &quot;/&quot;, 1) - BaseLevel
 		If iCurLevel &lt;&gt; 0 Then
@@ -117,11 +117,11 @@ REM	ck			                           SBNEWENDX, SBNEWENDY)
 
 REM	 The Current TextShape has To be connected with a TextShape
 REM  one Level higher
-REM	 - except For a TextShape In Level 0 
+REM	 - except For a TextShape In Level 0
 
 REM	 Line Coordinates
-		If Not bStartUpRun Then		
-		
+		If Not bStartUpRun Then
+
 REM	 A leaving Line Is only drawn when level is not 0
 			If iCurLevel&lt;&gt; 0 Then
 REM	 Determine the Coordinates of the arriving Line
@@ -137,7 +137,7 @@ REM	 Determine the End-Coordinates of the last leaving Line
 				iLevelPos(nConnectLevel,SBNEWENDX) = iLevelPos(nConnectLevel,SBNEWSTARTX)
 				iLevelPos(nConnectLevel,SBNEWENDY) = oCurTextShape.Position.Y + 0.5 * oCurTextShape.Size.Height
 			Else
-REM	On Level 0 the last Leaving Line&apos;s endpoint 
+REM	On Level 0 the last Leaving Line&apos;s endpoint
 REM is the upper edge of the textShape
 				iLevelPos(nConnectLevel,SBNEWENDY) = oCurTextShape.Position.Y
 				iLevelPos(nConnectLevel,SBNEWENDX) = iLevelPos(nConnectLevel,SBNEWSTARTX)
@@ -152,7 +152,7 @@ REM	 StartingPoint of the leaving edge
 REM	 Determine the beginning Coordinates of the leaving Line
 		iLevelPos(iCurLevel,SBNEWSTARTX) = iLevelPos(iCurLevel,SBBASEX) + 0.5 * oCurTextShape.Size.Width
 		iLevelPos(iCurLevel,SBNEWSTARTY) = iLevelPos(iCurLevel,SBBASEY) + oCurTextShape.Size.Height
-		
+
 REM	Save the values For the Next run
 		nOldHeight = oCurTextShape.Size.Height
 		nOldX = oCurTextShape.Position.X
@@ -174,11 +174,11 @@ Dim PageWidth, BaseX, TextWidth
 Dim aPoint As New com.sun.star.awt.Point
 Dim aSize As New com.sun.star.awt.Size
 
-	aSize.Width = SBBASEWIDTH  
-	aSize.Height = SBBASEHEIGHT 
+	aSize.Width = SBBASEWIDTH
+	aSize.Height = SBBASEHEIGHT
 
 	aPoint.x = CalculateXPoint()
-	aPoint.y = nOldY + SBRELDIST * nOldHeight  
+	aPoint.y = nOldY + SBRELDIST * nOldHeight
 	nOldY  = aPoint.y
 
 	oTextShape = oDocument.createInstance(&quot;com.sun.star.drawing.TextShape&quot;)
@@ -187,7 +187,7 @@ Dim aSize As New com.sun.star.awt.Size
 
 	oPage.add(oTextShape)
 	oTextShape.LineStyle = 1
-	oTextShape.Charheight = SBBASECHARHEIGHT 
+	oTextShape.Charheight = SBBASECHARHEIGHT
 	oTextShape.TextAutoGrowWidth = TRUE
 	oTextShape.TextAutoGrowHeight = TRUE
 	oTextShape.String = FileName
@@ -206,7 +206,7 @@ REM	 Configure Size And Position of the TextShape  according to its Scripting
 	End If
 	oTextShape.Size = aSize
 	iLevelPos(iCurLevel,SBBASEY) = oTextShape.Position.Y
-	CreateTextShape = oTextShape	
+	CreateTextShape = oTextShape
 End Function
 
 
@@ -227,7 +227,7 @@ End Function
 
 
 
-Function DrawLine(nLevel, nStartX, nStartY, nEndX, nEndY As Integer, oPage as Object) 
+Function DrawLine(nLevel, nStartX, nStartY, nEndX, nEndY As Integer, oPage as Object)
 Dim oConnect As Object
 
 	aPoint.X = iLevelPos(nLevel,nStartX)
@@ -262,14 +262,14 @@ Dim FileName as string
 Dim FileNameList(2000,1) as String
 Dim DirList(200) as String
 Dim oUCBobject as Object
-	
+
 	oUcbobject = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	&apos;isfolder
 	m = 0
 	s = 1
 	DirList(0) = Source
-	FileNameList(1,0) = Source 
-	FileNameList(1,1) = GetFileNameoutofPath(Source) 
+	FileNameList(1,0) = Source
+	FileNameList(1,1) = GetFileNameoutofPath(Source)
 	n = 2
 	Do
 		Source = DirList(m)
@@ -282,7 +282,7 @@ Dim oUCBobject as Object
 			For i = 0 to FilecountinDir -1
 				FileName = DirContent(i)
 				FilenameList(n,0) = FileName
-				FileNameList(n,1) = GetFileNameOutofPath(FileName)				
+				FileNameList(n,1) = GetFileNameOutofPath(FileName)
 				n = n + 1
 				If oUcbObject.IsFolder(FileName) Then
 					DirList(s) = FileName

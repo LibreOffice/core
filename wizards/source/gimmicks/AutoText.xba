@@ -11,27 +11,27 @@ Dim oAutoTextContainer, oAutogroup, oAutoText as Object
 Dim oCharStyles, oContentStyle, oHeaderStyle, oGroupTitleStyle as Object
 Dim n, m, iAutoCount as Integer
 
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	LoadLanguage(StarDesktop.ISOLocale.Language)
 
-	&apos; Open a new empty document 
+	&apos; Open a new empty document
 	oDocument = StarDesktop.LoadComponentFromURL(&quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs)
 	oDocuText = oDocument.Text
 
 	&apos; Create The Character-templates
 	oCharStyles = oDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
-	
+
 	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
 	oGroupTitleStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oGroupTitleStyle.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oGroupTitleStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oGroupTitleStyle.CharHeight = 14
 	oCharStyles.InsertbyName(&quot;AutoTextGroupTitle&quot;, oGroupTitleStyle)
 
 	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
 	oHeaderStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oCharStyles.InsertbyName(&quot;AutoTextHeading&quot;, oHeaderStyle)
-	
+
 	&apos; &quot;Ordinary&quot; Table Content
 	oContentStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
 	oCharStyles.InsertbyName(&quot;TableContent&quot;, oContentStyle)

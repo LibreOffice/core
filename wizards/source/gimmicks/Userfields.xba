@@ -17,7 +17,7 @@ Sub StartChangesUserfields
 Dim a as Integer
 Dim CurElement, TFMaster as Object
 
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	LoadLanguage(StarDesktop.ISOLocale.Language)
 	ScrollBarValue = 0
 	UserFieldDatatype(0) = &quot;COMPANY&quot;
@@ -32,9 +32,9 @@ Dim CurElement, TFMaster as Object
 	UserFieldDatatype(9) = &quot;POSITION&quot;
 	UserFieldDatatype(10) = &quot;PHONE_PRIVATE&quot;
 	UserFieldDatatype(11) = &quot;PHONE_COMPANY&quot;
-	UserFieldDatatype(12) = &quot;FAX&quot;   
-	UserFieldDatatype(13) = &quot;EMAIL&quot;  
-	UserFieldDatatype(14) = &quot;STATE&quot;  
+	UserFieldDatatype(12) = &quot;FAX&quot;
+	UserFieldDatatype(13) = &quot;EMAIL&quot;
+	UserFieldDatatype(14) = &quot;STATE&quot;
 
 	On Local Error GoTo NODOCUMENT
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
@@ -45,7 +45,7 @@ Dim CurElement, TFMaster as Object
 		Exit Sub
 	End If
 	On Local Error Goto 0
-	
+
 	&apos; Define TextFields
 	aTextfield = oDocument.getTextfields
 	aTextFieldEnum = aTextField.CreateEnumeration
@@ -111,14 +111,14 @@ End Sub
 
 Sub Dlg_Scroll(ScrollValue)
 	Call ChangeArray(ScrollBarValue)
-	ScrollBarValue = UserfieldDlg.VScrollbar.Value 
+	ScrollBarValue = UserfieldDlg.VScrollbar.Value
 	If (ScrollBarValue + MaxFieldCount) &gt; iUserFieldCount Then
 		ScrollBarValue = iUserFieldCount - MaxFieldCount
 	End If
 
 	For a = 1 To MaxFieldCount
 		LabelArray(a).Caption = UserFieldName(a + ScrollBarValue)
-		EditArray(a).Text = UserFieldValue(a + ScrollBarValue)	
+		EditArray(a).Text = UserFieldValue(a + ScrollBarValue)
 	Next a
 End Sub
 
@@ -191,6 +191,6 @@ Sub SetDialogText
 	UserfieldDlg.caption = HeaderLabel
 	UserfieldDlg.HeaderLabel.Caption = HeaderLabel
 	UserfieldDlg.CancelChanges.Caption = CancelButton
-	UserfieldDlg.SaveChanges.Caption = SaveButton	
+	UserfieldDlg.SaveChanges.Caption = SaveButton
 End Sub
 </script:module>

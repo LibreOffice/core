@@ -10,7 +10,7 @@ Public DialogExited
 Public oDocument, oText, oBookMarks, oBookMark, oBookMarkCursor, oBookText as Object
 
 Sub Main
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	TemplateDialog = LoadDialog(&quot;Template&quot;, &quot;TemplateDialog&quot;)
 	DialogModel = TemplateDialog.Model
 	DialogModel.Step = 2
@@ -54,13 +54,13 @@ Dim oFields as Object
 		msgError$ = GetResText(1302)
 		DialogModel.Title = GetResText(1303)
 		DialogModel.CmdCancel.Label = GetResText(1102)
-		DialogModel.CmdCorrGoOn.Label = GetResText(1103)		
+		DialogModel.CmdCorrGoOn.Label = GetResText(1103)
 		DialogModel.OptSingle.Label = GetResText(1303 + 1)
 		DialogModel.Optmerge.Label = GetResText(1303 + 2)
 		LoadLanguageCorrespondence() = True
 	Else
-&apos; Todo: Meldung, was Passiert wenn Datenbank nicht angelegt werden konnte	
-		LoadLanguageCorrespondence() = False	
+&apos; Todo: Meldung, was Passiert wenn Datenbank nicht angelegt werden konnte
+		LoadLanguageCorrespondence() = False
 	End If
 End Function
 
@@ -209,7 +209,7 @@ Dim oDisp as Object
 	oUrl.Complete = &quot;slot:6517&quot;
 	oTrans.parsestrict(oUrl)
 
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)
 	oDisp.dispatch(oUrl, oArg())
 End Sub
 </script:module>

@@ -6,7 +6,7 @@ Public BulletList(7) as Integer
 
 Sub Main()
 	&apos; Initialization...
-	LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 
 	UserfieldDatatype(0) = &quot;COMPANY&quot;
 	UserfieldDatatype(1) = &quot;FIRSTNAME&quot;

@@ -50,7 +50,7 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
 				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_blank&quot;,0, mFileProperties())
 				PrepareForEditing() = oNewDocument
 &apos;        		If IsFatOffice() Then
-          			&apos; If opened within a FatOffice Environment close doc. 
+          			&apos; If opened within a FatOffice Environment close doc.
           			&apos; Note: Due to a bug in Web office it is not possible to close the doc there
 					oDocument.Dispose()
  &apos;       		End If
@@ -75,7 +75,7 @@ Dim sFilterName(0) as String
 Dim StyleNames() as String
 Dim t as Integer
 Dim MaxIndex as Integer
-	LoadLibrary(&quot;Tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
 		oDocument = StarDesktop.ActiveFrame.Controller.Model
 		If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then

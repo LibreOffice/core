@@ -42,7 +42,7 @@ Public DialogModel as Object
 
 Sub Main
 &apos;On Local Error Goto GlobalErrorHandler
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
 	oViewSettings = oBaseDocument.CurrentController.ViewSettings
@@ -65,7 +65,7 @@ Sub Main
 	oCursor = oBasedocument.Text.CreateTextCursor
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 	SetProgressValue(40)
-	DialogModel.optTiled.State = 1	
+	DialogModel.optTiled.State = 1
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, MainDialog, &quot;lbStyles&quot;, Style())
 	SetProgressValue(50)
 	LoadWebPageStyles(oBaseDocument)
@@ -82,7 +82,7 @@ GLOBALERRORHANDLER:
 End Sub
 
 
-Function SetProgressValue(iValue as Integer)	
+Function SetProgressValue(iValue as Integer)
 	If iValue = 0 Then
 		ProgressBar.End
 	End If
@@ -104,7 +104,7 @@ Dim CurInd as Integer
 	oCursor.GotoEnd(True)
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 	SetBulletAndGraphics
-	CheckControls(oBaseDocument.DrawPage)	
+	CheckControls(oBaseDocument.DrawPage)
 ErrorOcurred:
 	If Err &lt;&gt; 0 Then
 		MsgBox(WebWiz_gErrWhileReloading$, 16, WebWiz_gWizardName$)
@@ -135,7 +135,7 @@ Dim CurIndex as Integer
 	End With
 	SetBulletAndGraphics()
 	CheckControls(oBaseDocument.DrawPage)
-	oViewCursor.GotoStart(False)	
+	oViewCursor.GotoStart(False)
 	oBaseDocument.UnlockControllers
 	ToggleWindow(True)
 End Sub
@@ -195,7 +195,7 @@ End Sub
 Sub EndDialog()
 	If DialogModel.chkSaveasTemplate.State = 1 Then
 		&apos; Generating template? Set events later!
-		AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;WebWizard.HtmlAutoPilotBasic.SetEvent()&quot;)	
+		AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;WebWizard.HtmlAutoPilotBasic.SetEvent()&quot;)
 		&apos; Call the Store template dialog
 		DispatchSlot(5538)
 	Else
@@ -220,10 +220,10 @@ Dim oDocument as Object
 &apos; from the AutoPilot or from a template. It is not possible to set these
 &apos; links for the template created by the AutoPilot because then it is not
 &apos; possible to modify the template.
-	LoadLibrary(&quot;tools&quot;)
+        BasicLibraries.LoadLibrary(&quot;tools&quot;)
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
-	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
-	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
 End Sub
 
 
@@ -236,13 +236,13 @@ Dim i as Integer
 Dim GraphicFilePath as String
 Dim SavePath$
 Dim GraphicFileName as String
-	LoadLibrary(&quot;tools&quot;)
-	GetPaths()	
+        BasicLibraries.LoadLibrary(&quot;tools&quot;)
+	GetPaths()
 	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
 	Msgbox oBaseDocument.Url
 	SavePath = oBaseDocument.Url
 	oGraphicObjects = oBaseDocument.GraphicObjects
-	
+
 	For i = 0 to oGraphicObjects.Count-1
 		oGraphic = oGraphicObjects.GetbyIndex(i)
 		GraphicFilePath = oGraphic.GraphicURL
@@ -255,7 +255,7 @@ Dim GraphicFileName as String
 	FileCopy BulletDir &amp; GraphicFileName, SavePath &amp; GraphicFileName
 
 	SetBulletGraphics(GraphicFileName)
-	
+
 &apos;	&apos; Copy background graphic
 &apos;	If ActiveWindow.Page.GrfFilename&lt;&gt;&quot;&quot; Then
 &apos;		&apos; Set new background graphic
@@ -298,11 +298,11 @@ Dim a as Integer
 Dim SelList(0) as Integer
 Dim LocMaxIndex as Integer
 	oListboxControl = oDialog.GetControl(ListboxName)
-	
+
 	oDocInfo = createUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
-	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)	
+	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
 	LocMaxIndex = Ubound(DirContent())
 	a = 0
@@ -385,7 +385,7 @@ Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
 			oLevel() = oRules.GetByIndex(n)
 			bDoReplace = ModifyPropertyValue(oLevel(), oNumberingBuffer())
 			If bDoReplace Then
-				oRules.ReplaceByIndex(n, oNumberingBuffer())		
+				oRules.ReplaceByIndex(n, oNumberingBuffer())
 			End If
 		Next n
 		oBookmarkCursor.NumberingRules = oRules
@@ -394,7 +394,7 @@ Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
 		oNewBuffer(1).Name = &quot;GraphicSize&quot;
 		oSize.Height = 300
 		oSize.Width = 300
-		oNewBuffer(1).Value = oSize		
+		oNewBuffer(1).Value = oSize
 		For n = 0 To oRules.Count - 1
 			oLevel() = oRules.GetByIndex(0)
 			bDoReplace = ModifyPropertyValue(oLevel(), oNewBuffer())
@@ -444,7 +444,7 @@ Dim BackGroundURL as String
 Dim oBackGraph as Object
 Dim i, BackColor as Long
 Dim oFamilies as Object, oFamily as Object, oStyle as Object
-Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue	
+Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 
 	If SourceFile &lt;&gt; &quot;&quot; Then
 		StylesOptions(0).Name = &quot;OverwriteStyles&quot;
@@ -463,7 +463,7 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 	End If
 	oFamilies = oDocument.StyleFamilies
 	oFamily = oFamilies.GetbyName(&quot;PageStyles&quot;)
-&apos;	oStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)	
+&apos;	oStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
 	For i = 0 To oFamily.Count - 1
 		If oFamily.GetByIndex(i).IsInUse Then
 			oStyle = oFamily.GetbyIndex(i)
@@ -510,7 +510,7 @@ Dim oLocDocument as Object
 	oFamilies = oLocDocument.StyleFamilies
 	oFamily = oFamilies.GetbyName(&quot;PageStyles&quot;)
 	For i = 0 To oFamily.Count - 1
-		If oFamily.GetByIndex(i).IsInUse Then	
+		If oFamily.GetByIndex(i).IsInUse Then
 			oStyle = oFamily.GetbyIndex(i)
 			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
 				oStyle.BackGraphicLocation = iBackgroundValue
