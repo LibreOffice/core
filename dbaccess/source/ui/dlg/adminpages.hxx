@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:22:44 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 15:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,12 +199,15 @@ protected:
     virtual void Reset(const SfxItemSet& _rCoreAttrs);
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+    virtual sal_Bool checkItems(const SfxItemSet& _rSet);
 
     virtual void GetFocus();
 
 protected:
     void onTypeSelected(DATASOURCE_TYPE _eType);
     void initializeHistory();
+
+    sal_Bool isBrowseable(DATASOURCE_TYPE _eType) const;
 
     DECL_LINK(OnDatasourceTypeSelected, ListBox*);
     DECL_LINK(OnBrowseConnections, PushButton*);
@@ -453,6 +456,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/10/30 15:22:44  fs
+ *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
+ *
  *  Revision 1.7  2000/10/24 12:11:15  fs
  *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
  *

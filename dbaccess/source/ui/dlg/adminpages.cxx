@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 14:18:21 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 15:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,24 +289,23 @@ void OGeneralPage::GetFocus()
 }
 
 //-------------------------------------------------------------------------
-void OGeneralPage::onTypeSelected(DATASOURCE_TYPE _eType)
+sal_Bool OGeneralPage::isBrowseable(DATASOURCE_TYPE _eType) const
 {
-    sal_Bool    bBrowseable = sal_False;    // enable or disable the browse button ?
-
     switch (_eType)
     {
         case DST_DBASE:
         case DST_TEXT:
         case DST_ADABAS:
         case DST_ODBC:
-            bBrowseable = sal_True;
-            break;
-        default:
-            bBrowseable = sal_False;
-            break;
+            return sal_True;
     }
+    return sal_False;
+}
 
-    m_aBrowseConnection.Enable(bBrowseable);
+//-------------------------------------------------------------------------
+void OGeneralPage::onTypeSelected(DATASOURCE_TYPE _eType)
+{
+    m_aBrowseConnection.Enable(isBrowseable(_eType));
 
     // update the selection history
     m_aSelectionHistory[m_eCurrentSelection] = m_aConnection.GetText();
@@ -317,6 +316,20 @@ void OGeneralPage::onTypeSelected(DATASOURCE_TYPE _eType)
 
     if (m_aTypeSelectHandler.IsSet())
         m_aTypeSelectHandler.Call(this);
+}
+
+//-------------------------------------------------------------------------
+sal_Bool OGeneralPage::checkItems(const SfxItemSet& _rSet)
+{
+    if (0 == m_aName.GetText().Len())
+    {
+        String sErrorMsg(ModuleRes(STR_ERR_EMPTY_DSN_NAME));
+        ErrorBox aErrorBox(GetParent(), WB_OK, sErrorMsg);
+        aErrorBox.Execute();
+        m_aName.GrabFocus();
+        return sal_False;
+    }
+    return sal_True;
 }
 
 //-------------------------------------------------------------------------
@@ -370,6 +383,7 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
         m_eCurrentSelection = m_pCollection->getType(sConnectURL);
         sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
     }
+    m_aBrowseConnection.Enable(bValid && isBrowseable(m_eCurrentSelection));
 
     // select the correct datasource type
     m_aDatasourceType.SelectEntry(sDisplayName);
@@ -1729,6 +1743,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2000/11/02 14:18:21  fs
+ *  #79967# check the getenv return against NULL
+ *
  *  Revision 1.10  2000/10/30 15:22:25  fs
  *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
  *
