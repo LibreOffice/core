@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:13:10 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,8 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
         jclass c = pJEnv->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
         {
-            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString(
+                              exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             pJEnv->ThrowNew( c, cstr.getStr() );
         }
