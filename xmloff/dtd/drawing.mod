@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.13 2000-11-29 11:41:58 cl Exp $
+	$Id: drawing.mod,v 1.14 2000-11-30 10:36:45 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -181,10 +181,10 @@
 <!ATTLIST draw:caption %zindex;>
 
 <!ELEMENT draw:measure %draw-text;>
-<!ATTLIST draw:connector svg:x1 %coordinate; #REQUIRED>
-<!ATTLIST draw:connector svg:y1 %coordinate; #REQUIRED>
-<!ATTLIST draw:connector svg:x2 %coordinate; #REQUIRED>
-<!ATTLIST draw:connector svg:y2 %coordinate; #REQUIRED>
+<!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
+<!ATTLIST draw:measure svg:y1 %coordinate; #REQUIRED>
+<!ATTLIST draw:measure svg:x2 %coordinate; #REQUIRED>
+<!ATTLIST draw:measure svg:y2 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure %draw-end-position; >
 <!ATTLIST draw:measure %draw-style-name; >
 <!ATTLIST draw:measure %draw-transform; >
