@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-10 15:01:58 $
+ *  last change: $Author: kso $ $Date: 2000-10-11 07:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 // includes --------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_CHAOS_XDATACONTAINER_HPP_
-#include <com/sun/star/chaos/XDataContainer.hpp>
+#ifndef _COM_SUN_STAR_UCB_XDATACONTAINER_HPP_
+#include <com/sun/star/ucb/XDataContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -93,7 +93,7 @@
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace com::sun::star::chaos;
+using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
@@ -274,8 +274,13 @@ sal_Bool SfxMailModel_Impl::Send()
     if ( SaveDocument( aFileName, aContentType ) )
     {
         Reference < XMultiServiceFactory > xMgr = ::utl::getProcessServiceFactory();
+#if SUPD<609
         Reference < XDataContainer > xData(
             xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.chaos.DataContainer") ), UNO_QUERY );
+#else
+        Reference < XDataContainer > xData(
+            xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.DataContainer") ), UNO_QUERY );
+#endif
         if ( xData.is() )
         {
             xData->setContentType( aContentType );
