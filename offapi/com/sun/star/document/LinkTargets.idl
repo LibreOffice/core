@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkTargets.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {   module sun {   module star {   module document {
     of <type scope="com::sun::star::beans">XPropertySet</type> that implement
     the service <type>LinkTarget</type>.  </p>
  */
-service LinkTargets
+published service LinkTargets
 {
     interface com::sun::star::container::XNameAccess;
 
