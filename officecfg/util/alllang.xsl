@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:08:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 <!--************************** TEMPLATES ******************************** -->
 <!-- ensure that at least root is available -->
-	<xsl:template match="/oor:node">
+	<xsl:template match="/oor:component-data">
 		<xsl:copy>
 			<xsl:choose>
 				<xsl:when test="string-length($locale)">
