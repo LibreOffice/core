@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:39:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,21 +1081,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                         return;
                     }
 
-                    if ( rReq.IsAPI() )
-                    {
-                        if( !pCloser )
-                        {
-                            if ( pPendingCloser )
-                                pPendingCloser->ForcePendingCall();
-                            pCloser = new svtools::AsynchronLink(
-                                Link( 0, SfxViewFrameClose_Impl ) );
-                            pCloser->Call( this );
-                            pPendingCloser = pCloser;
-                        }
-                        bClosed = sal_True;
-                    }
-                    else
-                        bClosed = GetFrame()->DoClose();
+                    bClosed = xTask->close();
                 }
 
                 rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
