@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBoxEntry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:44:19 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,6 @@ service AccessibleTreeListBoxEntry
                if the object is displayed on the screen.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::TRANSIENT</const> is always set.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::EDITABLE</const> is set when a tree list box entry can be edited.</li>
            <li><const scope="com::sun::star::accessibility"
