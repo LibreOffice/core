@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:25:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,23 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    void OBrowserListBox::EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton )
+    {
+        // TODO: O(log n) search
+        sal_uInt16 i, nEnd = m_aLines.size();
+        for ( i = 0 ; i<nEnd ; ++i )
+        {
+            OBrowserLine* pLine = m_aLines[i];
+            IBrowserControl* pControl = pLine->getControl();
+            if ( pControl && ( pControl->GetMyName() == _rEntryName ) )
+            {
+                pLine->EnableInputControls( _bEnableInput, _bEnableBrowseButton );
+                break;
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
     void OBrowserListBox::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
     {
         // TODO: O(log n) search
@@ -455,12 +472,6 @@ namespace pcr
                 break;
             }
         }
-    }
-
-    //------------------------------------------------------------------------
-    sal_uInt16 OBrowserListBox::AppendEntry(const OLineDescriptor& _rPropData)
-    {
-        return InsertEntry(_rPropData);
     }
 
     //------------------------------------------------------------------
@@ -631,7 +642,6 @@ namespace pcr
                 IBrowserControl* pControl = pBrowserLine->getControl();
                 m_pLineListener->Clicked(pControl->GetMyName(), pControl->GetProperty(), pControl->GetMyData());
             }
-            pPB->GrabFocus();
         }
         return 0;
     }
@@ -827,27 +837,29 @@ namespace pcr
 
                     case BCT_NUMFIELD:
                         {
-                            ONumericControl* pField = new ONumericControl(&m_aPlayGround, _rPropertyData.nDigits,
-                                                            nWinBits | WB_TABSTOP | WB_SPIN);
+                            ONumericControl* pField = new ONumericControl( &m_aPlayGround, _rPropertyData.nDigits,
+                                                            nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
                             if (_rPropertyData.bHaveMinMax)
                             {
                                 pField->SetMin(_rPropertyData.nMinValue);
                                 pField->SetMax(_rPropertyData.nMaxValue);
                             }
+                            pField->SetFieldUnit( _rPropertyData.eDisplayUnit );
+                            pField->SetValueUnit( _rPropertyData.eValueUnit );
                             pNewControl = pField;
                         }
                         break;
 
                     case BCT_CURFIELD:
-                        pNewControl = new OCurrencyControl(&m_aPlayGround,_rPropertyData.nDigits, nWinBits | WB_TABSTOP | WB_SPIN);
+                        pNewControl = new OCurrencyControl( &m_aPlayGround,_rPropertyData.nDigits, nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
                         break;
 
                     case BCT_DATEFIELD:
-                        pNewControl = new ODateControl(&m_aPlayGround,nWinBits | WB_TABSTOP | WB_SPIN);
+                        pNewControl = new ODateControl( &m_aPlayGround,nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
                         break;
 
                     case BCT_TIMEFIELD:
-                        pNewControl = new OTimeControl(&m_aPlayGround,nWinBits | WB_TABSTOP | WB_SPIN);
+                        pNewControl = new OTimeControl( &m_aPlayGround,nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
                         break;
 
                     case BCT_COLORBOX:
@@ -910,17 +922,16 @@ namespace pcr
             if (m_nTheNameSize< nTextWidth)
                 m_nTheNameSize = nTextWidth;
 
-            if (_rPropertyData.bHasBrowseButton)
+            if ( _rPropertyData.nUniqueButtonId )
             {
-                pBrowserLine->ShowXButton();
+                pBrowserLine->ShowBrowseButton();
                 pBrowserLine->SetClickHdl(LINK( this, OBrowserListBox, ClickHdl ) );
             }
             else
-                pBrowserLine->HideXButton();
+                pBrowserLine->HideBrowseButton();
 
             pBrowserLine->Locked(_rPropertyData.bIsLocked);
 
-            pBrowserLine->ShowAsHyperLink(_rPropertyData.bIsHyperlink);
             pBrowserLine->SetData(_rPropertyData.pDataPtr);
 
             if (bNew)
