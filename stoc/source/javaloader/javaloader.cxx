@@ -2,9 +2,9 @@ D/*************************************************************************
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-25 11:15:49 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 11:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@ D/*************************************************************************
  ************************************************************************/
 
 
+#include <cstdarg>
 #include <osl/diagnose.h>
 
 #include <rtl/ustring>
