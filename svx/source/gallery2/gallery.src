@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:22:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Hide = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 211, 150 ) ;
+    Size = MAP_APPFONT ( 211, 100 ) ;
     Text = "Gallery";
     Text [ ENGLISH ] = "Gallery";
     Text[ english_us ] = "Gallery";
