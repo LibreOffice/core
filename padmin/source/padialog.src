@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:10:15 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ greek ] = "Create ~Softlinks only";
         Text[ dutch ] = "Bij het toevoegen alleen ~softlinks aanleggen";
         Text[ french ] = "Crιer uniquement des soft links";
-        Text[ spanish ] = "Al aρadir, crear solo softlinks";
+        Text[ spanish ] = "~Crear sσlo enlaces simbσlicos";
         Text[ finnish ] = "Luo vain ~nδennδislinkkejδ";
         Text[ italian ] = "Crea solo collegamento ~simbolico";
         Text[ danish ] = "Opret kun ~softlinks ved tilfψjelsen";
@@ -200,7 +200,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ greek ] = "Επιλογή όλ~ων";
         Text[ dutch ] = "~Alle markeren";
         Text[ french ] = "Sιlectionner tout";
-        Text[ spanish ] = "~Seleccionar todas";
+        Text[ spanish ] = "~Seleccionar todo";
         Text[ finnish ] = "~Valitse kaikki";
         Text[ italian ] = "~Seleziona tutto";
         Text[ danish ] = "Marker ~alle";
@@ -331,7 +331,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ greek ] = "Δεν είναι δυνατή η εγκατάσταση του αρχείου γραμματοσειράς\n%s\n επειδή δεν βρέθηκε το κατάλληλο αρχείο μορφής ( με την προέκταση .afm ). Τα αρχεία μορφής μπορούν να δημιουργηθούν π.χ. με το ghostscript και πρέπει να υπάρχουν στον ίδιο κατάλογο με τα αρχεία γραμματοσειρών ή στον υποκατάλογο αυτών με την ονομασία 'afm'.";
         Text[ dutch ] = "Lettertypenbestand\n%s\n kan niet worden geοnstalleerd daar geen bijbehorend formaatbestand (met extensie .afm) werd gevonden. Formaatbestanden kunnen worden gemaakt met bijv. ghostscript en moeten worden opgeslagen in de directory waarin de lettertypenbestanden staan of in een subdirectory daarvan.";
         Text[ french ] = "Aucun fichier de format (d'extension .afm) n'a ιtι dιtectι pour le fichier de police\n%s\n ; la police ne peut donc pas κtre installιe. Les fichiers de format peuvent par ex. κtre crιι avec ghostscript et doivent κtre placιs dans le mκme rιpertoire que celui des fichiers de police ou dans le sous-rιpertoire afm.";
-        Text[ spanish ] = "No se encontrσ ningϊn archivo de formato (terminaciσn .afm) para el archivo de fuente\n%s\n por lo que no se puede instalar la fuente. Los archivos de formato se pueden crear p.ej. con ghostscript y deben estar en el mismo directorio que los archivos de fuentes o en su subdirectorio afm.";
+        Text[ spanish ] = "No se encontrσ ningϊn archivo de formato (extensiσn .afm) para el archivo de fuente\n%s\n por lo que no se puede instalar la fuente. Los archivos de formato se pueden crear p.ej. con ghostscript y deben encontrarse en el mismo directorio que los archivos de fuentes o en el subdirectorio afm.";
         Text[ italian ] = "Impossibile installare il font\n%s\nperchι non θ stato trovato il rispettivo file di formato (con estensione .afm). I file di formato si possono creare ad esempio con ghostscript e si devono trovare nella stessa cartella dei font oppure nella rispettiva sottocartella afm.";
         Text[ danish ] = "Der blev ikke fundet nogen formatfil (med filtypenavnet .afm) til skrifttypefilen\n%s\n, og derfor kan den ikke installeres. Formatfiler kan oprettes f.eks. med ghostscript og skal vζre i samme bibliotek som skrifttypefilerne eller i dets underbibliotek afm.";
         Text[ swedish ] = "Det hittades ingen formatfil (med filtillδgget .afm) till teckensnittsfilen\n%s\n, varfφr den inte kan installeras. Formatfiler kan t.ex. skapas med ghostscript och mεste finnas i samma katalog som teckensnittsfilerna eller i katalogens underordnade kataloger.";
@@ -357,7 +357,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η αντιγραφή του αρχείου μετρικής του αρχείου της γραμματοσειράς\n   %s\n. Η γραμματοσειρά δεν θα εγκατασταθεί.";
         Text[ dutch ] = "Het lettertype werd niet geοnstalleerd daar het metrische bestand voor lettertypenbestand\n %s\nniet kon worden gekopieerd.  ";
         Text[ french ] = "Copie du fichier mιtrique pour le fichier\n   %s\nimpossible, donc impossibilitι d'installer la police !";
-        Text[ spanish ] = "No se pudo copiar el archivo de mιtrica correspondiente al de fuente\n   %s\n, por lo que no se instalarα la fuente.";
+        Text[ spanish ] = "No se pudo copiar el archivo de mιtrica correspondiente al de la fuente\n   %s\n, por lo que no se instalarα la fuente.";
         Text[ italian ] = "Impossibile copiare il file metrico per il file dei font\n...%s\n. Il font non θ stato installato.";
         Text[ danish ] = "Metrikfilen til skrifttypefilen\n   %s\nkunne ikke kopieres. Skrifttypen bliver ikke installeret.";
         Text[ swedish ] = "Det gick inte att kopiera metrikfilen till teckensnittsfilen\n   %s\n. Teckensnittet kommer inte att installeras.";
@@ -409,7 +409,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ greek ] = "Δεν βρέθηκε κατάλογος στο Fontpath, ο οποίος να περιέχει ένα κατάλληλο αρχείο εγγραφής fonts.dir. Δεν είναι δυνατή η εγκατάσταση γραμματοσειρών.";
         Text[ dutch ] = "Er konden geen lettertypen worden geοnstalleerd daar er in het pad voor de lettertypen geen directory werd aangetroffen met een beschrijfbaar bestand fonts.dir.";
         Text[ french ] = "Aucun rιpertoire contenant un fichier d'ιcriture fonts.dir ne se trouve dans le chemin de police (fontpath). Impossible d'installer des polices !";
-        Text[ spanish ] = "No se encontrσ ningϊn directorio con un archivo fonts.dir escribible. Por ello no se puede instalar ninguna fuente.";
+        Text[ spanish ] = "No se encontrσ ningϊn directorio en la ruta de fuentes con un archivo de escritura fonts.dir. Imposible instalar fuentes.";
         Text[ italian ] = "Impossibile trovare in Fontpath una cartella con un file font.dir scrivibile. Non θ possibile installare i font.";
         Text[ danish ] = "Der blev ikke fundet noget bibliotek i skrifttypefilen, som indeholder en skrivbar fil med navnet fonts.dir. Det er ikke muligt at installere nogen skrifttyper.";
         Text[ swedish ] = "I Fontpath finns det ingen katalog som innehεller en skrivbar fonts.dir-fil. Det gεr inte att skapa nεgra teckensnitt.";
@@ -1038,7 +1038,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ greek ] = "Η εκτύπωση της σελίδας δοκιμής ολοκληρώθηκε επιτυχώς. Παρακαλώ ελέγξτε το αποτέλεσμα της εκτύπωσης.";
     Text[ dutch ] = "De testpagina werd met succes afgedrukt. Controleer het resultaat.";
     Text[ french ] = "L'impression de la page de test est terminιe. Veuillez en vιrifier le rιsultat.";
-    Text[ spanish ] = "La pαgina de prueba se imprimiσ satisfactoriamente. Compruebe por favor el resultado.";
+    Text[ spanish ] = "La impresiσn de la pαgina de prueba ha finalizado. Compruebe el resultado.";
     Text[ italian ] = "La pagina di prova θ stata stampata. Controllate il risultato.";
     Text[ danish ] = "Testsiden er udskrevet. Kontroller resultatet.";
     Text[ swedish ] = "Testsidan har skrivits ut. Kontrollera resultatet.";
@@ -1466,7 +1466,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ greek ] = "The font %s cannot be renamed due to missing write permission.";
         Text[ dutch ] = "Daar u geen schrijfrechten heeft kunt u de naam van lettertype %s kan niet wijzigen.";
         Text[ french ] = "Impossible de renommer la police %s : droits d'ιcriture insuffisants.";
-        Text[ spanish ] = "Debido a insuficientes derechos de escritura no es posible cambiar el nombre de la fuente %s.";
+        Text[ spanish ] = "No es posible cambiar el nombre de la fuente %s. Faltan derechos de escritura.";
         Text[ finnish ] = "The font %s cannot be renamed due to missing write permission.";
         Text[ italian ] = "Impossibile cambiare il nome al carattere %s in quanto mancano i diritti di scrittura";
         Text[ danish ] = "Skrifttypen %s kan ikke omdψbes, fordi du ikke har de nψdvendige skriverettigheder.";
@@ -1645,7 +1645,7 @@ String RID_AFMERROR_NO_FONT_NAME
     Text[ greek ] = "Η μετρική δεν περιέχει την εγγραφή 'FontName'.";
     Text[ dutch ] = "De metriek bevat geen item 'FontName'.";
     Text[ french ] = "La mιtrique ne contient aucune entrιe 'FontName'.";
-    Text[ spanish ] = "La mιtrica no contiene una entrada 'FontName'.";
+    Text[ spanish ] = "La mιtrica no contiene ninguna entrada 'FontName'.";
     Text[ italian ] = "La metrica non contiene una voce 'FontName'.";
     Text[ danish ] = "Metrikken indeholder ikke noget 'FontName'-element.";
     Text[ swedish ] = "Metriken innehεller ingen 'FontName'-post.";
@@ -1697,7 +1697,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text[ greek ] = "Η μετρική δεν περιέχει την εγγραφή 'FamilyName'.";
     Text[ dutch ] = "De metriek bevat geen item 'FamilyName'.";
     Text[ french ] = "La mιtrique ne contient aucune entrιe 'FamilyName'.";
-    Text[ spanish ] = "La mιtrica no contiene una entrada 'FamilyName'.";
+    Text[ spanish ] = "La mιtrica no contiene ninguna entrada 'FamilyName'.";
     Text[ italian ] = "La metrica non contiene una voce 'FamilyName'.";
     Text[ danish ] = "Metrikken indeholder ikke noget 'FamilyName'-element.";
     Text[ swedish ] = "Metriken innehεller ingen 'FamilyName'-post.";
@@ -1723,7 +1723,7 @@ String RID_AFMERROR_MOVETO_FAILED
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η εγγραφή της μετατρεπόμενης μετρικής.";
     Text[ dutch ] = "De geconverteerde metriek kon niet worden geschreven.";
     Text[ french ] = "Ιcriture de la mιtrique convertie impossible.";
-    Text[ spanish ] = "No se puede escribir la mιtrica convertida.";
+    Text[ spanish ] = "La mιtrica convertida no se puede escribir.";
     Text[ italian ] = "Impossibile scrivere la metrica convertita.";
     Text[ danish ] = "Den konverterede metrik kan ikke skrives.";
     Text[ swedish ] = "Det gεr inte att skriva den konverterade metriken.";
@@ -1827,7 +1827,7 @@ String RID_AFMERROR_BOX_TXT
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η μετατροπή της μετρικής\n\n%s\n\n για τον εξής λόγο:\n\n";
     Text[ dutch ] = "De metriek\n\n%s\n\nkon niet worden geconverteerd om de volgende reden:\n\n";
     Text[ french ] = "Impossible de convertir la mιtrique\n\n%s\n\npour la raison suivante :\n\n";
-    Text[ spanish ] = "Por el siguiente motivo no se pudo convertir la mιtrica\n\n%s\\:\n\n";
+    Text[ spanish ] = "La mιtrica\n\n%s\n\nno se pudo convetir por el motivo siguiente:\n\n";
     Text[ italian ] = "Impossibile convertire la metrica\n\n%s\n\nper il motivo seguente:\n\n";
     Text[ danish ] = "Metrikken\n\n%s\n\nkunne ikke konverteres af fψlgende εrsag:\n\n";
     Text[ swedish ] = "Det gick inte att konvertera metriken\n\n%s\n\n av fφljande skδl:\n\n";
@@ -1876,7 +1876,7 @@ ModelessDialog RID_PROGRESS_DLG
         Text[ greek ] = "Processed";
         Text[ dutch ] = "Reeds bewerkt";
         Text[ french ] = "Progression";
-        Text[ spanish ] = "Progreso";
+        Text[ spanish ] = "Progresiσn";
         Text[ finnish ] = "Processed";
         Text[ italian ] = "Progresso";
         Text[ danish ] = "Fremgang";
@@ -2006,7 +2006,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ greek ] = "Παρακαλώ επιλέξτε τον κατάλογο με τα αρχεία των προγραμμάτων οδήγησης.";
         Text[ dutch ] = "Selecteer de driver directory.";
         Text[ french ] = "Sιlectionnez le rιpertoire contenant les fichiers du pilote.";
-        Text[ spanish ] = "Seleccione el directorio con los archivos de controlador.";
+        Text[ spanish ] = "Seleccione el directorio del controlador.";
         Text[ italian ] = "Seleziona la cartella con i file del driver";
         Text[ danish ] = "Vζlg biblioteket med driverfilerne.";
         Text[ swedish ] = "Vδlj katalogen med drivrutinsfiler.";
@@ -2110,7 +2110,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ greek ] = "Παρακαλώ επιλέξτε τα προγράμματα οδήγησης που επιθυμείτε και επιβεβαιώστε την επιλογή σας πατώντας το \"%s\".";
         Text[ dutch ] = "Selecteer de gewenste drivers en druk op de knop \"%s\".";
         Text[ french ] = "Sιlectionnez les pilotes et validez avec le bouton \"%s\".";
-        Text[ spanish ] = "Elija los controladores deseados y confνrmelo con el botσn \"%s\".";
+        Text[ spanish ] = "Seleccione los controladores deseados y confνrmelo con el botσn \"%s\".";
         Text[ italian ] = "Selezionate i driver e confermate con il pulsante \"%s\".";
         Text[ danish ] = "Vζlg den ψnskede driver, og bekrζft ved at klikke pε knappen \"%s\".";
         Text[ swedish ] = "Vδlj drivrutiner och bekrδfta med kommandoknappen \"%s\".";
@@ -2170,7 +2170,7 @@ ModalDialog RID_PPDIMPORT_DLG
     Text[ greek ] = "Εγκατάσταση προγράμματος οδήγησης";
     Text[ dutch ] = "Driver installatie";
     Text[ french ] = "Installation du pilote";
-    Text[ spanish ] = "Instalaciσn de controlador";
+    Text[ spanish ] = "Instalaciσn del controlador";
     Text[ italian ] = "Installazione driver";
     Text[ danish ] = "Driverinstallation";
     Text[ swedish ] = "Drivrutinsinstallation";
@@ -2278,7 +2278,7 @@ String RID_QUERY_DRIVERUSED
     Text[ greek ] = "Υπάρχουν ακόμη εκτυπωτές, οι οποίοι χρησιμοποιούν αυτό το πρόγραμμα οδήγησης. Θέλετε πραγματικά να καταργηθεί; Σε αυτή τη περίπτωση θα γίν? ";
     Text[ dutch ] = "Driver \"%s\" is nog in gebruik voor enkele printers. Wilt u hem werkelijk verwijderen? De desbetreffende printers worden dan eveneens verwijderd.";
     Text[ french ] = "D'autres imprimantes utilisent le pilote \"%s\". Voulez-vous vraiment le supprimer ? Ceci entraξnera ιgalement la suppression des imprimantes correspondantes.";
-    Text[ spanish ] = "Existen aϊn impresoras que usan el controlador \"%s\". ΏDesea realmente eliminarlo? Tambiιn se eliminarαn las impresoras correspondientes.";
+    Text[ spanish ] = "Aϊn hay impresoras que utilizan el controlador \"%s\". ΏDesea realmente eliminarlo? Las impresoras correspondientes tambiιn se eliminarαn.";
     Text[ italian ] = "Ci sono ancora stampanti che utilizzano il driver \"%s\". Volete ugualmente rimuoverlo? Le stampanti corrispondenti verranno cosμ rimosse.";
     Text[ danish ] = "Der er stadig nogen printere, som bruger driveren \"%s\". Er du sikker pε, at du vil fjerne den? Den tilhψrende printer fjernes i sε fald ogsε.";
     Text[ swedish ] = "Det finns fortfarande skrivare som anvδnder drivrutinen \"%s\". Vill du verkligen ta bort den? Dε tas δven motsvarande skrivare bort.";
@@ -2359,7 +2359,7 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text[ greek ] = "Δεν είναι δυνατόν να διαγραφεί αυτό το πρόγραμμα οδήγησης επειδή χρησιμοποιείται από τον εκτυπωτή προεπιλογής.";
     Text[ dutch ] = "Driver \"%s\" kan niet worden verwijderd daar deze wordt gebruikt voor uw standaardprinter.";
     Text[ french ] = "Votre imprimante par dιfaut utilise le pilote \"%s\". Impossible de le supprimer.";
-    Text[ spanish ] = "No se puede eliminar el controlador \"%s\" porque lo usa su impresora predeterminada.";
+    Text[ spanish ] = "La impresora predeterminada utiliza el controlador \"%s\". Su eliminaciσn no es posible.";
     Text[ italian ] = "Questo driver θ utilizzato dalla vostra stampante standard, per questo non puς essere eliminato.";
     Text[ danish ] = "Driveren \"%s\" anvendes af standardprinteren. Derfor kan den ikke fjernes.";
     Text[ swedish ] = "Drivrutinen \"%s\" anvδnds av din standardskrivare. Dδrfφr gεr det inte att ta bort den.";
@@ -2413,7 +2413,7 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text[ greek ] = "Υπάρχει ήδη ένας εκτυπωτής με το όνομα \"%s\". Ο εκτυπωτής αυτός δεν θα εισαχθεί.";
     Text[ dutch ] = "Deze printer wordt niet geοmporteerd daar er reeds een printer met de naam \"%s\" voorkomt in uw systeem.";
     Text[ french ] = "Une imprimante nommιe \"%s\" existe dιjΰ. Cette imprimante ne va pas κtre importιe.";
-    Text[ spanish ] = "Ya existe una impresora con el nombre \"%s\". Esta impresora no se importa.";
+    Text[ spanish ] = "Ya existe una impresora con el nombre \"%s\". Esta impresora no se importarα.";
     Text[ italian ] = "Una stampante dal nome \"%s\" esiste giΰ. La stampante non verrΰ importata.";
     Text[ danish ] = "Der findes allerede en printer med navnet \"%s\". Denne printer bliver ikke importeret.";
     Text[ swedish ] = "Det finns redan en skrivare som heter \"%s\". Den hδr skrivaren importeras inte.";
@@ -2871,7 +2871,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ greek ] = "add a fa~x";
         Text[ dutch ] = "een fa~x aansluiten";
         Text[ french ] = "Connecter un pιriphιrique fax";
-        Text[ spanish ] = "aρadir un fa~x";
+        Text[ spanish ] = "Conectar a un fa~x";
         Text[ finnish ] = "Yhdistδ ~faksilaite";
         Text[ italian ] = "Aggingi un fa~x";
         Text[ danish ] = "tilknytte en fa~xlψsning";
@@ -2927,7 +2927,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ greek ] = "~import printers from a StarOffice installation";
         Text[ dutch ] = "~printers uit een StarOffice installatie importeren";
         Text[ french ] = "~Importer une ou des imprimantes depuis une installation StarOffice";
-        Text[ spanish ] = "~Importar impresora desde una instalaciσn StarOffice";
+        Text[ spanish ] = "~Importar impresoras desde una instalaciσn de StarOffice";
         Text[ italian ] = "~Importa le stampanti da un'installazione StarOffice";
         Text[ danish ] = "~importere en printer fra en StarOffice-installation";
         Text[ swedish ] = "~Importera skrivare frεn en StarOffice-installation";
@@ -3516,7 +3516,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ greek ] = "Use the following driver for this fax device:";
         Text[ dutch ] = "Voor deze faxaansluiting moet u de volgende driver gebruiken";
         Text[ french ] = "Pilote ΰ utiliser pour la connexion fax :";
-        Text[ spanish ] = "Para esta conexiσn de fax se debe usar el siguiente controlador:";
+        Text[ spanish ] = "Para esta conexiσn de fax se debe utilizar el siguiente controlador:";
         Text[ finnish ] = "Kδytδ tδssδ faksiyhteydessδ seuraavaa ajuria:";
         Text[ italian ] = "Per questo fax utilizzate il driver seguente:";
         Text[ danish ] = "Til faxtilknytningen skal fψlgende driver anvendes";
@@ -3544,7 +3544,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ greek ] = "Το προεπιλεγμένο πρόγραμμα οδήγησης";
         Text[ dutch ] = "de ~standaarddriver";
         Text[ french ] = "Pilote par dιfaut";
-        Text[ spanish ] = "el controlador predeterminado";
+        Text[ spanish ] = "~Controlador predeterminado";
         Text[ italian ] = "Driver standard";
         Text[ danish ] = "~standarddriveren";
         Text[ swedish ] = "~Standarddrivrutinen";
@@ -3572,7 +3572,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ greek ] = "a specific driver to format identical to a certain printer";
         Text[ dutch ] = "een speciale ~driver voor het aanpassen van de opmaakattributen aan een andere printer";
         Text[ french ] = "Pilote spιcifique pour adaptation du formatage ΰ une autre imprimante";
-        Text[ spanish ] = "Un controlador especνfico para sincronizar el formato con otra impresora";
+        Text[ spanish ] = "~Controlador especνfico para adaptar el formato a otra impresora";
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stamapante";
         Text[ danish ] = "en bestemt ~driver for at tilpasse formateringen til en anden printer";
         Text[ swedish ] = "en specifik drivru~tin fφr att anpassa formateringen till en annan skrivare";
@@ -3634,7 +3634,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ greek ] = "Use the following driver for this PDF printer:";
         Text[ dutch ] = "Voor deze PDF-converter moet u de volgende driver gebruiken";
         Text[ french ] = "Pilote ΰ utiliser pour le convertisseur PDF :";
-        Text[ spanish ] = "Use el siguiente controlador para este convertidor PDF";
+        Text[ spanish ] = "Utilice el siguiente controlador para este convertidor PDF";
         Text[ italian ] = "Per questo convertitore PDF utilizzate il seguente driver:";
         Text[ danish ] = "Til denne PDF-konverter skal fψlgende driver anvendes";
         Text[ swedish ] = "Fφljande drivrutin ska anvδndas fφr den hδr PDF-konverteraren";
@@ -3662,7 +3662,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ greek ] = "Το προεπιλεγμένο πρόγραμμα οδήγησης";
         Text[ dutch ] = "De ~standaarddriver";
         Text[ french ] = "Pilote par dιfaut";
-        Text[ spanish ] = "El controlador predeterminado";
+        Text[ spanish ] = "~Controlador predeterminado";
         Text[ italian ] = "Driver standard";
         Text[ danish ] = "~standarddriveren";
         Text[ swedish ] = "~Standarddrivrutinen";
@@ -3690,7 +3690,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ greek ] = "the Adobe Distiller(tm) driver";
         Text[ dutch ] = "De Adobe ~Distiller(tm) driver";
         Text[ french ] = "Pilote Adobe Distiller(tm)";
-        Text[ spanish ] = "El controlador Adobe Distiller(tm)";
+        Text[ spanish ] = "C~ontrolador Adobe Distiller(tm)";
         Text[ italian ] = "Driver Adobe Distiller(tm)";
         Text[ danish ] = "Adobe ~Distiller(tm)-driveren";
         Text[ swedish ] = "Drivrutinen Adobe ~Distiller(tm)";
@@ -3718,7 +3718,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ greek ] = "a specific driver to format identical to a certain printer";
         Text[ dutch ] = "Een speciale ~driver voor het aanpassen van de opmaakattributen aan een andere printer";
         Text[ french ] = "Pilote spιcifique pour adaptation du formatage ΰ une autre imprimante";
-        Text[ spanish ] = "Un controlador especνfico para adaptar el formato a otra impresora";
+        Text[ spanish ] = "C~ontrolador especνfico para adaptar el formato a otra impresora";
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stampante";
         Text[ danish ] = "en bestemt ~driver for at tilpasse formateringen til en anden printer";
         Text[ swedish ] = "En specifik drivru~tin fφr att anpassa formateringen till en annan skrivare";
