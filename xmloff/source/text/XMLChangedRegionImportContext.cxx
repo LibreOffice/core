@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:35:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ void XMLChangedRegionImportContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
-        OUString sValue = xAttrList->getValueByIndex(nAttr);
+        const OUString& rValue = xAttrList->getValueByIndex(nAttr);
         if ( XML_NAMESPACE_TEXT == nPrefix )
         {
             if( IsXMLToken( sLocalName, XML_ID ) )

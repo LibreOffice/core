@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:34:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void XMLChangeImportContext::StartElement(
             // prepare parameters
             UniReference<XMLTextImportHelper> rHelper =
                 GetImport().GetTextImport();
-            OUString sID = xAttrList->getValueByIndex(nAttr);
+            const OUString& rID = xAttrList->getValueByIndex(nAttr);
 
             // call for bStart and bEnd (may both be true)
             if (bIsStart)
@@ -145,6 +145,8 @@ void XMLChangeImportContext::StartElement(
             if (bIsOutsideOfParagraph)
             {
                 rHelper->SetOpenRedlineId(sID);
+        OUString crID = rID;
+                rHelper->SetOpenRedlineId(crID);
             }
         }
         // else: ignore
