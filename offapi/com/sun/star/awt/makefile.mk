@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obr $ $Date: 2001-03-12 12:36:17 $
+#   last change: $Author: mt $ $Date: 2001-04-02 16:10:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,12 +120,14 @@ IDLFILES=\
     SpinEvent.idl\
     Style.idl\
     SystemPointer.idl\
+    TabController.idl\
+    TabControllerModel.idl\
     TextAlign.idl\
     TextEvent.idl\
     Toolkit.idl\
-    UnoButtonControl.idl\
-    UnoCheckBoxControl.idl\
-    UnoComboBoxControl.idl\
+    UnoControlButton.idl\
+    UnoControlCheckBox.idl\
+    UnoControlComboBox.idl\
     UnoControl.idl\
     UnoControlButtonModel.idl\
     UnoControlCheckBoxModel.idl\
@@ -146,17 +148,17 @@ IDLFILES=\
     UnoControlPatternFieldModel.idl\
     UnoControlRadioButtonModel.idl\
     UnoControlTimeFieldModel.idl\
-    UnoCurrencyFieldControl.idl\
-    UnoEditControl.idl\
-    UnoFileControl.idl\
-    UnoFixedTextControl.idl\
-    UnoGroupBoxControl.idl\
-    UnoImageControl.idl\
-    UnoListBoxControl.idl\
-    UnoNumericFieldControl.idl\
-    UnoPatternFieldControl.idl\
-    UnoRadioButtonControl.idl\
-    UnoTimeFieldControl.idl\
+    UnoControlCurrencyField.idl\
+    UnoControlEdit.idl\
+    UnoControlFileControl.idl\
+    UnoControlFixedText.idl\
+    UnoControlGroupBox.idl\
+    UnoControlImageControl.idl\
+    UnoControlListBox.idl\
+    UnoControlNumericField.idl\
+    UnoControlPatternField.idl\
+    UnoControlRadioButton.idl\
+    UnoControlTimeField.idl\
     VclContainerEvent.idl\
     VclWindowPeerAttribute.idl\
     WindowAttribute.idl\
