@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:04:44 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,13 +342,37 @@ namespace configmgr
     // -----------------------------------------------------------------------------
     rtl::OUString FileHelper::getParentDir(rtl::OUString const& _sURL)
     {
-        // goto last '/' and cut the rest.
-        sal_Int32 nIdx = _sURL.lastIndexOf(delimiter, _sURL.getLength());
-        if (nIdx > 0)
-            return _sURL.copy(0, nIdx);
-        return rtl::OUString();
+        rtl::OUString parentDirectory ;
+        rtl::OUString fileName ;
+
+        splitFileUrl(_sURL, parentDirectory, fileName) ;
+        return parentDirectory ;
     }
 
+    // -----------------------------------------------------------------------------
+    void FileHelper::splitFileUrl(const rtl::OUString& aFileUrl,
+                                  rtl::OUString& aParentDirectory,
+                                  rtl::OUString& aFileName) {
+        // goto last '/' and cut the rest.
+        sal_Int32 nIdx = aFileUrl.lastIndexOf(delimiter, aFileUrl.getLength());
+        if (nIdx > 0) {
+            aParentDirectory = aFileUrl.copy(0, nIdx);
+            aFileName = aFileUrl.copy(nIdx + 1) ;
+        }
+        else {
+            aParentDirectory = rtl::OUString() ;
+            aFileName = aFileUrl ;
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    rtl::OUString FileHelper::getFileName(const rtl::OUString& aFileUrl) {
+        rtl::OUString parentDirectory ;
+        rtl::OUString fileName ;
+
+        splitFileUrl(aFileUrl, parentDirectory, fileName) ;
+        return fileName ;
+    }
     // -----------------------------------------------------------------------------
     bool FileHelper::mkdir(rtl::OUString const& _sDirURL)
     {

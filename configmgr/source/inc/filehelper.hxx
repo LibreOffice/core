@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:57:14 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,26 @@ namespace configmgr
             of the separator character.
         */
         rtl::OUString getParentDir(rtl::OUString const& _aFileURL);
+
+        /**
+          Returns the file name part of a file URL.
+
+          @param aFileUrl   file URL
+          @return   everything in the URL from the last delimiter on
+          */
+        rtl::OUString getFileName(const rtl::OUString& aFileUrl) ;
+
+        /**
+          Splits a file URL between its parent directory/file name
+          parts.
+
+          @param aFileUrl           file URL
+          @param aParentDirectory   parent directory filled on return
+          @param aFileName          file name filled on return
+          */
+        void splitFileUrl(const rtl::OUString& aFileUrl,
+                          rtl::OUString& aParentDirectory,
+                          rtl::OUString& aFileName) ;
 
         /** creates a directory whose pathname is specified by a FileURL.
             @return true if directory could be created or does exist, otherwise false.
