@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 19:34:00 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 12:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ english_us ] = "~Exchange characters" ;
         Text [ italian ] = "Scambia i caratteri" ;
         Text [ spanish ] = "~Cambiar caracteres" ;
-        Text [ french ] = "Caractères ~divergents" ;
+        Text [ french ] = "Échange de caractères" ;
         Text [ dutch ] = "Tekens ~vervangen" ;
         Text [ swedish ] = "~Byt ut tecken" ;
         Text [ danish ] = "Udskift tegn" ;
