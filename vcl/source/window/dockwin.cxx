@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:48:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,28 @@
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
 // =======================================================================
+
+// -----------------------------------------------------------------------
+
+class DockingWindow::ImplData
+{
+public:
+    ImplData();
+    ~ImplData();
+
+    Window*         mpParent;
+    Size            maMaxOutSize;
+};
+
+DockingWindow::ImplData::ImplData()
+{
+    mpParent = NULL;
+    maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
+}
+
+DockingWindow::ImplData::~ImplData()
+{
+}
 
 // -----------------------------------------------------------------------
 
@@ -318,7 +340,7 @@ BOOL DockingWindow::ImplStartDocking( const Point& rPos )
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
-        pWin = new ImplDockFloatWin( mpParent, mnFloatBits, NULL );
+        pWin = new ImplDockFloatWin( mpImplData->mpParent, mnFloatBits, NULL );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
         delete pWin;
@@ -359,6 +381,7 @@ BOOL DockingWindow::ImplStartDocking( const Point& rPos )
 
 void DockingWindow::ImplInitData()
 {
+    mpImplData              = new ImplData;
     mbDockWin               = TRUE;
 
     mpFloatWin              = NULL;
@@ -379,7 +402,7 @@ void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    mpParent                = pParent;
+    mpImplData->mpParent    = pParent;
     mbDockable              = (nStyle & WB_DOCKABLE) != 0;
     mnFloatBits             = WB_BORDER | (nStyle & DOCKWIN_FLOATSTYLES);
     nStyle                 &= ~(DOCKWIN_FLOATSTYLES | WB_BORDER);
@@ -493,6 +516,7 @@ DockingWindow::~DockingWindow()
         Show( FALSE, SHOW_NOFOCUSCHANGE );
         SetFloatingMode( FALSE );
     }
+    delete mpImplData;
 }
 
 // -----------------------------------------------------------------------
@@ -858,7 +882,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
 
                 ImplDockFloatWin* pWin =
                     new ImplDockFloatWin(
-                                         mpParent,
+                                         mpImplData->mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );
                 mpFloatWin      = pWin;
@@ -889,6 +913,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                     pWin->RollDown();
                 pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
                 pWin->SetMinOutputSizePixel( maMinOutSize );
+                pWin->SetMaxOutputSizePixel( mpImplData->maMaxOutSize );
 
                 ToggleFloatingMode();
 
@@ -907,6 +932,7 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                 mbRollUp        = mpFloatWin->IsRollUp();
                 maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
+                mpImplData->maMaxOutSize = mpFloatWin->GetMaxOutputSizePixel();
 
                 Window* pRealParent = mpRealParent;
                 mpBorderWindow = NULL;
@@ -1110,4 +1136,18 @@ BOOL DockingWindow::IsFloatingMode() const
         return pWrapper->IsFloatingMode();
     else
         return (mpFloatWin != NULL);
+}
+
+void DockingWindow::SetMaxOutputSizePixel( const Size& rSize )
+{
+    if ( mpFloatWin )
+        mpFloatWin->SetMaxOutputSizePixel( rSize );
+    mpImplData->maMaxOutSize = rSize;
+}
+
+const Size& DockingWindow::GetMaxOutputSizePixel() const
+{
+    if ( mpFloatWin )
+        return mpFloatWin->GetMaxOutputSizePixel();
+    return mpImplData->maMaxOutSize;
 }
