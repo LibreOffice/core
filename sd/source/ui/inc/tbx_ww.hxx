@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 13:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ private:
     WindowAlign         eTbxAlign;
     Link                aSelectLink;
 
-    DECL_LINK( TbxSelectHdl, void * );
+    DECL_LINK( TbxSelectHdl, ToolBox * );
 
 public:
     SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
