@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 13:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
 #endif
 
 using namespace connectivity::sdbcx;
@@ -266,8 +270,8 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
 void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    if(index <0 || index > getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString(),*this);
+    if(index <0 || index >= getCount())
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     ::comphelper::disposeComponent(m_aElements[index]->second);
     ::rtl::OUString elementName = m_aElements[index]->first;
@@ -281,11 +285,11 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
         static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ObjectIter aIter = m_aNameMap.find(columnName);
     if(aIter == m_aNameMap.end())
-        throw ::com::sun::star::sdbc::SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),*this,connectivity::dbtools::SQLSTATE_GENERAL,1000,makeAny(NoSuchElementException(columnName,*this)) );
 
     return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter)) +1; // because cloumns start at one
 }

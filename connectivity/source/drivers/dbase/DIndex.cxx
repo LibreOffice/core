@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:41:12 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,21 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 // define the properties of this lib
 // this file includes the properties for this dll
 namespace connectivity
@@ -119,6 +134,7 @@ namespace connectivity
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace ucb;
+using namespace utl;
 using namespace cppu;
 using namespace connectivity::file;
 using namespace connectivity::sdbcx;
@@ -133,7 +149,10 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_pTable(_pTable)
+    ,m_pFileStream(NULL)
 {
+    m_aHeader.db_maxkeys = m_aHeader.db_maxkeys = m_aHeader.db_keylen = m_aHeader.db_pagecount = m_aHeader.db_rootpage = 0;
+    m_aHeader.db_name[0] = '\0';
     construct();
 }
 // -------------------------------------------------------------------------
@@ -143,8 +162,14 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
     : OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_aHeader(_rHeader)
     , m_pTable(_pTable)
+    ,m_pFileStream(NULL)
 {
     construct();
+}
+// -----------------------------------------------------------------------------
+ODbaseIndex::~ODbaseIndex()
+{
+    closeImpl();
 }
 // -------------------------------------------------------------------------
 void ODbaseIndex::refreshColumns()
@@ -152,7 +177,12 @@ void ODbaseIndex::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::std::vector< ::rtl::OUString> aVector;
-    aVector.push_back(::rtl::OUString::createFromAscii(m_aHeader.db_name));
+    if(!isNew())
+    {
+        OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
+        OSL_ENSURE(m_aHeader.db_name[0] != '\0',"Invalid name for the column!");
+        aVector.push_back(::rtl::OUString::createFromAscii(m_aHeader.db_name));
+    }
 
     if(m_pColumns)
         delete m_pColumns;
@@ -198,32 +228,34 @@ ONDXPagePtr ODbaseIndex::getRoot()
 //------------------------------------------------------------------
 sal_Bool ODbaseIndex::openIndexFile()
 {
-    if(!m_aFileStream.IsOpen())
+    if(!m_pFileStream)
     {
-        INetURLObject aURL;
-
-        aURL.SetSmartProtocol(INET_PROT_FILE);
-        aURL.SetSmartURL(m_pTable->getEntry(), INetURLObject::ENCODE_ALL);
-
-        aURL.setName(m_Name);
-        aURL.setExtension(String::CreateFromAscii("ndx"));
-
-        //  Dir* pDir = m_pTable->getConnection()->getDir();
-        //  String aPath = pDir->GetName();
-        //  aPath += m_Name.getStr();
-        //  DirEntry aEntry(aPath);
-        //  aEntry.setExtension(String::CreateFromAscii("ndx"));
-        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-
-        m_aFileStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-        m_aFileStream.SetBufferSize(512);
+        ::rtl::OUString sFile = getCompletePath();
+        if(UCBContentHelper::Exists(sFile))
+        {
+            m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            if(!m_pFileStream)
+                m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+            if(m_pFileStream)
+            {
+                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                m_pFileStream->SetBufferSize(512);
+                (*m_pFileStream) >> *this;
+            }
+        }
+        if(!m_pFileStream)
+        {
+            ::rtl::OUString sErrMsg = ::rtl::OUString::createFromAscii("Could not open index: ");
+            sErrMsg += sFile;
+            throw SQLException(sErrMsg,*this,SQLSTATE_GENERAL,1000,Any());
+        }
     }
 
-    return m_aFileStream.IsOpen();
+    return m_pFileStream != NULL;
 }
 //------------------------------------------------------------------
 OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
-                                                  const OOperand* pOperand)
+                                            const OOperand* pOperand)
 {
     openIndexFile();
     return new OIndexIterator(this, pOp, pOperand);
@@ -231,7 +263,7 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
 //------------------------------------------------------------------
 BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     // Sucht ein bestimmten Wert im Index
     // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     try
@@ -248,8 +280,9 @@ BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
                 *rKey = ONDXKey(rValue.getDouble(), nRec );
         }
     }
-    catch (...)
+    catch (Exception&)
     {
+        OSL_ASSERT(0);
         return FALSE;
     }
     return TRUE;
@@ -259,7 +292,7 @@ BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
 BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     // Sucht ein bestimmten Wert im Index
     // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     ONDXKey aKey;
@@ -270,7 +303,7 @@ BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
 
     // Existiert der Wert bereits
@@ -295,7 +328,7 @@ BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
     openIndexFile();
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rNewValue) || (isUnique() && getRoot()->Find(aKey)))
         return FALSE;
@@ -307,7 +340,7 @@ BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
 BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     // Existiert der Wert bereits
     // Find immer verwenden um das aktuelle Blatt zu bestimmen
     ONDXKey aKey;
@@ -328,9 +361,12 @@ BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 //------------------------------------------------------------------
 void ODbaseIndex::Collect(ONDXPage* pPage)
 {
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     if (pPage)
+    {
+        pPage->acquire();
         m_aCollector.push_back(pPage);
+    }
 }
 //------------------------------------------------------------------
 void ODbaseIndex::Release(BOOL bSave)
@@ -362,15 +398,26 @@ void ODbaseIndex::Release(BOOL bSave)
     {
         m_aHeader.db_rootpage = m_nRootPage;
         m_aHeader.db_pagecount = m_nPageCount;
-        m_aFileStream << *this;
+        (*m_pFileStream) << *this;
     }
     m_nRootPage = m_nPageCount = 0;
     m_nCurNode = NODE_NOTFOUND;
+
+    closeImpl();
+}
+// -----------------------------------------------------------------------------
+void ODbaseIndex::closeImpl()
+{
+    if(m_pFileStream)
+    {
+        delete m_pFileStream;
+        m_pFileStream = NULL;
+    }
 }
 //------------------------------------------------------------------
 ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL bLoad)
 {
-    OSL_ENSURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
+    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
 
     ONDXPage* pPage;
     if (m_aCollector.size())
@@ -384,7 +431,7 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL b
         pPage = new ONDXPage(*this, nPagePos, pParent);
 
     if (bLoad)
-        m_aFileStream >> *pPage;
+        (*m_pFileStream) >> *pPage;
 
     return pPage;
 }
@@ -417,24 +464,30 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     return rStream;
 }
 // -------------------------------------------------------------------------
-INetURLObject ODbaseIndex::getEntry()
+::rtl::OUString ODbaseIndex::getCompletePath()
 {
-    INetURLObject aDir = m_pTable->getEntry();
-    aDir.setName(m_Name);
-    return aDir;
+    ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
+    sDir += STR_DELIMITER;
+    sDir += m_Name;
+    sDir += ::rtl::OUString::createFromAscii(".ndx");
+    return sDir;
 }
 //------------------------------------------------------------------
 void ODbaseIndex::createINFEntry()
 {
     // inf Datei abgleichen
-    String aNDX;
-    INetURLObject aEntry(getEntry());
-    aEntry.setExtension(String::CreateFromAscii("ndx"));
+    String sEntry = m_Name;
+    sEntry += String::CreateFromAscii(".ndx");
 
-    INetURLObject aInfEntry(m_pTable->getEntry());
-    aInfEntry.setExtension(String::CreateFromAscii("inf"));
+    ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
+    sCfgFile += STR_DELIMITER;
+    sCfgFile += m_pTable->getName();
+    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
-    Config aInfFile(aInfEntry.getFSysPath(INetURLObject::FSYS_DETECT));
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
+
+    Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
 
     USHORT nSuffix = aInfFile.GetKeyCount();
@@ -454,56 +507,47 @@ void ODbaseIndex::createINFEntry()
             }
         }
     }
-    aInfFile.WriteKey(aNewEntry,ByteString(aEntry.GetName(),m_pTable->getConnection()->getTextEncoding()));
+    aInfFile.WriteKey(aNewEntry,ByteString(sEntry,m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
 BOOL ODbaseIndex::DropImpl()
 {
-    if (m_aFileStream.IsOpen())
-        m_aFileStream.Close();
+    closeImpl();
 
-    INetURLObject aIndexEntry(getEntry());
-    aIndexEntry.setExtension(String::CreateFromAscii("ndx"));
-
-    try
+    ::rtl::OUString sPath = getCompletePath();
+    if(UCBContentHelper::Exists(sPath))
     {
-        Content aContent(aIndexEntry.GetMainURL(),Reference<XCommandEnvironment>());
-        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        if(!UCBContentHelper::Kill(sPath))
+            throw SQLException(::rtl::OUString::createFromAscii("Could not delete index!"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
     }
-    catch(Exception&) // a execption is thrown when no file exists
-    {
-    }
-
-//  ULONG nErrorCode = aIndexEntry.Kill();
-//  if (nErrorCode != SVSTREAM_OK && nErrorCode != SVSTREAM_FILE_NOT_FOUND)
-//  {
-//      //  aStatus.SetError(nErrorCode,INDEX,aName);
-//      return FALSE;
-//  }
 
     // InfDatei abgleichen
-    String aNDX;
-    INetURLObject aEntry( m_pTable->getEntry());
-    aEntry.setExtension(String::CreateFromAscii("inf"));
 
-    Config aInfFile(aEntry.getFSysPath(INetURLObject::FSYS_DETECT));
+    ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
+    sCfgFile += STR_DELIMITER;
+    sCfgFile += m_pTable->getName();
+    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
+
+    String sPhysicalPath;
+    String sNDX(sCfgFile);
+    sal_Bool bOk = LocalFileHelper::ConvertURLToPhysicalName(sNDX,sPhysicalPath);
+    OSL_ENSURE(bOk,"Can not convert Config Filename into Physical Name!");
+
+    Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
     USHORT nKeyCnt = aInfFile.GetKeyCount();
     ByteString aKeyName;
+    String sEntry = m_Name;
+    sEntry += String::CreateFromAscii(".ndx");
 
-    INetURLObject aEntryToComp(getEntry());
-    aEntryToComp.setExtension(String::CreateFromAscii("ndx"));
-
+    // delete entries from the inf file
     for (USHORT nKey = 0; nKey < nKeyCnt; nKey++)
     {
         // Verweist der Key auf ein Indexfile?...
         aKeyName = aInfFile.GetKeyName( nKey );
-        //...wenn ja, Indexliste der Tabelle hinzufuegen
-        if (aEntry.IsCaseSensitive() ? aKeyName.Copy(0,3) == "NDX" : aKeyName.Copy(0,3).EqualsIgnoreCaseAscii("NDX"))
+        if (aKeyName.Copy(0,3) == "ndx")
         {
-            aEntryToComp.setName(String(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()));
-            aEntryToComp.setExtension(String::CreateFromAscii("ndx"));
-            if (aEntryToComp == aIndexEntry)
+            if(sEntry == String(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
             {
                 aInfFile.DeleteKey(aKeyName);
                 break;
@@ -517,44 +561,20 @@ BOOL ODbaseIndex::DropImpl()
 BOOL ODbaseIndex::CreateImpl()
 {
     // Anlegen des Index
-    INetURLObject aEntry(getEntry());
-    aEntry.setExtension(String::CreateFromAscii("ndx"));
-
-    Content aContent(aEntry.GetMainURL(),Reference<XCommandEnvironment>());
-    try
-    {
-        if (aContent.isDocument())
-        {
-            //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,INDEX,aEntry.GetFull());
-            return FALSE;
-        }
-    }
-    catch(Exception&) // a execption is thrown when no file exists
-    {
-    }
+    ::rtl::OUString sFile = getCompletePath();
+    if(UCBContentHelper::Exists(sFile))
+        throw SQLException(::rtl::OUString::createFromAscii("Object already exists!"),*this,SQLSTATE_SEQUENCE,1000,Any());
 
     // Index ist nur einstufig
-    if (m_pColumns->getCount() != 2)
-    {
-        //  aStatus.SetDriverNotCapableError();
-        return FALSE;
-    }
+    if (m_pColumns->getCount() > 1)
+        throw SQLException(::rtl::OUString::createFromAscii("Not capable! Only one column per index."),*this,SQLSTATE_SEQUENCE,1000,Any());
 
     Reference<XFastPropertySet> xCol;
-    ::cppu::extractInterface(xCol,m_pColumns->getByIndex(1));
+    ::cppu::extractInterface(xCol,m_pColumns->getByIndex(0));
 
     // ist die Spalte schon indiziert ?
     if (!xCol.is())
-    {
-//      String aText = String(OResId(STR_STAT_INDEX_COLUMN_NOT_FOUND));
-//      aText.SearchAndReplace(String::CreateFromAscii("#"),pColumn->GetName());
-//      aText.SearchAndReplace(String::CreateFromAscii("%"),GetTable()->Name());
-//      aStatus.Set(SDB_STAT_ERROR,
-//              String::CreateFromAscii("01000"),
-//              aStatus.CreateErrorMessage(aText),
-//              0, String() );
-        return FALSE;
-    }
+        throw ::dbtools::FunctionSequenceException(*this);
 //  else if (pColumn && pColumn->IsIndexed())
 //  {
 //      String aText = String(OResId(STR_STAT_INDEX_COLUMN_ALREADY_INDEXED));
@@ -566,67 +586,81 @@ BOOL ODbaseIndex::CreateImpl()
 //      return FALSE;
 //  }
 
-    // Anlegen des Indexfiles
-    m_aFileStream.Open(aEntry.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
-    if (!m_aFileStream.IsOpen())
-        return FALSE;
+    // create the index file
+    m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    if (!m_pFileStream)
+        throw SQLException(::rtl::OUString::createFromAscii("Could not access index file!"),*this,SQLSTATE_SEQUENCE,1000,Any());
 
-    m_aFileStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    m_aFileStream.SetBufferSize(512);
+    m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_pFileStream->SetBufferSize(512);
 
     // Zun‰chst muﬂ das Ergebnis sortiert sein
-    Reference<XStatement> xStmt = m_pTable->getConnection()->createStatement();
-
-    String aName(getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME)));
-
-    String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
-    String aStatement;
-    aStatement.AssignAscii("SELECT ");
-    aStatement += aQuote;
-    aStatement += aName;
-    aStatement += aQuote;
-    aStatement.AppendAscii(" FROM ");
-    aStatement += aQuote;
-    aStatement += m_pTable->getName().getStr();
-    aStatement += aQuote;
-    aStatement.AppendAscii(" ORDER BY ");
-    aStatement += aQuote;
-    aStatement += aName;
-    aStatement += aQuote;
-
-    if (!m_IsUnique) // zusaetzlich sortierung mit der bookmarkspalte
+    Reference<XStatement> xStmt;
+    Reference<XResultSet> xSet;
+    String aName;
+    try
     {
-        aStatement.AppendAscii(" ,");
+        xStmt = m_pTable->getConnection()->createStatement();
+
+        aName = getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME));
+
+        String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
+        String aStatement;
+        aStatement.AssignAscii("SELECT ");
         aStatement += aQuote;
-        aStatement.AppendAscii("[BOOKMARK]"); // this is a special column
+        aStatement += aName;
         aStatement += aQuote;
+        aStatement.AppendAscii(" FROM ");
+        aStatement += aQuote;
+        aStatement += m_pTable->getName().getStr();
+        aStatement += aQuote;
+        aStatement.AppendAscii(" ORDER BY ");
+        aStatement += aQuote;
+        aStatement += aName;
+        aStatement += aQuote;
+
+//      if (!m_IsUnique) // zusaetzlich sortierung mit der bookmarkspalte
+//      {
+//          aStatement.AppendAscii(" ,");
+//          aStatement += aQuote;
+//          aStatement.AppendAscii("[BOOKMARK]"); // this is a special column
+//          aStatement += aQuote;
+//      }
+
+        xSet = xStmt->executeQuery(aStatement);
     }
+    catch(Exception& e)
+    {
 
-    Reference<XResultSet> xSet = xStmt->executeQuery(aStatement);
-
+        closeImpl();
+        if(UCBContentHelper::Exists(sFile))
+            UCBContentHelper::Kill(sFile);
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,makeAny(e));
+    }
     if (!xSet.is())
     {
-        m_aFileStream.Close();
-        try
-        {
-            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
-        }
-        catch(Exception&) // a execption is thrown when no file exists
-        {
-        }
-        return FALSE;
+
+        closeImpl();
+        if(UCBContentHelper::Exists(sFile))
+            UCBContentHelper::Kill(sFile);
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,Any());
     }
 
     // Setzen der Headerinfo
     memset(&m_aHeader,0,sizeof(m_aHeader));
-    m_aFileStream.SetStreamSize(512);
+    m_pFileStream->SetStreamSize(512);
 
     sal_Int32 nType = 0;
-    xCol->getFastPropertyValue(PROPERTY_ID_TYPE) >>= nType;
+    ::vos::ORef<OSQLColumns> aCols = m_pTable->getTableColumns();
+
+    Reference< XPropertySet > xTableCol(*find(aCols->begin(),aCols->end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
+
+    xTableCol->getPropertyValue(PROPERTY_TYPE) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(PROPERTY_PRECISION));
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
+
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
     strcpy(m_aHeader.db_name,aCol.GetBuffer());
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
@@ -647,61 +681,48 @@ BOOL ODbaseIndex::CreateImpl()
     //  ULONG nRowsLeft = pCursor->RowCount();
     Reference<XRow> xRow(xSet,UNO_QUERY);
 
-    xSet->last();
-    sal_Int32 nRowsLeft = xSet->getRow();
-    xSet->beforeFirst();
-
-    // Erzeugen der Indexstruktur
-    while (xSet->next())
+    if(xSet->last())
     {
-        //  ODbRow& rRow = *pCursor->GetRow();
-        // ueberpruefen auf doppelten eintrag
-        if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
+        sal_Int32 nRowsLeft = xSet->getRow();
+        xSet->beforeFirst();
+
+        // Erzeugen der Indexstruktur
+        while (xSet->next())
         {
-            ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, 0);
-            if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
+            //  ODbRow& rRow = *pCursor->GetRow();
+            // ueberpruefen auf doppelten eintrag
+            if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
             {
-//              String aText = String(OResId(STR_STAT_INDEX_NOT_UNIQUE));
-//              aText.SearchAndReplace(String::CreateFromAscii("#"),aName);
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
-                break;
+                ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, 0);
+                if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
+                {
+
+                    closeImpl();
+                    if(UCBContentHelper::Exists(sFile))
+                        UCBContentHelper::Kill(sFile);
+                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,SQLSTATE_GENERAL,1000,Any());
+                }
             }
+            ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
+            ONDXNode aNewNode(aKey);
+            if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
+                break;
+
+    #ifdef DEBUG
+            //DBG_TRACE1("SDB: %s", (const char*)pCursor->Variable(1)->GetString());
+            //      PrintTree();
+    #endif
         }
-        ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
-        ONDXNode aNewNode(aKey);
-        if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
-            break;
-
-#ifdef DEBUG
-        //DBG_TRACE1("SDB: %s", (const char*)pCursor->Variable(1)->GetString());
-        //      PrintTree();
-#endif
     }
+    xRow = NULL;
+    ::comphelper::disposeComponent(xSet);
+    ::comphelper::disposeComponent(xStmt);
 
-//  BOOL bResult = !pCursor->IsInRange();
-//  if (!bResult)
-//  {
-//      m_aFileStream.Close();
-//      aEntry.Kill();
-//      Release(FALSE);
-//  }
-//  else
-//  {
-
-        Release();
-//      m_aFileStream.Close();
-        // den FielStream NICHT schliessen, da per definitionem ein OObject nach dem Kreieren offen ist
-
-        // inf Datei abgleichen
-        createINFEntry();
-//  }
-//
-    //  pCursor->ReleaseRef();
+    Release();
+    createINFEntry();
     return sal_True;
 }
+// -----------------------------------------------------------------------------
 
 
 

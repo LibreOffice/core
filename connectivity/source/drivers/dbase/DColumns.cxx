@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void SAL_CALL ODbaseColumns::dropByIndex( sal_Int32 index ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     if(!m_pTable->isNew())
     {

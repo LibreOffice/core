@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,17 +108,14 @@ ONDXPage::~ONDXPage()
 void ONDXPage::release()
 {
     if (! osl_decrementInterlockedCount( &m_refCount ))
-    {
         QueryDelete();
-        delete this;
-    }
 }
 //------------------------------------------------------------------
 void ONDXPage::QueryDelete()
 {
     // Ablegen im GarbageCollector
     if (IsModified())
-        rIndex.m_aFileStream << *this;
+        (*rIndex.m_pFileStream) << *this;
 
     bModified = FALSE;
     if (rIndex.UseCollector())
@@ -139,6 +136,8 @@ void ONDXPage::QueryDelete()
         (*aParent).Clear();
         rIndex.Collect(this);
     }
+    else
+        delete this;
 //  else
 //      SvRefBase::QueryDelete();
 }
@@ -927,18 +926,8 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         memset(aNodeData.aData,0x20,rIndex.getHeader().db_keylen);
         if (aKey.getValue().hasValue())
         {
-            //  ODBFConnection *pCon = rIndex.GetDBFConnection();
-            if (NULL)
-            {
-                ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
-                strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
-            }
-            else
-            {
-                DBG_ERROR("No Connection");
-                ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
-                strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
-            }
+            ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
+            strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
         }
         rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
     }

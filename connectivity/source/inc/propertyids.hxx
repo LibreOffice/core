@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 15:46:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ namespace dbtools
 //  ====================================================
     extern const sal_Char* getERRORMSG_SEQUENCE();
     extern const sal_Char* getSQLSTATE_SEQUENCE();
+    extern const sal_Char* getSQLSTATE_GENERAL();
+    extern const sal_Char* getSTR_DELIMITER();
 }
 }
 
@@ -200,6 +202,8 @@ namespace connectivity
     DECLARE_CONSTASCII_USTRING(STAT_INVALID_INDEX,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(ERRORMSG_SEQUENCE,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(SQLSTATE_SEQUENCE,CONNECTIVITY_PROPERTY_NAME_SPACE)
+    DECLARE_CONSTASCII_USTRING(SQLSTATE_GENERAL,CONNECTIVITY_PROPERTY_NAME_SPACE)
+    DECLARE_CONSTASCII_USTRING(STR_DELIMITER,CONNECTIVITY_PROPERTY_NAME_SPACE)
 
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:05:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     ,m_nRowPos(0)
     ,m_bBOF(sal_True)
 {
+    construct();
 }
 
 // -------------------------------------------------------------------------
@@ -151,6 +152,9 @@ void ODatabaseMetaDataResultSet::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
+    m_aRowsIter = m_aRows.end();
+    m_aRows.clear();
+    m_aRowsIter = m_aRows.end();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
@@ -821,4 +825,6 @@ void ODatabaseMetaDataResultSet::setImportedKeysMap()
     pMetaData->setImportedKeysMap();
     m_xMetaData = pMetaData;
 }
+// -----------------------------------------------------------------------------
+
 

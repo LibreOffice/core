@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,14 @@
 #endif
 
 using namespace connectivity::dbase;
-using namespace connectivity::file;
+using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(OConnection* _pCon)  :ODatabaseMetaData(_pCon)
+ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
 }
 // -------------------------------------------------------------------------
@@ -127,7 +127,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setTypeInfoMap();
     ORows aRows;
@@ -211,7 +211,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumnPrivileges(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
     pResult->setColumnPrivilegesMap();
     return xRef;
@@ -310,7 +310,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
         }
     }
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
     pResult->setColumnsMap();
     pResult->setRows(aRows);
@@ -323,7 +323,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getVersionColumns(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setVersionColumnsMap();
     return xRef;
@@ -334,8 +334,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getExportedKeys(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
     pResult->setExportedKeysMap();
     return xRef;
 }
@@ -345,7 +345,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getImportedKeys(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setImportedKeysMap();
     return xRef;
@@ -356,7 +356,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getPrimaryKeys(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setPrimaryKeysMap();
     return xRef;
@@ -437,7 +437,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         }
     }
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setIndexInfoMap();
     pResult->setRows(aRows);
@@ -450,7 +450,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getBestRowIdentifier(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setBestRowIdentifierMap();
     return xRef;
@@ -463,7 +463,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getCrossReference(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setCrossReferenceMap();
     return xRef;

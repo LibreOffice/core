@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:05:46 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,13 +152,12 @@ namespace connectivity
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
+        ~ODatabaseMetaDataResultSet();
     public:
         virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
         virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSet();
-        ~ODatabaseMetaDataResultSet();
 
         void setRows(const ORows& _rRows) { m_aRows = _rRows; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UStringDescription_Impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 15:46:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,11 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ISBOOKMARKABLE);
 //============================================================
 IMPLEMENT_CONSTASCII_USTRING(ERRORMSG_SEQUENCE);
 IMPLEMENT_CONSTASCII_USTRING(SQLSTATE_SEQUENCE);
+IMPLEMENT_CONSTASCII_USTRING(SQLSTATE_GENERAL);
+//============================================================
+//= different
+//============================================================
+IMPLEMENT_CONSTASCII_USTRING(STR_DELIMITER);
 
 #endif // CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
 

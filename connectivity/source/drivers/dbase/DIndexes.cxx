@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,14 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
 
-
+using namespace utl;
 using namespace connectivity::dbase;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -85,26 +91,31 @@ Reference< XNamed > ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     //  Dir* pDir = m_pTable->getConnection()->getDir();
     //  String aPath = pDir->GetName();
     //  aPath += _rName.getStr();
-    INetURLObject aEntry(m_pTable->getEntry());
-    aEntry.setName(_rName);
-    aEntry.setExtension(String::CreateFromAscii("ndx"));
-    SvFileStream aFileStream;
-    aFileStream.Open(aEntry.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
+    ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
+    sFile += STR_DELIMITER;
+    sFile += _rName;
+    sFile += ::rtl::OUString::createFromAscii(".ndx");
+    if(!UCBContentHelper::Exists(sFile))
+        throw SQLException(::rtl::OUString::createFromAscii("Index file doesn't exists!"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
 
+    Reference< XNamed > xRet;
+    SvStream* pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
+    if(pFileStream)
+    {
+        pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        pFileStream->SetBufferSize(512);
+        ODbaseIndex::NDXHeader aHeader;
 
-    // Anlegen des Indexfiles
-        //  aFileStream.Open(aEntry.GetFull(), STREAM_READWRITE | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
+        pFileStream->Seek(0);
+        pFileStream->Read(&aHeader,512);
+        delete pFileStream;
 
-    aFileStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    aFileStream.SetBufferSize(512);
-    ODbaseIndex::NDXHeader aHeader;
-
-    aFileStream.Seek(0);
-    aFileStream.Read(&aHeader,512);
-
-    ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
-
-    Reference< XNamed > xRet = pIndex;
+        ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
+        xRet = pIndex;
+        pIndex->openIndexFile();
+    }
+    else
+        throw SQLException(::rtl::OUString::createFromAscii("Could not open index file"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
     return xRet;
 }
 // -------------------------------------------------------------------------
@@ -137,7 +148,7 @@ void SAL_CALL ODbaseIndexes::appendByDescriptor( const Reference< XPropertySet >
     {
         ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
         if(pIndex && pIndex->CreateImpl())
-            ODbaseIndexes_BASE::appendByDescriptor(descriptor);
+            ODbaseIndexes_BASE::appendByDescriptor(Reference< XPropertySet >(createObject(aName),UNO_QUERY));
     }
 }
 // -------------------------------------------------------------------------
@@ -149,6 +160,9 @@ void SAL_CALL ODbaseIndexes::dropByName( const ::rtl::OUString& elementName ) th
     ObjectMap::iterator aIter = m_aNameMap.find(elementName);
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
+
+    if(!aIter->second.is())
+        aIter->second = createObject(elementName);
 
     Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     if(xTunnel.is())
@@ -164,7 +178,7 @@ void SAL_CALL ODbaseIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     dropByName((*m_aElements[index]).first);
 }

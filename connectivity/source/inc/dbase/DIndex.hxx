@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace connectivity
             };
 
         private:
-            SvFileStream    m_aFileStream;                  // Stream zum Lesen/Schreiben des Index
+            SvStream*       m_pFileStream;                  // Stream zum Lesen/Schreiben des Index
             NDXHeader       m_aHeader;
             ONDXPageList    m_aCollector;                   // Pool von nicht mehr benötigten Seiten
             ONDXPagePtr     m_aRoot,                        // Wurzel des b+ Baums
@@ -134,14 +134,18 @@ namespace connectivity
             BOOL            m_bUseCollector : 1;                        // Verwenden des GarbageCollectors
             sal_Bool        m_bUnique;
 
-            sal_Bool openIndexFile();
-            INetURLObject getEntry();
+            ::rtl::OUString getCompletePath();
+            void closeImpl();
+        protected:
+            ~ODbaseIndex();
         public:
             DECLARE_CTY_DEFAULTS( ODbaseIndex_BASE);
 
             ODbaseIndex(ODbaseTable* _pTable);
             ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const ::rtl::OUString& _Name);
 
+
+            sal_Bool openIndexFile();
             virtual void refreshColumns();
 
             // com::sun::star::lang::XUnoTunnel

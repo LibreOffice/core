@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 13:09:17 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@ sal_Bool SAL_CALL OIndex::supportsService( const ::rtl::OUString& _rServiceName 
 OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
                 ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
                 ,   m_pColumns(NULL)
+                ,m_IsUnique(sal_False)
+                ,m_IsClustered(sal_False)
+                ,m_IsPrimaryKeyIndex(sal_False)
 {
 }
 // -------------------------------------------------------------------------
