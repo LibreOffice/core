@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidateStyle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,53 +68,49 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::InvalidateStyle
 /** specifies how to invalidate windows.
  */
 constants InvalidateStyle
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::InvalidateStyle::CHILDREN
-    /** The child windows are invalidated too.
+    /** The child windows are invalidated, too.
      */
     const short CHILDREN = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::InvalidateStyle::NOCHILDREN
     /** The child windows are not invalidated.
      */
     const short NOCHILDREN = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::InvalidateStyle::NOERASE
     /** The invalidated area is painted with the background color/pattern.
      */
     const short NOERASE = 4;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::InvalidateStyle::UPDATE
     /** The invalidated area is updated immediately.
      */
     const short UPDATE = 8;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** The parent window is invalidated, too.
+     */
     const short TRANSPARENT = 16;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge: empty anyway
+    /** The parent window is not invalidated.
+     */
     const short NOTRANSPARENT = 32;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::InvalidateStyle::NOCLIPCHILDREN
-    /** The area is invalidated regardless of ovrlapping child windows.
+    /** The area is invalidated regardless of overlapping child windows.
      */
     const short NOCLIPCHILDREN = 16384;
 

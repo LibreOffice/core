@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,26 +72,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::InputEvent
 /** the root event class for all component-level input events.
 
-
-
     <p>Input events are delivered to listeners before they are
-    processed normally by the source where they originated.
+    processed normally by the source where they originated.</p>
 
-    </p>@see WindowEvent
+    @see WindowEvent
  */
 struct InputEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::InputEvent::Modifiers
-    /** contains the modifier keys which were pressed while event occurred.
+    /** contains the modifier keys which were pressed while the event occurred.
 
-
-
-        <p>Zero or more constants from the <type scope="com::sun::star::awt">KeyModifier</type> group.</p>
+        <p>Zero or more constants from the
+        <type scope="com::sun::star::awt">KeyModifier</type> group.</p>
      */
     short Modifiers;
 
