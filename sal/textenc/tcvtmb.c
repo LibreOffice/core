@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-25 14:57:35 $
+ *  last change: $Author: sb $ $Date: 2002-11-06 10:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,8 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
             if ( (nLowChar >= pHighEntry->mnLowStart) && (nLowChar <= pHighEntry->mnLowEnd) )
             {
                 cConv = pHighEntry->mpToUniTrailTab[nLowChar-pHighEntry->mnLowStart];
-                cConv |= 0x8080;
+                if (cConv != 0)
+                    cConv |= 0x8080;
             }
             else
                 cConv = 0;
@@ -623,8 +624,9 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                 pHighEntry = pHighTab+nHighChar;
                 if ( (nLowChar >= pHighEntry->mnLowStart) && (nLowChar <= pHighEntry->mnLowEnd) )
                 {
-                    cConv = 0x8F0000+(pHighEntry->mpToUniTrailTab[nLowChar-pHighEntry->mnLowStart]);
-                    cConv |= 0x8080;
+                    cConv = pHighEntry->mpToUniTrailTab[nLowChar-pHighEntry->mnLowStart];
+                    if (cConv != 0)
+                        cConv |= 0x8F8080;
                 }
 
                 if ( !cConv )
