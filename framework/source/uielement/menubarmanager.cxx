@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:22:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 10:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,6 +721,13 @@ throw ( RuntimeException )
                     else if ( aItemText.matchAsciiL( "($2)", 4 ))
                     {
                         String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
+                    else if ( aItemText.matchAsciiL( "($3)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
                         rtl::OUString aTmp( aResStr );
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
@@ -1487,25 +1494,24 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
     // Retrieve popup menu labels
     if ( !m_aModuleIdentifier.getLength() )
     {
-        // #110897#
-        // Reference< XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
         Reference< XModuleManager > xModuleManager( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
-
         Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-        m_aModuleIdentifier = xModuleManager->identify( xIfac );
-
-        if ( m_aModuleIdentifier.getLength() > 0 )
+        try
         {
-            // #110897#
-            // Reference< XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
-            Reference< XNameAccess > xNameAccess( getServiceFactory()->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
-
-            if ( xNameAccess.is() )
+            m_aModuleIdentifier = xModuleManager->identify( xIfac );
+            if ( m_aModuleIdentifier.getLength() > 0 )
             {
-                Any a = xNameAccess->getByName( m_aModuleIdentifier );
-                Reference< XNameAccess > xUICommands;
-                a >>= m_xUICommandLabels;
+            Reference< XNameAccess > xNameAccess( getServiceFactory()->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
+                if ( xNameAccess.is() )
+                {
+                    Any a = xNameAccess->getByName( m_aModuleIdentifier );
+                    Reference< XNameAccess > xUICommands;
+                    a >>= m_xUICommandLabels;
+                }
             }
+        }
+        catch ( Exception& )
+        {
         }
     }
 
