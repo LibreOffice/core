@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 08:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( com::sun
                   picture with a leading METAFILEHEADER
 ------------------------------------------------------------------------*/
 HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
+HENHMETAFILE  SAL_CALL OOMFPictToWinENHMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
 
 /*------------------------------------------------------------------------
     input:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-24 07:55:54 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 08:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,11 +356,16 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     if ( CF_DIB == fetc.cfFormat )
         clipDataStream = OOBmpToWinDIB( clipDataStream );
 
-    // transfer data
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {
         stgmedium.tymed          = TYMED_MFPICT;
         stgmedium.hMetaFilePict  = OOMFPictToWinMFPict( clipDataStream );
+        stgmedium.pUnkForRelease = NULL;
+    }
+    else if( CF_ENHMETAFILE == fetc.cfFormat )
+    {
+        stgmedium.tymed          = TYMED_ENHMF;
+        stgmedium.hMetaFilePict  = OOMFPictToWinENHMFPict( clipDataStream );
         stgmedium.pUnkForRelease = NULL;
     }
     else

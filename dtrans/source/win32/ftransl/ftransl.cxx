@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2002-04-04 13:28:51 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 08:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(text/plain;charset=utf-16), EMPTY_OUSTR, CF_UNICODETEXT, OUSTR(Unicode-Text), CPPUTYPE_OUSTR) );
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Locale), CF_LOCALE ) );
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Image WMF), CF_METAFILEPICT ) );// SOT_FORMAT_WMF
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Image EMF), CF_ENHMETAFILE ) );// SOT_FORMAT_EMF
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(FileList), CF_HDROP ) );// SOT_FORMAT_FILE_LIST
 
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(GDIMetaFile) ) );// SOT_FORMAT_GDIMETAFILE
