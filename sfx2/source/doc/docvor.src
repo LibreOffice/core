@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:37:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ModalDialog DLG_ORGANIZE
         Text[ polish ] = "~Ksi¹¿ka adresowa...";
         Text[ portuguese_brazilian ] = "~Address Book...";
         Text[ japanese ] = "±ÄÞÚ½’ (~A)...";
-        Text[ korean ] = "ÁÖ¼Ò·Ï...";
+        Text[ korean ] = "ÁÖ¼Ò·Ï(~A)...";
         Text[ chinese_simplified ] = "Í¨Ñ¶²¾(~A)...";
         Text[ chinese_traditional ] = "³q°T¿ý(~A)...";
         Text[ turkish ] = "~Address Book...";
@@ -516,7 +516,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
                     Text[ arabic ] = "ÌÏíÏ";
                     Text[ greek ] = "~Äçìéïõñãßá";
-                    Text[ korean ] = "»õ·Î";
+                    Text[ korean ] = "»õ·Î(~N)";
                     Text[ turkish ] = "Y~eni";
                     Text[ language_user1 ] = " ";
                 };
@@ -550,7 +550,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "§R°£(~D)";
                     Text[ arabic ] = "ÍÐÝ";
                     Text[ greek ] = "Äéáãñá~öÞ";
-                    Text[ korean ] = "»èÁ¦";
+                    Text[ korean ] = "»èÁ¦(~D)";
                     Text[ turkish ] = "~Sil";
                     Text[ language_user1 ] = " ";
                 };
@@ -578,7 +578,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "½s¿è(~E)";
                     Text[ arabic ] = "~ÊÍÑíÑ";
                     Text[ greek ] = "~Åðåîåñãáóßá";
-                    Text[ korean ] = "ÆíÁý";
+                    Text[ korean ] = "ÆíÁý(~E)";
                     Text[ turkish ] = "~Düzenle";
                     Text[ language_user1 ] = " ";
                 };
@@ -670,7 +670,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "¦C¦L(~P)";
                     Text[ arabic ] = "ØÈÇÚÉ";
                     Text[ greek ] = "Åê~ôýðùóç";
-                    Text[ korean ] = "ÀÎ¼â";
+                    Text[ korean ] = "ÀÎ¼â(~P)";
                     Text[ turkish ] = "~Yazdýr";
                     Text[ language_user1 ] = " ";
                 };
