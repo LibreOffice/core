@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-06 13:36:17 $
+ *  last change: $Author: kr $ $Date: 2001-02-22 17:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.14 $ $ $Date: 2001-02-06 13:36:17 $
+ * @version     $Revision: 1.15 $ $ $Date: 2001-02-22 17:12:21 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -505,6 +505,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         String protocol = parseAttributes((String)args[0]);
 
+        _java_environment   = java_environment;
+
         Class protocol_class = Class.forName("com.sun.star.lib.uno.protocols." + protocol + "." + protocol);
         Constructor protocol_constructor = protocol_class.getConstructor(new Class[] {IBridge.class});
 
@@ -516,9 +518,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         if(args.length > 3)
             _name = (String)args[3];
-
-        _java_environment   = java_environment;
-
 
         // be sure that all neccessary members are set
         if(_java_environment == null
