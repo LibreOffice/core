@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-12 08:37:56 $
+ *  last change: $Author: ssa $ $Date: 2002-09-13 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2263,12 +2263,6 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
 
 void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 {
-    BOOL bReMirror = ( ImplHasMirroredGraphics() && !IsRTLEnabled() );
-#ifdef DEBUG
-    if( bReMirror )
-        bReMirror = TRUE;   // just to break
-#endif
-
     mbPaintFrame = FALSE;
 
     if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
@@ -2297,35 +2291,13 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
     if ( mnPaintFlags & IMPL_PAINT_PAINT )
     {
         Region* pWinChildClipRegion = ImplGetWinChildClipRegion();
-        // --- RTL --- the child clip region is the window region clipped
-        //             against any overlaps, ie frame coordinates of mirrored and
-        //             unmirrored windows were used -> remirror
-
         if ( mnPaintFlags & IMPL_PAINT_PAINTALL )
-        {
             maInvalidateRegion = *pWinChildClipRegion;
-            if( bReMirror && !(nPaintFlags & IMPL_PAINT_CHECKRTL) )
-                ImplReMirror( maInvalidateRegion );
-        }
         else
         {
             if ( pRegion )
-            {
-#ifndef REMOTE_APPSERVER
-                // - RTL - re-mirror paint rect at this window
-                // re-mirror before merging it in the existing InvalidateRegion
-                // so this is only requird if the InvalidateRegion is not empty
-                // but it is not required if we're mirroring later anyway (check_rtl)
-                if( bReMirror && !maInvalidateRegion.IsEmpty() && !(nPaintFlags & IMPL_PAINT_CHECKRTL) )
-                {
-                    Region aMirroredRgn( *pRegion );
-                    ImplReMirror( aMirroredRgn );
-                    maInvalidateRegion.Union( aMirroredRgn );
-                }
-                else
-#endif
-                    maInvalidateRegion.Union( *pRegion );
-            }
+                maInvalidateRegion.Union( *pRegion );
+
             if( mpWinData && mbTrackVisible )
                 /* #98602# need to repaint all children within the
                * tracking rectangle, so the following invert
@@ -2352,14 +2324,12 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
 #ifndef REMOTE_APPSERVER
-            // - RTL - re-mirror paint rect at this window
-            // but do it only if the paint event came from the system (IMPL_PAINT_CHECKRTL)
+            // - RTL - re-mirror paint rect and region at this window
             if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
-                if ( nPaintFlags & IMPL_PAINT_CHECKRTL )
-                {
-                    ImplReMirror( aPaintRect );
-                    ImplReMirror( aPaintRegion );
-                }
+            {
+                ImplReMirror( aPaintRect );
+                ImplReMirror( aPaintRegion );
+            }
 #endif
             aPaintRect = ImplDevicePixelToLogic( aPaintRect);
             mpPaintRegion = &aPaintRegion;
@@ -2435,7 +2405,7 @@ void Window::ImplCallOverlapPaint()
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
-        ImplCallPaint( NULL, mnPaintFlags /*| IMPL_PAINT_CHECKRTL*/ );
+        ImplCallPaint( NULL, mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
     }
 }
 
@@ -2575,7 +2545,17 @@ void Window::ImplInvalidate( const Region* pRegion, USHORT nFlags )
         Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
         Region      aRegion( aRect );
         if ( pRegion )
-            aRegion.Intersect( *pRegion );
+        {
+            // --- RTL --- remirror region before intersecting it
+            if ( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            {
+                Region aRgn( *pRegion );
+                ImplReMirror( aRgn );
+                aRegion.Intersect( aRgn );
+            }
+            else
+                aRegion.Intersect( *pRegion );
+        }
         pWindow->ImplClipBoundaries( aRegion, TRUE, TRUE );
         if ( nFlags & INVALIDATE_NOCHILDREN )
         {
@@ -3187,18 +3167,19 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
 #ifndef REMOTE_APPSERVER
         if( ImplHasMirroredGraphics() )
+        {
             ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X(), this );
 
-        // --- RTL --- check if parent is in different coordinates
-        /*
-        if( GetParent() && GetParent()->ImplHasMirroredGraphics() && !GetParent()->IsRTLEnabled() )
-        {
-            // --- RTL --- (re-mirror at parent window)
-            Rectangle aRect( Point ( nX, nY ), Size( mnOutWidth, mnOutHeight ) );
-            GetParent()->ImplReMirror( aRect );
-            nX = aRect.nLeft;
+            if( IsRTLEnabled() )
+            {
+                // --- RTL --- check if parent is in different coordinates
+                if( mpParent && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
+                {
+                    // --- RTL --- (re-mirror at parent window)
+                    nX = mpParent->mnOutWidth - mnOutWidth - 1 - nX;
+                }
+            }
         }
-        */
 #endif
         if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
         {
@@ -5676,6 +5657,9 @@ Region Window::GetWindowClipRegionPixel( USHORT nFlags ) const
     {
         Region* pWinChildClipRegion = ((Window*)this)->ImplGetWinChildClipRegion();
         aWinClipRegion = *pWinChildClipRegion;
+        // --- RTL --- remirror clip region before passing it to somebody
+        if( ((Window*)this)->ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            ImplReMirror( aWinClipRegion );
     }
 
     if ( nFlags & WINDOW_GETCLIPREGION_NULL )
