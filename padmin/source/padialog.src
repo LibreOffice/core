@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:06:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Vyberte prosím adresář, ze kterého chcete importovat písma. Vybraná písma přidejte kliknutím na tlačítko OK.";
         Text[ hebrew ] = "‮נא לבחור תיקיה ממנה ליבא גופנים. יש לבחור גופנים וללחוץ OK.‬";
         Text[ hindi ] = "कृपया कोष्ठ को चुनिए, जहाँ से आप फ़ॉन्ट् को आयात करना चाहते है । चुने हुए फ़ॉन्ट्स को जोड़ने केलिए ठीक बटन को क्लिक् कीजिए ।";
+        Text[ slovak ] = "Prosím vyberte adresár, z ktorého chcete importovať písma. Pridajte vybrané písma kliknutím na OK tlačidlo.";
     };
     FixedLine RID_FIMP_FL_FROM
     {
@@ -141,6 +142,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Zdrojový adresář";
         Text[ hebrew ] = "‮ספרית מקור‬";
         Text[ hindi ] = "मूल डैरक्टरी";
+        Text[ slovak ] = "Zdrojový adresár";
     };
     Edit RID_FIMP_EDT_FROM
     {
@@ -185,6 +187,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Vytvořit pouze symbolické odkazy";
         Text[ hebrew ] = "‮יצירת קשרים לוגיים בלבד‬";
         Text[ hindi ] = "केवल ~सॉफ्ट् लिंक्स उत्पन्न करो";
+        Text[ slovak ] = "~Vytvoriť len \"mäkké\" odkazy";
     };
     OKButton RID_FIMP_BTN_OK
     {
@@ -227,6 +230,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Vybrat vše";
         Text[ hebrew ] = "‮בחירה כוללת‬";
         Text[ hindi ] = "सब ~चुनो";
+        Text[ slovak ] = "Vyb~rať všetko";
     };
     String RID_FIMP_STR_IMPORTOP
     {
@@ -240,7 +244,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ french ] = "Ajout des polices";
         Text[ spanish ] = "A�ade fuentes";
         Text[ finnish ] = "Lis�� fontteja";
-        Text[ italian ] = "Importa font";
+        Text[ italian ] = "Importa tipo di carattere";
         Text[ danish ] = "Tilf�j skrifttyper";
         Text[ swedish ] = "L�gger till teckensnitt";
         Text[ polish ] = "Dodaj czcionki";
@@ -256,6 +260,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Přidat písma";
         Text[ hebrew ] = "‮הוספת גופנים‬";
         Text[ hindi ] = "फ़ॉन्ट्स जोड़ो";
+        Text[ slovak ] = "Pridať písma";
     };
     String RID_FIMP_STR_QUERYOVERWRITE
     {
@@ -268,7 +273,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ dutch ] = "Wilt u dit lettertypenbestand\n %s\n werkelijk overschrijven?";
         Text[ french ] = "Voulez-vous vraiment �craser\nle fichier de polices\n   %s ?";
         Text[ spanish ] = "�Desea realmente sobrescribir los archivos de fuente\n   %s?";
-        Text[ italian ] = "Volete davvero soprascrivere\n il file di font\n   %s";
+        Text[ italian ] = "Volete davvero soprascrivere\n il file del tipo di carattere\n   %s";
         Text[ danish ] = "Er du sikker p�, at du vil overskrive skrifttypefilen\n   %s\n?";
         Text[ swedish ] = "Vill du verkligen skriva �ver den h�r teckensnittsfilen\n   %s?";
         Text[ polish ] = "Czy na pewno chcesz zast�pi� ten plik czcionek?\n   %s";
@@ -285,6 +290,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Opravdu chcete přepsat tento soubor písma?\n   %s";
         Text[ hebrew ] = "‮האם באמת להחליף קובץ גופן זה?\n  %s‬";
         Text[ hindi ] = "आप सचमुच में इस फ़ॉन्ट् फाइल को ओवररइट् करना चाहते है ?\n   %s";
+        Text[ slovak ] = "Naozaj chcete prepísať tento súbor s písmom?\n   %s";
     };
     String RID_FIMP_STR_OVERWRITEALL
     {
@@ -314,6 +320,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Vše";
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "सब";
+        Text[ slovak ] = "Všetko";
     };
     String RID_FIMP_STR_OVERWRITENONE
     {
@@ -343,6 +350,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Žádné";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "कोई नहीं";
+        Text[ slovak ] = "Žiadne";
     };
 
     String RID_FIMP_STR_NOAFM
@@ -356,7 +364,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ dutch ] = "Lettertypenbestand\n%s\n kan niet worden ge�nstalleerd omdat er geen bijbehorend formaatbestand (met extensie .afm) is gevonden. Formaatbestanden kunnen worden gemaakt met bijvoorbeeld ghostscript en moeten worden opgeslagen in de directory waarin de lettertypenbestanden staan of in een subdirectory daarvan.";
         Text[ french ] = "Aucun fichier de format (d'extension .afm) n'a �t� d�tect� pour le fichier de police\n%s\n ; la police ne peut donc pas �tre install�e. Les fichiers de format peuvent par ex. �tre cr�� avec ghostscript et doivent �tre plac�s dans le m�me r�pertoire que celui des fichiers de police ou dans le sous-r�pertoire afm.";
         Text[ spanish ] = "No se encontr� ning�n archivo de formato (extensi�n .afm) para el archivo de fuente\n%s\n por lo que no se puede instalar la fuente. Los archivos de formato se pueden crear p.ej. con ghostscript y deben encontrarse en el mismo directorio que los archivos de fuentes o en el subdirectorio afm.";
-        Text[ italian ] = "Impossibile installare il font\n%s\nperch� non � stato trovato il rispettivo file di formato (con estensione .afm). I file di formato si possono creare ad esempio con ghostscript e si devono trovare nella stessa cartella dei font oppure nella rispettiva sottocartella afm.";
+        Text[ italian ] = "Impossibile installare il tipo di carattere\n%s\nperch� non � stato trovato il rispettivo file di formato (con estensione .afm). I file di formato si possono creare ad esempio con ghostscript e si devono trovare nella stessa cartella dei tipi di carattere oppure nella rispettiva sottocartella afm.";
         Text[ danish ] = "Der blev ikke fundet nogen formatfil (med filtypenavnet .afm) til skrifttypefilen\n%s\n, og derfor kan den ikke installeres. Formatfiler kan oprettes f.eks. med ghostscript og skal v�re i samme bibliotek som skrifttypefilerne eller i dets underbibliotek afm.";
         Text[ swedish ] = "Det hittades ingen formatfil (med filtill�gget .afm) till teckensnittsfilen\n%s\n, varf�r den inte kan installeras. Formatfiler kan t.ex. skapas med ghostscript och m�ste finnas i samma katalog som teckensnittsfilerna eller i katalogens underordnade kataloger.";
         Text[ polish ] = "Czcionka\n%s\nnie zostanie zainstalowana, poniewa� nie znaleziono dla niej �adnego pliku formatu (z rozszerzeniem .afm). Pliki formatu mo�na tworzy� np. za pomoc� programu ghostscript. Musz� si� one znajdowa� w tym samym katalogu, co pliki czcionki, albo w jego podkatalogu afm.";
@@ -373,6 +381,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Doplňující soubor (s příponou .afm) nebyl nalezen pro font\n%s\na proto tento font nemůže být nainstalován. Doplňující soubory můžete vytvořit například pomocí aplikace ghostscript. Tyto soubory musí být umístěny ve stejném adresáři jako soubory fontu nebo v jeho podadresáři afm.";
         Text[ hebrew ] = "‮לא ניתן להתקין את הגופן\n%s\nכי קובץ עם סיומת .afm לא אותר. ניתן לחולל קבצי .afm באמצעות תוכניות כגון ghostscript. יש לשים את הקבצים באותה ספריה שנמצא בה הגופן או בספרית ה .afm תחת ספרית הגופן.‬";
         Text[ hindi ] = "अक्षर केलिए रचना फाइल (.afm सहित विस्तार) नहीं मिला\n%s\nइसलिए, फ़ॉन्ट् का प्रतिष्ठापन नहीं हो सकता है । घोस्टस्क्रिप्ट सहित रचना फाइल को उत्पन्न कर सकते है, उदाहरण केलिए, और फ़ॉन्ट् फाइल अथवा afm अधीन डैरक्टरी का समान डैरक्टरी में स्थापित करना चाहिए ।";
+        Text[ slovak ] = "Formátový súbor (s .afm príponou) nebol nájdený pre písmo\n%s\npreto sa písmo nedá nainštalovať. Formátové súbory sa dajú vytvoriť pomocou programu ghostscript (napríklad) a musia byť umiestnené v tom istom adresári ako súbory písem alebo ich afm podadresároch.";
     };
     String RID_FIMP_STR_AFMCOPYFAILED
     {
@@ -385,7 +394,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ dutch ] = "Het lettertype is niet ge�nstalleerd omdat het metrische bestand voor lettertypenbestand\n %s\nniet kan worden gekopieerd.";
         Text[ french ] = "Copie du fichier m�trique pour le fichier\n   %s\nimpossible, donc impossibilit� d'installer la police !";
         Text[ spanish ] = "No se pudo copiar el archivo de m�trica correspondiente al de la fuente\n   %s\n, por lo que no se instalar� la fuente.";
-        Text[ italian ] = "Impossibile copiare il file metrico per il file dei font\n...%s\n. Il font non � stato installato.";
+        Text[ italian ] = "Impossibile copiare il file metrico per il file del tipo di carattere\n...%s\n. Il tipo di carattere non � stato installato.";
         Text[ danish ] = "Metrikfilen til skrifttypefilen\n   %s\nkunne ikke kopieres. Skrifttypen bliver ikke installeret.";
         Text[ swedish ] = "Det gick inte att kopiera metrikfilen till teckensnittsfilen\n   %s\n. Teckensnittet kommer inte att installeras.";
         Text[ polish ] = "Skopiowanie pliku metryki przypisanego do pliku czcionki\n   %s\nnie by�o mo�liwe. Czcionka nie zostanie zainstalowana.";
@@ -402,6 +411,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Soubor s metrikami pro soubor s písmem\n   %s\nnemohl být zkopírován. Font nebude nainstalován.";
         Text[ hebrew ] = "‮לא ניתן להתקין את הגופן כי לא ניתן להעתיק את מידות הגופן מקובץ הגופן\n   %s\n.‬";
         Text[ hindi ] = "फ़ॉन्ट् फाइल केलिए मेट्रिक फाइल\n   %s\n का प्रतिलिपि नहीं कर सकते है । फ़ॉन्ट् का प्रतिष्ठापन नहीं हो सकता है ।";
+        Text[ slovak ] = "Súbor s metrikami pre súbor s písmom\n   %s\nsa nedal skopírovať. Písmo nebude nainštalované.";
     };
     String RID_FIMP_STR_FONTCOPYFAILED
     {
@@ -414,7 +424,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ dutch ] = "Het lettertype wordt niet ge�nstalleerd omdat het lettertypenbestand \n %s\n niet kan worden gekopieerd.";
         Text[ french ] = "Copie du fichier de police\n   %s\n impossible, donc impossibilit� d'installer la police !";
         Text[ spanish ] = "No se pudo copiar el archivo de fuente\n   %s\n, por lo que no se instalar� la fuente.";
-        Text[ italian ] = "Impossibile compiare il file di font\n   %s\n. Il font non � stato installato.";
+        Text[ italian ] = "Impossibile compiare il file del tipo di carattere\n   %s\n. Il tipo di carattere non � stato installato.";
         Text[ danish ] = "Skrifttypefilen\n   %s\nkunne ikke kopieres. Skrifttypen bliver ikke installeret.";
         Text[ swedish ] = "Det gick inte att kopiera teckensnittsfilen\n   %s\n. Teckensnittet installeras inte.";
         Text[ polish ] = "Skopiowanie pliku czcionki\n   %s\nnie by�o mo�liwe. Czcionka nie zostanie zainstalowana.";
@@ -431,6 +441,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Soubor s písmem\n   %s\nnemohl být zkopírován. Font nebude nainstalován.";
         Text[ hebrew ] = "‮לא ניתן להתקין את הגופן כי לא ניתן להעתיק את קובץ הגופן\n   %s\n.‬";
         Text[ hindi ] = "फ़ॉन्ट् फाइल\n   %s\n का प्रतिलिपि नहीं बना सकते है । फ़ॉन्ट् का प्रतिष्ठापन नहीं हो सकता है ।";
+        Text[ slovak ] = "Súbor s písmom\n   %s\nsa nedal skopírovať. Písmo nebude nainštalované.";
     };
     String RID_FIMP_STR_NOWRITEABLEFONTSDIR
     {
@@ -443,7 +454,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ dutch ] = "Er kunnen geen lettertypen worden ge�nstalleerd omdat er in het pad voor de lettertypen geen directory is aangetroffen met een beschrijfbaar bestand fonts.dir.";
         Text[ french ] = "Aucun r�pertoire contenant un fichier d'�criture fonts.dir ne se trouve dans le chemin de police (fontpath). Impossible d'installer des polices !";
         Text[ spanish ] = "No se encontr� ning�n directorio en la ruta de fuentes con un archivo de escritura fonts.dir. Imposible instalar fuentes.";
-        Text[ italian ] = "Impossibile trovare in Fontpath una cartella con un file font.dir scrivibile. Non � possibile installare i font.";
+        Text[ italian ] = "Impossibile trovare in Fontpath una cartella con un file font.dir scrivibile. Non � possibile installare i tipi di carattere.";
         Text[ danish ] = "Der blev ikke fundet noget bibliotek i skrifttypefilen, som indeholder en skrivbar fil med navnet fonts.dir. Det er ikke muligt at installere nogen skrifttyper.";
         Text[ swedish ] = "I Fontpath finns det ingen katalog som inneh�ller en skrivbar fonts.dir-fil. Det g�r inte att skapa n�gra teckensnitt.";
         Text[ polish ] = "Nie mo�na zainstalowa� czcionek, poniewa� na �cie�ce Fontpath nie znaleziono �adnego katalogu z plikiem fonts.dir, kt�ry mo�naby zapisa�.";
@@ -460,6 +471,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Ve Fontpath není adresář obsahující soubor fonts.dir s přístupem pro zápis. Písma proto nemohou být instalována.";
         Text[ hebrew ] = "‮ לא ניתן להתקין גופנים כי אין במסלול הספריות של הגופנים קובץ אם הרשאות כתיבה בשם fonts.dir.‬";
         Text[ hindi ] = "अक्षरमार्ग में लिखने योग्य fonts.dir फाइल का डैरक्टरी नहीं है । इसलिए, फ़ॉन्ट् का प्रतिष्ठापन नहीं हो सकता है । ";
+        Text[ slovak ] = "V Fontpath nie je adresár obsahujúci súbor fonts.dir s právami pre zápis. Písma preto nemôžu byť nainštalované.";
     };
     String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
     {
@@ -473,7 +485,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ french ] = "%d nouvelles polices ont �t� install�es.";
         Text[ spanish ] = "Se a�adieron %d nuevas fuentes.";
         Text[ finnish ] = "%d uutta fonttia lis�ttiin.";
-        Text[ italian ] = "Sono stati installati %d nuovi font.";
+        Text[ italian ] = "Sono stati installati %d tipi di carattere nuovi.";
         Text[ danish ] = "Der blev tilf�jet %d nye skrifttyper.";
         Text[ swedish ] = "%d nya teckensnitt har lagts till.";
         Text[ polish ] = "Liczba dodanych nowych czcionek: %d.";
@@ -489,6 +501,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ czech ] = "Bylo přidáno %d nových písem.";
         Text[ hebrew ] = "‮נוספו %d גופנים חדשים‬";
         Text[ hindi ] = "%d नया फ़ॉन्ट्स को जोड़ा है ।";
+        Text[ slovak ] = "Bolo pridaných %d nových písem.";
     };
     Text[ english_us ] = "Add Fonts";
     Text[ portuguese ] = "Adicionar tipos de letra";
@@ -498,7 +511,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Text[ french ] = "Ajout de polices";
     Text[ spanish ] = "A�adir fuentes";
     Text[ finnish ] = "Lis�� fontteja";
-    Text[ italian ] = "Importa font";
+    Text[ italian ] = "Importa tipo di carattere";
     Text[ danish ] = "Tilf�j skrifttyper";
     Text[ swedish ] = "L�gg till teckensnitt";
     Text[ polish ] = "Dodaj czcionki";
@@ -514,6 +527,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Text[ czech ] = "Přidat písma";
     Text[ hebrew ] = "‮הוספת גופנים‬";
     Text[ hindi ] = "फ़ॉन्ट्स जोड़ो";
+    Text[ slovak ] = "Pridať písma";
 };
 
 ModalDialog RID_PADIALOG
@@ -563,6 +577,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zatvoriť";
     };
 
     FixedLine RID_PA_FL_PRINTERS
@@ -595,6 +610,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Instalované tiskárny";
         Text[ hebrew ] = "‮מדפסות מותקנות‬";
         Text[ hindi ] = "प्रतिष्ठापित ~मुद्रक";
+        Text[ slovak ] = "Nainštalované ~tlačiarne";
     };
     ListBox RID_PA_LB_DEV
     {
@@ -633,6 +649,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Příkaz:";
         Text[ hebrew ] = "‮פעולה:‬";
         Text[ hindi ] = "आज्ञा:";
+        Text[ slovak ] = "Príkaz:";
     };
     FixedText RID_PA_TXT_COMMAND_STRING
     {
@@ -669,6 +686,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Ovladač:";
         Text[ hebrew ] = "‮מנהל התקן:‬";
         Text[ hindi ] = "ड्रइवर:";
+        Text[ slovak ] = "Ovládač:";
     };
     FixedText RID_PA_TXT_DRIVER_STRING
     {
@@ -705,6 +723,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Umístění:";
         Text[ hebrew ] = "‮מיקום:‬";
         Text[ hindi ] = "स्थान:";
+        Text[ slovak ] = "Umiestnenie:";
     };
     FixedText RID_PA_TXT_LOCATION_STRING
     {
@@ -741,6 +760,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Poznámka:";
         Text[ hebrew ] = "‮הערה:‬";
         Text[ hindi ] = "अपवाद:";
+        Text[ slovak ] = "Poznámka:";
     };
     FixedText RID_PA_TXT_COMMENT_STRING
     {
@@ -777,6 +797,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Vlastnosti...";
         Text[ hebrew ] = "‮מאפינים...‬";
         Text[ hindi ] = "स्वभाव...";
+        Text[ slovak ] = "Vlastnosti...";
     };
     PushButton RID_PA_BTN_RENAME
     {
@@ -808,6 +829,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Přejmenovat...";
         Text[ hebrew ] = "‮שינוי שם...‬";
         Text[ hindi ] = "पु~नः नाम दो...";
+        Text[ slovak ] = "Pr~emenovať...";
     };
     PushButton RID_PA_BTN_STD
     {
@@ -840,6 +862,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     PushButton RID_PA_BTN_DEL
     {
@@ -871,6 +894,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Odstranit...";
         Text[ hebrew ] = "‮הסרה...‬";
         Text[ hindi ] = "हटा~ओ...";
+        Text[ slovak ] = "Odst~rániť...";
     };
     PushButton RID_PA_TESTPAGE
     {
@@ -902,8 +926,9 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Test. stránka";
         Text[ hebrew ] = "‮דף בדיקה‬";
         Text[ hindi ] = "जाँच ~पृष्ठ";
+        Text[ slovak ] = "Test. strán~ka";
     };
-
+    
     PushButton RID_PA_BTN_FONTS
     {
         Pos = MAP_APPFONT( 80, 150 );
@@ -917,7 +942,7 @@ ModalDialog RID_PADIALOG
         Text[ dutch ] = "~Lettertypen...";
         Text[ french ] = "~Polices...";
         Text[ spanish ] = "Fue~ntes...";
-        Text[ italian ] = "Font...";
+        Text[ italian ] = "Tipi di carattere...";
         Text[ danish ] = "S~krifttyper...";
         Text[ swedish ] = "Te~ckensnitt..";
         Text[ polish ] = "~Czcionki...";
@@ -934,6 +959,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Písma...";
         Text[ hebrew ] = "‮גופנים...‬";
         Text[ hindi ] = "फ़ॉ~न्ट्स...";
+        Text[ slovak ] = "Pí~sma...";
     };
     PushButton RID_PA_BTN_ADD
     {
@@ -965,6 +991,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Nová tiskárna...";
         Text[ hebrew ] = "‮הוספת מדפסת...‬";
         Text[ hindi ] = "नया मुद्रक...";
+        Text[ slovak ] = "Nová tlačiareň...";
     };
 
     String RID_PA_STR_DEFPRT
@@ -995,9 +1022,10 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Výchozí tiskárna";
         Text[ hebrew ] = "‮מדפסת ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति मुद्रक";
+        Text[ slovak ] = "Východzia tlačiareň";
     };
     String RID_PA_STR_RENAME
-    {
+    {       
         Text = "Umbenennen";
         Text [english] = "Rename";
         Text[ english_us ] = "Rename";
@@ -1024,6 +1052,7 @@ ModalDialog RID_PADIALOG
         Text[ czech ] = "Přejmenovat";
         Text[ hebrew ] = "‮שינוי שם‬";
         Text[ hindi ] = "पुनः नाम दो";
+        Text[ slovak ] = "Premenovať";
     };
     Text[ english_us ] = "Printer Administration";
     Text[ portuguese ] = "Administra��o da impressora";
@@ -1049,6 +1078,7 @@ ModalDialog RID_PADIALOG
     Text[ czech ] = "Administrace tiskáren";
     Text[ hebrew ] = "‮ניהול מדפסות‬";
     Text[ hindi ] = "मुद्रक प्रशासन";
+    Text[ slovak ] = "Administrácia tlačiarní";
 };
 
 ModalDialog RID_STRINGQUERYDLG
@@ -1119,6 +1149,7 @@ String RID_ERR_NOPRINTER
     Text[ czech ] = "Nelze otevřít tiskárnu %s.";
     Text[ hebrew ] = "‮לא ניתן לפנות למדפסת %s.‬";
     Text[ hindi ] = "%s मुद्रक को नहीं खोल सकता है ।";
+    Text[ slovak ] = "Nedá sa otvoriť tlačiareň %s.";
 };
 
 String RID_PA_TXT_TESTPAGE_PRINTED
@@ -1149,6 +1180,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ czech ] = "Testovací stránka byla úspěšně vytištěna. Zkontrolujte prosím výsledek.";
     Text[ hebrew ] = "‮דף הבדיקה הודפס. נא לבדוק את התוצאה.‬";
     Text[ hindi ] = "जाँच पृष्ठ को सफलता से छपाई किया है । कृपया नतीजे का जाँच कीजिए ।";
+    Text[ slovak ] = "Testovacia stránka bola úspešne vytlačená. Skontrolujte výsledok, prosím.";
 };
 
 String RID_QRY_PRTNAME
@@ -1179,6 +1211,7 @@ String RID_QRY_PRTNAME
     Text[ czech ] = "Nový název tiskárny";
     Text[ hebrew ] = "‮שם למדפסת הנוספת‬";
     Text[ hindi ] = "~नया मुद्रक नाम्";
+    Text[ slovak ] = "~Nový názov tlačiarne";
 };
 
 String RID_TXT_TESTPAGE_MODEL
@@ -1209,6 +1242,7 @@ String RID_TXT_TESTPAGE_MODEL
     Text[ czech ] = "Model";
     Text[ hebrew ] = "‮דגם‬";
     Text[ hindi ] = "नमूना";
+    Text[ slovak ] = "Model";
 };
 
 String RID_TXT_TESTPAGE_NAME
@@ -1239,6 +1273,7 @@ String RID_TXT_TESTPAGE_NAME
     Text[ czech ] = "Název";
     Text[ hebrew ] = "‮שם מדפסת‬";
     Text[ hindi ] = "नाम";
+    Text[ slovak ] = "Názov";
 };
 
 String RID_TXT_TESTPAGE_COMMENT
@@ -1269,6 +1304,7 @@ String RID_TXT_TESTPAGE_COMMENT
     Text[ czech ] = "Komentář";
     Text[ hebrew ] = "‮הערה‬";
     Text[ hindi ] = "अपवाद";
+    Text[ slovak ] = "Komentár";
 };
 
 String RID_TXT_TESTPAGE_QUEUE
@@ -1299,6 +1335,7 @@ String RID_TXT_TESTPAGE_QUEUE
     Text[ czech ] = "Fronta";
     Text[ hebrew ] = "‮תור‬";
     Text[ hindi ] = "क्यू";
+    Text[ slovak ] = "Fronta (Queue)";
 };
 
 String RID_TXT_TESTPAGE_DATE
@@ -1329,6 +1366,7 @@ String RID_TXT_TESTPAGE_DATE
     Text[ czech ] = "Datum";
     Text[ hebrew ] = "‮תאריך‬";
     Text[ hindi ] = "दिनांक";
+    Text[ slovak ] = "Dátum";
 };
 
 String RID_TXT_TESTPAGE_TIME
@@ -1359,6 +1397,7 @@ String RID_TXT_TESTPAGE_TIME
     Text[ czech ] = "Čas";
     Text[ hebrew ] = "‮שעה‬";
     Text[ hindi ] = "समय";
+    Text[ slovak ] = "Čas";
 };
 
 
@@ -1402,6 +1441,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zatvoriť";
     };
     PushButton RID_FNTNM_BTN_RENAME
     {
@@ -1433,6 +1473,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Přejmenovat...";
         Text[ hebrew ] = "‮שינוי שם...‬";
         Text[ hindi ] = "पुनः ~नाम दो...";
+        Text[ slovak ] = "Preme~novať";
     };
     PushButton RID_FNTNM_BTN_REMOVE
     {
@@ -1464,6 +1505,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Odstranit...";
         Text[ hebrew ] = "‮הסרה...‬";
         Text[ hindi ] = "~हटाओ...";
+        Text[ slovak ] = "Odst~rániť...";
     };
     PushButton RID_FNTNM_BTN_IMPORT
     {
@@ -1495,6 +1537,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     ListBox RID_FNTNM_LB_FONTS
     {
@@ -1535,6 +1578,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Poznámka: Písma jsou dostupná pouze aplikaci.";
         Text[ hebrew ] = "‮שימו לב: הגופנים נגישים ליישומי סטאר אופיס בלבד.‬";
         Text[ hindi ] = "सूचना: केवल कार्यक्रम केलिए फ़ॉन्ट्स उपलब्ध है ।";
+        Text[ slovak ] = "Poznámka: Písma sú dostupné len pre aplikácie.";
     };
     String RID_FNTNM_STR_RENAME
     {
@@ -1564,6 +1608,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Nový název pro %s";
         Text[ hebrew ] = "‮שם חדש עבור %s‬";
         Text[ hindi ] = "%s केलिए ~नया नाम ";
+        Text[ slovak ] = "~Nové meno pre %s";
     };
     String RID_FNTNM_STR_TTCRENAME
     {
@@ -1593,6 +1638,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Nový název pro %s (%d1 z %d2)";
         Text[ hebrew ] = "‮שם חדש עבור %s (%d1 מתוך %d2)‬";
         Text[ hindi ] = "%s केलिए ~नया नाम (%d2 का %d1 )";
+        Text[ slovak ] = "~Nový názov pre %s (%d1 z %d2)";
     };
     String RID_FNTNM_STR_NOTRENAMABLE
     {
@@ -1622,6 +1668,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ czech ] = "Nelze přejmenovat písmo %s kvůli chybějícímu oprávnění k zápisu.";
         Text[ hebrew ] = "‮לא ניתן לשנות שם גופן %s כי חסרות הרשאות כתיבה.‬";
         Text[ hindi ] = "लिखने का अधिकार न होने के कारण  %s फ़ॉन्ट् को पुनः नाम नहीं दे सकते है ।";
+        Text[ slovak ] = "Písmo %s nemôže byť premenované kvôli chýbajúcemu právu na zápis.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";
@@ -1630,7 +1677,7 @@ ModalDialog RID_FONTNAMEDIALOG
     Text[ dutch ] = "Lettertypen";
     Text[ french ] = "Polices";
     Text[ spanish ] = "Fuentes";
-    Text[ italian ] = "Font";
+    Text[ italian ] = "Tipi di carattere";
     Text[ danish ] = "Skrifttyper";
     Text[ swedish ] = "Teckensnitt";
     Text[ polish ] = "Czcionki";
@@ -1647,6 +1694,7 @@ ModalDialog RID_FONTNAMEDIALOG
     Text[ czech ] = "Písma";
     Text[ hebrew ] = "‮גופנים‬";
     Text[ hindi ] = "फ़ॉन्ट्स";
+    Text[ slovak ] = "Písma";
 };
 String RID_BXT_TESTPAGE
 {
@@ -1676,6 +1724,7 @@ String RID_BXT_TESTPAGE
     Text[ czech ] = "Test. stránka";
     Text[ hebrew ] = "‮דף לבדיקה‬";
     Text[ hindi ] = "जाँच पृष्ठ";
+    Text[ slovak ] = "Testovacia stránka";
 };
 String RID_BXT_ENVIRONMENT
 {
@@ -1705,6 +1754,7 @@ String RID_BXT_ENVIRONMENT
     Text[ czech ] = "Chybné prostředí";
     Text[ hebrew ] = "‮סביבה לא מתאימה‬";
     Text[ hindi ] = "गलत परिसर";
+    Text[ slovak ] = "Chybné prostredie";
 };
 
 String RID_YOU_SURE
@@ -1735,6 +1785,7 @@ String RID_YOU_SURE
     Text[ czech ] = "Jste si jist ?";
     Text[ hebrew ] = "‮אכן כן?‬";
     Text[ hindi ] = "सचमुच ?";
+    Text[ slovak ] = "Ste si istý?";
 };
 
 Bitmap RID_BUTTERFLY
@@ -1790,6 +1841,7 @@ String RID_AFMERROR_OK
     Text[ czech ] = "Žádná chyba";
     Text[ hebrew ] = "‮אין שגיאה‬";
     Text[ hindi ] = "कोई गलती नहीं";
+    Text[ slovak ] = "Žiadna chyba";
 };
 String RID_AFMERROR_NO_FONT_NAME
 {
@@ -1819,6 +1871,7 @@ String RID_AFMERROR_NO_FONT_NAME
     Text[ czech ] = "Metrika neobsahuje položku 'FontName'.";
     Text[ hebrew ] = "‮אין לערך 'FontName' עבור מידות הגופן.‬";
     Text[ hindi ] = "मेट्रिक में 'अक्षर नाम' प्रविष्टि नहीं है ।";
+    Text[ slovak ] = "Metrika neobsahuje položku 'FontName'.";
 };
 String RID_AFMERROR_NO_FULL_NAME
 {
@@ -1848,6 +1901,7 @@ String RID_AFMERROR_NO_FULL_NAME
     Text[ czech ] = "Metrika neobsahuje položku 'FullName'.";
     Text[ hebrew ] = "‮.אין ערך 'FullName' עבור מידות הגופן.‬";
     Text[ hindi ] = "मेट्रिक में 'पूरा नाम' प्रविष्टि नहीं है ।";
+    Text[ slovak ] = "Metrika neobsahuje položku 'FullName'.";
 };
 String RID_AFMERROR_NO_FAMILY_NAME
 {
@@ -1877,6 +1931,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text[ czech ] = "Metrika neobsahuje položku 'FamilyName'.";
     Text[ hebrew ] = "‮אין ערך 'FamilyName' עבור מידות הגופן.‬";
     Text[ hindi ] = "मेट्रिक में 'परिवार नाम' प्रविष्टि नहीं है ।";
+    Text[ slovak ] = "Metrika neobsahuje položku 'FamilyName'.";
 };
 String RID_AFMERROR_MOVETO_FAILED
 {
@@ -1906,6 +1961,7 @@ String RID_AFMERROR_MOVETO_FAILED
     Text[ czech ] = "Nelze zapsat zkonvertovanou metriku.";
     Text[ hebrew ] = "‮לא ניתן לכתוב את מידות הגופן המומר.‬";
     Text[ hindi ] = "बदला हुआ मेट्रिक को नहीं लिख सकते है ।";
+    Text[ slovak ] = "Nedá sa zapísať konvertovaná metrika.";
 };
 String RID_AFMERROR_STREAM_READ_FAILED
 {
@@ -1935,6 +1991,7 @@ String RID_AFMERROR_STREAM_READ_FAILED
     Text[ czech ] = "Nelze přečíst metriku.";
     Text[ hebrew ] = "‮לא ניתן לקראו את מידות הגופן.‬";
     Text[ hindi ] = "मेट्रिक को नहीं पढ़ सकते है";
+    Text[ slovak ] = "Metrika sa nedá prečítať.";
 };
 String RID_AFMERROR_STREAM_WRITE_FAILED
 {
@@ -1964,6 +2021,7 @@ String RID_AFMERROR_STREAM_WRITE_FAILED
     Text[ czech ] = "Nelze vytvořit dočasný soubor.";
     Text[ hebrew ] = "‮לא ניתן ליצור קובץ זמני הנדרש לפעולה זו.‬";
     Text[ hindi ] = "अस्थायी फाइल को उत्पन्न नहीं कर सकते है ।";
+    Text[ slovak ] = "Nedá sa vytvoriť dočasný súbor.";
 };
 STRING RID_AFMERROR_NOT_A_METRIC
 {
@@ -1993,6 +2051,7 @@ STRING RID_AFMERROR_NOT_A_METRIC
     Text[ czech ] = "Tento soubor neobsahuje metriku.";
     Text[ hebrew ] = "‮הקובץ אינו כולל מידות.‬";
     Text[ hindi ] = "फाइल में मेट्रिक नहीं है ।";
+    Text[ slovak ] = "Tento súbor neobsahuje metriku.";
 };
 String RID_AFMERROR_BOX_TXT
 {
@@ -2022,6 +2081,7 @@ String RID_AFMERROR_BOX_TXT
     Text[ czech ] = "Metrika\n\n%s\n\nnemohla být převedena z následujícího důvodu:\n\n";
     Text[ hebrew ] = "‮לא ניתן להמיר מידות הגופן \n\n%s\n\n מהסיבה הבאה:\n\n‬";
     Text[ hindi ] = "मेट्रिक\n\n%s\n\nको निम्नलिखित कारण केलिए बदल नहीं सकते है:\n\n";
+    Text[ slovak ] = "Metrika\n\n%s\n\nsa nedala vytvoriť z tohto dôvodu:\n\n";
 };
 
 ModelessDialog RID_PROGRESS_DLG
@@ -2075,6 +2135,7 @@ ModelessDialog RID_PROGRESS_DLG
         Text[ czech ] = "Průběh";
         Text[ hebrew ] = "‮התקדמות‬";
         Text[ hindi ] = "कार्यवाही हुआ";
+        Text[ slovak ] = "Priebeh";
     };
     Window RID_PROGRESS_STATUSBAR
     {
@@ -2112,6 +2173,7 @@ ModelessDialog RID_PROGRESS_DLG
     Text[ czech ] = "Čekejte prosím";
     Text[ hebrew ] = "‮נא להמתין‬";
     Text[ hindi ] = "कृपया ठहरिए";
+    Text[ slovak ] = "Čakajte prosím";
 };
 
 String RID_OPERATION_CONVERTMETRIC
@@ -2124,7 +2186,7 @@ String RID_OPERATION_CONVERTMETRIC
     Text[ dutch ] = "Lettertypenmetrieken converteren";
     Text[ french ] = "Conversion des m�triques de polices";
     Text[ spanish ] = "Conversi�n de las m�tricas de fuente";
-    Text[ italian ] = "Conversione dei font di metrica";
+    Text[ italian ] = "Conversione delle metriche del tipo di carattere";
     Text[ danish ] = "Konvertering af skrifttypemetrikken";
     Text[ swedish ] = "Konvertering av teckensnittsmetriker";
     Text[ polish ] = "Konwersja metryk czcionek";
@@ -2142,6 +2204,7 @@ String RID_OPERATION_CONVERTMETRIC
     Text[ czech ] = "Konverze metrik písma";
     Text[ hebrew ] = "‮הסבת מידות הגופן‬";
     Text[ hindi ] = "फ़ॉन्ट् मेट्रिक्स परिवर्तन";
+    Text[ slovak ] = "Konverzia metriky písma";
 };
 
 
@@ -2185,6 +2248,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Adresář s ovladačem";
         Text[ hebrew ] = "‮ספרית מנהלי התקנים‬";
         Text[ hindi ] = "ड्रइ~वर डैरक्टरी";
+        Text[ slovak ] = "Adresár s o~vládačom";
     };
     FixedText RID_PPDIMP_TXT_PATH
     {
@@ -2216,6 +2280,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Prosím zvolte adresář s ovladačem.";
         Text[ hebrew ] = "‮נא לבחור ספרית מנהלי התקנים.‬";
         Text[ hindi ] = "कृपया ड्रइवर डैरक्टरी को चुनिए ।";
+        Text[ slovak ] = "Prosím vyberte adresár s ovládačom.";
     };
     ComboBox RID_PPDIMP_LB_PATH
     {
@@ -2256,6 +2321,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Prohlížet...";
         Text[ hebrew ] = "‮דפדוף...‬";
         Text[ hindi ] = "ब्रउज़...";
+        Text[ slovak ] = "Prehliadať...";
     };
 
     FixedLine RID_PPDIMP_GROUP_DRIVER
@@ -2288,6 +2354,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Výběr ovladačů";
         Text[ hebrew ] = "‮בחירת מנהלי התקן‬";
         Text[ hindi ] = "ड्रइवरों की ~चुनाव";
+        Text[ slovak ] = "Výber ovlá~dačov";
     };
     MultiListBox RID_PPDIMP_LB_DRIVER
     {
@@ -2329,6 +2396,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Zvolte, prosím, ovladače k instalaci a stiskněte \"%s\".";
         Text[ hebrew ] = "‮נא לבחור התקנים להתקנה וללחוץ \"%s\".‬";
         Text[ hindi ] = "कृपया प्रतिष्ठापन करने केलिए ड्रइवरों को चुनो और \"%s\" को दबाओ ।";
+        Text[ slovak ] = "Prosím vyberte si ovládače na nainštalovanie a stlačte \"%s\".";
     };
     String RID_PPDIMP_STR_LOADINGPPD
     {
@@ -2358,6 +2426,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ czech ] = "Probíhá hledání ovladačů";
         Text[ hebrew ] = "‮מחפש מנהלי התקנים‬";
         Text[ hindi ] = "ड्रइवरों केलिए खोज करना";
+        Text[ slovak ] = "Hľadajú sa ovládače";
     };
     OKButton RID_PPDIMP_BTN_OK
     {
@@ -2395,6 +2464,7 @@ ModalDialog RID_PPDIMPORT_DLG
     Text[ czech ] = "Instalace ovladače";
     Text[ hebrew ] = "‮התקנת מנהלי התקנים‬";
     Text[ hindi ] = "ड्रइवर प्रतिष्ठापन";
+    Text[ slovak ] = "Inštalácia ovládačov";
 };
 
 String RID_QUERY_REMOVEDRIVER
@@ -2425,6 +2495,7 @@ String RID_QUERY_REMOVEDRIVER
     Text[ czech ] = "Opravdu chcete odstranit ovladač \"%s\"?";
     Text[ hebrew ] = "‮האם באמת להסיר מנהל ההתקן \"%s\"?‬";
     Text[ hindi ] = "आप सचमुच में \"%s\" ड्रइवर को हटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete odstrániť ovládač \"%s\"?";
 };
 
 String RID_QUERY_REMOVEPRINTER
@@ -2455,6 +2526,7 @@ String RID_QUERY_REMOVEPRINTER
     Text[ czech ] = "Opravdu chcete odstranit tuto tiskárnu?";
     Text[ hebrew ] = "‮האם באמת להסיר מדפסת זו?‬";
     Text[ hindi ] = "आप सचमुच में इस मुद्रक को हटाना चाहते है ?";
+    Text[ slovak ] = "Naozaj chcete odstrániť túto tlačiareň?";
 };
 
 String RID_QUERY_REMOVEFONTFROMLIST
@@ -2468,7 +2540,7 @@ String RID_QUERY_REMOVEFONTFROMLIST
     Text[ dutch ] = "Wilt u de geselecteerde lettertypen werkelijk verwijderen?";
     Text[ french ] = "Voulez-vous vraiment supprimer les polices s�lectionn�es ?";
     Text[ spanish ] = "�Desea realmente borrar las fuentes seleccionadas?";
-    Text[ italian ] = "Volete davvero rimuovere i font selezionati?";
+    Text[ italian ] = "Volete davvero rimuovere i tipi di carattere selezionati?";
     Text[ danish ] = "Er du sikker p�, at du vil fjerne de valgte skrifttyper?";
     Text[ swedish ] = "Vill du verkligen ta bort de markerade teckensnitten ?";
     Text[ polish ] = "Czy na pewno chcesz usun�� zaznaczone czcionki?";
@@ -2485,6 +2557,7 @@ String RID_QUERY_REMOVEFONTFROMLIST
     Text[ czech ] = "Opravdu chcete odstranit zvolená písma?";
     Text[ hebrew ] = "‮האם באמת להסיר את הגופנים הנבחרים?‬";
     Text[ hindi ] = "आप सचमुच में चुने हुए फ़ॉन्ट्स को हटाना चाहते है ?";
+    Text[ slovak ] = "Naozaj chcete odstrániť vybrané písma?";
 };
 
 String RID_QUERY_DRIVERUSED
@@ -2515,6 +2588,7 @@ String RID_QUERY_DRIVERUSED
     Text[ czech ] = "Ovladač \"%s\" je stále používán některými tiskárnami. Opravdu jej chcete odstranit? Odpovídající tiskárny budou také odstraněny.";
     Text[ hebrew ] = "‮ישנן הגדרות של מדפסות המשתמשות במנהל ההתקן \"%s\". הסרת ההתקן תגרום למחיקת ההגדרות האלו. האם באמת להסיר?‬";
     Text[ hindi ] = "ड्रइवर \"%s\" को अनेक मुद्रक उपयोग कर रहा है । आप उसे सचमुच में हटाना चाहते है? उसका अनुरूप मुद्रक भी हट जायेगा ।";
+    Text[ slovak ] = "Stále sú tlačiarne používajúce ovládač \"%s\". Naozaj ho chcete odstrániť? Príslušné tlačiarne budú tiež odstránené,";
 };
 
 String RID_ERR_REMOVESGENPRT
@@ -2545,6 +2619,7 @@ String RID_ERR_REMOVESGENPRT
     Text[ czech ] = "Ovladač \"%s\" je vždy potřeba, a tudíž jej nelze odstranit.";
     Text[ hebrew ] = "‮מנהל ההתקן \"%s\" נדרש תמיד, ולכן לא ניתן להסיר אותו.‬";
     Text[ hindi ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ slovak ] = "Ovládač \"%s\" je vždy používaný a preto nemôže byť odstránený.";
 };
 
 String RID_ERR_REMOVEDRIVERFAILED
@@ -2575,6 +2650,7 @@ String RID_ERR_REMOVEDRIVERFAILED
     Text[ czech ] = "Ovladač \"%s1\" nelze odstranit. Nelze odstranit soubor\n\n%s2.";
     Text[ hebrew ] = "‮לא ניתן להסיר את מנהל ההתקן \"%s1\" כי לא ניתן למחוק קובץ \n\n%s2.‬";
     Text[ hindi ] = "The driver \"%s1\" could not be removed. It was not possible to remove the file\n\n%s2.";
+    Text[ slovak ] = "Ovládač \"%s1\" nemohol byť odstránený. Nebolo možné odstrániť súbor\n\n%s2.";
 };
 
 String RID_ERR_REMOVEDEFAULTDRIVER
@@ -2605,6 +2681,7 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text[ czech ] = "Ovladač \"%s\" je používán vaší výchozí tiskárnou. Proto nemůže být smazán.";
     Text[ hebrew ] = "‮מדפסת ברירת המחדל משתמשת במנהל ההתקן \"%s\" ולכן לא ניתן להסיר אותו.‬";
     Text[ hindi ] = "ड्रइवर \"%s\" को आपका अनुपस्थिति मुद्रक उपयोग करता है । इसलिए, उसे नहीं हटा सकते है ।";
+    Text[ slovak ] = "Ovládač \"%s\" je používaný vašou východzou tlačiarňou. Preto sa nedá odstrániť.";
 };
 
 String RID_ERR_PRINTERNOTREMOVEABLE
@@ -2635,6 +2712,7 @@ String RID_ERR_PRINTERNOTREMOVEABLE
     Text[ czech ] = "Nelze odstranit tiskárnu %s.";
     Text[ hebrew ] = "‮לא ניתן להסיר מדפסת %s.‬";
     Text[ hindi ] = "%s मुद्रक को नहीं हटा सकते है ।";
+    Text[ slovak ] = "Tlačiareň %s sa nedá odstrániť.";
 };
 
 String RID_TXT_PRINTERALREADYEXISTS
@@ -2665,6 +2743,7 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text[ czech ] = "Tiskárna s názvem \"%s\" již existuje. Tato tiskárna nebude importována.";
     Text[ hebrew ] = "‮מדפסת בשם \"%s\" כבר מוגדרת ולכן לא תיובא.‬";
     Text[ hindi ] = "\"%s\" नाम् का मुद्रक पहिले से ही अस्तित्व में है । इस मुद्रक को आयात नहीं कर सकते है ।";
+    Text[ slovak ] = "Tlačiareň s názvom \"%s\" už existuje. Tato tlačiareň nebude importovaná.";
 };
 
 String RID_TXT_PRINTERWITHOUTCOMMAND
@@ -2695,6 +2774,7 @@ String RID_TXT_PRINTERWITHOUTCOMMAND
     Text[ czech ] = "Tiskárna \"%s\" nemá platnou konfiguraci, a proto nemůže být importována.";
     Text[ hebrew ] = "‮ההגדרה של מדפסת \"%s\" אינה תקינה, ולכן לא ניתן ליבא אותה.‬";
     Text[ hindi ] = "\"%s\" मुद्रक का रूपरेखा अमान्य है और, इसलिए, आयात नहीं कर सकते है ।";
+    Text[ slovak ] = "Tlačiareň \"%s\" nemá správnu konfiguráciu a preto sa nedá importovať.";
 };
 
 String RID_TXT_DRIVERDOESNOTEXIST
@@ -2725,6 +2805,7 @@ String RID_TXT_DRIVERDOESNOTEXIST
     Text[ czech ] = "Ovladač pro tiskárnu \"%s1\" (%s2) není nainstalován. Proto nemůže být tiskárna importována.";
     Text[ hebrew ] = "‮ההתקן עבור מדפסת \"%s1\" (%s2) אינו מותקן ולכן לא ניתן ליבא הגדרות המדפסת.‬";
     Text[ hindi ] = "मुद्रक \"%s1\" (%s2) केलिए ड्इवर को प्रतिष्ठापित नहीं किया है । इसलिए मुद्रक को आयात नहीं किया जाएगा ।";
+    Text[ slovak ] = "Ovládač pre tlačiareň \"%s1\" (%s2) nie je nainštalovaný. Tlačiareň preto nemôže byť importovaná.";
 };
 
 String RID_TXT_PRINTERADDFAILED
@@ -2783,6 +2864,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ czech ] = "Dokončit";
         Text[ hebrew ] = "‮סיום‬";
         Text[ hindi ] = "~समाप्त";
+        Text[ slovak ] = "Do~končiť";
     };
     CancelButton RID_ADDP_BTN_CANCEL
     {
@@ -2819,6 +2901,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ czech ] = "Další >>";
         Text[ hebrew ] = "‮הבא >>‬";
         Text[ hindi ] = "~आगे >>";
+        Text[ slovak ] = "Ď~alší >>";
     };
     PushButton RID_ADDP_BTN_PREV
     {
@@ -2850,6 +2933,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ czech ] = "<< Zpět";
         Text[ hebrew ] = "‮<< הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
+        Text[ slovak ] = "<< ~Späť";
     };
     Text[ english_us ] = "Add Printer";
     Text[ portuguese ] = "Adicionar impressora";
@@ -2875,6 +2959,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     Text[ czech ] = "Přidat tiskárnu";
     Text[ hebrew ] = "‮הוספת מדפסת‬";
     Text[ hindi ] = "मुद्रक जोड़ो";
+    Text[ slovak ] = "Pridať tlačiareň";
 };
 
 TabPage RID_ADDP_PAGE_CHOOSEDRIVER
@@ -2910,6 +2995,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ czech ] = "Vyberte ovladač";
         Text[ hebrew ] = "‮בחירת מנהל התקן‬";
         Text[ hindi ] = "एक ड्रइवर को चुनो";
+        Text[ slovak ] = "Vybrať ovládač";
     };
     FixedText RID_ADDP_CHDRV_TXT_DRIVER
     {
@@ -2941,6 +3027,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ czech ] = "Prosím vyberte odpovídající ovladač.";
         Text[ hebrew ] = "‮נא לבחור מנהל התקן מתאים‬";
         Text[ hindi ] = "कृपया एक ~योग्य ड्रइवर को चुनिए ।";
+        Text[ slovak ] = "P~rosím vyberte vhodný ovládač.";
     };
     ListBox RID_ADDP_CHDRV_BOX_DRIVER
     {
@@ -2979,6 +3066,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ czech ] = "Importovat...";
         Text[ hebrew ] = "‮יבוא...‬";
         Text[ hindi ] = "~आयात...";
+        Text[ slovak ] = "~Importovať...";
     };
     PushButton RID_ADDP_CHDRV_BTN_REMOVE
     {
@@ -3010,6 +3098,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     String RID_ADDP_CHDRV_STR_REMOVE
     {
@@ -3039,6 +3128,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ czech ] = "Smazat ovladač";
         Text[ hebrew ] = "‮מחיקת מנהל התקן‬";
         Text[ hindi ] = "ड्रइवर को मिटाओ";
+        Text[ slovak ] = "Vymazať ovládač";
     };
 };
 
@@ -3075,6 +3165,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Vyberte typ zařízení";
         Text[ hebrew ] = "‮בחירת סוג התקן‬";
         Text[ hindi ] = "एक साधन वर्ग को चुनो";
+        Text[ slovak ] = "Vyberte typ zariadenia";
     };
     FixedText RID_ADDP_CHDEV_TXT_OVER
     {
@@ -3106,6 +3197,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Chcete";
         Text[ hebrew ] = "‮האם ברצונך ל...‬";
         Text[ hindi ] = "आप चाहते है";
+        Text[ slovak ] = "Chcete";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PRINTER
     {
@@ -3137,7 +3229,8 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Přidat tiskárnu";
         Text[ hebrew ] = "‮להוסיף מדפסת‬";
         Text[ hindi ] = "एक ~मुद्रक को जोड़ोए";
-    };
+        Text[ slovak ] = "~Pridať tlačiareň";
+    };  
     RadioButton RID_ADDP_CHDEV_BTN_FAX
     {
         Pos = MAP_APPFONT ( 40, 50 );
@@ -3168,7 +3261,8 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Připojit fax";
         Text[ hebrew ] = "‮חיבור התקן פקס‬";
         Text[ hindi ] = "एक फ़ॉ~क्स साधन को कनेक्ट् करो";
-    };
+        Text[ slovak ] = "Pripojiť fa~xové zariadenie";
+    };  
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
         Pos = MAP_APPFONT ( 40, 60 );
@@ -3199,7 +3293,8 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Připojit PDF konvertor";
         Text[ hebrew ] = "‮חיבור ממיר PDF‬";
         Text[ hindi ] = "एक P~DF कनवर्टर को कनेक्ट् करो";
-    };
+        Text[ slovak ] = "Pripojiť P~DF konvertor";
+    };  
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
         Pos = MAP_APPFONT ( 40, 70 );
@@ -3230,6 +3325,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ czech ] = "Importovat tiskárny z instalace StarOffice";
         Text[ hebrew ] = "‮ליבא הגדרות מדפסת מהתקנה אחרת של סטאר אופיס‬";
         Text[ hindi ] = "StarOffice प्रतिष्ठापन से मुद्रकों को ~आयात करो";
+        Text[ slovak ] = "~Importovať tlačiarne z inštalácie StarOffice";
     };
 };
 
@@ -3266,6 +3362,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Vyberte název";
         Text[ hebrew ] = "‮נא לבחור שם‬";
         Text[ hindi ] = "एक नाम चुनो";
+        Text[ slovak ] = "Vybrať meno";
     };
     FixedText RID_ADDP_NAME_TXT_NAME
     {
@@ -3297,6 +3394,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Prosím zvolte název tiskárny.";
         Text[ hebrew ] = "‮נא לתת שם למדפסת זו.‬";
         Text[ hindi ] = "कृपया मुद्रक केलिए एक नाम प्रविष्ट कीजिए ।";
+        Text[ slovak ] = "Prosím zadajte názov tlačiarne.";
     };
     FixedText RID_ADDP_NAME_TXT_FAXNAME
     {
@@ -3328,6 +3426,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Prosím zvolte název faxu.";
         Text[ hebrew ] = "‮נא לתת שם לחיבור הפקס הזה.‬";
         Text[ hindi ] = "कृपया फ़ॉक्स कनेक्शन् केलिए एक नाम प्रविष्ट कीजिए ।";
+        Text[ slovak ] = "Prosím zadajte názov faxu.";
     };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
@@ -3359,6 +3458,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Prosím zvolte název PDF propojení.";
         Text[ hebrew ] = "‮נא לתת שם לחיבור ה-PDF הזה.‬";
         Text[ hindi ] = "कृपया PDF कनेक्शन् केलिए एक नाम प्रविष्ट कीजिए ।";
+        Text[ slovak ] = "Prosím zadajte názov PDF prepojenia.";
     };
     Edit RID_ADDP_NAME_EDT_NAME
     {
@@ -3397,6 +3497,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Faxová tiskárna";
         Text[ hebrew ] = "‮מדפסת פקס‬";
         Text[ hindi ] = "फ़ॉक्स मुद्रक";
+        Text[ slovak ] = "Faxová tlačiareň";
     };
     Edit RID_ADDP_NAME_EDT_PDFNAME
     {
@@ -3429,6 +3530,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "PDF konvertor";
         Text[ hebrew ] = "‮ממיר PDF‬";
         Text[ hindi ] = "PDF कनवर्टर";
+        Text[ slovak ] = "PDF konvertor";
     };
     CheckBox RID_ADDP_NAME_BOX_DEFAULT
     {
@@ -3460,6 +3562,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Použít jako výchozí tiskárnu";
         Text[ hebrew ] = "‮לקבוע כמדפסת ברירת המחדל‬";
         Text[ hindi ] = "अनुपस्थिति मुद्रक जैसे ~उपयोग करो";
+        Text[ slovak ] = "Po~užiť ako východziu tlačiareň";
     };
     CheckBox RID_ADDP_NAME_BOX_FAXSWALLOW
     {
@@ -3491,6 +3594,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ czech ] = "Odstranit číslo faxu z výstupu";
         Text[ hebrew ] = "‮הסרת מספר פקס מהפלט‬";
         Text[ hindi ] = "औटपुट् से फ़ॉक्स संख्या को हटा~ओ";
+        Text[ slovak ] = "Odstrániť faxové číslo z ~výstupu";
     };
 };
 
@@ -3527,6 +3631,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Vyberte příkazovou řádku";
         Text[ hebrew ] = "‮בחירת שורת פקודה‬";
         Text[ hindi ] = "एक आज्ञा रेखा को चुनो";
+        Text[ slovak ] = "Vybrať príkazový riadok";
     };
     FixedText RID_ADDP_CMD_TXT_COMMAND
     {
@@ -3559,6 +3664,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Zadejte prosím příkazovou řádku odpovídající pro toto zařízení.";
         Text[ hebrew ] = "‮נא להקליד שורת פקודה מתאימה להתקן זה.‬";
         Text[ hindi ] = "कृपया इस साधन केलिए योग्य एक आ~ज्ञा रेखा को प्रविष्ट कीजिए ।";
+        Text[ slovak ] = "Zadajte pr~osím príkazový riadok vhodný pre toto zariadenie.";
     };
     ComboBox RID_ADDP_CMD_BOX_COMMAND
     {
@@ -3602,6 +3708,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Cílový adresář PDF";
         Text[ hebrew ] = "‮ספרית יעד ל-PDF‬";
         Text[ hindi ] = "PDF ~लक्ष्य डैरक्टरी";
+        Text[ slovak ] = "Cieľový ad~resár PDF";
     };
     Edit RID_ADDP_CMD_EDT_PDFDIR
     {
@@ -3645,6 +3752,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Nápověda";
         Text[ hebrew ] = "‮עזרה‬";
         Text[ hindi ] = "~सहायता";
+        Text[ slovak ] = "~Pomocník";
     };
     String RID_ADDP_CMD_STR_PDFHELP
     {
@@ -3674,6 +3782,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Příkazová řádka pro konvertory do PDF je spouštěna takto: Pro každý tisknutý dokument je \"(TMP)\" v příkazové řádce nahrazeno dočasným souborem a \"(OUTFILE)\" je nahrazeno názvem cílového PDF souboru. Pokud se v příkazové řádce vyskytuje \"(TMP)\", je PostScriptový kód předán dočasným souborem, v opačném případě do standardního vstupu pomocí roury.";
         Text[ hebrew ] = "‮התוכנה מבצעת את הפקודה לשהמרה ל-PDF באופן הבא: עבור כל מסמך, המחרוזת \"(TMP)\" תוחלף בידי קובץ זמני והמחרוזת-\"(OUTFILE)\" תוחלף בשם קובץ פלט ה-PDF. יש לציין אספקת קלט בקובץ PostScript על ידי המחריזת \"(TMP)\" בשורת הפקודה, אחרת התוכנית תנסה לקראו את הקלט מקלט ברירת המחדל.‬";
         Text[ hindi ] = "PDF कनवर्टरों केलिए आज्ञा रेखा निम्नलिखित प्रकार से पूरा होगा: छपाई की हुयी हरेक लेखपत्र केलिए, आज्ञा रेखा में \"(TMP)\" को अल्पकालिक फाइल से प्रतिस्थापित किया जायेगा और आज्ञा रेखा में \"(OUTFILE)\" को लक्ष्य का PDF फाइल नाम से प्रतिस्थापित किया जायेगा । अगर \"(TMP)\" आज्ञा रेखा में है, तो पोस्टस्क्रिप्ट कोड को एक फाइल के द्वारा भेजा जायेगा, नहीं तो स्टान्डर्ड इनपुट जैसे (एक पइप जैसे) भेजा जायेगा ।";
+        Text[ slovak ] = "Príkazový riadok pre PDF konvertory je spracovaný takto: pre každý vytlačený dokument,  \"(TMP)\" v príkazovom riadku je zamenený dočasným súborom a \"(OUTFILE)\" v príkazovom riadku je zamenený za cieľový názov PDF súboru. Ak\"(TMP)\" je v príkazovom riadku, PostScript kód bude dodaný cez súbor, inak cez cez štandardný vstup (tzn. ako rúra).";
     };
     String RID_ADDP_CMD_STR_FAXHELP
     {
@@ -3703,6 +3812,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ czech ] = "Příkazová řádka pro faxová připojení je spouštěna takto: Pro každý odesílaný fax je \"(TMP)\" v příkazové řádce nahrazeno dočasným souborem a \"(PHONE)\" je nahrazeno telefonním číslem faxu. Pokud se v příkazové řádce vyskytuje \"(TMP)\", je PostScriptový kód předán dočasným souborem, v opačném případě do standardního vstupu pomocí roury.";
         Text[ hebrew ] = "‮התוכנה מבצעת את הפקודה לשילוח פקס באופן הבא: עבור כל פקס, המחרוזת \"(TMP)\" תוחלף בידי קובץ זמני והמחרוזת-(PHONE) תוחלף במספר הפקס. יש לציין אספקת קלט בקובץ PostScript על ידי המחריזת \"(TMP)\" בשורת הפקודה, אחרת התוכנית תנסה לקראו את הקלט מקלט ברירת המחדל.‬";
         Text[ hindi ] = "फ़ॉक्स कनेक्शनों केलिए आज्ञा रेखा निम्नलिखित प्रकार से पूरा होगा: भेजा हुआ हरेक फ़ॉक्स केलिए, आज्ञा रेखा में \"(TMP)\" को अल्पकालिक फाइल से प्रतिस्थापित किया जायेगा और आज्ञा रेखा में \"(PHONE)\" को फ़ॉक्स संख्या से प्रतिस्थापित किया जायेगा । अगर \"(TMP)\" आज्ञा रेखा में दिख रहा है, तो पोस्टस्क्रिप्ट कोड को एक फाइल के द्वारा भेजा जायेगा, नहीं तो स्टान्डर्ड इनपुट जैसे (एक पइप जैसे) भेजा जायेगा ।";
+        Text[ slovak ] = "Príkazový riadok pre faxové zariadenia je spracovaný takto: pre každý fax poslaný, \"(TMP)\" v príkazovom riadku je zamenený dočasným súborom a \"(PHONE)\" v príkazovom riadku je zamenený faxovým číslom. Ak sa \"(TMP)\" nachádza v príkazovom riadku, PostScript kód bude dodaný cez súbor, inak cez štandardný vstup (tzn. rúrou) ";
     };
 };
 
@@ -3739,6 +3849,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ czech ] = "Importovat tiskárny ze starší verze";
         Text[ hebrew ] = "‮ליבא מדפסות מגרסאות קודמות.‬";
         Text[ hindi ] = "मुद्रकों को पुराना आवर्तनों से आयात करो";
+        Text[ slovak ] = "Importovať tlačiarne zo starých verzií";
     };
     FixedText RID_ADDP_OLD_TXT_PRINTERS
     {
@@ -3771,6 +3882,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ czech ] = "Tyto tiskárny mohou být importovány. Zvolte prosím ty, které chcete importovat.";
         Text[ hebrew ] = "‮אלה המדפסות שניתן ליבא. נא לבחור את המדפסות הרצויות.‬";
         Text[ hindi ] = "~इन मुद्रकों को चुन सकते हैं । कृपया जिसको आप आयात करना चाहते है उसको चुनिए ।";
+        Text[ slovak ] = "~Tieto tlačiarne sa dajú importovať. Prosím vyberte si tie, ktoré chcete importovať.";
     };
     MultiListBox RID_ADDP_OLD_BOX_PRINTERS
     {
@@ -3808,6 +3920,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ czech ] = "Vybrat vše";
         Text[ hebrew ] = "‮בחירת הכל‬";
         Text[ hindi ] = "~सब चुनो";
+        Text[ slovak ] = "~Vybrať všetko";
     };
 };
 
@@ -3844,6 +3957,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ czech ] = "Vyberte ovladač";
         Text[ hebrew ] = "‮בחירת מנהל התקן למדפסת‬";
         Text[ hindi ] = "एक ड्रइवर चुनो";
+        Text[ slovak ] = "Vyberte ovládač";
     };
     FixedText RID_ADDP_FAXDRV_TXT_DRIVER
     {
@@ -3876,6 +3990,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ czech ] = "Použít tento ovladač pro propojení s faxem";
         Text[ hebrew ] = "‮להשתמש במנהל התקן הבא עבור חיבור פקס זה‬";
         Text[ hindi ] = "इस फ़ॉक्स कनेक्शन् केलिए निम्नलिखित ड्रइवर का उपयोग करो";
+        Text[ slovak ] = "Použiť nasledujúci ovládač pre toto faxové spojenie";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
     {
@@ -3907,6 +4022,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ czech ] = "Výchozí ovladač";
         Text[ hebrew ] = "‮מנהל התקן ברירת המחדל‬";
         Text[ hindi ] = "अ~नुपस्थिति ड्रइवर";
+        Text[ slovak ] = "Výc~hodzí ovládač";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_SELECT
     {
@@ -3938,6 +4054,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ czech ] = "Specifický ovladač upravující formátu pro jinou tiskárnu";
         Text[ hebrew ] = "‮מנהל התקן מיוחד על מנת להתאים את הפורמט למדפסת אחרת.‬";
         Text[ hindi ] = "एक नि~र्दिष्ट ड्रइवर, रचना को दूसरा मुद्रक केलिए स्वीकार करता है";
+        Text[ slovak ] = "Špeci~fický ovládač na prispôsobenie formátu pre inú tlačiareň";
     };
 };
 
@@ -3974,6 +4091,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ czech ] = "Vyberte ovladač";
         Text[ hebrew ] = "‮בחירת מנהל התקן‬";
         Text[ hindi ] = "एक ड्रइवर चुनो";
+        Text[ slovak ] = "Vybrať ovládač";
     };
     FixedText RID_ADDP_PDFDRV_TXT_DRIVER
     {
@@ -4006,6 +4124,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ czech ] = "Použít tento ovladač pro tento PDF konvertor";
         Text[ hebrew ] = "‮להשתמש בהתקן הבא עבור מימיר PDF זה‬";
         Text[ hindi ] = "इस PDF कनवर्टर केलिए निम्नलिखित ड्रइवर का उपयोग करो";
+        Text[ slovak ] = "Použiť nasledujúci ovládač pre tento PDF konvertor";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DEFAULT
     {
@@ -4037,6 +4156,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ czech ] = "Výchozí ovladač";
         Text[ hebrew ] = "‮מנהל ההתקן ברירת המחדל‬";
         Text[ hindi ] = "अ~नुपस्थिति ड्रइवर";
+        Text[ slovak ] = "Výc~hodzí ovládač";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DIST
     {
@@ -4068,6 +4188,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ czech ] = "Ovladač Adobe Distiller(tm)";
         Text[ hebrew ] = "‮התקן ה Adobe ~Distiller(tm)‬";
         Text[ hindi ] = "Adobe D~istiller(tm) ड्रइवर";
+        Text[ slovak ] = "Ovládač Adobe D~istiller(tm)";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_SELECT
     {
@@ -4099,6 +4220,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ czech ] = "Specifický ovladač upravující formátu pro jinou tiskárnu";
         Text[ hebrew ] = "‮מנהל התקן מיוחד על מנת להתאים את הפורמט למדפסת אחרת.‬";
         Text[ hindi ] = "एक नि~र्दिष्ट ड्रइवर, रचना को दूसरा मुद्रक केलिए स्वीकार करता है";
+        Text[ slovak ] = "Špec~ifický ovládač na prispôsobenie formátu pre inú tlačiareň";
     };
 };
 
@@ -4130,6 +4252,7 @@ String RID_TXT_FONT_ITALIC
     Text[ czech ] = "Italic";
     Text[ hebrew ] = "‮איטלקי‬";
     Text[ hindi ] = "इटालिक";
+    Text[ slovak ] = "Kurzíva";
 };
 
 String RID_TXT_FONT_OBLIQUE
@@ -4160,6 +4283,7 @@ String RID_TXT_FONT_OBLIQUE
     Text[ czech ] = "Oblique";
     Text[ hebrew ] = "‮נטוי‬";
     Text[ hindi ] = "तिर्यक";
+    Text[ slovak ] = "Šikmé";
 };
 
 String RID_TXT_FONT_THIN
@@ -4190,6 +4314,7 @@ String RID_TXT_FONT_THIN
     Text[ czech ] = "Thin";
     Text[ hebrew ] = "‮דק‬";
     Text[ hindi ] = "पतला";
+    Text[ slovak ] = "Úzke";
 };
 
 String RID_TXT_FONT_ULTRALIGHT
@@ -4220,6 +4345,7 @@ String RID_TXT_FONT_ULTRALIGHT
     Text[ czech ] = "Ultralight";
     Text[ hebrew ] = "‮קל ביותר‬";
     Text[ hindi ] = "अत्यन्त हल्का";
+    Text[ slovak ] = "Ultratenké";
 };
 
 String RID_TXT_FONT_SEMILIGHT
@@ -4250,6 +4376,7 @@ String RID_TXT_FONT_SEMILIGHT
     Text[ czech ] = "Semilight";
     Text[ hebrew ] = "‮קל בינוני‬";
     Text[ hindi ] = "आधा हल्का";
+    Text[ slovak ] = "Tenšie";
 };
 
 String RID_TXT_FONT_LIGHT
@@ -4280,6 +4407,7 @@ String RID_TXT_FONT_LIGHT
     Text[ czech ] = "Light";
     Text[ hebrew ] = "‮כתב קל‬";
     Text[ hindi ] = "हल्का";
+    Text[ slovak ] = "Tenké";
 };
 
 String RID_TXT_FONT_SEMIBOLD
@@ -4310,6 +4438,7 @@ String RID_TXT_FONT_SEMIBOLD
     Text[ czech ] = "Semibold";
     Text[ hebrew ] = "‮כתב חזק למחצה‬";
     Text[ hindi ] = "आधा बोल्ड्";
+    Text[ slovak ] = "Tučnejšie";
 };
 
 String RID_TXT_FONT_BOLD
@@ -4340,6 +4469,7 @@ String RID_TXT_FONT_BOLD
     Text[ czech ] = "Bold";
     Text[ hebrew ] = "‮מודגש‬";
     Text[ hindi ] = "बोल्ड्";
+    Text[ slovak ] = "Tučné";
 };
 
 String RID_TXT_FONT_ULTRABOLD
@@ -4370,6 +4500,7 @@ String RID_TXT_FONT_ULTRABOLD
     Text[ czech ] = "Ultrabold";
     Text[ hebrew ] = "‮כתב חזק ככל האפשר‬";
     Text[ hindi ] = "अत्यन्त बोल्ड्";
+    Text[ slovak ] = "Ultratučné";
 };
 
 String RID_TXT_FONT_ULTRACONDENSED
@@ -4400,6 +4531,7 @@ String RID_TXT_FONT_ULTRACONDENSED
     Text[ czech ] = "Ultracondensed";
     Text[ hebrew ] = "‮דיחוס ככל האפשר‬";
     Text[ hindi ] = "अत्यन्त संक्षिप्त";
+    Text[ slovak ] = "Ultrazúžené";
 };
 
 String RID_TXT_FONT_EXTRACONDENSED
@@ -4430,6 +4562,7 @@ String RID_TXT_FONT_EXTRACONDENSED
     Text[ czech ] = "Extracondensed";
     Text[ hebrew ] = "‮דיחוס ככל האפשר‬";
     Text[ hindi ] = "अधिक संक्षिप्त";
+    Text[ slovak ] = "Extrazúžené";
 };
 
 String RID_TXT_FONT_CONDENSED
@@ -4460,6 +4593,7 @@ String RID_TXT_FONT_CONDENSED
     Text[ czech ] = "Condensed";
     Text[ hebrew ] = "‮דחוס‬";
     Text[ hindi ] = "संक्षिप्त";
+    Text[ slovak ] = "Zúžené";
 };
 
 String RID_TXT_FONT_SEMICONDENSED
@@ -4490,6 +4624,7 @@ String RID_TXT_FONT_SEMICONDENSED
     Text[ czech ] = "Semicondensed";
     Text[ hebrew ] = "‮דיחוס למחצה‬";
     Text[ hindi ] = "आधा संक्षिप्त";
+    Text[ slovak ] = "Viac zúžené";
 };
 
 String RID_TXT_FONT_SEMIEXPANDED
@@ -4520,6 +4655,7 @@ String RID_TXT_FONT_SEMIEXPANDED
     Text[ czech ] = "Semiexpanded";
     Text[ hebrew ] = "‮מנופח למחצה‬";
     Text[ hindi ] = "आधा विस्तृत";
+    Text[ slovak ] = "Rozšírenejšie";
 };
 
 String RID_TXT_FONT_EXPANDED
@@ -4550,6 +4686,7 @@ String RID_TXT_FONT_EXPANDED
     Text[ czech ] = "Expanded";
     Text[ hebrew ] = "‮מנופח‬";
     Text[ hindi ] = "विस्तृत";
+    Text[ slovak ] = "Rozšírené";
 };
 
 String RID_TXT_FONT_EXTRAEXPANDED
@@ -4580,6 +4717,7 @@ String RID_TXT_FONT_EXTRAEXPANDED
     Text[ czech ] = "Extraexpanded";
     Text[ hebrew ] = "‮מנופח במיוחד‬";
     Text[ hindi ] = "अधिक विस्तृत";
+    Text[ slovak ] = "Extrarozšírené";
 };
 
 String RID_TXT_FONT_ULTRAEXPANDED
@@ -4610,6 +4748,7 @@ String RID_TXT_FONT_ULTRAEXPANDED
     Text[ czech ] = "Ultraexpanded";
     Text[ hebrew ] = "‮מנופח ביותר‬";
     Text[ hindi ] = "अत्यन्त विस्तृत";
+    Text[ slovak ] = "Ultrarozšírené";
 };
 
 String RID_TXT_FONT_REGULAR
@@ -4640,7 +4779,10 @@ String RID_TXT_FONT_REGULAR
     Text[ czech ] = "Regular";
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "नियमित";
+    Text[ slovak ] = "Východzou";
 };
+
+
 
 
 
