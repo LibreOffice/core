@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:52:35 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:51:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,10 @@ dummy:
 
 .IF "$(ENABLE_GTK)" != ""
 
-CFLAGS+=`pkg-config --cflags gtk+-2.0`
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE : pkg_config.mk
+
+CFLAGS+=$(PKGCONFIG_CFLAGS)
 
 SLOFILES=\
             $(SLO)$/gtkdata.obj	\
