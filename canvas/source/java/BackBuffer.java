@@ -67,7 +67,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
+import com.sun.star.rendering.*;
 
 // Java AWT
 import java.awt.*;
