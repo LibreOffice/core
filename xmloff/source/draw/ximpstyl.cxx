@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-03-23 09:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1432,7 +1432,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
 
 uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() const
 {
-    uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance< sal_Int32 >() );
+    uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
 
     for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
     {
