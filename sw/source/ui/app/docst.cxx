@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
