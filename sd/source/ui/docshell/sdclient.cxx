@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,17 @@
 
 #include "Client.hxx"
 
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
-
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
 #endif
-#ifndef _CLIENT_HXX //autogen
-#include <so3/client.hxx>
-#endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
-#endif
 #ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
 #endif
+
+#include <toolkit/helper/vclunohelper.hxx>
 
 #pragma hdrstop
 
@@ -107,6 +99,8 @@
 #endif
 #include "sdresid.hxx"
 
+using namespace com::sun::star;
+
 namespace sd {
 
 /*************************************************************************
@@ -116,12 +110,14 @@ namespace sd {
 \************************************************************************/
 
 Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
-    SfxInPlaceClient(pViewShell->GetViewShell(), pWindow),
+    SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
     pViewShell(pViewShell),
     pSdrOle2Obj(pObj),
     pSdrGrafObj(NULL),
     pOutlinerParaObj (NULL)
 {
+    SetObject( pObj->GetObjRef() );
+    DBG_ASSERT( GetObject().is(), "No object connected!" );
 }
 
 /*************************************************************************
@@ -142,18 +138,13 @@ Client::~Client()
 |*
 \************************************************************************/
 
-void Client::RequestObjAreaPixel(const Rectangle& rRect)
+void Client::RequestNewObjectArea( Rectangle& aObjRect )
 {
-    ::Window* pWin = pViewShell->GetActiveWindow();
-    Rectangle aObjRect( pWin->PixelToLogic( rRect.TopLeft() ),
-                        pWin->PixelToLogic( rRect.GetSize() ) );
-
     ::sd::View* pView = pViewShell->GetView();
     Rectangle aWorkArea( pView->GetWorkArea() );
-
     if (!aWorkArea.IsInside(aObjRect))
     {
-        // Position korrigieren
+        // correct position
         Point aPos = aObjRect.TopLeft();
         Size  aSize = aObjRect.GetSize();
         Point aWorkAreaTL = aWorkArea.TopLeft();
@@ -165,52 +156,22 @@ void Client::RequestObjAreaPixel(const Rectangle& rRect)
         aPos.Y() = Min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height());
 
         aObjRect.SetPos(aPos);
-
-        SfxInPlaceClient::RequestObjAreaPixel(pViewShell->GetActiveWindow()->
-                                              LogicToPixel(aObjRect) );
     }
-    else
-    {
-        SfxInPlaceClient::RequestObjAreaPixel(rRect);
-    }
+}
 
+void Client::ObjectAreaChanged()
+{
+    ::sd::View* pView = pViewShell->GetView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
         SdrObject* pObj = pMark->GetObj();
 
-        Rectangle aOldRect( pObj->GetLogicRect() );
-
-        if ( aObjRect != aOldRect )
-        {
-            // Rundungsfehler vermeiden - nur, wenn mindestens 1 Pixel Unterschied
-            // (getrennt fuer Position und Groesse)
-            Size aOnePixel = pWin->PixelToLogic( Size(1, 1) );
-            Size aLogicSize = aObjRect.GetSize();
-            Rectangle aNewRect = aOldRect;
-            Size aNewSize = aNewRect.GetSize();
-
-            if ( Abs( aObjRect.Left() - aOldRect.Left() ) >= aOnePixel.Width() )
-                aNewRect.SetPos( Point( aObjRect.Left(), aNewRect.Top() ) );
-            if ( Abs( aObjRect.Top() - aOldRect.Top() ) >= aOnePixel.Height() )
-                aNewRect.SetPos( Point( aNewRect.Left(), aObjRect.Top() ) );
-
-            if ( Abs( aLogicSize.Width() - aNewSize.Width() ) >= aOnePixel.Width() )
-                aNewSize.Width() = aLogicSize.Width();
-            if ( Abs( aLogicSize.Height() - aNewSize.Height() ) >= aOnePixel.Height() )
-                aNewSize.Height() = aLogicSize.Height();
-
-            aNewRect.SetSize( aNewSize );
-
-            if ( aNewRect != aOldRect )     // veraendert nur, wenn mindestens 1 Pixel
-                pObj->SetLogicRect( aNewRect );
-        }
+        // no need to check for changes, this method is called only if the area really changed
+        pObj->SetLogicRect( GetScaledObjArea() );
     }
 }
-
-
 
 /*************************************************************************
 |*
@@ -218,103 +179,37 @@ void Client::RequestObjAreaPixel(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void Client::ViewChanged(USHORT nAspect)
+void Client::ViewChanged()
 {
-    // Eventuell neues MetaFile holen
-    SfxInPlaceClient::ViewChanged(nAspect);
-
+    //TODO/LATER: should we try to avoid the recalculation of the visareasize
+    //if we know that it didn't change?
     if (pViewShell->GetActiveWindow())
     {
         ::sd::View* pView = pViewShell->GetView();
-
         if (pView)
         {
-            SvClientData* pData = GetEnv();
-
-            if( pData )
+            MapMode             aMap100( MAP_100TH_MM );
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) );
+            //TODO/LATER: is VisAreaSize enough?
+            Rectangle           aVisArea;
+            awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
+            aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
+            aVisArea = OutputDevice::LogicToLogic( aVisArea, aMapUnit, aMap100 );
+            Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
+            Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
+                                                static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
+            if( Application::GetDefaultDevice()->LogicToPixel( aScaledSize, aMap100 ) !=
+                Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) )
             {
-                SvEmbeddedObject*   pObj = GetEmbedObj();
-                MapMode             aMap100( MAP_100TH_MM );
-                Rectangle           aVisArea( OutputDevice::LogicToLogic( pObj->GetVisArea(), pObj->GetMapUnit(), aMap100 ) );
-                Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
-                Size                aScaledSize( static_cast< long >( pData->GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
-                                                 static_cast< long >( pData->GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
-
-                if( Application::GetDefaultDevice()->LogicToPixel( aScaledSize, aMap100 ) !=
-                    Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) )
-                {
-                    const sal_Bool bOldLock = pView->GetModel()->isLocked();
-
-                    pView->GetModel()->setLock( sal_True );
-                    pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
-                    pView->GetModel()->setLock( bOldLock );
-
-                    pSdrOle2Obj->BroadcastObjectChange();
-                }
+                pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
+                pSdrOle2Obj->BroadcastObjectChange();
             }
+            else
+                pSdrOle2Obj->ActionChanged();
         }
     }
 }
 
-
-/*************************************************************************
-|*
-|* InPlace-Objekt aktivieren / deaktivieren
-|*
-\************************************************************************/
-
-void Client::UIActivate(BOOL bActivate)
-{
-    SfxInPlaceClient::UIActivate(bActivate);
-
-    if (!bActivate)
-    {
-#ifdef STARIMAGE_AVAILABLE
-        if (pSdrGrafObj && pViewShell->GetActiveWindow())
-        {
-            // Das Ole2Obj (Image) wird gegen das GrafObj ausgetauscht
-            pSdrGrafObj->SetLogicRect(pSdrOle2Obj->GetLogicRect());
-            SvInPlaceObjectRef aIPObj = pSdrOle2Obj->GetObjRef();
-            pSdrGrafObj->SetGraphic ( SimDLL::GetGraphic( aIPObj ) );
-            SdView* pView = pViewShell->GetView();
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            SdrPage* pPg = pPV->GetPage();
-            delete pPg->RemoveObject( pSdrOle2Obj->GetOrdNum() );
-            pSdrGrafObj = NULL;
-        }
-#endif
-    }
-}
-
-/*************************************************************************
-|*
-|* Daten fuer eine ggf. spaeter zu erzeugende View
-|*
-\************************************************************************/
-
-void Client::MakeViewData()
-{
-    SfxInPlaceClient::MakeViewData();
-
-    SvClientData* pCD = GetClientData();
-
-    if (pCD)
-    {
-        SvEmbeddedObject* pObj = GetEmbedObj();
-        Rectangle aObjVisArea = OutputDevice::LogicToLogic(
-                                    pObj->GetVisArea(), pObj->GetMapUnit(),
-                                    MAP_100TH_MM );
-        Size aVisSize = aObjVisArea.GetSize();
-        Fraction aFractX = pCD->GetScaleWidth();
-        Fraction aFractY = pCD->GetScaleHeight();
-        aFractX *= aVisSize.Width();
-        aFractY *= aVisSize.Height();
-        pCD->SetSizeScale(aFractX, aFractY);
-
-        Rectangle aObjArea = pSdrOle2Obj->GetLogicRect();
-        pCD->SetObjArea(aObjArea);
-    }
-}
 
 /*************************************************************************
 |*
@@ -324,8 +219,6 @@ void Client::MakeViewData()
 
 void Client::MakeVisible()
 {
-    SfxInPlaceClient::MakeVisible();
-
     if (pViewShell->ISA(DrawViewShell))
     {
         static_cast<DrawViewShell*>(pViewShell)->MakeVisible(
@@ -334,5 +227,5 @@ void Client::MakeVisible()
     }
 }
 
-
 } // end of namespace sd
+
