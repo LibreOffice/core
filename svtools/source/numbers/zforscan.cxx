@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 20:51:10 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,8 +339,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         break;
     }
 
-    sal_Int32 nCnt, nElem;
-
     // boolean keyords
     sKeyword[NF_KEY_TRUE] = pCharClass->upper( pLocaleData->getTrueWord() );
     if ( !sKeyword[NF_KEY_TRUE].Len() )
@@ -356,23 +354,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     }
 
     // currency symbol
-    Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
-    nCnt = aCurrSeq.getLength();
-    for ( nElem=0; nElem<nCnt; nElem++ )
-    {
-        if ( aCurrSeq[nElem].isDefault )
-            break;
-    }
-    if ( nElem >= nCnt )
-    {
-        DBG_ERRORFILE( "SetDependentKeywords: no default currency" );
-        nElem = 0;
-        DBG_ASSERT( nElem < nCnt, "SetDependentKeywords: no currency at all" );
-    }
-    if ( nElem < nCnt )
-        sCurString = pCharClass->upper( aCurrSeq[nElem].symbol );
-    else
-        sCurString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ShellsAndPebbles" ) );
+    sCurString = pCharClass->upper( pLocaleData->getCurrSymbol() );
 }
 
 
@@ -2224,7 +2206,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 nCPos = sTmpStr.Search(sCurString);
                 if ( nCPos != STRING_NOTFOUND )
                 {
-                    const String& rCurr = pIntl->GetCurrSymbol();
+                    const String& rCurr = pLoc->getCurrSymbol();
                     sStrArray[j].Replace( nCPos, rCurr.Len(), rCurr );
                 }
             }

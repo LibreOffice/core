@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:46:12 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,24 +659,21 @@ BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
 
 BOOL ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos )
 {
-//  String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
-
-    //! Internationalisierung?
-    static const String aUpperAM( RTL_CONSTASCII_USTRINGPARAM( "AM" ) );
-    static const String aUpperPM( RTL_CONSTASCII_USTRINGPARAM( "PM" ) );
 
     if ( rString.Len() > nPos )
     {
-        if ( StringContains( aUpperAM, rString, nPos ) )
+        const CharClass* pChr = pFormatter->GetCharClass();
+        const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+        if ( StringContains( pChr->upper( pLoc->getTimeAM() ), rString, nPos ) )
         {
             nAmPm = 1;
-            nPos += aUpperAM.Len();
+            nPos += pLoc->getTimeAM().Len();
             return TRUE;
         }
-        else if ( StringContains( aUpperPM, rString, nPos ) )
+        else if ( StringContains( pChr->upper( pLoc->getTimePM() ), rString, nPos ) )
         {
             nAmPm = -1;
-            nPos += aUpperPM.Len();
+            nPos += pLoc->getTimePM().Len();
             return TRUE;
         }
     }
@@ -694,11 +691,14 @@ BOOL ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos 
 
 inline BOOL ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& nPos )
 {
-    if ( rString.Len() > nPos
-            && rString.GetChar(nPos) == pFormatter->GetInternational()->GetNumDecimalSep() )
+    if ( rString.Len() > nPos )
     {
-        nPos++;
-        return TRUE;
+        const String& rSep = pFormatter->GetLocaleData()->getNumDecimalSep();
+        if ( rString.Equals( rSep, nPos, rSep.Len() ) )
+        {
+            nPos += rSep.Len();
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -1213,7 +1213,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
             else
             {   // lang
                 SkipBlanks(rString, nPos);
-                SkipString( pFormatter->GetInternational()->GetLongDateDayOfWeekSep(), rString, nPos );
+                SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
             }
             SkipBlanks(rString, nPos);
             if ( nMonth = GetMonth(rString, nPos) ) // Monat (Jan 1)?
@@ -1582,8 +1582,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             || eScannedType == NUMBERFORMAT_DATETIME) )
     {   // day of week is just parsed away
         xub_StrLen nOldPos = nPos;
-        const International* pIntl = pFormatter->GetInternational();
-        const String& rSep = pIntl->GetLongDateDayOfWeekSep();
+        const String& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
             nPos += rSep.Len();
@@ -1758,7 +1757,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                 if (eSetType == NUMBERFORMAT_FRACTION)  // Sonderfall Bruch 1 = 1/1
                 {
                     if (i >= nAnzStrings ||         // kein Endstring oder ,
-                        sStrArray[i].GetChar(0) == pFormatter->GetInternational()->GetNumDecimalSep())
+                        sStrArray[i] == pFormatter->GetLocaleData()->getNumDecimalSep())
                     {
                         eScannedType = NUMBERFORMAT_FRACTION;
                         return TRUE;
@@ -1778,7 +1777,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                     eScannedType == NUMBERFORMAT_UNDEFINED && // nicht D oder C
                     nDecPos == 0 &&                 // kein Dezimalkomma vorher
                     (i >= nAnzStrings ||            // kein Endstring oder ,
-                        sStrArray[i].GetChar(0) == pFormatter->GetInternational()->GetNumDecimalSep())
+                        sStrArray[i] == pFormatter->GetLocaleData()->getNumDecimalSep())
                 )
                 {
                     eScannedType = NUMBERFORMAT_FRACTION;
@@ -1930,6 +1929,7 @@ void ImpSvNumberInputScan::InitText()
     int j;
     const International* pIntl = pFormatter->GetInternational();
     const CharClass* pChrCls = pFormatter->GetCharClass();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     for ( j=0; j<12; j++ )
     {
         aUpperMonthText[j] = pChrCls->upper( pIntl->GetMonthText(j+1) );
@@ -1940,7 +1940,7 @@ void ImpSvNumberInputScan::InitText()
         aUpperDayText[j] = pChrCls->upper( pIntl->GetDayText( (DayOfWeek) j ) );
         aUpperAbbrevDayText[j] = pChrCls->upper( pIntl->GetAbbrevDayText( (DayOfWeek) j ) );
     }
-    aUpperCurrSymbol = pChrCls->upper( pIntl->GetCurrSymbol() );
+    aUpperCurrSymbol = pChrCls->upper( pLoc->getCurrSymbol() );
     bTextInitialized = TRUE;
 }
 
@@ -1955,7 +1955,7 @@ void ImpSvNumberInputScan::InitText()
 
 void ImpSvNumberInputScan::ChangeIntl()
 {
-    sal_Unicode cDecSep = pFormatter->GetInternational()->GetNumDecimalSep();
+    sal_Unicode cDecSep = pFormatter->GetLocaleData()->getNumDecimalSep().GetChar(0);
     bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == '/' ||
                           cDecSep == '.' ||

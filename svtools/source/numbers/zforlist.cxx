@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 20:52:31 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ SvNumberFormatter::~SvNumberFormatter()
 void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 {
     if ( eLang == LANGUAGE_DONTKNOW )
-        eLang = LANGUAGE_ENGLISH_US;
+        eLang = UNKNOWN_SUBSTITUTE;
     SysLnge = eLang;
     ActLnge = eLang;
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
@@ -196,9 +196,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     if ( !International::IsFormatAvailable( eLang ) )
         eLang = UNKNOWN_SUBSTITUTE;
     pIntl = new International( eLang );
-    String aLanguage, aCountry, aVariant;
-    ConvertLanguageToIsoNames( International::GetRealLanguage( eLang ), aLanguage, aCountry );
-    aLocale = Locale( aLanguage, aCountry, aVariant );
+    aLocale = ConvertLanguageToLocale( eLang );
     pCharClass = new CharClass( xServiceManager, aLocale );
     pLocaleData = new LocaleDataWrapper( xServiceManager, aLocale );
     pStringScanner = new ImpSvNumberInputScan( this );
@@ -209,6 +207,19 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pMergeTable = new SvULONGTable;
     bNoZero = FALSE;
     pColorLink = NULL;
+}
+
+
+// static
+::com::sun::star::lang::Locale SvNumberFormatter::ConvertLanguageToLocale( LanguageType eLang )
+{
+    if ( eLang == LANGUAGE_DONTKNOW )
+        eLang = UNKNOWN_SUBSTITUTE;
+    if ( eLang == LANGUAGE_SYSTEM )
+        eLang = International::GetRealLanguage( eLang );
+    String aLanguage, aCountry, aVariant;
+    ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
+    return Locale( aLanguage, aCountry, aVariant );
 }
 
 
@@ -245,10 +256,8 @@ short SvNumberFormatter::GetStandardPrec()
 
 void SvNumberFormatter::ImpChangeSysCL(LanguageType eLnge)
 {
-//! if (eLnge == LANGUAGE_SYSTEM)               // Sprache Systemn uebersteuern
-//!     eLnge = System::GetLanguage();
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = LANGUAGE_ENGLISH_US;
+        eLnge = UNKNOWN_SUBSTITUTE;
     if (eLnge != SysLnge)
     {
         SysLnge = eLnge;
@@ -274,9 +283,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
             eLnge = UNKNOWN_SUBSTITUTE;
         pIntl = new International( eLnge );
 
-        String aLanguage, aCountry, aVariant;
-        ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
-        aLocale = Locale( aLanguage, aCountry, aVariant );
+        aLocale = ConvertLanguageToLocale( eLnge );
         pCharClass->setLocale( aLocale );
         pLocaleData->setLocale( aLocale );
 
@@ -381,10 +388,8 @@ BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
                                            LanguageType eNewLnge)
 {
     BOOL bRes;
-//! if (eNewLnge == LANGUAGE_SYSTEM)                // Sprache Systemn uebersteuern
-//!     eNewLnge = System::GetLanguage();
     if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = LANGUAGE_ENGLISH_US;
+        eNewLnge = UNKNOWN_SUBSTITUTE;
 
     pFormatScanner->SetConvertMode(eLnge, eNewLnge);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
@@ -799,15 +804,7 @@ ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
         if ( aLoadedLocale.Language != aLocale.Language || aLoadedLocale.Country != aLocale.Country )
         {
             ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "Locales don't match:\n" ) );
-            aMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
-            aMsg += '_';
-            aMsg += ByteString( String( aLocale.Country ), RTL_TEXTENCODING_UTF8 );
-            aMsg.Append( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
-            aMsg += ByteString( String( aLoadedLocale.Language ), RTL_TEXTENCODING_UTF8 );
-            aMsg += '_';
-            aMsg += ByteString( String( aLoadedLocale.Country ), RTL_TEXTENCODING_UTF8 );
-            aMsg.Append( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
+            DBG_ERRORFILE( pLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
         }
 #endif
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
@@ -1344,11 +1341,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 #ifndef PRODUCT
         ByteString aMsg( "ImpInsertFormat: bad numberformat code: " );
         aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
-        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
-        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
 #endif
         delete pFormat;
         return NULL;;
@@ -1361,11 +1354,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ": " ) );
         aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
         aMsg += ByteString::CreateFromInt32( nPos );
-        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
-        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
 #endif
         delete pFormat;
         return NULL;
@@ -1473,11 +1462,7 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
     {   // currency entries with decimals might not exist, e.g. Italian Lira
         ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
         aMsg += ByteString::CreateFromInt32( nTabOff );
-        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
-        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
     }
 #endif
     if ( nLen )
@@ -1954,13 +1939,13 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 void SvNumberFormatter::ImpGetPosCurrFormat(String& sPosStr)
 {
     NfCurrencyEntry::CompletePositiveFormatString( sPosStr,
-        pIntl->GetCurrSymbol(), pIntl->GetCurrPositiveFormat() );
+        pLocaleData->getCurrSymbol(), pLocaleData->getCurrPositiveFormat() );
 }
 
 void SvNumberFormatter::ImpGetNegCurrFormat(String& sNegStr)
 {
     NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
-        pIntl->GetCurrSymbol(), pIntl->GetCurrNegativeFormat() );
+        pLocaleData->getCurrSymbol(), pLocaleData->getCurrNegativeFormat() );
 }
 
 void SvNumberFormatter::GenerateFormat(String& sString,
@@ -2030,10 +2015,10 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             if ( pEntry )
             {
                 USHORT nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-                    pIntl->GetCurrPositiveFormat(),
+                    pLocaleData->getCurrPositiveFormat(),
                     pEntry->GetPositiveFormat(), bBank );
                 USHORT nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-                    pIntl->GetCurrNegativeFormat(),
+                    pLocaleData->getCurrNegativeFormat(),
                     pEntry->GetNegativeFormat(), bBank );
                 pEntry->CompletePositiveFormatString( sString, bBank,
                     nPosiForm );
@@ -2043,11 +2028,11 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             else
             {   // wir gehen von einem Banksymbol aus
                 USHORT nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-                    pIntl->GetCurrPositiveFormat(),
-                    pIntl->GetCurrPositiveFormat(), TRUE );
+                    pLocaleData->getCurrPositiveFormat(),
+                    pLocaleData->getCurrPositiveFormat(), TRUE );
                 USHORT nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-                    pIntl->GetCurrNegativeFormat(),
-                    pIntl->GetCurrNegativeFormat(), TRUE );
+                    pLocaleData->getCurrNegativeFormat(),
+                    pLocaleData->getCurrNegativeFormat(), TRUE );
                 NfCurrencyEntry::CompletePositiveFormatString( sString, aCurr,
                     nPosiForm );
                 NfCurrencyEntry::CompleteNegativeFormatString( sNegStr, aCurr,
@@ -2289,7 +2274,7 @@ USHORT SvNumberFormatter::GetYear2000Default()
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable() const
 {
     while ( !bCurrencyTableInitialized )
-        SvNumberFormatter::ImpInitCurrencyTable();
+        ImpInitCurrencyTable();
     return theCurrencyTable;
 }
 
@@ -2551,10 +2536,9 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
 #endif
 
 
-// static
-void SvNumberFormatter::ImpInitCurrencyTable()
+void SvNumberFormatter::ImpInitCurrencyTable() const
 {
-    // racing condition moeglich:
+    // racing condition possible:
     // while ( !bCurrencyTableInitialized )
     //      ImpInitCurrencyTable();
     static BOOL bInitializing = FALSE;
@@ -2562,6 +2546,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         return ;
     bInitializing = TRUE;
 
+    Locale aSaveLocale( pLocaleData->getLocale() );
     LanguageType eSysLang = System::GetLanguage();
     NfCurrencyEntryPtr pEntry;
     USHORT n = International::GetAvailableFormatCount();
@@ -2576,16 +2561,16 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         if ( eNeut != eLang )
             BOOL bBreak = TRUE;
 #endif
-        International* pIntl = new International( eLang );
-        pEntry = new NfCurrencyEntry( *pIntl );
+        pLocaleData->setLocale( ConvertLanguageToLocale( eLang ) );
+        pEntry = new NfCurrencyEntry( *pLocaleData, eLang );
 #ifndef PRODUCT
         lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
         theCurrencyTable.Insert( pEntry, j );
-        delete pIntl;
         if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
             nSystemCurrencyPosition = j;
     }
+    pLocaleData->setLocale( aSaveLocale );
     DBG_ASSERT( theCurrencyTable.Count(),
         "SvNumberFormatter::ImpInitCurrencyTable: no NfCurrencyEntry ?!?" );
     // first entry is System
@@ -2624,8 +2609,8 @@ USHORT SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
     if ( bBank )
     {   // nur Bankensymbole
         String aPositiveBank, aNegativeBank;
-        rCurr.BuildPositiveFormatString( aPositiveBank, TRUE, *pIntl, 1 );
-        rCurr.BuildNegativeFormatString( aNegativeBank, TRUE, *pIntl, 1 );
+        rCurr.BuildPositiveFormatString( aPositiveBank, TRUE, *pLocaleData, 1 );
+        rCurr.BuildNegativeFormatString( aNegativeBank, TRUE, *pLocaleData, 1 );
 
         WSStringPtr pFormat1 = new String( aPositiveBank );
         *pFormat1 += ';';
@@ -2655,14 +2640,14 @@ USHORT SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
         aRed += pFormatScanner->GetRedString();
         aRed += ']';
 
-        rCurr.BuildPositiveFormatString( aPositive, FALSE, *pIntl, 1 );
-        rCurr.BuildNegativeFormatString( aNegative, FALSE, *pIntl, 1 );
+        rCurr.BuildPositiveFormatString( aPositive, FALSE, *pLocaleData, 1 );
+        rCurr.BuildNegativeFormatString( aNegative, FALSE, *pLocaleData, 1 );
         if ( rCurr.GetDigits() )
         {
-            rCurr.BuildPositiveFormatString( aPositiveNoDec, FALSE, *pIntl, 0 );
-            rCurr.BuildNegativeFormatString( aNegativeNoDec, FALSE, *pIntl, 0 );
-            rCurr.BuildPositiveFormatString( aPositiveDashed, FALSE, *pIntl, 2 );
-            rCurr.BuildNegativeFormatString( aNegativeDashed, FALSE, *pIntl, 2 );
+            rCurr.BuildPositiveFormatString( aPositiveNoDec, FALSE, *pLocaleData, 0 );
+            rCurr.BuildNegativeFormatString( aNegativeNoDec, FALSE, *pLocaleData, 0 );
+            rCurr.BuildPositiveFormatString( aPositiveDashed, FALSE, *pLocaleData, 2 );
+            rCurr.BuildNegativeFormatString( aNegativeDashed, FALSE, *pLocaleData, 2 );
 
             pFormat1 = new String( aPositiveNoDec );
             *pFormat1 += ';';
@@ -2720,15 +2705,15 @@ NfCurrencyEntry::NfCurrencyEntry()
 }
 
 
-NfCurrencyEntry::NfCurrencyEntry( const International& rIntl )
+NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, LanguageType eLang )
 {
-    aSymbol         = rIntl.GetCurrSymbol();
-    aBankSymbol     = rIntl.GetCurrBankSymbol();
-    eLanguage       = rIntl.GetLanguage();
-    nPositiveFormat = rIntl.GetCurrPositiveFormat();
-    nNegativeFormat = rIntl.GetCurrNegativeFormat();
-    nDigits         = rIntl.GetCurrDigits();
-    cZeroChar       = rIntl.GetCurrZeroChar();
+    aSymbol         = rLocaleData.getCurrSymbol();
+    aBankSymbol     = rLocaleData.getCurrBankSymbol();
+    eLanguage       = eLang;
+    nPositiveFormat = rLocaleData.getCurrPositiveFormat();
+    nNegativeFormat = rLocaleData.getCurrNegativeFormat();
+    nDigits         = rLocaleData.getCurrDigits();
+    cZeroChar       = rLocaleData.getCurrZeroChar();
 }
 
 
@@ -2790,34 +2775,34 @@ void NfCurrencyEntry::BuildSymbolString( String& rStr, BOOL bBank,
 
 
 void NfCurrencyEntry::Impl_BuildFormatStringNumChars( String& rStr,
-            const International& rIntl, USHORT nDecimalFormat ) const
+            const LocaleDataWrapper& rLoc, USHORT nDecimalFormat ) const
 {
     rStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###0" ) );
-    rStr.Insert( rIntl.GetNumThousandSep(), 1 );
+    rStr.Insert( rLoc.getNumThousandSep(), 1 );
     if ( nDecimalFormat && nDigits )
     {
-        rStr += rIntl.GetNumDecimalSep();
+        rStr += rLoc.getNumDecimalSep();
         rStr.Expand( rStr.Len() + nDigits, (nDecimalFormat == 2 ? '-' : cZeroChar) );
     }
 }
 
 
 void NfCurrencyEntry::BuildPositiveFormatString( String& rStr, BOOL bBank,
-            const International& rIntl, USHORT nDecimalFormat ) const
+            const LocaleDataWrapper& rLoc, USHORT nDecimalFormat ) const
 {
-    Impl_BuildFormatStringNumChars( rStr, rIntl, nDecimalFormat );
+    Impl_BuildFormatStringNumChars( rStr, rLoc, nDecimalFormat );
     USHORT nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
-        rIntl.GetCurrPositiveFormat(), nPositiveFormat, bBank );
+        rLoc.getCurrPositiveFormat(), nPositiveFormat, bBank );
     CompletePositiveFormatString( rStr, bBank, nPosiForm );
 }
 
 
 void NfCurrencyEntry::BuildNegativeFormatString( String& rStr, BOOL bBank,
-            const International& rIntl, USHORT nDecimalFormat ) const
+            const LocaleDataWrapper& rLoc, USHORT nDecimalFormat ) const
 {
-    Impl_BuildFormatStringNumChars( rStr, rIntl, nDecimalFormat );
+    Impl_BuildFormatStringNumChars( rStr, rLoc, nDecimalFormat );
     USHORT nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
-        rIntl.GetCurrNegativeFormat(), nNegativeFormat, bBank );
+        rLoc.getCurrNegativeFormat(), nNegativeFormat, bBank );
     CompleteNegativeFormatString( rStr, bBank, nNegaForm );
 }
 

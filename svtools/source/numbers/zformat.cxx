@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
+ *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,11 +1258,11 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
     USHORT nStandardPrec = rScan.GetStandardPrec();
     if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
         SolarMath::DoubleToString(OutString, fNumber, 'E', nStandardPrec /*2*/,
-                       rIntl().GetNumDecimalSep());
+                       rLoc().getNumDecimalSep().GetChar(0));
     else
     {
         SolarMath::DoubleToString( OutString, fNumber, 'F', nStandardPrec /*2*/,
-                       rIntl().GetNumDecimalSep(), TRUE );
+                       rLoc().getNumDecimalSep().GetChar(0), TRUE );
         if (OutString.GetChar(0) == '-' &&
             OutString.GetTokenCount('0') == OutString.Len())
             OutString.EraseLeadingChars('-');            // nicht -0
@@ -1291,7 +1291,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, String& OutString)
     }
 
     SolarMath::DoubleToString( OutString, fNumber, 'A', INT_MAX,
-                    rIntl().GetNumDecimalSep(), TRUE );
+                    rLoc().getNumDecimalSep().GetChar(0), TRUE );
 
     if ( eType & NUMBERFORMAT_PERCENT && bModified)
         OutString += '%';
@@ -1514,7 +1514,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                  {
                     fNumber *= 100;
                     SolarMath::DoubleToString(OutString, fNumber, 'F', 2,
-                                   rIntl().GetNumDecimalSep());
+                                   rLoc().getNumDecimalSep().GetChar(0));
                     if (OutString.GetChar(0) == '-' &&
                         OutString.GetTokenCount('0') == OutString.Len())
                         OutString.EraseLeadingChars('-');            // nicht -0
@@ -1527,7 +1527,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             case NUMBERFORMAT_SCIENTIFIC:
             {
                 SolarMath::DoubleToString(OutString, fNumber, 'E', 2,
-                    rIntl().GetNumDecimalSep());
+                    rLoc().getNumDecimalSep().GetChar(0));
                 return FALSE;
             }
             break;
@@ -2088,7 +2088,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             case SYMBOLTYPE_DIGIT:
             {
                 xub_StrLen nLen = ( bInputLine && i > 0 &&
-                    rInfo.sStrArray[i-1].GetChar(0) == rIntl().GetNumDecimalSep() ?
+                    rInfo.sStrArray[i-1] == rLoc().getNumDecimalSep() ?
                     nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
@@ -2259,7 +2259,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             case NF_KEY_NNNN:               // NNNN
             {
                 OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
-                OutString += rIntl().GetLongDateDayOfWeekSep();
+                OutString += rLoc().getLongDateDayOfWeekSep();
             }
             break;
             case NF_KEY_WW :                // WW Kalenderwoche
@@ -2513,7 +2513,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_NNNN:               // NNNN
                 OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
-                OutString += rIntl().GetLongDateDayOfWeekSep();
+                OutString += rLoc().getLongDateDayOfWeekSep();
             break;
             case NF_KEY_WW :                // WW Kalenderwoche
                 OutString += String::CreateFromInt32(
@@ -2682,7 +2682,7 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
                 }                               // of case digi
                 break;
                 case NF_KEY_CCC:                // CCC-Waehrung
-                    sStr.Insert(rIntl().GetCurrBankSymbol(), k);
+                    sStr.Insert(rLoc().getCurrBankSymbol(), k);
                 break;
                 case NF_KEY_GENERAL:            // Standard im String
                 {
@@ -2701,8 +2701,13 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
 
     bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx, // ggfs Auffuellen mit .
                             rInfo.nCntPre);
-    if ( rInfo.nCntPost > 0 && sStr.GetChar( sStr.Len() - 1 ) == rIntl().GetNumDecimalSep() )
-        sStr.Erase( sStr.Len() - 1 );       // DecSep am Ende ohne Nachkommastellen weg
+    if ( rInfo.nCntPost > 0 )
+    {
+        const String& rDecSep = rLoc().getNumDecimalSep();
+        xub_StrLen nLen = rDecSep.Len();
+        if ( sStr.Len() > nLen && sStr.Equals( rDecSep, sStr.Len() - nLen, nLen ) )
+            sStr.Erase( sStr.Len() - nLen );        // no decimals => strip DecSep
+    }
     if (bSign)
         sStr.Insert('-',0);
     OutString = sStr;
@@ -2806,7 +2811,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
             }
             break;
             case NF_KEY_CCC:                        // CCC-Waehrung
-                sStr.Insert(rIntl().GetCurrBankSymbol(), k);
+                sStr.Insert(rLoc().getCurrBankSymbol(), k);
             break;
             case NF_KEY_GENERAL:                    // Standard im String
             {
@@ -2911,7 +2916,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
             }                                   // of case digi
             break;
             case NF_KEY_CCC:                // CCC-Waehrung
-                sStr.Insert(rIntl().GetCurrBankSymbol(), k);
+                sStr.Insert(rLoc().getCurrBankSymbol(), k);
             break;
             case NF_KEY_GENERAL:            // Standard im String
             {
@@ -3121,7 +3126,7 @@ Color* SvNumberformat::GetColor( USHORT nNumFor ) const
 
 
 void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
-            SvNumberformatLimitOps eOp, double fLimit, sal_Unicode cDecSep )
+            SvNumberformatLimitOps eOp, double fLimit, const String& rDecSep )
 {
     if ( eOp != NUMBERFORMAT_OP_NO )
     {
@@ -3146,14 +3151,14 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
         }
-        SolarMath::DoubleToString( rStr, fLimit, 'A', INT_MAX, cDecSep, TRUE );
+        SolarMath::DoubleToString( rStr, fLimit, 'A', INT_MAX, rDecSep.GetChar(0), TRUE );
         rStr += ']';
     }
 }
 
 
 String SvNumberformat::GetMappedFormatstring(
-        const NfKeywordTable& rKeywords, const International& rIntl,
+        const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLoc,
         BOOL bDontQuote ) const
 {
     String aStr;
@@ -3182,11 +3187,11 @@ String SvNumberformat::GetMappedFormatstring(
             {
                 case 0 :
                     lcl_SvNumberformat_AddLimitStringImpl( aPrefix, eOp1,
-                        fLimit1, rIntl.GetNumDecimalSep() );
+                        fLimit1, rLoc.getNumDecimalSep() );
                 break;
                 case 1 :
                     lcl_SvNumberformat_AddLimitStringImpl( aPrefix, eOp2,
-                        fLimit2, rIntl.GetNumDecimalSep() );
+                        fLimit2, rLoc.getNumDecimalSep() );
                 break;
             }
         }
@@ -3230,17 +3235,17 @@ String SvNumberformat::GetMappedFormatstring(
                 {
                     aStr += rKeywords[pType[j]];
                     if( NF_KEY_NNNN == pType[j] )
-                        aStr += rIntl.GetLongDateDayOfWeekSep();
+                        aStr += rLoc.getLongDateDayOfWeekSep();
                 }
                 else
                 {
                     switch ( pType[j] )
                     {
                         case SYMBOLTYPE_DECSEP :
-                            aStr += rIntl.GetNumDecimalSep();
+                            aStr += rLoc.getNumDecimalSep();
                         break;
                         case SYMBOLTYPE_THSEP :
-                            aStr += rIntl.GetNumThousandSep();
+                            aStr += rLoc.getNumThousandSep();
                         break;
                         case SYMBOLTYPE_STRING :
                             if( bDontQuote )
