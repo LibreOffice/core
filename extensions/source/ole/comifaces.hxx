@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comifaces.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,5 +86,13 @@ IUnoObjectWrapper: public IUnknown
     STDMETHOD( getOriginalUnoStruct)( Any * pStruct)=0;
 
 };
+
+MIDL_INTERFACE("8BB66591-A544-4de9-822C-57AB57BCED1C")
+IUnoTypeWrapper: public IUnknown
+{
+    STDMETHOD(put_Name)(BSTR val) = 0;
+    STDMETHOD(get_Name)(BSTR* pVal) = 0;
+};
+
 
 #endif
