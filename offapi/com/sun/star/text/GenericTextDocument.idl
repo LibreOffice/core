@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericTextDocument.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:54:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@
 
     <p>In addition, all text objects can be searched.</p>
  */
-service GenericTextDocument
+published service GenericTextDocument
 {
     service com::sun::star::document::OfficeDocument;
 
