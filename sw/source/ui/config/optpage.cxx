@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-04-10 08:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2032,6 +2032,10 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
     // Einstellungen in Preview anzeigen
     AttribHdl(&aInsertLB);
     ColorHdl(&aInsertColorLB);
+    AttribHdl(&aDeletedLB);
+    ColorHdl(&aInsertColorLB);
+    AttribHdl(&aChangedLB);
+    ColorHdl(&aChangedColorLB);
 
     ChangedMaskPrevHdl();
 }

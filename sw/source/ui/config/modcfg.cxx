@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-03-15 12:12:12 $
+ *  last change: $Author: os $ $Date: 2001-04-10 08:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
         case  SID_ATTR_CHAR_WEIGHT: nRet = 1; break;
         case  SID_ATTR_CHAR_POSTURE: nRet = 2; break;
         case  SID_ATTR_CHAR_UNDERLINE: nRet = UNDERLINE_SINGLE == rAttr.nAttr ? 3 : 4; break;
+        case  SID_ATTR_CHAR_STRIKEOUT: nRet = 3; break;
         case  SID_ATTR_CHAR_CASEMAP:
         {
             switch(rAttr.nAttr)
@@ -433,14 +434,24 @@ void SwRevisionConfig::Commit()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr)
+void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelete = sal_False)
 {
     rAttr.nItemId = rAttr.nAttr = 0;
     switch(nVal)
     {
         case 1: rAttr.nItemId = SID_ATTR_CHAR_WEIGHT;   rAttr.nAttr = WEIGHT_BOLD              ; break;
         case 2: rAttr.nItemId = SID_ATTR_CHAR_POSTURE;  rAttr.nAttr = ITALIC_NORMAL            ; break;
-        case 3: rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.nAttr = UNDERLINE_SINGLE         ; break;
+        case 3: if(bDelete)
+                {
+                    rAttr.nItemId = SID_ATTR_CHAR_STRIKEOUT;
+                    rAttr.nAttr = STRIKEOUT_SINGLE;
+                }
+                else
+                {
+                    rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;
+                    rAttr.nAttr = UNDERLINE_SINGLE;
+                }
+        break;
         case 4: rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.nAttr = UNDERLINE_DOUBLE         ; break;
         case 5: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_VERSALIEN    ; break;
         case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_GEMEINE      ; break;
@@ -467,7 +478,7 @@ void SwRevisionConfig::Load()
                 {
                     case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
                     case 1 : aInsertAttr.nColor     = nVal; break;
-                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr); break;
+                    case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, sal_True); break;
                     case 3 : aDeletedAttr.nColor    = nVal; break;
                     case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
                     case 5 : aFormatAttr.nColor     = nVal; break;
