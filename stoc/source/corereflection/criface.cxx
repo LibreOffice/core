@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:37:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,21 +189,10 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getDeclaringClass()
         MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
-            typelib_InterfaceTypeDescription * pTD =
-                (typelib_InterfaceTypeDescription *)getDeclTypeDescr();
-            while (pTD)
-            {
-                typelib_TypeDescriptionReference ** ppTypeRefs = pTD->ppMembers;
-                for ( sal_Int32 nPos = pTD->nMembers; nPos--; )
-                {
-                    if (td_equals( (typelib_TypeDescription *)getTypeDescr(), ppTypeRefs[nPos] ))
-                    {
-                        _xDeclClass = getReflection()->forType( (typelib_TypeDescription *)pTD );
-                        return _xDeclClass;
-                    }
-                }
-                pTD = pTD->pBaseTypeDescription;
-            }
+            rtl::OUString aName(getTypeDescr()->aBase.aBase.pTypeName);
+            sal_Int32 i = aName.indexOf(':');
+            OSL_ASSERT(i >= 0);
+            _xDeclClass = getReflection()->forName(aName.copy(0, i));
         }
     }
     return _xDeclClass;
@@ -490,21 +479,10 @@ Reference< XIdlClass > IdlInterfaceMethodImpl::getDeclaringClass()
         MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
-            typelib_InterfaceTypeDescription * pTD =
-                (typelib_InterfaceTypeDescription *)getDeclTypeDescr();
-            while (pTD)
-            {
-                typelib_TypeDescriptionReference ** ppTypeRefs = pTD->ppMembers;
-                for ( sal_Int32 nPos = pTD->nMembers; nPos--; )
-                {
-                    if (td_equals( (typelib_TypeDescription *)getTypeDescr(), ppTypeRefs[nPos] ))
-                    {
-                        _xDeclClass = getReflection()->forType( (typelib_TypeDescription *)pTD );
-                        return _xDeclClass;
-                    }
-                }
-                pTD = pTD->pBaseTypeDescription;
-            }
+            rtl::OUString aName(getTypeDescr()->aBase.aBase.pTypeName);
+            sal_Int32 i = aName.indexOf(':');
+            OSL_ASSERT(i >= 0);
+            _xDeclClass = getReflection()->forName(aName.copy(0, i));
         }
     }
     return _xDeclClass;
@@ -838,21 +816,17 @@ InterfaceIdlClassImpl::~InterfaceIdlClassImpl()
 Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (! _xSuperClass.is())
-    {
-        MutexGuard aGuard( getMutexAccess() );
-        if (! _xSuperClass.is())
-        {
-            typelib_InterfaceTypeDescription * pInterfaceTypeDescr = getTypeDescr()->pBaseTypeDescription;
-            if (pInterfaceTypeDescr)
-                _xSuperClass = getReflection()->forType( (typelib_TypeDescription *)pInterfaceTypeDescr );
+    MutexGuard aGuard(getMutexAccess());
+    if (_xSuperClasses.getLength() == 0) {
+        typelib_InterfaceTypeDescription * pType = getTypeDescr();
+        _xSuperClasses.realloc(pType->nBaseTypes);
+        for (sal_Int32 i = 0; i < pType->nBaseTypes; ++i) {
+            _xSuperClasses[i] = getReflection()->forType(
+                &pType->ppBaseTypes[i]->aBase);
+            OSL_ASSERT(_xSuperClasses[i].is());
         }
     }
-
-    if (_xSuperClass.is())
-        return Sequence< Reference< XIdlClass > >( &_xSuperClass, 1 );
-    else
-        return Sequence< Reference< XIdlClass > >();
+    return Sequence< Reference< XIdlClass > >(_xSuperClasses);
 }
 //__________________________________________________________________________________________________
 void InterfaceIdlClassImpl::initMembers()
@@ -897,10 +871,10 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
         else
         {
             const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
-            if (rSeq.getLength())
-            {
-                OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
-                return isAssignableFrom( rSeq[0] );
+            for (sal_Int32 i = 0; i < rSeq.getLength(); ++i) {
+                if (isAssignableFrom(rSeq[i])) {
+                    return true;
+                }
             }
         }
     }
