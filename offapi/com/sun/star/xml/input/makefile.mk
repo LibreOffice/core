@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-04 09:11:02 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:59:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ IDLFILES = \
         XRoot.idl                               \
         XElement.idl                            \
         XAttributes.idl                         \
+        XNamespaceMapping.idl                   \
         SaxDocumentHandler.idl
 
 # ------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRoot.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:10:55 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #if ! defined INCLUDED__com_sun_star_xml_input_XRoot_idl__
 #define INCLUDED__com_sun_star_xml_input_XRoot_idl__
 
-#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/xml/input/XNamespaceMapping.idl>
 #include <com/sun/star/xml/input/XElement.idl>
 #include <com/sun/star/xml/input/XAttributes.idl>
 #include <com/sun/star/xml/sax/SAXException.idl>
@@ -77,12 +77,12 @@ interface XRoot : com::sun::star::uno::XInterface
 {
     /** Receives notification of the beginning of a document.
 
-         @param xUidMapping
+         @param xMapping
                 mapping to obtain ids out of XML namespace URIs
-                (XNameAccess value type is IDL long)
-     */
+                and vice versa
+    */
     void startDocument(
-        [in] com::sun::star::container::XNameAccess xUidMapping )
+        [in] XNamespaceMapping xMapping )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Receives notification of the end of a document.
@@ -92,35 +92,35 @@ interface XRoot : com::sun::star::uno::XInterface
 
     /** Receives notification of a processing instruction.
 
-        @param Target
+        @param target
                target
-        @param Data
+        @param data
                data
     */
     void processingInstruction(
-        [in] string Target, [in] string Data )
+        [in] string target, [in] string data )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Receives an object for locating the origin of SAX document events.
 
-        @param Locator
+        @param locator
                locator
     */
     void setDocumentLocator(
-        [in] com::sun::star::xml::sax::XLocator Locator )
+        [in] com::sun::star::xml::sax::XLocator locator )
         raises (com::sun::star::xml::sax::SAXException);
 
     /** Called upon root element.
 
-         @param Uid
+         @param uid
                 namespace uid of element
-         @param LocalName
+         @param localName
                 localname of element
          @param xAattributes
                 attributes of element
      */
     XElement startRootElement(
-        [in] long Uid, [in] string LocalName, [in] XAttributes xAttributes )
+        [in] long uid, [in] string localName, [in] XAttributes xAttributes )
         raises (com::sun::star::xml::sax::SAXException);
 };
 
