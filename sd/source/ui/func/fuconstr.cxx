@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-13 11:19:39 $
+ *  last change: $Author: aw $ $Date: 2001-08-09 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,10 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( pView->IsAction() )
     {
-        if ( rMEvt.IsRight() )
-            pView->BckAction();
+        // #90235# this extra triggering is an error and leads to
+        // erasing the last two points when creating a polygon.
+        // if ( rMEvt.IsRight() )
+        //  pView->BckAction();
         return TRUE;
     }
 
