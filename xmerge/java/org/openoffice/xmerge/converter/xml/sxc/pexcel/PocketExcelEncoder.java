@@ -143,7 +143,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     protected String parseFormula(String formula) {
 
-        Debug.log(Debug.TRACE,"parseFormula : " + formula);
+        Debug.log(Debug.TRACE,"Strip Formula (Before) : " + formula);
 
         StringBuffer inFormula = new StringBuffer(formula);
         StringBuffer outFormula = new StringBuffer();
@@ -159,6 +159,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             case '[':
                 // We are now inside a StarOffice cell reference.
                 // We also need to strip out the '['
+                Debug.log(Debug.TRACE,"brace Found");
                 inBrace = true;
 
                 // If the next character is a '.', we want to strip it out
@@ -170,38 +171,30 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                 // We are stripping out the ']'
                 inBrace = false;
                 break;
+            case '.':
+                if (inBrace == true && (firstCharAfterBrace == true ||
+                    firstCharAfterColon == true) ) {
+
+                    Debug.log(Debug.TRACE,"dot Found and in brace");
+                    // Since we are in a StarOffice cell reference,
+                    // and we are the first character, we need to
+                    // strip out the '.'
+                    firstCharAfterBrace = false;
+                    firstCharAfterColon = false;
+
+                } else if(firstCharAfterColon == true) {
+                    firstCharAfterColon = false;
+                } else {
+                    outFormula.append(inFormula.charAt(in));
+                }
+                break;
 
             case ':':
                 // We have a cell range reference.
                 // May need to strip out the leading '.'
-                if (inBrace)
-                    firstCharAfterColon = true;
+                firstCharAfterColon = true;
                 outFormula.append(inFormula.charAt(in));
                 break;
-
-            case '.':
-                if (inBrace == true) {
-                    if (firstCharAfterBrace == false &&
-                            firstCharAfterColon == false) {
-                        // Not the first character after the open brace.
-                        // We have hit a separator between a sheet reference
-                        // and a cell reference.  MiniCalc uses a ! as
-                        // this type of separator.
-                        outFormula.append('!');
-                    }
-                    else {
-                        firstCharAfterBrace = false;
-                        firstCharAfterColon = false;
-                        // Since we are in a StarOffice cell reference,
-                        // and we are the first character, we need to
-                        // strip out the '.'
-                    }
-                    break;
-                } else {
-                    // We hit valid data, lets add it to the formula string
-                    outFormula.append(inFormula.charAt(in));
-                    break;
-                }
 
             case ';':
                 // StarOffice XML format uses ';' as a separator.  MiniCalc (and
@@ -219,6 +212,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             }
         }
 
+        Debug.log(Debug.TRACE,"Strip Formula (After) : " + outFormula);
         return outFormula.toString();
     }
 

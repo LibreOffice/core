@@ -73,13 +73,7 @@ import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Worksheet;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Formula;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.LabelCell;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.CellValue;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.FloatNumber;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.*;
 
 /**
  *  This class is used by {@link
@@ -374,20 +368,6 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     public String getCellDataType() {
 
-        String type = getCellFormatType();
-
-        return type;
-    }
-
-
-    /**
-     *  This method returns the format of the data in the current cell.
-     *  Currently it only supports strings.
-     *
-     *  @return  The format of the data in the current cell.
-     */
-    String getCellFormatType() {
-
         String type = OfficeConstants.CELLTYPE_STRING;
 
         if(cell instanceof FloatNumber)
@@ -416,7 +396,17 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
         fmt.clearFormatting();
 
-        fmt.setCategory(getCellFormatType());
+        Debug.log(Debug.TRACE," ixfe for Current Cell " + cell.getIxfe());
+        ExtendedFormat xf = wb.getExtendedFormat(cell.getIxfe());
+        Debug.log(Debug.TRACE," ixfnt for Current Cell " + xf.getFontIndex());
+        FontDescription fd = wb.getFontDescription(xf.getFontIndex());
+
+        fmt.setItalic(fd.isItalic());
+        fmt.setBold(fd.isBold());
+        fmt.setUnderline(fd.isUnderline());
+
+        fmt.setCategory(getCellDataType());
+
     }
 }
 
