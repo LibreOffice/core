@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-08-29 09:50:53 $
+ *  last change: $Author: obr $ $Date: 2001-11-01 14:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,9 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         if( aHandler.getLength() )
         {
+            // search handler in system path if no absolute path given
+            FileBase::searchFileURL( aHandler, OUString(), aHandler );
+
             // handler may be stored as file URL
             FileBase::getSystemPathFromFileURL( aHandler, aHandler );
 
@@ -333,6 +336,18 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         aBuffer.append( aTmp );
 
         aCommandLine = aBuffer.makeStringAndClear();
+    }
+
+    // check if the handler really exists and is executable
+    OString aHandler = aCommandLine.copy( 1, aCommandLine.indexOf( '\"', 1 ) - 1 );
+    if( 0 != access( aHandler.getStr(), X_OK ) )
+    {
+        int nerr = errno;
+
+        throw SystemShellExecuteException(
+            OUString::createFromAscii( strerror( nerr ) ),
+            static_cast < XSystemShellExecute * > (this),
+            nerr );
     }
 
     // do not wait for completion
