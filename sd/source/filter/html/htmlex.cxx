@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:06:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,7 +1533,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             }
             // jetzt zur Masterpage oder beenden
             if (!pPage->IsMasterPage())
-                pPage = (SdPage*)pPage->GetMasterPage(0);
+                pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             else
                 bMasterDone = true;
         }
