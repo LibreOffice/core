@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:54:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "Bedingung ~1";
         Text[ hindi ] = "शर्त ~1";
         Text[ slovak ] = "Podmienka ~1";
+        Text[ hungarian ] = "~1. feltétel";
+        Text[ slovenian ] = "Pogoj ~1";
     };
     ListBox LB_COND1_1
     {
@@ -144,7 +146,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ danish ] =
         {
-            < "Cellev�rdien er" ; Default ; > ;
+            < "Cellev�rdi er" ; Default ; > ;
             < "Formlen er" ; Default ; > ;
         };
         stringlist [ italian ] =
@@ -251,6 +253,16 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "Hodnota bunky je" ; Default ; > ;
         < "Vzorec je" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "A cella értéke" ; Default ; > ;
+        < "A képlet" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vrednost celice je" ; Default ; > ;
+        < "Formula je" ; Default ; > ;
     };
     };
     ListBox LB_COND1_2
@@ -559,6 +571,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "medzi" ; Default ; > ;
         < "nie je medzi" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "egyenlő" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "enako" ; Default ; > ;
+    };
     };
     Edit EDT_COND1_1
     {
@@ -601,6 +621,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND1_AND
     {
@@ -635,6 +657,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
         Text[ slovak ] = "a";
+        Text[ hungarian ] = "és";
+        Text[ slovenian ] = "in";
     };
     Edit EDT_COND1_2
     {
@@ -677,6 +701,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND1_TEMPLATE
     {
@@ -711,6 +737,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "~Zellvorlage";
         Text[ hindi ] = "~कोष्ठ शैली";
         Text[ slovak ] = "Štýl ~bunky";
+        Text[ hungarian ] = "~Cellastílus";
+        Text[ slovenian ] = "Slog ~celice";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -759,6 +787,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "Bedingung ~2";
         Text[ hindi ] = "शर्त ~2";
         Text[ slovak ] = "Podmienka ~2";
+        Text[ hungarian ] = "~2. feltétel";
+        Text[ slovenian ] = "Pogoj ~2";
     };
     ListBox LB_COND2_1
     {
@@ -799,7 +829,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ danish ] =
         {
-            < "Cellev�rdien er" ; Default ; > ;
+            < "Cellev�rdi er" ; Default ; > ;
             < "Formlen er" ; Default ; > ;
         };
         stringlist [ italian ] =
@@ -906,6 +936,16 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "Hodnota bunky je" ; Default ; > ;
         < "Vzorec je" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "A cella értéke" ; Default ; > ;
+        < "A képlet" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vrednost celice je" ; Default ; > ;
+        < "Formula je" ; Default ; > ;
     };
     };
     ListBox LB_COND2_2
@@ -1214,6 +1254,28 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "medzi" ; Default ; > ;
         < "nie je medzi" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "egyenlő" ; Default ; > ;
+        < "kisebb mint" ; Default ; > ;
+        < "nagyobb mint" ; Default ; > ;
+        < "kisebb vagy egyenlő" ; Default ; > ;
+        < "nagyobb vagy egyenlő" ; Default ; > ;
+        < "nem egyenlő" ; Default ; > ;
+        < "között" ; Default ; > ;
+        < "nincs közötte" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "enako" ; Default ; > ;
+        < "manjše kot" ; Default ; > ;
+        < "večje kot" ; Default ; > ;
+        < "manjše ali enako" ; Default ; > ;
+        < "večje ali enako" ; Default ; > ;
+        < "ni enako" ; Default ; > ;
+        < "med" ; Default ; > ;
+        < "ni med" ; Default ; > ;
+    };
     };
     Edit EDT_COND2_1
     {
@@ -1256,6 +1318,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND2_AND
     {
@@ -1290,6 +1354,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
         Text[ slovak ] = "a";
+        Text[ hungarian ] = "és";
+        Text[ slovenian ] = "in";
     };
     Edit EDT_COND2_2
     {
@@ -1332,6 +1398,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND2_TEMPLATE
     {
@@ -1366,6 +1434,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "Z~ellvorlage";
         Text[ hindi ] = "को~ष्ठ शैली";
         Text[ slovak ] = "Štýl bun~ky";
+        Text[ hungarian ] = "C~ellastílus";
+        Text[ slovenian ] = "Slog c~elice";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -1414,6 +1484,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "Bedingung ~3";
         Text[ hindi ] = "शर्त ~3";
         Text[ slovak ] = "Podmienka ~3";
+        Text[ hungarian ] = "~3. feltétel";
+        Text[ slovenian ] = "Pogoj ~3";
     };
     ListBox LB_COND3_1
     {
@@ -1454,7 +1526,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ danish ] =
         {
-            < "Cellev�rdien er" ; Default ; > ;
+            < "Cellev�rdi er" ; Default ; > ;
             < "Formlen er" ; Default ; > ;
         };
         stringlist [ italian ] =
@@ -1561,6 +1633,16 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "Hodnota bunky je" ; Default ; > ;
         < "Vzorec je" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "A cella értéke" ; Default ; > ;
+        < "A képlet" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vrednost celice je" ; Default ; > ;
+        < "Formula je" ; Default ; > ;
     };
     };
     ListBox LB_COND3_2
@@ -1869,6 +1951,28 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "medzi" ; Default ; > ;
         < "nie je medzi" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "egyenlő" ; Default ; > ;
+        < "kisebb mint" ; Default ; > ;
+        < "nagyobb mint" ; Default ; > ;
+        < "kisebb vagy egyenlő" ; Default ; > ;
+        < "nagyobb vagy egyenlő" ; Default ; > ;
+        < "nem egyenlő" ; Default ; > ;
+        < "között" ; Default ; > ;
+        < "nincs közötte" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "enako" ; Default ; > ;
+        < "manjše kot" ; Default ; > ;
+        < "večje kot" ; Default ; > ;
+        < "manjše ali enako" ; Default ; > ;
+        < "večje ali enako" ; Default ; > ;
+        < "ni enako" ; Default ; > ;
+        < "med" ; Default ; > ;
+        < "ni med" ; Default ; > ;
+    };
     };
     Edit EDT_COND3_1
     {
@@ -1911,6 +2015,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND3_AND
     {
@@ -1945,6 +2051,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
         Text[ slovak ] = "a";
+        Text[ hungarian ] = "és";
+        Text[ slovenian ] = "in";
     };
     Edit EDT_COND3_2
     {
@@ -1987,6 +2095,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COND3_TEMPLATE
     {
@@ -2021,6 +2131,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ hebrew ] = "Ze~llvorlage";
         Text[ hindi ] = "को~ष्ठ शैली";
         Text[ slovak ] = "Štý~l bunky";
+        Text[ hungarian ] = "Cell~astílus";
+        Text[ slovenian ] = "Slog ce~lice";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -2054,7 +2166,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text [ italian ] = "Formattazione condizionata" ;
     Text [ spanish ] = "Formateado condicional" ;
     Text [ french ] = "Formatage conditionnel" ;
-    Text [ dutch ] = "Conditionele opmaak" ;
+    Text [ dutch ] = "Voorwaardelijke opmaak" ;
     Text [ swedish ] = "Villkorlig formatering" ;
     Text [ danish ] = "Betinget formatering" ;
     Text [ portuguese_brazilian ] = "Formata��o Condicional" ;
@@ -2076,7 +2188,12 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ hebrew ] = "Bedingte Formatierung";
     Text[ hindi ] = "शर्त के अन्तर्गत रचना";
     Text[ slovak ] = "Podmienené formátovanie";
+    Text[ hungarian ] = "Feltételes formázás";
+    Text[ slovenian ] = "Pogojno oblikovanje";
 };
+
+
+
 
 
 
