@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,12 @@
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
+
+// Calc document
+extern uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
+extern rtl::OUString SAL_CALL ScDocument_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
 
 // Calc XML import
 extern uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
@@ -286,6 +292,10 @@ sal_Bool SAL_CALL component_writeInfo(
                             ScXMLExport_Settings_getImplementationName(),
                             ScXMLExport_Settings_getSupportedServiceNames() );
 
+            lcl_WriteInfo( pRegistryKey,
+                            ScDocument_getImplementationName(),
+                            ScDocument_getSupportedServiceNames() );
+
             return sal_True;
         }
         catch (registry::InvalidRegistryException&)
@@ -416,6 +426,14 @@ void * SAL_CALL component_getFactory(
                 ScXMLExport_Settings_getImplementationName(),
                 ScXMLExport_Settings_createInstance,
                 ScXMLExport_Settings_getSupportedServiceNames() );
+
+    if ( aImpl == ScDocument_getImplementationName() )
+        xFactory = cppu::createSingleFactory(
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ScDocument_getImplementationName(),
+                ScDocument_createInstance,
+                ScDocument_getSupportedServiceNames() );
+
 
     void* pRet = NULL;
     if (xFactory.is())
