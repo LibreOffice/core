@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:13:38 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,19 +272,19 @@ struct SvtDocInfoMapping_Impl
 
 static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
 {
-    "Title",        DI_TITLE,           STRING_TYPE,
-    "Author",       DI_FROM,            STRING_TYPE,
-    "Size",         DI_SIZE,            SIZE_TYPE,
-    "CreationDate", DI_DATE,            DATE_TYPE,
-    "Keywords",     DI_KEYWORDS,        STRING_TYPE,
-    "Description",  DI_DESCRIPTION,     STRING_TYPE,
-    "MIMEType",     DI_MIMETYPE,        STRING_TYPE,
-    "ModifyDate",   DI_MODIFIEDDATE,    DATE_TYPE,
-    "ModifiedBy",   DI_MODIFIEDBY,      STRING_TYPE,
-    "PrintDate",    DI_PRINTDATE,       DATE_TYPE,
-    "PrintedBy",    DI_PRINTBY,         STRING_TYPE,
-    "Theme",        DI_THEME,           STRING_TYPE,
-    NULL,           0,                  STRING_TYPE
+        {"Title",       DI_TITLE,           STRING_TYPE},
+        {"Author",      DI_FROM,            STRING_TYPE},
+        {"Size",        DI_SIZE,            SIZE_TYPE},
+        {"CreationDate",DI_DATE,            DATE_TYPE},
+        {"Keywords",    DI_KEYWORDS,        STRING_TYPE},
+        {"Description", DI_DESCRIPTION,     STRING_TYPE},
+        {"MIMEType",    DI_MIMETYPE,        STRING_TYPE},
+        {"ModifyDate",  DI_MODIFIEDDATE,    DATE_TYPE},
+        {"ModifiedBy",  DI_MODIFIEDBY,      STRING_TYPE},
+        {"PrintDate",   DI_PRINTDATE,       DATE_TYPE},
+        {"PrintedBy",   DI_PRINTBY,         STRING_TYPE},
+        {"Theme",       DI_THEME,           STRING_TYPE},
+        {NULL,          0,                  STRING_TYPE}
 };
 
 // class SvtDummyHeaderBar_Impl ------------------------------------------
@@ -488,6 +488,7 @@ void SvtIconWindow_Impl::InvalidateIconControl()
 
 ULONG SvtIconWindow_Impl::GetCursorPos() const
 {
+    // FIXME -Wall cannot really return -1 actually returns high values.
     ULONG nPos = -1;
 
     SvxIconChoiceCtrlEntry* pCursorEntry = aIconCtrl.GetCursor( );
