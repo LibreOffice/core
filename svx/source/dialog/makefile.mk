@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 10:02:13 $
+#   last change: $Author: hr $ $Date: 2004-09-08 17:13:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,10 @@ LIBTARGET=NO
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+.IF "$(ENABLE_GTK)" != ""
+CFLAGS+=-DENABLE_GTK
+.ENDIF
 
 CFLAGS+=-DDG_DLL
 RSCDEFS += -Dause_hack
