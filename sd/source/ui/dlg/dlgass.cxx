@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:56:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 12:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,15 +175,15 @@
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
@@ -228,7 +228,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd;
 
@@ -1849,7 +1848,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
             Reference<container::XNameAccess> xNameAccess (
                 xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.frame.UICommandDescription"))),
+                    "com.sun.star.frame.UICommandDescription"))),
                 UNO_QUERY);
             if ( ! xNameAccess.is())
                 break;
@@ -1910,17 +1909,17 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
             ::rtl::OUString sModuleIdentifier (
                 RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
 
-            Reference<drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier> xSupplier (
+            Reference<com::sun::star::ui::XModuleUIConfigurationManagerSupplier> xSupplier (
                 xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
+                    "com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
                 UNO_QUERY_THROW);
 
-            Reference<drafts::com::sun::star::ui::XUIConfigurationManager> xManager (
+            Reference<com::sun::star::ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(sModuleIdentifier));
             if ( ! xManager.is())
                 break;
 
-            Reference<drafts::com::sun::star::ui::XImageManager> xImageManager (
+            Reference<com::sun::star::ui::XImageManager> xImageManager (
                 xManager->getImageManager(),
                 UNO_QUERY_THROW);
 
