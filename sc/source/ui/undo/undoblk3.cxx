@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:47:18 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ TYPEINIT1(ScUndoMerge,              SfxUndoAction);
 TYPEINIT1(ScUndoAutoFormat,         SfxUndoAction);
 TYPEINIT1(ScUndoReplace,            SfxUndoAction);
 TYPEINIT1(ScUndoTabOp,              SfxUndoAction);
-TYPEINIT1(ScUndoSpelling,           SfxUndoAction);
+TYPEINIT1(ScUndoConversion,         SfxUndoAction);
 TYPEINIT1(ScUndoRefreshLink,        SfxUndoAction);
 TYPEINIT1(ScUndoInsertAreaLink,     SfxUndoAction);
 TYPEINIT1(ScUndoRemoveAreaLink,     SfxUndoAction);
@@ -1429,26 +1429,24 @@ BOOL __EXPORT ScUndoTabOp::CanRepeat(SfxRepeatTarget& rTarget) const
 
 
 //============================================================================
-//  class ScUndoSpelling
+//  class ScUndoConversion
 //
 //  Spelling
 
 //----------------------------------------------------------------------------
 
-ScUndoSpelling::ScUndoSpelling( ScDocShell* pNewDocShell,
-                                const ScMarkData& rMark,
-                                USHORT nCurX, USHORT nCurY, USHORT nCurZ,
-                                ScDocument* pNewUndoDoc,
-                                USHORT nNewX, USHORT nNewY, USHORT nNewZ,
-                                ScDocument* pNewRedoDoc)
-        //
-    :   ScSimpleUndo( pNewDocShell ),
-        //
-        aMarkData       ( rMark ),
-        aCursorPos      ( nCurX, nCurY, nCurZ ),
-        aNewCursorPos   ( nNewX, nNewY, nNewZ ),
-        pUndoDoc        ( pNewUndoDoc ),
-        pRedoDoc        ( pNewRedoDoc )
+ScUndoConversion::ScUndoConversion(
+        ScDocShell* pNewDocShell, const ScMarkData& rMark,
+        USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScDocument* pNewUndoDoc,
+        USHORT nNewX, USHORT nNewY, USHORT nNewZ, ScDocument* pNewRedoDoc,
+        ScConversionType eConvType ) :
+    ScSimpleUndo( pNewDocShell ),
+    meConvType( eConvType ),
+    aMarkData( rMark ),
+    aCursorPos( nCurX, nCurY, nCurZ ),
+    aNewCursorPos( nNewX, nNewY, nNewZ ),
+    pUndoDoc( pNewUndoDoc ),
+    pRedoDoc( pNewRedoDoc )
 {
     SetChangeTrack();
 }
@@ -1456,7 +1454,7 @@ ScUndoSpelling::ScUndoSpelling( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoSpelling::~ScUndoSpelling()
+__EXPORT ScUndoConversion::~ScUndoConversion()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -1465,7 +1463,7 @@ __EXPORT ScUndoSpelling::~ScUndoSpelling()
 
 //----------------------------------------------------------------------------
 
-void ScUndoSpelling::SetChangeTrack()
+void ScUndoConversion::SetChangeTrack()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
@@ -1476,7 +1474,7 @@ void ScUndoSpelling::SetChangeTrack()
                 nStartChangeAction, nEndChangeAction );
         else
         {
-            DBG_ERROR( "ScUndoSpelling::SetChangeTrack: kein UndoDoc" );
+            DBG_ERROR( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
             nStartChangeAction = nEndChangeAction = 0;
         }
     }
@@ -1486,15 +1484,22 @@ void ScUndoSpelling::SetChangeTrack()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoSpelling::GetComment() const
+String ScUndoConversion::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_SPELLING);  // "Rechtschreibung"
+    String aText;
+    switch( meConvType )
+    {
+        case SC_CONVERSION_SPELLCHECK:  aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
+        case SC_CONVERSION_HANGULHANJA: aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
+        default: DBG_ERRORFILE( "ScUndoConversion::GetComment - unknown conversion type" );
+    }
+    return aText;
 }
 
 
 //----------------------------------------------------------------------------
 
-void ScUndoSpelling::DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos )
+void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos )
 {
     if (pRefDoc)
     {
@@ -1527,7 +1532,7 @@ void ScUndoSpelling::DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos )
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSpelling::Undo()
+void ScUndoConversion::Undo()
 {
     BeginUndo();
     DoChange( pUndoDoc, aCursorPos );
@@ -1540,7 +1545,7 @@ void __EXPORT ScUndoSpelling::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSpelling::Redo()
+void ScUndoConversion::Redo()
 {
     BeginRedo();
     DoChange( pRedoDoc, aNewCursorPos );
@@ -1551,18 +1556,18 @@ void __EXPORT ScUndoSpelling::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSpelling::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSpellingChecker( TRUE );
+    if( rTarget.ISA( ScTabViewTarget ) )
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( meConvType, TRUE );
 }
 
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoSpelling::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return rTarget.ISA( ScTabViewTarget );
 }
 
 
