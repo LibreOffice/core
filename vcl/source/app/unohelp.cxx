@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-08 17:41:44 $
+ *  last change: $Author: pl $ $Date: 2000-11-14 14:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -238,7 +238,7 @@ Reference< XSingleServiceFactory > ImplLoadLibComponentFactory(
 uno::Reference < text::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
     uno::Reference < text::XBreakIterator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
@@ -267,7 +267,7 @@ uno::Reference < text::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
     uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
@@ -298,7 +298,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
 uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
 {
     uno::Reference < util::XCollator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.Collator" ) );

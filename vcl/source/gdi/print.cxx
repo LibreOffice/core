@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-06 09:01:04 $
+ *  last change: $Author: pl $ $Date: 2000-11-14 14:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include "rmwindow.hxx"
 #include "rvp.hxx"
 #include <vos/mutex.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -1780,7 +1780,7 @@ BOOL Printer::EndJob()
     if ( mpPrinter )
     {
         CHECK_FOR_RVPSYNC_NORMAL()
-        mpPrinter->mxPrintSpooler->EndJob( ::utl::getProcessServiceFactory() );
+        mpPrinter->mxPrintSpooler->EndJob( ::comphelper::getProcessServiceFactory() );
         mbPrinting = FALSE;
         mnCurPage = 0;
         mnCurPrintPage = 0;
