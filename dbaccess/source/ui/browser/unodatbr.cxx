@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 13:42:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1885,8 +1885,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
 
             // connect
-            xConnection = connect(pString->GetText(), sal_True);
-            pFirstData->xObject = xConnection;
+            xConnection = connectWithStatus( pString->GetText(), pFirstData );
         }
         if(xConnection.is())
         {
@@ -2245,6 +2244,27 @@ void SbaTableQueryBrowser::openHelpAgent(sal_Int32 _nHelpId)
 }
 
 //------------------------------------------------------------------------------
+Reference< XConnection > SbaTableQueryBrowser::connectWithStatus( const ::rtl::OUString& _rDataSourceName, void* _pTreeListUserData )
+{
+    // show the "connecting to ..." status
+    String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
+    sConnecting.SearchAndReplaceAscii("$name$", _rDataSourceName);
+    BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
+
+    // build a string showing context information in case of error
+    String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+    sConnectingContext.SearchAndReplaceAscii("$name$", _rDataSourceName);
+
+    // connect
+    Reference< XConnection > xConnection = connect(_rDataSourceName, sConnectingContext, rtl::OUString(), sal_True);
+
+    // remember the connection
+    static_cast< DBTreeListModel::DBTreeListUserData* >( _pTreeListUserData )->xObject = xConnection;
+
+    return xConnection;
+}
+
+//------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 {
     ::osl::MutexGuard aGuard(m_aEntryMutex);
@@ -2343,11 +2363,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 if (pTextItem)
                     sDataSourceName = static_cast<SvLBoxString*>(pTextItem)->GetText();
             }
-            if(!xConnection.is())
-            {
-                xConnection = connect(sDataSourceName, sal_True);
-                pConData->xObject = xConnection;
-            }
+            if (!xConnection.is())
+                xConnection = connectWithStatus( sDataSourceName, pConData );
+
             if(!xConnection.is())
             {
                 unloadAndCleanup(sal_False,sal_False);
@@ -3032,16 +3050,9 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
 
         if (pData)
             _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
-        if(!_xConnection.is() && pData)
-        {
-            // show the "connecting to ..." status
-            String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
-            sConnecting.SearchAndReplaceAscii("$name$", aDSName);
-            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
 
-            _xConnection = connect(aDSName, sal_True);
-            pData->xObject = _xConnection; // share the conenction with the querydesign
-        }
+        if (!_xConnection.is() && pData)
+            _xConnection = connectWithStatus( aDSName, pData );
     }
 
     return _xConnection.is();
