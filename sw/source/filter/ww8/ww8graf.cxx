@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:21:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3235,60 +3235,11 @@ void SwWW8ImplReader::GrafikDtor()
     DELETEZ(pWWZOrder);       // dito
 }
 
-void SwWW8ImplReader::GetNoninlineNodeAttribs(const SwTxtNode *pNode,
-    std::vector<const xub_StrLen*> &rPositions)
-{
-    USHORT nSize = pAnchorStck->Count();
-    while (nSize)
-    {
-        const SwFltStackEntry* pEntry = (*pAnchorStck)[--nSize];
-        if (pEntry->nMkNode == pNode->GetIndex()-1)
-        {
-            if (pEntry->pAttr->Which() == RES_FLTR_ANCHOR)
-            {
-                const SwFrmFmt* pFmt=((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
-                RndStdIds eAnchor = pFmt->GetAnchor().GetAnchorId();
-                if (eAnchor == FLY_AT_CNTNT || eAnchor == FLY_AUTO_CNTNT)
-                    rPositions.push_back(&pEntry->nMkCntnt);
-            }
-            else
-                rPositions.push_back(&pEntry->nMkCntnt);
-        }
-    }
-
-    nSize = pRefStck->Count();
-    while (nSize)
-    {
-        const SwFltStackEntry* pEntry = (*pRefStck)[--nSize];
-        if (pEntry->nMkNode == pNode->GetIndex()-1)
-            rPositions.push_back(&pEntry->nMkCntnt);
-    }
-
-}
-
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 {
     ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
         "Don't use fltanchors with inline frames, slap!");
     NewAttr(rPos, SwFltAnchor(pFmt));
-}
-
-void SwWW8FltAnchorStack::RemoveAnchor(const SwFrmFmt *pFmt)
-{
-    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
-        "Don't use fltanchors with inline frames, slap!");
-    USHORT nCnt = Count();
-    for (USHORT i=0; i < nCnt; ++i)
-    {
-        SwFltStackEntry* pEntry = (*this)[i];
-        ASSERT(pEntry->pAttr->Which() == RES_FLTR_ANCHOR,"Impossible!");
-        const SwFltAnchor *pAnchor = (const SwFltAnchor *)(pEntry->pAttr);
-        if (pAnchor->GetFrmFmt() == pFmt)
-        {
-            DeleteAndDestroy(i--);
-            --nCnt;
-        }
-    }
 }
 
 void SwWW8FltAnchorStack::Flush()
