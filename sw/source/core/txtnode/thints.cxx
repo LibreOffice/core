@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-08 08:35:13 $
+ *  last change: $Author: ama $ $Date: 2001-11-26 11:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,6 +1828,8 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
 
     SwTxtAttr *pMerge = pHint; // For a smarter Merge-function
 
+    BOOL bResort = FALSE;
+
     if( *pHtEnd < nHtStart )
     {
         ASSERT( *pHtEnd >= nHtStart,
@@ -2012,6 +2014,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                                             bForgetAttr = FALSE;
                                         if( pHistory ) pHistory->Add( pOther );
                                         *pOther->GetEnd() = nHtStart;
+                                        bResort = TRUE;
                                         if( pHistory ) pHistory->Add( pOther, TRUE );
                                         // ChainDelEnd( pOther );
                                         // ChainEnds( pOther );
@@ -2105,6 +2108,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                 SwpHintsArr::Insert( pHint );
                 if ( pHistory )
                     pHistory->Add( pHint, TRUE );
+                bResort = FALSE;
             }
             // InsertChain( pHint );
 
@@ -2134,6 +2138,9 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                 pTmpHints = NULL;
             }
         } while ( TRUE );
+
+        if( bResort )
+            SwpHintsArr::Resort();
 
         // Jetzt wollen wir mal gucken, ob wir das SwpHintsArray nicht
         // etwas vereinfachen koennen ...
