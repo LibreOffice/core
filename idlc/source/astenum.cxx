@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <idlc/astenum.hxx>
 #endif
 
+#include "registry/version.h"
+#include "registry/writer.hxx"
+
 using namespace ::rtl;
 
 AstEnum::AstEnum(const ::rtl::OString& name, AstScope* pScope)
@@ -77,8 +80,8 @@ AstEnum::~AstEnum()
 
 AstConstant* AstEnum::checkValue(AstExpression* pExpr)
 {
-    DeclList::iterator  iter = getIteratorBegin();
-    DeclList::iterator  end = getIteratorEnd();
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
     AstConstant*        pConst = NULL;
     AstDeclaration*     pDecl = NULL;
 
@@ -99,7 +102,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
     return NULL;
 }
 
-sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstEnum::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -113,16 +116,15 @@ sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     sal_uInt16 nConst = getNodeCount(NT_enum_val);
     if ( nConst > 0 )
     {
-        RegistryTypeWriter aBlob(pLoader->getApi(),
-                                 RT_TYPE_ENUM,
-                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OUString(), nConst, 0, 0);
+        typereg::Writer aBlob(
+            TYPEREG_VERSION_0, getDocumentation(),
+            OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
+            RT_TYPE_ENUM,
+            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
+            nConst, 0, 0);
 
-        aBlob.setDoku( getDocumentation() );
-        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
+        DeclList::const_iterator iter = getIteratorBegin();
+        DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         sal_uInt16 index = 0;
         while ( iter != end )
@@ -134,8 +136,8 @@ sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             ++iter;
         }
 
-        const sal_uInt8* pBlob = aBlob.getBlop();
-        sal_uInt32       aBlobSize = aBlob.getBlopSize();
+        sal_uInt32 aBlobSize;
+        void const * pBlob = aBlob.getBlob(&aBlobSize);
 
         if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
                                 (RegValue)pBlob, aBlobSize))
