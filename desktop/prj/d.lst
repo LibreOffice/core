@@ -1,24 +1,6 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\bin%_EXT%\local
 mkdir: %_DEST%\bin%_EXT%\remote2
-mkdir: %_DEST%\bin%_EXT%\01
-mkdir: %_DEST%\bin%_EXT%\03
-mkdir: %_DEST%\bin%_EXT%\07
-mkdir: %_DEST%\bin%_EXT%\31
-mkdir: %_DEST%\bin%_EXT%\33
-mkdir: %_DEST%\bin%_EXT%\34
-mkdir: %_DEST%\bin%_EXT%\39
-mkdir: %_DEST%\bin%_EXT%\45
-mkdir: %_DEST%\bin%_EXT%\46
-mkdir: %_DEST%\bin%_EXT%\48
-mkdir: %_DEST%\bin%_EXT%\49
-mkdir: %_DEST%\bin%_EXT%\66
-mkdir: %_DEST%\bin%_EXT%\81
-mkdir: %_DEST%\bin%_EXT%\82
-mkdir: %_DEST%\bin%_EXT%\86
-mkdir: %_DEST%\bin%_EXT%\88
-mkdir: %_DEST%\bin%_EXT%\91
-mkdir: %_DEST%\bin%_EXT%\96
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
