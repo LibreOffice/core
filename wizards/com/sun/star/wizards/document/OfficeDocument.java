@@ -2,9 +2,9 @@
 *
 *  $RCSfile: OfficeDocument.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:02:13 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:32:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.document.XTypeDetection;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.wizards.common.*;
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.sheet.XCellRangeData;
@@ -89,9 +90,13 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 
 public class OfficeDocument {
+    private XWindowPeer xWindowPeer;
+    private XMultiServiceFactory xMSF;
+
 
     /** Creates a new instance of OfficeDocument */
-    public OfficeDocument() {
+    public OfficeDocument(XMultiServiceFactory _xMSF) {
+        xMSF = _xMSF;
     }
 
     public static void attachEventCall(XComponent xComponent, String EventName, String EventType, String EventURL) {
@@ -212,7 +217,8 @@ public class OfficeDocument {
             return true;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgSavingImpossible);
+            //TODO make sure that the peer of the dialog is used when available
+            showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgSavingImpossible);
             return false;
         }
     }
@@ -305,4 +311,26 @@ public class OfficeDocument {
         return xDocumentInfoSupplier.getDocumentInfo();
     }
 
+    public static int showMessageBox(XMultiServiceFactory xMSF, String windowServiceName, int windowAttribute, String MessageText) {
+//      if (getWindowPeer() != null)
+    //      return SystemDialog.showMessageBox(xMSF, xWindowPeer, windowServiceName, windowAttribute, MessageText);
+//      else
+            return SystemDialog.showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText);
+    }
+
+
+    /**
+     * @return Returns the xWindowPeer.
+     */
+    public XWindowPeer getWindowPeer() {
+        return xWindowPeer;
+    }
+    /**
+     * @param windowPeer The xWindowPeer to set.
+     * Should be called as soon as a Windowpeer of a wizard dialog is available
+     * The windowpeer is needed to call a Messagebox
+     */
+    public void setWindowPeer(XWindowPeer windowPeer) {
+        xWindowPeer = windowPeer;
+    }
 }
