@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:44:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,7 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->SetOle2Link( Link() );
                         pTemplate->DoUndo( FALSE );     // always FALSE
                         pTemplate->SetBrowseMode( bTmplBrowseMode );
+                        pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( TRUE );
                         SwReader aRdr( *xStor, aEmptyStr, pTemplate );
@@ -693,6 +694,7 @@ SwDoc* Reader::GetTemplateDoc()
 
                 // sicher ist sicher
                 pTemplate->SetBrowseMode( bTmplBrowseMode );
+                pTemplate->RemoveAllFmtLanguageDependencies();
 
                 xStor->SetVersion( nVersion );
 
@@ -717,6 +719,7 @@ BOOL Reader::SetTemplate( SwDoc& rDoc )
     GetTemplateDoc();
     if( pTemplate )
     {
+        rDoc.RemoveAllFmtLanguageDependencies();
         rDoc.ReplaceStyles( *pTemplate );
         rDoc.SetFixFields();
         bRet = TRUE;
@@ -751,6 +754,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate->AddLink();
     pTemplate->SetBrowseMode( bTmplBrowseMode );
     pTemplate->GetPrt( TRUE );
+    pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // 2300. Jahrtausend sollte reichen
     aTemplateNm.AssignAscii( "$$Dummy$$" );
 }
