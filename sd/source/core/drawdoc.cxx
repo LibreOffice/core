@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:18 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,174 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
+//////////////////////////////////////////////////////////////////////////////
+// #109538#
+
+void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
+{
+    // clear vectors
+    maPageVectorStandard.clear();
+    maPageVectorNotes.clear();
+    mpHandoutPage = 0L;
+
+    // build up vectors again
+    const sal_uInt32 nPageCount(ImpGetPageCount());
+
+    for(sal_uInt32 a(0L); a < nPageCount; a++)
+    {
+        SdPage* pCandidate = ImpGetPage(a);
+        DBG_ASSERT(pCandidate, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Invalid PageList in Model (!)");
+
+        switch(pCandidate->GetPageKind())
+        {
+            case PK_STANDARD:
+            {
+                maPageVectorStandard.push_back(pCandidate);
+                break;
+            }
+            case PK_NOTES:
+            {
+                maPageVectorNotes.push_back(pCandidate);
+                break;
+            }
+            case PK_HANDOUT:
+            {
+                DBG_ASSERT(!mpHandoutPage, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Two Handout pages in PageList of Model (!)");
+                mpHandoutPage = pCandidate;
+                break;
+            }
+        }
+    }
+
+    // set to valid
+    mbPageListValid = sal_True;
+}
+
+ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
+:   mrModel(rModel),
+    mpHandoutPage(0L),
+    mbPageListValid(sal_False)
+{
+}
+
+ImpPageListWatcher::~ImpPageListWatcher()
+{
+}
+
+SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
+{
+    SdPage* pRetval(0L);
+
+    if(!mbPageListValid)
+    {
+        ImpRecreateSortedPageListOnDemand();
+    }
+
+    switch(ePgKind)
+    {
+        case PK_STANDARD:
+        {
+            DBG_ASSERT(nPgNum <= maPageVectorStandard.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
+            pRetval = maPageVectorStandard[nPgNum];
+            break;
+        }
+        case PK_NOTES:
+        {
+            DBG_ASSERT(nPgNum <= maPageVectorNotes.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
+            pRetval = maPageVectorNotes[nPgNum];
+            break;
+        }
+        case PK_HANDOUT:
+        {
+            DBG_ASSERT(mpHandoutPage, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
+            DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
+            pRetval = mpHandoutPage;
+            break;
+        }
+    }
+
+    return pRetval;
+}
+
+sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
+{
+    sal_uInt32 nRetval(0L);
+
+    if(!mbPageListValid)
+    {
+        ImpRecreateSortedPageListOnDemand();
+    }
+
+    switch(ePgKind)
+    {
+        case PK_STANDARD:
+        {
+            nRetval = maPageVectorStandard.size();
+            break;
+        }
+        case PK_NOTES:
+        {
+            nRetval = maPageVectorNotes.size();
+            break;
+        }
+        case PK_HANDOUT:
+        {
+            if(mpHandoutPage)
+            {
+                nRetval = 1L;
+            }
+
+            break;
+        }
+    }
+
+    return nRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
+{
+    return (sal_uInt32)mrModel.GetPageCount();
+}
+
+SdPage* ImpDrawPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
+{
+    return (SdPage*)mrModel.GetPage((sal_uInt16)nIndex);
+}
+
+ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
+:   ImpPageListWatcher(rModel)
+{
+}
+
+ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
+{
+    return (sal_uInt32)mrModel.GetMasterPageCount();
+}
+
+SdPage* ImpMasterPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
+{
+    return (SdPage*)mrModel.GetMasterPage((sal_uInt16)nIndex);
+}
+
+ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)
+:   ImpPageListWatcher(rModel)
+{
+}
+
+ImpMasterPageListWatcher::~ImpMasterPageListWatcher()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
@@ -264,8 +432,15 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     eLanguage( LANGUAGE_SYSTEM ),
     eLanguageCJK( LANGUAGE_SYSTEM ),
     eLanguageCTL( LANGUAGE_SYSTEM ),
-    mbStartWithPresentation( false )
+    mbStartWithPresentation( false ),
+    // #109538#
+    mpDrawPageListWatcher(0L),
+    mpMasterPageListWatcher(0L)
 {
+    // #109538#
+    mpDrawPageListWatcher = new ImpDrawPageListWatcher(*this);
+    mpMasterPageListWatcher = new ImpMasterPageListWatcher(*this);
+
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
 
     if (pDocSh)
@@ -553,6 +728,14 @@ SdDrawDocument::~SdDrawDocument()
 
     delete mpCharClass;
     mpCharClass = NULL;
+
+    // #109538#
+    delete mpDrawPageListWatcher;
+    mpDrawPageListWatcher = 0L;
+
+    // #109538#
+    delete mpMasterPageListWatcher;
+    mpMasterPageListWatcher = 0L;
 }
 
 /*************************************************************************
@@ -1856,3 +2039,16 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
     mbStartWithPresentation = bStartWithPresentation;
 }
 
+// #109538#
+void SdDrawDocument::PageListChanged()
+{
+    mpDrawPageListWatcher->Invalidate();
+}
+
+// #109538#
+void SdDrawDocument::MasterPageListChanged()
+{
+    mpMasterPageListWatcher->Invalidate();
+}
+
+// eof
