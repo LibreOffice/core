@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-23 09:31:35 $
+#   last change: $Author: lo $ $Date: 2002-09-30 15:59:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 OBJFILES = \
         $(OBJ)$/app.obj					\
+        $(OBJ)$/lockfile.obj			\
         $(OBJ)$/intro.obj				\
         $(OBJ)$/officeipcthread.obj		\
         $(OBJ)$/appinit.obj				\
@@ -97,7 +98,7 @@ OBJFILES = \
         $(OBJ)$/dispatchwatcher.obj		\
         $(OBJ)$/ssoinit.obj				\
         $(OBJ)$/officeipcmanager.obj	\
-        $(OBJ)$/javainteractionhandler.obj
+        $(OBJ)$/javainteractionhandler.obj		
 
 .IF "$(OS)" == "SOLARIS"
 
@@ -116,7 +117,8 @@ SLOFILES = \
         $(SLO)$/dispatchwatcher.obj		\
         $(SLO)$/ssoinit.obj				\
         $(SLO)$/officeipcmanager.obj	\
-        $(SLO)$/javainteractionhandler.obj
+        $(SLO)$/javainteractionhandler.obj \
+        $(OBJ)$/lockfile.obj
 
 .ENDIF
 

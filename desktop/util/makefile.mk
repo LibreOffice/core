@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-23 09:32:56 $
+#   last change: $Author: lo $ $Date: 2002-09-30 16:01:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ APP1DEPN= \
 
 APP1OBJS= \
             $(OBJ)$/app.obj					\
+            $(OBJ)$/lockfile.obj					\
             $(OBJ)$/intro.obj				\
             $(OBJ)$/officeipcthread.obj		\
             $(OBJ)$/appinit.obj				\

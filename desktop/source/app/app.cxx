@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: jbu $ $Date: 2002-09-04 14:54:11 $
+ *  last change: $Author: lo $ $Date: 2002-09-30 15:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "ssoinit.hxx"
 #endif
 #include "javainteractionhandler.hxx"
+#include "lockfile.hxx"
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -1274,6 +1275,15 @@ void Desktop::Main()
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
+
+    // check user installation directory for lockfile so we can be sure
+    // there is no other instance using our data files from a remote host
+    Lockfile aLock;
+    if (!aLock.check()) {
+        // Lockfile exists, and user clicked 'no'
+        return;
+    }
+    // lockfile will be removed in Lockfile d'tor
 
     com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
