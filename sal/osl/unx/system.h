@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-23 15:48:14 $
+ *  last change: $Author: svesik $ $Date: 2000-12-04 16:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,11 @@ extern unsigned int nanosleep(unsigned int);
 #   define  NO_DL_FUNCTIONS
 #   define  CMD_ARG_PRG *__Argv
 #   define  CMD_ARG_ENV _environ
+#   define  PTR_SIZE_T(s)               ((int *)&(s))
+#   define  NO_PTHREAD_PRIORITY
+#   include <dlfcn.h>
+#   define  IOCHANNEL_TRANSFER_BSD
+extern char *strdup(const char *);
 #endif
 
 #ifdef S390
