@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-11-26 12:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,8 @@ sal_Bool produceType(const ::rtl::OString& typeName,
                      RdbOptions* pOptions,
                      FileStream& o,
                      RegistryKey& regKey,
-                     StringSet& filterTypes)
+                     StringSet& filterTypes,
+                     sal_Bool bDepend = sal_False)
                  throw( CannotDumpException );
 
 #endif // _RDBMAKER_RDBTYPE_HXX_

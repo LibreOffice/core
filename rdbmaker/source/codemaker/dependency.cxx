@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependency.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-11-26 12:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ static sal_Bool checkReferenceDependencies(TypeManager& typeMgr, TypeDependency&
     return sal_True;
 }
 
-sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const OString& type)
+sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const OString& type, sal_Bool bDepend)
 {
     if (!typeMgr.isValidType(type))
         return sal_False;
@@ -324,6 +324,12 @@ sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencie
             return sal_False;
     }
 
+    if ( bDepend && reader.getTypeClass() == RT_TYPE_MODULE)
+    {
+        checkFieldDependencies(typeMgr, dependencies, reader, type);
+        return sal_True;
+    }
+
     OString superType(reader.getSuperTypeName());
     if (superType.getLength() > 0)
     {
@@ -335,12 +341,26 @@ sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencie
     {
         dependencies.insert(type, "com/sun/star/uno/RuntimeException", TYPEUSE_EXCEPTION);
         dependencies.insert(type, "com/sun/star/uno/TypeClass", TYPEUSE_NORMAL);
-        checkTypeDependencies(typeMgr, dependencies, "com/sun/star/uno/RuntimeException");
+        checkTypeDependencies(typeMgr, dependencies, "com/sun/star/uno/RuntimeException", bDepend);
     }
 
     checkFieldDependencies(typeMgr, dependencies, reader, type);
     checkMethodDependencies(typeMgr, dependencies, reader, type);
     checkReferenceDependencies(typeMgr, dependencies, reader, type);
+
+    // make the scope modules as dependencies
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+
+    OString aScope( type.copy( 0, nPos ) );
+    OStringBuffer tmpBuf(aScope.getLength());
+
+    nPos = 0;
+    do
+    {
+        tmpBuf.append(aScope.getToken(0, '/', nPos));
+        dependencies.insert(type, tmpBuf.getStr(), TYPEUSE_SCOPE);
+        tmpBuf.append('/');
+    } while( nPos != -1 );
 
     return sal_True;
 }

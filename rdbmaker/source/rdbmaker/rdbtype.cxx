@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
+ *  last change: $Author: jsc $ $Date: 2001-11-26 12:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,8 @@ sal_Bool produceDependedTypes(const OString& typeName,
                              typeDependencies,
                              pOptions,
                              o, regKey,
-                             filterTypes))
+                             filterTypes,
+                             sal_True))
             {
                 fprintf(stderr, "%s ERROR: %s\n",
                         pOptions->getProgramName().getStr(),
@@ -153,7 +154,8 @@ sal_Bool produceType(const OString& typeName,
                      RdbOptions* pOptions,
                      FileStream& o,
                      RegistryKey& regKey,
-                     StringSet& filterTypes)
+                     StringSet& filterTypes,
+                     sal_Bool bDepend)
     throw( CannotDumpException )
 {
     if (typeDependencies.isGenerated(typeName) )
@@ -164,7 +166,7 @@ sal_Bool produceType(const OString& typeName,
     if (!typeKey.isValid())
         return sal_False;
 */
-    if( !checkTypeDependencies(typeMgr, typeDependencies, typeName))
+    if( !checkTypeDependencies(typeMgr, typeDependencies, typeName, bDepend))
         return sal_False;
 
     if ( !checkFilterTypes(typeName) )
