@@ -13,7 +13,9 @@ STDSHL=
 SHL1ARCHIVES=
 .ENDIF
 
+.IF "$(SHL1USE_EXPORTS)"==""
 SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
+.ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -189,6 +191,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL1TARGETN:b)_linkinc.ls
 $(SHL1TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL1USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
+$(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -202,7 +213,8 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
                     $(SHL1VERSIONH)\
-                    $(SHL1DEPN)
+                    $(SHL1DEPN) \
+                    $(SHL1LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL1TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -258,6 +270,7 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL1USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -280,7 +293,7 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS) \
         $(STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -294,8 +307,22 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS)                      \
         $(STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL1USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL1BASEX)		\
+        $(SHL1STACK) -out:$(SHL1TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_1IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL1TARGET)_link.lst \
+        @$(mktmp $(SHL1STDLIBS)                      \
+        $(STDSHL) $(STDSHL1)                           \
+        $(SHL1LINKRES) \
+    )
+.ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL1TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL1TARGET).lst
@@ -419,7 +446,9 @@ STDSHL=
 SHL2ARCHIVES=
 .ENDIF
 
+.IF "$(SHL2USE_EXPORTS)"==""
 SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
+.ENDIF			# "$(SHL2USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -595,6 +624,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL2TARGETN:b)_linkinc.ls
 $(SHL2TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL2USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
+$(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -608,7 +646,8 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
                     $(SHL2VERSIONH)\
-                    $(SHL2DEPN)
+                    $(SHL2DEPN) \
+                    $(SHL2LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL2TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -664,6 +703,7 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL2USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -686,7 +726,7 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS) \
         $(STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -700,8 +740,22 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS)                      \
         $(STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL2USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL2BASEX)		\
+        $(SHL2STACK) -out:$(SHL2TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_2IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL2TARGET)_link.lst \
+        @$(mktmp $(SHL2STDLIBS)                      \
+        $(STDSHL) $(STDSHL2)                           \
+        $(SHL2LINKRES) \
+    )
+.ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL2TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL2TARGET).lst
@@ -825,7 +879,9 @@ STDSHL=
 SHL3ARCHIVES=
 .ENDIF
 
+.IF "$(SHL3USE_EXPORTS)"==""
 SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
+.ENDIF			# "$(SHL3USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -1001,6 +1057,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL3TARGETN:b)_linkinc.ls
 $(SHL3TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL3USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
+$(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -1014,7 +1079,8 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
                     $(SHL3VERSIONH)\
-                    $(SHL3DEPN)
+                    $(SHL3DEPN) \
+                    $(SHL3LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL3TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -1070,6 +1136,7 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL3USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -1092,7 +1159,7 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS) \
         $(STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1106,8 +1173,22 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS)                      \
         $(STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL3USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL3BASEX)		\
+        $(SHL3STACK) -out:$(SHL3TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_3IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL3TARGET)_link.lst \
+        @$(mktmp $(SHL3STDLIBS)                      \
+        $(STDSHL) $(STDSHL3)                           \
+        $(SHL3LINKRES) \
+    )
+.ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL3TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL3TARGET).lst
@@ -1231,7 +1312,9 @@ STDSHL=
 SHL4ARCHIVES=
 .ENDIF
 
+.IF "$(SHL4USE_EXPORTS)"==""
 SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
+.ENDIF			# "$(SHL4USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -1407,6 +1490,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL4TARGETN:b)_linkinc.ls
 $(SHL4TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL4USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
+$(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -1420,7 +1512,8 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
                     $(SHL4VERSIONH)\
-                    $(SHL4DEPN)
+                    $(SHL4DEPN) \
+                    $(SHL4LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL4TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -1476,6 +1569,7 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL4USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -1498,7 +1592,7 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS) \
         $(STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1512,8 +1606,22 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS)                      \
         $(STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL4USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL4BASEX)		\
+        $(SHL4STACK) -out:$(SHL4TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_4IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL4TARGET)_link.lst \
+        @$(mktmp $(SHL4STDLIBS)                      \
+        $(STDSHL) $(STDSHL4)                           \
+        $(SHL4LINKRES) \
+    )
+.ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL4TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL4TARGET).lst
@@ -1637,7 +1745,9 @@ STDSHL=
 SHL5ARCHIVES=
 .ENDIF
 
+.IF "$(SHL5USE_EXPORTS)"==""
 SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
+.ENDIF			# "$(SHL5USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -1813,6 +1923,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL5TARGETN:b)_linkinc.ls
 $(SHL5TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL5USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
+$(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -1826,7 +1945,8 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
                     $(SHL5VERSIONH)\
-                    $(SHL5DEPN)
+                    $(SHL5DEPN) \
+                    $(SHL5LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL5TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -1882,6 +2002,7 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL5USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -1904,7 +2025,7 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS) \
         $(STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1918,8 +2039,22 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS)                      \
         $(STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL5USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL5BASEX)		\
+        $(SHL5STACK) -out:$(SHL5TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_5IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL5TARGET)_link.lst \
+        @$(mktmp $(SHL5STDLIBS)                      \
+        $(STDSHL) $(STDSHL5)                           \
+        $(SHL5LINKRES) \
+    )
+.ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL5TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL5TARGET).lst
@@ -2043,7 +2178,9 @@ STDSHL=
 SHL6ARCHIVES=
 .ENDIF
 
+.IF "$(SHL6USE_EXPORTS)"==""
 SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
+.ENDIF			# "$(SHL6USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -2219,6 +2356,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL6TARGETN:b)_linkinc.ls
 $(SHL6TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL6USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
+$(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -2232,7 +2378,8 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
                     $(SHL6VERSIONH)\
-                    $(SHL6DEPN)
+                    $(SHL6DEPN) \
+                    $(SHL6LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL6TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -2288,6 +2435,7 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL6USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -2310,7 +2458,7 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS) \
         $(STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2324,8 +2472,22 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS)                      \
         $(STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL6USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL6BASEX)		\
+        $(SHL6STACK) -out:$(SHL6TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_6IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL6TARGET)_link.lst \
+        @$(mktmp $(SHL6STDLIBS)                      \
+        $(STDSHL) $(STDSHL6)                           \
+        $(SHL6LINKRES) \
+    )
+.ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL6TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL6TARGET).lst
@@ -2449,7 +2611,9 @@ STDSHL=
 SHL7ARCHIVES=
 .ENDIF
 
+.IF "$(SHL7USE_EXPORTS)"==""
 SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
+.ENDIF			# "$(SHL7USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -2625,6 +2789,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL7TARGETN:b)_linkinc.ls
 $(SHL7TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL7USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
+$(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -2638,7 +2811,8 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
                     $(SHL7VERSIONH)\
-                    $(SHL7DEPN)
+                    $(SHL7DEPN) \
+                    $(SHL7LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL7TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -2694,6 +2868,7 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL7USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -2716,7 +2891,7 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS) \
         $(STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2730,8 +2905,22 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS)                      \
         $(STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL7USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL7BASEX)		\
+        $(SHL7STACK) -out:$(SHL7TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_7IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL7TARGET)_link.lst \
+        @$(mktmp $(SHL7STDLIBS)                      \
+        $(STDSHL) $(STDSHL7)                           \
+        $(SHL7LINKRES) \
+    )
+.ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL7TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL7TARGET).lst
@@ -2855,7 +3044,9 @@ STDSHL=
 SHL8ARCHIVES=
 .ENDIF
 
+.IF "$(SHL8USE_EXPORTS)"==""
 SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
+.ENDIF			# "$(SHL8USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -3031,6 +3222,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL8TARGETN:b)_linkinc.ls
 $(SHL8TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL8USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
+$(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -3044,7 +3244,8 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
                     $(SHL8VERSIONH)\
-                    $(SHL8DEPN)
+                    $(SHL8DEPN) \
+                    $(SHL8LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL8TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -3100,6 +3301,7 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL8USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -3122,7 +3324,7 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS) \
         $(STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3136,8 +3338,22 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS)                      \
         $(STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL8USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL8BASEX)		\
+        $(SHL8STACK) -out:$(SHL8TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_8IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL8TARGET)_link.lst \
+        @$(mktmp $(SHL8STDLIBS)                      \
+        $(STDSHL) $(STDSHL8)                           \
+        $(SHL8LINKRES) \
+    )
+.ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL8TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL8TARGET).lst
@@ -3261,7 +3477,9 @@ STDSHL=
 SHL9ARCHIVES=
 .ENDIF
 
+.IF "$(SHL9USE_EXPORTS)"==""
 SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
+.ENDIF			# "$(SHL9USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -3437,6 +3655,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL9TARGETN:b)_linkinc.ls
 $(SHL9TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL9USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
+$(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -3450,7 +3677,8 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
                     $(SHL9VERSIONH)\
-                    $(SHL9DEPN)
+                    $(SHL9DEPN) \
+                    $(SHL9LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL9TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -3506,6 +3734,7 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL9USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -3528,7 +3757,7 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS) \
         $(STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3542,8 +3771,22 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS)                      \
         $(STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL9USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL9BASEX)		\
+        $(SHL9STACK) -out:$(SHL9TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_9IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL9TARGET)_link.lst \
+        @$(mktmp $(SHL9STDLIBS)                      \
+        $(STDSHL) $(STDSHL9)                           \
+        $(SHL9LINKRES) \
+    )
+.ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL9TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL9TARGET).lst
@@ -3667,7 +3910,9 @@ STDSHL=
 SHL10ARCHIVES=
 .ENDIF
 
+.IF "$(SHL10USE_EXPORTS)"==""
 SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
+.ENDIF			# "$(SHL10USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -3843,6 +4088,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL10TARGETN:b)_linkinc.ls
 $(SHL10TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL10USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
+$(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -3856,7 +4110,8 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
                     $(SHL10VERSIONH)\
-                    $(SHL10DEPN)
+                    $(SHL10DEPN) \
+                    $(SHL10LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL10TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -3912,6 +4167,7 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL10USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -3934,7 +4190,7 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS) \
         $(STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3948,8 +4204,22 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS)                      \
         $(STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL10USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL10BASEX)		\
+        $(SHL10STACK) -out:$(SHL10TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_10IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL10TARGET)_link.lst \
+        @$(mktmp $(SHL10STDLIBS)                      \
+        $(STDSHL) $(STDSHL10)                           \
+        $(SHL10LINKRES) \
+    )
+.ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL10TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL10TARGET).lst
