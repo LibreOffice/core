@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:34:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,8 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     };
 };
+
+
 
 
 
