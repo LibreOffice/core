@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-25 08:46:37 $
+ *  last change: $Author: kso $ $Date: 2001-05-09 14:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2536,7 +2536,7 @@ shell::copy(
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    err = copy_recursive( srcUnqPath, dstUnqPath, IsWhat,true );
+                    err = copy_recursive( srcUnqPath, newDstUnqPath, IsWhat,true );
                 }
                 while ( ( err == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
 
