@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:51:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
-
+#include "swabstdlg.hxx" //CHINA001
 // Prototypen ------------------------------------------------------------
 
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
@@ -486,14 +486,26 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-                SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
-                                               GetView().GetWindow(),
-                                   aSet, FALSE,
-                                   nSel & SwWrtShell::SEL_GRF ? DLG_FRM_GRF :
-                                   nSel & SwWrtShell::SEL_OLE ? DLG_FRM_OLE :
-                                                                DLG_FRM_STD,
-                                   FALSE,
-                                   nDefPage);
+//CHINA001                 SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
+//CHINA001                                             GetView().GetWindow(),
+//CHINA001                                 aSet, FALSE,
+//CHINA001                                 nSel & SwWrtShell::SEL_GRF ? DLG_FRM_GRF :
+//CHINA001                                 nSel & SwWrtShell::SEL_OLE ? DLG_FRM_OLE :
+//CHINA001                                                              DLG_FRM_STD,
+//CHINA001                                 FALSE,
+//CHINA001                                 nDefPage);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( ResId(DLG_FRM_STD),
+                                                        GetView().GetViewFrame(),
+                                                        GetView().GetWindow(),
+                                                        aSet, FALSE,
+                                                        nSel & SwWrtShell::SEL_GRF ? DLG_FRM_GRF :
+                                                        nSel & SwWrtShell::SEL_OLE ? DLG_FRM_OLE :
+                                                                                        DLG_FRM_STD,
+                                                        FALSE,
+                                                        nDefPage);
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
                 if ( pDlg->Execute() )
                 {
