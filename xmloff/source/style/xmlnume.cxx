@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 10:50:10 $
+ *  last change: $Author: mib $ $Date: 2001-04-20 15:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                                                   sXML_font_family, sTmp );
 
                     if( sBulletFontStyleName.getLength() )
-                        GetExport().AddAttribute( XML_NAMESPACE_FO,
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   sXML_font_style_name,
                                                   sBulletFontStyleName );
 
