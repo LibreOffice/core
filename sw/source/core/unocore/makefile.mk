@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2001-12-05 11:49:17 $
+#   last change: $Author: vg $ $Date: 2003-04-01 15:32:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,38 +85,6 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 
 
 # --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/swunohelper.obj\
-        $(SLO)$/SwXTextDefaults.obj\
-        $(SLO)$/unobkm.obj\
-        $(SLO)$/unoclbck.obj\
-        $(SLO)$/unoevent.obj\
-        $(SLO)$/unocrsrhelper.obj\
-        $(SLO)$/unoevtlstnr.obj\
-        $(SLO)$/unoftn.obj\
-        $(SLO)$/unorefmk.obj\
-        $(SLO)$/unosect.obj\
-        $(SLO)$/unosett.obj\
-        $(SLO)$/unocoll.obj\
-        $(SLO)$/unodraw.obj\
-        $(SLO)$/unofield.obj\
-        $(SLO)$/unoframe.obj\
-        $(SLO)$/unoidx.obj\
-        $(SLO)$/unomap.obj\
-        $(SLO)$/unoobj.obj\
-        $(SLO)$/unoobj2.obj\
-        $(SLO)$/unoparagraph.obj\
-        $(SLO)$/unoport.obj\
-        $(SLO)$/unoportenum.obj\
-        $(SLO)$/unoprnms.obj\
-        $(SLO)$/unoredline.obj\
-        $(SLO)$/unoredlines.obj\
-        $(SLO)$/unosrch.obj\
-        $(SLO)$/unostyle.obj\
-        $(SLO)$/unotbl.obj \
-        $(SLO)$/unotext.obj
-
 EXCEPTIONSFILES=	\
         $(SLO)$/swunohelper.obj\
         $(SLO)$/SwXTextDefaults.obj\
@@ -142,6 +110,7 @@ EXCEPTIONSFILES=	\
     $(SLO)$/unosrch.obj\
     $(SLO)$/unostyle.obj\
     $(SLO)$/unotbl.obj \
+    $(SLO)$/TextCursorHelper.obj \
     $(SLO)$/unotext.obj
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
@@ -149,6 +118,41 @@ EXCEPTIONSNOOPTFILES =$(SLO)$/unoportenum.obj
 .ELSE
 EXCEPTIONSFILES +=$(SLO)$/unoportenum.obj
 .ENDIF
+
+
+SLOFILES =	\
+        $(SLO)$/swunohelper.obj\
+        $(SLO)$/SwXTextDefaults.obj\
+        $(SLO)$/unoportenum.obj\
+    $(SLO)$/unobkm.obj\
+    $(SLO)$/unoevent.obj\
+    $(SLO)$/unocrsrhelper.obj\
+    $(SLO)$/unoevtlstnr.obj\
+    $(SLO)$/unoftn.obj\
+    $(SLO)$/unorefmk.obj\
+    $(SLO)$/unosect.obj\
+    $(SLO)$/unosett.obj\
+    $(SLO)$/unocoll.obj\
+    $(SLO)$/unodraw.obj\
+    $(SLO)$/unofield.obj\
+    $(SLO)$/unoframe.obj\
+    $(SLO)$/unoidx.obj\
+    $(SLO)$/unoobj.obj\
+    $(SLO)$/unoobj2.obj\
+    $(SLO)$/unoparagraph.obj\
+    $(SLO)$/unoport.obj\
+    $(SLO)$/unoredline.obj\
+    $(SLO)$/unoredlines.obj\
+    $(SLO)$/unosrch.obj\
+    $(SLO)$/unostyle.obj\
+    $(SLO)$/unotbl.obj \
+    $(SLO)$/TextCursorHelper.obj \
+    $(SLO)$/unotext.obj\
+        $(SLO)$/unoclbck.obj\
+        $(SLO)$/unomap.obj\
+        $(SLO)$/unoprnms.obj
+
+
 
 # --- Targets -------------------------------------------------------
 
