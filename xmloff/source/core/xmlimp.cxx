@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 14:57:51 $
+ *  last change: $Author: sab $ $Date: 2001-06-25 11:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,4 +1064,9 @@ const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
 const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
 {
     return (const SvXMLStylesContext *)&xMasterStyles;
+}
+
+OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue)
+{
+    return INetURLObject::RelToAbs( rValue );
 }
