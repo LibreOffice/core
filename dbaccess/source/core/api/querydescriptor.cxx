@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
 
     // -----------------
     // the data settings
-    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_DATASETTINGS_MAIN);
+    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_SETTINGS);
     if (!aSettingsNode.isValid())
     {
         OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo: could not open the sub key for the data settings!");
@@ -346,7 +346,7 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
 
     // -----------------
     // the data settings
-    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_DATASETTINGS_MAIN);
+    OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_SETTINGS);
     if (!aSettingsNode.isValid())
     {
         OSL_ENSHURE(sal_False, "OQueryDescriptor::initializeFrom: could not open the sub key for the data settings!");
