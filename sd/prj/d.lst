@@ -12,7 +12,6 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\bin\sd??????.dll %_DEST%\bin%_EXT%\sd??????.dll
 ..\%__SRC%\bin\sd?????.res %_DEST%\bin%_EXT%\sd?????.res
 ..\%__SRC%\bin\emp?????.* %_DEST%\bin%_EXT%\emp?????.*
-..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
 
 mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\common.inc %_DEST%\pck%_EXT%\common.inc
