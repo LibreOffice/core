@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShape.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:09 $
+ *  last change:$Date: 2003-02-10 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ import util.DrawTools;
 import util.InstCreator;
 import util.SOfficeFactory;
 import util.utils;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -225,18 +227,22 @@ public class SvxShape extends TestCase {
                             UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XStyle aStyle = null;
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
         tEnv.addObjRelation("Style1",aStyle);
 
         oShapeProps = (XPropertySet) UnoRuntime.queryInterface
             (XPropertySet.class,oShape);
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
         tEnv.addObjRelation("Style2",aStyle);
 
@@ -250,4 +256,3 @@ public class SvxShape extends TestCase {
     } // finish method getTestEnvironment
 
 }    // finish class SvxShape
-
