@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2003-05-28 13:48:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ String STR_COMCORE_READERROR
     TEXT[ czech ] = "Chyba při čtení";
     TEXT[ hebrew ] = "Lesefehler";
     TEXT[ hindi ] = "पढ़ने में गलती";
+    TEXT[ slovak ] = "Chyba pri čítaní";
 };
 String STR_COMCORE_CANT_SHOW
 {
@@ -133,6 +134,7 @@ String STR_COMCORE_CANT_SHOW
     TEXT[ czech ] = "Obrázek není možné zobrazit.";
     TEXT[ hebrew ] = "Grafik nicht darstellbar.";
     TEXT[ hindi ] = "सुचित्र को नहीं दिखा सकते है ।";
+    TEXT[ slovak ] = "Obrázok nie je možné zobraziť.";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Boxes
@@ -167,6 +169,7 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ czech ] = "Chyba při kopírování do schránky.";
     MESSAGE[ hebrew ] = "Fehler beim Kopieren in die Zwischenablage.";
     MESSAGE[ hindi ] = "क्लिपबोर्ड में प्रतिलिपि बनाने के समय गलती ।";
+    MESSAGE[ slovak ] = "Chyba pri kopírovaní do schránky.";
 };
 InfoBox ERR_CLPBRD_READ
 {
@@ -198,6 +201,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ czech ] = "Chyba při čtení ze schránky.";
     MESSAGE[ hebrew ] = "Fehler beim Lesen aus der Zwischenablage.";
     MESSAGE[ hindi ] = "क्लिपबोर्ड से पढ़ने के समय गलती ।";
+    MESSAGE[ slovak ] = "Chyba pri čítaní­ zo schránky.";
 };
 
 
@@ -237,6 +241,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chybný formát souboru";
         TEXT[ hebrew ] = "Formatfehler in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल रचना गलती घटित हुआ";
+        TEXT[ slovak ] = "Chybný formát súboru";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
     {
@@ -268,6 +273,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při čtení souboru";
         TEXT[ hebrew ] = "Fehler beim Lesen der Datei";
         TEXT[ hindi ] = "पढ़ने के समय गलती ";
+        TEXT[ slovak ] = "Chyba pri čítaní súboru";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
     {
@@ -299,6 +305,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba ve vstupním souboru";
         TEXT[ hebrew ] = "Fehler in der Eingabedatei";
         TEXT[ hindi ] = "इनपुट् फाइल गलती";
+        TEXT[ slovak ] = "Chyba vo vstupnom súbore";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
     {
@@ -330,6 +337,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Toto není soubor %PRODUCTNAME Writer";
         TEXT[ hebrew ] = "Die Datei ist keine %PRODUCTNAME Writer-Datei";
         TEXT[ hindi ] = "यह %PRODUCTNAME लेखक फाइल नहीं है";
+        TEXT[ slovak ] = "Toto nieje súbor %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
     {
@@ -361,6 +369,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Neočekávaný konec souboru";
         TEXT[ hebrew ] = "Unerwartetes Dateiende";
         TEXT[ hindi ] = "प्रतीक्षा न किया हुआ फाइल का अंत";
+        TEXT[ slovak ] = "Neočakávaný koniec súboru";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
     {
@@ -392,6 +401,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Zamčené soubory nejsou podporovány";
         TEXT[ hebrew ] = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden.";
         TEXT[ hindi ] = "कूटशब्द रक्षित फाइलें समर्थित नहीं";
+        TEXT[ slovak ] = "Zamknuté súbory nie sú podporované";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
     {
@@ -423,6 +433,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Toto není soubor WinWord6";
         TEXT[ hebrew ] = "Die Datei ist keine WinWord6-Datei";
         TEXT[ hindi ] = "यह WinWord6 फाइल नहीं है";
+        TEXT[ slovak ] = "Toto nie je súbor WinWord6";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
     {
@@ -458,6 +469,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Tento soubor byl uložen ve WinWord v režimu 'Rychlé ukládání'. Vypněte prosím volbu 'Povolit rychlé ukládání' a uložte soubor znovu.";
         TEXT[ hebrew ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
         TEXT[ hindi ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो । ";
+        TEXT[ slovak ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
     {
@@ -489,6 +501,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při zápisu do dočasného souboru";
         TEXT[ hebrew ] = "Fehler beim Schreiben der Temporärdatei";
         TEXT[ hindi ] = "अस्थायी फाइल में लिखने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri zápise do dočasného súboru";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
     {
@@ -520,6 +533,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Vkládaná oblast v ini souboru je příliš velká";
         TEXT[ hebrew ] = "Einfügebereich in Ini-Datei zu groß";
         TEXT[ hindi ] = "ini फाइल में जोड़ा हुआ विभाग बहुत बड़ा है";
+        TEXT[ slovak ] = "Vkladaná oblasť v ini súbore je príliš veľká";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
     {
@@ -550,6 +564,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Chybný formát souboru na $(ARG1)(řádek,sloupec)";
         Text[ hebrew ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
         Text[ hindi ] = "$(ARG1)(पंक्ति,स्तंभ) में फाइल रचना गलती घटित हुआ ";
+        Text[ slovak ] = "Chybný formát súboru na $(ARG1)(riadok,stĺpec)";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
     {
@@ -580,6 +595,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Soubor byl uložen novější verzí";
         Text[ hebrew ] = "Datei wurde von einer neueren Version geschrieben";
         Text[ hindi ] = "फाइल को नया आवर्तन में लिखा है";
+        Text[ slovak ] = "Súbor bol uložený novšou verziou";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
     {
@@ -609,6 +625,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Toto není soubor WinWord97";
         TEXT[ hebrew ] = "Die Datei ist keine WinWord97-Datei";
         TEXT[ hindi ] = "यह WinWord97 फाइल नहीं है";
+        TEXT[ slovak ] = "Toto nie je súbor WinWord97";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
@@ -638,6 +655,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chybný formát souboru v sub-dokumentu $(ARG1) na pozici $(ARG2)(řádek,sloupec)";
         TEXT[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
+        TEXT[ slovak ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok, stĺpec)";
     };
      // Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
@@ -670,6 +688,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při zápisu souboru ";
         TEXT[ hebrew ] = "Fehler beim Schreiben der Datei";
         TEXT[ hindi ] = "फाइल में लिखने के समय गलती ";
+        TEXT[ slovak ] = "Chyba pri zápise súboru ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
     {
@@ -680,7 +699,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Il documento di testo automatico presenta una versione errata" ;
         Text [ spanish ] = "Versi�n del documento de texto autom�tico err�nea" ;
         Text [ french ] = "La version de l' AutoTexte utilis�e est incorrecte" ;
-        Text [ swedish ] = "AutoTextdokumentet har fel version" ;
+        Text [ swedish ] = "AutoText-dokumentet har fel version" ;
         Text [ danish ] = "Forkert AutoTekst dokumentversion" ;
         Text [ portuguese ] = "O documento do AutoTexto tem a vers�o errada" ;
         Text [ portuguese_brazilian ] = "Vers�o incorreta do documento de AutoTexto" ;
@@ -700,6 +719,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Špatná verze dokumentu s automatickým textem";
         Text[ hebrew ] = "Das Autotextdokument hat falsche Version";
         Text[ hindi ] = "गलत स्वचालित टेक्स्ट् लेखपत्र आवर्तन";
+        Text[ slovak ] = "Zlá verzia AutoText dokumentu";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
     {
@@ -730,6 +750,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Soubor není možné vytvořit";
         Text[ hebrew ] = "Das Dokument kann nicht angelegt werden";
         Text[ hindi ] = "लेखपत्र को उत्पन्न नहीं कर सकते है";
+        Text[ slovak ] = "Dokument nemôže byť vytvorený";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
     {
@@ -761,6 +782,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při čtení dočasného souboru";
         TEXT[ hebrew ] = "Fehler beim Lesen der Temporärdatei";
         TEXT[ hindi ] = "अस्थायी फाइल को पढ़ने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri čítaní­ dočasného súboru";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
     {
@@ -791,6 +813,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Dokument přesahuje povolenou velikost textového dokumentu 3.1/4.0";
         Text[ hebrew ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe";
         Text[ hindi ] = "लेखपत्र का परिमाण स्वीकृत 3.1/4.0 टेक्स्ट् लेखपत्र परिमाण से अधिक है";
+        Text[ slovak ] = "Dokument prekračuje povolenú veľkosť textového dokumentu 3.1/4.0";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
     {
@@ -820,6 +843,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při zápisu sub-dokumentu $(ARG1)";
         TEXT[ hebrew ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
         TEXT[ hindi ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
     };
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
@@ -852,6 +876,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Interní chyba ve formátu souboru %PRODUCTNAME Writer";
         TEXT[ hebrew ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
         TEXT[ hindi ] = "%PRODUCTNAME Writer फाइल रचना में भीतरी गलती";
+        TEXT[ slovak ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
     {
@@ -883,6 +908,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Interní chyba ve formátu souboru %PRODUCTNAME Writer";
         TEXT[ hebrew ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat";
         TEXT[ hindi ] = "%PRODUCTNAME लेखक फाइल रचना में भीतरी गलती";
+        TEXT[ slovak ] = "Interná chyba vo formáte súboru %PRODUCTNAME Writer";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
     {
@@ -914,6 +940,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Nedostatek paměti";
         TEXT[ hebrew ] = "Nicht genügend Speicher vorhanden";
         TEXT[ hindi ] = "अपर्याप्त मेमरी";
+        TEXT[ slovak ] = "Nedostatok pamäti";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
     {
@@ -945,6 +972,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Nedostatek paměti";
         TEXT[ hebrew ] = "Nicht genügend Speicher vorhanden";
         TEXT[ hindi ] = "अपर्याप्त मेमरी";
+        TEXT[ slovak ] = "Nedostatok pamäti";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
     {
@@ -976,6 +1004,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Nedostatek místa na disku";
         TEXT[ hebrew ] = "Nicht genügend Platz auf dem Speichermedium";
         TEXT[ hindi ] = "डिस्क् में जगह अपर्याप्त है";
+        TEXT[ slovak ] = "Nedostatok miesta na disku";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
     {
@@ -1007,6 +1036,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Nedostatek místa na disku";
         TEXT[ hebrew ] = "Nicht genügend Platz auf dem Speichermedium";
         TEXT[ hindi ] = "डिस्क् में जगह अपर्याप्त है";
+        TEXT[ slovak ] = "Nedostatok miesta na disku";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
     {
@@ -1038,6 +1068,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Neznámá chyba ve filtru W4W";
         TEXT[ hebrew ] = "Unbekannter Fehler im W4W-Filter";
         TEXT[ hindi ] = "W4W फिल्टर में अज्ञात गलती";
+        TEXT[ slovak ] = "Neznáma chyba vo filtri W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
     {
@@ -1069,6 +1100,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Neznámá chyba ve filtru W4W";
         TEXT[ hebrew ] = "Unbekannter Fehler im W4W-Filter";
         TEXT[ hindi ] = "W4W फिल्टर में अज्ञात गलती";
+        TEXT[ slovak ] = "Neznáma chyba vo filtri W4W";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
     {
@@ -1100,6 +1132,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při načítání konvertoru";
         TEXT[ hebrew ] = "Fehler beim Laden des Konverters";
         TEXT[ hindi ] = "कनवर्टर को लोड़ करने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri načítaní­ konvertoru";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
     {
@@ -1131,6 +1164,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při načítání konvertoru";
         TEXT[ hebrew ] = "Fehler beim Laden des Konverters";
         TEXT[ hindi ] = "कनवर्टर को लोड़ करने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri načítaní­ konvertoru";
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
     {
@@ -1161,6 +1195,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "$(ARG1) byl změněn";
         Text[ hebrew ] = "$(ARG1) hat sich geändert";
         Text[ hindi ] = "$(ARG1) को परिवर्तन किया है";
+        Text[ slovak ] = "$(ARG1) bol zmenený";
     };
     String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
     {
@@ -1191,6 +1226,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "$(ARG1) neexistuje";
         Text[ hebrew ] = "$(ARG1) existiert nicht";
         Text[ hindi ] = "$(ARG1) अस्तित्व में नहीं है";
+        Text[ slovak ] = "$(ARG1) neexistuje";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
@@ -1222,6 +1258,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Buňky už dále není možné dělit";
         Text[ hebrew ] = "Zellen können nicht mehr geteilt werden";
         Text[ hindi ] = "कोष्ठों को और आलगाना असंभव है";
+        Text[ slovak ] = "Bunky už ďalej nie je možné deliť";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
@@ -1253,6 +1290,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Další sloupce už nelze přidat";
         Text[ hebrew ] = "weitere Spalten können nicht eingefügt werden";
         Text[ hindi ] = "अधिकतर स्तंभों को नहीं जोड़ सकते है";
+        Text[ slovak ] = "Nie je možné pridať ďalšie stĺpce";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
     {
@@ -1283,6 +1321,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Strukturu propojených tabulek nelze změnit";
         Text[ hebrew ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden";
         Text[ hindi ] = "लिंक किया हुआ सारणी का बनावट को नहीं सुधार सकते है";
+        Text[ slovak ] = "Štruktúru prepojených tabuliek nemožno zmeniť";
     };
      // -------------------- Warnings -----------------------------------
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
@@ -1314,6 +1353,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Není možné načíst kresby";
         Text[ hebrew ] = "Es konnten keine Zeichnungen geladen werden";
         Text[ hindi ] = "कोई रेखाचित्र को नहीं पढ़ सकते है";
+        Text[ slovak ] = "Nie je možné načítať kresby";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
     {
@@ -1349,6 +1389,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Tento soubor byl uložen ve WinWord v režimu 'Rychlé ukládání'. Vypněte prosím volbu 'Povolit rychlé ukládání' a uložte soubor znovu.";
         TEXT[ hebrew ] = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord";
         TEXT[ hindi ] = "इस फाइल को WinWord में 'शीघ्र संचित करो' प्रकार में  संचित किया है । कृपया 'शीघ्र संचित करना स्वीकृत' विकल्प को हटाओ और फाइल को फिर से संचित करो ।";
+        TEXT[ slovak ] = "Tento súbor bol uložený programom WinWord v režime 'Rýchle ukladanie'. Vypnite prosím voľbu 'Povoliť rýchle ukladanie' a uložte súbor znovu.";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
     {
@@ -1379,6 +1420,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Není možné načíst všechny atributy";
         Text[ hebrew ] = "Es konnten nicht alle Attribute gelesen werden";
         Text[ hindi ] = "सब ऐट्रिब्यूटों को नहीं पढ़ सकते है";
+        Text[ slovak ] = "Nie je možné načítať všetky atribúty";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
     {
@@ -1409,6 +1451,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Není možné zaznamenat všechny atributy";
         Text[ hebrew ] = "Es konnten nicht alle Attribute geschrieben werden";
         Text[ hindi ] = "सब ऐट्रिब्यूटों को नहीं रेकोर्ड कर सकते है";
+        Text[ slovak ] = "Nie je možné zaznamenať všetky atribúty";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
@@ -1440,6 +1483,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Některé OLE objekty lze načíst jen jako obrázky";
         Text[ hebrew ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
         Text[ hindi ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे लोड़ कर सकते है";
+        Text[ slovak ] = "Niektoré OLE objekty bolo možné načítať len ako obrázky";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
@@ -1471,6 +1515,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Některé OLE objekty lze uložit jen jako obrázky";
         Text[ hebrew ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden";
         Text[ hindi ] = "कुछ OLE वस्तुओं को केवल सुचित्र जैसे संचित कर सकते है";
+        Text[ slovak ] = "Niektoré OLE objekty možno uložiť len ako obrázky";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
@@ -1502,6 +1547,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Není možné načíst celý dokument";
         Text[ hebrew ] = "Dokument konnte nicht vollständig geladen werden";
         Text[ hindi ] = "लेखपत्र को संपूर्ण लोड़ नहीं कर सकते है";
+        Text[ slovak ] = "Nie je možné načítať celý dokument";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
@@ -1533,6 +1579,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Není možné uložit celý dokument";
         Text[ hebrew ] = "Dokument konnte nicht vollständig gespeichert werden";
         Text[ hindi ] = "लेखपत्र को संपूर्ण संचित नहीं कर सकते है";
+        Text[ slovak ] = "Nie je možné uložiť celý dokument";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
     {
@@ -1563,6 +1610,7 @@ Resource RID_SW_ERRHDL
         Text[ czech ] = "Tento HTML dokument obsahuje %PRODUCTNAME Basic makra.\nPodle aktuálního nastavení nebyla uložena.";
         Text[ hebrew ] = "Das HTML-Dokument enthält %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert.";
         Text[ hindi ] = "इस HTML लेखपत्र में %PRODUCTNAME Basic मॉक्रोस है ।\nउनको वर्तमान निर्यात निर्धारण द्वारा संचित नहीं किया है ।";
+        Text[ slovak ] = "Tento HTML dokument obsahuje makrá  %PRODUCTNAME Basic.\nPodľa aktuálneho nastavenia neboli uložené.";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
     {
@@ -1592,6 +1640,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chyba při zápisu sub-dokumentu $(ARG1)";
         TEXT[ hebrew ] = "Fehler beim Schreiben des Teildokuments $(ARG1)";
         TEXT[ hindi ] = "अधीन-लेखपत्र $(ARG1) में लिखने के समय गलती";
+        TEXT[ slovak ] = "Chyba pri zápise sub-dokumentu $(ARG1)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
     {
@@ -1621,6 +1670,7 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Chybný formát souboru v sub-dokumentu $(ARG1) na pozici $(ARG2)(řádek,sloupec)";
         TEXT[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         TEXT[ hindi ] = "फाइल में अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) में रचना में गलती है";
+        TEXT[ slovak ] = "Chybný formát súboru v sub-dokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
     {
@@ -1631,18 +1681,18 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "���������� �������� ��������� ������� � ��������� ������: $(ARG1)";
         TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ dutch ] = "De volgende tekens kunnen niet in de gekozen tekenset worden weergegeven: $(ARG1)";
-        TEXT[ french ] = "Impossible de repr�senter les caract�res suivants dans le jeu de caract�res s�lectionn� : $(ARG1)";
-        TEXT[ spanish ] = "Los siguientes caracteres no se pudieron representar en el juego de caracteres seleccionado: $(ARG1)";
+        TEXT[ french ] = "Impossible d'afficher les caract�res suivants dans le jeu de caract�res s�lectionn� : $(ARG1)";
+        TEXT[ spanish ] = "Los siguientes caracteres no se pudieron representar en el juego de caracteres seleccionado:\n$(ARG1)";
         TEXT[ finnish ] = "Seuraavia merkkej� ei voida n�ytt�� valitussa merkist�ss�: $(ARG1)";
-        TEXT[ italian ] = "Impossibile rappresentare i caratteri seguenti con il set di caratteri selezionato: $(ARG1)";
+        TEXT[ italian ] = "Impossibile rappresentare i caratteri seguenti con il set di caratteri selezionato:\n$(ARG1)";
         TEXT[ danish ] = "F�lgende tegn kunne ikke vises i det valgte tegns�t: ($Arg1)";
-        TEXT[ swedish ] = "F�ljande tecken gick inte att visa i den valda teckenupps�ttningen: $(ARG1)";
+        TEXT[ swedish ] = "F�ljande tecken gick inte att visa i den valda teckenupps�ttningen:\n$(ARG1)";
         TEXT[ polish ] = "Nast�puj�cych znak�w nie uda�o si� wy�wietli� przy u�yciu wybranego zestawu znak�w: $(ARG1)";
         TEXT[ portuguese_brazilian ] = "N�o foi poss�vel exibir os seguintes caracteres do conjunto de caracteres selecionado: $(ARG1)";
-        TEXT[ japanese ] = "以下の文字は選択された文字セットでは表示できませんでした: $(ARG1)";
-        TEXT[ korean ] = "선택한 문자를 선택한 문자열로 표시할 수 없습니다: ($(ARG1))";
-        TEXT[ chinese_simplified ] = "以下的字符无法采用这个选择的字符集显示：$(ARG1)";
-        TEXT[ chinese_traditional ] = "無法採用這個選取的字元集來顯示以下的字元：$(ARG1)";
+        TEXT[ japanese ] = "以下の文字は選択された文字セットでは表示できませんでした:\n$(ARG1)";
+        TEXT[ korean ] = "아래의 문자는 선택한 문자 집합에서 표시할 수 없습니다:\n$(ARG1)";
+        TEXT[ chinese_simplified ] = "以下的字符无法采用这个选择的字符集显示：\n$(ARG1)";
+        TEXT[ chinese_traditional ] = "無法採用這個選取的字元集來顯示以下的字元：\n$(ARG1)";
         TEXT[ turkish ] = "Bu karakterler, se�ilen karakter kodu $(ARG1) ile g�sterilemez.";
         TEXT[ arabic ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ catalan ] = "Aquests car�cters no es poden exportar amb la codificaci� de car�cters escollida: $(ARG1)";
@@ -1650,8 +1700,13 @@ Resource RID_SW_ERRHDL
         TEXT[ czech ] = "Ve zvolené znakové sadě nelze zobrazit následující znaky: $(ARG1)";
         TEXT[ hebrew ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)";
         TEXT[ hindi ] = "चुने हुए अक्षर समूह में निम्नलिखित अक्षरों को नहीं दिखा सकते है: $(ARG1)";
+        TEXT[ slovak ] = "V zvolenej znakovej sade nemožno zobraziť nasledujúce znaky: $(ARG1)";
     };
 };
+
+
+
+
 
 
 
