@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:37:46 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_DLGCTRL_CXX
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -1023,7 +1021,6 @@ Window* Window::GetLabelFor() const
 {
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
-    Window* pParent = ImplGetParent();
 
     WinBits nFrameStyle = pFrameWindow->GetStyle();
     if( ! ( nFrameStyle & WB_DIALOGCONTROL )
@@ -1094,7 +1091,6 @@ Window* Window::GetLabeledBy() const
 {
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
-    Window* pParent = ImplGetParent();
 
 /* #105538# OJ approved by PL
     WinBits nFrameStyle = pFrameWindow->GetStyle();
