@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:38:13 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,13 @@ Any SAL_CALL FTPContent::execute(
                     Reference<XCommandEnvironment>(0));
             } else if(action == THROWACCESSDENIED) {
                 Sequence<Any> seq(1);
-                seq[0] <<= m_aFTPURL.ident(false,false);
+                PropertyValue value;
+                value.Name =
+                    rtl::OUString::createFromAscii("Uri");
+                value.Handle = -1;
+                value.Value <<= m_aFTPURL.ident(false,false);
+                value.State = PropertyState_DIRECT_VALUE;
+                seq[0] <<= value;
                 ucbhelper::cancelCommandExecution(
                     IOErrorCode_ACCESS_DENIED,
                     seq,
@@ -549,7 +555,13 @@ Any SAL_CALL FTPContent::execute(
                             }
                         if(n) {
                             Sequence<Any> seq(1);
-                            seq[0] <<= m_aFTPURL.ident(false,false);
+                            PropertyValue value;
+                            value.Name =
+                                rtl::OUString::createFromAscii("Uri");
+                            value.Handle = -1;
+                            value.Value <<= m_aFTPURL.ident(false,false);
+                            value.State = PropertyState_DIRECT_VALUE;
+                            seq[0] <<= value;
                             ucbhelper::cancelCommandExecution(
                                 IOErrorCode_UNKNOWN,
                                 seq,
