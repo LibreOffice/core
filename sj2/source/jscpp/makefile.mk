@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-04-10 13:56:22 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 11:30:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,6 @@ TARGET=jscpp
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT=$(OUT)$/inc
 
 # --- Files --------------------------------------------------------
 

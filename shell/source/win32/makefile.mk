@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 14:16:03 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 11:28:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ TARGET=syssh
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
@@ -78,7 +78,7 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 
 SLOFILES=$(SLO)$/SysShentry.obj\
          $(SLO)$/SysShExec.obj
-                        
+
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS=$(CPPULIB)\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-11 09:55:57 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 11:23:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-# defaults for cppumaker
-# UNOUCRBASE=UCR
-# UNOUCRRDB=$(SOLARUCRDIR)$/uce.rdb
-# UNOUCROUT=$(OUT)$/inc
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 # Every source directory generates headers in a own output directory to
 # enable parallel building of the source directories within a project!
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
