@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 18:52:41 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 15:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,9 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
         SwReader aReader(*xRoot, aFolderName, pDoc );
+        ReadXML->SetBlockMode( sal_True );
         aReader.Read( *ReadXML );
+        ReadXML->SetBlockMode( sal_False );
         xRoot.Clear();
     }
     else
@@ -622,7 +624,9 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     ::GetXMLWriter ( aEmptyStr, xWrt);
     SwWriter aWriter (*xRoot, *pDoc );
 
+    xWrt->bBlock = sal_True;
     nRes = aWriter.Write ( xWrt );
+    xWrt->bBlock = sal_False;
     // Save OLE objects if there are some
     SwDocShell *pDocSh = pDoc->GetDocShell();
 
