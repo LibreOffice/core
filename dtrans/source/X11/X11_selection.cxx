@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-31 16:53:36 $
+ *  last change: $Author: pl $ $Date: 2002-07-31 20:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,6 +827,15 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     ::std::hash_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
+#ifdef DEBUG
+    OUString aSelection( getString( selection ) );
+    OUString aType( getString( type ) );
+    fprintf( stderr, "getPasteData( %s, native: %s )\n",
+             OUStringToOString( aSelection, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             OUStringToOString( aType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+             );
+#endif
+
     {
         MutexGuard aGuard(m_aMutex);
 
@@ -904,12 +913,20 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         osl_yieldThread();
     } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
 
+#ifdef DEBUG
+    if( time(NULL)-nBegin >= 2 )
+        fprintf( stderr, "timed out\n" );
+#endif
     if( it->second->m_aDataArrived.check() &&
         it->second->m_aData.getLength() )
     {
         rData = it->second->m_aData;
         bSuccess = true;
     }
+#ifdef DEBUG
+    else
+        fprintf( stderr, "conversion unsuccessfull\n" );
+#endif
     return bSuccess;
 }
 
@@ -1534,27 +1551,43 @@ void SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 
     // notification about success/failure of one of our conversion requests
 #ifdef DEBUG
-    fprintf( stderr, "handleSelectionNotify for selection %s and property %s\n",
-             OUStringToOString( getString( rNotify.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             rNotify.property == None ? "None" : OUStringToOString( getString( rNotify.property ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+    OUString aSelection( getString( rNotify.selection ) );
+    OUString aProperty( OUString::createFromAscii( "None" ) );
+    if( rNotify.property )
+        aProperty = getString( rNotify.property );
+    fprintf( stderr, "handleSelectionNotify for selection %s and property %s (0x%x)\n",
+             OUStringToOString( aSelection, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             OUStringToOString( aProperty, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             rNotify.property
              );
+    if( rNotify.requestor != m_aWindow && rNotify.requestor != m_aCurrentDropWindow )
+        fprintf( stderr, "Warning: selection notify for unknown window 0x%x\n", rNotify.requestor );
 #endif
     ::std::hash_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.selection );
     if( ( rNotify.requestor == m_aWindow || rNotify.requestor == m_aCurrentDropWindow )     &&
         it != m_aSelections.end()           &&
-        it->second->m_eState == Selection::WaitingForResponse )
+        ( it->second->m_eState == Selection::WaitingForResponse ) ||
+        ( it->second->m_eState == Selection::WaitingForData ) )
     {
-        // get the bytes, by INCR if necessary
+        // WaitingForData can actually happen; some
+        // applications (e.g. cmdtool on Solaris) first send
+        // a success and then cancel it. Weird !
         if( rNotify.property == None )
         {
+            // conversion failed, stop transfer
             it->second->m_eState        = Selection::Inactive;
             it->second->m_aData         = Sequence< sal_Int8 >();
             it->second->m_aDataArrived.set();
         }
+        // get the bytes, by INCR if necessary
         else
             it->second->m_eState = Selection::WaitingForData;
     }
+#ifdef DEBUG
+    else if( it != m_aSelections.end() )
+        fprintf( stderr, "Warning: selection in state %d\n", it->second->m_eState );
+#endif
 }
 
 // ------------------------------------------------------------------------
