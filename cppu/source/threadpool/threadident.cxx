@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:36:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <stdio.h>
 
 #include <list>
-#include <hash_map>
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
