@@ -8,6 +8,14 @@
     ===========================================================================
     ATTENTION! PLEASE! HEADS UP! IMPORTANT!
     ===========================================================================
+
+    Please validate your locale data contribution using a validating parser. A
+    validating parser, for example, may be found at
+    http://oss.software.ibm.com/cvs/icu4j/icu4j/src/com/ibm/icu/dev/tool/cldr/XMLValidator.java
+    Compile it into a class-jar and call it in the
+    i18npool/source/localedata/data/ directory:
+    java -cp <your_path>/XMLValidator.jar com.ibm.icu.dev.tool.cldr.XMLValidator your_data.xml
+
     Please test locale data files in a non-product (!) build, which implements
     some checks and pops up assertion message boxes if the tests fail, by
     following this procedure:
