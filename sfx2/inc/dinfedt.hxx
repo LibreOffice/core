@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:22 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,17 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SV_EDIT_HXX //autogen wg. Edit
-#include <vcl/edit.hxx>
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
 #endif
-#ifndef _SV_DIALOG_HXX //autogen wg. ModalDialog
+#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _SV_GROUP_HXX //autogen wg. GroupBox
-#include <vcl/group.hxx>
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
 #endif
-#ifndef _SV_BUTTON_HXX //autogen wg. OKButton
-#include <vcl/button.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 // class InfoEdit_Impl ---------------------------------------------------
@@ -92,11 +92,11 @@ public:
 class SfxDocInfoEditDlg : public ModalDialog
 {
 private:
+    FixedLine       aInfoFL;
     InfoEdit_Impl   aInfo1ED;
     InfoEdit_Impl   aInfo2ED;
     InfoEdit_Impl   aInfo3ED;
     InfoEdit_Impl   aInfo4ED;
-    GroupBox        aInfoGB;
     OKButton        aOkBT;
     CancelButton    aCancelBT;
     HelpButton      aHelpBtn;
@@ -114,7 +114,6 @@ public:
     String  GetText3() const { return aInfo3ED.GetText(); }
     String  GetText4() const { return aInfo4ED.GetText(); }
 };
-
 
 #endif
 
