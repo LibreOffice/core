@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 16:31:18 $
+ *  last change: $Author: dr $ $Date: 2001-01-18 16:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,19 @@ sal_uInt16 XclExpChTrTabId::GetLen() const
 
 //___________________________________________________________________
 
+// ! does not copy additional actions
+XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
+    sUsername( rCopy.sUsername ),
+    aDateTime( rCopy.aDateTime ),
+    nIndex( 0 ),
+    rTabBuffer( rCopy.rTabBuffer ),
+    pAddAction( NULL ),
+    rIdBuffer( rCopy.rIdBuffer ),
+    nLength( rCopy.nLength ),
+    nOpCode( rCopy.nOpCode )
+{
+}
+
 XclExpChTrAction::XclExpChTrAction(
         const ScChangeAction& rAction,
         const RootData& rRootData,
@@ -581,7 +594,7 @@ XclExpChTrAction::XclExpChTrAction(
     sUsername( rAction.GetUser() ),
     aDateTime( rAction.GetDateTime() ),
     nIndex( 0 ),
-    pAddRecord( NULL ),
+    pAddAction( NULL ),
     bAccepted( rAction.IsAccepted() ),
     rTabBuffer( *rRootData.pTabBuffer ),
     rIdBuffer( rTabIdBuffer ),
@@ -595,15 +608,29 @@ XclExpChTrAction::XclExpChTrAction(
 
 XclExpChTrAction::~XclExpChTrAction()
 {
-    if( pAddRecord )
-        delete pAddRecord;
+    if( pAddAction )
+        delete pAddAction;
 }
 
-void XclExpChTrAction::SetAddRecord( ExcRecord* pRecord )
+void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
 {
-    if( pAddRecord )
-        delete pAddRecord;
-    pAddRecord = pRecord;
+    if( pAddAction )
+        pAddAction->SetAddAction( pAction );
+    else
+        pAddAction = pAction;
+}
+
+void XclExpChTrAction::AddDependentContents(
+        const ScChangeAction& rAction,
+        RootData& rRootData,
+        ScChangeTrack& rChangeTrack )
+{
+    ScChangeActionTable aActionTable;
+    rChangeTrack.GetDependents( (ScChangeAction*)(&rAction), aActionTable );
+    for( const ScChangeAction* pDepAction = aActionTable.First(); pDepAction; pDepAction = aActionTable.Next() )
+        if( pDepAction->GetType() == SC_CAT_CONTENT )
+            SetAddAction( new XclExpChTrCellContent(
+                *((const ScChangeActionContent*) pDepAction), rRootData, rIdBuffer ) );
 }
 
 void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
@@ -621,18 +648,21 @@ void XclExpChTrAction::SaveCont( SvStream& rStrm )
     SaveActionData( rStrm );
 }
 
+void XclExpChTrAction::PrepareSaveAction( SvStream& rStrm ) const
+{
+}
+
+void XclExpChTrAction::CompleteSaveAction( SvStream& rStrm ) const
+{
+}
+
 void XclExpChTrAction::Save( SvStream& rStrm )
 {
-    if( pAddRecord )
-    {
-        XclExpChTrEmpty( 0x0150 ).Save( rStrm );
-    }
+    PrepareSaveAction( rStrm );
     ExcRecord::Save( rStrm );
-    if( pAddRecord )
-    {
-        pAddRecord->Save( rStrm );
-        XclExpChTrEmpty( 0x0151 ).Save( rStrm );
-    }
+    if( pAddAction )
+        pAddAction->Save( rStrm );
+    CompleteSaveAction( rStrm );
 }
 
 sal_uInt16 XclExpChTrAction::GetLen() const
@@ -890,8 +920,9 @@ sal_uInt16 XclExpChTrCellContent::GetActionByteCount() const
 
 XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
-        const RootData& rRootData,
-        const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
+        RootData& rRootData,
+        const XclExpChTrTabIdBuffer& rTabIdBuffer,
+        ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRootData, rTabIdBuffer ),
     aRange( rAction.GetBigRange().MakeRange() )
 {
@@ -918,7 +949,10 @@ XclExpChTrInsert::XclExpChTrInsert(
     }
 
     if( nOpCode & EXC_CHTR_OP_DELFLAG )
-        SetAddRecord( new XclExpChTr0x014A( *this ) );
+    {
+        SetAddAction( new XclExpChTr0x014A( *this ) );
+        AddDependentContents( rAction, rRootData, rChangeTrack );
+    }
 }
 
 XclExpChTrInsert::~XclExpChTrInsert()
@@ -931,6 +965,18 @@ void XclExpChTrInsert::SaveActionData( SvStream& rStrm ) const
     rStrm   << (sal_uInt16) 0x0000;
     Write2DRange( rStrm, aRange );
     rStrm   << (sal_uInt32) 0x00000000;
+}
+
+void XclExpChTrInsert::PrepareSaveAction( SvStream& rStrm ) const
+{
+    if( (nOpCode == EXC_CHTR_OP_DELROW) || (nOpCode == EXC_CHTR_OP_DELCOL) )
+        XclExpChTrEmpty( 0x0150 ).Save( rStrm );
+}
+
+void XclExpChTrInsert::CompleteSaveAction( SvStream& rStrm ) const
+{
+    if( (nOpCode == EXC_CHTR_OP_DELROW) || (nOpCode == EXC_CHTR_OP_DELCOL) )
+        XclExpChTrEmpty( 0x0151 ).Save( rStrm );
 }
 
 sal_uInt16 XclExpChTrInsert::GetNum() const
@@ -986,8 +1032,9 @@ sal_uInt16 XclExpChTrInsertTab::GetActionByteCount() const
 
 XclExpChTrMoveRange::XclExpChTrMoveRange(
         const ScChangeActionMove& rAction,
-        const RootData& rRootData,
-        const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
+        RootData& rRootData,
+        const XclExpChTrTabIdBuffer& rTabIdBuffer,
+        ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRootData, rTabIdBuffer, EXC_CHTR_OP_MOVE ),
     aDestRange( rAction.GetBigRange().MakeRange() )
 {
@@ -1001,6 +1048,7 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
     aSourceRange.aEnd.IncRow( (USHORT) -nDRows );
     aSourceRange.aEnd.IncCol( (USHORT) -nDCols );
     aSourceRange.aEnd.IncTab( (USHORT) -nDTabs );
+    AddDependentContents( rAction, rRootData, rChangeTrack );
 }
 
 XclExpChTrMoveRange::~XclExpChTrMoveRange()
@@ -1016,11 +1064,14 @@ void XclExpChTrMoveRange::SaveActionData( SvStream& rStrm ) const
     rStrm << (sal_uInt32) 0x00000000;
 }
 
-void XclExpChTrMoveRange::Save( SvStream& rStrm )
+void XclExpChTrMoveRange::PrepareSaveAction( SvStream& rStrm ) const
 {
-    { XclExpChTrEmpty( 0x014E ).Save( rStrm ); }
-    XclExpChTrAction::Save( rStrm );
-    { XclExpChTrEmpty( 0x014F ).Save( rStrm ); }
+    XclExpChTrEmpty( 0x014E ).Save( rStrm );
+}
+
+void XclExpChTrMoveRange::CompleteSaveAction( SvStream& rStrm ) const
+{
+    XclExpChTrEmpty( 0x014F ).Save( rStrm );
 }
 
 sal_uInt16 XclExpChTrMoveRange::GetNum() const
@@ -1243,7 +1294,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         case SC_CAT_INSERT_COLS:
         case SC_CAT_DELETE_ROWS:
         case SC_CAT_DELETE_COLS:
-            pXclAction = new XclExpChTrInsert( rAction, *pExcRoot, *pTabIdBuffer );
+            pXclAction = new XclExpChTrInsert( rAction, *pExcRoot, *pTabIdBuffer, *pTempChangeTrack );
         break;
         case SC_CAT_INSERT_TABS:
         {
@@ -1255,7 +1306,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         }
         break;
         case SC_CAT_MOVE:
-            pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, *pExcRoot, *pTabIdBuffer );
+            pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, *pExcRoot, *pTabIdBuffer, *pTempChangeTrack );
         break;
     }
     if( pXclAction )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:19:29 $
+ *  last change: $Author: dr $ $Date: 2001-01-18 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,14 @@ private:
     SvMemoryStream*             pContStrm;      // memory stream for continue recs
     UINT32List                  aCutPosList;    // cut positions for string input
     SvStream*                   pStrm;          // either pInStrm or pContStrm
+    sal_uInt32                  nStreamLen;
     sal_Int32                   nBytesLeft;
     sal_uInt16                  nTabIdCount;
+
+    enum { nmBase, nmFound, nmNested }
+                                eNestedMode;    // action with nested content actions
+
+    inline sal_Bool             FoundNestedMode() { return eNestedMode == nmFound; }
 
     void                        DoAcceptRejectAction( ScChangeAction* pAction );
     void                        DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLast );
@@ -161,6 +167,8 @@ private:
     void                        ReadChTrTabId();            // 0x013D
     void                        ReadChTrMoveRange();        // 0x0140
     void                        ReadChTrInsertTab();        // 0x014D
+    void                        StartNestedMode();          // 0x014E, 0x0150
+    sal_Bool                    EndNestedMode();            // 0x014F, 0x0151
 
                                 // creates continue stream, if cont record present
                                 // return: position of next regular record
@@ -169,6 +177,7 @@ private:
                                 // to next record
     void                        EndReadRecord( sal_uInt32 nNextPos );
 
+    void                        ReadRecords();
     void                        ReadStream();
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 16:31:35 $
+ *  last change: $Author: dr $ $Date: 2001-01-18 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ private:
     String                      sUsername;
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
-    ExcRecord*                  pAddRecord;     // additional record for this action
+    XclExpChTrAction*           pAddAction;     // additional record for this action
     sal_Bool                    bAccepted;
 
 protected:
@@ -417,9 +417,13 @@ protected:
     sal_uInt16                  nOpCode;        // EXC_CHTR_OP_***
     sal_Bool                    bForceInfo;
 
-    inline                      XclExpChTrAction( const XclExpChTrAction& rCopy );
+                                XclExpChTrAction( const XclExpChTrAction& rCopy );
 
-    void                        SetAddRecord( ExcRecord* pRecord );
+    void                        SetAddAction( XclExpChTrAction* pAction );
+    void                        AddDependentContents(
+                                    const ScChangeAction& rAction,
+                                    RootData& rRootData,
+                                    ScChangeTrack& rChangeTrack );
 
     inline void                 Write2DAddress( SvStream& rStrm, const ScAddress& rAddress ) const;
     inline void                 Write2DRange( SvStream& rStrm, const ScRange& rRange ) const;
@@ -433,6 +437,11 @@ protected:
     virtual void                SaveActionData( SvStream& rStrm ) const = 0;
                                 // overload to get action size without header, called by GetLen()
     virtual sal_uInt16          GetActionByteCount() const = 0;
+
+                                // do something before writing the record
+    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
+                                // do something after writing the record
+    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
 
 public:
                                 XclExpChTrAction(
@@ -454,18 +463,6 @@ public:
     virtual void                Save( SvStream& rStrm );
     virtual sal_uInt16          GetLen() const;
 };
-
-inline XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
-    sUsername( rCopy.sUsername ),
-    aDateTime( rCopy.aDateTime ),
-    nIndex( 0 ),
-    rTabBuffer( rCopy.rTabBuffer ),
-    pAddRecord( NULL ),
-    rIdBuffer( rCopy.rIdBuffer ),
-    nLength( rCopy.nLength ),
-    nOpCode( rCopy.nOpCode )
-{
-}
 
 inline void XclExpChTrAction::Write2DAddress( SvStream& rStrm, const ScAddress& rAddress ) const
 {
@@ -571,12 +568,15 @@ protected:
                                     XclExpChTrAction( rCopy ), aRange( rCopy.aRange ) {}
 
     virtual void                SaveActionData( SvStream& rStrm ) const;
+    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
+    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
 
 public:
                                 XclExpChTrInsert(
                                     const ScChangeAction& rAction,
-                                    const RootData& rRootData,
-                                    const XclExpChTrTabIdBuffer& rTabIdBuffer );
+                                    RootData& rRootData,
+                                    const XclExpChTrTabIdBuffer& rTabIdBuffer,
+                                    ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrInsert();
 
     virtual sal_uInt16          GetNum() const;
@@ -615,15 +615,17 @@ protected:
     ScRange                     aDestRange;
 
     virtual void                SaveActionData( SvStream& rStrm ) const;
+    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
+    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
 
 public:
                                 XclExpChTrMoveRange(
                                     const ScChangeActionMove& rAction,
-                                    const RootData& rRootData,
-                                    const XclExpChTrTabIdBuffer& rTabIdBuffer );
+                                    RootData& rRootData,
+                                    const XclExpChTrTabIdBuffer& rTabIdBuffer,
+                                    ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrMoveRange();
 
-    virtual void                Save( SvStream& rStrm );
     virtual sal_uInt16          GetNum() const;
     virtual sal_uInt16          GetActionByteCount() const;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:26:45 $
+ *  last change: $Author: dr $ $Date: 2001-01-18 16:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     pContStrm( NULL ),
     pStrm( NULL ),
     nBytesLeft( 0 ),
-    nTabIdCount( 0 )
+    nTabIdCount( 0 ),
+    eNestedMode( nmBase )
 {
     DBG_ASSERT( pExcRoot && pExcRoot->pImpTabIdBuffer && pExcRoot->pSupbookBuffer,
         "XclImpChangeTrack::XclImpChangeTrack - root data incomplete" );
@@ -409,6 +410,9 @@ void XclImpChangeTrack::ReadChTrInsert()
         else
             aRange.aEnd.SetCol( MAXCOL );
 
+        if( FoundNestedMode() )
+            ReadRecords();
+
         if( aRecHeader.nOpCode & EXC_CHTR_OP_DELFLAG )
             DoDeleteRange( aRange );
         else
@@ -501,6 +505,8 @@ void XclImpChangeTrack::ReadChTrMoveRange()
         Read2DRange( aDestRange );
         aSourceRange.aStart.SetTab( ReadTabNum() );
         aSourceRange.aEnd.SetTab( aSourceRange.aStart.Tab() );
+        if( FoundNestedMode() )
+            ReadRecords();
         pChangeTrack->AppendMove( aSourceRange, aDestRange, NULL );
         DoAcceptRejectAction( pChangeTrack->GetLast() );
     }
@@ -513,6 +519,21 @@ void XclImpChangeTrack::ReadChTrInsertTab()
         sal_uInt16 nTab = ReadTabNum();
         DoInsertRange( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab ) );
     }
+}
+
+void XclImpChangeTrack::StartNestedMode()
+{
+    DBG_ASSERT( eNestedMode == nmBase, "XclImpChangeTrack::StartNestedMode - unexpected nested mode" );
+    if( eNestedMode == nmBase )
+        eNestedMode = nmFound;
+}
+
+sal_Bool XclImpChangeTrack::EndNestedMode()
+{
+    DBG_ASSERT( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
+    sal_Bool bReturn = (eNestedMode == nmNested);
+    eNestedMode = nmBase;
+    return bReturn;
 }
 
 sal_uInt32 XclImpChangeTrack::PrepareReadRecord( sal_uInt16 nRecLen )
@@ -549,20 +570,14 @@ void XclImpChangeTrack::EndReadRecord( sal_uInt32 nNextPos )
     pInStrm->Seek( nNextPos );
 }
 
-void XclImpChangeTrack::ReadStream()
+void XclImpChangeTrack::ReadRecords()
 {
-    sal_uInt16 nRecId;
-    sal_uInt16 nRecLen;
+    sal_uInt32  nNextRecPos;
+    sal_uInt16  nRecId;
+    sal_uInt16  nRecLen;
+    sal_Bool    bExitLoop = sal_False;
 
-    pInStrm->Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nStreamLen = pInStrm->Tell();
-    pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-    sal_uInt32 nNextRecPos = 0;
-
-    if( nStreamLen == 0xFFFFFFFF )
-        return;
-
-    while( nNextRecPos < nStreamLen )
+    while( !bExitLoop )
     {
         *pInStrm >> nRecId >> nRecLen;
 
@@ -576,9 +591,25 @@ void XclImpChangeTrack::ReadStream()
             case 0x013D:    nTabIdCount = (sal_uInt16)(nBytesLeft >> 1);    break;
             case 0x0140:    ReadChTrMoveRange();                            break;
             case 0x014D:    ReadChTrInsertTab();                            break;
+            case 0x014E:
+            case 0x0150:    StartNestedMode();                              break;
+            case 0x014F:
+            case 0x0151:    bExitLoop = EndNestedMode();                    break;
         }
         EndReadRecord( nNextRecPos );
+        bExitLoop |= (nNextRecPos >= nStreamLen);
     }
+}
+
+void XclImpChangeTrack::ReadStream()
+{
+    pInStrm->Seek( STREAM_SEEK_TO_END );
+    nStreamLen = pInStrm->Tell();
+    if( nStreamLen == 0xFFFFFFFF )
+        return;
+
+    pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
+    ReadRecords();
 }
 
 void XclImpChangeTrack::Apply()
@@ -589,11 +620,12 @@ void XclImpChangeTrack::Apply()
         pChangeTrack->SetUseFixDateTime( FALSE );
 
         pExcRoot->pDoc->SetChangeTrack( pChangeTrack );
+        pChangeTrack = NULL;
+
         ScChangeViewSettings aSettings;
         aSettings.SetShowChanges( TRUE );
         pExcRoot->pDoc->SetChangeViewSettings( aSettings );
     }
-    pChangeTrack = NULL;
 }
 
 //___________________________________________________________________
