@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: sj $ $Date: 2001-05-16 11:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,16 @@
  *
  *
  ************************************************************************/
+#define FL_LINE         1
+#define FL_LABEL        2
+#define FL_VERT         3
+
 #define FT_LINE_DIST 1
 #define FT_HELPLINE_OVERHANG 2
 #define FT_HELPLINE_DIST 3
 #define FT_HELPLINE1_LEN 4
 #define FT_HELPLINE2_LEN 5
+#define FT_POSITION 6
 #define MTR_LINE_DIST 1
 #define MTR_FLD_HELPLINE_OVERHANG 2
 #define MTR_FLD_HELPLINE_DIST 3
@@ -76,8 +81,5 @@
 #define CTL_POSITION 1
 #define CTL_PREVIEW 2
 #define LB_UNIT 1
-#define GRP_ATTRIBUTES 1
-#define GRP_POSITION 2
-#define GRP_PREVIEW 3
 
 #define STR_MEASURE_AUTOMATIC 1

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:06:32 $
+ *  last change: $Author: sj $ $Date: 2001-05-16 11:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage RID_SVXPAGE_MEASURE
 {
     HelpId = HID_PAGE_MEASURE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 259 , 170 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Bemaﬂung" ;
     Text [ ENGLISH ] = "Measure" ;
     Text [ english_us ] = "Dimensioning" ;
@@ -82,10 +82,18 @@ TabPage RID_SVXPAGE_MEASURE
     Text [ danish ] = "Dimensionering" ;
     Text [ portuguese_brazilian ] = "Bemaﬂung" ;
     Text [ portuguese ] = "Dimensionar" ;
+
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Line" ;
+        Text [ ENGLISH ] = "Line" ;
+    };
     FixedText FT_LINE_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 15  ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "L~iniendistanz" ;
         Text [ ENGLISH ] = "L~ine distance" ;
         Text [ english_us ] = "Line ~distance" ;
@@ -113,7 +121,7 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_LINE_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 14  ) ;
+        Pos = MAP_APPFONT ( 80, 13  ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -128,8 +136,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE_OVERHANG
     {
-        Pos = MAP_APPFONT ( 12 , 32  ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 31  ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Hilfslinien~¸berhang" ;
         Text [ ENGLISH ] = "Helpline ~overhang" ;
         Text [ english_us ] = "Guide ~overhang" ;
@@ -157,7 +165,7 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 30  ) ;
+        Pos = MAP_APPFONT ( 80 , 29  ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -172,8 +180,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 48  ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 47  ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Hilfslinien~distanz" ;
         Text [ ENGLISH ] = "Helpline ~distance" ;
         Text [ english_us ] = "~Guide distance" ;
@@ -201,7 +209,7 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 46  ) ;
+        Pos = MAP_APPFONT ( 80 , 45  ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -216,8 +224,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE1_LEN
     {
-        Pos = MAP_APPFONT ( 12 , 64  ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 63  ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Linke Hilfslinie" ;
         Text [ ENGLISH ] = "~Left helpline" ;
         Text [ english_us ] = "~Left guide" ;
@@ -245,7 +253,7 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE1_LEN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 62  ) ;
+        Pos = MAP_APPFONT ( 80 , 61 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -260,8 +268,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE2_LEN
     {
-        Pos = MAP_APPFONT ( 12 , 80  ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Rechte Hilfslinie" ;
         Text [ ENGLISH ] = "~Right helpline" ;
         Text [ english_us ] = "~Right guide" ;
@@ -289,7 +297,7 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE2_LEN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 78  ) ;
+        Pos = MAP_APPFONT ( 80 , 77 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -302,12 +310,126 @@ TabPage RID_SVXPAGE_MEASURE
         Last = 10000 ;
         SpinSize = 10 ;
     };
+    TriStateBox TSB_BELOW_REF_EDGE
+    {
+        Pos = MAP_APPFONT ( 12 , 95  ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Maﬂlinie u~nterhalb des Objekts" ;
+        Text [ ENGLISH ] = "Measure ~below reference edge" ;
+    };
+    FixedLine FL_VERT
+    {
+        Pos = MAP_APPFONT ( 129 , 12  ) ;
+        Size = MAP_APPFONT ( 4, 116 ) ;
+    };
+    FixedLine FL_LABEL
+    {
+        Pos = MAP_APPFONT ( 135 , 3  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Beschriftung" ;
+        Text [ ENGLISH ] = "Legend" ;
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 141 , 15  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "~Textposition" ;
+        Text [ ENGLISH ] = "Text position" ;
+        Text [ dutch ] = "Tekstpositie" ;
+        Text [ english_us ] = "Text position" ;
+        Text [ italian ] = "Posizione testo" ;
+        Text [ spanish ] = "PosiciÛn del texto" ;
+        Text [ french ] = "Position du texte" ;
+        Text [ swedish ] = "Textposition" ;
+        Text [ danish ] = "Tekstplacering" ;
+        Text [ portuguese_brazilian ] = "Textposition" ;
+        Text [ portuguese ] = "PosiÁ„o do texto" ;
+        Text[ chinese_simplified ] = "’˝ŒƒŒª÷√";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ ÚÂÍÒÚ‡";
+        Text[ polish ] = "Pozycja tekstu";
+        Text[ japanese ] = "√∑ΩƒÇÃà íu";
+        Text[ chinese_traditional ] = "§Â¶r¶Ï∏m";
+        Text[ arabic ] = "„Ê÷⁄ «·‰’";
+        Text[ greek ] = "»›ÛÁ ÍÂÈÏ›ÌÔı";
+        Text[ korean ] = "≈ÿΩ∫∆Æ ¿ßƒ°";
+        Text[ turkish ] = "Metin konumu";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PosiciÛn del texto";
+        Text[ finnish ] = "Tekstin sijainti";
+    };
+    Control CTL_POSITION
+    {
+        HelpId = HID_MEASURE_CTL_POSITION ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 141 , 26  ) ;
+        Size = MAP_APPFONT ( 88 , 40 ) ;
+        TabStop = TRUE ;
+    };
+    TriStateBox TSB_AUTOPOSV
+    {
+        Pos = MAP_APPFONT ( 147 , 72  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Automatisch ~Vertikal" ;
+        Text [ ENGLISH ] = "~Automatic vertical" ;
+        Text [ english_us ] = "~AutoVertical" ;
+        Text[ portuguese ] = "~Vertical autom.";
+        Text[ russian ] = "~¿‚ÚÓÏ. ‚ÂÚËÍ‡Î¸ÌÓ";
+        Text[ greek ] = "¡ıÙÔÏ‹Ù˘Ú Í·Ù·Í¸Òıˆ·";
+        Text[ dutch ] = "~Automatisch verticaal";
+        Text[ french ] = "~Automatiquement vertical";
+        Text[ spanish ] = "~Vertical autom·ticamente";
+        Text[ italian ] = "Verticale ~autom.";
+        Text[ danish ] = "Automatisk lodret";
+        Text[ swedish ] = "Automatiskt vertikal";
+        Text[ polish ] = "Automatycznie pionowo";
+        Text[ portuguese_brazilian ] = "~Automatic vertical";
+        Text[ japanese ] = "é©ìÆìIÇ…ècï˚å¸Ç÷(~A)";
+        Text[ korean ] = "¿⁄µø ºˆ¡˜(~A)";
+        Text[ chinese_simplified ] = "◊‘∂Ø¥π÷±(~A)";
+        Text[ chinese_traditional ] = "¶€∞ ´´™Ω(~A)";
+        Text[ arabic ] = "⁄„ÊœÌ  ·ﬁ«∆Ì«";
+        Text[ turkish ] = "~Otomatik dikey";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vertical autom·ticamente";
+        Text[ finnish ] = "~Automaattinen pystysuunta";
+    };
+    TriStateBox TSB_AUTOPOSH
+    {
+        Pos = MAP_APPFONT ( 147 , 86  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Automatisch ~Horizontal" ;
+        Text [ ENGLISH ] = "~Automatic horizontal" ;
+        Text [ english_us ] = "A~utoHorizontal" ;
+        Text[ portuguese ] = "~Horizontal autom.";
+        Text[ russian ] = "¿‚ÚÓÏ. „ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ greek ] = "¡ıÙÔÏ‹Ù˘Ú ÔÒÈÊ¸ÌÙÈ·";
+        Text[ dutch ] = "~Automatisch horizontaal";
+        Text[ french ] = "~Automatiquement horizontal";
+        Text[ spanish ] = "~Horizontal autom·ticamente";
+        Text[ italian ] = "~Orizzontale automat.";
+        Text[ danish ] = "Automatisk vandret";
+        Text[ swedish ] = "Automatiskt horisontal";
+        Text[ polish ] = "Automatycznie poziomo";
+        Text[ portuguese_brazilian ] = "~Automatic horizontal";
+        Text[ japanese ] = "é©ìÆìIÇ…â°ï˚å¸Ç÷(~U)";
+        Text[ korean ] = "¿⁄µø ºˆ∆Ú(~U)";
+        Text[ chinese_simplified ] = "◊‘∂ØÀÆ∆Ω(~U)";
+        Text[ chinese_traditional ] = "¶€∞ §Ù•≠(~U)";
+        Text[ arabic ] = "√›ﬁÌ  ·ﬁ«∆Ì«";
+        Text[ turkish ] = "O~tomatik yatay";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Horizontal autom·ticamente";
+        Text[ finnish ] = "~Automaattinen vaakataso";
+    };
     TriStateBox TSB_SHOW_UNIT
     {
-        Pos = MAP_APPFONT ( 12 , 98  ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 141 , 101  ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Metrik anzeigen" ;
+        Text = "~Einheit anzeigen" ;
         Text [ ENGLISH ] = "Show ~Metric" ;
         Text [ dutch ] = "Weergave ~metriek" ;
         Text [ english_us ] = "Show ~meas. units" ;
@@ -334,227 +456,27 @@ TabPage RID_SVXPAGE_MEASURE
     ListBox LB_UNIT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 97  ) ;
-        Size = MAP_APPFONT ( 45 , 80 ) ;
+        Pos = MAP_APPFONT ( 211 , 100 ) ;
+        Size = MAP_APPFONT ( 42 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
-    TriStateBox TSB_BELOW_REF_EDGE
-    {
-        Pos = MAP_APPFONT ( 12 , 112  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Anzeige ~unterhalb" ;
-        Text [ ENGLISH ] = "~Below reference edge" ;
-        Text [ dutch ] = "~Weergave onder" ;
-        Text [ english_us ] = "~Below reference edge" ;
-        Text [ italian ] = "Mostra in basso" ;
-        Text [ spanish ] = "Mostrar ~abajo" ;
-        Text [ french ] = "Afficher ~en dessous" ;
-        Text [ swedish ] = "Visning ~nedanfˆr" ;
-        Text [ danish ] = "Vis nedenfor" ;
-        Text [ portuguese ] = "Mostrar ~abaixo" ;
-        Text [ portuguese_brazilian ] = "Anzeige ~unterhalb" ;
-        Text[ chinese_simplified ] = "œ¬∑Ωœ‘ æ(~B)";
-        Text[ russian ] = "œÓÍ‡Á ÌËÊÂ";
-        Text[ polish ] = "Pokaø poniøej";
-        Text[ japanese ] = "â∫ï˚Ç…ï\\é¶(~B)";
-        Text[ chinese_traditional ] = "§U§Ë≈„•‹(~B)";
-        Text[ arabic ] = "≈ŸÂ«— «·ﬁÌ«” »«·√”›·";
-        Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ Í‹Ù˘ ·¸";
-        Text[ korean ] = "æ∆∑°ø° «•Ω√(~B)";
-        Text[ turkish ] = "Altta ~gˆr¸nt¸le";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostrar ~abajo";
-        Text[ finnish ] = "~Viitereunan alapuolella";
-    };
     TriStateBox TSB_PARALLEL
     {
-        Pos = MAP_APPFONT ( 12 , 126  ) ;
+        Pos = MAP_APPFONT ( 141, 115 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Anzeige ~parallel" ;
-        Text [ ENGLISH ] = "~parallel" ;
-        Text [ dutch ] = "Weergave ~parallel" ;
-        Text [ english_us ] = "~Parallel" ;
-        Text [ italian ] = "Mostra ~parallelamente" ;
-        Text [ spanish ] = "M~ostrar paralelamente" ;
-        Text [ french ] = "Affichage ~parallËle" ;
-        Text [ swedish ] = "Visning ~parallellt" ;
-        Text [ danish ] = "Vis parallelt" ;
-        Text [ portuguese ] = "Paralelamente" ;
-        Text [ portuguese_brazilian ] = "Anzeige ~parallel" ;
-        Text[ chinese_simplified ] = "∆Ω––œ‘ æ(~P)";
-        Text[ russian ] = "œ‡‡ÎÎÂÎ¸ÌÓ";
-        Text[ polish ] = "Pokaø rÛwnolegle";
-        Text[ japanese ] = "ïΩçsÇ…ï\\é¶(~P)";
-        Text[ chinese_traditional ] = "•≠¶Ê≈„•‹(~P)";
-        Text[ arabic ] = "≈ŸÂ«— «·ﬁÌ«” „ Ê«“Ì«";
-        Text[ greek ] = "–·Ò‹ÎÎÁÎÁ ÒÔ‚ÔÎﬁ";
-        Text[ korean ] = "∆Ú«‡¿∏∑Œ «•Ω√(~P)";
-        Text[ turkish ] = "Paralel ~gˆr¸nt¸le";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M~ostrar paralelamente";
-        Text[ finnish ] = "~Samansuuntainen";
-    };
-    GroupBox GRP_ATTRIBUTES
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 142 , 161 ) ;
-        Text = "Attribute" ;
-        Text [ ENGLISH ] = "Attributes" ;
-        Text [ dutch ] = "Attributen" ;
-        Text [ english_us ] = "Attributes" ;
-        Text [ italian ] = "Attributi" ;
-        Text [ spanish ] = "Atributos" ;
-        Text [ french ] = "Attributs" ;
-        Text [ swedish ] = "Attribut" ;
-        Text [ danish ] = "Attributter" ;
-        Text [ portuguese_brazilian ] = "Attribute" ;
-        Text [ portuguese ] = "Atributos" ;
-        Text[ chinese_simplified ] = " Ù–‘";
-        Text[ russian ] = "¿ÚË·ÛÚ˚";
-        Text[ polish ] = "Atrybuty";
-        Text[ japanese ] = "ëÆê´";
-        Text[ chinese_traditional ] = "ƒ›© ";
-        Text[ arabic ] = "«·”„« ";
-        Text[ greek ] = "…‰È¸ÙÁÙÂÚ";
-        Text[ korean ] = "º”º∫";
-        Text[ turkish ] = "÷znitelikler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Atributos";
-        Text[ finnish ] = "M‰‰ritteet";
-    };
-    Control CTL_POSITION
-    {
-        HelpId = HID_MEASURE_CTL_POSITION ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 14  ) ;
-        Size = MAP_APPFONT ( 88 , 40 ) ;
-        TabStop = TRUE ;
-    };
-    TriStateBox TSB_AUTOPOSV
-    {
-        Pos = MAP_APPFONT ( 160 , 61  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Automatisch Vertikal" ;
-        Text [ ENGLISH ] = "~Automatic vertical" ;
-        Text [ english_us ] = "~AutoVertical" ;
-        Text[ portuguese ] = "~Vertical autom.";
-        Text[ russian ] = "~¿‚ÚÓÏ. ‚ÂÚËÍ‡Î¸ÌÓ";
-        Text[ greek ] = "¡ıÙÔÏ‹Ù˘Ú Í·Ù·Í¸Òıˆ·";
-        Text[ dutch ] = "~Automatisch verticaal";
-        Text[ french ] = "~Automatiquement vertical";
-        Text[ spanish ] = "~Vertical autom·ticamente";
-        Text[ italian ] = "Verticale ~autom.";
-        Text[ danish ] = "Automatisk lodret";
-        Text[ swedish ] = "Automatiskt vertikal";
-        Text[ polish ] = "Automatycznie pionowo";
-        Text[ portuguese_brazilian ] = "~Automatic vertical";
-        Text[ japanese ] = "é©ìÆìIÇ…ècï˚å¸Ç÷(~A)";
-        Text[ korean ] = "¿⁄µø ºˆ¡˜(~A)";
-        Text[ chinese_simplified ] = "◊‘∂Ø¥π÷±(~A)";
-        Text[ chinese_traditional ] = "¶€∞ ´´™Ω(~A)";
-        Text[ arabic ] = "⁄„ÊœÌ  ·ﬁ«∆Ì«";
-        Text[ turkish ] = "~Otomatik dikey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vertical autom·ticamente";
-        Text[ finnish ] = "~Automaattinen pystysuunta";
-    };
-    TriStateBox TSB_AUTOPOSH
-    {
-        Pos = MAP_APPFONT ( 160 , 75  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Automatisch Horizontal" ;
-        Text [ ENGLISH ] = "~Automatic horizontal" ;
-        Text [ english_us ] = "A~utoHorizontal" ;
-        Text[ portuguese ] = "~Horizontal autom.";
-        Text[ russian ] = "¿‚ÚÓÏ. „ÓËÁÓÌÚ‡Î¸ÌÓ";
-        Text[ greek ] = "¡ıÙÔÏ‹Ù˘Ú ÔÒÈÊ¸ÌÙÈ·";
-        Text[ dutch ] = "~Automatisch horizontaal";
-        Text[ french ] = "~Automatiquement horizontal";
-        Text[ spanish ] = "~Horizontal autom·ticamente";
-        Text[ italian ] = "~Orizzontale automat.";
-        Text[ danish ] = "Automatisk vandret";
-        Text[ swedish ] = "Automatiskt horisontal";
-        Text[ polish ] = "Automatycznie poziomo";
-        Text[ portuguese_brazilian ] = "~Automatic horizontal";
-        Text[ japanese ] = "é©ìÆìIÇ…â°ï˚å¸Ç÷(~U)";
-        Text[ korean ] = "¿⁄µø ºˆ∆Ú(~U)";
-        Text[ chinese_simplified ] = "◊‘∂ØÀÆ∆Ω(~U)";
-        Text[ chinese_traditional ] = "¶€∞ §Ù•≠(~U)";
-        Text[ arabic ] = "√›ﬁÌ  ·ﬁ«∆Ì«";
-        Text[ turkish ] = "O~tomatik yatay";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Horizontal autom·ticamente";
-        Text[ finnish ] = "~Automaattinen vaakataso";
-    };
-    GroupBox GRP_POSITION
-    {
-        Pos = MAP_APPFONT ( 154 , 3  ) ;
-        Size = MAP_APPFONT ( 100 , 88 ) ;
-        Text = "Textposition" ;
-        Text [ ENGLISH ] = "Text position" ;
-        Text [ dutch ] = "Tekstpositie" ;
-        Text [ english_us ] = "Text position" ;
-        Text [ italian ] = "Posizione testo" ;
-        Text [ spanish ] = "PosiciÛn del texto" ;
-        Text [ french ] = "Position du texte" ;
-        Text [ swedish ] = "Textposition" ;
-        Text [ danish ] = "Tekstplacering" ;
-        Text [ portuguese_brazilian ] = "Textposition" ;
-        Text [ portuguese ] = "PosiÁ„o do texto" ;
-        Text[ chinese_simplified ] = "’˝ŒƒŒª÷√";
-        Text[ russian ] = "œÓÎÓÊÂÌËÂ ÚÂÍÒÚ‡";
-        Text[ polish ] = "Pozycja tekstu";
-        Text[ japanese ] = "√∑ΩƒÇÃà íu";
-        Text[ chinese_traditional ] = "§Â¶r¶Ï∏m";
-        Text[ arabic ] = "„Ê÷⁄ «·‰’";
-        Text[ greek ] = "»›ÛÁ ÍÂÈÏ›ÌÔı";
-        Text[ korean ] = "≈ÿΩ∫∆Æ ¿ßƒ°";
-        Text[ turkish ] = "Metin konumu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PosiciÛn del texto";
-        Text[ finnish ] = "Tekstin sijainti";
+        Text = "Beschriftung ~parallel zur Hilfslinie" ;
+        Text [ ENGLISH ] = "legend ~parallel to help line" ;
     };
     Control CTL_PREVIEW
     {
         HelpId = HID_MEASURE_CTL_PREVIEW ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 105  ) ;
-        Size = MAP_APPFONT ( 88 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 132 ) ;
+        Size = MAP_APPFONT ( 247, 48 ) ;
         TabStop = TRUE ;
-    };
-    GroupBox GRP_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 154 , 94  ) ;
-        Size = MAP_APPFONT ( 100 , 70 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "PrevisualizaciÛn" ;
-        Text [ french ] = "AperÁu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ swedish ] = "Fˆrhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "‘§¿¿";
-        Text[ russian ] = "œÓÒÏÓÚ";
-        Text[ polish ] = "Podglπd";
-        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        Text[ chinese_traditional ] = "πwƒ˝";
-        Text[ arabic ] = "„⁄«Ì‰…";
-        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
-        Text[ turkish ] = "÷nizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PrevisualizaciÛn";
-        Text[ finnish ] = "Esikatselu";
     };
     String STR_MEASURE_AUTOMATIC
     {
@@ -580,7 +502,6 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Autom·tico";
-        Text[ finnish ] = "Automaattinen";
     };
     Text[ chinese_simplified ] = "∂®≥ﬂ¥Á";
     Text[ russian ] = "–‡ÁÏÂ˚";

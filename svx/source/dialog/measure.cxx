@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: sj $ $Date: 2001-05-16 11:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
 
+        aFlLine                 ( this, ResId( FL_LINE ) ),
         aFtLineDist             ( this, ResId( FT_LINE_DIST ) ),
         aMtrFldLineDist         ( this, ResId( MTR_LINE_DIST ) ),
         aFtHelplineOverhang     ( this, ResId( FT_HELPLINE_OVERHANG ) ),
@@ -154,16 +155,15 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aTsbParallel            ( this, ResId( TSB_PARALLEL ) ),
         aTsbShowUnit            ( this, ResId( TSB_SHOW_UNIT ) ),
         aLbUnit                 ( this, ResId( LB_UNIT ) ),
-        aGrpAttributes          ( this, ResId( GRP_ATTRIBUTES ) ),
 
+        aFlLabel                ( this, ResId( FL_LABEL ) ),
+        aFlVert                 ( this, ResId( FL_VERT ) ),
         aCtlPosition            ( this, ResId( CTL_POSITION ),
                                         RP_RM, 200, 100, CS_LINE ),
         aTsbAutoPosV            ( this, ResId( TSB_AUTOPOSV ) ),
         aTsbAutoPosH            ( this, ResId( TSB_AUTOPOSH ) ),
-        aGrpPosition            ( this, ResId( GRP_POSITION ) ),
-
+        aFtPosition             ( this, ResId( FT_POSITION ) ),
         aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
-        aGrpPreview             ( this, ResId( GRP_PREVIEW ) ),
         bPositionModified       ( FALSE )
 {
     FillUnitLB();
@@ -198,6 +198,10 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aTsbParallel.SetClickHdl( aLink );
     aTsbShowUnit.SetClickHdl( aLink );
     aLbUnit.SetSelectHdl( aLink );
+    WinBits nWinBits = aFlVert.GetStyle();
+    nWinBits &= ~WB_HORZ;
+    nWinBits |=  WB_VERT;
+    aFlVert.SetStyle( nWinBits );
 }
 
 /*************************************************************************
