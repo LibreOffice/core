@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:27:15 $
+ *  last change: $Author: os $ $Date: 2001-09-25 06:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     FixedText FT_INSERT_DATA
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 8 ) ;
         Text = "Daten einfügen als:" ;
         Text [ ENGLISH ] = "Insert data as:" ;
         Text [ english_us ] = "Insert data as:" ;
@@ -223,7 +223,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     FixedText FT_DB_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 72 , 10 ) ;
+        Size = MAP_APPFONT ( 72 , 8 ) ;
         Text = "Datenbank~spalten" ;
         Text [ ENGLISH ] = "Database columns" ;
         Text [ english_us ] = "Database ~columns" ;
@@ -493,7 +493,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     FixedText FT_TABLE_COL
     {
         Pos = MAP_APPFONT ( 137 , 31 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text = "Tabe~lle" ;
         Text [ ENGLISH ] = "Tab~le" ;
         Text [ english_us ] = "Tab~le" ;
@@ -534,9 +534,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     CheckBox CB_TABLE_HEADON
     {
         Pos = MAP_APPFONT ( 111 , 128 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Tabellenüberschrift einfügen" ;
-        Text [ ENGLISH ] = "On" ;
+        Text [ ENGLISH ] = "Insert table heading" ;
         TabStop = TRUE ;
         Check = TRUE ;
         Text[ english_us ] = "Insert table heading";
@@ -563,7 +563,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     RadioButton RB_HEADL_COLNMS
     {
         Pos = MAP_APPFONT ( 120 , 142 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
         Text = "S~paltenamen übernehmen" ;
         Text [ English ] = "Column name" ;
         TabStop = TRUE ;
@@ -592,7 +592,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     RadioButton RB_HEADL_EMPTY
     {
         Pos = MAP_APPFONT ( 120 , 155 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
         Text = "Nur Zeile erstellen" ;
         Text [ English ] = "empty" ;
         TabStop = TRUE ;
