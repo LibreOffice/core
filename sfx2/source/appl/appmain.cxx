@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:00:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #ifndef GCC
 #pragma hdrstop
 #endif
+#include <stdio.h>
 
 #ifndef _PVER_HXX //autogen
 #include <svtools/pver.hxx>
@@ -377,7 +378,7 @@ void SfxApplication::Main( )
 void SfxApplication::InsertLateInitHdl(const Link& rLink)
 {
     if ( Application::IsInExecute() )
-        Application::PostUserEvent( rLink );
+           Application::PostUserEvent( rLink );
     else
     {
         if ( !pAppData_Impl->pInitLinkList )
@@ -400,6 +401,8 @@ IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
         return 0;
     }
 
+    if ( pAppData_Impl->pInitLinkList && pAppData_Impl->pInitLinkList->Count() )
+    {
     // Ersten Link aus der Liste holen und ausf"uhren
     Link *pLink = (*pAppData_Impl->pInitLinkList)[0];
     pLink->Call(0);
@@ -418,6 +421,7 @@ IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
 #if SUPD<613//MUSTINI
         pAppIniMgr->ResetLock();
 #endif
+    }
     }
     return 0;
 }
