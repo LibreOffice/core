@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:49:03 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 11:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,10 +506,15 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
                 BOOL bNew = !aNewOpts.GetDetectiveAuto();
+                SFX_REQUEST_ARG( rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO, sal_False );
+                if ( pAuto )
+                    bNew = pAuto->GetValue();
+
                 aNewOpts.SetDetectiveAuto( bNew );
                 SetAppOptions( aNewOpts );
                 if (pBindings)
                     pBindings->Invalidate( SID_DETECTIVE_AUTO );
+                rReq.AppendItem( SfxBoolItem( SID_DETECTIVE_AUTO, bNew ) );
                 rReq.Done();
             }
             break;
