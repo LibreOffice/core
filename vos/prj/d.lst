@@ -1,0 +1,18 @@
+mkdir: %_DEST%\inc%_EXT%\vos
+..\version.mk %_DEST%\inc%_EXT%\vos\version.mk
+..\inc\vos\*.h %_DEST%\inc%_EXT%\vos\*.h
+..\inc\vos\*.hxx %_DEST%\inc%_EXT%\vos\*.hxx
+..\inc\vos\*.inl %_DEST%\inc%_EXT%\vos\*.inl
+
+..\%__SRC%\lib\avos.lib %_DEST%\lib%_EXT%\avos.lib
+..\%__SRC%\lib\ivos.lib %_DEST%\lib%_EXT%\ivos.lib
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\slb\cppvos.lib %_DEST%\lib%_EXT%\xvos.lib
+
+..\%__SRC%\bin\vos*.dll %_DEST%\bin%_EXT%\vos*.dll
+..\%__SRC%\bin\proxy %_DEST%\bin%_EXT%\proxy
+..\%__SRC%\bin\proxy.exe %_DEST%\bin%_EXT%\proxy.exe
