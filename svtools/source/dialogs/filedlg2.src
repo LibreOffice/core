@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:09:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ String STR_FILEDLG_TYPE
     Text[ chinese_traditional ] = "ÀÉ®×Ãþ«¬(~T)";
     Text[ arabic ] = "äæÚ ÇáãáÝ";
     Text[ greek ] = "Ôýðïò áñ÷åßïõ";
-    Text[ korean ] = "ÆÄÀÏ  À¯Çü";
+    Text[ korean ] = "ÆÄÀÏ  À¯Çü(~T)";
     Text[ turkish ] = "Dosya ~tipi";
     Text[ language_user1 ] = " ";
 };
@@ -335,7 +335,7 @@ String STR_FILEDLG_DRIVES
     Text [ danish ] = "Drev" ;
     Text [ italian ] = "Drive" ;
     Text [ spanish ] = "~Unidades" ;
-    Text [ french ] = "~Lecteurs" ;
+    Text [ french ] = "~Unités" ;
     Text [ dutch ] = "~Stations" ;
     Text[ chinese_simplified ] = "Çý¶¯ÅÌ(~R)";
     Text[ russian ] = "Äèñêè";

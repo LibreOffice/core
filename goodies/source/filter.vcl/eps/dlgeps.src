@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:11:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,13 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ spanish ] = "~Previsualización (Tiff)";
         Text[ english_us ] = "Image ~preview (TIFF)";
-        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÀÀ(~TIFF)";
+        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÀÀ(TIFF)(~P)";
         Text[ russian ] = "Ïğîñìîòğ êàğòèíêè (TIFF)";
         Text[ polish ] = "Podgl¹d rysunku (Tiff)";
         Text[ japanese ] = "²Ò°¼Ş‚ÌÌßÚËŞ­° (Tiff)(~P)";
         Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ(TIFF) ";
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
-        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÀÀ(~TIFF)";
+        Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÀÀ(TIFF)(~P)";
         Text[ greek ] = "Ğñïåğéóêüğçóç åéêüíáò (TIFF)";
         Text[ korean ] = "±×¸² ¹Ì¸®º¸±â (TIFF)(~P)";
         Text[ chinese_traditional ] = "¹Ï¤ù¹wÄı(TIFF)(~P)";
@@ -178,7 +178,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ polish ] = "~Interchange (EPSI)";
         Text[ portuguese_brazilian ] = "~Interchange (EPSI)";
         Text[ japanese ] = "²İÀ°Áªİ¼Ş(EPS~I)";
-        Text[ korean ] = "ÀÎÅÍÃ¼ÀÎÁö (EPSI)(~I)";
+        Text[ korean ] = "ÀÎÅÍÃ¼ÀÎÁö (EPS~I)";
         Text[ chinese_simplified ] = "»¥»»(EPS~I)";
         Text[ chinese_traditional ] = "¤¬´«(EPS~I)";
         Text[ arabic ] = "~Interchange (EPSI)";
