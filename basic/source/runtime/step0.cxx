@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-09-26 09:01:52 $
+ *  last change: $Author: ab $ $Date: 2000-10-18 09:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,6 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
     }
 }
 
-
 // REDIM
 // TOS  = Variable fuer das Array
 // argv = Dimensionsangaben
@@ -421,14 +420,142 @@ void SbiRuntime::StepREDIM()
     StepDIM();
 }
 
+
+// Helper function for StepREDIMP
+void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMaxDimIndex,
+    short nActualDim, short* pActualIndices, short* pLowerBounds, short* pUpperBounds )
+{
+    short& ri = pActualIndices[nActualDim];
+    for( ri = pLowerBounds[nActualDim] ; ri <= pUpperBounds[nActualDim] ; ri++ )
+    {
+        if( nActualDim < nMaxDimIndex )
+        {
+            implCopyDimArray( pNewArray, pOldArray, nMaxDimIndex, nActualDim + 1,
+                pActualIndices, pLowerBounds, pUpperBounds );
+        }
+        else
+        {
+            SbxVariable* pSource = pOldArray->Get( pActualIndices );
+            SbxVariable* pDest   = pNewArray->Get( pActualIndices );
+            if( pSource && pDest )
+                *pDest = *pSource;
+        }
+    }
+}
+
 // REDIM PRESERVE
 // TOS  = Variable fuer das Array
 // argv = Dimensionsangaben
 
 void SbiRuntime::StepREDIMP()
 {
-    StarBASIC::FatalError( SbERR_NOT_IMPLEMENTED );
+    SbxVariableRef refVar = PopVar();
+    DimImpl( refVar );
+
+    // Now check, if we can copy from the old array
+    if( refRedimpArray.Is() )
+    {
+        SbxBase* pElemObj = refVar->GetObject();
+        SbxDimArray* pNewArray = PTR_CAST(SbxDimArray,pElemObj);
+        SbxDimArray* pOldArray = (SbxDimArray*)(SbxArray*)refRedimpArray;
+        if( pNewArray )
+        {
+            short nDimsNew = pNewArray->GetDims();
+            short nDimsOld = pOldArray->GetDims();
+            short nDims = nDimsNew;
+            BOOL bRangeError = FALSE;
+
+            // Store dims to use them for copying later
+            short* pLowerBounds = new short[nDims];
+            short* pUpperBounds = new short[nDims];
+            short* pActualIndices = new short[nDims];
+            if( nDimsOld != nDimsNew )
+            {
+                bRangeError = TRUE;
+            }
+            else
+            {
+                // Compare bounds
+                for( short i = 1 ; i <= nDims ; i++ )
+                {
+                    short lBoundNew, uBoundNew;
+                    short lBoundOld, uBoundOld;
+                    pNewArray->GetDim( i, lBoundNew, uBoundNew );
+                    pOldArray->GetDim( i, lBoundOld, uBoundOld );
+
+                    // All bounds but the last have to be the same
+                    if( i < nDims && ( lBoundNew != lBoundOld || uBoundNew != uBoundOld ) )
+                    {
+                        bRangeError = TRUE;
+                        break;
+                    }
+                    else
+                    {
+                        if( i == nDims )
+                        {
+                            lBoundNew = max( lBoundNew, lBoundOld );
+                            uBoundNew = min( uBoundNew, uBoundOld );
+                        }
+                        short j = i - 1;
+                        pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                        pUpperBounds[j] = uBoundNew;
+                    }
+                }
+            }
+
+            if( bRangeError )
+            {
+                StarBASIC::Error( SbERR_OUT_OF_RANGE );
+            }
+            else
+            {
+                // Copy data from old array by going recursively through all dimensions
+                // (It would be faster to work on the flat internal data array of an
+                // SbyArray but this solution is clearer and easier)
+                implCopyDimArray( pNewArray, pOldArray, nDims - 1,
+                    0, pActualIndices, pLowerBounds, pUpperBounds );
+            }
+            delete pUpperBounds;
+            delete pLowerBounds;
+            delete pActualIndices;
+            refRedimpArray = NULL;
+        }
+    }
+
+    //StarBASIC::FatalError( SbERR_NOT_IMPLEMENTED );
 }
+
+// REDIM_COPY
+// TOS  = Array-Variable, Reference to array is copied
+//        Variable is cleared as in ERASE
+
+void SbiRuntime::StepREDIMP_ERASE()
+{
+    SbxVariableRef refVar = PopVar();
+    SbxDataType eType = refVar->GetType();
+    if( eType & SbxARRAY )
+    {
+        SbxBase* pElemObj = refVar->GetObject();
+        SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+        if( pDimArray )
+        {
+            refRedimpArray = pDimArray;
+        }
+
+        // As in ERASE
+        USHORT nFlags = refVar->GetFlags();
+        refVar->ResetFlag( SBX_FIXED );
+        refVar->SetType( SbxDataType(eType & 0x0FFF) );
+        refVar->SetFlags( nFlags );
+        refVar->Clear();
+    }
+    else
+    if( refVar->IsFixed() )
+        refVar->Clear();
+    else
+        refVar->SetType( SbxEMPTY );
+}
+
 
 // Variable loeschen
 // TOS = Variable
