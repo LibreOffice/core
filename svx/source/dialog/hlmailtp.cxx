@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
+ *  last change: $Author: af $ $Date: 2002-07-16 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,9 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
                               rItemSet )
 {
-    // set HC bitmaps
+    // Set HC bitmaps and disable display of bitmap names.
     maBtAdrBook.SetModeImage( Image( ResId( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtAdrBook.EnableTextDisplay (FALSE);
 
     InitStdControls();
     FreeResource();

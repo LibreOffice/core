@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
+ *  last change: $Author: af $ $Date: 2002-07-16 12:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,11 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     mbMarkWndOpen           ( FALSE ),
     maStrStdDocURL          ()
 {
-    // set HC bitmaps
+    // Set HC bitmaps and display display of bitmap names.
     maBtBrowse.SetModeImage( Image( ResId( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.EnableTextDisplay (FALSE);
     maBtTarget.SetModeImage( Image( ResId( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtTarget.EnableTextDisplay (FALSE);
 
     InitStdControls();
     FreeResource();
