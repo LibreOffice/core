@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: mba $ $Date: 2000-10-05 09:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,11 +259,15 @@ void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch 
         {
             // all names fit if matchstring is empty
             INetURLObject aObj( aURL );
+            sal_Unicode aDelimiter;
+            aObj.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter );
             if ( bIsFolder )
                 aObj.setFinalSlash();
             String aMatch = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
             if ( nMatchLen )
                 aMatch.Erase( 0, nMatchLen );
+            if ( bIsFolder )
+                aMatch += aDelimiter;
             Insert( aMatch, aObj.GetMainURL(), TRUE );
         }
     }
