@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstatic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 16:03:41 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,5 +110,5 @@ inline ConstAsciiString::operator const ::rtl::OUString () const
     ConstAsciiString name(asciivalue, sizeof(asciivalue) - 1)
 
 
-#endif _FM_STATIC_HXX_
+#endif // _FM_STATIC_HXX_
 
