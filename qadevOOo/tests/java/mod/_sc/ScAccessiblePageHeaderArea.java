@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeaderArea.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-09-08 12:02:31 $
+ *  last change: $Date: 2004-07-23 10:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentContainerWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         try {
