@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:34:22 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
