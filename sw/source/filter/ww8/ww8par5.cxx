@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:58:30 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,8 +519,19 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         if( aVal.Len() > (MAX_FIELDLEN - 4))
             aVal.Erase( MAX_FIELDLEN - 4 );
     }
-    pRefStck->NewAttr(*pPaM->GetPoint(),
-        SwFltBookmark(BookmarkToWriter(*pName), aVal, pB->GetHandle(), 0));
+
+    //e.g. inserting bookmark around field result, so we need to put
+    //it around the entire writer field, as we don't have the seperation
+    //of field and field result of word, see #i16941#
+    SwPosition aStart(*pPaM->GetPoint());
+    if (!maFieldStack.empty())
+    {
+        const FieldEntry &rTest = maFieldStack.back();
+        aStart = rTest.maStartPos;
+    }
+
+    pRefStck->NewAttr(aStart, SwFltBookmark(BookmarkToWriter(*pName), aVal,
+        pB->GetHandle(), 0));
     return 0;
 }
 
@@ -1471,7 +1482,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
         switch( nRet )
         {
         case -2:
-            if( !sOrigName.Len() )
+            if (!sOrigName.Len())
                 sOrigName = aReadParam.GetResult();
             else if( !aQ.Len() )
                 aQ = aReadParam.GetResult();
@@ -1486,14 +1497,23 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 
     if( !sOrigName.Len() )
         return FLD_TAGIGN;  // macht ohne Textmarke keinen Sinn
-    if( !aDef.Len() )
-        aDef = GetFieldResult( pF );
 
-    long nNo = MapBookmarkVariables(pF,sOrigName,aDef);
+    String aResult(GetFieldResult(pF));
+
+    //#i24377#, munge Default Text into title as we have only one slot
+    //available for aResult and aDef otherwise
+    if (aDef.Len())
+    {
+        if (aQ.Len())
+            aQ.APPEND_CONST_ASC(" - ");
+        aQ.Append(aDef);
+    }
+
+    long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
         SwSetExpFieldType(&rDoc, sOrigName, GSE_STRING));
-    SwSetExpField aFld( pFT, aDef );
+    SwSetExpField aFld(pFT, aResult);
     aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
     aFld.SetInputFlag(true);
     aFld.SetPromptText( aQ );
@@ -2829,8 +2849,8 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
-    if( ( pF->nLRes < 3 ) )
-        return FLD_TAGIGN;      // Nur Stuss -> ignorieren
+    if (pF->nLRes < 3)
+        return FLD_TEXT;      // ignore (#i25440#)
 
     TOXTypes eTox;                              // Baue ToxBase zusammen
     switch( pF->nId )
