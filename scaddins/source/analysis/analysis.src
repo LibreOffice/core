@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:40:30 $
+ *  last change: $Author: kz $ $Date: 2001-11-06 11:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8740,7 +8740,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Settlement";
-            Text[ italian ] = "Liquidazione";
+            Text[ italian ] = "Data di acquisto del titolo";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Data rozliczenia papieru wartoœciowego.";
@@ -8794,7 +8794,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Maturity";
-            Text[ italian ] = "Scadenza";
+            Text[ italian ] = "Data di scadenza del titolo";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty papieru wartoœciowego.";
@@ -8821,7 +8821,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Price";
-            Text[ italian ] = "Prezzo";
+            Text[ italian ] = "Prezzo ";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -8848,7 +8848,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Es la cotización bursátil del valor.";
             Text[ finnish ] = "Price";
-            Text[ italian ] = "Prezzo";
+            Text[ italian ] = "Il prezzo del titolo per un valore nominale di 100 unità monetarie";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Cena papieru wartoœciowego.";
@@ -8875,7 +8875,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Redemption";
-            Text[ italian ] = "Rimborso";
+            Text[ italian ] = "Rimborso ";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -8902,7 +8902,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Redemption";
-            Text[ italian ] = "Rimborso";
+            Text[ italian ] = "Il valore di rimborso del titolo per un valore nominale di 100 unità monetarie.";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wartoœæ wykupu papieru wartoœciowego.";
@@ -9040,7 +9040,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Fecha de liquidación del valor.";
             Text[ finnish ] = "Settlement";
-            Text[ italian ] = "Liquidazione";
+            Text[ italian ] = "Data di acquisto del titolo";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Data rozliczenia papieru wartoœciowego.";
@@ -9067,7 +9067,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Maturity";
-            Text[ italian ] = "Scadenza";
+            Text[ italian ] = "Scadenza ";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -9094,7 +9094,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Fecha de vencimiento del valor.";
             Text[ finnish ] = "Maturity";
-            Text[ italian ] = "Scadenza";
+            Text[ italian ] = "Data di scadenza del titolo.";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty papieru wartoœciowego.";
@@ -9148,7 +9148,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Tasa de interés nominal anual.";
             Text[ finnish ] = "Coupon";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Interesse nominale annuale (cedola d'interessi).";
             Text[ danish ] = "Coupon";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Roczne oprocentowanie kuponu papieru wartoœciowego.";
@@ -9175,7 +9175,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Yield";
-            Text[ italian ] = "Rendimento";
+            Text[ italian ] = "Rendimento ";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -9202,7 +9202,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "El rendimiento anual del valor.";
             Text[ finnish ] = "Yield";
-            Text[ italian ] = "Rendimento";
+            Text[ italian ] = "Rendimento annuo del titolo.";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Roczna rentownoœæ papieru wartoœciowego.";
@@ -9256,7 +9256,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "El número de interés en cupones a pagar anualmente.";
             Text[ finnish ] = "Frequency";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Numero di pagamenti degli interessi all'anno (1, 2 oppure 4).";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Liczba kuponów p³atnych w ci¹gu roku.";
@@ -9339,7 +9339,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie le taux d'intérêt effectif annuel.";
             Text[ spanish ] = "Devuelve el interés efectivo anual.";
             Text[ finnish ] = "Returns the effectiv annual interest rate";
-            Text[ italian ] = "Restituisce il tasso d'interesse effettivo annuo.";
+            Text[ italian ] = "Restituisce il tasso d'interesse effettivo annuale.";
             Text[ danish ] = "Returns the effectiv annual interest rate";
             Text[ swedish ] = "Returnerar den årliga effektiva räntan.";
             Text[ polish ] = "Podaje wartoœæ efektywnej rocznej stopy oprocentowania.";
@@ -9550,7 +9550,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
             Text[ finnish ] = "NPER";
-            Text[ italian ] = "Numero rate";
+            Text[ italian ] = "Numero rate ";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
             Text[ polish ] = "Okresy";
@@ -9602,7 +9602,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "VA";
             Text[ spanish ] = "VA";
             Text[ finnish ] = "NA";
-            Text[ italian ] = "Valore attuale";
+            Text[ italian ] = "Valore attuale ";
             Text[ danish ] = "NV";
             Text[ swedish ] = "Nuvärde";
             Text[ polish ] = "WB";
@@ -9655,7 +9655,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo de inicio";
             Text[ finnish ] = "Startperiode";
-            Text[ italian ] = "Periodo iniziale";
+            Text[ italian ] = "Periodo iniziale ";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Okres pocz¹tk.";
@@ -9681,7 +9681,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo inicial";
             Text[ finnish ] = "Startperiode";
-            Text[ italian ] = "Periodo iniziale";
+            Text[ italian ] = "Il primo periodo di pagamento.";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Pierwszy okres w wyliczeniu.";
@@ -9707,7 +9707,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Endperiode";
-            Text[ italian ] = "Periodo finale";
+            Text[ italian ] = "Periodo finale ";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Okres koñc.";
@@ -9733,7 +9733,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Endperiode";
-            Text[ italian ] = "Periodo finale";
+            Text[ italian ] = "L'ultimo periodo di pagamento";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Ostatni okres w wyliczeniu.";
@@ -9759,7 +9759,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Type";
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Tyyppi";
-            Text[ italian ] = "Scadenza";
+            Text[ italian ] = "Tipo";
             Text[ danish ] = "F";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Rodzaj";
@@ -9866,7 +9866,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso d'interesse per periodo";
             Text[ danish ] = "RENTE";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa procentowa.";
@@ -9892,7 +9892,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
             Text[ finnish ] = "NPER";
-            Text[ italian ] = "Numero rate";
+            Text[ italian ] = "Numero rate ";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
             Text[ polish ] = "Okresy";
@@ -9944,7 +9944,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "VA";
             Text[ spanish ] = "VA";
             Text[ finnish ] = "NA";
-            Text[ italian ] = "Valore attuale";
+            Text[ italian ] = "Valore attuale ";
             Text[ danish ] = "NV";
             Text[ swedish ] = "Nuvärde";
             Text[ polish ] = "WB";
@@ -9996,7 +9996,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo inicial";
             Text[ finnish ] = "Startperiode";
-            Text[ italian ] = "Periodo iniziale";
+            Text[ italian ] = "Periodo iniziale ";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Okres pocz¹tk.";
@@ -10022,7 +10022,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo inicial";
             Text[ finnish ] = "Startperiode";
-            Text[ italian ] = "Periodo iniziale";
+            Text[ italian ] = "Definisce il primo periodo";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Pierwszy okres w wyliczeniu.";
@@ -10048,7 +10048,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Endperiode";
-            Text[ italian ] = "Periodo finale";
+            Text[ italian ] = "Periodo finale ";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Okres koñc.";
@@ -10074,7 +10074,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Endperiode";
-            Text[ italian ] = "Periodo finale";
+            Text[ italian ] = "Definisce l'ultimo periodo";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Ostatni okres w wyliczeniu.";
@@ -10100,7 +10100,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Type";
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Tyyppi";
-            Text[ italian ] = "Scadenza";
+            Text[ italian ] = "Tipo ";
             Text[ danish ] = "F";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Rodzaj";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
