@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:43:35 $
+ *  last change: $Author: vg $ $Date: 2002-04-12 13:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,8 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
 
                         if ( aImageId.getLength() > 0 )
                         {
-                            Image aImage = GetImage( Reference< ::com::sun::star::frame::XFrame >(), aImageId, FALSE, bIsHiContrastMode );
+                            Reference< ::com::sun::star::frame::XFrame > xFrame;
+                            Image aImage = GetImage( xFrame, aImageId, FALSE, bIsHiContrastMode );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
