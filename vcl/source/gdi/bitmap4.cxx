@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:13:27 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 18:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pPr
                             aGrey.SetIndex( 0 );
                         else
                         {
-                            const double fGrey = nDotL / sqrt( nNx * nNx + nNy * nNy + nZ2 );
+                            const double fGrey = nDotL / sqrt( (double)(nNx * nNx + nNy * nNy + nZ2) );
                             aGrey.SetIndex( (BYTE) VOS_BOUND( fGrey, 0, 255 ) );
                         }
 
