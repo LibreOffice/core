@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:05:53 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <hash_map>
 #include <string.h>
 
@@ -417,6 +416,12 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
     if ( pSession )
     {
+        // If there is a proxy server in between, it shall never use
+        // cached data. We always want 'up-to-date' data.
+        ne_buffer_concat( headers, "Pragma: no-cache", EOL, NULL );
+        // alternative, but understoud by HTTP 1.1 servers only:
+        // ne_buffer_concat( headers, "Cache-Control: max-age=0", EOL, NULL );
+
         const RequestDataMap * pRequestData
             = static_cast< const RequestDataMap* >(
                 pSession->getRequestData() );
@@ -433,7 +438,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                         = rtl::OUStringToOString( (*it).second.aContentType,
                                                   RTL_TEXTENCODING_UTF8 );
                     ne_buffer_concat( headers, "Content-Type: ",
-                                    aType.getStr(), EOL, NULL );
+                                      aType.getStr(), EOL, NULL );
                 }
             }
 
@@ -446,7 +451,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                         = rtl::OUStringToOString( (*it).second.aReferer,
                                                   RTL_TEXTENCODING_UTF8 );
                     ne_buffer_concat( headers, "Referer: ",
-                                    aReferer.getStr(), EOL, NULL );
+                                      aReferer.getStr(), EOL, NULL );
                 }
             }
         }
