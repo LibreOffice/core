@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:44:09 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 16:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1846,7 +1846,7 @@ sal_Bool SfxMedium::IsTemporary() const
 sal_Bool SfxMedium::Exists( sal_Bool bForceSession )
 {
     DBG_ERROR( "Not implemented!" );
-    return sal_False;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
