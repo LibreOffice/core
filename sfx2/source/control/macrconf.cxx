@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:31:14 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,8 +478,14 @@ SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo)
     }
 
     rInfo.bAppBasic = (sal_Bool) nAppBasic;
-    rInfo.nSlotId = SFX_APP()->GetMacroConfig()->GetSlotId(&rInfo);
     return rStream;
+}
+
+int SfxMacroInfo::Load( SvStream& rStream )
+{
+    rStream >> (*this);
+    nSlotId = SFX_APP()->GetMacroConfig()->GetSlotId(this);
+    return 0;
 }
 
 //==========================================================================
