@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:10:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ namespace dbaui
             case DST_LDAP:
             case DST_CALC:
             case DST_MOZILLA:
+            case DST_THUNDERBIRD:
             case DST_EVOLUTION:
             case DST_OUTLOOK    :
             case DST_OUTLOOKEXP:
