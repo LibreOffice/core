@@ -40,6 +40,24 @@
 
   <component-description>
     <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLExporter</name>
+    <description>
+      This component exports a chart object into a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
     <name>com.sun.star.comp.Impress.XMLStylesExporter</name>
     <description>
       This component exports the styles of a presentation document into a single XML document stream.
@@ -76,6 +94,24 @@
 
   <component-description>
     <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLStylesExporter</name>
+    <description>
+      This component exports the styles of a chart object into a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
     <name>com.sun.star.comp.Impress.XMLMetaExporter</name>
     <description>
       This component exports the meta information of a presentation document into a single XML document stream.
@@ -97,6 +133,24 @@
     <name>com.sun.star.comp.Draw.XMLMetaExporter</name>
     <description>
       This component exports the meta information of a drawing document into a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLMetaExporter</name>
+    <description>
+      This component exports the meta information of a chart object into a single XML document stream.
     </description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
@@ -184,6 +238,24 @@
 
   <component-description>
     <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLContentExporter</name>
+    <description>
+      This component exports the content of a chart object into a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
     <name>com.sun.star.comp.Impress.XMLImporter</name>
     <description>
       This component imports a presentation document from a single XML document stream.
@@ -205,6 +277,24 @@
     <name>com.sun.star.comp.Draw.XMLImporter</name>
     <description>
       This component imports a drawing document from a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLImporter</name>
+    <description>
+      This component imports a chart object from a single XML document stream.
     </description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
@@ -256,6 +346,24 @@
 
   <component-description>
     <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLStylesImporter</name>
+    <description>
+      This component imports the styles of a chart object from a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
     <name>com.sun.star.comp.Impress.XMLMetaImporter</name>
     <description>
       This component imports the meta information of a presentation document from a single XML document stream.
@@ -277,6 +385,24 @@
     <name>com.sun.star.comp.Draw.XMLMetaImporter</name>
     <description>
       This component imports the meta information of a drawing document from a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLMetaImporter</name>
+    <description>
+      This component imports the meta information of a chart object from a single XML document stream.
     </description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
@@ -349,6 +475,24 @@
     <name>com.sun.star.comp.Draw.XMLContentImporter</name>
     <description>
       This component imports the content of a drawing document from a single XML document stream.
+    </description>
+    <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+    <language>c++</language>
+    <status value="beta"/>
+    <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    <reference-docu xlink:href="http://xml.openoffice.org/"
+        xlink:title="general OpenOffice.org xml information" />
+    <reference-docu xlink:title="XML File Format Specification (draft)"
+        xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
+    <reference-docu xlink:href="http://xml.openoffice.org/filter/"
+        xlink:title="Guide to implement XML-based filters in OpenOffice.org" />
+  </component-description>
+
+  <component-description>
+    <author>xmloff development team</author>
+    <name>com.sun.star.comp.Chart.XMLContentImporter</name>
+    <description>
+      This component imports the content of a chart object from a single XML document stream.
     </description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
