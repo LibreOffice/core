@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 10:05:02 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,15 +267,6 @@ void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeL
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLShapeContext::EndElement()
-{
-    SvXMLImportContext::EndElement();
-
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 {
     if(xShape.is())
@@ -439,6 +430,8 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             }
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -536,6 +529,8 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             }
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,6 +623,8 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             xShape->setSize(aSize);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -743,6 +740,8 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             }
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -907,6 +906,8 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             }
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1047,6 +1048,8 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             }
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1131,6 +1134,8 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             xShape->setSize(aSize);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1172,6 +1177,8 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             SdXMLShapeContext::StartElement(xAttrList);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1213,6 +1220,8 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             SdXMLShapeContext::StartElement(xAttrList);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1297,6 +1306,8 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             xShape->setSize(aSize);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1338,6 +1349,8 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             SdXMLShapeContext::StartElement(xAttrList);
         }
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1445,6 +1458,8 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1568,14 +1583,14 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 {
     if( mpChartContext )
         mpChartContext->StartElement( xAttrList );
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 void SdXMLChartShapeContext::EndElement()
 {
     if( mpChartContext )
         mpChartContext->EndElement();
-
-    SdXMLShapeContext::EndElement();
 }
 
 void SdXMLChartShapeContext::Characters( const ::rtl::OUString& rChars )
