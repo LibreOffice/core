@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-01 09:08:09 $
+ *  last change: $Author: nf $ $Date: 2001-08-29 11:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,8 @@ int Export::Execute( int nToken, char * pToken )
                 }
             }
             else {
+                if ( bDefine )
+                    bNextMustBeDefineEOL = TRUE;
                 if ( !nListLevel ) {
                     if ( bMergeMode )
                         MergeRest( pResData, MERGE_MODE_LIST );
@@ -2332,7 +2334,10 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, nLang, TRUE );
                             if ( bText && sText.Len()) {
                                 if ( nIdx == 1 ) {
-                                    ByteString sHead( sSpace );
+                                    ByteString sHead;
+                                    if ( bNextMustBeDefineEOL )
+                                        sHead = "\\\n\t";
+                                    sHead += sSpace;
                                     switch ( nT ) {
                                         case LIST_STRING : sHead += "StringList "; break;
                                         case LIST_FILTER : sHead += "FilterList "; break;
@@ -2344,7 +2349,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                         sHead += LangName[ nLang ];
                                         sHead += " ] ";
                                     }
-                                    if ( bDefine ) {
+                                    if ( bDefine || bNextMustBeDefineEOL ) {
                                         sHead += "= \\\n";
                                         sHead += sSpace;
                                         sHead += "\t{\\\n\t\t";
@@ -2390,7 +2395,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
 
                                 ByteString sText( "\t" );
                                 sText += sLine;
-                                if ( bDefine )
+                                if ( bDefine || bNextMustBeDefineEOL )
                                     sText += " ;\\\n";
                                 else
                                     sText += " ;\n";
@@ -2405,7 +2410,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         }
                         if ( nIdx > 1 ) {
                             ByteString sFooter( sSpace.Copy( 1 ));
-                            if ( !bDefine )
+                            if ( bNextMustBeDefineEOL )
+                                sFooter += "};";
+                            else if ( !bDefine )
                                 sFooter += "};\n\t";
                             else
                                 sFooter += "\n\n";
@@ -2451,6 +2458,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 ByteString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
+                if ( bDefine )
+                    sText += "\\";
                 sText += "\n";
                 for ( USHORT i = 0; i < nLevel; i++ )
                     sText += "\t";
