@@ -1,4 +1,4 @@
-ac  accessibility	: offuh unoil
+ac  accessibility	: offuh unoil NULL
 ac	accessibility                                         	usr1	-	all	ac_mkout NULL
 ac	accessibility\idl\org\openoffice\accessibility\internal	nmake	-	all	ac_idlc NULL
 ac	accessibility\idl\                                    	nmake	-	all	ac_unomakers ac_idlc NULL
