@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 14:56:55 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 15:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,9 +197,9 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
 
-//#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
-//#include <com/sun/star/util/XUpdatable.hpp>
-//#endif
+#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
+#include <com/sun/star/util/XUpdatable.hpp>
+#endif
 
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
@@ -810,7 +810,7 @@ void XMLTextFieldImportContext::ForceUpdate(
     const Reference<XPropertySet> & rPropertySet)
 {
     // force update
-/*  Reference<XUpdatable> xUpdate(rPropertySet, UNO_QUERY);
+    Reference<XUpdatable> xUpdate(rPropertySet, UNO_QUERY);
     if (xUpdate.is())
     {
         xUpdate->update();
@@ -818,7 +818,7 @@ void XMLTextFieldImportContext::ForceUpdate(
     else
     {
         DBG_ERROR("Expected XUpdatable support!");
-    }*/
+    }
 }
 
 
