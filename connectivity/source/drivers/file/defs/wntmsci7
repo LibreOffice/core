@@ -2797,3 +2797,8 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?deallocate@?$_STLP_alloc_proxy@PAV?$vector@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@V?$allocator@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@@_STL@@@_STL@@V12@V?$allocator@V?$vector@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@V?$allocator@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@@_STL@@@_STL@@@2@@_STL@@QAEXPAV?$vector@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@V?$allocator@V?$ORef@VORowSetValueDecorator@connectivity@@@vos@@@_STL@@@2@I@Z
 ?isCaseSensitiveParentFolder@?%O:\SRC651\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1934119243@@YAEABVString@@0@Z
 ?__copy@_STL@@YAPAJPAJ00ABUrandom_access_iterator_tag@1@PAH@Z
+??_C@_0CD@OPMI@o?3?2SRC652?2wntmsci7?2inc?2vos?1ref?4i@
+??_C@_0DF@CLGF@o?3?2SRC652?2wntmsci7?2inc?2com?1sun?1s@
+?isCaseSensitiveParentFolder@?%O:\SRC652\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1544417768@@YAEABVString@@0@Z
+??_C@_0DB@LFBC@o?3?2SRC652?2wntmsci7?2inc?2comphelpe@
+??_C@_0DG@LOJH@o?3?2SRC652?2wntmsci7?2inc?2comphelpe@
