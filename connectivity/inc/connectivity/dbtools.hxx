@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,20 +65,14 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
-//#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-//#include <com/sun/star/sdbc/XConnection.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-//#include <com/sun/star/sdbc/XRowSet.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-//#include <com/sun/star/sdb/SQLContext.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -522,12 +516,26 @@ namespace dbtools
             The table.
         @param  _rName
             The name of the column.
+        @param  _bCase
+            Is the column case sensitive.
+        @param  _bQueryForInfo
+            If <TRUE/> the autoincrement and currency field will be read from the meta data, otherwise the following parameters will be used instead
+        @param  _bIsAutoIncrement
+            <TRUE/> if the column is an autoincrement.
+        @param  _bIsCurrency
+            <TRUE/> if the column is a currency field.
+        @param  _nDataType
+            The data type of the column.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
             createSDBCXColumn(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                 const ::rtl::OUString& _rName,
-                                sal_Bool _bCase);
+                                sal_Bool _bCase,
+                                sal_Bool _bQueryForInfo = sal_True,
+                                sal_Bool _bIsAutoIncrement = sal_False,
+                                sal_Bool _bIsCurrency = sal_False,
+                                sal_Int32 _nDataType = com::sun::star::sdbc::DataType::OTHER);
 
     /** tries to locate the corresponding DataDefinitionSupplier for the given url and connection
         @param  _rsUrl
@@ -558,6 +566,25 @@ namespace dbtools
                                  const ::rtl::OUString& _sCatalog,
                                  const ::rtl::OUString& _sSchema,
                                  const ::rtl::OUString& _sTable);
+
+    /** collects the information about auto increment, currency and data type for the given column name.
+        The column must be quoted, * is also valid.
+        @param  _xConnection
+            The connection.
+        @param  _sComposedTableName
+            The quoted table name. ccc.sss.ttt
+        @param  _sName
+            The name of the column, or *
+        @param  _rInfo
+            The information about the column(s).
+    */
+    typedef ::std::pair<sal_Bool,sal_Bool> TBoolPair;
+    typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
+    typedef ::std::multimap< ::rtl::OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
+    void collectColumnInformation(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                    const ::rtl::OUString& _sComposedTableName,
+                                    const ::rtl::OUString& _rName,
+                                    ColumnInformationMap& _rInfo);
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
