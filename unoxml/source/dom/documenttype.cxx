@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documenttype.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace DOM
     }
 
     /**
-    A NamedNodeMap containing the general entities, both external and 
+    A NamedNodeMap containing the general entities, both external and
     internal, declared in the DTD.
     */
     Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException)
@@ -98,7 +98,7 @@ namespace DOM
     }
 
     /**
-    The name of DTD; i.e., the name immediately following the DOCTYPE 
+    The name of DTD; i.e., the name immediately following the DOCTYPE
     keyword.
     */
     OUString SAL_CALL CDocumentType::getName() throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: domimplementation.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: domimplementation.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ namespace DOM
     Creates a DOM Document object of the specified type with its document element.
     */
     Reference <XDocument > SAL_CALL CDOMImplementation::createDocument(
-           const OUString& namespaceURI, 
-           const OUString& qualifiedName, 
+           const OUString& namespaceURI,
+           const OUString& qualifiedName,
            const Reference< XDocumentType >& doctype)
         throw (RuntimeException)
     {
