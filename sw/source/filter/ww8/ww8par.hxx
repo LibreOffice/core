@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:59 $
+ *  last change: $Author: cmc $ $Date: 2002-08-21 09:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,36 +409,36 @@ struct WW8AuthorInfo
 //-----------------------------------------
 class WW8ReaderSave
 {
-    SwPosition aTmpPos;
-    SwWW8FltControlStack* pOldStck;
-    SwWW8FltAnchorStack* pOldAnchorStck;
+private:
+    WW8PLCFxSaveAll maPLCFxSave;
+    SwPosition maTmpPos;
+    SwWW8FltControlStack* mpOldStck;
+    SwWW8FltAnchorStack* mpOldAnchorStck;
     wwRedlineStack *mpOldRedlines;
-    WW8PLCFxSaveAll aPLCFxSave;
-    WW8PLCFMan* pOldPlcxMan;
-
-    WW8FlyPara* pWFlyPara;
-    WW8SwFlyPara* pSFlyPara;
-    WW8TabDesc* pTableDesc;
-    int nTable;
-    USHORT nAktColl;
-    sal_Unicode cSymbol;
-    BYTE bIgnoreText    : 1;
-    BYTE bDontCreateSep : 1;
-    BYTE bSymbol        : 1;
-    BYTE bHdFtFtnEdn    : 1;
-    BYTE bApo           : 1;
-    BYTE bTxbxFlySection: 1;
-    BYTE bTableInApo    : 1;
-    BYTE bAnl           : 1;
-    BYTE bInHyperlink : 1;
-    BYTE bPgSecBreak : 1;
-    BYTE bVerticalEnviron : 1;
-    BYTE bWasParaEnd : 1;
-    BYTE bHasBorder : 1;
+    WW8PLCFMan* mpOldPlcxMan;
+    WW8FlyPara* mpWFlyPara;
+    WW8SwFlyPara* mpSFlyPara;
+    WW8TabDesc* mpTableDesc;
+    int mnTable;
+    USHORT mnAktColl;
+    sal_Unicode mcSymbol;
+    bool mbIgnoreText;
+    bool mbDontCreateSep;
+    bool mbSymbol;
+    bool mbHdFtFtnEdn;
+    bool mbApo;
+    bool mbTxbxFlySection;
+    bool mbTableInApo;
+    bool mbAnl;
+    bool mbInHyperlink;
+    bool mbPgSecBreak;
+    bool mbVerticalEnviron;
+    bool mbWasParaEnd;
+    bool mbHasBorder;
 public:
-    WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
-    void Restore( SwWW8ImplReader* pRdr );
-    const SwPosition &GetStartPos() const { return aTmpPos; }
+    WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
+    void Restore(SwWW8ImplReader* pRdr);
+    const SwPosition &GetStartPos() const { return maTmpPos; }
 };
 
 enum eF_ResT{ FLD_OK, FLD_TEXT, FLD_TAGIGN, FLD_TAGTXT, FLD_READ_FSPA };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:00 $
+ *  last change: $Author: cmc $ $Date: 2002-08-21 09:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,13 +243,13 @@ friend class SwWW8ImplReader;
 
     BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
-    BYTE bTxtColChanged : 1;
-    BYTE bFontChanged   : 1;    // For Simulating Default-Font
-    BYTE bCJKFontChanged: 1;    // For Simulating Default-CJK Font
-    BYTE bCTLFontChanged: 1;    // For Simulating Default-CTL Font
-    BYTE bFSizeChanged  : 1;    // For Simulating Default-FontSize
-    BYTE bFCTLSizeChanged  : 1; // For Simulating Default-CTL FontSize
-    BYTE bWidowsChanged : 1;    // For Simulating Default-Widows / Orphans
+    bool bTxtColChanged;
+    bool bFontChanged;      // For Simulating Default-Font
+    bool bCJKFontChanged;   // For Simulating Default-CJK Font
+    bool bCTLFontChanged;   // For Simulating Default-CTL Font
+    bool bFSizeChanged;     // For Simulating Default-FontSize
+    bool bFCTLSizeChanged;  // For Simulating Default-CTL FontSize
+    bool bWidowsChanged;    // For Simulating Default-Widows / Orphans
 
     void ImportSprms(long nPosFc, short nLen, bool bPap);
     void ImportGrupx(short nLen, bool bPara, bool bOdd);

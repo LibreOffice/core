@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:59 $
+ *  last change: $Author: cmc $ $Date: 2002-08-21 09:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,31 +869,21 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 //      Fuss- und Endnoten
 //-----------------------------------------
 
-WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
-    : aTmpPos(*pRdr->pPaM->GetPoint())
-{
-    pWFlyPara       = pRdr->pWFlyPara;
-    pSFlyPara       = pRdr->pSFlyPara;
-    pTableDesc      = pRdr->pTableDesc;
-    cSymbol         = pRdr->cSymbol;
-    bSymbol         = pRdr->bSymbol;
-    bIgnoreText     = pRdr->bIgnoreText;
-    bDontCreateSep  = pRdr->bDontCreateSep;
-    bHdFtFtnEdn     = pRdr->bHdFtFtnEdn;
-    bApo            = pRdr->bApo;
-    bTxbxFlySection = pRdr->bTxbxFlySection;
-    nTable          = pRdr->nTable ;
-    bTableInApo     = pRdr->bTableInApo;
-    bAnl            = pRdr->bAnl;
-    bInHyperlink    = pRdr->bInHyperlink;
-    bPgSecBreak     = pRdr->bPgSecBreak;
-    bWasParaEnd = pRdr->bWasParaEnd;
-    bHasBorder = pRdr->bHasBorder;
-    nAktColl        = pRdr->nAktColl;
-
+WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
+    : maTmpPos(*pRdr->pPaM->GetPoint()), mpOldStck(pRdr->pCtrlStck),
+    mpOldAnchorStck(pRdr->pAnchorStck), mpOldRedlines(pRdr->mpRedlineStack),
+    mpOldPlcxMan(pRdr->pPlcxMan), mpWFlyPara(pRdr->pWFlyPara),
+    mpSFlyPara(pRdr->pSFlyPara), mpTableDesc(pRdr->pTableDesc),
+    mnTable(pRdr->nTable), mnAktColl(pRdr->nAktColl), mcSymbol(pRdr->cSymbol),
+    mbIgnoreText(pRdr->bIgnoreText), mbDontCreateSep(pRdr->bDontCreateSep),
+    mbSymbol(pRdr->bSymbol), mbHdFtFtnEdn(pRdr->bHdFtFtnEdn), mbApo(pRdr->bApo),
+    mbTxbxFlySection(pRdr->bTxbxFlySection), mbTableInApo(pRdr->bTableInApo),
+    mbAnl(pRdr->bAnl), mbInHyperlink(pRdr->bInHyperlink),
+    mbPgSecBreak(pRdr->bPgSecBreak),
     //Honestly should inherit this from parent environment so don't reset this
-    bVerticalEnviron = pRdr->bVerticalEnviron;
-
+    mbVerticalEnviron(pRdr->bVerticalEnviron),
+    mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder)
+{
     pRdr->bHdFtFtnEdn = true;
     pRdr->bApo = pRdr->bTxbxFlySection = pRdr->bTableInApo = pRdr->bAnl =
         pRdr->bPgSecBreak = pRdr->bWasParaEnd = pRdr->bHasBorder = false;
@@ -903,72 +893,67 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pTableDesc = 0;
     pRdr->nAktColl = 0;
 
-    pOldStck = pRdr->pCtrlStck;
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
 
-    mpOldRedlines = pRdr->mpRedlineStack;
     pRdr->mpRedlineStack = new wwRedlineStack(pRdr->rDoc);
 
-    pOldAnchorStck = pRdr->pAnchorStck;
     pRdr->pAnchorStck = new SwWW8FltAnchorStack(&pRdr->rDoc, pRdr->nFieldFlags);
 
     // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
     // PLCFx Manager natuerlich auf die gleichen FKPs zugreift, wie der alte
     // und deren Start-End-Positionen veraendert...
-    pRdr->pPlcxMan->SaveAllPLCFx( aPLCFxSave );
-
-    pOldPlcxMan = pRdr->pPlcxMan;
+    pRdr->pPlcxMan->SaveAllPLCFx(maPLCFxSave);
 
     if (nStartCp != -1)
     {
-        pRdr->pPlcxMan = new WW8PLCFMan(pRdr->pSBase, pOldPlcxMan->GetManType(),
-            nStartCp );
+        pRdr->pPlcxMan = new WW8PLCFMan(pRdr->pSBase,
+            mpOldPlcxMan->GetManType(), nStartCp);
     }
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 {
-    pRdr->pWFlyPara     = pWFlyPara;
-    pRdr->pSFlyPara     = pSFlyPara;
-    pRdr->pTableDesc    = pTableDesc;
-    pRdr->cSymbol       = cSymbol;
-    pRdr->bSymbol       = bSymbol;
-    pRdr->bIgnoreText   = bIgnoreText;
-    pRdr->bDontCreateSep= bDontCreateSep;
-    pRdr->bHdFtFtnEdn   = bHdFtFtnEdn;
-    pRdr->bApo          = bApo;
-    pRdr->bTxbxFlySection=bTxbxFlySection;
-    pRdr->nTable        = nTable;
-    pRdr->bTableInApo   = bTableInApo;
-    pRdr->bAnl          = bAnl;
-    pRdr->bInHyperlink  = bInHyperlink;
-    pRdr->bVerticalEnviron = bVerticalEnviron;
-    pRdr->bWasParaEnd = bWasParaEnd;
-    pRdr->bPgSecBreak   = bPgSecBreak;
-    pRdr->nAktColl      = nAktColl;
-    pRdr->bHasBorder = bHasBorder;
+    pRdr->pWFlyPara = mpWFlyPara;
+    pRdr->pSFlyPara = mpSFlyPara;
+    pRdr->pTableDesc = mpTableDesc;
+    pRdr->cSymbol = mcSymbol;
+    pRdr->bSymbol = mbSymbol;
+    pRdr->bIgnoreText = mbIgnoreText;
+    pRdr->bDontCreateSep = mbDontCreateSep;
+    pRdr->bHdFtFtnEdn = mbHdFtFtnEdn;
+    pRdr->bApo = mbApo;
+    pRdr->bTxbxFlySection = mbTxbxFlySection;
+    pRdr->nTable = mnTable;
+    pRdr->bTableInApo = mbTableInApo;
+    pRdr->bAnl = mbAnl;
+    pRdr->bInHyperlink = mbInHyperlink;
+    pRdr->bVerticalEnviron = mbVerticalEnviron;
+    pRdr->bWasParaEnd = mbWasParaEnd;
+    pRdr->bPgSecBreak = mbPgSecBreak;
+    pRdr->nAktColl = mnAktColl;
+    pRdr->bHasBorder = mbHasBorder;
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
     pRdr->DeleteCtrlStk();
-    pRdr->pCtrlStck = pOldStck;
+    pRdr->pCtrlStck = mpOldStck;
 
     pRdr->mpRedlineStack->closeall(*pRdr->pPaM->GetPoint());
     delete pRdr->mpRedlineStack;
     pRdr->mpRedlineStack = mpOldRedlines;
 
     pRdr->DeleteAnchorStk();
-    pRdr->pAnchorStck = pOldAnchorStck;
+    pRdr->pAnchorStck = mpOldAnchorStck;
 
-    *pRdr->pPaM->GetPoint() = aTmpPos;
+    *pRdr->pPaM->GetPoint() = maTmpPos;
 
-    if (pOldPlcxMan != pRdr->pPlcxMan)
+    if (mpOldPlcxMan != pRdr->pPlcxMan)
     {
         delete pRdr->pPlcxMan;
-        pRdr->pPlcxMan = pOldPlcxMan;
+        pRdr->pPlcxMan = mpOldPlcxMan;
     }
-    pRdr->pPlcxMan->RestoreAllPLCFx( aPLCFxSave );
+    pRdr->pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
