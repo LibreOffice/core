@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:14:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Sideskift mellem grupper" ;
         Text [ ENGLISH_US ] = "~Page break between groups" ;
         Text [ SPANISH ] = "~Nueva página entre grupos" ;
-        Text [ FINNISH ] = "Sivunvaihto joka ~ryhmõssõ" ;
+        Text [ FINNISH ] = "~Sivunvaihto ryhmien välillä" ;
         Text [ FRENCH ] = "Saut de page entre les grou~pes" ;
         Text [ ITALIAN ] = "Interruzione di pagina ~per ogni cambio di gruppo" ;
         Text [ DUTCH ] = "~Nieuwe pagina voor elke groep" ;
@@ -108,7 +108,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Forskel på store og små bogstaver" ;
         Text [ ENGLISH_US ] = "~Case sensitive" ;
         Text [ SPANISH ] = "~Mayúsculas/minúsculas" ;
-        Text [ FINNISH ] = "~Kirjainkoko vaikuttaa" ;
+        Text [ FINNISH ] = "~Kirjainkoon erottelu" ;
         Text [ FRENCH ] = "~Respecter la casse" ;
         Text [ ITALIAN ] = "~Maiuscole/minuscole" ;
         Text [ DUTCH ] = "~Hoofdletters/kleine letters belangrijk" ;
@@ -138,7 +138,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Sorter området først efter grupper" ;
         Text [ ENGLISH_US ] = "Pre-~sort area according to groups" ;
         Text [ SPANISH ] = "Ordenar primero e~l área por grupos" ;
-        Text [ FINNISH ] = "~Lajittelualue" ;
+        Text [ FINNISH ] = "Alueen esi~lajittelu ryhmien mukaan" ;
         Text [ FRENCH ] = "~Trier au préalable la plage selon les groupes" ;
         Text [ ITALIAN ] = "Ordinare prima l'area a gruppi" ;
         Text [ DUTCH ] = "~Bereik eerst op groepen sorteren" ;
@@ -169,7 +169,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Inkluder formater" ;
         Text [ ENGLISH_US ] = "I~nclude formats" ;
         Text [ SPANISH ] = "~Incluir formatos" ;
-        Text [ FINNISH ] = "Sisõllytõ ~muodot" ;
+        Text [ FINNISH ] = "Si~sällytä muodot" ;
         Text [ FRENCH ] = "Inclure ~formats" ;
         Text [ ITALIAN ] = "Includi ~formati" ;
         Text [ DUTCH ] = "Op~maak opnemen" ;
@@ -199,7 +199,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Brugerdefineret sorteringsrækkefølge" ;
         Text [ ENGLISH_US ] = "C~ustom sort order" ;
         Text [ SPANISH ] = "~Orden de clasificación definido por el usuario" ;
-        Text [ FINNISH ] = "Mukautettu laj~ittelujõrjestys" ;
+        Text [ FINNISH ] = "M~ukautettu lajittelujärjestys" ;
         Text [ FRENCH ] = "Ordre de tri ~utilisateur" ;
         Text [ ITALIAN ] = "Sequenza d'ordine ~definita dall'utente" ;
         Text [ DUTCH ] = "~Gebruikergedefinieerde sorteervolgorde" ;
@@ -267,7 +267,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Faldende" ;
         Text [ ENGLISH_US ] = "D~escending" ;
         Text [ SPANISH ] = "~Descendente" ;
-        Text [ FINNISH ] = "~Laskeva" ;
+        Text [ FINNISH ] = "L~askeva" ;
         Text [ FRENCH ] = "~Décroissant" ;
         Text [ ITALIAN ] = "Descrescente" ;
         Text [ DUTCH ] = "~Aflopend" ;
@@ -297,7 +297,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ DANISH ] = "Sorter" ;
         Text [ ENGLISH_US ] = "Sort" ;
         Text [ SPANISH ] = "Ordenar" ;
-        Text [ FINNISH ] = "Lajittelu" ;
+        Text [ FINNISH ] = "Lajittele" ;
         Text [ FRENCH ] = "Trier" ;
         Text [ ITALIAN ] = "Ordina" ;
         Text [ DUTCH ] = "Sorteren" ;
@@ -337,7 +337,7 @@ TabPage RID_SUBTBASE
         Text [ italian ] = "~Raggruppa per" ;
         Text [ portuguese_brazilian ] = "~Agrupar por" ;
         Text [ portuguese ] = "~Agrupar por" ;
-        Text [ finnish ] = "Ry~hmitä" ;
+        Text [ finnish ] = "~Ryhmittele" ;
         Text [ danish ] = "~Grupper efter" ;
         Text [ french ] = "~Grouper selon" ;
         Text [ swedish ] = "~Gruppera efter" ;
@@ -376,7 +376,7 @@ TabPage RID_SUBTBASE
         Text [ italian ] = "Calcola sub~totali per" ;
         Text [ portuguese_brazilian ] = "Calcular sub~totais em" ;
         Text [ portuguese ] = "Calcular sub~totais para" ;
-        Text [ finnish ] = "Laske ~välisummat" ;
+        Text [ finnish ] = "~Laske välisummat" ;
         Text [ danish ] = "Beregn subtotaler for" ;
         Text [ french ] = "~Calculer les sous-totaux pour" ;
         Text [ swedish ] = "Beräkna delresul~tat för" ;
@@ -413,7 +413,7 @@ TabPage RID_SUBTBASE
         Text [ italian ] = "Funz~ione" ;
         Text [ portuguese_brazilian ] = "Funç~ao" ;
         Text [ portuguese ] = "Usar fu~nção" ;
-        Text [ finnish ] = "~Funktio" ;
+        Text [ finnish ] = "Käytä ~funktiota" ;
         Text [ danish ] = "Beregningsfunktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Beräkningsregler" ;
@@ -526,17 +526,17 @@ TabPage RID_SUBTBASE
         };
         StringList [ finnish ] =
         {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+            < "Sum" ; Default ; > ;
+            < "Lukumäärä" ; Default ; > ;
+            < "Keskiarvo" ; Default ; > ;
+            < "Enint" ; Default ; > ;
+            < "Väh" ; Default ; > ;
+            < "Tuote" ; Default ; > ;
+            < "Lukumäärä (vain numerot)" ; Default ; > ;
+            < "StDev (vakiopoikkeama, Otos)" ; Default ; > ;
+            < "StDevP (vakiopoikkeama, populaatio)" ; Default ; > ;
+            < "Var (Otos)" ; Default ; > ;
+            < "VarP (populaatio)" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -831,7 +831,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ italian ] = "1. Gruppo" ;
                 Text [ portuguese_brazilian ] = "1. Grupo" ;
                 Text [ portuguese ] = "1° Grupo" ;
-                Text [ finnish ] = "1. ryhmä" ;
+                Text [ finnish ] = "Ensimmäinen ryhmä" ;
                 Text [ danish ] = "1. gruppe" ;
                 Text [ french ] = "1er groupe" ;
                 Text [ swedish ] = "Grupp 1" ;
@@ -859,7 +859,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ italian ] = "2. Gruppo" ;
                 Text [ portuguese_brazilian ] = "2. Grupo" ;
                 Text [ portuguese ] = "2° Grupo" ;
-                Text [ finnish ] = "2. ryhmä" ;
+                Text [ finnish ] = "Toinen ryhmä" ;
                 Text [ danish ] = "2. gruppe" ;
                 Text [ french ] = "2ème groupe" ;
                 Text [ swedish ] = "Grupp 2" ;
@@ -887,7 +887,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ italian ] = "3. Gruppo" ;
                 Text [ portuguese_brazilian ] = "3. Grupo" ;
                 Text [ portuguese ] = "3° Grupo" ;
-                Text [ finnish ] = "3. ryhmä" ;
+                Text [ finnish ] = "Kolmas ryhmä" ;
                 Text [ danish ] = "3. gruppe" ;
                 Text [ french ] = "3ème groupe" ;
                 Text [ swedish ] = "Grupp 3" ;
@@ -915,7 +915,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ italian ] = "Opzioni" ;
                 Text [ portuguese_brazilian ] = "Opções" ;
                 Text [ portuguese ] = "Opções" ;
-                Text [ finnish ] = "Määritykset" ;
+                Text [ finnish ] = "Asetukset" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ french ] = "Options" ;
                 Text [ swedish ] = "Alternativ" ;
