@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:32:36 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -15363,7 +15363,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text = "Zahl dessen Absolutwert berechnet werden soll." ;
+            Text = "Zahl deren Absolutwert berechnet werden soll." ;
             Text [ english ] = "is the real number of which you want the absolute value." ;
             Text [ norwegian ] = "Zahl dessen Absolutwert berechnet werden soll." ;
             Text [ italian ] = "Numero di cui si desidera calcolare il valore assoluto." ;
