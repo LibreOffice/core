@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:35:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, XclBiff eB
     pExcRoot->bCellCut = FALSE;
     pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
-    pExcRoot->nColMax = XCL_COLMAX;
-    pExcRoot->nRowMax = EXC5_ANZROW;
+    pExcRoot->nColMax = static_cast<SCCOL>(XCL_COLMAX);
+    pExcRoot->nRowMax = static_cast<SCROW>(EXC5_ANZROW);
     pExcRoot->pRootStorage = &rRootStorage;
 
     pExcRoot->pCharset = &eZielChar;
@@ -194,7 +194,7 @@ ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, XclBiff eB
 {
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->nRowMax = XCL8_ROWMAX;
+    pExcRoot->nRowMax = static_cast<SCROW>(XCL8_ROWMAX);
     pExcRoot->pEscher = new XclEscher( pDoc->GetTableCount(), *pExcRoot );
 }
 
