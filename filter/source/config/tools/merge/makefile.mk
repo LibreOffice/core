@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-28 18:57:39 $
+#   last change: $Date: 2004-03-09 12:25:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ JARCOMPRESS     =   TRUE
 
 .INCLUDE :  target.mk
 
+.IF "$(SOLAR_JAVA)" != ""
 ALLTAR : $(OWNCOPY)
 
 .IF "$(JARTARGETN)" != ""
@@ -118,3 +119,5 @@ $(JARTARGETN) : $(OWNCOPY)
 $(OWNCOPY) : $(CFGFILES)
     +-$(MKDIR) $(CLASSDIR)$/$(PACKAGE)
     +$(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
+
+.ENDIF # "$(SOLAR_JAVA)" != ""
