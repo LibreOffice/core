@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:05:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,11 +385,14 @@ TYPEINIT1(SbClassModuleObject,SbModule)
 SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     : SbModule( pClassModule->GetName() )
     , mpClassModule( pClassModule )
+    , mbInitializeEventDone( false )
 {
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
     pImage = pClassModule->pImage;
     pBreaks = pClassModule->pBreaks;
+
+    SetClassName( pClassModule->GetName() );
 
     // Allow search only internally
     ResetFlag( SBX_GBLSEARCH );
@@ -401,18 +404,55 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     for( i = 0 ; i < nMethodCount ; i++ )
     {
         SbxVariable* pVar = pClassMethods->Get32( i );
-        SbMethod* pMethod = PTR_CAST( SbMethod, pVar );
-        if( pMethod )
+
+        // Exclude SbIfaceMapperMethod to copy them in a second step
+        SbIfaceMapperMethod* pIfaceMethod = PTR_CAST( SbIfaceMapperMethod, pVar );
+        if( !pIfaceMethod )
         {
-            USHORT nFlags = pMethod->GetFlags();
-            pMethod->SetFlag( SBX_NO_BROADCAST );
-            SbMethod* pNewMethod = new SbMethod( *pMethod );
-            pNewMethod->ResetFlag( SBX_NO_BROADCAST );
-            pMethod->SetFlags( nFlags );
-            pNewMethod->pMod = this;
-            pNewMethod->SetParent( this );
-            pMethods->PutDirect( pNewMethod, i );
-            StartListening( pNewMethod->GetBroadcaster(), TRUE );
+            SbMethod* pMethod = PTR_CAST(SbMethod, pVar );
+            if( pMethod )
+            {
+                USHORT nFlags = pMethod->GetFlags();
+                pMethod->SetFlag( SBX_NO_BROADCAST );
+                SbMethod* pNewMethod = new SbMethod( *pMethod );
+                pNewMethod->ResetFlag( SBX_NO_BROADCAST );
+                pMethod->SetFlags( nFlags );
+                pNewMethod->pMod = this;
+                pNewMethod->SetParent( this );
+                pMethods->PutDirect( pNewMethod, i );
+                StartListening( pNewMethod->GetBroadcaster(), TRUE );
+            }
+        }
+    }
+
+    // Copy SbIfaceMapperMethod in a second step to ensure that
+    // the corresponding base methods have already been copied
+    for( i = 0 ; i < nMethodCount ; i++ )
+    {
+        SbxVariable* pVar = pClassMethods->Get32( i );
+
+        SbIfaceMapperMethod* pIfaceMethod = PTR_CAST( SbIfaceMapperMethod, pVar );
+        if( pIfaceMethod )
+        {
+            SbMethod* pImplMethod = pIfaceMethod->getImplMethod();
+            if( !pImplMethod )
+            {
+                DBG_ERROR( "No ImplMethod" );
+                continue;
+            }
+
+            // Search for own copy of ImplMethod
+            String aImplMethodName = pImplMethod->GetName();
+            SbxVariable* p = pMethods->Find( aImplMethodName, SbxCLASS_METHOD );
+            SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
+            if( !pImplMethodCopy )
+            {
+                DBG_ERROR( "Found no ImplMethod copy" );
+                continue;
+            }
+            SbIfaceMapperMethod* pNewIfaceMethod =
+                new SbIfaceMapperMethod( pIfaceMethod->GetName(), pImplMethodCopy );
+            pMethods->PutDirect( pNewIfaceMethod, i );
         }
     }
 
@@ -454,6 +494,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
 SbClassModuleObject::~SbClassModuleObject()
 {
+    triggerTerminateEvent();
+
     // Must be deleted by base class dtor because this data
     // is not owned by the SbClassModuleObject object
     pImage = NULL;
@@ -534,7 +576,63 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
 SbxVariable* SbClassModuleObject::Find( const XubString& rName, SbxClassType t )
 {
     SbxVariable* pRes = SbxObject::Find( rName, t );
+    if( pRes )
+    {
+        triggerInitializeEvent();
+
+        SbIfaceMapperMethod* pIfaceMapperMethod = PTR_CAST(SbIfaceMapperMethod,pRes);
+        if( pIfaceMapperMethod )
+        {
+            pRes = pIfaceMapperMethod->getImplMethod();
+            pRes->SetFlag( SBX_EXTFOUND );
+        }
+    }
     return pRes;
+}
+
+void SbClassModuleObject::triggerInitializeEvent( void )
+{
+    static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Class_Initialize") );
+
+    if( mbInitializeEventDone )
+        return;
+
+    mbInitializeEventDone = true;
+
+    // Search method
+    SbxVariable* pMeth = SbxObject::Find( aInitMethodName, SbxCLASS_METHOD );
+    if( pMeth )
+    {
+        SbxValues aVals;
+        pMeth->Get( aVals );
+    }
+}
+
+void SbClassModuleObject::triggerTerminateEvent( void )
+{
+    static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Class_Terminate") );
+
+    if( !mbInitializeEventDone || GetSbData()->bRunInit )
+        return;
+
+    // Search method
+    SbxVariable* pMeth = SbxObject::Find( aTermMethodName, SbxCLASS_METHOD );
+    if( pMeth )
+    {
+        SbxValues aVals;
+        pMeth->Get( aVals );
+    }
+}
+
+
+SbClassData::SbClassData( void )
+{
+    mxIfaces = new SbxArray();
+}
+
+void SbClassData::clear( void )
+{
+    mxIfaces->Clear();
 }
 
 SbClassFactory::SbClassFactory( void )
@@ -571,6 +669,13 @@ SbxObject* SbClassFactory::CreateObject( const String& rClassName )
         pRet = new SbClassModuleObject( pMod );
     }
     return pRet;
+}
+
+SbModule* SbClassFactory::FindClass( const String& rClassName )
+{
+    SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
+    SbModule* pMod = pVar ? (SbModule*)pVar : NULL;
+    return pMod;
 }
 
 
@@ -619,6 +724,12 @@ StarBASIC::~StarBASIC()
         pSBFAC = NULL;
         RemoveFactory( pUNOFAC );
         pUNOFAC = NULL;
+        RemoveFactory( pTYPEFAC );
+        pTYPEFAC = NULL;
+        RemoveFactory( pCLASSFAC );
+        pCLASSFAC = NULL;
+        RemoveFactory( pOLEFAC );
+        pOLEFAC = NULL;
 
 #ifdef DBG_UTIL
     // SbiData braucht am Programm-Ende nicht abgeraeumt werden,
