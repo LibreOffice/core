@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-05 10:47:46 $
+ *  last change: $Author: hro $ $Date: 2001-06-29 11:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,6 +639,12 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 
         case WM_DESTROY:
             PostQuitMessage( 0 );
+            break;
+
+        // FIX ME: DefWindowProcW always return 0 on Win9x fopr any message
+
+        case WM_QUERYENDSESSION:
+            lResult = TRUE;     // Allow Win9x to shutdown ;-)
             break;
 
         default:
