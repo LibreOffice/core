@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:20:41 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@
 #define RID_STR_LINECOUNT                   ( RID_FORMBROWSER_START +  90 )
 #define RID_STR_MULTILINE                   ( RID_FORMBROWSER_START +  91 )
 #define RID_STR_MULTISELECTION              ( RID_FORMBROWSER_START +  92 )
-#define RID_STR_HARDLINEBREAKS              ( RID_FORMBROWSER_START +  93 )
+    // free
 #define RID_STR_HSCROLL                     ( RID_FORMBROWSER_START +  94 )
 #define RID_STR_VSCROLL                     ( RID_FORMBROWSER_START +  95 )
 #define RID_STR_SPIN                        ( RID_FORMBROWSER_START +  96 )
@@ -254,6 +254,11 @@
 #define RID_STR_LIST_CELL_RANGE             ( RID_FORMBROWSER_START + 192 )
 #define RID_STR_CELL_EXCHANGE_TYPE          ( RID_FORMBROWSER_START + 193 )
 #define RID_STR_ENUM_CELL_EXCHANGE_TYPE     ( RID_FORMBROWSER_START + 194 )
+#define RID_STR_SCROLLVALUE_MIN             ( RID_FORMBROWSER_START + 195 )
+#define RID_STR_DEFAULT_SCROLLVALUE         ( RID_FORMBROWSER_START + 196 )
+#define RID_STR_REPEAT_DELAY                ( RID_FORMBROWSER_START + 197 )
+#define RID_STR_SYMBOLCOLOR                 ( RID_FORMBROWSER_START + 198 )
+#define RID_STR_REPEAT                      ( RID_FORMBROWSER_START + 199 )
 
 
 // -----------------------------------------------------------------------
