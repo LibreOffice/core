@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:12:32 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16741,7 +16741,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ norwegian ] = "Zahl" ;
             Text [ italian ] = "gradi" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
-            Text [ portuguese ] = "Ângulo" ;
+            Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Luku" ;
             Text [ danish ] = "Tal" ;
             Text [ french ] = "Nombre" ;
@@ -38088,7 +38088,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Èùåò ÷àñòü ñëîâà â òåêñòå ñ ó÷åòîì ğåãèñòğà.";
             Text[ polish ] = "Wyszukuje czêœæ s³owa w tekœcie uwzglêdniaj¹c wielkie i ma³e litery.";
             Text[ japanese ] = "w’è‚µ‚½•¶š—ñ‚ğ‘¼‚Ì(‰pš‚Ì‘å•¶š‚Æ¬•¶š‚ğ‹æ•Ê‚Å‚«‚é)•¶š—ñ‚Ì’†‚ÅŒŸõ‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "¥H°Ï¤À¤j¤p¼g¦r¥Àªº¤è¦¡¦b¤@­Ó¦r¦ê¤º¬d§ä¬Y¤@­Ó¦r¦ê¡C";
+            Text[ chinese_traditional ] = "¥H°Ï¤À¦r¥À¤j¤p¼gªº¤è¦¡¦b¤@­Ó¦r¦ê¤º¬d§ä¬Y¤@­Ó¦r¦ê¡C";
             Text[ arabic ] = "ÊÈÍË Úä ÌÒÁ ãä ßáãÉ İí äÕ ãÚ ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ æÇáÕÛíÑÉ.";
             Text[ dutch ] = "Zoekt een gedeelte van een woord (er wordt daarbij onderscheid gemaakt tussen hoofdletters en kleine letters).";
             Text[ chinese_simplified ] = "ÒÔÇø·Ö´óĞ¡Ğ´×ÖÄ¸µÄ·½Ê½ÔÚÒ»¸ö×Ö´®ÄÚ²éÕÒÄ³Ò»¸ö×Ö´®¡£";
@@ -38298,14 +38298,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Zoekt een tekenreeks in een tekst (er wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters)." ;
             Text [ spanish ] = "Busca un valor de texto dentro de otro sin reconocer mayúsculas o minúsculas." ;
             Text [ english_us ] = "Looks for one text value within another (not case-sensitive)." ;
-            Text[ chinese_simplified ] = "ÔÚ×Ö´®ÄÚ²éÕÒ×Ö·û»ò×Ö´®µÄÎ»ÖÃ£¬²»Çø·Ö´óĞ¡Ğ´¡£";
+            Text[ chinese_simplified ] = "ÔÚ×Ö´®ÄÚ²éÕÒ×Ö·û»ò×Ö´®µÄÎ»ÖÃ£¬²»Çø·Ö×ÖÄ¸´óĞ¡Ğ´¡£";
             Text[ russian ] = "Íàõîäèò ÷àñòü ñëîâà â òåêñòå áåç ó÷åòà ğåãèñòğà.";
             Text[ polish ] = "Znajduje wyst¹pienie tekstu w innym ³añcuchu tekstowym (nie rozró¿niaj¹c du¿ych i ma³ych liter).";
             Text[ japanese ] = "‘å•¶š/¬•¶š‚Ì‹æ•Ê‚È‚­Aw’è‚µ‚½•¶š‚ÌˆÊ’u‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "¦b¦r¦ê¤º¬d§ä¦r²Å©Î¦r²Å¦êªº¦ì¸m¡M¤£°Ï¤À¤j¤p¼g¡C";
+            Text[ chinese_traditional ] = "¦b¦r¦ê¤º¬d§ä¦r²Å©Î¦r²Å¦êªº¦ì¸m¡A¤£°Ï¤À¦r¥À¤j¤p¼g¡C";
             Text[ arabic ] = "ÊÈÍË Úä ÌÒÁ ãä ßáãÉ İí äÕ ÈÏæä ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ æÇáÕÛíÑÉ.";
             Text[ dutch ] = "Zoekt een tekenreeks in een tekst (er wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters).";
-            Text[ chinese_simplified ] = "ÔÚ×Ö´®ÄÚ²éÕÒ×Ö·û»ò×Ö´®µÄÎ»ÖÃ£¬²»Çø·Ö´óĞ¡Ğ´¡£";
+            Text[ chinese_simplified ] = "ÔÚ×Ö´®ÄÚ²éÕÒ×Ö·û»ò×Ö´®µÄÎ»ÖÃ£¬²»Çø·Ö×ÖÄ¸´óĞ¡Ğ´¡£";
             Text[ greek ] = "Áíáæçôåß İíá ôìŞìá åíüò êåéìİíïõ ÷ùñßò íá äéáêñßíåé ìåôáîı êåöáëáßùí êáé ğåæşí.";
             Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ ¾øÀÌ ÅØ½ºÆ®¿¡¼­¡¡¹İ´Ü¾î Ã£±â";
             Text[ turkish ] = "Metin içinde metin öğesi arar (Büyük/küçük harf duyarlı değil).";
@@ -39437,14 +39437,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Het aantal tekens dat wordt vervangen." ;
             Text [ spanish ] = "es el número de caracteres en el argumento texto_original, comenzando por núm_inicial, que desea reemplazar con el argumento texto_nuevo." ;
             Text [ english_us ] = "The number of characters to be replaced." ;
-            Text[ chinese_simplified ] = "¸üÌæ×Ö·ûµÄÊıÄ¿¡£";
+            Text[ chinese_simplified ] = "Ìæ»»×Ö·ûµÄÊıÄ¿¡£";
             Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ, êîòîğûå òğåáóåòñÿ çàìåíèòü.";
             Text[ polish ] = "Liczba znaków, które maj¹ zostaæ zast¹pione.";
             Text[ japanese ] = "’uŠ·•¶š—ñ‚Æ’u‚«Š·‚¦‚é•¶š—ñ‚Ì’†‚Ì•¶š”B";
             Text[ chinese_traditional ] = "§ó´À¦r¤¸ªº¼Æ¥Ø¡C";
             Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ ÇáÊí ÊÑíÏ ÇÓÊÈÏÇáåÇ.";
             Text[ dutch ] = "Het aantal tekens dat wordt vervangen.";
-            Text[ chinese_simplified ] = "¸üÌæ×Ö·ûµÄÊıÄ¿¡£";
+            Text[ chinese_simplified ] = "Ìæ»»×Ö·ûµÄÊıÄ¿¡£";
             Text[ greek ] = "Ôï ğëŞèïò ôùí ÷áñáêôŞñùí ğïõ èá áíôéêáôáóôáèïıí.";
             Text[ korean ] = "´ëÃ¼µÉ ¹®ÀÚÀÇ °³¼öÀÔ´Ï´Ù.";
             Text[ turkish ] = "Değiştirilecek karakter sayısı.";
@@ -39671,7 +39671,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "T" ;
             Text [ italian ] = "Nessun_separatore" ;
             Text [ portuguese_brazilian ] = "T" ;
-            Text [ portuguese ] = "Sem_vírgulas" ;
+            Text [ portuguese ] = "Sem separador de milhares" ;
             Text [ finnish ] = "T" ;
             Text [ danish ] = "T" ;
             Text [ french ] = "S" ;
@@ -39680,9 +39680,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ spanish ] = "No_separar_millares" ;
             Text [ english_us ] = "T" ;
             Text[ chinese_simplified ] = "T";
-            Text[ russian ] = "Ïğîáåë";
-            Text[ polish ] = "bez_przecinka";
-            Text[ japanese ] = "T";
+            Text[ russian ] = "Áåç ïğîáåëîâ";
+            Text[ polish ] = "Bez separatorów tysiêcznych";
+            Text[ japanese ] = "çŒ…‹æØ‚è‚È‚µ";
             Text[ chinese_traditional ] = "T";
             Text[ arabic ] = "T";
             Text[ dutch ] = "Geen separatoren voor duizendtallen";
@@ -39700,7 +39700,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
             Text [ italian ] = "è una valore logico che, se VERO, non consente a FISSO di includere i separatori delle migliaia nel testo restituito." ;
             Text [ portuguese_brazilian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
-            Text [ portuguese ] = "é um valor lógico que determina se o número terá vírgulas ou não." ;
+            Text [ portuguese ] = "Sem separador de milhares. Se o valor lógico existir e for VERDADEIRO (diferente de 0), o separador de milhares não é colocado." ;
             Text [ finnish ] = "Tuhaterotin. Määrittää tuhaterotinasetuksen." ;
             Text [ danish ] = "Tusindtalsseparator. Angiver, om en tusindtalsseparator skal sættes." ;
             Text [ french ] = "Séparateur de milliers. Indique si des espaces doivent être insérés ou non." ;
@@ -40521,14 +40521,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Vervangt meermaals tekens in een tekst." ;
             Text [ spanish ] = "Reemplaza caracteres dentro del texto." ;
             Text [ english_us ] = "Substitutes new text for old text in a string." ;
-            Text[ chinese_simplified ] = "¶àÖØ¸üÌæÒ»¸ö×Ö´®ÄÚµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "¶àÖØÌæ»»Ò»¸ö×Ö´®ÄÚµÄ×Ö·û¡£";
             Text[ russian ] = "Çàìåíÿåò ìíîãîêğàòíî ÷àñòè ñëîâ â òåêñòå.";
             Text[ polish ] = "Podstawia nowy tekst w miejsce starego we wskazanym ci¹gu znaków.";
             Text[ japanese ] = "•¶š—ñ’†‚Ìw’è‚³‚ê‚½•¶š‚ğ‘¼‚Ì•¶š‚É’u‚«Š·‚¦‚Ü‚·B";
             Text[ chinese_traditional ] = "¦h­«§ó´À¤@­Ó¦r¦ê¤ºªº¦r¤¸¡C";
             Text[ arabic ] = "ÊÓÊÈÏá ÇáäÕ ÇáŞÏíã ÈÃÎÑ ÌÏíÏ İí ÇáÓáÓáÉ ÇáäÕíÉ.";
             Text[ dutch ] = "Vervangt meermaals tekens in een tekst.";
-            Text[ chinese_simplified ] = "¶àÖØ¸üÌæÒ»¸ö×Ö´®ÄÚµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "¶àÖØÌæ»»Ò»¸ö×Ö´®ÄÚµÄ×Ö·û¡£";
             Text[ greek ] = "Åêôåëåß ğïëëáğëŞ áíôéêáôÜóôáóç ôìçìÜôùí ëİîåùí óå İíá êåßìåíï.";
             Text[ korean ] = "ÅØ½ºÆ®¿¡¼­¡¡´Ù¼öÀÇ¡¡¹İ´Ü¾î¸¦¡¡´ëÃ¼";
             Text[ turkish ] = "Metin içinde metin öğeleri değiştirir.";
@@ -40643,14 +40643,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Het woorddeel dat (meermaals) moeten worden vervangen." ;
             Text [ spanish ] = "es el texto que se desea sustituir." ;
             Text [ english_us ] = "The partial string to be (repeatedly) replaced." ;
-            Text[ chinese_simplified ] = "Òª(¶àÖØ)¸üÌæµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "Òª(¶àÖØ)Ìæ»»µÄ×Ö·û¡£";
             Text[ russian ] = "×àñòü ñëîâà, êîòîğóş íåîáõîäèìî (ìíîãîêğàòíî) çàìåíèòü.";
             Text[ polish ] = "S³owo cz¹stkowe, które ma zostaæ (wielokrotnie) zast¹pione.";
             Text[ japanese ] = "’u‚«Š·‚¦‚é•¶š—ñ‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­n(¦h­«)§ó´Àªº¦r¤¸¡C";
             Text[ arabic ] = "ÇáÌÒÁ ãä ÇáßáãÉ ÇáãÑÇÏ ÇÓÊÈÏÇáå ÃßËÑ ãä ãÑÉ.";
             Text[ dutch ] = "Het woorddeel dat (meermaals) moeten worden vervangen.";
-            Text[ chinese_simplified ] = "Òª(¶àÖØ)¸üÌæµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "Òª(¶àÖØ)Ìæ»»µÄ×Ö·û¡£";
             Text[ greek ] = "Ôï ôìŞìá ôçò ëİîçò ğïõ ğñüêåéôáé íá áíôéêáôáóôáèåß (ğïëëáğëÜ).";
             Text[ korean ] = "(¿©·¯¹ø) ´ëÃ¼µÉ ¹İ´Ü¾î";
             Text[ turkish ] = "(Birçok kez) değiştirilecek metin öğesi.";
@@ -40759,14 +40759,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Geeft aan bij het hoeveelste optreden het woorddeel moet worden vervangen." ;
             Text [ spanish ] = "especifica la ocurrencia del texto que se desea reemplazar." ;
             Text [ english_us ] = "Which occurence of the old text is to be replaced." ;
-            Text[ chinese_simplified ] = "Òª±»¸üÌæµÄÊÇµÚ¼¸´Î³öÏÖµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "Òª±»Ìæ»»µÄÊÇµÚ¼¸´Î³öÏÖµÄ×Ö·û¡£";
             Text[ russian ] = "Îïğåäåëÿåò, êàêîå âõîæäåíèå òåêñòà íóæíî çàìåíèòü.";
             Text[ polish ] = "Okreœla, które powtórzenie ci¹gu znaków ma zostaæ zast¹pione.";
             Text[ japanese ] = "•¶š—ñ‚ÉŠÜ‚Ü‚ê‚é‰½”Ô–Ú‚Ì•¶š—ñ‚ğ’uŠ·•¶š—ñ‚Æ’u‚«Š·‚¦‚é‚©‚ğw’è‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­n³Q§ó´Àªº¬O²Ä´X¦¸¥X²{ªº¦r¤¸¡C";
             Text[ arabic ] = "ÊÍÏÏ Ãí ÙåæÑ ááäÕ íÌÈ ÇÓÊÈÏÇáå.";
             Text[ dutch ] = "Geeft aan bij het hoeveelste optreden het woorddeel moet worden vervangen.";
-            Text[ chinese_simplified ] = "Òª±»¸üÌæµÄÊÇµÚ¼¸´Î³öÏÖµÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "Òª±»Ìæ»»µÄÊÇµÚ¼¸´Î³öÏÖµÄ×Ö·û¡£";
             Text[ greek ] = "Ç ğïóïóôŞ åìöÜíéóç ôïõ ôìŞìáôïò ëİîçò ğïõ èİëåôå íá áíôéêáôáóôáèåß.";
             Text[ korean ] = "¸î ¹øÂ°¿¡ ³ªÅ¸³ª´Â ¹İ´Ü¾î¸¦ ´ëÃ¼ÇÒ °ÍÀÎ°¡ÀÔ´Ï´Ù.";
             Text[ turkish ] = "Metin öğesinin hangi vakası değiştirilecek.";
@@ -41269,7 +41269,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ portuguese_brazilian ] = "Unit to convert from, case sensitive.";
             Text[ japanese ] = "•ÏŠ·‘O‚Ì”’l‚Ì’PˆÊB’PˆÊ–¼‚Æ—ªŒê‚Ì‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚·B";
             Text[ chinese_simplified ] = "Òª±»×ª»»µÄÔ­ÓĞµÄ»õ±Òµ¥Î»£¬Çø·Ö´óĞ¡Ğ´¡£";
-            Text[ chinese_traditional ] = "­n³QÂà´«ªº­ì¦³ªº³f¹ô³æ¦ì¡M°Ï¤À¤j¤p¼g¡C";
+            Text[ chinese_traditional ] = "­n³QÂà´«ªº­ì¦³ªº³f¹ô³æ¦ì¡A°Ï¤À¤j¤p¼g¡C";
             Text[ arabic ] = "ÇáæÍÏÉ ÇáÊí íÊã ÇáÊÍæíá ãäåÇ (ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ æÇáÕÛíÑÉ).";
             Text[ dutch ] = "Eenheid van waaruit wordt omgerekend, hoofd-/kleine letters zijn relevant.";
             Text[ chinese_simplified ] = "Òª±»×ª»»µÄÔ­ÓĞµÄ»õ±Òµ¥Î»£¬Çø·Ö´óĞ¡Ğ´¡£";
@@ -41325,7 +41325,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ portuguese_brazilian ] = "Unit to convert to, case sensitive.";
             Text[ japanese ] = "•ÏŠ·Œã‚Ì”’l‚Ì’PˆÊB’PˆÊ–¼‚Æ—ªŒê‚Ì‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚·B";
             Text[ chinese_simplified ] = "Òª×ª»»³ÉµÄ»õ±Òµ¥Î»£¬Çø·Ö´óĞ¡Ğ´¡£";
-            Text[ chinese_traditional ] = "­nÂà´«¦¨ªº³f¹ô³æ¦ì¡M°Ï¤À¤j¤p¼g¡C";
+            Text[ chinese_traditional ] = "­nÂà´«¦¨ªº³f¹ô³æ¦ì¡A°Ï¤À¦r¥À¤j¤p¼g¡C";
             Text[ arabic ] = "ÇáæÍÏÉ ÇáÊí íÊã ÇáÊÍæíá ÅáíåÇ (ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ æÇáÕÛíÑÉ).";
             Text[ dutch ] = "Eenheid waarnaar wordt geconverteerd, hoofd-/kleine letters zijn relevant.";
             Text[ chinese_simplified ] = "Òª×ª»»³ÉµÄ»õ±Òµ¥Î»£¬Çø·Ö´óĞ¡Ğ´¡£";
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
