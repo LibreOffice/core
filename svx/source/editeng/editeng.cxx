@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-15 12:50:44 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,6 +1131,18 @@ Link EditEngine::GetImportHdl() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->aImportHdl;
+}
+
+void EditEngine::SetBeginMovingParagraphsHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->aBeginMovingParagraphsHdl = rLink;
+}
+
+void EditEngine::SetEndMovingParagraphsHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->aEndMovingParagraphsHdl = rLink;
 }
 
 EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-31 13:16:27 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include <vos/mutex.hxx>
 
 #include <flditem.hxx>
+#include <svtools/intitem.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -1168,6 +1169,38 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
     return NULL;
 }
 
+BOOL ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
+{
+    if ( pPara )
+        *pPara = 0xFFFF;
+
+    if( !GetOutputArea().IsInside( rPos ) )
+        return FALSE;
+
+    Point aDocPos( GetDocPos( rPos ) );
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, sal_False );
+
+    if ( aPaM.GetIndex() == 0 )
+    {
+        USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+        Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
+        long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
+        ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+        nY += pParaPortion->GetFirstLineOffset();
+        if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
+             ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&
+             ( aDocPos.X() > ( aBulletArea.Left() ) ) &&
+             ( aDocPos.X() < ( aBulletArea.Right() ) ) )
+        {
+            if ( pPara )
+                *pPara = nPara;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 void ImpEditView::CutCopy( BOOL bCut )
 {
     if ( GetEditSelection().HasRange() )
@@ -1418,10 +1451,9 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     EditSelection aCopySel( GetEditSelection() );
     aCopySel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
 
-    if ( GetEditSelection().HasRange() )
+    if ( GetEditSelection().HasRange() && bClickedInSelection )
     {
-        if ( bClickedInSelection )
-            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
     }
     else
     {
@@ -1440,6 +1472,28 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
             BOOL bGotoCursor = DoAutoScroll();
             BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
             ShowCursor( bGotoCursor, bForceCursor );
+        }
+        else if ( IsBulletArea( aMousePos, &nPara ) )
+        {
+            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+            pDragAndDropInfo->bOutlinerMode = TRUE;
+            EditPaM aStartPaM( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara ), 0 );
+            EditPaM aEndPaM( aStartPaM );
+            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+            for ( USHORT n = nPara +1; n < pEditEngine->pImpEditEngine->GetEditDoc().Count(); n++ )
+            {
+                const SfxUInt16Item& rL = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
+                if ( rL.GetValue() > rLevel.GetValue() )
+                {
+                    aEndPaM.SetNode( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( n ) );
+                }
+                else
+                {
+                    break;
+                }
+            }
+            aEndPaM.GetIndex() = aEndPaM.GetNode()->Len();
+            SetEditSelection( EditSelection( aStartPaM, aEndPaM ) );
         }
     }
 
@@ -1472,7 +1526,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    if ( !bReadOnly && rDSDE.DropSuccess && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    if ( !bReadOnly && rDSDE.DropSuccess && !pDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
         if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
         {
@@ -1562,31 +1616,38 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
 
     HideDDCursor();
 
-    // Selektion wegmalen...
-    DrawSelection();
-
     if ( pDragAndDropInfo->bStarterOfDD )
     {
         pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
         pDragAndDropInfo->bUndoAction = TRUE;
     }
 
-    uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
-    if ( xDataObj.is() )
+    if ( pDragAndDropInfo->bOutlinerMode )
     {
         bChanges = TRUE;
-        EditPaM aPaM( pDragAndDropInfo->aDropDest );
-        EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
-        SetEditSelection( aNewSel );
-        pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
-        if ( pDragAndDropInfo->bStarterOfDD )
+        GetEditViewPtr()->MoveParagraphs( Range( pDragAndDropInfo->aBeginDragSel.nStartPara, pDragAndDropInfo->aBeginDragSel.nEndPara ), pDragAndDropInfo->nOutlinerDropDest );
+    }
+    else
+    {
+        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        if ( xDataObj.is() )
         {
-            // Nur dann setzen, wenn in gleicher Engine!
-            pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
-            pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
-            pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
-            pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
-            pDragAndDropInfo->bDroppedInMe = sal_True;
+            bChanges = TRUE;
+            // Selektion wegmalen...
+            DrawSelection();
+            EditPaM aPaM( pDragAndDropInfo->aDropDest );
+            EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+            SetEditSelection( aNewSel );
+            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+            if ( pDragAndDropInfo->bStarterOfDD )
+            {
+                // Nur dann setzen, wenn in gleicher Engine!
+                pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+                pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
+                pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
+                pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
+                pDragAndDropInfo->bDroppedInMe = sal_True;
+            }
         }
     }
 
@@ -1638,7 +1699,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     if ( GetOutputArea().IsInside( aMousePos ) )
     {
         sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
-        if ( pDragAndDropInfo->bHasValidData && ( nSupportedActions & rDTDE.DropAction ) )
+        if ( pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
         {
             bAccept = sal_True;
 
@@ -1668,8 +1729,28 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             Point aDocPos( GetDocPos( aMousePos ) );
             EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos );
             pDragAndDropInfo->aDropDest = aPaM;
-            // Pruefen, ob der PaM in der Selektion liegt...
-            if ( HasSelection() )
+            if ( pDragAndDropInfo->bOutlinerMode )
+            {
+                USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+                ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+                long nDestParaStartY = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                long nRel = aDocPos.Y() - nDestParaStartY;
+                if ( nRel < ( pPPortion->GetHeight() / 2 ) )
+                {
+                    pDragAndDropInfo->nOutlinerDropDest = nPara;
+                }
+                else
+                {
+                    pDragAndDropInfo->nOutlinerDropDest = nPara+1;
+                }
+
+                if( ( pDragAndDropInfo->nOutlinerDropDest >= pDragAndDropInfo->aBeginDragSel.nStartPara ) &&
+                    ( pDragAndDropInfo->nOutlinerDropDest <= (pDragAndDropInfo->aBeginDragSel.nEndPara+1) ) )
+                {
+                    bAccept = FALSE;
+                }
+            }
+            else if ( HasSelection() )
             {
                 // es darf nicht in eine Selektion gedroppt werden
                 EPaM aP = pEditEngine->pImpEditEngine->CreateEPaM( aPaM );
@@ -1683,13 +1764,46 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             }
             if ( bAccept )
             {
-                Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM );
-                Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
-                aEditCursor.SetPos( aTopLeft );
-                aEditCursor.Right() = aEditCursor.Left() + pDragAndDropInfo->nCursorWidth;
+                Rectangle aEditCursor;
+                if ( pDragAndDropInfo->bOutlinerMode )
+                {
+                    long nDDYPos;
+                    if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->pImpEditEngine->GetEditDoc().Count() )
+                    {
+                        ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( pDragAndDropInfo->nOutlinerDropDest );
+                        nDDYPos = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                    }
+                    else
+                    {
+                        nDDYPos = pEditEngine->pImpEditEngine->GetTextHeight();
+                    }
+                    Point aStartPos( 0, nDDYPos );
+                    aStartPos = GetWindowPos( aStartPos );
+                    Point aEndPos( GetOutputArea().GetWidth(), nDDYPos );
+                    aEndPos = GetWindowPos( aEndPos );
+                    aEditCursor = GetWindow()->LogicToPixel( Rectangle( aStartPos, aEndPos ) );
+                    if ( !pEditEngine->IsVertical() )
+                    {
+                        aEditCursor.Top()--;
+                        aEditCursor.Bottom()++;
+                    }
+                    else
+                    {
+                        aEditCursor.Left()--;
+                        aEditCursor.Right()++;
+                    }
+                    aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
+                }
+                else
+                {
+                    aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM );
+                    Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
+                    aEditCursor.SetPos( aTopLeft );
+                    aEditCursor.Right() = aEditCursor.Left() + pDragAndDropInfo->nCursorWidth;
+                    aEditCursor = GetWindow()->LogicToPixel( aEditCursor );
+                    aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
+                }
 
-                aEditCursor = GetWindow()->LogicToPixel( aEditCursor );
-                aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
                 sal_Bool bCursorChanged = !pDragAndDropInfo->bVisCursor || ( pDragAndDropInfo->aCurCursor != aEditCursor );
                 if ( bCursorChanged )
                 {

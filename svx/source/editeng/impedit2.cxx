@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1532,7 +1532,6 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, USHORT nChars, EditUndo
 
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNewPos )
 {
-
     aOldPositions.Justify();
     BOOL bValidAction = ( (long)nNewPos < aOldPositions.Min() ) || ( (long)nNewPos > aOldPositions.Max() );
     DBG_ASSERT( bValidAction, "Move in sich selbst ?" );
@@ -1585,6 +1584,9 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
         InsertUndo( new EditUndoMoveParagraphs( this, aOldPositions, nNewPos ) );
 #endif
 
+    MoveParagraphsInfo aMoveParagraphsInfo( aOldPositions.Min(), aOldPositions.Max(), nNewPos );
+    aBeginMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
+
     // Position nicht aus dem Auge verlieren!
     ParaPortion* pDestPortion = GetParaPortions().SaveGetObject( nNewPos );
 
@@ -1617,6 +1619,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
         GetParaPortions().Insert( pTmpPortion, nRealNewPos+i );
     }
 
+    aEndMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
     aEditDoc.SetModified( TRUE );
 
     if ( pRecalc1 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:20:01 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ struct DragAndDropInfo
     sal_uInt16          nCursorWidth;
     ESelection          aBeginDragSel;
     EditPaM             aDropDest;
+    USHORT              nOutlinerDropDest;
     ESelection          aDropSel;
     VirtualDevice       aBackground;
     const SvxFieldItem* pField;
@@ -164,12 +165,13 @@ struct DragAndDropInfo
     sal_Bool            bStarterOfDD            : 1;
     sal_Bool            bHasValidData           : 1;
     sal_Bool            bUndoAction             : 1;
+    sal_Bool            bOutlinerMode           : 1;
 
     DragAndDropInfo( const OutputDevice& rOutDev4VirtDev) :
             aBackground( rOutDev4VirtDev )  {
             bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False;
-            bHasValidData = sal_False; bUndoAction = sal_False;
-            nSensibleRange = 0; nCursorWidth = 0; pField = 0;
+            bHasValidData = sal_False; bUndoAction = sal_False; bOutlinerMode = sal_False;
+            nSensibleRange = 0; nCursorWidth = 0; pField = 0; nOutlinerDropDest = 0;
     }
 };
 
@@ -335,6 +337,8 @@ public:
     void            AddDragAndDropListeners();
     void            RemoveDragAndDropListeners();
 
+    BOOL            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
+
 //  Fuer die SelectionEngine...
     void            CreateAnchor();
     void            DeselectAll();
@@ -490,6 +494,8 @@ private:
     Timer               aStatusTimer;
     Link                aStatusHdlLink;
     Link                aImportHdl;
+    Link                aBeginMovingParagraphsHdl;
+    Link                aEndMovingParagraphsHdl;
 
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
