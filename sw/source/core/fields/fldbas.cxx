@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:05:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ DBG_NAME(SwFieldType);
     /* RES_SCRIPTFLD        */      TYP_SCRIPTFLD,
     /* RES_DATETIMEFLD      */      0,                  // dynamisch
     /* RES_AUTHORITY        */      TYP_AUTHORITY,
-    /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS
+    /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
+    /* RES_DROPDOWN         */      TYP_DROPDOWN
     };
         // ????? TYP_USRINPFLD,
 
@@ -336,7 +337,8 @@ USHORT SwField::GetResId(USHORT nTypeId, BOOL& bAmbigous)
      RES_JUMPEDITFLD   ,/*      TYP_JUMPEDITFLD     */
      RES_SCRIPTFLD,     /*      TYP_SCRIPTFLD       */
      RES_AUTHORITY,     /*      TYP_AUTHORITY       */
-     RES_COMBINED_CHARS /*      TYP_COMBINED_CHARS  */
+     RES_COMBINED_CHARS,/*      TYP_COMBINED_CHARS  */
+     RES_DROPDOWN       /*      TYP_DROPDOWN        */
     };
 
     switch( nTypeId )
@@ -531,6 +533,7 @@ FASTBOOL SwField::HasClickHdl() const
     case RES_GETREFFLD:
     case RES_MACROFLD:
     case RES_INPUTFLD:
+    case RES_DROPDOWN :
         bRet = TRUE;
         break;
 
