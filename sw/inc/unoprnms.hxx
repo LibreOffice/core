@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:51:16 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,11 +260,14 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_REVERSED                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_PROSPECT                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_CONTROLS                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_DRAWINGS                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PRING_RIGHT_PAGES              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_RIGHT_PAGES              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_LEFT_PAGES             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_BLACK_FONTS              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_PAPER_TRAY             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_PAGE_BACKGROUND          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_ANNOTATION_MODE          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_FAX_NAME                     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_PAPER_FROM_SETUP             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REGISTER_MODE_ACTIVE           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RELATIVE_WIDTH                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RELATIVE_HEIGHT                ;
@@ -380,7 +383,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_PAGE_NUMBER_OFFSET               
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PLACEHOLDER                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PLACEHOLDER_TYPE             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT                        ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINT_LEFT_PAGES             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REFERENCE_FIELD_PART           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REFERENCE_FIELD_SOURCE         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REGISTER_PARAGRAPH_STYLE     ;
