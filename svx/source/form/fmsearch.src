@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-18 08:21:27 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Text[ polish ] = "Wyszukiwanie rekordów";
     Text[ portuguese_brazilian ] = "Data record search";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ ãƒ¬ã‚³ãƒ¼ãƒ‰ã®æ¤œç´¢";
-    Text[ chinese_simplified ] = "æœå¯»æ•°æ®ç»„";
+    Text[ chinese_simplified ] = "æœå¯»æ•°æ®æ¡ç›®";
     Text[ chinese_traditional ] = "æœå°‹è³‡æ–™æ¢ç›®";
     Text[ arabic ] = "ÇáÈÍË Úä ÓÌá";
     Text[ greek ] = "ÁíáæŞôçóç åããñáöŞò";
     Text[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ ì°¾ê¸°";
     Text[ turkish ] = "Veri kümesi araması";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Búsqueda de registro de datos";
+    Text[ catalan ] = "Cerca de registres";
     Text[ finnish ] = "Tietuehaku";
     Moveable = TRUE;
     HelpId = HID_FM_DLG_SEARCH;
@@ -118,8 +118,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "æœå°‹å…§å®¹";
         Text[ arabic ] = "ÇáÈÍË Úä";
         Text[ turkish ] = "Ara:";
-        Text[ catalan ] = "Buscar por";
+        Text[ catalan ] = "Cerca per";
         Text[ finnish ] = "Etsi:";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²";
     };
     RadioButton RB_SEARCHFORTEXT
     {
@@ -146,7 +147,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = "ÇáäÕ :";
-        Text[ catalan ] = "~Texto :";
+        Text[ catalan ] = "~Text :";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     RadioButton RB_SEARCHFORNULL
     {
@@ -173,8 +175,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍŞá åí ŞíãÉ ÎÇáíÉ (NULL)";
         Text[ turkish ] = "Alan içeriği NULL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contenido del campo es ~NULL";
+        Text[ catalan ] = "Camp de contingut ~NUL";
         Text[ finnish ] = "Kentän sisältö ~NULL (tyhjä)";
+        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥~NULL";
     };
     RadioButton RB_SEARCHFORNOTNULL
     {
@@ -200,8 +203,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "æ¬„ä½å…§å®¹ä¸æ˜¯ NU~LL";
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍŞá áÇ ÊÓÇæí ŞíãÉ ÎÇáíÉ (NULL)";
         Text[ turkish ] = "Alan içeriği NULL değil";
-        Text[ catalan ] = "Contenido del campo no es N~ULL";
+        Text[ catalan ] = "Camp de contingut no NU~L";
         Text[ finnish ] = "Kentän sisältö ei ole ~NULL (tyhjä)";
+        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆ NU~LL";
     };
     ComboBox CMB_SEARCHTEXT
     {
@@ -240,6 +244,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea";
         Text[ finnish ] = "Hakukohde";
+        Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¹‰à¸™à¸«à¸²";
     };
     FixedText FT_FORM
     {
@@ -265,7 +270,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "è¡¨å–®";
         Text[ turkish ] = "Form:";
         Text[ arabic ] = "ÇáÇÓÊãÇÑÉ:";
-        Text[ catalan ] = "~Formulario :";
+        Text[ catalan ] = "Formulari:";
+        Text[ thai ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
     };
     ListBox LB_FORM
     {
@@ -302,8 +308,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ëª¨ë“  í•„ë“œ";
         Text[ turkish ] = "Tüm alanlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Todos los campos";
+        Text[ catalan ] = "Tots els camps";
         Text[ finnish ] = "Kaikki kentät";
+        Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     RadioButton RB_SINGLEFIELD
     {
@@ -329,7 +336,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "å–®å€‹æ¬„ä½";
         Text[ turkish ] = "Tek alan:";
         Text[ arabic ] = "ÍŞá İÑÏí :";
-        Text[ catalan ] = "~Campo individual :";
+        Text[ catalan ] = "~Camp individual :";
+        Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸”à¸µà¹ˆà¸¢à¸§";
     };
     ListBox LB_FIELD
     {
@@ -365,8 +373,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Paràmetres";
+        Text[ catalan ] = "Configuració";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²";
     };
     FixedText FT_POSITION
     {
@@ -392,7 +401,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "ä½ç½®";
         Text[ turkish ] = "Konum:";
         Text[ arabic ] = "ÇáãæÖÚ:";
-        Text[ catalan ] = "~Posición :";
+        Text[ catalan ] = "~Posició :";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     ListBox LB_POSITION
     {
@@ -430,8 +440,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "í•„ë“œ ì„œì‹ ì ìš©";
         Text[ turkish ] = "Alan formatını uygula";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Usar formato de ~campo";
+        Text[ catalan ] = "Aplica el format del camp";
         Text[ finnish ] = "Käytä kentän muotoa";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     CheckBox CB_CASE
     {
@@ -460,8 +471,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ìƒì„¸í•˜ê²Œ ì°¾ê¸°";
         Text[ turkish ] = "BÜYÜK/küçük harf duyarlı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Coincidencia ~exacta";
+        Text[ catalan ] = "Coincidència ~exacta";
         Text[ finnish ] = "Sama kirjainkoko";
+        Text[ thai ] = "à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œ";
     };
     CheckBox CB_BACKWARD
     {
@@ -490,8 +502,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ë’¤ë¡œ ì°¾ê¸°";
         Text[ turkish ] = "Geriye doğru ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Buscar hacia ~atrás";
+        Text[ catalan ] = "Cerca cap enrere";
         Text[ finnish ] = "Etsi taaksepäin";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸¢à¹‰à¸­à¸™à¸à¸¥à¸±à¸š";
     };
     CheckBox CB_STARTOVER
     {
@@ -520,8 +533,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ì²˜ìŒë¶€í„°";
         Text[ turkish ] = "Baştan itibaren";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Desde el principio";
+        Text[ catalan ] = "~Des del principi";
         Text[ finnish ] = "Alusta";
+        Text[ thai ] = "à¸ˆà¸²à¸à¸à¸²à¸£à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
     CheckBox CB_WILDCARD
     {
@@ -550,8 +564,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "í”Œë ˆì´ìŠ¤í™€ë” ì¸ì‡„";
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Expresión comodín";
+        Text[ catalan ] = "~Expresió comodí";
         Text[ finnish ] = "Paikkamerkkilauseke";
+        Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸•à¸±à¸§à¸¢à¸¶à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     CheckBox CB_REGULAR
     {
@@ -580,8 +595,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ë³´í†µ í‘œí˜„";
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Expresión ~regular";
+        Text[ catalan ] = "Expresió ~regular";
         Text[ finnish ] = "Säännöllinen lauseke";
+        Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸›à¸à¸•à¸´";
     };
     CheckBox CB_APPROX
     {
@@ -603,15 +619,16 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_simplified ] = "ç±»ä¼¼æœå¯»";
         Text[ russian ] = "Ïîèñê ïîõîæèõ";
         Text[ polish ] = "Szukaj podobnych";
-        Text[ japanese ] = "é¡ä¼¼æ¤œç´¢";
+        Text[ japanese ] = "é¡ä¼¼ã‚¹ãƒšãƒ«ã®æ¤œç´¢";
         Text[ chinese_traditional ] = "ç›¸ä¼¼å­—æœå°‹";
         Text[ arabic ] = "ÇáÈÍË Úä ßáãÇÊ ãÊÔÇÈåÉ";
         Text[ greek ] = "ÁíáæŞôçóç ïìïéüôçôáò";
         Text[ korean ] = "ìœ ì‚¬ì„± ì°¾ê¸°";
         Text[ turkish ] = "Benzerini ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Búsqueda por semejanza";
+        Text[ catalan ] = "Cerca de similitud";
         Text[ finnish ] = "Vastaavuushaku";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸„à¸¥à¹‰à¸²à¸¢à¸à¸±à¸™";
     };
     PushButton PB_APPROXSETTINGS
     {
@@ -640,7 +657,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "...";
         Text[ turkish ] = "~...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~...";
+        Text[ catalan ] = "...";
         Text[ finnish ] = "...";
     };
     CheckBox CB_HALFFULLFORMS
@@ -669,7 +686,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "é¡§åŠå­—å…ƒå¯¬åº¦";
         Text[ turkish ] = "Match half/full width forms";
         Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
-        Text[ catalan ] = "Match half/full-width forms";
+        Text[ catalan ] = "Considera la llargada del caràcter";
+        Text[ thai ] = "à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
     };
     CheckBox CB_SOUNDSLIKECJK
     {
@@ -696,8 +714,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "é¡ä¼¼å­—å…ƒ(æ—¥æ–‡)";
         Text[ turkish ] = "Sounds like (Japanese)";
         Text[ arabic ] = "ßÊÇÈÉ ãÔÇÈåÉ(íÇÈÇäíÉ)";
-        Text[ catalan ] = "Sounds like (Japanese)";
+        Text[ catalan ] = "S'assembla a (Japonès)";
         Text[ finnish ] = "Samankuuloinen kuin (japani)";
+        Text[ thai ] = "à¹€à¸ªà¸µà¸¢à¸‡à¸„à¸¥à¹‰à¸²à¸¢ (à¸ à¸²à¸©à¸²à¸à¸µà¹ˆà¸›à¸¸à¹ˆà¸™)";
     };
     PushButton PB_SOUNDSLIKESETTINGS
     {
@@ -754,6 +773,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estat";
         Text[ finnish ] = "Osavaltio";
+        Text[ thai ] = "à¸ à¸²à¸§à¸°";
     };
     FixedText FT_RECORDLABEL
     {
@@ -780,8 +800,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ë ˆì½”ë“œ:";
         Text[ turkish ] = "Veri kümesi:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Registro :";
+        Text[ catalan ] = "Registre :";
         Text[ finnish ] = "Tietue :";
+        Text[ thai ] = "à¸£à¸°à¹€à¸šà¸µà¸¢à¸™ :";
     };
     FixedText FT_RECORD
     {
@@ -822,8 +843,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ì°¾ê¸°";
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerca";
+        Text[ catalan ] = "Cerca";
         Text[ finnish ] = "Etsi";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²";
     };
     CancelButton 1
     {
@@ -852,8 +874,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tanca";
+        Text[ catalan ] = "Tan~ca";
         Text[ finnish ] = "~Sulje";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     HelpButton 1
     {
@@ -881,9 +904,11 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ë„ì›€ë§(~H)";
         Text[ turkish ] = "Yardım";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ajuda";
+        Text[ catalan ] = "A~juda";
         Text[ finnish ] = "~Ohje";
+        Text[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
     };
+    Text[ thai ] = "à¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¸„à¹‰à¸™à¸«à¸²";
 };
 
 String RID_STR_RECORDSEARCH_METHODS
@@ -909,8 +934,9 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ greek ] = "ôõ÷áßá;óôçí áñ÷Ş ôïõ ğåäßïõ;óôï ôİëïò ôïõ ğåäßïõ;ïëüêëçñï ôï ğåäßï";
     Text[ korean ] = "í•„ë“œì—ì„œ ì„ì˜ë¡œ;í•„ë“œ ì‹œì‘ì—;í•„ë“œ ëì—;ì „ì²´ í•„ë“œ";
     Text[ turkish ] = "Alanda rasgele;Alan başında;Alan sonunda;Tüm alanda";
-    Text[ catalan ] = "cualquier parte en campo;al principio del campo;al final del campo;todo el campo";
+    Text[ catalan ] = "qualsevol part del camp;a l'inici del camp;al final del camp;tot el camp";
     Text[ finnish ] = "kentässä missä tahansa;kentän alussa;kentän lopussa;koko kenttä";
+    Text[ thai ] = "à¸—à¸µà¹ˆà¹„à¸«à¸™à¸à¹‡à¹„à¸”à¹‰à¹ƒà¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥;à¸ˆà¸¸à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸‚à¸­à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥;à¸ˆà¸¸à¸”à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”à¸‚à¸­à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥;à¸—à¸±à¹‰à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 String RID_STR_RECORDSEARCH_BUTTONS
@@ -937,8 +963,9 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ korean ] = "ì²˜ìŒë¶€í„°;ëì—ì„œ ë¶€í„°;ì°¾ê¸°;ì·¨ì†Œ";
     Text[ turkish ] = "Baştan;Sondan;Ara;İptal";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Desde el principio;~Desde el final;~Buscar;~Cancelar";
+    Text[ catalan ] = "~Des de l'inici;~Des del final;~Cerca;~Cancel.la";
     Text[ finnish ] = "Ylhäältä;Alhaalta;Etsi;Peruuta";
+    Text[ thai ] = "à¸ˆà¸²à¸à¸”à¹‰à¸²à¸™à¸šà¸™;à¸ˆà¸²à¸à¸”à¹‰à¸²à¸™à¸¥à¹ˆà¸²à¸‡;à¸„à¹‰à¸™à¸«à¸²;à¸¢à¸à¹€à¸¥à¸´à¸";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
@@ -965,8 +992,9 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ korean ] = "ì‚¬ìš©ìì˜ ë°ì´í„°ì— ë§ëŠ” ë ˆì½”ë“œë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤!";
     Message[ turkish ] = "Girdiğiniz verilere uygun veri kümeleri bulunamadı!";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "¡No se encontró ningún registro de datos adecuado a su información!";
+    Message[ catalan ] = "No s'ha trobat cap registre que es correspongui a la vostra data!";
     Message[ finnish ] = "Tietoja vastaavia tietueita ei löytynyt.";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸œà¸¥à¸¡à¸²à¸ˆà¸²à¸à¸à¸²à¸£à¸à¸šà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¸„à¸¸à¸“!";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
@@ -993,8 +1021,9 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ korean ] = "ì•Œë ¤ì ¸ ìˆì§€ ì•Šì€ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ê²€ìƒ‰ì„ ì¢…ë£Œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤!";
     Message[ turkish ] = "Ayrıntıları bilinmeyen bir hata oluştu. Arama işlemi tamamlanamadı!";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Ha ocurrido un error desconocido. La búsqueda no se pudo completar.";
+    Message[ catalan ] = "S'ha produït un error desconegut. No s'ha pogut completar la cerca.";
     Message[ finnish ] = "Ilmeni tuntematon virhe. Hakua ei voitu suorittaa loppuun.";
+    Message[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸ à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸¥à¸´à¸à¸à¸²à¸£à¸„à¹‰à¸™à¸«à¸²!";
 };
 
 String RID_STR_SEARCH_OVERFLOW
@@ -1020,8 +1049,9 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ greek ] = "Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôçí áñ÷Ş,Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôï ôİëïò";
     Text[ korean ] = "ì˜¤ë²„í”Œë¡œ, ì°¾ê¸°ê°€ ì‹œì‘ ë¶€ë¶„ì—ì„œ ê³„ì†ë˜ì—ˆìŠµë‹ˆë‹¤;ì˜¤ë²„í”Œë¡œ, ì°¾ê¸°ê°€ ë ë¶€ë¶„ì—ì„œ ê³„ì†ë˜ì—ˆìŠµë‹ˆë‹¤";
     Text[ turkish ] = "Taşma, Arama işlemine baştan devam edildi;Taşma, Arama işlemine sondan devam edildi";
-    Text[ catalan ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa por el final";
+    Text[ catalan ] = "Desbordament; la cerca continua per l'inici;Desbordament; la cerca continua pel final";
     Text[ finnish ] = "Ylivuoto, hakua jatkettiin alusta;Ylivuoto, hakua jatkettiin lopusta";
+    Text[ thai ] = "à¸¥à¹‰à¸™, à¸„à¹‰à¸™à¸«à¸²à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™;à¸¥à¹‰à¸™, à¸„à¹‰à¸™à¸«à¸²à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢";
 };
 
 String RID_STR_SEARCH_COUNTING
@@ -1047,7 +1077,8 @@ String RID_STR_SEARCH_COUNTING
     Text[ korean ] = "ë ˆì½”ë“œ ìˆ˜ ì„¸ê¸°";
     Text[ turkish ] = "Veri kümeleri sayılıyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "contando registros de datos";
+    Text[ catalan ] = "s'estan comptant els registres";
     Text[ finnish ] = "lasketaan tietueet";
+    Text[ thai ] = "à¸™à¸±à¸šà¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
 };
 
