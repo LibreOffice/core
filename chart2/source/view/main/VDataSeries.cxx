@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:13:24 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 16:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,12 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
     ::std::auto_ptr< SymbolProperties > apSymbolProps( new SymbolProperties() );
     try
     {
-        if( !(xProp->getPropertyValue( C2U( "SymbolProperties" ) ) >>= *apSymbolProps) )
+        if( xProp->getPropertyValue( C2U( "SymbolProperties" ) ) >>= *apSymbolProps )
+        {
+            //use main color to fill symbols
+            xProp->getPropertyValue( C2U( "Color" ) ) >>= apSymbolProps->nFillColor;
+        }
+        else
             apSymbolProps.reset();
     }
     catch( uno::Exception &e)
