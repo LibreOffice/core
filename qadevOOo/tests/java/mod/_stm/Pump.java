@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pump.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:30:30 $
+ *  last change:$Date: 2003-09-08 12:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 package mod._stm;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.io.NotConnectedException;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XActiveDataSource;
@@ -69,11 +76,6 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
 
 /**
 * Test for object which is represented by service
