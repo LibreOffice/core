@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,7 +1596,7 @@ public:
 class SwUndoCompDoc : public SwUndo, public SwUndRng
 {
     SwRedlineData* pRedlData;
-    SwUndoDelete* pUnDel;
+    SwUndoDelete* pUnDel, *pUnDel2;
     SwRedlineSaveDatas* pRedlSaveData;
     BOOL bInsert;
 public:
