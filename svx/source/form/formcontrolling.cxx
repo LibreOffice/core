@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolling.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:00:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ namespace svx
                 _rEvent.NewValue >>= sNewValue;
                 if ( _rEvent.PropertyName == FM_PROP_ACTIVECOMMAND )
                 {
-                    m_xParser->setQuery( sNewValue );
+                    m_xParser->setElementaryQuery( sNewValue );
                 }
                 else if ( _rEvent.PropertyName == FM_PROP_FILTER_CRITERIA )
                 {
@@ -749,7 +749,7 @@ namespace svx
     void FormControllerHelper::appendFilterByColumn( const void* _pActionParam ) const
     {
         const param_appendFilterByColumn* pParam = static_cast< const param_appendFilterByColumn* >( _pActionParam );
-        m_xParser->appendFilterByColumn( pParam->xField );
+        m_xParser->appendFilterByColumn( pParam->xField, sal_True );
     }
 
     //------------------------------------------------------------------------------
@@ -1633,9 +1633,12 @@ namespace svx
             if ( bUseEscapeProcessing )
             {
                 Reference< XRowSet > xCursorRowSet( m_xCursor, UNO_QUERY );
-                Reference< XSQLQueryComposerFactory > xFactory( m_pDbTools->getRowSetConnection( xCursorRowSet ), UNO_QUERY );
+                Reference< XMultiServiceFactory > xFactory( m_pDbTools->getRowSetConnection( xCursorRowSet ), UNO_QUERY );
                 if ( xFactory.is() )
-                    m_xParser = xFactory->createQueryComposer();
+                {
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+                    DBG_ASSERT( m_xParser.is(), "FormControllerHelper::ensureInitializedParser: factory did not create a parser for us!" );
+                }
             }
 
             if ( m_xParser.is() )
