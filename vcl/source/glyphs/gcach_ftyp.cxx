@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:23:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,8 +557,21 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
     {
         const FtFontInfo& rFFI = *it->second;
-        ImplFontData* pFontData = new ImplFontData( rFFI.GetFontData() );
-        pToAdd->Add( pFontData );
+        rtl::OUString aFamilyName = rFFI.GetFontData().maName;
+        sal_Int32 nIndex = 0;
+        rtl::OUString aAliasNames = rFFI.GetFontData().maMapNames;
+
+        do
+        {
+            ImplFontData* pFontData = new ImplFontData( rFFI.GetFontData() );
+            pFontData->maName = aFamilyName;
+            pFontData->maMapNames.Erase();
+            pToAdd->Add( pFontData );
+            if( nIndex >= 0 )
+                aFamilyName = aAliasNames.getToken( 0, ';', nIndex );
+            else
+                aFamilyName = rtl::OUString();
+        } while( aFamilyName.getLength() );
     }
 
     return nCount;
