@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-10 15:50:22 $
+ *  last change: $Author: sj $ $Date: 2001-08-13 16:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5363,7 +5363,8 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
                         pCPropSet->maString = (sal_Unicode)( (sal_uInt8)aString.GetChar( (sal_uInt16)nCharAnzRead ) );
-                        pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
+                        if ( aCharPropSet.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
+                            pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
                         nCharCount--;
                         nCharAnzRead++;
