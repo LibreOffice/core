@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-16 07:59:00 $
+ *  last change: $Author: hdu $ $Date: 2002-09-17 17:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,15 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
         if( bDisableGlyphs )
             mnLayoutFlags |= SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
     }
+
+    // TODO: use a cached value for bDisableAsianKern from upper layers
+    if( mnLayoutFlags & SAL_LAYOUT_KERNING_ASIAN )
+    {
+        TEXTMETRICA aTextMetricA;
+        if( ::GetTextMetricsA( mhDC, &aTextMetricA )
+        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) )
+            mnLayoutFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -191,6 +200,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // layout text
     int nMaxGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+    int nMaxCharCount  = nMaxGlyphCount;
     DWORD nGcpOption = 0;
 
     mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
@@ -200,34 +210,18 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
         mpGlyphOrigAdvs = new int[ nMaxGlyphCount ];
 
-    GCP_RESULTSW aGCP;
-    aGCP.lStructSize    = sizeof(aGCP);
-    aGCP.lpOutString    = NULL;
-    aGCP.lpOrder        = NULL;
-    aGCP.lpDx           = mpGlyphAdvances;
-    aGCP.lpCaretPos     = NULL;
-    aGCP.lpClass        = NULL;
-    aGCP.lpGlyphs       = NULL;
-    aGCP.nGlyphs        = nMaxGlyphCount;
-    aGCP.nMaxFit        = 0;
-
-    if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
-        aGCP.lpOutString = mpOutGlyphs;
-    else
-        aGCP.lpGlyphs = mpOutGlyphs;
-
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
 
     // apply reordering if requested
+    char* pGcpClass = NULL;
     if( (nMaxGlyphCount > 1) && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
     {
-        aGCP.lpOrder = mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
+        mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
 
-        char* pGcpClass = (char*)alloca( nMaxGlyphCount );
-        aGCP.lpClass = pGcpClass;
-        nGcpOption  |= GCP_REORDER;
+        pGcpClass = (char*)alloca( nMaxGlyphCount );
+        nGcpOption |= GCP_REORDER;
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
         {
             pGcpClass[0] = GCPCLASS_PREBOUNDRTL;
@@ -243,50 +237,109 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     DWORD nRC;
     if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
     {
-        if( mpGlyphOrigAdvs )
+        GCP_RESULTSW aGCPW;
+        aGCPW.lStructSize    = sizeof(aGCPW);
+        aGCPW.lpOutString    = NULL;
+        aGCPW.lpGlyphs       = NULL;
+        aGCPW.lpCaretPos     = NULL;
+        aGCPW.lpClass        = pGcpClass;
+        aGCPW.nGlyphs        = nMaxGlyphCount;
+        aGCPW.nMaxFit        = 0;
+
+        // get glyphs/outstring and kerned placement
+        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+            aGCPW.lpOutString = mpOutGlyphs;
+        else
+            aGCPW.lpGlyphs = mpOutGlyphs;
+        aGCPW.lpOrder = mpGlyphs2Chars;
+        aGCPW.lpDx = mpGlyphAdvances;
+        nRC = ::GetCharacterPlacementW( mhDC,
+            rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
+            0, &aGCPW, nGcpOption );
+        mnGlyphCount = aGCPW.lpOutString ? aGCPW.nMaxFit : aGCPW.nGlyphs;
+
+        // get undisturbed placement
+        if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
-            aGCP.lpDx = mpGlyphOrigAdvs;
-            nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnMinCharPos,
-                        nMaxGlyphCount, 0, &aGCP, (nGcpOption & ~GCP_USEKERNING) );
-           aGCP.lpDx = mpGlyphAdvances;
+            aGCPW.lpOrder = NULL;
+            aGCPW.lpDx = mpGlyphOrigAdvs;
+            nRC = ::GetCharacterPlacementW( mhDC,
+                rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
+                0, &aGCPW, (nGcpOption & ~GCP_USEKERNING) );
         }
-        nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnMinCharPos,
-                    nMaxGlyphCount, 0, &aGCP, nGcpOption );
     }
     else
     {
+        // TODO: emulate full GetCharacterPlacementW on crappy OS
+        // TODO: move into uwinapi.dll
         // convert into ANSI code page
-        UINT nACP = GetACP();
+        static UINT nACP = GetACP();
         int nMBLen = ::WideCharToMultiByte( nACP,
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
             NULL, 0, NULL, NULL );
         if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
             return false;
-        char* pMBStr = (char*)alloca( nMBLen+1 );
+        char* const pMBStr = (char*)alloca( nMBLen+1 );
         ::WideCharToMultiByte( nACP,
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
             pMBStr, nMBLen, NULL, NULL );
-        if( aGCP.lpOutString )
+        pMBStr[ nMBLen ] = '\0';
+
+        // get glyphs/outstring and placement
+        GCP_RESULTSA aGCPA;
+        aGCPA.lStructSize    = sizeof(aGCPA);
+        aGCPA.lpOutString    = NULL;
+        aGCPA.lpGlyphs       = NULL;
+        aGCPA.lpCaretPos     = NULL;
+        aGCPA.lpClass        = pGcpClass;
+        aGCPA.nMaxFit        = 0;
+
+        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
         {
-            aGCP.nGlyphs *= 2;  // ascii length = 2 * unicode length
-            delete[] mpGlyphAdvances;
-            aGCP.lpDx = mpGlyphAdvances = new int[ aGCP.nGlyphs ];
+            nMaxCharCount *= 2; // size(outglyph)==2*size(char)
+            if( nMaxCharCount < nMBLen )
+            {
+                nMaxCharCount = (nMBLen | 15) + 1;
+                delete[] mpGlyphAdvances;
+                delete[] mpOutGlyphs;
+                mpGlyphAdvances = new int[ nMaxCharCount ];
+                mpOutGlyphs = (WCHAR*)new char[ nMaxCharCount ];
+                if( mpGlyphOrigAdvs )
+                {
+                    delete[] mpGlyphOrigAdvs;
+                    mpGlyphOrigAdvs = new int[ nMaxCharCount ];
+                }
+            }
+            aGCPA.lpOutString = reinterpret_cast<char*>(mpOutGlyphs);
+            aGCPA.nGlyphs = nMaxCharCount;
         }
-        if( mpGlyphOrigAdvs )
+        else
         {
-            aGCP.lpDx = mpGlyphOrigAdvs;
-            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
-                        0, (GCP_RESULTSA*)&aGCP, (nGcpOption & ~GCP_USEKERNING) );
-           aGCP.lpDx = mpGlyphAdvances;
+            aGCPA.lpGlyphs = mpOutGlyphs;
+            aGCPA.nGlyphs = nMaxGlyphCount;
         }
+
+        aGCPA.lpOrder = mpGlyphs2Chars;
+        aGCPA.lpDx = mpGlyphAdvances;
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
-                    0, (GCP_RESULTSA*)&aGCP, nGcpOption );
+            0, &aGCPA, nGcpOption );
+        mnGlyphCount = aGCPA.lpOutString ? aGCPA.nMaxFit : aGCPA.nGlyphs;
+
+        // TODO: map lpOrderA to lpOrderW
+        // TODO: map lpDxA to lpDxW
+
+        if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
+        {
+            aGCPA.lpOrder = NULL;
+            aGCPA.lpDx = mpGlyphOrigAdvs;
+            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
+                0, &aGCPA, (nGcpOption & ~GCP_USEKERNING) );
+        }
     }
 
     // cache essential layout properties
-    mnGlyphCount = aGCP.lpOutString ? aGCP.nMaxFit : aGCP.nGlyphs;
     mnWidth = nRC & 0xFFFF; // TODO: check API docs for clarification
 
     if( !nRC )
@@ -297,20 +350,21 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     int i;
     for( i = 0; i < mnGlyphCount; ++i )
     {
-        if( !mpGlyphAdvances[i] && (!aGCP.lpGlyphs || (mpOutGlyphs[i] == 3)) )
+        if( (mpGlyphAdvances[i] != 0)
+        || ((mpOutGlyphs[i] != 3) && !(mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING)) )
+            continue;
+
+        if( mnNotdefWidth < 0 )
         {
-            if( mnNotdefWidth < 0 )
-            {
-                SIZE aExtent;
-                WCHAR cNotDef = 0xFFFF;
-                mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
-            }
-            mpOutGlyphs[i] = 0;
-            mpGlyphAdvances[i] = mnNotdefWidth;
-            if( mpGlyphOrigAdvs )
-                mpGlyphOrigAdvs[i] = mnNotdefWidth;
-            mnWidth += mnNotdefWidth;
+            SIZE aExtent;
+            static const WCHAR cNotDef = 0xFFFF;
+            mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
         }
+        mpOutGlyphs[i] = 0;
+        mpGlyphAdvances[i] = mnNotdefWidth;
+        if( mpGlyphOrigAdvs )
+            mpGlyphOrigAdvs[i] = mnNotdefWidth;
+        mnWidth += mnNotdefWidth;
     }
 
     // fixup strong RTL layout by reversing glyph order
@@ -322,14 +376,14 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         i = 0;
         for( int j = mnGlyphCount; --j >= i; ++i )
         {
-            WCHAR nTempGlyph = mpOutGlyphs[ i ];
-            int nTempAdvance = mpGlyphAdvances[ i ];
-            mpOutGlyphs[ i ]        = mpOutGlyphs[ j ];
-            mpGlyphAdvances[ i ]    = mpGlyphAdvances[ j ];
-            mpGlyphs2Chars[ i ]     = j + (nMaxGlyphCount - mnGlyphCount);
-            mpOutGlyphs[ j ]        = nTempGlyph;
-            mpGlyphAdvances[ j ]    = nTempAdvance;
-            mpGlyphs2Chars[ j ]     = i + (nMaxGlyphCount - mnGlyphCount);
+            WCHAR nTempGlyph    = mpOutGlyphs[ i ];
+            int nTempAdvance    = mpGlyphAdvances[ i ];
+            mpOutGlyphs[i]      = mpOutGlyphs[ j ];
+            mpGlyphAdvances[i]  = mpGlyphAdvances[ j ];
+            mpGlyphs2Chars[i]   = j + (nMaxGlyphCount - mnGlyphCount);
+            mpOutGlyphs[j]      = nTempGlyph;
+            mpGlyphAdvances[j]  = nTempAdvance;
+            mpGlyphs2Chars[j]   = i + (nMaxGlyphCount - mnGlyphCount);
         }
         for( i = mnGlyphCount; i < nMaxGlyphCount; ++i )
             mpGlyphs2Chars[ i ] = -1;
@@ -355,6 +409,12 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
     &&  !rArgs.mpDXArray && !rArgs.mnLayoutWidth )
     {
+        if( !(rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) )
+        {
+            for( i = 0; i < mnGlyphCount; ++i )
+                mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
+        }
+
         bool bVertical = false;
         const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnMinCharPos;
         // #99658# also do asian kerning one beyond substring
