@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleInitialization.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:00:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -76,7 +76,7 @@ import com.sun.star.text.XText;
 public class StyleInitialization {
 
     public static void main(String args[]) {
-        String sConnectionString = "uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService";
+        String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.NamingService";
 
         // It is possible to use a different connection string, passed as argument
         if ( args.length == 1 ) {
