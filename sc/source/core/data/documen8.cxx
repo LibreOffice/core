@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,11 @@ SfxPrinter* ScDocument::GetPrinter()
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                             NULL );
 
-        OfaMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
+        SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
         if ( pOffCfg )
         {
             USHORT nFlags = 0;
-            if ( pOffCfg->IsPaperBinWarning() )
+            if ( pOffCfg->IsPaperOrientationWarning() )
                 nFlags |= SFX_PRINTER_CHG_ORIENTATION;
             if ( pOffCfg->IsPaperSizeWarning() )
                 nFlags |= SFX_PRINTER_CHG_SIZE;
@@ -241,13 +241,13 @@ void ScDocument::SetPrintOptions()
 
     if ( pPrinter )
     {
-        OfaMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
+        SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
         if ( pOffCfg )
         {
             SfxItemSet aOptSet( pPrinter->GetOptions() );
 
             USHORT nFlags = 0;
-            if ( pOffCfg->IsPaperBinWarning() )
+            if ( pOffCfg->IsPaperOrientationWarning() )
                 nFlags |= SFX_PRINTER_CHG_ORIENTATION;
             if ( pOffCfg->IsPaperSizeWarning() )
                 nFlags |= SFX_PRINTER_CHG_SIZE;
