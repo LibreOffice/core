@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 11:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,11 +218,11 @@ void FmFieldWinListBox::Command(const CommandEvent& rEvt)
                     aLinkPtr( POINTER_LINKDATA );
 
             UniString aCopyData = pTabWin->GetDatabaseName();
-            aCopyData   += char(11);
+            aCopyData   += sal_Unicode(11);
             aCopyData   += pTabWin->GetObjectName().getStr();
-            aCopyData   += char(11);
+            aCopyData   += sal_Unicode(11);
             aCopyData   += ::rtl::OUString::valueOf((sal_Int32)pTabWin->GetObjectType()).getStr();
-            aCopyData   += char(11);
+            aCopyData   += sal_Unicode(11);
 
             SvLBoxEntry* pFirstSelected = FirstSelected();
             if( pFirstSelected )
