@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:22:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-21 08:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,17 @@ Reference< XInterface > SAL_CALL
 }
 
 //------------------------------------------------------------------
+namespace fmctrlr
+{
+    const ::rtl::OUString& getDataModeIdentifier()
+    {
+        static ::rtl::OUString s_sDataModeIdentifier = DATA_MODE;
+        return s_sDataModeIdentifier;
+    }
+}
+using namespace fmctrlr;
+
+//------------------------------------------------------------------
 FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
                                      FmFormView* _pView, Window* _pWindow, const UniString& _sDispatchPrefix)
                   :FmXFormController_BASE1(m_aMutex)
@@ -372,7 +383,7 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                   ,m_bCurrentRecordNew(sal_False)
                   ,m_bLocked(sal_False)
                   ,m_bControlsSorted(sal_True)
-                  ,m_aMode(DATA_MODE)
+                  ,m_aMode(getDataModeIdentifier())
                   ,m_bFiltering(sal_False)
                   ,m_bAttachEvents(sal_True)
                   ,m_bDetachEvents(sal_True)
