@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:05:35 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,23 @@ Image BMP_EXCEPTION_WARNING
 Image BMP_EXCEPTION_INFO
 {
     ImageBitmap = Bitmap { File = "exinfo.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image BMP_EXCEPTION_ERROR_SCH
+{
+    ImageBitmap = Bitmap { File = "exerror_sch.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_WARNING_SCH
+{
+    ImageBitmap = Bitmap { File = "exwarning_sch.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_INFO_SCH
+{
+    ImageBitmap = Bitmap { File = "exinfo_sch.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
@@ -382,6 +399,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/11/16 23:05:35  kz
+ *  Merge SRC638: 16.11.01 - 23:04:00
+ *
  *  Revision 1.30  2001/09/26 20:38:37  kz
  *  Merge SRC638: 09/26/01 - 22:37:40
  *
