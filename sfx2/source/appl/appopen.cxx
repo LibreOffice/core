@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: mba $ $Date: 2001-03-12 10:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
     if( bCopy )
     {
-        SvStorageRef aTmpStor = new SvStorage(String());
+        SvStorageRef aTmpStor = new SvStorage( (xDoc->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60) ,String() );
         if( 0 != aTmpStor->GetError())
         {
             xDoc->DoClose();
