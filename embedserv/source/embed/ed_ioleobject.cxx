@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:31:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@ using namespace ::com::sun::star;
 
 
 extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+
+//-------------------------------------------------------------------------------
+// IOleObject
 
 
 STDMETHODIMP EmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
@@ -151,9 +154,15 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite
     {
         if( m_pDocHolder )
         {
-            SIZEL aEmbSize;
+            // the commented code could be usefull in case
+            // outer window would be resized depending from inner one
+            // RECTL aEmbArea;
+            // m_pDocHolder->GetVisArea( &aEmbArea );
+            // m_pDocHolder->show();
+            // m_pDocHolder->SetVisArea( &aEmbArea );
 
-            GetExtent( DVASPECT_CONTENT, &aEmbSize );
+            SIZEL aEmbSize;
+            m_pDocHolder->GetExtent( &aEmbSize );
             m_pDocHolder->show();
             m_pDocHolder->resizeWin( aEmbSize );
         }
@@ -209,26 +218,7 @@ STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
     if ( !psizel )
         return E_FAIL;
 
-    if ( m_pDocHolder->GetDocument().is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = m_pDocHolder->GetDocument()->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aSize(2);
-                aSize[0] = psizel->cx;
-                aSize[1] = psizel->cy;
-
-                aArgs[nInd].Value <<= aSize;
-
-                break;
-            }
-
-        OSL_ENSURE( nInd < aArgs.getLength(), "WinExtent seems not to be implemented!\n" );
-
-        m_pDocHolder->GetDocument()->attachResource( m_pDocHolder->GetDocument()->getURL(), aArgs );
-    }
+    m_pDocHolder->SetExtent( psizel );
 
     return S_OK;
 }
@@ -238,28 +228,12 @@ STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL *psizel )
     if ( !psizel )
         return E_INVALIDARG;
 
-    if ( m_pDocHolder->GetDocument().is() )
+    if ( FAILED( m_pDocHolder->GetExtent( psizel ) ) )
     {
-        uno::Sequence< beans::PropertyValue > aArgs = m_pDocHolder->GetDocument()->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                uno::Sequence< sal_Int32 > aSize;
-                if ( ( aArgs[nInd].Value >>= aSize ) && aSize.getLength() == 2 )
-                {
-                    psizel->cx = aSize[0];
-                    psizel->cy = aSize[1];
-
-                    return S_OK;
-                }
-
-                break;
-            }
+        // return default values
+        psizel->cx = 500;
+        psizel->cy = 500;
     }
-
-    // return default values
-    psizel->cx = 500;
-    psizel->cy = 500;
 
     return S_OK;
 }
@@ -305,6 +279,62 @@ STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE *pLogpal )
     return E_NOTIMPL;
 }
 
+//-------------------------------------------------------------------------------
+// IDispatch
+
+STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
+{
+    if ( m_pDocHolder->GetIDispatch() )
+        return m_pDocHolder->GetIDispatch()->GetTypeInfoCount( pctinfo );
+
+    return E_NOTIMPL;
+}
+
+STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo )
+{
+    if ( m_pDocHolder->GetIDispatch() )
+        return m_pDocHolder->GetIDispatch()->GetTypeInfo( iTInfo, lcid, ppTInfo );
+
+    return DISP_E_BADINDEX; // the only error that can be returned
+}
+
+STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
+                                                OLECHAR FAR* FAR* rgszNames,
+                                                unsigned int cNames,
+                                                LCID lcid,
+                                                DISPID FAR* rgDispId )
+{
+    if ( m_pDocHolder->GetIDispatch() )
+        return m_pDocHolder->GetIDispatch()->GetIDsOfNames( riid, rgszNames, cNames, lcid, rgDispId );
+
+    for ( unsigned int ind = 0; ind < cNames; ind++ )
+        rgDispId[ind] = DISPID_UNKNOWN;
+
+    return DISP_E_UNKNOWNNAME;
+}
+
+STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMember,
+                                         REFIID riid,
+                                         LCID lcid,
+                                         WORD wFlags,
+                                         DISPPARAMS FAR* pDispParams,
+                                         VARIANT FAR* pVarResult,
+                                         EXCEPINFO FAR* pExcepInfo,
+                                         unsigned int FAR* puArgErr )
+{
+    if ( m_pDocHolder->GetIDispatch() )
+        return m_pDocHolder->GetIDispatch()->Invoke( dispIdMember,
+                                                     riid,
+                                                     lcid,
+                                                     wFlags,
+                                                     pDispParams,
+                                                     pVarResult,
+                                                     pExcepInfo,
+                                                     puArgErr );
+
+    return DISP_E_MEMBERNOTFOUND;
+}
+
 
 // C++ - methods
 
@@ -341,4 +371,5 @@ void EmbedDocument_Impl::notify()
     if ( m_pDAdviseHolder )
         m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
 }
+
 
