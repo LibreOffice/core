@@ -1,0 +1,61 @@
+Based on the C grammar for arithmetic expressions
+=================================================
+
+number_digit = '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+
+number_exponent = 'e'|'E'
+
+basic_number = basic_number number_digit | number_digit
+
+number = 
+	   basic_number |
+
+	   basic_number number_exponent basic_number |	   
+	   basic_number number_exponent '-' basic_number |
+	   basic_number number_exponent '+' basic_number |
+
+	   '.' basic_number number_exponent basic_number |
+	   '.' basic_number number_exponent '-' basic_number |
+	   '.' basic_number number_exponent '+' basic_number |
+
+	   basic_number '.' number_exponent basic_number |
+	   basic_number '.' number_exponent '-' basic_number |
+	   basic_number '.' number_exponent '+' basic_number |
+
+	   basic_number '.' basic_number number_exponent basic_number |
+	   basic_number '.' basic_number number_exponent '-' basic_number |
+	   basic_number '.' basic_number number_exponent '+' basic_number
+
+
+identifier = '$'|'pi'|'e'|'X'|'Y'|'Width'|'Height'
+              ^            ^   ^     ^       ^
+              |            |   |     |       |
+	 '$' in PPT            |   |     |       |
+			 '#ppt_x' in PPT   |     |       |
+			     '#ppt_y' in PPT     |       |
+				       '#ppt_w' in PPT       |
+                               '#ppt_h' in PPT
+
+unary_function = 'abs'|'sqrt'|'sin'|'cos'|'tan'|'atan'|'acos'|'asin'|'exp'|'log'
+binary_function = 'min'|'max'
+
+
+basic_expression = 
+				 number |
+				 identifier | 
+				 unary_function '(' additive_expression ')' |
+				 binary_function '(' additive_expression ',' additive_expression ')' |
+				 '(' additive_expression ')'
+
+unary_expression = '-' basic_expression
+
+multiplicative_expression = 
+						  basic_expression |
+						  multiplicative_expression '*' basic_expression |
+						  multiplicative_expression '/' basic_expression
+
+additive_expression = 
+					multiplicative_expression |
+					additive_expression '+' multiplicative_expression |
+					additive_expression '-' multiplicative_expression
+
