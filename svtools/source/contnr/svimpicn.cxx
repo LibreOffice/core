@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 12:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3611,7 +3611,6 @@ void ImpIcnCursor::ExpandGrid()
     {
         long nNewGridRows = nGridRows + 20;
         unsigned char* pTempMap = new unsigned char[ nNewGridRows * nGridCols ];
-        memset( pTempMap, nNewGridRows * nGridCols, 0 );
         memcpy( pTempMap, pGridMap, nGridRows * nGridCols );
         delete pGridMap;
         pGridMap = pTempMap;
