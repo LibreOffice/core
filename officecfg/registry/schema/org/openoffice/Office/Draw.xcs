@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:07:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Draw" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Draw" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>AF</author>
 		<desc xml:lang="en-US">Defines the properties of the Draw application.</desc>
 	</info>
@@ -714,6 +713,7 @@
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
+									<desc xml:lang="sk">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -921,6 +921,7 @@
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
+									<desc xml:lang="sk">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -1562,7 +1563,7 @@
 					<label xml:lang="fi">Don&apos;t distort objects in curve</label>
 					<label xml:lang="cs">Don&apos;t distort objects in curve</label>
 					<label xml:lang="da">Don&apos;t distort objects in curve</label>
-					<label xml:lang="zh-CN">设定成圆形：不变形</label>
+					<label xml:lang="zh-CN">设定成不变形的圆形</label>
 					<label xml:lang="zh-TW">Don&apos;t distort objects in curve</label>
 					<label xml:lang="ar">Don&apos;t distort objects in curve</label>
 					<label xml:lang="he">Don&apos;t distort objects in curve</label>
@@ -2293,6 +2294,7 @@
 								<desc xml:lang="th">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="hi-IN">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="x-comment">Specifies that there has to be at least one morphing step.</desc>
+								<desc xml:lang="sk">Specifies that there has to be at least one morphing step.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="256">
@@ -2322,6 +2324,7 @@
 								<desc xml:lang="th">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="hi-IN">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="x-comment">Specifies that there may be at least this many morphing steps.</desc>
+								<desc xml:lang="sk">Specifies that there may be at least this many morphing steps.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -2582,11 +2585,54 @@
 					<!-- UIHints: Tools - Options - Draw - Other - [Section] Compatibility -->
 					<info>
 						<author>AF</author>
-						<desc xml:lang="en-US">Indicates whether to use printer independent
-                        metrics for document formatting (2) or to use metrics derived from the
-                        current printer (1).  Refer to com::sun::star::document::PrinterIndependentLayout
-                        for valid values.</desc>
+						<desc xml:lang="en-US">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="pt">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="ru">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="el">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="nl">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="fr">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="es">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="fi">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="it">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="cs">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="sk">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="da">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="sv">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="pl">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="pt-BR">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="ja">ドキュメントの書式設定に、プリンタと無関係なメトリックを使用するか (2)、現在のプリンタから取得したメトリックを使用するか (1) を指定します。指定可能な値については com::sun::star::document::PrinterIndependentLayout を参照してください。</desc>
+							<desc xml:lang="ko">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="zh-CN">指定是否使用不受打印机限制的度量来格式化文档 (2) 或使用来源于当前打印机的度量 (1) 。参考com::sun::star::document::PrinterIndependentLayout 以获得有效值。</desc>
+							<desc xml:lang="zh-TW">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="tr">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="ar">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="he">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="ca">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="th">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
 						<label xml:lang="en-US">Use printer independent metrics for document formatting</label>
+						<label xml:lang="pt">Use printer independent metrics for document formatting</label>
+						<label xml:lang="ru">Use printer independent metrics for document formatting</label>
+						<label xml:lang="el">Use printer independent metrics for document formatting</label>
+						<label xml:lang="nl">Use printer independent metrics for document formatting</label>
+						<label xml:lang="fr">Use printer independent metrics for document formatting</label>
+						<label xml:lang="es">Use printer independent metrics for document formatting</label>
+						<label xml:lang="fi">Use printer independent metrics for document formatting</label>
+						<label xml:lang="it">Use printer independent metrics for document formatting</label>
+						<label xml:lang="cs">Use printer independent metrics for document formatting</label>
+						<label xml:lang="sk">Use printer independent metrics for document formatting</label>
+						<label xml:lang="da">Use printer independent metrics for document formatting</label>
+						<label xml:lang="sv">Use printer independent metrics for document formatting</label>
+						<label xml:lang="pl">Use printer independent metrics for document formatting</label>
+						<label xml:lang="pt-BR">Use printer independent metrics for document formatting</label>
+						<label xml:lang="ja">ドキュメントの書式設定に、プリンタと無関係なメトリックを使用します。</label>
+						<label xml:lang="ko">Use printer independent metrics for document formatting</label>
+						<label xml:lang="zh-CN">使用不受打印机限制的度量来打印文档</label>
+						<label xml:lang="zh-TW">Use printer independent metrics for document formatting</label>
+						<label xml:lang="tr">Use printer independent metrics for document formatting</label>
+						<label xml:lang="ar">Use printer independent metrics for document formatting</label>
+						<label xml:lang="he">Use printer independent metrics for document formatting</label>
+						<label xml:lang="ca">Use printer independent metrics for document formatting</label>
+						<label xml:lang="th">Use printer independent metrics for document formatting</label>
 					</info>
 					<value>2</value>
 				</prop>
@@ -2613,7 +2659,7 @@
 				<desc xml:lang="sv">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="pl">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="pt-BR">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
-				<desc xml:lang="ja">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
+				<desc xml:lang="ja">オブジェクトの位置とサイズをスナップグリッドまたは他のオブジェクトに合わせる方法について、指定する情報が含まれます。</desc>
 				<desc xml:lang="ko">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="tr">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="th">Contains the specification of how to force object positions and sizes to the snap grid or to align with other objects.</desc>
@@ -2640,7 +2686,7 @@
 					<desc xml:lang="sv">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="pl">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="pt-BR">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
-					<desc xml:lang="ja">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
+					<desc xml:lang="ja">オブジェクトの位置とサイズを他のオブジェクトに対する事前定義された相対位置に合わせる方法について、指定する情報が含まれます。</desc>
 					<desc xml:lang="ko">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="tr">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="th">Contains the specification of how to force object positions and sizes to predefined locations in relation to other objects.</desc>
@@ -2671,7 +2717,7 @@
 							<desc xml:lang="sv">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="pl">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to snap an object when moved to the next grid point.</desc>
-							<desc xml:lang="ja">Indicates whether to snap an object when moved to the next grid point.</desc>
+							<desc xml:lang="ja">次のグリッド点に移動したときに、オブジェクトを位置合わせするかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="tr">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="th">Indicates whether to snap an object when moved to the next grid point.</desc>
@@ -2695,11 +2741,12 @@
 						<label xml:lang="sv">Gitterlinjer</label>
 						<label xml:lang="pl">Linie siatki</label>
 						<label xml:lang="pt-BR">Linhas da grade</label>
-						<label xml:lang="ja">目盛線</label>
+						<label xml:lang="ja">グリッド線</label>
 						<label xml:lang="ko">눈금선</label>
 						<label xml:lang="tr">Kılavuz çizgileri</label>
 						<label xml:lang="th">เส้นตาราง</label>
 						<label xml:lang="hi-IN">जाल रेखाएँ</label>
+						<label xml:lang="sk">Čiary mriežky</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2728,7 +2775,7 @@
 							<desc xml:lang="sv">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="pl">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to snap at snap lines.</desc>
-							<desc xml:lang="ja">Indicates whether to snap at snap lines.</desc>
+							<desc xml:lang="ja">スナップラインに位置合わせするかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="tr">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="th">Indicates whether to snap at snap lines.</desc>
@@ -2752,7 +2799,7 @@
 						<label xml:lang="sv">Snap lines</label>
 						<label xml:lang="pl">Snap lines</label>
 						<label xml:lang="pt-BR">Snap lines</label>
-						<label xml:lang="ja">Snap lines</label>
+						<label xml:lang="ja">スナップライン</label>
 						<label xml:lang="ko">Snap lines</label>
 						<label xml:lang="tr">Snap lines</label>
 						<label xml:lang="th">Snap lines</label>
@@ -2785,7 +2832,7 @@
 							<desc xml:lang="sv">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="pl">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="pt-BR">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
-							<desc xml:lang="ja">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
+							<desc xml:lang="ja">オブジェクトのアウトラインを近辺のページ余白に対して均等に割り付けするかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="tr">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="th">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
@@ -2809,7 +2856,7 @@
 						<label xml:lang="sv">Page margins</label>
 						<label xml:lang="pl">Page margins</label>
 						<label xml:lang="pt-BR">Page margins</label>
-						<label xml:lang="ja">Page margins</label>
+						<label xml:lang="ja">ページ余白</label>
 						<label xml:lang="ko">Page margins</label>
 						<label xml:lang="tr">Page margins</label>
 						<label xml:lang="th">Page margins</label>
@@ -2842,7 +2889,7 @@
 							<desc xml:lang="sv">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="pl">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
-							<desc xml:lang="ja">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
+							<desc xml:lang="ja">オブジェクトのアウトラインを近隣のオブジェクトに均等に割り付けるかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="tr">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="th">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
@@ -2866,7 +2913,7 @@
 						<label xml:lang="sv">Object frame</label>
 						<label xml:lang="pl">Object frame</label>
 						<label xml:lang="pt-BR">Object frame</label>
-						<label xml:lang="ja">Object frame</label>
+						<label xml:lang="ja">オブジェクトフレーム</label>
 						<label xml:lang="ko">Object frame</label>
 						<label xml:lang="tr">Object frame</label>
 						<label xml:lang="th">Object frame</label>
@@ -2899,7 +2946,7 @@
 							<desc xml:lang="sv">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="pl">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to snap corner points of adjacent objects.</desc>
-							<desc xml:lang="ja">Indicates whether to snap corner points of adjacent objects.</desc>
+							<desc xml:lang="ja">隣接するオブジェクトの角の頂点に位置合わせすべきかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="tr">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="th">Indicates whether to snap corner points of adjacent objects.</desc>
@@ -2923,7 +2970,7 @@
 						<label xml:lang="sv">Object points</label>
 						<label xml:lang="pl">Object points</label>
 						<label xml:lang="pt-BR">Object points</label>
-						<label xml:lang="ja">Object points</label>
+						<label xml:lang="ja">オブジェクトポイント</label>
 						<label xml:lang="ko">Object points</label>
 						<label xml:lang="tr">Object points</label>
 						<label xml:lang="th">Object points</label>
@@ -2956,7 +3003,7 @@
 							<desc xml:lang="sv">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="pl">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="pt-BR">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
-							<desc xml:lang="ja">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
+							<desc xml:lang="ja">位置合わせがアクティブになる座標軸に沿った最大範囲をピクセル単位で指定します。</desc>
 							<desc xml:lang="ko">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="tr">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="th">Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
@@ -2980,7 +3027,7 @@
 						<label xml:lang="sv">Snap range</label>
 						<label xml:lang="pl">Snap range</label>
 						<label xml:lang="pt-BR">Snap range</label>
-						<label xml:lang="ja">Snap range</label>
+						<label xml:lang="ja">位置合わせの範囲</label>
 						<label xml:lang="ko">Snap range</label>
 						<label xml:lang="tr">Snap range</label>
 						<label xml:lang="th">Snap range</label>
@@ -2996,7 +3043,7 @@
 								<desc xml:lang="fi">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="cs">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="da">Specifies that the minimum snap range is 1.</desc>
-								<desc xml:lang="zh-CN">Specifies that the minimum snap range is 1.</desc>
+								<desc xml:lang="zh-CN">指定最小归整范围为 1 。</desc>
 								<desc xml:lang="zh-TW">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="ar">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="he">Specifies that the minimum snap range is 1.</desc>
@@ -3008,11 +3055,12 @@
 								<desc xml:lang="sv">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="pl">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="pt-BR">Specifies that the minimum snap range is 1.</desc>
-								<desc xml:lang="ja">Specifies that the minimum snap range is 1.</desc>
+								<desc xml:lang="ja">位置合わせの最小値を 1 に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="tr">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="th">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum snap range is 1.</desc>
+								<desc xml:lang="sk">Specifies that the minimum snap range is 1.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="50">
@@ -3024,7 +3072,7 @@
 								<desc xml:lang="fi">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="cs">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="da">Specifies that the maximum snap range is 50.</desc>
-								<desc xml:lang="zh-CN">Specifies that the maximum snap range is 50.</desc>
+								<desc xml:lang="zh-CN">指定最大归整范围为 50 。</desc>
 								<desc xml:lang="zh-TW">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="ar">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="he">Specifies that the maximum snap range is 50.</desc>
@@ -3036,11 +3084,12 @@
 								<desc xml:lang="sv">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="pl">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="pt-BR">Specifies that the maximum snap range is 50.</desc>
-								<desc xml:lang="ja">Specifies that the maximum snap range is 50.</desc>
+								<desc xml:lang="ja">位置合わせの最大値を 50 に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="tr">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="th">Specifies that the maximum snap range is 50.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximum snap range is 50.</desc>
+								<desc xml:lang="sk">Specifies that the maximum snap range is 50.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3068,7 +3117,7 @@
 					<desc xml:lang="sv">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="pl">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="pt-BR">Specifies constraints regarding the creation and modification of graphical objects.</desc>
-					<desc xml:lang="ja">Specifies constraints regarding the creation and modification of graphical objects.</desc>
+					<desc xml:lang="ja">グラフィカルなオブジェクトの作成および変更に関する制約を指定します。</desc>
 					<desc xml:lang="ko">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="tr">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="th">Specifies constraints regarding the creation and modification of graphical objects.</desc>
@@ -3099,7 +3148,7 @@
 							<desc xml:lang="sv">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="pl">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
-							<desc xml:lang="ja">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
+							<desc xml:lang="ja">オブジェクトの作成を正方形、円などに制限し、サイズ変更時にその x/y 比率を維持するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="tr">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="th">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
@@ -3123,7 +3172,7 @@
 						<label xml:lang="sv">When creating or moving objects</label>
 						<label xml:lang="pl">When creating or moving objects</label>
 						<label xml:lang="pt-BR">When creating or moving objects</label>
-						<label xml:lang="ja">When creating or moving objects</label>
+						<label xml:lang="ja">オブジェクトの作成時または移動時</label>
 						<label xml:lang="ko">When creating or moving objects</label>
 						<label xml:lang="tr">When creating or moving objects</label>
 						<label xml:lang="th">When creating or moving objects</label>
@@ -3156,7 +3205,7 @@
 							<desc xml:lang="sv">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="pl">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
-							<desc xml:lang="ja">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
+							<desc xml:lang="ja">新しい正方形の角の長さまたは新しい円の直径を決定するために、最初の位置から現在の位置への座標軸に沿った 2 つの距離のうち、より長い方を使用するか (true)、それともより短い方を使用するか (false) を示します。</desc>
 							<desc xml:lang="ko">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="tr">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="th">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
@@ -3180,7 +3229,7 @@
 						<label xml:lang="sv">Extend edges</label>
 						<label xml:lang="pl">Extend edges</label>
 						<label xml:lang="pt-BR">Extend edges</label>
-						<label xml:lang="ja">Extend edges</label>
+						<label xml:lang="ja">長い辺</label>
 						<label xml:lang="ko">Extend edges</label>
 						<label xml:lang="tr">Extend edges</label>
 						<label xml:lang="th">Extend edges</label>
@@ -3213,7 +3262,7 @@
 							<desc xml:lang="sv">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="pl">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to use snapping while rotating an object.</desc>
-							<desc xml:lang="ja">Indicates whether to use snapping while rotating an object.</desc>
+							<desc xml:lang="ja">オブジェクトの回転中に位置合わせを使用するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="tr">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="th">Indicates whether to use snapping while rotating an object.</desc>
@@ -3237,7 +3286,7 @@
 						<label xml:lang="sv">When rotating</label>
 						<label xml:lang="pl">When rotating</label>
 						<label xml:lang="pt-BR">When rotating</label>
-						<label xml:lang="ja">When rotating</label>
+						<label xml:lang="ja">回転時</label>
 						<label xml:lang="ko">When rotating</label>
 						<label xml:lang="tr">When rotating</label>
 						<label xml:lang="th">When rotating</label>
@@ -3270,7 +3319,7 @@
 							<desc xml:lang="sv">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="pl">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="pt-BR">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
-							<desc xml:lang="ja">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
+							<desc xml:lang="ja">回転に対する位置合わせを有効にしたとき、回転角をこの入力値の倍数に設定します。[単位 = 度 / 100]</desc>
 							<desc xml:lang="ko">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="tr">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="th">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
@@ -3294,7 +3343,7 @@
 						<label xml:lang="sv">When rotating</label>
 						<label xml:lang="pl">When rotating</label>
 						<label xml:lang="pt-BR">When rotating</label>
-						<label xml:lang="ja">When rotating</label>
+						<label xml:lang="ja">回転時</label>
 						<label xml:lang="ko">When rotating</label>
 						<label xml:lang="tr">When rotating</label>
 						<label xml:lang="th">When rotating</label>
@@ -3310,7 +3359,7 @@
 								<desc xml:lang="fi">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="cs">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="da">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
-								<desc xml:lang="zh-CN">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
+								<desc xml:lang="zh-CN">指定最小旋转角度为 0/100 度。</desc>
 								<desc xml:lang="zh-TW">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="ar">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="he">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
@@ -3322,11 +3371,12 @@
 								<desc xml:lang="sv">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="pl">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="pt-BR">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
-								<desc xml:lang="ja">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
+								<desc xml:lang="ja">回転の最小角度を 0/100 度に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="tr">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="th">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
+								<desc xml:lang="sk">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="18000">
@@ -3338,7 +3388,7 @@
 								<desc xml:lang="fi">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="cs">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="da">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
-								<desc xml:lang="zh-CN">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
+								<desc xml:lang="zh-CN">指定最大旋转角度为 18000/100 度。</desc>
 								<desc xml:lang="zh-TW">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="ar">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="he">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
@@ -3350,11 +3400,12 @@
 								<desc xml:lang="sv">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="pl">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="pt-BR">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
-								<desc xml:lang="ja">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
+								<desc xml:lang="ja">回転の最大角度を 18000/100 度に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="tr">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="th">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
+								<desc xml:lang="sk">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3385,7 +3436,7 @@
 							<desc xml:lang="sv">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="pl">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="pt-BR">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
-							<desc xml:lang="ja">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
+							<desc xml:lang="ja">ポイントエディタ内で、2 ポイントを接続する場所に線が位置合わせする前に、線を移動できる最大角度を指定します [単位 = 度 / 100]。</desc>
 							<desc xml:lang="ko">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="tr">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="th">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
@@ -3409,7 +3460,7 @@
 						<label xml:lang="sv">Point reduction</label>
 						<label xml:lang="pl">Point reduction</label>
 						<label xml:lang="pt-BR">Point reduction</label>
-						<label xml:lang="ja">Point reduction</label>
+						<label xml:lang="ja">点を減らす</label>
 						<label xml:lang="ko">Point reduction</label>
 						<label xml:lang="tr">Point reduction</label>
 						<label xml:lang="th">Point reduction</label>
@@ -3425,7 +3476,7 @@
 								<desc xml:lang="fi">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="cs">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="da">Specifies that the minimum angle is 100/100 degrees.</desc>
-								<desc xml:lang="zh-CN">Specifies that the minimum angle is 100/100 degrees.</desc>
+								<desc xml:lang="zh-CN">指定最小角度为 100/100 度。</desc>
 								<desc xml:lang="zh-TW">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="ar">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="he">Specifies that the minimum angle is 100/100 degrees.</desc>
@@ -3437,11 +3488,12 @@
 								<desc xml:lang="sv">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="pl">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="pt-BR">Specifies that the minimum angle is 100/100 degrees.</desc>
-								<desc xml:lang="ja">Specifies that the minimum angle is 100/100 degrees.</desc>
+								<desc xml:lang="ja">最小角度を 100/100 度に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="tr">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="th">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum angle is 100/100 degrees.</desc>
+								<desc xml:lang="sk">Specifies that the minimum angle is 100/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="9000">
@@ -3453,7 +3505,7 @@
 								<desc xml:lang="fi">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="cs">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="da">Specifies that the maximum angle is 9000/100 degrees.</desc>
-								<desc xml:lang="zh-CN">Specifies that the maximum angle is 9000/100 degrees.</desc>
+								<desc xml:lang="zh-CN">指定最大角度为 9000/100 度。</desc>
 								<desc xml:lang="zh-TW">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="ar">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="he">Specifies that the maximum angle is 9000/100 degrees.</desc>
@@ -3465,11 +3517,12 @@
 								<desc xml:lang="sv">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="pl">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="pt-BR">Specifies that the maximum angle is 9000/100 degrees.</desc>
-								<desc xml:lang="ja">Specifies that the maximum angle is 9000/100 degrees.</desc>
+								<desc xml:lang="ja">最大角度を 9000/100 度に指定します。</desc>
 								<desc xml:lang="ko">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="tr">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="th">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximum angle is 9000/100 degrees.</desc>
+								<desc xml:lang="sk">Specifies that the maximum angle is 9000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3498,7 +3551,7 @@
 				<desc xml:lang="sv">Contains configuration items related to zooming.</desc>
 				<desc xml:lang="pl">Contains configuration items related to zooming.</desc>
 				<desc xml:lang="pt-BR">Contains configuration items related to zooming.</desc>
-				<desc xml:lang="ja">Contains configuration items related to zooming.</desc>
+				<desc xml:lang="ja">ズームに関連する設定項目が含まれます。</desc>
 				<desc xml:lang="ko">Contains configuration items related to zooming.</desc>
 				<desc xml:lang="tr">Contains configuration items related to zooming.</desc>
 				<desc xml:lang="th">Contains configuration items related to zooming.</desc>
@@ -3529,7 +3582,7 @@
 						<desc xml:lang="sv">Specifies zoom factor along the horizontal axis.</desc>
 						<desc xml:lang="pl">Specifies zoom factor along the horizontal axis.</desc>
 						<desc xml:lang="pt-BR">Specifies zoom factor along the horizontal axis.</desc>
-						<desc xml:lang="ja">Specifies zoom factor along the horizontal axis.</desc>
+						<desc xml:lang="ja">水平軸に沿ったズーム倍率を指定します。</desc>
 						<desc xml:lang="ko">Specifies zoom factor along the horizontal axis.</desc>
 						<desc xml:lang="tr">Specifies zoom factor along the horizontal axis.</desc>
 						<desc xml:lang="th">Specifies zoom factor along the horizontal axis.</desc>
@@ -3553,11 +3606,12 @@
 					<label xml:lang="sv">Skala</label>
 					<label xml:lang="pl">Skala</label>
 					<label xml:lang="pt-BR">Escala</label>
-					<label xml:lang="ja">ズーム</label>
+					<label xml:lang="ja">スケール</label>
 					<label xml:lang="ko">배율</label>
 					<label xml:lang="tr">Ölçek</label>
 					<label xml:lang="th">สเกล</label>
 					<label xml:lang="hi-IN">स्केल</label>
+					<label xml:lang="sk">Škála</label>
 				</info>
 				<value>1</value>
 			</prop>
@@ -3586,7 +3640,7 @@
 						<desc xml:lang="sv">Specifies zoom factor along the vertical axis.</desc>
 						<desc xml:lang="pl">Specifies zoom factor along the vertical axis.</desc>
 						<desc xml:lang="pt-BR">Specifies zoom factor along the vertical axis.</desc>
-						<desc xml:lang="ja">Specifies zoom factor along the vertical axis.</desc>
+						<desc xml:lang="ja">垂直軸に沿ったズーム倍率を指定します。</desc>
 						<desc xml:lang="ko">Specifies zoom factor along the vertical axis.</desc>
 						<desc xml:lang="tr">Specifies zoom factor along the vertical axis.</desc>
 						<desc xml:lang="th">Specifies zoom factor along the vertical axis.</desc>
@@ -3610,11 +3664,12 @@
 					<label xml:lang="sv">Skala</label>
 					<label xml:lang="pl">Skala</label>
 					<label xml:lang="pt-BR">Escala</label>
-					<label xml:lang="ja">ズーム</label>
+					<label xml:lang="ja">スケール</label>
 					<label xml:lang="ko">배율</label>
 					<label xml:lang="tr">Ölçek</label>
 					<label xml:lang="th">สเกล</label>
 					<label xml:lang="hi-IN">स्केल</label>
+					<label xml:lang="sk">Škála</label>
 				</info>
 				<value>1</value>
 			</prop>
@@ -3640,7 +3695,7 @@
 				<desc xml:lang="sv">Defines handling and display of the (snap) grid.</desc>
 				<desc xml:lang="pl">Defines handling and display of the (snap) grid.</desc>
 				<desc xml:lang="pt-BR">Defines handling and display of the (snap) grid.</desc>
-				<desc xml:lang="ja">Defines handling and display of the (snap) grid.</desc>
+				<desc xml:lang="ja">(スナップ) グリッドの処理および表示を定義します。</desc>
 				<desc xml:lang="ko">Defines handling and display of the (snap) grid.</desc>
 				<desc xml:lang="tr">Defines handling and display of the (snap) grid.</desc>
 				<desc xml:lang="th">Defines handling and display of the (snap) grid.</desc>
@@ -3667,7 +3722,7 @@
 					<desc xml:lang="sv">Switches regarding use and display of the (snap) grid.</desc>
 					<desc xml:lang="pl">Switches regarding use and display of the (snap) grid.</desc>
 					<desc xml:lang="pt-BR">Switches regarding use and display of the (snap) grid.</desc>
-					<desc xml:lang="ja">Switches regarding use and display of the (snap) grid.</desc>
+					<desc xml:lang="ja">(スナップ) グリッドの使用および表示を切り替えます。</desc>
 					<desc xml:lang="ko">Switches regarding use and display of the (snap) grid.</desc>
 					<desc xml:lang="tr">Switches regarding use and display of the (snap) grid.</desc>
 					<desc xml:lang="th">Switches regarding use and display of the (snap) grid.</desc>
@@ -3698,7 +3753,7 @@
 							<desc xml:lang="sv">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="pl">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to force frames and drawing elements on grid points.</desc>
-							<desc xml:lang="ja">Indicates whether to force frames and drawing elements on grid points.</desc>
+							<desc xml:lang="ja">フレームおよび図形描画要素をグリッド点上に強制的に位置合わせするかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="tr">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="th">Indicates whether to force frames and drawing elements on grid points.</desc>
@@ -3722,11 +3777,12 @@
 						<label xml:lang="sv">Fäst mot raster</label>
 						<label xml:lang="pl">Zaczep przy siatce</label>
 						<label xml:lang="pt-BR">Foto Grade</label>
-						<label xml:lang="ja">グリッド線で位置合わせ</label>
+						<label xml:lang="ja">グリッドに位置合わせする</label>
 						<label xml:lang="ko">그리드로 맞춤</label>
 						<label xml:lang="tr">Kılavuz çizgileri kullan</label>
 						<label xml:lang="th">จัดชิดกับเส้นตาราง</label>
 						<label xml:lang="hi-IN">जाल में स्नॉप</label>
+						<label xml:lang="sk">Zachytiť na mriežku</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3755,7 +3811,7 @@
 							<desc xml:lang="sv">Indicates whether to show the grid.</desc>
 							<desc xml:lang="pl">Indicates whether to show the grid.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show the grid.</desc>
-							<desc xml:lang="ja">Indicates whether to show the grid.</desc>
+							<desc xml:lang="ja">グリッドを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show the grid.</desc>
 							<desc xml:lang="tr">Indicates whether to show the grid.</desc>
 							<desc xml:lang="th">Indicates whether to show the grid.</desc>
@@ -3779,7 +3835,7 @@
 						<label xml:lang="sv">Visible grid</label>
 						<label xml:lang="pl">Visible grid</label>
 						<label xml:lang="pt-BR">Visible grid</label>
-						<label xml:lang="ja">Visible grid</label>
+						<label xml:lang="ja">グリッドを表示</label>
 						<label xml:lang="ko">Visible grid</label>
 						<label xml:lang="tr">Visible grid</label>
 						<label xml:lang="th">Visible grid</label>
@@ -3812,7 +3868,7 @@
 							<desc xml:lang="sv">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="pl">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
-							<desc xml:lang="ja">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
+							<desc xml:lang="ja">x グリッドおよび y グリッドの解像度を同期するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="tr">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="th">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
@@ -3836,7 +3892,7 @@
 						<label xml:lang="sv">Synchronize axes</label>
 						<label xml:lang="pl">Synchronize axes</label>
 						<label xml:lang="pt-BR">Synchronize axes</label>
-						<label xml:lang="ja">Synchronize axes</label>
+						<label xml:lang="ja">軸を同期する</label>
 						<label xml:lang="ko">Synchronize axes</label>
 						<label xml:lang="tr">Synchronize axes</label>
 						<label xml:lang="th">Synchronize axes</label>
@@ -3866,7 +3922,7 @@
 					<desc xml:lang="sv">Specifies the grid resolution.</desc>
 					<desc xml:lang="pl">Specifies the grid resolution.</desc>
 					<desc xml:lang="pt-BR">Specifies the grid resolution.</desc>
-					<desc xml:lang="ja">Specifies the grid resolution.</desc>
+					<desc xml:lang="ja">グリッドの解像度を指定します。</desc>
 					<desc xml:lang="ko">Specifies the grid resolution.</desc>
 					<desc xml:lang="tr">Specifies the grid resolution.</desc>
 					<desc xml:lang="th">Specifies the grid resolution.</desc>
@@ -3898,7 +3954,7 @@
 							<desc xml:lang="sv">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="pl">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="pt-BR">Defines the horizontal distance between adjacent grid points.</desc>
-							<desc xml:lang="ja">Defines the horizontal distance between adjacent grid points.</desc>
+							<desc xml:lang="ja">隣接するグリッド点間の水平方向の距離を定義します。</desc>
 							<desc xml:lang="ko">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="tr">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="th">Defines the horizontal distance between adjacent grid points.</desc>
@@ -3922,7 +3978,7 @@
 						<label xml:lang="sv">X Axis Resolution</label>
 						<label xml:lang="pl">X Axis Resolution</label>
 						<label xml:lang="pt-BR">X Axis Resolution</label>
-						<label xml:lang="ja">X Axis Resolution</label>
+						<label xml:lang="ja">X 軸の解像度</label>
 						<label xml:lang="ko">X Axis Resolution</label>
 						<label xml:lang="tr">X Axis Resolution</label>
 						<label xml:lang="th">X Axis Resolution</label>
@@ -3949,7 +4005,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -3979,7 +4035,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4015,7 +4071,7 @@
 							<desc xml:lang="sv">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="pl">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="pt-BR">Defines the vertical distance between adjacent grid points.</desc>
-							<desc xml:lang="ja">Defines the vertical distance between adjacent grid points.</desc>
+							<desc xml:lang="ja">隣接するグリッド点間の垂直方向の距離を定義します。</desc>
 							<desc xml:lang="ko">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="tr">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="th">Defines the vertical distance between adjacent grid points.</desc>
@@ -4039,7 +4095,7 @@
 						<label xml:lang="sv">Y Axis Resolution</label>
 						<label xml:lang="pl">Y Axis Resolution</label>
 						<label xml:lang="pt-BR">Y Axis Resolution</label>
-						<label xml:lang="ja">Y Axis Resolution</label>
+						<label xml:lang="ja">Y 軸の解像度</label>
 						<label xml:lang="ko">Y Axis Resolution</label>
 						<label xml:lang="tr">Y Axis Resolution</label>
 						<label xml:lang="th">Y Axis Resolution</label>
@@ -4066,7 +4122,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4096,7 +4152,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4128,7 +4184,7 @@
 					<desc xml:lang="sv">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="pl">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="pt-BR">Specifies the subdivision of the grid.</desc>
-					<desc xml:lang="ja">Specifies the subdivision of the grid.</desc>
+					<desc xml:lang="ja">グリッドの点の間隔を指定します。</desc>
 					<desc xml:lang="ko">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="tr">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="th">Specifies the subdivision of the grid.</desc>
@@ -4160,7 +4216,7 @@
 							<desc xml:lang="sv">Specifies the number of points between two grid points on the X axis.</desc>
 							<desc xml:lang="pl">Specifies the number of points between two grid points on the X axis.</desc>
 							<desc xml:lang="pt-BR">Specifies the number of points between two grid points on the X axis.</desc>
-							<desc xml:lang="ja">Specifies the number of points between two grid points on the X axis.</desc>
+							<desc xml:lang="ja">X 軸上にある２つのグリッド点間に含まれる点の数を指定します。</desc>
 							<desc xml:lang="ko">Specifies the number of points between two grid points on the X axis.</desc>
 							<desc xml:lang="tr">Specifies the number of points between two grid points on the X axis.</desc>
 							<desc xml:lang="th">Specifies the number of points between two grid points on the X axis.</desc>
@@ -4184,7 +4240,7 @@
 						<label xml:lang="sv">X Axis Subdivision</label>
 						<label xml:lang="pl">X Axis Subdivision</label>
 						<label xml:lang="pt-BR">X Axis Subdivision</label>
-						<label xml:lang="ja">X Axis Subdivision</label>
+						<label xml:lang="ja">X 軸の点の間隔</label>
 						<label xml:lang="ko">X Axis Subdivision</label>
 						<label xml:lang="tr">X Axis Subdivision</label>
 						<label xml:lang="th">X Axis Subdivision</label>
@@ -4218,7 +4274,7 @@
 							<desc xml:lang="sv">Specifies the number of points between two grid points on the Y axis.</desc>
 							<desc xml:lang="pl">Specifies the number of points between two grid points on the Y axis.</desc>
 							<desc xml:lang="pt-BR">Specifies the number of points between two grid points on the Y axis.</desc>
-							<desc xml:lang="ja">Specifies the number of points between two grid points on the Y axis.</desc>
+							<desc xml:lang="ja">Y 軸上にある２つのグリッド点の間に含まれる点の数を指定します。</desc>
 							<desc xml:lang="ko">Specifies the number of points between two grid points on the Y axis.</desc>
 							<desc xml:lang="tr">Specifies the number of points between two grid points on the Y axis.</desc>
 							<desc xml:lang="th">Specifies the number of points between two grid points on the Y axis.</desc>
@@ -4242,7 +4298,7 @@
 						<label xml:lang="sv">Y Axis Subdivision</label>
 						<label xml:lang="pl">Y Axis Subdivision</label>
 						<label xml:lang="pt-BR">Y Axis Subdivision</label>
-						<label xml:lang="ja">Y Axis Subdivision</label>
+						<label xml:lang="ja">Y 軸の点の間隔</label>
 						<label xml:lang="ko">Y Axis Subdivision</label>
 						<label xml:lang="tr">Y Axis Subdivision</label>
 						<label xml:lang="th">Y Axis Subdivision</label>
@@ -4272,7 +4328,7 @@
 					<desc xml:lang="sv">Specifies the snap grid.</desc>
 					<desc xml:lang="pl">Specifies the snap grid.</desc>
 					<desc xml:lang="pt-BR">Specifies the snap grid.</desc>
-					<desc xml:lang="ja">Specifies the snap grid.</desc>
+					<desc xml:lang="ja">スナップグリッドを指定します。</desc>
 					<desc xml:lang="ko">Specifies the snap grid.</desc>
 					<desc xml:lang="tr">Specifies the snap grid.</desc>
 					<desc xml:lang="th">Specifies the snap grid.</desc>
@@ -4303,7 +4359,7 @@
 							<desc xml:lang="sv">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="pl">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to synchronize grid and snap-grid.</desc>
-							<desc xml:lang="ja">Indicates whether to synchronize grid and snap-grid.</desc>
+							<desc xml:lang="ja">グリッドとスナップグリッドを同期させるかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="tr">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="th">Indicates whether to synchronize grid and snap-grid.</desc>
@@ -4327,7 +4383,7 @@
 						<label xml:lang="sv">Size to grid</label>
 						<label xml:lang="pl">Size to grid</label>
 						<label xml:lang="pt-BR">Size to grid</label>
-						<label xml:lang="ja">Size to grid</label>
+						<label xml:lang="ja">サイズをグリッドに合わせる</label>
 						<label xml:lang="ko">Size to grid</label>
 						<label xml:lang="tr">Size to grid</label>
 						<label xml:lang="th">Size to grid</label>
@@ -4361,7 +4417,7 @@
 							<desc xml:lang="sv">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="pl">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="pt-BR">Defines the horizontal distance between adjacent points of the snap grid.</desc>
-							<desc xml:lang="ja">Defines the horizontal distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="ja">隣接するスナップグリッド点間の水平方向の距離を定義します。</desc>
 							<desc xml:lang="ko">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="tr">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="th">Defines the horizontal distance between adjacent points of the snap grid.</desc>
@@ -4385,11 +4441,12 @@
 						<label xml:lang="sv">X-axel</label>
 						<label xml:lang="pl">Oś X</label>
 						<label xml:lang="pt-BR">Eixo X</label>
-						<label xml:lang="ja">X軸</label>
+						<label xml:lang="ja">X 軸</label>
 						<label xml:lang="ko">X 축</label>
 						<label xml:lang="tr">X ekseni</label>
 						<label xml:lang="th">แกนX </label>
 						<label xml:lang="hi-IN">X अक्ष</label>
+						<label xml:lang="sk">Os X</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4412,7 +4469,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4442,7 +4499,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4478,7 +4535,7 @@
 							<desc xml:lang="sv">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="pl">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="pt-BR">Defines the vertical distance between adjacent points of the snap grid.</desc>
-							<desc xml:lang="ja">Defines the vertical distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="ja">隣接するスナップグリッド点間の垂直方向の距離を定義します。</desc>
 							<desc xml:lang="ko">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="tr">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="th">Defines the vertical distance between adjacent points of the snap grid.</desc>
@@ -4502,11 +4559,12 @@
 						<label xml:lang="sv">Y-axel</label>
 						<label xml:lang="pl">Oś Y</label>
 						<label xml:lang="pt-BR">Eixo Y</label>
-						<label xml:lang="ja">Y軸</label>
+						<label xml:lang="ja">Y 軸</label>
 						<label xml:lang="ko">Y 축</label>
 						<label xml:lang="tr">Y ekseni</label>
 						<label xml:lang="th">แกนY </label>
 						<label xml:lang="hi-IN">Y अक्ष</label>
+						<label xml:lang="sk">Os Y</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4529,7 +4587,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4559,7 +4617,7 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
@@ -4592,7 +4650,7 @@
 				<desc xml:lang="sv">Defines options regarding the printing of Draw documents.</desc>
 				<desc xml:lang="pl">Defines options regarding the printing of Draw documents.</desc>
 				<desc xml:lang="pt-BR">Defines options regarding the printing of Draw documents.</desc>
-				<desc xml:lang="ja">Defines options regarding the printing of Draw documents.</desc>
+				<desc xml:lang="ja">Draw ドキュメントの印刷に関するオプションを定義します。</desc>
 				<desc xml:lang="ko">Defines options regarding the printing of Draw documents.</desc>
 				<desc xml:lang="tr">Defines options regarding the printing of Draw documents.</desc>
 				<desc xml:lang="th">Defines options regarding the printing of Draw documents.</desc>
@@ -4619,7 +4677,7 @@
 					<desc xml:lang="sv">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="pl">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="pt-BR">Defines options regarding the printing of document content.</desc>
-					<desc xml:lang="ja">Defines options regarding the printing of document content.</desc>
+					<desc xml:lang="ja">ドキュメント内容の印刷に関するオプションを定義します。</desc>
 					<desc xml:lang="ko">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="tr">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="th">Defines options regarding the printing of document content.</desc>
@@ -4650,7 +4708,7 @@
 							<desc xml:lang="sv">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
 							<desc xml:lang="pl">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
 							<desc xml:lang="pt-BR">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
-							<desc xml:lang="ja">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
+							<desc xml:lang="ja">(マスターページではなく) 描画ページを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
 							<desc xml:lang="tr">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
 							<desc xml:lang="th">Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
@@ -4679,6 +4737,7 @@
 						<label xml:lang="tr">Çizim</label>
 						<label xml:lang="th">วาดรูป</label>
 						<label xml:lang="hi-IN">रेखाचित्र</label>
+						<label xml:lang="sk">Kresba</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4704,7 +4763,7 @@
 					<desc xml:lang="sv">Specifies how and what pages will be printed.</desc>
 					<desc xml:lang="pl">Specifies how and what pages will be printed.</desc>
 					<desc xml:lang="pt-BR">Specifies how and what pages will be printed.</desc>
-					<desc xml:lang="ja">Specifies how and what pages will be printed.</desc>
+					<desc xml:lang="ja">どのページをどのように印刷するか、その方法を指定します。</desc>
 					<desc xml:lang="ko">Specifies how and what pages will be printed.</desc>
 					<desc xml:lang="tr">Specifies how and what pages will be printed.</desc>
 					<desc xml:lang="th">Specifies how and what pages will be printed.</desc>
@@ -4735,7 +4794,7 @@
 							<desc xml:lang="sv">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="pl">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
-							<desc xml:lang="ja">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
+							<desc xml:lang="ja">印刷時に、物理用紙サイズに適合するようにドキュメントのページサイズを拡大/縮小するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="tr">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="th">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
@@ -4759,7 +4818,7 @@
 						<label xml:lang="sv">Fit to page</label>
 						<label xml:lang="pl">Fit to page</label>
 						<label xml:lang="pt-BR">Fit to page</label>
-						<label xml:lang="ja">Fit to page</label>
+						<label xml:lang="ja">ページに合わせる</label>
 						<label xml:lang="ko">Fit to page</label>
 						<label xml:lang="tr">Fit to page</label>
 						<label xml:lang="th">Fit to page</label>
@@ -4792,7 +4851,7 @@
 							<desc xml:lang="sv">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="pl">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
-							<desc xml:lang="ja">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
+							<desc xml:lang="ja">各ページの最上段にページタイトルを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="tr">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
@@ -4816,7 +4875,7 @@
 						<label xml:lang="sv">Tile pages</label>
 						<label xml:lang="pl">Tile pages</label>
 						<label xml:lang="pt-BR">Tile pages</label>
-						<label xml:lang="ja">Tile pages</label>
+						<label xml:lang="ja">ページを並べて印刷</label>
 						<label xml:lang="ko">Tile pages</label>
 						<label xml:lang="tr">Tile pages</label>
 						<label xml:lang="th">Tile pages</label>
@@ -4849,7 +4908,7 @@
 							<desc xml:lang="sv">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="pl">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print a document in the form of a brochure.</desc>
-							<desc xml:lang="ja">Indicates whether to print a document in the form of a brochure.</desc>
+							<desc xml:lang="ja">パンフレット形式でドキュメントを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="tr">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print a document in the form of a brochure.</desc>
@@ -4873,7 +4932,7 @@
 						<label xml:lang="sv">Brochure</label>
 						<label xml:lang="pl">Brochure</label>
 						<label xml:lang="pt-BR">Brochure</label>
-						<label xml:lang="ja">Brochure</label>
+						<label xml:lang="ja">パンフレット形式</label>
 						<label xml:lang="ko">Brochure</label>
 						<label xml:lang="tr">Brochure</label>
 						<label xml:lang="th">Brochure</label>
@@ -4906,7 +4965,7 @@
 							<desc xml:lang="sv">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="pl">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print the front side pages of a brochure.</desc>
-							<desc xml:lang="ja">Indicates whether to print the front side pages of a brochure.</desc>
+							<desc xml:lang="ja">パンフレットの正面ページを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="tr">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print the front side pages of a brochure.</desc>
@@ -4930,7 +4989,7 @@
 						<label xml:lang="sv">Front side</label>
 						<label xml:lang="pl">Front side</label>
 						<label xml:lang="pt-BR">Front side</label>
-						<label xml:lang="ja">Front side</label>
+						<label xml:lang="ja">正面</label>
 						<label xml:lang="ko">Front side</label>
 						<label xml:lang="tr">Front side</label>
 						<label xml:lang="th">Front side</label>
@@ -4963,7 +5022,7 @@
 							<desc xml:lang="sv">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="pl">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print the back side pages of a brochure.</desc>
-							<desc xml:lang="ja">Indicates whether to print the back side pages of a brochure.</desc>
+							<desc xml:lang="ja">パンフレットの背面ページを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="tr">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print the back side pages of a brochure.</desc>
@@ -4987,7 +5046,7 @@
 						<label xml:lang="sv">Back side</label>
 						<label xml:lang="pl">Back side</label>
 						<label xml:lang="pt-BR">Back side</label>
-						<label xml:lang="ja">Back side</label>
+						<label xml:lang="ja">背面</label>
 						<label xml:lang="ko">Back side</label>
 						<label xml:lang="tr">Back side</label>
 						<label xml:lang="th">Back side</label>
@@ -5017,7 +5076,7 @@
 					<desc xml:lang="sv">Contains specifications of general printing related issues.</desc>
 					<desc xml:lang="pl">Contains specifications of general printing related issues.</desc>
 					<desc xml:lang="pt-BR">Contains specifications of general printing related issues.</desc>
-					<desc xml:lang="ja">Contains specifications of general printing related issues.</desc>
+					<desc xml:lang="ja">印刷に関連する全般的な問題について指定する情報が含まれます。</desc>
 					<desc xml:lang="ko">Contains specifications of general printing related issues.</desc>
 					<desc xml:lang="tr">Contains specifications of general printing related issues.</desc>
 					<desc xml:lang="th">Contains specifications of general printing related issues.</desc>
@@ -5048,7 +5107,7 @@
 							<desc xml:lang="sv">Indicates whether to print page names.</desc>
 							<desc xml:lang="pl">Indicates whether to print page names.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print page names.</desc>
-							<desc xml:lang="ja">Indicates whether to print page names.</desc>
+							<desc xml:lang="ja">ページ名を印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print page names.</desc>
 							<desc xml:lang="tr">Indicates whether to print page names.</desc>
 							<desc xml:lang="th">Indicates whether to print page names.</desc>
@@ -5072,7 +5131,7 @@
 						<label xml:lang="sv">Page name</label>
 						<label xml:lang="pl">Page name</label>
 						<label xml:lang="pt-BR">Page name</label>
-						<label xml:lang="ja">Page name</label>
+						<label xml:lang="ja">ページ名</label>
 						<label xml:lang="ko">Page name</label>
 						<label xml:lang="tr">Page name</label>
 						<label xml:lang="th">Page name</label>
@@ -5105,7 +5164,7 @@
 							<desc xml:lang="sv">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="pl">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print the current date at the top of every page.</desc>
-							<desc xml:lang="ja">Indicates whether to print the current date at the top of every page.</desc>
+							<desc xml:lang="ja">各ページの最上段に現在の日付を印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="tr">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the current date at the top of every page.</desc>
@@ -5134,6 +5193,7 @@
 						<label xml:lang="tr">Tarih</label>
 						<label xml:lang="th">วันที่</label>
 						<label xml:lang="hi-IN">दिनांक</label>
+						<label xml:lang="sk">Dátum</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5162,7 +5222,7 @@
 							<desc xml:lang="sv">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="pl">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print the current time at the top of every page.</desc>
-							<desc xml:lang="ja">Indicates whether to print the current time at the top of every page.</desc>
+							<desc xml:lang="ja">各ページの最上段に現在の時間を印刷すべきかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="tr">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the current time at the top of every page.</desc>
@@ -5191,6 +5251,7 @@
 						<label xml:lang="tr">Zaman</label>
 						<label xml:lang="th">เวลา</label>
 						<label xml:lang="hi-IN">समय</label>
+						<label xml:lang="sk">Čas</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5219,7 +5280,7 @@
 							<desc xml:lang="sv">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="pl">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to print hidden pages.</desc>
-							<desc xml:lang="ja">Indicates whether to print hidden pages.</desc>
+							<desc xml:lang="ja">隠しページを印刷するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="tr">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="th">Indicates whether to print hidden pages.</desc>
@@ -5243,7 +5304,7 @@
 						<label xml:lang="sv">Hidden pages</label>
 						<label xml:lang="pl">Hidden pages</label>
 						<label xml:lang="pt-BR">Hidden pages</label>
-						<label xml:lang="ja">Hidden pages</label>
+						<label xml:lang="ja">隠しページ</label>
 						<label xml:lang="ko">Hidden pages</label>
 						<label xml:lang="tr">Hidden pages</label>
 						<label xml:lang="th">Hidden pages</label>
@@ -5276,7 +5337,7 @@
 						<desc xml:lang="sv">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="pl">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="pt-BR">Specifies the quality of the printed colors.</desc>
-						<desc xml:lang="ja">Specifies the quality of the printed colors.</desc>
+						<desc xml:lang="ja">印刷される色の質を指定します。</desc>
 						<desc xml:lang="ko">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="tr">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="th">Specifies the quality of the printed colors.</desc>
@@ -5286,17 +5347,17 @@
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">Color</desc>
-								<desc xml:lang="el">Color</desc>
-								<desc xml:lang="nl">Color</desc>
+								<desc xml:lang="el">Χρώμα</desc>
+								<desc xml:lang="nl">Kleur</desc>
 								<desc xml:lang="fr">Couleur</desc>
-								<desc xml:lang="fi">Color</desc>
-								<desc xml:lang="cs">Color</desc>
-								<desc xml:lang="da">Color</desc>
+								<desc xml:lang="fi">Väri</desc>
+								<desc xml:lang="cs">Barva</desc>
+								<desc xml:lang="da">Farve</desc>
 								<desc xml:lang="zh-CN">颜色</desc>
 								<desc xml:lang="zh-TW">顏色</desc>
-								<desc xml:lang="ar">Color</desc>
-								<desc xml:lang="he">Color</desc>
-								<desc xml:lang="ca">Color</desc>
+								<desc xml:lang="ar">اللون</desc>
+								<desc xml:lang="he">‮צבע‬</desc>
+								<desc xml:lang="ca">~Color</desc>
 								<desc xml:lang="pt">Cor</desc>
 								<desc xml:lang="ru">Цвет</desc>
 								<desc xml:lang="es">~Color</desc>
@@ -5309,22 +5370,23 @@
 								<desc xml:lang="tr">Renk</desc>
 								<desc xml:lang="th">สี</desc>
 								<desc xml:lang="hi-IN">रंग</desc>
+								<desc xml:lang="sk">Farba</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
 								<desc xml:lang="en-US">Grayscale</desc>
-								<desc xml:lang="el">Grayscale</desc>
-								<desc xml:lang="nl">Grayscale</desc>
+								<desc xml:lang="el">Διαβαθμίσεις του γκρι</desc>
+								<desc xml:lang="nl">Grijswaarden</desc>
 								<desc xml:lang="fr">Niveaux de gris</desc>
-								<desc xml:lang="fi">Grayscale</desc>
-								<desc xml:lang="cs">Grayscale</desc>
-								<desc xml:lang="da">Grayscale</desc>
+								<desc xml:lang="fi">Harmaasävy</desc>
+								<desc xml:lang="cs">Stupně šedi</desc>
+								<desc xml:lang="da">Gråtoner</desc>
 								<desc xml:lang="zh-CN">灰度</desc>
 								<desc xml:lang="zh-TW">灰階</desc>
-								<desc xml:lang="ar">Grayscale</desc>
-								<desc xml:lang="he">Grayscale</desc>
-								<desc xml:lang="ca">Grayscale</desc>
+								<desc xml:lang="ar">درجات الرمادي</desc>
+								<desc xml:lang="he">‮סולם האפור‬</desc>
+								<desc xml:lang="ca">Escala de grisos</desc>
 								<desc xml:lang="pt">Tons de cinzento</desc>
 								<desc xml:lang="ru">Оттенки серого</desc>
 								<desc xml:lang="es">Escala de grises</desc>
@@ -5337,22 +5399,23 @@
 								<desc xml:lang="tr">Gri tonlama</desc>
 								<desc xml:lang="th">สเกลสีเทา</desc>
 								<desc xml:lang="hi-IN">ग्रेस्केल</desc>
+								<desc xml:lang="sk">Stupne šedej</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Black/White</desc>
-								<desc xml:lang="el">Black/White</desc>
-								<desc xml:lang="nl">Black/White</desc>
+								<desc xml:lang="el">Μαύρο/Λευκό</desc>
+								<desc xml:lang="nl">Zwart-wit</desc>
 								<desc xml:lang="fr">Noir/Blanc</desc>
-								<desc xml:lang="fi">Black/White</desc>
-								<desc xml:lang="cs">Black/White</desc>
-								<desc xml:lang="da">Black/White</desc>
+								<desc xml:lang="fi">Mustavalkoinen</desc>
+								<desc xml:lang="cs">Černobílá</desc>
+								<desc xml:lang="da">Sort-hvid</desc>
 								<desc xml:lang="zh-CN">黑/白</desc>
 								<desc xml:lang="zh-TW">黑白</desc>
-								<desc xml:lang="ar">Black/White</desc>
-								<desc xml:lang="he">Black/White</desc>
-								<desc xml:lang="ca">Black/White</desc>
+								<desc xml:lang="ar">أسود/أبيض</desc>
+								<desc xml:lang="he">Schwarz/Weiß</desc>
+								<desc xml:lang="ca">Negre/Blanc</desc>
 								<desc xml:lang="pt">Preto/Branco</desc>
 								<desc xml:lang="ru">Черно-белый</desc>
 								<desc xml:lang="es">Blanco y Negro</desc>
@@ -5365,6 +5428,7 @@
 								<desc xml:lang="tr">Siyah/Beyaz</desc>
 								<desc xml:lang="th">ดำ/ขาว</desc>
 								<desc xml:lang="hi-IN">काला/सफेद</desc>
+								<desc xml:lang="sk">Čiernobiela</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -5395,7 +5459,7 @@
 							<desc xml:lang="sv">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="pl">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
-							<desc xml:lang="ja">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
+							<desc xml:lang="ja">給紙方法を選択するために、プリンタのシステム設定を使用するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="tr">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="th">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
@@ -5419,7 +5483,7 @@
 						<label xml:lang="sv">From printer setup</label>
 						<label xml:lang="pl">From printer setup</label>
 						<label xml:lang="pt-BR">From printer setup</label>
-						<label xml:lang="ja">From printer setup</label>
+						<label xml:lang="ja">プリンタのセットアップから</label>
 						<label xml:lang="ko">From printer setup</label>
 						<label xml:lang="tr">From printer setup</label>
 						<label xml:lang="th">From printer setup</label>
@@ -5431,6 +5495,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

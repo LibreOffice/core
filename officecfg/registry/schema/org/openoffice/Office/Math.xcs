@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:08:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>TL</author>
 		<desc xml:lang="en-US">Contains settings for Math.</desc>
 	</info>
@@ -208,6 +207,7 @@
 							<desc xml:lang="th">not known</desc>
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
+							<desc xml:lang="sk">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -237,6 +237,7 @@
 							<desc xml:lang="th">decorative</desc>
 							<desc xml:lang="hi-IN">decorative</desc>
 							<desc xml:lang="x-comment">decorative</desc>
+							<desc xml:lang="sk">decorative</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -266,6 +267,7 @@
 							<desc xml:lang="th">modern</desc>
 							<desc xml:lang="hi-IN">modern</desc>
 							<desc xml:lang="x-comment">modern</desc>
+							<desc xml:lang="sk">modern</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -295,6 +297,7 @@
 							<desc xml:lang="th">roman</desc>
 							<desc xml:lang="hi-IN">roman</desc>
 							<desc xml:lang="x-comment">roman</desc>
+							<desc xml:lang="sk">roman</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -354,6 +357,7 @@
 							<desc xml:lang="th">swiss</desc>
 							<desc xml:lang="hi-IN">swiss</desc>
 							<desc xml:lang="x-comment">swiss</desc>
+							<desc xml:lang="sk">swiss</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -383,6 +387,7 @@
 							<desc xml:lang="th">ระบบ</desc>
 							<desc xml:lang="hi-IN">सिस्टम</desc>
 							<desc xml:lang="x-comment">system</desc>
+							<desc xml:lang="sk">system</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -443,6 +448,7 @@
 							<desc xml:lang="th">not known</desc>
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
+							<desc xml:lang="sk">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -563,6 +569,7 @@
 							<desc xml:lang="th">not known</desc>
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
+							<desc xml:lang="sk">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -622,6 +629,7 @@
 							<desc xml:lang="th">ultra light</desc>
 							<desc xml:lang="hi-IN">ultra light</desc>
 							<desc xml:lang="x-comment">ultra light</desc>
+							<desc xml:lang="sk">ultra light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -711,6 +719,7 @@
 							<desc xml:lang="th">ปกติ</desc>
 							<desc xml:lang="hi-IN">सामान्य</desc>
 							<desc xml:lang="x-comment">normal</desc>
+							<desc xml:lang="sk">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -921,6 +930,7 @@
 							<desc xml:lang="th">not slanted</desc>
 							<desc xml:lang="hi-IN">not slanted</desc>
 							<desc xml:lang="x-comment">not slanted</desc>
+							<desc xml:lang="sk">not slanted</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -980,6 +990,7 @@
 							<desc xml:lang="th">ปกติ</desc>
 							<desc xml:lang="hi-IN">सामान्य</desc>
 							<desc xml:lang="x-comment">normal</desc>
+							<desc xml:lang="sk">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -1009,6 +1020,7 @@
 							<desc xml:lang="th">not known</desc>
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
+							<desc xml:lang="sk">not known</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1483,6 +1495,7 @@
 							<desc xml:lang="th">Adapt to paper size</desc>
 							<desc xml:lang="hi-IN">Adapt to paper size</desc>
 							<desc xml:lang="x-comment">Adapt to paper size</desc>
+							<desc xml:lang="sk">Adapt to paper size</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1512,6 +1525,7 @@
 							<desc xml:lang="th">Define zoom factor</desc>
 							<desc xml:lang="hi-IN">Define zoom factor</desc>
 							<desc xml:lang="x-comment">Define zoom factor</desc>
+							<desc xml:lang="sk">Define zoom factor</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1603,6 +1617,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="400">
@@ -1632,6 +1647,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1776,7 +1792,7 @@
 					<label xml:lang="sv">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="pl">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="pt-BR">Ignore ~ and &apos; at the end of the line</label>
-					<label xml:lang="ja">行末の「~」と &apos; を無視します。</label>
+					<label xml:lang="ja">行末の「~」と「&apos;」を無視します。</label>
 					<label xml:lang="ko">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="tr">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="th">Ignore ~ and &apos; at the end of the line</label>
@@ -2324,31 +2340,31 @@
 				<!-- UIHints: Format- Font Size - Base size -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="el">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="nl">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="fr">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="fi">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="cs">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="da">Specifies the reference base size.  [UNIT=Pts]</desc>
+					<desc xml:lang="en-US">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="el">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="nl">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="fr">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="fi">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="cs">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="da">Specifies the reference base size. [UNIT=Pts]</desc>
 						<desc xml:lang="zh-CN">指定引用的基本大小。[UNIT=Pts]</desc>
-						<desc xml:lang="zh-TW">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="ar">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="he">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="ca">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="pt">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="ru">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="es">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="it">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="sv">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="pl">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="pt-BR">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="ja">基準となる基本サイズを指定します。[UNIT = Pts]</desc>
-						<desc xml:lang="ko">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="tr">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="th">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="hi-IN">Specifies the reference base size.  [UNIT=Pts]</desc>
-						<desc xml:lang="x-comment">Specifies the reference base size.  [UNIT=Pts]</desc>
+						<desc xml:lang="zh-TW">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="ar">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="he">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="ca">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="pt">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="ru">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="es">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="it">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="sv">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="pl">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="pt-BR">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="ja">基準となる基本サイズを指定します。[単位 = Pts]</desc>
+						<desc xml:lang="ko">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="tr">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="th">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="hi-IN">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="x-comment">Specifies the reference base size. [UNIT=Pts]</desc>
 					<label xml:lang="en-US">Base size</label>
 					<label xml:lang="el">Base size</label>
 					<label xml:lang="nl">Base size</label>
@@ -2403,6 +2419,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="127">
@@ -2432,6 +2449,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2443,31 +2461,31 @@
 				<!-- UIHints: Format- Font Size - Text -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="el">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="nl">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fr">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fi">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="cs">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="da">Specifies the text size relative to the base size.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="el">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="nl">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fr">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fi">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="cs">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="da">Specifies the text size relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="zh-CN">指定相对于基本大小的文字大小。[UNIT=%]</desc>
-						<desc xml:lang="zh-TW">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ar">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="he">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ca">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ru">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="es">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="it">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="sv">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pl">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt-BR">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ja">基本サイズに対するテキストサイズを指定します。[UNIT = %]</desc>
-						<desc xml:lang="ko">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="tr">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="th">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="hi-IN">Specifies the text size relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="x-comment">Specifies the text size relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="zh-TW">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ar">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="he">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ca">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ru">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="es">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="it">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sv">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pl">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt-BR">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ja">基本サイズに対するテキストサイズを指定します。[単位 = %]</desc>
+						<desc xml:lang="ko">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="tr">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="th">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hi-IN">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="x-comment">Specifies the text size relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Text size</label>
 					<label xml:lang="el">Text size</label>
 					<label xml:lang="nl">Text size</label>
@@ -2522,6 +2540,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2551,6 +2570,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2562,31 +2582,31 @@
 				<!-- UIHints: Format- Font Size - Indices -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="el">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="nl">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fr">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fi">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="cs">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="da">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="el">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="nl">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fr">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fi">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="cs">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="da">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="zh-CN">指定相对于基本大小的标志大小。[UNIT=%]</desc>
-						<desc xml:lang="zh-TW">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ar">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="he">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ca">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ru">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="es">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="it">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="sv">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pl">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt-BR">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ja">基本サイズに対する添え字のサイズを指定します。[UNIT = %]</desc>
-						<desc xml:lang="ko">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="tr">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="th">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="hi-IN">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="x-comment">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="zh-TW">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ar">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="he">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ca">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ru">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="es">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="it">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sv">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pl">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt-BR">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ja">基本サイズに対する添え字のサイズを指定します。[単位 = %]</desc>
+						<desc xml:lang="ko">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="tr">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="th">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hi-IN">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="x-comment">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Index size</label>
 					<label xml:lang="el">Index size</label>
 					<label xml:lang="nl">Index size</label>
@@ -2641,6 +2661,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2670,6 +2691,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2681,31 +2703,31 @@
 				<!-- UIHints: Format- Font Size - Functions -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="el">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="nl">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fr">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fi">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="cs">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="da">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="el">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="nl">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fr">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fi">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="cs">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="da">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="zh-CN">指定相对于基本大小的函数大小。[UNIT=%]</desc>
-						<desc xml:lang="zh-TW">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ar">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="he">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ca">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ru">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="es">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="it">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="sv">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pl">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt-BR">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ja">基本サイズに対する関数のサイズを指定します。[UNIT = %]</desc>
-						<desc xml:lang="ko">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="tr">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="th">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="hi-IN">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="x-comment">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="zh-TW">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ar">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="he">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ca">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ru">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="es">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="it">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sv">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pl">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt-BR">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ja">基本サイズに対する関数のサイズを指定します。[単位 = %]</desc>
+						<desc xml:lang="ko">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="tr">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="th">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hi-IN">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="x-comment">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Function size</label>
 					<label xml:lang="el">Function size</label>
 					<label xml:lang="nl">Function size</label>
@@ -2760,6 +2782,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2789,6 +2812,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2800,31 +2824,31 @@
 				<!-- UIHints: Format- Font Size - Operators -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="el">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="nl">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fr">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fi">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="cs">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="da">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="el">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="nl">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fr">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fi">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="cs">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="da">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="zh-CN">指定相对于基本大小的运算符大小。[UNIT=%]</desc>
-						<desc xml:lang="zh-TW">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ar">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="he">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ca">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ru">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="es">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="it">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="sv">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pl">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt-BR">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ja">基本サイズに対する演算子のサイズを指定します。[UNIT = %]</desc>
-						<desc xml:lang="ko">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="tr">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="th">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="hi-IN">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="x-comment">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="zh-TW">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ar">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="he">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ca">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ru">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="es">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="it">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sv">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pl">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt-BR">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ja">基本サイズに対する演算子のサイズを指定します。[単位 = %]</desc>
+						<desc xml:lang="ko">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="tr">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="th">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hi-IN">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="x-comment">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Operator size</label>
 					<label xml:lang="el">Operator size</label>
 					<label xml:lang="nl">Operator size</label>
@@ -2879,6 +2903,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2908,6 +2933,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2919,31 +2945,31 @@
 				<!-- UIHints: Format- Font Size - Limits -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="el">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="nl">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fr">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="fi">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="cs">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="da">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="el">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="nl">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fr">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="fi">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="cs">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="da">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="zh-CN">指定相对于基本大小的限度大小。[UNIT=%]</desc>
-						<desc xml:lang="zh-TW">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ar">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="he">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ca">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ru">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="es">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="it">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="sv">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pl">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="pt-BR">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="ja">基本サイズに対する境界のサイズを指定します。[UNIT = %]</desc>
-						<desc xml:lang="ko">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="tr">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="th">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="hi-IN">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
-						<desc xml:lang="x-comment">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="zh-TW">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ar">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="he">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ca">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ru">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="es">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="it">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sv">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pl">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="pt-BR">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="ja">基本サイズに対する境界のサイズを指定します。[単位 = %]</desc>
+						<desc xml:lang="ko">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="tr">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="th">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hi-IN">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="x-comment">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Limits size</label>
 					<label xml:lang="el">Limits size</label>
 					<label xml:lang="nl">Limits size</label>
@@ -2998,6 +3024,7 @@
 							<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -3027,6 +3054,7 @@
 							<desc xml:lang="th">Specifies the maximum value allowed</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3479,31 +3507,31 @@
 					<!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定不同表达式和二元运算符之间的水平间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="ja">異なる数式および二項演算子の、横の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="ja">異なる数式および二項演算子の、横の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 						<label xml:lang="en-US">Horizontal distance</label>
 						<label xml:lang="el">Horizontal distance</label>
 						<label xml:lang="nl">Horizontal distance</label>
@@ -3558,6 +3586,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
@@ -3587,6 +3616,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3598,31 +3628,31 @@
 					<!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of different lines. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定不同行之间的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="ja">異なる行の縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="ja">異なる行の縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of different lines. [UNIT=%]</desc>
 						<label xml:lang="en-US">Vertical distance</label>
 						<label xml:lang="el">Vertical distance</label>
 						<label xml:lang="nl">Vertical distance</label>
@@ -3677,6 +3707,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
@@ -3706,6 +3737,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3717,31 +3749,31 @@
 					<!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定根图标的水平条到变量的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ja">ルート記号の横棒から引数までの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ja">ルート記号の横棒から引数までの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to root symbol</label>
 						<label xml:lang="el">Distance to root symbol</label>
 						<label xml:lang="nl">Distance to root symbol</label>
@@ -3796,6 +3828,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -3825,6 +3858,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3836,31 +3870,31 @@
 					<!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定下标到基线的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ja">下付き文字からベースまでの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ja">下付き文字からベースまでの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Subscript distance</label>
 						<label xml:lang="el">Subscript distance</label>
 						<label xml:lang="nl">Subscript distance</label>
@@ -3915,6 +3949,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -3944,6 +3979,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3955,31 +3991,31 @@
 					<!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定上标到基线的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="ja">上付き文字からベースまでの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="ja">上付き文字からベースまでの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Superscript distance</label>
 						<label xml:lang="el">Superscript distance</label>
 						<label xml:lang="nl">Superscript distance</label>
@@ -4034,6 +4070,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4063,6 +4100,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4074,31 +4112,31 @@
 					<!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定下界限到运算符的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ja">下限から演算子までの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ja">下限から演算子までの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Lower limit distance</label>
 						<label xml:lang="el">Lower limit distance</label>
 						<label xml:lang="nl">Lower limit distance</label>
@@ -4153,6 +4191,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4182,6 +4221,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4193,31 +4233,31 @@
 					<!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定上界限到运算符的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="ja">上限から演算子までの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="ja">上限から演算子までの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Upper limit distance</label>
 						<label xml:lang="el">Upper limit distance</label>
 						<label xml:lang="nl">Upper limit distance</label>
@@ -4272,6 +4312,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4301,6 +4342,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4312,31 +4354,31 @@
 					<!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定相对于基本大小的大运算符比例。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="ja">大きい演算子の、基本サイズに対するサイズ調整を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="ja">拡大演算子の、基本サイズに対するサイズ調整を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 						<label xml:lang="en-US">Oversize of large operator</label>
 						<label xml:lang="el">Oversize of large operator</label>
 						<label xml:lang="nl">Oversize of large operator</label>
@@ -4391,6 +4433,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4420,6 +4463,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4431,31 +4475,31 @@
 					<!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定大运算符与其变量之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ja">大きい演算子とその引数までの距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="ja">大きい演算子とその引数までの距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to large operator</label>
 						<label xml:lang="el">Distance to large operator</label>
 						<label xml:lang="nl">Distance to large operator</label>
@@ -4510,6 +4554,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4539,6 +4584,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4550,31 +4596,31 @@
 					<!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定分子到分数分隔符的垂直间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="ja">分子から分数の区切り線までの縦の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="ja">分子から分数の区切り線までの縦の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Numerator distance</label>
 						<label xml:lang="el">Numerator distance</label>
 						<label xml:lang="nl">Numerator distance</label>
@@ -4629,6 +4675,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4658,6 +4705,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4748,6 +4796,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4777,6 +4826,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4788,31 +4838,31 @@
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定分数分隔符相对于其变量的超长度。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="ja">分数の区切り線の、引数に対する長さの差を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="ja">分数の区切り線の、引数に対する長さの差を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 						<label xml:lang="en-US">Fraction overlength</label>
 						<label xml:lang="el">Fraction overlength</label>
 						<label xml:lang="nl">Fraction overlength</label>
@@ -4867,6 +4917,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4896,6 +4947,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4986,6 +5038,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed (must be positive)</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5015,6 +5068,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5026,31 +5080,31 @@
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定可变括号相对于变量的超长度。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="ja">引数に対する、スケーラブルなかっこの超過長さを指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="ja">引数に対する、スケーラブルなかっこの超過長さを指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Bracket oversize</label>
 						<label xml:lang="el">Bracket oversize</label>
 						<label xml:lang="nl">Bracket oversize</label>
@@ -5105,6 +5159,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5134,6 +5189,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5145,31 +5201,31 @@
 					<!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定括号与所括变量之间的水平间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="ja">かっこと、かっこでくくられた引数との間の横の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="ja">かっこと、かっこでくくられた引数との間の横の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Bracket distance</label>
 						<label xml:lang="el">Bracket distance</label>
 						<label xml:lang="nl">Bracket distance</label>
@@ -5224,6 +5280,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5253,6 +5310,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5264,31 +5322,31 @@
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定普通括号相对于变量的超长度。仅在 ScaleNormalBracket = TRUE 时有效。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="ja">引数に対する、標準かっこの超過長さを指定します。ScaleNormalBracket = TRUE の場合のみ有効。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="ja">引数に対する、標準かっこの超過長さを指定します。ScaleNormalBracket = TRUE の場合のみ有効。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 						<label xml:lang="en-US">Normal bracket oversize</label>
 						<label xml:lang="el">Normal bracket oversize</label>
 						<label xml:lang="nl">Normal bracket oversize</label>
@@ -5343,6 +5401,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5372,6 +5431,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5383,31 +5443,31 @@
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定矩阵各行之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ja">マトリックスの行間の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ja">マトリックスの行間の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 						<label xml:lang="en-US">Matrix row distance</label>
 						<label xml:lang="el">Matrix row distance</label>
 						<label xml:lang="nl">Matrix row distance</label>
@@ -5462,6 +5522,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
@@ -5491,6 +5552,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5502,31 +5564,31 @@
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定矩阵各列之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="ja">マトリックスの列間の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="ja">マトリックスの列間の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 						<label xml:lang="en-US">Matrix column distance</label>
 						<label xml:lang="el">Matrix column distance</label>
 						<label xml:lang="nl">Matrix column distance</label>
@@ -5581,6 +5643,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
@@ -5610,6 +5673,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5621,31 +5685,31 @@
 					<!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定属性与其基线之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="ja">属性からベースまでの距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="ja">属性からベースまでの距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to attribute</label>
 						<label xml:lang="el">Distance to attribute</label>
 						<label xml:lang="nl">Distance to attribute</label>
@@ -5700,6 +5764,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5729,6 +5794,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5740,31 +5806,31 @@
 					<!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定同一基线的不同属性之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="ja">同じ基準位置にある、異なる属性間の距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="ja">同じ基準位置にある、異なる属性間の距離を指定します。[単位 = %]</desc>
+							<desc xml:lang="ko">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance between attributes</label>
 						<label xml:lang="el">Distance between attributes</label>
 						<label xml:lang="nl">Distance between attributes</label>
@@ -5819,6 +5885,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5848,6 +5915,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5859,31 +5927,31 @@
 					<!-- UIHints: Format - Spacing - Category - Borders - Left -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="el">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="nl">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fr">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fi">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="cs">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="da">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
+						<desc xml:lang="en-US">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="el">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="nl">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fr">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fi">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="cs">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="da">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="zh-CN">指定公式左边额外空间的宽度。[UNIT=1/100 mm]</desc>
-							<desc xml:lang="zh-TW">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ar">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="he">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ca">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ru">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="es">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="it">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="sv">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pl">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt-BR">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="zh-TW">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ar">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="he">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ca">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ru">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="es">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="it">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sv">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pl">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt-BR">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="ja">数式の左端までの余白幅を指定します。[単位=1/100 mm]</desc>
-							<desc xml:lang="ko">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="tr">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="th">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="hi-IN">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="x-comment">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ko">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="tr">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="th">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hi-IN">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Left margin</label>
 						<label xml:lang="el">Αριστερό περιθώριο</label>
 						<label xml:lang="nl">Linker rand</label>
@@ -5939,6 +6007,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -5968,6 +6037,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5979,31 +6049,31 @@
 					<!-- UIHints: Format - Spacing - Category - Borders - Right -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="el">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="nl">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fr">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fi">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="cs">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="da">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
+						<desc xml:lang="en-US">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="el">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="nl">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fr">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fi">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="cs">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="da">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="zh-CN">指定公式右边额外空间的宽度。[UNIT=1/100 mm]</desc>
-							<desc xml:lang="zh-TW">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ar">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="he">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ca">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ru">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="es">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="it">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="sv">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pl">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt-BR">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="zh-TW">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ar">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="he">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ca">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ru">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="es">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="it">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sv">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pl">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt-BR">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="ja">数式の右端までの余白幅を指定します。[単位=1/100 mm]</desc>
-							<desc xml:lang="ko">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="tr">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="th">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="hi-IN">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="x-comment">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ko">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="tr">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="th">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hi-IN">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Right margin</label>
 						<label xml:lang="el">Δεξιό περιθώριο</label>
 						<label xml:lang="nl">Rechter rand</label>
@@ -6059,6 +6129,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6088,6 +6159,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6099,31 +6171,31 @@
 					<!-- UIHints: Format - Spacing - Category - Borders - Top -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="el">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="nl">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fr">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fi">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="cs">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="da">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
+						<desc xml:lang="en-US">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="el">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="nl">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fr">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fi">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="cs">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="da">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="zh-CN">指定公式上边的额外空间量。[UNIT=1/100 mm]</desc>
-							<desc xml:lang="zh-TW">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ar">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="he">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ca">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ru">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="es">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="it">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="sv">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pl">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt-BR">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="zh-TW">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ar">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="he">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ca">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ru">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="es">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="it">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sv">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pl">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt-BR">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="ja">数式の上の余白サイズを指定します。[単位=1/100 mm]</desc>
-							<desc xml:lang="ko">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="tr">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="th">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="hi-IN">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="x-comment">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ko">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="tr">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="th">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hi-IN">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Top margin</label>
 						<label xml:lang="el">Άνω περιθώριο</label>
 						<label xml:lang="nl">Bovenmarge</label>
@@ -6179,6 +6251,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6208,6 +6281,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6219,31 +6293,31 @@
 					<!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="el">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="nl">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fr">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="fi">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="cs">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="da">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
+						<desc xml:lang="en-US">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="el">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="nl">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fr">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="fi">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="cs">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="da">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="zh-CN">指定公式下边的额外空间量。[UNIT=1/100 mm]</desc>
-							<desc xml:lang="zh-TW">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ar">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="he">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ca">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ru">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="es">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="it">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="sv">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pl">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="pt-BR">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="zh-TW">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ar">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="he">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ca">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ru">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="es">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="it">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sv">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pl">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="pt-BR">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="ja">数式の下の余白サイズを指定します。[単位=1/100 mm]</desc>
-							<desc xml:lang="ko">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="tr">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="th">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="hi-IN">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
-							<desc xml:lang="x-comment">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ko">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="tr">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="th">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hi-IN">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Bottom margin</label>
 						<label xml:lang="el">Bottom margin</label>
 						<label xml:lang="nl">Bottom margin</label>
@@ -6298,6 +6372,7 @@
 								<desc xml:lang="th">Specifies the minimum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6327,6 +6402,7 @@
 								<desc xml:lang="th">Specifies the maximum value allowed</desc>
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6365,6 +6441,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

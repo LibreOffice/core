@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:33:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>OJ</author>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
@@ -412,7 +411,7 @@
 					<desc xml:lang="sv">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="pl">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="pt-BR">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
-					<desc xml:lang="ja">列に対して使用する数値書式の索引が含まれます。この列に対して使用する数値書式が標準の数値書式ではない場合 (したがって書式キーのみを使用して持続させることができません)、書式の計算時に FormatDescriptor 設定および FormatLocale 設定が適用されるはずです。この場合、FormatKey は NULL になります。FormatKey および FormatDescriptor が NULL である場合、列のデータ型に応じた標準の数値書式が使用されるはずです。</desc>
+					<desc xml:lang="ja">列に対して使用する数値書式の索引が含まれます。この列に対して使用する数値書式が標準の数値書式ではない場合 (したがって書式キーのみを使用して持続させることができません)、書式の計算時に FormatDescriptor 設定および FormatLocale 設定が適用されます。この場合、FormatKey は NULL になります。FormatKey および FormatDescriptor が NULL である場合、列のデータ型に応じた標準の数値書式が使用されます。</desc>
 					<desc xml:lang="ko">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="tr">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="th">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
@@ -601,31 +600,31 @@
 			</prop>
 			<prop oor:name="Width" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="el">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="nl">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="fr">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="fi">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="cs">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="da">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="el">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="nl">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="fr">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="fi">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="cs">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="da">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 					<desc xml:lang="zh-CN">指定网格中显示的列的宽度。如果该值为 NULL，将按照列名的大小使用默认的宽度。[UNIT=1/100 mm]</desc>
-					<desc xml:lang="zh-TW">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="ar">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="he">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="ca">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="pt">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="ru">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="es">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="it">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="sv">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="pl">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="pt-BR">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="zh-TW">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="ar">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="he">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="ca">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="pt">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="ru">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="es">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="it">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="sv">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="pl">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="pt-BR">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 					<desc xml:lang="ja">グリッド内に表示される列の幅を指定します。この値が NULL である場合、列名のサイズに応じた標準の幅が使用されるはずです。[単位=1/100 mm]</desc>
-					<desc xml:lang="ko">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="tr">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="th">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="hi-IN">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
-					<desc xml:lang="x-comment">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="ko">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="tr">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="th">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="hi-IN">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="x-comment">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 				</info>
 			</prop>
 			<prop oor:name="Position" oor:type="xs:int">
@@ -951,31 +950,31 @@
 			</prop>
 			<prop oor:name="UpdateTableName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="el">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="nl">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="fr">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="fi">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="cs">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="da">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="en-US">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="el">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="nl">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="fr">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="fi">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="cs">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="da">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 					<desc xml:lang="zh-CN">指定要更新的表格的名称。这通常用于执行与多个表格相关的查询。</desc>
-					<desc xml:lang="zh-TW">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="ar">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="he">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="ca">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="pt">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="ru">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="es">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="it">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="sv">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="pl">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="zh-TW">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="ar">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="he">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="ca">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="pt">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="ru">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="es">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="it">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="sv">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="pl">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="pt-BR">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 					<desc xml:lang="ja">更新するテーブルの名前を指定します。通常、複数のテーブルに関係するクエリーに対して使用されます。</desc>
-					<desc xml:lang="ko">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="tr">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="th">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="hi-IN">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
-					<desc xml:lang="x-comment">Specifies the name of the table which should be updated.  This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="ko">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="tr">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="th">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="hi-IN">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="x-comment">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UpdateSchemaName" oor:type="xs:string">
@@ -5125,6 +5124,7 @@
 							<desc xml:lang="th">Search for text</desc>
 							<desc xml:lang="hi-IN">Search for text</desc>
 							<desc xml:lang="x-comment">Search for text</desc>
+							<desc xml:lang="sk">Search for text</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="null">
@@ -5154,6 +5154,7 @@
 							<desc xml:lang="th">Search for NULL</desc>
 							<desc xml:lang="hi-IN">Search for NULL</desc>
 							<desc xml:lang="x-comment">Search for NULL</desc>
+							<desc xml:lang="sk">Search for NULL</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="non-null">
@@ -5183,6 +5184,7 @@
 							<desc xml:lang="th">Search for non-NULL</desc>
 							<desc xml:lang="hi-IN">Search for non-NULL</desc>
 							<desc xml:lang="x-comment">Search for non-NULL</desc>
+							<desc xml:lang="sk">Search for non-NULL</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -5244,6 +5246,7 @@
 							<desc xml:lang="th">Anywhere</desc>
 							<desc xml:lang="hi-IN">Anywhere</desc>
 							<desc xml:lang="x-comment">Anywhere</desc>
+							<desc xml:lang="sk">Anywhere</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="beginning-of-field">
@@ -5273,6 +5276,7 @@
 							<desc xml:lang="th">Beginning</desc>
 							<desc xml:lang="hi-IN">Beginning</desc>
 							<desc xml:lang="x-comment">Beginning</desc>
+							<desc xml:lang="sk">Beginning</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="end-of-field">
@@ -6299,6 +6303,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

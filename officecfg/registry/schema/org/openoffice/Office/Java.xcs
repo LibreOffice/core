@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:34:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>JL</author>
 	</info>
 	<component>
@@ -156,31 +155,31 @@
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on version used -->
 				<info>
-					<desc xml:lang="en-US">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="el">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="nl">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="fr">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="fi">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="cs">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="da">Specifies the  version of the Java installation that is used.</desc>
+					<desc xml:lang="en-US">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="el">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="nl">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="fr">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="fi">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="cs">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="da">Specifies the version of the Java installation that is used.</desc>
 						<desc xml:lang="zh-CN">指定所使用的 Java 版本。</desc>
-						<desc xml:lang="zh-TW">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="ar">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="he">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="ca">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="pt">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="ru">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="es">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="it">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="sv">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="pl">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="pt-BR">Specifies the  version of the Java installation that is used.</desc>
+						<desc xml:lang="zh-TW">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="ar">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="he">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="ca">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="pt">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="ru">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="es">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="it">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="sv">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="pl">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="pt-BR">Specifies the version of the Java installation that is used.</desc>
 						<desc xml:lang="ja">使用する Java インストールのバージョンを指定します。</desc>
-						<desc xml:lang="ko">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="tr">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="th">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="hi-IN">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="x-comment">Specifies the  version of the Java installation that is used.</desc>
+						<desc xml:lang="ko">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="tr">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="th">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="hi-IN">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="x-comment">Specifies the version of the Java installation that is used.</desc>
 					<label xml:lang="en-US">Java Version</label>
 					<label xml:lang="el">Έκδοση Java</label>
 					<label xml:lang="nl">Java Version</label>
@@ -474,6 +473,7 @@
 							<desc xml:lang="th">Host - connect to origin</desc>
 							<desc xml:lang="hi-IN">Host - connect to origin</desc>
 							<desc xml:lang="x-comment">Host - connect to origin</desc>
+							<desc xml:lang="sk">Host - connect to origin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -503,6 +503,7 @@
 							<desc xml:lang="th">Unrestricted - connect to all</desc>
 							<desc xml:lang="hi-IN">Unrestricted - connect to all</desc>
 							<desc xml:lang="x-comment">Unrestricted - connect to all</desc>
+							<desc xml:lang="sk">Unrestricted - connect to all</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -532,6 +533,7 @@
 							<desc xml:lang="th">None - no connection alloed</desc>
 							<desc xml:lang="hi-IN">None - no connection alloed</desc>
 							<desc xml:lang="x-comment">None - no connection alloed</desc>
+							<desc xml:lang="sk">None - no connection alloed</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -847,6 +849,7 @@
 							<desc xml:lang="th">Verify mode 0</desc>
 							<desc xml:lang="hi-IN">Verify mode 0</desc>
 							<desc xml:lang="x-comment">Verify mode 0</desc>
+							<desc xml:lang="sk">Verify mode 0</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -877,6 +880,7 @@
 							<desc xml:lang="th">Verify mode 1</desc>
 							<desc xml:lang="hi-IN">Verify mode 1</desc>
 							<desc xml:lang="x-comment">Verify mode 1</desc>
+							<desc xml:lang="sk">Verify mode 1</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -907,6 +911,7 @@
 							<desc xml:lang="th">Verify mode 2</desc>
 							<desc xml:lang="hi-IN">Verify mode 2</desc>
 							<desc xml:lang="x-comment">Verify mode 2</desc>
+							<desc xml:lang="sk">Verify mode 2</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1098,6 +1103,7 @@
 							<desc xml:lang="th">Classic VM</desc>
 							<desc xml:lang="hi-IN">Classic VM</desc>
 							<desc xml:lang="x-comment">Classic VM</desc>
+							<desc xml:lang="sk">Classic VM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="Hotspot">
@@ -1127,6 +1133,7 @@
 							<desc xml:lang="th">Hotspot VM</desc>
 							<desc xml:lang="hi-IN">Hotspot VM</desc>
 							<desc xml:lang="x-comment">Hotspot VM</desc>
+							<desc xml:lang="sk">Hotspot VM</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1189,6 +1196,7 @@
 							<desc xml:lang="th">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="hi-IN">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="x-comment">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="sk">JDKxxx or j2sdkxxx</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="JRE">
@@ -1218,6 +1226,7 @@
 							<desc xml:lang="th">JRExxx</desc>
 							<desc xml:lang="hi-IN">JRExxx</desc>
 							<desc xml:lang="x-comment">JRExxx</desc>
+							<desc xml:lang="sk">JRExxx</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1453,31 +1462,31 @@
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
-					<desc xml:lang="en-US">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="el">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="nl">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="fr">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="fi">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="cs">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="da">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+					<desc xml:lang="en-US">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="el">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="nl">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="fr">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="fi">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="cs">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="da">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="zh-CN">指定 Java 设置程序 (jvmsetup.exe) 忽略所有已安装的较低版本的 Java。</desc>
-					<desc xml:lang="zh-TW">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="ar">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="he">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="ca">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="pt">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="ru">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="es">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="it">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="sv">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="pl">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="pt-BR">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+					<desc xml:lang="zh-TW">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ar">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="he">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ca">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pt">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ru">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="es">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="it">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sv">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pl">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pt-BR">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="ja">Java セットアップ (jvmsetup.exe) で、より低いバージョンの Java インストールをすべて無視するように指定します。</desc>
-					<desc xml:lang="ko">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="tr">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="th">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="hi-IN">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="x-comment">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+					<desc xml:lang="ko">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="tr">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="th">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="hi-IN">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="x-comment">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1519,31 +1528,31 @@
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
-					<desc xml:lang="en-US">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="el">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="nl">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="fr">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="fi">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="cs">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="da">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="en-US">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="el">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="nl">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="fr">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="fi">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="cs">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="da">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="zh-CN">含有以空格分隔的列单，其中含有 Java 设置程序 (jvmsetup.exe) 忽略的 Java 版本。</desc>
-					<desc xml:lang="zh-TW">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="ar">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="he">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="ca">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="pt">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="ru">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="es">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="it">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="sv">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="pl">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="pt-BR">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="zh-TW">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ar">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="he">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ca">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pt">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ru">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="es">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="it">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sv">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pl">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="pt-BR">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="ja">Java セットアップ (jvmsetup.exe) で無視する Java のバージョンをスペースで区切ったリストが含まれます。</desc>
-					<desc xml:lang="ko">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="tr">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="th">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="hi-IN">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="x-comment">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ko">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="tr">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="th">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="hi-IN">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="x-comment">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1618,6 +1627,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

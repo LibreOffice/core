@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:36:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Table</value>
               <value xml:lang="de">Tabelle</value>
-              <value xml:lang="x-comment">Table</value>
+              <value xml:lang="x-comment">; Table</value>
               <value xml:lang="pt">Tabela</value>
               <value xml:lang="ru">Таблица</value>
               <value xml:lang="el">Πίνακας</value>
@@ -102,7 +102,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Text</value>
               <value xml:lang="de">Text</value>
-              <value xml:lang="x-comment">Text</value>
+              <value xml:lang="x-comment">; Text</value>
               <value xml:lang="pt">Texto</value>
               <value xml:lang="ru">Текст</value>
               <value xml:lang="el">Κείμενο</value>
@@ -135,7 +135,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -170,7 +170,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -203,7 +203,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -236,7 +236,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -269,7 +269,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -302,7 +302,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -335,7 +335,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -368,7 +368,7 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
+              <value xml:lang="x-comment">; Illustration</value>
               <value xml:lang="pt">Ilustração</value>
               <value xml:lang="ru">Иллюстрация</value>
               <value xml:lang="el">Εικόνα</value>
@@ -950,6 +950,7 @@
     </node>
   </node>
 </oor:component-data>
+
 
 
 

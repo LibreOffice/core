@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:09:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
 		<author>KSO</author>
 		<desc xml:lang="en-US">Contains components and templates used for storing UCB related data.</desc>
 	</info>
@@ -310,6 +309,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

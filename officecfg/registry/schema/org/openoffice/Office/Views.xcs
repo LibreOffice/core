@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:36:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Views" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Views" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>AS</author>
 		<desc xml:lang="en-US">Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
 	</info>
@@ -386,31 +385,31 @@
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="el">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="nl">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fr">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="fi">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="cs">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="da">Includes information  (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="el">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="nl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="fr">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="fi">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="cs">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="da">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="zh-CN">包括已使用的 vcl 视窗的信息 (位置、大小和状态)。</desc>
-					<desc xml:lang="zh-TW">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ar">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="he">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ca">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ru">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="es">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="it">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="sv">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pl">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="pt-BR">Includes information  (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="zh-TW">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ar">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="he">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ca">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="pt">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ru">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="es">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="it">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
-					<desc xml:lang="ko">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="tr">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="th">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="hi-IN">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="x-comment">Includes information  (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Visible" oor:type="xs:boolean">
@@ -592,6 +591,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Substitution.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:35:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,9 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Substitution" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Substitution" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined	path variable must be substituted with a real path.</desc>
+		<desc xml:lang="en-US">Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined path variable must be substituted with a real path.</desc>
 	</info>
 	<templates>
 		<group oor:name="SharePointMapping">
@@ -269,31 +268,31 @@
 				</prop>
 				<prop oor:name="NTDomain" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="el">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="nl">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fr">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fi">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="cs">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="da">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="en-US">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="el">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="nl">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="fr">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="fi">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="cs">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="da">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
 						<desc xml:lang="zh-CN">指定对“目录”属性变量有效的 NT 域。可以在域中使用“*”通配符。</desc>
-						<desc xml:lang="zh-TW">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ar">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="he">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ca">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ru">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="es">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="it">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sv">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pl">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt-BR">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="zh-TW">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="ar">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="he">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="ca">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="pt">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="ru">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="es">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="it">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="sv">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="pl">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="pt-BR">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
 						<desc xml:lang="ja">Directory 属性の変数が有効な NT ドメインを指定します。ドメインにワイルドカード「*」を使用できます。</desc>
-						<desc xml:lang="ko">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="tr">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="th">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="hi-IN">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="x-comment">Specifies the NT domain for which the Directory property variable is valid.  You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="ko">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="tr">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="th">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="hi-IN">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc xml:lang="x-comment">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
 					</info>
 				</prop>
 			</group>
@@ -360,6 +359,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

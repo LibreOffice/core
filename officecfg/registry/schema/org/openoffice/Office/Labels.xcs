@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:34:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Labels" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<!-- UIHints: File - New - Labels - Labels -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Labels" oor:package="org.openoffice.Office" xml:lang="en-US"> <!-- UIHints: File - New - Labels - Labels -->
 	<info>
 		<author>OS</author>
 		<desc xml:lang="en-US">Contains settings for Writer documents used as labels.</desc>
@@ -243,6 +242,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

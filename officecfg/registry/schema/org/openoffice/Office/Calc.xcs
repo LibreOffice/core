@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:06:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Calc" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Calc" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>NN</author>
 		<desc xml:lang="en-US">Contains settings for the spreadsheet application.</desc>
 	</info>
@@ -966,6 +965,7 @@
 								<desc xml:lang="th">Show placeholders</desc>
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
+								<desc xml:lang="sk">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1117,6 +1117,7 @@
 								<desc xml:lang="th">Show placeholders</desc>
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
+								<desc xml:lang="sk">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1268,6 +1269,7 @@
 								<desc xml:lang="th">Show placeholders</desc>
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
+								<desc xml:lang="sk">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1387,6 +1389,7 @@
 								<desc xml:lang="th">Update always</desc>
 								<desc xml:lang="hi-IN">Update always</desc>
 								<desc xml:lang="x-comment">Update always</desc>
+								<desc xml:lang="sk">Update always</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -1416,6 +1419,7 @@
 								<desc xml:lang="th">Update never</desc>
 								<desc xml:lang="hi-IN">Update never</desc>
 								<desc xml:lang="x-comment">Update never</desc>
+								<desc xml:lang="sk">Update never</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1445,6 +1449,7 @@
 								<desc xml:lang="th">Update on request</desc>
 								<desc xml:lang="hi-IN">Update on request</desc>
 								<desc xml:lang="x-comment">Update on request</desc>
+								<desc xml:lang="sk">Update on request</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1678,7 +1683,7 @@
 						<label xml:lang="it">Interruzioni pagina</label>
 						<label xml:lang="sv">Sidbrytningar</label>
 						<label xml:lang="pl">Page breaks</label>
-						<label xml:lang="pt-BR">Page breaks</label>
+						<label xml:lang="pt-BR">Quebras de páginas</label>
 						<label xml:lang="ja">改ページ</label>
 						<label xml:lang="ko">페이지 나누기</label>
 						<label xml:lang="tr">Sayfa sonları</label>
@@ -2365,6 +2370,7 @@
 								<desc xml:lang="th">Number count</desc>
 								<desc xml:lang="hi-IN">Number count</desc>
 								<desc xml:lang="x-comment">Number count</desc>
+								<desc xml:lang="sk">Number count</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -2394,6 +2400,7 @@
 								<desc xml:lang="th">Count of all non-empty cells</desc>
 								<desc xml:lang="hi-IN">Count of all non-empty cells</desc>
 								<desc xml:lang="x-comment">Count of all non-empty cells</desc>
+								<desc xml:lang="sk">Count of all non-empty cells</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -2423,6 +2430,7 @@
 								<desc xml:lang="th">มากที่สุด</desc>
 								<desc xml:lang="hi-IN">अधिकतम</desc>
 								<desc xml:lang="x-comment">Maximum</desc>
+								<desc xml:lang="sk">Maximum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="5">
@@ -2452,6 +2460,7 @@
 								<desc xml:lang="th">น้อยที่สุด</desc>
 								<desc xml:lang="hi-IN">न्यूनतम</desc>
 								<desc xml:lang="x-comment">Minimum</desc>
+								<desc xml:lang="sk">Minimum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -2752,6 +2761,7 @@
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
+									<desc xml:lang="sk">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -2868,7 +2878,7 @@
 							<desc xml:lang="sv">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="pl">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="pt-BR">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
-							<desc xml:lang="ja">メートル法以外のロケールとともに使用する単位を指定します。</desc>
+							<desc xml:lang="ja">メートル法を使用しないロケールで使用する単位を指定します。</desc>
 							<desc xml:lang="ko">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="tr">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="th">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
@@ -2933,6 +2943,7 @@
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
+									<desc xml:lang="sk">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -3143,6 +3154,7 @@
 								<desc xml:lang="th">Percentage value</desc>
 								<desc xml:lang="hi-IN">Percentage value</desc>
 								<desc xml:lang="x-comment">Percentage value</desc>
+								<desc xml:lang="sk">Percentage value</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -3172,6 +3184,7 @@
 								<desc xml:lang="th">Whole page</desc>
 								<desc xml:lang="hi-IN">Whole page</desc>
 								<desc xml:lang="x-comment">Whole page</desc>
+								<desc xml:lang="sk">Whole page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -3201,6 +3214,7 @@
 								<desc xml:lang="th">Width of a page</desc>
 								<desc xml:lang="hi-IN">Width of a page</desc>
 								<desc xml:lang="x-comment">Width of a page</desc>
+								<desc xml:lang="sk">Width of a page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -4149,6 +4163,7 @@
 							<desc xml:lang="th">น้อยที่สุด</desc>
 							<desc xml:lang="hi-IN">न्यूनतम</desc>
 							<desc xml:lang="x-comment">MIN</desc>
+							<desc xml:lang="sk">MIN</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="223">
@@ -4178,6 +4193,7 @@
 							<desc xml:lang="th">มากที่สุด</desc>
 							<desc xml:lang="hi-IN">अधिकतम</desc>
 							<desc xml:lang="x-comment">MAX</desc>
+							<desc xml:lang="sk">MAX</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -4207,6 +4223,7 @@
 							<desc xml:lang="th">IF</desc>
 							<desc xml:lang="hi-IN">IF</desc>
 							<desc xml:lang="x-comment">IF</desc>
+							<desc xml:lang="sk">IF</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4735,7 +4752,7 @@
 								<desc xml:lang="sv">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pt-BR">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
-								<desc xml:lang="ja">メートル法以外のロケールとともに使用する間隔を指定します。</desc>
+								<desc xml:lang="ja">メートル法を使用しないロケールで使用する間隔を指定します。</desc>
 								<desc xml:lang="ko">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="tr">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
@@ -4857,7 +4874,7 @@
 								<desc xml:lang="sv">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pt-BR">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
-								<desc xml:lang="ja">メートル法以外のロケールとともに使用する間隔を指定します。</desc>
+								<desc xml:lang="ja">メートル法を使用しないロケールで使用する間隔を指定します。</desc>
 								<desc xml:lang="ko">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="tr">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
@@ -5007,7 +5024,7 @@
 								<desc xml:lang="sv">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pt-BR">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
-								<desc xml:lang="ja">メートル法以外のロケールとともに使用する間隔を指定します。</desc>
+								<desc xml:lang="ja">メートル法を使用しないロケールで使用する間隔を指定します。</desc>
 								<desc xml:lang="ko">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="tr">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
@@ -5128,7 +5145,7 @@
 								<desc xml:lang="sv">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="pt-BR">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
-								<desc xml:lang="ja">メートル法以外のロケールとともに使用する間隔を指定します。</desc>
+								<desc xml:lang="ja">メートル法を使用しないロケールで使用する間隔を指定します。</desc>
 								<desc xml:lang="ko">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="tr">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
@@ -6726,6 +6743,7 @@
 									<desc xml:lang="th">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="hi-IN">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="x-comment">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="sk">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -6815,6 +6833,7 @@
 									<desc xml:lang="th">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="hi-IN">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="x-comment">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="sk">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -7169,6 +7188,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:05:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US"> <info>
 		<author>SB</author>
 		<desc xml:lang="en-US">Contains Internet-related configurations (proxies, search engines, etc.).</desc>
 	</info>
@@ -863,7 +862,7 @@
 				<info>
 					<deprecated/>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="en-US">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="el">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="nl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="fr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
@@ -887,7 +886,7 @@
 					<desc xml:lang="tr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="th">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="x-comment">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="x-comment">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="sk">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
@@ -1488,6 +1487,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:21:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,6 +1001,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

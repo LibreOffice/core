@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:37:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WriterWeb" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WriterWeb" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>OS</author>
 		<desc xml:lang="en-US">Contains settings for the HTML editor.</desc>
 	</info>
@@ -335,6 +334,7 @@
 						<label xml:lang="tr">Kesmeler</label>
 						<label xml:lang="he">‮מעברים‬</label>
 						<label xml:lang="sk">Zalomenia</label>
+						<label xml:lang="pt-BR">Quebras</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -616,6 +616,7 @@
 								<desc xml:lang="he">‮סנטימטר‬</desc>
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
+								<desc xml:lang="sk">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -644,6 +645,7 @@
 								<desc xml:lang="he">‮מטר‬</desc>
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
+								<desc xml:lang="sk">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -672,6 +674,7 @@
 								<desc xml:lang="he">‮קילומטר‬</desc>
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
+								<desc xml:lang="sk">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -927,6 +930,7 @@
 								<desc xml:lang="he">‮סנטימטר‬</desc>
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
+								<desc xml:lang="sk">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -955,6 +959,7 @@
 								<desc xml:lang="he">‮מטר‬</desc>
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
+								<desc xml:lang="sk">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -983,6 +988,7 @@
 								<desc xml:lang="he">‮קילומטר‬</desc>
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
+								<desc xml:lang="sk">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -1249,6 +1255,7 @@
 								<desc xml:lang="he">‮סנטימטר‬</desc>
 								<desc xml:lang="ca">Centímetre</desc>
 								<desc xml:lang="th">เซนติเมตร</desc>
+								<desc xml:lang="sk">Centimeter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -1277,6 +1284,7 @@
 								<desc xml:lang="he">‮מטר‬</desc>
 								<desc xml:lang="ca">Metre</desc>
 								<desc xml:lang="th">เมตร</desc>
+								<desc xml:lang="sk">Meter</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -1305,6 +1313,7 @@
 								<desc xml:lang="he">‮קילומטר‬</desc>
 								<desc xml:lang="ca">Quilòmetre</desc>
 								<desc xml:lang="th">กิโลเมตร</desc>
+								<desc xml:lang="sk">Kilometer</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -1502,6 +1511,7 @@
 								<desc xml:lang="he">‮אחוז‬</desc>
 								<desc xml:lang="ca">Percentatge</desc>
 								<desc xml:lang="th">เปอร์เซ็นต์</desc>
+								<desc xml:lang="sk">Percent</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1530,6 +1540,7 @@
 								<desc xml:lang="he">Whole Page</desc>
 								<desc xml:lang="ca">Whole Page</desc>
 								<desc xml:lang="th">Whole Page</desc>
+								<desc xml:lang="sk">Whole Page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -1681,10 +1692,10 @@
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Defines the distance between the grid points on the X-axis  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="x-comment">; Defines the distance between the grid points on the X-axis  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="zh-CN">定义 X 轴上网格点之间的间隔 [UNIT=1/100 mm]。</desc>
-							<desc xml:lang="ja">X 軸上のグリッドポイント間の距離を指定します [UNIT = 1/100 mm]。</desc>
+						<desc xml:lang="en-US">Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="x-comment">; Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="zh-CN">定义 X 轴上网格点之间的间隔 [UNIT=1/100 mm] 。</desc>
+							<desc xml:lang="ja">X 軸上のグリッドポイント間の距離を指定します [単位 = 1/100 mm]。</desc>
 						<label xml:lang="en-US">X Axis Resolution</label>
 						<label xml:lang="x-comment">; X Axis Resolution</label>
 						<label xml:lang="zh-CN">X 轴的分辨率</label>
@@ -1698,10 +1709,10 @@
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Defines the distance between the grid points on the Y-axis  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="x-comment">; Defines the distance between the grid points on the Y-axis  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="zh-CN">定义 Y 轴上网格点之间的间隔 [UNIT=1/100 mm]。</desc>
-							<desc xml:lang="ja">Y 軸上のグリッドポイント間の距離を指定します [UNIT = 1/100 mm]。</desc>
+						<desc xml:lang="en-US">Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="x-comment">; Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+							<desc xml:lang="zh-CN">定义 Y 轴上网格点之间的间隔 [UNIT=1/100 mm] 。</desc>
+							<desc xml:lang="ja">Y 軸上のグリッドポイント間の距離を指定します [単位 = 1/100 mm]。</desc>
 						<label xml:lang="en-US">Y Axis Resolution</label>
 						<label xml:lang="x-comment">; Y Axis Resolution</label>
 						<label xml:lang="zh-CN">Y 轴的分辨率</label>
@@ -2001,6 +2012,7 @@
 								<desc xml:lang="he">Notes only</desc>
 								<desc xml:lang="ca">Notes only</desc>
 								<desc xml:lang="th">Notes only</desc>
+								<desc xml:lang="sk">Notes only</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -2029,6 +2041,7 @@
 								<desc xml:lang="he">End of document</desc>
 								<desc xml:lang="ca">End of document</desc>
 								<desc xml:lang="th">End of document</desc>
+								<desc xml:lang="sk">End of document</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -2057,6 +2070,7 @@
 								<desc xml:lang="he">End of page</desc>
 								<desc xml:lang="ca">End of page</desc>
 								<desc xml:lang="th">End of page</desc>
+								<desc xml:lang="sk">End of page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2212,10 +2226,10 @@
 					<!--Notice: NonMetric default: 635 1/100 mm-->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies the default value for moving a table row  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="x-comment">; Specifies the default value for moving a table row  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="zh-CN">指定移动表格行时采用的默认值 [UNIT=1/100 mm]。</desc>
-							<desc xml:lang="ja">表の行移動のデフォルト値を指定します [UNIT = 1/100 mm]。</desc>
+						<desc xml:lang="en-US">Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="x-comment">; Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+							<desc xml:lang="zh-CN">指定移动表格行时采用的默认值 [UNIT=1/100 mm] 。</desc>
+							<desc xml:lang="ja">表の行移動のデフォルト値を指定します [単位 = 1/100 mm]。</desc>
 						<label xml:lang="en-US">Row</label>
 						<label xml:lang="x-comment">; Row</label>
 						<label xml:lang="fr">Ligne</label>
@@ -2335,10 +2349,10 @@
 					<!-- Notice: The NonMetric Default 2540 1/100 mm-->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies the default value for inserting columns  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="x-comment">; Specifies the default value for inserting columns  [UNIT=1/100 mm].</desc>
-							<desc xml:lang="zh-CN">指定插入列时采用的默认值 [UNIT=1/100 mm]。</desc>
-							<desc xml:lang="ja">列の挿入用のデフォルト値を指定します [UNIT = 1/100 mm]。</desc>
+						<desc xml:lang="en-US">Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="x-comment">; Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+							<desc xml:lang="zh-CN">指定插入列时采用的默认值 [UNIT=1/100 mm] 。</desc>
+							<desc xml:lang="ja">列の挿入用のデフォルト値を指定します [単位 = 1/100 mm]。</desc>
 						<label xml:lang="en-US">Column</label>
 						<label xml:lang="x-comment">; Column</label>
 						<label xml:lang="fr">Colonne</label>
@@ -2440,6 +2454,7 @@
 								<desc xml:lang="he">FixedProportional</desc>
 								<desc xml:lang="ca">FixedProportional</desc>
 								<desc xml:lang="th">FixedProportional</desc>
+								<desc xml:lang="sk">FixedProportional</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -2839,6 +2854,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:22:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -27633,6 +27633,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

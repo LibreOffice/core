@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:33:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
 		<desc xml:lang="en-US">Contains general information about ~ and rules, and about actions based on office commands.</desc>
 	</info>
@@ -186,6 +185,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 

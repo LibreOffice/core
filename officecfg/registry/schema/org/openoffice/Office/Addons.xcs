@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:32:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-24 13:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
 		<desc xml:lang="en-US">Contains general structures used to integrate external components into the Office user interface.</desc>
 	</info>
@@ -267,6 +266,7 @@
 					<desc xml:lang="ca">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 					<desc xml:lang="th">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="sk">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigURL" oor:type="xs:string">
@@ -295,6 +295,7 @@
 					<desc xml:lang="ca">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 					<desc xml:lang="th">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="sk">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallHCURL" oor:type="xs:string">
@@ -323,6 +324,7 @@
 					<desc xml:lang="ca">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 					<desc xml:lang="th">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="sk">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigHCURL" oor:type="xs:string">
@@ -351,6 +353,7 @@
 					<desc xml:lang="ca">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 					<desc xml:lang="th">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 					<desc xml:lang="x-comment">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="sk">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 		</group>
@@ -501,6 +504,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
