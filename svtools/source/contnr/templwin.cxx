@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-28 11:13:55 $
+ *  last change: $Author: gt $ $Date: 2001-10-12 12:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,18 +1285,11 @@ void SvtTemplateWindow::ReadViewSettings( )
     if ( aViewSettings.Exists() )
     {
         // read the settings
-        Sequence< PropertyValue > aSettings = aViewSettings.GetAnyData( );
-        const PropertyValue* pSettings      =                   aSettings.getConstArray();
-        const PropertyValue* pSettingsEnd   =   pSettings   +   aSettings.getLength();
-        for (; pSettings != pSettingsEnd; ++pSettings)
-        {
-            if ( 0 == pSettings->Name.compareToAscii( "SelectedGroup" ) )
-                pSettings->Value >>= nSelectedGroup;
-            else if ( 0 == pSettings->Name.compareToAscii( "SelectedView" ) )
-                pSettings->Value >>= nSelectedView;
-            else if ( 0 == pSettings->Name.compareToAscii( "SplitRatio" ) )
-                pSettings->Value >>= nSplitRatio;
-        }
+        Sequence< NamedValue > aSettings = aViewSettings.GetUserData( );
+
+        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SelectedGroup" ) ) >>= nSelectedGroup;
+        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SelectedView" ) ) >>= nSelectedView;
+        aViewSettings.GetUserItem( ::rtl::OUString::createFromAscii( "SplitRatio" ) ) >>= nSplitRatio;
     }
     // normalize
     if ( nSelectedGroup < ICON_POS_NEWDOC )     nSelectedGroup = ICON_POS_NEWDOC;
@@ -1331,7 +1324,7 @@ void SvtTemplateWindow::ReadViewSettings( )
 void SvtTemplateWindow::WriteViewSettings( )
 {
     // collect
-    Sequence< PropertyValue > aSettings(3);
+    Sequence< NamedValue > aSettings(3);
 
     // the selected group
     aSettings[0].Name   =   ::rtl::OUString::createFromAscii( "SelectedGroup" );
@@ -1350,7 +1343,7 @@ void SvtTemplateWindow::WriteViewSettings( )
 
     // write
     SvtViewOptions aViewSettings( E_DIALOG, ::rtl::OUString::createFromAscii( "NewFromTemplate" ) );
-    aViewSettings.SetAnyData( aSettings );
+    aViewSettings.SetUserData( aSettings );
 }
 
 // struct SvtTmplDlg_Impl ------------------------------------------------
