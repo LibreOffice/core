@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-19 11:39:33 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,10 @@ namespace rtl
 {
 
 /**
- * Converts all of the characters in this <code>OUString</code> to lower
- * case using the rules of the given locale.
- * @param locale use the case transformation rules for this locale
- * @return the OUString, converted to lowercase.
- * @see     java.lang.Character#toLowerCase(char)
- * @see     java.lang.OUString#toUpperCase()
- * @since   JDK1.1
+    Converts all of the characters in this <code>OUString</code> to lower
+    case using the rules of the given locale.
+    @param locale use the case transformation rules for this locale
+    @return the OUString, converted to lowercase.
  */
 inline OUString OUString::toLowerCase( const OLocale & locale ) const
 {
@@ -93,13 +90,10 @@ inline OUString OUString::toLowerCase( const OLocale & locale ) const
 
 
 /**
- * Converts all of the characters in this <code>OUString</code> to upper
- * case using the rules of the given locale.
- * @param locale use the case transformation rules for this locale
- * @return the OUString, converted to uppercase.
- * @see     java.lang.Character#toUpperCase(char)
- * @see     java.lang.OUString#toLowerCase(char)
- * @since   JDK1.1
+    Converts all of the characters in this <code>OUString</code> to upper
+    case using the rules of the given locale.
+    @param locale use the case transformation rules for this locale
+    @return the OUString, converted to uppercase.
  */
 inline OUString OUString::toUpperCase( const OLocale & locale) const
 {

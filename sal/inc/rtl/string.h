@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:15:42 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,54 +695,54 @@ void SAL_CALL rtl_uString2String( rtl_String ** newStr, const sal_Unicode * str,
 /* ======================================================================= */
 
 /**
- * Compares first string to second string object. Both
- * strings must be NULL-terminated.
- * The result is <code>true</code> if and only if second string represents
- * the same sequence of characters as the first string, where case is ignored.
- * <p>
- * Two characters are considered the same, ignoring case, if at
- * least one of the following is true:
- * <ul>
- * <li>The two characters are the same (as compared by the <code>==</code>
- *     operator).
- * <li>Applying the method <code>Character.toUppercase</code> to each
- *     character produces the same result.
- * <li>Applying the method <code>Character.toLowercase</code> to each
- *     character produces the same result.
- * </ul>
- * <p>
- * Two sequences of characters are the same, ignoring case, if the
- * sequences have the same length and corresponding characters are
- * the same, ignoring case.
- *
- * @param   first   the <code>string</code> to compared.
- * @param   second  the <code>string</code> to compare first
- *                  <code>String</code> against.
- * @return  <code>true</code> if the <code>String</code>s are equal,
- *          ignoring case; <code>false</code> otherwise.
+    Compares first string to second string object. Both
+    strings must be NULL-terminated.
+    The result is <code>true</code> if and only if second string represents
+    the same sequence of characters as the first string, where case is ignored.
+    <p>
+    Two characters are considered the same, ignoring case, if at
+    least one of the following is true:
+    <ul>
+    <li>The two characters are the same (as compared by the <code>==</code>
+       operator).
+    <li>Applying the method <code>Character.toUppercase</code> to each
+       character produces the same result.
+    <li>Applying the method <code>Character.toLowercase</code> to each
+       character produces the same result.
+    </ul>
+    <p>
+    Two sequences of characters are the same, ignoring case, if the
+    sequences have the same length and corresponding characters are
+    the same, ignoring case.
+
+    @param  first   the <code>string</code> to compared.
+    @param  second  the <code>string</code> to compare first
+                    <code>String</code> against.
+    @return <code>true</code> if the <code>String</code>s are equal,
+            ignoring case; <code>false</code> otherwise.
  */
 sal_Bool SAL_CALL rtl_str_equalsIgnoreCase_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen );
 sal_Bool SAL_CALL rtl_str_equalsIgnoreCase( const sal_Char * first, const sal_Char * second );
 
 /**
- * rtl_str_compareIgnoreCase() and rtl_str_compareIgnoreCase_WithLength()
- * functions  are  caseinsensitive  versions  of rtl_str_compare() and
- * rtl_str_compare_WithLength() respectively, described above. They assume
- * the  ASCII characterset and ignore differences in case when comparing
- * lower and upper case characters.  rtl_str_compareIgnoreCase_WithLength()
- * does not compare more than len characters. Both strings have to be NULL
- * terminated
- *
- * @param   first   the <code>String</code> to be compared.
- * @param   second  the <code>String</code> to compare first
- *                  <code>String</code> against.
- * @return  the value <code>0</code> if the argument string is equal to
- *          this string; a value less than <code>0</code> if a all lowercase
- *          version of first string is lexicographically less than a all
- *          lowercase version of the second string; and a
- *          value greater than <code>0</code> if first string is
- *          lexicographically greater than the second string, again both
- *          strings all lowercase.
+    rtl_str_compareIgnoreCase() and rtl_str_compareIgnoreCase_WithLength()
+    functions  are  caseinsensitive versions  of rtl_str_compare() and
+    rtl_str_compare_WithLength() respectively, described above. They assume
+    the ASCII characterset and ignore differences in case when comparing
+    lower and upper case characters.  rtl_str_compareIgnoreCase_WithLength()
+    does not compare more than len characters. Both strings have to be NULL
+    terminated
+
+    @param  first   the <code>String</code> to be compared.
+    @param  second  the <code>String</code> to compare first
+                    <code>String</code> against.
+    @return the value <code>0</code> if the argument string is equal to
+            this string; a value less than <code>0</code> if a all lowercase
+            version of first string is lexicographically less than a all
+            lowercase version of the second string; and a
+            value greater than <code>0</code> if first string is
+            lexicographically greater than the second string, again both
+            strings all lowercase.
  */
 sal_Int32 SAL_CALL
 rtl_str_compareIgnoreCase_WithLength(
@@ -751,29 +751,29 @@ sal_Int32 SAL_CALL
 rtl_str_compareIgnoreCase( const sal_Char *first, const sal_Char *second );
 
 /**
- * Converts all of the characters in the <code>string</code> to lower case.
- * @param   str     a NULL-terminated string.
+    Converts all of the characters in the <code>string</code> to lower case.
+    @param  str     a NULL-terminated string.
  */
 void SAL_CALL rtl_str_toAsciiLowerCase_WithLength( sal_Char * str, sal_Int32 len );
 void SAL_CALL rtl_str_toAsciiLowerCase( sal_Char * str );
 
 /**
- * Converts all of the characters in the <code>string</code> to upper case.
- *
- * @param   str     a NULL-terminated string.
+    Converts all of the characters in the <code>string</code> to upper case.
+
+    @param  str     a NULL-terminated string.
  */
 void SAL_CALL rtl_str_toAsciiUpperCase_WithLength(sal_Char * str, sal_Int32 len);
 void SAL_CALL rtl_str_toAsciiUpperCase(sal_Char * str);
 
 /**
- * Removes white space from both ends of the string.
- * <p>
- * All characters that have codes less than or equal to
- * <code>'&#92;u0020'</code> (the space character) are considered to be
- * white space.
- *
- * @param   str     a NULL-terminated string.
- * @return  new length of the string.
+    Removes white space from both ends of the string.
+    <p>
+    All characters that have codes less than or equal to
+    <code>'&#92;u0020'</code> (the space character) are considered to be
+    white space.
+
+    @param  str     a NULL-terminated string.
+    @return new length of the string.
  */
 sal_Int32 SAL_CALL rtl_str_trim_WithLength( sal_Char * str, sal_Int32 len );
 sal_Int32 SAL_CALL rtl_str_trim( sal_Char * str );
@@ -782,23 +782,23 @@ sal_Int32 SAL_CALL rtl_str_trim( sal_Char * str );
 /*######################################################################*/
 
 /**
- * A string with this reference count is static und must not deleted.
- * It is also not allowed to modifiy the reference count.
+    A string with this reference count is static und must not deleted.
+    It is also not allowed to modifiy the reference count.
  */
 #define RTL_STATIC_ASCIISTRING_REF  ((sal_Int32)0x80000000)
 #define RTL_STRING_NEW(newStr)  rtl_string_new(newStr)
 
 /**
- * Returns a new string resulting from replacing all occurrences of
- * <code>oldChar</code> in this string with <code>newChar</code>.
- * <p>
- * If the character <code>oldChar</code> does not occur in the
- * character sequence represented by the string, then the string is
- * returned.
- *
- * @param   oldChar   the old character.
- * @param   newChar   the new character.
- * @return  the new string. The reference count is 1.
+    Returns a new string resulting from replacing all occurrences of
+    <code>oldChar</code> in this string with <code>newChar</code>.
+    <p>
+    If the character <code>oldChar</code> does not occur in the
+    character sequence represented by the string, then the string is
+    returned.
+
+    @param  oldChar   the old character.
+    @param  newChar   the new character.
+    @return the new string. The reference count is 1.
  */
 void SAL_CALL rtl_string_newReplace( rtl_String ** newStr,
                                      rtl_String * str,
@@ -806,52 +806,52 @@ void SAL_CALL rtl_string_newReplace( rtl_String ** newStr,
                                      sal_Char newChar);
 
 /**
- * Converts all of the characters in this <code>String</code> to lower
- * case using the rules of the given locale.
- * @param locale use the case transformation rules for this locale
- * @return the String, converted to lowercase.
- * @return  the new string. The reference count is 1.
+    Converts all of the characters in this <code>String</code> to lower
+    case using the rules of the given locale.
+    @param locale use the case transformation rules for this locale
+    @return the String, converted to lowercase.
+    @return the new string. The reference count is 1.
  */
 void SAL_CALL rtl_string_newToLowerCase( rtl_String ** newStr, rtl_String * str);
 
 /**
- * Converts all of the characters in this <code>String</code> to upper
- * case using the rules of the given locale.
- * @param locale use the case transformation rules for this locale
- * @return the String, converted to uppercase.
- * @return  the new string. The reference count is 1.
+    Converts all of the characters in this <code>String</code> to upper
+    case using the rules of the given locale.
+    @param locale use the case transformation rules for this locale
+    @return the String, converted to uppercase.
+    @return the new string. The reference count is 1.
  */
 void SAL_CALL rtl_string_newToUpperCase( rtl_String ** newStr, rtl_String * str);
 
 /**
- * Removes white space from both ends of the string.
- * <p>
- * All characters that have codes less than or equal to
- * <code>'&#92;u0020'</code> (the space character) are considered to be
- * white space.
- *
- * @return  this string, with white space removed from the front and end.
- * @return  the new string. The reference count is 1.
+    Removes white space from both ends of the string.
+    <p>
+    All characters that have codes less than or equal to
+    <code>'&#92;u0020'</code> (the space character) are considered to be
+    white space.
+
+    @return this string, with white space removed from the front and end.
+    @return the new string. The reference count is 1.
  */
 void SAL_CALL rtl_string_newTrim( rtl_String ** newStr, rtl_String * str );
 
 /**
- * Returns the number of tokens in this <code>String</code> seperated
- * by <code>cTok</code>.
- *
- * @param   cTok    the character which seperate the tokens
- * @return  the number of tokens.
+    Returns the number of tokens in this <code>String</code> seperated
+    by <code>cTok</code>.
+
+    @param  cTok    the character which seperate the tokens
+    @return the number of tokens.
  */
 sal_Int32 SAL_CALL rtl_string_getTokenCount( rtl_String * str , sal_Char cTok);
 
 /**
- * Returns a new string for the token specified by nToken. If nToken < 0 or
- * nToken > tokenCount then an empty string is returned.
- *
- * @param   nToken  the number of the token to return.
- * @param   cTok    the character which seperate the tokens
- * @param   newStr  the new string for the token
- * @return  the new string. The reference count is 1.
+    Returns a new string for the token specified by nToken. If nToken < 0 or
+    nToken > tokenCount then an empty string is returned.
+
+    @param  nToken  the number of the token to return.
+    @param  cTok    the character which seperate the tokens
+    @param  newStr  the new string for the token
+    @return the new string. The reference count is 1.
  */
 void SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str, sal_Int32 nToken, sal_Char cTok);
 

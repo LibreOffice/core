@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 09:48:21 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,78 +79,74 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence );
 
 /** Reallocates length of byte sequence.
-    <br>
+
     @param ppSequence sequence
     @param nSize new size of sequence
 */
 void SAL_CALL rtl_byte_sequence_realloc(
     sal_Sequence ** ppSequence, sal_Int32 nSize );
 
-/** Acquires the byte sequence <br>
+/** Acquires the byte sequence
+
     @param pSequence sequence, that shall be acquired.
  */
 void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence );
 
 /** Releases the byte sequence. If the refcount drops to zero,
- *  the sequence is freed.<br>
+    the sequence is freed.
 
     @param pSequence sequence, that shall be released. Invalid after call.
  */
 void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence );
 
 /** Constructs a bytes sequence with length nLength. All bytes are set to zero.
- *
- * @param On entry *ppSequence may be null , otherwise it is released.
- *        After the call, ppSequence contains the newly constructed sequence.
- *
- *
- **/
+
+    @param On entry *ppSequence may be null , otherwise it is released.
+           After the call, ppSequence contains the newly constructed sequence.
+ */
 void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32 nLength );
 
 /** Constructs a bytes sequence with length nLength. The data is not initialized.
- *
- * @param ppSequence contains the newly constructed sequence.
- *        *ppSequence is released on entry if needed.
- *
- **/
+
+     @param ppSequence contains the newly constructed sequence.
+           *ppSequence is released on entry if needed.
+ */
 void SAL_CALL rtl_byte_sequence_constructNoDefault(
     sal_Sequence **ppSequence , sal_Int32 nLength );
 
 /** Constructs a byte sequence with length nLength and copies nLength bytes from pData.
- *
- * @param ppSequence contains the newly constructed sequence.
- *        *ppSequence is released on entry if needed.
- **/
+
+    @param ppSequence contains the newly constructed sequence.
+           *ppSequence is released on entry if needed.
+ */
 void SAL_CALL rtl_byte_sequence_constructFromArray(
     sal_Sequence **ppSequence, const sal_Int8 *pData , sal_Int32 nLength );
 
 /** Assigns the byte sequence pSequence to ppSequence.
- *
- * @param On entry *ppSequence may be null , otherwise it is released.
- *        ppSequence contains after the call a copy of pSequence.
- * @param pSequence the source sequence
- **/
+
+    @param On entry *ppSequence may be null , otherwise it is released.
+           ppSequence contains after the call a copy of pSequence.
+    @param pSequence the source sequence
+ */
 void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence *pSequence );
 
 /** Compares two byte sequences.
- *
- * @return sal_False, if the data within the sequences are different. <br>
- *         sal_True, if the data within the sequences are identical <br>
- **/
+
+    @return sal_False, if the data within the sequences are different. <br>
+            sal_True, if the data within the sequences are identical <br>
+ */
 sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 );
 
 
 /** Returns the data pointer of the sequence.
- *
- * @return const pointer to the data of the sequence. If rtl_byte_sequence_reference2One
- *         has been called before, the pointer may be casted to a non const pointer and
- *         the sequence may be modified.
- **/
+
+    @return const pointer to the data of the sequence. If rtl_byte_sequence_reference2One
+            has been called before, the pointer may be casted to a non const pointer and
+            the sequence may be modified.
+ */
 const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray( sal_Sequence *pSequence );
 
 /** Returns the length of the sequence
- *
- *
  **/
 sal_Int32 SAL_CALL rtl_byte_sequence_getLength( sal_Sequence *pSequence );
 

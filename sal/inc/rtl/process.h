@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,17 @@ extern "C" {
 #endif
 
 
-/********
- * gets a 16-byte fixed size identifier which is guaranteed not to change
- * during the current process.
- *
- * The current implementation creates a 16-byte uuid without using
- * the ethernet address of system ( @see rtl_createUiid ). Thus the
- * identifier is very likely to be different from identifiers created
- * in other processes.
- *
- * @param pTargetUUID 16 byte of memory
- *
- ******/
+/**
+    gets a 16-byte fixed size identifier which is guaranteed not to change
+    during the current process.
+
+    The current implementation creates a 16-byte uuid without using
+    the ethernet address of system ( @see rtl_createUiid ). Thus the
+    identifier is very likely to be different from identifiers created
+    in other processes.
+
+    @param pTargetUUID 16 byte of memory
+ */
 void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
 
 #ifdef __cplusplus

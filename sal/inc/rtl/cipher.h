@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cipher.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_ "$Revision: 1.1.1.1 $"
+#define _RTL_CIPHER_H_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -81,8 +81,8 @@ typedef void* rtlCipher;
 
 
 /** rtlCipherAlgorithm.
- *
- *  @see rtl_cipher_create.
+
+    @see rtl_cipher_create.
  */
 typedef enum
 {
@@ -93,8 +93,8 @@ typedef enum
 
 
 /** rtlCipherMode.
- *
- *  @see rtl_cipher_create.
+
+    @see rtl_cipher_create.
  */
 typedef enum
 {
@@ -107,8 +107,8 @@ typedef enum
 
 
 /** rtlCipherDirection.
- *
- *  @see rtl_cipher_init.
+
+    @see rtl_cipher_init.
  */
 typedef enum
 {
@@ -137,11 +137,11 @@ typedef enum
 
 
 /** rtl_cipher_create.
- *  Create a cipher handle for the given algorithm and mode.
- *
- *  @param  Algorithm [in]
- *  @param  Mode      [in]
- *  @return Cipher handle, or 0 upon failure.
+    Create a cipher handle for the given algorithm and mode.
+
+    @param  Algorithm [in]
+    @param  Mode      [in]
+    @return Cipher handle, or 0 upon failure.
  */
 rtlCipher SAL_CALL rtl_cipher_create (
     rtlCipherAlgorithm Algorithm,
@@ -149,14 +149,14 @@ rtlCipher SAL_CALL rtl_cipher_create (
 
 
 /** rtl_cipher_init.
- *
- *  @param  Cipher    [in]
- *  @param  Direction [in]
- *  @param  pKeyData  [in]
- *  @param  nKeyLen   [in]
- *  @param  pArgData  [in]
- *  @param  nArgLen   [in]
- *  @return rtl_Cipher_E_None upon success.
+
+    @param  Cipher    [in]
+    @param  Direction [in]
+    @param  pKeyData  [in]
+    @param  nKeyLen   [in]
+    @param  pArgData  [in]
+    @param  nArgLen   [in]
+    @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher           Cipher,
@@ -166,13 +166,13 @@ rtlCipherError SAL_CALL rtl_cipher_init (
 
 
 /** rtl_cipher_encode.
- *
- *  @param  Cipher  [in]
- *  @param  pData   [in]
- *  @param  nDatLen [in]
- *  @param  pBuffer [out]
- *  @param  nBufLen [in]
- *  @return rtl_Cipher_E_None upon success.
+
+    @param  Cipher  [in]
+    @param  pData   [in]
+    @param  nDatLen [in]
+    @param  pBuffer [out]
+    @param  nBufLen [in]
+    @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
@@ -181,13 +181,13 @@ rtlCipherError SAL_CALL rtl_cipher_encode (
 
 
 /** rtl_cipher_decode.
- *
- *  @param  Cipher  [in]
- *  @param  pData   [in]
- *  @param  nDatLen [in]
- *  @param  pBuffer [out]
- *  @param  nBufLen [in]
- *  @return rtl_Cipher_E_None upon success.
+
+    @param  Cipher  [in]
+    @param  pData   [in]
+    @param  nDatLen [in]
+    @param  pBuffer [out]
+    @param  nBufLen [in]
+    @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
@@ -196,9 +196,9 @@ rtlCipherError SAL_CALL rtl_cipher_decode (
 
 
 /** rtl_cipher_destroy.
- *
- *  @param  Cipher [in] handle to be destroyed.
- *  @return None. Cipher handle destroyed and invalid.
+
+    @param  Cipher [in] handle to be destroyed.
+    @return None. Cipher handle destroyed and invalid.
  */
 void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher);
 
@@ -212,17 +212,17 @@ void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher);
  *
  *======================================================================*/
 /** rtl_cipher_createBF.
- *
- *  @return Cipher handle, or 0 upon failure.
- *  @see    rtl_cipher_create.
+
+    @return Cipher handle, or 0 upon failure.
+    @see    rtl_cipher_create.
  */
 rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode);
 
 
 /** rtl_cipher_initBF.
- *
- *  @return rtl_Cipher_E_None upon success.
- *  @see    rtl_cipher_init.
+
+    @return rtl_Cipher_E_None upon success.
+    @see    rtl_cipher_init.
  */
 rtlCipherError SAL_CALL rtl_cipher_initBF (
     rtlCipher          Cipher,
@@ -232,9 +232,9 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
 
 
 /** rtl_cipher_encodeBF.
- *
- *  @return rtl_Cipher_E_None upon success.
- *  @see    rtl_cipher_encode.
+
+    @return rtl_Cipher_E_None upon success.
+    @see    rtl_cipher_encode.
  */
 rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     rtlCipher   Cipher,
@@ -243,9 +243,9 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
 
 
 /** rtl_cipher_decodeBF.
- *
- *  @return rtl_Cipher_E_None upon success.
- *  @see    rtl_cipher_decode.
+
+    @return rtl_Cipher_E_None upon success.
+    @see    rtl_cipher_decode.
  */
 rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     rtlCipher   Cipher,
@@ -254,10 +254,10 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
 
 
 /** rtl_cipher_destroyBF.
- *
- *  @param  Cipher [in] handle to be destroyed.
- *  @return None. Cipher handle destroyed and invalid.
- *  @see    rtl_cipher_destroy.
+
+    @param  Cipher [in] handle to be destroyed.
+    @return None. Cipher handle destroyed and invalid.
+    @see    rtl_cipher_destroy.
  */
 void SAL_CALL rtl_cipher_destroyBF (rtlCipher Cipher);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:16:48 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,25 +263,23 @@ public:
 
 
     /**
-     * Allocates a new string that contains the sequence of characters
-     * currently contained in the string buffer argument.
-     *
-     * @param   buffer   a <code>StringBuffer</code>.
+        Allocates a new string that contains the sequence of characters
+        currently contained in the string buffer argument.
+
+        @param  buffer   a <code>StringBuffer</code>.
      */
     //public OString (StringBuffer buffer) {
 
     /**
-     * Compares this string to the specified object.
-     * The result is <code>true</code> if and only if the argument is not
-     * <code>null</code> and is a <code>OString</code> object that represents
-     * the same sequence of characters as this object.
-     *
-     * @param   anObject   the object to compare this <code>OString</code>
-     *                     against.
-     * @return  <code>true</code> if the <code>OString </code>are equal;
-     *          <code>false</code> otherwise.
-     * @see     java.lang.OString#compareTo(java.lang.OString)
-     * @see     java.lang.OString#equalsIgnoreCase(java.lang.OString)
+        Compares this string to the specified object.
+        The result is <code>true</code> if and only if the argument is not
+        <code>null</code> and is a <code>OString</code> object that represents
+        the same sequence of characters as this object.
+
+        @param  anObject   the object to compare this <code>OString</code>
+                           against.
+        @return <code>true</code> if the <code>OString </code>are equal;
+                <code>false</code> otherwise.
      */
     sal_Bool equals( const OString & rObj ) const
     {
@@ -289,32 +287,30 @@ public:
     }
 
     /**
-     * Compares this OString to another object.
-     * The result is <code>true</code> if and only if the argument is not
-     * <code>null</code> and is a <code>OString</code> object that represents
-     * the same sequence of characters as this object, where case is ignored.
-     * <p>
-     * Two characters are considered the same, ignoring case, if at
-     * least one of the following is true:
-     * <ul>
-     * <li>The two characters are the same (as compared by the <code>==</code>
-     *     operator).
-     * <li>Applying the method <code>Character.toUppercase</code> to each
-     *     character produces the same result.
-     * <li>Applying the method <code>Character.toLowercase</code> to each
-     *     character produces the same result.
-     * </ul>
-     * <p>
-     * Two sequences of characters are the same, ignoring case, if the
-     * sequences have the same length and corresponding characters are
-     * the same, ignoring case.
-     *
-     * @param   anotherString   the <code>OString</code> to compare this
-     *                          <code>OString</code> against.
-     * @return  <code>true</code> if the <code>OString</code>s are equal,
-     *          ignoring case; <code>false</code> otherwise.
-     * @see     java.lang.Character#toLowerCase(char)
-     * @see     java.lang.Character#toUpperCase(char)
+        Compares this OString to another object.
+        The result is <code>true</code> if and only if the argument is not
+        <code>null</code> and is a <code>OString</code> object that represents
+        the same sequence of characters as this object, where case is ignored.
+        <p>
+        Two characters are considered the same, ignoring case, if at
+        least one of the following is true:
+        <ul>
+        <li>The two characters are the same (as compared by the <code>==</code>
+           operator).
+        <li>Applying the method <code>Character.toUppercase</code> to each
+           character produces the same result.
+        <li>Applying the method <code>Character.toLowercase</code> to each
+           character produces the same result.
+        </ul>
+        <p>
+        Two sequences of characters are the same, ignoring case, if the
+        sequences have the same length and corresponding characters are
+        the same, ignoring case.
+
+        @param  anotherString   the <code>OString</code> to compare this
+                                <code>OString</code> against.
+        @return <code>true</code> if the <code>OString</code>s are equal,
+                ignoring case; <code>false</code> otherwise.
      */
     sal_Bool equalsIgnoreCase( const OString & rObj ) const
     {
@@ -323,16 +319,16 @@ public:
     }
 
     /**
-     * Compares two strings lexicographically.
-     * The comparison is based on the Unicode value of each character in
-     * the strings.
-     *
-     * @param   anotherString   the <code>OString</code> to be compared.
-     * @return  the value <code>0</code> if the argument string is equal to
-     *          this string; a value less than <code>0</code> if this string
-     *          is lexicographically less than the string argument; and a
-     *          value greater than <code>0</code> if this string is
-     *          lexicographically greater than the string argument.
+        Compares two strings lexicographically.
+        The comparison is based on the Unicode value of each character in
+        the strings.
+
+        @param  anotherString   the <code>OString</code> to be compared.
+        @return the value <code>0</code> if the argument string is equal to
+                this string; a value less than <code>0</code> if this string
+                is lexicographically less than the string argument; and a
+                value greater than <code>0</code> if this string is
+                lexicographically greater than the string argument.
      */
     sal_Int32 compareTo( const OString & rObj ) const
     {
@@ -341,20 +337,20 @@ public:
     }
 
     /**
-     * Compares two strings lexicographically using only the number of
-     * characters given in the length parameter.
-     * The comparison is based on the Unicode value of each character in
-     * the strings.
-     *
-     * @param   anotherString   the <code>OString</code> to be compared.
-     * @param   length    the number of characters that are compared.
-     * @return  'This string' and 'argument string' here means the substring
-     *          defined by the length parameter.
-     *          the value <code>0</code> if the argument string is equal to
-     *          this string; a value less than <code>0</code> if this string
-     *          is lexicographically less than the string argument; and a
-     *          value greater than <code>0</code> if this string is
-     *          lexicographically greater than the string argument.
+        Compares two strings lexicographically using only the number of
+        characters given in the length parameter.
+        The comparison is based on the Unicode value of each character in
+        the strings.
+
+        @param  anotherString   the <code>OString</code> to be compared.
+        @param  length    the number of characters that are compared.
+        @return 'This string' and 'argument string' here means the substring
+                defined by the length parameter.
+                the value <code>0</code> if the argument string is equal to
+                this string; a value less than <code>0</code> if this string
+                is lexicographically less than the string argument; and a
+                value greater than <code>0</code> if this string is
+                lexicographically greater than the string argument.
      */
     sal_Int32 compareTo( const OString & rObj, sal_Int32 length ) const
     {
@@ -386,9 +382,9 @@ public:
                         { return rStr1.compareTo( rStr2 ) >= 0; }
 
     /**
-     * Returns a hashcode for this string.
-     *
-     * @return  a hash code value for this object.
+        Returns a hashcode for this string.
+
+        @return a hash code value for this object.
      */
     sal_Int32 hashCode() const
     {
@@ -396,15 +392,15 @@ public:
     }
 
     /**
-     * Returns the index within this string of the first occurrence of the
-     * specified character, starting the search at the specified index.
-     *
-     * @param   ch          a character.
-     * @param   fromIndex   the index to start the search from.
-     * @return  the index of the first occurrence of the character in the
-     *          character sequence represented by this object that is greater
-     *          than or equal to <code>fromIndex</code>, or <code>-1</code>
-     *          if the character does not occur.
+        Returns the index within this string of the first occurrence of the
+        specified character, starting the search at the specified index.
+
+        @param  ch          a character.
+        @param  fromIndex   the index to start the search from.
+        @return the index of the first occurrence of the character in the
+                character sequence represented by this object that is greater
+                than or equal to <code>fromIndex</code>, or <code>-1</code>
+                if the character does not occur.
      */
     sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const
     {
@@ -413,19 +409,19 @@ public:
     }
 
     /**
-     * Returns the index within this string of the first occurence of
-     * the specified substring.
-     * The returned index indicates the start of the substring, and it
-     * must be equal to or less than <code>fromIndex</code>.
-     *
-     * @param   str         the substring to search for.
-     * @param   fromIndex   the index to start the search from.
-     * @return  If the string argument occurs one or more times as a substring
-     *          within this object at a starting index no greater than
-     *          <code>fromIndex</code>, then the index of the first character of
-     *          the last such substring is returned. If it does not occur as a
-     *          substring starting at <code>fromIndex</code> or earlier,
-     *          <code>-1</code> is returned.
+        Returns the index within this string of the first occurence of
+        the specified substring.
+        The returned index indicates the start of the substring, and it
+        must be equal to or less than <code>fromIndex</code>.
+
+        @param  str         the substring to search for.
+        @param  fromIndex   the index to start the search from.
+        @return If the string argument occurs one or more times as a substring
+                within this object at a starting index no greater than
+                <code>fromIndex</code>, then the index of the first character of
+                the last such substring is returned. If it does not occur as a
+                substring starting at <code>fromIndex</code> or earlier,
+                <code>-1</code> is returned.
      */
     sal_Int32 indexOf( const OString & str, int fromIndex = 0) const
     {
@@ -435,15 +431,15 @@ public:
     }
 
     /**
-     * Returns the index within this string of the last occurrence of the
-     * specified character, searching backward starting at the end.
-     *
-     * @param   ch          a character.
-     * @param   fromIndex   the index to start the search from.
-     * @return  the index of the last occurrence of the character in the
-     *          character sequence represented by this object that is less
-     *          than or equal to <code>length -1</code>, or <code>-1</code>
-     *          if the character does not occur before that point.
+        Returns the index within this string of the last occurrence of the
+        specified character, searching backward starting at the end.
+
+        @param  ch          a character.
+        @param  fromIndex   the index to start the search from.
+        @return the index of the last occurrence of the character in the
+                character sequence represented by this object that is less
+                than or equal to <code>length -1</code>, or <code>-1</code>
+                if the character does not occur before that point.
      */
     sal_Int32 lastIndexOf( sal_Char ch, int fromIndex ) const
     {
@@ -451,15 +447,15 @@ public:
     }
 
     /**
-     * Returns the index within this string of the last occurrence of the
-     * specified character, searching backward starting at the end.
-     *
-     * @param   ch          a character.
-     * @param   fromIndex   the index to start the search from.
-     * @return  the index of the last occurrence of the character in the
-     *          character sequence represented by this object that is less
-     *          than or equal to <code>length -1</code>, or <code>-1</code>
-     *          if the character does not occur before that point.
+        Returns the index within this string of the last occurrence of the
+        specified character, searching backward starting at the end.
+
+        @param  ch          a character.
+        @param  fromIndex   the index to start the search from.
+        @return the index of the last occurrence of the character in the
+                character sequence represented by this object that is less
+                than or equal to <code>length -1</code>, or <code>-1</code>
+                if the character does not occur before that point.
      */
     sal_Int32 lastIndexOf( sal_Char ch ) const
     {
@@ -467,19 +463,19 @@ public:
     }
 
     /**
-     * Returns the index within this string of the last occurrence of
-     * the specified substring.
-     * The returned index indicates the start of the substring, and it
-     * must be equal to or less than <code>fromIndex</code>.
-     *
-     * @param   str         the substring to search for.
-     * @param   fromIndex   the index to start the search from.
-     * @return  If the string argument occurs one or more times as a substring
-     *          within this object at a starting index no greater than
-     *          <code>fromIndex</code>, then the index of the first character of
-     *          the last such substring is returned. If it does not occur as a
-     *          substring starting at <code>fromIndex</code> or earlier,
-     *          <code>-1</code> is returned.
+        Returns the index within this string of the last occurrence of
+        the specified substring.
+        The returned index indicates the start of the substring, and it
+        must be equal to or less than <code>fromIndex</code>.
+
+        @param  str         the substring to search for.
+        @param  fromIndex   the index to start the search from.
+        @return If the string argument occurs one or more times as a substring
+                within this object at a starting index no greater than
+                <code>fromIndex</code>, then the index of the first character of
+                the last such substring is returned. If it does not occur as a
+                substring starting at <code>fromIndex</code> or earlier,
+                <code>-1</code> is returned.
      */
     sal_Int32 lastIndexOf( const OString & str, int fromIndex ) const
     {
@@ -488,19 +484,19 @@ public:
     }
 
     /**
-     * Returns the index within this string of the last occurrence of
-     * the specified substring.
-     * The returned index indicates the start of the substring, and it
-     * must be equal to or less than <code>fromIndex</code>.
-     *
-     * @param   str         the substring to search for.
-     * @param   fromIndex   the index to start the search from.
-     * @return  If the string argument occurs one or more times as a substring
-     *          within this object at a starting index no greater than
-     *          <code>fromIndex</code>, then the index of the first character of
-     *          the last such substring is returned. If it does not occur as a
-     *          substring starting at <code>fromIndex</code> or earlier,
-     *          <code>-1</code> is returned.
+        Returns the index within this string of the last occurrence of
+        the specified substring.
+        The returned index indicates the start of the substring, and it
+        must be equal to or less than <code>fromIndex</code>.
+
+        @param  str         the substring to search for.
+        @param  fromIndex   the index to start the search from.
+        @return If the string argument occurs one or more times as a substring
+                within this object at a starting index no greater than
+                <code>fromIndex</code>, then the index of the first character of
+                the last such substring is returned. If it does not occur as a
+                substring starting at <code>fromIndex</code> or earlier,
+                <code>-1</code> is returned.
      */
     sal_Int32 lastIndexOf( const OString & str ) const
     {
@@ -509,14 +505,14 @@ public:
     }
 
     /**
-     * Returns a new string that is a substring of this string. The
-     * substring begins at the specified index and extends to the end of
-     * this string.
-     *
-     * @param      beginIndex   the beginning index, inclusive.
-     * @return     the specified substring.
-     * @exception  StringIndexOutOfBoundsException  if the
-     *             <code>beginIndex</code> is out of range.
+        Returns a new string that is a substring of this string. The
+        substring begins at the specified index and extends to the end of
+        this string.
+
+        @param     beginIndex   the beginning index, inclusive.
+        @return    the specified substring.
+        @exception  StringIndexOutOfBoundsException if the
+                   <code>beginIndex</code> is out of range.
      */
     OString copy( sal_Int32 beginIndex) const
     {
@@ -525,16 +521,16 @@ public:
 
 
     /**
-     * Returns a new string that is a substring of this string. The
-     * substring begins at the specified <code>beginIndex</code> and
-     * extends to the character at index <code>endIndex - 1</code>.
-     *
-     * @param      beginIndex   the beginning index, inclusive.
-     * @param      count        the number of characters.
-     * @return     the specified substring.
-     * @exception  StringIndexOutOfBoundsException  if the
-     *             <code>beginIndex</code> or the <code>endIndex</code> is
-     *             out of range.
+        Returns a new string that is a substring of this string. The
+        substring begins at the specified <code>beginIndex</code> and
+        extends to the character at index <code>endIndex - 1</code>.
+
+        @param     beginIndex   the beginning index, inclusive.
+        @param     count        the number of characters.
+        @return    the specified substring.
+        @exception  StringIndexOutOfBoundsException if the
+                   <code>beginIndex</code> or the <code>endIndex</code> is
+                   out of range.
      */
     OString copy( sal_Int32 beginIndex, sal_Int32 count ) const
     {
@@ -549,15 +545,15 @@ public:
     }
 
     /**
-     * Concatenates the specified string to the end of this string.
-     * <p>
-     * If the length of the argument string is <code>0</code>, then this
-     * object is returned.
-     *
-     * @param   str   the <code>OString</code> that is concatenated to the end
-     *                of this <code>OString</code>.
-     * @return  a string that represents the concatenation of this object's
-     *          characters followed by the string argument's characters.
+        Concatenates the specified string to the end of this string.
+        <p>
+        If the length of the argument string is <code>0</code>, then this
+        object is returned.
+
+        @param  str   the <code>OString</code> that is concatenated to the end
+                      of this <code>OString</code>.
+        @return a string that represents the concatenation of this object's
+                characters followed by the string argument's characters.
      */
     OString concat( const OString & str ) const
     {
@@ -572,17 +568,17 @@ public:
     }
 
     /**
-     * Returns a new string resulting from replacing all occurrences of
-     * <code>oldChar</code> in this string with <code>newChar</code>.
-     * <p>
-     * If the character <code>oldChar</code> does not occur in the
-     * character sequence represented by this object, then this string is
-     * returned.
-     *
-     * @param   oldChar   the old character.
-     * @param   newChar   the new character.
-     * @return  a string derived from this string by replacing every
-     *          occurrence of <code>oldChar</code> with <code>newChar</code>.
+        Returns a new string resulting from replacing all occurrences of
+        <code>oldChar</code> in this string with <code>newChar</code>.
+        <p>
+        If the character <code>oldChar</code> does not occur in the
+        character sequence represented by this object, then this string is
+        returned.
+
+        @param  oldChar   the old character.
+        @param  newChar   the new character.
+        @return a string derived from this string by replacing every
+                occurrence of <code>oldChar</code> with <code>newChar</code>.
      */
     OString replace( sal_Char oldChar, sal_Char newChar ) const
     {
@@ -592,14 +588,14 @@ public:
     }
 
     /**
-     * Returns a new string resulting from replacing n = count characters
-     * from position index in this string with <code>newStr</code>.
-     * <p>
-     *
-     * @param   index   the index for beginning.
-     * @param   count   the count of charcters that will replaced
-     * @param   newStr  the new substring.
-     * @return  the new string. The reference count is 1.
+        Returns a new string resulting from replacing n = count characters
+        from position index in this string with <code>newStr</code>.
+        <p>
+
+        @param  index   the index for beginning.
+        @param  count   the count of charcters that will replaced
+        @param  newStr  the new substring.
+        @return the new string. The reference count is 1.
      */
     OString replaceAt(sal_Int32 index, sal_Int32 count, const OString& newStr ) const
     {
@@ -609,19 +605,17 @@ public:
     }
 
     /**
-     * Converts this <code>OString</code> to lowercase.
-     * <p>
-     * If no character in the string has a different lowercase version,
-     * based on calling the <code>toLowerCase</code> method defined by
-     * <code>Character</code>, then the original string is returned.
-     * <p>
-     * Otherwise, a new string is allocated, whose length is identical
-     * to this string, and such that each character that has a different
-     * lowercase version is mapped to this lowercase equivalent.
-     *
-     * @return  the string, converted to lowercase.
-     * @see     java.lang.Character#toLowerCase(char)
-     * @see     java.lang.OString#toUpperCase()
+        Converts this <code>OString</code> to lowercase.
+        <p>
+        If no character in the string has a different lowercase version,
+        based on calling the <code>toLowerCase</code> method defined by
+        <code>Character</code>, then the original string is returned.
+        <p>
+        Otherwise, a new string is allocated, whose length is identical
+        to this string, and such that each character that has a different
+        lowercase version is mapped to this lowercase equivalent.
+
+        @return the string, converted to lowercase.
      */
     OString toLowerCase() const
     {
@@ -631,19 +625,17 @@ public:
     }
 
     /**
-     * Converts this string to uppercase.
-     * <p>
-     * If no character in this string has a different uppercase version,
-     * based on calling the <code>toUpperCase</code> method defined by
-     * <code>Character</code>, then the original string is returned.
-     * <p>
-     * Otherwise, a new string is allocated, whose length is identical
-     * to this string, and such that each character that has a different
-     * uppercase version is mapped to this uppercase equivalent.
-     *
-     * @return  the string, converted to uppercase.
-     * @see     java.lang.Character#toUpperCase(char)
-     * @see     java.lang.OString#toLowerCase()
+        Converts this string to uppercase.
+        <p>
+        If no character in this string has a different uppercase version,
+        based on calling the <code>toUpperCase</code> method defined by
+        <code>Character</code>, then the original string is returned.
+        <p>
+        Otherwise, a new string is allocated, whose length is identical
+        to this string, and such that each character that has a different
+        uppercase version is mapped to this uppercase equivalent.
+
+        @return the string, converted to uppercase.
      */
     OString toUpperCase() const
     {
@@ -653,13 +645,13 @@ public:
     }
 
     /**
-     * Removes white space from both ends of this string.
-     * <p>
-     * All characters that have codes less than or equal to
-     * <code>'&#92;u0020'</code> (the space character) are considered to be
-     * white space.
-     *
-     * @return  this string, with white space removed from the front and end.
+        Removes white space from both ends of this string.
+        <p>
+        All characters that have codes less than or equal to
+        <code>'&#92;u0020'</code> (the space character) are considered to be
+        white space.
+
+        @return this string, with white space removed from the front and end.
      */
     OString trim() const
     {

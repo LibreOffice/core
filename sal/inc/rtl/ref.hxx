@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 12:00:11 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,8 @@ public:
 
 
     /** Assignment.
-     *  Unbinds this instance from its body (if bound) and
-     *  bind it to the body represented by the handle.
+         Unbinds this instance from its body (if bound) and
+         bind it to the body represented by the handle.
      */
     inline Reference<reference_type> &
     SAL_CALL operator= (const Reference<reference_type> & handle)
@@ -169,7 +169,7 @@ public:
 
 
     /** Set...
-     *  Similar to assignment.
+         Similar to assignment.
      */
     inline Reference<reference_type> &
     SAL_CALL set (reference_type * pBody)
@@ -183,11 +183,11 @@ public:
     }
 
     /** Unbind the body from this handle.
-     *  Note that for a handle representing a large body,
-     *  "handle.clear().set(new body());" _might_
-     *  perform a little bit better than "handle.set(new body());",
-     *  since in the second case two large objects exist in memory
-     *  (the old body and the new body).
+         Note that for a handle representing a large body,
+         "handle.clear().set(new body());" _might_
+         perform a little bit better than "handle.set(new body());",
+         since in the second case two large objects exist in memory
+         (the old body and the new body).
      */
     inline Reference<reference_type> & SAL_CALL clear()
     {
@@ -201,8 +201,8 @@ public:
 
 
     /** Get the body. Can be used instead of operator->().
-     *  I.e. handle->someBodyOp() and handle.get()->someBodyOp()
-     *  are the same.
+         I.e. handle->someBodyOp() and handle.get()->someBodyOp()
+         are the same.
      */
     inline reference_type * SAL_CALL get() const
     {

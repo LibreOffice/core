@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_ "$Revision: 1.1.1.1 $"
+#define _RTL_RANDOM_H_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -91,23 +91,23 @@ typedef enum
 } rtlRandomError;
 
 /** rtl_random_createPool.
- *
- *  @return Pool
+
+    @return Pool
  */
 rtlRandomPool SAL_CALL rtl_random_createPool (void);
 
 /** rtl_random_destroyPool.
- *
- *  @param Pool [in]
+
+    @param Pool [in]
  */
 void SAL_CALL rtl_random_destroyPool (
     rtlRandomPool Pool);
 
 /** rtl_random_addBytes.
- *
- *  @param Pool    [in]
- *  @param pBuffer [in]
- *  @param nBufLen [in]
+
+    @param Pool    [in]
+    @param pBuffer [in]
+    @param nBufLen [in]
  */
 rtlRandomError SAL_CALL rtl_random_addBytes (
     rtlRandomPool  Pool,
@@ -115,10 +115,10 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
     sal_uInt32     Bytes);
 
 /** rtl_random_getBytes.
- *
- *  @param Pool    [in]
- *  @param pBuffer [inout]
- *  @param nBufLen [in]
+
+    @param Pool    [in]
+    @param pBuffer [inout]
+    @param nBufLen [in]
  */
 rtlRandomError SAL_CALL rtl_random_getBytes (
     rtlRandomPool  Pool,

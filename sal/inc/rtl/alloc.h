@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,38 +72,38 @@ extern "C" {
 
 
 /** Allocate memory.
- *  @param  Bytes [in] memory size.
- *  @return pointer to allocated memory.
+    @param  Bytes [in] memory size.
+    @return pointer to allocated memory.
  */
 void * SAL_CALL rtl_allocateMemory (sal_uInt32 Bytes);
 
 
 /** Reallocate memory.
- *  @param  Ptr   [in] pointer to previously allocated memory.
- *  @param  Bytes [in] new memory size.
- *  @return pointer to reallocated memory. May differ from Ptr.
+    @param  Ptr   [in] pointer to previously allocated memory.
+    @param  Bytes [in] new memory size.
+    @return pointer to reallocated memory. May differ from Ptr.
  */
 void * SAL_CALL rtl_reallocateMemory (void *Ptr, sal_uInt32 Bytes);
 
 
 /** Free memory.
- *  @param  Ptr   [in] pointer to previously allocated memory.
- *  @return none. Memory is released. Ptr is invalid.
+    @param  Ptr   [in] pointer to previously allocated memory.
+    @return none. Memory is released. Ptr is invalid.
  */
 void SAL_CALL rtl_freeMemory (void *Ptr);
 
 
 /** Allocate and zero memory.
- *  @param  Bytes [in] memory size.
- *  @return pointer to allocated and zero'ed memory.
+    @param  Bytes [in] memory size.
+    @return pointer to allocated and zero'ed memory.
  */
 void * SAL_CALL rtl_allocateZeroMemory (sal_uInt32 Bytes);
 
 
 /** Zero and free memory.
- *  @param  Ptr   [in] pointer to previously allocated memory.
- *  @param  Bytes [in] memory size.
- *  @return none. Memory is zero'ed and released. Ptr is invalid.
+    @param  Ptr   [in] pointer to previously allocated memory.
+    @param  Bytes [in] memory size.
+    @return none. Memory is zero'ed and released. Ptr is invalid.
  */
 void SAL_CALL rtl_freeZeroMemory (void *Ptr, sal_uInt32 Bytes);
 
