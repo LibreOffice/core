@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellRangeObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:02:38 $
+ *  last change:$Date: 2003-09-08 12:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,27 +58,31 @@
  *
  *
  ************************************************************************/
-
 package mod._sc;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import util.ValueComparer;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
 
 /**
 * Test for object which is represented by service
@@ -130,26 +134,27 @@ public class ScCellRangeObj extends TestCase {
     /**
     * Creates Spreadsheet document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a Spreadsheet document" );
+            log.println("creating a Spreadsheet document");
             xSheetDoc = SOF.createCalcDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
         }
     }
 
     /**
     * Disposes Spreadsheet document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xSheetDoc ");
+
+        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xSheetDoc);
         oComp.dispose();
     }
 
@@ -167,57 +172,144 @@ public class ScCellRangeObj extends TestCase {
     * </ul>
     * @see com.sun.star.sheet.XSpreadsheet
     */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
-        XInterface oInterface = null;
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
+        XCellRange testRange;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "Creating a test environment" );
+        log.println("Creating a test environment");
 
-        XSpreadsheets oSpreadsheets = ( (XSpreadsheetDocument)
-                                        UnoRuntime.queryInterface(
-                                        XSpreadsheetDocument.class,
-                                        xSheetDoc) ).getSheets() ;
-        XNameAccess oNames = (XNameAccess)
-            UnoRuntime.queryInterface( XNameAccess.class, oSpreadsheets);
+        XSpreadsheets oSpreadsheets = ((XSpreadsheetDocument) UnoRuntime.queryInterface(
+                                               XSpreadsheetDocument.class,
+                                               xSheetDoc)).getSheets();
+        XNameAccess oNames = (XNameAccess) UnoRuntime.queryInterface(
+                                     XNameAccess.class, oSpreadsheets);
 
         XSpreadsheet oSheet = null;
+
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
-                new Type(XSpreadsheet.class),
-                    oNames.getByName(oNames.getElementNames()[0]));
+                             new Type(XSpreadsheet.class),
+                             oNames.getByName(oNames.getElementNames()[0]));
 
-            oObj = oSheet.getCellRangeByPosition( 0, 0, 3, 4 );
-        } catch(com.sun.star.lang.WrappedTargetException e) {
+            oObj = oSheet.getCellRangeByPosition(0, 0, 3, 4);
+            testRange = (XCellRange) UnoRuntime.queryInterface(
+                                XCellRange.class, oObj);
+        } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+                    "Error getting cell object from spreadsheet document", e);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        } catch(com.sun.star.container.NoSuchElementException e) {
+                    "Error getting cell object from spreadsheet document", e);
+        } catch (com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
-        } catch(com.sun.star.lang.IllegalArgumentException e) {
+                    "Error getting cell object from spreadsheet document", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
+                    "Error getting cell object from spreadsheet document", e);
         }
 
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation( "SHEET", oSheet );
+        tEnv.addObjRelation("SHEET", oSheet);
 
-        XPropertySet PropSet = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class, oObj);
-        tEnv.addObjRelation("PropSet",PropSet);
+        XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
+                                       XPropertySet.class, oObj);
+        tEnv.addObjRelation("PropSet", PropSet);
+
+        //Adding relation for util.XSortable
+        final PrintWriter finalLog = log;
+        final XCellRange oTable = testRange;
+        tEnv.addObjRelation("SORTCHECKER",
+                            new ifc.util._XSortable.XSortChecker() {
+            PrintWriter out = finalLog;
+
+            public void setPrintWriter(PrintWriter log) {
+                out = log;
+            }
+
+            public void prepareToSort() {
+                try {
+                    oTable.getCellByPosition(0, 0).setValue(4);
+                    oTable.getCellByPosition(0, 1).setFormula("b");
+                    oTable.getCellByPosition(0, 2).setValue(3);
+                    oTable.getCellByPosition(0, 3).setValue(23);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    out.println("Exception while checking sort");
+                }
+            }
+
+            public boolean checkSort(boolean isSortNumbering,
+                                     boolean isSortAscending) {
+                out.println("Sort checking...");
+
+                boolean res = false;
+                String[] value = new String[4];
+
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        XCell cell = oTable.getCellByPosition(0, i);
+                        value[i] = cell.getFormula();
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                        out.println("Exception while checking sort");
+                    }
+                }
+
+                if (isSortNumbering) {
+                    if (isSortAscending) {
+                        out.println("Sorting ascending");
+
+                        String[] rightVal = { "3", "4", "23", "b" };
+                        String[] vals = { value[0], value[1], value[2], value[3] };
+                        res = ValueComparer.equalValue(vals, rightVal);
+                        out.println("Expected 3, 4, 23, b");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    } else {
+                        String[] rightVal = { "b", "23", "4", "3" };
+                        String[] vals = { value[0], value[1], value[2], value[3] };
+                        res = ValueComparer.equalValue(vals, rightVal);
+                        out.println("Expected b, 23, 4, 3");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    }
+                } else {
+                    if (isSortAscending) {
+                        String[] rightVal = { "3", "4", "23", "b" };
+                        res = ValueComparer.equalValue(value, rightVal);
+                        out.println("Expected 3, 4, 23, b");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    } else {
+                        String[] rightVal = { "b", "23", "4", "3" };
+                        res = ValueComparer.equalValue(value, rightVal);
+                        out.println("Expected b, 23, 4, 3");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    }
+                }
+
+                if (res) {
+                    out.println("Sorted correctly");
+                } else {
+                    out.println("Sorted uncorrectly");
+                }
+
+                return res;
+            }
+        });
 
         return tEnv;
     }
-
-}    // finish class ScCellRangeObj
-
+} // finish class ScCellRangeObj
