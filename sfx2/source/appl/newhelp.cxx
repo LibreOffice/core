@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-07 09:18:34 $
+ *  last change: $Author: pb $ $Date: 2001-11-07 14:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,7 @@ void IndexTabPage_Impl::InitializeIndex()
                 {
                     // abi: Do not copy, but use references
                     const ::rtl::OUString& aKeywordPair = aKeywordList[i];
+                    DBG_ASSERT( aKeywordPair.getLength() > 0, "invalid help index" );
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRefList = aKeywordRefList[i];
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAnchorList = aAnchorRefList[i];
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aTitleList = aTitleRefList[i];
@@ -692,7 +693,7 @@ void IndexTabPage_Impl::InitializeIndex()
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),
                                 "reference list and title list of different length" );
 
-                    insert = ( (ndx=aKeywordPair.indexOf( sal_Unicode( ';' ) )) == -1 ? sal_False : sal_True );
+                    insert = ( ( ndx = aKeywordPair.indexOf( sal_Unicode( ';' ) ) ) == -1 ? sal_False : sal_True );
 
                     if ( insert )
                     {
