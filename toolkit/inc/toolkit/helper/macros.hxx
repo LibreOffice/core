@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,20 @@ void ClassName::MethodName( const EventType& e ) throw(::com::sun::star::uno::Ru
     aMulti.Source = &GetContext(); \
     ::cppu::OInterfaceIteratorHelper aIt( *this ); \
     while( aIt.hasMoreElements() ) \
-        ((InterfaceName*)aIt.next())->MethodName( aMulti ); \
+    { \
+        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
+            static_cast< InterfaceName* >( aIt.next() ) ); \
+        try \
+        { \
+            xListener->MethodName( aMulti ); \
+        } \
+        catch( ::com::sun::star::lang::DisposedException e ) \
+        { \
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
+            if ( e.Context == xListener || !e.Context.is() ) \
+                aIt.remove(); \
+        } \
+    } \
 }
 
 // -------------------------------------------------------------------------------------
