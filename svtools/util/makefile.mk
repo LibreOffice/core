@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.8 $
+#*  $Revision: 1.9 $
 #*
-#*  last change: $Author: hr $ $Date: 2000-11-14 09:58:52 $
+#*  last change: $Author: hr $ $Date: 2000-11-14 10:13:55 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -168,8 +168,7 @@ RESLIB1SRSFILES=$(SRS)$/filter.srs		\
         $(SRS)$/uno.srs
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
-    $(SRS)$/mediatyp.srs \
-    $(SRS)$/svsql.srs
+    $(SRS)$/mediatyp.srs
 
 # Bilden der DLL --------------------------------------------------
 
