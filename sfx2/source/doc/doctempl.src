@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:28:06 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ chinese_simplified ] =
     {
-        < "标准" ; > ;
+        < "我的文档样式" ; > ;
         < "商务信函" ; > ;
         < "其他商务文档" ; > ;
         < "私人信函和文档" ; > ;
