@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-29 19:15:48 $
+ *  last change: $Author: ssa $ $Date: 2001-10-30 08:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1434,6 +1434,7 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 
 void ImplHandleMoveResize( Window* pWindow, long nNewX, long nNewY, long nNewWidth, long nNewHeight )
 {
+    ImplHandleMove( pWindow, nNewX, nNewY );
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
