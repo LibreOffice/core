@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:52:30 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,7 @@
 #include "rtl/ustring.hxx"
 
 namespace jfw_plugin {
-// Define SUNVERSION_SELFTEST to run a test when this lib is loaded
-//#define SUNVERSION_SELFTEST
+// Define OSL_DEBUG_LEVEL >= 2 to run a test when this lib is loaded
 
 /* SunVersion is used to compare java versions based on a string, as taken
    from the registry. The strings look like "1.3", "1.3.1", "1.3.1_02" etc.
@@ -143,6 +142,12 @@ protected:
     bool init(const char * szVer);
 
     bool m_bValid;
+
+    /* Determines if a string constitutes a pre release. For example, if
+       "ea" is passed then Rel_EA is returned. If the string is no pre release
+       then Rel_NONE is returned.
+    */
+    PreRelease getPreRelease(const char *szRel);
 };
 
 }
