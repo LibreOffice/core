@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instance.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:55:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 #include "osl/doublecheckedlocking.h"
+#endif
+#ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
+#include "osl/getglobalmutex.hxx"
 #endif
 
 namespace {
@@ -368,6 +371,38 @@ rtl_Instance< Inst, InstCtor, Guard, GuardCtor, Data, DataCtor >::m_pInstance
 = 0;
 #endif // _MSC_VER
 
+}
+
+namespace rtl
+{
+    template< typename T, typename Unique > struct StaticInstance
+    {
+        T * operator ()()
+        {
+            static T instance;
+            return &instance;
+        }
+    };
+
+    template< typename T, typename Unique, typename Base = StaticInstance<T, Unique> > struct Static : public Base
+    {
+        static T & get()
+        {
+              return *rtl_Instance<
+                  T, Static, osl::MutexGuard, osl::GetGlobalMutex >::create(
+                      Static(), osl::GetGlobalMutex());
+        }
+    };
+
+    template< typename T, typename InitAggregate > struct StaticAggregate : public InitAggregate
+    {
+        static T * get()
+        {
+              return rtl_Instance<
+                  T, StaticAggregate, osl::MutexGuard, osl::GetGlobalMutex >::create(
+                      StaticAggregate(), osl::GetGlobalMutex());
+        }
+    };
 }
 
 #endif // INCLUDED_RTL_INSTANCE_HXX
