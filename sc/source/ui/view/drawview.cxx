@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:35:13 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 18:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,15 @@ void ScDrawView::InvalidateAttribs()
     rBindings.Invalidate( SID_ORIGINALSIZE );
 
     rBindings.Invalidate( SID_ATTR_TRANSFORM );
+
+    rBindings.Invalidate( SID_ATTR_GRAF_MODE );
+    rBindings.Invalidate( SID_ATTR_GRAF_RED );
+    rBindings.Invalidate( SID_ATTR_GRAF_GREEN );
+    rBindings.Invalidate( SID_ATTR_GRAF_BLUE );
+    rBindings.Invalidate( SID_ATTR_GRAF_LUMINANCE );
+    rBindings.Invalidate( SID_ATTR_GRAF_CONTRAST );
+    rBindings.Invalidate( SID_ATTR_GRAF_GAMMA );
+    rBindings.Invalidate( SID_ATTR_GRAF_TRANSPARENCE );
 }
 
 void ScDrawView::InvalidateDrawTextAttrs()
@@ -467,6 +476,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
             SetLayerLocked( pLayer->GetName(), TRUE );
     }
 
+    BOOL bSubShellSet = FALSE;
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -477,22 +487,25 @@ void __EXPORT ScDrawView::MarkListHasChanged()
                 pViewSh->SetOleObjectShell(TRUE);
             else
                 pViewSh->SetChartShell(TRUE);
+            bSubShellSet = TRUE;
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRAF)
         {
             pGrafObj = (SdrGrafObj*) pObj;
             pViewSh->SetGraphicShell(TRUE);
+            bSubShellSet = TRUE;
         }
-        else if (!pObj->GetObjIdentifier() == OBJ_TEXT  // Verhindern, das beim Anlegen
+        else if (pObj->GetObjIdentifier() != OBJ_TEXT   // Verhindern, das beim Anlegen
                     || !pViewSh->IsDrawTextShell())     // eines TextObjekts auf die
         {                                               // DrawShell umgeschaltet wird.
             pViewSh->SetDrawShell(TRUE);                //@#70206#
         }
     }
 
-    if (nMarkCount)                             // VC-Popup, wenn nur VCs markiert sind
+    if ( nMarkCount && !bSubShellSet )
     {
         BOOL bOnlyControls = TRUE;
+        BOOL bOnlyGraf     = TRUE;
         for (ULONG i=0; i<nMarkCount; i++)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
@@ -503,25 +516,32 @@ void __EXPORT ScDrawView::MarkListHasChanged()
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
 
-                    if(!pSubObj->ISA(SdrUnoObj))
-                    {
+                    if (!pSubObj->ISA(SdrUnoObj))
                         bOnlyControls = FALSE;
-                        break;
-                    }
-                }
+                    if (pSubObj->GetObjIdentifier() != OBJ_GRAF)
+                        bOnlyGraf = FALSE;
 
-                if(!bOnlyControls) break;
+                    if ( !bOnlyControls && !bOnlyGraf ) break;
+                }
             }
-            else if (!pObj->ISA(SdrUnoObj))
+            else
             {
-                bOnlyControls = FALSE;
-                break;
+                if (!pObj->ISA(SdrUnoObj))
+                    bOnlyControls = FALSE;
+                if (pObj->GetObjIdentifier() != OBJ_GRAF)
+                    bOnlyGraf = FALSE;
             }
+
+            if ( !bOnlyControls && !bOnlyGraf ) break;
         }
 
         if(bOnlyControls)
         {
             pViewSh->SetDrawFormShell(TRUE);            // jetzt UNO-Controls
+        }
+        else if(bOnlyGraf)
+        {
+            pViewSh->SetGraphicShell(TRUE);
         }
         else if(nMarkCount>1)
         {
