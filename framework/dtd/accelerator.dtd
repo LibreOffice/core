@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: accelerator.dtd,v 1.1 2001-08-03 16:44:00 cd Exp $
+	$Id: accelerator.dtd,v 1.2 2001-10-16 15:44:43 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,8 +64,8 @@
 <!ELEMENT accel:item EMPTY>
 <!ATTLIST accel:item
 	accel:code CDATA #REQUIRED
-	accel:shift %boolean; #IMPLIED
-	accel:mod1 %boolean; #IMPLIED
-	accel:mod2 %boolean; #IMPLIED
+	accel:shift %boolean; "false"
+	accel:mod1 %boolean; "false"
+	accel:mod2 %boolean; "false"
 	xlink:href CDATA #REQUIRED
 >

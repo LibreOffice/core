@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: statusbar.dtd,v 1.1 2001-06-20 12:25:22 cd Exp $
+	$Id: statusbar.dtd,v 1.2 2001-10-16 15:44:43 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -66,10 +66,10 @@
 <!ELEMENT statusbar:statusbaritem EMPTY>
 <!ATTLIST statusbar:statusbaritem
 	xlink:href CDATA #REQUIRED
-	statusbar:align %alignment; #IMPLIED
-	statusbar:style %style; #IMPLIED
-	statusbar:autosize %boolean; #IMPLIED
-	statusbar:ownerdraw %boolean; #IMPLIED
-	statusbar:width %numeric; #IMPLIED
-	statusbar:offset %numeric; #IMPLIED
+	statusbar:align %alignment; "center"
+	statusbar:style %style; "in"
+	statusbar:autosize %boolean; "false"
+	statusbar:ownerdraw %boolean; "false"
+	statusbar:width %numeric; "0"
+	statusbar:offset %numeric; "5"
 >
