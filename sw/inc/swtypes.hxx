@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:39:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ const USHORT lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
 const USHORT lNumIndent = 1440/4;
 const short lNumFirstLineOffset = -lNumIndent;
+const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // <- #i30312#
 
 // Anzahl der SystemField-Types vom SwDoc
