@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:25:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     FixedText FT_PATH
     {
@@ -148,6 +149,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "°æ·Î";
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ruta";
     };
     Control LB_PATH
     {
@@ -183,6 +185,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "ÆíÁý(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editar...";
     };
     PushButton BTN_STANDARD
     {
@@ -209,6 +212,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "±âº»(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterminado";
     };
     FixedLine GB_STD
     {
@@ -237,6 +241,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "±âº»";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Predeterminado";
     };
     Text[ chinese_traditional ] = "¸ô®|";
     Text[ arabic ] = "ÇáãÓÇÑÇÊ";
@@ -244,6 +249,7 @@ TabPage RID_SFXPAGE_PATH
     Text[ korean ] = "°æ·Î";
     Text[ turkish ] = "Veri yollarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rutas";
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
@@ -270,5 +276,6 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ korean ] = "±¸¼º¿ë µð·ºÅä¸®¿Í ¸ÞÀÏÀúÀå µð·ºÅä¸®´Â ±¸ºÐµÇ¾î¾ß ÇÕ´Ï´Ù.\n»õ °æ·Î¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À.";
     Message[ turkish ] = "Konfigürasyon ve ileti dizinlerinin ayrý dizinler olarak\nbelirlenmesi gerekir.\nLütfen yeni bir veri yolu seçin.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta.";
 };
  // ******************************************************************* EOF
