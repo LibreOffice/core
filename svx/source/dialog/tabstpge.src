@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:23:48 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "Posi��o" ;
         Text [ portuguese ] = "Posi��o" ;
         Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "~Placering" ;
+        Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
@@ -125,6 +125,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     FixedLine FL_TABPOS_VERT
     {
@@ -143,7 +145,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasen" ;
-        Text [ danish ] = "Venstre" ;
+        Text [ danish ] = "~Venstre" ;
         Text [ french ] = "� gauche" ;
         Text [ swedish ] = "~V�nster" ;
         Text [ dutch ] = "~Links" ;
@@ -166,6 +168,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
         Text[ slovak ] = "Vľ~avo";
+        Text[ hungarian ] = "~Balra";
+        Text[ slovenian ] = "~Levo";
     };
     Window WIN_TABLEFT
     {
@@ -183,7 +187,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "Di~reita" ;
         Text [ portuguese ] = "Di~reita" ;
         Text [ finnish ] = "~Oikea" ;
-        Text [ danish ] = "H�~jre" ;
+        Text [ danish ] = "~H�jre" ;
         Text [ french ] = "� droite" ;
         Text [ swedish ] = "H�ge~r" ;
         Text [ dutch ] = "~Rechts" ;
@@ -205,6 +209,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "दाहि~ना";
         Text[ slovak ] = "Vp~ravo";
+        Text[ hungarian ] = "~Jobbra";
+        Text[ slovenian ] = "Des~no";
     };
     Window WIN_TABRIGHT
     {
@@ -244,6 +250,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮ממורכז‬";
         Text[ hindi ] = "केन्द्रि~त";
         Text[ slovak ] = "Na ~stred";
+        Text[ hungarian ] = "~Középre";
+        Text[ slovenian ] = "Na s~redini";
     };
     Window WIN_TABCENTER
     {
@@ -283,6 +291,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮עשרוני‬";
         Text[ hindi ] = "दशां~श";
         Text[ slovak ] = "De~siatkovo";
+        Text[ hungarian ] = "Tize~desjelhez";
+        Text[ slovenian ] = "Deci~malno";
     };
     Window WIN_TABDECIMAL
     {
@@ -300,7 +310,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "~Caracter" ;
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
-        Text [ danish ] = "T~egn" ;
+        Text [ danish ] = "Te~gn" ;
         Text [ french ] = "Caract�res" ;
         Text [ swedish ] = "T~ecken" ;
         Text [ dutch ] = "T~eken" ;
@@ -322,6 +332,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮תו‬";
         Text[ hindi ] = "~अक्षर";
         Text[ slovak ] = "~Znak";
+        Text[ hungarian ] = "Ka~rakter";
+        Text[ slovenian ] = "~Znak";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -363,6 +375,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     FixedLine FL_TABTYPE_VERT
     {
@@ -381,7 +395,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "N~enhum" ;
         Text [ portuguese ] = "N~enhum" ;
         Text [ finnish ] = "~Ei mit��n" ;
-        Text [ danish ] = "Ingen" ;
+        Text [ danish ] = "Ing~en" ;
         Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
@@ -404,6 +418,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "को~ई नहीं";
         Text[ slovak ] = "Žia~dny";
+        Text[ hungarian ] = "~Nincs";
+        Text[ slovenian ] = "B~rez";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -434,7 +450,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "Caracter" ;
         Text [ portuguese ] = "Ca~racteres" ;
         Text [ finnish ] = "Merkki" ;
-        Text [ danish ] = "Teg~n" ;
+        Text [ danish ] = "Tegn" ;
         Text [ french ] = "Caract�res" ;
         Text [ swedish ] = "Tec~ken" ;
         Text [ dutch ] = "~Teken" ;
@@ -456,6 +472,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮תו‬";
         Text[ hindi ] = "अक्षर";
         Text[ slovak ] = "Znak";
+        Text[ hungarian ] = "Karakter";
+        Text[ slovenian ] = "Znak";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -497,6 +515,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮תו מילוי‬";
         Text[ hindi ] = "अक्षर भरो";
         Text[ slovak ] = "Vyplniť znakom";
+        Text[ hungarian ] = "Kitöltő karakter";
+        Text[ slovenian ] = "Zapolnitveni znak";
     };
     PushButton BTN_NEW
     {
@@ -509,7 +529,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo" ;
         Text [ finnish ] = "~Uusi" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "~Ny(t)" ;
         Text [ french ] = "~Nouveau" ;
         Text [ swedish ] = "~Ny" ;
         Text [ dutch ] = "~Nieuw" ;
@@ -531,6 +551,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
         Text[ slovak ] = "~Nový";
+        Text[ hungarian ] = "Ú~j";
+        Text[ slovenian ] = "~Nov";
     };
     PushButton BTN_DELALL
     {
@@ -543,7 +565,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "~Excluir Tudo" ;
         Text [ portuguese ] = "Eli~minar tudo" ;
         Text [ finnish ] = "Poista ~kaikki" ;
-        Text [ danish ] = "Slet alle" ;
+        Text [ danish ] = "Slet ~alle" ;
         Text [ french ] = "Tout supprimer" ;
         Text [ swedish ] = "Radera ~alla" ;
         Text [ dutch ] = "~Alle wissen" ;
@@ -565,6 +587,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮מחיקת הכל‬";
         Text[ hindi ] = "~सब मिटाओ";
         Text[ slovak ] = "Zmazať ~všetko";
+        Text[ hungarian ] = "Öss~zes törlése";
+        Text[ slovenian ] = "Izbriši ~vse";
     };
     PushButton BTN_DEL
     {
@@ -577,7 +601,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -599,6 +623,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     String ST_LEFTTAB_ASIAN
     {
@@ -612,7 +638,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ spanish ] = "~Izquierda/Arriba";
         Text[ finnish ] = "~Left/Top";
         Text[ italian ] = "A sinistra/in alto";
-        Text[ danish ] = "~Left/Top";
+        Text[ danish ] = "~Venstre top";
         Text[ swedish ] = "V�nster/uppe";
         Text[ polish ] = "~Left/Top";
         Text[ japanese ] = "左/上(~L)";
@@ -628,6 +654,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ thai ] = "~Left/Top";
         Text[ hindi ] = "~Left/Top";
         Text[ slovak ] = "~Vľavo/Hore";
+        Text[ hungarian ] = "~Balra/fent";
+        Text[ slovenian ] = "~Levo/zgoraj";
     };
     String ST_RIGHTTAB_ASIAN
     {
@@ -641,7 +669,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ spanish ] = "~Derecha/Abajo";
         Text[ finnish ] = "Righ~t/Bottom";
         Text[ italian ] = "A destra/in basso";
-        Text[ danish ] = "Righ~t/Bottom";
+        Text[ danish ] = "~H�jre bund";
         Text[ swedish ] = "H�ger/nere";
         Text[ polish ] = "Righ~t/Bottom";
         Text[ japanese ] = "右/下(~T)";
@@ -657,6 +685,8 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ thai ] = "Righ~t/Bottom";
         Text[ hindi ] = "Righ~t/Bottom";
         Text[ slovak ] = "Vp~ravo/Dole";
+        Text[ hungarian ] = "J~obbra/lent";
+        Text[ slovenian ] = "Des~no/spodaj";
     };
     Text[ chinese_simplified ] = "制表符";
     Text[ russian ] = "���������";
@@ -674,8 +704,12 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ hebrew ] = "‮טאבים‬";
     Text[ hindi ] = "टॉब्स";
     Text[ slovak ] = "Tabulátory";
+    Text[ hungarian ] = "Tabulátorok";
+    Text[ slovenian ] = "Tabulatorji";
 };
  // ********************************************************************** EOF
+
+
 
 
 
