@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-01 11:47:46 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,14 @@
 
 #include <hash_map>
 
+#define SMGR_NAME "com.sun.star.lang.ServiceManager"
+#define TDMGR_NAME "com.sun.star.reflection.TypeDescriptionManager"
+
+
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-
 
 namespace cppu
 {
@@ -212,21 +215,21 @@ Any ComponentContext::getValueByName( OUString const & rName )
                 if (xInstance.is())
                 {
                     ClearableMutexGuard aGuard( m_mutex );
-                    if (! pEntry->bLateInitService) // inited in the meantime?
+                    if (pEntry->bLateInitService)
+                    {
+                        pEntry->value.setValue( &xInstance, ::getCppuType( &xInstance ) );
+                        pEntry->bLateInitService = false;
+                    }
+                    else // inited in the meantime
                     {
                         aGuard.clear();
                         // service has entered the context in the meantime
-                        // => try to dispose this one
+                        // => try to dispose this object
                         Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
                         if (xComp.is())
                         {
                             xComp->dispose();
                         }
-                    }
-                    else
-                    {
-                        pEntry->value.setValue( &xInstance, ::getCppuType( &xInstance ) );
-                        pEntry->bLateInitService = false;
                     }
 
                     return pEntry->value;
@@ -253,8 +256,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
 
         return Any(); // error occured
     }
-
-    if (m_xDelegate.is())
+    else if (m_xDelegate.is())
     {
         return m_xDelegate->getValueByName( rName );
     }
@@ -281,31 +283,46 @@ void ComponentContext::disposing()
     ::fprintf( stderr, "> disposing context %p\n", this );
 #endif
 
-    // dispose all context objects
+    Reference< lang::XComponent > xTDMgr; // to be disposed separately
+
+    // first dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
     for ( ; iPos != m_map.end(); ++iPos )
     {
         ContextEntry * pEntry = iPos->second;
-        Reference< lang::XComponent > xComp;
 
-        if (pEntry->bLateInitService)
+        // service manager disposed separately
+        if (!m_xSMgr.is() || !iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_NAME) ))
         {
-            // may be in late init
-            MutexGuard aGuard( m_mutex );
-            pEntry->value >>= xComp;
-        }
-        else
-        {
-            pEntry->value >>= xComp;
-        }
+            Reference< lang::XComponent > xComp;
 
-        if (xComp.is())
-        {
-            xComp->dispose();
+            if (pEntry->bLateInitService)
+            {
+                // may be in late init
+                MutexGuard aGuard( m_mutex );
+                pEntry->value >>= xComp;
+            }
+            else
+            {
+                pEntry->value >>= xComp;
+            }
+
+            if (xComp.is())
+            {
+                if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_NAME) ))
+                {
+                    // disposed separately
+                    xTDMgr = xComp;
+                }
+                else
+                {
+                    xComp->dispose();
+                }
+            }
         }
     }
 
-    // dispose service manager
+    // second dispose service manager
     if (m_bDisposeSMgr)
     {
         Reference< lang::XComponent > xComp( m_xSMgr, UNO_QUERY );
@@ -315,11 +332,18 @@ void ComponentContext::disposing()
         }
     }
 
+    // last dispose of tdmgr: revoke callback from cppu runtime
+    if (xTDMgr.is())
+    {
+        xTDMgr->dispose();
+    }
+
     // everything is disposed, hopefully nobody accesses the context anymore...
     for ( iPos = m_map.begin(); iPos != m_map.end(); ++iPos )
     {
         delete iPos->second;
     }
+
     m_map.clear();
 }
 //__________________________________________________________________________________________________
@@ -334,10 +358,9 @@ ComponentContext::ComponentContext(
     {
         ContextEntry_Init const & rEntry = pEntries[ nEntries ];
 
-        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.lang.ServiceManager") ))
+        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_NAME) ))
         {
-            if (rEntry.value >>= m_xSMgr)
-                continue;
+            rEntry.value >>= m_xSMgr;
         }
         m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
     }
