@@ -22254,3 +22254,7 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?updateFromModel@DbTextField@@MAEXV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
 ?updateFromModel@DbTimeField@@MAEXV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx3132814430@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?MigrateItemPool@SdrAttrObj@@UAEXPAVSfxItemPool@@0PAVSdrModel@@@Z
+?MigrateItemPool@SdrObject@@UAEXPAVSfxItemPool@@0PAVSdrModel@@@Z
+?MigrateItemPool@SdrObjGroup@@UAEXPAVSfxItemPool@@0PAVSdrModel@@@Z
+?MigrateItemPool@E3dScene@@UAEXPAVSfxItemPool@@0PAVSdrModel@@@Z
