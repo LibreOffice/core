@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 10:02:23 $
+ *  last change: $Author: hr $ $Date: 2002-05-15 10:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,10 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 const OSQLTables& xTabs = m_pSqlIterator->getTables();
                                 if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() == xTabs.end())
                                 {
-                                    ::rtl::OUString sError(String(ModuleRes(STR_QRY_NOSELECT)));
-                                    showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
+                                    ModuleRes aModuleRes(STR_QRY_NOSELECT);
+                                    String sTmpStr(aModuleRes);
+                                    ::rtl::OUString sError(sTmpStr);
+                                    showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),1000,Any()));
                                 }
                                 else
                                 {
@@ -481,7 +483,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         }
                         else
                         {
-                            ::rtl::OUString sError(String(ModuleRes(STR_QRY_SYNTAX)));
+                            ModuleRes aModuleRes(STR_QRY_SYNTAX);
+                            String sTmpStr(aModuleRes);
+                            ::rtl::OUString sError(sTmpStr);
                             showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
                         }
                     }
@@ -1264,7 +1268,9 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     }
     else if(!m_sStatement.getLength())
     {
-        ::rtl::OUString sError(String(ModuleRes(STR_QRY_NOSELECT)));
+        ModuleRes aModuleRes(STR_QRY_NOSELECT);
+        String sTmpStr(aModuleRes);
+        ::rtl::OUString sError(sTmpStr);
         showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
     }
     else
