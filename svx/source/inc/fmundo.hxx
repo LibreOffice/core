@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: fs $ $Date: 2001-07-24 06:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,11 +140,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-#ifndef ENABLEUNICODE
     virtual String          GetComment() const;
-#else
-    virtual UniString       GetComment() const;
-#endif
 
 };
 
@@ -196,11 +192,7 @@ public:
     virtual void Undo();
     virtual void Redo() { Undo(); }
 
-#ifndef ENABLEUNICODE
     virtual String          GetComment() const;
-#else
-    virtual UniString       GetComment() const;
-#endif
 };
 
 //========================================================================

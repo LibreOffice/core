@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:12:25 $
+ *  last change: $Author: fs $ $Date: 2001-07-24 06:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,12 +145,6 @@
 #endif
 #ifndef SVX_FMPROPBRW_HXX
 #include "fmPropBrw.hxx"
-#endif
-
-#ifndef ENABLEUNICODE
-#define WS(a) ::rtl::OUString(UniString(a)
-#else
-#define WS(a) a
 #endif
 
 using namespace ::svxform;
