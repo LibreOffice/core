@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 12:19:25 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ namespace dbaui
             // empty the frame where our view resides
         virtual sal_Bool CommitCurrent();
             // commit the current column (i.e. cell)
-        virtual sal_Bool SaveModified(sal_Bool bCommit = sal_True);
+        virtual sal_Bool SaveModified(sal_Bool bAskFor = sal_True);
             // save the modified record
 //      virtual sal_uInt16 SaveData(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
             // save all data if modified, maybe ask the user
