@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localdataimportsvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:15 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 12:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#endif
 #include <drafts/com/sun/star/configuration/backend/XImportLayer.hpp>
 
 // -----------------------------------------------------------------------------
@@ -135,6 +139,7 @@ LocalDataImportService::~LocalDataImportService()
 
 namespace
 {
+// -----------------------------------------------------------------------------
     struct JobDesc
     {
         explicit JobDesc(task::XJob * pJob, const uno::Sequence< beans::NamedValue >& aArguments);
@@ -153,6 +158,7 @@ namespace
         sal_Bool use_overwrite;
         sal_Bool use_truncate;
     };
+    // -----------------------------------------------------------------------------
 
     JobDesc::JobDesc(task::XJob * pJob, const uno::Sequence< beans::NamedValue >& aArguments)
     : aLayerDataUrl()
@@ -243,9 +249,18 @@ namespace
                 aImporterService = OUSTRING("com.sun.star.configuration.backend.MergeImporter");
         }
     }
+    // -----------------------------------------------------------------------------
+
+    static
+    inline
+    uno::Type getOverwriteFailedExceptionType()
+    {
+        lang::IllegalAccessException const * const selected = 0;
+        return ::getCppuType(selected);
+    }
+// -----------------------------------------------------------------------------
 }
 // -----------------------------------------------------------------------------
-
 // XJob
 
 uno::Any SAL_CALL
@@ -296,11 +311,24 @@ uno::Any SAL_CALL
         throw lang::NullPointerException(sMessage,*this);
     }
 
-    if (aJob.use_entity)
-        xImporter->importLayerForEntity(xLayer,aJob.aEntity);
+    try
+    {
+        if (aJob.use_entity)
+            xImporter->importLayerForEntity(xLayer,aJob.aEntity);
 
-    else
-        xImporter->importLayer(xLayer);
+        else
+            xImporter->importLayer(xLayer);
+    }
+    catch (lang::WrappedTargetException & e)
+    {
+        if (aJob.overwrite || !e.TargetException.isExtractableTo(getOverwriteFailedExceptionType())) throw;
+        return e.TargetException;
+    }
+    catch (lang::WrappedTargetRuntimeException & e)
+    {
+        if (aJob.overwrite || !e.TargetException.isExtractableTo(getOverwriteFailedExceptionType())) throw;
+        return e.TargetException;
+    }
 
     return uno::Any();
 }
