@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-25 10:07:03 $
+#   last change: $Author: obo $ $Date: 2005-03-15 13:37:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,12 @@ TARFILE_NAME=icu-2.6
 TARFILE_ROOTDIR=icu
 
 PATCH_FILE_NAME=icu-2.6.patch
+
+ADDITIONAL_FILES= \
+    source$/layout$/KhmerLayoutEngine.cpp \
+    source$/layout$/KhmerLayoutEngine.h \
+    source$/layout$/KhmerReordering.cpp \
+    source$/layout$/KhmerReordering.h
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
