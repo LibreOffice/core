@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:08:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,17 +183,35 @@ namespace sdr
                                 rDisplayInfo.ClearGhostedDrawMode();
                             }
 
-                            // Paint (erase) the background.  That was
-                            // formerly done in DrawPaper() but has to be
-                            // done even when the paper (the page) is not
-                            // painted.
-                            OutputDevice* pOut=rDisplayInfo.GetOutputDevice();
-                            pOut->SetBackground(Wallpaper(
-                                pPageView->GetApplicationBackgroundColor()));
+                            // #i34947#
+                            // Initialize background. Dependent of IsPageVisible, use
+                            // ApplicationBackgroundColor or ApplicationDocumentColor. Most
+                            // old renderers for export (html, pdf, gallery, ...) set the
+                            // page to not visible (SetPageVisible(false)). They expect the
+                            // given OutputDevice to be initialized with the
+                            // ApplicationDocumentColor then.
+                            const SdrView& rView = pPageView->GetView();
+                            Color aInitColor;
+
+                            if(rView.IsPageVisible())
+                            {
+                                aInitColor = pPageView->GetApplicationBackgroundColor();
+                            }
+                            else
+                            {
+                                aInitColor = pPageView->GetApplicationDocumentColor();
+
+                                if(Color(COL_AUTO) == aInitColor)
+                                {
+                                    aInitColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+                                }
+                            }
+
+                            // init background with InitColor
+                            OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+                            pOut->SetBackground(Wallpaper(aInitColor));
                             pOut->SetLineColor();
                             pOut->Erase();
-
-                            const SdrView& rView = pPageView->GetView();
 
                             if(rView.IsPageVisible())
                             {
@@ -202,29 +220,6 @@ namespace sdr
                                 if(rView.IsPageBorderVisible())
                                 {
                                     DrawPaperBorder(rDisplayInfo);
-                                }
-                            }
-                            else
-                            {
-                                // #i29291#
-                                // This is a rare and special case when we draw a SdrPage
-                                // that is not visible on any view and has no masterpage.
-                                // In this case, the page should paint its paper rect white
-                                // instead of leaving it black.
-                                // This case is used f.e. from the gallery to paint a thumb preview
-                                if( !GetSdrPage().IsMasterPage() && !GetSdrPage().TRG_HasMasterPage() )
-                                {
-                                    // get page color
-                                    Color aColor( pPageView->GetApplicationDocumentColor() );
-                                    if(aColor == COL_AUTO)
-                                    {
-                                        aColor = Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
-                                    }
-
-                                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                                    pOut->SetBackground(Wallpaper(aColor));
-                                    pOut->SetLineColor();
-                                    pOut->Erase();
                                 }
                             }
 
