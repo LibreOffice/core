@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:43:51 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ protected:
     sal_Bool                                            m_bSuppressVersionColumns : 1;
     sal_Bool                                            m_bModified : 1;
     sal_Bool                                            m_bDocumentReadOnly : 1;
+    sal_Bool                                            m_bDisposingSubStorages;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                                         m_aInfo;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -510,6 +511,9 @@ protected:
 // other stuff
     void    flushDocuments();
     void    flushTables();
+
+    // disposes all elements in m_aStorages, and clears it
+    void    disposeStorages() SAL_THROW(());
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
