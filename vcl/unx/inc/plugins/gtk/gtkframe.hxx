@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:35:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,9 @@ public:
     GtkWindow*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
+    GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
+    GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
     GdkVisibilityState getVisibilityState() const
     { return m_nVisibility; }
 
