@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: pl $ $Date: 2001-07-25 14:27:53 $
+#   last change: $Author: pl $ $Date: 2001-08-10 10:58:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,9 +177,6 @@ LIB1FILES=  $(SLB)$/app.lib     \
             $(SLB)$/ctrl.lib    \
             $(SLB)$/helper.lib
 
-.IF "$(TF_SVDATA)"==""
-LIB1FILES+= $(SLB)$/ex.lib
-.ENDIF
 
 .IF "$(remote)" != ""
     LIB1FILES+= $(SLB)$/remote.lib
