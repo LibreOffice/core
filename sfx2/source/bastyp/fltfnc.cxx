@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1548,10 +1548,23 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 aResult = xFilterCFG->getByName( sQuery );
                 if( aResult >>= lFilterNames )
                 {
+                    // If list of filters already exist ...
+                    // ReadExternalFilters must work in update mode.
+                    // Best way seams to mark all filters NOT_INSTALLED
+                    // and change it back for all valid filters afterwards.
+                    BOOL bUpdated = FALSE;
                     if( pImpl->aList.Count() > 0 )
                     {
-                        pImpl->syncDefaults( lFilterNames );
-                        return;
+                        bUpdated = TRUE;
+                        SfxFilterList_Impl& rList = pImpl->aList;
+                        USHORT nCount = (USHORT)rList.Count();
+                        SfxFilter* pFilter;
+                        for (USHORT f=0; f<nCount; ++f)
+                        {
+                            pFilter = NULL;
+                            pFilter = rList.GetObject(f);
+                            pFilter->nFormatType |= SFX_FILTER_NOTINSTALLED;
+                        }
                     }
 
                     // get all properties of filters ... put it into the filter container
@@ -1670,7 +1683,7 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                                 nClipboardId = SotExchange::RegisterFormatName( sHumanName );
 
                                 // #100570# For external filters ignore clipboard IDs
-                                if(nFlags & SFX_FILTER_STARONEFILTER)
+                                if((nFlags & SFX_FILTER_STARONEFILTER) == SFX_FILTER_STARONEFILTER)
                                 {
                                     nClipboardId = 0;
                                 }
@@ -1685,16 +1698,40 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                                 sFilterName = sFilterName.copy( nStartRealName+2 );
                             }
 
-                            SfxFilter *pFilter = new SfxFilter( sFilterName             ,
-                                                                sExtension              ,
-                                                                nFlags                  ,
-                                                                nClipboardId            ,
-                                                                sType                   ,
-                                                                sType                   ,
-                                                                (USHORT)nDocumentIconId ,
-                                                                sMimeType               ,
-                                                                this                    ,
-                                                                sUserData               );
+                            USHORT nCachePos = 0;
+                            if (!((nFlags & SFX_FILTER_DEFAULT) == SFX_FILTER_DEFAULT))
+                                nCachePos = GetFilterCount();
+
+                            SfxFilter* pFilter = this->GetFilter4FilterName(sFilterName,0,0);
+                            const SfxFilter* pCheck = this->GetFilter4FilterName(sFilterName,0,0);
+                            BOOL bNew = FALSE;
+                            if (!pFilter)
+                            {
+                                bNew = TRUE;
+                                pFilter = new SfxFilter( sFilterName             ,
+                                                         sExtension              ,
+                                                         nFlags                  ,
+                                                         nClipboardId            ,
+                                                         sType                   ,
+                                                         sType                   ,
+                                                         (USHORT)nDocumentIconId ,
+                                                         sMimeType               ,
+                                                         this                    ,
+                                                         sUserData               );
+                            }
+                            else
+                            {
+                                pFilter->aName        = sFilterName;
+                                pFilter->aWildCard    = WildCard(sExtension, ';');
+                                pFilter->nFormatType  = nFlags;
+                                pFilter->lFormat      = nClipboardId;
+                                pFilter->aMacType     = sType;
+                                pFilter->aTypeName    = sType;
+                                pFilter->nDocIcon     = (USHORT)nDocumentIconId;
+                                pFilter->aMimeType    = sMimeType;
+                                pFilter->pContainer   = this;
+                                pFilter->aUserData    = sUserData;
+                            }
 
                             // Don't forget to set right UIName!
                             // Otherwise internal name is used as fallback ...
@@ -1704,13 +1741,45 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                             {
                                 pFilter->SetVersion( nFormatVersion );
                             }
-                            if( (( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT ) == TRUE )
+
+                            if (bNew)
+                                AddFilter(pFilter, nCachePos);
+                        }
+                    }
+
+                    // In case we updated an already filled cache, it was to complicated to
+                    // look for right place of the default filter!
+                    // It seams to be easiear to step over the whole container twice and
+                    // correct it now ...
+                    if (bUpdated)
+                    {
+                        SfxFilterList_Impl& rList       = pImpl->aList;
+                        SfxFilter*          pOldDefault = rList.First();
+                        SfxFilter*          pNewDefault = NULL         ;
+                        sal_Int32           nNewPos     = 0            ;
+
+                        if ((pOldDefault->nFormatType & SFX_FILTER_DEFAULT) != SFX_FILTER_DEFAULT)
+                        {
+                            USHORT nCount = (USHORT)rList.Count();
+                            SfxFilter* pFilter;
+                            for (USHORT f=0; f<nCount; ++f)
                             {
-                                AddFilter( pFilter, 0 );
+                                pFilter = NULL;
+                                pFilter = rList.GetObject(f);
+                                if ((pFilter->nFormatType & SFX_FILTER_DEFAULT) == SFX_FILTER_DEFAULT)
+                                {
+                                    pNewDefault = pFilter;
+                                    nNewPos     = f;
+                                    break;
+                                }
                             }
-                            else
+
+                            if (nNewPos>0 && pNewDefault)
                             {
-                                AddFilter( pFilter, GetFilterCount() );
+                                rList.Remove( pNewDefault                 );
+                                rList.Remove( pOldDefault                 );
+                                rList.Insert( pNewDefault, (ULONG)0       );
+                                rList.Insert( pOldDefault, (ULONG)nNewPos );
                             }
                         }
                     }
