@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:41:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,20 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
+namespace {
 
+rtl::OUString encodePathSegment(rtl::OUString const & decoded) {
+    return rtl::Uri::encode(
+        decoded, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
+        RTL_TEXTENCODING_UTF8);
+}
+
+rtl::OUString decodePathSegment(rtl::OUString const & encoded) {
+    return rtl::Uri::decode(
+        encoded, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+}
+
+}
 
 MemoryContainer::MemoryContainer()
     : m_nLen(0),
@@ -372,7 +385,7 @@ rtl::OUString FTPURL::parent(bool internal) const
 
 void FTPURL::child(const rtl::OUString& title)
 {
-    m_aPathSegmentVec.push_back(title);
+    m_aPathSegmentVec.push_back(encodePathSegment(title));
 }
 
 
@@ -380,7 +393,7 @@ rtl::OUString FTPURL::child() const
 {
     return
         m_aPathSegmentVec.size() ?
-        m_aPathSegmentVec.back() : rtl::OUString();
+        decodePathSegment(m_aPathSegmentVec.back()) : rtl::OUString();
 }
 
 
@@ -528,7 +541,7 @@ std::vector<FTPDirentry> FTPURL::list(
         if(osKind != int(FTP_UNKNOWN) &&
            !aDirEntry.m_aName.equalsAscii("..") &&
            !aDirEntry.m_aName.equalsAscii(".")) {
-            aDirEntry.m_aURL = viewurl + aDirEntry.m_aName;
+            aDirEntry.m_aURL = viewurl + encodePathSegment(aDirEntry.m_aName);
 
             sal_Bool isDir =
                 sal_Bool(aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR);
@@ -611,7 +624,7 @@ rtl::OUString FTPURL::net_title() const
             //  to the one given in the URL.
             if(m_aPathSegmentVec.size())
                 // determine title form url
-                net_title = m_aPathSegmentVec.back();
+                net_title = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root
                 net_title = rtl::OUString::createFromAscii("/");
@@ -715,9 +728,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     rtl::OString title;
     if(m_aPathSegmentVec.size()) {
         rtl::OUString titleOU = m_aPathSegmentVec.back();
-        titleOU = rtl::Uri::decode(titleOU,
-                                 rtl_UriDecodeWithCharset,
-                                 RTL_TEXTENCODING_UTF8);
+        titleOU = decodePathSegment(titleOU);
         title = rtl::OString(titleOU.getStr(),
                             titleOU.getLength(),
                             RTL_TEXTENCODING_UTF8);
@@ -800,7 +811,7 @@ rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
         throw curl_exception(err);
     else if(m_aPathSegmentVec.size() &&
             !m_aPathSegmentVec.back().equalsAscii(".."))
-        m_aPathSegmentVec.back() = NewTitle;
+        m_aPathSegmentVec.back() = encodePathSegment(NewTitle);
     return OldTitle;
 }
 
