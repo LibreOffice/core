@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-11 11:20:45 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 07:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,9 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
-    if ( rFactory != aFactory && rFactory.Len() > 0 )
+    DBG_ASSERT( rFactory.Len() > 0, "empty factory" );
+
+    if ( rFactory != aFactory )
     {
         aFactory = rFactory;
         ClearIndex();
@@ -1581,15 +1583,18 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 
 void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActive )
 {
-    if ( !pIPage )
-        pIPage = new IndexTabPage_Impl( &aTabCtrl );
-    pIPage->SetFactory( rFactory );
-    if ( !pSPage )
-        pSPage = new SearchTabPage_Impl( &aTabCtrl );
-    pSPage->SetFactory( rFactory );
+    if ( rFactory.Len() > 0 )
+    {
+        if ( !pIPage )
+            pIPage = new IndexTabPage_Impl( &aTabCtrl );
+        pIPage->SetFactory( rFactory );
+        if ( !pSPage )
+            pSPage = new SearchTabPage_Impl( &aTabCtrl );
+        pSPage->SetFactory( rFactory );
 
-    if ( bActive )
-        SetActiveFactory();
+        if ( bActive )
+            SetActiveFactory();
+    }
 }
 
 // -----------------------------------------------------------------------
