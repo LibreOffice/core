@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:53:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ private:
     sal_Bool MergeMenues_Impl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp );
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
+                const ::rtl::OUString& aContModuleName );
 
 public:
 
@@ -177,6 +178,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenuesForInplace(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xContMenu,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
+        const ::rtl::OUString& aContModuleName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xOwnMenu,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xOwnDisp )
             throw ( ::com::sun::star::uno::Exception );
@@ -217,7 +219,8 @@ public:
 
     sal_Bool ShowUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP,
+        const ::rtl::OUString& aContModuleName );
     sal_Bool HideUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
 
