@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 12:47:08 $
+ *  last change: $Author: mav $ $Date: 2003-11-25 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,15 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
 private:
     void CommonInit_Impl();
+
+    void SwitchOwnPersistence(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewObjectStorage,
+                const ::rtl::OUString& aNewName );
+
+    void SwitchOwnPersistence(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
+                const ::rtl::OUString& aNewName );
 
     ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:24:24 $
+ *  last change: $Author: mav $ $Date: 2003-11-25 13:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,38 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     return xResult;
 
+}
+
+//------------------------------------------------------
+void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
+                                                  const uno::Reference< embed::XStorage >& xNewObjectStorage,
+                                                  const ::rtl::OUString& aNewName )
+{
+    try {
+        uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
+        OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    m_xObjectStorage = xNewObjectStorage;
+    m_xParentStorage = xNewParentStorage;
+    m_aEntryName = aNewName;
+}
+
+//------------------------------------------------------
+void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
+                                                  const ::rtl::OUString& aNewName )
+{
+    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+
+    uno::Reference< embed::XStorage > xNewOwnStorage = xNewParentStorage->openStorageElement( aNewName, nStorageMode );
+    OSL_ENSURE( xNewOwnStorage.is(), "The method can not return empty reference!" );
+
+    SwitchOwnPersistence( xNewParentStorage, xNewOwnStorage, aNewName );
 }
 
 //------------------------------------------------------
@@ -565,9 +597,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
 
-    m_xObjectStorage = xStorage->openStorageElement( sEntName, nStorageMode );
-    m_xParentStorage = xStorage;
-    m_aEntryName = sEntName;
+    SwitchOwnPersistence( xStorage, sEntName );
 
     if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
     {
@@ -800,11 +830,16 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( bUseNew )
     {
         // the link object is not linked any more
+        // TODO: the link will have own persistence, so the link will stay the link
         m_bIsLink = sal_False;
         m_aLinkURL = ::rtl::OUString();
 
+        SwitchOwnPersistence( m_xNewParentStorage, m_xNewObjectStorage, m_aNewEntryName );
+    }
+    else
+    {
         try {
-            uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
+            uno::Reference< lang::XComponent > xComponent( m_xNewObjectStorage, uno::UNO_QUERY );
             OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
             if ( xComponent.is() )
                 xComponent->dispose();
@@ -812,10 +847,6 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         catch ( uno::Exception& )
         {
         }
-
-        m_xObjectStorage = m_xNewObjectStorage;
-        m_xParentStorage = m_xNewParentStorage;
-        m_aEntryName = m_aNewEntryName;
     }
 
     m_xNewObjectStorage = uno::Reference< embed::XStorage >();
@@ -979,9 +1010,8 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     m_bReadOnly = sal_False;
     sal_Int32 nStorageMode = embed::ElementModes::ELEMENT_READWRITE;
 
-    m_xObjectStorage = xStorage->openStorageElement( sEntName, nStorageMode );
-    m_xParentStorage = xStorage;
-    m_aEntryName = sEntName;
+    if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
+        SwitchOwnPersistence( xStorage, sEntName );
 
     // for linked object it means that it becomes embedded object
     // the document must switch it's persistence also
