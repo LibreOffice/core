@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 13:56:07 $
+#   last change: $Author: obo $ $Date: 2004-11-16 12:08:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,9 @@
 PRJ=..$/..
 PRJINC=..$/inc
 
-PRJNAME=pcr
+PRJNAME=extensions
 TARGET=pcr
-ENABLE_EXCEPTIONS=TRUE
+#ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -76,10 +76,14 @@ USE_DEFFILE=TRUE
 CDEFS+=-DCOMPMOD_NAMESPACE=pcr
 CDEFS+=-DCOMPMOD_RESPREFIX=pcr
 
+.IF $(DVO_XFORMS) != ""
+CDEFS+=-DDVO_XFORMS
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 #Create UNO Header files
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
 
 UNOTYPES=\
@@ -151,14 +155,41 @@ UNOTYPES=\
     com.sun.star.form.binding.XValueBinding      \
     com.sun.star.form.binding.XListEntrySource   \
     com.sun.star.form.binding.XListEntrySink     \
+    com.sun.star.xforms.XModel                  \
+    com.sun.star.xforms.XFormsSupplier          \
+    com.sun.star.xforms.XDataTypeRepository     \
+    com.sun.star.xforms.XSubmission             \
+    com.sun.star.xsd.XDataType                  \
+    com.sun.star.xsd.WhiteSpaceTreatment        \
+    com.sun.star.form.submission.XSubmissionSupplier \
 
 
-SLOFILES=			$(SLO)$/controlfontdialog.obj	\
+EXCEPTIONSFILES=    $(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/fontdialog.obj	\
                     $(SLO)$/pcrservices.obj	\
-                    $(SLO)$/browserline.obj	\
                     $(SLO)$/selectlabeldialog.obj	\
                     $(SLO)$/formcontroller.obj	\
+                    $(SLO)$/propcontroller.obj	\
+                    $(SLO)$/modulepcr.obj   \
+                    $(SLO)$/cellbindinghelper.obj   \
+                    $(SLO)$/taborder.obj   \
+                    $(SLO)$/pcrunodialogs.obj   \
+                    $(SLO)$/unourl.obj   \
+                    $(SLO)$/formlinkdialog.obj   \
+                    $(SLO)$/listselectiondlg.obj   \
+                    $(SLO)$/propertyhandler.obj   \
+                    $(SLO)$/cellbindinghandler.obj   \
+                    $(SLO)$/stringrepresentation.obj   \
+                    $(SLO)$/editpropertyhandler.obj   \
+                    $(SLO)$/eformspropertyhandler.obj   \
+                    $(SLO)$/eformshelper.obj   \
+                    $(SLO)$/xsddatatypes.obj   \
+                    $(SLO)$/xsdvalidationhelper.obj \
+                    $(SLO)$/pushbuttonnavigation.obj \
+                    $(SLO)$/submissionhandler.obj
+
+SLOFILES=			$(EXCEPTIONSFILES) \
+                    $(SLO)$/browserline.obj	\
                     $(SLO)$/formmetadata.obj	\
                     $(SLO)$/formbrowsertools.obj	\
                     $(SLO)$/standardcontrol.obj	\
@@ -170,29 +201,28 @@ SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/formstrings.obj	\
                     $(SLO)$/pcrstrings.obj	\
                     $(SLO)$/browserview.obj	\
-                    $(SLO)$/propcontroller.obj	\
+                    $(SLO)$/xsdvalidationpropertyhandler.obj \
                     $(SLO)$/pcrcommon.obj	\
-                    $(SLO)$/modulepcr.obj   \
-                    $(SLO)$/cellbindinghelper.obj   \
-                    $(SLO)$/taborder.obj   \
-                    $(SLO)$/pcrunodialogs.obj   \
-                    $(SLO)$/unourl.obj   \
-                    $(SLO)$/formlinkdialog.obj   \
-                    $(SLO)$/listselectiondlg.obj   \
-                    $(SLO)$/pushbuttonnavigation.obj   \
+                    $(SLO)$/newdatatype.obj \
+                    $(SLO)$/buttonnavigationhandler.obj \
+                    $(SLO)$/propertycomposer.obj \
 
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			propres.src	 \
                     formres.src \
+                    pcrmiscres.src \
                     taborder.src \
+                    fontdialog.src \
+                    selectlabeldialog.src \
                     formlinkdialog.src \
-                    listselectiondlg.src
+                    listselectiondlg.src \
+                    newdatatype.src
 
 #RESLIB1DEPN= pcr.src pcr.hrc
 
 RESLIB1NAME=$(TARGET)
-RESLIB1IMAGES=$(SRS)$/$(TARGET).srs 
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
