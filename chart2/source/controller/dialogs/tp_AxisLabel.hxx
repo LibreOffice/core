@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2004-08-04 14:14:26 $
+ *  last change: $Author: dr $ $Date: 2004-08-04 14:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 // header for CheckBox
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 // header for SvxWinOrientation
 #ifndef SVX_ORIENTHELPER_HXX

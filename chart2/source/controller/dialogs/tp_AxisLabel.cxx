@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:53 $
+ *  last change: $Author: dr $ $Date: 2004-08-04 14:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
 
         aCbShowDescription( this, SchResId( CB_AXIS_LABEL_SCHOW_DESCR ) ),
 
+#if 0 // DR: TODO new control types
         aWOAngle( this,
                   SchResId( CT_AXIS_LABEL_DIAL ),
                   SchResId( PB_AXIS_LABEL_TEXTSTACKED ),
@@ -120,6 +121,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
                   SchResId( FT_UNUSED ),
                   SchResId( CT_UNUSED ),
                   SchResId( FL_AXIS_LABEL_ORIENTATION ) ),
+#endif
 
         aFlTextFlow( this, SchResId( FL_AXIS_LABEL_TEXTFLOW ) ),
         aCbTextOverlap( this, SchResId( CB_AXIS_LABEL_TEXTOVERLAP ) ),
@@ -164,6 +166,7 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
 
 BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
+#if 0 // DR: TODO new control types
 //  SvxChartTextOrient eOrient;
     BOOL bIsStacked = FALSE;
     long nDegrees = aWOAngle.GetDegrees() * 100L;
@@ -224,6 +227,7 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXTBREAK, aCbTextBreak.IsChecked() ) );
     if( aCbShowDescription.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, aCbShowDescription.IsChecked() ) );
+#endif
 
     return TRUE;
 }
@@ -296,8 +300,10 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
         bStacked = reinterpret_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
     }
 
+#if 0 // DR: TODO new control types
     aWOAngle.SetDegrees( nDegrees );
     aWOAngle.SetStackedTxt( bStacked );
+#endif
     m_nInitialDegrees = nDegrees;
     m_bInitialStacking = bStacked;
 
@@ -394,10 +400,12 @@ IMPL_LINK ( SchAxisLabelTabPage, ToggleShowLabel, void *, EMPTYARG )
 {
     BOOL bEnable = ( aCbShowDescription.GetState() != STATE_NOCHECK );
 
+#if 0 // DR: TODO new control types
     if( bEnable )
         aWOAngle.Enable();
     else
         aWOAngle.Disable();
+#endif
 
     aFlOrder.Enable( bEnable );
     aRbSideBySide.Enable( bEnable );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:58 $
+ *  last change: $Author: dr $ $Date: 2004-08-04 14:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace chart
 
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs),
+    SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs)
 
 //  aCbxTextBreak   ( this, ResId( CBX_TEXTBREAK ) ),
 //  aCbxTextOverlap ( this, ResId( CBX_TEXTOVERLAP ) ),
@@ -113,11 +113,13 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
 //  eOrderMode(CHORDMODE_X_AXIS),
 
     //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
+#if 0 // DR: TODO new control types
     aWinOrient      ( this,ResId(CTR_DIAL),ResId(BTN_TXTSTACKED),
                         ResId(FT_DEGREES),ResId(NF_ORIENT),
                         ResId(FT_DUMMY),
                         ResId(CTR_DUMMY),
                         ResId( FL_ALIGN))
+#endif
 
 {
     FreeResource();
@@ -176,6 +178,7 @@ SfxTabPage* SchAlignmentTabPage::Create(Window* pWindow,
 
 BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
+#if 0 // DR: TODO new control types
     //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
 //  SvxChartTextOrient eOrient;
     BOOL bIsStacked = FALSE;
@@ -233,7 +236,7 @@ BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     const SfxItemSet&   rOldSet         = GetItemSet();
     */
 //  TriState            eState;
-
+#endif
 
 
     return TRUE;
@@ -315,11 +318,13 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
 //      }
 //  }
 
+#if 0 // DR: TODO new control types
     aWinOrient.SetDegrees( static_cast< short >( nDegrees ));
     if( rInAttrs.GetItemState( SCHATTR_TEXT_STACKED, TRUE, &pPoolItem ) == SFX_ITEM_SET )
     {
         aWinOrient.SetStackedTxt( reinterpret_cast< const SfxBoolItem * >( pPoolItem )->GetValue() );
     }
+#endif
 
     // Textumbruch
     /*
