@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paralleltimecontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:06:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace presentation
             if( getState() == ACTIVE )
                 return true; // avoid duplicate event generation
 
-            if( !BaseNode::activate() )
+            if( !BaseContainerNode::activate() )
                 return false;
 
             // resolve all children, only return true, if _all_
