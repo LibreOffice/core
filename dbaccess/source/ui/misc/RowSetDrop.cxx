@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:45:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,14 +285,6 @@ sal_Bool ORowSetImportExport::insertNewRow()
     }
     catch(const SQLException&)
     {
-        try
-        {
-            m_xTargetResultSetUpdate->cancelRowUpdates();
-        }
-        catch(const SQLException& )
-        {
-        }
-
         if(!m_bAlreadyAsked)
         {
             String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
