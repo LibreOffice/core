@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:09:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONTYPE_HPP_
+#include <com/sun/star/animations/TransitionType.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -215,6 +219,10 @@
 
 #ifndef _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_ANIMATIONS_HXX
+#include "animations.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -443,7 +451,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     DPMAP( "UserDefinedAttributes",     XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     DPMAP( "Change",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE ),
-    DPMAP( "Effect",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE ),
+    DPMAP( "Effect",                        XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, (sal_Int16)MID_FLAG_NO_PROPERTY_EXPORT ),
     DPMAP( "Speed",                     XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED ),
     DPMAP( "Duration",                  XML_NAMESPACE_PRESENTATION, XML_DURATION,           XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION ),
     DPMAP( "Visible",                   XML_NAMESPACE_PRESENTATION, XML_VISIBILITY,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE ),
@@ -481,6 +489,10 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 //  DMAP( "DateTimeText",               XML_NAMESPACE_DRAW, XML_DATE_TIME_TEXT,         XML_TYPE_STRING, CTF_DATE_TIME_TEXT ),
 //  DMAP( "DateTimeFormat",             XML_NAMESPACE_DRAW, XML_DATE_TIME_FORMAT,       XML_SD_TYPE_DATETIME_FORMAT, CTF_DATE_TIME_FORMAT ),
 
+    DPMAP( "TransitionType",            XML_NAMESPACE_SMIL, XML_TYPE,                   XML_SD_TYPE_TRANSITION_TYPE, CTF_PAGE_TRANSITION_TYPE ),
+    DPMAP( "TransitionSubtype",         XML_NAMESPACE_SMIL, XML_SUBTYPE,                XML_SD_TYPE_TRANSTIION_SUBTYPE, CTF_PAGE_TRANSITION_SUBTYPE ),
+    DPMAP( "TransitionDirection",       XML_NAMESPACE_SMIL, XML_DIRECTION,              XML_SD_TYPE_TRANSTIION_DIRECTION, CTF_PAGE_TRANSITION_DIRECTION ),
+    DPMAP( "TransitionFadeColor",       XML_NAMESPACE_SMIL, XML_FADECOLOR,              XML_TYPE_COLOR, CTF_PAGE_TRANSITION_FADECOLOR ),
     { 0L }
 };
 
@@ -1188,6 +1200,15 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_DATETIME_FORMAT:
                 pHdl = new XMLDateTimeFormatHdl( mpExport );
                 break;
+            case XML_SD_TYPE_TRANSITION_TYPE:
+                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionType) , ::getCppuType((const sal_Int16*)0));
+                break;
+            case XML_SD_TYPE_TRANSTIION_SUBTYPE:
+                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionSubType) , ::getCppuType((const sal_Int16*)0));
+                break;
+            case XML_SD_TYPE_TRANSTIION_DIRECTION:
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );
+                break;
             case XML_TYPE_WRAP_OPTION:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_NO_WRAP ), GetXMLToken( XML_WRAP ) );
                 break;
@@ -1576,6 +1597,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
     XMLPropertyState* pTransDuration = NULL;
     XMLPropertyState* pDateTimeUpdate = NULL;
     XMLPropertyState* pDateTimeFormat = NULL;
+    XMLPropertyState* pTransitionFadeColor = NULL;
+
+    sal_Int16 nTransitionType = 0;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -1601,12 +1625,29 @@ void XMLPageExportPropertyMapper::ContextFilter(
             case CTF_PAGE_TRANS_TYPE:
                 pTransType = property;
                 break;
-            case CTF_PAGE_TRANS_STYLE:
+            case CTF_PAGE_TRANSITION_TYPE:
                 {
-                    presentation::FadeEffect aEnum;
-                    if( ((*property).maValue >>= aEnum) && aEnum == presentation::FadeEffect_NONE )
+                    if( ((*property).maValue >>= nTransitionType) && (nTransitionType == 0) )
                         (*property).mnIndex = -1;
                 }
+                break;
+            case CTF_PAGE_TRANSITION_SUBTYPE:
+                {
+                    sal_Int16 nTransitionSubtype;
+                    if( ((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0) )
+                        (*property).mnIndex = -1;
+
+                }
+                break;
+            case CTF_PAGE_TRANSITION_DIRECTION:
+                {
+                    sal_Bool bDirection;
+                    if( ((*property).maValue >>= bDirection) && bDirection )
+                        (*property).mnIndex = -1;
+                }
+                break;
+            case CTF_PAGE_TRANSITION_FADECOLOR:
+                pTransitionFadeColor = property;
                 break;
             case CTF_PAGE_TRANS_SPEED:
                 {
@@ -1650,6 +1691,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
         }
     }
+
+    if( pTransitionFadeColor && nTransitionType != ::com::sun::star::animations::TransitionType::FADE )
+        pTransitionFadeColor->mnIndex = -1;
 
     if( pDateTimeFormat && pDateTimeUpdate )
     {
