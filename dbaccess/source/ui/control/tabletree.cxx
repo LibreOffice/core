@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:21:51 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,27 +124,65 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
+#define TABLE_TYPE  1
+#define VIEW_TYPE   2
+#define FOLDER_TYPE 3
+
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle,sal_Bool _bVirtualRoot )
+OTableTreeListBox::OTableTreeListBox( Window* pParent, sal_Bool _bHiContrast,WinBits nWinStyle,sal_Bool _bVirtualRoot )
     :OMarkableTreeListBox(pParent,nWinStyle)
-    ,m_aTableImage(ResId(TABLE_TREE_ICON))
-    ,m_aViewImage(ResId(VIEW_TREE_ICON))
     ,m_bVirtualRoot(_bVirtualRoot)
 {
-    SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
-    SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
+    notifyHiContrastChanged();
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bVirtualRoot)
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent,rResId)
-    ,m_aTableImage(ModuleRes(TABLE_TREE_ICON))
-    ,m_aViewImage(ModuleRes(VIEW_TREE_ICON))
     ,m_bVirtualRoot(_bVirtualRoot)
 {
-    SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
-    SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
+    notifyHiContrastChanged();
+}
+// -----------------------------------------------------------------------------
+void OTableTreeListBox::notifyHiContrastChanged()
+{
+    OMarkableTreeListBox::notifyHiContrastChanged();
+
+    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+    m_aTableImage = Image(ModuleRes(bHiContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON));
+    m_aViewImage = Image(ModuleRes(bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON));
+
+    SetDefaultExpandedEntryBmp(Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON)));
+    SetDefaultCollapsedEntryBmp(Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON)));
+
+    SvLBoxEntry* pEntryLoop = First();
+    while (pEntryLoop)
+    {
+        sal_Int32 nType = reinterpret_cast<sal_Int32>(pEntryLoop->GetUserData());
+        if ( nType )
+        {
+            USHORT nCount = pEntryLoop->ItemCount();
+            for (USHORT i=0;i<nCount;++i)
+            {
+                SvLBoxItem* pItem = pEntryLoop->GetItem(i);
+                if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
+                {
+                    Image aImage;
+                    switch( nType )
+                    {
+                        case TABLE_TYPE:    aImage = m_aTableImage; break;
+                        case VIEW_TYPE:     aImage = m_aViewImage;  break;
+                        default:            aImage = Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON));
+                    }
+                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(pEntryLoop,aImage);
+                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(pEntryLoop,aImage);
+                    break;
+                }
+            }
+        }
+        pEntryLoop = Next(pEntryLoop);
+    }
 }
 //------------------------------------------------------------------------
 void OTableTreeListBox::Command( const CommandEvent& rEvt )
@@ -377,7 +415,7 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 sRootEntryText = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            pAllObjects = InsertEntry(sRootEntryText);
+            pAllObjects = InsertEntry(sRootEntryText,NULL,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
         }
 
         if (!_rTables.getLength() && !_rViews.getLength())
@@ -412,7 +450,8 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 _rxConnMetaData,
                 *pCurrentTable,
                 bIsView ? m_aViewImage : m_aTableImage,
-                pAllObjects
+                pAllObjects,
+                bIsView ? VIEW_TYPE : TABLE_TYPE
             );
         }
     }
@@ -519,7 +558,8 @@ void OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxConnMetaData,
         const ::rtl::OUString& _rTableName,
         const Image& _rImage,
-        SvLBoxEntry* _pParentEntry
+        SvLBoxEntry* _pParentEntry,
+        sal_Int32 _nType
     )
 {
     // split the complete name into it's components
@@ -532,7 +572,7 @@ void OTableTreeListBox::implAddEntry(
     {
         pCat = GetEntryPosByName(sCatalog, _pParentEntry);
         if (!pCat)
-            pCat = InsertEntry(sCatalog, _pParentEntry);
+            pCat = InsertEntry(sCatalog, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
         _pParentEntry = pCat;
     }
 
@@ -540,12 +580,12 @@ void OTableTreeListBox::implAddEntry(
     {
         pSchema = GetEntryPosByName(sSchema, _pParentEntry);
         if (!pSchema)
-            pSchema = InsertEntry(sSchema, _pParentEntry);
+            pSchema = InsertEntry(sSchema, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
         _pParentEntry = pSchema;
     }
 
     if (!GetEntryPosByName(sName, _pParentEntry))
-        InsertEntry(sName, _rImage, _rImage, _pParentEntry);
+        InsertEntry(sName, _rImage, _rImage, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(_nType));
 }
 
 //------------------------------------------------------------------------
@@ -563,7 +603,7 @@ void OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, con
         }
 
         // add the entry
-        implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry() );
+        implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry(),TABLE_TYPE );
             // TODO: the image
     }
     catch( const Exception& )
@@ -601,6 +641,9 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/08/28 08:21:51  fs
+ *  #91573# UpdateTableList returns the driver used for connecting
+ *
  *  Revision 1.18  2001/08/14 14:13:33  fs
  *  #86945# removed the tables container parameter from UpdateTableList
  *
