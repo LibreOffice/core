@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:45:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,12 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
+#ifndef DBUI_TABLECOPYHELPER_HXX
+#include "TableCopyHelper.hxx"
+#endif
+#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
+#include "linkeddocuments.hxx"
+#endif
 
 #include <memory>
 
@@ -147,33 +153,18 @@ namespace dbaui
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > > TContainerVector;
         typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 , ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > TDocuments;
-    protected:
-        // is needed to describe the drop target
-        struct DropDescriptor
-        {
-            ::svx::ODataAccessDescriptor    aDroppedData;
-            String                          aUrl;
-            SotStorageStreamRef             aHtmlRtfStorage;
-            ElementType                     nType;
-            sal_Int8                        nAction;
-            sal_Bool                        bHtml;
-            sal_Bool                        bError;
-
-            DropDescriptor() : nType(E_TABLE),nAction(DND_ACTION_NONE) { }
-        };
     private:
 
         DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,TDataSourceConnections);
 
-        DropDescriptor          m_aAsyncDrop;
+        OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
         TDataSourceConnections  m_aDataSourceConnections;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
-                                m_xCurrentContainer;        // the container we listen on at the moment
-        TContainerVector        m_aCurrentSubContainers;    // the sub container of our current container
+        TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
         TDocuments              m_aDocuments;
         ODsnTypeCollection      m_aTypeCollection;
+        OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         mutable ::rtl::OUString m_sDatabaseName;
@@ -199,6 +190,12 @@ namespace dbaui
         */
         ::rtl::OUString getStrippedDatabaseName() const;
 
+        /** return the element type for given container
+            @param  _xContainer The container where the element type has to be found
+            @return the element type coressponding to the given container
+        */
+        ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) const;
+
         /** opens a new frame with either the table or the query or report or form or view
             @param  _sName
                 The name of the object to open
@@ -206,19 +203,26 @@ namespace dbaui
                 Defines the type to open
             @param  _bOpenDesignMode
                 If <TRUE/> the design mode opens for the element
+            @return the form or report model will only be returned, otherwise <NULL/>
         */
-        void openElement(const ::rtl::OUString& _sName,ElementType _eType = E_TABLE,sal_Bool _bOpenDesignMode = sal_False);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(const ::rtl::OUString& _sName,ElementType _eType = E_TABLE,OLinkedDocumentsAccess::EOpenMode _eOpenMode = OLinkedDocumentsAccess::OPEN_NORMAL);
 
         /** opens a new frame for creation or auto pilot
             @param  _eType
                 Defines the type to open
-            @param  _bAutoPilot
-                If <TRUE/> the auto pilot opens, otherwise not.
             @param  _bSQLView
                 If <TRUE/> the query design will be opened in SQL view, otherwise not.
         */
-        void newElement(ElementType _eType = E_TABLE,sal_Bool _bAutoPilot = sal_False,sal_Bool _bSQLView = sal_False);
+        void newElement( ElementType _eType , sal_Bool _bSQLView );
 
+        /** creates a new database object, using an auto pilot
+            @param _eType
+                Defines the type of the object to create
+            @precond
+                Our mutex must not be locked.
+            @since #i39203#
+        */
+        void newElementWithPilot( ElementType _eType );
 
         /** converts the query to a view
             @param  _sName
@@ -332,49 +336,11 @@ namespace dbaui
         */
         sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const String& _sParentFolder = String(),sal_Bool _bMove = sal_False);
 
-        /** pastes a table into the data source
-            @param  _rPasteData
-                The data helper.
-        */
-        void pasteTable( const TransferableDataHelper& _rTransData );
+        /// returns the system clipboard.
+        const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }
 
-        /** pastes a table into the data source
-            @param  _nFormatId
-                The format which should be copied.
-            @param  _rPasteData
-                The data helper.
-        */
-        void pasteTable( SotFormatStringId _nFormatId,const TransferableDataHelper& _rTransData );
-
-        /** pastes a table into the data source
-            @param  _rPasteData
-                The data descriptor.
-        */
-        void pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData );
-
-        /** insert a table into the data source. The source can eihter be a table or a query
-            @param  _nCommandType
-                The command type.
-            @param  _xSrcConnection
-                The connection of the source.
-            @param  _xSrcRs
-                The ResultSet of the source.
-            @param  _aSelection
-                The selection of the rows to copy.
-            @param  _bBookmarkSelection
-                If <TRUE/> the selection is bookmark selection.
-            @param  _sCommand
-                The name of the query or table.
-            @param  _sSrcDataSourceName
-                The name of the source data source.
-        */
-        void insertTable( sal_Int32 _nCommandType
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xSrcConnection
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&   _xSrcRs         // the source resultset may be empty
-                        ,const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _aSelection
-                        ,sal_Bool _bBookmarkSelection
-                        ,const ::rtl::OUString& _sCommand
-                        ,const ::rtl::OUString& _sSrcDataSourceName);
+        /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
+        sal_Bool isTableFormat() const;
 
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _rDesc
@@ -382,14 +348,8 @@ namespace dbaui
             @param  _bCheck
                 If set to <TRUE/> than the controller checks only if a copy is possible.
         */
-        sal_Bool copyTagTable(DropDescriptor& _rDesc, sal_Bool _bCheck);
-
-        /// returns the system clipboard.
-        const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }
-
-        /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
-        sal_Bool isTableFormat() const;
-
+        sal_Bool copyTagTable(  OTableCopyHelper::DropDescriptor& _rDesc
+                                , sal_Bool _bCheck);
 
         /** fills the vector with all supported formats
             @param  _eType
@@ -399,18 +359,11 @@ namespace dbaui
         */
         void getSupportedFormats(ElementType _eType,::std::vector<SotFormatStringId>& _rFormatIds) const;
 
-        /** crates a number formatter
-            @param  _rxConnection
-                The connection is needed to create the formatter
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection ) const;
-
         /** adds a listener to the current name access.
             @param  _xCollection
                 The collection where we want to listen on.
         */
         void addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xCollection);
-
 
         /** opens a uno dialog withthe currently selected data source as initialize argument
             @param  _sServiceName
@@ -484,10 +437,10 @@ namespace dbaui
         /** all selected entries will be opened, or edited, or converted to a view
             @param  _nId
                 The slot which should be executed.
-            @param  _bEdit
-                If <TRUE/> it was a edit command.
+            @param  _eOpenMode
+                Defines the mode of opening. @see OLinkedDocumentsAccess::EOpenMode
         */
-        void doAction(sal_uInt16 _nId ,sal_Bool _bEdit);
+        void doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode);
     protected:
         // ----------------------------------------------------------------
         // initalizing members
@@ -551,8 +504,10 @@ namespace dbaui
                 The new connection
             @param  _bCreate
                 If set to <TRUE/> than the connection will be created if it doesn't exist.
+            @return
+                <TRUE/> if and only if the conneciton could be established
         */
-        void ensureConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,sal_Bool _bCreate = sal_True);
+        bool ensureConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,sal_Bool _bCreate = sal_True);
 
         /** returns the connection for the currently active data source
             @return
@@ -588,10 +543,10 @@ namespace dbaui
         /// @see <method>IApplicationElementNotification::onDeleteEntry</method>
         virtual void onDeleteEntry(SvLBoxEntry* _pEntry);
 
-        // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, void* );
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnAsyncDrop, void* );
+        DECL_LINK( OnCreateWithPilot, void* );
 
         // IContainerFoundListener
         virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
