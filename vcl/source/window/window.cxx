@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 16:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,19 +563,21 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
                 if( pEnvData )
                 {
-                    Sequence< Any > aDragSourceAL( 1 ), aDropTargetAL( 1 );
-//                  Sequence< sal_Int8 > windowId( 4 );
+                    Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                     OUString aDragSourceSN, aDropTargetSN;
 
 #if defined WNT
-//                  xInstance = xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragAndDrop" ) );
-//                  * ( reinterpret_cast < HWND * > ( windowId.getArray() ) ) = pEnvData->hWnd;
+                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
+                    aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                    aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+                    aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+
 #elif defined UNX
-                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragAndDrop" );
+                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
                     aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
 
                     // need second parameter for drop target
-                    aDropTargetAL.realloc( 2 );
+//                  aDropTargetAL.realloc( 2 );
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
