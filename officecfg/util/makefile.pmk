@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: tpf $ $Date: 2002-08-07 15:08:11 $
+#   last change: $Author: hjs $ $Date: 2002-09-02 14:33:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
 # creating locale dependent resource bundles
 $(MISC)$/registry$/res$/{$(alliso)}$/%.properties :| %.xcs
     -$(MKDIR) -p $(@:d)
-    java -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $(@:d)$(<:b).properties locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $(subst,.properties,.xcs $@)))}
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $(@:d)$(<:b).properties locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $(subst,.properties,.xcs $@)))}
 
 #xxxxxxxxx
 # create old output format obsolete
