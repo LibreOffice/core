@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2003-05-22 08:36:43 $
+#   last change: $Date: 2003-10-06 12:42:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,37 +75,44 @@ TARGET = runner_util
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES =	AccessibilityTools.java	\
-            FrameDsc.java			\
-            TableDsc.java			\
+            BasicMacroTools.java    \
             BookmarkDsc.java		\
-            InstCreator.java		\
-            TextSectionDsc.java		\
             ControlDsc.java			\
-            InstDescr.java			\
-            ValueChanger.java		\
-            DBTools.java			\
-            ParagraphDsc.java       \
-            ValueComparer.java		\
-            DefaultDsc.java			\
-            ReferenceMarkDsc.java	\
-            WriterTools.java		\
-            DesktopTools.java		\
-            RegistryTools.java		\
-            XInstCreator.java		\
-            DrawTools.java          \
-            SOfficeFactory.java		\
-            XMLTools.java			\
-            FootnoteDsc.java		\
-            ShapeDsc.java			\
             dbg.java				\
+            DBTools.java			\
+            DefaultDsc.java			\
+            DesktopTools.java		\
+            DrawTools.java          \
+            DynamicClassLoader.java \
+            FootnoteDsc.java		\
             FormTools.java			\
+            FrameDsc.java			\
+            InstCreator.java		\
+            InstDescr.java			\
+            ParagraphDsc.java       \
+            ReferenceMarkDsc.java	\
+            RegistryTools.java		\
+            ShapeDsc.java			\
+            SOfficeFactory.java		\
             StyleFamilyDsc.java		\
             SysUtils.java           \
-            utils.java \
-            WaitUnreachable.java
+            TableDsc.java			\
+            TextSectionDsc.java		\
+            UITools.java            \
+            utils.java              \
+            ValueChanger.java		\
+            ValueComparer.java		\
+            WaitUnreachable.java    \
+            WriterTools.java		\
+            XInstCreator.java       \
+            XMLTools.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
 
+
 .INCLUDE :  target.mk
+
+TST:
+        +@echo $(JAVACLASSFILES)
