@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:11:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,12 @@ void SvxStyleBox_Impl::Select()
         aArgs[0].Value  = makeAny( OUString( GetSelectEntry() ));
         aArgs[1].Name   = OUString::createFromAscii( "Family" );
         aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+
+        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            This instance may be deleted in the meantime (i.e. when a dialog is opened
+            while in Dispatch()), accessing members will crash in this case. */
+        ReleaseFocus();
+
         SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                      m_aCommand,
                                      aArgs );
@@ -485,7 +491,6 @@ void SvxStyleBox_Impl::Select()
         rBindings.GetDispatcher()->Execute(
             nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, &aFamily, 0L );
 */
-        ReleaseFocus();
     }
 }
 // -----------------------------------------------------------------------
@@ -813,12 +818,18 @@ void SvxFontNameBox_Impl::Select()
             aArgs[0].Name   = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ));
             aFontItem.QueryValue( a );
             aArgs[0].Value  = a;
+
+            /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+                This instance may be deleted in the meantime (i.e. when a dialog is opened
+                while in Dispatch()), accessing members will crash in this case. */
+            ReleaseFocus_Impl();
+
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )),
                                          aArgs );
         }
-
-        ReleaseFocus_Impl();
+        else
+            ReleaseFocus_Impl();
     }
 }
 
@@ -878,10 +889,15 @@ void SvxFontSizeBox_Impl::Select()
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontHeight.Height" ));
         aArgs[0].Value  = makeAny( fSelVal );
+
+        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            This instance may be deleted in the meantime (i.e. when a dialog is opened
+            while in Dispatch()), accessing members will crash in this case. */
+        ReleaseFocus_Impl();
+
         SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" )),
                                      aArgs );
-        ReleaseFocus_Impl();
     }
 }
 // -----------------------------------------------------------------------
@@ -1102,6 +1118,13 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
     USHORT nItemId = aColorSet.GetSelectItemId();
+    SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
+
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    aColorSet.SetNoSelection();
+
     if ( IsInPopupMode() )
         EndPopupMode();
 
@@ -1128,7 +1151,6 @@ IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
     }
     else
     {
-        SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
         INetURLObject aObj( maCommand );
 
         Any a;
@@ -1141,7 +1163,6 @@ IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
                                      aArgs );
     }
 
-    aColorSet.SetNoSelection();
     return 0;
 }
 
@@ -1399,6 +1420,11 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     aBorderInner.QueryValue( a );
     aArgs[1].Value = a;
 
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    aFrameSet.SetNoSelection();
+
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SetBorderStyle" )),
                                  aArgs );
@@ -1406,7 +1432,6 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     GetBindings().GetDispatcher()->Execute(
         SID_ATTR_BORDER, SFX_CALLMODE_RECORD, &aBorderOuter, &aBorderInner, 0L );
 */
-    aFrameSet.SetNoSelection();
     return 0;
 }
 
@@ -1745,12 +1770,17 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ));
     aLineItem.QueryValue( a );
     aArgs[0].Value = a;
+
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    aLineSet.SetNoSelection();
+
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineStyle" )),
                                  aArgs );
 //    GetBindings().GetDispatcher()->Execute( SID_FRAME_LINESTYLE, SFX_CALLMODE_RECORD, &aLineItem, 0L );
 
-    aLineSet.SetNoSelection();
     return 0;
 }
 
