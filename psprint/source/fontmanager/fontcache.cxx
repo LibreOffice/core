@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:21:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,12 @@ FontCache::FontCache()
     xub_StrLen nIndex = 0;
     rtl_TextEncoding aEnconding = osl_getThreadTextEncoding();
 
+    m_bDoFlush = false;
     while( nIndex != STRING_NOTFOUND )
     {
         aPath = aPrinterPath.GetToken( 0, ':', nIndex );
         read( ByteString( aPath, aEnconding ) );
     }
-    m_bDoFlush = false;
 }
 
 /*
@@ -122,9 +122,9 @@ void FontCache::clearCache()
 {
     for( FontCacheData::iterator dir_it = m_aCache.begin(); dir_it != m_aCache.end(); ++dir_it )
     {
-        for( FontDirMap::iterator entry_it = dir_it->second.begin(); entry_it != dir_it->second.end(); ++entry_it )
+        for( FontDirMap::iterator entry_it = dir_it->second.m_aEntries.begin(); entry_it != dir_it->second.m_aEntries.end(); ++entry_it )
         {
-            for( FontCacheEntry::iterator font_it = entry_it->second.begin(); font_it != entry_it->second.end(); ++font_it )
+            for( FontCacheEntry::iterator font_it = entry_it->second.m_aEntry.begin(); font_it != entry_it->second.m_aEntry.end(); ++font_it )
                 delete *font_it;
         }
     }
@@ -149,7 +149,7 @@ void FontCache::flush()
     {
         aPath = aPrinterPath.getToken( 0, ':', nIndex );
         aPath.AppendAscii( "/pspfontcache" );
-        aStream.Open( aPath, STREAM_READ | STREAM_WRITE );
+        aStream.Open( aPath, STREAM_WRITE | STREAM_TRUNC );
         if( aStream.IsOpen() && aStream.IsWritable() )
         {
             bHavePath = true;
@@ -167,16 +167,21 @@ void FontCache::flush()
 
     for( FontCacheData::const_iterator dir_it = m_aCache.begin(); dir_it != m_aCache.end(); ++ dir_it )
     {
+        const FontDirMap& rDir( dir_it->second.m_aEntries );
+
         ByteString aDirectory( rManager.getDirectory( dir_it->first ) );
         ByteString aLine( "FontCacheDirectory:" );
+        aLine.Append( ByteString::CreateFromInt64( dir_it->second.m_nTimestamp ) );
+        aLine.Append( ':' );
         aLine.Append( aDirectory );
+        if( rDir.empty() && dir_it->second.m_bNoFiles )
+            aLine.Insert( "Empty", 0 );
         aStream.WriteLine( aLine );
 
-        const FontDirMap& rDir( dir_it->second );
         for( FontDirMap::const_iterator entry_it = rDir.begin(); entry_it != rDir.end(); ++entry_it )
         {
             // insert cache entries
-            const FontCacheEntry& rEntry( entry_it->second );
+            const FontCacheEntry& rEntry( entry_it->second.m_aEntry );
             if( rEntry.begin() == rEntry.end() )
                 continue;
 
@@ -191,7 +196,7 @@ void FontCache::flush()
             aLine.Append( ByteString( entry_it->first ) );
             aStream.WriteLine( aLine );
 
-            int nEntrySize = entry_it->second.size();
+            int nEntrySize = entry_it->second.m_aEntry.size();
             // write: type;mtime;nfonts
             aLine = ByteString::CreateFromInt32( rEntry.front()->m_eType );
             aLine.Append( ';' );
@@ -274,7 +279,7 @@ void FontCache::flush()
 }
 
 /*
- * FontCache::getValues
+ * FontCache::read
  */
 
 void FontCache::read( const OString& rPath )
@@ -288,23 +293,57 @@ void FontCache::read( const OString& rPath )
     if( ! aStream.IsOpen() )
         return;
 
-    m_bDoFlush = true;
-
     ByteString aLine;
-    OString aDir( rPath );
-    int nDir = rManager.getDirectoryAtom( aDir, true );
-    FontDirMap* pDir = &m_aCache[ nDir ];
+    int nDir = 0;
+    FontDirMap* pDir = NULL;
     xub_StrLen nIndex;
     do
     {
         aStream.ReadLine( aLine );
-        if( aLine.CompareTo( "FontCacheDirectory:", 19 ) == COMPARE_EQUAL )
+        if( aLine.CompareTo( "FontCacheDirectory:", 19 ) == COMPARE_EQUAL ||
+            aLine.CompareTo( "EmptyFontCacheDirectory:", 24 ) == COMPARE_EQUAL )
         {
-            aDir = aLine.Copy( 19 );
-            nDir = rManager.getDirectoryAtom( aDir, true );
-            pDir = &m_aCache[ nDir ];
+            bool bEmpty = (aLine.CompareTo( "Empty", 5 ) == COMPARE_EQUAL);
+            xub_StrLen nSearchIndex = bEmpty ? 24 : 19;
+
+            OString aDir;
+            sal_Int64 nTimestamp = 0;
+            xub_StrLen nTEnd = aLine.Search( ':', nSearchIndex );
+            if( nTEnd != STRING_NOTFOUND )
+            {
+                nTimestamp = aLine.Copy( nSearchIndex, nTEnd - nSearchIndex ).ToInt64();
+                aDir = aLine.Copy( nTEnd+1 );
+            }
+            else
+            {
+                // invalid format, remove
+                pDir = NULL;
+                nDir = 0;
+                m_bDoFlush = true;
+                continue;
+            }
+
+            // is the directory modified ?
+            struct stat aStat;
+            if( stat( aDir.getStr(), &aStat )               ||
+                (sal_Int64)aStat.st_mtime != nTimestamp     ||
+                ! S_ISDIR(aStat.st_mode) )
+            {
+                // remove outdated cache data
+                pDir = NULL;
+                nDir = 0;
+                m_bDoFlush = true;
+                continue;
+            }
+            else
+            {
+                nDir = rManager.getDirectoryAtom( aDir, true );
+                m_aCache[ nDir ].m_nTimestamp = nTimestamp;
+                m_aCache[ nDir ].m_bNoFiles = bEmpty;
+                pDir = bEmpty ? NULL : &m_aCache[ nDir ].m_aEntries;
+            }
         }
-        else if( aLine.CompareTo( "File:", 5 ) == COMPARE_EQUAL )
+        else if( pDir && aLine.CompareTo( "File:", 5 ) == COMPARE_EQUAL )
         {
             OString aFile( aLine.Copy( 5 ) );
             aStream.ReadLine( aLine );
@@ -325,17 +364,7 @@ void FontCache::read( const OString& rPath )
 
             sal_Int32 nFonts = aLine.GetToken( 0, ';', nIndex ).ToInt32();
 
-            // check whether file is outdated
-            struct stat aStat;
-            ByteString aFileName( aDir );
-            aFileName.Append( '/' );
-            aFileName.Append( ByteString( aFile ) );
-            if( stat( aFileName.GetBuffer(), &aStat )
-                || nTime < (sal_Int64)aStat.st_mtime
-                || ! S_ISREG(aStat.st_mode)
-                )
-                continue;
-
+            (*pDir)[ aFile ].m_nTimestamp = nTime;
             for( int n = 0; n < nFonts; n++ )
             {
                 PrintFontManager::PrintFont* pFont = NULL;
@@ -414,16 +443,6 @@ void FontCache::read( const OString& rPath )
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile =  aMetricFile;
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aFontFile = aFile;
-                        aFileName = aDir;
-                        aFileName.Append( '/' );
-                        aFileName.Append( aMetricFile );
-                        if( stat( aFileName.GetBuffer(), &aStat ) ||
-                            ! S_ISREG( aStat.st_mode )
-                            )
-                        {
-                            delete pFont;
-                            continue;
-                        }
                     }
                     break;
                     case fonttype::Builtin:
@@ -431,11 +450,25 @@ void FontCache::read( const OString& rPath )
                         static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_aMetricFile = aFile;
                         break;
                 }
-                (*pDir)[ aFile ].push_back( pFont );
+                (*pDir)[ aFile ].m_aEntry.push_back( pFont );
             }
         }
     } while( ! aStream.IsEof() );
 }
+
+/*
+ *  FontCache::updateDirTimestamp
+ */
+void FontCache::updateDirTimestamp( int nDirID )
+{
+    PrintFontManager& rManager( PrintFontManager::get() );
+    const OString& rDir = rManager.getDirectory( nDirID );
+
+    struct stat aStat;
+    if( ! stat( rDir.getStr(), &aStat ) )
+        m_aCache[ nDirID ].m_nTimestamp = (sal_Int64)aStat.st_mtime;
+}
+
 
 /*
  *  FontCache::copyPrintFont
@@ -510,21 +543,18 @@ PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::
 /*
  *  FontCache::getFontCacheFile
  */
-bool FontCache::getFontCacheFile( int nDirID, const OString& rDir, const OString& rFile, list< PrintFontManager::PrintFont* >& rNewFonts )
+bool FontCache::getFontCacheFile( int nDirID, const OString& rDir, const OString& rFile, list< PrintFontManager::PrintFont* >& rNewFonts ) const
 {
     bool bSuccess = false;
 
     FontCacheData::const_iterator dir = m_aCache.find( nDirID );
-    if( dir == m_aCache.end() )
-        read( rDir );
-    dir = m_aCache.find( nDirID );
     if( dir != m_aCache.end() )
     {
-        FontDirMap::const_iterator entry = dir->second.find( rFile );
-        if( entry != dir->second.end() )
+        FontDirMap::const_iterator entry = dir->second.m_aEntries.find( rFile );
+        if( entry != dir->second.m_aEntries.end() )
         {
             bSuccess = true;
-            for( list< PrintFontManager::PrintFont* >::const_iterator font = entry->second.begin(); font != entry->second.end(); ++font )
+            for( FontCacheEntry::const_iterator font = entry->second.m_aEntry.begin(); font != entry->second.m_aEntry.end(); ++font )
             {
                 PrintFontManager::PrintFont* pFont = clonePrintFont( *font );
                 rNewFonts.push_back( pFont );
@@ -567,10 +597,10 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
 
     if( dir != m_aCache.end() )
     {
-        entry = dir->second.find( aFile );
-        if( entry != dir->second.end() )
+        entry = dir->second.m_aEntries.find( aFile );
+        if( entry != dir->second.m_aEntries.end() )
         {
-            for( font = entry->second.begin(); font != entry->second.end(); ++font )
+            for( font = entry->second.m_aEntry.begin(); font != entry->second.m_aEntry.end(); ++font )
             {
                 if( (*font)->m_eType == pFont->m_eType &&
                     ( (*font)->m_eType != fonttype::TrueType ||
@@ -578,19 +608,75 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
                       ) )
                     break;
             }
-            if( font != entry->second.end() )
+            if( font != entry->second.m_aEntry.end() )
                 pCacheFont = *font;
         }
     }
+    else
+        createCacheDir( nDirID );
 
     if( pCacheFont )
         copyPrintFont( pFont, pCacheFont );
     else
     {
         pCacheFont = clonePrintFont( pFont );
-        m_aCache[nDirID][aFile].push_back( pCacheFont );
+        m_aCache[nDirID].m_aEntries[aFile].m_aEntry.push_back( pCacheFont );
+
+        ByteString aPath = rManager.getDirectory( nDirID );
+        aPath.Append( '/' );
+        aPath.Append( ByteString( aFile ) );
+        struct stat aStat;
+        if( ! stat( aPath.GetBuffer(), &aStat ) )
+            m_aCache[nDirID].m_aEntries[aFile].m_nTimestamp = (sal_Int64)aStat.st_mtime;
     }
     m_bDoFlush = true;
     if( bFlush )
         flush();
+}
+
+/*
+ *  FontCache::listDirectory
+ */
+bool FontCache::listDirectory( const OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
+{
+    PrintFontManager& rManager( PrintFontManager::get() );
+    int nDirID = rManager.getDirectoryAtom( rDir );
+    FontCacheData::const_iterator dir = m_aCache.find( nDirID );
+    bool bFound = (dir != m_aCache.end());
+
+    if( bFound && !dir->second.m_bNoFiles )
+    {
+        for( FontDirMap::const_iterator file = dir->second.m_aEntries.begin(); file != dir->second.m_aEntries.end(); ++file )
+        {
+            for( FontCacheEntry::const_iterator font = file->second.m_aEntry.begin(); font != file->second.m_aEntry.end(); ++font )
+            {
+                PrintFontManager::PrintFont* pFont = clonePrintFont( *font );
+                rNewFonts.push_back( pFont );
+            }
+        }
+    }
+    return bFound;
+}
+
+/*
+ *  FontCache::createCacheDir
+ */
+void FontCache::createCacheDir( int nDirID )
+{
+    PrintFontManager& rManager( PrintFontManager::get() );
+
+    const OString& rDir = rManager.getDirectory( nDirID );
+    struct stat aStat;
+    if( ! stat( rDir.getStr(), &aStat ) )
+        m_aCache[nDirID].m_nTimestamp = (sal_Int64)aStat.st_mtime;
+}
+
+/*
+ *  FontCache::markEmptyDir
+ */
+void FontCache::markEmptyDir( int nDirID, bool bNoFiles )
+{
+    createCacheDir( nDirID );
+    m_aCache[nDirID].m_bNoFiles = bNoFiles;
+    m_bDoFlush = true;
 }
