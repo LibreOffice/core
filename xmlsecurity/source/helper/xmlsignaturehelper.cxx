@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 06:35:07 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 06:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
             }
         }
     }
-    */
     mxSecurityContext = mxSEInitializer->createSecurityContext( tokenPath );
+    */
     //MM : end
 
     //MM : search for the default profile
