@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2000-09-26 09:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,23 @@
 #define _USE_UNO
 
 #ifdef _USE_UNO
+#ifndef _RTL_USTRING_
 #include <rtl/ustring>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::uno;
+
+
+// Define activates old file implementation
+// (only in non UCB case)
+#define _OLD_FILE_IMPL
 
 
 //#include <sal/types.h>
@@ -131,9 +143,15 @@ class Dir;
 class SbiRTLData
 {
 public:
+
+#ifdef _OLD_FILE_IMPL
     Dir*    pDir;
+#else
+    ::osl::Directory* pDir;
+#endif
     INT16   nDirFlags;
     USHORT  nCurDirPos;
+
 #ifdef _USE_UNO
     Sequence< OUString > aDirSeq;
 #endif /* _USE_UNO */
@@ -469,5 +487,9 @@ String implGetCurDir( void );
 // (Implemented in methods.cxx, so step0.cxx
 // has not to be infected with UNO)
 void implStepRenameUCB( const String& aSource, const String& aDest );
+
+//*** OSL file access ***
+String getFullPathUNC( const String& aRelPath );
+void implStepRenameOSL( const String& aSource, const String& aDest );
 
 #endif

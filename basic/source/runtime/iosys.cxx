@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: patrick.luby $ $Date: 2000-09-25 02:53:43 $
+ *  last change: $Author: ab $ $Date: 2000-09-26 09:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #include <osl/security.h>
+#include <osl/file.hxx>
 
 #include "runtime.hxx"
 
@@ -119,6 +120,7 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 using namespace utl;
+using namespace osl;
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -683,6 +685,105 @@ BOOL hasUno( void )
 }
 
 
+
+#ifndef _OLD_FILE_IMPL
+
+class OslStream : public SvStream
+{
+    File maFile;
+    short mnStrmMode;
+
+public:
+                    OslStream( const String& rName, short nStrmMode );
+                    ~OslStream();
+    virtual ULONG   GetData( void* pData, ULONG nSize );
+    virtual ULONG   PutData( const void* pData, ULONG nSize );
+    virtual ULONG   SeekPos( ULONG nPos );
+    virtual void    FlushData();
+    virtual void    SetSize( ULONG nSize );
+};
+
+OslStream::OslStream( const String& rName, short nStrmMode )
+    : maFile( rName )
+    , mnStrmMode( nStrmMode )
+{
+    sal_uInt32 nFlags;
+
+    if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
+    {
+        nFlags = OpenFlag_Read | OpenFlag_Write;
+    }
+    else if( nStrmMode & STREAM_WRITE )
+    {
+        nFlags = OpenFlag_Write;
+    }
+    else //if( nStrmMode & STREAM_READ )
+    {
+        nFlags = OpenFlag_Read;
+    }
+
+    FileBase::RC nRet = maFile.open( nFlags );
+    if( nRet == FileBase::RC::E_NOENT && nFlags != OpenFlag_Read )
+    {
+        nFlags |= OpenFlag_Create;
+        nRet = maFile.open( nFlags );
+    }
+
+    if( nRet != FileBase::RC::E_None )
+    {
+        SetError( ERRCODE_IO_GENERAL );
+    }
+}
+
+
+OslStream::~OslStream()
+{
+    FileBase::RC nRet = maFile.close();
+}
+
+ULONG OslStream::GetData( void* pData, ULONG nSize )
+{
+
+    sal_uInt64 nBytesRead = nSize;
+    FileBase::RC nRet = maFile.read( pData, nBytesRead, nBytesRead );
+    return (ULONG)nBytesRead;
+}
+
+ULONG OslStream::PutData( const void* pData, ULONG nSize )
+{
+    sal_uInt64 nBytesWritten;
+    FileBase::RC nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
+    return (ULONG)nBytesWritten;
+}
+
+ULONG OslStream::SeekPos( ULONG nPos )
+{
+    FileBase::RC nRet;
+    if( nPos == STREAM_SEEK_TO_END )
+    {
+        nRet = maFile.setPos( Pos_End, 0 );
+    }
+    else
+    {
+        nRet = maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
+    }
+    sal_uInt64 nRealPos;
+    nRet = maFile.getPos( nRealPos );
+    return nRealPos;
+}
+
+void OslStream::FlushData()
+{
+}
+
+void OslStream::SetSize( ULONG nSize )
+{
+    FileBase::RC nRet = maFile.setSize( (sal_uInt64)nSize );
+}
+
+#endif
+
+
 #ifdef _USE_UNO
 
 class UCBStream : public SvStream
@@ -929,7 +1030,13 @@ SbError SbiStream::Open
 
 #endif
     if( !pStrm )
+    {
+#ifdef _OLD_FILE_IMPL
         pStrm = new SvFileStream( aNameStr, nStrmMode );
+#else
+        pStrm = new OslStream( getFullPathUNC( aNameStr ), nStrmMode );
+#endif
+    }
     if( IsAppend() )
         pStrm->Seek( STREAM_SEEK_TO_END );
     MapError();
@@ -943,7 +1050,11 @@ SbError SbiStream::Close()
     if( pStrm )
     {
         if( !hasUno() )
+        {
+#ifdef _OLD_FILE_IMPL
             ((SvFileStream *)pStrm)->Close();
+#endif
+        }
         MapError();
         delete pStrm;
         pStrm = NULL;

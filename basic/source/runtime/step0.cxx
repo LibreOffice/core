@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2000-09-26 09:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,6 +747,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
     else
     // --> UCB
     {
+#ifdef _OLD_FILE_IMPL
         DirEntry aSourceDirEntry( aSource );
         if( aSourceDirEntry.Exists() )
         {
@@ -755,6 +756,9 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
         }
         else
                 StarBASIC::Error( SbERR_PATH_NOT_FOUND );
+#else
+        implStepRenameOSL( aSource, aDest );
+#endif
     }
 }
 
