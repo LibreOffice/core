@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:07:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,7 +1181,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 {
                     const Font* pFnt = &SwNumRule::GetDefBulletFont();
                     aFmt.SetBulletFont( pFnt );
-                    aFmt.SetBulletChar( cBulletChar );
+                    aFmt.SetBulletChar( GetBulletChar(pNum->GetRealLevel() ));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
                 aNumRule.Set(pNum->GetRealLevel(), aFmt);
