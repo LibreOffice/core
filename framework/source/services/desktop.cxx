@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-12-08 11:43:12 $
+ *  last change: $Author: as $ $Date: 2001-01-26 06:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_DESKTOP_HXX_
-#include <baeh_services/desktop.hxx>
+#include <services/desktop.hxx>
 #endif
 
 #ifndef __FRAMEWORK_FRAME_HXX_

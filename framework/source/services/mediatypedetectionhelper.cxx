@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediatypedetectionhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:45:30 $
+ *  last change: $Author: as $ $Date: 2001-01-26 06:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_BAEHSERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <baeh_services/mediatypedetectionhelper.hxx>
+#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#include <services/mediatypedetectionhelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DEFINES_HXX_
@@ -210,6 +210,9 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/28 14:45:30  as
+    #79040# new version of new type detection
+
     Revision 1.1  2000/11/23 14:52:10  as
     #79040# implement new filter detection - use TF_FILTER to enable
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-12-08 11:43:44 $
+ *  last change: $Author: as $ $Date: 2001-01-26 06:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_BAEHSERVICES_URLTRANSFORMER_HXX_
-#include <baeh_services/urltransformer.hxx>
+#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#include <services/urltransformer.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DEFINES_HXX_
