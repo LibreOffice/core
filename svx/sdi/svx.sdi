@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:44:39 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11751,6 +11751,624 @@ SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ExtrusionToggle SID_EXTRUSION_TOOGLE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Readonly = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionTiltDown SID_EXTRUSION_TILT_DOWN
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionTiltUp SID_EXTRUSION_TILT_UP
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionTiltLeft SID_EXTRUSION_TILT_LEFT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionTiltRight SID_EXTRUSION_TILT_RIGHT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
+(SvxDoubleItem Depth SID_EXTRUSION_DEPTH,SfxUInt16Item Metric SID_ATTR_METRIC)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* status: */
+    SlotType = SvxDoubleItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionLightingFloater SID_EXTRUSION_LIGHTING_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item Extrusion3DColor SID_EXTRUSION_3D_COLOR
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SvxDoubleItem ExtrusionDepth SID_EXTRUSION_DEPTH
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item ExtrusionDirection SID_EXTRUSION_DIRECTION
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item ExtrusionProjection SID_EXTRUSION_PROJECTION
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item ExtrusionLightingDirection SID_EXTRUSION_LIGHTING_DIRECTION
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item ExtrusionLightingIntensity SID_EXTRUSION_LIGHTING_INTENSITY
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item ExtrusionSurface SID_EXTRUSION_SURFACE
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem FontworkShapeFloater SID_FONTWORK_SHAPE_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem FontworkSameLetterHeights SID_FONTWORK_SAME_LETTER_HEIGHTS
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem FontworkVerticalText SID_FONTWORK_VERTICAL_TEXT
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOATER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item FontworkShape SID_FONTWORK_SHAPE
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item FontworkAlignment SID_FONTWORK_ALIGNMENT
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
 OfaPtrItem GetColorTable SID_GET_COLORTABLE
 ()
 [
@@ -12117,5 +12735,4 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
     ToolBoxConfig = FALSE,
     GroupId = GID_DATA;
 ]
-
 
