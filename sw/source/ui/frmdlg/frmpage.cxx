@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:41:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,23 +864,27 @@ namespace
 
 void SwFrmPage::EnableGraficMode( void )
 {
-    long nOffset1 = aRelWidthCB.GetPosPixel().Y() - aAutoWidthCB.GetPosPixel().Y();
-    long nOffset2 = nOffset1 + aRelHeightCB.GetPosPixel().Y() - aAutoHeightCB.GetPosPixel().Y();
+    // #i39692# mustn't be called more than once
+    if(!aRealSizeBT.IsVisible())
+    {
+        long nOffset1 = aRelWidthCB.GetPosPixel().Y() - aAutoWidthCB.GetPosPixel().Y();
+        long nOffset2 = nOffset1 + aRelHeightCB.GetPosPixel().Y() - aAutoHeightCB.GetPosPixel().Y();
 
-    MoveControl( aHeightFT, nOffset1 );
-    MoveControl( aHeightED, nOffset1 );
-    MoveControl( aRelHeightCB, nOffset1 );
-    MoveControl( aFixedRatioCB, nOffset2 );
+        MoveControl( aHeightFT, nOffset1 );
+        MoveControl( aHeightED, nOffset1 );
+        MoveControl( aRelHeightCB, nOffset1 );
+        MoveControl( aFixedRatioCB, nOffset2 );
 
-    aWidthFT.Show();
-    aWidthAutoFT.Hide();
-    aAutoHeightCB.Hide();
+        aWidthFT.Show();
+        aWidthAutoFT.Hide();
+        aAutoHeightCB.Hide();
 
-    aHeightFT.Show();
-    aHeightAutoFT.Hide();
-    aAutoWidthCB.Hide();
+        aHeightFT.Show();
+        aHeightAutoFT.Hide();
+        aAutoWidthCB.Hide();
 
-    aRealSizeBT.Show();
+        aRealSizeBT.Show();
+    }
 }
 
 void SwFrmPage::Reset( const SfxItemSet &rSet )
