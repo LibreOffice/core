@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:13:01 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog DLG_DROPCAPS
                 Text[ czech ] = "Iniciály";
                 Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
                 Text[ hindi ] = "बड़े अक्षरों को मिटाओ ";
+                Text[ slovak ] = "Stránkovanie veľkými písmenami";
             };
         };
     };
@@ -138,6 +139,7 @@ TabDialog DLG_DROPCAPS
     Text[ czech ] = "Iniciály";
     Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
     Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
+    Text[ slovak ] = "Stránkovanie veľkými písmenami";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -176,6 +178,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Zobrazovat iniciály";
         Text[ hebrew ] = "I~nitialen anzeigen";
         Text[ hindi ] = "बड़े अक्षरों को मिटाकर दिखाओ";
+        Text[ slovak ] = "Zobrazovať iniciály";
     };
     CheckBox CB_WORD
     {
@@ -208,6 +211,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Celé slovo";
         Text[ hebrew ] = "Ganzes ~Wort";
         Text[ hindi ] = "~पूर्ण शब्द";
+        Text[ slovak ] = "~Celé slovo";
     };
     FixedText FT_DROPCAPS
     {
@@ -240,6 +244,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Počet znaků:";
         Text[ hebrew ] = "Anzahl der Ze~ichen";
         Text[ hindi ] = "~अक्षरों की संख्या:";
+        Text[ slovak ] = "Počet ~znakov:";
     };
     NumericField FLD_DROPCAPS
     {
@@ -288,6 +293,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Řádků";
         Text[ hebrew ] = "Zei~len";
         Text[ hindi ] = "~रेखाएँ";
+        Text[ slovak ] = "~Riadkov";
     };
     NumericField FLD_LINES
     {
@@ -336,6 +342,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Vzdálenost k textu";
         Text[ hebrew ] = "A~bstand zum Text";
         Text[ hindi ] = "टेक्स्ट् के बीच अंतर";
+        Text[ slovak ] = "Vzdialenosť k textu";
     };
     MetricField FLD_DISTANCE
     {
@@ -386,6 +393,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     Control CNT_PICT
     {
@@ -426,6 +434,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Text";
         Text[ hebrew ] = "Initialen~text";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Text";
     };
     Edit EDT_TEXT
     {
@@ -469,6 +478,7 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Styl znaku:";
         Text[ hebrew ] = "Zeichen~vorlage";
         Text[ hindi ] = "अक्षर शै~ली";
+        Text[ slovak ] = "Štýl ~znaku:";
     };
     ListBox BOX_TEMPLATE
     {
@@ -509,9 +519,12 @@ TabPage TP_DROPCAPS
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयें";
+        Text[ slovak ] = "Obsah";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
