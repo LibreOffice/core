@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:21 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 08:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,8 +570,8 @@ void ORelationController::loadTableData(const Any& _aTable)
                             }
                             //////////////////////////////////////////////////////////////////////
                             // Update/Del-Flags setzen
-                            sal_Int32   nUpdateRule,
-                                        nDeleteRule;
+                            sal_Int32   nUpdateRule = 0;
+                            sal_Int32   nDeleteRule = 0;
                             xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
                             xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
 
