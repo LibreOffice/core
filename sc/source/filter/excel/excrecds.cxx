@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:28:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2307,94 +2307,58 @@ void ExcRowBlock::Save( XclExpStream& rStrm )
 }
 
 
+// ============================================================================
 
-//------------------------------------------------------ class ExcDefcolwidth -
-
-ExcDefcolwidth::ExcDefcolwidth( UINT16 nNewWidth )
+XclExpColinfo::XclExpColinfo(
+        const XclExpRoot& rRoot, sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline ) :
+    XclExpRecord( EXC_ID_COLINFO, 12 ),
+    XclExpRoot( rRoot ),
+    mnXFId( nXFId ),
+    mnFirstXclCol( nScCol ),
+    mnLastXclCol( nScCol ),
+    mnWidth( GetWidth( nScCol, nScTab ) ),
+    mnFlags( GetFlags( nScCol, nScTab, rOutline ) )
 {
-    nWidth = nNewWidth;
 }
 
-
-void ExcDefcolwidth::SaveCont( XclExpStream& rStrm )
+bool XclExpColinfo::Expand( sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline )
 {
-    rStrm << nWidth;
-}
-
-
-UINT16 ExcDefcolwidth::GetNum( void ) const
-{
-    return 0x0055;
-}
-
-
-ULONG ExcDefcolwidth::GetLen( void ) const
-{
-    return 2;
-}
-
-
-
-//---------------------------------------------------------- class ExcColinfo -
-
-ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, sal_uInt32 nXFId, RootData& rRoot, ExcEOutline& rOutline )
-{
-    ScDocument&     rDoc = *rRoot.pDoc;
-
-    nFirstCol = nLastCol = nCol;
-
-    mnXFId = nXFId;
-
-    nColWidth = XclTools::GetXclColumnWidth( rDoc.GetColWidth( nCol, nTab ), rRoot.pER->GetCharWidth() );
-
-    BYTE nColFlags = rDoc.GetColFlags( nCol, nTab );
-    nOptions = 0x0000;
-
-    if( nColFlags & CR_HIDDEN )
-        nOptions |= EXC_COL_HIDDEN;
-
-    rOutline.Update( nCol );
-
-    nOptions |= EXC_COL_LEVELFLAGS( rOutline.GetLevel() );
-    if( rOutline.IsCollapsed() )
-        nOptions |= EXC_COL_COLLAPSED;
-}
-
-
-void ExcColinfo::Expand( ExcColinfo*& rpExp )
-{
-    if( !rpExp ) return;
-
-    if( (nLastCol + 1 == rpExp->nFirstCol) && (nColWidth == rpExp->nColWidth) &&
-        (mnXFId == rpExp->mnXFId) && (nOptions == rpExp->nOptions) )
-    {// expand
-        nLastCol = rpExp->nLastCol;
-        delete rpExp;
-        rpExp = NULL;
+    if( (mnXFId == nXFId) &&
+        (mnLastXclCol + 1 == nScCol) &&
+        (mnWidth == GetWidth( nScCol, nScTab )) &&
+        (mnFlags == GetFlags( nScCol, nScTab, rOutline )) )
+    {
+        ++mnLastXclCol;
+        return true;
     }
+    return false;
 }
 
+sal_uInt16 XclExpColinfo::GetWidth( sal_uInt16 nScCol, sal_uInt16 nScTab ) const
+{
+    return XclTools::GetXclColumnWidth( GetDoc().GetColWidth( nScCol, nScTab ), GetCharWidth() );
+}
 
-void ExcColinfo::SaveCont( XclExpStream& rStrm )
+sal_uInt16 XclExpColinfo::GetFlags( sal_uInt16 nScCol, sal_uInt16 nScTab, ExcEOutline& rOutline ) const
+{
+    sal_uInt8 nScColFlags = GetDoc().GetColFlags( nScCol, nScTab );
+    rOutline.Update( nScCol );
+
+    sal_uInt16 nFlags = 0;
+    ::set_flag( nFlags, EXC_COLINFO_HIDDEN, (nScColFlags & CR_HIDDEN) != 0 );
+    ::set_flag( nFlags, EXC_COLINFO_COLLAPSED, rOutline.IsCollapsed() );
+    ::insert_value( nFlags, rOutline.GetLevel(), 8, 3 );
+    return nFlags;
+}
+
+void XclExpColinfo::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nXF = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnXFId );
-    rStrm << nFirstCol << nLastCol << nColWidth << nXF << nOptions << (BYTE)0;
+    rStrm << mnFirstXclCol << mnLastXclCol << mnWidth << nXF << mnFlags << sal_uInt16( 0 );
 }
 
 
-UINT16 ExcColinfo::GetNum( void ) const
-{
-    return 0x007D;
-}
-
-
-ULONG ExcColinfo::GetLen( void ) const
-{
-    return 11;
-}
-
-
-
+// ============================================================================
 //------------------------------------------------------ class ExcExterncount -
 
 ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
