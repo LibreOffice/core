@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-06 15:39:30 $
+ *  last change: $Author: ab $ $Date: 2001-05-07 09:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2960,6 +2960,8 @@ RTLFUNC(Shell)
         std::list<String>::const_iterator iter = aTokenList.begin();
         const String& rStr = *iter;
         ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
+        String aOUStrProgUNC = getFullPathUNC( aOUStrProg );
+
         iter++;
 
         USHORT nParamCount = aTokenList.size() - 1;
@@ -2981,7 +2983,7 @@ RTLFUNC(Shell)
 
         //const char* pParams = aParams.Len() ? aParams.GetStr() : 0;
         NAMESPACE_VOS(OProcess)* pApp;
-        pApp = new NAMESPACE_VOS(OProcess)( aOUStrProg );
+        pApp = new NAMESPACE_VOS(OProcess)( aOUStrProgUNC );
         BOOL bSucc;
         if( nParamCount == 0 )
         {
