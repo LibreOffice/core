@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sm_SmGraphicAccessible.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:57 $ 
+'*  last change:$Date: 2003-05-27 12:15:24 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -97,7 +97,7 @@ On Error Goto ErrHndl
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
 
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 100, "Formula")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT, "Formula")
 Exit Sub
 ErrHndl:
     Test.Exception()
