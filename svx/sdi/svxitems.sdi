@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 08:23:52 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,6 @@ enum FontUnderline
     UNDERLINE_DOUBLE,
     UNDERLINE_DOTTED
 };
-item FontUnderline SvxUnderlineItem;
 
 //-------------------------------------------------------------------------
 
@@ -286,7 +285,6 @@ enum FontStrikeout
     STRIKEOUT_SINGLE,
     STRIKEOUT_DOUBLE
 };
-item FontStrikeout SvxCrossedOutItem;
 
 //-------------------------------------------------------------------------
 
@@ -394,6 +392,7 @@ item SvxShadowLocation      SvxShadowLocationItem;
 
 //-------------------------------------------------------------------------
 
+item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
 item INT32                  SvxColorItem;
 item BOOL                   SvxContourItem;
@@ -427,6 +426,20 @@ item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 
 //-------------------------------------------------------------------------
+
+struct SvxCrossedOut
+{
+    FontStrikeout   Kind        MID_CROSS_OUT;
+};
+item SvxCrossedOut SvxCrossedOutItem;
+
+struct SvxUnderline
+{
+    FontUnderline   Underline   MID_UNDERLINE;
+    BOOL            HasColor    MID_UL_HASCOLOR;
+    INT32           Color       MID_UL_COLOR;
+};
+item SvxUnderline SvxUnderlineItem;
 
 struct SvxBrush
 {
