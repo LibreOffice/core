@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:36:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
         {"ModifiedBy",  DI_MODIFIEDBY,      STRING_TYPE},
         {"PrintDate",   DI_PRINTDATE,       DATE_TYPE},
         {"PrintedBy",   DI_PRINTBY,         STRING_TYPE},
-        {"Theme",       DI_THEME,           STRING_TYPE},
+        {"Subject",     DI_THEME,           STRING_TYPE},
         {NULL,          0,                  STRING_TYPE}
 };
 
