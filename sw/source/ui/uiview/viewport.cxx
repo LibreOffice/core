@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //nicht mehr zum aktuell sichtbaren Bereich passen
         pWrtShell->ResetCursorStack();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         SwEditWin &rW = GetEditWin();
 #endif
         ASSERT( !GetEditWin().IsVisible() ||
