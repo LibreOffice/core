@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:03:34 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         sal_Bool bTextPathOn = sal_False;
         const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-        const rtl::OUString sOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
-        com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sOn );
+        com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if ( pAny )
             *pAny >>= bTextPathOn;
 
@@ -249,6 +248,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRenderedShape->NbcMirror( aTop, aBottom );
             }
+            pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), sal_True );
             pRenderedShape->RecalcSnapRect();
             xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
                 pRenderedShape->GetObjInventor(), pRenderedShape, NULL );
