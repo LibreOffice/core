@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 19:51:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";
         Text[ turkish ] = "~Kýsa ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Abreviatura";
     };
     FixedText FT_AUTHTYPE
     {
@@ -131,6 +132,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáäæÚ";
         Text[ turkish ] = "~Tür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     FixedText FT_YEAR
     {
@@ -157,6 +159,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÓäÉ";
         Text[ turkish ] = "Yýl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Año";
     };
     FixedText FT_AUTHOR
     {
@@ -183,6 +186,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáãÄáÝ";
         Text[ turkish ] = "Yazar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~utor";
     };
     FixedText FT_TITLE
     {
@@ -202,13 +206,14 @@ TabPage RID_TP_GENERAL
         Text[ swedish ] = "Titel";
         Text[ polish ] = "Tytu³";
         Text[ portuguese_brazilian ] = "Title";
-        Text[ japanese ] = "‘è–¼(~L)";
+        Text[ japanese ] = "À²ÄÙ(~L)";
         Text[ korean ] = "Á¦¸ñ(~L)";
         Text[ chinese_simplified ] = "±êÌâ(~L)";
         Text[ chinese_traditional ] = "¼ÐÃD(~L)";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Títu~lo";
     };
     FixedText FT_PUBLISHER
     {
@@ -235,6 +240,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
         Text[ turkish ] = "Yayýnevi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editorial";
     };
     FixedText FT_ADDRESS
     {
@@ -261,6 +267,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Adres";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Dirección";
     };
     FixedText FT_ISBN
     {
@@ -287,6 +294,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ISBN";
         Text[ turkish ] = "~ISBN";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~SBN";
     };
     FixedText FT_CHAPTER
     {
@@ -313,6 +321,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáÝÕá";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Capítulo";
     };
     FixedText FT_PAGE
     {
@@ -339,6 +348,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÕÝÍÉ (ÕÝÍÇÊ)";
         Text[ turkish ] = "Sayfa(lar)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Página(s)";
     };
     FixedText FT_EDITOR
     {
@@ -365,6 +375,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáäÇÔÑ";
         Text[ turkish ] = "Yayýma hazýrlayan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editor";
     };
     FixedText FT_EDITION
     {
@@ -391,6 +402,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáØÈÚÉ";
         Text[ turkish ] = "Yayým";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Edición";
     };
     FixedText FT_BOOKTITLE
     {
@@ -417,6 +429,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
         Text[ turkish ] = "Kitap adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Título del libro";
     };
     FixedText FT_VOLUME
     {
@@ -443,6 +456,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÑÞã ÇáãÌáÏ";
         Text[ turkish ] = "Kitap no.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tomo";
     };
     FixedText FT_HOWPUBLISHED
     {
@@ -469,6 +483,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ØÑíÞÉ ÇáØÈÇÚÉ";
         Text[ turkish ] = "Yayým türü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tip~o de publicación";
     };
     FixedText FT_ORGANIZATION
     {
@@ -495,6 +510,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáãäÙãÉ";
         Text[ turkish ] = "Organizasyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Organización";
     };
     FixedText FT_INSTITUTION
     {
@@ -521,6 +537,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáåíÆÉ";
         Text[ turkish ] = "Kurum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~nstitución";
     };
     FixedText FT_SCHOOL
     {
@@ -547,6 +564,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáÌÇãÚÉ";
         Text[ turkish ] = "Üniversite/yüksek okul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Universidad";
     };
     FixedText FT_REPORT
     {
@@ -573,6 +591,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÊÞÑíÑ";
         Text[ turkish ] = "Rapor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~nforme";
     };
     FixedText FT_MONTH
     {
@@ -599,6 +618,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáÔåÑ";
         Text[ turkish ] = "Ay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mes";
     };
     FixedText FT_JOURNAL
     {
@@ -625,6 +645,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáãÌáÉ";
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Revista";
     };
 
     FixedText FT_NUMBER
@@ -652,6 +673,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÑÞã";
         Text[ language_user1 ] = "\"Sayý\" burada istisna (dergi için)";
         Text[ turkish ] = "Sayý";
+        Text[ catalan ] = "~Número";
     };
     FixedText FT_SERIES
     {
@@ -678,6 +700,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÓáÓáÉ";
         Text[ turkish ] = "Dizi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Serie";
     };
     FixedText FT_ANNOTE
     {
@@ -704,6 +727,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÊÚáíÞ ÊæÖíÍí";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~notación";
     };
     FixedText FT_NOTE
     {
@@ -730,6 +754,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nota";
     };
     FixedText FT_URL
     {
@@ -756,6 +781,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "URL";
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL";
     };
     FixedText FT_CUSTOM1
     {
@@ -782,6 +808,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 1";
         Text[ turkish ] = "Kullanýcý alaný ~1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario ~1";
     };
     FixedText FT_CUSTOM2
     {
@@ -808,6 +835,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 2";
         Text[ turkish ] = "Kullanýcý alaný ~2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario ~2";
     };
     FixedText FT_CUSTOM3
     {
@@ -834,6 +862,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 3";
         Text[ turkish ] = "Kullanýcý alaný ~3";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario ~3";
     };
     FixedText FT_CUSTOM4
     {
@@ -860,6 +889,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 4";
         Text[ turkish ] = "Kullanýcý alaný ~4";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario ~4";
     };
     FixedText FT_CUSTOM5
     {
@@ -886,6 +916,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 5";
         Text[ turkish ] = "Kullanýcý alaný ~5";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario ~5";
     };
     String ST_ERROR_PREFIX
     {
@@ -909,6 +940,7 @@ TabPage RID_TP_GENERAL
         Text[ chinese_traditional ] = "µLªk«ü©w¤U¦CÄæ¦W¡G\n";
         Text[ arabic ] = "ÊÚÐÑ ÊÚííä ÃÓãÇÁ ÇáÃÚãÏÉ ÇáÊÇáíÉ:\n";
         Text[ turkish ] = "Þu sütun adlarý atanamadý:\n";
+        Text[ catalan ] = "No se pudieron asignar los siguientes nombres de columnas:\n";
     };
     String ST_TYPE_ARTICLE
     {
@@ -933,6 +965,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãÞÇáÉ";
         Text[ turkish ] = "Makale";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Artículo";
     };
     String ST_TYPE_BOOK
     {
@@ -957,6 +990,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ßÊÇÈ";
         Text[ turkish ] = "Kitap";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Libro";
     };
     String ST_TYPE_BOOKLET
     {
@@ -981,6 +1015,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ßÊíÈ";
         Text[ turkish ] = "Broþür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Folleto";
     };
     String ST_TYPE_CONFERENCE
     {
@@ -1005,6 +1040,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÊÞÑíÑ Úä ãÄÊãÑ";
         Text[ turkish ] = "Toplantý tutanaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe de conferencia";
     };
     String ST_TYPE_INBOOK
     {
@@ -1029,6 +1065,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãÞÊÈÓÇÊ ãä ßÊÇÈ";
         Text[ turkish ] = "Kitap özeti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Extracto de libro";
     };
     String ST_TYPE_INCOLLECTION
     {
@@ -1053,6 +1090,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãÞÊÈÓÇÊ ãä ßÊÇÈ ÐÇÊ ÚäæÇä";
         Text[ turkish ] = "Baþlýklý kitap özeti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Extracto de libro con título";
     };
     String ST_TYPE_INPROCEEDINGS
     {
@@ -1077,6 +1115,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
         Text[ turkish ] = "Konferans raporu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe de congreso";
     };
     String ST_TYPE_JOURNAL
     {
@@ -1101,6 +1140,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÇáãÌáÉ";
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Revista";
     };
     String ST_TYPE_MANUAL
     {
@@ -1125,6 +1165,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "Ïáíá ÇÓÊÎÏÇã";
         Text[ turkish ] = "Teknik dokümantasyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Documentación técnica";
     };
     String ST_TYPE_MASTERSTHESIS
     {
@@ -1149,6 +1190,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÑÓÇáÉ ãÇÌÓÊíÑ";
         Text[ turkish ] = "Tez";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Trabajo de diplomatura";
     };
     String ST_TYPE_MISC
     {
@@ -1173,6 +1215,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãäæÚÇÊ";
         Text[ turkish ] = "Diðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Diversos";
     };
     String ST_TYPE_PHDTHESIS
     {
@@ -1197,6 +1240,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÑÓÇáÉ ÏßÊæÑÇå";
         Text[ turkish ] = "Disertasyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tesis doctoral";
     };
     String ST_TYPE_PROCEEDINGS
     {
@@ -1221,6 +1265,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
         Text[ turkish ] = "Konferans raporu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe de congreso";
     };
     String ST_TYPE_TECHREPORT
     {
@@ -1245,6 +1290,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÊÞÑíÑ Úä ÚãáíÉ ÇáÈÍË";
         Text[ turkish ] = "Araþtýrma raporu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe de investigación";
     };
     String ST_TYPE_UNPUBLISHED
     {
@@ -1269,6 +1315,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "áã íõäÔÑ ÈÚÏ";
         Text[ turkish ] = "Yayýmlanmamýþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Inédito";
     };
     String ST_TYPE_EMAIL
     {
@@ -1293,6 +1340,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
         Text[ turkish ] = "e-posta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mensaje electrónico";
     };
     String ST_TYPE_WWW
     {
@@ -1317,6 +1365,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãÓÊäÏ æíÈ";
         Text[ turkish ] = "WWW belgesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Documento WWW";
     };
     String ST_TYPE_CUSTOM1
     {
@@ -1341,6 +1390,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã1";
         Text[ turkish ] = "Kullanýcý tanýmlý1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por usuario 1";
     };
     String ST_TYPE_CUSTOM2
     {
@@ -1365,6 +1415,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã2";
         Text[ turkish ] = "Kullanýcý tanýmlý2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por usuario 2";
     };
     String ST_TYPE_CUSTOM3
     {
@@ -1389,6 +1440,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã3";
         Text[ turkish ] = "Kullanýcý tanýmlý3";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por usuario 3";
     };
     String ST_TYPE_CUSTOM4
     {
@@ -1413,6 +1465,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã4";
         Text[ turkish ] = "Kullanýcý tanýmlý4";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por usuario 4";
     };
     String ST_TYPE_CUSTOM5
     {
@@ -1437,6 +1490,7 @@ TabPage RID_TP_GENERAL
         Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã5";
         Text[ turkish ] = "Kullanýcý tanýmlý5";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por usuario 5";
     };
     Text[ english_us ] = "General";
     Text[ portuguese ] = "Geral";
@@ -1457,6 +1511,7 @@ TabPage RID_TP_GENERAL
     Text[ arabic ] = "ÚÇã";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "General";
 };
 Menu RID_POPUP_ME_VIEW
 {
@@ -1486,6 +1541,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ arabic ] = "ÅÏÑÇÌ äØÇÞ...";
             Text[ turkish ] = "Bölüm ekle...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar sección...";
         };
         MenuItem
         {
@@ -1511,6 +1567,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ arabic ] = "ÍÐÝ äØÇÞ...";
             Text[ turkish ] = "Bölümü sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar sección...";
         };
         MenuItem
         {
@@ -1536,6 +1593,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ arabic ] = "ÊÚÏíá ÇÓã...";
             Text[ turkish ] = "Adý deðiþtir...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Modificar nombre...";
         };
     };
 };
