@@ -5000,3 +5000,8 @@ __CTA2?AVIndexOutOfBoundsException@lang@star@sun@com@@
 ?isValidTarget@TargetCheck@framework@@SAEABVOUString@rtl@@@Z
 ?matchSpecialTarget@TargetCheck@framework@@SAEABVOUString@rtl@@0@Z
 ?impldbg_checkParameter_match@Wildcard@framework@@SAEABVOUString@rtl@@0@Z
+?DbgError@@YAXPBD0G@Z
+?DbgGetData@@YAPAUDbgData@@XZ
+?DbgIsAssert@@YAKXZ
+?DbgIsErrorOut@@YAKXZ
+?getLength@?$Sequence@V?$Reference@VXInteractionContinuation@task@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QBAJXZ
