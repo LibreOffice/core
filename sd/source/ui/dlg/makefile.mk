@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2003-05-13 12:19:35 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:14:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,12 +67,9 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=dlg
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Imagelisten --------------------------------------------------
@@ -82,7 +79,8 @@ BMP_IN=$(PRJ)$/res/imagelst
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
     ins_page.src\
     ins_paste.src\
     inspagob.src\
