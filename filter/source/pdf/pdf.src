@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdf.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:55:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@ String PDF_PROGRESS_BAR
     Text[ chinese_simplified ] = "θΎ“ε‡Ίζ PDF";
     Text[ chinese_traditional ] = "ε―ε‡Ίζ PDF";
     Text[ turkish ] = "PDF Olarak Dύώa Aktar";
-    Text[ greek ] = "Export as PDF";
-    Text[ dutch ] = "Export as PDF";
+    Text[ greek ] = "Εξαγωγή ως PDF";
+    Text[ dutch ] = "Als PDF Exporteren";
     Text[ finnish ] = "Export as PDF";
     Text[ czech ] = "Exportovat jako PDF";
-    Text[ danish ] = "Export as PDF";
+    Text[ danish ] = "Eksporter som PDF";
     Text[ arabic ] = "Export as PDF";
     Text[ hebrew ] = "β€®Χ™Χ¦Χ•Χ Χ› PDFβ€¬";
     Text[ catalan ] = "Export as PDF";
@@ -91,7 +91,10 @@ String PDF_PROGRESS_BAR
     Text[ thai ] = "Export as PDF";
     Text[ hindi ] = "Export as PDF";
     Text[ slovak ] = "Export do PDF";
+    Text[ hungarian ] = "ExportΓ΅lΓ΅s PDF-be";
+    Text[ slovenian ] = "Izvozi v PDF";
 };
+
 
 
 
