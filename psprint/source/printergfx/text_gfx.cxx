@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.14 $
+  *  $Revision: 1.15 $
   *
-  *  last change: $Author: hdu $ $Date: 2001-11-30 11:37:19 $
+  *  last change: $Author: hdu $ $Date: 2001-12-21 16:27:15 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -361,6 +361,9 @@ void PrinterGfx::drawVerticalizedText(
     PrintFontInfo aInfo;
     rMgr.getFontInfo( mnFontID, aInfo );
 
+    bool* pGsubFlags = (bool*)alloca( nLen * sizeof(bool) );
+    rMgr.hasVerticalSubstitutions( mnFontID, pStr, nLen, pGsubFlags );
+
     Point aPoint( rPoint );
     for( int i = 0; i < nLen; )
     {
@@ -389,19 +392,20 @@ void PrinterGfx::drawVerticalizedText(
 
             double nA = nTextScale * aInfo.m_nAscend / 1000.0;
             double nD = nTextScale * aInfo.m_nDescend / 1000.0;
-            if( !rMgr.hasVerticalSubstitutions( mnFontID ) )
-                nD *= 0.5;
+            double fStretch = (double)maVirtualStatus.mnTextWidth / maVirtualStatus.mnTextHeight;
+            if( !pGsubFlags[i] )
+                nD *= fStretch;
 
             Point aPos( aPoint );
             switch( nDeltaAngle )
             {
                 case +900:
-                    aPos.X() += +nA * fCos - nD * fSin;
-                    aPos.Y() += +nA * fSin + nD * fCos;
+                    aPos.X() += +nA * fCos + nD * fSin;
+                    aPos.Y() += -nA * fSin + nD * fCos;
                     break;
                 case -900:
                     aPos.X() += +nA * fSin + nD * fCos;
-                    aPos.Y() += -nA * fCos + nD * fSin;
+                    aPos.Y() += -(nTextScale*fStretch - nD) * fCos;
                     break;
             }
             drawText( aPos, pStr+i, 1, NULL );
@@ -431,6 +435,7 @@ PrinterGfx::LicenceWarning(const Point& rPoint, const sal_Unicode* pStr,
     // treat it like a builtin font in case a user has that font also in the
     // printer. This is not so unlikely as it may seem; no print embedding
     // licensed fonts are often used (or so they say) in companies:
+    // they are installed on displays and printers, but get not embedded in
     // they are installed on displays and printers, but get not embedded in
     // print files or documents because they are not licensed for use outside
     // the company.
