@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-01-16 12:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,13 +770,14 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
                 rInf.X( rInf.X() + nKernWidth_1 );
 
-                new SwKernPortion( *pPor, nKernWidth - nKernWidth_1,
-                                   sal_False, sal_True );
+                if ( ! bFull )
+                    new SwKernPortion( *pPor, nKernWidth - nKernWidth_1,
+                                       sal_False, sal_True );
 
                 pGridKernPortion = 0;
             }
             else if ( pPor->InFixMargGrp() || pPor->IsFlyCntPortion() ||
-                      nCurrScript != nNextScript || rInf.IsUnderFlow() )
+                      nCurrScript != nNextScript )
                 // next portion should snap to grid
                 pGridKernPortion = 0;
         }
