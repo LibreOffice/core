@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-13 13:31:56 $
+ *  last change: $Author: iha $ $Date: 2002-10-01 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence == OComponentHelper::getTypes();
+        maTypeSequence = OComponentHelper::getTypes();
         sal_Int32 nOldCount = maTypeSequence.getLength();
 
         maTypeSequence.realloc( nOldCount + 4 ); // !DANGER! keep this updated
