@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-11 17:32:03 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,16 @@ String RID_STR_IMPORTNOTPOSSIBLE
 {
     Text = "Hinzufügen von 'XX' nicht möglich." ;
     Text [ English ] = "Import of 'XX' not possible." ;
+};
+String RID_STR_NOIMPORT
+{
+    Text = "'XX' wurde nicht hinzugefügt." ;
+    Text [ English ] = "'XX' was not imported." ;
+};
+String RID_STR_ENTERPASSWORD
+{
+    Text = "Kennwort eingeben für 'XX'" ;
+    Text [ English ] = "Enter password for 'XX'" ;
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {

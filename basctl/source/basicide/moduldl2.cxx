@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-12 14:24:40 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,6 +1007,7 @@ void LibPage::InsertLib()
                 if ( pLibDlg->Execute() )
                 {
                     ULONG nNewPos = aLibBox.GetEntryCount();
+                    BOOL bRemove = FALSE;
                     BOOL bReplace = pLibDlg->IsReplace();
                     BOOL bReference = pLibDlg->IsReference();
                     for ( USHORT nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
@@ -1045,18 +1046,8 @@ void LibPage::InsertLib()
                                         continue;
                                     }
 
-                                    // remove listbox entry
-                                    SvLBoxEntry* pEntry = aLibBox.FindEntry( aLibName );
-                                    if ( pEntry )
-                                        aLibBox.SvTreeListBox::GetModel()->Remove( pEntry );
-
-                                    // remove module library
-                                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-                                        xModLibContainer->removeLibrary( aOULibName );
-
-                                    // remove dialog library
-                                    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
-                                        xDlgLibContainer->removeLibrary( aOULibName );
+                                    // remove existing libraries
+                                    bRemove = TRUE;
                                 }
                                 else
                                 {
@@ -1071,6 +1062,41 @@ void LibPage::InsertLib()
                                     ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                     continue;
                                 }
+                            }
+
+                            // check, if the library is password protected
+                            if ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) )
+                            {
+                                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
+                                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                                {
+                                    BOOL bOK = QueryPassword( xModLibContImp, aLibName, TRUE, TRUE );
+
+                                    if ( !bOK )
+                                    {
+                                        String aErrStr( IDEResId( RID_STR_NOIMPORT ) );
+                                        aErrStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibName );
+                                        ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            // remove existing libraries
+                            if ( bRemove )
+                            {
+                                // remove listbox entry
+                                SvLBoxEntry* pEntry = aLibBox.FindEntry( aLibName );
+                                if ( pEntry )
+                                    aLibBox.SvTreeListBox::GetModel()->Remove( pEntry );
+
+                                // remove module library
+                                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+                                    xModLibContainer->removeLibrary( aOULibName );
+
+                                // remove dialog library
+                                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+                                    xDlgLibContainer->removeLibrary( aOULibName );
                             }
 
                             // copy module library

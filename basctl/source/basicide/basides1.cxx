@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 10:51:53 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                         {
-                            bOK = QueryPassword( pShell, aLibName );
+                            bOK = QueryPassword( xModLibContainer, aLibName );
                         }
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 10:53:42 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,32 +1060,53 @@ BOOL QueryDelModule( const String& rName, Window* pParent )
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-BOOL QueryPassword( SfxObjectShell* pShell, const String& rLibName )
+BOOL QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, BOOL bRepeat, BOOL bNewTitle )
 {
     BOOL bOK = FALSE;
-    SfxPasswordDialog* pDlg = new SfxPasswordDialog( Application::GetDefDialogParent() );
-    pDlg->SetMinLen( 1 );
-    if ( pDlg->Execute() )
-    {
-        ::rtl::OUString aOULibName( rLibName );
-        Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-        {
-            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
-            {
-                ::rtl::OUString aOUPassword( pDlg->GetPassword() );
-                bOK = xPasswd->verifyLibraryPassword( aOULibName, aOUPassword );
+    USHORT nRet = 0;
 
-                if ( !bOK )
+    do
+    {
+        // password dialog
+        SfxPasswordDialog* pDlg = new SfxPasswordDialog( Application::GetDefDialogParent() );
+        pDlg->SetMinLen( 1 );
+
+        // set new title
+        if ( bNewTitle )
+        {
+            String aTitle( IDEResId( RID_STR_ENTERPASSWORD ) );
+            aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), rLibName );
+            pDlg->SetText( aTitle );
+        }
+
+        // execute dialog
+        nRet = pDlg->Execute();
+
+        // verify password
+        if ( nRet == RET_OK )
+        {
+            ::rtl::OUString aOULibName( rLibName );
+            if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
+            {
+                Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, String( IDEResId( RID_STR_WRONGPASSWORD ) ) );
-                    aErrorBox.Execute();
+                    ::rtl::OUString aOUPassword( pDlg->GetPassword() );
+                    bOK = xPasswd->verifyLibraryPassword( aOULibName, aOUPassword );
+
+                    if ( !bOK )
+                    {
+                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, String( IDEResId( RID_STR_WRONGPASSWORD ) ) );
+                        aErrorBox.Execute();
+                    }
                 }
             }
         }
+
+        delete pDlg;
     }
-    delete pDlg;
+    while ( bRepeat && !bOK && nRet == RET_OK );
+
     return bOK;
 }
 

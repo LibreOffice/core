@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,7 @@ StarBASIC* ObjectPage::GetSelectedBasic()
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
-                bOK = QueryPassword( pShell, aLibName );
+                bOK = QueryPassword( xModLibContainer, aLibName );
             }
 
             // load library
