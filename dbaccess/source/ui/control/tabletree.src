@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabletree.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-05 10:01:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBAUI_TABLETREE_HRC_
+#include "tabletree.hrc"
+#endif
+
+Image TABLE_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "sx03188.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image VIEW_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "sx16670.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image TABLEFOLDER_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "sx03187.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Menu MENU_TABLETREE_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MID_SORT_ASCENDING;
+            Text = "Aufsteigend Sortieren" ;
+            Text [ ENGLISH ] = "Functions" ;
+            Text[ english_us ] = "Sort Ascending";
+            Text[ portuguese ] = "Ordem ascendente";
+            Text[ russian ] = "—ÓÚËÓ‚‡Ú¸ ÔÓ ‚ÓÁ‡ÒÚ‡ÌË˛";
+            Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ Í·Ù‹ ·˝ÓÔıÛ·";
+            Text[ dutch ] = "Oplopend sorteren";
+            Text[ french ] = "Tri croissant";
+            Text[ spanish ] = "Orden ascendente";
+            Text[ italian ] = "Disponi in ordine crescente";
+            Text[ danish ] = "Sorter stigende";
+            Text[ swedish ] = "Sortera stigande";
+            Text[ polish ] = "Sortuj rosnπco";
+            Text[ portuguese_brazilian ] = "Functions";
+            Text[ japanese ] = "è∏èáÇ…ï¿Ç◊ë÷Ç¶";
+            Text[ korean ] = "ø¿∏ß¬˜º¯ ¡§∑ƒ";
+            Text[ chinese_simplified ] = "œÚ…œ≈≈–Ú";
+            Text[ chinese_traditional ] = "¶V§W±∆ß«";
+            Text[ arabic ] = "›—“  ’«⁄œÌ";
+            Text[ turkish ] = "Artan s˝ralama";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MID_SORT_DECENDING;
+            Text = "Absteigend Sortieren" ;
+            Text [ ENGLISH ] = "Functions" ;
+            Text[ english_us ] = "Sort Descending";
+            Text[ portuguese ] = "Ordem decrescente";
+            Text[ russian ] = "—ÓÚËÓ‚‡Ú¸ ÔÓ Û·˚‚‡ÌË˛";
+            Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ Í·Ù‹ ˆËﬂÌÔıÛ·";
+            Text[ dutch ] = "Aflopend sorteren";
+            Text[ french ] = "Tri dÈcroissant";
+            Text[ spanish ] = "Orden descendente";
+            Text[ italian ] = "Disponi in ordine descrescente";
+            Text[ danish ] = "Sorter faldende";
+            Text[ swedish ] = "Sortera fallande";
+            Text[ polish ] = "Sortuj malejπco";
+            Text[ portuguese_brazilian ] = "Functions";
+            Text[ japanese ] = "ç~èáÇ…ï¿Ç◊ë÷Ç¶";
+            Text[ korean ] = "≥ª∏≤¬˜º¯ ¡§∑ƒ";
+            Text[ chinese_simplified ] = "œÚœ¬≈≈–Ú";
+            Text[ chinese_traditional ] = "¶V§U±∆ß«";
+            Text[ arabic ] = "›—“  ‰«“·Ì";
+            Text[ turkish ] = "Azalan s˝ralama";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+String STR_COULDNOTCREATE_DRIVERMANAGER
+{
+    Text = "Es konnte keine Verbindung zum SDBC-Treiber-Manager (#servicename#) hergestellt werden.";
+    Text [ english ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+    Text [ english_us ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+};
+
+String STR_NOREGISTEREDDRIVER
+{
+    Text = "Es ist kein Treiber f¸r die URL #connurl# registriert!";
+    Text [ english ] = "There is no registered driver for the URL #connurl#";
+    Text [ english_us ] = "There is no registered driver for the URL #connurl#";
+};
+
+String STR_INVALIDREGISTEREDDRIVER
+{
+    Text = "Der registrierte Treiber f¸r die URL #connurl# unterstuetzt ein notwendiges Interface (com.sun.star.sdbc.XDataDefinitionSupplier) nicht.";
+    Text [ english ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text [ english_us ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+};
+
+String STR_COULDNOTCONNECT_PLEASECHECK
+{
+    Text = "Es konnte keine Verbindung f¸r die URL #connurl# aufgebaut werden. Bitte ueberpruefen Sie die aktuellen Einstellungen.";
+    Text [ english ] = "A connection could not be established for URL #connurl#. Please check the current settings.";
+    Text [ english_us ] = "A connection could not be established for URL #connurl#. Please check the current settings.";
+};
+String STR_NOTABLEINFO
+{
+    Text = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen ¸ber Tabellen in der Datenbank ermittelt werden.";
+    Text [ english ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+    Text [ english_us ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 28.09.00 13:36:13  fs
+ ************************************************************************/
+

@@ -1,0 +1,322 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sqlmessage.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-05 10:07:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBAUI_SQLMESSAGE_HRC_
+#include "sqlmessage.hrc"
+#endif
+
+//-------------------------------------------------------------------------
+Image BMP_EXCEPTION_ERROR
+{
+    ImageBitmap = Bitmap { File = "exerror.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_WARNING
+{
+    ImageBitmap = Bitmap { File = "exwarning.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_INFO
+{
+    ImageBitmap = Bitmap { File = "exinfo.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+ModalDialog DLG_SQLMESSAGE
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 238 , 101 ) ;
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    Text [ norwegian ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ portuguese_brazilian ] = "Texto" ;
+    Text [ portuguese ] = "Texto" ;
+    Text [ finnish ] = "Teksti" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ french ] = "Texte" ;
+    Text [ swedish ] = "Text" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ english_us ] = "Text" ;
+    MultiLineEdit ED_TEXT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 153 , 76 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_DATA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 165 , 92 ) ;
+        Text = "Text" ;
+        Text [ ENGLISH ] = "Text" ;
+        Text [ norwegian ] = "Text" ;
+        Text [ italian ] = "Testo" ;
+        Text [ portuguese_brazilian ] = "Texto" ;
+        Text [ portuguese ] = "Texto" ;
+        Text [ finnish ] = "Teksti" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ french ] = "Texte" ;
+        Text [ swedish ] = "Text" ;
+        Text [ dutch ] = "Tekst" ;
+        Text [ spanish ] = "Texto" ;
+        Text [ english_us ] = "Text" ;
+        Text[ chinese_simplified ] = "Œƒ◊÷";
+        Text[ russian ] = "“ÂÍÒÚ";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "√∑Ωƒ";
+        Text[ chinese_traditional ] = "§Â¶r";
+        Text[ arabic ] = "«·‰’";
+        Text[ greek ] = " ÂﬂÏÂÌÔ";
+        Text[ korean ] = "≈ÿΩ∫∆Æ";
+        Text[ turkish ] = "Metin";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 181 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 181 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text[ chinese_simplified ] = "Œƒ◊÷";
+    Text[ russian ] = "“ÂÍÒÚ";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "√∑Ωƒ";
+    Text[ chinese_traditional ] = "§Â¶r";
+    Text[ arabic ] = "«·‰’";
+    Text[ greek ] = " ÂﬂÏÂÌÔ";
+    Text[ korean ] = "≈ÿΩ∫∆Æ";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+
+    String STR_EXCEPTION_ERROR
+    {
+        Text = "Fehler";
+        Text [ english ] = "Error";
+        Text [ english_us ] = "Error";
+    };
+    String STR_EXCEPTION_WARNING
+    {
+        Text = "Warnung";
+        Text [ english ] = "Warning";
+        Text [ english_us ] = "Warning";
+    };
+    String STR_EXCEPTION_INFO
+    {
+        Text = "Information";
+        Text [ english ] = "Information";
+        Text [ english_us ] = "Information";
+    };
+    String STR_EXCEPTION_DETAILS
+    {
+        Text = "Details";
+        Text [ english ] = "Details";
+        Text [ english_us ] = "Details";
+    };
+    String STR_EXCEPTION_STATUS
+    {
+        Text = "SQL-Status";
+        Text [ english ] = "SQL State";
+        Text [ english_us ] = "SQL State";
+    };
+    String STR_EXCEPTION_ERRORCODE
+    {
+        Text = "Fehler-Code";
+        Text [ english ] = "Error code";
+        Text [ english_us ] = "Error code";
+    };
+};
+
+ModalDialog DLG_SQLEXCEPTIONCHAIN
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 280 , 150 ) ;
+    Text = "StarBase" ;
+
+    GroupBox GB_DETAILS
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 268, 121 ) ;
+        Text = "Details";
+        Text [ english ] = "details";
+        Text [ english_us ] = "Details";
+        Text[ portuguese ] = "Detalhes";
+        Text[ russian ] = "ƒÂÚ‡ÎË";
+        Text[ greek ] = "ÀÂÙÔÏ›ÒÂÈÂÚ";
+        Text[ dutch ] = "Details";
+        Text[ french ] = "DÈtails";
+        Text[ spanish ] = "Detalles";
+        Text[ italian ] = "Dettagli";
+        Text[ danish ] = "Detaljer";
+        Text[ swedish ] = "Detaljer";
+        Text[ polish ] = "SzczegÛ≥y";
+        Text[ portuguese_brazilian ] = "details";
+        Text[ japanese ] = "è⁄ç◊";
+        Text[ korean ] = "¿⁄ºº»˜";
+        Text[ chinese_simplified ] = "œ∏Ω⁄";
+        Text[ chinese_traditional ] = "≤”∏`";
+        Text[ arabic ] = "«· ›«’Ì·";
+        Text[ turkish ] = "Ayr˝nt˝lar";
+    };
+    FixedText FT_ERRORLIST
+    {
+        Pos = MAP_APPFONT ( 12, 12 ) ;
+        Size = MAP_APPFONT ( 125, 10 ) ;
+        Text = "~Fehlerliste:";
+        Text [ english ] = "error ~list:";
+        Text [ english_us ] = "Error ~list:";
+        Group = TRUE;
+        Text[ portuguese ] = "~Lista de erros:";
+        Text[ russian ] = "—ÔËÒÓÍ Ó¯Ë·ÓÍ:";
+        Text[ greek ] = "ÀﬂÛÙ· Ûˆ·ÎÏ‹Ù˘Ì:";
+        Text[ dutch ] = "Lijst met ~fouten:";
+        Text[ french ] = "~Liste d'erreurs :";
+        Text[ spanish ] = "Lista de ~errores:";
+        Text[ italian ] = "Lista errori:";
+        Text[ danish ] = "~Fejlliste:";
+        Text[ swedish ] = "~Fellista:";
+        Text[ polish ] = "~Lista b≥ÍdÛw:";
+        Text[ portuguese_brazilian ] = "error ~list:";
+        Text[ japanese ] = "¥◊∞ÿΩƒ:";
+        Text[ korean ] = "ø¿∑˘ ∏Ò∑œ(~L)";
+        Text[ chinese_simplified ] = "¥ÌŒÛ¡–µ•£∫";
+        Text[ chinese_traditional ] = "ø˘ª~≤M≥Ê°G";
+        Text[ arabic ] = "ﬁ«∆„… «·√Œÿ«¡:";
+        Text[ turkish ] = "Hata listesi:";
+    };
+    Control CTL_ERRORLIST
+    {
+        Pos = MAP_APPFONT ( 12, 25 ) ;
+        Size = MAP_APPFONT ( 125, 93 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 143, 12 ) ;
+        Size = MAP_APPFONT ( 125, 10 ) ;
+        Text = "~Beschreibung:";
+        Text [ english ] = "~description:";
+        Text [ english_us ] = "~Description:";
+        Group = TRUE;
+        Text[ portuguese ] = "~DescriÁ„o:";
+        Text[ russian ] = "ŒÔËÒ‡ÌËÂ:";
+        Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ:";
+        Text[ dutch ] = "~beschrijving:";
+        Text[ french ] = "~description :";
+        Text[ spanish ] = "~DescripciÛn:";
+        Text[ italian ] = "Descrizione:";
+        Text[ danish ] = "~Beskrivelse:";
+        Text[ swedish ] = "~Beskrivning:";
+        Text[ polish ] = "~Opis:";
+        Text[ portuguese_brazilian ] = "~description:";
+        Text[ japanese ] = "ê‡ñæ:";
+        Text[ korean ] = "º≥∏Ì:(~D)";
+        Text[ chinese_simplified ] = "Àµ√˜£∫";
+        Text[ chinese_traditional ] = "¥y≠z°G";
+        Text[ arabic ] = "«·Ê’›:";
+        Text[ turkish ] = "AÁ˝klama:";
+    };
+    MultiLineEdit ME_DESCRIPTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 143 , 25 ) ;
+        Size = MAP_APPFONT ( 125 , 93 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 115 , 130 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+};
+
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 02.10.00 12:43:18  fs
+ ************************************************************************/
+

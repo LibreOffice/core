@@ -1,0 +1,26 @@
+#ifndef _DBAUI_DBF_INDEXES_HRC_
+#define _DBAUI_DBF_INDEXES_HRC_
+
+#define CB_TABLES           1
+
+#define FT_TABLES           1
+#define FT_TABLEINDEXES     2
+#define FT_ALLINDEXES       3
+
+#define GB_INDEXES          1
+
+#define LB_TABLEINDEXES     1
+#define LB_FREEINDEXES      2
+
+#define PB_OK               1
+#define PB_CANCEL           1
+#define PB_HELP             1
+
+#define PB_ADD              1
+#define PB_REMOVE           2
+#define PB_ADDALL           3
+#define PB_REMOVEALL        4
+
+
+#endif //_DBAUI_DBF_INDEXES_HRC_
+

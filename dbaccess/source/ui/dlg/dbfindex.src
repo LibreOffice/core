@@ -1,0 +1,279 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbfindex.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-05 10:05:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DBF_INDEXES_HRC_
+#include "dbfindex.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define WIN_X   202
+#define WIN_Y   168
+
+ModalDialog DLG_DBASE_INDEXES
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text = "Indizes" ;
+    Text [ english ] = "Indexes" ;
+    Text [ italian ] = "Indici" ;
+    Text [ portuguese ] = "Índices" ;
+    Text [ french ] = "Index" ;
+    Text [ dutch ] = "Indices" ;
+    Text [ spanish ] = "Índices" ;
+    Text [ english_us ] = "Indexes" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , WIN_Y - 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 59 , WIN_Y - 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_TABLES
+    {
+        Pos = MAP_APPFONT ( 8 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Tabelle:" ;
+        Text [ english ] = "Table:" ;
+        Text [ english_us ] = "~Table:" ;
+        Text [ spanish ] = "~Tabla:" ;
+        Text [ french ] = "~Table :" ;
+        Text [ italian ] = "Tabella:" ;
+        Text [ dutch ] = "~Tabel:" ;
+        Text [ portuguese ] = "~Tabela:" ;
+        Text [ portuguese_brazilian ] = "Tabelle:" ;
+        Text [ danish ] = "Tabel:" ;
+        Text [ swedish ] = "~Tabell:" ;
+        Text[ chinese_simplified ] = "±í¸ñ(~T)£º";
+        Text[ russian ] = "Òàáëèöà:";
+        Text[ polish ] = "Tabela:";
+        Text[ japanese ] = "Ã°ÌÞÙ(~T):";
+        Text[ chinese_traditional ] = "ªí®æ(~T)¡G";
+        Text[ arabic ] = "ÌÏæá:";
+        Text[ greek ] = "~Ðßíáêáò:";
+        Text[ korean ] = "Ç¥:(~T)";
+        Text[ turkish ] = "Tablo:";
+    };
+    ComboBox CB_TABLES
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 5 ) ;
+        Size = MAP_APPFONT ( 134 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    GroupBox GB_INDEXES
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( WIN_X - 12 , 120 ) ;
+        Text = "Zuweisung" ;
+        Text [ english ] = "Assignment" ;
+        Text [ english_us ] = "Assignment" ;
+        Text[ portuguese ] = "Atribuição";
+        Text[ russian ] = "Ïðèìåíåíèå";
+        Text[ greek ] = "Áíôéóôïß÷éóç";
+        Text[ dutch ] = "Toewijzing";
+        Text[ french ] = "Assignement";
+        Text[ spanish ] = "Asignación";
+        Text[ italian ] = "Assegnazione";
+        Text[ danish ] = "Tildeling";
+        Text[ swedish ] = "Tilldelning";
+        Text[ polish ] = "Przydzia³";
+        Text[ portuguese_brazilian ] = "Assignment";
+        Text[ japanese ] = "“K—p";
+        Text[ korean ] = "ÁöÁ¤";
+        Text[ chinese_simplified ] = "Ö¸¶¨";
+        Text[ chinese_traditional ] = "«ü©w";
+        Text[ arabic ] = "ÊÚííä";
+        Text[ turkish ] = "Atama";
+    };
+    FixedText FT_TABLEINDEXES
+    {
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "T~abellenindizes:" ;
+        Text [ english ] = "Table indexes:" ;
+        Text [ english_us ] = "T~able indexes:" ;
+        Text [ spanish ] = "Índices de ta~bla:" ;
+        Text [ french ] = "~Index de table :" ;
+        Text [ italian ] = "Indici t~abella:" ;
+        Text [ dutch ] = "Tabel~indices:" ;
+        Text [ portuguese ] = "~Índices de tabelas:" ;
+        Text [ portuguese_brazilian ] = "Tabellenindizes:" ;
+        Text [ swedish ] = "T~abellindex:" ;
+        Text [ danish ] = "Tabelindeks:" ;
+        Text[ chinese_simplified ] = "±í¸ñ±êÖ¾(~A)£º";
+        Text[ russian ] = "Èíäåêñû òàáëèöû:";
+        Text[ polish ] = "Indeksy tabeli:";
+        Text[ japanese ] = "Ã°ÌÞÙ‚Ì²ÝÃÞ¯¸½:";
+        Text[ chinese_traditional ] = "ªí®æ¼Ð»x¡G";
+        Text[ arabic ] = "ÝåÇÑÓ ÌÏæá:";
+        Text[ greek ] = "ÅõñåôÞñé~á ðéíÜêùí:";
+        Text[ korean ] = "Ç¥ »öÀÎ:(~A)";
+        Text[ turkish ] = "Tablo dizinleri:";
+    };
+    ListBox LB_TABLEINDEXES
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 73 , 90 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ALLINDEXES
+    {
+        Pos = MAP_APPFONT ( 117 , 33 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Text = "~Freie Indizes:" ;
+        Text [ english ] = "Free Indexes:" ;
+        Text [ english_us ] = "~Free indexes:" ;
+        Text [ spanish ] = "Índices lib~res:" ;
+        Text [ french ] = "Index ~libres" ;
+        Text [ italian ] = "Indici liberi:" ;
+        Text [ dutch ] = "~Vrije indices" ;
+        Text [ portuguese ] = "Índices ~livres" ;
+        Text [ portuguese_brazilian ] = "Freie Indizes" ;
+        Text [ swedish ] = "~Fria index:" ;
+        Text [ danish ] = "Frie indeks:" ;
+        Text[ chinese_simplified ] = "×ÔÓÉ±êÖ¾(~F)£º";
+        Text[ russian ] = "Ñâîáîäíûå èíäåêñû";
+        Text[ polish ] = "Wolne indeksy";
+        Text[ japanese ] = "ÌØ° ²ÝÃÞ¯¸½";
+        Text[ chinese_traditional ] = "¦Û¥Ñ¼Ð»x(~F)¡G";
+        Text[ arabic ] = "ÝåÇÑÓ ÍÑÉ:";
+        Text[ greek ] = "Åëåý~èåñá åõñåôÞñéá";
+        Text[ korean ] = "ÀÚÀ¯ »öÀÎ(~F)";
+        Text[ turkish ] = "Boþ dizinler:";
+    };
+    ListBox LB_FREEINDEXES
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 46 ) ;
+        Size = MAP_APPFONT ( 73 , 90 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADD
+    {
+        Pos = MAP_APPFONT ( 91 , 60 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "<-" ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADDALL
+    {
+        Pos = MAP_APPFONT ( 91 , 77 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "~<<=" ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_REMOVE
+    {
+        Pos = MAP_APPFONT ( 91 , 98 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "->" ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_REMOVEALL
+    {
+        Pos = MAP_APPFONT ( 91, 114 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "=~>>" ;
+        TabStop = TRUE ;
+    };
+
+    Text [ portuguese_brazilian ] = "Indizes" ;
+    Text [ swedish ] = "Index" ;
+    Text [ danish ] = "Indeks" ;
+    Text[ chinese_simplified ] = "±êÖ¾";
+    Text[ russian ] = "Èíäåêñû";
+    Text[ polish ] = "Indeksy";
+    Text[ japanese ] = "²ÝÃÞ¯¸½";
+    Text[ chinese_traditional ] = "¼Ð»x";
+    Text[ arabic ] = "ÝåÇÑÓ";
+    Text[ greek ] = "ÅõñåôÞñéá";
+    Text[ korean ] = "ÀÎµ¦½º";
+    Text[ turkish ] = "Dizinler";
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 26.09.00 17:03:30  fs
+ ************************************************************************/
+

@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbu_resource.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-05 10:08:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#define _DBU_RESOURCE_HRC_
+
+//========================================================================
+// dialog ids
+
+#define DLG_DATABASE_ADMINISTRATION     1000
+#define DLG_DBASE_INDEXES               1001
+#define DLG_SQLMESSAGE                  1002
+#define DLG_SQLEXCEPTIONCHAIN           1003
+
+//========================================================================
+// tab pages
+
+#define PAGE_GENERAL                    1000
+#define PAGE_DBASE                      1001
+#define PAGE_JDBC                       1002
+#define PAGE_ODBC                       1003
+#define PAGE_TEXT                       1004
+#define PAGE_ADABAS                     1005
+#define PAGE_TABLESUBSCRIPTION          1006
+
+//========================================================================
+// error boxes
+
+#define ERR_NOREGISTEREDDATASOURCES     1000
+
+//========================================================================
+// bitmaps
+
+#define BMP_PLUSBUTTON                  1000
+#define BMP_MINUSBUTTON                 1001
+#define BMP_CHECKBUTTON_UNCHECKED       1002
+#define BMP_CHECKBUTTON_CHECKED         1003
+#define BMP_CHECKBUTTON_HICHECKED       1004
+#define BMP_CHECKBUTTON_HIUNCHECKED     1005
+#define BMP_CHECKBUTTON_TRISTATE        1006
+#define BMP_CHECKBUTTON_HITRISTATE      1007
+
+//========================================================================
+// images
+
+#define TABLE_TREE_ICON                 1000
+#define VIEW_TREE_ICON                  1001
+#define TABLEFOLDER_TREE_ICON           1002
+#define BMP_EXCEPTION_ERROR             1003
+#define BMP_EXCEPTION_WARNING           1004
+#define BMP_EXCEPTION_INFO              1005
+
+//========================================================================
+// image lists
+
+//========================================================================
+// menues
+
+#define MENU_TABLETREE_POPUP            256
+
+//========================================================================
+// strings
+
+#define STR_COULDNOTCREATE_DRIVERMANAGER    256
+#define STR_NOREGISTEREDDRIVER              257
+#define STR_INVALIDREGISTEREDDRIVER         258
+#define STR_COULDNOTCONNECT_PLEASECHECK     259
+#define STR_NOTABLEINFO                     260
+#define STR_GENERAL_SDB_ERROR               261
+
+//========================================================================
+// untyped resources
+
+#define RSC_DATASOURCE_TYPES            256
+#define RSC_CHARSETS                    257
+
+#endif // _DBU_RESOURCE_HRC_
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 25.09.00 08:50:32  fs
+ ************************************************************************/
+

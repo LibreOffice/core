@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbadmin.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-05 10:04:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DBADMIN_HRC_
+#define _DBAUI_DBADMIN_HRC_
+
+//========================================================================
+// control ids
+
+#define FT_DATATYPE             1
+#define FT_CONNECTURL           2
+#define FT_SELECTOR_TITLE       3
+#define FT_DATASOURCENAME       4
+#define FT_USERNAME             5
+#define FT_PASSWORD             6
+#define FT_OPTIONS              7
+#define FT_CHARSET              8
+#define FT_JDBCDRIVERCLASS      9
+#define FT_FIELDSEPARATOR       10
+#define FT_TEXTSEPARATOR        11
+#define FT_DECIMALSEPARATOR     12
+#define FT_THOUSANDSSEPARATOR   13
+#define FT_EXTENSION            14
+#define FT_TABLESUBSCRIPTION    15
+
+#define LB_DATATYPE             1
+#define LB_DATASOURCES          2
+#define LB_CHARSET              3
+
+#define ET_CONNECTURL           1
+#define ET_DATASOURCENAME       2
+#define ET_USERNAME             3
+#define ET_PASSWORD             4
+#define ET_OPTIONS              5
+#define ET_JDBCDRIVERCLASS      6
+
+#define PB_BROWSECONNECTION     1
+#define PB_INDICIES             2
+#define PB_ADDALLTABLES         3
+
+#define GB_CONNECTION           1
+#define GB_DBASE_MAIN           2
+
+#define CB_ASK_WHEN_EMPTY_PWD   1
+#define CB_SHOWDELETEDROWS      2
+#define CB_ALLOWLONGNAMES       3
+#define CB_HEADER               4
+
+#define FL_SEPARATOR1           1
+
+#define CM_FIELDSEPARATOR       1
+#define CM_TEXTSEPARATOR        2
+#define CM_DECIMALSEPARATOR     3
+#define CM_THOUSANDSSEPARATOR   4
+#define CM_EXTENSION            5
+
+#define WND_DATASOURCESELECTOR  1
+#define WND_SELECTORBORDER      2
+
+#define CTL_TABLESUBSCRIPTION   1
+
+//========================================================================
+// string ids (relative to other resources, that's why not necessarily unique)
+
+#define STR_PAGETITLE_GENERAL           1
+#define STR_PAGETITLE_DBASE             2
+#define STR_PAGETITLE_JDBC              3
+#define STR_PAGETITLE_ODBC              4
+#define STR_PAGETITLE_ADABAS            5
+#define STR_PAGETITLE_TEXT              6
+#define STR_PAGETITLE_TABLESUBSCRIPTION 7
+#define STR_FIELDSEPARATORLIST          8
+#define STR_TEXTSEPARATORLIST           9
+#define STR_DELIMITER_MISSING           10
+#define STR_DELIMITER_MUST_DIFFER       11
+#define STR_NO_WILDCARDS                12
+#define STR_CHECK_ALL                   13
+#define STR_CHECK_NONE                  14
+
+#endif // _DBAUI_DBADMIN_HRC_
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 20.09.00 11:42:05  fs
+ ************************************************************************/
+
