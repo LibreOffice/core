@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.10 $
+#*  $Revision: 1.11 $
 #*
-#*  last change: $Author: er $ $Date: 2002-08-06 13:11:41 $
+#*  last change: $Author: khong $ $Date: 2002-08-06 23:19:38 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -77,8 +77,10 @@ debug!=
 # macro to link with localedata_en library
 .IF "$(GUI)" == "WNT"
 LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
+LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ELSE
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
+LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -195,15 +197,47 @@ SHL1OBJS= \
 LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
 LIB1OBJFILES=$(SHL1OBJS)
 
-# European Locales
-SHL2TARGET=localedata_euro
+# Spanish Locales
+SHL2TARGET=localedata_es
 SHL2IMPLIB= 	i$(SHL2TARGET)
 DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 DEFLIB2NAME=	$(SHL2TARGET)
 SHL2STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
-SHL2OBJS=	\
+SHL2OBJS= \
+    $(SLO)$/localedata_es_AR.obj \
+    $(SLO)$/localedata_es_BO.obj \
+    $(SLO)$/localedata_es_CL.obj \
+    $(SLO)$/localedata_es_CO.obj \
+    $(SLO)$/localedata_es_CR.obj \
+    $(SLO)$/localedata_es_DO.obj \
+    $(SLO)$/localedata_es_EC.obj \
+    $(SLO)$/localedata_es_ES.obj \
+    $(SLO)$/localedata_es_GT.obj \
+    $(SLO)$/localedata_es_HN.obj \
+    $(SLO)$/localedata_es_MX.obj \
+    $(SLO)$/localedata_es_NI.obj \
+    $(SLO)$/localedata_es_PA.obj \
+    $(SLO)$/localedata_es_PE.obj \
+    $(SLO)$/localedata_es_PR.obj \
+    $(SLO)$/localedata_es_PY.obj \
+    $(SLO)$/localedata_es_SV.obj \
+    $(SLO)$/localedata_es_UY.obj \
+    $(SLO)$/localedata_es_VE.obj
+
+LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
+LIB2OBJFILES=$(SHL2OBJS)
+
+# European Locales
+SHL3TARGET=localedata_euro
+SHL3IMPLIB= 	i$(SHL3TARGET)
+DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
+SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=	$(SHL3TARGET)
+DEFLIB3NAME=	$(SHL3TARGET)
+SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
+SHL3OBJS=	\
     $(SLO)$/localedata_de_DE.obj	\
     $(SLO)$/localedata_fr_FR.obj	\
     $(SLO)$/localedata_it_IT.obj	\
@@ -236,43 +270,11 @@ SHL2OBJS=	\
     $(SLO)$/localedata_nb_NO.obj	\
     $(SLO)$/localedata_de_LI.obj
 
-LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
-LIB2OBJFILES=$(SHL2OBJS)
+LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
+LIB3OBJFILES=$(SHL3OBJS)
 
 # Missing
 #	$(SLO)$/localedata_et_EE.obj
-
-# Spanish Locales
-SHL3TARGET=localedata_es
-SHL3IMPLIB= 	i$(SHL3TARGET)
-DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-DEFLIB3NAME=	$(SHL3TARGET)
-SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
-SHL3OBJS= \
-    $(SLO)$/localedata_es_AR.obj \
-    $(SLO)$/localedata_es_BO.obj \
-    $(SLO)$/localedata_es_CL.obj \
-    $(SLO)$/localedata_es_CO.obj \
-    $(SLO)$/localedata_es_CR.obj \
-    $(SLO)$/localedata_es_DO.obj \
-    $(SLO)$/localedata_es_EC.obj \
-    $(SLO)$/localedata_es_ES.obj \
-    $(SLO)$/localedata_es_GT.obj \
-    $(SLO)$/localedata_es_HN.obj \
-    $(SLO)$/localedata_es_MX.obj \
-    $(SLO)$/localedata_es_NI.obj \
-    $(SLO)$/localedata_es_PA.obj \
-    $(SLO)$/localedata_es_PE.obj \
-    $(SLO)$/localedata_es_PR.obj \
-    $(SLO)$/localedata_es_PY.obj \
-    $(SLO)$/localedata_es_SV.obj \
-    $(SLO)$/localedata_es_UY.obj \
-    $(SLO)$/localedata_es_VE.obj
-
-LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
-LIB3OBJFILES=$(SHL3OBJS)
 
 # Other Locales
 SHL4TARGET=localedata_others
