@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ english_us ] = "Font" ;
                 Text[ portuguese ] = "Font";
                 Text[ russian ] = "Font";
-                Text[ greek ] = "Font";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
                 Text[ dutch ] = "Font";
                 Text[ french ] = "Font";
                 Text[ spanish ] = "Font";
@@ -105,9 +105,9 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ polish ] = "Font";
                 Text[ portuguese_brazilian ] = "Font";
                 Text[ japanese ] = "Font";
-                Text[ korean ] = "Font";
+                Text[ korean ] = "±Û²Ã";
                 Text[ chinese_simplified ] = "×ÖÌå";
-                Text[ chinese_traditional ] = "Font";
+                Text[ chinese_traditional ] = "¦r«¬";
                 Text[ turkish ] = "Font";
                 Text[ arabic ] = "ÇÇáÎØ";
             };
@@ -118,7 +118,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ english_us ] = "Font Effects" ;
                 Text[ portuguese ] = "Font Effects";
                 Text[ russian ] = "Font Effects";
-                Text[ greek ] = "Font Effects";
+                Text[ greek ] = "ÅöÝ ãñáììáôïóåéñÜò";
                 Text[ dutch ] = "Font Effects";
                 Text[ french ] = "Font Effects";
                 Text[ spanish ] = "Font Effects";
@@ -128,9 +128,9 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ polish ] = "Font Effects";
                 Text[ portuguese_brazilian ] = "Font Effects";
                 Text[ japanese ] = "Font Effects";
-                Text[ korean ] = "Font Effects";
+                Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ chinese_simplified ] = "×ÖÌåÐ§¹û";
-                Text[ chinese_traditional ] = "Font Effects";
+                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Font Effects";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
             };
@@ -141,7 +141,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ english_us ] = "Position" ;
                 Text[ portuguese ] = "Position";
                 Text[ russian ] = "Position";
-                Text[ greek ] = "Position";
+                Text[ greek ] = "ÈÝóç";
                 Text[ dutch ] = "Position";
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Position";
@@ -151,9 +151,9 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ polish ] = "Position";
                 Text[ portuguese_brazilian ] = "Position";
                 Text[ japanese ] = "Position";
-                Text[ korean ] = "Position";
+                Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
-                Text[ chinese_traditional ] = "Position";
+                Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ÇáãæÖÚ";
             };
