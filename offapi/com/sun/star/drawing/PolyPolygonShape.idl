@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
     <p>A polypolygon has 2 or more straight lines, with the first and
     last point connected by a straight line.</p>
  */
-service PolyPolygonShape
+published service PolyPolygonShape
 {
     service com::sun::star::drawing::Shape;
 
