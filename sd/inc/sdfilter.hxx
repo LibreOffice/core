@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:17:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,10 @@ public:
     SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress );
     ~SdFilter();
 
-    virtual sal_Bool            Import();
-    virtual sal_Bool            Export();
-
     sal_Bool                    IsProgress() const { return mbShowProgress; }
     sal_Bool                    IsDraw() const { return mbIsDraw; }
     sal_Bool                    IsImpress() const { return !mbIsDraw; }
+    virtual sal_Bool            Export() = 0;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             mxModel;
