@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
