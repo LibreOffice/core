@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:48 $
+ *  last change:$Date: 2003-05-27 12:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,52 @@
 
 package share;
 
+import java.util.Vector;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 /**
  *
  * Base Interface to get a description for a given TestJob
  *
  */
-public interface DescGetter {
+public abstract class DescGetter {
 
-    public DescEntry[] getDescriptionFor(String entry, String DescPath, boolean debug);
+    public abstract DescEntry[] getDescriptionFor(String entry,
+                                    String DescPath, boolean debug);
+
+    protected abstract DescEntry getDescriptionForSingleJob(
+                                    String job, String descPath, boolean debug);
+
+    protected DescEntry[] getScenario(String url, String descPath,
+                                                        boolean debug) {
+        Vector entryList = new Vector();
+        String line = "";
+        BufferedReader scenario = null;
+        DescEntry[] entries = null;
+        try {
+            scenario = new BufferedReader(new FileReader(url));
+        } catch (java.io.FileNotFoundException fnfe) {
+            System.out.println("Couldn't find file "+url);
+            return entries;
+        }
+        while (line != null) {
+            try {
+                if (line.startsWith("-o")) {
+                    entryList.add(getDescriptionForSingleJob(
+                                    line.substring(3).trim(), descPath, debug));
+                }
+                line = scenario.readLine();
+            } catch (java.io.IOException ioe) {
+                if (debug)
+                    System.out.println("Exception while reading scenario");
+            }
+        }
+
+        entries = new DescEntry[entryList.size()];
+        entries = (DescEntry[])entryList.toArray(entries);
+        return entries;
+    }
 
 }
 
