@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:44:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,17 +99,22 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "res_bmp.hrc"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 
 #include <string>
 #include <algorithm>
 
 using namespace ::com::sun::star;
-SFX_IMPL_DOCKINGWINDOW( SdAnimationChildWindow, SID_ANIMATION_OBJECTS)
+
+namespace sd {
 
 /*************************************************************************
 |*  SdDisplay - Control
@@ -180,15 +185,17 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     {
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
-        SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+        SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+            : ViewShell::OUTPUT_DRAWMODE_COLOR );
     }
 }
 
 /*************************************************************************
-|*  SdAnimationWin - FloatingWindow
+|*  AnimationWindow - FloatingWindow
 \************************************************************************/
 
-SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
+AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent, const SdResId& rSdResId ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
         aCtlDisplay         ( this, SdResId( CTL_DISPLAY ) ),
@@ -231,27 +238,27 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
     SdPage* pPage = (SdPage*) pMyDoc->AllocPage(FALSE);
     pMyDoc->InsertPage(pPage);
 
-    pControllerItem = new SdAnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
+    pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
 
     // Solange noch nicht in der Resource
     aTimeField.SetFormat( TIMEF_SEC_CS );
 
-    aBtnFirst.SetClickHdl( LINK( this, SdAnimationWin, ClickFirstHdl ) );
-    aBtnReverse.SetClickHdl( LINK( this, SdAnimationWin, ClickPlayHdl ) );
-    aBtnStop.SetClickHdl( LINK( this, SdAnimationWin, ClickStopHdl ) );
-    aBtnPlay.SetClickHdl( LINK( this, SdAnimationWin, ClickPlayHdl ) );
-    aBtnLast.SetClickHdl( LINK( this, SdAnimationWin, ClickLastHdl ) );
+    aBtnFirst.SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
+    aBtnReverse.SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    aBtnStop.SetClickHdl( LINK( this, AnimationWindow, ClickStopHdl ) );
+    aBtnPlay.SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    aBtnLast.SetClickHdl( LINK( this, AnimationWindow, ClickLastHdl ) );
 
-    aBtnGetOneObject.SetClickHdl( LINK( this, SdAnimationWin, ClickGetObjectHdl ) );
-    aBtnGetAllObjects.SetClickHdl( LINK( this, SdAnimationWin, ClickGetObjectHdl ) );
-    aBtnRemoveBitmap.SetClickHdl( LINK( this, SdAnimationWin, ClickRemoveBitmapHdl ) );
-    aBtnRemoveAll.SetClickHdl( LINK( this, SdAnimationWin, ClickRemoveBitmapHdl ) );
+    aBtnGetOneObject.SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    aBtnGetAllObjects.SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    aBtnRemoveBitmap.SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
+    aBtnRemoveAll.SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
 
-    aRbtGroup.SetClickHdl( LINK( this, SdAnimationWin, ClickRbtHdl ) );
-    aRbtBitmap.SetClickHdl( LINK( this, SdAnimationWin, ClickRbtHdl ) );
-    aBtnCreateGroup.SetClickHdl( LINK( this, SdAnimationWin, ClickCreateGroupHdl ) );
-    aNumFldBitmap.SetModifyHdl( LINK( this, SdAnimationWin, ModifyBitmapHdl ) );
-    aTimeField.SetModifyHdl( LINK( this, SdAnimationWin, ModifyTimeHdl ) );
+    aRbtGroup.SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    aRbtBitmap.SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    aBtnCreateGroup.SetClickHdl( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
+    aNumFldBitmap.SetModifyHdl( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
+    aTimeField.SetModifyHdl( LINK( this, AnimationWindow, ModifyTimeHdl ) );
 
     // disable 3D border
     aCtlDisplay.SetBorderStyle(WINDOW_BORDER_MONO);
@@ -268,7 +275,7 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
 
 // -----------------------------------------------------------------------
 
-SdAnimationWin::~SdAnimationWin()
+AnimationWindow::~AnimationWindow()
 {
     ULONG i, nCount;
 
@@ -290,7 +297,7 @@ SdAnimationWin::~SdAnimationWin()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickFirstHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ClickFirstHdl, void *, EMPTYARG )
 {
     aBmpExList.First();
     pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
@@ -301,7 +308,7 @@ IMPL_LINK( SdAnimationWin, ClickFirstHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickStopHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ClickStopHdl, void *, EMPTYARG )
 {
     bMovie = FALSE;
     return( 0L );
@@ -309,7 +316,7 @@ IMPL_LINK( SdAnimationWin, ClickStopHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickPlayHdl, void *, p )
+IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
     bMovie = TRUE;
     BOOL bDisableCtrls = FALSE;
@@ -409,7 +416,7 @@ IMPL_LINK( SdAnimationWin, ClickPlayHdl, void *, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickLastHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ClickLastHdl, void *, EMPTYARG )
 {
     aBmpExList.Last();
     pBitmapEx = static_cast< BitmapEx* >(  aBmpExList.GetCurObject() );
@@ -420,7 +427,7 @@ IMPL_LINK( SdAnimationWin, ClickLastHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickRbtHdl, void *, p )
+IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 {
     if( !pBitmapEx || p == &aRbtGroup || aRbtGroup.IsChecked() )
     {
@@ -445,7 +452,7 @@ IMPL_LINK( SdAnimationWin, ClickRbtHdl, void *, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickGetObjectHdl, void *, pBtn )
+IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 {
     bAllObjects = pBtn == &aBtnGetAllObjects;
 
@@ -459,7 +466,7 @@ IMPL_LINK( SdAnimationWin, ClickGetObjectHdl, void *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
+IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 {
     SdPage*     pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
     SdrObject*  pObject;
@@ -551,7 +558,7 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ClickCreateGroupHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ClickCreateGroupHdl, void *, EMPTYARG )
 {
     // Code jetzt in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, TRUE );
@@ -563,7 +570,7 @@ IMPL_LINK( SdAnimationWin, ClickCreateGroupHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ModifyBitmapHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ModifyBitmapHdl, void *, EMPTYARG )
 {
     ULONG nBmp = aNumFldBitmap.GetValue();
 
@@ -582,7 +589,7 @@ IMPL_LINK( SdAnimationWin, ModifyBitmapHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdAnimationWin, ModifyTimeHdl, void *, EMPTYARG )
+IMPL_LINK( AnimationWindow, ModifyTimeHdl, void *, EMPTYARG )
 {
     ULONG nPos = aNumFldBitmap.GetValue() - 1;
 
@@ -596,7 +603,7 @@ IMPL_LINK( SdAnimationWin, ModifyTimeHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
+void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
 {
     String aString;
 
@@ -622,7 +629,9 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
             //AdjustVDev( &aVD );
             ExtOutputDevice aOut( &aVD );
-            aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+            aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+                ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+                : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
             pObject->SingleObjectPainter( aOut, aPaintInfoRec ); // #110094#-17
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
@@ -701,7 +710,7 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::ResetAttrs()
+void AnimationWindow::ResetAttrs()
 {
     aRbtGroup.Check();
     aLbAdjustment.SelectEntryPos( BA_CENTER );
@@ -713,7 +722,7 @@ void SdAnimationWin::ResetAttrs()
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::WaitInEffect( ULONG nMilliSeconds ) const
+void AnimationWindow::WaitInEffect( ULONG nMilliSeconds ) const
 {
     ULONG nEnd = Time::GetSystemTicks() + nMilliSeconds;
     ULONG nCurrent = Time::GetSystemTicks();
@@ -725,7 +734,7 @@ void SdAnimationWin::WaitInEffect( ULONG nMilliSeconds ) const
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
+void AnimationWindow::WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
                                     SfxProgress* pProgress ) const
 {
     clock_t aEnd = Time::GetSystemTicks() + nMilliSeconds;
@@ -744,7 +753,7 @@ void SdAnimationWin::WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
 
 // -----------------------------------------------------------------------
 
-Fraction SdAnimationWin::GetScale()
+Fraction AnimationWindow::GetScale()
 {
     Fraction aFrac;
     ULONG nPos = aBmpExList.GetCurPos();
@@ -774,7 +783,7 @@ Fraction SdAnimationWin::GetScale()
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::Resize()
+void AnimationWindow::Resize()
 {
     //if( !IsZoomedIn() )
     if ( !IsFloatingMode() ||
@@ -878,7 +887,7 @@ void SdAnimationWin::Resize()
 
 // -----------------------------------------------------------------------
 
-BOOL SdAnimationWin::Close()
+BOOL AnimationWindow::Close()
 {
     SfxBoolItem aItem( SID_ANIMATION_OBJECTS, FALSE );
 
@@ -892,14 +901,14 @@ BOOL SdAnimationWin::Close()
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::FillInfo( SfxChildWinInfo& rInfo ) const
+void AnimationWindow::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo ) ;
 }
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::AddObj( SdView& rView )
+void AnimationWindow::AddObj (::sd::View& rView )
 {
     // Texteingabemodus beenden, damit Bitmap mit
     // Objekt identisch ist.
@@ -1071,9 +1080,9 @@ void SdAnimationWin::AddObj( SdView& rView )
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::CreateAnimObj( SdView& rView )
+void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
-    Window*     pOutWin = (Window*) rView.GetWin( 0 );
+    ::Window* pOutWin = static_cast< ::Window*>(rView.GetWin(0));
     DBG_ASSERT( pOutWin, "Window ist nicht vorhanden!" );
 
     // die Fentermitte ermitteln
@@ -1295,43 +1304,7 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
     ClickFirstHdl( this );
 }
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Animator
-|*
-\************************************************************************/
-
-SdAnimationChildWindow::SdAnimationChildWindow( Window* pParent,
-                                                         USHORT nId,
-                                                         SfxBindings* pBindings,
-                                                         SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
-{
-    SdAnimationWin* pAnimWin = new SdAnimationWin( pBindings, this, pParent,
-                                        SdResId( FLT_WIN_ANIMATION ) );
-    pWindow = pAnimWin;
-
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-
-    pAnimWin->Initialize( pInfo );
-    /*
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
-    {
-        pWindow->SetPosSizePixel( pInfo->aPos, pInfo->aSize );
-    }
-    else
-        pWindow->SetPosPixel(SFX_APPWINDOW->OutputToScreenPixel(
-                                SFX_APPWINDOW->GetClientAreaPixel().TopLeft()));
-
-    if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-        pAnimWin->ZoomIn();
-
-    pAnimWin->aFltWinSize = pWindow->GetSizePixel();
-    */
-    SetHideNotDelete( TRUE );
-}
-
-void SdAnimationWin::DataChanged( const DataChangedEvent& rDCEvt )
+void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxDockingWindow::DataChanged( rDCEvt );
 
@@ -1347,17 +1320,18 @@ void SdAnimationWin::DataChanged( const DataChangedEvent& rDCEvt )
 |*
 \************************************************************************/
 
-SdAnimationControllerItem::SdAnimationControllerItem( USHORT nId,
-                                SdAnimationWin* pAnimWin,
-                                SfxBindings*    pBindings) :
-    SfxControllerItem( nId, *pBindings ),
-    pAnimationWin( pAnimWin )
+AnimationControllerItem::AnimationControllerItem(
+    USHORT nId,
+    AnimationWindow* pAnimWin,
+    SfxBindings*    pBindings)
+    : SfxControllerItem( nId, *pBindings ),
+      pAnimationWin( pAnimWin )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SdAnimationControllerItem::StateChanged( USHORT nSId,
+void AnimationControllerItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_ANIMATOR_STATE )
@@ -1372,3 +1346,4 @@ void SdAnimationControllerItem::StateChanged( USHORT nSId,
 }
 
 
+} // end of namespace sd
