@@ -597,6 +597,16 @@ sub evaluateForEvent( xmlline as string, lineCount as integer )
 	next n	
 end sub
 
+function isOKscriptProps( eventName as string ) 
+	On Error Goto ErrorHandler
+	scriptProps = ThisComponent.getEvents().getByName( eventName )
+	test = ubound( scriptProps )
+	isOKscriptProps = true
+	exit function
+	
+	ErrorHandler:
+	isOKscriptProps = false
+end function
 
 sub ReadEventsFromDoc()
 	On Error Goto ErrorHandler
@@ -604,15 +614,17 @@ sub ReadEventsFromDoc()
 	eventSupplier = ThisComponent
 	for n = 0 to ubound( allEventTypes() )
 		scriptProps = eventSupplier.getEvents().getByName( allEventTypes( n ).Name )
-		if ( ubound( scriptProps ) &gt; 0 ) then
-			if ( scriptProps(0).Value = &quot;Script&quot; ) then
-				&apos;Script binding
-				allEventTypesDoc(n).Name = scriptProps(1).Value
-				allEventTypesDoc(n).value = 2
-			elseif( scriptProps(0).Value = &quot;StarBasic&quot; ) then
-				&apos;StarBasic macro
-				allEventTypesDoc(n).Name = &quot;Allocated to Office function&quot;
-				allEventTypesDoc(n).value = 1
+		if (isOKscriptProps(allEventTypes( n ).Name)) then
+			if ( ubound( scriptProps ) &gt; 0 ) then
+				if ( scriptProps(0).Value = &quot;Script&quot; ) then
+					&apos;Script binding
+					allEventTypesDoc(n).Name = scriptProps(1).Value					
+					allEventTypesDoc(n).value = 2
+				elseif( scriptProps(0).Value = &quot;StarBasic&quot; ) then
+					&apos;StarBasic macro
+					allEventTypesDoc(n).Name = &quot;Allocated to Office function&quot;
+					allEventTypesDoc(n).value = 1
+				end if
 			end if
 		end if
 	next n
