@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 10:07:17 $
+ *  last change: $Author: fs $ $Date: 2002-04-10 06:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 
@@ -258,12 +261,7 @@ OTableDesignView::OTableDesignView( Window* pParent,
 
     try
     {
-
-        //  Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-        //  m_aLocale.Language = ::comphelper::getString(aValue);
-        String sLanguage, sCountry;
-        ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
-        m_aLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
+        m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     }
     catch(Exception&)
     {
