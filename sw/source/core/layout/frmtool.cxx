@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 09:50:35 $
+ *  last change: $Author: ama $ $Date: 2001-05-29 12:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,8 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
-#include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_SIZEITEM_HXX //autogen
-#include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
@@ -117,15 +111,6 @@
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FMTPDSC_HXX //autogen
-#include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
-#include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
-#include <fmtpdsc.hxx>
-#endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
 #endif
@@ -134,12 +119,6 @@
 #endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTCNCT_HXX //autogen
-#include <fmtcnct.hxx>
-#endif
-#ifndef _DOCSTAT_HXX //autogen
-#include <docstat.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -150,11 +129,8 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "cntfrm.hxx"
 #include "colfrm.hxx"
-#include "flyfrm.hxx"
 #include "doc.hxx"
 #include "fesh.hxx"
 #include "viewimp.hxx"
@@ -163,8 +139,6 @@
 #include "dcontact.hxx"
 #include "frmtool.hxx"
 #include "docsh.hxx"
-#include "swtable.hxx"
-#include "errhdl.hxx"
 #include "tabfrm.hxx"
 #include "rowfrm.hxx"
 #include "ftnfrm.hxx"
@@ -179,7 +153,12 @@
 #include "node2lay.hxx"
 #include "ndole.hxx"
 #include "ndtxt.hxx"
-#include "fmtclds.hxx"      // SwFmtCol
+#ifndef _LAYHELP_HXX
+#include <layhelp.hxx>
+#endif
+#ifndef _LAYCACHE_HXX
+#include <laycache.hxx>
+#endif
 
 #include "mdiexp.hxx"
 #include "statstr.hrc"
@@ -193,6 +172,8 @@ FASTBOOL bSetCompletePaintOnInvalidate = FALSE;
 
 BYTE StackHack::nCnt = 0;
 BOOL StackHack::bLocked = FALSE;
+
+
 
 /*************************************************************************
 |*
@@ -1026,111 +1007,6 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
     aCpy.Remove( 0, aCpy.Count() );
 }
 
-BOOL MA_FASTCALL lcl_CheckInsertPage( SwFrm *pFrm, SwPageFrm *&rpPage,
-                                      SwLayoutFrm *&rpLay,
-                                      ULONG nParagraphCnt,
-                                      ULONG nMaxParaPerPage, BOOL &rbBreakAfter )
-{
-    FASTBOOL bEnd = 0 == rpPage->GetNext();
-    const SwAttrSet *pAttr = pFrm->GetAttrSet();
-    const SvxFmtBreakItem &rBrk = pAttr->GetBreak();
-    const SwFmtPageDesc &rDesc = pAttr->GetPageDesc();
-    const SwPageDesc *pDesc = rDesc.GetPageDesc();
-
-    BOOL bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
-    rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
-                   rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
-    if ( !bBrk )
-        bBrk = rBrk.GetBreak() == SVX_BREAK_PAGE_BEFORE ||
-               rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
-
-    if ( bBrk || pDesc )
-    {
-        USHORT nPgNum = 0;
-        if ( !pDesc )
-            pDesc = rpPage->GetPageDesc()->GetFollow();
-        else
-        {
-            if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
-                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(TRUE);
-        }
-        BOOL bOdd = !rpPage->OnRightPage();
-        BOOL bInsertEmpty = FALSE;
-        if( nPgNum && bOdd != ( ( nPgNum % 2 ) != 0 ) )
-        {
-            bOdd = !bOdd;
-            bInsertEmpty = TRUE;
-        }
-        ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bOdd, bInsertEmpty, FALSE, rpPage->GetNext() );
-        if ( bEnd )
-        {
-            ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
-            do
-            {   rpPage = (SwPageFrm*)rpPage->GetNext();
-            } while ( rpPage->GetNext() );
-        }
-        else
-        {
-            ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
-            rpPage = (SwPageFrm*)rpPage->GetNext();
-            if ( rpPage->IsEmptyPage() )
-            {
-                ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
-                rpPage = (SwPageFrm*)rpPage->GetNext();
-            }
-        }
-        rpLay = rpPage->FindBodyCont();
-        while( rpLay->Lower() )
-            rpLay = (SwLayoutFrm*)rpLay->Lower();
-        return TRUE;
-    }
-    return FALSE;
-}
-
-//Solange eine Section "offen" ist ist im InsertCnt ein Pointer auf die
-//Hilfsklasse SwActualSection vorhanden.
-//Bei Seitenumbruchen wird fuer "offene" Sections entsprechend ein Follow
-//erzeugt.
-//Da Bereiche ineinander verschachtelt sein koennen, sich aber wiederum im
-//Layout nicht ineinander verschachteln, hat die Klasse eine Pointer auf ihren
-//Upper wenn eine "innere" Section notwendig ist. Wenn diese abgeschlossen ist
-//wird einfach wieder der "Upper" weiterverwendet (im Layout muss dafuer
-//natuerlich wieder ein entsprechender Frame erzeugt werden.
-
-//!!Nicht fuer im Layout verschachtelte Bereiche funktionsfaehig.
-
-class SwActualSection
-{
-    SwActualSection *pUpper;
-    SwSectionFrm    *pSectFrm;
-    SwSectionNode   *pSectNode;
-public:
-    SwActualSection( SwActualSection *pUpper,
-                     SwSectionFrm    *pSect,
-                     SwSectionNode   *pNd );
-
-    SwSectionFrm    *GetSectionFrm()                    { return pSectFrm; }
-    void             SetSectionFrm( SwSectionFrm *p )   { pSectFrm = p; }
-    SwSectionNode   *GetSectionNode()                   { return pSectNode;}
-    SwActualSection *GetUpper()                         { return pUpper; }
-};
-
-SwActualSection::SwActualSection( SwActualSection *pUp,
-                                  SwSectionFrm    *pSect,
-                                  SwSectionNode   *pNd ) :
-    pUpper( pUp ),
-    pSectFrm( pSect ),
-    pSectNode( pNd )
-{
-    if ( !pSectNode )
-    {
-        const SwNodeIndex *pIndex = pSect->GetFmt()->GetCntnt().GetCntntIdx();
-        pSectNode = pSect->GetFmt()->GetDoc()->GetNodes()[*pIndex]->
-                                                            FindSectionNode();
-    }
-}
-
 void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              ULONG nIndex, BOOL bPages, ULONG nEndIndex,
                              SwFrm *pPrv )
@@ -1154,76 +1030,44 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //Wenn in der DocStatistik eine brauchebare Seitenzahl angegeben ist
     //(wird beim Schreiben gepflegt), so wird von dieser Seitenanzahl
     //ausgegengen.
-    ULONG nMaxParaPerPage = 25;
-    ULONG nPgCount;
     BOOL bStartPercent = bPages && !nEndIndex &&
-                                   !SfxProgress::GetActiveProgress() &&
-                                   !SfxProgress::GetActiveProgress( pDoc->GetDocShell() );
-    if ( bStartPercent )
-    {
-        nPgCount = pDoc->GetDocStat().nPage;
-        if ( nPgCount <= 10 ) //darunter machen wir es nicht.
-            nPgCount = 0;
-        ULONG nNdCount = pDoc->GetDocStat().nPara;
-        if ( nNdCount <= 1 )
-        {
-            //Anzahl der Absaetze schaetzen.
-            ULONG nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
-                        pDoc->GetNodes().GetEndOfExtras().GetIndex();
-            //Fuer Die Tabellen ziehen wir einiges wg. der Start-/EndNodes ab.
-            nTmp -= pDoc->GetTblFrmFmts()->Count() * 25;
-            //Fuer die Rahmen ziehen auch nocheinmal etwa 5 Absaetze ab.
-            nTmp -= (pDoc->GetNodes().GetEndOfAutotext().GetIndex() -
-                       pDoc->GetNodes().GetEndOfInserts().GetIndex()) / 3 * 5;
-            if ( nTmp > 0 )
-                nNdCount = nTmp;
-        }
-        if ( nNdCount < 1000 )
-            bStartPercent = FALSE;
-        if ( nNdCount > 100 ) //darunter machen wir es nicht
-        {
-            if ( nPgCount > 0 )
-                nMaxParaPerPage = nNdCount / nPgCount;
-            else
-            {
-                nMaxParaPerPage = Max( ULONG(20),
-                                       ULONG(20 + nNdCount / 1000 * 3) );
-                //Standard ASCII-Leerzeilen
-#ifdef PM2
-                const ULONG nMax = 49;
-#elif MAC
-                const ULONG nMax = 56;
-#elif UNIX
-                const ULONG nMax = 57;
-#else
-                const ULONG nMax = 53;
-#endif
-                nMaxParaPerPage = Min( nMaxParaPerPage, nMax );
-                nPgCount = nNdCount / nMaxParaPerPage;
-            }
-            if ( pDoc->IsBrowseMode() )
-                nMaxParaPerPage *= 6;
-        }
-    }
-
-    //Wenn das Layout erzeugt wird (bPages == TRUE) steuern wir den Progress
-    //an. Flys und DrawObjekte werden dann nicht gleich verbunden, dies
-    //passiert erst am Ende der Funktion.
-    if ( bPages && bStartPercent )
-    {
-        ::StartProgress( STR_STATSTR_LAYOUTINIT, 1, nPgCount, pDoc->GetDocShell());
-        bObjsDirect = FALSE;
-    }
+                        !SfxProgress::GetActiveProgress() &&
+                        !SfxProgress::GetActiveProgress( pDoc->GetDocShell() );
 
     SwPageFrm *pPage = pLay->FindPageFrm();
     const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
     SwFrm       *pFrm = 0;
-    USHORT nParagraphCnt = 0;
     BOOL   bBreakAfter   = FALSE;
-    BOOL   bFirst = TRUE;
 
-    SwActualSection *pActualSection = 0;    //Siehe Dokumentation oben bei der
-    if( pLay->IsInSct() &&                  //Klassendefinition
+    SwActualSection *pActualSection = 0;
+    SwLayHelper *pPageMaker;
+
+    //Wenn das Layout erzeugt wird (bPages == TRUE) steuern wir den Progress
+    //an. Flys und DrawObjekte werden dann nicht gleich verbunden, dies
+    //passiert erst am Ende der Funktion.
+    if ( bPages )
+    {
+        // Attention: the SwLayHelper class uses references to the content-,
+        // page-, layout-frame etc. and may change them!
+        pPageMaker = new SwLayHelper( pDoc, pFrm, pPrv, pPage, pLay,
+                pActualSection, bBreakAfter, nIndex, 0 == nEndIndex );
+        if( bStartPercent )
+        {
+            ULONG nPageCount = pPageMaker->CalcPageCount();
+            if( nPageCount )
+            {
+                ::StartProgress( STR_STATSTR_LAYOUTINIT, 1, nPageCount,
+                                 pDoc->GetDocShell());
+                bObjsDirect = FALSE;
+            }
+            else
+                bStartPercent = FALSE;
+        }
+    }
+    else
+        pPageMaker = NULL;
+
+    if( pLay->IsInSct() &&
         ( pLay->IsSctFrm() || pLay->GetUpper() ) ) // Hierdurch werden Frischlinge
             // abgefangen, deren Flags noch nicht ermittelt werden koennen,
             // so z.B. beim Einfuegen einer Tabelle
@@ -1245,6 +1089,12 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         }
     }
 
+    //If a section is "open", the pActualSection points to an SwActualSection.
+    //If the page breaks, for "open" sections a follow will created.
+    //For nested sections (which have, however, not a nested layout),
+    //the SwActualSection class has a member, which points to an upper(section).
+    //When the "inner" section finishs, the upper will used instead.
+
     while( TRUE )
     {
         SwNode *pNd = pDoc->GetNodes()[nIndex];
@@ -1253,61 +1103,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             SwCntntNode* pNode = (SwCntntNode*)pNd;
             pFrm = pNode->IsTxtNode() ? new SwTxtFrm( (SwTxtNode*)pNode ) :
                                         pNode->MakeFrm();
-            if ( bPages )
-            {
-                ++nParagraphCnt;
-                if ( !bFirst || nEndIndex )
-                {
-                    if ( bFirst )
-                        nParagraphCnt = USHRT_MAX;
+            if( pPageMaker && pPageMaker->CheckInsert( nIndex )
+                && bStartPercent )
+                ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
 
-                    if ( lcl_CheckInsertPage( pFrm, pPage, pLay, nParagraphCnt,
-                                              nMaxParaPerPage, bBreakAfter ) )
-                    {
-                        pPrv = 0;
-                        nParagraphCnt = 0;
-                        if ( bPages && bStartPercent )
-                            ::SetProgressState( pPage->GetPhyPageNum(), pDoc->GetDocShell());
-
-                        if ( pActualSection )
-                        {
-                            //Hatte der SectionFrm ueberhaupt Inhalt? Wenn
-                            //nicht kann er gleich umgehaengt werden.
-                            SwFrm *pFrm;
-                            if ( !pActualSection->GetSectionFrm()->ContainsCntnt())
-                            {
-                                pFrm = pActualSection->GetSectionFrm();
-                                pFrm->Remove();
-                            }
-                            else
-                            {
-                                pFrm = new SwSectionFrm(
-                                    *pActualSection->GetSectionFrm(), FALSE );
-                                pActualSection->GetSectionFrm()->SimpleFormat();
-                                pFrm->Frm().Width( pLay->Prt().Width() );
-                                pFrm->Prt().Width( pLay->Prt().Width() );
-                                if( ((SwSectionFrm*)pFrm)->Lower() &&
-                                  ((SwSectionFrm*)pFrm)->Lower()->IsColumnFrm())
-                                {
-                                    const SwFmtCol &rCol =
-                                      ((SwSectionFrm*)pFrm)->GetFmt()->GetCol();
-                                      ((SwSectionFrm*)pFrm)->AdjustColumns(
-                                                                &rCol, FALSE );
-                                 }
-                            }
-                            pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
-                            pFrm->InsertBehind( pLay, 0 );
-                            pFrm->Frm().Pos() = pLay->Frm().Pos();
-                            pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-
-                            pLay = (SwLayoutFrm*)pFrm;
-                            if ( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
-                                pLay = pLay->GetNextLayoutLeaf();
-                        }
-                    }
-                }
-                bFirst = FALSE;
-            }
             pFrm->InsertBehind( pLay, pPrv );
             pFrm->Frm().Pos() = pLay->Frm().Pos();
             pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
@@ -1321,66 +1120,9 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             SwTableNode *pTblNode = (SwTableNode*)pNd;
             pFrm = pTblNode->MakeFrm();
 
-            if ( bPages )
-            {
-                //Fuer die Seiten zaehlt jede Zeile als ein Absatz.
-                SwFrm *pLow = ((SwTabFrm*)pFrm)->Lower();
-                do
-                {   ++nParagraphCnt;
-                    pLow = pLow->GetNext();
-                } while ( pLow );
-
-                if ( !bFirst || nEndIndex )
-                {
-                    if ( bFirst )
-                        nParagraphCnt = USHRT_MAX;
-
-                    if ( lcl_CheckInsertPage( pFrm, pPage, pLay, nParagraphCnt,
-                                                nMaxParaPerPage, bBreakAfter ) )
-                    {
-                        pPrv = 0;
-                        nParagraphCnt = 0;
-                        if ( bPages && bStartPercent )
-                            ::SetProgressState( pPage->GetPhyPageNum(), pDoc->GetDocShell());
-
-                        if ( pActualSection )
-                        {
-                            //Hatte der SectionFrm ueberhaupt Inhalt? Wenn
-                            //nicht kann er gleich umgehaengt werden.
-                            SwFrm *pFrm;
-                            if ( !pActualSection->GetSectionFrm()->ContainsCntnt())
-                            {
-                                pFrm = pActualSection->GetSectionFrm();
-                                pFrm->Remove();
-                            }
-                            else
-                            {
-                                pFrm = new SwSectionFrm(
-                                    *pActualSection->GetSectionFrm(), FALSE );
-                                pActualSection->GetSectionFrm()->SimpleFormat();
-                                pFrm->Frm().Width( pLay->Prt().Width() );
-                                pFrm->Prt().Width( pLay->Prt().Width() );
-                                if( ((SwSectionFrm*)pFrm)->Lower() &&
-                                  ((SwSectionFrm*)pFrm)->Lower()->IsColumnFrm())
-                                {
-                                    const SwFmtCol &rCol =
-                                      ((SwSectionFrm*)pFrm)->GetFmt()->GetCol();
-                                      ((SwSectionFrm*)pFrm)->AdjustColumns(
-                                                                &rCol, FALSE );
-                                 }
-                            }
-                            pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
-                            pFrm->InsertBehind( pLay, 0 );
-                            pFrm->Frm().Pos() = pLay->Frm().Pos();
-                            pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-
-                            pLay = (SwLayoutFrm*)pFrm;
-                            if ( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
-                                pLay = pLay->GetNextLayoutLeaf();
-                        }
-                    }
-                }
-            }
+            if( pPageMaker && pPageMaker->CheckInsert( nIndex )
+                && bStartPercent )
+                ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
 
             pFrm->InsertBehind( pLay, pPrv );
             if ( bObjsDirect && pTbl->Count() )
@@ -1540,6 +1282,20 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             ::EndProgress( pDoc->GetDocShell() );
     }
 
+    if( pPageMaker )
+    {
+        delete pPageMaker;
+        if( pDoc->GetLayoutCache() )
+        {
+#ifndef PRODUCT
+#ifdef DEBUG
+            pDoc->GetLayoutCache()->CompareLayout( *pDoc );
+#endif
+#endif
+            pDoc->GetLayoutCache()->ClearImpl();
+        }
+    }
+
     if ( bOldIdle )
         pDoc->StartIdleTimer();
     pDoc->GetRootFrm()->SetCallbackActionEnabled( bOldCallbackActionEnabled );
@@ -1561,9 +1317,6 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
         SwFrm* pFrm;
         while( 0 != (pFrm = aNode2Layout.NextFrm()) )
         {
-            //Fuer klare Verhaeltnisse sorgen. Wenn ein Prev da ist
-            //alle Nachfolger von diesem auf die folgenden Seite
-            //schieben
             SwLayoutFrm *pUpper = pFrm->GetUpper();
             SwFtnFrm* pFtnFrm = pUpper->FindFtnFrm();
             BOOL bOldLock, bOldFtn;
@@ -1587,11 +1340,15 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             }
             else
                 bOldLock = TRUE;
+
+#ifndef PRODUCT
+#ifdef DEBUG
             // Wenn pFrm sich nicht bewegen kann, koennen wir auch niemanden
             // auf die naechste Seite schieben. Innerhalb eines Rahmens auch
             // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
             // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
-            if ( !pFrm->IsInFly() && pFrm->IsMoveable() &&
+            static BOOL bTest = FALSE;
+            if ( bTest && !pFrm->IsInFly() && pFrm->IsMoveable() &&
                  (!pFrm->IsInTab() || pFrm->IsTabFrm() ) )
             {
                 SwFrm *pMove = pFrm;
@@ -1697,6 +1454,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                               pFrm->IsInDocBody(), nEndIdx, pPrev );
             }
             else
+#endif
+#endif
             {
                 BOOL bSplit;
                 SwFrm* pPrv = bApres ? pFrm : pFrm->GetPrev();

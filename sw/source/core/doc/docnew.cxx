@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 18:35:50 $
+ *  last change: $Author: ama $ $Date: 2001-05-29 12:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _LAYCACHE_HXX
+#include <laycache.hxx>
 #endif
 #ifndef _MVSAVE_HXX
 #include <mvsave.hxx>
@@ -629,6 +632,7 @@ SwDoc::~SwDoc()
     delete pColumnContFmt;
     delete pDfltCharFmt;
     delete pDfltFrmFmt;
+    delete pLayoutCache;
 }
 
 
@@ -975,4 +979,27 @@ void SwDoc::ClearForbiddenCharacters( USHORT nLang )
         }
     }
 }
+
+/*-----------------28.5.2001 10:06------------------
+ * SwDoc:
+ *  Reading and writing of the layout cache.
+ *--------------------------------------------------*/
+
+void SwDoc::ReadLayoutCache( SvStream& rStream )
+{
+    if( !pLayoutCache )
+        pLayoutCache = new SwLayoutCache();
+    if( !pLayoutCache->IsLocked() )
+    {
+        pLayoutCache->GetLockCount() |= 0x8000;
+        pLayoutCache->Read( rStream );
+        pLayoutCache->GetLockCount() &= 0x7fff;
+    }
+}
+
+void SwDoc::WriteLayoutCache( SvStream& rStream )
+{
+    pLayoutCache->Write( rStream, *this );
+}
+
 

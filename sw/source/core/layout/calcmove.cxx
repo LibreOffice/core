@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 12:27:40 $
+ *  last change: $Author: ama $ $Date: 2001-05-29 12:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,6 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             const SwFrm *pPrevFrm = pNewUpper->Lower();
             while ( pPrevFrm )
             {
-                if( !pPrevFrm->GetNext() && !pPrevFrm->IsValid() )
-                    return TRUE;
                 aRect.Top( pPrevFrm->Frm().Bottom() );
                 pPrevFrm = pPrevFrm->GetNext();
             }

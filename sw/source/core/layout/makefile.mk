@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:32:02 $
+#   last change: $Author: ama $ $Date: 2001-05-29 12:38:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,7 @@ CXXFILES = \
         ftnfrm.cxx \
         hffrm.cxx \
         layact.cxx \
+                laycache.cxx \
         layouter.cxx \
         newfrm.cxx \
         pagechg.cxx \
@@ -143,6 +144,7 @@ SLOFILES =  \
         $(SLO)$/ftnfrm.obj \
         $(SLO)$/hffrm.obj \
         $(SLO)$/layact.obj \
+                $(SLO)$/laycache.obj \
         $(SLO)$/layouter.obj \
         $(SLO)$/newfrm.obj \
         $(SLO)$/pagechg.obj \
