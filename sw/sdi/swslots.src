@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2001-09-11 11:25:06 $
+ *  last change: $Author: os $ $Date: 2001-09-21 10:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8418,34 +8418,6 @@ SfxSlotInfo FN_TOOL_ANKER
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
-    SlotName = "Als Zeichen verankern";
-    SlotName [ english ] =  "Anchor as character";
-    SlotName[ english_us ] = "Anchor as Character";
-    SlotName[ portuguese ] = "Ancorar como carαcter";
-    SlotName[ russian ] = "Οπθβÿηΰςό κΰκ ηνΰκ";
-    SlotName[ dutch ] = "Aan teken verankeren";
-    SlotName[ french ] = "Ancrage comme caractθre";
-    SlotName[ spanish ] = "Anclar como carαcter";
-    SlotName[ italian ] = "Ancora come carattere";
-    SlotName[ danish ] = "Forankring til tegnet";
-    SlotName[ swedish ] = "Fφrankra som tecken";
-    SlotName[ polish ] = "Zakotwicz przy znaku";
-    SlotName[ portuguese_brazilian ] = "Anchor at Character";
-    SlotName[ japanese ] = "ζ–‡ε­—γ¨γ—γ¦ο½±οΎο½¶ο½°γ™γ‚‹";
-    SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
-    SlotName[ chinese_traditional ] = "ζ¨™θ¨ε¨ε­—ε…ƒδΈ";
-    SlotName[ arabic ] = "ΕΡΣΗΑ Ϊαμ ΗαΓΝΡέ";
-    SlotName[ dutch ] = "Aan teken verankeren";
-    SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
-    SlotName[ greek ] = "Αγκύρωση στον χαρακτήρα";
-    SlotName[ korean ] = "λ¬Έμλ΅ μ„μΉ κ³ μ •";
-    SlotName[ turkish ] = "Karaktere sabitle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Anclar al carαcter";
-    SlotName[ finnish ] = "Ankkuri merkkiin";
-};
-SfxSlotInfo FN_TOOL_ANKER_CHAR
-{
     SlotName = "Am Zeichen verankern";
     SlotName [ english ] =  "Am Zeichen verankern";
     SlotName[ english_us ] = "Anchor to Character";
@@ -8467,6 +8439,34 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ chinese_simplified ] = "ζ ‡θ®°ε¨ε­—η¬¦δΈ";
     SlotName[ greek ] = "Αγκύρωση στον χαρακτήρα";
     SlotName[ korean ] = "λ¬Έμμ— μ„μΉκ³ μ •";
+    SlotName[ turkish ] = "Karaktere sabitle";
+    SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar al carαcter";
+    SlotName[ finnish ] = "Ankkuri merkkiin";
+};
+SfxSlotInfo FN_TOOL_ANKER_CHAR
+{
+    SlotName = "Als Zeichen verankern";
+    SlotName [ english ] =  "Anchor as character";
+    SlotName[ english_us ] = "Anchor as Character";
+    SlotName[ portuguese ] = "Ancorar como carαcter";
+    SlotName[ russian ] = "Οπθβÿηΰςό κΰκ ηνΰκ";
+    SlotName[ dutch ] = "Aan teken verankeren";
+    SlotName[ french ] = "Ancrage comme caractθre";
+    SlotName[ spanish ] = "Anclar como carαcter";
+    SlotName[ italian ] = "Ancora come carattere";
+    SlotName[ danish ] = "Forankring til tegnet";
+    SlotName[ swedish ] = "Fφrankra som tecken";
+    SlotName[ polish ] = "Zakotwicz przy znaku";
+    SlotName[ portuguese_brazilian ] = "Anchor at Character";
+    SlotName[ japanese ] = "ζ–‡ε­—γ¨γ—γ¦ο½±οΎο½¶ο½°γ™γ‚‹";
+    SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
+    SlotName[ chinese_traditional ] = "ζ¨™θ¨ε¨ε­—ε…ƒδΈ";
+    SlotName[ arabic ] = "ΕΡΣΗΑ Ϊαμ ΗαΓΝΡέ";
+    SlotName[ dutch ] = "Aan teken verankeren";
+    SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
+    SlotName[ greek ] = "Αγκύρωση στον χαρακτήρα";
+    SlotName[ korean ] = "λ¬Έμλ΅ μ„μΉ κ³ μ •";
     SlotName[ turkish ] = "Karaktere sabitle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al carαcter";
