@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 10:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,12 +552,15 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
         if( mpDIB )
             memcpy( mpDIB->mpBits, rSalBmp.mpDIB->mpBits, mpDIB->mnScanlineSize * mpDIB->mnHeight );
     }
-    else
+    else if(  rSalBmp.mpDDB )
     {
-        DBG_ASSERT( !rSalBmp.mpDDB, "trying to copy construct SalBitmap with DDB => NYI" );
+        ImplCreateFromDrawable( rSalBmp.mpDDB->ImplGetPixmap(), rSalBmp.mpDDB->ImplGetDepth(),
+                                0, 0, rSalBmp.mpDDB->ImplGetWidth(), rSalBmp.mpDDB->ImplGetHeight() );
     }
 
-    return( !rSalBmp.mpDIB || ( mpDIB != NULL ) );
+    return( ( !rSalBmp.mpDIB && !rSalBmp.mpDDB ) ||
+            ( rSalBmp.mpDIB && ( mpDIB != NULL ) ) ||
+            ( rSalBmp.mpDDB && ( mpDDB != NULL ) ) );
 }
 
 // -----------------------------------------------------------------------------
