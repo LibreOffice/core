@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:43:28 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1851,14 +1850,15 @@ Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
+// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleParagraph::deselectAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
-    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
+    aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
 //=====  XAccessibleHypertext  ============================================
