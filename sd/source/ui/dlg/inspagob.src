@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:03:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ hindi ] = "~ΰ¤…ΰ¤¨ΰ¥ΰ¤­ΰ¥ΰ¤―ΰ¤Έΰ¥ΰ¤¤ ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤ ΰ¤­ΰ¤Ύΰ¤— ΰ¤•ΰ¥‹ ΰ¤®ΰ¤Ώΰ¤ΰ¤Ύΰ¤“";
         Text[ slovak ] = "~ZmazaΕ¥ nepouΕΎitΓ© pozadia";
     };
-    Text[ greek ] = "Εισαγωγή αντικειμένων/σελίδων";
+    Text[ greek ] = "Εισαγωγή διαφανειών/αντικειμένων";
     Text[ korean ] = "μ¬λΌμ΄λ“/κ°μ²΄ μ‚½μ…";
     Text[ turkish ] = "Sayfa/nesne ekle";
     Text[ language_user1 ] = " ";
@@ -193,6 +193,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤²ΰ¤‡ΰ¤΅ΰ¥‹ΰ¤‚/ΰ¤µΰ¤Έΰ¥ΰ¤¤ΰ¥ΰ¤“ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤ΰ¥‹ΰ¤΅ΰ¤Όΰ¥‹";
     Text[ slovak ] = "VloΕΎiΕ¥ snΓ­mky/objekty";
 };
+
 
 
 
