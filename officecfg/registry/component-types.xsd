@@ -104,13 +104,13 @@
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
   <!--List of basic type definitions for all schema and instance elements known by OOR-->
-  <xs:complexType name="node">
+  <xs:complexType name="basic-node">
     <xs:annotation>
       <xs:documentation>base class for all kinds of nodes (set | group)</xs:documentation>
     </xs:annotation>
     <xs:attributeGroup ref="oor:node-info"/>
   </xs:complexType>
-  <xs:complexType name="prop">
+  <xs:complexType name="basic-prop">
     <xs:annotation>
       <xs:documentation>type definition for node properties</xs:documentation>
     </xs:annotation>
