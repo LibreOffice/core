@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:18:14 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,12 +381,12 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Résolution [~DPI]" ;
         Text [ dutch ] = "Resolutie [~DPI]:" ;
         Text [ portuguese ] = "Resolução [~DPI]:" ;
-        Text[ chinese_simplified ] = "·Ö±æÂÊ[DPI]";
+        Text[ chinese_simplified ] = "·Ö±æÂÊ[~DPI]";
         Text[ russian ] = "Ðàçðåøåíèå [DPI]:";
         Text[ polish ] = "Rozdzielczoœæ [~DPI]:";
         Text[ japanese ] = "‰ð‘œ“x [~DPI]";
         Text[ greek ] = "ÁíÜëõóç [~DPI]:";
-        Text[ korean ] = "ÇØ»óµµ [DPI]:(~D)";
+        Text[ korean ] = "ÇØ»óµµ [~DPI]:";
         Text[ chinese_traditional ] = "¸ÑªR«× [~DPI]";
         Text[ arabic ] = "ÇÓÊÈÇäÉ [~DPI]";
         Text[ turkish ] = "Çözünürlük [~DPI]";
