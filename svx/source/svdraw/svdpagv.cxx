@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-26 09:12:00 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,11 +1129,24 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             aNewMap.SetOrigin(aMapOrgGridTmp);
             pBmp->aVD.SetMapMode(aNewMap);
             rXOut.SetOutDev(&pBmp->aVD);
+
             // Paper, Border etc. painten
-            if (rView.bPageVisible) ((SdrPageView*)this)->DrawPaper(pBmp->aVD);
-            if (rView.bBordVisible) ((SdrPageView*)this)->DrawBorder(pBmp->aVD);
-            if (rView.bGridVisible && !rView.bGridFront) ((SdrPageView*)this)->DrawGrid(pBmp->aVD, rView.GetGridColor());
-            if (rView.bHlplVisible && !rView.bHlplFront) ((SdrPageView*)this)->DrawHelplines(pBmp->aVD);
+            if (rView.bPageVisible)
+            {
+                ((SdrPageView*)this)->DrawPaper(pBmp->aVD);
+
+                // if (rView.bPageVisible && rView.bPageBorderVisible)
+                //      ((SdrPageView*)this)->DrawPaperBorder(pBmp->aVD);
+            }
+
+            if (rView.bBordVisible)
+                ((SdrPageView*)this)->DrawBorder(pBmp->aVD);
+
+            if (rView.bGridVisible && !rView.bGridFront)
+                ((SdrPageView*)this)->DrawGrid(pBmp->aVD, rView.GetGridColor());
+
+            if (rView.bHlplVisible && !rView.bHlplFront)
+                ((SdrPageView*)this)->DrawHelplines(pBmp->aVD);
 
             // DrawMode vom Window uebernehmen
             const ULONG nOldDrawMode = pBmp->aVD.GetDrawMode();
@@ -1288,9 +1301,13 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
 
         if(!bPrinter)
         {
-            // Papier, Seitenraender, Raster und Hilfslinien
             if(rView.bPageVisible)
+            {
                 DrawPaper(*pOut);
+
+                // if(rView.bPageBorderVisible)
+                //      DrawPaperBorder(*pOut);
+            }
 
             if(rView.bBordVisible)
                 DrawBorder(*pOut);
@@ -1436,49 +1453,53 @@ FASTBOOL SdrPageView::IsReady() const
     return bRet;
 }
 
-
 void SdrPageView::DrawPaper(OutputDevice& rOut)
 {
-    if (pPage==NULL)
-        return;
+    if( pPage )
+    {
+        const svx::ColorConfig aColorConfig;
 
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-
-    svx::ColorConfig aColorConfig;
-    svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
-    Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
-
-    rOut.SetFillColor( aDocColor.nColor );
-    rOut.SetLineColor( aBorderColor );
-
-    Rectangle aRect(GetPageRect());
-    rOut.DrawRect(aRect);
+        rOut.SetLineColor();
+        rOut.SetFillColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+        rOut.DrawRect( GetPageRect() );
+    }
 }
 
+void SdrPageView::DrawPaperBorder(OutputDevice& rOut)
+{
+    if( pPage )
+    {
+        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+        rOut.SetFillColor();
+        rOut.DrawRect( GetPageRect() );
+    }
+}
 
 void SdrPageView::DrawBorder(OutputDevice& rOut)
 {
-    if (pPage==NULL)
-        return;
+    if( pPage )
+    {
+        // !!! enable again if PaperBorder flag is enabled !!!
+        // !!! if( (pPage->GetLftBorder() == 0) && (pPage->GetUppBorder() == 0) && ( pPage->GetRgtBorder() == 0) && ( pPage->GetLwrBorder() == 0) )
+        // !!!  return;
+        svx::ColorConfig    aColorConfig;
+        Color               aBorderColor;
 
-    if( (pPage->GetLftBorder() == 0) && (pPage->GetUppBorder() == 0) && ( pPage->GetRgtBorder() == 0) && ( pPage->GetLwrBorder() == 0) )
-        return;
+        if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+            aBorderColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        else
+            aBorderColor = aColorConfig.GetColorValue( svx::DOCBOUNDARIES ).nColor;
 
-    svx::ColorConfig aColorConfig;
-    svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+        rOut.SetLineColor( aBorderColor );
+        rOut.SetFillColor();
 
-    if( !aBorderColor.bIsVisible )
-        return;
-
-    rOut.SetLineColor( aBorderColor.nColor );
-    rOut.SetFillColor();
-
-    Rectangle aRect(GetPageRect());
-    aRect.Left  ()+=pPage->GetLftBorder();
-    aRect.Top   ()+=pPage->GetUppBorder();
-    aRect.Right ()-=pPage->GetRgtBorder();
-    aRect.Bottom()-=pPage->GetLwrBorder();
-    rOut.DrawRect(aRect);
+        Rectangle aRect(GetPageRect());
+        aRect.Left  ()+=pPage->GetLftBorder();
+        aRect.Top   ()+=pPage->GetUppBorder();
+        aRect.Right ()-=pPage->GetRgtBorder();
+        aRect.Bottom()-=pPage->GetLwrBorder();
+        rOut.DrawRect(aRect);
+    }
 }
 
 #ifdef OS2
