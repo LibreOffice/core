@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:53:19 $
+ *  last change: $Author: er $ $Date: 2001-07-05 15:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,9 @@ class ScGlobal
 
 public:
     static ::com::sun::star::lang::Locale*      pLocale;
-    static CharClass*           pCharClass;
     static SvtSysLocale*        pSysLocale;
+    // for faster access a pointer to the single instance provided by SvtSysLocale
+    static const CharClass*     pCharClass;
     static CalendarWrapper*     pCalendar;
     static CollatorWrapper*     pCollator;
     static CollatorWrapper*     pCaseCollator;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 09:54:16 $
+ *  last change: $Author: er $ $Date: 2001-07-05 15:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ ScUserList*     ScGlobal::pUserList = NULL;
 String**        ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
-CharClass*  ScGlobal::pCharClass = NULL;
 SvtSysLocale*   ScGlobal::pSysLocale = NULL;
+const CharClass*  ScGlobal::pCharClass = NULL;
 CalendarWrapper* ScGlobal::pCalendar = NULL;
 CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
@@ -599,8 +599,8 @@ void ScGlobal::Init()
     String aLanguage, aCountry;
     ConvertLanguageToIsoNames( Application::GetSettings().GetLanguage(), aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
-    pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
     pSysLocale = new SvtSysLocale;
+    pCharClass = pSysLocale->GetCharClassPtr();
     pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
     pCalendar->loadDefaultCalendar( *pLocale );
     pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
@@ -710,8 +710,9 @@ void ScGlobal::Clear()
     DELETEZ(pCaseCollator);
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
+    //! do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance
+    pCharClass = NULL;
     DELETEZ(pSysLocale);
-    DELETEZ(pCharClass);
     DELETEZ(pLocale);
     DELETEZ(pScIntlWrapper);
     DELETEZ(pStrClipDocName);
