@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:40:43 $
+ *  last change: $Author: rt $ $Date: 2001-09-24 21:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,11 +409,11 @@ String RID_STR_OPEN_GRAPHICS
     Text = "Grafik einfügen aus...";
     Text [ english ] = "Insert graphics from...";
     Text [ english_us ] = "Insert graphics from...";
-    Text[ portuguese ] = "Insert graphics from...";
-    Text[ russian ] = "Insert graphics from...";
+    Text[ portuguese ] = "Inserir imagem de...";
+    Text[ russian ] = "Âñòàâèòü ãğàôèêè èç...";
     Text[ greek ] = "Insert graphics from...";
     Text[ dutch ] = "Afbeelding invoegen uit...";
-    Text[ french ] = "Insert graphics from...";
+    Text[ french ] = "Insérer une image à partir de...";
     Text[ spanish ] = "Insertar imagen de...";
     Text[ finnish ] = "Insert graphics from...";
     Text[ italian ] = "Inserisci l'immagine da...";
@@ -421,9 +421,9 @@ String RID_STR_OPEN_GRAPHICS
     Text[ swedish ] = "Infoga grafik från...";
     Text[ polish ] = "Wstaw grafikê z...";
     Text[ portuguese_brazilian ] = "Insert graphics from...";
-    Text[ japanese ] = "Insert graphics from...";
+    Text[ japanese ] = "å›³ã®æŒ¿å…¥ã«é–‹ã...";
     Text[ korean ] = "Insert graphics from...";
-    Text[ chinese_simplified ] = "Insert graphics from...";
+    Text[ chinese_simplified ] = "æ’å…¥å›¾å½¢ä½¿ç”¨...";
     Text[ chinese_traditional ] = "Insert graphics from...";
     Text[ turkish ] = "Insert graphics from...";
     Text[ arabic ] = "Insert graphics from...";
@@ -435,11 +435,11 @@ String RID_STR_CLEAR_GRAPHICS
     Text = "Grafik entfernen";
     Text [ english ] = "Remove graphics";
     Text [ english_us ] = "Remove graphics";
-    Text[ portuguese ] = "Remove graphics";
-    Text[ russian ] = "Remove graphics";
+    Text[ portuguese ] = "Remover imagem";
+    Text[ russian ] = "Óäàëèòü ãğàôèêè";
     Text[ greek ] = "Remove graphics";
     Text[ dutch ] = "Afbeelding verwijderen";
-    Text[ french ] = "Remove graphics";
+    Text[ french ] = "Supprimer l'image";
     Text[ spanish ] = "Eliminar imagen";
     Text[ finnish ] = "Remove graphics";
     Text[ italian ] = "Elimina l'immagine";
@@ -447,12 +447,13 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ swedish ] = "Ta bort grafik";
     Text[ polish ] = "Usuñ grafikê";
     Text[ portuguese_brazilian ] = "Remove graphics";
-    Text[ japanese ] = "Remove graphics";
+    Text[ japanese ] = "å›³ã®å‰Šé™¤";
     Text[ korean ] = "Remove graphics";
-    Text[ chinese_simplified ] = "Remove graphics";
+    Text[ chinese_simplified ] = "åˆ é™¤å›¾å½¢";
     Text[ chinese_traditional ] = "Remove graphics";
     Text[ turkish ] = "Remove graphics";
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
