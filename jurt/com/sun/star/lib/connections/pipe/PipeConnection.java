@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PipeConnection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:39:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2004-05-03 07:39:26 $
+ * @version     $Revision: 1.5 $ $ $Date: 2004-11-09 11:18:17 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.PipeAcceptor
  * @see         com.sun.star.comp.connections.PipeConnector
@@ -96,16 +96,30 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     static public final boolean DEBUG = false;
 
     static {
-    // preload shared libraries whichs import lips are linked to jpipe
-    if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-    {
-        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr70");
-        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "uwinapi");
-        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "sal3");
-    }
+        // preload shared libraries whichs import lips are linked to jpipe
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
+        {
+            try {
+                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr71");
+            } catch (Throwable e){} // loading twice would fail
 
-    // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
+            try {
+                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr70");
+            } catch (Throwable e){} // loading twice would fail
+
+            try {
+                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "uwinapi");
+            } catch (Throwable e){} // loading twice would fail
+
+            try {
+                NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "sal3");
+            } catch (Throwable e){} // loading twice would fail
+        }
+
+        // load shared library for JNI code
+        try {
+            NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
+        } catch (Throwable e){} // loading twice would fail
     }
 
     protected String    _aDescription;
