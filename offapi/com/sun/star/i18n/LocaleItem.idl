@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleItem.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 18:43:14 $
+ *  last change: $Author: arellano $ $Date: 2001-05-21 21:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,37 +73,37 @@ module com {  module sun {  module star {  module i18n {
  */
 constants LocaleItem
 {
-    /// date separator, e.g.  <bold>. / -</bold>
+    /// date separator, for example, <bold> / </bold>
     const short DATE_SEPARATOR          = 0;
-    /// group (AKA thousand) separator, e.g.  <bold>. ,</bold>
+    /// group and thousand separator, for example,  <bold>","</bold>.
     const short THOUSAND_SEPARATOR      = 1;
-    /// decimal separator, e.g.  <bold>, .</bold>
+    /// decimal separator, for example, <bold>"."</bold> .
     const short DECIMAL_SEPARATOR       = 2;
-    /// time separator, e.g.  <bold>:</bold>
+    /// time separator, for example, <bold>":"</bold> .
     const short TIME_SEPARATOR          = 3;
-    /// time 100th seconds separator,  e.g.  <bold>. ,</bold>
+    /// time 100th seconds separator,  for example, <bold>","</bold> .
     const short TIME_100SEC_SEPARATOR   = 4;
-    /// list separator, e.g.  <bold>;</bold>
+    /// list separator, for example, <bold>";"</bold> .
     const short LIST_SEPARATOR          = 5;
-    /// single quotation mark start
+    /// single quotation mark start.
     const short SINGLE_QUOTATION_START  = 6;
-    /// single quotation mark end
+    /// single quotation mark end.
     const short SINGLE_QUOTATION_END    = 7;
-    /// double quotation mark start
+    /// double quotation mark start.
     const short DOUBLE_QUOTATION_START  = 8;
-    /// double quotation mark end
+    /// double quotation mark end.
     const short DOUBLE_QUOTATION_END    = 9;
-    /// measurement system, e.g. <bold>metric</bold> or <bold>us</bold>
+    /// measurement system, for example, <bold>"metric"</bold> or <bold>"us"</bold>.
     const short MEASUREMENT_SYSTEM      = 10;
-    /// time AM symbol, e.g. <bold>AM</bold> or <bold>am</bold>
+    /// time AM symbol, for example, <bold>"AM"</bold> or <bold>"am"</bold>.
     const short TIME_AM                 = 11;
-    /// time PM symbol, e.g. <bold>PM</bold> or <bold>pm</bold>
+    /// time PM symbol, for example, <bold>"PM"</bold> or <bold>"pm"</bold>.
     const short TIME_PM                 = 12;
     /// long date day of week separator, e.g. ", "
     const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
-    /// long date day separator, e.g. ", "
+    /// long date day separator, for example, ", ".
     const short LONG_DATE_DAY_SEPARATOR = 14;
-    /// long date month separator, e.g. " "
+    /// long date month separator, for example, " "
     const short LONG_DATE_MONTH_SEPARATOR   = 15;
     /// long date year separator, e.g. " "
     const short LONG_DATE_YEAR_SEPARATOR    = 16;
@@ -111,7 +111,7 @@ constants LocaleItem
     //! New values may be inserted here if locale data provides them.
     //! Do not forget to adjust the COUNT value.
 
-    /// count of items available
+    /// count of items available.
     const short COUNT                   = 17;
 };
 
