@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-23 23:06:10 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_simplified ] = "ε…¶δ»–";
                 Text[ russian ] = "Οΰπΰμεςπϋ";
                 Text[ polish ] = "Dodatki";
-                Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ";
+                Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³";
                 Text[ chinese_traditional ] = "ε…¶δ»–";
                 Text[ arabic ] = "ΞνΗΡΗΚ";
                 Text[ greek ] = "Πρόσθετα";
@@ -189,7 +189,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_simplified ] = "θ¶…ι“Ύζ¥";
                 Text[ russian ] = "Γθοεπρρϋλκΰ";
                 Text[ polish ] = "Hiper³Ήcze";
-                Text[ japanese ] = "οΎο½²οΎοΎο½°οΎοΎο½Έ";
+                Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―";
                 Text[ chinese_traditional ] = "θ¶…ι€£ηµ";
                 Text[ arabic ] = "ΗΡΚΘΗΨ ΚΤΪΘν";
                 Text[ greek ] = "Υπερ-σύνδεση";
@@ -299,7 +299,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_simplified ] = "ε®";
                 Text[ russian ] = "Μΰκπξρ";
                 Text[ polish ] = "Makro";
-                Text[ japanese ] = "οΎο½ΈοΎ›";
+                Text[ japanese ] = "γƒγ‚―γƒ­";
                 Text[ chinese_traditional ] = "ε·¨ι›†";
                 Text[ arabic ] = "γΗίΡζ";
                 Text[ greek ] = "Μακροεντολή";
@@ -389,7 +389,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_simplified ] = "ε…¶δ»–";
                 Text[ russian ] = "Οΰπΰμεςπϋ";
                 Text[ polish ] = "Dodatki";
-                Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ";
+                Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³";
                 Text[ chinese_traditional ] = "ε…¶δ»–";
                 Text[ arabic ] = "ΞνΗΡΗΚ";
                 Text[ greek ] = "Πρόσθετα";
@@ -444,7 +444,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_simplified ] = "θ¶…ι“Ύζ¥";
                 Text[ russian ] = "Γθοεπρρϋλκΰ";
                 Text[ polish ] = "Hiper³Ήcze";
-                Text[ japanese ] = "οΎο½²οΎοΎο½°οΎοΎο½Έ";
+                Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―";
                 Text[ chinese_traditional ] = "θ¶…ι€£ηµ";
                 Text[ arabic ] = "ΗΡΚΘΗΨ ΚΤΪΘν";
                 Text[ greek ] = "Υπερ-σύνδεση";
@@ -499,7 +499,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_simplified ] = "θ£ε‰ª";
                 Text[ russian ] = "Ξαπεηΰςό";
                 Text[ polish ] = "Przytnij";
-                Text[ japanese ] = "οΎ„οΎοΎοΎο½ΈοΎ";
+                Text[ japanese ] = "γƒγƒªγƒγƒ³γ‚°";
                 Text[ chinese_traditional ] = "θ£ε‰ª";
                 Text[ arabic ] = "ΗήΚΥΗΥ";
                 Text[ greek ] = "Προσαρμογή";
@@ -581,7 +581,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_simplified ] = "ε®";
                 Text[ russian ] = "Μΰκπξρ";
                 Text[ polish ] = "Makro";
-                Text[ japanese ] = "οΎο½ΈοΎ›";
+                Text[ japanese ] = "γƒγ‚―γƒ­";
                 Text[ chinese_traditional ] = "ε·¨ι›†";
                 Text[ arabic ] = "γΗίΡζ";
                 Text[ greek ] = "Μακροεντολή";
@@ -672,7 +672,7 @@ TabDialog DLG_FRM_OLE
                 Text[ chinese_simplified ] = "ε…¶δ»–";
                 Text[ russian ] = "Οΰπΰμεςπϋ";
                 Text[ polish ] = "Dodatki";
-                Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ";
+                Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³";
                 Text[ chinese_traditional ] = "ε…¶δ»–";
                 Text[ arabic ] = "ΞνΗΡΗΚ";
                 Text[ greek ] = "Πρόσθετα";
@@ -727,7 +727,7 @@ TabDialog DLG_FRM_OLE
                 Text[ chinese_simplified ] = "θ¶…ι“Ύζ¥";
                 Text[ russian ] = "Γθοεπρρϋλκΰ";
                 Text[ polish ] = "Hiper³Ήcze";
-                Text[ japanese ] = "οΎο½²οΎοΎο½°οΎοΎο½Έ";
+                Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―";
                 Text[ chinese_traditional ] = "θ¶…ι€£ηµ";
                 Text[ arabic ] = "ΗΡΚΘΗΨ ΚΤΪΘν";
                 Text[ greek ] = "Υπερ-σύνδεση";
@@ -828,7 +828,7 @@ TabDialog DLG_FRM_OLE
                 Text[ chinese_simplified ] = "ε®";
                 Text[ russian ] = "Μΰκπξρ";
                 Text[ polish ] = "Makro";
-                Text[ japanese ] = "οΎο½ΈοΎ›";
+                Text[ japanese ] = "γƒγ‚―γƒ­";
                 Text[ chinese_traditional ] = "ε·¨ι›†";
                 Text[ arabic ] = "γΗίΡζ";
                 Text[ greek ] = "Μακροεντολή";
@@ -842,7 +842,7 @@ TabDialog DLG_FRM_OLE
     Text[ chinese_simplified ] = "ε―Ήθ±΅";
     Text[ russian ] = "Ξαϊεκς";
     Text[ polish ] = "Obiekt";
-    Text[ japanese ] = "ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„";
+    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
     Text[ chinese_traditional ] = "η‰©δ»¶";
     Text[ arabic ] = "ίΗΖδ";
     Text[ greek ] = "Αντικείμενο";
@@ -1084,7 +1084,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "εδ»¶ε¤§ε°(~O)";
         Text[ russian ] = "Θρυξδνϋι πΰημεπ";
         Text[ polish ] = "Rozmiar oryginalny";
-        Text[ japanese ] = "ε…ƒγ®ο½»ο½²ο½½οΎ(~O)";
+        Text[ japanese ] = "ε…ƒγ®γ‚µγ‚¤γ‚Ί(~O)";
         Text[ chinese_traditional ] = "εδ»¶ε¤§ε°(~O)";
         Text[ arabic ] = "ΗαΝΜγ ΗαΓΥαν";
         Text[ greek ] = "Αρχικό μέγεθος";
@@ -1112,7 +1112,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "ε¤§ε°";
         Text[ russian ] = "Πΰημεπ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ο½»ο½²ο½½οΎ";
+        Text[ japanese ] = "γ‚µγ‚¤γ‚Ί";
         Text[ chinese_traditional ] = "ε¤§ε°";
         Text[ arabic ] = "ΗαΝΜγ";
         Text[ greek ] = "Μέγεθος";
@@ -1144,7 +1144,7 @@ TabPage TP_FRM_STD
         Text[ swedish ] = "Vid ~sidan";
         Text[ polish ] = "Przy stronie";
         Text[ portuguese_brazilian ] = "At page";
-        Text[ japanese ] = "οΎοΎο½°ο½ΌοΎγ«(~P)";
+        Text[ japanese ] = "γƒγƒΌγ‚Έγ«(~P)";
         Text[ korean ] = "νμ΄μ§€μ—(~P)";
         Text[ chinese_simplified ] = "ε¨ι΅µιΆδΈ(~P)";
         Text[ chinese_traditional ] = "ε¨ι ιΆδΈ(~P)";
@@ -1282,7 +1282,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "ι”ε®";
         Text[ russian ] = "Οπθβÿηκΰ";
         Text[ polish ] = "Zakotwiczenie";
-        Text[ japanese ] = "ο½±οΎο½¶ο½°";
+        Text[ japanese ] = "γ‚Άγƒ³γ‚«γƒΌ";
         Text[ chinese_traditional ] = "ι–ε®";
         Text[ arabic ] = "ΕΡΣΗΑ";
         Text[ greek ] = "Αγκύρωση";
@@ -1432,7 +1432,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "ηΏ»θ½¬ε°ε¶ζ•°ι΅µιΆ(~M)";
         Text[ russian ] = "Ξςπΰηθςό νΰ χεςνϋυ ρςπΰνθφΰυ";
         Text[ polish ] = "Odbij na parzystych stronach";
-        Text[ japanese ] = "ε¶ζ•°οΎοΎο½°ο½ΌοΎγ«εθ»Ά(~M)";
+        Text[ japanese ] = "ε¶ζ•°γƒγƒΌγ‚Έγ«εθ»Ά(~M)";
         Text[ chinese_traditional ] = "ηΏ»θ½‰ε°ε¶ζ•Έι ιΆ(~M)";
         Text[ arabic ] = "ΗδΪίΗΣ Ϊαμ ΗαΥέΝΗΚ ΗαÒζΜνΙ";
         Text[ greek ] = "Καθρε~πτισμός στις άρτιες σελίδες";
@@ -1619,7 +1619,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_simplified ] = "ι“Ύζ¥";
         Text[ russian ] = "Ρρϋλκΰ";
         Text[ polish ] = "£Ήcze";
-        Text[ japanese ] = "οΎοΎο½Έ";
+        Text[ japanese ] = "γƒªγƒ³γ‚―";
         Text[ chinese_traditional ] = "ζ·εΎ‘";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Σύνδεση";
@@ -1645,7 +1645,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_simplified ] = "ζ–‡δ»¶ε(~F)";
         Text[ russian ] = "Θμÿ τΰιλΰ";
         Text[ polish ] = "Nazwa pliku";
-        Text[ japanese ] = "οΎο½§ο½²οΎ™ε(~F)";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«ε(~F)";
         Text[ chinese_traditional ] = "ζª”ζ΅ε(~F)";
         Text[ arabic ] = "ΗΣγ Ηαγαέ";
         Text[ greek ] = "Όνομα αρχείου";
@@ -1792,7 +1792,7 @@ TabPage TP_GRF_EXT
         Text[ swedish ] = "pε ~alla sidor";
         Text[ polish ] = "na wszystkich stronach";
         Text[ portuguese_brazilian ] = "on all pages";
-        Text[ japanese ] = "γ™γΉγ¦γ®οΎοΎο½°ο½ΌοΎ";
+        Text[ japanese ] = "γ™γΉγ¦γ®γƒγƒΌγ‚Έ";
         Text[ korean ] = "λª¨λ“  νμ΄μ μ—";
         Text[ chinese_simplified ] = "ε…¨ιƒ¨ι΅µιΆ";
         Text[ chinese_traditional ] = "ε¨ζ‰€ζ‰ι ιΆδΈ";
@@ -1820,7 +1820,7 @@ TabPage TP_GRF_EXT
         Text[ swedish ] = "pε vδ~nstersidor";
         Text[ polish ] = "na parzystych stronach";
         Text[ portuguese_brazilian ] = "on even pages";
-        Text[ japanese ] = "ε·¦οΎοΎο½°ο½ΌοΎ";
+        Text[ japanese ] = "ε·¦γƒγƒΌγ‚Έ";
         Text[ korean ] = "μ™Όμª½μ—";
         Text[ chinese_simplified ] = "ε¨ε·¦ζ–Ήι΅µιΆ";
         Text[ chinese_traditional ] = "ε¨ε·¦ι δΈ";
@@ -1848,7 +1848,7 @@ TabPage TP_GRF_EXT
         Text[ swedish ] = "pε hφge~rsidor";
         Text[ polish ] = "na prawych stronach";
         Text[ portuguese_brazilian ] = "on odd pages";
-        Text[ japanese ] = "ε³οΎοΎο½°ο½ΌοΎ";
+        Text[ japanese ] = "ε³γƒγƒΌγ‚Έ";
         Text[ korean ] = "μ¤λ¥Έμª½μ—";
         Text[ chinese_simplified ] = "ε¨ε³ζ–Ήι΅µιΆ";
         Text[ chinese_traditional ] = "ε¨ε³ι δΈ";
@@ -1909,7 +1909,7 @@ String STR_EDIT_GRF
     TEXT[ chinese_simplified ] = "ι“Ύζ¥";
     TEXT[ russian ] = "Ρβÿηΰςό";
     TEXT[ polish ] = "Po³Ήcz";
-    TEXT[ japanese ] = "οΎοΎο½Έ";
+    TEXT[ japanese ] = "γƒªγƒ³γ‚―";
     TEXT[ chinese_traditional ] = "ζ·εΎ‘";
     TEXT[ arabic ] = "ΡΘΨ";
     TEXT[ greek ] = "Σύνδεση";
@@ -2013,7 +2013,7 @@ TabPage TP_FRM_URL
         Text[ chinese_simplified ] = "ζ΅†ε―Ήθ±΅";
         Text[ russian ] = "Κΰδπ";
         Text[ polish ] = "Frame";
-        Text[ japanese ] = "οΎοΎο½°οΎ‘";
+        Text[ japanese ] = "γƒ•γƒ¬γƒΌγƒ ";
         Text[ chinese_traditional ] = "θ¨ζ΅†";
         Text[ arabic ] = "ΕΨΗΡ";
         Text[ greek ] = "Πλαίσιο";
@@ -2077,7 +2077,7 @@ TabPage TP_FRM_URL
         Text[ swedish ] = "Lδnk till";
         Text[ polish ] = "£Ήcze do";
         Text[ portuguese_brazilian ] = "Hyperlink";
-        Text[ japanese ] = "οΎοΎο½Έε…";
+        Text[ japanese ] = "γƒªγƒ³γ‚―ε…";
         Text[ korean ] = "ν•μ΄νΌλ§ν¬";
         Text[ chinese_simplified ] = "ι“Ύζ¥ε°";
         Text[ chinese_traditional ] = "ζ·εΎ‘";
@@ -2104,7 +2104,7 @@ TabPage TP_FRM_URL
         Text[ swedish ] = "Image map pε ~serversidan";
         Text[ polish ] = "~Server Site Image Map";
         Text[ portuguese_brazilian ] = "~Server";
-        Text[ japanese ] = "ο½»ο½°οΎοΎο½°ο½»ο½²οΎ„ ο½²οΎ’ο½°ο½ΌοΎοΎο½―οΎοΎ(~S)";
+        Text[ japanese ] = "γ‚µγƒΌγƒγƒΌγ‚µγ‚¤γƒ γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—(~S)";
         Text[ korean ] = "μ„λ²„ μ‹Έμ΄νΈ μ΄λ―Έμ§€λ§µ(~S)";
         Text[ chinese_simplified ] = "ζε΅ε™¨η«―ι΅µιΆε›Ύεƒζ ε°„(~S)";
         Text[ chinese_traditional ] = "δΌΊζε™¨ι ιΆε½±εƒζ ε°„(~S)";
@@ -2131,7 +2131,7 @@ TabPage TP_FRM_URL
         Text[ swedish ] = "Image map pε ~klientsidan";
         Text[ polish ] = "Client Site Image Map";
         Text[ portuguese_brazilian ] = "~Client";
-        Text[ japanese ] = "ο½ΈοΎ—ο½²ο½±οΎοΎ„ο½»ο½²οΎ„ ο½²οΎ’ο½°ο½ΌοΎοΎο½―οΎοΎ(~C)";
+        Text[ japanese ] = "γ‚―γƒ©γ‚¤γ‚Άγƒ³γƒγ‚µγ‚¤γƒ γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—(~C)";
         Text[ korean ] = "ν΄λΌμ΄μ–ΈνΈ μ‹Έμ΄νΈ μ΄λ―Έμ§€λ§µ(~C)";
         Text[ chinese_simplified ] = "ε®Άζ·η«―ι΅µιΆε›Ύεƒζ ε°„(~C)";
         Text[ chinese_traditional ] = "ε®Άζ¶η«―ι ιΆε½±εƒζ ε°„(~C)";
@@ -2157,7 +2157,7 @@ TabPage TP_FRM_URL
         Text[ chinese_simplified ] = "ε›Ύεƒζ ε°„";
         Text[ russian ] = "Image Map";
         Text[ polish ] = "Mapa obrazkowa";
-        Text[ japanese ] = "ο½²οΎ’ο½°ο½ΌοΎοΎο½―οΎοΎ";
+        Text[ japanese ] = "γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—";
         Text[ chinese_traditional ] = "ε½±εƒζ ε°„";
         Text[ arabic ] = "Image map";
         Text[ greek ] = "Image map";
@@ -2414,7 +2414,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_simplified ] = "ε¤§ε°(~S)";
         Text[ russian ] = "Πΰημεπ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ο½»ο½²ο½½οΎ(~S)";
+        Text[ japanese ] = "γ‚µγ‚¤γ‚Ί(~S)";
         Text[ chinese_traditional ] = "ε¤§ε°(~S)";
         Text[ arabic ] = "ΗαΝΜγ";
         Text[ greek ] = "Μέγεθος";
@@ -2469,7 +2469,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_simplified ] = "ε―ηΌ–θΎ‘ι²ζ”Ήε†™η„ζ–‡ζ΅£(~E)";
         Text[ russian ] = "Οπΰβκΰ ηΰωθωεννξγξ ξς ηΰοθρθ δξκσμενςΰ";
         Text[ polish ] = "Edycja ~moΏliwa w dokumentach tylko do odczytu";
-        Text[ japanese ] = "θª­γΏε–γ‚ε°‚η”¨οΎ„οΎο½·ο½­οΎ’οΎοΎ„ε†…γ§η·¨ι›†ε―θƒ½(~E)";
+        Text[ japanese ] = "θª­γΏε–γ‚ε°‚η”¨γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒε†…γ§η·¨ι›†ε―θƒ½(~E)";
         Text[ chinese_traditional ] = "ε―η·¨θΌ―ε”―θ®€ζ–‡δ»¶(~E)";
         Text[ arabic ] = "ήΗΘα ααΚΝΡνΡ έν γΣΚδΟ ααήΡΗΑΙ έήΨ";
         Text[ greek ] = "Δυνατότητα ~επεξεργασίας σε έγγραφο τύπου \"Μόνο για ανάγνωση\"";
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
