@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:33:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,7 @@ private:
     std::vector<String>* mpAtnNames;
 
     sw::util::AuthorInfos* pAuthorInfos;
+    String sBaseURL;
 
                                 // Ini-Flags:
     ULONG nIniFlags;            // Flags aus der writer.ini
@@ -1561,8 +1562,9 @@ public:     // eigentlich private, geht aber leider nur public
     static ColorData GetCol(BYTE nIco);
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, bool bNewDoc );
+        SwDoc& rD, const String& rBaseURL, bool bNewDoc );
 
+    const String& GetBaseURL() const { return sBaseURL; }
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
