@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:53:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 class SvxEditSource;
 
@@ -139,7 +143,7 @@ namespace accessibility
         edit source. Every interface method will then properly throw
         an exception.
     */
-    class AccessibleStaticTextBase : public ::com::sun::star::accessibility::XAccessibleText
+    class SVX_DLLPUBLIC AccessibleStaticTextBase : public ::com::sun::star::accessibility::XAccessibleText
     {
 
     public:
@@ -159,9 +163,9 @@ namespace accessibility
     private:
 
         // declared, but not defined
-        AccessibleStaticTextBase( const AccessibleStaticTextBase& );
+        SVX_DLLPRIVATE AccessibleStaticTextBase( const AccessibleStaticTextBase& );
         // declared, but not defined
-        AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& );
+        SVX_DLLPRIVATE AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& );
 
     public:
         /** Query the current edit source
